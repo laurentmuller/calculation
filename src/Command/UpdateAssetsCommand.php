@@ -92,13 +92,19 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
 
         // get values
+        /** @var string $source */
         $source = $configuration->source;
-        $target = $publicDir . '/' . $configuration->target;
+        $target = $publicDir . '/' . (string) $configuration->target;
         $targetTemp = $this->tempDir($publicDir) . '/';
+        /** @var string $format */
         $format = $configuration->format;
+        /** @var \stdClass[] $plugins */
         $plugins = $configuration->plugins;
+        /** @var array<string, string> $prefixes */
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
+        /** @var array<string, string> $suffixes */
         $suffixes = $this->getConfigArray($configuration, 'suffixes');
+        /** @var array<string, string> $renames */
         $renames = $this->getConfigArray($configuration, 'renames');
 
         $countPlugins = 0;
@@ -112,13 +118,15 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
                     continue;
                 }
 
-                $name = $plugin->name;
-                $version = $plugin->version;
-                $display = $plugin->display ?? $plugin->name;
+                $name = (string) $plugin->name;
+                $version = (string) $plugin->version;
+                $display = (string) ($plugin->display ?? $plugin->name);
                 $this->writeVerbose("Installing '{$display} v{$version}'.");
 
                 // copy files
-                foreach ($plugin->files as $file) {
+                /** @var string[] $files */
+                $files = $plugin->files;
+                foreach ($files as $file) {
                     // get source
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
 
@@ -133,7 +141,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
                 ++$countPlugins;
 
                 // check version
-                $versionSource = $plugin->source ?? $source;
+                $versionSource = (string) ($plugin->source ?? $source);
                 if (false !== \stripos($versionSource, 'cdnjs')) {
                     $this->checkApiCdnjsLastVersion($name, $version);
                 } elseif (false !== \stripos($versionSource, 'jsdelivr')) {
@@ -147,7 +155,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
                     return $carry;
                 }
 
-                return $carry + \count($plugin->files);
+                return $carry + \count((array) $plugin->files);
             }, 0);
             if ($expected !== $countFiles) {
                 $this->writeError("Not all files has been loaded! Expected: {$expected}, Loaded: {$countFiles}.");
@@ -210,7 +218,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function checkVersion(string $url, string $name, string $version, array $paths): void
     {
-        if (false === $content = $this->loadJson($url)) {
+        $content = $this->loadJson($url);
+        if (false === $content) {
             $this->write("Unable to find the URL '$url' for the plugin '$name'.");
 
             return;
@@ -222,11 +231,14 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
                 return;
             }
+            /** @var \stdClass $content */
             $content = $content->$path;
         }
 
-        if (\version_compare($version, $content, '<')) {
-            $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$content}'.");
+        /** @var string $newVersion */
+        $newVersion = $content;
+        if (\version_compare($version, $newVersion, '<')) {
+            $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$newVersion}'.");
         }
     }
 
@@ -240,6 +252,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param array  $renames    the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
      *
      * @return bool true if success
+     *
+     * @psalm-param array<string, string>  $prefixes
+     * @psalm-param array<string, string>  $suffixes
+     * @psalm-param array<string, string>  $renames
      */
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -323,6 +339,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param array  $renames    the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
      *
      * @return bool true if success
+     *
+     * @psalm-param array<string, string>  $prefixes
+     * @psalm-param array<string, string>  $suffixes
+     * @psalm-param array<string, string>  $renames
      */
     private function dumpFile(string $content, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -346,12 +366,12 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
 
         // css?
-        if ('css' === (string) \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
+        if ('css' === \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
             $content = \str_replace('/*!', '/*', $content);
         }
 
         // bootstrap.css?
-        $name = (string) \pathinfo($targetFile, \PATHINFO_BASENAME);
+        $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
         if (self::BOOTSTRAP_FILE_NAME === $name) {
             $content = $this->updateStyle($content);
         }
@@ -375,13 +395,15 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function findStyleEntries(string $style, array $entries)
     {
+        /** @var string[] $result */
         $result = [];
         $matches = [];
         foreach ($entries as $entry) {
             $pattern = '/^\s*' . \preg_quote($entry, '/') . '\s*:\s*.*;/m';
             if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER, 0))) {
+                /** @var string $matche */
                 foreach ($matches as $matche) {
-                    $result[] = (string) $matche[0];
+                    $result[] = $matche[0];
                 }
             }
         }
@@ -442,8 +464,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function getSourceFile(string $source, string $format, \stdClass $plugin, string $file): string
     {
-        $name = $plugin->name;
-        $version = $plugin->version;
+        $name = (string) $plugin->name;
+        $version = (string) $plugin->version;
 
         // source
         if (\property_exists($plugin, 'source') && null !== $plugin->source) {
@@ -474,7 +496,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function getTargetFile(string $target, \stdClass $plugin, string $file): string
     {
-        $name = $plugin->target ?? $plugin->name;
+        $name = (string) ($plugin->target ?? $plugin->name);
 
         return $target . $name . '/' . $file;
     }
@@ -489,11 +511,15 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param array     $renames       the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
      *
      * @return int the number of downloaded themes
+     *
+     * @psalm-param array<string, string>  $prefixes
+     * @psalm-param array<string, string>  $suffixes
+     * @psalm-param array<string, string>  $renames
      */
     private function installBootswatch(\stdClass $configuration, string $targetDir, array $prefixes = [], array $suffixes = [], array $renames = []): int
     {
         // check if the default boostrap theme is present
-        $target = $configuration->target;
+        $target = (string) $configuration->target;
         $relative = \rtrim($this->makePathRelative('/' . ThemeService::DEFAULT_CSS, '/' . $target), '/');
         $targetFile = $targetDir . $relative;
         if (!$this->exists($targetFile)) {
@@ -509,21 +535,24 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         // check bootswatch entry
         if ($this->propertyExists($configuration, 'bootswatch')) {
             // load file
-            $source = $this->loadJson($configuration->bootswatch);
+            $source = $this->loadJson((string) $configuration->bootswatch);
             if ($source instanceof \stdClass) {
                 // message
-                $version = $source->version;
+                $version = (string) $source->version;
                 $this->writeVerbose("Installing 'bootswatch v{$version}'.");
 
                 // themes
-                foreach ($source->themes as $theme) {
-                    $name = $theme->name;
-                    $description = $theme->description . '.';
+                /** @var \stdClass[] $themes */
+                $themes = $source->themes;
+                foreach ($themes as $theme) {
+                    $css = (string) $theme->css;
+                    $name = (string) $theme->name;
+                    $description = (string) $theme->description . '.';
                     $relativePath = $themesDir . \strtolower($name) . '/' . self::BOOTSTRAP_FILE_NAME;
 
                     // copy file
                     $targetFile = $targetDir . $relativePath;
-                    if ($this->copyFile($theme->css, $targetFile, $prefixes, $suffixes, $renames)) {
+                    if ($this->copyFile($css, $targetFile, $prefixes, $suffixes, $renames)) {
                         $result[] = new Theme([
                             'name' => $name,
                             'description' => $description,

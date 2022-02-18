@@ -68,32 +68,38 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     public function detect(string $text)
     {
+        // query
         $query = ['q' => $text];
-        if (!$response = $this->get(self::URI_DETECT, $query)) {
+
+        /** @var bool|array $response */
+        $response = $this->get(self::URI_DETECT, $query);
+        if (!\is_array($response)) {
             return false;
         }
 
         // detections
-
-        if (!$detections = $this->getPropertyArray($response, 'detections')) {
+        $detections = $this->getPropertyArray($response, 'detections');
+        if (!\is_array($detections)) {
             return false;
         }
 
         // entries
-        /** @var array $detections */
         if (!$this->isValidArray($detections[0], 'entries')) {
             return false;
         }
+        /** @var array $entries */
         $entries = $detections[0];
 
         // entry
         if (!$this->isValidArray($entries[0], 'detection')) {
             return false;
         }
+        /** @var array $detection */
         $detection = $entries[0];
 
         // language
-        if (!$tag = $this->getProperty($detection, 'language')) {
+        $tag = $this->getProperty($detection, 'language');
+        if (!\is_string($tag)) {
             return false;
         }
 
@@ -124,31 +130,41 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false)
     {
+        // query
         $query = [
             'q' => $text,
             'target' => $to,
             'source' => $from ?: '',
             'format' => $html ? 'html' : 'text',
         ];
-        if (!$response = $this->get(self::URI_TRANSLATE, $query)) {
+
+        // get
+        /** @var bool|array $response */
+        $response = $this->get(self::URI_TRANSLATE, $query);
+        if (!\is_array($response)) {
             return false;
         }
 
         // translations
-        if (!$translations = $this->getPropertyArray($response, 'translations')) {
+        $translations = $this->getPropertyArray($response, 'translations');
+        if (!\is_array($translations)) {
             return false;
         }
-        /** @var array $translations */
+
+        /** @var array $translation */
         $translation = $translations[0];
 
         // target
-        if (!$target = $this->getProperty($translation, 'translatedText')) {
+        $target = $this->getProperty($translation, 'translatedText');
+        if (!\is_string($target)) {
             return false;
         }
 
         // from
-        if ($detectedLanguage = $this->getProperty($translation, 'detectedSourceLanguage', false)) {
-            $from = $detectedLanguage;
+        /** @var bool|string $from */
+        $from = $this->getProperty($translation, 'detectedSourceLanguage', false);
+        if (!\is_string($from)) {
+            return false;
         }
 
         return [
@@ -170,19 +186,24 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     protected function doGetLanguages()
     {
+        // query
         $query = ['target' => self::getAcceptLanguage()];
-        if (!$response = $this->get(self::URI_LANGUAGE, $query)) {
+
+        $response = $this->get(self::URI_LANGUAGE, $query);
+        if (!\is_array($response)) {
             return false;
         }
 
         // languages
-        if (!$languages = $this->getPropertyArray($response, 'languages')) {
+        /** @var bool|array<array{name: string, language: string}>  $languages */
+        $languages = $this->getPropertyArray($response, 'languages');
+        if (!\is_array($languages)) {
             return false;
         }
 
         // build
         $result = [];
-        foreach ((array) $languages as $language) {
+        foreach ($languages as $language) {
             $result[$language['name']] = $language['language'];
         }
         \ksort($result);
@@ -220,15 +241,24 @@ class GoogleTranslatorService extends AbstractTranslatorService
         $response = $response->toArray(false);
 
         // check error
-        $error = $this->getProperty($response, 'error', false);
-        if (false !== $error) {
+        if (isset($response['error'])) {
+            /**
+             * @var null|array{
+             *      result: bool,
+             *      code: string|int,
+             *      message: string,
+             *      exception?: array|\Exception} $error
+             */
+            $error = $response['error'];
             $this->lastError = $error;
 
             return false;
         }
 
         // get data
-        if (!$data = $this->getProperty($response, 'data')) {
+        /** @var bool|array $data */
+        $data = $this->getProperty($response, 'data');
+        if (!\is_array($data)) {
             return false;
         }
 

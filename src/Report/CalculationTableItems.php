@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
-use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Pdf\PdfColumn;
@@ -64,7 +63,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $duplicateItems = $calculation->getDuplicateItems();
 
         // styles
-        $groupStyle = $this->getGroup()->getStyle();
+        $groupStyle = $this->findGroupStyle();
         $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::INDENT);
         $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
 
@@ -84,19 +83,16 @@ class CalculationTableItems extends PdfGroupTableBuilder
             $groupStyle->resetIndent();
             $this->setGroupKey($group->getCode());
 
-            /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
                 $this->checkLines(2);
                 $groupStyle->setIndent(self::INDENT);
                 $this->setGroupKey($category->getCode());
 
-                /** @var CalculationItem $item */
                 foreach ($category->getItems() as $item) {
-                    // @phpstan-ignore-next-line
-                    $this->startRow()
-                        ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
-                        ->add($item->getUnit())
-                        ->addAmount($item->getPrice(), $errorStyle)
+                    $this->startRow();
+                    $this->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle);
+                    $this->add($item->getUnit());
+                    $this->addAmount($item->getPrice(), $errorStyle)
                         ->addAmount($item->getQuantity(), $errorStyle)
                         ->addAmount($item->getTotal(), null)
                         ->endRow();
@@ -155,9 +151,6 @@ class CalculationTableItems extends PdfGroupTableBuilder
         return $this;
     }
 
-    /**
-     * Check if the given number of lines can be outputed.
-     */
     private function checkLines(int $lines): bool
     {
         $this->inProgress = true;
@@ -165,5 +158,14 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $this->inProgress = false;
 
         return $result;
+    }
+
+    private function findGroupStyle(): PdfStyle
+    {
+        if (null !== $style = $this->getGroupStyle()) {
+            return $style;
+        }
+
+        return PdfStyle::getCellStyle()->setFontBold();
     }
 }

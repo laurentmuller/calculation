@@ -51,11 +51,11 @@ trait LoggerTrait
      */
     protected function getInstallerName(): string
     {
-        if (!$this->installerName) {
+        if (null === $this->installerName) {
             $this->installerName = Utils::getShortName(static::class);
         }
 
-        return (string) $this->installerName;
+        return $this->installerName;
     }
 
     /**

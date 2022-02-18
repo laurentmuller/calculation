@@ -37,6 +37,7 @@ class ProductUpdateQuery
     private ?Category $category = null;
     private float $fixed = 0;
     private float $percent = 0;
+    /** @var Product[] */
     private array $products = [];
     private bool $round = false;
     private bool $simulate = true;
@@ -63,7 +64,7 @@ class ProductUpdateQuery
      */
     public function getCategoryId(): int
     {
-        return null !== $this->category ? $this->category->getId() : 0;
+        return null !== $this->category ? (int) $this->category->getId() : 0;
     }
 
     /**
@@ -87,7 +88,7 @@ class ProductUpdateQuery
      */
     public function getGroupCode(): ?string
     {
-        return null !== $this->category ? $this->category->getGroup()->getCode() : null;
+        return null !== $this->category ? $this->category->getGroupCode() : null;
     }
 
     /**

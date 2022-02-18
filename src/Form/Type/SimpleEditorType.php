@@ -28,11 +28,22 @@ class SimpleEditorType extends AbstractType
 {
     /**
      * {@inheritdoc}
+     *
+     * @param array{
+     *      required:bool
+     * } $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        /**
+         * @var array{
+         *      attr: array,
+         *      groups: array
+         * } $vars
+         */
+        $vars = &$view->vars;
         if ($options['required']) {
-            $view->vars['attr']['class'] = $this->getWidgetClass($view);
+            $vars['attr']['class'] = $this->getWidgetClass($view);
         }
         $view->vars['groups'] = $this->getGroupedActions($options);
     }
@@ -64,7 +75,7 @@ class SimpleEditorType extends AbstractType
         $file = __DIR__ . '/simple_editor_actions.json';
 
         try {
-            return FileUtils::decodeJson($file);
+            return (array) FileUtils::decodeJson($file);
         } catch (\InvalidArgumentException $e) {
             return [];
         }
@@ -75,7 +86,24 @@ class SimpleEditorType extends AbstractType
      */
     private function getGroupedActions(array $options): array
     {
-        $actions = \array_filter($options['actions'] ?? [], static function (array $action): bool {
+        /** @var array $exisiting */
+        $exisiting = $options['actions'] ?? [];
+
+        /**
+         * @var array<array{
+         *      title: null|string,
+         *      group: string,
+         *      icon: null|string,
+         *      text: string,
+         *      exec: string,
+         *      parameter: string,
+         *      state: string,
+         *      enabled: string,
+         *      class: string,
+         *      attributes: array<string, string>,
+         *      actions: array}> $actions
+         */
+        $actions = \array_filter($exisiting, static function (array $action): bool {
             return !empty($action['exec']) || !empty($action['actions']);
         });
         $this->updateActions($actions);
@@ -90,19 +118,41 @@ class SimpleEditorType extends AbstractType
 
     /**
      * Gets the class name when the required option is set.
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function getWidgetClass(FormView $view): string
     {
-        $values = \array_filter(\explode(' ', $view->vars['attr']['class'] ?? ''));
+        /** @var string $class */
+        $class = $view->vars['attr']['class'] ?? '';
+        $values = \array_filter(\explode(' ', $class));
         $values[] = 'must-validate';
 
         return \implode(' ', \array_unique($values));
     }
 
+    /**
+     * @param array<array{
+     *      title: null|string,
+     *      group: string,
+     *      icon: null|string,
+     *      text: string,
+     *      exec: string,
+     *      parameter: string,
+     *      state: string,
+     *      enabled: string,
+     *      class: string,
+     *      attributes: array<string, string>,
+     *      actions: null|array}> $actions
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
+     */
     private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): void
     {
         foreach ($actions as &$action) {
-            $action['group'] ??= 'default';
+            if (empty($action['group'])) {
+                $action['group'] = 'default';
+            }
             $action['icon'] ??= $action['exec'];
             $action['attributes']['class'] = $class;
             $action['attributes']['title'] = 'simple_editor.' . ($action['title'] ?? $action['exec']);
@@ -133,6 +183,11 @@ class SimpleEditorType extends AbstractType
             unset($action['class']);
 
             // drop-down items?
+            if (isset($action['actions'])) {
+                $action['attributes']['aria-expanded'] = 'false';
+                $action['attributes']['data-toggle'] = 'dropdown';
+                $action['attributes']['class'] .= ' dropdown-toggle';
+            }
             if (!empty($action['actions'])) {
                 $action['attributes']['aria-expanded'] = 'false';
                 $action['attributes']['data-toggle'] = 'dropdown';

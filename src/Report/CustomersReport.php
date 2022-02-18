@@ -22,6 +22,8 @@ use App\Pdf\PdfStyle;
  * Report for the list of customers.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<Customer>
  */
 class CustomersReport extends AbstractArrayReport
 {
@@ -33,7 +35,7 @@ class CustomersReport extends AbstractArrayReport
     /**
      * The other group name.
      */
-    private ?string $other = null;
+    private string $other;
 
     /**
      * Constructor.
@@ -45,17 +47,19 @@ class CustomersReport extends AbstractArrayReport
     public function __construct(AbstractController $controller, array $entities, bool $grouped = true)
     {
         parent::__construct($controller, $entities, self::ORIENTATION_LANDSCAPE);
+        $this->other = $this->trans('report.other');
         $this->grouped = $grouped;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param Customer[] $entities
      */
     protected function doRender(array $entities): bool
     {
         // title
         $this->setTitleTrans('customer.list.title');
-        $this->other = $this->translator->trans('report.other');
 
         // new page
         $this->AddPage();
@@ -75,7 +79,7 @@ class CustomersReport extends AbstractArrayReport
         if ($this->grouped) {
             $groups = $this->groupCustomers($entities);
             foreach ($groups as $name => $items) {
-                $table->setGroupKey((string) $name);
+                $table->setGroupKey($name);
                 foreach ($items as $entity) {
                     $this->outputCustomer($table, $entity);
                 }
@@ -100,7 +104,7 @@ class CustomersReport extends AbstractArrayReport
     private function getFirstChar(string $text): string
     {
         if ('' !== $text) {
-            return (string) \strtoupper($text[0]);
+            return \strtoupper($text[0]);
         }
 
         return $this->other;

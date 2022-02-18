@@ -37,7 +37,7 @@ trait DisableListenerTrait
     /**
      * {@inheritdoc}
      */
-    public function setEnabled($enabled): self
+    public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
 

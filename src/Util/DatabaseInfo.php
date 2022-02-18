@@ -51,8 +51,8 @@ final class DatabaseInfo
             // convert
             foreach ($entries as $entry) {
                 if ('' !== $entry['Value']) {
-                    $key = $entry['Variable_name'];
-                    $values[$key] = $entry['Value'];
+                    $key = (string) $entry['Variable_name'];
+                    $values[$key] = (string) $entry['Value'];
                 }
             }
         } catch (\Exception $e) {
@@ -64,6 +64,8 @@ final class DatabaseInfo
 
     /**
      * Gets the database server informations.
+     *
+     * @psalm-suppress InternalMethod
      */
     public function getDatabase(): array
     {
@@ -98,7 +100,7 @@ final class DatabaseInfo
             $result->free();
 
             if (false !== $entries) {
-                return $entries['Value'];
+                return (string) $entries['Value'];
             }
         } catch (\Exception $e) {
             // ignore
@@ -113,6 +115,7 @@ final class DatabaseInfo
     private function executeQuery(string $sql): Result
     {
         $connection = $this->getConnection();
+        /** @psalm-var \Doctrine\DBAL\Statement $statement */
         $statement = $connection->prepare($sql);
 
         return $statement->executeQuery();

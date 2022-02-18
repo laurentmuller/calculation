@@ -24,6 +24,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  * Spreadsheet document for application logs.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<mixed>
  */
 class LogsDocument extends AbstractArrayDocument
 {
@@ -71,8 +73,8 @@ class LogsDocument extends AbstractArrayDocument
         foreach ($logs as $log) {
             $this->setRowValues($row++, [
                 $log->getCreatedAt(),
-                LogService::getChannel($log->getChannel(), true),
-                LogService::getLevel($log->getLevel(), true),
+                LogService::getChannel((string) $log->getChannel(), true),
+                LogService::getLevel((string) $log->getLevel(), true),
                 $this->getMessage($log),
             ]);
         }
@@ -84,15 +86,12 @@ class LogsDocument extends AbstractArrayDocument
 
     /**
      * Format the given Sql query.
-     *
-     * @param string $sql the query to format
-     *
-     * @return string the formatted query
      */
     private function formatSql(string $sql): string
     {
+        /** @var SqlFormatter|null $formatter */
         static $formatter;
-        if (!$formatter) {
+        if (null === $formatter) {
             $formatter = new SqlFormatter(new NullHighlighter());
         }
 
@@ -104,12 +103,12 @@ class LogsDocument extends AbstractArrayDocument
      */
     private function getMessage(Log $log): string
     {
-        $message = 'doctrine' === $log->getChannel() ? $this->formatSql($log->getMessage()) : $log->getMessage();
+        $message = 'doctrine' === $log->getChannel() ? $this->formatSql((string) $log->getMessage()) : (string) $log->getMessage();
         if (!empty($log->getContext())) {
-            $message .= "\n" . Utils::exportVar($log->getContext());
+            $message .= "\n" . (string) Utils::exportVar((array) $log->getContext());
         }
         if (!empty($log->getExtra())) {
-            $message .= "\n" . Utils::exportVar($log->getExtra());
+            $message .= "\n" . (string) Utils::exportVar($log->getExtra());
         }
 
         return $message;

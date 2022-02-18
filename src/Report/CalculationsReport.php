@@ -26,6 +26,8 @@ use App\Util\FormatUtils;
  * Report for the list of calculations.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<Calculation>
  */
 class CalculationsReport extends AbstractArrayReport
 {
@@ -62,6 +64,8 @@ class CalculationsReport extends AbstractArrayReport
 
     /**
      * {@inheritdoc}
+     *
+     * @param Calculation[] $entities
      */
     protected function doRender(array $entities): bool
     {
@@ -80,7 +84,6 @@ class CalculationsReport extends AbstractArrayReport
         $items = 0.0;
         $overall = 0.0;
 
-        /** @var Calculation $entity */
         foreach ($entities as $entity) {
             $items += $entity->getItemsTotal();
             $overall += $entity->getOverallTotal();
@@ -168,10 +171,10 @@ class CalculationsReport extends AbstractArrayReport
      */
     private function outputByGroup(array $entities): PdfGroupTableBuilder
     {
-        // groups the calculations by state
+        /** @var array<string, Calculation[]> $groups */
         $groups = [];
         foreach ($entities as $entity) {
-            $key = $entity->getStateCode();
+            $key = (string) $entity->getStateCode();
             $groups[$key][] = $entity;
         }
 
@@ -222,7 +225,7 @@ class CalculationsReport extends AbstractArrayReport
         $style = $this->getMarginStyle($c);
 
         $table->startRow()
-            ->add(FormatUtils::formatId($c->getId()))
+            ->add(FormatUtils::formatId((int) $c->getId()))
             ->add(FormatUtils::formatDate($c->getDate()));
 
         if (!$groupByState) {

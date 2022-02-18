@@ -50,7 +50,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
      * The calculation items.
      *
      * @ORM\OneToMany(targetEntity=CalculationCategory::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC", "code" = "ASC"})
+     * @ORM\OrderBy({"position" = "ASC"})
      * @Assert\Valid
      *
      * @var CalculationCategory[]|Collection
@@ -190,7 +190,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
      */
     public function getDisplay(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     /**
@@ -244,7 +244,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
      */
     public function isSortable(): bool
     {
-        /** @var CalculationCategory $category */
         foreach ($this->categories as $category) {
             if ($category->isSortable()) {
                 return true;
@@ -348,13 +347,12 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
         // sort
         $categories = $this->categories->toArray();
         \uasort($categories, static function (CalculationCategory $a, CalculationCategory $b): int {
-            return \strcasecmp($a->getCode(), $b->getCode());
+            return \strcasecmp((string) $a->getCode(), (string) $b->getCode());
         });
 
         $position = 0;
         $changed = false;
 
-        /** @var CalculationCategory $category */
         foreach ($categories as $category) {
             if ($position !== $category->getPosition()) {
                 $category->setPosition($position);
@@ -382,7 +380,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
         }
 
         // margin
-        $margin = $this->group->findPercent($amount);
+        $margin = null !== $this->group ? $this->group->findPercent($amount) : 0.0;
 
         return $this->setAmount($amount)->setMargin($margin);
     }
@@ -408,7 +406,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     {
         $position = 0;
 
-        /** @var CalculationCategory $category */
         foreach ($this->categories as $category) {
             if ($category->getPosition() !== $position) {
                 $category->setPosition($position);

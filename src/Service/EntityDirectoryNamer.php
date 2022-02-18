@@ -66,6 +66,9 @@ class EntityDirectoryNamer implements DirectoryNamerInterface
         return $this->transliterate($firstPart);
     }
 
+    /**
+     * @psalm-suppress InternalMethod
+     */
     private function transliterate(string $value): string
     {
         return $this->transliterator->transliterate($value);

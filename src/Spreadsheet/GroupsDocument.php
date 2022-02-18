@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Group;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of groups.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\Group>
  */
 class GroupsDocument extends AbstractArrayDocument
 {
@@ -44,7 +45,6 @@ class GroupsDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var Group $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getCode(),

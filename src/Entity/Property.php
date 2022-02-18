@@ -75,9 +75,10 @@ class Property extends AbstractEntity
     public function getArray(): ?array
     {
         if (!empty($this->value)) {
-            $result = \json_decode($this->value);
+            /** @psalm-var array|null $result */
+            $result = \json_decode($this->value, true);
             if (\JSON_ERROR_NONE === \json_last_error()) {
-                return $result;
+                return (array) $result;
             }
         }
 
@@ -131,7 +132,7 @@ class Property extends AbstractEntity
      */
     public function getName(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**

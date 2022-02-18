@@ -390,44 +390,70 @@ const Application = {
      */
     updateButtons: function () {
         'use strict';
+        const that = this;
 
-        // run hover bodies
+        let hideUp;
+        let hideDown;
         let disabled = true;
-        $('#data-table-edit tbody').each(function (_index, element) {
-            const $body = $(element);
-            const $rows = $body.find('.item');
-            const lastIndex = $rows.length - 1;
 
-            // run over rows
-            $rows.each(function (index, element) {
-                const $row = $(element);
-                const hideUp = index === 0;
-                const hideDown = index === lastIndex;
-                $row.find('.btn-first-item').toggleClass('d-none', hideUp);
-                $row.find('.btn-up-item').toggleClass('d-none', hideUp);
-                $row.find('.btn-down-item').toggleClass('d-none', hideDown);
-                $row.find('.btn-last-item').toggleClass('d-none', hideDown);
-                $row.find('.btn-first-item').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
+        // groups
+        const $groups = that.getGroups();
+        $groups.each(function (indexGroup, group) {
+            const $group = $(group);
+            hideUp = indexGroup === 0;
+            hideDown = indexGroup === $groups.length - 1;
+            $group.find('.btn-first-group').toggleClass('d-none', hideUp);
+            $group.find('.btn-up-group').toggleClass('d-none', hideUp);
+            $group.find('.btn-down-group').toggleClass('d-none', hideDown);
+            $group.find('.btn-last-group').toggleClass('d-none', hideDown);
+            $group.find('.btn-first-group').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
+
+            // categories
+            const $categories = that.getCategories($group);
+            $categories.each(function (indexCategory, category) {
+                const $category = $(category);
+                hideUp = indexCategory === 0;
+                hideDown = indexCategory === $categories.length - 1;
+                $category.find('.btn-first-category').toggleClass('d-none', hideUp);
+                $category.find('.btn-up-category').toggleClass('d-none', hideUp);
+                $category.find('.btn-down-category').toggleClass('d-none', hideDown);
+                $category.find('.btn-last-category').toggleClass('d-none', hideDown);
+                $category.find('.btn-first-category').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
+
+                // items
+                const $items = that.getItems($category);
+                $items.each(function (indexItem, item) {
+                    const $item = $(item);
+                    hideUp = indexItem === 0;
+                    hideDown = indexItem === $items.length - 1;
+                    $item.find('.btn-first-item').toggleClass('d-none', hideUp);
+                    $item.find('.btn-up-item').toggleClass('d-none', hideUp);
+                    $item.find('.btn-down-item').toggleClass('d-none', hideDown);
+                    $item.find('.btn-last-item').toggleClass('d-none', hideDown);
+                    $item.find('.btn-first-item').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
+                })
             });
-            if ($rows.length > 1) {
-                disabled = false;
-            }
         });
 
-        if (disabled) {
-            const $groups= this.getGroups();
-            if ($groups.length > 1) {
-                disabled = false;
-            } else {
-                $groups.each(function () {
-                    const $body = $(this).nextUntil('.group');
-                    if ($body.length > 1) {
-                        disabled = false;
-                        return false;
-                    }
-                });
-            }
-        }
+        // if ($rows.length > 1) {
+        // disabled = false;
+        // }
+        // });
+
+        // if (disabled) {
+        // const $groups= this.getGroups();
+        // if ($groups.length > 1) {
+        // disabled = false;
+        // } else {
+        // $groups.each(function () {
+        // const $body = $(this).nextUntil('.group');
+        // if ($body.length > 1) {
+        // disabled = false;
+        // return false;
+        // }
+        // });
+        // }
+        // }
 
         // update global sort
         $('.btn-sort-items').toggleDisabled(disabled);
@@ -1153,6 +1179,7 @@ const Application = {
             // -----------------------------
             // Moved to a new position
             // -----------------------------
+            $row.timeoutToggle('table-success');
             that.updateButtons().updatePositions();
         } else {
             // -----------------------------
@@ -1435,6 +1462,26 @@ $.fn.extend({
     },
 
     /**
+     * Gets the parent group.
+     *
+     * @returns {jQuery} - The parent group (thead).
+     */
+    getParentGroup: function () {
+        'use strict';
+        return $(this).closest('.group');
+    },
+
+    /**
+     * Gets the parent category.
+     *
+     * @returns {jQuery} - The parent category (tbody).
+     */
+    getParentCategory: function () {
+        'use strict';
+        return $(this).closest('tbody');
+    },
+
+    /**
      * Gets the parent row.
      *
      * @returns {jQuery} - The parent row.
@@ -1459,50 +1506,276 @@ $.fn.extend({
 /**
  * -------------- The move rows handler --------------
  */
-const MoveRowHandler = {
+const MoveHandler = {
 
     /**
-     * Initialize.
+     * Initialize handlers.
      */
     init: function () {
         'use strict';
-
         const that = this;
+        // groups
+        $('#data-table-edit').on('click', '.btn-first-group', function (e) {
+            e.preventDefault();
+            that.moveGroupFirst($(this).getParentGroup());
+        }).on('click', '.btn-up-group', function (e) {
+            e.preventDefault();
+            that.moveGroupUp($(this).getParentGroup());
+        }).on('click', '.btn-down-group', function (e) {
+            e.preventDefault();
+            that.moveGroupDown($(this).getParentGroup());
+        }).on('click', '.btn-last-group', function (e) {
+            e.preventDefault();
+            that.moveGroupLast($(this).getParentGroup());
+        });
+
+
+        // categories
+        $('#data-table-edit').on('click', '.btn-first-category', function (e) {
+            e.preventDefault();
+            that.moveCategoryFirst($(this).getParentCategory());
+        }).on('click', '.btn-up-category', function (e) {
+            e.preventDefault();
+            that.moveCategoryUp($(this).getParentCategory());
+        }).on('click', '.btn-down-category', function (e) {
+            e.preventDefault();
+            that.moveCategoryDown($(this).getParentCategory());
+        }).on('click', '.btn-last-category', function (e) {
+            e.preventDefault();
+            that.moveCategoryLast($(this).getParentCategory());
+        });
+
+        // items
         $('#data-table-edit').on('click', '.btn-first-item', function (e) {
             e.preventDefault();
-            that.moveFirst($(this).getParentRow());
+            that.moveItemFirst($(this).getParentRow());
         }).on('click', '.btn-up-item', function (e) {
             e.preventDefault();
-            that.moveUp($(this).getParentRow());
+            that.moveItemUp($(this).getParentRow());
         }).on('click', '.btn-down-item', function (e) {
             e.preventDefault();
-            that.moveDown($(this).getParentRow());
+            that.moveItemDown($(this).getParentRow());
         }).on('click', '.btn-last-item', function (e) {
             e.preventDefault();
-            that.moveLast($(this).getParentRow());
+            that.moveItemLast($(this).getParentRow());
         });
     },
 
     /**
-     * Move a source row before or after the target row.
+     * Move a source group before or after the target group.
      *
      * @param {jQuery}
-     *            $source - the row to move.
+     *            $source - the group to move.
      * @param {jQuery}
-     *            $target - the target row.
+     *            $target - the target group.
      * @param {boolean}
      *            up - true to move before the target (up); false to move after (down).
-     * @return {jQuery} - The moved row.
+     * @return {jQuery} - the moved group.
      */
-    move: function ($source, $target, up) {
+    moveGroup: function ($source, $target, up) {
+        'use strict';
+        // check
+        if ($source && $target && $source !== $target) {
+            // save source tbody
+            const $bodies = $source.nextUntil('.group');
+
+            // move
+            if (up) {
+                $source.insertBefore($target);
+            } else {
+                $source.insertAfter($target.nextUntil('.group'));
+            }
+            $bodies.insertAfter($source);
+
+            // update
+            $source.scrollInViewport().find('tr:first').timeoutToggle('table-success');
+            Application.updateButtons().updatePositions();
+        }
+        return $source;
+    },
+
+    /**
+     * Move a calculation group to the first position.
+     *
+     * @param {jQuery}
+     *            $group - the group to move.
+     * @return {jQuery} - the moved group.
+     */
+    moveGroupFirst: function ($group) {
+        'use strict';
+        const $target = $group.prevAll('.group:last');
+        if ($target.length && $target !== $group) {
+            return this.moveGroup($group, $target, true);
+        }
+        return $group;
+    },
+
+    /**
+     * Move a calculation group to the last position.
+     *
+     * @param {jQuery}
+     *            $group - the group to move.
+     * @return {jQuery} - the moved group.
+     */
+    moveGroupLast: function ($group) {
+        'use strict';
+        const $target = $group.nextAll('.group:last');
+        if ($target.length && $target !== $group) {
+            return this.moveGroup($group, $target, false);
+        }
+        return $group;
+    },
+
+    /**
+     * Move up a calculation group.
+     *
+     * @param {jQuery}
+     *            $group - the group to move.
+     * @return {jQuery} - the moved group.
+     */
+    moveGroupUp: function ($group) {
         'use strict';
 
-        if ($source && $target) {
+        const $target = $group.prevAll('.group:first');
+        if ($target.length && $target !== $group) {
+            return this.moveGroup($group, $target, true);
+        }
+
+        return $group;
+    },
+
+    /**
+     * Move down a calculation group.
+     *
+     * @param {jQuery}
+     *            $group - the group to move.
+     * @return {jQuery} - the moved group.
+     */
+    moveGroupDown: function ($group) {
+        'use strict';
+        const $target = $group.nextAll('.group:first');
+        if ($target.length && $target !== $group) {
+            return this.moveGroup($group, $target, false);
+        }
+        return $group;
+    },
+
+    /**
+     * Move a source category before or after the target category.
+     *
+     * @param {jQuery}
+     *            $source - the category to move.
+     * @param {jQuery}
+     *            $target - the target category.
+     * @param {boolean}
+     *            up - true to move before the target (up); false to move after (down).
+     * @return {jQuery} - the moved category.
+     */
+    moveCategory: function ($source, $target, up) {
+        'use strict';
+        // check
+        if ($source && $target && $source !== $target) {
+            // move
             if (up) {
                 $source.insertBefore($target);
             } else {
                 $source.insertAfter($target);
             }
+
+            // update
+            $source.scrollInViewport().find('tr:first').timeoutToggle('table-success');
+            Application.updateButtons().updatePositions();
+        }
+        return $source;
+    },
+
+    /**
+     * Move a calculation category to the first position.
+     *
+     * @param {jQuery}
+     *            $category - the category to move.
+     * @return {jQuery} - the moved category.
+     */
+    moveCategoryFirst: function ($category) {
+        'use strict';
+        const $target = $category.prevUntil('thead').last();
+        if ($target.length && $target !== $category) {
+            return this.moveCategory($category, $target, true);
+        }
+        return $item;
+    },
+
+    /**
+     * Move a calculation category to the last position.
+     *
+     * @param {jQuery}
+     *            $category - the category to move.
+     * @return {jQuery} - the moved category.
+     */
+    moveCategoryLast: function ($category) {
+        'use strict';
+        const $target = $category.nextUntil('thead').last();
+        if ($target.length && $target !== $category) {
+            return this.moveCategory($category, $target, false);
+        }
+        return $category;
+    },
+
+    /**
+     * Move up a calculation category.
+     *
+     * @param {jQuery}
+     *            $category - the category to move.
+     * @return {jQuery} - the moved category.
+     */
+    moveCategoryUp: function ($category) {
+        'use strict';
+        const $target = $category.prev();
+        if ($target.length && $target !== $category) {
+            return this.moveCategory($category, $target, true);
+        }
+
+        return $category;
+    },
+
+    /**
+     * Move down a calculation category.
+     *
+     * @param {jQuery}
+     *            $category - the category to move.
+     * @return {jQuery} - the moved category.
+     */
+    moveCategoryDown: function ($category) {
+        'use strict';
+        const $target = $category.next();
+        if ($target.length && $target !== $category) {
+            return this.moveCategory($category, $target, false);
+        }
+        return $category;
+    },
+    /**
+     * Move a source item before or after the target item.
+     *
+     * @param {jQuery}
+     *            $source - the item to move.
+     * @param {jQuery}
+     *            $target - the target item.
+     * @param {boolean}
+     *            up - true to move before the target (up); false to move after (down).
+     * @return {jQuery} - the moved item.
+     */
+    moveItem: function ($source, $target, up) {
+        'use strict';
+        // check
+        if ($source && $target && $source !== $target) {
+            // move
+            if (up) {
+                $source.insertBefore($target);
+            } else {
+                $source.insertAfter($target);
+            }
+
+            // update
             $source.scrollInViewport().timeoutToggle('table-success');
             Application.updateButtons().updatePositions();
         }
@@ -1513,74 +1786,70 @@ const MoveRowHandler = {
      * Move a calculation item to the first position.
      *
      * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
+     *            $row - the item to move.
+     * @return {jQuery} - the moved item.
      */
-    moveFirst: function ($row) {
+    moveItemFirst: function ($item) {
         'use strict';
-
-        const index = $row.index();
-        if (index > 1 && $row.prev()) {
-            const $target = $row.siblings(':nth-child(2)');
-            return this.move($row, $target, true);
+        const index = $item.index();
+        if (index > 1 && $item.prev()) {
+            const $target = $item.siblings(':nth-child(2)');
+            return this.moveItem($item, $target, true);
         }
-        return $row;
+        return $item;
     },
 
     /**
      * Move a calculation item to the last position.
      *
      * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
+     *            $item - the item to move.
+     * @return {jQuery} - the moved item.
      */
-    moveLast: function ($row) {
+    moveItemLast: function ($item) {
         'use strict';
-
-        const index = $row.index();
-        const count = $row.siblings().length;
-        if (index < count && $row.next()) {
-            const $target = $row.siblings(':last');
-            return this.move($row, $target, false);
+        const index = $item.index();
+        const count = $item.siblings().length;
+        if (index < count && $item.next()) {
+            const $target = $item.siblings(':last');
+            return this.moveItem($item, $target, false);
         }
-        return $row;
+        return $item;
     },
 
     /**
      * Move up a calculation item.
      *
      * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
+     *            $item - the item to move.
+     * @return {jQuery} - the moved item.
      */
-    moveUp: function ($row) {
+    moveItemUp: function ($item) {
         'use strict';
-
-        const index = $row.index();
-        if (index > 1 && $row.prev()) {
-            const $target = $row.prev();
-            return this.move($row, $target, true);
+        const index = $item.index();
+        if (index > 1 && $item.prev()) {
+            const $target = $item.prev();
+            return this.moveItem($item, $target, true);
         }
-        return $row;
+        return $item;
     },
 
     /**
      * Move down a calculation item.
      *
      * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
+     *            $item - the item to move.
+     * @return {jQuery} - the moved item.
      */
-    moveDown: function ($row) {
+    moveItemDown: function ($item) {
         'use strict';
-
-        const index = $row.index();
-        const count = $row.siblings().length;
-        if (index < count && $row.next()) {
-            const $target = $row.next();
-            return this.move($row, $target, false);
+        const index = $item.index();
+        const count = $item.siblings().length;
+        if (index < count && $item.next()) {
+            const $target = $item.next();
+            return this.moveItem($item, $target, false);
         }
-        return $row;
+        return $item;
     }
 };
 
@@ -1594,7 +1863,7 @@ const MoveRowHandler = {
     SearchHelper.init();
 
     // move rows
-    MoveRowHandler.init();
+    MoveHandler.init();
 
     // application
     Application.init();
@@ -1629,7 +1898,7 @@ const MoveRowHandler = {
             },
 
             'onStartEdit': function () {
-                $cell.removeClass('empty-cell')
+                $cell.removeClass('empty-cell');
                 $('.dropdown-menu.show').removeClass('show');
             },
             'onEndEdit': function (oldValue, newValue) {
@@ -1656,5 +1925,13 @@ const MoveRowHandler = {
 
     // main form validation
     $('#edit-form').initValidator();
+
+    // edit the default product if new calculation
+    const edit = $('#edit-form').data('edit') || false;
+    const $button = $('#data-table-edit .dropdown-item.btn-edit-item');
+    if (edit && $button.length === 1) {
+        Application.showEditItemDialog($button);
+    }
+
 }(jQuery));
 

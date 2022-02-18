@@ -137,7 +137,7 @@ class ThemeService
     public function getCurrentTheme(?Request $request = null): Theme
     {
         if (null !== ($request = $this->getRequest($request))) {
-            $css = (string) $request->cookies->get(self::KEY_CSS, self::DEFAULT_CSS);
+            $css = $request->cookies->get(self::KEY_CSS, self::DEFAULT_CSS);
 
             return $this->findTheme($css);
         }
@@ -177,7 +177,7 @@ class ThemeService
     public function getThemeBackground(?Request $request = null): string
     {
         if (null !== ($request = $this->getRequest($request))) {
-            return (string) $request->cookies->get(self::KEY_BACKGROUND, self::DEFAULT_BACKGROUND);
+            return $request->cookies->get(self::KEY_BACKGROUND, self::DEFAULT_BACKGROUND);
         }
 
         return self::DEFAULT_BACKGROUND;
@@ -191,7 +191,9 @@ class ThemeService
     public function getThemes(): array
     {
         // already cached?
-        if ($themes = $this->getCacheValue(self::KEY_THEMES)) {
+        /** @var Theme[]|null $themes */
+        $themes = $this->getCacheValue(self::KEY_THEMES);
+        if (null !== $themes) {
             return $themes;
         }
 
@@ -210,6 +212,7 @@ class ThemeService
         }
 
         // decode and check error
+        /** @var array<array{name: string, description: string, css: string}>|null $entries */
         $entries = \json_decode($content, true);
         if (\JSON_ERROR_NONE !== \json_last_error() || empty($entries)) {
             return $themes;

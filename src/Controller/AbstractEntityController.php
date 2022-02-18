@@ -40,8 +40,6 @@ abstract class AbstractEntityController extends AbstractController
 {
     /**
      * The entity class name.
-     *
-     * @psalm-var class-string<T> $className
      */
     protected string $className;
 
@@ -96,6 +94,7 @@ abstract class AbstractEntityController extends AbstractController
      *                                    <li><code>success</code> : the message to display on success.</li>
      *                                    <li><code>failure</code> : the message to display on failure.</li>
      *                                    </ul>
+     * @psalm-param T $item
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
@@ -114,13 +113,12 @@ abstract class AbstractEntityController extends AbstractController
             try {
                 // remove
                 $this->deleteFromDatabase($item);
-
                 // message
-                $message = $parameters['success'] ?? 'common.delete_success';
+                $message = (string) ($parameters['success'] ?? 'common.delete_success');
                 $message = $this->trans($message, ['%name%' => $display]);
                 $this->warning($message);
             } catch (Exception $e) {
-                $failure = $parameters['failure'] ?? 'common.delete_failure';
+                $failure = (string) ($parameters['failure'] ?? 'common.delete_failure');
                 $message = $this->trans($failure, ['%name%' => $display]);
                 $context = Utils::getExceptionContext($e);
                 $logger->error($message, $context);
@@ -133,14 +131,14 @@ abstract class AbstractEntityController extends AbstractController
 
             // redirect
             $id = 0;
-            $route = $parameters['route'] ?? $this->getDefaultRoute();
+            $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
         // get parameters
-        $title = $parameters['title'] ?? 'common.delete_title';
-        $message = $parameters['message'] ?? 'common.delete_message';
+        $title = (string) ($parameters['title'] ?? 'common.delete_title');
+        $message = (string) ($parameters['message'] ?? 'common.delete_message');
         $message = $this->trans($message, ['%name%' => $display]);
 
         // update parameters
@@ -157,6 +155,7 @@ abstract class AbstractEntityController extends AbstractController
      * This function delete the given entity from the database.
      *
      * @param AbstractEntity $item the entity to delete
+     * @psalm-param T $item
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {
@@ -175,6 +174,7 @@ abstract class AbstractEntityController extends AbstractController
      *                                   <li><code>success</code> : the message to display on success (optional).</li>
      *                                   <li><code>route</code> : the route to display on success (optional).</li>
      *                                   </ul>
+     * @psalm-param T $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
@@ -191,13 +191,14 @@ abstract class AbstractEntityController extends AbstractController
             $this->saveToDatabase($item);
 
             // message
+            /** @psalm-var string $key */
             $key = $isNew ? $parameters['success'] ?? 'common.add_success' : $parameters['success'] ?? 'common.edit_success';
             $message = $this->trans($key, ['%name%' => $item->getDisplay()]);
             $this->succes($message);
 
             // redirect
             $id = $item->getId();
-            $route = $parameters['route'] ?? $this->getDefaultRoute();
+            $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
@@ -269,6 +270,10 @@ abstract class AbstractEntityController extends AbstractController
      * @param string $alias     the entity alias
      *
      * @return AbstractEntity[] the entities
+     *
+     * @psalm-param array<Criteria|string> $criterias
+     * @psalm-return T[]
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
@@ -329,10 +334,10 @@ abstract class AbstractEntityController extends AbstractController
         $mode = $this->getSessionString($keySort, $sortMode);
 
         // get request values
-        $id = (int) $request->get('id', 0);
-        $query = $request->get('query', '');
-        $mode = $request->get('sortMode', $mode);
-        $field = $request->get('sortField', $field);
+        $id = $this->getRequestInt($request, 'id', 0);
+        $query = $this->getRequestString($request, 'query', '');
+        $mode = $this->getRequestString($request, 'sortMode', $mode);
+        $field = $this->getRequestString($request, 'sortField', $field);
 
         // update session values
         if ($sortField === $field && $sortMode === $mode) {
@@ -345,6 +350,8 @@ abstract class AbstractEntityController extends AbstractController
         }
 
         // get items
+        /** @psalm-var string|null $field */
+        /** @psalm-var string $mode */
         $items = $this->getEntities($field, $mode);
 
         // parameters
@@ -422,6 +429,7 @@ abstract class AbstractEntityController extends AbstractController
      * Derived class can update entity before it is saved to the database.
      *
      * @param AbstractEntity $item the entity to save
+     * @psalm-param T $item
      */
     protected function saveToDatabase(AbstractEntity $item): void
     {
@@ -439,6 +447,7 @@ abstract class AbstractEntityController extends AbstractController
      * @param array          $parameters the additional parameters to pass to the template
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
+     * @psalm-param T $item
      */
     protected function showEntity(AbstractEntity $item, array $parameters = []): Response
     {
@@ -456,13 +465,15 @@ abstract class AbstractEntityController extends AbstractController
      * Update the parameters by adding the request query values.
      *
      * @param Request $request    the request to get the query values
-     * @param array   $parameters the $parameters to update
+     * @param array   $parameters the parameters to update
      * @param int     $id         an optional entity identifier
      */
     protected function updateQueryParameters(Request $request, array &$parameters, ?int $id = 0): void
     {
+        /** @psalm-var array $existing */
+        $existing = $parameters['params'] ?? [];
         $queryParameters = $request->query->all();
-        $parameters['params'] = \array_merge($queryParameters, $parameters['params'] ?? []);
+        $parameters['params'] = $existing + $queryParameters;
         if (!empty($id) && !isset($parameters['params']['id'])) {
             $parameters['params']['id'] = $id;
         }

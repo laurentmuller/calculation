@@ -14,15 +14,12 @@ namespace App\Repository;
 
 use App\Entity\CalculationGroup;
 use App\Entity\Group;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for calculation group entity.
  *
- * @method CalculationGroup|null find($id, $lockMode = null, $lockVersion = null)
- * @method CalculationGroup|null findOneBy(array $criteria, array $orderBy = null)
- * @method CalculationGroup[]    findAll()
- * @method CalculationGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractRepository<CalculationGroup>
  *
  * @author Laurent Muller
@@ -48,14 +45,12 @@ class CalculationGroupRepository extends AbstractRepository
      */
     public function countGroupReferences(Group $group): int
     {
-        $result = $this->createQueryBuilder('e')
+        return (int) $this->createQueryBuilder('e')
             ->select('DISTINCT COUNT(c.id)')
             ->innerJoin('e.calculation', 'c')
             ->where('e.group = :group')
-            ->setParameter('group', $group)
+            ->setParameter('group', $group, Types::OBJECT)
             ->getQuery()
             ->getSingleScalarResult();
-
-        return (int) $result;
     }
 }

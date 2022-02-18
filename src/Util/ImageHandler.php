@@ -46,8 +46,8 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Constructor.
      *
-     * @param resource $image    the image to handle
-     * @param string   $filename the file name or null if none
+     * @param mixed  $image    the image to handle
+     * @param string $filename the file name or null if none
      *
      * @throws \InvalidArgumentException if the given image is not a resource
      */
@@ -403,8 +403,11 @@ class ImageHandler implements ImageExtensionInterface
      */
     public function resolution(int $default = self::DEFAULT_RESOLUTION): int
     {
-        if (\function_exists('imageresolution') && $resolutions = \imageresolution($this->image)) {
-            return $resolutions[0];
+        if (\function_exists('imageresolution')) {
+            /** @psalm-var int[] $values */
+            $values = \imageresolution($this->image);
+
+            return $values[0];
         }
 
         return $default;
@@ -442,12 +445,12 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a BMP image to either the browser or a file.
      *
-     * @param mixed $to the path or an open stream resource (which is automatically being closed
-     *                  after this function returns) to save the file to. If not set or null, the
-     *                  raw image stream will be outputted directly.</p>
-     *                  <p>
-     *                  <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                  </p>
+     * @param resource|string|null $to the path or an open stream resource (which is automatically being closed
+     *                                 after this function returns) to save the file to. If not set or null, the
+     *                                 raw image stream will be outputted directly.</p>
+     *                                 <p>
+     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                 </p>
      *
      * @return bool true on success or false on failure
      */
@@ -459,12 +462,12 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a GIF image to either the browser or a file.
      *
-     * @param mixed $to the path or an open stream resource (which is automatically being closed
-     *                  after this function returns) to save the file to. If not set or null, the
-     *                  raw image stream will be outputted directly.</p>
-     *                  <p>
-     *                  <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                  </p>
+     * @param resource|string|null $to the path or an open stream resource (which is automatically being closed
+     *                                 after this function returns) to save the file to. If not set or null, the
+     *                                 raw image stream will be outputted directly.</p>
+     *                                 <p>
+     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                 </p>
      *
      * @return bool true on success or false on failure
      */
@@ -476,36 +479,36 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a JPEG image to either the browser or a file.
      *
-     * @param mixed $to      the path or an open stream resource (which is automatically being closed
-     *                       after this function returns) to save the file to. If not set or null, the
-     *                       raw image stream will be outputted directly.</p>
-     *                       <p>
-     *                       <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                       </p>
-     * @param int   $quality the quality is optional, and ranges from 0 (worst quality, smaller file)
-     *                       to 100 (best quality, biggest file). The default is the default IJG quality value
-     *                       (about 75).
+     * @param resource|string|null $to      the path or an open stream resource (which is automatically being closed
+     *                                      after this function returns) to save the file to. If not set or null, the
+     *                                      raw image stream will be outputted directly.</p>
+     *                                      <p>
+     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                      </p>
+     * @param int                  $quality the quality is optional, and ranges from 0 (worst quality, smaller file)
+     *                                      to 100 (best quality, biggest file). The default is the default IJG quality value
+     *                                      (about 75).
      *
      * @return bool true on success or false on failure
      */
     public function toJpeg($to = null, int $quality = -1): bool
     {
-        return (bool) \imagejpeg($this->image, $to, $quality);
+        return \imagejpeg($this->image, $to, $quality);
     }
 
     /**
      * Output a PNG image to either the browser or a file.
      *
-     * @param mixed $to      the path or an open stream resource (which is automatically being closed
-     *                       after this function returns) to save the file to. If not set or null, the
-     *                       raw image stream will be outputted directly.</p>
-     *                       <p>
-     *                       <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                       </p>
-     * @param int   $quality the compression level: from 0 (no compression) to 9. The current default is 6.
-     * @param int   $filters allows reducing the PNG file size. It is a bitmask field which may be set to any
-     *                       combination of the PNG_FILTER_XX constants. PNG_NO_FILTER or PNG_ALL_FILTERS may also be
-     *                       used to respectively disable or activate all filters.
+     * @param resource|string|null $to      the path or an open stream resource (which is automatically being closed
+     *                                      after this function returns) to save the file to. If not set or null, the
+     *                                      raw image stream will be outputted directly.</p>
+     *                                      <p>
+     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                      </p>
+     * @param int                  $quality the compression level: from 0 (no compression) to 9. The current default is 6.
+     * @param int                  $filters allows reducing the PNG file size. It is a bitmask field which may be set to any
+     *                                      combination of the PNG_FILTER_XX constants. PNG_NO_FILTER or PNG_ALL_FILTERS may also be
+     *                                      used to respectively disable or activate all filters.
      *
      * @return bool true on success or false on failure
      */
@@ -517,15 +520,15 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a WBMP (Wireless Bitmaps) image to either the browser or a file.
      *
-     * @param mixed $to         the path or an open stream resource (which is automatically being closed
-     *                          after this function returns) to save the file to. If not set or null, the
-     *                          raw image stream will be outputted directly.</p>
-     *                          <p>
-     *                          <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                          </p>
-     * @param int   $foreground you can set the foreground color with this parameter by setting an
-     *                          identifier obtained from allocate. The default foreground color
-     *                          is black. All other colors are treated as background.
+     * @param resource|string $to         the path or an open stream resource (which is automatically being closed
+     *                                    after this function returns) to save the file to. If not set or null, the
+     *                                    raw image stream will be outputted directly.</p>
+     *                                    <p>
+     *                                    <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                    </p>
+     * @param int             $foreground you can set the foreground color with this parameter by setting an
+     *                                    identifier obtained from allocate. The default foreground color
+     *                                    is black. All other colors are treated as background.
      *
      * @return bool true on success or false on failure
      */
@@ -541,13 +544,13 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a JPEG image to either the browser or a file.
      *
-     * @param mixed $to      the path or an open stream resource (which is automatically being closed
-     *                       after this function returns) to save the file to. If not set or null, the
-     *                       raw image stream will be outputted directly.</p>
-     *                       <p>
-     *                       <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                       </p>
-     * @param int   $quality the ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file)
+     * @param resource|string $to      the path or an open stream resource (which is automatically being closed
+     *                                 after this function returns) to save the file to. If not set or null, the
+     *                                 raw image stream will be outputted directly.</p>
+     *                                 <p>
+     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                 </p>
+     * @param int             $quality the ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file)
      *
      * @return bool true on success or false on failure
      */
@@ -559,15 +562,14 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a XBM image to either the browser or a file.
      *
-     * @param mixed $to         the path or an open stream resource (which is automatically being closed
-     *                          after this function returns) to save the file to. If not set or null, the
-     *                          raw image stream will be outputted directly.</p>
-     *                          <p>
-     *                          <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                          </p>
-     * @param int   $foreground you can set the foreground color with this parameter by setting an
-     *                          identifier obtained from allocate. The default foreground color
-     *                          is black. All other colors are treated as background.
+     * @param string|null $to         the path to save the file to. If not set or null, the
+     *                                raw image stream will be outputted directly.</p>
+     *                                <p>
+     *                                <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                </p>
+     * @param int         $foreground you can set the foreground color with this parameter by setting an
+     *                                identifier obtained from allocate. The default foreground color
+     *                                is black. All other colors are treated as background.
      *
      * @return bool true on success or false on failure
      */
@@ -600,7 +602,7 @@ class ImageHandler implements ImageExtensionInterface
      * @param string $fontfile the path to the TrueType font
      * @param string $text     the string to be measured
      *
-     * @return array|bool an array with 8 elements representing four points making the bounding box of the
+     * @return int[]|bool an array with 8 elements representing four points making the bounding box of the
      *                    text on success and false on error.<br>
      *                    The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
      *                    corner seeing the text horizontally.<br><br>
@@ -645,7 +647,10 @@ class ImageHandler implements ImageExtensionInterface
      */
     public function ttfBox(float $size, float $angle, string $fontfile, string $text)
     {
-        return \imagettfbbox($size, $angle, $fontfile, $text);
+        /** @var int[]|bool $result */
+        $result = \imagettfbbox($size, $angle, $fontfile, $text);
+
+        return $result;
     }
 
     /**
@@ -673,7 +678,7 @@ class ImageHandler implements ImageExtensionInterface
      * @param string $fontfile the path to the TrueType font
      * @param string $text     the string to be measured
      *
-     * @return array an array with the text width and the text height or an empty array ([0, 0]) on error
+     * @return int[] an array with the text width and the text height or an empty array ([0, 0]) on error
      *
      * @see ImageHandler::ttfBox()
      */

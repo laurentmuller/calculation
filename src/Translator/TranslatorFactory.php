@@ -110,7 +110,7 @@ class TranslatorFactory
      */
     public function getSessionService(): TranslatorServiceInterface
     {
-        $class = $this->getSessionValue(self::KEY_LAST_SERVICE, self::DEFAULT_SERVICE);
+        $class = (string) $this->getSessionValue(self::KEY_LAST_SERVICE, self::DEFAULT_SERVICE);
         if (!$this->exists($class)) {
             $class = self::DEFAULT_SERVICE;
         }

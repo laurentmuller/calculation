@@ -24,30 +24,22 @@ class HtmlMargins
     /**
      * The bottom margin.
      */
-    protected float $bottom;
+    protected float $bottom = 0.0;
 
     /**
      * The left margin.
      */
-    protected float $left;
+    protected float $left = 0.0;
 
     /**
      * The right margin.
      */
-    protected float $right;
+    protected float $right = 0.0;
 
     /**
      * The top margin.
      */
-    protected float $top;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->reset();
-    }
+    protected float $top = 0.0;
 
     public function __toString(): string
     {

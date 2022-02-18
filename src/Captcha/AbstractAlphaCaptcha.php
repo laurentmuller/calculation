@@ -36,7 +36,7 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     public function __construct(DictionnaryService $dictionnary, TranslatorInterface $translator)
     {
         $this->dictionnary = $dictionnary;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**

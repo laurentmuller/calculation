@@ -16,13 +16,14 @@ namespace App\Faker;
  * Faker provider to generate custom phone numbers.
  *
  * @author Laurent Muller
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
 {
     /**
      * Swiss phone number formats.
      *
-     * @var mixed
+     * @psalm-var mixed
      */
     protected static $formats = [
         '0## ### ## ##',
@@ -30,6 +31,8 @@ class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
 
     /**
      * Swiss mobile (cell) phone number formats.
+     *
+     * @psalm-var array
      */
     protected static $mobileFormats = [
         // Local

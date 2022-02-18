@@ -94,7 +94,7 @@ class PlainType extends AbstractType
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -104,6 +104,7 @@ class PlainType extends AbstractType
     {
         parent::buildView($view, $form, $options);
 
+        /** @var mixed $data */
         $data = $form->getViewData();
         $view->vars = \array_replace(
             $view->vars,
@@ -225,12 +226,10 @@ class PlainType extends AbstractType
     /**
      * Formats the given value as date.
      *
-     * @param mixed $value   the value to transform
-     * @param array $options the options
-     *
-     * @return string|null the formatted date
+     * @param \DateTimeInterface|int|null $value   the value to transform
+     * @param array                       $options the options
      */
-    private function formatDate($value, array $options): ?string
+    private function formatDate($value, array $options): string
     {
         $calendar = $this->getCalendarFormat($options);
         $timezone = $this->getOptionString($options, 'time_zone');
@@ -238,14 +237,14 @@ class PlainType extends AbstractType
         $datetype = $this->getOptionInt($options, 'date_format', FormatUtils::getDateType());
         $timetype = $this->getOptionInt($options, 'time_format', FormatUtils::getTimeType());
 
-        return FormatUtils::formatDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
+        return (string) FormatUtils::formatDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
     }
 
     /**
      * Formats the given value as number.
      *
-     * @param mixed $value   the value to transform
-     * @param array $options the options
+     * @param float|int|string $value   the value to transform
+     * @param array            $options the options
      *
      * @return string the formatted number
      */
@@ -255,17 +254,17 @@ class PlainType extends AbstractType
 
         switch ($type) {
             case self::NUMBER_IDENTIFIER:
-                return FormatUtils::formatId($value);
+                return FormatUtils::formatId((int) $value);
             case self::NUMBER_INTEGER:
-                return FormatUtils::formatInt($value);
+                return FormatUtils::formatInt((int) $value);
             case self::NUMBER_PERCENT:
                 $includeSign = $this->getOptionBool($options, 'percent_sign', true);
                 $decimals = $this->getOptionInt($options, 'percent_decimals', 2);
                 $roundingMode = $this->getOptionInt($options, 'percent_rounding_mode', \NumberFormatter::ROUND_HALFEVEN);
 
-                return FormatUtils::formatPercent($value, $includeSign, $decimals, $roundingMode);
+                return FormatUtils::formatPercent((float) $value, $includeSign, $decimals, $roundingMode);
             case self::NUMBER_AMOUNT:
-                return FormatUtils::formatAmount($value);
+                return FormatUtils::formatAmount((float) $value);
             default:
                 return (string) $value;
         }
@@ -301,7 +300,7 @@ class PlainType extends AbstractType
     private function getOptionBool(array $options, string $name, bool $defaultValue): bool
     {
         if (isset($options[$name]) && \is_bool($options[$name])) {
-            return (bool) $options[$name];
+            return $options[$name];
         }
 
         return $defaultValue;
@@ -319,7 +318,7 @@ class PlainType extends AbstractType
     private function getOptionInt(array $options, string $name, int $defaultValue): int
     {
         if (isset($options[$name]) && \is_int($options[$name])) {
-            return (int) $options[$name];
+            return $options[$name];
         }
 
         return $defaultValue;
@@ -339,7 +338,7 @@ class PlainType extends AbstractType
     {
         $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
 
-        return $translate ? $this->trans($value) : $value;
+        return $translate ? $this->trans((string) $value) : $value;
     }
 
     /**
@@ -348,15 +347,16 @@ class PlainType extends AbstractType
      * @param mixed $value   the value to transform
      * @param array $options the options
      *
-     * @return string|null the transformed value
-     *
      * @throws TransformationFailedException if the value can not be mapped to a string
      */
-    private function transformValue($value, array $options): ?string
+    private function transformValue($value, array $options): string
     {
         // transformer?
-        if (\is_callable($options['transformer'] ?? false)) {
-            $value = \call_user_func($options['transformer'], $value);
+        /** @var callable|null $callback */
+        $callback = $options['transformer'] ?? null;
+        if (\is_callable($callback)) {
+            /** @var mixed $value */
+            $value = \call_user_func($callback, $value);
         }
 
         // boolean?
@@ -369,23 +369,25 @@ class PlainType extends AbstractType
 
         // value?
         if (null === $value || (\is_string($value) && '' === $value)) {
-            if (\is_callable($options['empty_value'] ?? false)) {
-                return \call_user_func($options['empty_value'], $value);
+            /** @var callable|null $callback */
+            $callback = $options['empty_value'] ?? null;
+            if (\is_callable($callback)) {
+                return (string) \call_user_func($callback, $value);
             }
 
-            return $this->getOptionString($options, 'empty_value', 'common.value_null', true);
+            return (string) $this->getOptionString($options, 'empty_value', 'common.value_null', true);
         }
 
         // array?
         if (\is_array($value)) {
             // @phpstan-ignore-next-line
-            $callback = function ($item) use ($options): ?string {
+            $callback =  /** @param mixed $item */ function ($item) use ($options): string {
                 return $this->transformValue($item, $options);
             };
-            $values = \array_map($callback, (array) $value);
+            $values = \array_map($callback, $value);
             $separator = $this->getOptionString($options, 'separator', ', ');
 
-            return \implode($separator, $values);
+            return \implode((string) $separator, $values);
         }
 
         // entity?

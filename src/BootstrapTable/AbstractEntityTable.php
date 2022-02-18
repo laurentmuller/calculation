@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\AbstractEntity;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Util\Utils;
@@ -129,6 +130,7 @@ abstract class AbstractEntityTable extends AbstractTable
         $this->limit($query, $builder);
 
         // get result and map entities
+        /** @var AbstractEntity[] $entities */
         $entities = $builder->getQuery()->getResult();
         $results->rows = $this->mapEntities($entities);
 
@@ -155,6 +157,7 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function orderBy(DataQuery $query, QueryBuilder $builder): void
     {
+        /** @var array<string, string> $orderBy */
         $orderBy = [];
         $sort = $query->sort;
         $order = $query->order;
@@ -218,9 +221,9 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Update the order by clause.
      *
-     * @param array  $orderBy    the order by clause to update
-     * @param string $orderField the order field to add
-     * @param string $orderSort  the order direction to add
+     * @param array<string, string> $orderBy    the order by clause to update
+     * @param string                $orderField the order field to add
+     * @param string                $orderSort  the order direction to add
      */
     private function updateOrderBy(array &$orderBy, string $orderField, string $orderSort): void
     {

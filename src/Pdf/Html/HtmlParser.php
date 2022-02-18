@@ -110,7 +110,7 @@ class HtmlParser
     {
         $chunk = new HtmlOlChunk($name, $parent);
         $chunk->setClassName($class);
-        $chunk->setType($this->getTypeAttribute($node));
+        $chunk->setType((string) $this->getTypeAttribute($node));
         $chunk->setStart($this->getStartAttribute($node));
 
         return $chunk;
@@ -205,14 +205,15 @@ class HtmlParser
      * @param string   $name    the attribute name to find
      * @param string   $default the default value to returns if the attribute is not found
      *
-     * @return string the attribute value, if found; the default value otherwise
+     * @return string|null the attribute value, if found; the default value otherwise
      */
     private function getAttribute(\DOMNode $node, string $name, ?string $default = null): ?string
     {
         if ($node->hasAttributes()) {
+            /** @var \DOMNamedNodeMap $attributes */
             $attributes = $node->attributes;
             if (null !== ($attribute = $attributes->getNamedItem($name))) {
-                $value = \trim($attribute->nodeValue);
+                $value = \trim((string) $attribute->nodeValue);
                 if (Utils::isString($value)) {
                     return $value;
                 }

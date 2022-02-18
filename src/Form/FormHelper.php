@@ -54,6 +54,8 @@ class FormHelper
 {
     /**
      * The attributes.
+     *
+     * @psalm-var array<string, mixed>
      */
     private array $attributes = [];
 
@@ -69,11 +71,15 @@ class FormHelper
 
     /**
      * The help attributes.
+     *
+     * @psalm-var array<string, mixed>
      */
     private array $helpAttributes = [];
 
     /**
      * The label attributes.
+     *
+     * @psalm-var array<string, mixed>
      */
     private array $labelAttributes = [];
 
@@ -84,11 +90,15 @@ class FormHelper
 
     /**
      * The options.
+     *
+     * @psalm-var array<string, mixed>
      */
     private array $options = [];
 
     /**
      * The row attributes.
+     *
+     * @psalm-var array<string, mixed>
      */
     private array $rowAttributes = [];
 
@@ -128,7 +138,7 @@ class FormHelper
         }
 
         // add
-        $this->builder->add($this->field, $type, $this->options);
+        $this->builder->add((string) $this->field, $type, $this->options);
 
         return $this->reset();
     }
@@ -251,6 +261,8 @@ class FormHelper
      * @param int      $priority  The priority of the listener. Listeners
      *                            with a higher priority are called before
      *                            listeners with a lower priority.
+     * @psalm-suppress ArgumentTypeCoercion
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function addEventListener(string $eventName, callable $listener, int $priority = 0): self
     {
@@ -335,7 +347,7 @@ class FormHelper
         if (\PHP_INT_MAX !== $max) {
             $this->updateAttribute('max', $max);
         }
-        if (-1 !== $step) {
+        if (-1 !== (int) $step) {
             $this->updateAttribute('step', $step);
         }
 
@@ -673,7 +685,7 @@ class FormHelper
         if (null === $locale) {
             $locale = \Locale::getDefault();
         }
-        $formatter = new \NumberFormatter((string) $locale, \NumberFormatter::PERCENT);
+        $formatter = new \NumberFormatter($locale, \NumberFormatter::PERCENT);
 
         return $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
     }
@@ -857,11 +869,13 @@ class FormHelper
     /**
      * Update attributes.
      *
-     * @param array<string, mixed> $attributes the attributes names and values
-     * @param bool                 $force      true to put the option, even if the value is null
+     * @param array $attributes the attributes names and values
+     * @param bool  $force      true to put the option, even if the value is null
+     * @psalm-param array<string, mixed> $attributes
      */
     public function updateAttributes(array $attributes, bool $force = false): self
     {
+        /** @psalm-var mixed $value */
         foreach ($attributes as $name => $value) {
             $this->updateAttribute($name, $value, $force);
         }
@@ -913,6 +927,7 @@ class FormHelper
      */
     public function updateOptions(array $options, bool $force = false): self
     {
+        /** @psalm-var mixed $value */
         foreach ($options as $name => $value) {
             $this->updateOption($name, $value, $force);
         }
@@ -947,6 +962,7 @@ class FormHelper
      *
      * @param array  $array the array attributes where to find and update existing classes
      * @param string $name  one or more space-separated classes to add
+     * @psalm-param array<string, mixed> $array
      */
     private function addClasses(array &$array, string $name): self
     {
@@ -954,11 +970,13 @@ class FormHelper
             return $this;
         }
 
+        /** @var string $existing */
+        $existing = $array['class'] ?? '';
         $newValues = \array_filter(\explode(' ', $name));
-        $oldValues = \array_filter(\explode(' ', $array['class'] ?? ''));
+        $oldValues = \array_filter(\explode(' ', $existing));
         $className = \implode(' ', \array_unique([...$oldValues, ...$newValues]));
 
-        return $this->updateEntry($array, 'class', '' === $className ? null : $className, false);
+        return $this->updateEntry($array, 'class', empty($className) ? null : $className, false);
     }
 
     /**
@@ -968,6 +986,9 @@ class FormHelper
      * @param string $name  the entry name
      * @param mixed  $value the entry value
      * @param bool   $force true to put the entry, even if the value is null
+     *
+     * @psalm-param array<string, mixed> $array
+     * @psalm-suppress MixedAssignment
      */
     private function updateEntry(array &$array, string $name, $value, bool $force): self
     {

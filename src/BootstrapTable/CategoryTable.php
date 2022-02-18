@@ -90,7 +90,7 @@ class CategoryTable extends AbstractEntityTable
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
-        $groupId = (int) $request->get(self::PARAM_GROUP, 0);
+        $groupId = (int) $this->getRequestValue($request, self::PARAM_GROUP, 0, false);
         $query->addCustomData(self::PARAM_GROUP, $groupId);
 
         return $query;
@@ -150,8 +150,6 @@ class CategoryTable extends AbstractEntityTable
 
     /**
      * Gets groups.
-     *
-     * @return Group[]
      */
     private function getGroups(): array
     {

@@ -28,6 +28,11 @@ trait ModelTrait
      * @return string the class name if no exception
      *
      * @throws CalendarException if the given class name does not exist
+     *
+     * @template T
+     * @psalm-param class-string<T>|null $className
+     * @psalm-param class-string<T> $defaultClass
+     * @psalm-return  class-string<T>
      */
     protected function checkClass(?string $className, string $defaultClass): string
     {

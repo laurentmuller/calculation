@@ -20,7 +20,7 @@ namespace App\Pivot\Field;
 class PivotQuarterField extends PivotDateField
 {
     /**
-     * @var callable|null
+     * @var callable(int): string|null
      */
     private $formatter;
 
@@ -40,13 +40,13 @@ class PivotQuarterField extends PivotDateField
      */
     public function getDisplayValue($value)
     {
-        return $this->formatQuarter($value);
+        return $this->formatQuarter((int) $value);
     }
 
     /**
      * Gets the callback used to format a quarter.
      *
-     * @return callable|null the callback, if set; null otherwise
+     * @return callable(int): string|null the callback, if set; null otherwise
      */
     public function getFormatter(): ?callable
     {
@@ -58,7 +58,7 @@ class PivotQuarterField extends PivotDateField
      *
      * The function receive the quarter (1 to 4) as parameter and must return a string.
      *
-     * @param callable|null $formatter the callback to set; null to use default
+     * @param callable(int): string|null $formatter the callback to set; null to use default
      */
     public function setFormatter(?callable $formatter): self
     {
@@ -81,10 +81,8 @@ class PivotQuarterField extends PivotDateField
      * Formats the quarter.
      *
      * @param int $quarter the quarter (1 to 4) to format
-     *
-     * @return string|null the formatted quarter
      */
-    private function formatQuarter(int $quarter): ?string
+    private function formatQuarter(int $quarter): string
     {
         if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $quarter);

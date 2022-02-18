@@ -20,6 +20,8 @@ use App\Util\Utils;
  * Represents a calendar for a specified year.
  *
  * @author Laurent Muller
+ *
+ * @psalm-consistent-constructor
  */
 class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDaysInterface
 {
@@ -43,18 +45,22 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * The day model class.
+     *
+     * @psalm-var class-string<Day>
      */
     protected string $dayModel = self::DEFAULT_DAY_MODEL;
 
     /**
      * The month model class.
+     *
+     * @psalm-var class-string<Month>
      */
     protected string $monthModel = self::DEFAULT_MONTH_MODEL;
 
     /**
      * The full month names.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected ?array $monthNames = null;
 
@@ -68,7 +74,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * The short month names.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected ?array $monthShortNames = null;
 
@@ -79,13 +85,15 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * The week model class.
+     *
+     * @psalm-var class-string<Week>
      */
     protected string $weekModel = self::DEFAULT_WEEK_MODEL;
 
     /**
      * The full name of the week days.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected ?array $weekNames = null;
 
@@ -99,7 +107,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * The short name of the week days.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected ?array $weekShortNames = null;
 
@@ -129,10 +137,10 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
-        $firstDate = new \DateTime('1 January ' . $this->year);
-        $lastDate = new \DateTime('31 December ' . $this->year);
-        $first = FormatUtils::formatDate($firstDate);
-        $last = FormatUtils::formatDate($lastDate);
+        $firstDate = new \DateTime('1 January ' . (int) $this->year);
+        $lastDate = new \DateTime('31 December ' . (int) $this->year);
+        $first = (string) FormatUtils::formatDate($firstDate);
+        $last = (string) FormatUtils::formatDate($lastDate);
 
         return \sprintf('%s(%d, %s - %s)', $name, $this->getNumber(), $first, $last);
     }
@@ -156,14 +164,12 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
         $lastYearDate = new \DateTime('31 December ' . $year);
 
         // get first day in calendar (monday of the 1st week)
-        /** @var \DateTime $firstDate */
         $firstDate = new \DateTime('first monday of January ' . $year);
         if ($firstDate > $firstYearDate) {
             $firstDate->sub(new \DateInterval('P1W'));
         }
 
         // get the last days in calendar (sunday of the last week)
-        /** @var \DateTime $lastDate */
         $lastDate = new \DateTime('last sunday of December ' . $year);
         if ($lastDate < $lastYearDate) {
             $lastDate->add(new \DateInterval('P1W'));
@@ -175,7 +181,6 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
         /** @var ?Month $currentMonth */
         $currentMonth = null;
 
-        /** @var \DateTime $currentDate */
         $currentDate = clone $firstDate;
 
         // build calendar
@@ -239,7 +244,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Gets the full name of the months.
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getMonthNames(): array
     {
@@ -263,7 +268,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Gets the short name of the months.
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getMonthShortNames(): array
     {
@@ -322,7 +327,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Gets the full name of the week days.
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getWeekNames(): array
     {
@@ -346,7 +351,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Gets the short name of the week days.
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getWeekShortNames(): array
     {
@@ -397,6 +402,10 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      * @param string|null $dayModel   the day model class or null for default
      *
      * @throws CalendarException if the month, the week or the day class model does not exist
+     *
+     * @psalm-param class-string<Month>|null $monthModel
+     * @psalm-param class-string<Week>|null $weekModel
+     * @psalm-param class-string<Day>|null $dayModel
      */
     public function setModels(?string $monthModel = null, ?string $weekModel = null, ?string $dayModel = null): self
     {
@@ -410,13 +419,14 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Sets the full name of the months. The array must have 12 values and keys from 1 to 12.
      *
-     * @param string[] $monthNames the month names to set
+     * @param array<int, string> $monthNames the month names to set
      *
      * @throws CalendarException if the array does not contains 12 values, if a key is missing or if one of the values is not a string
      */
     public function setMonthNames(array $monthNames): self
     {
-        $this->monthNames = $this->checkArray($monthNames, self::MONTHS_COUNT);
+        $this->checkArray($monthNames, self::MONTHS_COUNT);
+        $this->monthNames = $monthNames;
 
         return $this;
     }
@@ -424,13 +434,14 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Sets the short name of the months. The array must have 12 values and keys from 1 to 12.
      *
-     * @param string[] $monthShortNames the month short names to set
+     * @param array<int, string> $monthShortNames the month short names to set
      *
      * @throws CalendarException if the array does not contains 12 values, if a key is missing or if one of the values is not a string
      */
     public function setMonthShortNames(array $monthShortNames): self
     {
-        $this->monthShortNames = $this->checkArray($monthShortNames, self::MONTHS_COUNT);
+        $this->checkArray($monthShortNames, self::MONTHS_COUNT);
+        $this->monthShortNames = $monthShortNames;
 
         return $this;
     }
@@ -438,13 +449,14 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Sets the full name of the week days. The array must have 7 values and keys from 1 to 7.
      *
-     * @param string[] $weekNames the week names to set
+     * @param array<int, string> $weekNames the week names to set
      *
      * @throws CalendarException if the array does not contains 7 values, if a key is missing or if one of the values is not a string
      */
     public function setWeekNames(array $weekNames): self
     {
-        $this->weekNames = $this->checkArray($weekNames, self::DAYS_COUNT);
+        $this->checkArray($weekNames, self::DAYS_COUNT);
+        $this->weekNames = $weekNames;
 
         return $this;
     }
@@ -452,13 +464,14 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Sets the short name of the week days. The array must have 7 values and keys from 1 to 7.
      *
-     * @param string[] $weekShortNames the week short names to set
+     * @param array<int, string> $weekShortNames the week short names to set
      *
      * @throws CalendarException if the array does not contains 7 values, if a key is missing or if one of the values is not a string
      */
     public function setWeekShortNames(array $weekShortNames): self
     {
-        $this->weekShortNames = $this->checkArray($weekShortNames, self::DAYS_COUNT);
+        $this->checkArray($weekShortNames, self::DAYS_COUNT);
+        $this->weekShortNames = $weekShortNames;
 
         return $this;
     }
@@ -475,16 +488,14 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     }
 
     /**
-     * Checks if the given array has the given length and that all keys from 1 to length are present.
+     * Checks if the given array has the given length, that all keys from 1 to length are present and values are string.
      *
-     * @param array $array  the array to verify
-     * @param int   $length the length to match
-     *
-     * @return array the given array
+     * @param array<int, mixed> $array  the array to verify
+     * @param int               $length the length to match
      *
      * @throws CalendarException if the array has the wrong length, if a key is missing or if one of the values is not a string
      */
-    private function checkArray(array $array, int $length): array
+    private function checkArray(array $array, int $length): void
     {
         if ($length !== \count($array)) {
             throw new CalendarException("The array must contains {$length} values.");
@@ -497,8 +508,6 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
                 throw new CalendarException("The value {$array[$i]} for the key {$i} must be a string.");
             }
         }
-
-        return $array;
     }
 
     /**
@@ -508,7 +517,6 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      */
     private function createDay(\DateTimeInterface $date): Day
     {
-        /** @var Day $day */
         $day = new $this->dayModel($this, $date);
         $this->addDay($day);
 
@@ -524,7 +532,6 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      */
     private function createMonth(int $number): Month
     {
-        /** @var Month $month */
         $month = new $this->monthModel($this, $number);
         $this->months[$month->getKey()] = $month;
 
@@ -540,7 +547,6 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      */
     private function createWeek(int $number): Week
     {
-        /** @var Week $week */
         $week = new $this->weekModel($this, $number);
         $this->weeks[] = $week;
 

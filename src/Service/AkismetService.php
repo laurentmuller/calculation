@@ -102,7 +102,7 @@ class AkismetService extends AbstractHttpClientService
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
         $this->stack = $stack;
         $this->security = $security;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -202,6 +202,7 @@ class AkismetService extends AbstractHttpClientService
     public function verifyKey(): bool
     {
         // already saved?
+        /** @psalm-var mixed $verified */
         $verified = $this->getUrlCacheValue(self::URI_VERIFY);
         if (\is_bool($verified)) {
             return $verified;
@@ -246,7 +247,7 @@ class AkismetService extends AbstractHttpClientService
     private function checkError(ResponseInterface $response): void
     {
         $headers = $response->getHeaders();
-        $help = (string) ($headers['x-akismet-debug-help'][0] ?? '');
+        $help = $headers['x-akismet-debug-help'][0] ?? '';
         if ('' !== $help) {
         }
         $code = (int) ($headers['X-akismet-alert-code'][0] ?? 0);

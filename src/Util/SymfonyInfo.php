@@ -30,6 +30,8 @@ final class SymfonyInfo
 {
     /**
      * The properties to get for a package.
+     *
+     * @var string[]
      */
     private const PACKAGE_PROPERTIES = [
         'name',
@@ -207,16 +209,17 @@ final class SymfonyInfo
             if (FileUtils::exists($path)) {
                 try {
                     // parse
+                    /** @var array $content */
                     $content = FileUtils::decodeJson($path);
 
                     // runtime packages
                     $result = [
-                        'runtime' => $this->processPackages($content['packages'], false),
+                        'runtime' => $this->processPackages((array) $content['packages'], false),
                     ];
 
                     //development packages
                     if ($this->isDebug()) {
-                        $result['debug'] = $this->processPackages($content['packages-dev'], true);
+                        $result['debug'] = $this->processPackages((array) $content['packages-dev'], true);
                     }
                 } catch (\InvalidArgumentException $e) {
                     // ignore
@@ -377,25 +380,27 @@ final class SymfonyInfo
      *
      * @param array $packages the packages to process
      * @param bool  $isDev    true if packages are requiered onyl for development mode
-     *
-     * @return string[][]
      */
     private function processPackages(array $packages, bool $isDev): array
     {
         $result = [];
+        /** @psalm-var array $entry */
         foreach ($packages as $entry) {
             $package = [];
             $package['dev'] = $isDev;
             foreach (self::PACKAGE_PROPERTIES as $key) {
-                if ('version' === $key) {
-                    $entry[$key] = \ltrim($entry[$key], 'v');
-                } elseif ('description' === $key) {
-                    $value = $entry[$key];
-                    if ($value && !Utils::endwith($value, '.')) {
-                        $entry[$key] .= '.';
+                $value = (string) ($entry[$key] ?? '');
+                switch ($key) {
+                case 'version':
+                    $value = \ltrim($value, 'v');
+                    break;
+                case 'description':
+                    if (!Utils::endwith($value, '.')) {
+                        $value .= '.';
                     }
+                    break;
                 }
-                $package[$key] = $entry[$key] ?? '';
+                $package[$key] = $value;
             }
             $result[$package['name']] = $package;
         }

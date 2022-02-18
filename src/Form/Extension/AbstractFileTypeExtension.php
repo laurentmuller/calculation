@@ -57,17 +57,49 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
     }
 
     /**
+     * Updates attributes.
+     *
+     * @param FormInterface $form       the form
+     * @param array         $attributes the attributes to update
+     * @param array         $options    the options
+     */
+    protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void
+    {
+        if (isset($options['placeholder'])) {
+            /** @var string $placeholder */
+            $placeholder = $options['placeholder'];
+            $attributes['placeholder'] = $placeholder;
+        }
+        if (isset($options['maxfiles'])) {
+            $value = (int) $options['maxfiles'];
+            if ($value > 1) {
+                $attributes['maxfiles'] = $value;
+            }
+        }
+        if (isset($options['maxsize'])) {
+            /** @var string|int $maxsize */
+            $maxsize = $options['maxsize'];
+            $attributes['maxsize'] = $this->normalizeSize($maxsize);
+        }
+        if (isset($options['maxsizetotal'])) {
+            /** @var string|int $maxsizetotal */
+            $maxsizetotal = $options['maxsizetotal'];
+            $attributes['maxsizetotal'] = $this->normalizeSize($maxsizetotal);
+        }
+    }
+
+    /**
      * Normalize the given size.
      *
      * @param string|int $size the size to normalize
      *
-     * @return int the normalized size
+     * @return int|null the normalized size
      *
      * @throws InvalidOptionsException if the $size can not be parsed
      *
      * @see https://symfony.com/doc/current/reference/constraints/File.html#maxsize
      */
-    protected function normalizeSize($size): ?int
+    private function normalizeSize($size)
     {
         if (empty($size)) {
             return null;
@@ -85,42 +117,8 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             return (int) $size;
         }
         if (\preg_match('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', (string) $size, $matches)) {
-            return $matches[1] * $factors[\strtolower($matches[2])];
+            return (int) $matches[1] * $factors[\strtolower($matches[2])];
         }
         throw new InvalidOptionsException("\"{$size}\" is not a valid size.");
-    }
-
-    /**
-     * Updates attributes.
-     *
-     * @param FormInterface $form       the form
-     * @param array         $attributes the attributes to update
-     * @param array         $options    the options
-     *
-     * @psalm-suppress UnusedParam
-     */
-    protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void
-    {
-        if (isset($options['placeholder'])) {
-            $attributes['placeholder'] = $options['placeholder'];
-        }
-        if (isset($options['maxfiles'])) {
-            $value = (int) ($options['maxfiles']);
-            if ($value > 1) {
-                $attributes['maxfiles'] = $value;
-            }
-        }
-        if (isset($options['maxsize'])) {
-            $value = self::normalizeSize($options['maxsize']);
-            if ($value && $value > 0) {
-                $attributes['maxsize'] = $value;
-            }
-        }
-        if (isset($options['maxsizetotal'])) {
-            $value = self::normalizeSize($options['maxsizetotal']);
-            if ($value && $value > 0) {
-                $attributes['maxsizetotal'] = $value;
-            }
-        }
     }
 }

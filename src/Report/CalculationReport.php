@@ -77,10 +77,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         return $this->minMargin;
     }
 
-    /**
-     * Gets the translator.
-     */
-    public function getTranslator(): TranslatorInterface
+    public function getTranslator(): ?TranslatorInterface
     {
         return $this->translator;
     }
@@ -105,7 +102,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         if ($calculation->isNew()) {
             $this->setTitleTrans('calculation.add.title');
         } else {
-            $id = FormatUtils::formatId($calculation->getId());
+            $id = FormatUtils::formatId((int) $calculation->getId());
             $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
 
@@ -249,7 +246,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
                     ->build();
 
                 // save
-                $result->saveToFile($path);
+                $result->saveToFile((string) $path);
 
                 // position
                 $size = $this->getQrCodeSize();

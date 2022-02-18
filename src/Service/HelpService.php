@@ -60,7 +60,7 @@ class HelpService
         if (!$isDebug) {
             $this->adapter = $adapter;
         }
-        $this->translator = $translator;
+        $this->setTranslator($translator);
         $this->file = $projectDir . self::FILE_PATH;
         $this->imagePath = $projectDir . self::IMAGE_PATH;
     }
@@ -98,7 +98,9 @@ class HelpService
      */
     public function findEntityByDialog(array $dialog): ?array
     {
-        if ($id = $dialog['entity'] ?? false) {
+        /** @var string|null $id */
+        $id = $dialog['entity'] ?? null;
+        if (null !== $id) {
             return $this->findEntity($id);
         }
 
@@ -109,20 +111,70 @@ class HelpService
      * Gets the dialogs.
      *
      * @return array|null the dialogs, if found; null otherwise
+     *
+     * @psalm-return null|array<array{
+     *      id: string,
+     *      description: string|null,
+     *      image: string|null,
+     *      displayEntityColumns: null|bool,
+     *      displayEntityFields: null|bool,
+     *      displayEntityActions: null|bool,
+     *      entity: null|string,
+     *      editActions: null|array,
+     *      globalActions: null|array,
+     *      forbidden: null|array,
+     *      details: string[]|null}>
      */
     public function getDialogs(): ?array
     {
-        return $this->findEntries('dialogs');
+        /**
+         * @psalm-var null|array<array{
+         *      id: string,
+         *      description: string|null,
+         *      image: string|null,
+         *      displayEntityColumns: null|bool,
+         *      displayEntityFields: null|bool,
+         *      displayEntityActions: null|bool,
+         *      entity: null|string,
+         *      editActions: null|array,
+         *      globalActions: null|array,
+         *      forbidden: null|array,
+         *      details: string[]|null}> $dialogs
+         */
+        $dialogs = $this->findEntries('dialogs');
+
+        return $dialogs;
     }
 
     /**
      * Gets the entities.
      *
      * @return array|null the entities, if found; null otherwise
+     *
+     * @psalm-return null|array<array{
+     *      id: string,
+     *      name: string,
+     *      description: string|null,
+     *      constraints: string[]|null,
+     *      actions: array|null,
+     *      fields: array|null,
+     *      required: bool|null}>
      */
     public function getEntities(): ?array
     {
-        return $this->findEntries('entities');
+        /**
+         * @psalm-var null|array<array{
+         *      id: string,
+         *      name: string,
+         *      description: string|null,
+         *      constraints: string[]|null,
+         *      actions: array|null,
+         *      fields: array|null,
+         *      required: bool|null}> $entities
+         */
+        $entities = $this->findEntries('entities');
+
+        return $entities;
     }
 
     /**
@@ -139,18 +191,26 @@ class HelpService
     public function getHelp(): array
     {
         // read from cache
-        if ($help = $this->getCacheValue(self::CACHE_KEY)) {
+        /** @psalm-var array|null $help */
+        $help = $this->getCacheValue(self::CACHE_KEY);
+        if (\is_array($help)) {
             return $help;
         }
 
         // load
-        $content = \file_get_contents($this->file);
-        if ($help = \json_decode((string) $content, true)) {
-            // sort
-            if (isset($help['entities'])) {
+        $content = (string) \file_get_contents($this->file);
+        /**
+         * @psalm-var null|array{
+         *      entities: null|bool|array<array{id: string}>,
+         *      dialogs:  null|bool|array<array{id: string, entity: null|string}>
+         * } $help
+         */
+        $help = \json_decode($content, true);
+        if (\is_array($help)) {
+            if (isset($help['entities']) && \is_array($help['entities'])) {
                 $this->sortEntities($help['entities']);
             }
-            if (isset($help['dialogs'])) {
+            if (isset($help['dialogs']) && \is_array($help['dialogs'])) {
                 $this->sortDialogs($help['dialogs']);
             }
 
@@ -185,15 +245,30 @@ class HelpService
      * Gets the main (root) menus.
      *
      * @return array|null the main menus, if found; null otherwise
+     *
+     * @psalm-return null|array<array{
+     *      id: string,
+     *      description:
+     *      string,
+     *      menus: array|null}>
      */
     public function getMainMenus(): ?array
     {
-        return $this->findEntries('mainMenu', 'menus');
+        /**
+         * @psalm-var null|array<array{
+         *      id: string,
+         *      description: string,
+         *      menus: array|null}> $menus
+         */
+        $menus = $this->findEntries('mainMenu', 'menus');
+
+        return $menus;
     }
 
     private function findById(string $path, string $id): ?array
     {
         if ($entries = $this->findEntries($path)) {
+            /** @psalm-var array $entry */
             foreach ($entries as $entry) {
                 if (isset($entry['id']) && $entry['id'] === $id) {
                     return $entry;
@@ -211,33 +286,40 @@ class HelpService
             if (!isset($entries[$path])) {
                 return null;
             }
+            /** @psalm-var array $entries */
             $entries = $entries[$path];
         }
 
         return $entries;
     }
 
+    /**
+     *  @psalm-param array<array{entity: null|string, id: string}> $values
+     */
     private function sortDialogs(array &$values): void
     {
         \usort($values, function (array $a, array $b) {
-            $entityA = isset($a['entity']) ? $this->trans($a['entity'] . '.name') : 'zzzz';
-            $entityB = isset($b['entity']) ? $this->trans($b['entity'] . '.name') : 'zzzz';
+            $entityA = isset($a['entity']) ? $this->trans((string) $a['entity'] . '.name') : 'zzzz';
+            $entityB = isset($b['entity']) ? $this->trans((string) $b['entity'] . '.name') : 'zzzz';
             if (0 !== $result = \strnatcmp($entityA, $entityB)) {
                 return $result;
             }
 
-            $textA = $this->trans($a['id']);
-            $textB = $this->trans($b['id']);
+            $textA = $this->trans((string) $a['id']);
+            $textB = $this->trans((string) $b['id']);
 
             return \strnatcmp($textA, $textB);
         });
     }
 
+    /**
+     *  @psalm-param array<array{id: string}> $values
+     */
     private function sortEntities(array &$values): void
     {
         \usort($values, function (array $a, array $b) {
-            $textA = $this->trans($a['id'] . '.name');
-            $textB = $this->trans($b['id'] . '.name');
+            $textA = $this->trans((string) $a['id'] . '.name');
+            $textB = $this->trans((string) $b['id'] . '.name');
 
             return \strnatcmp($textA, $textB);
         });

@@ -64,6 +64,7 @@ class Theme implements \JsonSerializable
      * Constructor.
      *
      * @param array $source the source to copy values from
+     * @psalm-param array{name: string, description: string, css: string} $source
      */
     public function __construct(array $source)
     {

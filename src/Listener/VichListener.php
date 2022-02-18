@@ -65,6 +65,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $user = $event->getObject();
         $mapping = $event->getMapping();
 
+        /** @psalm-suppress InternalMethod */
         $file = $mapping->getFile($user);
         if (!$file instanceof File || !$file->isReadable()) {
             return;
@@ -91,6 +92,8 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 
     /**
      * Remove the small and medium image if applicable.
+     *
+     * @psalm-suppress InternalMethod
      */
     public function onPreRemove(Event $event): void
     {
@@ -99,10 +102,11 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $mapping = $event->getMapping();
 
         // directory
+        /** @psalm-suppress InternalMethod */
         $path = $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR;
 
         // get file extension
-        $filename = $mapping->getFileName($user);
+        $filename = (string) $mapping->getFileName($user);
         $file = new File($filename, false);
         $ext = $file->getExtension();
 
@@ -117,6 +121,8 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 
     /**
      * Rename and resize the image if applicable.
+     *
+     * @psalm-suppress InternalMethod
      */
     public function onPreUpload(Event $event): void
     {
@@ -141,8 +147,11 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         // rename if not same extension
         $extension = $this->getFileExtension($file);
         if (self::EXTENSION_PNG !== $extension) {
-            $newName = \substr_replace($name, self::EXTENSION_PNG, \strrpos($name, '.') + 1);
-            $mapping->setFileName($user, $newName);
+            $pos = \strrpos($name, '.');
+            if (false !== $pos) {
+                $newName = \substr_replace($name, self::EXTENSION_PNG, $pos + 1);
+                $mapping->setFileName($user, $newName);
+            }
         }
     }
 
@@ -156,6 +165,9 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         return empty($extension) ? self::EXTENSION_PNG : \strtolower($extension);
     }
 
+    /**
+     * @psalm-suppress InternalMethod
+     */
     private function rename(PropertyMapping &$mapping, User $user, File $file): File
     {
         $name = UserNamer::getBaseName($user, self::SIZE_DEFAULT, $file->getExtension());

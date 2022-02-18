@@ -8,15 +8,13 @@
 function setDefaultValues() {
     'use strict';
 
-    $('#edit-form :input:not(button), :checkbox').each(function () {
+    $('#edit-form :input:not(button)[data-default], :checkbox[data-default]').each(function () {
         const $this = $(this);
         const value = $this.data('default');
-        if (!$.isUndefined(value) && value !== '') {
-            if ($this.is(':checkbox')) {
-                $this.prop('checked', value);
-            } else {
-                $this.val(value);
-            }
+        if ($this.is(':checkbox')) {
+            $this.prop('checked', value);
+        } else {
+            $this.val(value);
         }
     });
 }

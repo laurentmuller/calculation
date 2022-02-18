@@ -315,9 +315,15 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int[]  $cityIds the city identifiers. The maximim number of city identifiers are 20.
      * @param string $units   the units to use
      *
-     * @return array|bool the current conditions if success; false on error
+     * @return array|bool the conditions for the given cities if success; false on error
      *
      * @throws \InvalidArgumentException if the number of city identifiers is greater than 20
+     *
+     *  @psalm-return bool|array<array{
+     *      cnt: int,
+     *      units: array,
+     *      list: array<int, array>
+     *  }>
      */
     public function group(array $cityIds, string $units = self::UNIT_METRIC)
     {
@@ -329,9 +335,14 @@ class OpenWeatherService extends AbstractHttpClientService
             'id' => \implode(',', $cityIds),
             'units' => $units,
         ];
-        if (!$result = $this->get(self::URI_GROUP, $query)) {
-            return false;
-        }
+
+        /** @psalm-var bool|array<array{
+         *      cnt: int,
+         *      units: array,
+         *      list: array<int, array>
+         *  }> $result
+         */
+        $result = $this->get(self::URI_GROUP, $query);
 
         return $result;
     }
@@ -377,12 +388,29 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int    $limit the maximum number of cities to return
      *
      * @return array|bool the search result if success; false on error
+     *
+     * @psalm-return bool|array<array{
+     *      id: int,
+     *      name: string,
+     *      country: string,
+     *      latitude: float,
+     *      longitude: float}>
      */
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25)
     {
         // find from cache
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units]);
-        if ($result = $this->getCacheValue($key)) {
+
+        /**
+         *  @psalm-var bool|array<array{
+         *      id: int,
+         *      name: string,
+         *      country: string,
+         *      latitude: float,
+         *      longitude: float}> $result
+         */
+        $result = $this->getCacheValue($key);
+        if (\is_array($result)) {
             return $result;
         }
 
@@ -391,15 +419,26 @@ class OpenWeatherService extends AbstractHttpClientService
         $result = $db->findCity($name, $limit);
         $db->close();
 
-        if (!empty($result)) {
-            // update
-            $this->updateResult($result);
-
-            // save to cache
-            $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
+        // found?
+        if (empty($result)) {
+            return false;
         }
 
-        return $result;
+        // update and cache
+        $this->updateResult($result);
+        $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
+
+        /**
+         *  @psalm-var array<array{
+         *      id: int,
+         *      name: string,
+         *      country: string,
+         *      latitude: float,
+         *      longitude: float}> $cities
+         */
+        $cities = $result;
+
+        return $cities;
     }
 
     /**
@@ -431,18 +470,14 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * Checks if the response contains an error.
-     *
-     * @param array $result the response to validate
-     *
-     * @return array|bool the result if no error found; false if an error
      */
-    private function checkErrorCode(array $result)
+    private function checkErrorCode(array $result): bool
     {
         if (isset($result['cod']) && Response::HTTP_OK !== (int) $result['cod']) {
-            return $this->setLastError((int) $result['cod'], $result['message']);
+            return $this->setLastError((int) $result['cod'], (string) $result['message']);
         }
 
-        return $result;
+        return true;
     }
 
     /**
@@ -454,6 +489,7 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function findTimezone(array $data): int
     {
+        /** @var mixed $value */
         foreach ($data as $key => $value) {
             if ('timezone' === $key) {
                 return (int) $value;
@@ -477,7 +513,9 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         // find from cache
         $key = $this->getCacheKey($uri, $query);
-        if ($result = $this->getCacheValue($key)) {
+        /** @psalm-var array|null $result */
+        $result = $this->getCacheValue($key);
+        if (\is_array($result)) {
             return $result;
         }
 
@@ -494,15 +532,15 @@ class OpenWeatherService extends AbstractHttpClientService
         $result = $response->toArray(false);
 
         // check
-        if (!$result = $this->checkErrorCode($result)) {
+        if (!$this->checkErrorCode($result)) {
             return false;
         }
 
         // update
-        $offset = $this->findTimezone((array) $result);
+        $offset = $this->findTimezone($result);
         $timezone = $this->offsetToTimZone($offset);
         $this->updateResult($result, $timezone);
-        $this->addUnits($result, $query['units']);
+        $this->addUnits($result, (string) $query['units']);
 
         // save to cache
         $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
@@ -536,7 +574,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getWindDirection(int $deg): string
     {
         $deg %= 360;
-        $index = \floor(($deg / 22.5 + 0.5));
+        $index = (int) \floor(($deg / 22.5 + 0.5));
 
         return self::WIND_DIRECTIONS[$index];
     }
@@ -566,62 +604,65 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Update result.
      *
-     * @param array $result   the result to process
-     * @param mixed $timezone the timezone identifier
+     * @param array                                   $result   the result to process
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      */
     private function updateResult(array &$result, $timezone = null): void
     {
+        /** @psalm-var mixed $value */
         foreach ($result as $key => &$value) {
             switch ((string) $key) {
                 case 'icon':
-                    $result['icon_big'] = $this->replaceUrl(self::ICON_BIG_URL, $value);
-                    $result['icon_small'] = $this->replaceUrl(self::ICON_SMALL_URL, $value);
+                    $result['icon_big'] = $this->replaceUrl(self::ICON_BIG_URL, (string) $value);
+                    $result['icon_small'] = $this->replaceUrl(self::ICON_SMALL_URL, (string) $value);
                     break;
 
                 case 'description':
-                    $result[$key] = \ucfirst($value);
+                    $result[$key] = \ucfirst((string) $value);
                     break;
 
                 case 'country':
-                    if ($name = $this->getCountryName($value)) {
+                    if ($name = $this->getCountryName((string) $value)) {
                         $result['country_name'] = $name;
                     }
-                    $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower($value));
+                    $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower((string) $value));
                     break;
 
                 case 'dt':
-                    $result['dt_date'] = FormatUtils::formatDate($value, self::TYPE_SHORT);
-                    $result['dt_date_locale'] = FormatUtils::formatDate($value, self::TYPE_SHORT, $timezone);
+                    $result['dt_date'] = FormatUtils::formatDate((int) $value, self::TYPE_SHORT);
+                    $result['dt_date_locale'] = FormatUtils::formatDate((int) $value, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_time'] = FormatUtils::formatTime($value, self::TYPE_SHORT);
-                    $result['dt_time_locale'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
+                    $result['dt_time'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT);
+                    $result['dt_time_locale'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_date_time'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
-                    $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
+                    $result['dt_date_time'] = FormatUtils::formatDateTime((int) $value, self::TYPE_SHORT, self::TYPE_SHORT);
+                    $result['dt_date_time_locale'] = FormatUtils::formatDateTime((int) $value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
-                    $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
+                    $result['dt_date_time_medium'] = FormatUtils::formatDateTime((int) $value, self::TYPE_MEDIUM, self::TYPE_SHORT);
+                    $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime((int) $value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
 
                     unset($result['dt_txt']);
                     break;
 
                 case 'sunrise':
-                    $result['sunrise_formatted'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
+                    $result['sunrise_formatted'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT, $timezone);
                     break;
 
                 case 'sunset':
-                    $result['sunset_formatted'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
+                    $result['sunset_formatted'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT, $timezone);
                     break;
 
                 case 'weather':
                     if (\is_array($value) && !empty($value)) {
                         $this->updateResult($value, $timezone);
-                        $value = $value[0];
+                        /** @psalm-var array $first */
+                        $first = $value[0];
+                        $value = $first;
                     }
                     break;
 
                 case 'deg':
-                    $result['deg_text'] = $this->getWindDirection($value);
+                    $result['deg_text'] = $this->getWindDirection((int) $value);
                     break;
 
                 default:

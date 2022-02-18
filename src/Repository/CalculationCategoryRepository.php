@@ -14,15 +14,12 @@ namespace App\Repository;
 
 use App\Entity\CalculationCategory;
 use App\Entity\Category;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for calculation group entity.
  *
- * @method CalculationCategory|null find($id, $lockMode = null, $lockVersion = null)
- * @method CalculationCategory|null findOneBy(array $criteria, array $orderBy = null)
- * @method CalculationCategory[]    findAll()
- * @method CalculationCategory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractRepository<CalculationCategory>
  *
  * @author Laurent Muller
@@ -48,15 +45,13 @@ class CalculationCategoryRepository extends AbstractRepository
      */
     public function countCategoryReferences(Category $category): int
     {
-        $result = $this->createQueryBuilder('e')
+        return (int) $this->createQueryBuilder('e')
             ->select('DISTINCT COUNT(c.id)')
             ->innerJoin('e.group', 'g')
             ->innerJoin('g.calculation', 'c')
             ->where('e.category = :category')
-            ->setParameter('category', $category)
+            ->setParameter('category', $category, Types::OBJECT)
             ->getQuery()
             ->getSingleScalarResult();
-
-        return (int) $result;
     }
 }

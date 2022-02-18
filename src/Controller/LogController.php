@@ -59,9 +59,12 @@ class LogController extends AbstractController
     public function cspViolation(LoggerInterface $logger): Response
     {
         $content = (string) \file_get_contents('php://input');
-        if ($data = \json_decode($content, true)) {
-            $context = \array_filter($data['csp-report'], 'strlen');
+        /** @psalm-var bool|array{csp-report: string[]} $data */
+        $data = \json_decode($content, true);
+        if (\is_array($data)) {
             $title = 'CSP Violation';
+            $csp_report = $data['csp-report'];
+            $context = \array_filter($csp_report, 'strlen');
             if (isset($context['document-uri'])) {
                 $title .= ': ' . $context['document-uri'];
             } elseif (isset($context['source-file'])) {
@@ -117,9 +120,9 @@ class LogController extends AbstractController
         $parameters = [
             'form' => $form,
             'file' => $file,
-            'route' => $request->get('route'),
             'size' => FileUtils::formatSize($file),
             'entries' => FileUtils::getLinesCount($file),
+            'route' => $this->getRequestString($request, 'route'),
         ];
 
         // display
@@ -230,7 +233,7 @@ class LogController extends AbstractController
      */
     private function getDefaultRoute(Request $request): string
     {
-        if (null !== $route = $request->get('route')) {
+        if (null !== $route = $this->getRequestString($request, 'route')) {
             return $route;
         }
 

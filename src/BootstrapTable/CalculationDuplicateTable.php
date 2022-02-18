@@ -34,9 +34,12 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
      */
     public function formatItems(array $items): string
     {
-        $result = \array_map(function (array $item): string {
-            return \sprintf('%s (%d)', $item['description'], $item['count']);
-        }, $items);
+        $result = \array_map(
+            function (array $item): string {
+                return \sprintf('%s (%d)', $item['description'], $item['count']);
+            },
+            $items
+        );
 
         return \implode('<br>', $result);
     }
@@ -63,6 +66,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     protected function getItemsCount(array $items): int
     {
         return \array_reduce($items, function (int $carry, array $item) {
+            /** @psalm-var array{count: int} $child*/
             foreach ($item['items'] as $child) {
                 $carry += $child['count'];
             }

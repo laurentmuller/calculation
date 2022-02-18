@@ -10,28 +10,27 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace App\Util\Response;
 
-use App\Interfaces\IResponseInterface;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 
 /**
- * Trait to set headers of the download document.
+ * Utility class for response headers.
  *
  * @author Laurent Muller
  */
-trait ResponseTrait
+class ResponseUtils
 {
     /**
-     * Build response headers.
+     * Build response headers for an attachment.
      *
      * @param string $name     the document name
      * @param string $mimetype the document mime type
      * @param bool   $inline   <code>true</code> to send the file inline to the browser. The document viewer is used if available.
      *                         <code>false</code> to send to the browser and force a file download with the name given.
      */
-    protected function buildHeaders(string $name, string $mimetype, bool $inline): array
+    public static function buildHeaders(string $name, string $mimetype, bool $inline): array
     {
         $encoded = Utils::ascii($name);
 
@@ -39,7 +38,7 @@ trait ResponseTrait
             $type = $mimetype;
             $disposition = HeaderUtils::DISPOSITION_INLINE;
         } else {
-            $type = IResponseInterface::MIME_TYPE_DOWNLOAD;
+            $type = 'application/x-download';
             $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
         }
 

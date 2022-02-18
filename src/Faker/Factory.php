@@ -26,6 +26,7 @@ class Factory extends \Faker\Factory
     {
         $generator = new Generator();
 
+        /** @psalm-var string $provider */
         foreach (static::$defaultProviders as $provider) {
             $providerClassName = self::getProviderClassname($provider, $locale);
             $generator->addProvider(new $providerClassName($generator));

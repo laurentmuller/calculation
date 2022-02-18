@@ -62,7 +62,9 @@ class PivotDateField extends PivotField
      */
     public function getValue(array $row)
     {
-        if (isset($row[$this->name]) && ($value = $row[$this->name]) && $value instanceof \DateTimeInterface) {
+        /** @psalm-var mixed $value */
+        $value = $this->getRowValue($row);
+        if ($value instanceof \DateTimeInterface) {
             return $this->doGetValue($value);
         }
 
@@ -74,7 +76,7 @@ class PivotDateField extends PivotField
      *
      * @param \DateTimeInterface $date the date
      *
-     * @return mixed the value
+     * @return int
      */
     protected function doGetValue(\DateTimeInterface $date)
     {

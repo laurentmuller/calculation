@@ -109,7 +109,13 @@ class EntityVoter extends Voter implements EntityVoterInterface
      */
     public static function getEntityName($subject): string
     {
-        $name = \is_string($subject) ? (string) $subject : \get_class($subject);
+        if (\is_string($subject)) {
+            $name = $subject;
+        } elseif (\is_object($subject)) {
+            $name = \get_class($subject);
+        } else {
+            $name = (string) $subject;
+        }
         if (false !== ($pos = \strrpos($name, '\\'))) {
             $name = \substr($name, $pos + 1);
         }
@@ -236,14 +242,6 @@ class EntityVoter extends Voter implements EntityVoterInterface
     public function supportsAttribute(string $attribute): bool
     {
         return \array_key_exists($attribute, self::MASK_ATTRIBUTES);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function supportsType(string $subjectType): bool
-    {
-        return \is_string($subjectType);
     }
 
     /**

@@ -175,7 +175,6 @@ class GroupController extends AbstractEntityController
      */
     public function excel(): SpreadsheetResponse
     {
-        /** @var Group[] $groups */
         $groups = $this->getEntities('code');
         if (empty($groups)) {
             $message = $this->trans('group.list.empty');
@@ -196,7 +195,6 @@ class GroupController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var Group[] $groups */
         $groups = $this->getEntities('code');
         if (empty($groups)) {
             $message = $this->trans('group.list.empty');

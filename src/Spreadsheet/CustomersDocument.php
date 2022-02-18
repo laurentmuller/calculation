@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Customer;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of customers.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\Customer>
  */
 class CustomersDocument extends AbstractArrayDocument
 {
@@ -42,7 +43,6 @@ class CustomersDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var Customer $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getLastName(),

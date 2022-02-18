@@ -21,11 +21,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation state entity.
  *
- * @method CalculationState|null find($id, $lockMode = null, $lockVersion = null)
- * @method CalculationState|null findOneBy(array $criteria, array $orderBy = null)
- * @method CalculationState[]    findAll()
- * @method CalculationState[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractRepository<CalculationState>
+ * @psalm-suppress  MixedReturnTypeCoercion
  *
  * @author Laurent Muller
  */
@@ -61,6 +58,16 @@ class CalculationStateRepository extends AbstractRepository
      * @param float $margin the minimumn margin
      *
      * @return array the states with the number and the sum of calculations
+     * @psalm-return array<array{
+     *      id: int,
+     *      code: string,
+     *      editable: boolean,
+     *      color: string,
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      margin: float,
+     *      marginAmount: float}>
      */
     public function getListCountBelows(float $margin): array
     {
@@ -71,11 +78,19 @@ class CalculationStateRepository extends AbstractRepository
 
         $results = $builder->getQuery()->getArrayResult();
 
-        // convert
+        /** @psalm-var array{
+         *      id: int,
+         *      code: string,
+         *      editable: boolean,
+         *      color: string,
+         *      count: int,
+         *      items: float,
+         *      total: float,
+         *      margin: float,
+         *      marginAmount: float} $result
+         */
         foreach ($results as &$result) {
-            $result['total'] = (float) $result['total'];
-            $result['items'] = (float) $result['items'];
-            $result['margin'] = (float) $result['margin'];
+            $this->updateQueryResult($result);
         }
 
         return $results;
@@ -87,6 +102,16 @@ class CalculationStateRepository extends AbstractRepository
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
      * @return array the states with the number and the sum of calculations
+     * @psalm-return array<array{
+     *      id: int,
+     *      code: string,
+     *      editable: boolean,
+     *      color: string,
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      margin: float,
+     *      marginAmount: float}>
      */
     public function getListCountCalculations(): array
     {
@@ -94,12 +119,19 @@ class CalculationStateRepository extends AbstractRepository
             ->getQuery()
             ->getArrayResult();
 
-        // convert
+        /** @psalm-var array{
+         *      id: int,
+         *      code: string,
+         *      editable: boolean,
+         *      color: string,
+         *      count: int,
+         *      items: string|float,
+         *      total: string|float,
+         *      margin: string|float,
+         *      marginAmount: string|float} $result
+         */
         foreach ($results as &$result) {
-            $result['total'] = (float) $result['total'];
-            $result['items'] = (float) $result['items'];
-            $result['margin'] = (float) $result['margin'];
-            $result['marginAmount'] = (float) $result['marginAmount'];
+            $this->updateQueryResult($result);
         }
 
         return $results;
@@ -151,5 +183,25 @@ class CalculationStateRepository extends AbstractRepository
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.code', Criteria::ASC);
+    }
+
+    /**
+     * @psalm-param array{
+     *      id: int,
+     *      code: string,
+     *      editable: boolean,
+     *      color: string,
+     *      count: int,
+     *      items: string|float,
+     *      total: string|float,
+     *      margin: string|float,
+     *      marginAmount: string|float} $result
+     */
+    private function updateQueryResult(array &$result): void
+    {
+        $result['total'] = (float) $result['total'];
+        $result['items'] = (float) $result['items'];
+        $result['margin'] = (float) $result['margin'];
+        $result['marginAmount'] = (float) $result['marginAmount'];
     }
 }

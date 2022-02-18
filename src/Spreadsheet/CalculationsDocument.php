@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Calculation;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of calculations.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\Calculation>
  */
 class CalculationsDocument extends AbstractArrayDocument
 {
@@ -52,7 +53,6 @@ class CalculationsDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var Calculation $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getId(),

@@ -132,55 +132,42 @@ class PdfHeader implements PdfConstantsInterface
 
     private function getAddress(): string
     {
-        return $this->isCustomer() ? $this->toEmpty($this->customer->getAddress()) : '';
+        return null !== $this->customer ? $this->toEmpty($this->customer->getAddress()) : '';
     }
 
     private function getEmail(): string
     {
-        return $this->isCustomer() ? $this->toEmpty($this->customer->getEmail()) : '';
+        return null !== $this->customer ? $this->toEmpty($this->customer->getEmail()) : '';
     }
 
     private function getFax(): string
     {
-        if ($this->isCustomer()) {
-            return $this->customer->getTranslatedFax($this->parent);
-        }
-
-        return '';
+        return null !== $this->customer ? $this->customer->getTranslatedFax($this->parent) : '';
     }
 
     private function getName(): string
     {
-        return $this->isCustomer() ? $this->toEmpty($this->customer->getName()) : '';
+        return null !== $this->customer ? $this->toEmpty($this->customer->getName()) : '';
     }
 
     private function getPhone(): string
     {
-        if ($this->isCustomer()) {
-            return $this->customer->getTranslatedPhone($this->parent);
-        }
-
-        return '';
+        return null !== $this->customer ? $this->customer->getTranslatedPhone($this->parent) : '';
     }
 
     private function getUrl(): string
     {
-        return $this->isCustomer() ? $this->toEmpty($this->customer->getUrl()) : '';
+        return null !== $this->customer ? $this->toEmpty($this->customer->getUrl()) : '';
     }
 
     private function getZipCity(): string
     {
-        return $this->isCustomer() ? $this->toEmpty($this->customer->getZipCity()) : '';
-    }
-
-    private function isCustomer(): bool
-    {
-        return null !== $this->customer;
+        return null !== $this->customer ? $this->toEmpty($this->customer->getZipCity()) : '';
     }
 
     private function isPrintAddress(): bool
     {
-        return $this->isCustomer() && $this->customer->isPrintAddress();
+        return null !== $this->customer && $this->customer->isPrintAddress();
     }
 
     private function line1(float $printableWidth, bool $isAddress): void
@@ -276,7 +263,7 @@ class PdfHeader implements PdfConstantsInterface
     }
 
     /**
-     * @param mixed $border
+     * @param string|int $border
      */
     private function outputText(float $width, float $height, string $text, $border, int $move, string $align, string $link = ''): void
     {

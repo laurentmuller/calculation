@@ -36,8 +36,8 @@ class CustomerGenerator extends AbstractEntityGenerator
 
         for ($i = 0; $i < $count; ++$i) {
             $customer = new Customer();
-            $style = $generator->randomElement($styles);
-            $gender = $generator->randomElement($genders);
+            $style = (int) $generator->randomElement($styles);
+            $gender = (string) $generator->randomElement($genders);
 
             switch ($style) {
                     case 0: // company

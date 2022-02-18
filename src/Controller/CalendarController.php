@@ -217,7 +217,10 @@ class CalendarController extends AbstractController
             return $current['year_month'] > $yearMonth;
         });
 
-        return \reset($filtered);
+        /** @psalm-var int[]|bool $result */
+        $result = \reset($filtered);
+
+        return $result;
     }
 
     /**
@@ -236,7 +239,10 @@ class CalendarController extends AbstractController
             return $current['year_week'] > $yearWeek;
         });
 
-        return \reset($filtered);
+        /** @psalm-var int[]|bool $result */
+        $result = \reset($filtered);
+
+        return $result;
     }
 
     /**
@@ -253,7 +259,10 @@ class CalendarController extends AbstractController
             return $current > $year;
         });
 
-        return \reset($filtered);
+        /** @psalm-var int|bool $result */
+        $result = \reset($filtered);
+
+        return $result;
     }
 
     /**
@@ -272,7 +281,10 @@ class CalendarController extends AbstractController
             return $current['year_month'] < $yearMonth;
         });
 
-        return \end($filtered);
+        /** @psalm-var int[]|bool $result */
+        $result = \reset($filtered);
+
+        return $result;
     }
 
     /**
@@ -291,7 +303,10 @@ class CalendarController extends AbstractController
             return $current['year_week'] < $yearWeek;
         });
 
-        return \end($filtered);
+        /** @psalm-var int[]|bool $result */
+        $result = \reset($filtered);
+
+        return $result;
     }
 
     /**
@@ -330,7 +345,10 @@ class CalendarController extends AbstractController
                 return $current['year_month'] === $yearMonth;
             });
 
-            return \reset($filtered);
+            /** @psalm-var int[]|bool $result */
+            $result = \reset($filtered);
+
+            return $result;
         }
 
         return false;
@@ -355,7 +373,10 @@ class CalendarController extends AbstractController
                 return $current['year_week'] === $yearWeek;
             });
 
-            return \reset($filtered);
+            /** @psalm-var int[]|bool $result */
+            $result = \reset($filtered);
+
+            return $result;
         }
 
         return false;

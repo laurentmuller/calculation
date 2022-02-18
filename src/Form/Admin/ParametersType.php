@@ -13,11 +13,13 @@ declare(strict_types=1);
 namespace App\Form\Admin;
 
 use App\Form\FormHelper;
+use App\Form\Product\ProductListType;
 use App\Form\Type\MinStrengthType;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
+use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Security;
@@ -131,6 +133,23 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
             ->percent(true)
             ->addPercentType(0);
+
+        $helper->field(self::P_DEFAULT_PRODUCT)
+            ->notRequired()
+            ->updateOption('placeholder', 'parameters.placehoders.' . self::P_DEFAULT_PRODUCT)
+            ->help('parameters.helps.' . self::P_DEFAULT_PRODUCT)
+            ->updateAttribute('data-default', '')
+            ->add(ProductListType::class);
+
+        $helper->field(self::P_DEFAULT_PRODUCT_QUANTITY)
+            ->updateAttribute('data-default', FormatUtils::formatAmount(0))
+            ->addNumberType();
+
+        $helper->field(self::P_DEFAULT_PRODUCT_EDIT)
+            ->updateAttribute('data-default', \json_encode(true))
+            ->rowClass('ml-2')
+            ->notRequired()
+            ->addCheckboxType();
 
         $helper->field(self::P_DISPLAY_TABULAR)
             ->updateAttribute('data-default', (int) self::DEFAULT_TABULAR)

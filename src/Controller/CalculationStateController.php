@@ -157,7 +157,6 @@ class CalculationStateController extends AbstractEntityController
      */
     public function excel(): SpreadsheetResponse
     {
-        /** @var CalculationState[] $entities */
         $entities = $this->getEntities('code');
         if (empty($entities)) {
             $message = $this->trans('calculationstate.list.empty');
@@ -178,7 +177,6 @@ class CalculationStateController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var CalculationState[] $entities */
         $entities = $this->getEntities('code');
         if (empty($entities)) {
             $message = $this->trans('calculationstate.list.empty');

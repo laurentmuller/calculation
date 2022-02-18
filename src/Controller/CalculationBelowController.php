@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTable\CalculationBelowDataTable;
+use App\Entity\Calculation;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDocument;
@@ -51,10 +52,10 @@ class CalculationBelowController extends AbstractController
 
         // parameters
         $parameters = [
+            'id' => $this->getRequestInt($request, 'id'),
             'items' => $items,
             'min_margin' => $minMargin,
             'query' => false,
-            'id' => $request->get('id', 0),
             'sortField' => 'id',
             'sortMode' => Criteria::DESC,
             'sortFields' => [],
@@ -151,6 +152,8 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Gets items to display.
+     *
+     * @return Calculation[]
      */
     private function getItems(CalculationRepository $repository, float $minMargin): array
     {

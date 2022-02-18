@@ -184,7 +184,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
      */
     public function getDisplay(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     /**
@@ -308,13 +308,12 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
         // sort
         $items = $this->items->toArray();
         \uasort($items, static function (CalculationItem $a, CalculationItem $b): int {
-            return \strcasecmp($a->getDescription(), $b->getDescription());
+            return \strcasecmp((string) $a->getDescription(), (string) $b->getDescription());
         });
 
         $position = 0;
         $changed = false;
 
-        /** @var CalculationItem $item */
         foreach ($items as $item) {
             if ($position !== $item->getPosition()) {
                 $item->setPosition($position);
@@ -362,7 +361,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
     {
         $position = 0;
 
-        /** @var CalculationItem $item */
         foreach ($this->items as $item) {
             if ($item->getPosition() !== $position) {
                 $item->setPosition($position);

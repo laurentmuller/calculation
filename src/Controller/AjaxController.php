@@ -30,6 +30,7 @@ use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
@@ -91,7 +92,7 @@ class AjaxController extends AbstractController
     {
         if (!$service->validateTimeout()) {
             $response = $this->trans('captcha.timeout', [], 'validators');
-        } elseif (!$service->validateToken($request->get('captcha'))) {
+        } elseif (!$service->validateToken($this->getRequestString($request, 'captcha'))) {
             $response = $this->trans('captcha.invalid', [], 'validators');
         } else {
             $response = true;
@@ -110,7 +111,7 @@ class AjaxController extends AbstractController
     {
         // get values
         $remoteIp = $request->getClientIp();
-        $response = $request->get('g-recaptcha-response', $request->get('response'));
+        $response = (string) $this->getRequestString($request, 'g-recaptcha-response', $this->getRequestString($request, 'response'));
         $secret = $this->getStringParameter('recaptcha_secret');
 
         // verify
@@ -143,7 +144,7 @@ class AjaxController extends AbstractController
     public function checkUser(Request $request, UserRepository $repository): JsonResponse
     {
         // find user name
-        $usernameOrEmail = $request->get('user');
+        $usernameOrEmail = $this->getRequestString($request, 'user');
         if (null !== $usernameOrEmail && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
             return $this->json(true);
         }
@@ -160,8 +161,8 @@ class AjaxController extends AbstractController
     public function checkUserEmail(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
-        $id = (int) $request->get('id', 0);
-        $email = $request->get('email', null);
+        $id = $this->getRequestInt($request, 'id');
+        $email = $this->getRequestString($request, 'email');
 
         // check
         $message = null;
@@ -194,8 +195,8 @@ class AjaxController extends AbstractController
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
-        $id = (int) $request->get('id', 0);
-        $username = $request->get('username');
+        $id = $this->getRequestInt($request, 'id');
+        $username = $this->getRequestString($request, 'username');
 
         // check
         $message = null;
@@ -228,8 +229,8 @@ class AjaxController extends AbstractController
     public function computeTask(Request $request, TaskService $service, TaskRepository $repository): JsonResponse
     {
         // get values
-        $id = (int) $request->get('id', 0);
-        $quantity = (float) $request->get('quantity', 0.0);
+        $id = $this->getRequestInt($request, 'id');
+        $quantity = $this->getRequestFloat($request, 'quantity');
 
         $task = $repository->find($id);
         if (!$task instanceof Task) {
@@ -243,7 +244,8 @@ class AjaxController extends AbstractController
             ->setQuantity($quantity)
             ->compute($request);
 
-        $data = \array_merge($service->jsonSerialize(), [
+        /** @psalm-var array $data */
+        $data = \array_merge((array) $service->jsonSerialize(), [
             'message' => $this->trans('taskcompute.success'),
         ]);
 
@@ -262,12 +264,13 @@ class AjaxController extends AbstractController
         if (!$kernel->isDebug()) {
             $item = $cache->getItem(self::KEY_LANGUAGE);
             if ($item->isHit()) {
-                return JsonResponse::fromJsonString($item->get());
+                return JsonResponse::fromJsonString((string) $item->get());
             }
         }
 
         if ($file = $this->getDatatablesLang($kernel)) {
             // load localized file name
+            /** @psalm-var array $lang */
             $lang = Yaml::parseFile($file);
         } else {
             // default behavior
@@ -327,7 +330,7 @@ class AjaxController extends AbstractController
         $json = (string) \json_encode($lang);
 
         // save
-        if (isset($item)) {
+        if (isset($item) && $item instanceof CacheItemInterface) {
             $item->set($json)
                 ->expiresAfter(self::CACHE_TIMEOUT);
             $cache->save($item);
@@ -344,8 +347,8 @@ class AjaxController extends AbstractController
      */
     public function languages(Request $request, TranslatorFactory $factory): JsonResponse
     {
-        $class = $request->get('service', TranslatorFactory::DEFAULT_SERVICE);
-        $service = $factory->getService($class);
+        $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
+        $service = $factory->getService((string) $class);
         if ($languages = $service->getLanguages()) {
             return $this->jsonTrue([
                 'languages' => $languages,
@@ -356,7 +359,7 @@ class AjaxController extends AbstractController
         $message = $this->trans('translator.languages_error');
         if ($error = $service->getLastError()) {
             // translate message
-            $id = $service->getDefaultIndexName() . '.' . $error['code'];
+            $id = $service->getDefaultIndexName() . '.' . (string) $error['code'];
             if ($this->isTransDefined($id, 'translator')) {
                 $error['message'] = $this->trans($id, [], 'translator');
             }
@@ -381,8 +384,8 @@ class AjaxController extends AbstractController
     public function randomText(Request $request, FakerService $service): JsonResponse
     {
         // get parameters
-        $maxNbChars = (int) $request->get('maxNbChars', 145);
-        $indexSize = (int) $request->get('indexSize', 2);
+        $maxNbChars = $this->getRequestInt($request, 'maxNbChars', 145);
+        $indexSize = $this->getRequestInt($request, 'indexSize', 2);
         $generator = $service->getGenerator();
         $text = $generator->realText($maxNbChars, $indexSize);
 
@@ -402,8 +405,8 @@ class AjaxController extends AbstractController
     public function saveSession(Request $request): JsonResponse
     {
         $result = false;
-        $name = $request->get('name');
-        $value = $request->get('value');
+        $name = $this->getRequestString($request, 'name');
+        $value = $this->getRequestString($request, 'value');
         if (null !== $name && null !== $value) {
             $this->setSessionValue($name, \json_decode($value));
             $result = true;
@@ -420,10 +423,10 @@ class AjaxController extends AbstractController
      */
     public function searchAddress(Request $request, SwissPostService $service): JsonResponse
     {
-        $zip = $request->get('zip');
-        $city = $request->get('city');
-        $street = $request->get('street');
-        $limit = (int) $request->get('limit', 25);
+        $zip = $this->getRequestString($request, 'zip');
+        $city = $this->getRequestString($request, 'city');
+        $street = $this->getRequestString($request, 'street');
+        $limit = $this->getRequestInt($request, 'limit', 25);
 
         if ($zip) {
             $rows = $service->findZip($zip, $limit);
@@ -465,7 +468,7 @@ class AjaxController extends AbstractController
      */
     public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
     {
-        $className = 'App\\Entity\\' . \ucfirst($request->get('entity', ''));
+        $className = 'App\\Entity\\' . \ucfirst((string) $this->getRequestString($request, 'entity', ''));
         if (!\class_exists($className)) {
             return $this->jsonFalse([
                 'values' => [],
@@ -473,7 +476,7 @@ class AjaxController extends AbstractController
         }
 
         // field
-        $field = (string) $request->get('field');
+        $field = $this->getRequestString($request, 'field');
         if (!Utils::isString($field)) {
             return $this->jsonFalse([
                 'values' => [],
@@ -484,7 +487,7 @@ class AjaxController extends AbstractController
             /** @psalm-var AbstractRepository<\App\Entity\AbstractEntity> $repository */
             $repository = $manager->getRepository($className);
 
-            return $this->getDistinctValues($request, $repository, $field);
+            return $this->getDistinctValues($request, $repository, (string) $field);
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
@@ -499,9 +502,9 @@ class AjaxController extends AbstractController
     public function searchProduct(Request $request, ProductRepository $repository): JsonResponse
     {
         try {
-            $search = (string) $request->get('query', '');
+            $search = (string) $this->getRequestString($request, 'query', '');
             if (Utils::isString($search)) {
-                $maxResults = (int) $request->get('limit', 15);
+                $maxResults = $this->getRequestInt($request, 'limit', 15);
                 $products = $repository->search($search, $maxResults);
                 if (!empty($products)) {
                     return $this->json($products);
@@ -564,10 +567,10 @@ class AjaxController extends AbstractController
         }
 
         // get parameters
-        $to = $request->get('to', '');
-        $from = $request->get('from');
-        $text = $request->get('text', '');
-        $class = $request->get('service', TranslatorFactory::DEFAULT_SERVICE);
+        $to = (string) $this->getRequestString($request, 'to', '');
+        $from = $this->getRequestString($request, 'from');
+        $text = (string) $this->getRequestString($request, 'text', '');
+        $class = (string) $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
 
         // check parameters
@@ -594,7 +597,7 @@ class AjaxController extends AbstractController
             $message = $this->trans('translator.translate_error');
             if ($error = $service->getLastError()) {
                 // translate message
-                $id = $service->getDefaultIndexName() . '.' . $error['code'];
+                $id = $service->getDefaultIndexName() . '.' . (string) $error['code'];
                 if ($this->isTransDefined($id, 'translator')) {
                     $error['message'] = $this->trans($id, [], 'translator');
                 }
@@ -627,7 +630,8 @@ class AjaxController extends AbstractController
         }
 
         // parameters
-        $source = $request->get('calculation');
+        /** @psalm-var array|null $source */
+        $source = Utils::getRequestInputBag($request)->get('calculation');
         if (null === $source) {
             return $this->jsonFalse([
                 'message' => $this->trans('calculation.edit.error.update_total'),
@@ -645,7 +649,7 @@ class AjaxController extends AbstractController
 
             // adjust user margin?
             $parameters['min_margin'] = $service->getMinMargin();
-            if ($request->get('adjust', false) && $parameters['overall_below']) {
+            if ($this->getRequestBoolean($request, 'adjust') && $parameters['overall_below']) {
                 $service->adjustUserMargin($parameters);
             }
 
@@ -719,9 +723,9 @@ class AjaxController extends AbstractController
     private function getDistinctValues(Request $request, AbstractRepository $repository, string $field): JsonResponse
     {
         try {
-            $search = (string) $request->get('query', '');
+            $search = $this->getRequestString($request, 'query', '');
             if (Utils::isString($search)) {
-                $limit = (int) $request->get('limit', 15);
+                $limit = $this->getRequestInt($request, 'limit', 15);
                 $values = $repository->getDistinctValues($field, $search, $limit);
                 if (!empty($values)) {
                     return $this->json($values);
@@ -748,9 +752,9 @@ class AjaxController extends AbstractController
     private function getDistincValuesForCategoryItem(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository, string $field): JsonResponse
     {
         try {
-            $search = (string) $request->get('query', '');
+            $search = $this->getRequestString($request, 'query', '');
             if (Utils::isString($search)) {
-                $limit = (int) $request->get('limit', 15);
+                $limit = $this->getRequestInt($request, 'limit', 15);
                 $productValues = $productRepository->getDistinctValues($field, $search);
                 $taskValues = $taskRepository->getDistinctValues($field, $search);
                 $values = \array_unique(\array_merge($productValues, $taskValues));

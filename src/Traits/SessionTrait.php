@@ -176,7 +176,7 @@ trait SessionTrait
      *
      * @param string $key the attribute name
      *
-     * @return mixed the removed value or null when attribute does not exist
+     * @return mixed|null the removed value or null when attribute does not exist
      */
     protected function removeSessionValue(string $key)
     {
@@ -194,7 +194,7 @@ trait SessionTrait
      *
      * @param string[] $keys the attribute names to remove
      *
-     * @return array<mixed> the removed values
+     * @return array the removed values
      */
     protected function removeSessionValues(array $keys): array
     {
@@ -246,6 +246,7 @@ trait SessionTrait
      */
     protected function setSessionValues(array $attributes): self
     {
+        /** @psalm-var mixed $value */
         foreach ($attributes as $key => $value) {
             $this->setSessionValue($key, $value);
         }

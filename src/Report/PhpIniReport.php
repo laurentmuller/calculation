@@ -71,6 +71,7 @@ class PhpIniReport extends AbstractReport
             ->outputHeaders();
 
         // output content
+        /** @var array<string, mixed> $value */
         foreach ($content as $key => $value) {
             $table->setGroupKey($key);
             $this->outputEntries($table, $value);
@@ -117,9 +118,13 @@ class PhpIniReport extends AbstractReport
         if (\preg_match('/#[0-9A-Fa-f]{6}/i', $var) && $color = PdfTextColor::create($var)) {
             return PdfStyle::getCellStyle()->setTextColor($color);
         } elseif ('No value' === $var) {
-            return PdfStyle::getCellStyle()
-                ->setTextColor(PdfTextColor::create('#7F7F7F'))
-                ->setFontItalic(true);
+            $color = PdfTextColor::create('#7F7F7F');
+            $style = PdfStyle::getCellStyle()->setFontItalic(true);
+            if (null !== $color) {
+                $style->setTextColor($color);
+            }
+
+            return $style;
         }
 
         return null;
@@ -129,12 +134,12 @@ class PhpIniReport extends AbstractReport
      * Output the given entries to the given table.
      *
      * @param PdfGroupTableBuilder $table   the table to update
-     * @param array                $entries the entries to output
+     * @param array<string, mixed> $entries the entries to output
      */
     private function outputEntries(PdfGroupTableBuilder $table, array $entries): void
     {
         $this->sortEntries($entries);
-
+        /** @var mixed $entry */
         foreach ($entries as $key => $entry) {
             if (\is_array($entry)) {
                 $local = $this->convert(\reset($entry));
@@ -157,11 +162,11 @@ class PhpIniReport extends AbstractReport
     /**
      * Sorts the given entries.
      *
-     * @param array $entries the entries to sort
+     * @param array<string, mixed> $entries the entries to sort
      */
     private function sortEntries(array &$entries): void
     {
-        \uksort($entries, function (string $a, string $b) use ($entries) {
+        \uksort($entries, function (string $a, string $b) use ($entries): int {
             $isArrayA = \is_array($entries[$a]);
             $isArrayB = \is_array($entries[$b]);
             if ($isArrayA !== $isArrayB) {

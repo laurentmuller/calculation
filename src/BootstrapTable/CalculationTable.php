@@ -71,7 +71,7 @@ class CalculationTable extends AbstractEntityTable
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
-        $stateId = (int) $request->get(self::PARAM_STATE, 0);
+        $stateId = (int) $this->getRequestValue($request, self::PARAM_STATE, 0, false);
         $query->addCustomData(self::PARAM_STATE, $stateId);
 
         return $query;
@@ -80,7 +80,16 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Gets calculation states.
      *
-     * @return CalculationState[]
+     * @psalm-return array<array{
+     *      id: int,
+     *      code: string,
+     *      editable: boolean,
+     *      color: string,
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      margin: float,
+     *      marginAmount: float}>
      */
     protected function getCalculationStates(): array
     {

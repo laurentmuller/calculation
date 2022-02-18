@@ -157,7 +157,7 @@ class CalculationState extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     /**
@@ -193,7 +193,7 @@ class CalculationState extends AbstractEntity
      */
     public function setColor(string $color): self
     {
-        $this->color = $this->trim($color);
+        $this->color = (string) $this->trim($color);
 
         return $this;
     }

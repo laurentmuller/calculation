@@ -42,7 +42,7 @@ abstract class AbstractPivotAggregator implements \JsonSerializable
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
-        $value = $this->getValue();
+        $value = (string) $this->getValue();
 
         return \sprintf('%s(%s)', $name, $value);
     }

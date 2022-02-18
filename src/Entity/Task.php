@@ -136,6 +136,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      * @param \Closure $p the predicate used for filtering
      *
      * @return TaskItem[]|Collection the collection with the results of the filter operation
+     * @psalm-param Closure(TaskItem=):bool $p
      * @psalm-return Collection<int, TaskItem>
      */
     public function filter(\Closure $p): Collection
@@ -203,7 +204,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable
     {
         $position = 0;
 
-        /** @var TaskItem $item */
         foreach ($this->items as $item) {
             if ($item->getPosition() !== $position) {
                 $item->setPosition($position);

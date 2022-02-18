@@ -16,6 +16,7 @@ use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
+use App\Traits\TranslatorTrait;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -30,12 +31,12 @@ use Twig\Environment;
  */
 class CalculationStateDataTable extends AbstractEntityDataTable
 {
+    use TranslatorTrait;
+
     /**
      * The datatable identifier.
      */
     public const ID = CalculationState::class;
-
-    private TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -43,7 +44,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
     public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, CalculationStateRepository $repository, Environment $environment, TranslatorInterface $translator)
     {
         parent::__construct($requestStack, $datatables, $repository, $environment);
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -71,7 +72,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
     {
         $id = $value ? 'common.value_true' : 'common.value_false';
 
-        return $this->translator->trans($id);
+        return $this->trans($id);
     }
 
     /**

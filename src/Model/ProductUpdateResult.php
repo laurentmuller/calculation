@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Entity\Product;
-
 /**
  * Contains result of updated products.
  *
@@ -21,10 +19,15 @@ use App\Entity\Product;
  */
 class ProductUpdateResult implements \Countable
 {
+    /**
+     * @var array<array<string, mixed>>
+     */
     private array $products = [];
 
     /**
      * Add a product to the list of updated products.
+     *
+     * @param array<string, mixed> $values
      */
     public function addProduct(array $values): self
     {
@@ -43,8 +46,6 @@ class ProductUpdateResult implements \Countable
 
     /**
      * Gets the updated products.
-     *
-     * @return Product[]
      */
     public function getProducts(): array
     {

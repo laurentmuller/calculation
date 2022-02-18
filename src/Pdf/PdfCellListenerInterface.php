@@ -36,7 +36,7 @@ interface PdfCellListenerInterface
      * @param PdfTableBuilder $builder the table builder
      * @param int             $index   the column index
      * @param PdfRectangle    $bounds  the cell bounds
-     * @param mixed           $border  the border style
+     * @param int|string      $border  the border style
      *
      * @return bool false to call the default behavior; true if listener handle the draw function
      */

@@ -48,7 +48,7 @@ abstract class AbstractEntity
 
     public function __toString(): string
     {
-        return (string) $this->getDisplay();
+        return $this->getDisplay();
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractEntity
      */
     public function getId(): ?int
     {
-        return $this->id ? (int) $this->id : null;
+        return $this->id ? $this->id : null;
     }
 
     /**

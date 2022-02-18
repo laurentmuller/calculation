@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Traits\TranslatorFlashMessageTrait;
+use App\Util\Utils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
@@ -42,7 +43,7 @@ class SwitchUserListener implements EventSubscriberInterface
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -65,9 +66,10 @@ class SwitchUserListener implements EventSubscriberInterface
         }
 
         // get values
-        $action = $request->get(self::SWITCH_USER);
-        $name = $this->getTargetUsername($event);
+        /** @psalm-var string $action */
+        $action = Utils::getRequestInputBag($request)->get(self::SWITCH_USER);
         $original = $this->getOriginalUsername($event);
+        $name = $this->getTargetUsername($event);
 
         // get message
         if (self::EXIT_VALUE === $action) {

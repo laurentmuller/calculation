@@ -14,7 +14,7 @@ namespace App\Response;
 
 use App\Interfaces\IResponseInterface;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Traits\ResponseTrait;
+use App\Util\Response\ResponseUtils;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -24,10 +24,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @author Laurent Muller
  *
  * @see SpreadsheetDocument
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class SpreadsheetResponse extends StreamedResponse implements IResponseInterface
 {
-    use ResponseTrait;
     /**
      * The application Microsoft Excel (OpenXML) mime type.
      */
@@ -44,7 +44,7 @@ class SpreadsheetResponse extends StreamedResponse implements IResponseInterface
     public function __construct(SpreadsheetDocument $doc, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.xlsx' : \basename($name);
-        $headers = $headers = $this->buildHeaders($name, self::MIME_TYPE_EXCEL, $inline);
+        $headers = ResponseUtils::buildHeaders($name, self::MIME_TYPE_EXCEL, $inline);
         $callback = function () use ($doc): void {
             $writer = IOFactory::createWriter($doc, 'Xlsx');
             $writer->save('php://output');

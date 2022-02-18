@@ -90,6 +90,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->assertCount(1, $result['list']);
         $this->assertIsArray($result['units']);
 
+        // @phpstan-ignore-next-line
         $result = $result['list'][0];
         $this->assertIsArray($result);
         $this->validateResult($result, false);

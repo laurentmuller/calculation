@@ -69,6 +69,12 @@ abstract class AbstractHttpClientService
 
     /**
      * The last error.
+     *
+     * @psalm-var null|array{
+     *      result: bool,
+     *      code: string|int,
+     *      message: string,
+     *      exception?: array|\Exception}
      */
     protected ?array $lastError = null;
 
@@ -110,6 +116,12 @@ abstract class AbstractHttpClientService
      * Gets the last error.
      *
      * @return array|null the last error with the 'code' and the 'message' and eventually the exception; null if none
+     *
+     * @psalm-return null|array{
+     *      result: bool,
+     *      code: string|int,
+     *      message: string,
+     *      exception?: array|\Exception}
      */
     public function getLastError(): ?array
     {
@@ -187,11 +199,9 @@ abstract class AbstractHttpClientService
     protected function getUrlKey(string $url): string
     {
         $options = $this->getDefaultOptions();
-        if (isset($options[self::BASE_URI])) {
-            return $options[self::BASE_URI] . $url;
-        }
+        $prefix = isset($options[self::BASE_URI]) ? (string) $options[self::BASE_URI] : Utils::getShortName($this);
 
-        return Utils::getShortName($this) . $url;
+        return $prefix . $url;
     }
 
     /**
@@ -273,7 +283,7 @@ abstract class AbstractHttpClientService
      * Save the given value to the cache for the given URL.
      *
      * @param string                 $url   The URL for which to save the value
-     * @param mixed                  $value The value to save. If null, the key item is removed.
+     * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
      * @param int|\DateInterval|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.

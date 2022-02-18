@@ -53,7 +53,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
 
         $shortName = Utils::getShortName($this);
 
-        return \sprintf('%s("%s")', $shortName, $this->text);
+        return \sprintf('%s("%s")', $shortName, (string) $this->text);
     }
 
     /**
@@ -82,7 +82,6 @@ class HtmlTextChunk extends AbstractHtmlChunk
             $index = $this->index();
             $count = $parent->count();
             if (-1 !== $index && $index < $count - 1) {
-                /** @var AbstractHtmlChunk $next */
                 $next = $parent->getChildren()[$index + 1];
 
                 return $next->is(self::LIST_ORDERED, self::LIST_UNORDERED);
@@ -116,8 +115,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
      */
     protected function outputText(HtmlReport $report, string $text): void
     {
-        /** @var HtmlParentChunk $parent */
-        $parent = $this->parent;
+        $parent = $this->getParent();
 
         // special case when parent contains only this text
         if (null !== $parent && 1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {

@@ -181,6 +181,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     public function findByKeys(array $keys): ?self
     {
         $current = $this;
+        /** @psalm-var mixed $key */
         foreach ($keys as $key) {
             if (null === ($found = $current->find($key))) {
                 return null;
@@ -324,7 +325,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      */
     public function getLevel(): int
     {
-        return $this->isRoot() ? 0 : 1 + $this->parent->getLevel();
+        if ($this->isRoot() || !$this->parent instanceof self) {
+            return 0;
+        }
+
+        return 1 + $this->parent->getLevel();
     }
 
     /**
@@ -360,7 +365,12 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     public function getPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
         if (!$this->isRoot()) {
-            return \implode($separator, $this->getKeys());
+            // @phpstan-ignore-next-line
+            $keys = \array_map(function ($value) {
+                return (string) $value;
+            }, $this->getKeys());
+
+            return \implode($separator, $keys);
         }
 
         return '';
@@ -368,8 +378,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * Gets the sort mode.
-     *
-     * @return string one of the SORT_XX constant
      */
     public function getSortMode(): string
     {
@@ -378,8 +386,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * Gets the title.
-     *
-     * @return string|null the title, if any; the key otherwise
      */
     public function getTitle(): ?string
     {
@@ -397,11 +403,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
             return [];
         }
 
-        $result = [$this->getTitle()];
+        $result = [(string) $this->getTitle()];
         $parent = $this->parent;
         while (null !== $parent && !$parent->isRoot()) {
             // put first
-            \array_unshift($result, $parent->getTitle());
+            \array_unshift($result, (string) $parent->getTitle());
             $parent = $parent->parent;
         }
 
@@ -474,21 +480,21 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress MixedAssignment
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): ?array
     {
         $result = [];
-        if ($this->key) {
+        if (null !== $this->key) {
             $result['key'] = $this->key;
         }
-        if ($this->title) {
+        if (null !== $this->title) {
             $result['title'] = $this->title;
         }
-
         if (!empty($this->getValue())) {
             $result['value'] = $this->aggregator->getFormattedResult();
         }
-
         if (!$this->isEmpty()) {
             $result['children'] = $this->children;
         }
@@ -510,8 +516,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * Sets the sort mode.
-     *
-     * @param string $sortMode one of the SORT_XX constant
      */
     public function setSortMode(string $sortMode): self
     {
@@ -532,8 +536,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * Sets the title.
-     *
-     * @param string $title the title to set
      */
     public function setTitle(?string $title): self
     {

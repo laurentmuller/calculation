@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\DataTable\CalculationDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
-use App\Entity\Task;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
 use App\Form\Dialog\EditItemDialogType;
@@ -87,10 +86,20 @@ class CalculationController extends AbstractEntityController
      */
     public function add(Request $request): Response
     {
+        $application = $this->getApplication();
+        $state = $application->getDefaultState();
+        $product = $application->getDefaultProduct();
+        $quantity = $application->getDefaultQuantity();
+
         // create
         $item = new Calculation();
-        if (null !== ($state = $this->getApplication()->getDefaultState())) {
+
+        // update
+        if (null !== $state) {
             $item->setState($state);
+        }
+        if (null !== $product) {
+            $item->addProduct($product, $quantity);
         }
 
         $parameters = ['overall_below' => false];
@@ -189,7 +198,6 @@ class CalculationController extends AbstractEntityController
      */
     public function excel(): SpreadsheetResponse
     {
-        /** @var Calculation[] $entities */
         $entities = $this->getEntities('id');
         if (empty($entities)) {
             $message = $this->trans('calculation.list.empty');
@@ -222,14 +230,13 @@ class CalculationController extends AbstractEntityController
      */
     public function pdf(Request $request): PdfResponse
     {
-        /** @var Calculation[] $entities */
         $entities = $this->getEntities('id');
         if (empty($entities)) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $grouped = (bool) $request->get('grouped', true);
+        $grouped = $this->getRequestBoolean($request, 'grouped', true);
         $doc = new CalculationsReport($this, $entities, $grouped);
 
         return $this->renderPdfDocument($doc);
@@ -401,11 +408,6 @@ class CalculationController extends AbstractEntityController
         return null;
     }
 
-    /**
-     * Gets the tasks.
-     *
-     * @return Task[]
-     */
     private function getTasks(): array
     {
         return $this->taskRepository->getSortedBuilder(false)

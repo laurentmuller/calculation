@@ -13,17 +13,17 @@ declare(strict_types=1);
 namespace App\Response;
 
 use App\Interfaces\IResponseInterface;
-use App\Traits\ResponseTrait;
+use App\Util\Response\ResponseUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * The CsvResponse represents an HTTP streamed response within an CSV content.
  *
  * @author Laurent Muller
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CsvResponse extends StreamedResponse implements IResponseInterface
 {
-    use ResponseTrait;
     /**
      * The CSV mime type.
      */
@@ -40,7 +40,7 @@ class CsvResponse extends StreamedResponse implements IResponseInterface
     public function __construct(callable $callback = null, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.csv' : \basename($name);
-        $headers = $this->buildHeaders($name, self::MIME_TYPE_CSV, $inline);
+        $headers = ResponseUtils::buildHeaders($name, self::MIME_TYPE_CSV, $inline);
         parent::__construct($callback, self::HTTP_OK, $headers);
     }
 

@@ -63,8 +63,8 @@ final class PhpInfo
                             $directive2 = $match3;
                         } elseif ($directive1 && $directive2) {
                             $result[$name][$match1] = [
-                                $directive1 => $match2,
-                                $directive2 => $match3,
+                                (string) $directive1 => $match2,
+                                (string) $directive2 => $match3,
                             ];
                         } else {
                             $result[$name][$match1] = [$match2,  $match3];
@@ -104,10 +104,10 @@ final class PhpInfo
         $info = (string) \preg_replace('/<tr>.*PASSWORD.*<\/tr>/m', '', $info);
 
         // replace version
-        $info = (string) \str_replace('PHP Version', 'Version', $info);
+        $info = \str_replace('PHP Version', 'Version', $info);
 
         // update table class
-        $info = (string) \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+        $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
         return $info;
     }
@@ -135,7 +135,7 @@ final class PhpInfo
      *
      * @param mixed $var the variable to convert
      *
-     * @return mixed the converted variable
+     * @return string|int|float|bool the converted variable
      */
     private function convert($var)
     {
@@ -149,14 +149,14 @@ final class PhpInfo
         } elseif (\is_float($var)) {
             return $var;
         } elseif (\preg_match('/^-?\d+\.\d+$/', $value)) {
-            $pos = \strrpos($value, '.');
+            $pos = (int) \strrpos($value, '.');
             $decimals = \strlen($value) - $pos - 1;
 
             return \round((float) $value, $decimals);
         } elseif ('no value' === $value) {
             return 'No value';
         } else {
-            return \str_replace('\\', '/', $var);
+            return \str_replace('\\', '/', (string) $var);
         }
     }
 }

@@ -30,21 +30,29 @@ class CalendarService
 
     /**
      * The calendar model class.
+     *
+     * @psalm-var class-string<Calendar>
      */
     private string $calendarModel = self::DEFAULT_CALENDAR_MODEL;
 
     /**
      * The day model.
+     *
+     * @psalm-var class-string<Day>
      */
     private ?string $dayModel = null;
 
     /**
      * The month model.
+     *
+     * @psalm-var class-string<Month>
      */
     private ?string  $monthModel = null;
 
     /**
      * The week model.
+     *
+     * @psalm-var class-string<Week>
      */
     private ?string $weekModel = null;
 
@@ -62,7 +70,6 @@ class CalendarService
         // check year
         $year = DateUtils::completYear($year ?? (int) \date('Y'));
 
-        /** @var Calendar $calendar */
         $calendar = new $this->calendarModel();
         $calendar->setModels($this->monthModel, $this->weekModel, $this->dayModel);
         $calendar->generate($year);
@@ -116,6 +123,8 @@ class CalendarService
      * @param string|null $calendarModel the calendar model class or null for default
      *
      * @throws CalendarException if the calendar class model does not exist
+     *
+     * @psalm-param class-string<Calendar>|null $calendarModel
      */
     public function setCalendarModel(?string $calendarModel): self
     {
@@ -130,6 +139,8 @@ class CalendarService
      * @param string|null $dayModel the day model class or null for default
      *
      * @throws CalendarException if the day class model does not exist
+     *
+     * @psalm-param class-string<Day>|null $dayModel
      */
     public function setDayModel(?string $dayModel): self
     {
@@ -148,6 +159,11 @@ class CalendarService
      * @param string|null $dayModel      the day model class or null for default
      *
      * @throws CalendarException if the calendar, the month, the week or the day class model does not exist
+     *
+     * @psalm-param class-string<Calendar>|null $calendarModel
+     * @psalm-param class-string<Month>|null $monthModel
+     * @psalm-param class-string<Week>|null $weekModel
+     * @psalm-param class-string<Day>|null $dayModel
      */
     public function setModels(?string $calendarModel = null, ?string $monthModel = null, ?string $weekModel = null, ?string $dayModel = null): self
     {
@@ -163,6 +179,8 @@ class CalendarService
      * @param string|null $monthModel the month model class or null for default
      *
      * @throws CalendarException if the month class model does not exist
+     *
+     * @psalm-param class-string<Month>|null $monthModel
      */
     public function setMonthModel(?string $monthModel): self
     {
@@ -178,6 +196,8 @@ class CalendarService
      * @param string|null $weekModel the week model class or null for default
      *
      * @throws CalendarException if the week class model does not exist
+     *
+     * @psalm-param class-string<Week>|null $weekModel
      */
     public function setWeekModel(?string $weekModel): self
     {

@@ -14,6 +14,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -24,11 +25,7 @@ use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepository
 /**
  * Repository for user entity.
  *
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @template-extends AbstractRepository<\App\Entity\User>
+ * @template-extends AbstractRepository<User>
  *
  * @author Laurent Muller
  */
@@ -140,7 +137,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
             ->set('u.requestedAt', 'NULL')
             ->set('u.expiresAt', 'NULL')
             ->where('u.expiresAt <= :time')
-            ->setParameter('time', $time)
+            ->setParameter('time', $time, Types::DATE_IMMUTABLE)
             ->getQuery();
 
         return (int) $query->execute();
@@ -160,6 +157,8 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
         }
 
         $resetPasswordRequest->eraseResetPasswordRequest();
-        $this->_em->flush();
+        /** @psalm-var \Doctrine\ORM\EntityManagerInterface  $manager */
+        $manager = $this->_em;
+        $manager->flush();
     }
 }

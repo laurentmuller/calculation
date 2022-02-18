@@ -22,6 +22,8 @@ use App\Util\FormatUtils;
  * Report for the list of groups.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<Group>
  */
 class GroupsReport extends AbstractArrayReport
 {
@@ -37,7 +39,6 @@ class GroupsReport extends AbstractArrayReport
         $marginsCount = 0;
         $groupsCount = 0;
 
-        /** @var Group $entity */
         foreach ($entities as $entity) {
             $marginsCount += $entity->countMargins();
             $groupsCount += $entity->countCategories();
@@ -52,7 +53,6 @@ class GroupsReport extends AbstractArrayReport
         $last = \end($entities);
         $emptyStyle = PdfStyle::getCellStyle()->setBorder('LR');
 
-        /** @var Group $entity */
         foreach ($entities as $entity) {
             $this->outputGroup($table, $entity);
             if ($entity !== $last) {

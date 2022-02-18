@@ -19,6 +19,35 @@ use FPDF;
  * PDF document with default header and footer.
  *
  * @author Laurent Muller
+ *
+ * @property int     $page           The current page number.
+ * @property float[] $DefPageSize    The default page size.
+ * @property float[] $CurPageSize    The current page size.
+ * @property float   $lMargin        The left margin.
+ * @property float   $tMargin        The top margin.
+ * @property float   $rMargin        The right margin.
+ * @property float   $bMargin        The bottom margin.
+ * @property float   $cMargin        The cell margin.
+ * @property float   $k              The scale factor (number of points in user unit).
+ * @property float   $x              The current X position in user unit.
+ * @property float   $y              The current Y position in user unit.
+ * @property float   $w              The width of current page in user unit.
+ * @property float   $h              The height of current page in user unit.
+ * @property string  $FontFamily     The current font family.
+ * @property string  $FontStyle      The current font style.
+ * @property float   $FontSizePt     The current font size in points.
+ * @property float   $FontSize       The current font size in user unit.
+ * @property array   $CurrentFont    The current font information.
+ * @property string  $DefOrientation The default orientation.
+ * @property string  $CurOrientation The current orientation.
+ * @property int     $CurRotation    The current page rotation in degrees.
+ * @property float   $lasth          The height of last printed cell.
+ *
+ * @method float GetX()          The current X position in user unit.
+ * @method float GetY()          The current Y position in user unit.
+ * @method int   PageNo()        The current page number.
+ * @method float GetPageWidth()  The width of current page in user unit.
+ * @method float GetPageHeight() The height of current page in user unit.
  */
 class PdfDocument extends FPDF implements PdfConstantsInterface
 {
@@ -287,9 +316,9 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the current page size.
      *
-     * @return string the current page size. Is one of the of the SIZE_XX contants.
+     * @return float[] the current page size. Is one of the of the SIZE_XX contants.
      */
-    public function getCurrentPageSize(): string
+    public function getCurrentPageSize(): array
     {
         return $this->CurPageSize;
     }
@@ -297,7 +326,8 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the current rotation.
      *
-     * @return int the current rotation
+     * @return int the current orientation (0, 90, 180 or 270 degrees)
+     *             contants
      */
     public function getCurrentRotation(): int
     {
@@ -307,10 +337,10 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the default orientation.
      *
-     * @return int the current orientation. Is one of the of the ORIENTATION_XX
-     *             contants.
+     * @return string the default orientation. Is one of the of the ORIENTATION_XX
+     *                contants.
      */
-    public function getDefaultOrientation(): int
+    public function getDefaultOrientation(): string
     {
         return $this->DefOrientation;
     }
@@ -318,9 +348,9 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the default page size.
      *
-     * @return string the current page size. Is one of the of the SIZE_XX contants.
+     * @return float[] the current page size
      */
-    public function getDefaultPageSize(): string
+    public function getDefaultPageSize(): array
     {
         return $this->DefPageSize;
     }
@@ -398,9 +428,11 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
         $lastIndex = 0;
         $currentWidth = 0;
         $linesCount = 1;
+
+        /** @psalm-var array<string, float> $cw */
         $cw = &$this->CurrentFont['cw'];
 
-        // reun over text
+        // run over text
         while ($index < $lenText) {
             $ch = $text[$index];
 
@@ -488,7 +520,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     {
         $s = $this->cleanText($s);
 
-        return parent::GetStringWidth($s);
+        return (float) parent::GetStringWidth($s);
     }
 
     /**

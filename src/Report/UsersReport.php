@@ -30,6 +30,9 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * Report for the list of users.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<User>
+ * @psalm-suppress InternalMethod
  */
 class UsersReport extends AbstractArrayReport
 {
@@ -42,6 +45,8 @@ class UsersReport extends AbstractArrayReport
 
     /**
      * Constructor.
+     *
+     * @param User[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter)
     {
@@ -53,6 +58,8 @@ class UsersReport extends AbstractArrayReport
 
     /**
      * {@inheritdoc}
+     *
+     * @param User[] $entities
      */
     protected function doRender(array $entities): bool
     {
@@ -76,7 +83,6 @@ class UsersReport extends AbstractArrayReport
             ->addColumn(PdfColumn::left($this->trans('user.fields.lastLogin'), 30, true))
             ->outputHeaders();
 
-        /** @var User $entity */
         foreach ($entities as $entity) {
             $enabled = $entity->isEnabled();
             $style = $enabled ? $enabledStyle : $disabledStyle;
@@ -115,7 +121,8 @@ class UsersReport extends AbstractArrayReport
      */
     private function getFieldName(User $user): ?string
     {
-        if (!$this->fieldName) {
+        if (null !== $this->fieldName) {
+            /** @var \Vich\UploaderBundle\Mapping\PropertyMapping[] $mappings */
             $mappings = $this->factory->fromObject($user);
             if (!empty($mappings)) {
                 $this->fieldName = $mappings[0]->getFilePropertyName();

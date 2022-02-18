@@ -52,6 +52,7 @@ final class FileUtils
         }
 
         // decode
+        /** @var array|\stdClass $content */
         $content = \json_decode($json, $assoc);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             $message = \json_last_error_msg();
@@ -127,8 +128,9 @@ final class FileUtils
      */
     public static function getFilesystem(): Filesystem
     {
+        /** @psalm-var Filesystem|null $fs */
         static $fs;
-        if (!$fs) {
+        if (null === $fs) {
             $fs = new Filesystem();
         }
 
@@ -161,9 +163,8 @@ final class FileUtils
 
             return $file->key() + 1;
         } catch (\Exception $e) {
+            // ignore
             return 0;
-        } finally {
-            $file = null;
         }
     }
 
@@ -290,6 +291,6 @@ final class FileUtils
             return (string) $file->getRealPath();
         }
 
-        return (string) $file;
+        return $file;
     }
 }

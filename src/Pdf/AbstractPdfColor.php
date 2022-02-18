@@ -37,17 +37,17 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * The blue component.
      */
-    protected int $blue;
+    protected int $blue = 0;
 
     /**
      * The green component.
      */
-    protected int $green;
+    protected int $green = 0;
 
     /**
      * The red component.
      */
-    protected int $red;
+    protected int $red = 0;
 
     /**
      * Constructor.
@@ -109,7 +109,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Creates a new instance.
      *
-     * @param array|string $rgb an array containing the red, green and blue values or a hexadecimal string
+     * @param int[]|string $rgb an array containing the red, green and blue values or a hexadecimal string
      *
      * @return static|null the color or null if the RGB value can not be parsed
      *
@@ -227,7 +227,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         }
 
         // gets a proper hex string
-        $value = \preg_replace('/[^0-9A-Fa-f]/', '', $value);
+        $value = \preg_replace('/[^0-9A-Fa-f]/', '', (string) $value);
 
         // parse depending of length
         switch (\strlen($value)) {

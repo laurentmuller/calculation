@@ -74,11 +74,12 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     public function detect(string $text)
     {
-        // content
-        $data = [['Text' => $text]];
+        // query
+        $query = [['Text' => $text]];
 
-        // post
-        if (!$response = $this->post(self::URI_DETECT, $data)) {
+        /** @var bool|array $response */
+        $response = $this->post(self::URI_DETECT, $query);
+        if (!\is_array($response)) {
             return false;
         }
 
@@ -88,10 +89,13 @@ class BingTranslatorService extends AbstractTranslatorService
         }
 
         // get first result
+        /** @var array $result */
         $result = $response[0];
 
         // get language
-        if (!$tag = $this->getProperty($result, 'language')) {
+        /** @var string|bool $tag */
+        $tag = $this->getProperty($result, 'language');
+        if (!\is_string($tag)) {
             return false;
         }
 
@@ -133,7 +137,9 @@ class BingTranslatorService extends AbstractTranslatorService
         ];
 
         // post
-        if (!$response = $this->post(self::URI_TRANSLATE, $data, $query)) {
+        /** @var bool|array $response */
+        $response = $this->post(self::URI_TRANSLATE, $data, $query);
+        if (!\is_array($response)) {
             return false;
         }
 
@@ -143,23 +149,35 @@ class BingTranslatorService extends AbstractTranslatorService
         }
 
         // get first result
+        /** @var array $result */
         $result = $response[0];
 
         // translations
-        if (!$translations = $this->getPropertyArray($result, 'translations')) {
+        $translations = $this->getPropertyArray($result, 'translations');
+        if (!\is_array($translations)) {
             return false;
         }
-        /** @var array $translations */
+
+        /** @var array $translation */
         $translation = $translations[0];
 
         // target
-        if (!$target = $this->getProperty($translation, 'text')) {
+        $target = $this->getProperty($translation, 'text');
+        if (!\is_string($target)) {
+            return false;
+        }
+
+        // detected language
+        $detectedLanguage = $this->getProperty($result, 'detectedLanguage', false);
+        if (!\is_array($detectedLanguage)) {
             return false;
         }
 
         // from
-        if (($detectedLanguage = $this->getProperty($result, 'detectedLanguage', false)) && ($language = $this->getProperty($detectedLanguage, 'language', false))) {
-            $from = $language;
+        /** @var bool|string $from */
+        $from = $this->getProperty($detectedLanguage, 'language', false);
+        if (!\is_string($from)) {
+            return false;
         }
 
         return [
@@ -185,18 +203,21 @@ class BingTranslatorService extends AbstractTranslatorService
         $query = ['scope' => 'translation'];
 
         // get
-        if (!$response = $this->get(self::URI_LANGUAGE, $query)) {
+        $response = $this->get(self::URI_LANGUAGE, $query);
+        if (!\is_array($response)) {
             return false;
         }
 
         // translations
-        if (!$translation = $this->getPropertyArray($response, 'translation')) {
+        /** @var bool|array<string, array{name: string}>  $translation */
+        $translation = $this->getPropertyArray($response, 'translation');
+        if (!\is_array($translation)) {
             return false;
         }
 
         // build
         $result = [];
-        foreach ((array) $translation as $key => $value) {
+        foreach ($translation as $key => $value) {
             $result[$value['name']] = $key;
         }
         \ksort($result);
@@ -241,6 +262,7 @@ class BingTranslatorService extends AbstractTranslatorService
         // check status code
         if (Response::HTTP_OK !== $response->getStatusCode()) {
             $content = $response->getContent(false);
+            /** @var array|null */
             $response = \json_decode($content, true);
         } else {
             // decode
@@ -249,7 +271,15 @@ class BingTranslatorService extends AbstractTranslatorService
 
         // check error
         if (isset($response['error'])) {
-            $this->lastError = $response['error'];
+            /**
+             * @var null|array{
+             *      result: bool,
+             *      code: string|int,
+             *      message: string,
+             *      exception?: array|\Exception} $error
+             */
+            $error = $response['error'];
+            $this->lastError = $error;
 
             return false;
         }
@@ -269,7 +299,6 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     private function post(string $uri, array $data, array $query = [])
     {
-        //try {
         // add version
         $query['api-version'] = self::API_VERSION;
 
@@ -282,6 +311,7 @@ class BingTranslatorService extends AbstractTranslatorService
         // check status code
         if (Response::HTTP_OK !== $response->getStatusCode()) {
             $content = $response->getContent(false);
+            /** @var array|null */
             $response = \json_decode($content, true);
         } else {
             // decode
@@ -290,7 +320,15 @@ class BingTranslatorService extends AbstractTranslatorService
 
         // check error
         if (isset($response['error'])) {
-            $this->lastError = $response['error'];
+            /**
+             * @var null|array{
+             *      result: bool,
+             *      code: string|int,
+             *      message: string,
+             *      exception?: array|\Exception} $error
+             */
+            $error = $response['error'];
+            $this->lastError = $error;
 
             return false;
         }

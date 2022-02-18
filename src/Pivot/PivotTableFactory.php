@@ -21,13 +21,14 @@ use Symfony\Component\Intl\Exception\UnexpectedTypeException;
  * Factory to create a pivot table.
  *
  * @author Laurent Muller
+ *
+ * @template T of AbstractAggregator
  */
 class PivotTableFactory
 {
     /**
      * The aggregator class name.
      *
-     * @template T of AbstractAggregator
      * @psalm-var class-string<T> $aggregatorClass
      */
     private string $aggregatorClass;
@@ -78,6 +79,7 @@ class PivotTableFactory
     {
         $this->title = $title;
         $this->dataset = $dataset;
+        // @phpstan-ignore-next-line
         $this->aggregatorClass = SumAggregator::class;
     }
 
@@ -97,10 +99,11 @@ class PivotTableFactory
         $keyField = $this->keyField;
         $dataField = $this->dataField;
         $rowFields = $this->rowFields;
-        $colFields = $this->columnFields;
+        $columnFields = $this->columnFields;
         $table = new PivotTable($this->createAggregator(), $this->title);
 
         // build
+        /** @psalm-var array $row */
         foreach ($this->dataset as $row) {
             // key
             if (null !== $keyField) {
@@ -112,11 +115,11 @@ class PivotTableFactory
             }
 
             // value
-            $value = $dataField->getValue($row);
+            $value = null !== $dataField ? $dataField->getValue($row) : null;
 
             // find or create columns
             $currentCol = $table->getColumn();
-            foreach ($colFields as $field) {
+            foreach ($columnFields as $field) {
                 $key = $field->getValue($row);
                 if (null === ($child = $currentCol->find($key))) {
                     $aggregator = $this->createAggregator();
@@ -162,13 +165,21 @@ class PivotTableFactory
         }
 
         // fields
-        $table->setKeyField($keyField)
-            ->setDataField($dataField)
-            ->setColumnFields($colFields)
-            ->setRowFields($rowFields);
+        if (null !== $keyField) {
+            $table->setKeyField($keyField);
+        }
+        if (null !== $dataField) {
+            $table->setDataField($dataField);
+        }
+        if ([] !== $columnFields) {
+            $table->setColumnFields($columnFields);
+        }
+        if ([] !== $rowFields) {
+            $table->setRowFields($rowFields);
+        }
 
         // titles
-        $table->getColumn()->setTitle($this->buildFieldsTitle($colFields));
+        $table->getColumn()->setTitle($this->buildFieldsTitle($columnFields));
         $table->getRow()->setTitle($this->buildFieldsTitle($rowFields));
 
         return $table;
@@ -176,6 +187,8 @@ class PivotTableFactory
 
     /**
      * Gets the aggregator class name.
+     *
+     * @psalm-return class-string<T>
      */
     public function getAggregatorClass(): string
     {
@@ -245,6 +258,8 @@ class PivotTableFactory
      *
      * @param array  $dataset the dataset
      * @param string $title   the table title
+     *
+     * @psalm-return PivotTableFactory<AbstractAggregator>
      */
     public static function instance(array $dataset, ?string $title = null): self
     {
@@ -267,6 +282,10 @@ class PivotTableFactory
      * @param string $aggregatorClass the aggregator class name to set
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractAggregator class
+     *
+     * @psalm-param class-string<T> $aggregatorClass
+     *
+     * @psalm-return PivotTableFactory<T>
      */
     public function setAggregatorClass(string $aggregatorClass): self
     {
@@ -283,6 +302,8 @@ class PivotTableFactory
      *
      * @param PivotField[]|PivotField $fields the fields to set
      *
+     * @psalm-return PivotTableFactory<T>
+     *
      * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
      */
     public function setColumnFields($fields): self
@@ -296,6 +317,8 @@ class PivotTableFactory
      * Sets the data field.
      *
      * @param PivotField $dataField the data field to set
+     *
+     * @psalm-return PivotTableFactory<T>
      */
     public function setDataField(PivotField $dataField): self
     {
@@ -306,6 +329,8 @@ class PivotTableFactory
 
     /**
      * Sets the unique key field.
+     *
+     * @psalm-return PivotTableFactory<T>
      */
     public function setKeyField(?PivotField $keyField): self
     {
@@ -319,6 +344,8 @@ class PivotTableFactory
      *
      * @param PivotField[]|PivotField $fields the fields to set
      *
+     * @psalm-return PivotTableFactory<T>
+     *
      * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
      */
     public function setRowFields($fields): self
@@ -331,7 +358,7 @@ class PivotTableFactory
     /**
      * Sets the table title.
      *
-     * @param string $title
+     * @psalm-return PivotTableFactory<T>
      */
     public function setTitle(?string $title): self
     {
@@ -350,18 +377,19 @@ class PivotTableFactory
     private function buildFieldsTitle(array $fields): string
     {
         return \array_reduce($fields, function (string $carry, PivotField $field): string {
+            $title = (string) $field->getTitle();
             if ('' !== $carry) {
-                return $carry . '\\' . $field->getTitle();
-            } else {
-                return $field->getTitle();
+                return $carry . '\\' . $title;
             }
+
+            return $title;
         }, '');
     }
 
     /**
      * Checks if all elements of the given array are instance of PivotField class.
      *
-     * @param mixed $fields the array to validate
+     * @param array|mixed $fields the array to validate
      *
      * @return PivotField[] the pivot fields
      *
@@ -373,13 +401,17 @@ class PivotTableFactory
             $fields = [$fields];
         }
 
+        /** @var PivotField[] $result */
+        $result = [];
+
         foreach ($fields as $field) {
             if (!$field instanceof PivotField) {
                 throw new UnexpectedTypeException($field, PivotField::class);
             }
+            $result[] = $field;
         }
 
-        return $fields;
+        return $result;
     }
 
     /**

@@ -45,6 +45,8 @@ trait RoleTrait
     /**
      * {@inheritdoc}
      *
+     * @return string[]
+     *
      * @see UserInterface
      */
     public function getRoles(): array

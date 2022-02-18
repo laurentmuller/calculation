@@ -43,21 +43,19 @@ class ThemeController extends AbstractController
      */
     public function invoke(Request $request, ThemeService $service): Response
     {
-        // create form and handle request
-        $theme = $service->getCurrentTheme();
-        $background = $service->getThemeBackground($request);
-
         $data = [
-            'theme' => $theme,
-            'background' => $background,
+            'theme' => $service->getCurrentTheme(),
+            'background' => $service->getThemeBackground($request),
         ];
-
         $form = $this->createForm(ThemeType::class, $data);
+
         if ($this->handleRequestForm($request, $form)) {
             // get values
+            /** @psalm-var array $data */
             $data = $form->getData();
+            /** @psalm-var \App\Model\Theme $theme */
             $theme = $data['theme'];
-            $background = $data['background'];
+            $background = (string) $data['background'];
             $dark = $theme->isDark();
 
             // check values
@@ -86,9 +84,9 @@ class ThemeController extends AbstractController
         // render
         return $this->renderForm('user/user_theme.html.twig', [
             'asset_base' => $this->getStringParameter('asset_base'),
-            'form' => $form,
             'themes' => $service->getThemes(),
-            'theme' => $theme,
+            'theme' => $data['theme'],
+            'form' => $form,
         ]);
     }
 

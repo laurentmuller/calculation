@@ -183,7 +183,6 @@ class TaskItem extends AbstractEntity implements \Countable
         $lastMin = null;
         $lastMax = null;
 
-        /** @var TaskItemMargin $margin */
         foreach ($margins as $key => $margin) {
             // get values
             $min = $margin->getMinimum();

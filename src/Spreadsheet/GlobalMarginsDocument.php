@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\GlobalMargin;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of global margins.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\GlobalMargin>
  */
 class GlobalMarginsDocument extends AbstractArrayDocument
 {
@@ -44,7 +45,6 @@ class GlobalMarginsDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var GlobalMargin $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                     $entity->getMinimum(),

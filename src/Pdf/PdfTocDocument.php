@@ -16,6 +16,8 @@ namespace App\Pdf;
  * Extends the document to output a Table of content (TOC).
  *
  * @author Laurent Muller
+ *
+ * @property array<int, string> $pages The array containing pages.
  */
 class PdfTocDocument extends PdfDocument
 {
@@ -36,6 +38,8 @@ class PdfTocDocument extends PdfDocument
 
     /**
      * The TOC entries.
+     *
+     * @var array<array>
      */
     private array $tocEntries = [];
 
@@ -43,12 +47,12 @@ class PdfTocDocument extends PdfDocument
      * {@inheritdoc}
      *
      * @param string $orientation
-     * @param string $format
+     * @param string $size
      * @param int    $rotation
      */
-    public function AddPage($orientation = '', $format = '', $rotation = 0): void
+    public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {
-        parent::AddPage($orientation, $format, $rotation);
+        parent::AddPage($orientation, $size, $rotation);
         if ($this->numbering) {
             ++$this->currentPage;
         }
@@ -140,9 +144,9 @@ class PdfTocDocument extends PdfDocument
      */
     private function tocOuputEntry(array $entry, float $fontSize, string $fontName): void
     {
-        $level = $entry['level'];
-        $text = $entry['text'];
-        $page = $entry['page'];
+        $level = (int) $entry['level'];
+        $text = (string) $entry['text'];
+        $page = (int) $entry['page'];
 
         // offset
         if ($level > 0) {
@@ -153,7 +157,7 @@ class PdfTocDocument extends PdfDocument
         $weight = 0 === $level ? 'B' : '';
         $this->SetFont($fontName, $weight, $fontSize);
         $str_size = $this->GetStringWidth($text);
-        $this->Cell($str_size + 2, $this->FontSize + 2, $text);
+        $this->Cell($str_size + 2, (float) $this->FontSize + 2, $text);
 
         // filling dots
         $this->SetFont($fontName, '', $fontSize);
@@ -161,10 +165,10 @@ class PdfTocDocument extends PdfDocument
         $width = $this->getPrintableWidth() - $page_cell_size - ($level * 8) - ($str_size + 2);
         $multplier = $width / $this->GetStringWidth('.');
         $dots = \str_repeat('.', (int) $multplier);
-        $this->Cell($width, $this->FontSize + 2, $dots, 0, 0, 'R');
+        $this->Cell($width, (float) $this->FontSize + 2, $dots, 0, 0, 'R');
 
         // page number
-        $this->Cell($page_cell_size, $this->FontSize + 2, (string) $page, 0, 1, 'R');
+        $this->Cell($page_cell_size, (float) $this->FontSize + 2, (string) $page, 0, 1, 'R');
     }
 
     /**
@@ -178,7 +182,7 @@ class PdfTocDocument extends PdfDocument
     {
         if ('' !== $title) {
             $this->SetFont($fontName, 'B', $fontSize);
-            $this->Cell(0, $this->FontSize, $title, 0, 1, 'C');
+            $this->Cell(0, (float) $this->FontSize, $title, 0, 1, 'C');
             $this->Ln(10);
         }
     }

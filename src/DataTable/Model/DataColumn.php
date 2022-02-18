@@ -46,9 +46,9 @@ class DataColumn implements SortModeInterface
     /**
      * Either a sprintf compatible format string, or a callable function providing rendering conversion, or default null.
      *
-     * @var string|callable
+     * @var string|callable|null
      */
-    protected $formatter;
+    protected $formatter = null;
 
     /**
      * The header class name.
@@ -65,7 +65,7 @@ class DataColumn implements SortModeInterface
     /**
      * The field name.
      */
-    protected ?string $name = '';
+    protected string $name = '';
 
     /**
      * The orderable behavior.
@@ -98,6 +98,11 @@ class DataColumn implements SortModeInterface
     protected bool $visible = true;
 
     /**
+     * The property accessor to get values.
+     */
+    private static ?PropertyAccessorInterface $accessor = null;
+
+    /**
      * The property path for array object.
      */
     private string $property = '';
@@ -110,7 +115,7 @@ class DataColumn implements SortModeInterface
      */
     public function __construct(string $name = null, string $class = null)
     {
-        $this->name = $name;
+        $this->name = $name ?? '';
         $this->class = $class;
         $this->updateProperty();
     }
@@ -134,20 +139,17 @@ class DataColumn implements SortModeInterface
     {
         // get value
         $property = \is_array($data) ? $this->property : $this->name;
+        /** @psalm-var mixed $value */
         $value = self::accessor()->getValue($data, $property);
 
         // format
         if (\is_string($this->formatter)) {
-            if (null !== $value) {
-                return \sprintf($this->formatter, $value);
-            }
-
-            return '';
+            return \is_string($value) ? \sprintf($this->formatter, $value) : '';
         }
 
         // convert
         if (\is_callable($this->formatter)) {
-            return \call_user_func($this->formatter, $value, $data);
+            return (string) \call_user_func($this->formatter, $value, $data);
         }
 
         // default
@@ -562,12 +564,11 @@ class DataColumn implements SortModeInterface
      */
     private static function accessor(): PropertyAccessorInterface
     {
-        static $accessor;
-        if (null === $accessor) {
-            $accessor = PropertyAccess::createPropertyAccessor();
+        if (null === self::$accessor) {
+            self::$accessor = PropertyAccess::createPropertyAccessor();
         }
 
-        return $accessor;
+        return self::$accessor;
     }
 
     /**

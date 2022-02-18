@@ -15,6 +15,7 @@ namespace App\Form\User;
 use App\Form\DataTransformer\AddressTransformer;
 use App\Form\FormHelper;
 use App\Form\Type\SimpleEditorType;
+use App\Model\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -42,7 +43,9 @@ class UserCommentType extends AbstractType
     {
         parent::buildForm($builder, $options);
 
-        $isMail = $options['data']->isMail();
+        /** @var Comment $data */
+        $data = $options['data'];
+        $isMail = $data->isMail();
         $helper = new FormHelper($builder, 'user.fields.');
 
         if ($isMail) {

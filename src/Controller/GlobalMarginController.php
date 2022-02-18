@@ -126,7 +126,6 @@ class GlobalMarginController extends AbstractEntityController
      */
     public function excel(): SpreadsheetResponse
     {
-        /** @var GlobalMargin[] $entities */
         $entities = $this->getEntities('minimum');
         if (empty($entities)) {
             $message = $this->trans('globalmargin.list.empty');
@@ -147,7 +146,6 @@ class GlobalMarginController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var GlobalMargin[] $entities */
         $entities = $this->getEntities('minimum');
         if (empty($entities)) {
             $message = $this->trans('globalmargin.list.empty');

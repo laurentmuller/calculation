@@ -21,11 +21,15 @@ use App\Util\FormatUtils;
  * Report for the list of global margins.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<GlobalMargin>
  */
 class GlobalMarginsReport extends AbstractArrayReport
 {
     /**
      * {@inheritdoc}
+     *
+     * @param GlobalMargin[] $entities
      */
     protected function doRender(array $entities): bool
     {
@@ -42,7 +46,6 @@ class GlobalMarginsReport extends AbstractArrayReport
             ->addColumn(PdfColumn::right($this->trans('globalmargin.fields.margin'), 50))
             ->outputHeaders();
 
-        /** @var GlobalMargin $entity */
         foreach ($entities as $entity) {
             $table->startRow()
                 ->add(FormatUtils::formatAmount($entity->getMinimum()))

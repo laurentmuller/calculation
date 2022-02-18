@@ -35,13 +35,9 @@ class AverageAggregator extends AbstractAggregator
         if ($value instanceof self) {
             $this->sum += $value->sum;
             $this->count += $value->count;
-        } else {
-            if (!empty($value)) {
-                $this->sum += (float) $value;
-            }
-            if (null !== $value) {
-                ++$this->count;
-            }
+        } elseif (null !== $value) {
+            ++$this->count;
+            $this->sum += (float) $value;
         }
 
         return $this;

@@ -31,11 +31,15 @@ class NotificationEmail extends BaseNotificationEmail
     {
         parent::__construct($headers, $body);
         $this->htmlTemplate('emails/notification.html.twig');
-        $this->translator = $translator;
+        if (null !== $translator) {
+            $this->setTranslator($translator);
+        }
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-suppress InternalMethod
      */
     public function getPreparedHeaders(): Headers
     {
@@ -50,43 +54,19 @@ class NotificationEmail extends BaseNotificationEmail
      */
     public function setFooterText(string $footerText): self
     {
-        return $this->updateContext('footer_text', $footerText);
-    }
-
-    /**
-     * Sets the translator used to translate the subject.
-     */
-    public function setTranslator(TranslatorInterface $translator): self
-    {
-        $this->translator = $translator;
-
+        $context = $this->getContext();
+        $context['footer_text'] = $footerText;
+        $this->context($context);
+        //return $this->updateContext('footer_text', $footerText);
         return $this;
     }
 
-    private function translateSubject(): ?string
+    private function translateSubject(): string
     {
-        $subject = $this->getSubject();
-        if (null !== $this->translator) {
-            $importance = $this->getContext()['importance'] ?? self::IMPORTANCE_LOW;
-            $translated = $this->trans("importance.full.$importance");
+        $subject = (string) $this->getSubject();
+        $importance = (string) ($this->getContext()['importance'] ?? self::IMPORTANCE_LOW);
+        $translated = $this->trans("importance.full.$importance");
 
-            return \sprintf('%s - %s', $subject, $translated);
-        }
-
-        return $subject;
-    }
-
-    /**
-     * @param mixed $value
-     */
-    private function updateContext(string $name, $value): self
-    {
-        $property = new \ReflectionProperty(BaseNotificationEmail::class, 'context');
-        $property->setAccessible(true);
-        $context = $property->getValue($this);
-        $context[$name] = $value;
-        $property->setValue($this, $context);
-
-        return $this;
+        return \sprintf('%s - %s', $subject, $translated);
     }
 }

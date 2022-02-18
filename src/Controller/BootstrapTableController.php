@@ -209,7 +209,7 @@ class BootstrapTableController extends AbstractController
      */
     public function save(Request $request): JsonResponse
     {
-        $view = (string) $request->get(TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+        $view = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
         $limit = AbstractTable::getDefaultPageSize($view);
 
         $response = $this->json(true);
@@ -275,7 +275,9 @@ class BootstrapTableController extends AbstractController
 
         // update request parameters
         $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-        $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
+        if (\is_string($view)) {
+            $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
+        }
 
         // check empty
         if (null !== $emptyMessage = $table->checkEmpty()) {
@@ -328,10 +330,11 @@ class BootstrapTableController extends AbstractController
     }
 
     /**
-     * @param mixed|null $default the default value if the result parameter is null
+     * @param string|int|float|bool|null $default the default value if the result parameter is null
      */
     private function saveCookie(Response $response, DataResults $results, string $key, $default = null, string $prefix = '', string $modify = '+1 year'): void
     {
+        /** @psalm-var string|int|float|bool|array|null $value */
         $value = $results->getParams($key, $default);
         if (null !== $value) {
             $this->setCookie($response, $key, $value, $prefix, $modify);
@@ -352,17 +355,20 @@ class BootstrapTableController extends AbstractController
     }
 
     /**
-     * @param mixed|null $default the default value if the input key does not exist
+     * @param string|int|float|bool|null $default the default value if the input key does not exist
      *
-     * @return mixed the request value, the cookie value or the default value
+     * @return string|int|float|bool|null the request value, the cookie value or the default value
+     * @psalm-suppress InvalidScalarArgument
      */
     private function updateRequest(Request $request, string $key, $default = null, string $prefix = '')
     {
-        $input = $this->getRequestInputBag($request);
+        $input = Utils::getRequestInputBag($request);
         $value = $input->get($key);
         if (null === $value) {
+            $cookies = $request->cookies;
             $name = $this->getCookieName($key, $prefix);
-            $value = $request->cookies->get($name, $default);
+            // @phpstan-ignore-next-line
+            $value = $cookies->get($name, $default);
             if (null !== $value) {
                 $input->set($key, $value);
             }

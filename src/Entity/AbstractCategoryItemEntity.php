@@ -45,6 +45,8 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
 
     /**
      * Get category.
+     *
+     * @psalm-suppress all
      */
     public function getCategory(): ?Category
     {
@@ -56,7 +58,9 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getCategoryCode(): ?string
     {
-        return null !== $this->category ? $this->category->getCode() : null;
+        $category = $this->getCategory();
+
+        return null !== $category ? $category->getCode() : null;
     }
 
     /**
@@ -64,7 +68,9 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getCategoryId(): ?int
     {
-        return null !== $this->category ? $this->category->getId() : null;
+        $category = $this->getCategory();
+
+        return null !== $category ? $category->getId() : null;
     }
 
     /**
@@ -72,7 +78,9 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getGroup(): ?Group
     {
-        return null !== $this->category ? $this->category->getGroup() : null;
+        $category = $this->getCategory();
+
+        return null !== $category ? $category->getGroup() : null;
     }
 
     /**
@@ -80,7 +88,9 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getGroupCode(): ?string
     {
-        return null !== $this->category ? $this->category->getGroupCode() : null;
+        $category = $this->getCategory();
+
+        return null !== $category ? $category->getGroupCode() : null;
     }
 
     /**
@@ -101,6 +111,8 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
 
     /**
      * Set category.
+     *
+     * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function setCategory(?Category $category): self
     {

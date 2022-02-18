@@ -93,7 +93,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         // source
         $source = $publicDir;
         if ($this->propertyExists($configuration, 'source')) {
-            $source .= '/' . $configuration->source;
+            $source .= '/' . (string) $configuration->source;
         }
         if (!$this->exists($source)) {
             $this->writeError("The source directory '{$source}' does not exist.");
@@ -105,17 +105,17 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         if (!$this->propertyExists($configuration, 'target')) {
             return Command::SUCCESS;
         }
-        $target = $publicDir . '/' . $configuration->target;
+        $target = $publicDir . '/' . (string) $configuration->target;
         $targetTemp = $this->tempDir($publicDir) . '/';
 
         // uglifyjs arguments
-        if ($this->propertyExists($configuration, 'js_args') && !empty($uglifyJsArgs = \trim($configuration->js_args))) {
+        if ($this->propertyExists($configuration, 'js_args') && !empty($uglifyJsArgs = \trim((string) $configuration->js_args))) {
             $this->uglifyJsArgs = $uglifyJsArgs;
             $this->writeVerbose("UglifyJs arguments: {$uglifyJsArgs}");
         }
 
         // cleancss arguments
-        if ($this->propertyExists($configuration, 'css_args') && !empty($cleanCssArgs = \trim($configuration->css_args))) {
+        if ($this->propertyExists($configuration, 'css_args') && !empty($cleanCssArgs = \trim((string) $configuration->css_args))) {
             $this->cleanCssArgs = $cleanCssArgs;
             $this->writeVerbose("CleanCss arguments: {$cleanCssArgs}");
         }
@@ -206,7 +206,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      */
     private function checkUglifyJs(): ?string
     {
-        if ($this->uglifyJsBinary) {
+        if (null !== $this->uglifyJsBinary) {
             [$ok, $output] = $this->executeCommand(\escapeshellarg($this->uglifyJsBinary) . ' --version', '', false);
             if (!$ok) {
                 return 'Error while executing ' . $this->uglifyJsBinary . ', install Node.js and uglify-es.';
@@ -239,7 +239,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         }
 
         $this->writeVeryVerbose("Compressing {$origFile}");
-        $cmd = \escapeshellarg((string) $this->cleanCssBinary) . ' ' . $this->cleanCssArgs;
+        $cmd = \escapeshellarg($this->cleanCssBinary) . ' ' . $this->cleanCssArgs;
         [$ok, $output] = $this->executeCommand($cmd, $content, false);
         if (!$ok) {
             $this->writeError("Error while executing {$cmd}");
@@ -261,21 +261,21 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      */
     private function compressJs(string $content, string $origFile): string
     {
-        if (!$this->uglifyJsBinary || !$this->checkCompressMark($content)) {
+        if (null === $this->uglifyJsBinary || !$this->checkCompressMark($content)) {
             return $content;
         }
 
         $this->writeVeryVerbose("Compressing {$origFile}");
-        $cmd = \escapeshellarg((string) $this->uglifyJsBinary) . ' ' . $this->uglifyJsArgs;
-        [$ok, $output] = $this->executeCommand($cmd, $content, false);
-        if (!$ok) {
+        $cmd = \escapeshellarg($this->uglifyJsBinary) . ' ' . $this->uglifyJsArgs;
+        $result = $this->executeCommand($cmd, $content, false);
+        if (!$result[0]) {
             $this->writeError("Error while executing {$cmd}");
-            $this->writeError($output);
+            $this->writeError($result[1]);
 
             return $content;
         }
 
-        return $output;
+        return $result[1];
     }
 
     /**
@@ -290,7 +290,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     {
         $finder = new Finder();
         $finder->in($source)
-            ->exclude($configuration->target)
+            ->exclude((array) $configuration->target)
             ->name('*.css')
             ->name('*.js')
             ->files();
@@ -307,6 +307,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * Executes a command.
      *
      * @return array the success result at index 0 and the output string at index 1
+     * @psalm-return array{0: bool, 1: string}
      */
     private function executeCommand(string $command, string $input, bool $bypassShell = true): array
     {
@@ -354,7 +355,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     {
         $dir = \dirname($origFile);
 
-        return (string) \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function (array $matches) use ($dir) {
+        return (string) \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function (array $matches) use ($dir): string {
             $file = $dir . '/' . $matches[1];
             if (!\is_file($file)) {
                 $this->writeError("Expanding file {$file} not found!");

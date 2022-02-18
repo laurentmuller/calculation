@@ -1,5 +1,5 @@
 {# Macro for a calculation categories #}
-{% macro printCategoryRow(category, editable) -%}
+{% macro printCategoryRow(category, editable, first, last) -%}
 {# import #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'calculation/_macro_items.html.twig' as macroItems %}
@@ -21,6 +21,11 @@
                     {{ icons.dropdownSeparator() }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_item', 'file far', 'btn-add-item') }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_task', 'tasks', 'btn-add-task') }}
+                    {{ icons.dropdownSeparator(first and last) }}
+                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-category', first) }}
+                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-category', first) }}
+                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-category', last) }}
+                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-category', last) }}
                 </div>
             </div>
         </th>

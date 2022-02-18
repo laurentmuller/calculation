@@ -13,14 +13,16 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 
 /**
  * Abstract repository for products and tasks.
  *
- * @author Laurent Muller
  * @template T of \App\Entity\AbstractCategoryItemEntity
  * @template-extends AbstractRepository<T>
+ *
+ * @author Laurent Muller
  */
 abstract class AbstractCategoryItemRepository extends AbstractRepository
 {
@@ -38,12 +40,12 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
      */
     public function countCategoryReferences(Category $category): int
     {
-        $builder = $this->createQueryBuilder('e')
+        return (int) $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->where('e.category = :category')
-            ->setParameter('category', $category);
-
-        return (int) $builder->getQuery()->getSingleScalarResult();
+            ->setParameter('category', $category, Types::OBJECT)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**

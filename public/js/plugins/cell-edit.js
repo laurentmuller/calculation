@@ -29,7 +29,7 @@
 
         destroy() {
             if (this.$input) {
-                this._cancel($.Event('blur'), false);
+                this._cancel($.Event('blur'), false); // jslint ignore:line
             }
             this.$element.off('click', $.proxy(this._click, this));
             this.$element.removeData('cell-edit');
@@ -78,7 +78,7 @@
             }
             this.$input.select().focus();
             if (title) {
-                this.$input.tooltip('show')
+                this.$input.tooltip('show');
             }
 
             return this;
@@ -149,7 +149,9 @@
         }
 
         _cancel(e, notify = true) {
-            e.stopPropagation();
+            if (e) {
+                e.stopPropagation();
+            }
             if (this.$input) {
                 this.$input.off('blur', $.proxy(this._blur, this));
                 this.$input.off('input', $.proxy(this._input, this));
@@ -172,6 +174,17 @@
             return this;
         }
 
+        _removeInput() {
+            if (this.$input) {
+                this.$input.off('blur', $.proxy(this._blur, this));
+                this.$input.off('input', $.proxy(this._input, this));
+                this.$input.off('keydown', $.proxy(this._keydown, this));
+                this.$input.tooltip('dispose');
+                this.$input.remove();
+                this.$input = null;
+            }
+        }
+
         _parse(value) {
             if ($.isFunction(this.options.parser)) {
                 return this.options.parser(value);
@@ -185,7 +198,7 @@
             }
             return value;
         }
-    }
+    };
 
     // -----------------------------
     // CellEdit default options

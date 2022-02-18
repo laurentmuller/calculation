@@ -38,8 +38,9 @@ class CalculationDuplicateReport extends AbstractCalculationItemsReport
     protected function computeItemsCount(array $items): int
     {
         return \array_reduce($items, function (int $carry, array $item) {
+            /** @var array $child */
             foreach ($item['items'] as $child) {
-                $carry += $child['count'];
+                $carry += (int) $child['count'];
             }
 
             return $carry;
@@ -52,7 +53,7 @@ class CalculationDuplicateReport extends AbstractCalculationItemsReport
     protected function formatItems(array $items): string
     {
         $result = \array_map(function (array $item): string {
-            return \sprintf('%s (%d)', $item['description'], $item['count']);
+            return \sprintf('%s (%d)', (string) $item['description'], (int) $item['count']);
         }, $items);
 
         return \implode("\n", $result);

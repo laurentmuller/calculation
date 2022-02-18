@@ -37,9 +37,17 @@ class LogControllerTest extends AbstractControllerTest
     public function getRoutes(): array
     {
         return [
+            ['/log', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/log', self::ROLE_ADMIN],
+            ['/log', self::ROLE_SUPER_ADMIN],
+
             ['/log/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/log/card', self::ROLE_ADMIN],
             ['/log/card', self::ROLE_SUPER_ADMIN],
+
+            ['/log/delete', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/log/delete', self::ROLE_ADMIN],
+            ['/log/delete', self::ROLE_SUPER_ADMIN],
 
             ['/log/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/log/excel', self::ROLE_ADMIN],
@@ -52,14 +60,6 @@ class LogControllerTest extends AbstractControllerTest
             ['/log/refresh', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/log/refresh', self::ROLE_ADMIN, Response::HTTP_FOUND],
             ['/log/refresh', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
-
-            ['/log', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/log', self::ROLE_ADMIN],
-            ['/log', self::ROLE_SUPER_ADMIN],
-
-            ['/log/delete', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/log/delete', self::ROLE_ADMIN],
-            ['/log/delete', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

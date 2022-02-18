@@ -61,7 +61,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(UserRegistrationType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             // encode password
-            $plainPassword = $form->get('plainPassword')->getData();
+            $plainPassword = (string) $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
 
@@ -105,12 +105,12 @@ class RegistrationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $id = $request->get('id');
-        if (null === $id) {
+        $id = $this->getRequestInt($request, 'id');
+        if (0 === $id) {
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
 
-        $user = $repository->find((int) $id);
+        $user = $repository->find($id);
         if (!$user instanceof User) {
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }

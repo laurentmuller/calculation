@@ -38,6 +38,8 @@ class EntityFileNamer implements NamerInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-suppress InternalMethod
      */
     public function name($object, PropertyMapping $mapping): string
     {
@@ -45,13 +47,16 @@ class EntityFileNamer implements NamerInterface
         $name = $this->transliterate($mapping->getFileNamePropertyName());
 
         // append the file extension if there is one
-        if ($extension = $this->getExtension($file)) {
+        if ($file && $extension = $this->getExtension($file)) {
             $name = \sprintf('%s.%s', $name, $extension);
         }
 
         return \uniqid() . '_' . $name;
     }
 
+    /**
+     * @psalm-suppress InternalMethod
+     */
     private function transliterate(string $value): string
     {
         return $this->transliterator->transliterate($value);

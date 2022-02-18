@@ -111,6 +111,19 @@ class PivotController extends AbstractController
 
     /**
      * Gets the pivot dataset.
+     *
+     * @psalm-return array<array{
+     *      calculation_id: int,
+     *      calculation_date: \DateTimeInterface,
+     *      calculation_overall_margin: float,
+     *      calculation_overall_total: float,
+     *      calculation_state: string,
+     *      item_group: string,
+     *      item_category: string,
+     *      item_description: string,
+     *      item_price: float,
+     *      item_quantity: float,
+     *      item_total: float}>
      */
     private function getDataset(): array
     {
@@ -123,10 +136,10 @@ class PivotController extends AbstractController
     private function getTable(): ?PivotTable
     {
         // callbacks
-        $semesterFormatter = function (int $semestre) {
+        $semesterFormatter = function (int $semestre): string {
             return $this->trans("pivot.semester.$semestre");
         };
-        $quarterFormatter = function (int $quarter) {
+        $quarterFormatter = function (int $quarter): string {
             return $this->trans("pivot.quarter.$quarter");
         };
 

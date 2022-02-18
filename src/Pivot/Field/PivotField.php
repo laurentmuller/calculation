@@ -101,11 +101,13 @@ class PivotField implements \JsonSerializable
      *
      * @param array $row the dataset row
      *
-     * @return mixed the value
+     * @return float|int|string|\DateTimeInterface|null the value
      */
     public function getValue(array $row)
     {
-        if (isset($row[$this->name]) && $value = $row[$this->name]) {
+        /** @psalm-var mixed $value */
+        $value = $this->getRowValue($row);
+        if ($value) {
             switch ($this->method) {
                 case self::METHOD_FLOAT:
                     return (float) $value;
@@ -164,5 +166,13 @@ class PivotField implements \JsonSerializable
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getRowValue(array $row)
+    {
+        return $row[$this->name] ?? null;
     }
 }

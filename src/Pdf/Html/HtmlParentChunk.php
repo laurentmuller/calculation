@@ -71,8 +71,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     /**
      * Finds the first child for the given the tag names.
      *
-     * @param string[] ...$names the tag names to search for
-     *
      * @return AbstractHtmlChunk|null the child, if found; <code>null</code> otherwise
      */
     public function findChild(string ...$names): ?AbstractHtmlChunk
@@ -167,8 +165,8 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
             $this->moveY($report, $this->getBottomMargin());
 
             // restore style
-            if (null !== $this->getParent()) {
-                $this->getParent()->applyStyle($report);
+            if (null !== $parent = $this->getParent()) {
+                $parent->applyStyle($report);
             }
         });
     }

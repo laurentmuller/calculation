@@ -28,7 +28,7 @@ class SumAggregator extends AbstractAggregator
     {
         if ($value instanceof self) {
             $this->result += $value->result;
-        } elseif (!empty($value)) {
+        } elseif (null !== $value) {
             $this->result += (float) $value;
         }
 
@@ -48,7 +48,7 @@ class SumAggregator extends AbstractAggregator
      */
     public function getResult()
     {
-        return (float) $this->result;
+        return $this->result;
     }
 
     /**

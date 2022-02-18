@@ -77,6 +77,7 @@ class ChartController extends AbstractController
      * Creates and initialize a chart.
      *
      * @param bool $init_options true to initialize language options
+     * @psalm-suppress MixedMethodCall
      */
     private function createChart($init_options = true): Basechart
     {
@@ -84,7 +85,6 @@ class ChartController extends AbstractController
         if ($init_options) {
             $chart->initLangOptions();
         }
-        $chart->chart->backgroundColor('transparent');
 
         return $chart;
     }
@@ -148,6 +148,8 @@ class ChartController extends AbstractController
 
     /**
      * Gets data used by the chart for the calculations by month.
+     *
+     * @psalm-suppress MixedMethodCall
      */
     private function getMonthData(int $count, CalculationRepository $repository, ThemeService $service, string $url): array
     {
@@ -156,9 +158,17 @@ class ChartController extends AbstractController
         // get values
         $data = $repository->getByMonth($months);
 
-        // dates (x values)
+        /** @psalm-var array{
+         *      count: int,
+         *      items: float,
+         *      total: float,
+         *      year: int,
+         *      month: int,
+         *      margin: float,
+         *      date: \DateTimeInterface} $item */
+        // @phpstan-ignore-next-line
         $dates = \array_map(function (array $item): int {
-            return $item['date']->getTimestamp() * 1000;
+            return (int) $item['date']->getTimestamp() * 1000;
         }, $data);
 
         // count serie
@@ -270,6 +280,7 @@ class ChartController extends AbstractController
             ->yAxis($yAxis)
             ->series($series);
 
+        // @phpstan-ignore-next-line
         $chart->plotOptions->series([
             'stacking' => 'normal',
             'cursor' => 'pointer',
@@ -280,6 +291,7 @@ class ChartController extends AbstractController
             ],
         ]);
 
+        // @phpstan-ignore-next-line
         $chart->tooltip->useHTML(true)
             ->formatter($formatter);
 
@@ -316,25 +328,24 @@ class ChartController extends AbstractController
 
     /**
      * Gets data used by the chart for the calculations by state.
+     *
+     * @psalm-suppress MixedMethodCall
      */
     private function getStateData(CalculationStateRepository $repository, ThemeService $service, bool $tabular): array
     {
         // get values
         $states = $repository->getListCountCalculations();
 
-        // totals
-        [$count, $total, $items] = \array_reduce($states, function (array $carry, array $state) {
-            $carry[0] += $state['count'];
-            $carry[1] += $state['total'];
-            $carry[2] += $state['items'];
-
-            return $carry;
-        }, [0, 0, 0]);
+        // sum
+        $count = \array_sum(\array_column($states, 'count'));
+        $total = \array_sum(\array_column($states, 'total'));
+        $items = \array_sum(\array_column($states, 'items'));
 
         // update
+        /** @psalm-var array $state */
         foreach ($states as &$state) {
-            $state['percentCalculation'] = $this->safeDivide($state['count'], $count);
-            $state['percentAmount'] = $this->safeDivide($state['total'], $total);
+            $state['percentCalculation'] = $this->safeDivide((float) $state['count'], $count);
+            $state['percentAmount'] = $this->safeDivide((float) $state['total'], $total);
         }
 
         // data
@@ -399,11 +410,15 @@ class ChartController extends AbstractController
             ->series($series);
 
         $chart->colors = $colors;
+        // @phpstan-ignore-next-line
         $chart->plotOptions->pie($pie);
+        // @phpstan-ignore-next-line
         $chart->legend->itemStyle($style)->itemHoverStyle($style);
 
         // tooltip
+        // @phpstan-ignore-next-line
         $chart->tooltip->headerFormat('');
+        // @phpstan-ignore-next-line
         $chart->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>');
 
         return [

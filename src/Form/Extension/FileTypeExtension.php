@@ -39,8 +39,8 @@ class FileTypeExtension extends AbstractFileTypeExtension
         // merge options from parent (VichFileType or VichImageType)
         if (null !== ($parent = $form->getParent())) {
             $configuration = $parent->getConfig();
-            foreach (['placeholder', 'maxfiles', 'maxsize'] as $option) {
-                $this->updateOption($configuration, $options, $option);
+            foreach (['placeholder', 'maxfiles', 'maxsize'] as $name) {
+                $this->updateOption($configuration, $options, $name);
             }
         }
 
@@ -54,13 +54,13 @@ class FileTypeExtension extends AbstractFileTypeExtension
      * @param FormConfigInterface $configuration the form configuration to get value from
      * @param array               $options       the options array to update
      * @param string              $name          the option name to search for
+     *
+     * @psalm-suppress MixedAssignment
      */
-    private function updateOption(FormConfigInterface $configuration, array &$options, string $name): self
+    private function updateOption(FormConfigInterface $configuration, array &$options, string $name): void
     {
         if ($configuration->hasOption($name)) {
             $options[$name] = $configuration->getOption($name);
         }
-
-        return $this;
     }
 }

@@ -17,7 +17,6 @@ use App\Entity\CalculationState;
 use App\Form\FormHelper;
 use App\Model\CalculationUpdateQuery;
 use App\Model\CalculationUpdateResult;
-use App\Repository\CalculationRepository;
 use App\Traits\LoggerTrait;
 use App\Traits\SessionTrait;
 use App\Traits\TranslatorTrait;
@@ -72,7 +71,7 @@ class CalculationUpdater implements LoggerAwareInterface
 
         // traits
         $this->requestStack = $requestStack;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -181,7 +180,6 @@ class CalculationUpdater implements LoggerAwareInterface
         try {
             $this->listener->disableListeners();
 
-            /** @var Calculation[] $calculations */
             $calculations = $this->getCalculations();
 
             foreach ($calculations as $calculation) {
@@ -261,7 +259,6 @@ class CalculationUpdater implements LoggerAwareInterface
      */
     private function getCalculations(): array
     {
-        /** @var CalculationRepository $repository */
         $repository = $this->manager->getRepository(Calculation::class);
 
         return $repository->findBy([], ['id' => 'ASC']);
@@ -273,6 +270,7 @@ class CalculationUpdater implements LoggerAwareInterface
     private function getNonEditableCodes(): string
     {
         $repository = $this->manager->getRepository(CalculationState::class);
+        /** @psalm-var string[] $codes */
         $codes = $repository->createQueryBuilder('e')
             ->select('e.code')
             ->orderBy('e.code')

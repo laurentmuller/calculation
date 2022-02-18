@@ -133,7 +133,7 @@ class SwissPostService
     /**
      * Gets the directory of the database.
      */
-    public function getDataDirectory(): ?string
+    public function getDataDirectory(): string
     {
         return $this->dataDirectory;
     }

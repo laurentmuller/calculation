@@ -30,6 +30,9 @@ class DataDefinitition
 
     private bool $searchable;
 
+    /**
+     * @var string[]
+     */
     private array $searchFields;
 
     private string $sortField;

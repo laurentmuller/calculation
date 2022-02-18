@@ -27,7 +27,8 @@ class UrlTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritdoc}
      *
-     * @see \Symfony\Component\Form\AbstractTypeExtension::buildView()
+     * @psalm-suppress MixedArrayAssignment
+     * @psalm-suppress PropertyTypeCoercion
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

@@ -59,7 +59,7 @@ class PdfCellBorder implements PdfDocumentUpdaterInterface
     {
         $name = Utils::getShortName($this);
 
-        return \sprintf('%s(%s, %s)', $name, $this->color, $this->line);
+        return \sprintf('%s(%s, %s)', $name, (string) $this->color, (string) $this->line);
     }
 
     /**

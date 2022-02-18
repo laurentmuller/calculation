@@ -243,7 +243,9 @@ class ResponseListener implements EventSubscriberInterface
      */
     private function isDevFirewall(Request $request): bool
     {
-        if ($context = $request->attributes->get('_firewall_context')) {
+        /** @psalm-var mixed $context */
+        $context = $request->attributes->get('_firewall_context');
+        if (\is_string($context)) {
             return false !== \stripos($context, 'dev');
         }
 

@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             // update password
-            $plainPassword = $form->get('plainPassword')->getData();
+            $plainPassword = (string) $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
             $manager->flush();

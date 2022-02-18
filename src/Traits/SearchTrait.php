@@ -33,8 +33,9 @@ trait SearchTrait
     {
         $terms = $this->getSearchTerms();
         $query = $this->ascii($query)->toString();
+        /** @psalm-var mixed $term */
         foreach ($terms as $term) {
-            if (null !== $term && $this->ignoreCase($term)->containsAny($query)) {
+            if (null !== $term && $this->ignoreCase((string) $term)->containsAny($query)) {
                 return true;
             }
         }

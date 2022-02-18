@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Category;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of categories.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\Category>
  */
 class CategoriesDocument extends AbstractArrayDocument
 {
@@ -44,8 +45,7 @@ class CategoriesDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        $default = $this->translator->trans('report.other');
-        /** @var Category $entity */
+        $default = $this->trans('report.other');
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getCode(),

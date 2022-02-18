@@ -53,7 +53,7 @@ class GeneratorController extends AbstractController
         $helper = $this->createFormHelper('generate.fields.', $data);
 
         $helper->field('entity')
-            ->updateOption('choice_attr', function (string $choice, string $key): array {
+            ->updateOption('choice_attr', function (string $_choice, string $key): array {
                 return ['data-key' => $key];
             })->addChoiceType([
                 'customer.name' => $this->generateUrl(self::ROUTE_CUSTOMER),
@@ -122,7 +122,8 @@ class GeneratorController extends AbstractController
     {
         $count = $this->getRequestInt($request, 'count');
         $simulate = $this->getRequestBoolean($request, 'simulate', true);
-        $entity = $this->generateUrl($request->attributes->get('_route', self::ROUTE_CUSTOMER));
+        $route = (string) $request->attributes->get('_route', self::ROUTE_CUSTOMER);
+        $entity = $this->generateUrl($route);
 
         $this->setSessionValues([
             self::KEY_COUNT => $count,

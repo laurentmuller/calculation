@@ -25,8 +25,14 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
  * @method Basechart xAxis(array $xAxis)  set the x axis options.
  * @method Basechart yAxis(array $yAxis)  set the y axis options.
  *
- * @property mixed $xAxis the x axis options.
- * @property mixed $yAxis the y axis options.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x axis options.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y axis options.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $chart       the chart.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $credits     the credits.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $legend      the legend.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $tooltip     the tooltip.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $plotOptions the plot options.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $lang        the language.
  */
 class Basechart extends Highchart
 {
@@ -62,15 +68,21 @@ class Basechart extends Highchart
     {
         parent::__construct();
         $this->hideCredits();
+        // @phpstan-ignore-next-line
         $this->chart->renderTo(self::CONTAINER);
+        // @phpstan-ignore-next-line
+        $this->chart->backgroundColor('transparent');
         $this->style(['fontFamily' => 'var(--font-family-sans-serif)']);
     }
 
     /**
      * Hides the credits text.
+     *
+     * @psalm-suppress MixedMethodCall
      */
     public function hideCredits(): self
     {
+        // @phpstan-ignore-next-line
         $this->credits->enabled(false);
 
         return $this;
@@ -81,6 +93,7 @@ class Basechart extends Highchart
      */
     public function hideLegend(): self
     {
+        // @phpstan-ignore-next-line
         $this->legend->enabled(false);
 
         return $this;
@@ -116,6 +129,8 @@ class Basechart extends Highchart
      * Sets the chart title.
      *
      * @param string $title the title to set or null to hide
+     *
+     * @psalm-suppress MixedMethodCall
      */
     public function setTitle(?string $title): self
     {
@@ -131,6 +146,7 @@ class Basechart extends Highchart
      */
     public function setType(string $type): self
     {
+        // @phpstan-ignore-next-line
         $this->chart->type($type);
 
         return $this;
@@ -143,6 +159,7 @@ class Basechart extends Highchart
      */
     public function setXAxisCategories($categories): self
     {
+        // @phpstan-ignore-next-line
         $this->xAxis->categories($categories);
 
         return $this;
@@ -155,6 +172,7 @@ class Basechart extends Highchart
      */
     public function setXAxisTitle(?string $title): self
     {
+        // @phpstan-ignore-next-line
         $this->xAxis->title([
             'text' => $title,
         ]);
@@ -169,6 +187,7 @@ class Basechart extends Highchart
      */
     public function setYAxisTitle(?string $title): self
     {
+        // @phpstan-ignore-next-line
         $this->yAxis->title([
             'text' => $title,
         ]);

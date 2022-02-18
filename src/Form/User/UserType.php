@@ -79,6 +79,7 @@ class UserType extends AbstractEntityType
         if ($form->has('plainPassword')) {
             /** @var User $user */
             $user = $event->getData();
+            /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
             $encodedPassword = $this->hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);

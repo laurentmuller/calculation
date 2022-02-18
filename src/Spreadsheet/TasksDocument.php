@@ -12,9 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Task;
-use App\Entity\TaskItem;
-use App\Entity\TaskItemMargin;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
@@ -22,6 +19,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  * Spreadsheet document for the list of tasks.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\Task>
  */
 class TasksDocument extends AbstractArrayDocument
 {
@@ -77,7 +76,6 @@ class TasksDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var Task $entity */
         foreach ($entities as $entity) {
             $this->writeTask = true;
             if ($entity->isEmpty()) {
@@ -102,7 +100,6 @@ class TasksDocument extends AbstractArrayDocument
             }
             $this->writeTask = false;
 
-            /** @var TaskItem $item */
             foreach ($entity->getItems() as $item) {
                 $this->writeItem = true;
                 if ($item->isEmpty()) {
@@ -118,7 +115,6 @@ class TasksDocument extends AbstractArrayDocument
                     $this->writeItem = false;
                 } else {
                     $index = 0;
-                    /** @var TaskItemMargin $margin */
                     foreach ($item->getMargins() as $margin) {
                         $text = (0 === $index++) ? $item->getName() : null;
                         $this->setRowValues($row++, [

@@ -20,6 +20,7 @@ use App\BootstrapTable\SearchTable;
 use App\Controller\AbstractController;
 use App\DataTable\Model\AbstractDataTable;
 use App\Interfaces\TableInterface;
+use App\Util\Utils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -121,8 +122,9 @@ class UrlGeneratorService
         $params = [];
 
         // parameters
+        $input = Utils::getRequestInputBag($request);
         foreach (self::PARAMETER_NAMES as $name) {
-            if (null !== ($value = $request->get($name))) {
+            if (null !== ($value = $input->get($name))) {
                 $params[$name] = $value;
             }
         }
@@ -140,6 +142,7 @@ class UrlGeneratorService
      */
     private function getCaller(array &$params): ?string
     {
+        /** @var string|null $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
         if (!empty($caller)) {
             unset($params[self::PARAM_CALLER]);

@@ -82,7 +82,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function getGroupStyle(): ?PdfStyle
     {
-        return $this->group->getStyle();
+        return null !== $this->group ? $this->group->getStyle() : null;
     }
 
     /**
@@ -90,7 +90,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function outputGroup(): self
     {
-        if ($this->group->isKey() && !$this->inProgress) {
+        if ($this->group && $this->group->isKey() && !$this->inProgress) {
             $this->inProgress = true;
             if (!$this->groupListener instanceof PdfGroupListenerInterface || !$this->groupListener->onOutputGroup($this, $this->group)) {
                 $this->group->output($this);
@@ -135,7 +135,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function setGroupKey($key, bool $output = true): self
     {
-        if ($this->group->getKey() !== $key) {
+        if ($this->group && $this->group->getKey() !== $key) {
             $this->group->setKey($key);
             if ($output) {
                 return $this->outputGroup();
@@ -160,7 +160,9 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function setGroupStyle(?PdfStyle $style): self
     {
-        $this->group->setStyle($style);
+        if (null !== $this->group) {
+            $this->group->setStyle($style);
+        }
 
         return $this;
     }

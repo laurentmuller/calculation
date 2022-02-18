@@ -32,10 +32,10 @@ abstract class AbstractReport extends PdfDocument
      */
     protected AbstractController $controller;
 
-    /**
+    /*
      * The Twig extension to format values.
      */
-    private ?FormatExtension $extension = null;
+    private FormatExtension $extension;
 
     /**
      * Constructor.
@@ -51,6 +51,7 @@ abstract class AbstractReport extends PdfDocument
 
         $this->controller = $controller;
         $this->translator = $controller->getTranslator();
+        $this->extension = new FormatExtension($this->translator);
 
         $application = $controller->getApplication();
         $appName = $controller->getApplicationName();
@@ -78,19 +79,7 @@ abstract class AbstractReport extends PdfDocument
      */
     public function booleanFilter($value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
-        return $this->getExtension()->booleanFilter($value, $true, $false, $translate);
-    }
-
-    /**
-     * Gets the filter extension used to format values.
-     */
-    public function getExtension(): FormatExtension
-    {
-        if (null === $this->extension) {
-            $this->extension = new FormatExtension($this->translator);
-        }
-
-        return $this->extension;
+        return $this->extension->booleanFilter($value, $true, $false, $translate);
     }
 
     /**

@@ -152,7 +152,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getAddress(): Address
     {
-        return new Address($this->email, $this->username);
+        return new Address((string) $this->email, (string) $this->username);
     }
 
     /**
@@ -252,7 +252,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getNameAndEmail(): string
     {
-        return \sprintf('%s <%s>', $this->getUsername(), $this->getEmail());
+        return \sprintf('%s <%s>', $this->getUsername(), (string) $this->getEmail());
     }
 
     /**
@@ -366,9 +366,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * Sets the enabled state.
      */
-    public function setEnabled(bool $boolean): self
+    public function setEnabled(bool $enabled): self
     {
-        $this->enabled = (bool) $boolean;
+        $this->enabled = $enabled;
 
         return $this;
     }
@@ -452,13 +452,16 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function unserialize($serialized): void
     {
         [
             $this->id,
             $this->username,
             $this->password,
-            ] = \unserialize($serialized);
+        ] = (array) \unserialize($serialized);
     }
 
     /**

@@ -31,6 +31,8 @@ use Doctrine\SqlFormatter\SqlFormatter;
  * Report for the log.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<Mixed>
  */
 class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
 {
@@ -49,9 +51,9 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     /**
      * The border colors.
      *
-     * @var ?PdfDrawColor[]
+     * @var array<PdfDrawColor|null>
      */
-    private ?array $colors = null;
+    private array $colors = [];
 
     /**
      * The draw cards state.
@@ -126,7 +128,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
         // new page
         $this->AddPage();
 
-        // logs
+        /** @var Log[] $logs */
         $logs = $entities['logs'];
         if (empty($logs)) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.list.empty'));
@@ -134,8 +136,11 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
             return true;
         }
 
-        // levels and channels
-        $cards = \array_merge($entities['levels'], $entities['channels']);
+        /** @var array<string, int> $levels */
+        $levels = $entities['levels'];
+        /** @var array<string, int> $channels */
+        $channels = $entities['channels'];
+        $cards = \array_merge($levels, $channels);
         $this->outputCards($cards);
 
         // lines
@@ -199,7 +204,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
      */
     private function getColor(string $level): ?PdfDrawColor
     {
-        if (null === $this->colors || !\array_key_exists($level, $this->colors)) {
+        if (!\array_key_exists($level, $this->colors)) {
             switch ($level) {
                 case 'warning':
                     $this->colors[$level] = PdfDrawColor::create('#ffc107');
@@ -223,10 +228,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
             }
         }
 
-        /** @var ?PdfDrawColor $color */
-        $color = $this->colors[$level];
-
-        return $color;
+        return $this->colors[$level];
     }
 
     /**
@@ -234,12 +236,12 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
      */
     private function getMessage(Log $log): string
     {
-        $message = 'doctrine' === $log->getChannel() ? $this->formatSql($log->getMessage()) : $log->getMessage();
+        $message = 'doctrine' === $log->getChannel() ? $this->formatSql((string) $log->getMessage()) : (string) $log->getMessage();
         if (!empty($log->getContext())) {
-            $message .= "\n" . Utils::exportVar($log->getContext());
+            $message .= "\n" . (string) Utils::exportVar((array) $log->getContext());
         }
         if (!empty($log->getExtra())) {
-            $message .= "\n" . Utils::exportVar($log->getExtra());
+            $message .= "\n" . (string) Utils::exportVar((array) $log->getExtra());
         }
 
         return $message;
@@ -248,7 +250,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     /**
      * Output header cards.
      *
-     * @param array $cards the cards to output
+     * @param array<string, int> $cards the cards to output
      */
     private function outputCards(array $cards): void
     {
@@ -310,8 +312,8 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
             $this->level = $log->getLevel();
             $table->startRow()
                 ->add(FormatUtils::formatDateTime($log->getCreatedAt(), null, \IntlDateFormatter::MEDIUM))
-                ->add(Utils::capitalize($log->getLevel()))
-                ->add(Utils::capitalize($log->getChannel()))
+                ->add(Utils::capitalize((string) $log->getLevel()))
+                ->add(Utils::capitalize((string) $log->getChannel()))
                 ->add($this->getMessage($log))
                 ->endRow();
         }

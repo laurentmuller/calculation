@@ -316,7 +316,8 @@ class AboutController extends AbstractController
         }
 
         $server = $request->server;
-        $software = $server->get('SERVER_SOFTWARE', false);
+        /** @psalm-var string|null $software */
+        $software = $server->get('SERVER_SOFTWARE');
         if ($software && false !== \stripos($software, 'apache') && \preg_match($regex, $software, $matches)) {
             return $matches['version'];
         }

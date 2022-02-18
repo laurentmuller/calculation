@@ -174,7 +174,7 @@ class Category extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     /**
@@ -184,7 +184,7 @@ class Category extends AbstractEntity
     {
         $code = $this->code;
         if ($parent = $this->getGroupCode()) {
-            return \sprintf('%s - %s', $code, $parent);
+            return \sprintf('%s - %s', (string) $code, $parent);
         }
 
         return $code;

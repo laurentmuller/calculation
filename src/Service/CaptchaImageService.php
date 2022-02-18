@@ -104,7 +104,7 @@ class CaptchaImageService
     {
         // not force and valid?
         if (!$force && $this->validateTimeout() && $this->hasSessionValue(self::KEY_DATA)) {
-            return $this->getSessionValue(self::KEY_DATA);
+            return (string) $this->getSessionValue(self::KEY_DATA);
         }
 
         // clear previous values
@@ -137,7 +137,7 @@ class CaptchaImageService
     public function validateTimeout(): bool
     {
         $actual = \time();
-        $last = $this->getSessionInt(self::KEY_TIME, 0);
+        $last = (int) $this->getSessionInt(self::KEY_TIME, 0);
         $delta = $actual - $last;
 
         return $delta <= self::MAX_TIME_OUT;
@@ -148,7 +148,7 @@ class CaptchaImageService
      */
     public function validateToken(?string $token): bool
     {
-        return $token && 0 === \strcasecmp($token, $this->session->get(self::KEY_TEXT));
+        return $token && $this->session && 0 === \strcasecmp($token, (string) $this->session->get(self::KEY_TEXT, ''));
     }
 
     /**
@@ -277,19 +277,22 @@ class CaptchaImageService
             // get position
             $textHeight = 0;
             $textWidth = -self::CHAR_SPACE;
+            /** @psalm-var array $item */
             foreach ($items as $item) {
-                $textWidth += $item['width'] + self::CHAR_SPACE;
-                $textHeight = \max($textHeight, $item['height']);
+                $textWidth += (int) $item['width'] + self::CHAR_SPACE;
+                $textHeight = \max($textHeight, (int) $item['height']);
             }
             $x = \intdiv($width - $textWidth, 2);
             $y = \intdiv($height - $textHeight, 2) + $size;
 
             //draw
+            /** @psalm-var array $item */
             foreach ($items as $item) {
-                $char = $item['char'];
-                $angle = $item['angle'];
-                $image->ttfText($size, $angle, $x, $y, (int) $color, $font, $char);
-                $x += $item['width'] + self::CHAR_SPACE;
+                $char = (string) $item['char'];
+                $angle = (float) $item['angle'];
+                $width = (float) $item['width'];
+                $image->ttfText($size, $angle, (int) $x, $y, $color, $font, $char);
+                $x += $width + self::CHAR_SPACE;
             }
         }
 

@@ -47,6 +47,11 @@ interface ApplicationServiceInterface
     public const DEFAULT_PRINT_ADDRESS = false;
 
     /**
+     * The default product edit (bool).
+     */
+    public const DEFAULT_PRODUCT_EDIT = true;
+
+    /**
      * The default output qr-code (boolean).
      */
     public const DEFAULT_QR_CODE = false;
@@ -110,6 +115,21 @@ interface ApplicationServiceInterface
      * The property name for the default category (integer).
      */
     public const P_DEFAULT_CATEGORY = 'default_category';
+
+    /**
+     * The property name for the default product (integer).
+     */
+    public const P_DEFAULT_PRODUCT = 'default_product';
+
+    /**
+     * The property name for the default product edit (bool).
+     */
+    public const P_DEFAULT_PRODUCT_EDIT = 'default_product_edit';
+
+    /**
+     * The property name for the default product quantity (float).
+     */
+    public const P_DEFAULT_PRODUCT_QUANTITY = 'default_product_quantity';
 
     /**
      * The property name for the default calculation state (integer).

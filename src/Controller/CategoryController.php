@@ -183,7 +183,6 @@ class CategoryController extends AbstractEntityController
      */
     public function excel(): SpreadsheetResponse
     {
-        /** @var Category[] $entities */
         $entities = $this->getEntities('code');
         if (empty($entities)) {
             $message = $this->trans('category.list.empty');
@@ -204,7 +203,6 @@ class CategoryController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var Category[] $entities */
         $entities = $this->getEntities('code');
         if (empty($entities)) {
             $message = $this->trans('category.list.empty');

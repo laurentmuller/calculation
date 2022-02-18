@@ -20,7 +20,6 @@ use App\Util\Utils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
-use DataTables\Order;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -43,16 +42,16 @@ class LogDataTable extends AbstractDataTable
     /**
      * The channels.
      *
-     * @var ?string[]
+     * @var array<string, int>
      */
-    private $channels;
+    private array $channels = [];
 
     /**
      * The levels.
      *
-     * @var ?string[]
+     * @var array<string, int>
      */
-    private $levels;
+    private array $levels = [];
 
     /**
      * The log service.
@@ -99,11 +98,11 @@ class LogDataTable extends AbstractDataTable
     /**
      * Gets the channels.
      *
-     * @return string[]
+     * @return array<string, int>
      */
     public function getChannels(): array
     {
-        return $this->channels ?? [];
+        return $this->channels;
     }
 
     /**
@@ -117,11 +116,11 @@ class LogDataTable extends AbstractDataTable
     /**
      * Gets the levels.
      *
-     * @return string[]
+     * @return array<string, int>
      */
     public function getLevels(): array
     {
-        return $this->levels ?? [];
+        return $this->levels;
     }
 
     /**
@@ -155,11 +154,12 @@ class LogDataTable extends AbstractDataTable
         $results = new DataTableResults();
 
         // get entries
-        if (!$entries = $this->service->getEntries()) {
+        $entries = $this->service->getEntries();
+        if (!\is_array($entries)) {
             return $results;
         }
 
-        /** @var array $entries */
+        /** @var Log[] $logs */
         $logs = $entries[LogService::KEY_LOGS];
         $results->recordsTotal = \count($logs);
 
@@ -183,11 +183,13 @@ class LogDataTable extends AbstractDataTable
         $results->recordsFiltered = \count($logs);
 
         // sort
-        if (!empty($query->order)) {
-            /** @var Order $order */
+        if ([] !== $query->order) {
             $order = $query->order[0];
-            $field = $this->getColumn($order->column)->getName();
-            $this->sort($logs, $field, $order->dir);
+            $column = $this->getColumn($order->column);
+            if (null !== $column) {
+                $field = $column->getName();
+                $this->sort($logs, $field, $order->dir);
+            }
         }
 
         // restrict and convert
@@ -219,6 +221,8 @@ class LogDataTable extends AbstractDataTable
      * @param Log[]  $logs      the logs to sort
      * @param string $field     the sorted field
      * @param string $direction the sorted direction ('asc' or 'desc')
+     *
+     * @psalm-suppress ReferenceConstraintViolation
      */
     private function sort(array &$logs, string $field, string $direction): void
     {

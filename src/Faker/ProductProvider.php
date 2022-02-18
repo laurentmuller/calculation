@@ -21,6 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * @author Laurent Muller
  *
  * @template-extends EntityProvider<Product>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class ProductProvider extends EntityProvider
 {
@@ -62,9 +63,9 @@ class ProductProvider extends EntityProvider
      */
     public function productName(): string
     {
-        $adjective = static::randomElement(self::$adjective);
-        $product = static::randomElement(self::$product);
-        $material = static::randomElement(self::$material);
+        $adjective = (string) static::randomElement(self::$adjective);
+        $product = (string) static::randomElement(self::$product);
+        $material = (string) static::randomElement(self::$material);
 
         return "$adjective $product en $material";
     }
@@ -76,15 +77,16 @@ class ProductProvider extends EntityProvider
      */
     public function products(int $count = 1, bool $allowDuplicates = false): array
     {
+        /** @var Product[] $products */
         $products = $this->randomElements($this->getEntities(), $count, $allowDuplicates);
         if (\count($products) < 2) {
             return $products;
         }
 
         \usort($products, static function (Product $a, Product $b) {
-            $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());
+            $result = \strcasecmp((string) $a->getCategoryCode(), (string) $b->getCategoryCode());
             if (0 === $result) {
-                return \strcasecmp($a->getDescription(), $b->getDescription());
+                return \strcasecmp((string) $a->getDescription(), (string) $b->getDescription());
             }
 
             return $result;
@@ -106,7 +108,10 @@ class ProductProvider extends EntityProvider
      */
     public function productSupplier(): ?string
     {
-        return $this->distinctValue('supplier', true);
+        /** @var string|null $value */
+        $value = $this->distinctValue('supplier', true);
+
+        return $value;
     }
 
     /**
@@ -114,6 +119,9 @@ class ProductProvider extends EntityProvider
      */
     public function productUnit(): ?string
     {
-        return $this->distinctValue('unit', true);
+        /** @var string|null $value */
+        $value = $this->distinctValue('unit', true);
+
+        return $value;
     }
 }

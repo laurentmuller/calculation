@@ -91,8 +91,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function applyStyle(HtmlReport $report): self
     {
-        if ($this->hasStyle()) {
-            $this->getStyle()->apply($report);
+        if (null !== $this->style) {
+            $this->style->apply($report);
         }
 
         return $this;
@@ -101,14 +101,13 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     /**
      * Finds the parent for the given the tag names.
      *
-     * @param string[] ...$names the tag names to search for
-     *
      * @return HtmlParentChunk|null the parent, if found; <code>null</code> otherwise
      */
     public function findParent(string ...$names): ?HtmlParentChunk
     {
         /** @var HtmlParentChunk $parent */
         $parent = $this->parent;
+        /** @psalm-param list<$names> $names */
         while (null !== $parent && !$parent->is(...$names)) {
             $parent = $parent->getParent();
         }
@@ -123,8 +122,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function getAlignment(): string
     {
-        if ($this->hasStyle()) {
-            return $this->style->getAlignment();
+        if (null !== $this->style) {
+            return (string) $this->style->getAlignment();
         }
 
         return self::ALIGN_LEFT;
@@ -137,7 +136,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function getBottomMargin(): float
     {
-        if ($this->hasStyle()) {
+        if (null !== $this->style) {
             return $this->style->getBottomMargin();
         }
 
@@ -167,7 +166,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function getLeftMargin(): float
     {
-        if ($this->hasStyle()) {
+        if (null !== $this->style) {
             return $this->style->getLeftMargin();
         }
 
@@ -199,7 +198,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function getRightMargin(): float
     {
-        if ($this->hasStyle()) {
+        if (null !== $this->style) {
             return $this->style->getRightMargin();
         }
 
@@ -223,7 +222,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function getTopMargin(): float
     {
-        if ($this->hasStyle()) {
+        if (null !== $this->style) {
             return $this->style->getTopMargin();
         }
 
@@ -255,14 +254,13 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     }
 
     /**
-     * Returns if this tag name match the given one of the lis of names.
-     *
-     * @param string[] ...$names the tag names to check
+     * Returns if this tag name match the given one of the list of names.
      *
      * @return bool true if match
      */
     public function is(string ...$names): bool
     {
+        /** @psalm-param list<$names> $names */
         foreach ($names as $name) {
             if (0 === \strcasecmp($this->name, $name)) {
                 return true;
@@ -295,7 +293,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
         // write text
         $text = $this->getOutputText();
         if (Utils::isString($text)) {
-            $this->outputText($report, $text);
+            $this->outputText($report, (string) $text);
         }
     }
 
@@ -623,27 +621,45 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
                         break;
 
                     case 'text-primary':
-                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::PRIMARY));
+                        $color = PdfTextColor::create(HtmlBootstrapColors::PRIMARY);
+                        if (null !== $color) {
+                            $style->setTextColor($color);
+                        }
                         break;
 
                     case 'text-secondary':
-                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::SECONDARY));
+                        $color = PdfTextColor::create(HtmlBootstrapColors::SECONDARY);
+                        if (null !== $color) {
+                            $style->setTextColor($color);
+                        }
                         break;
 
                     case 'text-success':
-                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::SUCCESS));
+                        $color = PdfTextColor::create(HtmlBootstrapColors::SUCCESS);
+                        if (null !== $color) {
+                            $style->setTextColor($color);
+                        }
                         break;
 
                     case 'text-danger':
-                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::DANGER));
+                        $color = PdfTextColor::create(HtmlBootstrapColors::DANGER);
+                        if (null !== $color) {
+                            $style->setTextColor($color);
+                        }
                         break;
 
                     case 'text-warning':
-                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::WARNING));
+                        $color = PdfTextColor::create(HtmlBootstrapColors::WARNING);
+                        if (null !== $color) {
+                            $style->setTextColor($color);
+                        }
                         break;
 
                     case 'text-info':
-                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::INFO));
+                        $color = PdfTextColor::create(HtmlBootstrapColors::INFO);
+                        if (null !== $color) {
+                            $style->setTextColor($color);
+                        }
                         break;
 
                     default:

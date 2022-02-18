@@ -53,7 +53,7 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
     protected function computeItemsCount(array $items): int
     {
         return \array_reduce($items, function (int $carry, array $item) {
-            return $carry + \count($item['items']);
+            return $carry + \count((array) $item['items']);
         }, 0);
     }
 
@@ -64,14 +64,14 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
     {
         $result = \array_map(function (array $item): string {
             $founds = [];
-            if ($this->isFloatZero($item['price'])) {
+            if ($this->isFloatZero((float) $item['price'])) {
                 $founds[] = $this->priceLabel;
             }
-            if ($this->isFloatZero($item['quantity'])) {
+            if ($this->isFloatZero((float) $item['quantity'])) {
                 $founds[] = $this->quantityLabel;
             }
 
-            return \sprintf('%s (%s)', $item['description'], \implode(', ', $founds));
+            return \sprintf('%s (%s)', (string) $item['description'], \implode(', ', $founds));
         }, $items);
 
         return \implode("\n", $result);

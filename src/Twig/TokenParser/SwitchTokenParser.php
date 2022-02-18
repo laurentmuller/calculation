@@ -48,6 +48,8 @@ final class SwitchTokenParser extends AbstractTokenParser
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress InternalMethod
      */
     public function parse(Token $token): Node
     {
@@ -61,24 +63,28 @@ final class SwitchTokenParser extends AbstractTokenParser
         $stream->expect(Token::BLOCK_END_TYPE);
 
         // There can be some whitespace between the {% switch %} and first {% case %} tag.
-        while (Token::TEXT_TYPE === $stream->getCurrent()->getType() && '' === \trim($stream->getCurrent()->getValue())) {
+        while (Token::TEXT_TYPE === $stream->getCurrent()->getType() && '' === \trim((string) $stream->getCurrent()->getValue())) {
             $stream->next();
         }
 
         $stream->expect(Token::BLOCK_START_TYPE);
 
-        $expressionParser = $this->parser->getExpressionParser();
         $cases = [];
         $end = false;
+        $expressionParser = $this->parser->getExpressionParser();
 
         while (!$end) {
             $next = $stream->next();
 
             switch ($next->getValue()) {
                 case 'case':
+                    /** @psalm-var Node[] $values */
                     $values = [];
                     while (true) {
-                        $values[] = $expressionParser->parsePrimaryExpression();
+                        /** @psalm-var Node $node */
+                        $node = $expressionParser->parsePrimaryExpression();
+                        $values[] = $node;
+
                         // Multiple allowed values?
                         if ($stream->test(Token::OPERATOR_TYPE, 'or')) {
                             $stream->next();

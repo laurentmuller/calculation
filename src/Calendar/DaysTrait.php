@@ -51,7 +51,7 @@ trait DaysTrait
             $key = $key->format(Day::KEY_FORMAT);
         }
 
-        return $this->days[(string) $key] ?? null;
+        return $this->days[$key] ?? null;
     }
 
     /**

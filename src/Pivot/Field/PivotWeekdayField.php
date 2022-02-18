@@ -48,10 +48,10 @@ class PivotWeekdayField extends PivotDateField
      */
     public function getDisplayValue($value)
     {
-        if (\array_key_exists($value, $this->names)) {
+        if (\is_int($value) && \array_key_exists($value, $this->names)) {
             return $this->names[$value];
-        } else {
-            return parent::getDisplayValue($value);
         }
+
+        return parent::getDisplayValue($value);
     }
 }

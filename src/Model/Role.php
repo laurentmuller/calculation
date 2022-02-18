@@ -53,7 +53,7 @@ class Role implements RoleInterface
      */
     public function getName(): string
     {
-        return $this->name ?? $this->role;
+        return $this->name ?? $this->getRole();
     }
 
     /**

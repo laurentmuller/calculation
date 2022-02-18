@@ -154,7 +154,6 @@ class UserController extends AbstractEntityController
      */
     public function excel(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): SpreadsheetResponse
     {
-        /** @var User[] $entities */
         $entities = $this->getEntities('username');
         if (empty($entities)) {
             $message = $this->trans('user.list.empty');
@@ -220,10 +219,11 @@ class UserController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
 
-        $currentUser = $this->getUser();
+        /** @var User $from */
+        $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment(true);
         $comment->setSubject($this->getApplicationName())
-            ->setFromAddress($currentUser)
+            ->setFromAddress($from)
             ->setToAddress($user);
 
         // create and handle request
@@ -274,7 +274,7 @@ class UserController extends AbstractEntityController
         $form = $this->createForm(UserChangePasswordType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
             // encode password
-            $plainPassword = $form->get('plainPassword')->getData();
+            $plainPassword = (string) $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($item, $plainPassword);
             $item->setPassword($encodedPassword);
 
@@ -308,7 +308,6 @@ class UserController extends AbstractEntityController
      */
     public function pdf(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): PdfResponse
     {
-        /** @var User[] $entities */
         $entities = $this->getEntities('username');
         if (empty($entities)) {
             $message = $this->trans('user.list.empty');
@@ -377,7 +376,6 @@ class UserController extends AbstractEntityController
      */
     public function rightsExcel(): SpreadsheetResponse
     {
-        /** @var User[] $entities */
         $entities = $this->getEntities('username');
         if (empty($entities)) {
             $message = $this->trans('user.list.empty');
@@ -398,7 +396,6 @@ class UserController extends AbstractEntityController
      */
     public function rightsPdf(): PdfResponse
     {
-        /** @var User[] $users */
         $users = $this->getEntities('username');
         if (empty($users)) {
             $message = $this->trans('user.list.empty');

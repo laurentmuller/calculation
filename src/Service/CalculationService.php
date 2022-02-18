@@ -17,6 +17,7 @@ use App\Entity\CalculationGroup;
 use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
+use App\Repository\GlobalMarginRepository;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -78,7 +79,7 @@ final class CalculationService
     {
         $this->manager = $manager;
         $this->service = $service;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -92,6 +93,7 @@ final class CalculationService
         $parameters['overall_below'] = false;
 
         // get rows
+        /** @psalm-var array $groups */
         $groups = &$parameters['groups'];
         $totalGroup = &$this->findGroup($groups, self::ROW_TOTAL_GROUP);
         $netGroup = &$this->findGroup($groups, self::ROW_TOTAL_NET);
@@ -99,9 +101,9 @@ final class CalculationService
         $overallGroup = &$this->findGroup($groups, self::ROW_OVERALL_TOTAL);
 
         // get values
-        $minMargin = $parameters['min_margin'];
-        $totalAmount = $totalGroup['amount'];
-        $netTotal = $netGroup['total'];
+        $minMargin = (float) $parameters['min_margin'];
+        $totalAmount = (float) $totalGroup['amount'];
+        $netTotal = (float) $netGroup['total'];
 
         // net total?
         if ($this->isFloatZero($netTotal)) {
@@ -139,7 +141,7 @@ final class CalculationService
             return [$this->createEmptyGroup()];
         }
 
-        $mapper = function (CalculationGroup $group) {
+        $mapper = function (CalculationGroup $group): array {
             return [
                 'id' => self::ROW_GROUP,
                 'description' => $group->getCode(),
@@ -178,7 +180,8 @@ final class CalculationService
         }
 
         // reduce groups
-        $itemGroups = \array_reduce($source['groups'], function (array $carry, array $group) {
+        /** @psalm-var array<int, float> $itemGroups */
+        $itemGroups = \array_reduce((array) $source['groups'], function (array $carry, array $group): array {
             $id = (int) ($group['group']);
             $carry[$id] = $this->reduceGroup($group);
 
@@ -198,7 +201,7 @@ final class CalculationService
             }
 
             //create group if needed
-            $id = $group->getId();
+            $id = (int) $group->getId();
             if (!\array_key_exists($id, $groups)) {
                 $groups[$id] = [
                     'id' => self::ROW_GROUP,
@@ -212,7 +215,7 @@ final class CalculationService
 
             // update group
             $current = &$groups[$id];
-            $amount = $current['amount'] + $value;
+            $amount = (float) $current['amount'] + $value;
             $margin = $this->getGroupMargin($group, $amount);
             $total = $this->round($margin * $amount);
             $margin_amount = $total - $amount;
@@ -240,8 +243,10 @@ final class CalculationService
 
         $userMargin = (float) $source['userMargin'] / 100.0;
         $groups = $this->computeGroups($groups, null, $userMargin);
-        $overall_margin = \end($groups)['margin'];
-        $overall_total = \end($groups)['total'];
+        /** @psalm-var array $lastGroup */
+        $lastGroup = \end($groups);
+        $overall_margin = (float) $lastGroup['margin'];
+        $overall_total = (float) $lastGroup['total'];
         $overall_below = !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         // OK
@@ -263,9 +268,9 @@ final class CalculationService
     }
 
     /**
-     * Gets the translator service.
+     * Gets the translator.
      */
-    public function getTranslator(): TranslatorInterface
+    public function getTranslator(): ?TranslatorInterface
     {
         return $this->translator;
     }
@@ -331,6 +336,7 @@ final class CalculationService
      */
     private function &findGroup(array &$groups, int $id): array
     {
+        /** @psalm-var array $group */
         foreach ($groups as &$group) {
             if ($group['id'] === $id) {
                 return $group;
@@ -449,14 +455,15 @@ final class CalculationService
      * @param float $amount the amount to get margin for
      *
      * @return float the margin in percent
+     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getGlobalMargin(float $amount): float
     {
         if (!empty($amount)) {
-            /** @var \App\Repository\GlobalMarginRepository $repository */
+            /** @var GlobalMarginRepository $repository */
             $repository = $this->manager->getRepository(GlobalMargin::class);
 
-            return (float) $repository->getMargin($amount);
+            return $repository->getMargin($amount);
         }
 
         return 0;
@@ -469,7 +476,10 @@ final class CalculationService
      */
     private function getGroup(int $id): ?Group
     {
-        return $this->manager->getRepository(Group::class)->find($id);
+        /** @psalm-var \Doctrine\ORM\EntityRepository<Group> $repository */
+        $repository = $this->manager->getRepository(Group::class);
+
+        return $repository->find($id);
     }
 
     /**
@@ -479,6 +489,7 @@ final class CalculationService
      * @param float $amount the amount to get percent for
      *
      * @return float the margin, in percent, if found; 0 otherwise
+     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getGroupMargin(Group $group, float $amount): float
     {
@@ -499,8 +510,8 @@ final class CalculationService
      */
     private function getGroupsAmount(array $groups): float
     {
-        return \array_reduce($groups, function (float $carry, array $group) {
-            return $carry + $group['amount'];
+        return \array_reduce($groups, function (float $carry, array $group): float {
+            return $carry + (float) $group['amount'];
         }, 0);
     }
 
@@ -511,8 +522,8 @@ final class CalculationService
      */
     private function getGroupsMargin(array $groups): float
     {
-        return \array_reduce($groups, function (float $carry, array $group) {
-            return $carry + $group['margin_amount'];
+        return \array_reduce($groups, function (float $carry, array $group): float {
+            return $carry + (float) $group['margin_amount'];
         }, 0);
     }
 
@@ -524,12 +535,14 @@ final class CalculationService
     private function reduceCategory(array $category): float
     {
         if ($this->isArrayKey($category, 'items')) {
-            return \array_reduce($category['items'], function (float $carry, array $item) {
-                $price = $item['price']; //(float)
-                $quantity = $item['quantity']; //(float)
-                $total = $carry + ($price * $quantity);
+            /** @psalm-var array $items */
+            $items = $category['items'];
 
-                return $total;
+            return \array_reduce($items, function (float $carry, array $item): float {
+                $price = (float) $item['price'];
+                $quantity = (float) $item['quantity'];
+
+                return $carry + ($price * $quantity);
             }, 0);
         }
 
@@ -539,7 +552,10 @@ final class CalculationService
     private function reduceGroup(array $group): float
     {
         if ($this->isArrayKey($group, 'categories')) {
-            return \array_reduce($group['categories'], function (float $carry, array $category) {
+            /** @psalm-var array $categories */
+            $categories = $group['categories'];
+
+            return \array_reduce($categories, function (float $carry, array $category) {
                 return $carry + $this->reduceCategory($category);
             }, 0);
         }

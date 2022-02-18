@@ -41,8 +41,8 @@ class StrengthValidator extends AbstractConstraintValidator
     public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor = null)
     {
         parent::__construct(Strength::class);
-        $this->translator = $translator;
         $this->propertyAccessor = $propertyAccessor;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -60,7 +60,7 @@ class StrengthValidator extends AbstractConstraintValidator
         $zx = new Zxcvbn();
         $userInputs = $this->getUserInputs($constraint);
         $strength = $zx->passwordStrength($value, $userInputs);
-        $score = $strength['score'];
+        $score = (int) $strength['score'];
         if ($score < $minstrength) {
             $strength_min = $this->translateLevel($constraint->minstrength);
             $strength_current = $this->translateLevel($score);
@@ -85,8 +85,12 @@ class StrengthValidator extends AbstractConstraintValidator
         return $this->propertyAccessor;
     }
 
+    /**
+     * @return string[]
+     */
     private function getUserInputs(Strength $constraint): array
     {
+        /** @var string[] $userInputs */
         $userInputs = [];
         if (null === $object = $this->context->getObject()) {
             return $userInputs;
@@ -94,14 +98,14 @@ class StrengthValidator extends AbstractConstraintValidator
 
         if ($path = $constraint->userNamePath) {
             try {
-                $userInputs[] = $this->getPropertyAccessor()->getValue($object, $path);
+                $userInputs[] = (string) $this->getPropertyAccessor()->getValue($object, $path);
             } catch (NoSuchPropertyException $e) {
                 throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, get_debug_type($constraint)) . $e->getMessage(), 0, $e);
             }
         }
         if ($path = $constraint->emailPath) {
             try {
-                $userInputs[] = $this->getPropertyAccessor()->getValue($object, $path);
+                $userInputs[] = (string) $this->getPropertyAccessor()->getValue($object, $path);
             } catch (NoSuchPropertyException $e) {
                 throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, get_debug_type($constraint)) . $e->getMessage(), 0, $e);
             }

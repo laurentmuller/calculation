@@ -19,6 +19,8 @@ use App\Util\Utils;
  * Represents a single day with a date.
  *
  * @author Laurent Muller
+ *
+ * @psalm-consistent-constructor
  */
 class Day extends AbstractCalendarItem implements WeekDaysInterface
 {
@@ -51,8 +53,9 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
+        $date = (string) FormatUtils::formatDate($this->date);
 
-        return \sprintf('%s(%s)', $name, FormatUtils::formatDate($this->date));
+        return \sprintf('%s(%s)', $name, $date);
     }
 
     /**

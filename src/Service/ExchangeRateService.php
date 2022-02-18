@@ -77,22 +77,22 @@ class ExchangeRateService extends AbstractHttpClientService
         $key = $params->get(self::PARAM_KEY);
         parent::__construct($adapter, $isDebug, $key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
-     * Gets the exchange rates from the given curreny code to all the other currencies supported.
+     * Gets the lastest exchange rates from the given curreny code to all the other currencies supported.
      *
      * @param string $code the base curreny code
      *
      * @return array an array with the currency code as key and the currency rate as value or an empty array if an error occurs
-     * @psalm-return array<string, float>
      */
     public function getLatest(string $code): array
     {
         $url = \sprintf(self::URI_LATEST, \strtoupper($code));
-
-        if ($response = $this->getUrlCacheValue($url)) {
+        /** @psalm-var mixed $response */
+        $response = $this->getUrlCacheValue($url);
+        if (\is_array($response)) {
             return $response;
         }
 
@@ -120,7 +120,9 @@ class ExchangeRateService extends AbstractHttpClientService
     public function getRate(string $baseCode, string $targetCode): float
     {
         $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
-        if ($response = $this->getUrlCacheValue($url)) {
+        /** @psalm-var mixed $response */
+        $response = $this->getUrlCacheValue($url);
+        if (\is_float($response)) {
             return $response;
         }
 
@@ -144,11 +146,23 @@ class ExchangeRateService extends AbstractHttpClientService
      * @param string $targetCode the target curreny code
      *
      * @return array|null the exchange rate, the next update and last update dates or null if an error occurs
+     * @psalm-return null|array{
+     *      rate: float,
+     *      next: int|null,
+     *      update: int|null
+     * }
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
         $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
-        if ($response = $this->getUrlCacheValue($url)) {
+
+        /** @psalm-var null|array{
+         *      rate: float,
+         *      next: int|null,
+         *      update: int|null} $response
+         */
+        $response = $this->getUrlCacheValue($url);
+        if (null !== $response) {
             return $response;
         }
 
@@ -175,16 +189,19 @@ class ExchangeRateService extends AbstractHttpClientService
      * Gets the supported currency codes.
      *
      * @return array the supported currency codes or an empty array if an error occurs
-     * @psalm-return array<string, string>
      */
     public function getSupportedCodes(): array
     {
         $url = self::URI_CODES;
-        if ($response = $this->getUrlCacheValue($url)) {
+
+        /** @psalm-var mixed $response */
+        $response = $this->getUrlCacheValue($url);
+        if (\is_array($response)) {
             return $response;
         }
 
         if ($response = $this->getResponse($url)) {
+            /** @psalm-var string[] $codes */
             $codes = (array) ($response['supported_codes'] ?? []);
             if (!empty($codes)) {
                 $codes = $this->mapCodes($codes);
@@ -208,8 +225,8 @@ class ExchangeRateService extends AbstractHttpClientService
 
     private function getDeltaTime(array $response): ?int
     {
-        $time = (int) ($response['time_next_update_unix'] ?? 0);
-        if (0 !== $time) {
+        $time = $this->getNextTime($response);
+        if (null !== $time) {
             $delta = $time - \time() - 1;
             if ($delta > 0) {
                 return $delta;
@@ -221,14 +238,13 @@ class ExchangeRateService extends AbstractHttpClientService
 
     private function getNextTime(array $response): ?int
     {
-        $time = (int) ($response['time_next_update_unix'] ?? 0);
-
-        return 0 !== $time ? $time : null;
+        return $this->getTime($response, 'time_next_update_unix');
     }
 
     private function getResponse(string $url): ?array
     {
         try {
+            /** @var array<string, string> $result */
             $result = $this->requestGet($url)->toArray();
             if ($this->isValidResult($result)) {
                 return $result;
@@ -240,27 +256,39 @@ class ExchangeRateService extends AbstractHttpClientService
         return null;
     }
 
-    private function getUpdateTime(array $response): ?int
+    private function getTime(array $response, string $key): ?int
     {
-        $time = (int) ($response['time_last_update_unix'] ?? 0);
+        $time = (int) ($response[$key] ?? 0);
 
         return 0 !== $time ? $time : null;
     }
 
-    private function isValidResult(array $result): bool
+    private function getUpdateTime(array $response): ?int
     {
-        $result = $result['result'] ?? 'unknown';
+        return $this->getTime($response, 'time_last_update_unix');
+    }
+
+    /**
+     * @param array<string, string> $response
+     */
+    private function isValidResult(array $response): bool
+    {
+        // result
+        $result = $response['result'] ?? 'unknown';
         if (self::RESPONSE_SUCCESS === $result) {
             return true;
         }
 
         // error
-        $error = $result['error-type'] ?? 'unknown';
+        $error = $response['error-type'] ?? 'unknown';
         $this->setLastError(404, $this->translateError($error));
 
         return false;
     }
 
+    /**
+     * @param string[] $codes
+     */
     private function mapCodes(array $codes): array
     {
         // filter
@@ -270,6 +298,7 @@ class ExchangeRateService extends AbstractHttpClientService
 
         // map
         $result = [];
+        /** @psalm-var string $code */
         foreach ($codes as $code) {
             $result[$code] = [
                 'symbol' => Currencies::getSymbol($code),

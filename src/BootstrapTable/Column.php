@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\AbstractEntity;
 use App\Interfaces\SortModeInterface;
 use App\Util\FileUtils;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
@@ -115,7 +116,7 @@ class Column implements SortModeInterface
 
     public function __toString(): string
     {
-        return (string) $this->field;
+        return $this->field;
     }
 
     /**
@@ -129,6 +130,7 @@ class Column implements SortModeInterface
     public static function fromJson(AbstractTable $parent, string $path): array
     {
         // decode
+        /** @var array $definitions */
         $definitions = FileUtils::decodeJson($path);
 
         // definitions?
@@ -142,7 +144,7 @@ class Column implements SortModeInterface
         // map
         return \array_map(function (array $definition) use ($parent, $accessor): self {
             $column = new self();
-            /** @var string $key */
+            /** @var mixed $value */
             foreach ($definition as $key => $value) {
                 // special case for the field formatter
                 if (self::FIELD_FORMATTER === $key) {
@@ -150,7 +152,7 @@ class Column implements SortModeInterface
                 }
 
                 try {
-                    $accessor->setValue($column, $key, $value);
+                    $accessor->setValue($column, (string) $key, $value);
                 } catch (AccessException|UnexpectedTypeException $e) {
                     $message = "Cannot set the property '$key'.";
                     throw new \InvalidArgumentException($message, 0, $e);
@@ -161,7 +163,7 @@ class Column implements SortModeInterface
         }, $definitions);
     }
 
-    public function getAlias(): ?string
+    public function getAlias(): string
     {
         return $this->alias ?? $this->field;
     }
@@ -283,8 +285,8 @@ class Column implements SortModeInterface
     /**
      * Map the given object to a string value using this field property.
      *
-     * @param mixed            $objectOrArray the object to map
-     * @param PropertyAccessor $accessor      the property accessor to get the object value
+     * @param array|AbstractEntity $objectOrArray the object to map
+     * @param PropertyAccessor     $accessor      the property accessor to get the object value
      *
      * @return string the mapped value
      */
@@ -292,6 +294,7 @@ class Column implements SortModeInterface
     {
         // get value
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
+        /** @var mixed $value */
         $value = $accessor->getValue($objectOrArray, $property);
 
         // format
@@ -421,8 +424,8 @@ class Column implements SortModeInterface
     /**
      * Formats the given value using the field formatter if applicable.
      *
-     * @param mixed $objectOrArray the object to map
-     * @param mixed $value         the value to format
+     * @param array|AbstractEntity $objectOrArray the object to map
+     * @param mixed                $value         the value to format
      *
      * @return string the formatted value
      */

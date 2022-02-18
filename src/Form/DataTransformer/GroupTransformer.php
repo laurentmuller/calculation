@@ -36,13 +36,11 @@ class GroupTransformer implements DataTransformerInterface
     public function __construct(GroupRepository $repository, TranslatorInterface $translator)
     {
         $this->repository = $repository;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param int|null $value
      */
     public function reverseTransform($value): ?Group
     {

@@ -15,7 +15,6 @@ ul.timeline:before {
     left: 29px;
     width: 2px;
     height: 100%;
-    z-index: 400;
     margin-top: 3px;
 }
 
@@ -34,7 +33,6 @@ ul.timeline>li:before {
     left: 20px;
     width: 20px;
     height: 20px;
-    z-index: 400;
     margin-top: 3px;
 }
 

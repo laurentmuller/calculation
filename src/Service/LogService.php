@@ -17,6 +17,7 @@ use App\Traits\CacheTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
+use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -60,16 +61,6 @@ class LogService
     private const DATE_FORMAT = 'd.m.Y H:i:s';
 
     /**
-     * The cache keys.
-     */
-    private const KEYS = [
-        self::KEY_FILE,
-        self::KEY_LOGS,
-        self::KEY_CHANNELS,
-        self::KEY_LEVELS,
-    ];
-
-    /**
      * The values separator.
      */
     private const VALUES_SEP = '|';
@@ -93,7 +84,12 @@ class LogService
      */
     public function clearCache(): self
     {
-        $this->deleteCacheItems(self::KEYS);
+        $this->deleteCacheItems([
+            self::KEY_FILE,
+            self::KEY_LOGS,
+            self::KEY_CHANNELS,
+            self::KEY_LEVELS,
+        ]);
 
         return $this;
     }
@@ -110,28 +106,34 @@ class LogService
      */
     public static function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
     {
-        if (Utils::isString($value)) {
+        if (null !== $value && '' !== $value) {
             $filter = static function (Log $log) use ($value, $skipChannel, $skipLevel): bool {
-                if (!$skipChannel) {
-                    $channel = self::getChannel($log->getChannel());
+                if (!$skipChannel && $log->getChannel()) {
+                    $channel = self::getChannel((string) $log->getChannel());
                     if (Utils::contains($channel, $value, true)) {
                         return true;
                     }
                 }
 
-                if (!$skipLevel) {
-                    $level = self::getLevel($log->getLevel());
+                if (!$skipLevel && $log->getLevel()) {
+                    $level = self::getLevel((string) $log->getLevel());
                     if (Utils::contains($level, $value, true)) {
                         return true;
                     }
                 }
 
-                $date = self::getCreatedAt($log->getCreatedAt());
-                if (Utils::contains($date, $value, true)) {
-                    return true;
+                if (null !== $createdAt = $log->getCreatedAt()) {
+                    $date = self::getCreatedAt($createdAt);
+                    if (Utils::contains($date, $value, true)) {
+                        return true;
+                    }
                 }
 
-                return Utils::contains($log->getMessage(), $value, true);
+                if (null !== $log->getMessage()) {
+                    return Utils::contains((string) $log->getMessage(), $value, true);
+                }
+
+                return false;
             };
 
             return \array_filter($logs, $filter);
@@ -152,7 +154,7 @@ class LogService
     {
         if (Utils::isString($value)) {
             return \array_filter($logs, function (Log $log) use ($value): bool {
-                return 0 === \strcasecmp($value, $log->getChannel());
+                return 0 === \strcasecmp((string) $value, (string) $log->getChannel());
             });
         }
 
@@ -171,7 +173,7 @@ class LogService
     {
         if (Utils::isString($value)) {
             return \array_filter($logs, function (Log $log) use ($value): bool {
-                return 0 === \strcasecmp($value, $log->getLevel());
+                return 0 === \strcasecmp((string) $value, (string) $log->getLevel());
             });
         }
 
@@ -201,14 +203,19 @@ class LogService
      */
     public static function getCreatedAt(\DateTimeInterface $value): string
     {
-        return FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
+        return (string) FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
     }
 
     /**
      * Gets the entries.
      *
-     * @return array|bool an array with the file name, the logs, the levels and the channels;
-     *                    <code>false</code> if an error occurs or if the file is empty
+     * @return bool|array
+     *
+     * @psalm-return bool|array{
+     *      file: string, logs:
+     *      array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>}
      */
     public function getEntries()
     {
@@ -216,8 +223,9 @@ class LogService
             return $entries;
         }
 
-        if ($entries = $this->readFile()) {
-            return $this->setCachedValues((array) $entries);
+        $entries = $this->readFile();
+        if (\is_array($entries)) {
+            return $this->setCachedValues($entries);
         }
 
         return false;
@@ -292,19 +300,56 @@ class LogService
     /**
      * Gets the cached values.
      *
-     * @return array|bool the values, if cached; false otherwise
+     * @return bool|array{
+     *      file: string,
+     *      logs: array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>}
      */
     private function getCachedValues()
     {
+        /** @psalm-var array{
+         *      file: string,
+         *      logs: array<int, Log>,
+         *      levels: array<string, int>,
+         *      channels: array<string, int>} $entries */
         $entries = [];
-        $items = $this->getCacheItems(self::KEYS);
-        foreach ($items as $item) {
-            if ($item->isHit()) {
-                $entries[$item->getKey()] = $item->get();
-            } else {
-                return false;
-            }
+
+        // file
+        $item = $this->getCacheItem(self::KEY_FILE);
+        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+            return false;
         }
+        /** @psalm-var string $file */
+        $file = $item->get();
+        $entries[self::KEY_FILE] = $file;
+
+        // logs
+        $item = $this->getCacheItem(self::KEY_LOGS);
+        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+            return false;
+        }
+        /** @psalm-var array<int, Log> $logs */
+        $logs = $item->get();
+        $entries[self::KEY_LOGS] = $logs;
+
+        // levels
+        $item = $this->getCacheItem(self::KEY_LEVELS);
+        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+            return false;
+        }
+        /** @psalm-var array<string, int> $levels */
+        $levels = $item->get();
+        $entries[self::KEY_LEVELS] = $levels;
+
+        // channels
+        $item = $this->getCacheItem(self::KEY_CHANNELS);
+        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+            return false;
+        }
+        /** @psalm-var array<string, int> $channels */
+        $channels = $item->get();
+        $entries[self::KEY_CHANNELS] = $channels;
 
         return $entries;
     }
@@ -312,12 +357,13 @@ class LogService
     /**
      * Increment by one the given array.
      *
-     * @param array  $array the array to update
-     * @param string $key   the array's key to incremente
+     * @param array<string, int> $array the array to update
+     * @param string             $key   the array's key to incremente
      */
     private function increment(array &$array, string $key): void
     {
-        $array[$key] = ($array[$key] ?? 0) + 1;
+        $value = $array[$key] ?? 0;
+        $array[$key] = $value + 1;
     }
 
     /**
@@ -343,6 +389,7 @@ class LogService
      */
     private function parseJson(string $value): array
     {
+        /** @psalm-var mixed $result */
         $result = \json_decode($value, true);
         if (\is_array($result) && \JSON_ERROR_NONE === \json_last_error()) {
             return $result;
@@ -366,7 +413,13 @@ class LogService
     /**
      * Gets all lines of the log file.
      *
-     * @return array|bool an array with the logs, the levels and the channels; <code>false</code> if an error occurs or if the file is empty
+     * @return array|bool an array with the file, logs, the levels and the channels; <code>false</code> if an error occurs or if the file is empty
+     *
+     * @psalm-return bool|array{
+     *      file: string,
+     *      logs: array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>}
      */
     private function readFile()
     {
@@ -384,8 +437,11 @@ class LogService
             }
 
             $id = 1;
+            /** @psalm-var array<int, Log> $logs */
             $logs = [];
+            /** @psalm-var array<string, int> $levels */
             $levels = [];
+            /** @psalm-var array<string, int> $channels */
             $channels = [];
 
             // read line by line
@@ -445,12 +501,21 @@ class LogService
     /**
      * Save entries to cache.
      *
-     * @param array $entries the entries to save
+     * @psalm-param array{
+     *      file: string,
+     *      logs: array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>} $entries the entries to cache
      *
-     * @return array the entries argument
+     * @psalm-return array{
+     *      file: string,
+     *      logs: array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>} the entries parameter
      */
     private function setCachedValues(array $entries): array
     {
+        /** @psalm-var mixed $value */
         foreach ($entries as $key => $value) {
             $this->setCacheValue($key, $value);
         }

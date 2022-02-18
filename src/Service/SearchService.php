@@ -95,9 +95,9 @@ class SearchService
     /**
      * The SQL queries.
      *
-     * @var string[]
+     * @var array<string, string>
      */
-    private ?array $queries = null;
+    private array $queries = [];
 
     /**
      * Constructor.
@@ -125,7 +125,7 @@ class SearchService
         }
 
         // get result
-        $result = $this->getArrayResult($search, $entity);
+        $result = $this->getArrayResult((string) $search, $entity);
 
         // count
         return \count($result);
@@ -164,6 +164,14 @@ class SearchService
      * @param int    $offset the zero based index of the first row to return
      *
      * @return array the array of results for the given search (can be empty)
+     * @psalm-return array<array{
+     *      id: int,
+     *      type: string,
+     *      field: string,
+     *      content: string,
+     *      entityName: string,
+     *      fieldName: string
+     *  }>
      */
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
@@ -181,7 +189,7 @@ class SearchService
         $extra = " LIMIT {$limit} OFFSET {$offset}";
 
         // return result
-        return $this->getArrayResult($search, $entity, $extra);
+        return $this->getArrayResult((string) $search, $entity, $extra);
     }
 
     /**
@@ -195,9 +203,10 @@ class SearchService
             foreach ($fields as $field) {
                 $content = "date_format(e.{$field}, '%d.%m.%Y')";
                 $key = $this->getKey($class, $field);
-                $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+                $sql = (string) $this->createQueryBuilder($class, $field, $content)
                     ->getQuery()
                     ->getSQL();
+                $this->queries[$key] = $sql;
             }
         }
 
@@ -214,11 +223,11 @@ class SearchService
             $field = 'group';
             $content = 'g.code';
             $key = $this->getKey($class, $field);
-
-            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+            $sql = (string) $this->createQueryBuilder($class, $field, $content)
                 ->join('e.groups', 'g')
                 ->getQuery()
                 ->getSQL();
+            $this->queries[$key] = $sql;
         }
 
         return $this;
@@ -234,13 +243,13 @@ class SearchService
             $field = 'item';
             $content = 'i.description';
             $key = $this->getKey($class, $field);
-
-            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+            $sql = (string) $this->createQueryBuilder($class, $field, $content)
                 ->join('e.groups', 'g')
                 ->join('g.categories', 'c')
                 ->join('c.items', 'i')
                 ->getQuery()
                 ->getSQL();
+            $this->queries[$key] = $sql;
         }
 
         return $this;
@@ -256,11 +265,11 @@ class SearchService
             $field = 'state';
             $content = 's.code';
             $key = $this->getKey($class, $field);
-
-            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+            $sql = (string) $this->createQueryBuilder($class, $field, $content)
                 ->join('e.state', 's')
                 ->getQuery()
                 ->getSQL();
+            $this->queries[$key] = $sql;
         }
 
         return $this;
@@ -278,9 +287,10 @@ class SearchService
         if ($this->isGrantedSearch($class)) {
             foreach ($fields as $field) {
                 $key = $this->getKey($class, $field);
-                $this->queries[$key] = $this->createQueryBuilder($class, $field)
+                $sql = (string) $this->createQueryBuilder($class, $field)
                     ->getQuery()
                     ->getSQL();
+                $this->queries[$key] = $sql;
             }
         }
 
@@ -315,6 +325,15 @@ class SearchService
      * @param string $search the term to search
      * @param string $entity the entity to search in or null for all
      * @param string $extra  a SQL statement to add to the default native SELECT SQL statement
+     *
+     * @psalm-return array<array{
+     *      id: int,
+     *      type: string,
+     *      field: string,
+     *      content: string,
+     *      entityName: string,
+     *      fieldName: string
+     *  }>
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
@@ -324,7 +343,7 @@ class SearchService
         // entity?
         if (Utils::isString($entity)) {
             $queries = \array_filter($queries, function (string $key) use ($entity): bool {
-                return 0 === \stripos($key, $entity);
+                return 0 === \stripos($key, (string) $entity);
             }, \ARRAY_FILTER_USE_KEY);
         }
 
@@ -342,7 +361,19 @@ class SearchService
         // set parameter
         $query->setParameter(self::SEARCH_PARAM, "%{$search}%");
 
-        return $query->getArrayResult();
+        /**
+         * @var array<array{
+         *      id: int,
+         *      type: string,
+         *      field: string,
+         *      content: string,
+         *      entityName: string,
+         *      fieldName: string
+         *  }> $result
+         */
+        $result = $query->getArrayResult();
+
+        return $result;
     }
 
     /**
@@ -403,6 +434,7 @@ class SearchService
             // update SQL
             $param = ':' . self::SEARCH_PARAM;
             $columns = \array_keys(self::COLUMNS);
+            /** @psalm-var string $query */
             foreach ($this->queries as &$query) {
                 // replace parameter
                 $query = \str_replace('?', $param, $query);

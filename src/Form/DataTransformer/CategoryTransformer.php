@@ -36,13 +36,11 @@ class CategoryTransformer implements DataTransformerInterface
     public function __construct(CategoryRepository $repository, TranslatorInterface $translator)
     {
         $this->repository = $repository;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param int|null $value
      */
     public function reverseTransform($value): ?Category
     {

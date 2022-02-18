@@ -57,13 +57,6 @@ class AdminController extends AbstractController
             $this->getApplication()->clearCache();
 
             try {
-                // old command
-                $options = [
-                    'command' => 'cache:clear',
-                    '--env' => $kernel->getEnvironment(),
-                    '--no-warmup' => true,
-                ];
-
                 // new command
                 $options = [
                     'command' => 'cache:pool:clear',
@@ -127,7 +120,10 @@ class AdminController extends AbstractController
         // handle request
         if ($this->handleRequestForm($request, $form)) {
             // import
-            $file = $form->getData()['file'];
+            /** @psalm-var array $data */
+            $data = $form->getData();
+            /** @psalm-var \Symfony\Component\HttpFoundation\File\UploadedFile|string|null $file */
+            $file = $data['file'];
             $results = $updater->import($file);
 
             // display result
@@ -168,6 +164,7 @@ class AdminController extends AbstractController
         $form = $this->createForm(ParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
             //save properties
+            /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $application->setProperties($data);
             $this->succesTrans('parameters.success');
@@ -304,7 +301,7 @@ class AdminController extends AbstractController
     private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
     {
         // name
-        $pos = \strpos($roleName, '_');
+        $pos = (int) \strpos($roleName, '_');
         $name = 'user.roles.' . \strtolower(\substr($roleName, $pos + 1));
 
         // role

@@ -18,6 +18,8 @@ use App\Util\Utils;
  * This class describe a style that can be apply to a PDF document.
  *
  * @author Laurent Muller
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class PdfStyle implements PdfDocumentUpdaterInterface
 {
@@ -78,7 +80,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     {
         $name = Utils::getShortName($this);
 
-        return \sprintf('%s(%s, %s, %s, %s, %s, %s)', $name, $this->font, $this->drawColor, $this->fillColor, $this->textColor, $this->line, $this->getBorderText());
+        return \sprintf('%s(%s, %s, %s, %s, %s, %s)', $name, (string) $this->font, (string) $this->drawColor, (string) $this->fillColor, (string) $this->textColor, (string) $this->line, $this->getBorderText());
     }
 
     /**

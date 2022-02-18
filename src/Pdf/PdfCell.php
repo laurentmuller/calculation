@@ -78,11 +78,21 @@ class PdfCell
     public function __clone()
     {
         // deep clone
-        $this->borderBottom = clone $this->borderBottom;
-        $this->borderLeft = clone $this->borderLeft;
-        $this->borderRight = clone $this->borderRight;
-        $this->borderTop = clone $this->borderTop;
-        $this->style = clone $this->style;
+        if (null !== $this->borderBottom) {
+            $this->borderBottom = clone $this->borderBottom;
+        }
+        if (null !== $this->borderLeft) {
+            $this->borderLeft = clone $this->borderLeft;
+        }
+        if (null !== $this->borderRight) {
+            $this->borderRight = clone $this->borderRight;
+        }
+        if (null !== $this->borderTop) {
+            $this->borderTop = clone $this->borderTop;
+        }
+        if (null !== $this->style) {
+            $this->style = clone $this->style;
+        }
     }
 
     /**

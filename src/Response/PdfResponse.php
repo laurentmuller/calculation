@@ -14,7 +14,7 @@ namespace App\Response;
 
 use App\Interfaces\IResponseInterface;
 use App\Pdf\PdfDocument;
-use App\Traits\ResponseTrait;
+use App\Util\Response\ResponseUtils;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -23,10 +23,10 @@ use Symfony\Component\HttpFoundation\Response;
  * @author Laurent Muller
  *
  * @see PdfDocument
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class PdfResponse extends Response implements IResponseInterface
 {
-    use ResponseTrait;
     /**
      * The application PDF mime type.
      */
@@ -43,8 +43,8 @@ class PdfResponse extends Response implements IResponseInterface
     public function __construct(PdfDocument $doc, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.pdf' : \basename($name);
-        $headers = $this->buildHeaders($name, self::MIME_TYPE_PDF, $inline);
-        $content = $doc->Output(PdfDocument::OUTPUT_STRING);
+        $headers = ResponseUtils::buildHeaders($name, self::MIME_TYPE_PDF, $inline);
+        $content = (string) $doc->Output(PdfDocument::OUTPUT_STRING);
         parent::__construct($content, self::HTTP_OK, $headers);
     }
 

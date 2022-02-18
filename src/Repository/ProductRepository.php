@@ -15,16 +15,14 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for product entity.
  *
- * @method Product|null find($id, $lockMode = null, $lockVersion = null)
- * @method Product|null findOneBy(array $criteria, array $orderBy = null)
- * @method Product[]    findAll()
- * @method Product[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractCategoryItemRepository<Product>
+ * @psalm-suppress  MixedReturnTypeCoercion
  *
  * @author Laurent Muller
  */
@@ -71,7 +69,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     {
         $builder = $this->createDefaultQueryBuilder('e')
             ->where('e.category = :category')
-            ->setParameter('category', $category)
+            ->setParameter('category', $category, Types::OBJECT)
             ->orderBy('e.description');
 
         if ($excludeEmpty) {
@@ -81,6 +79,17 @@ class ProductRepository extends AbstractCategoryItemRepository
         return $builder
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Gets the default query builder with all products order by the category code, the group code and the product description.
+     */
+    public function getQueryBuilderByCategory(): QueryBuilder
+    {
+        return $this->createDefaultQueryBuilder()
+            ->addOrderBy(self::CATEGORY_ALIAS . '.code')
+            ->addOrderBy(CategoryRepository::GROUP_ALIAS . '.code')
+            ->addOrderBy(self::DEFAULT_ALIAS . '.description');
     }
 
     /**

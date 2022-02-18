@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Util;
 
+use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\String\UnicodeString;
@@ -55,9 +57,15 @@ final class Utils
      * @param mixed    $initial  the optional initial value. It will be used at the beginning of the process, or as a final result in case the array is empty
      *
      * @return mixed the resulting value
+     * @psalm-suppress MissingClosureReturnType
+     * @psalm-suppress MixedArrayOffset
      */
     public static function arrayReduceKey(array $array, callable $callback, $initial = null)
     {
+        /*
+         * @var mixed $carry
+         * @var mixed $key
+         */
         // @phpstan-ignore-next-line
         return \array_reduce(\array_keys($array), function ($carry, $key) use ($callback, $array) {
             return $callback($carry, $key, $array[$key]);
@@ -92,8 +100,8 @@ final class Utils
     /**
      * Compare 2 values.
      *
-     * @param mixed                     $a         the first object to get field value from
-     * @param mixed                     $b         the second object to get field value from
+     * @param object|array              $a         the first object to get field value from
+     * @param object|array              $b         the second object to get field value from
      * @param string                    $field     the field name to get value for
      * @param PropertyAccessorInterface $accessor  the property accessor to get values
      * @param bool                      $ascending true to sort ascending, false to sort descending
@@ -109,8 +117,9 @@ final class Utils
      */
     public static function compare($a, $b, string $field, PropertyAccessorInterface $accessor, bool $ascending = true): int
     {
-        $result = 0;
+        /** @var mixed $valueA */
         $valueA = $accessor->getValue($a, $field);
+        /** @var mixed $valueB */
         $valueB = $accessor->getValue($b, $field);
         $result = \is_string($valueA) && \is_string($valueB) ? \strnatcasecmp($valueA, $valueB) : $valueA <=> $valueB;
 
@@ -176,7 +185,7 @@ final class Utils
 
             return \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
         } catch (\Exception $e) {
-            return $expression;
+            return (string) $expression;
         }
     }
 
@@ -191,9 +200,12 @@ final class Utils
      * @param callable $callback the filter callback
      *
      * @return mixed|null the first matching item, if any; null otherwise
+     *
+     * @psalm-param callable(mixed): bool $callback
      */
     public static function findFirst(array $array, callable $callback)
     {
+        /** @psalm-var mixed $value */
         foreach ($array as $value) {
             if ($callback($value)) {
                 return $value;
@@ -231,21 +243,34 @@ final class Utils
     }
 
     /**
+     * Gets the request input bag, depending of the request method.
+     */
+    public static function getRequestInputBag(Request $request): InputBag
+    {
+        // merge
+        $result = new InputBag();
+        $result->add($request->attributes->all());
+        $result->add($request->request->all());
+        $result->add($request->query->all());
+
+        return $result;
+    }
+
+    /**
      * Gets the short class name of the given variable.
      *
-     * @param mixed $var either a string containing the name of the class to reflect, or an object
+     * @param object|string $var either a string containing the name of the class to reflect, or an object
      *
-     * @return string|null the short name or null if the variable is null
+     * @return string the short name or null if the variable is null
      *
      * @throws \ReflectionException if the class to reflect does not exist
+     *
+     * @psalm-suppress ArgumentTypeCoercion
      */
-    public static function getShortName($var): ?string
+    public static function getShortName($var): string
     {
-        if ($var) {
-            return (new \ReflectionClass($var))->getShortName();
-        }
-
-        return null;
+        // @phpstan-ignore-next-line
+        return (new \ReflectionClass($var))->getShortName();
     }
 
     /**
@@ -253,8 +278,12 @@ final class Utils
      *
      * Any additional keys (if any) will be used for grouping the next set of sub-arrays.
      *
-     * @param array               $array   the array to be grouped
-     * @param string|int|callable $key,... a set of keys to group by
+     * @param array               $array the array to be grouped
+     * @param string|int|callable $key   a set of keys to group by
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArrayAccess
+     * @psalm-suppress MixedArrayOffset
+     * @psalm-suppress PossiblyNullArrayOffset
      */
     public static function groupBy(array $array, $key): array
     {
@@ -262,13 +291,14 @@ final class Utils
 
         // load the new array, splitting by the target key
         $grouped = [];
+
         foreach ($array as $value) {
             if ($callable) {
                 $groupKey = $callable($value);
             } elseif (\is_object($value)) {
                 $groupKey = $value->{$key};
-            } else {
-                $groupKey = $value[$key];
+            } else { // array
+                $groupKey = $value[$key] ?? null;
             }
             $grouped[$groupKey][] = $value;
         }
@@ -278,9 +308,13 @@ final class Utils
         if (\func_num_args() > 2) {
             $args = \func_get_args();
             $callback = [__CLASS__, __FUNCTION__];
+            /** @psalm-var array $grouped */
+            /** @psalm-var int|string $value */
             foreach ($grouped as $groupKey => $value) {
                 $params = \array_merge([$value], \array_slice($args, 2, \func_num_args()));
-                $grouped[$groupKey] = \call_user_func_array($callback, $params);
+                /** @psalm-var mixed $value */
+                $value = \call_user_func_array($callback, $params);
+                $grouped[$groupKey] = $value;
             }
         }
 
@@ -305,6 +339,7 @@ final class Utils
      * @param array  $array     the array to sort
      * @param string $field     the field name to get values for
      * @param bool   $ascending true to sort in ascending, false to sort in descending
+     * @psalm-suppress MixedArgument
      */
     public static function sortField(array &$array, string $field, bool $ascending = true): void
     {
@@ -319,16 +354,17 @@ final class Utils
     /**
      * Sorts an array for the given fields.
      *
-     * @param array $array          the array to sort
-     * @param array $fields<string, bool> the array where the key is field name to sort and the value is ascending state
-     *                              (true to sort in ascending, false to sort in descending)
-     * @psalm-param array<string, boolean> $fields
+     * @param array               $array  the array to sort
+     * @param array<string, bool> $fields the array where the key is field name to sort and the value is ascending state
+     *                                    (true to sort in ascending, false to sort in descending)
+     *
+     * @psalm-suppress MixedArgument
      */
     public static function sortFields(array &$array, array $fields): void
     {
         $count = \count($fields);
         if (1 === $count) {
-            $field = \array_key_first($fields);
+            $field = (string) \array_key_first($fields);
             $ascending = $fields[$field];
             self::sortField($array, $field, $ascending);
         } elseif ($count > 1) {

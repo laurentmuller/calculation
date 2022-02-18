@@ -91,7 +91,6 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      */
     protected function createDataTableResults(DataTableQuery $query): DataTableResults
     {
-        /** @var DataDefinitition[] $definitions */
         $definitions = \array_map(function (Column $column): DataDefinitition {
             $name = $column->name;
             $sortField = $this->repository->getSortField($name);
@@ -126,6 +125,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         }
 
         // get items
+        /** @psalm-var array<array|object> $items */
         $items = $builder->getQuery()->getResult();
 
         // transform
@@ -195,7 +195,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
                 $parameter = \str_replace('.', '_', $name);
                 foreach ($definition->getSearchFields() as $field) {
                     if ($expression = $this->createSearchExpression($field, $parameter)) {
-                        $parameterValue = $this->createSearchParameterValue($field, $value);
+                        $parameterValue = $this->createSearchParameterValue($field, (string) $value);
                         $builder->andWhere($expression)->setParameter($parameter, $parameterValue);
                     }
                 }
@@ -253,7 +253,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      * @param string $field the field name to search in
      * @param string $value the search value
      *
-     * @return mixed the parameter value
+     * @return string|int the parameter value
      *
      * @psalm-suppress UnusedParam
      */
@@ -278,6 +278,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      * Each order is apply, if not yet present, after the request order.
      *
      * @return array an array where each key is the column name and the value is the order direction ('asc' or 'desc')
+     * @psalm-return array<string, string>
      */
     protected function getDefaultOrder(): array
     {

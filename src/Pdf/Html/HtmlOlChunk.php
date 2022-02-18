@@ -213,6 +213,7 @@ class HtmlOlChunk extends HtmlParentChunk
         }
 
         // lookup array that we will use to traverse the number
+        /** @psalm-var array<string, int> $lookup */
         static $lookup = [
             'M' => 1000,
             'CM' => 900,

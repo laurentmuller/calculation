@@ -23,6 +23,19 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
 {
     /**
      * Constructor.
+     *
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }> $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {
@@ -35,7 +48,7 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
     protected function formatItems(array $items): string
     {
         $result = \array_map(function (array $item): string {
-            return \sprintf('%s (%d)', $item['description'], $item['count']);
+            return \sprintf('%s (%d)', (string) $item['description'], (int) $item['count']);
         }, $items);
 
         return \implode("\n", $result);

@@ -249,13 +249,24 @@ class PdfTableBuilder implements PdfConstantsInterface
         $parent = $this->parent;
         $columns = $this->columns;
 
+        /** @psalm-var string[] $texts */
+        $texts = [];
+        /** @psalm-var PdfStyle[] $styles */
+        $styles = [];
+        /** @psalm-var string[] $aligns */
+        $aligns = [];
+        /** @psalm-var float[] $widths */
+        $widths = [];
+        /** @psalm-var float[] $fixeds */
+        $fixeds = [];
+
         $index = 0;
         foreach ($cells as $cell) {
-            $texts[] = $cell->getText();
-            $styles[] = $cell->getStyle() ?: $this->rowStyle;
-            $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment();
+            $texts[] = $cell->getText() ?: '';
+            $styles[] = $cell->getStyle() ?: $this->rowStyle ?: PdfStyle::getCellStyle();
+            $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment() ?: self::ALIGN_LEFT;
 
-            $width = 0;
+            $width = 0.0;
             $fixed = $columns[$index]->isFixed();
             for ($i = 0, $count = $cell->getCols(); $i < $count; ++$i) {
                 // check if one of the columns is not fixed
@@ -572,7 +583,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfStyle    $style     the cell style
      * @param PdfCell     $cell      the cell
      */
-    protected function drawCell(PdfDocument $parent, int $index, float $width, float $height, ?string $text, string $alignment, PdfStyle $style, PdfCell $cell): void
+    protected function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, string $alignment, PdfStyle $style, PdfCell $cell): void
     {
         // save the current position
         [$x, $y] = $parent->GetXY();
@@ -644,7 +655,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfDocument  $parent the parent document
      * @param int          $index  the column index
      * @param PdfRectangle $bounds the cell bounds
-     * @param mixed        $border the border style
+     * @param string|int   $border the border style
      */
     protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, $border): void
     {
@@ -660,7 +671,7 @@ class PdfTableBuilder implements PdfConstantsInterface
         if (self::BORDER_ALL === $border) {
             // draw all
             $parent->rectangle($bounds, self::RECT_BORDER);
-        } else {
+        } elseif (\is_string($border)) {
             // draw each applicable border side
             $right = $bounds->right();
             $bottom = $bounds->bottom();

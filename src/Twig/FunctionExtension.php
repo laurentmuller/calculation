@@ -61,7 +61,7 @@ final class FunctionExtension extends AbstractExtension
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator, UrlGeneratorService $generator)
     {
         $this->webDir = (string) \realpath($kernel->getProjectDir() . '/public');
-        $this->translator = $translator;
+        $this->setTranslator($translator);
         $this->generator = $generator;
     }
 
@@ -244,7 +244,7 @@ final class FunctionExtension extends AbstractExtension
         $fullPath = (string) \realpath($this->webDir . $path);
         $size = (array) \getimagesize($fullPath);
 
-        return $size[1];
+        return (int) $size[1];
     }
 
     /**
@@ -259,11 +259,14 @@ final class FunctionExtension extends AbstractExtension
         $fullPath = (string) \realpath($this->webDir . $path);
         $size = (array) \getimagesize($fullPath);
 
-        return $size[0];
+        return (int) $size[0];
     }
 
     /**
      * Gets the translator.
+     *
+     * @psalm-suppress InvalidNullableReturnType
+     * @psalm-suppress NullableReturnStatement
      */
     public function getTranslator(): TranslatorInterface
     {
@@ -346,10 +349,7 @@ final class FunctionExtension extends AbstractExtension
      */
     private function getExtension(Environment $env, string $className)
     {
-        /** @psalm-var T $result */
-        $result = $env->getExtension($className);
-
-        return $result;
+        return $env->getExtension($className);
     }
 
     /**
@@ -362,7 +362,6 @@ final class FunctionExtension extends AbstractExtension
     private function getNonce(Environment $env): string
     {
         if (null === $this->nonce) {
-            /** @var NonceExtension $extension */
             $extension = $this->getExtension($env, NonceExtension::class);
             $this->nonce = $extension->getNonce();
         }
@@ -380,12 +379,13 @@ final class FunctionExtension extends AbstractExtension
     private function reduceParameters(array $parameters): string
     {
         if (!empty($parameters)) {
+            /** @psalm-suppress MissingClosureParamType */
             // @phpstan-ignore-next-line
-            $callback = function (string $carry, string $key, $value) {
+            $callback = function (string $carry, string $key, $value): string {
                 return $carry . ' ' . $key . '="' . \htmlspecialchars((string) $value) . '"';
             };
 
-            return Utils::arrayReduceKey($parameters, $callback, '');
+            return (string) Utils::arrayReduceKey($parameters, $callback, '');
         }
 
         return '';

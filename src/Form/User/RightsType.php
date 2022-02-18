@@ -50,6 +50,7 @@ class RightsType extends AbstractHelperType
      */
     public function onPreSetData(FormEvent $event): void
     {
+        /** @var mixed $data */
         $data = $event->getData();
         if ($data instanceof RoleInterface) {
             $roles = $this->roleHierarchy->getReachableRoleNames([$data->getRole()]);

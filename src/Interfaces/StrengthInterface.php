@@ -38,6 +38,8 @@ interface StrengthInterface
 
     /**
      * The no validation level.
+     *
+     * @var int
      */
     public const LEVEL_NONE = -1;
 

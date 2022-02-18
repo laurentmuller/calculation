@@ -124,7 +124,7 @@ class UtilsTest extends TestCase
     public function getShortName(): array
     {
         return [
-            [null, null],
+            [null, null, true],
             [self::class, 'UtilsTest'],
             [Calculation::class, 'Calculation'],
             [new Calculation(), 'Calculation'],

@@ -53,7 +53,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      *
-     * @psalm-param T $constraint
+     * @param mixed $value
      */
     public function validate($value, Constraint $constraint): void
     {

@@ -157,12 +157,13 @@ class OpenWeatherController extends AbstractController
     {
         try {
             $units = $this->getRequestUnits($request);
-            $latitude = (float) $request->get('latitude', 0.0);
-            $longitude = (float) $request->get('longitude', 0.0);
-            $exclude = (array) $request->get('exclude', []);
-
-            if (false === $response = $this->service->onecall($latitude, $longitude, $units, $exclude)) {
-                $response = $this->service->getLastError();
+            $latitude = $this->getRequestFloat($request, 'latitude');
+            $longitude = $this->getRequestFloat($request, 'longitude');
+            $exclude = (string) $this->getRequestString($request, 'exclude');
+            $exclude = \explode(',', $exclude);
+            $response = $this->service->onecall($latitude, $longitude, $units, $exclude);
+            if (false === $response) {
+                return $this->json($this->service->getLastError());
             }
 
             return $this->json($response);
@@ -181,13 +182,18 @@ class OpenWeatherController extends AbstractController
         try {
             $query = $this->getRequestQuery($request);
             $units = $this->getRequestUnits($request);
-            if (false === $response = $this->service->search($query, $units)) {
-                return $this->json($this->service->getLastError());
+            $response = $this->service->search($query, $units);
+            if ($lastError = $this->service->getLastError()) {
+                return $this->json($lastError);
+            }
+
+            if (!\is_array($response)) {
+                return $this->jsonFalse();
             }
 
             // add urls
             $parameters = ['units' => $units];
-            foreach ((array) $response as &$city) {
+            foreach ($response as &$city) {
                 $parameters['latitude'] = $city['latitude'];
                 $parameters['longitude'] = $city['longitude'];
                 $city['onecall_url'] = $generator->generate('openweather_api_onecall', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -272,7 +278,19 @@ class OpenWeatherController extends AbstractController
                 }
 
                 // decode content
-                if (!$cities = $this->getJsonContent($content)) {
+                /**
+                 * @psalm-var null|array<array{
+                 *      id: int,
+                 *      name: string,
+                 *      country: string,
+                 *      coord: array{
+                 *          lat: float,
+                 *          lon: float
+                 *      }
+                 * }> $cities
+                 */
+                $cities = $this->getJsonContent($content);
+                if (!\is_array($cities)) {
                     return $this->renderErrorResult('import.error.empty_archive', ['name' => $name]);
                 }
 
@@ -284,7 +302,7 @@ class OpenWeatherController extends AbstractController
                 $valids = 0;
                 $errors = 0;
                 foreach ($cities as $city) {
-                    if (!$db->insertCity((int) $city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
+                    if (!$db->insertCity($city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
                         ++$errors;
                     } elseif (0 === ++$valids % 50000) {
                         $db->commitTransaction();
@@ -367,15 +385,10 @@ class OpenWeatherController extends AbstractController
                 OpenWeatherService::DEGREE_IMPERIAL => OpenWeatherService::UNIT_IMPERIAL,
             ]);
 
+        $limits = [10, 15, 25, 50, 100];
         $helper->field(self::KEY_LIMIT)
             ->updateOption('choice_translation_domain', false)
-            ->addChoiceType([
-                10 => 10,
-                15 => 15,
-                25 => 25,
-                50 => 50,
-                100 => 100,
-            ]);
+            ->addChoiceType(\array_combine($limits, $limits));
 
         $helper->field(self::KEY_COUNT)
             ->addHiddenType();
@@ -384,32 +397,41 @@ class OpenWeatherController extends AbstractController
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // get values
-            $query = (string) $form->get('query')->getData();
-            $units = (string) $form->get('units')->getData();
-            $limit = (int) $form->get('limit')->getData();
-            $count = (int) $form->get('count')->getData();
+            /** @psalm-var array $data */
+            $data = $form->getData();
+            $query = (string) $data[self::KEY_QUERY];
+            $units = (string) $data[self::KEY_UNITS];
+            $limit = (int) $data[self::KEY_LIMIT];
+            $count = (int) $data[self::KEY_COUNT];
 
-            // search
-            /** @var array $cities */
+            /**
+             * @var array<int, array{
+             *      id: int,
+             *      units: array,
+             *      current: array
+             *      }> $cities
+             */
             $cities = $this->service->search($query, $units, $limit);
 
-            // get identifers
+            /** @var int[] $cityIds */
             $cityIds = \array_map(function (array $city): int {
                 return $city['id'];
             }, $cities);
 
-            // load current weather by chunk of 20 items
-            $group = false;
-            foreach (\array_keys($cities) as $key) {
-                if (0 === $key % OpenWeatherService::MAX_GROUP) {
+            /** @var null|array{
+             *      units: array,
+             *      list: array<int, mixed>} $group
+             */
+            $group = null;
+            foreach (\array_keys($cities) as $index) {
+                // load current weather by chunk of 20 items
+                if (0 === $index % OpenWeatherService::MAX_GROUP) {
                     $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
                     $group = $this->service->group($ids, $units);
                 }
-                /** @var array $group */
-                if (false !== $group) {
-                    $cities[$key]['name'] = $group['list'][$key % 20]['name'];
-                    $cities[$key]['current'] = $group['list'][$key % 20];
-                    $cities[$key]['units'] = $group['units'];
+                if (\is_array($group)) {
+                    $cities[$index]['units'] = $group['units'];
+                    $cities[$index]['current'] = (array) $group['list'][$index % 20];
                 }
             }
 
@@ -493,7 +515,7 @@ class OpenWeatherController extends AbstractController
         \fseek($handle, -4, \SEEK_END);
         $buffer = (string) \fread($handle, 4);
         $unpacked = (array) \unpack('V', $buffer);
-        $uncompressedSize = \end($unpacked);
+        $uncompressedSize = (int) \end($unpacked);
         \fclose($handle);
 
         // read the gzipped content, specifying the exact length
@@ -508,47 +530,48 @@ class OpenWeatherController extends AbstractController
 
     private function getJsonContent(string $content): ?array
     {
+        /** @var bool|array $decoded */
         $decoded = \json_decode($content, true);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             return null;
         }
 
-        return $decoded;
+        return (array) $decoded;
     }
 
     private function getRequestCityId(Request $request): int
     {
-        return (int) $request->get(self::KEY_CITY_ID, 0);
+        return $this->getRequestInt($request, self::KEY_CITY_ID, 0);
     }
 
     private function getRequestCount(Request $request, int $default = 5): int
     {
-        return (int) $request->get(self::KEY_COUNT, $default);
+        return $this->getRequestInt($request, self::KEY_COUNT, $default);
     }
 
     private function getRequestLimit(Request $request, int $default = 25): int
     {
-        return (int) $request->get(self::KEY_LIMIT, $default);
+        return $this->getRequestInt($request, self::KEY_LIMIT, $default);
     }
 
     private function getRequestQuery(Request $request): string
     {
-        return \trim((string) $request->get(self::KEY_QUERY, ''));
+        return \trim((string) $this->getRequestString($request, self::KEY_QUERY, ''));
     }
 
     private function getRequestUnits(Request $request): string
     {
-        return (string) $request->get(self::KEY_UNITS, OpenWeatherService::UNIT_METRIC);
+        return (string) $this->getRequestString($request, self::KEY_UNITS, OpenWeatherService::UNIT_METRIC);
     }
 
     private function getSessionCityId(Request $request): int
     {
-        return (int) $this->getSessionInt(self::KEY_CITY_ID, $this->getRequestCityId($request));
+        return $this->getRequestInt($request, self::KEY_CITY_ID, $this->getRequestCityId($request));
     }
 
     private function getSessionCount(Request $request, int $default = 5): int
     {
-        return (int) $this->getSessionInt(self::KEY_COUNT, $this->getRequestCount($request, $default));
+        return $this->getRequestInt($request, self::KEY_COUNT, $this->getRequestCount($request, $default));
     }
 
     private function getSessionLimit(Request $request, int $default = 25): int

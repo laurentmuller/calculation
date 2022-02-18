@@ -45,7 +45,9 @@ final class FormatUtils
      */
     public static function formatAmount($number): string
     {
-        return self::getNumberFormatter(\NumberFormatter::DECIMAL, 2)->format((float) $number);
+        $value = self::checkNegativeZero($number);
+
+        return self::getNumberFormatter(\NumberFormatter::DECIMAL, 2)->format($value);
     }
 
     /**
@@ -92,7 +94,7 @@ final class FormatUtils
     /**
      * Format an integer identifier with 0 left padding  (Ex: 123 -> 000123).
      *
-     * @param int $number the value to format
+     * @param int|string $number
      */
     public static function formatId($number): string
     {
@@ -102,7 +104,7 @@ final class FormatUtils
     /**
      * Format a number for the current locale with 0 decimals (Ex: 2312.2 -> 2'312).
      *
-     * @param float|int $number the value to format
+     * @param float|int|string $number the value to format
      */
     public static function formatInt($number): string
     {
@@ -131,8 +133,9 @@ final class FormatUtils
                 $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, '');
             }
         }
+        $value = self::checkNegativeZero($number);
 
-        return $formatter->format((float) $number);
+        return $formatter->format($value);
     }
 
     /**
@@ -201,6 +204,7 @@ final class FormatUtils
      */
     public static function getDecimal(): string
     {
+        /** @var string|null $decimal */
         static $decimal;
         if ($decimal) {
             return $decimal;
@@ -224,6 +228,7 @@ final class FormatUtils
      */
     public static function getGrouping(): string
     {
+        /** @var string|null $grouping */
         static $grouping;
         if ($grouping) {
             return $grouping;
@@ -276,6 +281,7 @@ final class FormatUtils
      */
     public static function getPercent(): string
     {
+        /** @var string|null $percent */
         static $percent;
         if ($percent) {
             return $percent;
@@ -294,6 +300,14 @@ final class FormatUtils
     public static function getTimeType(): int
     {
         return \IntlDateFormatter::SHORT;
+    }
+
+    /**
+     * @param float|int $number the value to format
+     */
+    private static function checkNegativeZero($number): float
+    {
+        return empty($number) ? 0.0 : (float) $number;
     }
 
     /**

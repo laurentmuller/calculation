@@ -36,6 +36,19 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
 
     /**
      * Constructor.
+     *
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }> $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {
@@ -51,14 +64,14 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
     {
         $result = \array_map(function (array $item): string {
             $founds = [];
-            if ($this->isFloatZero($item['price'])) {
+            if ($this->isFloatZero((float) $item['price'])) {
                 $founds[] = $this->priceLabel;
             }
-            if ($this->isFloatZero($item['quantity'])) {
+            if ($this->isFloatZero((float) $item['quantity'])) {
                 $founds[] = $this->quantityLabel;
             }
 
-            return \sprintf('%s (%s)', $item['description'], \implode(', ', $founds));
+            return \sprintf('%s (%s)', (string) $item['description'], \implode(', ', $founds));
         }, $items);
 
         return \implode("\n", $result);

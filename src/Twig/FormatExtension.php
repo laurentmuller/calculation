@@ -34,7 +34,7 @@ final class FormatExtension extends AbstractExtension
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -45,9 +45,9 @@ final class FormatExtension extends AbstractExtension
      * @param string|null $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
      * @param bool        $translate <code>true</code> to translate texts
      */
-    public function booleanFilter($value, ?string $true = null, ?string $false = null, bool $translate = false): string
+    public function booleanFilter(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
-        if ((bool) $value) {
+        if ($value) {
             if (null !== $true) {
                 return $translate ? $this->trans($true) : $true;
             }
@@ -95,9 +95,12 @@ final class FormatExtension extends AbstractExtension
      * @throws SyntaxError if the date format or the time format is unknown
      *
      * @return string the formatted date
+     *
+     * @psalm-suppress UndefinedFunction
      */
     public function dateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
+        /** @psalm-var array<string, int> $formats */
         static $formats = [
             'none' => \IntlDateFormatter::NONE,
             'short' => \IntlDateFormatter::SHORT,
@@ -106,19 +109,20 @@ final class FormatExtension extends AbstractExtension
             'full' => \IntlDateFormatter::FULL,
         ];
 
+        /** @psalm-var array<string, int> $calendars */
         static $calendars = [
             'gregorian' => \IntlDateFormatter::GREGORIAN,
             'traditional' => \IntlDateFormatter::TRADITIONAL,
         ];
 
         // check formats and calendar
-        if ($dateFormat && !isset($formats[$dateFormat])) {
+        if (null !== $dateFormat && !isset($formats[$dateFormat])) {
             throw new SyntaxError(\sprintf('The date format "%s" does not exist. Known formats are: "%s"', $dateFormat, \implode('", "', \array_keys($formats))));
         }
-        if ($timeFormat && !isset($formats[$timeFormat])) {
+        if (null !== $timeFormat && !isset($formats[$timeFormat])) {
             throw new SyntaxError(\sprintf('The time format "%s" does not exist. Known formats are: "%s"', $timeFormat, \implode('", "', \array_keys($formats))));
         }
-        if ($calendar && !isset($calendars[$calendar])) {
+        if (null !== $calendar && !isset($calendars[$calendar])) {
             throw new SyntaxError(\sprintf('The calendar "%s" does not exist. Known calendars are: "%s"', $calendar, \implode('", "', \array_keys($calendars))));
         }
 
@@ -133,10 +137,11 @@ final class FormatExtension extends AbstractExtension
         }
 
         // convert
+        /** @psalm-var \DateTimeInterface $date */
         $date = twig_date_converter($env, $date, $timezone);
 
         // format
-        return FormatUtils::formatDateTime($date, $datetype, $timetype, $timezone, $calendar, $pattern);
+        return (string) FormatUtils::formatDateTime($date, $datetype, $timetype, $timezone, $calendar, $pattern);
     }
 
     /**
@@ -159,6 +164,9 @@ final class FormatExtension extends AbstractExtension
 
     /**
      * Gets the translator.
+     *
+     * @psalm-suppress InvalidNullableReturnType
+     * @psalm-suppress NullableReturnStatement
      */
     public function getTranslator(): TranslatorInterface
     {

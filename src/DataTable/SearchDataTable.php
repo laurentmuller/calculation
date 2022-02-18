@@ -86,7 +86,7 @@ class SearchDataTable extends AbstractDataTable
         parent::__construct($requestStack, $datatables);
         $this->service = $service;
         $this->checker = $checker;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -106,10 +106,12 @@ class SearchDataTable extends AbstractDataTable
      */
     public function isActionGranted(string $action): bool
     {
-        $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
-        foreach ($entities as $entity) {
-            if ($this->checker->isGranted($action, $entity)) {
-                return true;
+        if (null !== $this->checker) {
+            $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
+            foreach ($entities as $entity) {
+                if ($this->checker->isGranted($action, $entity)) {
+                    return true;
+                }
             }
         }
 
@@ -136,7 +138,6 @@ class SearchDataTable extends AbstractDataTable
         // search?
         $search = $query->search->value;
         if ($search && \strlen($search) > 1) {
-            /** @var \DataTables\Column $column */
             $column = $query->columns[1];
             $entity = $column->search->value;
 
@@ -147,6 +148,7 @@ class SearchDataTable extends AbstractDataTable
             if (!empty($items)) {
                 $limit = $query->length;
                 $offset = $query->start;
+                /** @psalm-param array<string, string> $orders */
                 $orders = $this->getQueryOrders($query);
 
                 $count = \count($items);
@@ -178,6 +180,8 @@ class SearchDataTable extends AbstractDataTable
      * @param DataTableQuery $query the query to get order
      *
      * @return array the columns order where key it the column name and value the order direction ('asc' or 'desc')
+     *
+     * @psalm-return array<string, string>
      */
     private function getQueryOrders(DataTableQuery $query): array
     {
@@ -214,6 +218,14 @@ class SearchDataTable extends AbstractDataTable
      * Update results.
      *
      * @param array $items the items to update
+     * @psalm-param array<array{
+     *      id: int,
+     *      type: string,
+     *      field: string,
+     *      content: string,
+     *      entityName: string,
+     *      fieldName: string
+     *  }> $items
      */
     private function processItems(array &$items): void
     {
@@ -251,6 +263,15 @@ class SearchDataTable extends AbstractDataTable
      *
      * @param array $items  the items to sort
      * @param array $orders the order definitions where key is the field and value is the order ('asc' or 'desc')
+     * @psalm-param array<array{
+     *      id: int,
+     *      type: string,
+     *      field: string,
+     *      content: string,
+     *      entityName: string,
+     *      fieldName: string
+     *  }> $items
+     *  @psalm-param array<string, string> $orders
      */
     private function sortItems(array &$items, array $orders): void
     {

@@ -84,7 +84,10 @@ class HtmlLiChunk extends HtmlParentChunk
             $chunk = $chunk->getParent();
         }
         if (null !== $chunk) {
-            return $chunk->getStyle()->getFont();
+            $style = $chunk->getStyle();
+            if (null !== $style) {
+                return $style->getFont();
+            }
         }
 
         return null;
@@ -115,7 +118,7 @@ class HtmlLiChunk extends HtmlParentChunk
             });
         }
 
-        return $width;
+        return (float) $width;
     }
 
     /**

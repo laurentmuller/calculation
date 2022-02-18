@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\CalculationState;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -21,6 +20,8 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
  * Spreadsheet document for the list of calculation state.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\CalculationState>
  */
 class CalculationStatesDocument extends AbstractArrayDocument
 {
@@ -47,7 +48,6 @@ class CalculationStatesDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var CalculationState $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 $entity->getCode(),

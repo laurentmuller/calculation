@@ -253,6 +253,7 @@ abstract class AbstractDatabase extends \SQLite3
      * @param \SQLite3Stmt $stmt the statement to execute
      * @param int          $mode controls how the next row will be returned to the caller. This value
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
+     * @psalm-suppress RedundantConditionGivenDocblockType
      */
     protected function executeAndfetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {

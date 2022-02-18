@@ -68,6 +68,7 @@ class CalculationServiceTest extends KernelTestCase
 
         /** @var CalculationCategory $category */
         $category = $group->getCategories()->first();
+        $this->assertCount(1, $category->getItems());
 
         /** @var CalculationItem $item */
         $item = $category->getItems()->first();

@@ -14,9 +14,6 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
-use App\Entity\CalculationCategory;
-use App\Entity\CalculationGroup;
-use App\Entity\CalculationItem;
 use App\Util\FormatUtils;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -73,7 +70,7 @@ class CalculationDocument extends AbstractDocument
         $calculation = $this->calculation;
 
         // title
-        $id = FormatUtils::formatId($calculation->getId());
+        $id = FormatUtils::formatId((int) $calculation->getId());
         $title = $this->trans('calculation.edit.title', ['%id%' => $id]);
         $this->start($title);
         $this->sheet = $this->getActiveSheet();
@@ -120,19 +117,16 @@ class CalculationDocument extends AbstractDocument
         ++$row;
 
         // groups, categories and items
-        /** @var CalculationGroup $group */
         foreach ($calculation->getGroups() as $group) {
             $this->mergeCells(1, 5, $row)
                 ->renderBold(1, $row, $group->getCode());
             ++$row;
 
-            /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
                 $this->mergeCells(1, 5, $row)
                     ->renderBold(1, $row, $category->getCode(), 1);
                 ++$row;
 
-                /** @var CalculationItem $item */
                 foreach ($category->getItems() as $item) {
                     $this->renderText(1, $row, $item->getDescription(), 1)
                         ->renderText(2, $row, $item->getUnit())
@@ -165,7 +159,6 @@ class CalculationDocument extends AbstractDocument
             ->fillBackground($row);
         ++$row;
 
-        /** @var CalculationGroup $group */
         foreach ($calculation->getGroups() as $group) {
             $this->renderText(1, $row, $group->getCode())
                 ->renderAmount(2, $row, $group->getAmount())
@@ -227,10 +220,13 @@ class CalculationDocument extends AbstractDocument
      */
     private function fillBackground(int $row): self
     {
-        $coordinate = "A$row:E$row";
-        $this->sheet->getStyle($coordinate)
-            ->getFill()->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()->setARGB(self::COLOR_BACKGROUND);
+        if (null !== $this->sheet) {
+            /** @psalm-var string $coordinate */
+            $coordinate = "A$row:E$row";
+            $this->sheet->getStyle($coordinate)
+                ->getFill()->setFillType(Fill::FILL_SOLID)
+                ->getStartColor()->setARGB(self::COLOR_BACKGROUND);
+        }
 
         return $this;
     }
@@ -255,7 +251,9 @@ class CalculationDocument extends AbstractDocument
      */
     private function mergeCells(int $startColumn, int $endColumn, int $row): self
     {
-        $this->sheet->mergeCellsByColumnAndRow($startColumn, $row, $endColumn, $row);
+        if (null !== $this->sheet) {
+            $this->sheet->mergeCellsByColumnAndRow($startColumn, $row, $endColumn, $row);
+        }
 
         return $this;
     }
@@ -310,20 +308,22 @@ class CalculationDocument extends AbstractDocument
     private function renderCell(int $column, int $row, $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
     {
         $coordinate = $this->stringFromColumnAndRowIndex($column, $row);
-        $style = $this->sheet->getStyle($coordinate);
-        if ($bold) {
-            $style->getFont()->setBold(true);
+        if (null !== $this->sheet) {
+            $style = $this->sheet->getStyle($coordinate);
+            if ($bold) {
+                $style->getFont()->setBold(true);
+            }
+            if ($indent > 0) {
+                $style->getAlignment()->setIndent($indent);
+            }
+            if (!empty($alignment)) {
+                $style->getAlignment()->setHorizontal($alignment);
+            }
+            if (!empty($format)) {
+                $style->getNumberFormat()->setFormatCode($format);
+            }
+            $this->sheet->setCellValue($coordinate, $value);
         }
-        if ($indent > 0) {
-            $style->getAlignment()->setIndent($indent);
-        }
-        if (!empty($alignment)) {
-            $style->getAlignment()->setHorizontal($alignment);
-        }
-        if (!empty($format)) {
-            $style->getNumberFormat()->setFormatCode($format);
-        }
-        $this->sheet->setCellValue($coordinate, $value);
 
         return $this;
     }
@@ -338,35 +338,37 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderEnd(int $lastRow, array $emptyRows): bool
     {
-        // set borders to all cells
-        $this->sheet->getStyle("A1:E$lastRow")
-            ->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)
-            ->getColor()->setARGB(self::COLOR_BORDER);
+        if (null !== $this->sheet) {
+            // set borders to all cells
+            $this->sheet->getStyle("A1:E$lastRow")
+                ->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)
+                ->getColor()->setARGB(self::COLOR_BORDER);
 
-        // remove left and right borders for empty rows
-        foreach ($emptyRows as $emptyRow) {
-            $this->sheet->getStyle("A$emptyRow")->getBorders()
-                ->getLeft()->setBorderStyle(Border::BORDER_NONE);
-            $this->sheet->getStyle("E$emptyRow")->getBorders()
-                ->getRight()->setBorderStyle(Border::BORDER_NONE);
+            // remove left and right borders for empty rows
+            foreach ($emptyRows as $emptyRow) {
+                $this->sheet->getStyle("A$emptyRow")->getBorders()
+                    ->getLeft()->setBorderStyle(Border::BORDER_NONE);
+                $this->sheet->getStyle("E$emptyRow")->getBorders()
+                    ->getRight()->setBorderStyle(Border::BORDER_NONE);
+            }
+
+            // fit columns
+            foreach (\range('A', 'E') as $column) {
+                $this->sheet->getColumnDimension($column)->setAutoSize(true);
+            }
+
+            // page setup
+            $this->sheet->getPageSetup()
+                ->setFitToWidth(1)
+                ->setFitToHeight(0)
+                ->setHorizontalCentered(true)
+                ->setRowsToRepeatAtTopByStartAndEnd(1, 4);
+
+            $this->sheet->setPrintGridlines(false)
+                ->setShowGridlines(false);
+
+            $this->finish('A1');
         }
-
-        // fit columns
-        foreach (\range('A', 'E') as $column) {
-            $this->sheet->getColumnDimension($column)->setAutoSize(true);
-        }
-
-        // page setup
-        $this->sheet->getPageSetup()
-            ->setFitToWidth(1)
-            ->setFitToHeight(0)
-            ->setHorizontalCentered(true)
-            ->setRowsToRepeatAtTopByStartAndEnd(1, 4);
-
-        $this->sheet->setPrintGridlines(false)
-            ->setShowGridlines(false);
-
-        $this->finish('A1');
 
         return true;
     }

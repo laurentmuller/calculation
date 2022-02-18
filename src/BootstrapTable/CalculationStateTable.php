@@ -14,6 +14,7 @@ namespace App\BootstrapTable;
 
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
+use App\Traits\TranslatorTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -25,10 +26,7 @@ use Twig\Environment;
  */
 class CalculationStateTable extends AbstractEntityTable
 {
-    /**
-     * The translator.
-     */
-    private TranslatorInterface $translator;
+    use TranslatorTrait;
 
     /**
      * The template renderer.
@@ -41,7 +39,7 @@ class CalculationStateTable extends AbstractEntityTable
     public function __construct(CalculationStateRepository $repository, TranslatorInterface $translator, Environment $twig)
     {
         parent::__construct($repository);
-        $this->translator = $translator;
+        $this->setTranslator($translator);
         $this->twig = $twig;
     }
 
@@ -66,10 +64,10 @@ class CalculationStateTable extends AbstractEntityTable
     public function formatEditable(bool $value): string
     {
         if ($value) {
-            return $this->translator->trans('common.value_true');
+            return $this->trans('common.value_true');
         }
 
-        return $this->translator->trans('common.value_false');
+        return $this->trans('common.value_false');
     }
 
     /**

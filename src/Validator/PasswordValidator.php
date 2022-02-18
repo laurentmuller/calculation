@@ -36,7 +36,7 @@ class PasswordValidator extends AbstractConstraintValidator
     public function __construct(TranslatorInterface $translator)
     {
         parent::__construct(Password::class);
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -204,7 +204,7 @@ class PasswordValidator extends AbstractConstraintValidator
         if (StrengthInterface::LEVEL_NONE !== $constraint->minstrength) {
             $zxcvbn = new Zxcvbn();
             $strength = $zxcvbn->passwordStrength($value);
-            $score = $strength['score'];
+            $score = (int) $strength['score'];
             if ($score < $constraint->minstrength) {
                 $strength_min = $this->translateLevel($constraint->minstrength);
                 $strength_current = $this->translateLevel($score);

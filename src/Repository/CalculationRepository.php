@@ -22,11 +22,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation entity.
  *
- * @method Calculation|null find($id, $lockMode = null, $lockVersion = null)
- * @method Calculation|null findOneBy(array $criteria, array $orderBy = null)
- * @method Calculation[]    findAll()
- * @method Calculation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractRepository<Calculation>
+ * @psalm-suppress  MixedReturnTypeCoercion
  *
  * @author Laurent Muller
  */
@@ -93,11 +90,10 @@ class CalculationRepository extends AbstractRepository
      */
     public function countDistinctMonths(): int
     {
-        $query = $this->createQueryBuilder('c')
+        return (int) $this->createQueryBuilder('c')
             ->select("COUNT (DISTINCT DATE_FORMAT(c.date, '%Y-%m'))")
-            ->getQuery();
-
-        return (int) $query->getSingleScalarResult();
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -162,12 +158,12 @@ class CalculationRepository extends AbstractRepository
      */
     public function countStateReferences(CalculationState $state): int
     {
-        $builder = $this->createQueryBuilder('e')
+        return (int) $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->where('e.state= :state')
-            ->setParameter('state', $state);
-
-        return (int) $builder->getQuery()->getSingleScalarResult();
+            ->setParameter('state', $state, Types::OBJECT)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -212,8 +208,8 @@ class CalculationRepository extends AbstractRepository
         $builder = $this->createQueryBuilder('c')
             ->where('c.date > :from')
             ->andWhere('c.date <= :to')
-            ->setParameter('from', $from)
-            ->setParameter('to', $to)
+            ->setParameter('from', $from, Types::DATETIME_MUTABLE)
+            ->setParameter('to', $to, Types::DATETIME_MUTABLE)
             ->orderBy('c.date', Criteria::DESC)
             ->addOrderBy('c.id', Criteria::DESC);
 
@@ -226,6 +222,15 @@ class CalculationRepository extends AbstractRepository
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
      *
      * @return array an array with the year, the month, the number and the sum of calculations
+     *
+     * @psalm-return array<array{
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      year: int,
+     *      month: int,
+     *      margin: float,
+     *      date: \DateTimeInterface}>
      */
     public function getByMonth(int $maxResults = 6): array
     {
@@ -247,6 +252,7 @@ class CalculationRepository extends AbstractRepository
         $result = $builder->getQuery()->getArrayResult();
 
         // convert and create dates
+        /** @psalm-var array $item */
         foreach ($result as &$item) {
             $item['year'] = (int) $item['year'];
             $item['month'] = (int) $item['month'];
@@ -281,7 +287,11 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the distinct years and months of calculations.
      *
-     * @return int[] the distinct years and months
+     * @return array<int[]> the distinct years and months
+     * @psalm-return array<array{
+     *      year: int,
+     *      month: int,
+     *      year_month: int}>
      */
     public function getCalendarYearsMonths(): array
     {
@@ -298,6 +308,7 @@ class CalculationRepository extends AbstractRepository
         $result = $builder->getQuery()->getArrayResult();
 
         // convert
+        /** @psalm-var array $entry */
         foreach ($result as &$entry) {
             $entry['year'] = (int) ($entry['year']);
             $entry['month'] = (int) ($entry['month']);
@@ -311,6 +322,10 @@ class CalculationRepository extends AbstractRepository
      * Gets the distinct years and week of calculations.
      *
      * @return int[] the distinct years and weeks
+     * @psalm-return array<array{
+     *      year: int,
+     *      month: int,
+     *      year_week: int}>
      */
     public function getCalendarYearsWeeks(): array
     {
@@ -327,9 +342,10 @@ class CalculationRepository extends AbstractRepository
         $result = $builder->getQuery()->getArrayResult();
 
         // convert
+        /** @psalm-var array $entry */
         foreach ($result as &$entry) {
-            $entry['year'] = (int) ($entry['year']);
-            $entry['week'] = (int) ($entry['week']);
+            $entry['year'] = (int) $entry['year'];
+            $entry['week'] = (int) $entry['week'];
             $entry['year_week'] = $entry['year'] * 1000 + $entry['week'];
         }
 
@@ -342,7 +358,18 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @return array the array result
+     * @psalm-return array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }>
      */
     public function getDuplicateItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
@@ -381,7 +408,32 @@ class CalculationRepository extends AbstractRepository
         $items = $builder->getQuery()->getArrayResult();
 
         // map calculations => items
+        /**
+         * @psalm-var array<int, array{
+         *      id: int,
+         *      date: \DateTimeInterface,
+         *      stateCode: string,
+         *      customer: string,
+         *      description: string,
+         *      items: array{
+         *          description: string,
+         *          quantity: float,
+         *          price: float,
+         *          count: int}
+         *      }> $result
+         */
         $result = [];
+        /** @psalm-var array{
+         *      calculation_id: int,
+         *      calculation_date: \DateTimeInterface,
+         *      calculation_customer: string,
+         *      calculation_description: string,
+         *      calculation_state: string,
+         *      calculation_color: string,
+         *      calculation_editable: bool,
+         *      item_description: string,
+         *      item_count: int
+         * } $item */
         foreach ($items as $item) {
             $this->updateResult($result, $item, [
                 'description' => $item['item_description'],
@@ -398,7 +450,18 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @return array the array result
+     * @psalm-return array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }>
      */
     public function getEmptyItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
@@ -439,7 +502,35 @@ class CalculationRepository extends AbstractRepository
         $items = $builder->getQuery()->getArrayResult();
 
         // map calculations => items
+        /**
+         * @var array<int, array{
+         *      id: int,
+         *      date: \DateTimeInterface,
+         *      stateCode: string,
+         *      customer: string,
+         *      description: string,
+         *      items: array{
+         *          description: string,
+         *          quantity: float,
+         *          price: float,
+         *          count: int}
+         *      }> $result
+         */
         $result = [];
+        /** @psalm-var array{
+         *      calculation_id: int,
+         *      calculation_date: \DateTimeInterface,
+         *      calculation_customer: string,
+         *      calculation_description: string,
+         *      calculation_state: string,
+         *      calculation_color: string,
+         *      calculation_editable: bool,
+         *      item_description: string,
+         *      item_count: int,
+         *      item_description: string,
+         *      item_quantity: float,
+         *      item_price: float,
+         * } $item */
         foreach ($items as $item) {
             $this->updateResult($result, $item, [
                 'description' => $item['item_description'],
@@ -475,6 +566,7 @@ class CalculationRepository extends AbstractRepository
      * @param int $week the week number (1 to 53)
      *
      * @return Calculation[] the matching calculations
+     * @psalm-return list<Calculation>
      */
     public function getForWeek(int $year, int $week): array
     {
@@ -497,6 +589,7 @@ class CalculationRepository extends AbstractRepository
      * @param int $year the year
      *
      * @return Calculation[] the matching calculations
+     * @psalm-return list<Calculation>
      */
     public function getForYear(int $year): array
     {
@@ -511,6 +604,7 @@ class CalculationRepository extends AbstractRepository
      * @param int $maxResults the maximum number of results to retrieve (the "limit")
      *
      * @return Calculation[] the last calculations
+     * @psalm-return list<Calculation>
      */
     public function getLastCalculations(int $maxResults): array
     {
@@ -527,6 +621,19 @@ class CalculationRepository extends AbstractRepository
 
     /**
      * Gets data for the pivot table.
+     *
+     * @psalm-return array<array{
+     *      calculation_id: int,
+     *      calculation_date: \DateTimeInterface,
+     *      calculation_overall_margin: float,
+     *      calculation_overall_total: float,
+     *      calculation_state: string,
+     *      item_group: string,
+     *      item_category: string,
+     *      item_description: string,
+     *      item_price: float,
+     *      item_quantity: float,
+     *      item_total: float}>
      */
     public function getPivot(): array
     {
@@ -603,8 +710,8 @@ class CalculationRepository extends AbstractRepository
 
     private function convertToDate(array $item): \DateTimeInterface
     {
-        $year = $item['year'];
-        $month = $item['month'];
+        $year = (int) $item['year'];
+        $month = (int) $item['month'];
         $day = 1 === $month ? 10 : 1;
         $time = "$year-$month-$day";
 
@@ -687,8 +794,20 @@ class CalculationRepository extends AbstractRepository
      * Update the given result.
      *
      * @param array $result the result to update
-     * @param array $item   the item to get values for creating an entry result
+     * @param array $item   the item to get values for creating a new entry result
      * @param array $values the values to add as an item entry
+     *
+     * @psalm-param array{
+     *      calculation_id: int,
+     *      calculation_date: \DateTimeInterface,
+     *      calculation_customer: string,
+     *      calculation_description: string,
+     *      calculation_state: string,
+     *      calculation_color: string,
+     *      calculation_editable: bool
+     * } $item
+     *
+     * @psalm-suppress MixedArrayAssignment
      */
     private function updateResult(array &$result, array $item, array $values): void
     {

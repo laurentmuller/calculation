@@ -39,7 +39,7 @@ class UserTable extends AbstractEntityTable
     public function __construct(UserRepository $repository, TranslatorInterface $translator, Environment $twig, DateTimeFormatter $formatter)
     {
         parent::__construct($repository);
-        $this->translator = $translator;
+        $this->setTranslator($translator);
         $this->twig = $twig;
         $this->formatter = $formatter;
     }
@@ -51,7 +51,7 @@ class UserTable extends AbstractEntityTable
     {
         $key = $enabled ? 'common.value_enabled' : 'common.value_disabled';
 
-        return $this->translator->trans($key);
+        return $this->trans($key);
     }
 
     /**
@@ -75,7 +75,7 @@ class UserTable extends AbstractEntityTable
             return $this->formatter->formatDiff($date, new \DateTime());
         }
 
-        return $this->translator->trans('common.value_none');
+        return $this->trans('common.value_none');
     }
 
     /**

@@ -45,7 +45,7 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator;
+        $this->setTranslator($translator);
 
         try {
             $this->imagine = new Imagine();
@@ -73,8 +73,10 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
         }
 
         try {
-            [$imageWidth, $imageHeight] = (array) \getimagesize($source);
-            $ratio = $imageWidth / $imageHeight;
+            $imageSize = (array) \getimagesize($source);
+            $imageWidth = (float) $imageSize[0];
+            $imageHeight = (float) $imageSize[1];
+            $ratio = ($imageWidth / $imageHeight);
 
             $width = $size;
             $height = $size;

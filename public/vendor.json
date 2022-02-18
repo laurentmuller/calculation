@@ -33,7 +33,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.0.0-beta3",
+            "version": "6.0.0",
             "files": [
                 "css/all.css",
                 "webfonts/fa-brands-400.ttf",
@@ -57,7 +57,7 @@
         },
         {
             "name": "highcharts",
-            "version": "9.3.2",
+            "version": "9.3.3",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/{file}",
             "files": [
@@ -144,7 +144,7 @@
         },
         {
             "name": "clipboard.js",
-            "version": "2.0.9",
+            "version": "2.0.10",
             "target": "clipboard",
             "files": [
                 "clipboard.js"

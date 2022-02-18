@@ -20,7 +20,9 @@ use Faker\Provider\Base;
  * Entity provider.
  *
  * @author Laurent Muller
+ *
  * @template T of \App\Entity\AbstractEntity
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityProvider extends Base
 {
@@ -41,7 +43,7 @@ class EntityProvider extends Base
     /**
      * The repository.
      *
-     * @var AbstractRepository<T>
+     * @psalm-var AbstractRepository<T>
      */
     private AbstractRepository $repository;
 
@@ -49,6 +51,7 @@ class EntityProvider extends Base
      * Constructor.
      *
      * @psalm-param class-string<T> $className the entity class name.
+     * @psalm-suppress PropertyTypeCoercion
      */
     public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
     {
@@ -93,7 +96,10 @@ class EntityProvider extends Base
      */
     protected function entity()
     {
-        return $this->randomElement($this->getEntities());
+        /** @psalm-var T|null $entity */
+        $entity = $this->randomElement($this->getEntities());
+
+        return $entity;
     }
 
     /**

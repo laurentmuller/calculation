@@ -69,7 +69,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The groups.
      *
      * @ORM\OneToMany(targetEntity=CalculationGroup::class, mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC", "code" = "ASC"})
+     * @ORM\OrderBy({"position" = "ASC"})
      * @Assert\Valid
      *
      * @var CalculationGroup[]|Collection
@@ -156,10 +156,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function addProduct(Product $product, float $quantity = 1.0): self
     {
+        /** @var Category $category */
+        $category = $product->getCategory();
         $item = CalculationItem::create($product)->setQuantity($quantity);
-        $category = $this->findCategory($product->getCategory());
-        $category->addItem($item);
-        $category->update();
+        $newCategory = $this->findCategory($category);
+        $newCategory->addItem($item);
+        $newCategory->update();
 
         return $this;
     }
@@ -199,21 +201,19 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Finds a calculation category for the given category.
-     * <p>
-     * <b>Note:</b> if the calculation category is not found, a new one is created.
-     * </p>.
+     * Finds or create a calculation category for the given category.
      *
      * @param Category $category the category to find
      */
     public function findCategory(Category $category): CalculationCategory
     {
         // find group
-        $group = $this->findGroup($category->getGroup());
+        /** @var Group $categoryGroup */
+        $categoryGroup = $category->getGroup();
+        $group = $this->findGroup($categoryGroup);
 
         // find category
         $code = $category->getCode();
-        /** @var CalculationCategory $current */
         foreach ($group->getCategories() as $current) {
             if ($code === $current->getCode()) {
                 return $current;
@@ -228,10 +228,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Finds a calculation group for the given group.
-     * <p>
-     * <b>Note:</b> if the calculation group is not found, a new one is created.
-     * </p>.
+     * Finds or create a calculation group for the given group.
      *
      * @param Group $group the group to find
      */
@@ -239,7 +236,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         // find group
         $code = $group->getCode();
-        /** @var CalculationGroup $current */
         foreach ($this->groups as $current) {
             if ($code === $current->getCode()) {
                 return $current;
@@ -299,7 +295,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getDisplay(): string
     {
-        return FormatUtils::formatId($this->id);
+        return FormatUtils::formatId((int) $this->id);
     }
 
     /**
@@ -319,6 +315,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         // group by key
+        /** @var array<string, CalculationItem[]> $array */
         $array = [];
         foreach ($this->getItems() as $item) {
             $key = $this->getItemKey($item);
@@ -326,13 +323,16 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         // merge duplicated items
-        return \array_reduce($array, function (array $current, array $items): array {
+        /** @var CalculationItem[] $result */
+        $result = \array_reduce($array, function (array $current, array $items): array {
             if (\count($items) > 1) {
                 return \array_merge($current, \array_values($items));
             }
 
             return $current;
         }, []);
+
+        return $result;
     }
 
     /**
@@ -353,7 +353,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
         $result = [];
 
-        /** @var CalculationItem $item */
         foreach ($this->getItems() as $item) {
             if ($item->isEmpty()) {
                 $result[] = $item;
@@ -452,13 +451,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Gets all calculation items.
      *
-     * @return \Traversable|CalculationItem[]
+     * @return \Generator<CalculationItem>
      */
     public function getItems(): \Traversable
     {
-        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
-            /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
                 foreach ($category->getItems() as $item) {
                     yield $item;
@@ -481,9 +478,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getLinesCount(): int
     {
         $count = 0;
-        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
-            /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
                 $count += $category->count();
             }
@@ -532,7 +527,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $result = [];
         if (!$this->isEmpty()) {
             foreach ($this->groups as $group) {
-                $result[$group->getCode()] = $group;
+                $result[(string) $group->getCode()] = $group;
             }
             \ksort($result, \SORT_NATURAL);
         }
@@ -611,7 +606,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         if (!$this->isEmpty()) {
             $keys = [];
 
-            /** @var CalculationItem $item */
             foreach ($this->getItems() as $item) {
                 $key = $this->getItemKey($item);
                 if (\in_array($key, $keys, true)) {
@@ -637,7 +631,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function hasEmptyItems(): bool
     {
         if (!$this->isEmpty()) {
-            /** @var CalculationItem $item */
             foreach ($this->getItems() as $item) {
                 if ($item->isEmpty()) {
                     return true;
@@ -699,7 +692,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function isSortable(): bool
     {
         if (!$this->isEmpty()) {
-            /** @var CalculationGroup $group */
             foreach ($this->groups as $group) {
                 if ($group->isSortable()) {
                     return true;
@@ -723,7 +715,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function removeDuplicateItems(): int
     {
-        /** @var CalculationItem[] $items */
         $items = $this->getDuplicateItems();
         if (empty($items)) {
             return 0;
@@ -754,7 +745,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function removeEmptyItems(): int
     {
-        /** @var CalculationItem[] $items */
         $items = $this->getEmptyItems();
         if (empty($items)) {
             return 0;
@@ -892,7 +882,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
         $changed = false;
 
-        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
             if ($group->sort()) {
                 $changed = true;
@@ -911,12 +900,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         $total = 0;
 
-        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
             if ($group->updateCode()) {
                 ++$total;
             }
-            /** @var CalculationCategory $category */
             foreach ($group->getCategories()  as $category) {
                 if ($category->updateCode()) {
                     ++$total;
@@ -934,7 +921,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         $position = 0;
 
-        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
             if ($group->getPosition() !== $position) {
                 $group->setPosition($position);
@@ -954,7 +940,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return [
             $this->customer,
             $this->description,
-            FormatUtils::formatId($this->id),
+            FormatUtils::formatId((int) $this->id),
             FormatUtils::formatDate($this->date),
             $this->getStateCode(),
         ];
@@ -969,7 +955,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     private function getItemKey(CalculationItem $item): string
     {
-        return \strtolower($item->getDescription());
+        return \strtolower((string) $item->getDescription());
     }
 
     /**
@@ -982,19 +968,25 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     private function removeItem(CalculationItem $item): bool
     {
         $category = $item->getCategory();
-        if (null !== $category && $category->contains($item)) {
-            $category->removeItem($item);
-            if ($category->isEmpty()) {
-                $group = $category->getGroup();
-                $group->removeCategory($category);
-                if ($group->isEmpty()) {
-                    $this->removeGroup($group);
-                }
-            }
+        if (!$category instanceof CalculationCategory || !$category->contains($item)) {
+            return false;
+        }
 
+        $category->removeItem($item);
+        if (!$category->isEmpty()) {
             return true;
         }
 
-        return false;
+        $group = $category->getGroup();
+        if (!$group instanceof CalculationGroup) {
+            return true;
+        }
+
+        $group->removeCategory($category);
+        if ($group->isEmpty()) {
+            $this->removeGroup($group);
+        }
+
+        return true;
     }
 }

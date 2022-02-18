@@ -75,7 +75,7 @@ class CustomerInformation
     {
         $fax = $this->getFax() ?? '';
         if (\method_exists($translator, 'trans')) {
-            return $translator->trans('report.fax', ['{0}' => $fax]);
+            return (string) $translator->trans('report.fax', ['{0}' => $fax]);
         }
 
         return empty($fax) ? '' : "Fax: $fax";
@@ -88,7 +88,7 @@ class CustomerInformation
     {
         $phone = $this->getPhone() ?? '';
         if (\method_exists($translator, 'trans')) {
-            return $translator->trans('report.phone', ['{0}' => $phone]);
+            return (string) $translator->trans('report.phone', ['{0}' => $phone]);
         }
 
         return empty($phone) ? '' : "Phone: $phone";

@@ -90,7 +90,7 @@ class UpdateController extends AbstractController
         try {
             $listener->disableListeners();
             foreach ($calculations as $calculation) {
-                $style = $generator->randomElement($styles);
+                $style = (int) $generator->randomElement($styles);
                 switch ($style) {
                     case 0:
                         $calculation->setCustomer($generator->company());
@@ -104,9 +104,12 @@ class UpdateController extends AbstractController
                         $calculation->setCustomer($generator->name(Person::GENDER_FEMALE));
                         break;
                 }
+
+                /** @psalm-var CalculationState $state */
+                $state = $generator->randomElement($states);
                 $description = $generator->catchPhrase();
-                $calculation->setDescription($description)
-                    ->setState($generator->randomElement($states));
+                $calculation->setState($state)
+                    ->setDescription($description);
             }
 
             $manager->flush();
@@ -138,8 +141,8 @@ class UpdateController extends AbstractController
         try {
             $listener->disableListeners();
             foreach ($customers as $customer) {
-                $style = $generator->randomElement($styles);
-                $gender = $generator->randomElement($genders);
+                $style = (int) $generator->randomElement($styles);
+                $gender = (string) $generator->randomElement($genders);
 
                 switch ($style) {
                     case 0: // company
@@ -207,7 +210,7 @@ class UpdateController extends AbstractController
      * Update an element property.
      *
      * @param PropertyAccessor $accessor the property accessor to get or set value
-     * @param mixed            $element  the element to update
+     * @param object|array     $element  the element to update
      * @param string           $property the property name
      * @param mixed            $value    the new value to set
      */

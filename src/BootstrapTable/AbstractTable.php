@@ -109,13 +109,13 @@ abstract class AbstractTable implements SortModeInterface
         // global parameters
         $query->id = $this->getParamId($request);
         $query->callback = $request->isXmlHttpRequest();
-        $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
+        $query->search = (string) $this->getRequestValue($request, TableInterface::PARAM_SEARCH, '', false);
         $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE, false);
 
         // limit, offset and page
         $defaultSize = self::getDefaultPageSize($query->view);
         $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, $defaultSize, false, $query->view);
-        $query->offset = (int) $request->get(TableInterface::PARAM_OFFSET, 0);
+        $query->offset = (int) $this->getRequestValue($request, TableInterface::PARAM_OFFSET, 0, false);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
         // sort and order
@@ -255,7 +255,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the default order to apply.
      *
-     * @return array an array where each key is the field name and the value is the order direction ('asc' or 'desc')
+     * @return array<string, string> an array where each key is the field name and the value is the order direction ('asc' or 'desc')
      */
     protected function getDefaultOrder(): array
     {
@@ -265,12 +265,14 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the request parameter value.
      *
-     * @param Request $request       the request to get value from
-     * @param string  $name          the parameter name
-     * @param mixed   $default       the default value if not found
-     * @param bool    $useSessionKey true to use session key; false to use the parameter name
+     * @param Request                    $request       the request to get value from
+     * @param string                     $name          the parameter name
+     * @param string|int|float|bool|null $default       the default value if not found
+     * @param bool                       $useSessionKey true to use session key; false to use the parameter name
      *
      * @return mixed the parameter value
+     *
+     * @psalm-suppress InvalidScalarArgument
      */
     protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true, string $prefix = '')
     {
@@ -279,15 +281,17 @@ abstract class AbstractTable implements SortModeInterface
 
         // find in session
         if (null !== $session) {
+            /** @var string|int|float|bool|null $default */
             $default = $session->get($key, $default);
         }
 
         // find in cookies
         $cookieName = '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
-        $default = $request->cookies->get($cookieName, $default);
+        // @phpstan-ignore-next-line
+        $cokiesValue = $request->cookies->get($cookieName, $default);
 
         // find in request
-        $value = $request->get($name, $default);
+        $value = Utils::getRequestInputBag($request)->get($name, $cokiesValue);
 
         // save
         if (null !== $session) {
@@ -344,9 +348,9 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Maps the given entities.
      *
-     * @param array $entities the entities to map
+     * @param array<array|AbstractEntity> $entities the entities to map
      *
-     * @return array the mapped entities
+     * @return array<array<string, string>> the mapped entities
      */
     protected function mapEntities(array $entities): array
     {
@@ -370,17 +374,20 @@ abstract class AbstractTable implements SortModeInterface
      * @param Column[]             $columns       the column definitions
      * @param PropertyAccessor     $accessor      the property accessor to get the object values
      *
-     * @return string[] the mapped object
+     * @return array<string, string> the mapped object
      */
     protected function mapValues($objectOrArray, array $columns, PropertyAccessor $accessor): array
     {
-        $callback = static function (array $result, Column $column) use ($objectOrArray, $accessor) {
+        $callback = static function (array $result, Column $column) use ($objectOrArray, $accessor): array {
             $result[$column->getAlias()] = $column->mapValue($objectOrArray, $accessor);
 
             return $result;
         };
 
-        return \array_reduce($columns, $callback, []);
+        /** @var array<string, string> $mappings */
+        $mappings = \array_reduce($columns, $callback, []);
+
+        return $mappings;
     }
 
     /**
@@ -393,7 +400,7 @@ abstract class AbstractTable implements SortModeInterface
     {
         // page list and limit
         $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
-        $limit = (int) \min($query->limit, \max($results->pageList));
+        $limit = [] !== $results->pageList ? \min($query->limit, \max($results->pageList)) : $query->limit;
 
         // parameters
         $results->params = \array_merge([
@@ -446,6 +453,6 @@ abstract class AbstractTable implements SortModeInterface
      */
     private function getParamId(Request $request): int
     {
-        return (int) $request->get(TableInterface::PARAM_ID, 0);
+        return (int) $this->getRequestValue($request, TableInterface::PARAM_ID, 0, false);
     }
 }

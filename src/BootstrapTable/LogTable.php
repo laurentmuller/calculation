@@ -64,8 +64,10 @@ class LogTable extends AbstractTable implements \Countable
             return 0;
         }
 
-        /* @var array $entries */
-        return \count($entries[LogService::KEY_LOGS]);
+        /** @var array $logs */
+        $logs = $entries[LogService::KEY_LOGS];
+
+        return \count($logs);
     }
 
     /**
@@ -101,9 +103,12 @@ class LogTable extends AbstractTable implements \Countable
      */
     public function getDataQuery(Request $request): DataQuery
     {
+        $level = (string) $this->getRequestValue($request, self::PARAM_LEVEL, '', false);
+        $channel = (string) $this->getRequestValue($request, self::PARAM_CHANNEL, '', false);
+
         $query = parent::getDataQuery($request);
-        $query->addCustomData(self::PARAM_CHANNEL, (string) $request->get(self::PARAM_CHANNEL, ''));
-        $query->addCustomData(self::PARAM_LEVEL, (string) $request->get(self::PARAM_LEVEL, ''));
+        $query->addCustomData(self::PARAM_CHANNEL, $channel);
+        $query->addCustomData(self::PARAM_LEVEL, $level);
 
         return $query;
     }
@@ -162,7 +167,7 @@ class LogTable extends AbstractTable implements \Countable
             return $results;
         }
 
-        // get entities
+        /** @var Log[] $entities */
         $entities = $entries[LogService::KEY_LOGS];
         if (empty($entities)) {
             $results->status = Response::HTTP_PRECONDITION_FAILED;
@@ -174,14 +179,19 @@ class LogTable extends AbstractTable implements \Countable
         $results->totalNotFiltered = \count($entities);
 
         // filter
-        if ($level = $query->customData[self::PARAM_LEVEL]) {
+        /** @var string|null $level */
+        $level = $query->customData[self::PARAM_LEVEL];
+        if ($isLevel = Utils::isString($level)) {
             $entities = LogService::filterLevel($entities, $level);
         }
-        if ($channel = $query->customData[self::PARAM_CHANNEL]) {
+        /** @var string|null $channel */
+        $channel = $query->customData[self::PARAM_CHANNEL];
+        if ($isChannel = Utils::isString($channel)) {
             $entities = LogService::filterChannel($entities, $channel);
         }
-        if ('' !== $search = $query->search) {
-            $entities = LogService::filter($entities, $search, Utils::isString($level), Utils::isString($channel));
+        $search = $query->search;
+        if (Utils::isString($search)) {
+            $entities = LogService::filter($entities, $search, $isLevel, $isChannel);
         }
         $results->filtered = \count($entities);
 
@@ -206,8 +216,8 @@ class LogTable extends AbstractTable implements \Countable
         if (!$query->callback) {
             // action parameters
             $results->params = [
-                self::PARAM_CHANNEL => $channel,
                 self::PARAM_LEVEL => $level,
+                self::PARAM_CHANNEL => $channel,
             ];
 
             // custom data
@@ -231,6 +241,8 @@ class LogTable extends AbstractTable implements \Countable
      * @param Log[]  $entities  the logs to sort
      * @param string $field     the sorted field
      * @param string $direction the sorted direction ('asc' or 'desc')
+     *
+     * @psalm-suppress ReferenceConstraintViolation
      */
     private function sort(array &$entities, string $field, string $direction): void
     {
@@ -239,15 +251,12 @@ class LogTable extends AbstractTable implements \Countable
             return;
         }
 
-        $ascending = Column::SORT_ASC === $direction;
-        if (self::COLUMN_DATE === $field) {
-            Utils::sortField($entities, $field, $ascending);
-        } else {
-            $fields = [
-                $field => $ascending,
-                self::COLUMN_DATE => false,
-            ];
-            Utils::sortFields($entities, $fields);
+        $fields = [
+            $field => Column::SORT_ASC === $direction,
+        ];
+        if (self::COLUMN_DATE !== $field) {
+            $fields[self::COLUMN_DATE] = false;
         }
+        Utils::sortFields($entities, $fields);
     }
 }

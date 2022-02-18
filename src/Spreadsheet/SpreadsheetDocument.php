@@ -86,7 +86,7 @@ class SpreadsheetDocument extends Spreadsheet
     public function __construct(TranslatorInterface $translator)
     {
         parent::__construct();
-        $this->translator = $translator;
+        $this->setTranslator($translator);
         $this->setPageSize(PageSetup::PAPERSIZE_A4);
     }
 
@@ -100,7 +100,9 @@ class SpreadsheetDocument extends Spreadsheet
     public static function checkSheetTitle(string $title): string
     {
         // replace invalid characters
-        $title = \str_replace(Worksheet::getInvalidCharacters(), '', $title);
+        /** @var string[] $invalidChars */
+        $invalidChars = Worksheet::getInvalidCharacters();
+        $title = \str_replace($invalidChars, '', $title);
 
         // check length
         if (StringHelper::countCharacters($title) > Worksheet::SHEET_TITLE_MAXIMUM_LENGTH) {
@@ -355,7 +357,7 @@ class SpreadsheetDocument extends Spreadsheet
         }
 
         if (!$includeHeader) {
-            $style = $sheet->getStyle("{$name}1")->getFont()->getColor()
+            $sheet->getStyle("{$name}1")->getFont()->getColor()
                 ->setARGB(Color::COLOR_BLACK);
         }
 
@@ -530,6 +532,7 @@ class SpreadsheetDocument extends Spreadsheet
      *                           alignments
      * @param int   $columnIndex the starting column index (A = 1)
      * @param int   $rowIndex    the row index (1 = First row)
+     * @psalm-param array<string, string|string[]> $headers
      */
     public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): self
     {
@@ -670,6 +673,7 @@ class SpreadsheetDocument extends Spreadsheet
     public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): self
     {
         $sheet = $this->getActiveSheet();
+        /** @psalm-var mixed $value*/
         foreach ($values as $value) {
             $this->setCellValue($sheet, $columnIndex++, $rowIndex, $value);
         }

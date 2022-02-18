@@ -40,7 +40,7 @@ class CountAggregator extends AbstractAggregator
      */
     public function getResult()
     {
-        return (int) $this->result;
+        return $this->result;
     }
 
     /**

@@ -18,10 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for task item margin entity.
  *
- * @method TaskItemMargin|null find($id, $lockMode = null, $lockVersion = null)
- * @method TaskItemMargin|null findOneBy(array $criteria, array $orderBy = null)
- * @method TaskItemMargin[]    findAll()
- * @method TaskItemMargin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractRepository<TaskItemMargin>
  *
  * @author Laurent Muller

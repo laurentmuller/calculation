@@ -20,6 +20,7 @@ use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -27,6 +28,9 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * Spreadsheet document for the list of users.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<User>
+ * @psalm-suppress InternalMethod
  */
 class UsersDocument extends AbstractArrayDocument
 {
@@ -39,6 +43,8 @@ class UsersDocument extends AbstractArrayDocument
 
     /**
      * Constructor.
+     *
+     * @param User[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter)
     {
@@ -74,7 +80,6 @@ class UsersDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var User $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 null,
@@ -89,7 +94,7 @@ class UsersDocument extends AbstractArrayDocument
             $path = $this->getImagePath($entity);
             if (!empty($path) && FileUtils::isFile($path)) {
                 [$width, $height] = (array) \getimagesize($path);
-                $this->setCellImage($path, "A$row", $width, $height);
+                $this->setCellImage($path, "A$row", (int) $width, (int) $height);
             }
 
             ++$row;
@@ -149,6 +154,7 @@ class UsersDocument extends AbstractArrayDocument
     private function getFieldName(User $user): ?string
     {
         if (!$this->fieldName) {
+            /** @var PropertyMapping[] $mappings */
             $mappings = $this->factory->fromObject($user);
             if (!empty($mappings)) {
                 $this->fieldName = $mappings[0]->getFilePropertyName();

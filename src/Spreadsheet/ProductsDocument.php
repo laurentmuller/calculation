@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Product;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of products.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<\App\Entity\Product>
  */
 class ProductsDocument extends AbstractArrayDocument
 {
@@ -45,7 +46,6 @@ class ProductsDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
-        /** @var Product $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getGroupCode(),

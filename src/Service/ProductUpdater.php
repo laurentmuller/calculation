@@ -19,7 +19,6 @@ use App\Form\FormHelper;
 use App\Model\ProductUpdateQuery;
 use App\Model\ProductUpdateResult;
 use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
 use App\Traits\LoggerTrait;
 use App\Traits\MathTrait;
 use App\Traits\SessionTrait;
@@ -70,7 +69,7 @@ class ProductUpdater implements LoggerAwareInterface
 
         // traits
         $this->requestStack = $requestStack;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -152,7 +151,7 @@ class ProductUpdater implements LoggerAwareInterface
      */
     public function createUpdateQuery(): ProductUpdateQuery
     {
-        $id = $this->getSessionInt(self::KEY_CATEGORY, 0);
+        $id = (int) $this->getSessionInt(self::KEY_CATEGORY, 0);
         $category = $this->getCategory($id);
 
         $query = new ProductUpdateQuery();
@@ -161,7 +160,7 @@ class ProductUpdater implements LoggerAwareInterface
             ->setProducts($this->getProducts($category))
             ->setPercent($this->getSessionFloat(self::KEY_PERCENT, 0))
             ->setFixed($this->getSessionFloat(self::KEY_FIXED, 0))
-            ->setType($this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT))
+            ->setType((string) $this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT))
             ->setSimulate($this->isSessionBool(self::KEY_SIMULATE, true))
             ->setRound($this->isSessionBool(self::KEY_ROUND, false));
 
@@ -198,7 +197,6 @@ class ProductUpdater implements LoggerAwareInterface
             return $result;
         }
 
-        /** @var Product $product */
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
             $newPrice = $this->computePrice($oldPrice, $query);
@@ -239,14 +237,16 @@ class ProductUpdater implements LoggerAwareInterface
      */
     private function getAllProducts(): array
     {
-        /** @var ProductRepository $repository */
         $repository = $this->manager->getRepository(Product::class);
 
-        return $repository->createDefaultQueryBuilder('e')
+        /** @var Product[] $products */
+        $products = $repository->createDefaultQueryBuilder('e')
             ->orderBy('e.description')
             ->where('e.price != 0')
             ->getQuery()
             ->getResult();
+
+        return $products;
     }
 
     /**
@@ -267,11 +267,13 @@ class ProductUpdater implements LoggerAwareInterface
      * Gets products for the given category.
      *
      * @return Product[] the products
+     *
+     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getProducts(?Category $category): array
     {
         if (null !== $category) {
-            /** @var ProductRepository $repository */
+            /** @var \App\Repository\ProductRepository $repository */
             $repository = $this->manager->getRepository(Product::class);
 
             return $repository->findByCategory($category);

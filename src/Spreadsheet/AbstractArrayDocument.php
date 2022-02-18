@@ -18,9 +18,16 @@ use App\Controller\AbstractController;
  * Asbtract Spreadsheet document to render an array of objects.
  *
  * @author Laurent Muller
+ *
+ * @template T
  */
 abstract class AbstractArrayDocument extends AbstractDocument
 {
+    /**
+     * The entities to output.
+     *
+     * @pslam-var T[]
+     */
     protected array $entities;
 
     /**
@@ -28,6 +35,7 @@ abstract class AbstractArrayDocument extends AbstractDocument
      *
      * @param AbstractController $controller the parent controller
      * @param array              $entities   the entities to render
+     * @psalm-param T[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {
@@ -53,6 +61,8 @@ abstract class AbstractArrayDocument extends AbstractDocument
      * @param array $entities the entities to render
      *
      * @return bool true if rendered successfully; false otherwise
+     *
+     * @psalm-param T[] $entities
      */
     abstract protected function doRender(array $entities): bool;
 }

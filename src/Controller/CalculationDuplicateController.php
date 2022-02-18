@@ -60,9 +60,10 @@ class CalculationDuplicateController extends AbstractController
 
         // number of items
         $items = $this->getItems($repository);
-        $items_count = \array_reduce($items, function (int $carry, array $calculation) {
+        $items_count = \array_reduce($items, function (int $carry, array $calculation): int {
+            /** @psalm-var array $item */
             foreach ($calculation['items'] as $item) {
-                $carry += $item['count'];
+                $carry += (int) $item['count'];
             }
 
             return $carry;
@@ -73,10 +74,10 @@ class CalculationDuplicateController extends AbstractController
                 'items' => $items,
                 'items_count' => $items_count,
                 'query' => false,
-                'id' => $request->get('id', 0),
                 'sortField' => 'id',
                 'sortMode' => Criteria::DESC,
                 'sortFields' => [],
+                'id' => $this->getRequestInt($request, 'id'),
             ];
 
         return $this->renderForm('calculation/calculation_card_duplicate.html.twig', $parameters);
@@ -162,6 +163,19 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Gets items to display.
+     *
+     * @psalm-return array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }>
      */
     private function getItems(CalculationRepository $repository): array
     {

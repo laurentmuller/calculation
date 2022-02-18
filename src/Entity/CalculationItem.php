@@ -118,7 +118,7 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      */
     public function getDisplay(): string
     {
-        return $this->getDescription();
+        return (string) $this->getDescription();
     }
 
     /**

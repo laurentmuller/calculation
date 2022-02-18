@@ -20,6 +20,8 @@ use App\Util\Utils;
  * The HTML style.
  *
  * @author Laurent Muller
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class HtmlStyle extends PdfStyle
 {
@@ -52,7 +54,7 @@ class HtmlStyle extends PdfStyle
     {
         $shortName = Utils::getShortName($this);
 
-        return \sprintf('%s(%s, Margins(L:%g, R:%g, T:%g, B:%g))', $shortName, $this->font, $this->leftMargin, $this->rightMargin, $this->topMargin, $this->bottomMargin);
+        return \sprintf('%s(%s, Margins(L:%g, R:%g, T:%g, B:%g))', $shortName, (string) $this->font, $this->leftMargin, $this->rightMargin, $this->topMargin, $this->bottomMargin);
     }
 
     /**

@@ -75,19 +75,21 @@ class ProfileChangePasswordType extends AbstractEntityType
         $root = $context->getRoot();
 
         // not checked so continue.
+        /** @var bool|mixed $checkPassword */
         $checkPassword = $root->get('checkPassword')->getData();
         if (\is_bool($checkPassword) && !$checkPassword) {
             return;
         }
 
         // check password
-        $password = $context->getRoot()->get('plainPassword');
+        /** @var Form $password */
+        $password = $root->get('plainPassword');
         $violations = $context->getValidator()->validate($password->getData(), [
             new NotCompromisedPassword(),
         ]);
 
         // if compromised assign the error to the password field
-        if ($violations instanceof ConstraintViolationList && $violations->count() > 0 && $password instanceof Form) {
+        if ($violations instanceof ConstraintViolationList && $violations->count() > 0) {
             $password->addError(new FormError((string) $violations));
         }
     }

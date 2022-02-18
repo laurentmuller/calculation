@@ -29,6 +29,7 @@
 {%- set form_attr = form_attr|merge({
                                'data-title': title|trans(title_parameters),
                                'data-update': url('ajax_update'),
+                               'data-edit': (new ? app.defaultEdit : false)|json_encode,
                                'data-search-customer': url('ajax_search_customer'),
                                'data-search-product': url('ajax_search_product'),
                                'data-search-unit': url('ajax_search_unit'),
@@ -36,7 +37,8 @@
                                'data-error-customer': 'calculation.edit.error.search_customer'|trans,
                                'data-error-product': 'calculation.edit.error.search_product'|trans,
                                'data-error-unit': 'calculation.edit.error.search_unit'|trans,
-                               'data-error-margin': 'calculation.edit.error.user_margin'|trans
+                               'data-error-margin': 'calculation.edit.error.user_margin'|trans,
+
                                }) -%}
 {%- endif -%}
 

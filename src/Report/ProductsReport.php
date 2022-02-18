@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Entity\Product;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
@@ -23,6 +22,8 @@ use App\Util\FormatUtils;
  * Report for the list of products.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<\App\Entity\Product>
  */
 class ProductsReport extends AbstractArrayReport
 {
@@ -44,10 +45,9 @@ class ProductsReport extends AbstractArrayReport
         $emptyStyle = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
 
-        /** @var Product $entity */
         foreach ($entities as $entity) {
             // group
-            $key = \sprintf('%s / %s', $entity->getGroupCode(), $entity->getCategoryCode());
+            $key = \sprintf('%s / %s', (string) $entity->getGroupCode(), (string) $entity->getCategoryCode());
             $table->setGroupKey($key);
 
             $style = empty($entity->getPrice()) ? $emptyStyle : null;

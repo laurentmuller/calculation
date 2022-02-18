@@ -28,6 +28,8 @@ use App\Traits\RoleTranslatorTrait;
  * Report for the list of user rights.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<User>
  */
 class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
@@ -79,8 +81,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     public function onOutputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
     {
+        /** @var Role|User|null $key */
         $key = $group->getKey();
-        $description = $this->translator->trans('user.fields.role') . ' ';
+        $description = $this->trans('user.fields.role') . ' ';
 
         if ($key instanceof Role) {
             $description .= $this->translateRole($key);
@@ -94,7 +97,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             if ($key->isEnabled()) {
                 $description .= $this->translateRole($key);
             } else {
-                $description .= $this->translator->trans('common.value_disabled');
+                $description .= $this->trans('common.value_disabled');
             }
 
             // save position
@@ -121,6 +124,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     /**
      * {@inheritdoc}
+     *
+     * @param User[] $entities
      */
     protected function doRender(array $entities): bool
     {
@@ -231,7 +236,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         // rights
         foreach (self::RIGHTS as $key => $value) {
             if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                $this->outputRights($builder, $key, $role->{$value});
+                $this->outputRights($builder, $key, (array) $role->{$value});
             }
         }
     }
@@ -307,7 +312,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             // output rights
             foreach (self::RIGHTS as $key => $value) {
                 if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                    $this->outputRights($builder, $key, $user->{$value});
+                    $this->outputRights($builder, $key, (array) $user->{$value});
                 }
             }
         }

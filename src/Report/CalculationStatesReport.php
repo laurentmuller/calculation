@@ -27,6 +27,8 @@ use App\Util\FormatUtils;
  * Report for the list of calculation states.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<CalculationState>
  */
 class CalculationStatesReport extends AbstractArrayReport implements PdfCellListenerInterface
 {
@@ -73,7 +75,9 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param CalculationState[] $entities
      */
     protected function doRender(array $entities): bool
     {
@@ -93,7 +97,6 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
             ->addColumn(PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true))
             ->outputHeaders();
 
-        /** @var CalculationState $entity */
         foreach ($entities as $entity) {
             $table->startRow()
                 ->add($entity->getCode())

@@ -40,10 +40,10 @@ calculation:
         edit_item: Modifier l'article
         delete_item: Supprimer l'article
         sort_item: Trier les groupes, les catégories et les articles
-        move_first_item: Déplacer à la première place
-        move_up_item: Déplacer vers le haut
-        move_down_item: Déplacer vers le bas
-        move_last_item: Déplacer à la dernière place
+        move_first: Déplacer à la première place
+        move_up: Déplacer vers le haut
+        move_down: Déplacer vers le bas
+        move_last: Déplacer à la dernière place
         add_task: Ajouter une tâche
         edit_task: Modifier la tâche
         delete_task: Supprimer la tâche
@@ -815,9 +815,15 @@ parameters:
         mintrength: Force minimum
         qr_code: Code QR sur les calculations
         print_address: Imprimer l'adresse
+        default_product: Article
+        default_product_quantity: Quantité
+        default_product_edit: "Editer l'article lors de l'affichage de la nouvelle calculation"
+    placehoders:
+        default_product: <Aucun article sélectionné>
     helps:
         qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
         print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
+        default_product: L'article sélectionné est ajouté automatiquement à une nouvelle calculation.
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?

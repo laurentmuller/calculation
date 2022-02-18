@@ -20,7 +20,7 @@ namespace App\Pivot\Field;
 class PivotSemesterField extends PivotDateField
 {
     /**
-     * @var callable|null
+     * @var callable(int): string|null
      */
     private $formatter;
 
@@ -40,13 +40,13 @@ class PivotSemesterField extends PivotDateField
      */
     public function getDisplayValue($value)
     {
-        return $this->formatSemester($value);
+        return $this->formatSemester((int) $value);
     }
 
     /**
      * Gets the callback used to format a semestre.
      *
-     * @return callable|null the callback, if set; null otherwise
+     * @return callable(int): string|null the callback, if set; null otherwise
      */
     public function getFormatter(): ?callable
     {
@@ -58,7 +58,7 @@ class PivotSemesterField extends PivotDateField
      *
      * The function receive the semestre (1 or 2 ) as parameter and must return a string.
      *
-     * @param callable|null $formatter the callback to set; null to use default
+     * @param callable(int): string|null $formatter the callback to set; null to use default
      */
     public function setFormatter(?callable $formatter): self
     {
@@ -81,10 +81,8 @@ class PivotSemesterField extends PivotDateField
      * Formats the semester.
      *
      * @param int $semester the semester (1 or 2) to format
-     *
-     * @return string|null the formatted semester
      */
-    private function formatSemester(int $semester): ?string
+    private function formatSemester(int $semester): string
     {
         if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $semester);

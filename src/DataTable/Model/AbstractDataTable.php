@@ -20,7 +20,6 @@ use DataTables\AbstractDataTableHandler;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
-use DataTables\Order;
 use DataTables\Parameters;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -141,7 +140,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
      */
     public function formatDate(\DateTimeInterface $date): string
     {
-        return FormatUtils::formatDate($date);
+        return (string) FormatUtils::formatDate($date);
     }
 
     /**
@@ -149,7 +148,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
      */
     public function formatDateTime(\DateTimeInterface $date): string
     {
-        return FormatUtils::formatDateTime($date);
+        return (string) FormatUtils::formatDateTime($date);
     }
 
     /**
@@ -189,7 +188,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
      */
     public function formatTime(\DateTimeInterface $date): string
     {
-        return FormatUtils::formatTime($date);
+        return (string) FormatUtils::formatTime($date);
     }
 
     /**
@@ -242,17 +241,17 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
     /**
      * {@inheritdoc}
      */
-    public function handle(DataTableQuery $query): DataTableResults
+    public function handle(DataTableQuery $request): DataTableResults
     {
         // create results
-        $results = $this->createDataTableResults($query);
+        $results = $this->createDataTableResults($request);
 
         // save parameters
-        $this->setSessionValue(self::PARAM_PAGE_LENGTH, $query->length);
-        if (empty($query->order)) {
+        $this->setSessionValue(self::PARAM_PAGE_LENGTH, $request->length);
+        if (empty($request->order)) {
             $this->removeSessionValues([self::PARAM_ORDER_COLUMN, self::PARAM_ORDER_DIR]);
         } else {
-            $order = $query->order[0];
+            $order = $request->order[0];
             $this->setSessionValues([
                 self::PARAM_ORDER_COLUMN => $order->column,
                 self::PARAM_ORDER_DIR => $order->dir,
@@ -273,7 +272,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
     {
         // callback?
         if ($this->callback = $request->isXmlHttpRequest()) {
-            $result = $this->datatables->handle($request, static::ID);
+            $result = $this->datatables->handle($request, (string) static::ID);
         } else {
             $query = $this->createDataTableQuery($request);
             $result = $this->handle($query);
@@ -316,19 +315,14 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
     protected function createParameters(Request $request): Parameters
     {
         // get request values
-        $query = $request->get('query');
+        /** @psalm-var ?string $query */
+        $query = Utils::getRequestInputBag($request)->get('query');
         $page = (int) $this->getRequestValue($request, self::PARAM_PAGE_INDEX, self::PAGE_START);
         $pagelength = (int) $this->getRequestValue($request, self::PARAM_PAGE_LENGTH, self::PAGE_LENGTH);
-        $ordercolumn = (string) $this->getRequestValue($request, self::PARAM_ORDER_COLUMN);
-        $orderdir = (string) $this->getRequestValue($request, self::PARAM_ORDER_DIR);
-        $searchColumns = (array) $this->getRequestValue($request, self::PARAM_SEARCH_COLUMNS, []);
-
-        // convert search columns
-        $searchColumns = \array_reduce($searchColumns, function (array $carry, array $entry) {
-            $carry[$entry['index']] = $entry['value'];
-
-            return $carry;
-        }, []);
+        /** @psalm-var ?string $ordercolumn */
+        $ordercolumn = $this->getRequestValue($request, self::PARAM_ORDER_COLUMN);
+        /** @psalm-var ?string $orderdir */
+        $orderdir = $this->getRequestValue($request, self::PARAM_ORDER_DIR);
 
         // parameters
         $params = new Parameters();
@@ -338,11 +332,8 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
 
         // columns
         $columns = $this->getColumns();
-        $params->columns = Utils::arrayMapKey(function (int $key, DataColumn $column) use ($searchColumns) {
-            $search = $searchColumns[$key] ?? null;
-            $key = $this->getColumnKey($key, $column);
-
-            return $column->toArray($key, $search);
+        $params->columns = Utils::arrayMapKey(function (int $key, DataColumn $column) {
+            return $column->toArray($key);
         }, $columns);
 
         // order
@@ -415,11 +406,15 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
      * @param DataTableQuery $request the data table query to get order for
      *
      * @return array|null an array with the column index ('index'), the data column ('column') and the sort direction ('direction') or null if no order is set
+     * @psalm-return array{
+     *      index: int,
+     *      column: DataColumn|null,
+     *      direction: string
+     * }|null
      */
     protected function getFirstRequestOrder(DataTableQuery $request): ?array
     {
         if (!empty($request->order)) {
-            /** @var Order $order */
             $order = $request->order[0];
             $index = $order->column;
             $dir = $order->dir;
@@ -439,19 +434,20 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
      * Gets a request parameter. This function try first to get value from request, then from the session
      * and if not found return the default.
      *
-     * @param Request $request the request
-     * @param string  $key     the parameter key to search for
-     * @param mixed   $default the default value if not found
+     * @param Request                    $request the request
+     * @param string                     $key     the parameter key to search for
+     * @param string|int|float|bool|null $default the default value if not found
      *
      * @return mixed the value, if found; the default value otherwise
      */
     protected function getRequestValue(Request $request, string $key, $default = null)
     {
         // find within the session
+        /** @psalm-var string|int|float|bool|null $sessionValue */
         $sessionValue = $this->getSessionValue($key, $default);
 
         // find within the request
-        return $request->get($key, $sessionValue);
+        return Utils::getRequestInputBag($request)->get($key, $sessionValue);
     }
 
     /**

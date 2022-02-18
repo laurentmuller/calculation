@@ -13,13 +13,11 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
-use App\Entity\CalculationGroup;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
-use Doctrine\Common\Collections\Collection;
 
 /**
  * Table to render the totals by group of a calculation.
@@ -51,9 +49,6 @@ class CalculationTableGroups extends PdfTableBuilder
     public function output(): void
     {
         $calculation = $this->calculation;
-
-        /** @var CalculationGroup[]|Collection $groups */
-        /** @psalm-var Collection<int, CalculationGroup> $groups */
         $groups = $calculation->getGroups();
         if ($groups->isEmpty()) {
             return;

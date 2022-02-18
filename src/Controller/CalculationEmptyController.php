@@ -61,7 +61,7 @@ class CalculationEmptyController extends AbstractController
         // number of items
         $items = $this->getItems($repository);
         $items_count = \array_reduce($items, function (int $carry, array $calculation) {
-            return $carry + \count($calculation['items']);
+            return $carry + \count((array) $calculation['items']);
         }, 0);
 
         // parameters
@@ -69,10 +69,10 @@ class CalculationEmptyController extends AbstractController
             'items' => $items,
             'items_count' => $items_count,
             'query' => false,
-            'id' => $request->get('id', 0),
             'sortField' => 'id',
             'sortMode' => Criteria::DESC,
             'sortFields' => [],
+            'id' => $this->getRequestInt($request, 'id'),
         ];
 
         return $this->renderForm('calculation/calculation_card_empty.html.twig', $parameters);
@@ -159,6 +159,19 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Gets items to display.
+     *
+     * @psalm-return array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }>
      */
     private function getItems(CalculationRepository $repository): array
     {

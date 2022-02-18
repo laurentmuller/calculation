@@ -23,6 +23,7 @@ class CalculationUpdateResult
 {
     private array $calculations = [];
     private int $copyCodes = 0;
+    /** @var array<int, string[]> */
     private array $descriptions = [];
     private int $duplicateItems = 0;
     private int $emptyCalculations = 0;

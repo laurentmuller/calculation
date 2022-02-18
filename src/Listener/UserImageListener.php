@@ -38,6 +38,8 @@ class UserImageListener implements ImageExtensionInterface
 
     /**
      * Handle the entity post persist.
+     *
+     * @psalm-suppress InternalMethod
      */
     public function postPersist(LifecycleEventArgs $event): void
     {
@@ -55,12 +57,13 @@ class UserImageListener implements ImageExtensionInterface
             return;
         }
 
+        $id = (int) $entity->getId();
         $dir = $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR;
         $ext = \pathinfo($imageName, \PATHINFO_EXTENSION);
 
-        $this->rename($dir, $entity->getId(), self::SIZE_MEDIUM, $ext);
-        $this->rename($dir, $entity->getId(), self::SIZE_SMALL, $ext);
-        $newName = $this->rename($dir, $entity->getId(), self::SIZE_DEFAULT, $ext);
+        $this->rename($dir, $id, self::SIZE_MEDIUM, $ext);
+        $this->rename($dir, $id, self::SIZE_SMALL, $ext);
+        $newName = $this->rename($dir, $id, self::SIZE_DEFAULT, $ext);
 
         // update user
         $entity->setImageName($newName);

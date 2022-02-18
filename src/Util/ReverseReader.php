@@ -65,8 +65,9 @@ class ReverseReader
     public function close(): bool
     {
         $result = true;
-        if (null !== $this->handle) {
-            $result = \fclose($this->handle);
+        if (\is_resource($this->handle)) {
+            $handle = $this->handle;
+            $result = \fclose($handle);
             $this->handle = null;
         }
 

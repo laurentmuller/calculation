@@ -95,18 +95,25 @@ class ExchangeRateController extends AbstractController
      */
     public function getRate(Request $request): JsonResponse
     {
-        $baseCode = (string) $request->get('baseCode', '');
-        $targetCode = (string) $request->get('targetCode', '');
+        $baseCode = (string) $this->getRequestString($request, 'baseCode', '');
+        $targetCode = (string) $this->getRequestString($request, 'targetCode', '');
         $result = $this->service->getRateAndDates($baseCode, $targetCode);
 
         if ($lastError = $this->service->getLastError()) {
             return $this->json($lastError);
         }
 
-        return $this->jsonTrue([
-            'rate' => $result['rate'],
-            'next' => FormatUtils::formatDateTime($result['next']),
-            'update' => FormatUtils::formatDateTime($result['update']),
+        if (\is_array($result)) {
+            return $this->jsonTrue([
+                'rate' => $result['rate'],
+                'next' => FormatUtils::formatDateTime($result['next']),
+                'update' => FormatUtils::formatDateTime($result['update']),
+            ]);
+        }
+
+        return $this->jsonFalse([
+            'code' => 404,
+            'message' => $this->trans('unknown', [], 'exchangerate'),
         ]);
     }
 }

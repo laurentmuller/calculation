@@ -85,7 +85,7 @@ class PdfFooter implements PdfConstantsInterface
      */
     private function getDate(): string
     {
-        return FormatUtils::formatDateTime(new \DateTime(), \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
+        return (string) FormatUtils::formatDateTime(new \DateTime(), \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
     }
 
     /**

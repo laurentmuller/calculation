@@ -95,7 +95,7 @@ class SearchTable extends AbstractTable
     {
         $this->service = $service;
         $this->checker = $checker;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -104,7 +104,8 @@ class SearchTable extends AbstractTable
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
-        $query->addCustomData(self::PARAM_ENTITY, (string) $request->get(self::PARAM_ENTITY, ''));
+        $entity = (string) $this->getRequestValue($request, self::PARAM_ENTITY, '', false);
+        $query->addCustomData(self::PARAM_ENTITY, $entity);
 
         return $query;
     }
@@ -146,7 +147,7 @@ class SearchTable extends AbstractTable
 
         // get parameters
         $search = $query->search;
-        $entity = $query->customData[self::PARAM_ENTITY];
+        $entity = (string) $query->customData[self::PARAM_ENTITY];
 
         // search
         $items = \strlen($search) > 1 ? $this->service->search($search, $entity, SearchService::NO_LIMIT) : [];
@@ -187,21 +188,23 @@ class SearchTable extends AbstractTable
 
     /**
      * Update items.
+     *
+     * @param array<array<string, mixed>> $items
      */
     private function processItems(array &$items): void
     {
         foreach ($items as &$item) {
-            $type = $item[SearchService::COLUMN_TYPE];
-            $field = $item[SearchService::COLUMN_FIELD];
+            $type = (string) $item[SearchService::COLUMN_TYPE];
+            $field = (string) $item[SearchService::COLUMN_FIELD];
 
             // translate entity and field names
             $lowerType = \strtolower($type);
             $entity = $this->trans("{$lowerType}.name");
-            $item[self::COLUMN_ACTION] = $item['id'];
+            $item[self::COLUMN_ACTION] = (int) $item['id'];
             $item[self::COLUMN_ENTITY_NAME] = $entity;
             $item[self::COLUMN_FIELD_NAME] = $this->trans("{$lowerType}.fields.{$field}");
 
-            // format content
+            /** @var string|int|float|bool $content */
             $content = $item[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'Calculation.id':
@@ -223,6 +226,8 @@ class SearchTable extends AbstractTable
 
     /**
      * Sorts items.
+     *
+     * @param array<array<string, mixed>> $items
      */
     private function sortItems(array &$items, string $sort, string $order): void
     {
@@ -250,11 +255,13 @@ class SearchTable extends AbstractTable
 
     /**
      * Update the item.
+     *
+     * @param array<string, mixed> $item
      */
     private function updateItem(array &$item): void
     {
-        $name = $item[self::COLUMN_ENTITY_NAME];
-        $type = \strtolower($item[SearchService::COLUMN_TYPE]);
+        $name = (string) $item[self::COLUMN_ENTITY_NAME];
+        $type = \strtolower((string) $item[SearchService::COLUMN_TYPE]);
 
         $icon = 'file far';
         switch ($type) {

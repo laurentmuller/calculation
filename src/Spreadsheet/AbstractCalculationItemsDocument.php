@@ -20,11 +20,33 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
  * Abstract Spreadsheet document for the list of calculations with invalid items.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<array{
+ *      id: int,
+ *      date: \DateTimeInterface,
+ *      stateCode: string,
+ *      customer: string,
+ *      description: string,
+ *      items: array
+ * }>
  */
 abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
 {
     /**
      * Constructor.
+     *
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }> $entities
      */
     public function __construct(AbstractController $controller, array $entities, string $title)
     {
@@ -38,7 +60,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         // initialize
-        $this->start($this->title, true);
+        $this->start((string) $this->title, true);
 
         // red color and word wrap for items
         $this->setForeground(6, Color::COLOR_RED)

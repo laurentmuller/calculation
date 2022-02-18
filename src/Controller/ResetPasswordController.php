@@ -81,7 +81,7 @@ class ResetPasswordController extends AbstractController
     {
         $form = $this->createForm(RequestChangePasswordType::class);
         if ($this->handleRequestForm($request, $form)) {
-            $usernameOrEmail = $form->get('user')->getData();
+            $usernameOrEmail = (string) $form->get('user')->getData();
 
             return $this->sendEmail($request, $usernameOrEmail, $mailer, $service);
         }
@@ -131,7 +131,7 @@ class ResetPasswordController extends AbstractController
             $this->helper->removeResetRequest($token);
 
             // encode password
-            $plainPassword = $form->get('plainPassword')->getData();
+            $plainPassword = (string) $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
             $this->repository->getEntityManager()->flush();

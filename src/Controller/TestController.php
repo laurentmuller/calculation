@@ -13,8 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Calculation;
-use App\Entity\Category;
-use App\Entity\Group;
 use App\Form\Admin\ParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
@@ -122,31 +120,34 @@ class TestController extends AbstractController
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $user = $this->getUser();
-            $data = $form->getData();
-            $message = $data['message'];
-            $email = (string) $data['email'];
-            $importance = $data['importance'];
-            $notification = (bool) $data['notification'];
-            $this->setSessionValue('editor_notification', $notification);
+            if (null !== $user) {
+                /** @psalm-var array $data */
+                $data = $form->getData();
+                $message = (string) $data['message'];
+                $email = (string) $data['email'];
+                $importance = (string) $data['importance'];
+                $notification = (bool) $data['notification'];
+                $this->setSessionValue('editor_notification', $notification);
 
-            try {
-                if ($notification) {
-                    $service->sendNotification($email, $user, $message, $importance);
-                } else {
-                    $service->sendComment($email, $user, $message, $importance);
+                try {
+                    if ($notification) {
+                        $service->sendNotification($email, $user, $message, $importance);
+                    } else {
+                        $service->sendComment($email, $user, $message, $importance);
+                    }
+                    $this->succesTrans('user.comment.success');
+
+                    return $this->redirectToHomePage();
+                } catch (\Exception $e) {
+                    $message = $this->trans('user.comment.error');
+                    $context = Utils::getExceptionContext($e);
+                    $logger->error($message, $context);
+
+                    return $this->renderForm('@Twig/Exception/exception.html.twig', [
+                        'message' => $message,
+                        'exception' => $e,
+                    ]);
                 }
-                $this->succesTrans('user.comment.success');
-
-                return $this->redirectToHomePage();
-            } catch (\Exception $e) {
-                $message = $this->trans('user.comment.error');
-                $context = Utils::getExceptionContext($e);
-                $logger->error($message, $context);
-
-                return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
             }
         }
 
@@ -240,6 +241,7 @@ class TestController extends AbstractController
 
         // listener
         $listener = function (FormEvent $event) use ($options, $constraint): void {
+            /** @psalm-var array $data */
             $data = $event->getData();
             foreach ($options as $option) {
                 $constraint->{$option} = (bool) ($data[$option] ?? false);
@@ -287,6 +289,7 @@ class TestController extends AbstractController
 
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
+            /** @psalm-var array<bool|int> $data */
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';
@@ -299,11 +302,12 @@ class TestController extends AbstractController
             }
 
             // minimum strength
-            if (StrengthInterface::LEVEL_NONE !== $data['minstrength']) {
+            $minstrength = (int) $data['minstrength'];
+            if (StrengthInterface::LEVEL_NONE !== $minstrength) {
                 $message .= '<li>';
                 $message .= $this->trans('password.minstrength');
                 $message .= ' : ';
-                $message .= $this->translateLevel($data['minstrength']);
+                $message .= $this->translateLevel($minstrength);
                 $message .= '</li>';
             }
 
@@ -345,9 +349,10 @@ class TestController extends AbstractController
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // get values
+            /** @psalm-var array $data */
             $data = $form->getData();
-            $response = $data['recaptcha'];
-            $hostname = $request->server->get('HTTP_HOST');
+            $response = (string) $data['recaptcha'];
+            $hostname = (string) $request->server->get('HTTP_HOST');
             $secret = $this->getStringParameter('google_recaptcha_secret_key');
 
             // verify
@@ -360,11 +365,13 @@ class TestController extends AbstractController
 
             // OK?
             if ($result->isSuccess()) {
+                /** @psalm-var array<string, mixed> $values */
                 $values = $result->toArray();
                 $html = '<table class="table table-sm table-borderless alert-heading">';
+
+                /** @psalm-var string[]|string|null $value */
                 foreach ($values as $key => $value) {
-                    //ISO format yyyy-MM-dd'T'HH:mm:ssZZ
-                    if ($value) {
+                    if (null !== $value) {
                         if (\is_array($value)) {
                             $value = \implode('<br>', $value);
                         } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
@@ -405,12 +412,12 @@ class TestController extends AbstractController
      */
     public function swiss(Request $request, SwissPostService $service): Response
     {
-        $all = $request->get('all');
-        $zip = $request->get('zip');
-        $city = $request->get('city');
-        $street = $request->get('street');
+        $all = $this->getRequestString($request, 'all');
+        $zip = $this->getRequestString($request, 'zip');
+        $city = $this->getRequestString($request, 'city');
+        $street = $this->getRequestString($request, 'street');
 
-        $limit = (int) $request->get('limit', 25);
+        $limit = $this->getRequestInt($request, 'limit', 25);
 
         if (null !== $all) {
             $rows = $service->findAll($all, $limit);
@@ -442,8 +449,8 @@ class TestController extends AbstractController
      */
     public function timeline(Request $request, CalculationRepository $repository): Response
     {
-        $interval = $request->get('interval', 'P1W');
-        $to = new \DateTime($request->get('date', 'today'));
+        $interval = (string) $this->getRequestString($request, 'interval', 'P1W');
+        $to = new \DateTime((string) $this->getRequestString($request, 'date', 'today'));
         $from = DateUtils::sub($to, $interval);
         $calculations = $repository->getByInterval($from, $to);
         $data = Utils::groupBy($calculations, function (Calculation $c) {
@@ -520,7 +527,7 @@ class TestController extends AbstractController
         // check error
         if ($error = $service->getLastError()) {
             // translate message
-            $id = $service->getDefaultIndexName() . '.' . $error['code'];
+            $id = $service->getDefaultIndexName() . '.' . (string) $error['code'];
             if ($this->isTransDefined($id, 'translator')) {
                 $error['message'] = $this->trans($id, [], 'translator');
             }
@@ -556,23 +563,22 @@ class TestController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $count = 0;
 
-            /** @var Group[] $groups */
             $groups = $repository->findAllByCode();
 
             $nodes = [];
+
             foreach ($groups as $group) {
                 $node = [
-                    'id' => 'group-' . $group->getId(),
+                    'id' => 'group-' . (string) $group->getId(),
                     'text' => $group->getCode(),
                     'icon' => 'fas fa-code-branch fa-fw',
                     'badgeValue' => $group->countItems(),
                 ];
 
-                /** @var Category $category */
                 foreach ($group->getCategories() as $category) {
                     $count += $category->countItems();
                     $node['nodes'][] = [
-                        'id' => 'category-' . $category->getId(),
+                        'id' => 'category-' . (string) $category->getId(),
                         'text' => $category->getCode(),
                         'icon' => 'far fa-folder fa-fw',
                         'badgeValue' => $category->countItems(),
@@ -608,10 +614,10 @@ class TestController extends AbstractController
      */
     public function union(Request $request, SearchService $service): JsonResponse
     {
-        $query = $request->get('query');
-        $entity = $request->get('entity');
-        $limit = (int) $request->get('limit', 25);
-        $offset = (int) $request->get('offset', 0);
+        $query = $this->getRequestString($request, 'query');
+        $entity = $this->getRequestString($request, 'entity');
+        $limit = $this->getRequestInt($request, 'limit', 25);
+        $offset = $this->getRequestInt($request, 'offset', 0);
 
         $count = $service->count($query, $entity);
         $results = $service->search($query, $entity, $limit, $offset);
@@ -695,7 +701,7 @@ class TestController extends AbstractController
         });
 
         \usort($currencies, function (array $left, array $right): int {
-            return \strnatcasecmp($left['name'], $right['name']);
+            return \strnatcasecmp((string) $left['name'], (string) $right['name']);
         });
 
         return $currencies;

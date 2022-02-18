@@ -70,6 +70,13 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
      * @param array $items the invalid calculation items
      *
      * @return string the formatted items
+     *
+     * @psalm-param array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int
+     *      }> $items
      */
     abstract public function formatItems(array $items): string;
 
@@ -99,7 +106,7 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
         // sort mode
         $orderColumn = 'id';
         $orderDirection = Criteria::DESC;
-        if ($order = $this->getFirstRequestOrder($query)) {
+        if (($order = $this->getFirstRequestOrder($query)) && $order['column']) {
             $orderColumn = $order['column']->getName();
             $orderDirection = $order['direction'];
         }
@@ -115,6 +122,7 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
         // filter
         $offset = $query->start;
         $limit = $query->length;
+        /** @psalm-var array<array|object> $filtered */
         $filtered = -1 === $limit ? \array_slice($items, $offset) : \array_slice($items, $offset, $limit);
 
         // transform
@@ -131,6 +139,19 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
      * @param CalculationRepository $repository     the calculation repository
      * @param string                $orderColumn    the order column
      * @param string                $orderDirection the order direction ('ASC' or 'DESC')
+     *
+     * @psalm-return array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }>
      */
     abstract protected function getItems(CalculationRepository $repository, string $orderColumn, string $orderDirection): array;
 
@@ -140,6 +161,19 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
      * @param array $items the calculations
      *
      * @return int the number of items
+     *
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}
+     *      }> $items
      */
     abstract protected function getItemsCount(array $items): int;
 }

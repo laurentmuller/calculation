@@ -58,6 +58,8 @@ class DataResults implements \JsonSerializable
 
     /**
      * The rows to display.
+     *
+     * @var array<array|\App\Entity\AbstractEntity>
      */
     public array $rows = [];
 

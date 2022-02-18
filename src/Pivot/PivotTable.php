@@ -368,6 +368,8 @@ class PivotTable extends AbstractPivotAggregator
      * @param array  $result the array to update
      * @param string $name   the array key
      * @param mixed  $value  the array value
+     *
+     * @psalm-suppress MixedAssignment
      */
     private function serialize(array &$result, string $name, $value): self
     {

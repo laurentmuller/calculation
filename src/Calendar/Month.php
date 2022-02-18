@@ -19,6 +19,8 @@ use App\Util\Utils;
  * Represents a month with a calendar and an array of days.
  *
  * @author Laurent Muller
+ *
+ * @psalm-consistent-constructor
  */
 class Month extends AbstractCalendarItem
 {
@@ -59,8 +61,8 @@ class Month extends AbstractCalendarItem
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
-        $first = FormatUtils::formatDate($this->getFirstDate());
-        $last = FormatUtils::formatDate($this->getLastDate());
+        $first = (string) FormatUtils::formatDate($this->getFirstDate());
+        $last = (string) FormatUtils::formatDate($this->getLastDate());
 
         return \sprintf('%s(%d.%d, %s - %s)', $name, $this->getNumber(), $this->getYear(), $first, $last);
     }
@@ -147,12 +149,11 @@ class Month extends AbstractCalendarItem
      */
     public function isInWeek(Week $week): bool
     {
-        /** @var Week[] $weeks */
         $weeks = $this->getWeeks();
         $number = $week->getNumber();
         $year = $week->getYear();
 
-        foreach ($weeks as $current) {
+        foreach ($weeks as /* @var Week $current */ $current) {
             if ($year === $current->getYear()
                 && $number === $current->getNumber()) {
                 return true;

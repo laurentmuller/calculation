@@ -82,7 +82,7 @@ class EmailVerifier
     private function generateSignature(string $routeName, User $user): VerifyEmailSignatureComponents
     {
         $userId = (string) $user->getId();
-        $userEmail = $user->getEmail();
+        $userEmail = (string) $user->getEmail();
         $parameters = ['id' => $userId];
 
         return $this->helper->generateSignature($routeName, $userId, $userEmail, $parameters);
@@ -97,7 +97,7 @@ class EmailVerifier
     {
         $signedUrl = $request->getUri();
         $userId = (string) $user->getId();
-        $userEmail = $user->getEmail();
+        $userEmail = (string) $user->getEmail();
 
         $this->helper->validateEmailConfirmation($signedUrl, $userId, $userEmail);
     }

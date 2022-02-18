@@ -29,7 +29,7 @@ final class CalculationListener extends TimestampableListener
      */
     protected function getEntities(UnitOfWork $unitOfWork): array
     {
-        /** @var array $entities */
+        /** @var AbstractEntity[] $entities */
         $entities = [
             ...$unitOfWork->getScheduledEntityUpdates(),
             ...$unitOfWork->getScheduledEntityDeletions(),

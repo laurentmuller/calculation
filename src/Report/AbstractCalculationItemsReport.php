@@ -23,6 +23,8 @@ use App\Util\FormatUtils;
  * Report for calculations with invalid items.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<mixed>
  */
 abstract class AbstractCalculationItemsReport extends AbstractArrayReport
 {
@@ -65,7 +67,16 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
         $style = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
 
-        // add
+        /**
+         * @var array{
+         *      id: int,
+         *      date: \DateTimeInterface,
+         *      stateCode: string,
+         *      customer: string,
+         *      description: string,
+         *      items: array
+         *      } $entity
+         */
         foreach ($entities as $entity) {
             $table->startRow()
                 ->add(FormatUtils::formatId($entity['id']))

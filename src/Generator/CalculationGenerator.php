@@ -15,6 +15,7 @@ namespace App\Generator;
 use App\Entity\Calculation;
 use App\Entity\CalculationItem;
 use App\Faker\Generator;
+use App\Repository\CalculationRepository;
 use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Util\FormatUtils;
@@ -29,15 +30,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationGenerator extends AbstractEntityGenerator
 {
+    private CalculationRepository $repository;
     private CalculationService $service;
 
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator, CalculationService $service, CalculationRepository $repository)
     {
         parent::__construct($manager, $fakerService, $translator);
         $this->service = $service;
+        $this->repository = $repository;
     }
 
     /**
@@ -46,7 +49,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
     {
         $calculations = [];
-        $id = $simulate ? (int) $manager->getRepository(Calculation::class)->getNextId() : 0;
+        $id = $simulate ? $this->repository->getNextId() : 0;
 
         // products range
         $productsCount = $generator->productsCount();
@@ -62,7 +65,7 @@ class CalculationGenerator extends AbstractEntityGenerator
                 ->setUserMargin($generator->randomFloat(2, 0, 0.1))
                 ->setState($generator->state())
                 ->setCustomer($generator->name())
-                ->setCreatedBy($generator->userName());
+                ->setCreatedBy((string) $generator->userName());
 
             // add products
             $products = $generator->products($generator->numberBetween($min, $max));
@@ -73,11 +76,11 @@ class CalculationGenerator extends AbstractEntityGenerator
                     $item->setPrice($generator->randomFloat(2, 1, 10));
                 }
 
-                // find category
-                $category = $calculation->findCategory($product->getCategory());
-
-                // add
-                $category->addItem($item);
+                // find category and add
+                $category = $product->getCategory();
+                if (null !== $category) {
+                    $calculation->findCategory($category)->addItem($item);
+                }
             }
 
             // update

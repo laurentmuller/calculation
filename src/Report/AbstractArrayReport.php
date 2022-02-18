@@ -18,11 +18,15 @@ use App\Controller\AbstractController;
  * Asbtract report to render an array of objects.
  *
  * @author Laurent Muller
+ *
+ * @template T
  */
 abstract class AbstractArrayReport extends AbstractReport
 {
     /**
      * The entities to output.
+     *
+     * @pslam-var T[]
      */
     protected array $entities;
 
@@ -32,6 +36,7 @@ abstract class AbstractArrayReport extends AbstractReport
      * @param AbstractController $controller  the parent controller
      * @param array              $entities    the entities to render
      * @param string             $orientation the page orientation. One of the ORIENTATION_XX contants.
+     * @psalm-param T[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, string $orientation = self::ORIENTATION_PORTRAIT)
     {
@@ -57,6 +62,8 @@ abstract class AbstractArrayReport extends AbstractReport
      * @param array $entities the entities to render
      *
      * @return bool true if rendered successfully; false otherwise
+     *
+     * @psalm-param T[] $entities
      */
     abstract protected function doRender(array $entities): bool;
 }

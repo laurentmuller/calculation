@@ -13,8 +13,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Task;
-use App\Entity\TaskItem;
-use App\Entity\TaskItemMargin;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupListenerInterface;
@@ -27,6 +25,8 @@ use App\Util\FormatUtils;
  * Report for the list of tasks.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<Task>
  */
 class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
@@ -37,7 +37,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     {
         /** @var Task $task */
         $task = $group->getKey();
-        $category = \sprintf('%s / %s', $task->getGroupCode(), $task->getCategoryCode());
+        $category = \sprintf('%s / %s', (string) $task->getGroupCode(), (string) $task->getCategoryCode());
         $parent->startRow()
             ->add($task->getName(), 1, $group->getStyle())
             ->add($category)
@@ -65,13 +65,15 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table = $this->createTable();
 
         // styles
-        $table->getGroupStyle()->setFontBold();
+        $groupStyle = $table->getGroupStyle();
+        if (null !== $groupStyle) {
+            $groupStyle->setFontBold();
+        }
         $itemStyle = PdfStyle::getCellStyle()
             ->setIndent(4);
         $emptyStyle = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
 
-        /** @var Task $entity */
         foreach ($entities as $entity) {
             // empty?
             if ($entity->isEmpty()) {
@@ -79,7 +81,6 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 continue;
             }
 
-            /** @var TaskItem $item */
             foreach ($entity->getItems() as $item) {
                 //check for new page
                 $count = 1 + \max($item->count(), 1);
@@ -100,8 +101,6 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                         ->endRow();
                 } else {
                     $index = 0;
-
-                    /** @var TaskItemMargin $margin */
                     foreach ($item->getMargins() as $margin) {
                         $table->startRow();
                         if (0 === $index++) {

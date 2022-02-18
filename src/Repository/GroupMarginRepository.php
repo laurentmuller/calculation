@@ -21,10 +21,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for group margin entity.
  *
- * @method GroupMargin|null find($id, $lockMode = null, $lockVersion = null)
- * @method GroupMargin|null findOneBy(array $criteria, array $orderBy = null)
- * @method GroupMargin[]    findAll()
- * @method GroupMargin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractRepository<GroupMargin>
  *
  * @author Laurent Muller
@@ -57,7 +53,7 @@ class GroupMarginRepository extends AbstractRepository
             ->where('e.group = :group')
             ->andWhere(':amount >= e.minimum')
             ->andWhere(':amount < e.maximum')
-            ->setParameter('group', $group)
+            ->setParameter('group', $group, Types::OBJECT)
             ->setParameter('amount', $amount, Types::FLOAT);
 
         // execute

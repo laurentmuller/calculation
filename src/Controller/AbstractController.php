@@ -27,7 +27,6 @@ use App\Util\Utils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -220,6 +219,9 @@ abstract class AbstractController extends BaseController
      * {@inheritDoc} Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
      *
      * @param mixed $data the initial data
+     *
+     * @psalm-suppress ArgumentTypeCoercion
+     * @psalm-suppress OverriddenMethodAccess
      */
     protected function createForm(string $type = FormType::class, $data = null, array $options = []): FormInterface
     {
@@ -249,17 +251,19 @@ abstract class AbstractController extends BaseController
      */
     protected function getRequestBoolean(Request $request, string $key, bool $default = false): bool
     {
-        $value = $this->getRequestInputBag($request)->get($key, $default);
-
-        return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
+        return Utils::getRequestInputBag($request)->getBoolean($key, $default);
     }
 
     /**
-     * Gets the request input bag, depending of the request method.
+     * Returns the request parameter value converted to float.
+     *
+     * @param Request $request the request to get parameter value from
+     * @param string  $key     the parameter key
+     * @param float   $default the default value if the parameter key does not exist
      */
-    protected function getRequestInputBag(Request $request): InputBag
+    protected function getRequestFloat(Request $request, string $key, float $default = 0): float
     {
-        return Request::METHOD_POST === $request->getMethod() ? $request->request : $request->query;
+        return (float) Utils::getRequestInputBag($request)->get($key, $default);
     }
 
     /**
@@ -271,7 +275,21 @@ abstract class AbstractController extends BaseController
      */
     protected function getRequestInt(Request $request, string $key, int $default = 0): int
     {
-        return (int) $this->getRequestInputBag($request)->get($key, $default);
+        return Utils::getRequestInputBag($request)->getInt($key, $default);
+    }
+
+    /**
+     * Returns the request parameter value converted to string.
+     *
+     * @param Request $request the request to get parameter value from
+     * @param string  $key     the parameter key
+     * @param string  $default the default value if the parameter key does not exist
+     */
+    protected function getRequestString(Request $request, string $key, string $default = null): ?string
+    {
+        $value = Utils::getRequestInputBag($request)->get($key, $default);
+
+        return \is_string($value) ? $value : null;
     }
 
     /**
@@ -283,11 +301,17 @@ abstract class AbstractController extends BaseController
      *
      * @template T
      * @psalm-param class-string<T> $id
-     * @psalm-return T|null
+     * @psalm-return T
+     *
+     * @throws \Psr\Container\NotFoundExceptionInterface  no entry was found for the identifier
+     * @throws \Psr\Container\ContainerExceptionInterface error while retrieving the entry
      */
     protected function getService(string $id)
     {
-        return $this->container->has($id) ? $this->container->get($id) : null;
+        /** @psalm-var T $service */
+        $service = $this->container->get($id);
+
+        return $service;
     }
 
     /**
@@ -374,7 +398,7 @@ abstract class AbstractController extends BaseController
 
         // title
         if (empty($name) && !empty($doc->getTitle())) {
-            $name = $doc->getTitle() . '.pdf';
+            $name = (string) $doc->getTitle() . '.pdf';
         }
 
         // create response
@@ -400,7 +424,7 @@ abstract class AbstractController extends BaseController
 
         // title
         if (empty($name) && !empty($doc->getTitle())) {
-            $name = $doc->getTitle() . '.xlsx';
+            $name = (string) $doc->getTitle() . '.xlsx';
         }
 
         return new SpreadsheetResponse($doc, $inline, $name);

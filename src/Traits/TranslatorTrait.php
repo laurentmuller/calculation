@@ -39,7 +39,6 @@ trait TranslatorTrait
     public function isTransDefined(string $id, ?string $domain = null, ?string $locale = null): bool
     {
         if (($translator = $this->doGetTranslator()) && $translator instanceof TranslatorBagInterface) {
-            /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
             $catalogue = $translator->getCatalogue($locale);
 
             return $catalogue->defines($id, $domain ?? 'messages');
@@ -78,12 +77,14 @@ trait TranslatorTrait
     /**
      * Gets the translator.
      *
-     * @return TranslatorInterface|null the translator if found; null otherwise
+     * @psalm-suppress UnnecessaryVarAnnotation
      */
     protected function doGetTranslator(): ?TranslatorInterface
     {
         if (null === $this->translator && \method_exists($this, 'getTranslator')) {
-            return $this->translator = $this->getTranslator();
+            /** @var TranslatorInterface $translator */
+            $translator = $this->getTranslator();
+            $this->translator = $translator;
         }
 
         return $this->translator;

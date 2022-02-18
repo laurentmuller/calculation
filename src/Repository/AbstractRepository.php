@@ -22,14 +22,10 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Base repository.
  *
- * @method T|null find($id, $lockMode = null, $lockVersion = null)
- * @method T|null findOneBy(array $criteria, array $orderBy = null)
- * @method T[]    findAll()
- * @method T[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- *
- * @author Laurent Muller
  * @template T of \App\Entity\AbstractEntity
  * @template-extends ServiceEntityRepository<T>
+ *
+ * @author Laurent Muller
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
@@ -132,6 +128,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @param string $alias        the entity alias
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
+     *
+     * @psalm-param array<Criteria|string> $criterias
+     * @psalm-param array<string, string>  $sortedFields
      */
     public function getSearchQuery(array $sortedFields = [], array $criterias = [], string $alias = self::DEFAULT_ALIAS): Query
     {
@@ -169,7 +168,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
      */
     public function getSingleIdentifierFieldName(): string
     {
-        return $this->_class->getSingleIdentifierFieldName();
+        /** @var \Doctrine\ORM\Mapping\ClassMetadata<T> $class */
+        $class = $this->_class;
+
+        return $class->getSingleIdentifierFieldName();
     }
 
     /**

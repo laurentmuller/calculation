@@ -56,11 +56,44 @@ class HelpReport extends AbstractReport
      */
     public function render(): bool
     {
-        // get values
-        $menus = $this->service->getMainMenus();
+        /**
+         * @psalm-var array<array{
+         *      id: string,
+         *      description: string,
+         *      menus: array|null
+         *      }> $mainMenus
+         */
+        $mainMenus = $this->service->getMainMenus();
+
+        /**
+         * @psalm-var array<array{
+         *      id: string,
+         *      description: string|null,
+         *      image: string|null,
+         *      displayEntityColumns: null|bool,
+         *      displayEntityFields: null|bool,
+         *      displayEntityActions: null|bool,
+         *      entity: null|string,
+         *      editActions: null|array,
+         *      globalActions: null|array,
+         *      forbidden: null|array,
+         *      details: string[]|null}> $dialogs
+         */
         $dialogs = $this->service->getDialogs();
+
+        /**
+         * @psalm-var array<array{
+         *      id: string,
+         *      name: string,
+         *      description: string|null,
+         *      constraints: string[]|null,
+         *      actions: array|null,
+         *      fields: array|null,
+         *      required: bool|null}> $entities
+         */
         $entities = $this->service->getEntities();
-        if (empty($menus) && empty($dialogs) && empty($entities)) {
+
+        if (empty($mainMenus) && empty($dialogs) && empty($entities)) {
             return false;
         }
 
@@ -68,32 +101,74 @@ class HelpReport extends AbstractReport
         $this->setTitleTrans('help.title');
 
         // content
-        $newPage = true;
-        $newPage = $this->outputMainMenus($menus, $newPage);
+        $newPage = $this->outputMainMenus($mainMenus, true);
         $newPage = $this->outputDialogs($dialogs, $newPage);
-        $newPage = $this->outputEntities($entities, $newPage);
+        $this->outputEntities($entities, $newPage);
 
         return true;
     }
 
+    /**
+     * @psalm-param array{entity: null|string} $dialog
+     * @psalm-return null|array{
+     *      id: string,
+     *      name:string,
+     *      description: string,
+     *      fields: null|array,
+     *      actions: null|array,
+     *      editActions: null|array}
+     */
     private function findEntity(array $dialog): ?array
     {
-        if ($id = $dialog['entity'] ?? false) {
-            return $this->service->findEntity($id);
+        $id = $dialog['entity'] ?? null;
+        if (null !== $id) {
+            /** @psalm-var null|array{
+             *      id: string,
+             *      name:string,
+             *      description: string,
+             *      fields: null|array,
+             *      actions: null|array,
+             *      editActions: null|array} $entity */
+            $entity = $this->service->findEntity($id);
+            if (null !== $entity) {
+                return $entity;
+            }
         }
 
         return null;
     }
 
+    /**
+     * @psalm-param array{fields: null|array} $entity
+     * @psalm-return null|array<array{
+     *      name: string,
+     *      description: string,
+     *      type: string|null,
+     *      length: int|null,
+     *      required: bool|null}>
+     */
     private function findFields(?array $entity): ?array
     {
-        if ($entity) {
-            return $entity['fields'] ?? null;
+        if (null !== $entity) {
+            /** @psalm-var null|array<array{
+             *      name: string,
+             *      description: string,
+             *      type: string|null,
+             *      length: int|null,
+             *      required: bool|null}> $fields */
+            $fields = $entity['fields'] ?? null;
+            if (null !== $fields) {
+                return $fields;
+            }
         }
 
         return null;
     }
 
+    /**
+     * @psalm-param array{id: string} $item
+     * @psalm-param array{name: string} $field
+     */
     private function formatFieldName(array $item, array $field): string
     {
         $id = $item['id'];
@@ -102,9 +177,15 @@ class HelpReport extends AbstractReport
         return $this->trans("$id.fields.$name");
     }
 
+    /**
+     * @psalm-param array{
+     *      type: string|null,
+     *      length: int|null} $field
+     */
     private function formatFieldType(array $field): string
     {
-        $type = $this->trans('help.types.' . ($field['type'] ?? 'text'));
+        $default = $field['type'] ?? 'text';
+        $type = $this->trans('help.types.' . $default);
         if ($length = $field['length'] ?? null) {
             return "$type ($length)";
         }
@@ -117,6 +198,9 @@ class HelpReport extends AbstractReport
         return $this->trans($required ? 'common.value_true' : 'common.value_false');
     }
 
+    /**
+     * @psalm-param array<array{id: string, description: string}> $actions
+     */
     private function outputActions(array $actions): void
     {
         $table = new PdfTableBuilder($this);
@@ -132,6 +216,10 @@ class HelpReport extends AbstractReport
         }
     }
 
+    /**
+     * @psalm-param array{id: string} $item
+     * @psalm-param array<array{name: string, description: string}> $fields
+     */
     private function outputColumns(array $item, array $fields): void
     {
         $table = new PdfTableBuilder($this);
@@ -146,6 +234,9 @@ class HelpReport extends AbstractReport
         }
     }
 
+    /**
+     * @psalm-param string[] $constraints
+     */
     private function outputConstraints(array $constraints): void
     {
         $margin = $this->getLeftMargin();
@@ -156,12 +247,29 @@ class HelpReport extends AbstractReport
         $this->SetLeftMargin($margin);
     }
 
+    /**
+     * @psalm-param string[] $details
+     */
     private function outputDetails(array $details): void
     {
         $text = \strip_tags(\implode(' ', $details));
         $this->MultiCell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::ALIGN_LEFT);
     }
 
+    /**
+     * @psalm-param array{
+     *      id: string,
+     *      description: string|null,
+     *      image: string|null,
+     *      displayEntityColumns: null|bool,
+     *      displayEntityFields: null|bool,
+     *      displayEntityActions: null|bool,
+     *      entity: null|string,
+     *      editActions: null|array,
+     *      globalActions: null|array,
+     *      forbidden: null|array,
+     *      details: string[]|null} $item
+     */
     private function outputDialog(array $item): void
     {
         // title
@@ -189,7 +297,7 @@ class HelpReport extends AbstractReport
         // entity and fields
         $entity = $this->findEntity($item);
         $fields = $this->findFields($entity);
-        if ($entity && $fields) {
+        if (null !== $entity && null !== $fields) {
             // columns
             if (isset($item['displayEntityColumns']) && $item['displayEntityColumns']) {
                 $this->Ln(3);
@@ -205,36 +313,58 @@ class HelpReport extends AbstractReport
             }
 
             // actions
-            if (isset($item['displayEntityActions']) && $item['displayEntityActions'] && ($actions = $entity['actions'] ?? false)) {
-                $this->Ln(3);
-                $this->outputText('help.labels.entity_actions');
-                $this->outputActions($actions);
+            $displayEntityActions = $item['displayEntityActions'] ?? false;
+            if ($displayEntityActions) {
+                /** @var array<array{id: string, description: string}>|null $actions */
+                $actions = $entity['actions'] ?? null;
+                if (null !== $actions) {
+                    $this->Ln(3);
+                    $this->outputText('help.labels.entity_actions');
+                    $this->outputActions($actions);
+                }
             }
         }
 
         // edit actions
-        if ($actions = $item['editActions'] ?? false) {
+        /** @psalm-var null|array<array{
+         *      id: string,
+         *      description: string}> $actions */
+        $actions = $item['editActions'] ?? null;
+        if (null !== $actions) {
             $this->Ln(3);
             $this->outputText('help.labels.edit_actions');
             $this->outputActions($actions);
         }
 
         // global actions
-        if ($actions = $item['globalActions'] ?? false) {
+        /** @psalm-var null|array<array{
+         *      id: string,
+         *      description: string}> $actions */
+        $actions = $item['globalActions'] ?? null;
+        if (null !== $actions) {
             $this->Ln(3);
             $this->outputText('help.labels.global_actions');
             $this->outputActions($actions);
         }
 
-        // forbidden
-        if ($forbidden = $item['forbidden'] ?? false) {
+        /**
+         * @psalm-var null|array{
+         *      image: string|null,
+         *      text:string|null,
+         *      action: array|null} $forbidden
+         */
+        $forbidden = $item['forbidden'] ?? null;
+        if (null !== $forbidden) {
             $this->Ln(3);
             $text = $forbidden['text'] ?? $this->trans('help.labels.forbidden_text');
             $this->outputText($text, false);
-            if ($image = $forbidden['image'] ?? false) {
+            $image = $forbidden['image'] ?? null;
+            if (null !== $image) {
                 $this->outputImage($image);
             }
-            if ($action = $forbidden['action'] ?? false) {
+            /** @psalm-var null|array{id: string, description: string} $action */
+            $action = $forbidden['action'] ?? null;
+            if (null !== $action) {
                 $this->Ln(3);
                 $this->outputText('help.labels.edit_actions');
                 $this->outputActions([$action]);
@@ -242,6 +372,20 @@ class HelpReport extends AbstractReport
         }
     }
 
+    /**
+     * @psalm-param array<array{
+     *      id: string,
+     *      description: string|null,
+     *      image: string|null,
+     *      displayEntityColumns: null|bool,
+     *      displayEntityFields: null|bool,
+     *      displayEntityActions: null|bool,
+     *      entity: null|string,
+     *      editActions: null|array,
+     *      globalActions: null|array,
+     *      forbidden: null|array,
+     *      details: string[]|null}> $dialogs
+     */
     private function outputDialogs(array $dialogs, bool $newPage): bool
     {
         if (empty($dialogs)) {
@@ -267,6 +411,16 @@ class HelpReport extends AbstractReport
         return true;
     }
 
+    /**
+     * @psalm-param array<array{
+     *      id: string,
+     *      name: string,
+     *      description: string|null,
+     *      constraints: string[]|null,
+     *      actions: array|null,
+     *      fields: array|null,
+     *      required: bool|null}> $entities
+     */
     private function outputEntities(array $entities, bool $newPage): bool
     {
         if (empty($entities)) {
@@ -292,6 +446,16 @@ class HelpReport extends AbstractReport
         return true;
     }
 
+    /**
+     * @psalm-param array{
+     *      id: string,
+     *      name: string,
+     *      description: string|null,
+     *      constraints: string[]|null,
+     *      actions: array|null,
+     *      fields: array|null,
+     *      required: bool|null} $item
+     */
     private function outputEntity(array $item): void
     {
         $this->outputTitle($item['id'] . '.name');
@@ -300,7 +464,8 @@ class HelpReport extends AbstractReport
             $this->MultiCell(0, self::LINE_HEIGHT, $description);
         }
 
-        if ($fields = $this->findFields($item)) {
+        $fields = $this->findFields($item);
+        if (null !== $fields) {
             $this->Ln(3);
             $this->outputText('help.labels.edit_fields');
             $this->outputFields($item, $fields);
@@ -308,19 +473,35 @@ class HelpReport extends AbstractReport
             $this->outputText('help.labels.entity_empty');
         }
 
-        if ($constraints = $item['constraints'] ?? false) {
+        $constraints = $item['constraints'] ?? null;
+        if (null !== $constraints) {
             $this->Ln(3);
             $this->outputText('help.labels.constraints');
             $this->outputConstraints($constraints);
         }
 
-        if ($actions = $item['actions'] ?? false) {
+        /** @psalm-var null|array<array{id: string, description: string}> $actions */
+        $actions = $item['actions'] ?? null;
+        if (null !== $actions) {
             $this->Ln(3);
             $this->outputText('help.labels.entity_actions');
             $this->outputActions($actions);
         }
     }
 
+    /**
+     * @psalm-param array{
+     *      id: string,
+     *      name:string,
+     *      description: string|null} $item
+     *
+     * @psalm-param array<array{
+     *      name: string,
+     *      description: string,
+     *      type: string|null,
+     *      length: int|null,
+     *      required: bool|null}> $fields
+     */
     private function outputFields(array $item, array $fields): void
     {
         $table = new PdfTableBuilder($this);
@@ -346,9 +527,9 @@ class HelpReport extends AbstractReport
             return;
         }
 
-        [$width, $height] = (array) \getimagesize($file);
-        $width = $this->pixels2UserUnit($width);
-        $height = $this->pixels2UserUnit($height);
+        /** @var float[] $size */
+        $size = \getimagesize($file);
+        $width = $this->pixels2UserUnit($size[0]);
         $width = \min($width, $this->getPrintableWidth());
         $this->Image($file, null, null, $width);
     }
@@ -360,26 +541,37 @@ class HelpReport extends AbstractReport
         PdfStyle::getDefaultStyle()->apply($this);
     }
 
+    /**
+     * @psalm-param array<array{
+     *      id: string,
+     *      description: string,
+     *      menus: array|null}> $menus
+     */
     private function outputMainMenus(array $menus, bool $newPage): bool
     {
         if (!empty($menus)) {
             if ($newPage) {
                 $this->AddPage();
-                $newPage = false;
             }
 
             $this->outputTitle('help.main_menu', 12);
             $this->outputLine();
 
-            // root
+            /**
+             * @psalm-param null|array{description: string|null, image: string|null}  $rootMenu
+             */
             if ($rootMenu = $this->service->getMainMenu()) {
                 //description
-                if ($description = $rootMenu['description'] ?? false) {
+                /** @psalm-var string|null $description */
+                $description = $rootMenu['description'] ?? null;
+                if (null !== $description) {
                     $this->outputText($description, false);
                 }
 
                 // image
-                if ($image = $rootMenu['image'] ?? false) {
+                /** @psalm-var string|null $image */
+                $image = $rootMenu['image'] ?? null;
+                if (null !== $image) {
                     $this->Ln(3);
                     $this->outputText('help.labels.screenshot');
                     $this->outputImage($image);
@@ -401,6 +593,14 @@ class HelpReport extends AbstractReport
         return false;
     }
 
+    /**
+     * @psalm-param array<array{
+     *      id: string,
+     *      description: string,
+     *      menus: array|null
+     *      }> $menus
+     *  @psalm-suppress MixedArgumentTypeCoercion
+     */
     private function outputMenus(PdfTableBuilder $table, array $menus, int $indent = 0): void
     {
         $style = PdfStyle::getCellStyle()->setIndent($indent);
@@ -410,7 +610,11 @@ class HelpReport extends AbstractReport
                 ->add($menu['description'])
                 ->endRow();
 
-            if ($children = $menu['menus'] ?? false) {
+            /**
+             * @psalm-var null|array $children.
+             */
+            $children = $menu['menus'] ?? null;
+            if (null !== $children) {
                 $this->outputMenus($table, $children, $indent + 4);
             }
         }

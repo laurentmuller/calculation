@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 /**
  * Trait to add flash messages.
  *
@@ -29,9 +31,8 @@ trait FlashMessageTrait
      */
     protected function addFlashMessage(string $type, string $message): self
     {
-        /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
         $session = $this->getSession();
-        if (null !== $session) {
+        if ($session instanceof Session) {
             $session->getFlashBag()->add($type, $message);
         }
 

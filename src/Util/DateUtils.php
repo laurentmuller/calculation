@@ -214,6 +214,8 @@ final class DateUtils
 
     /**
      * Gets week day names.
+     *
+     * @return array<int, string>
      */
     private static function getDayNames(string $pattern, string $firstday, string $locale): array
     {
@@ -239,6 +241,8 @@ final class DateUtils
 
     /**
      * Gets the month names.
+     *
+     * @return array<int, string>
      */
     private static function getMonthNames(string $pattern, string $locale): array
     {

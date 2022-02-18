@@ -77,8 +77,8 @@ class PersistenceListener implements EventSubscriber
     {
         $this->requestStack = $requestStack;
         $this->debug = $kernel->isDebug();
-        $this->translator = $translator;
         $this->appName = $appName;
+        $this->setTranslator($translator);
         $this->title = $this->trans('environment.' . $kernel->getEnvironment());
     }
 

@@ -20,11 +20,6 @@ namespace App\Interfaces;
 interface IResponseInterface
 {
     /**
-     * The application download mime type.
-     */
-    public const MIME_TYPE_DOWNLOAD = 'application/x-download';
-
-    /**
      * Gets the mime type.
      */
     public function getMimeType(): string;

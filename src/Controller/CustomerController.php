@@ -134,7 +134,6 @@ class CustomerController extends AbstractEntityController
      */
     public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
-        /** @var Customer[] $entities */
         $entities = $repository->findAllByNameAndCompany();
         if (empty($entities)) {
             $message = $this->trans('customer.list.empty');
@@ -155,14 +154,13 @@ class CustomerController extends AbstractEntityController
      */
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
-        /** @var Customer[] $entities */
         $entities = $repository->findAllByNameAndCompany();
         if (empty($entities)) {
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $grouped = (bool) $request->get('grouped', true);
+        $grouped = $this->getRequestBoolean($request, 'grouped', true);
         $report = new CustomersReport($this, $entities, $grouped);
 
         return $this->renderPdfDocument($report);

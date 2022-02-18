@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Entity\Category;
 use App\Entity\Task;
 use App\Entity\TaskItem;
+use App\Util\Utils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,8 +55,6 @@ class TaskService implements \JsonSerializable
 
         if (null !== $this->task) {
             $quantity = $this->quantity;
-
-            /** @var TaskItem $item */
             foreach ($this->task->getItems() as $item) {
                 $checked = false;
                 $id = $item->getId();
@@ -225,8 +224,8 @@ class TaskService implements \JsonSerializable
         $this->task = $task;
 
         // select all?
-        if ($this->task && $selectAll) {
-            return $this->setTaskItems($task->getItems());
+        if (null !== $this->task && $selectAll) {
+            return $this->setTaskItems($this->task->getItems());
         }
 
         return $this;
@@ -239,21 +238,30 @@ class TaskService implements \JsonSerializable
      */
     public function setTaskItems(Collection $items): self
     {
-        // filter and convert
         $task = $this->task;
-        $this->items = $items->filter(function (TaskItem $item) use ($task) {
+
+        /** @psalm-var int[] $items */
+        $items = $items->filter(function (TaskItem $item) use ($task) {
             return $task === $item->getTask();
         })->map(function (TaskItem $item) {
-            return $item->getId();
+            return (int) $item->getId();
         })->toArray();
+        $this->items = $items;
 
         return $this;
     }
 
+    /**
+     * @return int[]
+     */
     private function parseRequest(Request $request): array
     {
-        $items = (array) $request->get('items', []);
+        /** @var int[]|null $items */
+        $items = Utils::getRequestInputBag($request)->get('items');
+        if (\is_array($items)) {
+            return \array_map('intval', $items);
+        }
 
-        return \array_map('intval', $items);
+        return [];
     }
 }

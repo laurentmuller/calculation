@@ -179,7 +179,6 @@ class Group extends AbstractEntity
      */
     public function findMargin(float $amount): ?GroupMargin
     {
-        /** @var GroupMargin $margin */
         foreach ($this->margins as $margin) {
             if ($margin->contains($amount)) {
                 return $margin;
@@ -243,7 +242,7 @@ class Group extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     /**
@@ -337,7 +336,6 @@ class Group extends AbstractEntity
         $lastMin = null;
         $lastMax = null;
 
-        /** @var GroupMargin $margin */
         foreach ($margins as $key => $margin) {
             // get values
             $min = $margin->getMinimum();
@@ -392,6 +390,8 @@ class Group extends AbstractEntity
 
     /**
      * Iteratively reduce this categories to a single value using the callback function.
+     *
+     * @psalm-param callable(int, Category): int $callback
      */
     private function reduceCategories(callable $callback): int
     {

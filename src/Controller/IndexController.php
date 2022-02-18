@@ -46,14 +46,9 @@ class IndexController extends AbstractController
         $min_margin = $this->getApplication()->getMinMargin();
 
         // get state count, overall total and items total
-        [$states_count, $states_total, $states_items] = \array_reduce($states, function (array $carry, array $state) {
-            $carry[0] += $state['count'];
-            $carry[1] += $state['total'];
-            $carry[2] += $state['items'];
-
-            return $carry;
-        }, [0, 0, 0]);
-
+        $states_count = \array_sum(\array_column($states, 'count'));
+        $states_total = \array_sum(\array_column($states, 'total'));
+        $states_items = \array_sum(\array_column($states, 'items'));
         $states_margin = $this->safeDivide($states_total, $states_items);
 
         // render view

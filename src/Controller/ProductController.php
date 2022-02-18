@@ -158,7 +158,6 @@ class ProductController extends AbstractEntityController
      */
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
-        /** @var Product[] $entities */
         $entities = $repository->findAllByGroup();
         if (empty($entities)) {
             $message = $this->trans('product.list.empty');
@@ -179,7 +178,6 @@ class ProductController extends AbstractEntityController
      */
     public function pdf(ProductRepository $repository): PdfResponse
     {
-        /** @var Product[] $entities */
         $entities = $repository->findAllByGroup();
         if (empty($entities)) {
             $message = $this->trans('product.list.empty');

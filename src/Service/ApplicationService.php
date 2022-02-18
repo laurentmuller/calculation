@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
+use App\Entity\Product;
 use App\Entity\Property;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
@@ -106,6 +107,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function getAdminRole(): Role
     {
         $role = EntityVoter::getRoleAdmin();
+        /** @psalm-var int[] $rights */
         $rights = $this->getPropertyArray(self::P_ADMIN_RIGHTS, $role->getRights());
         $role->setRights($rights);
 
@@ -202,10 +204,13 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function getDefaultCategory(): ?Category
     {
         $id = $this->getDefaultCategoryId();
-        if (!empty($id)) {
+        if (0 !== $id) {
+            /** @psalm-var \Doctrine\ORM\EntityRepository<Category> $repository */
             $repository = $this->manager->getRepository(Category::class);
-
-            return $repository->find($id);
+            $category = $repository->find($id);
+            if ($category instanceof Category) {
+                return $category;
+            }
         }
 
         return null;
@@ -222,6 +227,46 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Gets the default product.
+     *
+     * @return product|null the product, if any; null otherwise
+     */
+    public function getDefaultProduct(): ?Product
+    {
+        $id = $this->getDefaultProductId();
+        if (0 !== $id) {
+            /** @psalm-var \Doctrine\ORM\EntityRepository<Product> $repository */
+            $repository = $this->manager->getRepository(Product::class);
+            $product = $repository->find($id);
+            if ($product instanceof Product) {
+                return $product;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the default product identifier.
+     *
+     * @return int the product identifer, if any; 0 otherwise
+     */
+    public function getDefaultProductId(): int
+    {
+        return $this->getPropertyInteger(self::P_DEFAULT_PRODUCT);
+    }
+
+    /**
+     * Gets the default product quantity.
+     *
+     * @return float the default product quantity, if any; 0 otherwise
+     */
+    public function getDefaultQuantity(): float
+    {
+        return $this->getPropertyFloat(self::P_DEFAULT_PRODUCT_QUANTITY);
+    }
+
+    /**
      * Gets the default calculation state.
      *
      * @return CalculationState|null the calculation state, if any; null otherwise
@@ -229,10 +274,13 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function getDefaultState(): ?CalculationState
     {
         $id = $this->getDefaultStateId();
-        if (!empty($id)) {
+        if (0 !== $id) {
+            /** @psalm-var \Doctrine\ORM\EntityRepository<CalculationState> $repository */
             $repository = $this->manager->getRepository(CalculationState::class);
-
-            return $repository->find($id);
+            $state = $repository->find($id);
+            if ($state instanceof CalculationState) {
+                return $state;
+            }
         }
 
         return null;
@@ -261,7 +309,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getEditAction(): string
     {
-        return $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_ACTION);
+        return (string) $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_ACTION);
     }
 
     /**
@@ -277,7 +325,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getMessagePosition(): string
     {
-        return $this->getPropertyString(self::P_MESSAGE_POSITION, self::DEFAULT_POSITION);
+        return (string) $this->getPropertyString(self::P_MESSAGE_POSITION, self::DEFAULT_POSITION);
     }
 
     /**
@@ -344,6 +392,10 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
             self::P_QR_CODE => $this->isQrCode(),
             self::P_PRINT_ADDRESS => $this->isPrintAddress(),
+
+            self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
+            self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
+            self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
         ];
 
         // exlude keys
@@ -364,9 +416,11 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getPropertyArray(string $name, array $default): array
     {
+        /** @psalm-var mixed $value */
         $value = $this->getItemValue($name, $default);
         if (\is_string($value)) {
-            $value = \json_decode($value);
+            /** @psalm-var mixed $value */
+            $value = \json_decode($value, true);
             if (\JSON_ERROR_NONE !== \json_last_error()) {
                 return $default;
             }
@@ -435,6 +489,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getPropertyString(string $name, ?string $default = null): ?string
     {
+        /** @psalm-var mixed $value */
         $value = $this->getItemValue($name, $default);
         if (\is_string($value)) {
             return $value;
@@ -479,6 +534,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function getUserRole(): Role
     {
         $role = EntityVoter::getRoleUser();
+        /** @psalm-var int[] $rights */
         $rights = $this->getPropertyArray(self::P_USER_RIGHTS, $role->getRights());
         $role->setRights($rights);
 
@@ -516,6 +572,16 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Gets the default product edit on new calculation.
+     *
+     * @return bool the default edit product
+     */
+    public function isDefaultEdit(): bool
+    {
+        return $this->isPropertyBoolean(self::P_DEFAULT_PRODUCT_EDIT, self::DEFAULT_PRODUCT_EDIT);
+    }
+
+    /**
      * Gets a value indicating the image captcha is displayed when login.
      *
      * @return bool true to display the image; false to hide
@@ -547,7 +613,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         if ($value instanceof Calculation) {
             return $value->isMarginBelow($this->getMinMargin());
         } else {
-            return (float) $value < $this->getMinMargin();
+            return $value < $this->getMinMargin();
         }
     }
 
@@ -597,13 +663,13 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     /**
      * Save the given properties to the database and to the cache.
      *
-     * @param array $properties the properties to set
+     * @param array<string, mixed> $properties the properties to set
      */
     public function setProperties(array $properties): void
     {
         if (!empty($properties)) {
-            // update
             $repository = $this->getRepository();
+            /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
                 $this->saveProperty($repository, $key, $value);
             }
@@ -662,10 +728,12 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the property repository.
+     *
+     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getRepository(): PropertyRepository
     {
-        /** @var PropertyRepository $repository */
+        /** @psalm-var PropertyRepository $repository */
         $repository = $this->manager->getRepository(Property::class);
 
         return $repository;
@@ -727,7 +795,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         }
 
         // create items
-        $properties = $this->getRepository()->findAll();
+        $properties = $this->manager->getRepository(Property::class)->findAll();
         foreach ($properties as $property) {
             $this->saveDeferredItem($adapter, $property->getName(), $property->getString());
         }

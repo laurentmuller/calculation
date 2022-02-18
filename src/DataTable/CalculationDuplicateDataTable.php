@@ -51,7 +51,8 @@ class CalculationDuplicateDataTable extends AbstractCalculationItemsDataTable
      */
     protected function getItemsCount(array $items): int
     {
-        return \array_reduce($items, function (int $carry, array $item) {
+        return \array_reduce($items, function (int $carry, array $item): int {
+            /** @psalm-var array{count: int} $child*/
             foreach ($item['items'] as $child) {
                 $carry += $child['count'];
             }

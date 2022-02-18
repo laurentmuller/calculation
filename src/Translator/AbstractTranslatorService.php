@@ -49,7 +49,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     public function findLanguage(?string $tag): ?string
     {
         if ($tag && ($languages = $this->getLanguages()) && ($name = \array_search($tag, (array) $languages, true))) {
-            return (string) $name;
+            return $name;
         }
 
         return null;
@@ -70,7 +70,9 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     {
         // already cached?
         $key = $this->getCacheKey();
-        if ($languages = $this->getCacheValue($key)) {
+        /** @var array<string, string>|null $languages */
+        $languages = $this->getCacheValue($key);
+        if (\is_array($languages)) {
             return $languages;
         }
 
@@ -88,7 +90,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * Gets the set of languages currently supported by other operations of the service.
      *
-     * @return array|bool an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
+     * @return bool|array an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
+     * @psalm-return bool|array<string, string>
      */
     abstract protected function doGetLanguages();
 
@@ -149,7 +152,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     protected function getPropertyArray(array $data, string $name, bool $error = true)
     {
-        if (!$property = $this->getProperty($data, $name, $error)) {
+        if (false === $property = $this->getProperty($data, $name, $error)) {
             return false;
         }
 

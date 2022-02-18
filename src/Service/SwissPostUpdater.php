@@ -19,7 +19,6 @@ use App\Model\SwissPostUpdateResult;
 use App\Traits\TranslatorTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -66,25 +65,25 @@ class SwissPostUpdater
     private const STATE_FILE = 'swiss_state.csv';
 
     private ApplicationService $application;
-
     private ?\ZipArchive $archive = null;
     private ?SwissDatabase $database = null;
     private string $databaseName;
     private string $dataDirectory;
     private FormFactoryInterface $factory;
-    private ?SwissPostUpdateResult $results = null;
+    private SwissPostUpdateResult $results;
     private ?string $sourceName = null;
 
-    /** @var resource|bool */
+    /** @psalm-var bool|resource */
     private $stream = false;
 
     public function __construct(TranslatorInterface $translator, ApplicationService $application, FormFactoryInterface $factory, SwissPostService $service)
     {
-        $this->translator = $translator;
+        $this->setTranslator($translator);
         $this->application = $application;
         $this->factory = $factory;
-        $this->databaseName = $service->getDatabaseName();
         $this->dataDirectory = $service->getDataDirectory();
+        $this->databaseName = $service->getDatabaseName();
+        $this->results = new SwissPostUpdateResult();
     }
 
     /**
@@ -92,7 +91,7 @@ class SwissPostUpdater
      */
     public function createForm(): FormInterface
     {
-        $builder = $this->factory->createBuilder(FormType::class);
+        $builder = $this->factory->createBuilder();
         $helper = new FormHelper($builder, 'swisspost.fields.');
 
         // file constraints
@@ -129,7 +128,7 @@ class SwissPostUpdater
             $this->sourceName = $sourceFile->getClientOriginalName();
             $sourceFile = $sourceFile->getPathname();
         } else {
-            $sourceFile = (string) $sourceFile;
+            $sourceFile = $sourceFile;
             $this->sourceName = \basename($sourceFile);
         }
 
@@ -227,6 +226,8 @@ class SwissPostUpdater
 
     /**
      * Close the Zip archive entry stream.
+     *
+     * @psalm-suppress InvalidPropertyAssignmentValue
      */
     private function closeStream(): void
     {
@@ -283,26 +284,36 @@ class SwissPostUpdater
     private function openStream(): bool
     {
         // open entry
-        $streamName = (string) $this->archive->getNameIndex(0);
-        if (false === $this->stream = $this->archive->getStream($streamName)) {
-            $this->setError('open_stream', [
-                '%name%' => $this->sourceName,
-                '%streamName%' => $streamName,
-            ]);
-            $this->closeArchive();
+        if (null !== $this->archive) {
+            $streamName = (string) $this->archive->getNameIndex(0);
+            if (false === $this->stream = $this->archive->getStream($streamName)) {
+                $this->setError('open_stream', [
+                    '%name%' => $this->sourceName,
+                    '%streamName%' => $streamName,
+                ]);
+                $this->closeArchive();
 
-            return false;
+                return false;
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
      * Insert a city record to the database.
+     *
+     * @psalm-param array{
+     *      1: string|int,
+     *      4: string,
+     *      8: string,
+     *      9: string} $data
      */
     private function processCity(array $data): void
     {
-        if (\count($data) > 9 && $this->database->insertCity([
+        if ($this->validateLength($data, 9) && null !== $this->database && $this->database->insertCity([
                 $data[1],               // id
                 $data[4],               // zip code
                 $this->clean($data[8]), // city name
@@ -321,8 +332,14 @@ class SwissPostUpdater
     {
         $filename = $this->dataDirectory . self::STATE_FILE;
         if (FileUtils::exists($filename) && false !== ($handle = \fopen($filename, 'r'))) {
+            /**
+             * @psalm-param bool|array{
+             *      0: string,
+             *      1: string
+             * } $data
+             */
             while (false !== ($data = \fgetcsv($handle, 0, ';'))) {
-                if ($this->database->insertState($data)) {
+                if (null !== $this->database && $this->database->insertState($data)) {
                     $this->results->addValidStates();
                 } else {
                     $this->results->addErrorStates();
@@ -340,7 +357,23 @@ class SwissPostUpdater
         /** @var resource $stream */
         $stream = $this->stream;
         $process = true;
-        while ($process && false !== ($data = \fgetcsv($stream, 0, ';'))) {
+
+        while ($process) {
+            /**
+             * @psalm-var bool|null|array{
+             *      0: string,
+             *      1: string|int,
+             *      2: int,
+             *      4: string,
+             *      6: string,
+             *      8: string,
+             *      9: string} $data
+             */
+            $data = \fgetcsv($stream, 0, ';');
+            if (!\is_array($data)) {
+                break;
+            }
+
             switch ((int) $data[0]) {
                 case self::REC_VALIDITY:
                     if (!$this->processValidity($data)) {
@@ -364,14 +397,16 @@ class SwissPostUpdater
             }
 
             // commit
-            if (0 === $this->results->getValids() % 50000) {
+            if (0 === $this->results->getValids() % 50000 && null !== $this->database) {
                 $this->database->commitTransaction();
                 $this->database->beginTransaction();
             }
         }
 
         // last commit
-        $this->database->commitTransaction();
+        if (null !== $this->database) {
+            $this->database->commitTransaction();
+        }
 
         //close
         $this->closeStream();
@@ -381,10 +416,14 @@ class SwissPostUpdater
 
     /**
      * Insert a street record to the database.
+     *
+     * @psalm-param array{
+     *      2: int,
+     *      6: string} $data
      */
     private function processStreet(array $data): void
     {
-        if (\count($data) > 6 && $this->database->insertStreet([
+        if ($this->validateLength($data, 6) && null !== $this->database && $this->database->insertStreet([
                 $data[2],                         // city Id
                 \ucfirst($this->clean($data[6])), // street name
         ])) {
@@ -396,12 +435,21 @@ class SwissPostUpdater
 
     /**
      * Process the validity record.
+     *
+     * @psalm-param array{
+     *      0: string,
+     *      1: string|int,
+     *      2: int,
+     *      4: string,
+     *      6: string,
+     *      8: string,
+     *      9: string} $data
      */
     private function processValidity(array $data): bool
     {
         $validity = null;
-        if (\count($data) > 1) {
-            $validity = \DateTime::createFromFormat(self::DATE_PATTERN, $data[1]);
+        if ($this->validateLength($data, 1)) {
+            $validity = \DateTime::createFromFormat(self::DATE_PATTERN, (string) $data[1]);
             if ($validity instanceof \DateTime) {
                 $validity = $validity->setTime(0, 0, 0, 0);
             }
@@ -454,5 +502,10 @@ class SwissPostUpdater
         if ($this->results->isValid() && null !== $validity = $this->results->getValidity()) {
             $this->application->setProperties([ApplicationServiceInterface::P_LAST_IMPORT => $validity]);
         }
+    }
+
+    private function validateLength(array $data, int $length): bool
+    {
+        return \count($data) > $length;
     }
 }

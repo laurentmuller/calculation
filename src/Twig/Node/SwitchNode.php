@@ -37,15 +37,18 @@ final class SwitchNode extends Node
             ->raw(") {\n")
             ->indent();
 
-        foreach ($this->getNode('cases') as $case) {
+        /** @psalm-var Node[] $cases */
+        $cases = $this->getNode('cases');
+        foreach ($cases as $case) {
             // The 'body' node may have been removed by Twig if it was an empty text node in a sub-template,
             // outside of any blocks
-            /** @var Node $case */
             if (!$case->hasNode('body')) {
                 continue;
             }
 
-            foreach ($case->getNode('values') as $value) {
+            /** @psalm-var Node[] $values */
+            $values = $case->getNode('values');
+            foreach ($values as $value) {
                 $compiler
                     ->write('case ')
                     ->subcompile($value)

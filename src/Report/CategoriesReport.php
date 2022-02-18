@@ -22,11 +22,15 @@ use App\Util\Utils;
  * Report for the list of categories.
  *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayReport<Category>
  */
 class CategoriesReport extends AbstractArrayReport
 {
     /**
      * {@inheritdoc}
+     *
+     * @param Category[] $entities
      */
     protected function doRender(array $entities): bool
     {
@@ -35,6 +39,7 @@ class CategoriesReport extends AbstractArrayReport
 
         // group by parent code
         $default = $this->trans('report.other');
+        /** @var array<string, Category[]> $groups */
         $groups = Utils::groupBy($entities, function (Category $category) use ($default) {
             return $category->getGroupCode() ?: $default;
         });
@@ -48,7 +53,6 @@ class CategoriesReport extends AbstractArrayReport
         // categories by group
         foreach ($groups as $key => $items) {
             $table->setGroupKey($key);
-            /** @var Category $item */
             foreach ($items as $item) {
                 $table->startRow()
                     ->add($item->getCode())

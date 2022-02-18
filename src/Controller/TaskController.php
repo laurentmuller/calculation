@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use App\DataTable\TaskDataTable;
 use App\Entity\AbstractEntity;
-use App\Entity\Category;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
@@ -122,6 +121,7 @@ class TaskController extends AbstractEntityController
     public function compute(Request $request, Task $task = null, TaskService $service, TaskRepository $repository): Response
     {
         // get tasks
+        /** @var Task[] $tasks */
         $tasks = $repository->getSortedBuilder(false)
             ->getQuery()
             ->getResult();
@@ -191,7 +191,6 @@ class TaskController extends AbstractEntityController
      */
     public function excel(): SpreadsheetResponse
     {
-        /** @var Category[] $entities */
         $entities = $this->getEntities('name');
         if (empty($entities)) {
             $message = $this->trans('task.list.empty');
@@ -212,7 +211,6 @@ class TaskController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var Category[] $entities */
         $entities = $this->getEntities('name');
         if (empty($entities)) {
             $message = $this->trans('task.list.empty');

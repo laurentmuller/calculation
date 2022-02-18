@@ -23,7 +23,11 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
+ * Spreadsheet document for the list of user rights.
+ *
  * @author Laurent Muller
+ *
+ * @extends AbstractArrayDocument<User>
  */
 class UserRightsDocument extends AbstractArrayDocument
 {
@@ -66,13 +70,19 @@ class UserRightsDocument extends AbstractArrayDocument
     public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): self
     {
         if (1 === $columnIndex && $this->writeName) {
-            $values = \explode('|', $value);
+            $values = \explode('|', (string) $value);
             if (2 === \count($values)) {
                 $richText = new RichText();
-                $richText->createTextRun($values[0])
-                    ->getFont()->setBold(true);
-                $richText->createTextRun(' - ' . $values[1])
-                    ->getFont()->setItalic(true);
+                $font = $richText->createTextRun($values[0])
+                    ->getFont();
+                if (null !== $font) {
+                    $font->setBold(true);
+                }
+                $font = $richText->createTextRun(' - ' . $values[1])
+                    ->getFont();
+                if (null !== $font) {
+                    $font->setItalic(true);
+                }
                 parent::setCellValue($sheet, $columnIndex, $rowIndex, $richText);
             } else {
                 parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
@@ -199,7 +209,7 @@ class UserRightsDocument extends AbstractArrayDocument
         $this->writeRights = true;
         foreach (self::RIGHTS as $key => $value) {
             if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                $this->outputRights($key, $role->{$value}, $row++);
+                $this->outputRights($key, (array) $role->{$value}, $row++);
             }
         }
         $this->writeRights = false;
@@ -226,7 +236,7 @@ class UserRightsDocument extends AbstractArrayDocument
         $this->writeRights = true;
         foreach (self::RIGHTS as $key => $value) {
             if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                $this->outputRights($key, $user->{$value}, $row++);
+                $this->outputRights($key, (array) $user->{$value}, $row++);
             }
         }
         $this->writeRights = false;

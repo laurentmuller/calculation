@@ -18,6 +18,8 @@ use App\Util\Utils;
  * AbstractAggregator function.
  *
  * @author Laurent Muller
+ *
+ * @psalm-consistent-constructor
  */
 abstract class AbstractAggregator implements \JsonSerializable
 {
@@ -39,7 +41,7 @@ abstract class AbstractAggregator implements \JsonSerializable
         $name = Utils::getShortName($this);
         $value = $this->getFormattedResult();
 
-        return \sprintf('%s(%s)', $name, $value);
+        return \sprintf('%s(%s)', $name, (string) $value);
     }
 
     /**
@@ -52,7 +54,7 @@ abstract class AbstractAggregator implements \JsonSerializable
     /**
      * Gets the formatted result.
      *
-     * @return mixed the formatted result
+     * @return float|int the formatted result
      */
     public function getFormattedResult()
     {
@@ -62,7 +64,7 @@ abstract class AbstractAggregator implements \JsonSerializable
     /**
      * Gets the result.
      *
-     * @return mixed the result
+     * @return float|int the result
      */
     abstract public function getResult();
 

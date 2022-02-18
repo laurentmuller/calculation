@@ -74,7 +74,7 @@ trait RightsTrait
     /**
      * {@inheritdoc}
      *
-     * @param mixed $value
+     * @psalm-param int[]|null $value
      */
     public function __set(string $name, $value): void
     {
@@ -116,7 +116,7 @@ trait RightsTrait
     /**
      * Sets the rights.
      *
-     * @psalm-param array<int>|null $rights
+     * @psalm-param int[]|null $rights
      */
     public function setRights(?array $rights): self
     {

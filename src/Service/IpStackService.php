@@ -56,7 +56,7 @@ class IpStackService extends AbstractHttpClientService
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);
         parent::__construct($adapter, $isDebug, $key);
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -64,14 +64,16 @@ class IpStackService extends AbstractHttpClientService
      *
      * @param Request $request the request to get client IP address or null for detecting the IP address
      *
-     * @return array the current Ip informations if success; null on error
+     * @return array|null the current Ip informations if success; null on error
      */
     public function getIpInfo(?Request $request = null): ?array
     {
         $clientIp = $this->getClientIp($request);
 
         // find from cache
-        if ($result = $this->getUrlCacheValue($clientIp)) {
+        /** @psalm-var array|null $result */
+        $result = $this->getUrlCacheValue($clientIp);
+        if (\is_array($result)) {
             return $result;
         }
 
@@ -98,7 +100,7 @@ class IpStackService extends AbstractHttpClientService
 
             // update region name
             if (isset($result['region_name'])) {
-                $result['region_name'] = \ucfirst($result['region_name']);
+                $result['region_name'] = \ucfirst((string) $result['region_name']);
             }
 
             // save to cache

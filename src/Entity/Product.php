@@ -80,7 +80,7 @@ class Product extends AbstractCategoryItemEntity
      */
     public function getDisplay(): string
     {
-        return $this->getDescription();
+        return (string) $this->getDescription();
     }
 
     /**

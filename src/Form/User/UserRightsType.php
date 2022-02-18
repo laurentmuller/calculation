@@ -34,7 +34,7 @@ class UserRightsType extends RightsType
     public function __construct(RoleHierarchyInterface $roleHierarchy, bool $isDebug, TranslatorInterface $translator)
     {
         parent::__construct($roleHierarchy, $isDebug);
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**

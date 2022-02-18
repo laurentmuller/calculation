@@ -59,7 +59,7 @@ class ThemeType extends AbstractHelperType
     public function __construct(ThemeService $service, TranslatorInterface $translator)
     {
         $this->service = $service;
-        $this->translator = $translator;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -118,7 +118,7 @@ class ThemeType extends AbstractHelperType
     private function addThemeField(FormHelper $helper): self
     {
         $themes = $this->service->getThemes();
-        $choice_attr = function (Theme $choice) {
+        $choice_attr = function (Theme $choice): array {
             return [
                 'data-description' => $choice->getDescription(),
                 'data-css' => $choice->getCss(),

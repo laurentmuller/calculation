@@ -9,7 +9,7 @@
  */
 function loadingTemplate(message) { // jshint ignore:line
     'use strict';
-    return '<i class="fa fa-spinner fa-spin fa-fw"></i>' + message;
+    return '<div class="alert alert-success text-center w-75" role="alert"><i class="fa fa-spinner fa-spin fa-fw"></i>' + message + '</div>';
 }
 
 /**

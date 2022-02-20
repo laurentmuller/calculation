@@ -81,7 +81,8 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     protected function search(DataQuery $query, QueryBuilder $builder): void
     {
         parent::search($query, $builder);
-        if (0 !== $categoryId = (int) $query->getCustomData(self::PARAM_CATEGORY, 0)) {
+        $categoryId = (int) $query->getCustomData(self::PARAM_CATEGORY, 0);
+        if (0 !== $categoryId) {
             /** @var string $field */
             $field = $this->repository->getSearchFields('category.id');
             $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)

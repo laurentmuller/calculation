@@ -36,9 +36,9 @@
 {% import 'macros/_icons.html.twig' as icons %}
 <tr>
     <td class="e pl-3">
-        {{ package.name }}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', 'd-print-none', 'share', 'about.extern_link') -}}{% endif -%}
+        {{ package.name }}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', 'd-print-none', 'link', 'about.extern_link') -}}{% endif -%}
     </td>
-    <td class="f">{{ package.version }}</td>
+    <td class="f text-nowrap">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
 </tr>
 {%- endmacro %}

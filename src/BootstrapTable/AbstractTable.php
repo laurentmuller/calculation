@@ -277,7 +277,7 @@ abstract class AbstractTable implements SortModeInterface
     protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true, string $prefix = '')
     {
         $key = $useSessionKey ? $this->getSessionKey($name) : $name;
-        $session = $request->hasSession() ? $request->getSession() : null;
+        $session = $useSessionKey && $request->hasSession() ? $request->getSession() : null;
 
         // find in session
         if (null !== $session) {

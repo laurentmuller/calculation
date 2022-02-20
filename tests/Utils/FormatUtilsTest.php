@@ -22,22 +22,17 @@ use PHPUnit\Framework\TestCase;
  */
 class FormatUtilsTest extends TestCase
 {
+    private const DATE_TIME = '2022-02-20 12:59:59';
+
     private const LOCALE_FR_CH = 'fr_CH';
 
     private const PERCENT_SIGN = '%';
 
+    private const TIME_STAMP = 1645358399;
+
     private const TIME_ZONE = 'Europe/Zurich';
 
-    public function getDateFormatterPatterns(): array
-    {
-        return [
-            ['dd/mm/yy', 'dd/mm/yyyy'],
-            ['dd-mm-yy', 'dd-mm-yyyy'],
-            ['d/m/yy', 'd/m/yyyy'],
-        ];
-    }
-
-    public function getFormatAmounts(): array
+    public function getAmounts(): array
     {
         return [
             [0, '0.00'],
@@ -53,7 +48,7 @@ class FormatUtilsTest extends TestCase
             [-1000, "-1'000.00"],
 
             [-0, '0.00'],
-            // [-0.0, "-0.00"],
+            [-0.0, '0.00'],
 
             [0.14, '0.14'],
             [0.15, '0.15'],
@@ -65,36 +60,61 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
-    public function getFormatDates(): array
+    public function getDateFormatterPatterns(): array
     {
         return [
-            [$this->createDate('2022-02-20'), '20.02.2022'],
-            [$this->createDate('2022-02-20'), '20.02.2022', \IntlDateFormatter::SHORT],
-            [$this->createDate('2022-02-20'), '20 févr. 2022', \IntlDateFormatter::MEDIUM],
-            [$this->createDate('2022-02-20'), '20 février 2022', \IntlDateFormatter::LONG],
+            ['dd/mm/yy', 'dd/mm/yyyy'],
+            ['dd-mm-yy', 'dd-mm-yyyy'],
+            ['d/m/yy', 'd/m/yyyy'],
         ];
     }
 
-    public function getFormatDateTimes(): array
+    public function getDates(): array
     {
         return [
-            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59'],
-            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
-            [$this->createDate('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
-            [$this->createDate('2022-02-20 12:59:59'), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
+            [$this->createDate(), '20.02.2022'],
+            [$this->createDate(), '20.02.2022', \IntlDateFormatter::SHORT],
+            [$this->createDate(), '20 févr. 2022', \IntlDateFormatter::MEDIUM],
+            [$this->createDate(), '20 février 2022', \IntlDateFormatter::LONG],
+            [$this->createDate(), 'dimanche, 20 février 2022', \IntlDateFormatter::FULL],
 
-            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM],
-            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG],
-
-            [$this->createDate('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
-            [$this->createDate('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
-
-            [$this->createDate('2022-02-20 12:59:59'), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM],
-            [$this->createDate('2022-02-20 12:59:59'), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG],
+            [null, null],
+            [self::TIME_STAMP, '20.02.2022'],
         ];
     }
 
-    public function getFormatIds(): array
+    public function getDateTimes(): array
+    {
+        return [
+            [$this->createDate(), '20.02.2022 12:59'],
+            [$this->createDate(), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
+            [$this->createDate(), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
+            [$this->createDate(), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
+
+            [$this->createDate(), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM],
+            [$this->createDate(), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG],
+
+            [$this->createDate(), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
+            [$this->createDate(), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
+
+            [$this->createDate(), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM],
+            [$this->createDate(), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG],
+
+            [$this->createDate(), '20.02.2022', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE],
+            [$this->createDate(), '12:59', \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT],
+
+            [$this->createDate(), 'dimanche, 20 février 2022', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE],
+            [$this->createDate(), 'dimanche, 20 février 2022 à 12:59', \IntlDateFormatter::FULL, \IntlDateFormatter::SHORT],
+            [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59', \IntlDateFormatter::FULL, \IntlDateFormatter::MEDIUM],
+            [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::FULL, \IntlDateFormatter::LONG],
+            [$this->createDate(), 'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL],
+
+            [null, null],
+            [self::TIME_STAMP, '20.02.2022 12:59'],
+        ];
+    }
+
+    public function getIds(): array
     {
         return [
             [0, '000000'],
@@ -103,10 +123,12 @@ class FormatUtilsTest extends TestCase
             ['0.0', '000000'],
             [1, '000001'],
             [1.0, '000001'],
+            [-0, '000000'],
+            [null, '000000'],
         ];
     }
 
-    public function getFormatInts(): array
+    public function getInts(): array
     {
         return [
             [0, '0'],
@@ -117,13 +139,15 @@ class FormatUtilsTest extends TestCase
             [1.0, '1'],
             [-1, '-1'],
             [-1.0, '-1'],
+            [null, '0'],
         ];
     }
 
-    public function getFormatPercents(): array
+    public function getPercents(): array
     {
         return [
             [0, '0%'],
+            [-0, '0%'],
             [0, '0', false],
 
             [0, '0.0%', true, 1],
@@ -134,16 +158,25 @@ class FormatUtilsTest extends TestCase
 
             [0.1, '10%'],
             [0.15, '15%'],
+
+            [null, '0%'],
+            [null, '0', false],
+            [null, '0.0%', true, 1],
+            [null, '0.00%', true, 2],
         ];
     }
 
-    public function getFormatTimes(): array
+    public function getTimes(): array
     {
         return [
-            [$this->createDate('12:59:59'), '12:59'],
-            [$this->createDate('12:59:59'), '12:59', \IntlDateFormatter::SHORT],
-            [$this->createDate('12:59:59'), '12:59:59', \IntlDateFormatter::MEDIUM],
-            [$this->createDate('12:59:59'), '12:59:59 UTC+1', \IntlDateFormatter::LONG],
+            [$this->createDate(), '12:59'],
+            [$this->createDate(), '12:59', \IntlDateFormatter::SHORT],
+            [$this->createDate(), '12:59:59', \IntlDateFormatter::MEDIUM],
+            [$this->createDate(), '12:59:59 UTC+1', \IntlDateFormatter::LONG],
+            [$this->createDate(), '12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL],
+
+            [null, null],
+            [self::TIME_STAMP, '12:59'],
         ];
     }
 
@@ -173,7 +206,7 @@ class FormatUtilsTest extends TestCase
 
     /**
      *  @param mixed $number
-     *  @dataProvider getFormatAmounts
+     *  @dataProvider getAmounts
      */
     public function testFormatAmount($number, string $expected): void
     {
@@ -184,9 +217,10 @@ class FormatUtilsTest extends TestCase
 
     /**
      *  @param mixed $date
-     *  @dataProvider getFormatDates
+     *  @param mixed $expected
+     *  @dataProvider getDates
      */
-    public function testFormatDate($date, string $expected, ?int $datetype = null): void
+    public function testFormatDate($date, $expected, ?int $datetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -196,9 +230,10 @@ class FormatUtilsTest extends TestCase
 
     /**
      *  @param mixed $date
-     *  @dataProvider getFormatDateTimes
+     *  @param mixed $expected
+     *  @dataProvider getDateTimes
      */
-    public function testFormatDateTime($date, string $expected, ?int $datetype = null, ?int $timetype = null): void
+    public function testFormatDateTime($date, $expected, ?int $datetype = null, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -208,7 +243,7 @@ class FormatUtilsTest extends TestCase
 
     /**
      *  @param mixed $number
-     *  @dataProvider getFormatIds
+     *  @dataProvider getIds
      */
     public function testFormatId($number, string $expected): void
     {
@@ -218,7 +253,7 @@ class FormatUtilsTest extends TestCase
 
     /**
      *  @param mixed $number
-     *  @dataProvider getFormatInts
+     *  @dataProvider getInts
      */
     public function testFormatInt($number, string $expected): void
     {
@@ -228,7 +263,7 @@ class FormatUtilsTest extends TestCase
 
     /**
      *  @param mixed $number
-     *  @dataProvider getFormatPercents
+     *  @dataProvider getPercents
      */
     public function testFormatPercent($number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
     {
@@ -245,9 +280,10 @@ class FormatUtilsTest extends TestCase
 
     /**
      *  @param mixed $date
-     *  @dataProvider getFormatTimes
+     *  @param mixed $expected
+     *  @dataProvider getTimes
      */
-    public function testFormatTime($date, string $expected, ?int $timetype = null): void
+    public function testFormatTime($date, $expected, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -274,8 +310,8 @@ class FormatUtilsTest extends TestCase
         $this->assertEquals(\IntlDateFormatter::SHORT, FormatUtils::getTimeType());
     }
 
-    private function createDate(string $time): \DateTime
+    private function createDate(string $time = self::DATE_TIME, string $timezone = self::TIME_ZONE): \DateTime
     {
-        return new \DateTime($time, new \DateTimeZone(self::TIME_ZONE));
+        return new \DateTime($time, new \DateTimeZone($timezone));
     }
 }

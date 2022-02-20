@@ -536,8 +536,8 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      *
      * @return float[] the X and Y position
      *
-     * @see Fpdf::GetX()
-     * @see Fpdf::GetY()
+     * @see PdfDocument::GetX()
+     * @see PdfDocument::GetY()
      */
     public function GetXY(): array
     {

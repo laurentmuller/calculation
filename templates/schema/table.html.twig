@@ -1,0 +1,44 @@
+{% extends 'cards/card_base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title = 'schema.table.title' -%}
+{%- set title_description = 'schema.table.description' -%}
+{%- set title_parameters = {'%name%': name} -%}
+{%- set title_icon = 'table-columns' -%}
+
+{% block card_body -%}
+{% if columns|length %}
+<table class="table table-hover table-list table-sm">
+    <thead>
+        <tr>
+            <th>{{ 'schema.table.fields.name'|trans }}</th>
+            <th class="text-date-time">{{ 'schema.table.fields.type'|trans }}</th>
+            <th class="text-currency">{{ 'schema.table.fields.length'|trans }}</th>
+            <th class="text-boolean">{{ 'schema.table.fields.empty'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for column in columns %}
+        {% set foreign_table = column.foreignTableName ?? false %}
+        <tr>
+            <td>
+                {{- column.name }}{% if primaryKey == column.name %} <i class="fa-solid fa-key"></i>{% endif %}
+                {% if foreign_table -%} {{ icons.link(path('schema_table', {'name': foreign_table}), null, null, 'link', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
+            </td>
+            <td class="text-date-time">{{ column.type }}</td>
+            <td class="text-currency">{{ column.length > 0 ? column.length|integer : '&nbsp;' }}</a></td>
+            <td class="text-boolean">{{ column.null|boolean }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-warning text-center" role="alert">{{ 'schema.table.empty'|trans }}</div>
+{% endif %}
+{%- endblock %}
+
+{% block card_footer -%}
+{{- icons.homepage() }}
+{{ icons.link(path('schema'), 'schema.index.title', 'btn btn-secondary btn-form') -}}
+{%- endblock %}

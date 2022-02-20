@@ -1304,3 +1304,20 @@ importance:
         high: Importance haute
         medium: Importance moyenne
         low: Importance basse
+schema:
+    index:
+        title: Tables
+        description: Liste des tables de la base de données.
+        fields:
+            name: Nom
+            columns: Colonnes
+        tooltip: Afficher les colonnes de la table %name%
+    table:
+        title: Colonnes de la table %name%
+        description: Liste des colonnes de la base de données.
+        empty: Aucune colonne n'est défine.
+        fields:
+            name: Nom
+            type: Type
+            empty: 'Nulle'
+            length: Longueur

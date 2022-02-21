@@ -14,13 +14,12 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
-use App\Entity\GlobalMargin;
 use App\Entity\Group;
-use App\Entity\GroupMargin;
 use App\Repository\GlobalMarginRepository;
+use App\Repository\GroupMarginRepository;
+use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -68,16 +67,27 @@ final class CalculationService
      */
     public const ROW_USER_MARGIN = 5;
 
-    private EntityManagerInterface $manager;
+    private GlobalMarginRepository $globalMarginRepository;
+
+    private GroupMarginRepository $groupMarginRepository;
+
+    private GroupRepository $groupRepository;
 
     private ApplicationService $service;
 
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, ApplicationService $service, TranslatorInterface $translator)
-    {
-        $this->manager = $manager;
+    public function __construct(
+        GlobalMarginRepository $globalMarginRepository,
+        GroupMarginRepository $groupMarginRepository,
+        GroupRepository $groupRepository,
+        ApplicationService $service,
+        TranslatorInterface $translator
+    ) {
+        $this->globalMarginRepository = $globalMarginRepository;
+        $this->groupMarginRepository = $groupMarginRepository;
+        $this->groupRepository = $groupRepository;
         $this->service = $service;
         $this->setTranslator($translator);
     }
@@ -182,7 +192,7 @@ final class CalculationService
         // reduce groups
         /** @psalm-var array<int, float> $itemGroups */
         $itemGroups = \array_reduce((array) $source['groups'], function (array $carry, array $group): array {
-            $id = (int) ($group['group']);
+            $id = (int) $group['group'];
             $carry[$id] = $this->reduceGroup($group);
 
             return $carry;
@@ -235,11 +245,6 @@ final class CalculationService
                 'overall_total' => 0,
             ];
         }
-
-        // sort
-        \uasort($groups, static function (array $a, array $b) {
-            return $a['description'] <=> $b['description'];
-        });
 
         $userMargin = (float) $source['userMargin'] / 100.0;
         $groups = $this->computeGroups($groups, null, $userMargin);
@@ -460,10 +465,7 @@ final class CalculationService
     private function getGlobalMargin(float $amount): float
     {
         if (!empty($amount)) {
-            /** @var GlobalMarginRepository $repository */
-            $repository = $this->manager->getRepository(GlobalMargin::class);
-
-            return $repository->getMargin($amount);
+            return $this->globalMarginRepository->getMargin($amount);
         }
 
         return 0;
@@ -476,10 +478,7 @@ final class CalculationService
      */
     private function getGroup(int $id): ?Group
     {
-        /** @psalm-var \Doctrine\ORM\EntityRepository<Group> $repository */
-        $repository = $this->manager->getRepository(Group::class);
-
-        return $repository->find($id);
+        return $this->groupRepository->find($id);
     }
 
     /**
@@ -494,10 +493,7 @@ final class CalculationService
     private function getGroupMargin(Group $group, float $amount): float
     {
         if (!empty($amount)) {
-            /** @var \App\Repository\GroupMarginRepository $repository */
-            $repository = $this->manager->getRepository(GroupMargin::class);
-
-            return $repository->getMargin($group, $amount);
+            return $this->groupMarginRepository->getMargin($group, $amount);
         }
 
         return 0;
@@ -555,7 +551,7 @@ final class CalculationService
             /** @psalm-var array $categories */
             $categories = $group['categories'];
 
-            return \array_reduce($categories, function (float $carry, array $category) {
+            return \array_reduce($categories, function (float $carry, array $category): float {
                 return $carry + $this->reduceCategory($category);
             }, 0);
         }

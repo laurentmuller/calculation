@@ -43,7 +43,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
         return (int) $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->where('e.category = :category')
-            ->setParameter('category', $category, Types::OBJECT)
+            ->setParameter('category', $category->getId(), Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }

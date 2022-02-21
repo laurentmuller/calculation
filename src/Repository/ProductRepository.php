@@ -69,7 +69,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     {
         $builder = $this->createDefaultQueryBuilder('e')
             ->where('e.category = :category')
-            ->setParameter('category', $category, Types::OBJECT)
+            ->setParameter('category', $category->getId(), Types::INTEGER)
             ->orderBy('e.description');
 
         if ($excludeEmpty) {

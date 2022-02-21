@@ -53,7 +53,7 @@ class GroupMarginRepository extends AbstractRepository
             ->where('e.group = :group')
             ->andWhere(':amount >= e.minimum')
             ->andWhere(':amount < e.maximum')
-            ->setParameter('group', $group, Types::OBJECT)
+            ->setParameter('group', $group->getId(), Types::INTEGER)
             ->setParameter('amount', $amount, Types::FLOAT);
 
         // execute

@@ -49,7 +49,7 @@ class CalculationGroupRepository extends AbstractRepository
             ->select('DISTINCT COUNT(c.id)')
             ->innerJoin('e.calculation', 'c')
             ->where('e.group = :group')
-            ->setParameter('group', $group, Types::OBJECT)
+            ->setParameter('group', $group->getId(), Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }

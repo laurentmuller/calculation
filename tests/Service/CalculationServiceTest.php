@@ -21,7 +21,9 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
-use App\Repository\AbstractRepository;
+use App\Repository\GlobalMarginRepository;
+use App\Repository\GroupMarginRepository;
+use App\Repository\GroupRepository;
 use App\Service\ApplicationService;
 use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
@@ -54,7 +56,7 @@ class CalculationServiceTest extends KernelTestCase
             ->setUserMargin(self::MARGIN_USER);
 
         $manager = $this->getManager();
-        $service = $this->getService($manager);
+        $service = $this->getCalculationService($manager);
         $service->updateTotal($calculation);
 
         $this->assertEquals(1, $calculation->getGroupsCount());
@@ -108,14 +110,29 @@ class CalculationServiceTest extends KernelTestCase
         echo \sprintf("\n%-15s: %s", $name, $value);
     }
 
-    protected function getService(EntityManager $manager): CalculationService
+    protected function getCalculationService(EntityManager $manager): CalculationService
     {
-        /** @var ApplicationService $application */
-        $application = static::getContainer()->get(ApplicationService::class);
-        /** @var TranslatorInterface $translator */
-        $translator = static::getContainer()->get(TranslatorInterface::class);
+        // get services
+        $groupRepository = $this->getService(GroupRepository::class);
+        $groupMarginRepository = $this->getService(GroupMarginRepository::class);
+        $globalMarginRepository = $this->getService(GlobalMarginRepository::class);
+        $service = $this->getService(ApplicationService::class);
+        $translator = $this->getService(TranslatorInterface::class);
 
-        return new CalculationService($manager, $application, $translator);
+        return new CalculationService($globalMarginRepository, $groupMarginRepository, $groupRepository, $service, $translator);
+    }
+
+    /**
+     * @psalm-template T
+     * @psalm-param class-string<T> $classname
+     * @psalm-return T
+     */
+    protected function getService(string $classname)
+    {
+        /** @psalm-var T $service */
+        $service = static::getContainer()->get($classname);
+
+        return $service;
     }
 
     protected function init(): Product
@@ -180,20 +197,15 @@ class CalculationServiceTest extends KernelTestCase
     }
 
     /**
-     * @template T of \App\Entity\AbstractEntity
-     *
-     * @param class-string<T> $entityName
+     * @psalm-template T of \App\Entity\AbstractEntity
+     * @psalm-param class-string<T> $entityName
      * @psalm-return EntityRepository<T> $repository
      */
     protected function initRepository(EntityManager $manager, string $entityName): EntityRepository
     {
-        /**
-         *  @var AbstractRepository $repository
-         *  @psalm-var AbstractRepository<T> $repository
-         */
+        /** @psalm-var \App\Repository\AbstractRepository<T> $repository */
         $repository = $manager->getRepository($entityName);
 
-        // remove existing elements
         $items = $repository->findAll();
         foreach ($items as $item) {
             $manager->remove($item);

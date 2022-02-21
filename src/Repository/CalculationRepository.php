@@ -161,7 +161,7 @@ class CalculationRepository extends AbstractRepository
         return (int) $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->where('e.state= :state')
-            ->setParameter('state', $state, Types::OBJECT)
+            ->setParameter('state', $state->getId(), Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }

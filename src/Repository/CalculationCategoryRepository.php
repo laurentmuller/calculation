@@ -50,7 +50,7 @@ class CalculationCategoryRepository extends AbstractRepository
             ->innerJoin('e.group', 'g')
             ->innerJoin('g.calculation', 'c')
             ->where('e.category = :category')
-            ->setParameter('category', $category, Types::OBJECT)
+            ->setParameter('category', $category->getId(), Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
     }

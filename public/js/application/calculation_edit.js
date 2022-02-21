@@ -366,6 +366,7 @@ const Application = {
      * @returns {Number} - the rounded value.
      */
     roundValue: function(value) {
+        'use strict';
         return Math.round((value + Number.EPSILON) * 100) / 100;
     },
 
@@ -431,7 +432,7 @@ const Application = {
                     $item.find('.btn-down-item').toggleClass('d-none', hideDown);
                     $item.find('.btn-last-item').toggleClass('d-none', hideDown);
                     $item.find('.btn-first-item').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
-                })
+                });
             });
         });
 
@@ -1702,7 +1703,7 @@ const MoveHandler = {
         if ($target.length && $target !== $category) {
             return this.moveCategory($category, $target, true);
         }
-        return $item;
+        return $category;
     },
 
     /**

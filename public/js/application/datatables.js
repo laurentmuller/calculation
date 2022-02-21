@@ -430,7 +430,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
                     const $image = $cell.find('img');
                     const params = table.getParameters(id);
                     if (params.pagelength === -1) {
-                        delete params['pagelength'];
+                        delete params.pagelength;
                     }
                     const href = path.replace('0', id) + '?' + $.param(params);
 

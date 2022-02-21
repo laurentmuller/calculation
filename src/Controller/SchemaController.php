@@ -15,6 +15,7 @@ namespace App\Controller;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -31,14 +32,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SchemaController extends AbstractController
 {
-    private EntityManagerInterface $manager;
+    /**
+     * @var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
+     */
+    private AbstractSchemaManager $manager;
 
     /**
      * Constructor.
      */
     public function __construct(EntityManagerInterface $manager)
     {
-        $this->manager = $manager;
+        $this->manager = $manager->getConnection()->createSchemaManager();
     }
 
     /**
@@ -53,16 +57,18 @@ class SchemaController extends AbstractController
 
     /**
      * @Route("/{name}", name="schema_table")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the table can not be found
      */
     public function table(string $name): Response
     {
-        $columns = $this->getColumns($name);
-        $primaryKey = $this->getPrimaryKey($name);
+        if (!$this->tableExist($name)) {
+            throw $this->createNotFoundException($this->trans('schema.table.error', ['%name%' => $name]));
+        }
 
         return $this->renderForm('schema/table.html.twig', [
             'name' => $name,
-            'columns' => $columns,
-            'primaryKey' => $primaryKey,
+            'columns' => $this->getColumns($name),
         ]);
     }
 
@@ -83,71 +89,102 @@ class SchemaController extends AbstractController
 
     /**
      * Gets the columns for the given table name.
+     *
+     * @return array<array{
+     *      name: string,
+     *      primaryKey: bool,
+     *      unique: bool,
+     *      type: string,
+     *      length: int,
+     *      nullable: bool,
+     *      foreignTableName: null|string}>
      */
     private function getColumns(string $name): array
     {
-        $manager = $this->getSchemaManager();
-        $columns = $manager->listTableColumns($name);
-        $foreignKeys = $manager->listTableForeignKeys($name);
+        $table = $this->getManager()->listTableDetails($name);
+        $indexes = $table->getIndexes();
+        $foreignKeys = $table->getForeignKeys();
+        $primaryKeys = $this->getPrimaryKeys($table);
 
-        return \array_map(function (Column $column) use ($foreignKeys): array {
+        return \array_map(function (Column $column) use ($primaryKeys, $indexes, $foreignKeys): array {
             $name = $column->getName();
+            $isPrimaryKey = \in_array($name, $primaryKeys, true);
+            $unique = $this->isIndexUnique($name, $indexes);
             $foreignTableName = $this->findForeignTableName($name, $foreignKeys);
 
             return [
                 'name' => $name,
+                'primaryKey' => $isPrimaryKey,
+                'unique' => $unique,
                 'type' => $column->getType()->getName(),
                 'length' => (int) $column->getLength(),
-                'null' => !$column->getNotnull(),
+                'nullable' => !$column->getNotnull(),
                 'foreignTableName' => $foreignTableName,
             ];
-        }, $columns);
-    }
-
-    private function getPrimaryKey(string $name): ?string
-    {
-        $manager = $this->getSchemaManager();
-        $table = $manager->listTableDetails($name);
-        if ($table->hasPrimaryKey()) {
-            $columns = $table->getPrimaryKeyColumns();
-            if (!empty($columns)) {
-                $key = \array_key_first($columns);
-
-                return $columns[$key]->getName();
-            }
-        }
-
-        return null;
+        }, $table->getColumns());
     }
 
     /**
      * @return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      */
-    private function getSchemaManager(): AbstractSchemaManager
+    private function getManager(): AbstractSchemaManager
     {
-        return $this->manager->getConnection()
-            ->createSchemaManager();
+        return $this->manager;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getPrimaryKeys(Table $table): array
+    {
+        if ($table->hasPrimaryKey()) {
+            return \array_map(static function (Column $c): string {
+                return $c->getName();
+            }, $table->getPrimaryKeyColumns());
+        }
+
+        return [];
     }
 
     /**
      * Gets the tables.
+     *
+     * @return array<array{
+     *      name: string,
+     *      count: int}>
      */
     private function getTables(): array
     {
-        $manager = $this->getSchemaManager();
-        $tables = $manager->listTables();
+        $tables = $this->getManager()->listTables();
 
-        if ($sort) {
-            \usort($tables, function (Table $a, Table $b): int {
-                return \strnatcmp($a->getName(), $b->getName());
-            });
-        }
+        \usort($tables, function (Table $a, Table $b): int {
+            return \strnatcmp($a->getName(), $b->getName());
+        });
 
-        return \array_map(function (Table $table): array {
+        return \array_map(static function (Table $table): array {
             return [
                 'name' => $table->getName(),
-                 'columns' => \count($table->getColumns()),
+                'count' => \count($table->getColumns()),
              ];
         }, $tables);
+    }
+
+    /**
+     * @param Index[] $indexes
+     */
+    private function isIndexUnique(string $name, array $indexes): bool
+    {
+        foreach ($indexes as $index) {
+            if (\in_array($name, $index->getColumns(), true)) {
+                return $index->isUnique();
+            }
+        }
+
+        return false;
+    }
+
+    private function tableExist(string $name): bool
+    {
+        return $this->getManager()->tablesExist([$name]);
     }
 }

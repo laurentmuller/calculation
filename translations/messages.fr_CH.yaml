@@ -198,8 +198,7 @@ category:
         title: Supprimer la catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
         success: La catégorie <b>%name%</b> a été supprimée avec succès.
-        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée
-            dans :'
+        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
     list:
         title: Catégories
         empty: Aucune catégorie définie.
@@ -232,8 +231,7 @@ group:
         title: Supprimer le groupe
         message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
         success: Le groupe <b>%name%</b> a été supprimé avec succès.
-        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé
-            dans :'
+        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
     list:
         title: Groupes
         empty: Aucun groupe défini.
@@ -817,7 +815,7 @@ parameters:
         print_address: Imprimer l'adresse
         default_product: Article
         default_product_quantity: Quantité
-        default_product_edit: "Editer l'article lors de l'affichage de la nouvelle calculation"
+        default_product_edit: Editer l'article lors de l'affichage de la nouvelle calculation
     placehoders:
         default_product: <Aucun article sélectionné>
     helps:
@@ -827,8 +825,7 @@ parameters:
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?
-    note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle
-        : %size%).'
+    note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle : %size%).'
     success: Le cache de l'application a été vidé avec succés.
     failure: Impossible de vider le cache de l'application.
     submit: Vider
@@ -923,8 +920,7 @@ password:
         strong: Forte
         very_strong: Très forte
     input: Mot de passe
-    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées
-        :'
+    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
 swisspost:
     title: Importer les localités et les noms de rue
     import:
@@ -1213,8 +1209,7 @@ help:
         entity_fields: 'Les champs sont définis comme suit :'
         entity_empty: Cet objet ne contient aucun champ.
         entity_actions: 'Les actions possibles sur l''objet sont les suivantes :'
-        global_actions: 'Les actions globales suivantes peuvent être sélectionnées
-            :'
+        global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
         edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
         edit_fields: 'Les champs de saisie sont définis comme suit :'
         edit_columns: 'La table contient les colonnes suivantes :'
@@ -1310,14 +1305,17 @@ schema:
         description: Liste des tables de la base de données.
         fields:
             name: Nom
-            columns: Colonnes
+            count: Colonnes
         tooltip: Afficher les colonnes de la table %name%
     table:
         title: Colonnes de la table %name%
         description: Liste des colonnes de la base de données.
         empty: Aucune colonne n'est défine.
+        error: La table '%name%' n'existe pas ou est introuvable.
+        primary_key: Clé primaire
+        index_unique: Valeur unique
         fields:
             name: Nom
             type: Type
-            empty: 'Nulle'
+            empty: Nulle
             length: Longueur

@@ -643,7 +643,7 @@
          *            timeout - The time out.
          */
         updateProgress: function($progress, endTime, timeout) {
-            let percent = ((endTime - (new Date().getTime())) / timeout) * 100;
+            let percent = (endTime - new Date().getTime() / timeout) * 100;
             percent = Number.parseInt(percent, 10);
             $progress.css('width', percent + '%');
             if (percent === 0) {

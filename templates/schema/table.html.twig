@@ -9,30 +9,33 @@
 
 {% block card_body -%}
 {% if columns|length %}
-<table class="table table-hover table-list table-sm">
-    <thead>
-        <tr>
-            <th>{{ 'schema.table.fields.name'|trans }}</th>
-            <th class="text-date-time">{{ 'schema.table.fields.type'|trans }}</th>
-            <th class="text-currency">{{ 'schema.table.fields.length'|trans }}</th>
-            <th class="text-boolean">{{ 'schema.table.fields.empty'|trans }}</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for column in columns %}
-        {% set foreign_table = column.foreignTableName ?? false %}
-        <tr>
-            <td>
-                {{- column.name }}{% if primaryKey == column.name %} <i class="fa-solid fa-key"></i>{% endif %}
-                {% if foreign_table -%} {{ icons.link(path('schema_table', {'name': foreign_table}), null, null, 'link', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
-            </td>
-            <td class="text-date-time">{{ column.type }}</td>
-            <td class="text-currency">{{ column.length > 0 ? column.length|integer : '&nbsp;' }}</a></td>
-            <td class="text-boolean">{{ column.null|boolean }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-hover table-list table-sm">
+        <thead>
+            <tr>
+                <th class="w-100">{{ 'schema.table.fields.name'|trans }}</th>
+                <th class="text-date-time">{{ 'schema.table.fields.type'|trans }}</th>
+                <th class="text-currency">{{ 'schema.table.fields.length'|trans }}</th>
+                <th class="text-boolean">{{ 'schema.table.fields.empty'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for column in columns %}
+            {% set foreign_table = column.foreignTableName ?? false %}
+            <tr>
+                <td class="w-100">
+                    {{- column.name }}{% if column.primaryKey %} <i class="fa-solid fa-key" title="{{ 'schema.table.primary_key'|trans }}"></i>{% endif %}
+                    {% if column.unique and not column.primaryKey %} <i class="fa-solid fa-lock" title="{{ 'schema.table.index_unique'|trans }}"></i>{% endif %}
+                    {% if foreign_table -%} {{ icons.link(path('schema_table', {'name': foreign_table}), null, null, 'link', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
+                </td>
+                <td class="text-date-time">{{ column.type }}</td>
+                <td class="text-currency">{{ column.length > 0 ? column.length|integer : '&nbsp;' }}</a></td>
+                <td class="text-boolean">{{ column.nullable|boolean }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% else %}
 <div class="alert alert-warning text-center" role="alert">{{ 'schema.table.empty'|trans }}</div>
 {% endif %}

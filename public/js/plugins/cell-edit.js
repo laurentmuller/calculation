@@ -52,7 +52,7 @@
             this.value = this._parse(this.value);
 
             const required = options.required;
-            const valid = !required || ('' + this.value);
+            const valid = !required || '' + this.value;
             const className = valid ? options.inputClass : options.inputClass + ' is-invalid';
             const title = valid ? options.tooltipEdit : options.tooltipError ;
             const customClass = valid ? options.tooltipEditClass : options.tooltipErrorClass;

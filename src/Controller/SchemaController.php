@@ -18,7 +18,6 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -47,17 +46,15 @@ class SchemaController extends AbstractController
      */
     public function index(): Response
     {
-        $tables = $this->getTables();
-
         return $this->renderForm('schema/index.html.twig', [
-            'tables' => $tables,
+            'tables' => $this->getTables(),
         ]);
     }
 
     /**
      * @Route("/{name}", name="schema_table")
      */
-    public function table(Request $request, string $name): Response
+    public function table(string $name): Response
     {
         $columns = $this->getColumns($name);
         $primaryKey = $this->getPrimaryKey($name);
@@ -87,17 +84,11 @@ class SchemaController extends AbstractController
     /**
      * Gets the columns for the given table name.
      */
-    private function getColumns(string $name, bool $sort = false): array
+    private function getColumns(string $name): array
     {
         $manager = $this->getSchemaManager();
         $columns = $manager->listTableColumns($name);
         $foreignKeys = $manager->listTableForeignKeys($name);
-
-        if ($sort) {
-            \usort($columns, function (Column $a, Column $b): int {
-                return \strnatcmp($a->getName(), $b->getName());
-            });
-        }
 
         return \array_map(function (Column $column) use ($foreignKeys): array {
             $name = $column->getName();
@@ -141,7 +132,7 @@ class SchemaController extends AbstractController
     /**
      * Gets the tables.
      */
-    private function getTables(bool $sort = true): array
+    private function getTables(): array
     {
         $manager = $this->getSchemaManager();
         $tables = $manager->listTables();

@@ -280,7 +280,7 @@ class BootstrapTableController extends AbstractController
         }
 
         // check empty
-        if (null !== $emptyMessage = $table->checkEmpty()) {
+        if ($emptyMessage = $table->checkEmpty()) {
             $this->infoTrans($emptyMessage);
 
             return $this->redirectToHomePage();

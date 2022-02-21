@@ -156,7 +156,7 @@ class SpreadsheetDocument extends Spreadsheet
         $username = $controller->getUserName();
         $title = $this->trans($title);
 
-        $this->setHeaderFooter($title, $application, $customer)
+        $this->setHeaderFooter($title, $customer)
             ->setTitle($title)
             ->setActiveTitle($title)
             ->setCompany($customer->getName())
@@ -492,7 +492,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the header and footer texts.
      */
-    public function setHeaderFooter(?string $title, ?string $application, CustomerInformation $customer): self
+    public function setHeaderFooter(?string $title, CustomerInformation $customer): self
     {
         $sheet = $this->getActiveSheet();
         $pageMargins = $sheet->getPageMargins();

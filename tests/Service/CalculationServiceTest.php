@@ -113,13 +113,13 @@ class CalculationServiceTest extends KernelTestCase
     protected function getCalculationService(EntityManager $manager): CalculationService
     {
         // get services
+        $globalRepository = $this->getService(GlobalMarginRepository::class);
+        $marginRepository = $this->getService(GroupMarginRepository::class);
         $groupRepository = $this->getService(GroupRepository::class);
-        $groupMarginRepository = $this->getService(GroupMarginRepository::class);
-        $globalMarginRepository = $this->getService(GlobalMarginRepository::class);
         $service = $this->getService(ApplicationService::class);
         $translator = $this->getService(TranslatorInterface::class);
 
-        return new CalculationService($globalMarginRepository, $groupMarginRepository, $groupRepository, $service, $translator);
+        return new CalculationService($globalRepository, $marginRepository, $groupRepository, $service, $translator);
     }
 
     /**

@@ -73,7 +73,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @param string $attribute the attribute to check permission for
      *
-     *  @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
     protected function checkPermission(string $attribute): void
     {

@@ -67,26 +67,21 @@ final class CalculationService
      */
     public const ROW_USER_MARGIN = 5;
 
-    private GlobalMarginRepository $globalMarginRepository;
-
-    private GroupMarginRepository $groupMarginRepository;
+    private GlobalMarginRepository $globalRepository;
 
     private GroupRepository $groupRepository;
+
+    private GroupMarginRepository $marginRepository;
 
     private ApplicationService $service;
 
     /**
      * Constructor.
      */
-    public function __construct(
-        GlobalMarginRepository $globalMarginRepository,
-        GroupMarginRepository $groupMarginRepository,
-        GroupRepository $groupRepository,
-        ApplicationService $service,
-        TranslatorInterface $translator
-    ) {
-        $this->globalMarginRepository = $globalMarginRepository;
-        $this->groupMarginRepository = $groupMarginRepository;
+    public function __construct(GlobalMarginRepository $globalRepository, GroupMarginRepository $marginRepository, GroupRepository $groupRepository, ApplicationService $service, TranslatorInterface $translator)
+    {
+        $this->globalRepository = $globalRepository;
+        $this->marginRepository = $marginRepository;
         $this->groupRepository = $groupRepository;
         $this->service = $service;
         $this->setTranslator($translator);
@@ -465,7 +460,7 @@ final class CalculationService
     private function getGlobalMargin(float $amount): float
     {
         if (!empty($amount)) {
-            return $this->globalMarginRepository->getMargin($amount);
+            return $this->globalRepository->getMargin($amount);
         }
 
         return 0;
@@ -493,7 +488,7 @@ final class CalculationService
     private function getGroupMargin(Group $group, float $amount): float
     {
         if (!empty($amount)) {
-            return $this->groupMarginRepository->getMargin($group, $amount);
+            return $this->marginRepository->getMargin($group, $amount);
         }
 
         return 0;

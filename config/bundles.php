@@ -11,7 +11,6 @@ return [
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Ob\HighchartsBundle\ObHighchartsBundle::class => ['all' => true],
-    DataTables\DataTablesBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
     SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],

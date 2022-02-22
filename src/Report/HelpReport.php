@@ -201,8 +201,11 @@ class HelpReport extends AbstractReport
     /**
      * @psalm-param array<array{id: string, description: string}> $actions
      */
-    private function outputActions(array $actions): void
+    private function outputActions(array $actions, string $description): void
     {
+        $this->Ln(3);
+        $this->outputText($description);
+
         $table = new PdfTableBuilder($this);
         $table->addColumn(PdfColumn::left($this->trans('help.fields.action'), 70, true))
             ->addColumn(PdfColumn::left($this->trans('help.fields.description'), 50))
@@ -318,9 +321,7 @@ class HelpReport extends AbstractReport
                 /** @var array<array{id: string, description: string}>|null $actions */
                 $actions = $entity['actions'] ?? null;
                 if (null !== $actions) {
-                    $this->Ln(3);
-                    $this->outputText('help.labels.entity_actions');
-                    $this->outputActions($actions);
+                    $this->outputActions($actions, 'help.labels.entity_actions');
                 }
             }
         }
@@ -331,9 +332,7 @@ class HelpReport extends AbstractReport
          *      description: string}> $actions */
         $actions = $item['editActions'] ?? null;
         if (null !== $actions) {
-            $this->Ln(3);
-            $this->outputText('help.labels.edit_actions');
-            $this->outputActions($actions);
+            $this->outputActions($actions, 'help.labels.edit_actions');
         }
 
         // global actions
@@ -342,9 +341,7 @@ class HelpReport extends AbstractReport
          *      description: string}> $actions */
         $actions = $item['globalActions'] ?? null;
         if (null !== $actions) {
-            $this->Ln(3);
-            $this->outputText('help.labels.global_actions');
-            $this->outputActions($actions);
+            $this->outputActions($actions, 'help.labels.global_actions');
         }
 
         /**
@@ -365,9 +362,7 @@ class HelpReport extends AbstractReport
             /** @psalm-var null|array{id: string, description: string} $action */
             $action = $forbidden['action'] ?? null;
             if (null !== $action) {
-                $this->Ln(3);
-                $this->outputText('help.labels.edit_actions');
-                $this->outputActions([$action]);
+                $this->outputActions([$action], 'help.labels.edit_actions');
             }
         }
     }
@@ -483,9 +478,7 @@ class HelpReport extends AbstractReport
         /** @psalm-var null|array<array{id: string, description: string}> $actions */
         $actions = $item['actions'] ?? null;
         if (null !== $actions) {
-            $this->Ln(3);
-            $this->outputText('help.labels.entity_actions');
-            $this->outputActions($actions);
+            $this->outputActions($actions, 'help.labels.entity_actions');
         }
     }
 

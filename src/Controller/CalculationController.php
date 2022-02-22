@@ -22,7 +22,6 @@ use App\Form\Dialog\EditTaskDialogType;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
-use App\Repository\CalculationStateRepository;
 use App\Repository\TaskRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
@@ -295,7 +294,7 @@ class CalculationController extends AbstractEntityController
      *     {"label" = "calculation.list.title"}
      * })
      */
-    public function table(Request $request, CalculationTable $table, CalculationStateRepository $repository): Response
+    public function table(Request $request, CalculationTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table.html.twig');
     }

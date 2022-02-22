@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a7010136f767138eb3f84ad8658e6e8",
+    "content-hash": "12c5892bf034bc1fbcbbc2f0eb494bb8",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -9053,62 +9053,6 @@
                 "source": "https://github.com/dustin10/VichUploaderBundle/tree/1.19.0"
             },
             "time": "2021-12-23T17:28:12+00:00"
-        },
-        {
-            "name": "webinarium/datatables-bundle",
-            "version": "2.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webinarium/DataTablesBundle.git",
-                "reference": "c2460dbf062f3ee501b20920e4c398cc70885253"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webinarium/DataTablesBundle/zipball/c2460dbf062f3ee501b20920e4c398cc70885253",
-                "reference": "c2460dbf062f3ee501b20920e4c398cc70885253",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=7.0",
-                "psr/log": "^1.1",
-                "symfony/config": "^2.7|^3.0|^4.0|^5.0",
-                "symfony/dependency-injection": "^2.7|^3.4.26|^4.0|^5.0",
-                "symfony/http-foundation": "^2.7|^3.4.35|^4.0|^5.0",
-                "symfony/http-kernel": "^2.7|^3.0|^4.0|^5.0",
-                "symfony/validator": "^2.7|^3.0|^4.0|^5.0"
-            },
-            "require-dev": {
-                "doctrine/annotations": "^1.4",
-                "doctrine/cache": "^1.6",
-                "friendsofphp/php-cs-fixer": "^2.14",
-                "phpunit/phpunit": "^5.6",
-                "roave/security-advisories": "dev-master"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "DataTables\\": [
-                        "src/",
-                        "tests/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "DataTables Symfony bundle",
-            "homepage": "https://github.com/webinarium/DataTablesBundle",
-            "keywords": [
-                "datatable",
-                "datatables"
-            ],
-            "support": {
-                "issues": "https://github.com/webinarium/DataTablesBundle/issues",
-                "source": "https://github.com/webinarium/DataTablesBundle/tree/2.4.1"
-            },
-            "time": "2021-12-01T05:50:39+00:00"
         }
     ],
     "packages-dev": [

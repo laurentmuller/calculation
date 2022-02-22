@@ -872,16 +872,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/webinarium/datatables-bundle/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/webinarium/datatables-bundle/tests">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/webmozart/assert/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

@@ -75,12 +75,6 @@ services:
     App\Validator\RecaptchaValidator:
         arguments: ['%google_recaptcha_secret_key%']
 
-    # datatables
-    App\DataTable\:
-        resource: '../src/DataTable/'
-        exclude:  '../src/DataTable/Model'
-        tags: [datatable]
-
     # used to display flash message when entities change
     # App\Listener\PersistenceListener:
     #     tags:

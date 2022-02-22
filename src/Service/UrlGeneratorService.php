@@ -18,7 +18,6 @@ use App\BootstrapTable\CategoryTable;
 use App\BootstrapTable\LogTable;
 use App\BootstrapTable\SearchTable;
 use App\Controller\AbstractController;
-use App\DataTable\Model\AbstractDataTable;
 use App\Interfaces\TableInterface;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -43,13 +42,6 @@ class UrlGeneratorService
     private const PARAMETER_NAMES = [
         // global
         self::PARAM_CALLER,
-
-        // datatables
-        AbstractDataTable::PARAM_QUERY,
-        AbstractDataTable::PARAM_PAGE_INDEX,
-        AbstractDataTable::PARAM_PAGE_LENGTH,
-        AbstractDataTable::PARAM_ORDER_COLUMN,
-        AbstractDataTable::PARAM_ORDER_DIR,
 
         // bootstrap-table
         TableInterface::PARAM_ID,

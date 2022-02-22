@@ -67,22 +67,13 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     protected function doExecute(InputInterface $input, OutputInterface $output): int
     {
-        // get file
+        // public dir
         if (!$publicDir = $this->getPublicDir()) {
             return Command::SUCCESS;
         }
-        $vendorFile = $publicDir . '/' . self::VENDOR_FILE_NAME;
 
-        // check file
-        if (!$this->exists($publicDir) || !$this->exists($vendorFile)) {
-            $this->writeVerbose("The file '{$vendorFile}' does not exist.");
-
-            return Command::SUCCESS;
-        }
-
-        // decode
-        $configuration = $this->loadJson($vendorFile);
-        if (!$configuration instanceof \stdClass) {
+        // configuration
+        if (null == ($configuration = $this->loadConfiguration($publicDir))) {
             return Command::SUCCESS;
         }
 
@@ -107,8 +98,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         /** @var array<string, string> $renames */
         $renames = $this->getConfigArray($configuration, 'renames');
 
-        $countPlugins = 0;
         $countFiles = 0;
+        $countPlugins = 0;
 
         try {
             // parse plugins
@@ -572,6 +563,24 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
 
         return $count;
+    }
+
+    private function loadConfiguration(string $publicDir): ?\stdClass
+    {
+        // check file
+        $vendorFile = $publicDir . '/' . self::VENDOR_FILE_NAME;
+        if (!$this->exists($publicDir) || !$this->exists($vendorFile)) {
+            $this->writeVerbose("The file '{$vendorFile}' does not exist.");
+
+            return null;
+        }
+
+        $configuration = $this->loadJson($vendorFile);
+        if (!$configuration instanceof \stdClass) {
+            return null;
+        }
+
+        return $configuration;
     }
 
     /**

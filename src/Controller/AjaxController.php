@@ -29,20 +29,14 @@ use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
-use App\Util\FileUtils;
-use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -56,16 +50,6 @@ class AjaxController extends AbstractController
 {
     use CookieTrait;
     use MathTrait;
-
-    /**
-     * The cache timeout (60 minutes).
-     */
-    private const CACHE_TIMEOUT = 60 * 60;
-
-    /**
-     * The cache key.
-     */
-    private const KEY_LANGUAGE = 'LanguageService';
 
     /**
      * Returns a new captcha image.
@@ -254,93 +238,6 @@ class AjaxController extends AbstractController
         ]);
 
         return $this->jsonTrue($data);
-    }
-
-    /**
-     * Gets the datatables translations.
-     *
-     * @Route("/language", name="ajax_language")
-     * @IsGranted("ROLE_USER")
-     */
-    public function language(KernelInterface $kernel, CacheItemPoolInterface $cache): JsonResponse
-    {
-        // check if cached
-        if (!$kernel->isDebug()) {
-            $item = $cache->getItem(self::KEY_LANGUAGE);
-            if ($item->isHit()) {
-                return JsonResponse::fromJsonString((string) $item->get());
-            }
-        }
-
-        if ($file = $this->getDatatablesLang($kernel)) {
-            // load localized file name
-            /** @psalm-var array $lang */
-            $lang = Yaml::parseFile($file);
-        } else {
-            // default behavior
-            $keys = [
-                // common
-                'search',
-                'processing',
-                'lengthMenu',
-                'info',
-                'infoEmpty',
-                'infoFiltered',
-                'infoPostFix',
-                'loadingRecords',
-                'zeroRecords',
-                'emptyTable',
-
-                // paginate
-                'paginate.first',
-                'paginate.previous',
-                'paginate.next',
-                'paginate.last',
-
-                // aria
-                'aria.sortAscending',
-                'aria.sortDescending',
-                'aria.paginate.first',
-                'aria.paginate.previous',
-                'aria.paginate.next',
-                'aria.paginate.last',
-
-                //select
-                'select.rows.0',
-                'select.rows.1',
-                'select.rows._',
-            ];
-
-            $lang = [];
-            $domain = 'datatables';
-            foreach ($keys as $key) {
-                $current = &$lang;
-                $paths = \explode('.', $key);
-                foreach ($paths as $path) {
-                    if (!isset($current[$path])) { // @phpstan-ignore-line
-                        $current[$path] = [];
-                    }
-                    $current = &$current[$path];
-                }
-                $current = $this->trans($key, [], $domain);
-            }
-        }
-
-        // format
-        $lang['decimal'] = FormatUtils::getDecimal();
-        $lang['thousands'] = FormatUtils::getGrouping();
-
-        // encode
-        $json = (string) \json_encode($lang);
-
-        // save
-        if (isset($item) && $item instanceof CacheItemInterface) {
-            $item->set($json)
-                ->expiresAfter(self::CACHE_TIMEOUT);
-            $cache->save($item);
-        }
-
-        return JsonResponse::fromJsonString($json);
     }
 
     /**
@@ -713,22 +610,6 @@ class AjaxController extends AbstractController
         }
 
         return null;
-    }
-
-    /**
-     * Gets the datatables translations file for the current locale.
-     *
-     * @param KernelInterface $kernel the kernel to get root directory
-     *
-     * @return string|null the language file, if exists; null otherwise
-     */
-    private function getDatatablesLang(KernelInterface $kernel): ?string
-    {
-        $dir = $kernel->getProjectDir();
-        $locale = \Locale::getDefault();
-        $file = "$dir/translations/datatables.$locale.yaml";
-
-        return FileUtils::exists($file) ? $file : null;
     }
 
     /**

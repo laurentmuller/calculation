@@ -123,27 +123,29 @@ class PlainType extends AbstractType
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults([
-            'hidden_input' => false,
-            'read_only' => true,
-            'disabled' => true,
-            'required' => false,
-            'date_format' => null,
-            'time_format' => null,
-            'date_pattern' => null,
-            'time_zone' => null,
-            'calendar' => null,
-            'number_pattern' => null,
-            'percent_sign' => true,
-            'percent_decimals' => 2,
-            'percent_rounding_mode' => \NumberFormatter::ROUND_HALFEVEN,
-            'empty_value' => null,
-            'compound' => false,
-            'expanded' => false,
-            'separator' => ', ',
-            'transformer' => null,
+        $this->configureDefaults($resolver);
+        $this->configureDate($resolver);
+        $this->configureNumber($resolver);
+
+        $resolver->setAllowedTypes('empty_value', [
+            'null',
+            'string',
+            'callable',
         ]);
 
+        $resolver->setAllowedTypes('separator', [
+            'null',
+            'string',
+        ]);
+
+        $resolver->setAllowedTypes('transformer', [
+            'null',
+            'callable',
+        ]);
+    }
+
+    private function configureDate(OptionsResolver $resolver): void
+    {
         $resolver->setAllowedTypes('date_format', [
             'null',
             'int',
@@ -181,7 +183,34 @@ class PlainType extends AbstractType
             'null',
             'string',
         ]);
+    }
 
+    private function configureDefaults(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'hidden_input' => false,
+            'read_only' => true,
+            'disabled' => true,
+            'required' => false,
+            'date_format' => null,
+            'time_format' => null,
+            'date_pattern' => null,
+            'time_zone' => null,
+            'calendar' => null,
+            'number_pattern' => null,
+            'percent_sign' => true,
+            'percent_decimals' => 2,
+            'percent_rounding_mode' => \NumberFormatter::ROUND_HALFEVEN,
+            'empty_value' => null,
+            'compound' => false,
+            'expanded' => false,
+            'separator' => ', ',
+            'transformer' => null,
+        ]);
+    }
+
+    private function configureNumber(OptionsResolver $resolver): void
+    {
         $resolver->setAllowedTypes('number_pattern', [
             'null',
             'string',
@@ -205,22 +234,6 @@ class PlainType extends AbstractType
                 \NumberFormatter::ROUND_HALFDOWN,
                 \NumberFormatter::ROUND_HALFUP,
             ]);
-
-        $resolver->setAllowedTypes('empty_value', [
-            'null',
-            'string',
-            'callable',
-        ]);
-
-        $resolver->setAllowedTypes('separator', [
-            'null',
-            'string',
-        ]);
-
-        $resolver->setAllowedTypes('transformer', [
-            'null',
-            'callable',
-        ]);
     }
 
     /**

@@ -71,22 +71,13 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      */
     protected function doExecute(InputInterface $input, OutputInterface $output): int
     {
-        // get file
+        // public dir
         if (!$publicDir = $this->getPublicDir()) {
             return Command::SUCCESS;
         }
-        $assetFile = $publicDir . '/' . self::ASSETS_FILE_NAME;
 
-        // check file
-        if (!$this->exists($publicDir) || !$this->exists($assetFile)) {
-            $this->writeVerbose("The file '{$assetFile}' does not exist.");
-
-            return Command::SUCCESS;
-        }
-
-        // decode
-        $configuration = $this->loadJson($assetFile);
-        if (!$configuration instanceof \stdClass) {
+        // configuration
+        if (null == ($configuration = $this->loadConfiguration($publicDir))) {
             return Command::SUCCESS;
         }
 
@@ -403,6 +394,24 @@ class CompileAssetsCommand extends AbstractAssetsCommand
 
             return $this->expandJsImports((string) \file_get_contents($file), $file);
         }, $content);
+    }
+
+    private function loadConfiguration(string $publicDir): ?\stdClass
+    {
+        // check file
+        $assetFile = $publicDir . '/' . self::ASSETS_FILE_NAME;
+        if (!$this->exists($publicDir) || !$this->exists($assetFile)) {
+            $this->writeVerbose("The file '{$assetFile}' does not exist.");
+
+            return null;
+        }
+
+        $configuration = $this->loadJson($assetFile);
+        if (!$configuration instanceof \stdClass) {
+            return null;
+        }
+
+        return $configuration;
     }
 
     /**

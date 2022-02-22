@@ -73,7 +73,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
 
         // configuration
-        if (null == ($configuration = $this->loadConfiguration($publicDir))) {
+        if (null === ($configuration = $this->loadConfiguration($publicDir))) {
             return Command::SUCCESS;
         }
 

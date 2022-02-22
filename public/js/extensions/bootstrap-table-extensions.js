@@ -507,7 +507,7 @@ $.fn.extend({
      * Refresh/reload the remote server data.
      *
      * @param {object}
-     *            options - the optional options.
+     *            options - the refresh options.
      * @return {jQuery} this instance for chaining.
      */
     refresh: function (options) {

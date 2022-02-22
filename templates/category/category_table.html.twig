@@ -12,6 +12,7 @@
 {%- endblock %}
 
 {% block toolbar_actions -%}
+{% if customData.groups|length > 1 %}
 <div class="input-group-append">
     <button id="groupId" data-value="{{ group_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
         <i class="fa-solid fa-code-branch"></i>&nbsp;{{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
@@ -23,6 +24,7 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}

@@ -617,7 +617,9 @@ $.fn.extend({
     // handle drop-down input buttons
     $inputs.each(function () {
         $(this).initDropdown().on('input', function () {
-            $table.refresh();
+            $table.refresh({
+                pageNumber: 1
+            });
         });
     });
 

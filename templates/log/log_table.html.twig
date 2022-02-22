@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block toolbar_actions -%}
+{% if customData.channels|length > 1 %}
 <div class="input-group-append">
     <button id="channel" data-value="{{ channel }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
         <i class="fa-solid fa-tools"></i>&nbsp;{{- channel|length ? channel|capitalize : 'log.fields.channel'|trans -}}
@@ -24,6 +25,8 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
+{% if customData.levels|length > 1 %}
 <div class="input-group-append">
     <button id="level" data-value="{{ level }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
         <i class="fa-solid fa-layer-group"></i>&nbsp;{{- level|length ? level|capitalize : 'log.fields.level'|trans -}}
@@ -35,6 +38,7 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}

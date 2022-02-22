@@ -65,7 +65,10 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     /**
      * Gets categories.
      */
-    abstract protected function getCategories(CategoryRepository $repository): array;
+    protected function getCategories(): array
+    {
+        return [];
+    }
 
     /**
      * Gets the category for the given identifier.
@@ -99,7 +102,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         if (!$query->callback) {
             $categoryId = (int) $query->getCustomData(self::PARAM_CATEGORY, 0);
             $results->addCustomData('category', $this->getCategory($categoryId));
-            $results->addCustomData('categories', $this->getCategories($this->categoryRepository));
+            $results->addCustomData('categories', $this->getCategories());
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
         }
     }

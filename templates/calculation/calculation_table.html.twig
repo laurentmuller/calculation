@@ -12,7 +12,7 @@
 {%- endblock %}
 
 {% block toolbar_actions -%}
-{% if customData.states is defined %}
+{% if customData.states is defined and customData.states|length > 1 %}
 {%- set state_id = customData.state.id|default(0) -%}
 <div class="input-group-append">
     <button id="stateId" data-value="{{ state_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">

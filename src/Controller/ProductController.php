@@ -12,17 +12,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\ProductDataTable;
+use App\BootstrapTable\ProductTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
 use App\Report\ProductsReport;
-use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\ProductsDocument;
-use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -38,16 +36,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/product")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "product.list.title", "route" = "table_product", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  * @template-extends AbstractEntityController<Product>
  */
@@ -66,7 +55,8 @@ class ProductController extends AbstractEntityController
      *
      * @Route("/add", name="product_add")
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.add"}
+     *     {"label" = "product.list.title", "route" = "product_table"},
+     *     {"label" = "product.add.title"}
      * })
      */
     public function add(Request $request): Response
@@ -80,27 +70,12 @@ class ProductController extends AbstractEntityController
     }
 
     /**
-     * List the products.
-     *
-     * @Route("/card", name="product_card")
-     */
-    public function card(Request $request): Response
-    {
-        $sortedFields = [
-            ['name' => 'description', 'label' => 'product.fields.description'],
-            ['name' => 'price', 'label' => 'product.fields.price', 'numeric' => true],
-            ['name' => 'category.code', 'label' => 'product.fields.category'],
-        ];
-
-        return $this->renderCard($request, 'description', Criteria::ASC, $sortedFields);
-    }
-
-    /**
      * Clone (copy) a product.
      *
-     * @Route("/clone/{id}", name="product_clone", requirements={"id" = "\d+" })
+     * @Route("/clone/{id}", name="product_clone", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.clone" }
+     *     {"label" = "product.list.title", "route" = "product_table"},
+     *     {"label" = "breadcrumb.clone"}
      * })
      */
     public function clone(Request $request, Product $item): Response
@@ -117,10 +92,11 @@ class ProductController extends AbstractEntityController
     /**
      * Delete a product.
      *
-     * @Route("/delete/{id}", name="product_delete", requirements={"id" = "\d+" })
+     * @Route("/delete/{id}", name="product_delete", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.delete" }
+     *     {"label" = "product.list.title", "route" = "product_table"},
+     *     {"label" = "breadcrumb.delete"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
@@ -138,10 +114,11 @@ class ProductController extends AbstractEntityController
     /**
      * Edit a product.
      *
-     * @Route("/edit/{id}", name="product_edit", requirements={"id" = "\d+" })
+     * @Route("/edit/{id}", name="product_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "product.list.title", "route" = "product_table"},
+     *     {"label" = "breadcrumb.edit"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function edit(Request $request, Product $item): Response
@@ -192,10 +169,11 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      *
-     * @Route("/show/{id}", name="product_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="product_show", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.property" }
+     *     {"label" = "product.list.title", "route" = "product_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function show(Product $item): Response
@@ -207,20 +185,13 @@ class ProductController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="product_table")
+     * @Breadcrumb({
+     *     {"label" = "product.list.title" }
+     * })
      */
-    public function table(Request $request, ProductDataTable $table, CategoryRepository $repository): Response
+    public function table(Request $request, ProductTable $table): Response
     {
-        $parameters = [];
-        if (!$request->isXmlHttpRequest()) {
-            $categories = $repository->getListCountProducts();
-            $total = \array_sum(\array_column($categories, 'count'));
-            $parameters = [
-                'categories' => $categories,
-                'total' => $total,
-            ];
-        }
-
-        return $this->renderTable($request, $table, [], $parameters);
+        return $this->handleTableRequest($request, $table, 'product/product_table.html.twig');
     }
 
     /**

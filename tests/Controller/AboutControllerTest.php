@@ -42,10 +42,6 @@ class AboutControllerTest extends AbstractControllerTest
             ['/about/php/ini', self::ROLE_ADMIN],
             ['/about/php/ini', self::ROLE_SUPER_ADMIN],
 
-//             ['/about/php/ini/pdf', self::ROLE_USER],
-//             ['/about/php/ini/pdf', self::ROLE_ADMIN],
-//             ['/about/php/ini/pdf', self::ROLE_SUPER_ADMIN],
-
             ['/about/policy', self::ROLE_USER],
             ['/about/policy', self::ROLE_ADMIN],
             ['/about/policy', self::ROLE_SUPER_ADMIN],

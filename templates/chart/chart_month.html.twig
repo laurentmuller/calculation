@@ -11,7 +11,7 @@
 {# parameters #}
 {%- set title = 'title_by_month' -%}
 {%- set title_icon = 'calendar-alt far' -%}
-{%- set list_path = tabular ? 'calculation_table' : 'calculation_card' -%}
+{%- set list_path = 'calculation_table' -%}
 
 {# class #}
 {% block card_container_class '' -%}
@@ -50,9 +50,10 @@
         <tbody data-link="row" class="rowlink">
             {% for item in data -%}
             {%- set month = item.date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
+            {%- set parameters = {'search': item.date|localedate('none', null, null, 'MM.Y')} -%}
             <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
                 <td class="text-nowrap">
-                    <a href="{{ path(list_path, {'query': item.date|localedate('none', null, null, 'MM.Y')}) }}">{{ month }}</a>
+                    <a href="{{ path(list_path, parameters) }}">{{ month }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|integer }}</td>

@@ -1,153 +1,43 @@
-{% extends 'cards/card_base.html.twig' %}
-
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-{% import 'macros/_attributes.html.twig' as tools %}
-{% import 'macros/_datatables.html.twig' as helper %}
-
-{% macro button(class, text, action, icon) %}
-{%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
-    <a href="#" class="btn btn-secondary disabled {{ class }}" data-path="{{ path }}" title="{{ text|trans }}">
-        {{- icons.icon(icon) -}}
-    </a>
-{% endmacro %}
-
-{% macro fill_entities(entities) %}
-<button class="dropdown-item dropdown-entity active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
-{% for key, entity in entities %}
-    <button class="dropdown-item dropdown-entity" type="button" data-id="{{ key }}">{{ entity|trans }}</button>
-{% endfor %}
-{% endmacro %}
+{% extends 'cards/card_table.html.twig' %}
 
 {# parameters #}
 {%- set title = 'search.title' -%}
 {%- set title_icon = 'search' -%}
-{%- set ajax_path = path(app.request.get('_route')) -%}
-{%- set ajax_lang = path('ajax_language') -%}
+{%- set defer_url = url('search') -%}
+{%- set entity = entity|default('') -%}
+{%- set path = path('homepage') -%}
+{%- set allow_global = false -%}
 
-{%- set id = app.request.get('id', 0) -%}
-{%- set orderdir = app.session.get('FullSearchDataTable.orderdir') -%}
-{%- set ordercolumn = app.session.get('FullSearchDataTable.ordercolumn') -%}
-{%- set pagelength = app.session.get('FullSearchDataTable.pagelength', 15) -%}
-{%- set row_link = not app.actionNone -%}
+{% block header_actions %}
+<small id="search_minimum" class="text-danger d-print-none">{{ 'search.minimum'|trans }}</small>
+{% endblock %}
 
-{# header #}
-{% block card_header %}
-<div class="row">
-    <div class="col-lg-5 mt-1">{{ parent() }}</div>
-    <div class="col-lg-7 text-lg-right d-print-none">
-        <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-            {% if show_granted %}
-            {{ _self.button('btn-table-show', 'common.button_show', 'show', 'tv fa-fw') }}
-            {% endif %}
-            {% if edit_granted %}
-            {{ _self.button('btn-table-edit', 'common.button_edit', 'edit', 'pencil fa-fw') }}
-            {% endif %}
-            {% if delete_granted %}
-            {{ _self.button('btn-table-delete', 'common.button_delete', 'delete', 'times fa-fw') }}
-            {% endif %}
-        </div>
+{% block toolbar_actions -%}
+<div class="input-group-append btn-dropdown">
+    <button id="entity" data-value="{{ entity }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'datatable.all'|trans }}" title="{{ 'search.entity_help'|trans }}">
+        {{- customData.entity ? customData.entity : 'datatable.all'|trans -}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="entity">
+        {{ _self.output_dropdown('entity', '', entity, 'datatable.all'|trans) }}
+        {% for key, value in customData.entities %}
+        {{ _self.output_dropdown('entity', key, entity, value|trans) }}
+        {% endfor %}
     </div>
 </div>
-{% endblock %}
+{%- endblock %}
 
-{# body #}
-{% block card_body %}
-<div class="row mb-2 d-print-none">
-    <div class="col-auto mr-auto">
-        <div class="form-inline">
-            <label class="mr-2 required" for="table_search">{{ 'datatable.search'|trans }}</label>
-            <div class="input-group input-group-sm bg-white">
-                <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">
-                <div class="input-group-append dropdown" id="dropdown-menu-entity">
-                    <button id="button-entity" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'search.entity_help'|trans }}">
-                        {{- 'datatable.all'|trans -}}
-                    </button>
-                    <div class="dropdown-menu">
-                        {{ _self.fill_entities(entities) -}}
-                    </div>
-                    <input type="hidden" id="entity" name="entity">
-                </div>
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
-                        <i class="fa-solid fa-eraser"></i>
-                    </button>
-                </div>
-             </div>
-             <label id="minimum" class="ml-2 text-danger d-none">{{ 'search.minimum'|trans }}</label>
-        </div>
-    </div>
-    <div class="col-auto">
-        <div class="form-inline">
-            <label class="mr-2" for="table_length">{{ 'datatable.show'|trans }}</label>
-            <select id="table_length" name="table_length" class="form-control form-control-sm custom-select custom-select-sm">
-                {{ helper.page(10, pagelength) }}
-                {{ helper.page(15, pagelength) }}
-                {{ helper.page(20, pagelength) }}
-                {{ helper.page(25, pagelength) }}
-                {{ helper.page(30, pagelength) }}
-                {{ helper.page(50, pagelength) }}
-            </select>
-            <label class="ml-2">{{ 'datatable.elements'|trans }}</label>
-        </div>
-    </div>
-</div>
-{%- set attributes = attributes|default({})|merge({
-        'id': 'data-table',
-        'row-link': row_link,
-        'edit-action': app.actionEdit,
-        'class': 'table table-list table-hover table-sm dataTable border-bottom w-100',
-        'data-ajax': ajax_path,
-        'data-lang': ajax_lang,
-        'data-total': results.recordsTotal,
-        'data-filtered': results.recordsFiltered,
-        'data-pagelength': pagelength,
-        'data-ordercolumn': ordercolumn,
-          'data-orderdir': orderdir,
-        'data-debug': app.debug,
-        'data-search-highlight': true
-}) -%}
-<table{{ tools.attribs(attributes) }}>
-    {{ helper.headers(columns) }}
-    <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
-        {% for row in results.data -%}
-             <tr{% if row['id'] == id %} class="datatables-selection"{% endif %}>
-             {% for column in columns -%}
-                 {%- set value = row[column.name] -%}
-                 <td class="{{ column.class }}">
-                     {{- column.rawData ? value|raw : value -}}
-                 </td>
-             {%- endfor %}
-            </tr>
-        {%- endfor %}
-    </tbody>
-</table>
-{% endblock %}
-{# class #}
-{% block card_container_class '' %}
-{% block card_body_class ' px-3 pb-0' %}
-{% block card_footer_class ' footer-place-holder' %}
+{% block other_actions -%}
+{%- set show_class = show_class ~ ' btn-search btn-show' -%}
+{%- set edit_class = show_class ~ ' btn-search btn-edit' -%}
+{{- _self.item_path(path ~ '_type_/show/_id_', 'common.button_show', 'tv', show_class) }}
+{{- _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', 'pencil', edit_class) }}
+{{- _self.item_path(path ~ '_type_/delete/_id_', 'common.button_delete', 'times', 'btn-search btn-delete') }}
+{%- endblock %}
 
-{# stylesheets #}
-{% block stylesheets %}
-{{ asset_css('css/datatables.css') }}
-{%- endblock -%}
+{% block custom_view_header -%}
+<a href="#" class="item-link text-body">%entityName%</a>
+{%- endblock %}
 
-{# java scripts #}
-{% block javascripts -%}
-{% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
-{{ asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
-{{ asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
-{{ asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
-{{ asset_js('js/vendor/datatables/js/datatables.mark.js') }}
-{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
-{{ asset_js('js/plugins/plugin-rowlink.js') }}
-{{ asset_js('js/extensions/contextmenu-extensions.js') }}
-{{ asset_js('js/extensions/datatables-extensions.js') }}
-{{ asset_js('js/application/search.js') }}
-{% else %}
-{{ asset_js('js/search.js') }}
-{% endif %}
-{% endblock %}
+{% block custom_view_body -%}
+{{ _self.property_both('%fieldName%', '%content%', '', 'text-truncate') }}
+{%- endblock %}

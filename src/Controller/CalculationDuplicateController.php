@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\CalculationDuplicateDataTable;
+use App\BootstrapTable\CalculationDuplicateTable;
 use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDuplicateDocument;
-use Doctrine\Common\Collections\Criteria;
+use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,57 +31,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/duplicate")
  * @IsGranted("ROLE_ADMIN")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "calculation.list.title", "route" = "table_duplicate", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  */
 class CalculationDuplicateController extends AbstractController
 {
-    /**
-     * Shows duplicate items, as card, in the calculations.
-     *
-     * @Route("/card", name="duplicate_card")
-     */
-    public function card(Request $request, CalculationRepository $repository): Response
-    {
-        if ($this->isEmptyItems($repository)) {
-            $this->warningTrans('duplicate.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        // number of items
-        $items = $this->getItems($repository);
-        $items_count = \array_reduce($items, function (int $carry, array $calculation): int {
-            /** @psalm-var array $item */
-            foreach ($calculation['items'] as $item) {
-                $carry += (int) $item['count'];
-            }
-
-            return $carry;
-        }, 0);
-
-        // parameters
-        $parameters = [
-                'items' => $items,
-                'items_count' => $items_count,
-                'query' => false,
-                'sortField' => 'id',
-                'sortMode' => Criteria::DESC,
-                'sortFields' => [],
-                'id' => $this->getRequestInt($request, 'id'),
-            ];
-
-        return $this->renderForm('calculation/calculation_card_duplicate.html.twig', $parameters);
-    }
+    use TableTrait;
 
     /**
      * Export the duplicate items to a Spreadsheet document.
@@ -122,43 +77,16 @@ class CalculationDuplicateController extends AbstractController
     }
 
     /**
-     * Display the duplicate items, as table, in the calculations.
+     * Render the table view.
      *
      * @Route("", name="duplicate_table")
+     * @Breadcrumb({
+     *     {"label" = "duplicate.title"}
+     * })
      */
-    public function table(Request $request, CalculationDuplicateDataTable $table, CalculationRepository $repository): Response
+    public function table(Request $request, CalculationDuplicateTable $table): Response
     {
-        if (!$request->isXmlHttpRequest() && $this->isEmptyItems($repository)) {
-            $this->warningTrans('duplicate.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        $items = $this->getItems($repository);
-        if (empty($items)) {
-            $this->warningTrans('duplicate.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        // attributes
-        $attributes = [
-            'itemsCount' => $table->getItemCounts(),
-        ];
-
-        // parameters
-        $parameters = [
-            'results' => $results,
-            'attributes' => $attributes,
-            'columns' => $table->getColumns(),
-        ];
-
-        return $this->renderForm('calculation/calculation_table_duplicate.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_duplicate.html.twig');
     }
 
     /**

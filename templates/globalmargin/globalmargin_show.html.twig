@@ -11,7 +11,7 @@
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('globalmargin_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('globalmargin_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'globalmargin_card') -%}
+{%- set cancel_path = cancel_url(app.request, id, 'globalmargin_table') -%}
 
 {# properties #}
 {% block property_body %}

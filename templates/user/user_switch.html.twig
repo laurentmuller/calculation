@@ -7,8 +7,7 @@
             {{- 'user.switch.connected'|trans({'%original%': app.token.originalToken.userIdentifier, '%current%': app.user.username})|raw -}}
         </div>
         <div class="col-md-5 text-md-right">
-            {%- set route = app.displayTabular ? 'user_table' : 'user_card' -%}
-            {{- icons.link(path(route, {'_switch_user': '_exit'}), 'user.switch.exit.title', 'alert-link font-weight-normal', 'user-slash') -}}
+            {{- icons.link(path('user_table', {'_switch_user': '_exit'}), 'user.switch.exit.title', 'alert-link font-weight-normal', 'user-slash') -}}
         </div>
     </div>
 </div>

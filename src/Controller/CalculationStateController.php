@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\CalculationStateDataTable;
+use App\BootstrapTable\CalculationStateTable;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
@@ -38,8 +38,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/calculationstate")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "calculationstate.list.title", "route" = "table_calculationstate" }
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  * @template-extends AbstractEntityController<CalculationState>
  */
@@ -58,7 +57,8 @@ class CalculationStateController extends AbstractEntityController
      *
      * @Route("/add", name="calculationstate_add")
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.add"}
+     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
+     *     {"label" = "calculationstate.add.title"}
      * })
      */
     public function add(Request $request): Response
@@ -67,21 +67,12 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
-     * Render the card view.
-     *
-     * @Route("/card", name="calculationstate_card")
-     */
-    public function card(Request $request): Response
-    {
-        return $this->renderCard($request, 'code');
-    }
-
-    /**
      * Clone (copy) a calculation state.
      *
-     * @Route("/clone/{id}", name="calculationstate_clone", requirements={"id" = "\d+" })
+     * @Route("/clone/{id}", name="calculationstate_clone", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.clone" }
+     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
+     *     {"label" = "breadcrumb.clone"}
      * })
      */
     public function clone(Request $request, CalculationState $item): Response
@@ -95,10 +86,11 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Delete a calculation state.
      *
-     * @Route("/delete/{id}", name="calculationstate_delete", requirements={"id" = "\d+" })
+     * @Route("/delete/{id}", name="calculationstate_delete", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.delete" }
+     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
+     *     {"label" = "breadcrumb.delete"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
@@ -137,10 +129,11 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Edit a calculation state.
      *
-     * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id" = "\d+" })
+     * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
+     *     {"label" = "breadcrumb.edit"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function edit(Request $request, CalculationState $item): Response
@@ -191,10 +184,11 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      *
-     * @Route("/show/{id}", name="calculationstate_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="calculationstate_show", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.property" }
+     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function show(CalculationState $item): Response
@@ -206,20 +200,13 @@ class CalculationStateController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="calculationstate_table")
+     * @Breadcrumb({
+     *     {"label" = "calculationstate.list.title"}
+     * })
      */
-    public function table(Request $request, CalculationStateDataTable $table): Response
+    public function table(Request $request, CalculationStateTable $table): Response
     {
-        // callback?
-        $attributes = [];
-        if (!$request->isXmlHttpRequest()) {
-            $route = $this->isDisplayTabular() ? 'calculation_table' : 'calculationstate_list';
-            $attributes = [
-                'link_href' => $this->generateUrl($route),
-                'link_title' => $this->trans('calculationstate.list.calculation_title'),
-            ];
-        }
-
-        return $this->renderTable($request, $table, $attributes);
+        return $this->handleTableRequest($request, $table, 'calculationstate/calculationstate_table.html.twig');
     }
 
     /**

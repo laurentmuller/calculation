@@ -8,33 +8,26 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="dataDropdown">
     {%- if is_granted_product -%}
-        {%- set href = is_tabular ? path('product_table') : path('product_card') -%}
-        {{- icons.dropdownItem(href, 'product.list.title', 'file-alt far') -}}
+        {{- icons.dropdownItem(path('product_table'), 'product.list.title', 'file-alt far') -}}
     {%- endif -%}
     {%- if is_granted_task -%}
-        {%- set href = is_tabular ? path('task_table') : path('task_card') -%}
-        {{- icons.dropdownItem(href, 'task.list.title', 'tasks') -}}
+        {{- icons.dropdownItem(path('task_table'), 'task.list.title', 'tasks') -}}
     {%- endif -%}
     {%- if is_granted_category -%}
-        {%- set href = is_tabular ? path('category_table') : path('category_card') -%}
-        {{- icons.dropdownItem(href, 'category.list.title', 'folder far') -}}
+        {{- icons.dropdownItem(path('category_table'), 'category.list.title', 'folder far') -}}
     {%- endif -%}
     {%- if is_granted_group -%}
-        {%- set href = is_tabular ? path('group_table') : path('group_card') -%}
-        {{- icons.dropdownItem(href, 'group.list.title', 'code-branch') -}}
+        {{- icons.dropdownItem(path('group_table'), 'group.list.title', 'code-branch') -}}
     {%- endif -%}
     {%- if is_granted_calculation_state -%}
-        {%- set href = is_tabular ? path('calculationstate_table') : path('calculationstate_card') -%}
-        {{- icons.dropdownItem(href, 'calculationstate.list.title', 'flag far') -}}
+        {{- icons.dropdownItem(path('calculationstate_table'), 'calculationstate.list.title', 'flag far') -}}
     {%- endif -%}
     {%- if is_granted_global_margin -%}
-        {%- set href = is_tabular ? path('globalmargin_table') : path('globalmargin_card') -%}
-        {{- icons.dropdownItem(href, 'globalmargin.list.title', 'percent') -}}
+        {{- icons.dropdownItem(path('globalmargin_table'), 'globalmargin.list.title', 'percent') -}}
     {%- endif -%}
     {%- if is_granted_customer %}
-        {%- set href = is_tabular ? path('customer_table') : path('customer_card') -%}
         {%- if is_granted_data -%}{{- icons.dropdownSeparator -}}{% endif %}
-        {{- icons.dropdownItem(href, 'customer.list.title', 'address-card far') -}}
+        {{- icons.dropdownItem(path('customer_table'), 'customer.list.title', 'address-card far') -}}
     {%- endif -%}
     </div>
 </li>

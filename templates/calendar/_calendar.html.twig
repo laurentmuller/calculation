@@ -2,7 +2,7 @@
 {% macro linkCalculations(query, date, count, class, title_message='counters.calculations_calendar') -%}
 {% import 'macros/_icons.html.twig' as icons %}
 {%- set title = title_message|trans({date: date, count: count}) -%}
-<a class="{{ class }}" href="{{ path('table_calculation', {'search': query}) }}" title="{{ title }}">{{ icons.icon('calculator') }}</a>
+<a class="{{ class }}" href="{{ path('calculation_table', {'search': query}) }}" title="{{ title }}">{{ icons.icon('calculator') }}</a>
 {%- endmacro %}
 
 {% macro dataContent(calculations) -%}
@@ -42,7 +42,7 @@
         {%- set link = true -%}
         {%- set count = calculations|length -%}
         {%- set class = class ~ (small ? ' small' : '') ~ ' text-white' ~ (day.current ? ' bg-primary' : ' bg-success') -%}
-        {%- set href = path('table_calculation', {'search': day.date|localedate('short')}) -%}
+        {%- set href = path('calculation_table', {'search': day.date|localedate('short')}) -%}
         {%- set content = _self.dataContent(calculations) -%}
     {%- elseif day.current -%}
         {%- set class = class ~ ' bg-primary text-white' -%}

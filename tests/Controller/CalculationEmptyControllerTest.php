@@ -42,10 +42,6 @@ class CalculationEmptyControllerTest extends AbstractControllerTest
             ['/empty', self::ROLE_ADMIN],
             ['/empty', self::ROLE_SUPER_ADMIN],
 
-            ['/empty/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/empty/card', self::ROLE_ADMIN],
-            ['/empty/card', self::ROLE_SUPER_ADMIN],
-
             ['/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/empty/pdf', self::ROLE_ADMIN],
             ['/empty/pdf', self::ROLE_SUPER_ADMIN],

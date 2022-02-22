@@ -41,10 +41,6 @@ class LogControllerTest extends AbstractControllerTest
             ['/log', self::ROLE_ADMIN],
             ['/log', self::ROLE_SUPER_ADMIN],
 
-            ['/log/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/log/card', self::ROLE_ADMIN],
-            ['/log/card', self::ROLE_SUPER_ADMIN],
-
             ['/log/delete', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/log/delete', self::ROLE_ADMIN],
             ['/log/delete', self::ROLE_SUPER_ADMIN],

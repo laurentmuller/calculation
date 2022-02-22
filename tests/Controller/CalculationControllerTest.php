@@ -36,10 +36,6 @@ class CalculationControllerTest extends AbstractControllerTest
             ['/calculation', self::ROLE_ADMIN],
             ['/calculation', self::ROLE_SUPER_ADMIN],
 
-            ['/calculation/card', self::ROLE_USER],
-            ['/calculation/card', self::ROLE_ADMIN],
-            ['/calculation/card', self::ROLE_SUPER_ADMIN],
-
             ['/calculation/add', self::ROLE_USER],
             ['/calculation/add', self::ROLE_ADMIN],
             ['/calculation/add', self::ROLE_SUPER_ADMIN],

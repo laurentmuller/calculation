@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\UserDataTable;
+use App\BootstrapTable\UserTable;
 use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Form\User\UserChangePasswordType;
@@ -56,16 +56,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * @Route("/user")
  * @IsGranted("ROLE_ADMIN")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "user.list.title", "route" = "table_user", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  * @template-extends AbstractEntityController<User>
  */
@@ -84,7 +75,8 @@ class UserController extends AbstractEntityController
      *
      * @Route("/add", name="user_add")
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.add"}
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "user.add.title"}
      * })
      */
     public function add(Request $request): Response
@@ -93,22 +85,13 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Display the users as cards.
-     *
-     * @Route("/card", name="user_card")
-     */
-    public function card(Request $request): Response
-    {
-        return $this->renderCard($request, 'username');
-    }
-
-    /**
      * Delete an user.
      *
-     * @Route("/delete/{id}", name="user_delete", requirements={"id" = "\d+" })
+     * @Route("/delete/{id}", name="user_delete", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.delete" }
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "breadcrumb.delete"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function delete(Request $request, User $item, LoggerInterface $logger): Response
@@ -134,10 +117,11 @@ class UserController extends AbstractEntityController
     /**
      * Edit an user.
      *
-     * @Route("/edit/{id}", name="user_edit", requirements={"id" = "\d+" })
+     * @Route("/edit/{id}", name="user_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "breadcrumb.edit"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function edit(Request $request, User $item): Response
@@ -168,10 +152,11 @@ class UserController extends AbstractEntityController
     /**
      * Edit an user's image.
      *
-     * @Route("/image/{id}", name="user_image", requirements={"id" = "\d+" })
+     * @Route("/image/{id}", name="user_image", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "user.image.title" }
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "user.image.title"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function image(Request $request, User $item): Response
@@ -203,10 +188,11 @@ class UserController extends AbstractEntityController
     /**
      * Send an email from the current user to an other user.
      *
-     * @Route("/message/{id}", name="user_message", requirements={"id" = "\d+" })
+     * @Route("/message/{id}", name="user_message", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "user.message.title" }
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "user.message.title"},
+     *     {"label" = "$item.display"},
      * })
      */
     public function message(Request $request, User $user, MailerInterface $mailer, LoggerInterface $logger): Response
@@ -263,10 +249,11 @@ class UserController extends AbstractEntityController
     /**
      * Change password for an existing user.
      *
-     * @Route("/password/{id}", name="user_password", requirements={"id" = "\d+" })
+     * @Route("/password/{id}", name="user_password", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "user.change_password.title" }
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "user.change_password.title"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function password(Request $request, User $item, UserPasswordHasherInterface $hasher): Response
@@ -322,10 +309,11 @@ class UserController extends AbstractEntityController
     /**
      * Edit user access rights.
      *
-     * @Route("/rights/{id}", name="user_rights", requirements={"id" = "\d+" })
+     * @Route("/rights/{id}", name="user_rights", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "user.rights.title" }
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "user.rights.title"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy, EntityManagerInterface $manager): Response
@@ -410,10 +398,11 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      *
-     * @Route("/show/{id}", name="user_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="user_show", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.property" }
+     *     {"label" = "user.list.title", "route" = "user_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function show(User $item): Response
@@ -422,13 +411,16 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Display the users as a table view.
+     * Render the table view.
      *
      * @Route("", name="user_table")
+     * @Breadcrumb({
+     *     {"label" = "user.list.title" }
+     * })
      */
-    public function table(Request $request, UserDataTable $table): Response
+    public function table(Request $request, UserTable $table): Response
     {
-        return $this->renderTable($request, $table);
+        return $this->handleTableRequest($request, $table, 'user/user_table.html.twig');
     }
 
     /**

@@ -45,7 +45,7 @@ function initSearchToolbar() {
     }
 
     const $button = $("#navigation-search-button");
-    const $query = $("#navigation-search-form #query");
+    const $search = $("#navigation-search-form #search");
 
     $.fn.extend({
         hideInvalid: function () {
@@ -54,7 +54,7 @@ function initSearchToolbar() {
     });
 
     const hideForm = function () {
-        $query.val("").hideInvalid();
+        $search.val("").hideInvalid();
         $form.animate({
             width: 0
         }, function () {
@@ -68,21 +68,21 @@ function initSearchToolbar() {
         $form.show().animate({
             width: 200
         }, function () {
-            $query.focus();
+            $search.focus();
         });
     });
 
-    $query.on("keyup", function (e) {
+    $search.on("keyup", function (e) {
         if (e.which === 27) { // escape
             hideForm();
         } else {
             // validate
-            if ($query.val().trim().length < 2) {
-                $query.addClass('is-invalid').tooltip({
+            if ($search.val().trim().length < 2) {
+                $search.addClass('is-invalid').tooltip({
                     customClass: 'tooltip-danger'
                 }).tooltip('show');
             } else {
-                $query.hideInvalid();
+                $search.hideInvalid();
             }
         }
     }).on("blur", function () {
@@ -90,7 +90,7 @@ function initSearchToolbar() {
     });
 
     $form.on('submit', function (e) {
-        if ($query.hasClass('is-invalid')) {
+        if ($search.hasClass('is-invalid')) {
             e.stopPropagation();
             e.preventDefault();
         }

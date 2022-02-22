@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\GlobalMarginDataTable;
+use App\BootstrapTable\GlobalMarginTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
 use App\Form\GlobalMargin\GlobalMarginType;
@@ -36,16 +36,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/globalmargin")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "globalmargin.list.title", "route" = "table_globalmargin", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  * @template-extends AbstractEntityController<GlobalMargin>
  */
@@ -64,7 +55,8 @@ class GlobalMarginController extends AbstractEntityController
      *
      * @Route("/add", name="globalmargin_add")
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.add"}
+     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
+     *     {"label" = "globalmargin.add.title"}
      * })
      */
     public function add(Request $request): Response
@@ -73,22 +65,13 @@ class GlobalMarginController extends AbstractEntityController
     }
 
     /**
-     * List the global margins.
-     *
-     * @Route("/card", name="globalmargin_card")
-     */
-    public function card(Request $request): Response
-    {
-        return $this->renderCard($request, 'minimum');
-    }
-
-    /**
      * Delete a global margin.
      *
-     * @Route("/delete/{id}", name="globalmargin_delete", requirements={"id" = "\d+" })
+     * @Route("/delete/{id}", name="globalmargin_delete", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.delete" }
+     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
+     *     {"label" = "breadcrumb.delete"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function delete(Request $request, GlobalMargin $item, LoggerInterface $logger): Response
@@ -106,10 +89,11 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Edit a global margin.
      *
-     * @Route("/edit/{id}", name="globalmargin_edit", requirements={"id" = "\d+" })
+     * @Route("/edit/{id}", name="globalmargin_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
+     *     {"label" = "breadcrumb.edit"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function edit(Request $request, GlobalMargin $item): Response
@@ -160,10 +144,11 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      *
-     * @Route("/show/{id}", name="globalmargin_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="globalmargin_show", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.property" }
+     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function show(GlobalMargin $item): Response
@@ -175,10 +160,13 @@ class GlobalMarginController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="globalmargin_table")
+     * @Breadcrumb({
+     *     {"label" = "globalmargin.list.title"}
+     * })
      */
-    public function table(Request $request, GlobalMarginDataTable $table): Response
+    public function table(Request $request, GlobalMarginTable $table): Response
     {
-        return $this->renderTable($request, $table);
+        return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig');
     }
 
     /**

@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\CalculationEmptyDataTable;
+use App\BootstrapTable\CalculationEmptyTable;
 use App\Report\CalculationEmptyReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsEmptyDocument;
-use Doctrine\Common\Collections\Criteria;
+use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,52 +31,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/empty")
  * @IsGranted("ROLE_ADMIN")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "calculation.list.title", "route" = "table_empty", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage" }
  * })
  */
 class CalculationEmptyController extends AbstractController
 {
-    /**
-     * Shows calculations, as card, where items has the price or the quantity is equal to 0.
-     *
-     * @Route("/card", name="empty_card")
-     */
-    public function card(Request $request, CalculationRepository $repository): Response
-    {
-        if ($this->isEmptyItems($repository)) {
-            $this->warningTrans('empty.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        // number of items
-        $items = $this->getItems($repository);
-        $items_count = \array_reduce($items, function (int $carry, array $calculation) {
-            return $carry + \count((array) $calculation['items']);
-        }, 0);
-
-        // parameters
-        $parameters = [
-            'items' => $items,
-            'items_count' => $items_count,
-            'query' => false,
-            'sortField' => 'id',
-            'sortMode' => Criteria::DESC,
-            'sortFields' => [],
-            'id' => $this->getRequestInt($request, 'id'),
-        ];
-
-        return $this->renderForm('calculation/calculation_card_empty.html.twig', $parameters);
-    }
+    use TableTrait;
 
     /**
      * Export the empty items to a Spreadsheet document.
@@ -117,44 +77,16 @@ class CalculationEmptyController extends AbstractController
     }
 
     /**
-     * Shows calculations, as table, where items has the price or the quantity is equal to 0.
+     * Render the table view.
      *
      * @Route("", name="empty_table")
+     * @Breadcrumb({
+     *     {"label" = "empty.title" }
+     * })
      */
-    public function table(Request $request, CalculationEmptyDataTable $table, CalculationRepository $repository): Response
+    public function table(Request $request, CalculationEmptyTable $table): Response
     {
-        if (!$request->isXmlHttpRequest() && $this->isEmptyItems($repository)) {
-            $this->warningTrans('empty.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        // empty?
-        $items = $this->getItems($repository);
-        if (empty($items)) {
-            $this->warningTrans('empty.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        // attributes
-        $attributes = [
-            'itemsCount' => $table->getItemCounts(),
-        ];
-
-        // parameters
-        $parameters = [
-            'results' => $results,
-            'attributes' => $attributes,
-            'columns' => $table->getColumns(),
-        ];
-
-        return $this->renderForm('calculation/calculation_table_empty.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_empty.html.twig');
     }
 
     /**

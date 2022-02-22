@@ -1,44 +1,59 @@
 {% extends 'cards/card_table.html.twig' %}
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title = 'empty.title' -%}
 {%- set title_icon = 'file-code far' -%}
-{%- set pdf_title = 'calculation.list.pdf_title' -%}
+{%- set defer_url = url('empty_table') -%}
 {%- set object_type = ENTITY_CALCULATION -%}
-
-{# actions #}
-{%- set params = {'id': 0} -%}
-{%- set add_path = false -%}
-{%- set show_search = false -%}
-{%- set show_path = path('calculation_show', params) -%}
-{%- set edit_path = path('calculation_edit', params) -%}
-{%- set delete_path = path('calculation_delete', params) -%}
-{%- set pdf_path = path('empty_pdf') -%}
-{%- set excel_path = path('empty_excel') -%}
-{%- set single_path = path('calculation_pdf_id', params) -%}
-
-{# titles #}
-{%- set show_title = 'calculation.show.title' %}
-{%- set edit_title = 'calculation.edit.title_short' %}
-{%- set delete_title = 'calculation.delete.title' %}
-{%- set excel_title = 'calculation.list.excel_title' -%}
 
 {% block card_header -%}
 {{ parent() }}
-<small>{{ 'empty.description'|trans }}
-{% if attributes.itemsCount > 0 and results.data|length > 0 -%}
-    {{ 'empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount}) }}
-{%- endif %}
-</small>
+<small>{{ 'empty.description'|trans }}</small>
 {%- endblock %}
 
-{# other actions #}
-{% block table_actions %}
-{{ _self.item_data_external(single_path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
-{{ icons.dropdownSeparator() }}
-{{ parent() }}
-{{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('empty_card') }}
-{% endblock %}
+{% block header_actions -%}
+{% if customData.itemsCount and rows|length -%}<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
+{%- endblock %}
+
+{% block global_actions -%}
+{{- _self.item_external(path('empty_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('empty_excel'), 'calculation.list.excel_title', 'file-excel far') }}
+{%- endblock %}
+
+{% block show_actions -%}
+{{- _self.item_path(path('calculation_show', params), 'calculation.show.title', 'tv', show_class) }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{ _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', 'pencil', edit_class) }}
+{%- endblock %}
+
+{% block delete_actions -%}
+{{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', 'times', 'btn-delete') }}
+{%- endblock %}
+
+{% block other_actions -%}
+{% if allow_export %}
+{{- _self.item_separator() }}
+{{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', 'file-pdf far', 'btn-calculation-pdf') }}
+{% endif %}
+{%- endblock %}
+
+{% block custom_view_card_class ' text-border' %}
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('calculation_edit', params) }}" class="item-link text-body" title="{{ 'calculation.edit.title_short'|trans }}">%id%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('calculation_show', params) }}" class="item-link text-body" title="{{ 'calculation.show.title'|trans }}">%id%</a>
+{%- else -%}
+    <span>%id%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%date% / %stateCode%') }}
+{{ _self.property_value('%customer%') }}
+{{ _self.property_value('%description%') }}
+{{ _self.property_line() }}
+{{ _self.property_value('%items%', 'text-danger') }}
+{%- endblock %}

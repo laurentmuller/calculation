@@ -1,60 +1,66 @@
 {% extends 'cards/card_table.html.twig' %}
 
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
-{# macros #}
-{% macro fill_groups(groups, total) %}
-<button class="dropdown-item dropdown-group active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
-{% for group in groups %}
-    <button class="dropdown-item dropdown-group" type="button" data-id="{{ group.id }}">{{ group.code }}</button>
-{% endfor %}
-{% endmacro %}
-
 {# parameters #}
 {%- set title = 'category.list.title' -%}
 {%- set title_icon = 'folder far' -%}
+{%- set defer_url = url('category_table') -%}
+{%- set group_id = customData.group.id|default(0) -%}
 {%- set object_type = ENTITY_CATEGORY -%}
 
-{# actions #}
-{%- set params = {'id': 0} -%}
-{%- set add_path = path('category_add') -%}
-{%- set show_path = path('category_show', params) -%}
-{%- set edit_path = path('category_edit', params) -%}
-{%- set delete_path = path('category_delete', params) -%}
-{%- set pdf_path = path('category_pdf') -%}
-{%- set excel_path = path('category_excel') -%}
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('category_add', params) }}">{{ 'category.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
-{# titles #}
-{%- set add_title = 'category.add.title' %}
-{%- set show_title = 'category.show.title' %}
-{%- set edit_title = 'category.edit.title' %}
-{%- set delete_title = 'category.delete.title' %}
-{%- set pdf_title = 'category.list.pdf_title' -%}
-{%- set excel_title = 'category.list.excel_title' -%}
-
-{# highlight search #}
-{%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
-
-{% block search_input -%}
-<div class="input-group-append" id="dropdown-menu-group">
-    <button id="button-group" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'category.list.group_help'|trans }}">
-        {{- 'category.fields.group'|trans -}}
+{% block toolbar_actions -%}
+<div class="input-group-append">
+    <button id="groupId" data-value="{{ group_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
+        <i class="fa-solid fa-code-branch"></i>&nbsp;{{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
     </button>
-    <div class="dropdown-menu">
-        {{ _self.fill_groups(groups, total) -}}
+    <div class="dropdown-menu" aria-labelledby="groupId">
+        {{ _self.output_dropdown('group', 0, group_id, 'datatable.all'|trans) }}
+        {% for group in customData.groups %}
+        {{ _self.output_dropdown('group', group.id, group_id, group.code) }}
+        {% endfor %}
     </div>
-    <input type="hidden" id="group" name="group">
 </div>
 {%- endblock %}
 
-{% block table_actions -%}
-{{ parent() }}
-{{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('category_card') }}
+{% block global_actions -%}
+{{ _self.item_external(path('category_pdf'), 'category.list.pdf_title', 'file-pdf far') }}
+{{ _self.item_external(path('category_excel'), 'category.list.excel_title', 'file-excel far') }}
 {%- endblock %}
 
-{% block javascripts -%}
-{{- parent() }}
-{{- asset_js('js/application/category_table.js') }}
-{% endblock %}
+{% block show_actions -%}
+{{- _self.item_path(path('category_show', params), 'category.show.title', 'tv', show_class) }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{ _self.item_path(path('category_edit', params), 'category.edit.title', 'pencil', edit_class) }}
+{%- endblock %}
+
+{% block delete_actions -%}
+{{- _self.item_path(path('category_delete', params), 'category.delete.title', 'times', 'btn-delete') }}
+{%- endblock %}
+
+{% block add_actions -%}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('category_add', params), 'category.add.title', 'file far', 'btn-add') }}
+{{- _self.item_path(path('category_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
+{%- endblock %}
+
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('category_edit', params) }}" class="item-link text-body" title="{{ 'category.edit.title'|trans }}">%code%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('category_show', params) }}" class="item-link text-body" title="{{ 'category.show.title'|trans }}">%code%</a>
+{%- else -%}
+    <span>%code%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%description%') }}
+{{ _self.property_row('category.fields.group', '%group.code%') }}
+{{ _self.property_row('category.fields.products', '%products%') }}
+{{ _self.property_row('category.fields.tasks', '%tasks%') }}
+{%- endblock %}

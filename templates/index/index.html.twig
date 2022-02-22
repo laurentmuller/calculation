@@ -20,11 +20,7 @@
 <div class="row no-gutters">
 {% if enabled %}
     <div class="col">
-        {%- if app.isDisplayTabular -%}
-            {%- include 'index/panel_table.html.twig' -%}
-        {%- else -%}
-            {%- include 'index/panel_card.html.twig' -%}
-        {%- endif -%}
+        {%- include 'index/panel_table.html.twig' -%}
         {%- include 'index/panel_state.html.twig' -%}
         {%- include 'index/panel_month.html.twig' -%}
         {%- include 'user/user_switch.html.twig' -%}

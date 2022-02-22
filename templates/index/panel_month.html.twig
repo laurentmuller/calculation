@@ -18,7 +18,7 @@
         <div class="card-title mb-1">
         {%- set text = date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
         {%- if list_path -%}
-            <a href="{{ path(list_path, {'query': date|localedate('none', null, null, 'MM.Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">{{ text }}</a>
+            <a href="{{ path(list_path, {'search': date|localedate('none', null, null, 'MM.Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">{{ text }}</a>
         {%- else -%}
             <span>{{ text }}</span>
         {%- endif -%}
@@ -37,10 +37,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set list_path = false -%}
-{%- if is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
-    {%- set list_path = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}
-{%- endif -%}
+{%- set list_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) ? 'calculation_table' : false -%}
 
 <div class="card">
     <div class="card-header">

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\Model\AbstractEntityDataTable;
 use App\Entity\AbstractEntity;
 use App\Interfaces\EntityVoterInterface;
 use App\Pdf\PdfDocument;
@@ -21,6 +20,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Security\EntityVoter;
 use App\Spreadsheet\SpreadsheetDocument;
+use App\Traits\TableTrait;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,6 +38,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class AbstractEntityController extends AbstractController
 {
+    use TableTrait;
+
     /**
      * The entity class name.
      */
@@ -217,23 +219,11 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Gets the Twig template (path) name used to display entities as card.
-     */
-    protected function getCardTemplate(): string
-    {
-        return \sprintf('%1$s/%1$s_card.html.twig', $this->lowerName);
-    }
-
-    /**
      * Gets the default route name used to display the list of entities.
      */
     protected function getDefaultRoute(): string
     {
-        if ($this->isDisplayTabular()) {
-            return \sprintf('%s_table', $this->lowerName);
-        }
-
-        return \sprintf('%s_list', $this->lowerName);
+        return \sprintf('%s_table', $this->lowerName);
     }
 
     /**
@@ -309,65 +299,6 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Render the entities as card.
-     *
-     * @param Request $request    the request
-     * @param string  $sortField  the default sorted field
-     * @param string  $sortMode   the default sorted direction
-     * @param array   $sortFields the allowed sorted fields
-     * @param array   $parameters the parameters to pass to the template
-     *
-     * @return Response the rendered template
-     */
-    protected function renderCard(Request $request, string $sortField, string $sortMode = Criteria::ASC, array $sortFields = [], array $parameters = []): Response
-    {
-        // check permission
-        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_LIST);
-
-        // keys
-        $key = Utils::getShortName($this->className);
-        $keyField = $key . '.sortField';
-        $keySort = $key . '.sortMode';
-
-        // get session values
-        $field = $this->getSessionString($keyField, $sortField);
-        $mode = $this->getSessionString($keySort, $sortMode);
-
-        // get request values
-        $id = $this->getRequestInt($request, 'id', 0);
-        $query = $this->getRequestString($request, 'query', '');
-        $mode = $this->getRequestString($request, 'sortMode', $mode);
-        $field = $this->getRequestString($request, 'sortField', $field);
-
-        // update session values
-        if ($sortField === $field && $sortMode === $mode) {
-            $this->removeSessionValues([$keyField, $keySort]);
-        } else {
-            $this->setSessionValues([
-                $keyField => $field,
-                $keySort => $mode,
-            ]);
-        }
-
-        // get items
-        /** @psalm-var string|null $field */
-        /** @psalm-var string $mode */
-        $items = $this->getEntities($field, $mode);
-
-        // parameters
-        $parameters = \array_merge([
-            'items' => $items,
-            'id' => $id,
-            'query' => $query,
-            'sortMode' => $mode,
-            'sortField' => $field,
-            'sortFields' => $sortFields,
-        ], $parameters);
-
-        return $this->renderForm($this->getCardTemplate(), $parameters);
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
@@ -389,38 +320,6 @@ abstract class AbstractEntityController extends AbstractController
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_EXPORT);
 
         return parent::renderSpreadsheetDocument($doc, $inline, $name);
-    }
-
-    /**
-     * Render the entities as data table.
-     *
-     * @param Request                 $request    the request to get parameters
-     * @param AbstractEntityDataTable $table      the data table
-     * @param array                   $attributes additional data table attributes
-     * @param array                   $parameters parameters to pass to the view
-     *
-     * @return Response a JSON response if is a callback, the data table view otherwise
-     *
-     * @psalm-param AbstractEntityDataTable<T> $table
-     */
-    protected function renderTable(Request $request, AbstractEntityDataTable $table, array $attributes = [], array $parameters = []): Response
-    {
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        // check permission
-        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_LIST);
-
-        // parameters
-        $parameters += [
-            'results' => $results,
-            'attributes' => $attributes,
-            'columns' => $table->getColumns(),
-        ];
-
-        return $this->renderForm($this->getTableTemplate(), $parameters);
     }
 
     /**

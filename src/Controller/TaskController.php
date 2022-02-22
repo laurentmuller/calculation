@@ -12,13 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\TaskDataTable;
+use App\BootstrapTable\TaskTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
 use App\Report\TasksReport;
-use App\Repository\CategoryRepository;
 use App\Repository\TaskRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
@@ -40,16 +39,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/task")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "task.list.title", "route" = "table_task", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  * @template-extends AbstractEntityController<Task>
  */
@@ -68,7 +58,8 @@ class TaskController extends AbstractEntityController
      *
      * @Route("/add", name="task_add")
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.add"}
+     *     {"label" = "task.list.title", "route" = "task_table"},
+     *     {"label" = "task.add.title"}
      * })
      */
     public function add(Request $request): Response
@@ -82,21 +73,12 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * List the taks.
-     *
-     * @Route("/card", name="task_card")
-     */
-    public function card(Request $request): Response
-    {
-        return $this->renderCard($request, 'name');
-    }
-
-    /**
      * Edit a copy (cloned) task.
      *
-     * @Route("/clone/{id}", name="task_clone", requirements={"id" = "\d+" })
+     * @Route("/clone/{id}", name="task_clone", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.clone" }
+     *     {"label" = "task.list.title", "route" = "task_table"},
+     *     {"label" = "breadcrumb.clone"}
      * })
      */
     public function clone(Request $request, Task $item): Response
@@ -113,9 +95,10 @@ class TaskController extends AbstractEntityController
     /**
      * Display the form to compute a task.
      *
-     * @Route("/compute/{id}", name="task_compute", requirements={"id" = "\d+" })
+     * @Route("/compute/{id}", name="task_compute", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "taskcompute.title" }
+     *     {"label" = "task.list.title", "route" = "task_table"},
+     *     {"label" = "taskcompute.title"}
      * })
      */
     public function compute(Request $request, Task $task = null, TaskService $service, TaskRepository $repository): Response
@@ -150,10 +133,11 @@ class TaskController extends AbstractEntityController
     /**
      * Delete a task.
      *
-     * @Route("/delete/{id}", name="task_delete", requirements={"id" = "\d+" })
+     * @Route("/delete/{id}", name="task_delete", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.delete" }
+     *     {"label" = "task.list.title", "route" = "task_table"},
+     *     {"label" = "breadcrumb.delete"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
@@ -171,10 +155,11 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a task.
      *
-     * @Route("/edit/{id}", name="task_edit", requirements={"id" = "\d+" })
+     * @Route("/edit/{id}", name="task_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "task.list.title", "route" = "task_table"},
+     *     {"label" = "breadcrumb.edit"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function edit(Request $request, Task $item): Response
@@ -225,10 +210,11 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      *
-     * @Route("/show/{id}", name="task_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="task_show", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.property" }
+     *     {"label" = "task.list.title", "route" = "task_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function show(Task $item): Response
@@ -240,20 +226,13 @@ class TaskController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="task_table")
+     * @Breadcrumb({
+     *     {"label" = "task.list.title"}
+     * })
      */
-    public function table(Request $request, TaskDataTable $table, CategoryRepository $repository): Response
+    public function table(Request $request, TaskTable $table): Response
     {
-        $parameters = [];
-        if (!$request->isXmlHttpRequest()) {
-            $categories = $repository->getListCountTasks();
-            $total = \array_sum(\array_column($categories, 'count'));
-            $parameters = [
-                'categories' => $categories,
-                'total' => $total,
-            ];
-        }
-
-        return $this->renderTable($request, $table, [], $parameters);
+        return $this->handleTableRequest($request, $table, 'task/task_table.html.twig');
     }
 
     /**

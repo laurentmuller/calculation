@@ -59,7 +59,7 @@ class CalculationTable extends AbstractEntityTable
      */
     public function formatOverallMargin(float $margin, Calculation $entity): string
     {
-        return $this->twig->render('table/_cell_calculation_margin.html.twig', [
+        return $this->twig->render('macros/_cell_calculation_margin.html.twig', [
             'empty' => $entity->isEmpty(),
             'margin' => $margin,
         ]);

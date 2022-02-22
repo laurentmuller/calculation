@@ -11,7 +11,7 @@
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('group_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'group_card') -%}
+{%- set cancel_path = cancel_url(app.request, id, 'group_table') -%}
 
 {# properties #}
 {% block property_body %}

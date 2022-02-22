@@ -1,31 +1,50 @@
 {% extends 'cards/card_table.html.twig' %}
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title = 'group.list.title' -%}
 {%- set title_icon = 'code-branch' -%}
-{%- set object_type = ENTITY_CATEGORY -%}
+{%- set defer_url = url('group_table') -%}
+{%- set object_type = ENTITY_GROUP -%}
 
-{# actions #}
-{%- set params = {'id': 0} -%}
-{%- set add_path = path('group_add') -%}
-{%- set show_path = path('group_show', params) -%}
-{%- set edit_path = path('group_edit', params) -%}
-{%- set delete_path = path('group_delete', params) -%}
-{%- set pdf_path = path('group_pdf') -%}
-{%- set excel_path = path('group_excel') -%}
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('group_add', params) }}">{{ 'group.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
-{# titles #}
-{%- set add_title = 'group.add.title' %}
-{%- set show_title = 'group.show.title' %}
-{%- set edit_title = 'group.edit.title' %}
-{%- set delete_title = 'group.delete.title' %}
-{%- set pdf_title = 'group.list.pdf_title' -%}
-{%- set excel_title = 'group.list.excel_title' -%}
+{% block global_actions -%}
+{{- _self.item_external(path('group_pdf'), 'group.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('group_excel'), 'group.list.excel_title', 'file-excel far') }}
+{%- endblock %}
 
-{% block table_actions -%}
-{{ parent() }}
-{{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('group_card') }}
+{% block show_actions -%}
+{{- _self.item_path(path('group_show', params), 'group.show.title', 'tv', show_class) }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{- _self.item_path(path('group_edit', params), 'group.edit.title', 'pencil', edit_class) }}
+{%- endblock %}
+
+{% block delete_actions -%}
+{{- _self.item_path(path('group_delete', params), 'group.delete.title', 'times', 'btn-delete') }}
+{%- endblock %}
+
+{% block add_actions -%}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('group_add', params), 'group.add.title', 'file far', 'btn-add') }}
+{{- _self.item_path(path('group_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
+{%- endblock %}
+
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('group_edit', params) }}" class="item-link text-body" title="{{ 'group.edit.title'|trans }}">%code%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('group_show', params) }}" class="item-link text-body" title="{{ 'group.show.title'|trans }}">%code%</a>
+{%- else -%}
+    <span>%code%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%description%') }}
+{{ _self.property_row('group.fields.margins', '%margins%') }}
+{{ _self.property_row('group.fields.categories', '%categories%') }}
 {%- endblock %}

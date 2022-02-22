@@ -27,9 +27,8 @@
 {%- set title = 'calculation.update.title' -%}
 {%- set title_icon = 'calculator' -%}
 {%- set title_description = 'calculation.result.description' -%}
-{%- set tabular = app.displayTabular -%}
-{%- set empty_path = tabular ? path('empty_table') : path('empty_card') -%}
-{%- set duplicate_path = tabular ? path('duplicate_table') : path('duplicate_card') -%}
+{%- set empty_path = 'empty_table' -%}
+{%- set duplicate_path = path('duplicate_table') -%}
 {%- set separator = false -%}
 {% block card_body %}
 <table class="table table-sm border-bottom">

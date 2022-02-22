@@ -41,8 +41,7 @@ class ChartController extends AbstractController
      */
     public function month(int $count = 6, CalculationRepository $repository, ThemeService $service): Response
     {
-        $tabular = $this->isDisplayTabular();
-        $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_card');
+        $url = $this->generateUrl('calculation_table');
         $allowedMonths = $this->getAllowedMonths($repository);
 
         // check count
@@ -53,7 +52,6 @@ class ChartController extends AbstractController
         $data = $this->getMonthData($count, $repository, $service, $url);
         $data['min_margin'] = $this->getApplication()->getMinMargin();
         $data['allowed_months'] = $allowedMonths;
-        $data['tabular'] = $tabular;
 
         return $this->renderForm('chart/chart_month.html.twig', $data);
     }
@@ -65,10 +63,8 @@ class ChartController extends AbstractController
      */
     public function state(CalculationStateRepository $repository, ThemeService $service): Response
     {
-        $tabular = $this->isDisplayTabular();
-        $data = $this->getStateData($repository, $service, $tabular);
+        $data = $this->getStateData($repository, $service);
         $data['min_margin'] = $this->getApplication()->getMinMargin();
-        $data['tabular'] = $tabular;
 
         return $this->renderForm('chart/chart_state.html.twig', $data);
     }
@@ -87,27 +83,6 @@ class ChartController extends AbstractController
         }
 
         return $chart;
-    }
-
-    /**
-     * Generate the URL to display calculations when a state is clicked in pie chart.
-     */
-    private function generateStateUrl(array $state, bool $tabular): string
-    {
-        if ($tabular) {
-            $route = 'calculation_table';
-            $parameters = [
-                'search[0][index]' => 8,
-                'search[0][value]' => $state['id'],
-            ];
-        } else {
-            $route = 'calculation_card';
-            $parameters = [
-                'query' => $state['code'],
-            ];
-        }
-
-        return $this->generateUrl($route, $parameters);
     }
 
     /**
@@ -265,7 +240,7 @@ class ChartController extends AbstractController
         // click event
         $function = <<<EOF
             function() {
-                const href = "{$url}?query=" + Highcharts.dateFormat("%m.%Y", this.category);
+                const href = "{$url}?search=" + Highcharts.dateFormat("%m.%Y", this.category);
                 location.href = href;
             }
             EOF;
@@ -331,7 +306,7 @@ class ChartController extends AbstractController
      *
      * @psalm-suppress MixedMethodCall
      */
-    private function getStateData(CalculationStateRepository $repository, ThemeService $service, bool $tabular): array
+    private function getStateData(CalculationStateRepository $repository, ThemeService $service): array
     {
         // get values
         $states = $repository->getListCountCalculations();
@@ -349,11 +324,13 @@ class ChartController extends AbstractController
         }
 
         // data
-        $data = \array_map(function (array $state) use ($tabular): array {
+        $data = \array_map(function (array $state): array {
+            $url = $this->generateUrl('calculation_table', ['stateId' => $state['id']]);
+
             return [
                 'name' => $state['code'],
                 'y' => $state['total'],
-                'url' => $this->generateStateUrl($state, $tabular),
+                'url' => $url,
             ];
         }, $states);
 

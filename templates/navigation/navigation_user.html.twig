@@ -20,12 +20,10 @@
         {% if is_admin %}
             {{- icons.dropdownSeparator -}}
             {{- icons.dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') -}}
-            {%- set href = is_tabular ? path('log_table') : path('log_card') -%}
-            {{- icons.dropdownItem(href, 'log.title', 'book') -}}
+            {{- icons.dropdownItem(path('log_table'), 'log.title', 'book') -}}
             {{- icons.dropdownItem(path('admin_clear'), 'clear_cache.title', 'times') -}}
             {{- icons.dropdownSeparator -}}
-            {%- set href = is_tabular ? path('user_table') : path('user_card') -%}
-            {{- icons.dropdownItem(href, 'user.list.title', 'user far') -}}
+            {{- icons.dropdownItem(path('user_table'), 'user.list.title', 'user far') -}}
             {{- icons.dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'unlock-alt') -}}
         {% endif %}
         {% if is_super_admin %}
@@ -33,8 +31,7 @@
         {% endif %}
         {% if is_previous_admin %}
             {{- icons.dropdownSeparator -}}
-            {%- set route = is_tabular ? 'user_table' : 'user_card' -%}
-            {{- icons.dropdownItem(path(route, {'_switch_user': '_exit'}), 'user.switch.exit.title', 'user-slash') -}}
+            {{- icons.dropdownItem(path('user_table', {'_switch_user': '_exit'}), 'user.switch.exit.title', 'user-slash') -}}
         {% endif %}
         {# switch environment #}
         {% if is_env_dev %}

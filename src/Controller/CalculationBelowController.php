@@ -12,14 +12,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\CalculationBelowDataTable;
+use App\BootstrapTable\CalculationBelowTable;
 use App\Entity\Calculation;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDocument;
+use App\Traits\TableTrait;
 use App\Util\FormatUtils;
-use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,35 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CalculationBelowController extends AbstractController
 {
-    /**
-     * Show calculations, as card.
-     *
-     * @Route("/card", name="below_card")
-     */
-    public function card(Request $request, CalculationRepository $repository): Response
-    {
-        // get values
-        $minMargin = $this->getApplication()->getMinMargin();
-        $items = $this->getItems($repository, $minMargin);
-        if (empty($items)) {
-            $this->warningTrans('below.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        // parameters
-        $parameters = [
-            'id' => $this->getRequestInt($request, 'id'),
-            'items' => $items,
-            'min_margin' => $minMargin,
-            'query' => false,
-            'sortField' => 'id',
-            'sortMode' => Criteria::DESC,
-            'sortFields' => [],
-        ];
-
-        return $this->renderForm('calculation/calculation_card_below.html.twig', $parameters);
-    }
+    use TableTrait;
 
     /**
      * Export the calculations to a Spreadsheet document.
@@ -111,43 +84,16 @@ class CalculationBelowController extends AbstractController
     }
 
     /**
-     * Show calculations, as table.
+     * Render the table view.
      *
      * @Route("", name="below_table")
+     * @Breadcrumb({
+     *     {"label" = "below.title"}
+     * })
      */
-    public function table(Request $request, CalculationBelowDataTable $table, CalculationRepository $repository): Response
+    public function table(Request $request, CalculationBelowTable $table): Response
     {
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        // get values
-        $minMargin = $this->getApplication()->getMinMargin();
-        $items = $this->getItems($repository, $minMargin);
-        if (empty($items)) {
-            $this->warningTrans('below.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        // get values
-        $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($minMargin)]);
-
-        $attributes = [
-            'min_margin' => $minMargin,
-            'min_margin_text' => $margin_text,
-            'itemsCount' => \count($items),
-        ];
-
-        // parameters
-        $parameters = [
-            'results' => $results,
-            'attributes' => $attributes,
-            'columns' => $table->getColumns(),
-        ];
-
-        return $this->renderForm('calculation/calculation_table_below.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_below.html.twig');
     }
 
     /**

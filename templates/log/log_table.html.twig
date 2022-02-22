@@ -1,79 +1,71 @@
 {% extends 'cards/card_table.html.twig' %}
 
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
-{# macros #}
-{% macro add_options(values) %}
-<option value="">{{ 'datatable.all'|trans }}</option>
-{% for key in values|keys %}
-    <option value="{{ key }}">{{ key|humanize }}</option>
-{% endfor %}
-{% endmacro %}
-
-{% macro fill_options(options, suffix, all_text) %}
-<button class="dropdown-item dropdown-{{ suffix }} active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
-{% for key in options|keys %}
-    <button class="dropdown-item dropdown-{{ suffix }}" type="button" data-id="{{ key }}">{{ key|humanize }}</button>
-{% endfor %}
-{% endmacro %}
-
 {# parameters #}
 {%- set title = 'log.title' -%}
 {%- set title_icon = 'book' -%}
+{%- set defer_url = url('log_table') -%}
+{%- set channel = customData.channel|default('') -%}
+{%- set level = customData.level|default('') -%}
 {%- set object_type = ENTITY_LOG -%}
 
-{# actions #}
-{%- set params = {'id': 0} -%}
-{%- set show_path = path('log_show', params) -%}
-{%- set pdf_path = path('log_pdf') -%}
-{%- set excel_path = path('log_excel') -%}
-
-{# titles #}
-{%- set show_title = 'log.show.title' %}
-{%- set pdf_title = 'log.list.pdf_title' %}
-{%- set excel_title = 'log.list.excel_title' -%}
-
-{% block card_header %}
-{{ parent() }}
-<small>{{ 'log.list.file'|trans({'%file%': file}) }}</small>
+{% block header_actions %}
+<small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>
 {% endblock %}
 
-{% block search_input -%}
-<div class="input-group-append" id="dropdown-menu-channel">
-    <button id="button-channel" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-channel" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
-        {{- 'log.fields.channel'|trans -}}
+{% block toolbar_actions -%}
+<div class="input-group-append">
+    <button id="channel" data-value="{{ channel }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
+        <i class="fa-solid fa-tools"></i>&nbsp;{{- channel|length ? channel|capitalize : 'log.fields.channel'|trans -}}
     </button>
-    <div class="dropdown-menu">
-        {{ _self.fill_options(channels, 'channel') -}}
+    <div class="dropdown-menu" aria-labelledby="channel">
+        {{ _self.output_dropdown('channel', '', channel, 'datatable.all'|trans) }}
+        {% for key in customData.channels %}
+        {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
+        {% endfor %}
     </div>
-    <input type="hidden" id="channel" name="channel">
 </div>
-<div class="input-group-append" id="dropdown-menu-level">
-    <button id="button-level" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-level" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
-        {{- 'log.fields.level'|trans -}}
+<div class="input-group-append">
+    <button id="level" data-value="{{ level }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
+        <i class="fa-solid fa-layer-group"></i>&nbsp;{{- level|length ? level|capitalize : 'log.fields.level'|trans -}}
     </button>
-    <div class="dropdown-menu">
-        {{ _self.fill_options(levels, 'level') -}}
+    <div class="dropdown-menu" aria-labelledby="level">
+        {{ _self.output_dropdown('level', '', level, 'datatable.all'|trans) }}
+        {% for key in customData.levels %}
+        {{ _self.output_dropdown('level', key, level, key|capitalize) }}
+        {% endfor %}
     </div>
-    <input type="hidden" id="level" name="level">
 </div>
 {%- endblock %}
 
-{% block table_actions %}
-{{ parent() }}
-{{ icons.dropdownItem(path('log_delete', {'route': app.request.get('_route')}), 'log.delete.title', 'times') }}
-{{ icons.dropdownSeparator() }}
-{{ icons.dropdownItem(path('log_refresh', {'route': app.request.get('_route')}), 'common.button_refresh', 'sync-alt') }}
-{{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('log_card') }}
-{% endblock %}
+{% block global_actions -%}
+{%- set route = app.request.get('_route') -%}
+{{- _self.item_global(path('log_refresh', {'route': route}), 'common.button_refresh', 'sync-alt') }}
+{{- _self.item_separator() }}
+{{- _self.item_global(path('log_delete', {'route': route}), 'log.delete.title', 'times') }}
+{{- _self.item_separator() }}
+{{- _self.item_external(path('log_pdf'), 'log.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('log_excel'), 'log.list.excel_title', 'file-excel far') }}
+{%- endblock %}
+
+{% block show_actions -%}
+{{- _self.item_path(path('log_show', params), 'log.show.title', 'tv', 'btn-show btn-default') }}
+{%- endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/logs_table.css') }}
+{{ asset_css('css/logs_boostrap_table.css') }}
 {% endblock %}
 
-{% block javascripts -%}
-{{ parent() }}
-{{ asset_js('js/application/log_table.js') }}
-{% endblock %}
+{% block custom_view_card_class ' text-border' %}
+{% block custom_view_header -%}
+{%- if allow_show -%}
+    <a href="{{ path('log_show', params) }}" class="item-link text-body" title="{{ 'log.show.title'|trans }}">%createdAt%</a>
+{%- else -%}
+    <span>%createdAt%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%message%') }}
+{{ _self.property_row('log.fields.channel', '%channel%') }}
+{{ _self.property_row('log.fields.level', '%level%') }}
+{%- endblock %}

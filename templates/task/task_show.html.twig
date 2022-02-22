@@ -11,7 +11,7 @@
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('task_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'task_card') -%}
+{%- set cancel_path = cancel_url(app.request, id, 'task_table') -%}
 
 {# properties #}
 {% block property_body %}

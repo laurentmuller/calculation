@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\CustomerDataTable;
+use App\BootstrapTable\CustomerTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
@@ -21,7 +21,6 @@ use App\Repository\CustomerRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CustomersDocument;
-use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -39,16 +38,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/customer")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"},
- *     {"label" = "customer.list.title", "route" = "table_customer", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  * @template-extends AbstractEntityController<Customer>
  */
@@ -67,6 +57,7 @@ class CustomerController extends AbstractEntityController
      *
      * @Route("/add", name="customer_add")
      * @Breadcrumb({
+     *     {"label" = "customer.list.title", "route" = "customer_table"},
      *     {"label" = "breadcrumb.add"}
      * })
      */
@@ -76,27 +67,13 @@ class CustomerController extends AbstractEntityController
     }
 
     /**
-     * List the customers.
-     *
-     * @Route("/card", name="customer_card")
-     */
-    public function card(Request $request): Response
-    {
-        $sortedFields = [
-            ['name' => CustomerRepository::NAME_COMPANY_FIELD, 'label' => 'customer.fields.nameAndCompany'],
-            ['name' => CustomerRepository::ZIP_CITY_FIELD, 'label' => 'customer.fields.zipCity'],
-        ];
-
-        return $this->renderCard($request, CustomerRepository::NAME_COMPANY_FIELD, Criteria::ASC, $sortedFields);
-    }
-
-    /**
      * Delete a customer.
      *
-     * @Route("/delete/{id}", name="customer_delete", requirements={"id" = "\d+" })
+     * @Route("/delete/{id}", name="customer_delete", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.delete" }
+     *     {"label" = "customer.list.title", "route" = "customer_table"},
+     *     {"label" = "breadcrumb.delete"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
@@ -114,10 +91,11 @@ class CustomerController extends AbstractEntityController
     /**
      * Edit a customer.
      *
-     * @Route("/edit/{id}", name="customer_edit", requirements={"id" = "\d+" })
+     * @Route("/edit/{id}", name="customer_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "customer.list.title", "route" = "customer_table"},
+     *     {"label" = "breadcrumb.edit"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function edit(Request $request, Customer $item): Response
@@ -169,10 +147,11 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      *
-     * @Route("/show/{id}", name="customer_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="customer_show", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.property" }
+     *     {"label" = "customer.list.title", "route" = "customer_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function show(Customer $item): Response
@@ -184,10 +163,13 @@ class CustomerController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="customer_table")
+     * @Breadcrumb({
+     *     {"label" = "customer.list.title"}
+     * })
      */
-    public function table(Request $request, CustomerDataTable $table): Response
+    public function table(Request $request, CustomerTable $table): Response
     {
-        return $this->renderTable($request, $table);
+        return $this->handleTableRequest($request, $table, 'customer/customer_table.html.twig');
     }
 
     /**

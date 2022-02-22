@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Service\LogService;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -119,6 +120,14 @@ class Log extends AbstractEntity
     public function getExtra(): ?array
     {
         return $this->extra;
+    }
+
+    /**
+     * Gets the formatted date.
+     */
+    public function getFormattedDate(): string
+    {
+        return LogService::getCreatedAt($this->createdAt);
     }
 
     /**

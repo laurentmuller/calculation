@@ -31,10 +31,6 @@ class CalculationStateControllerTest extends AbstractControllerTest
             ['/calculationstate', self::ROLE_ADMIN],
             ['/calculationstate', self::ROLE_SUPER_ADMIN],
 
-            ['/calculationstate/card', self::ROLE_USER],
-            ['/calculationstate/card', self::ROLE_ADMIN],
-            ['/calculationstate/card', self::ROLE_SUPER_ADMIN],
-
             ['/calculationstate/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/calculationstate/add', self::ROLE_ADMIN],
             ['/calculationstate/add', self::ROLE_SUPER_ADMIN],

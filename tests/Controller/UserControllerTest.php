@@ -28,10 +28,6 @@ class UserControllerTest extends AbstractControllerTest
             ['/user', self::ROLE_ADMIN],
             ['/user', self::ROLE_SUPER_ADMIN],
 
-            ['/user/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/card', self::ROLE_ADMIN],
-            ['/user/card', self::ROLE_SUPER_ADMIN],
-
             ['/user/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/user/add', self::ROLE_ADMIN],
             ['/user/add', self::ROLE_SUPER_ADMIN],

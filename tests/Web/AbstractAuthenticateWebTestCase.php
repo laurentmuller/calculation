@@ -77,6 +77,8 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     {
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
+//         if (!$response->isSuccessful())
+//             $this->doEcho('response', $response->getContent());
         $this->assertEquals($expected, $statusCode, "Invalid status code for '{$url}' and '{$username}'.");
     }
 

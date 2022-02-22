@@ -72,47 +72,6 @@
             ]
         },
         {
-            "name": "datatables",
-            "version": "1.10.22",
-            "source": "https://cdn.datatables.net/",
-            "format": "{source}{version}/{file}",
-            "files": [
-                "js/jquery.dataTables.js",
-                "js/dataTables.bootstrap4.js",
-                "css/dataTables.bootstrap4.css"
-            ]
-        },
-        {
-            "name": "conditionalPaging",
-            "version": "1.10.22",
-            "source": "https://cdn.datatables.net/plug-ins/",
-            "format": "{source}{version}/features/{name}/{file}",
-            "target": "datatables/js",
-            "disabled": true,
-            "files": [
-                "dataTables.conditionalPaging.js"
-            ]
-        },
-        {
-            "name": "keytable",
-            "version": "2.5.3",
-            "source": "http://cdn.datatables.net/",
-            "target": "datatables",
-            "files": [
-                "js/dataTables.keyTable.js"
-            ]
-        },
-        {
-            "name": "mark.js",
-            "version": "1.10.22",
-            "source": "https://cdn.datatables.net/plug-ins/",
-            "format": "{source}{version}/features/{name}/{file}",
-            "target": "datatables/js",
-            "files": [
-                "datatables.mark.js"
-            ]
-        },
-        {
             "display": "mark.js-jquery-mark",
             "name": "mark.js",
             "version": "8.11.1",

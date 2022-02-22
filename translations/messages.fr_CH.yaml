@@ -772,7 +772,8 @@ parameters:
         hide: Masquer le groupe %name%
     tabular:
         table: Tabulaire
-        flex: Mosaïque
+        custom: Mosaïque
+        card: Détaillée
     message_position:
         top-left: En haut à gauche
         top-center: En haut centré

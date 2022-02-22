@@ -18,6 +18,7 @@ use App\Form\Type\MinStrengthType;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\TableInterface;
 use App\Service\ApplicationService;
 use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
@@ -72,6 +73,9 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
 
         // default values
         $this->addDefaultValueSection($helper);
+
+        // display
+        $this->addDisplaySection($helper);
 
         // flashbag
         $this->addFlashbagSection($helper);
@@ -150,12 +154,16 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->rowClass('ml-2')
             ->notRequired()
             ->addCheckboxType();
+    }
 
-        $helper->field(self::P_DISPLAY_TABULAR)
-            ->updateAttribute('data-default', (int) self::DEFAULT_TABULAR)
+    private function addDisplaySection(FormHelper $helper): void
+    {
+        $helper->field(self::P_DISPLAY_MODE)
+            ->updateAttribute('data-default', self::DEFAULT_DISPLAY_MODE)
             ->addChoiceType([
-                'parameters.tabular.table' => true,
-                'parameters.tabular.flex' => false,
+                'parameters.tabular.table' => TableInterface::VIEW_TABLE,
+                'parameters.tabular.custom' => TableInterface::VIEW_CUSTOM,
+                'parameters.tabular.card' => TableInterface::VIEW_CARD,
             ]);
 
         $helper->field(self::P_EDIT_ACTION)

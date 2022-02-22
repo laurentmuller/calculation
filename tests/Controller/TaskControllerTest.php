@@ -37,10 +37,6 @@ class TaskControllerTest extends AbstractControllerTest
             ['/task', self::ROLE_ADMIN],
             ['/task', self::ROLE_SUPER_ADMIN],
 
-            ['/task/card', self::ROLE_USER],
-            ['/task/card', self::ROLE_ADMIN],
-            ['/task/card', self::ROLE_SUPER_ADMIN],
-
             ['/task/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/task/add', self::ROLE_ADMIN],
             ['/task/add', self::ROLE_SUPER_ADMIN],

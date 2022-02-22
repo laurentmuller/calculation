@@ -7,7 +7,7 @@
         {{- icons.icon('search fa-fw') -}}
     </a>
     <form id="navigation-search-form" name="navigation-search-form" class="form-inline my-auto mx-2" role="search" novalidate="novalidate" action="{{ path('search') }}" style="display: none; width: 0">
-        <input id="query" name="query" type="text" required="required" minlength="2" autocomplete="off" class="form-control form-control-sm w-100" placeholder="{{ 'search.placeholder'|trans }}" data-title="{{ 'search.minimum'|trans }}">
+        <input id="search" name="search" type="text" required="required" minlength="2" autocomplete="off" class="form-control form-control-sm w-100" placeholder="{{ 'search.placeholder'|trans }}" data-title="{{ 'search.minimum'|trans }}">
     </form>
 </li>
 {% endif -%}

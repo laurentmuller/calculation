@@ -39,10 +39,6 @@ class CalculationDuplicateControllerTest extends AbstractControllerTest
             ['/duplicate', self::ROLE_ADMIN],
             ['/duplicate', self::ROLE_SUPER_ADMIN],
 
-            ['/duplicate/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate/card', self::ROLE_ADMIN],
-            ['/duplicate/card', self::ROLE_SUPER_ADMIN],
-
             ['/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/duplicate/pdf', self::ROLE_ADMIN],
             ['/duplicate/pdf', self::ROLE_SUPER_ADMIN],

@@ -43,8 +43,8 @@ class GroupTable extends AbstractEntityTable
      */
     public function formatCategories(\Countable $categories, Group $group): string
     {
-        return $this->twig->render('table/_cell_table_link.html.twig', [
-            'route' => 'table_category',
+        return $this->twig->render('macros/_cell_table_link.html.twig', [
+            'route' => 'category_table',
             'count' => $categories->count(),
             'title' => 'group.list.category_title',
             'parameters' => [

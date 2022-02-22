@@ -12,14 +12,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\LogDataTable;
+use App\BootstrapTable\LogTable;
 use App\Report\LogReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
+use App\Traits\TableTrait;
 use App\Util\FileUtils;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,24 +33,13 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/log")
  * @IsGranted("ROLE_ADMIN")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage"}
+ * })
  */
 class LogController extends AbstractController
 {
-    /**
-     * Display the content of the log file as card.
-     *
-     * @Route("/card", name="log_card")
-     */
-    public function card(LogService $service): Response
-    {
-        if (!$entries = $service->getEntries()) {
-            $this->infoTrans('log.list.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        return $this->renderForm('log/log_card.html.twig', (array) $entries);
-    }
+    use TableTrait;
 
     /**
      * Logs a Content Security Policy report.
@@ -183,7 +174,12 @@ class LogController extends AbstractController
     /**
      * Show properties of a log entry.
      *
-     * @Route("/show/{id}", name="log_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="log_show", requirements={"id" = "\d+"})
+     * @Breadcrumb({
+     *     {"label" = "log.title", "route" = "log_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.formattedDate"}
+     * })
      */
     public function show(Request $request, int $id, LogService $service): Response
     {
@@ -198,34 +194,16 @@ class LogController extends AbstractController
     }
 
     /**
-     * Display the content of the log file as table.
+     * Render the table view.
      *
      * @Route("", name="log_table")
+     * @Breadcrumb({
+     *     {"label" = "log.title"}
+     * })
      */
-    public function table(Request $request, LogDataTable $table): Response
+    public function table(Request $request, LogTable $table): Response
     {
-        $service = $table->getService();
-        if (!$service->getEntries()) {
-            $this->infoTrans('log.list.empty');
-
-            return $this->redirectToHomePage();
-        }
-
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        // parameters
-        $parameters = [
-            'results' => $results,
-            'file' => $table->getFileName(),
-            'columns' => $table->getColumns(),
-            'channels' => $table->getChannels(),
-            'levels' => $table->getLevels(),
-        ];
-
-        return $this->renderForm('log/log_table.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'log/log_table.html.twig');
     }
 
     /**
@@ -237,10 +215,6 @@ class LogController extends AbstractController
             return $route;
         }
 
-        if ($this->isDisplayTabular()) {
-            return 'log_table';
-        }
-
-        return 'log_list';
+        return 'log_table';
     }
 }

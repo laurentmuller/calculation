@@ -1,52 +1,70 @@
 {% extends 'cards/card_table.html.twig' %}
 
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'user.list.title' -%}
 {%- set title_icon = 'user far' -%}
+{%- set defer_url = url('user_table') -%}
 {%- set object_type = ENTITY_USER -%}
+{%- set attributes = attributes|default({})|merge({'user-id': app.user.id}) -%}
 
-{# actions #}
-{%- set params = {'id': 0} -%}
-{%- set add_path = path('user_add') -%}
-{%- set show_path = path('user_show', params) -%}
-{%- set edit_path = path('user_edit', params) -%}
-{%- set delete_path = path('user_delete', params) -%}
-{%- set password_path = path('user_password', params) -%}
-{%- set image_path = path('user_image', params) -%}
-{%- set rights_path = path('user_rights', params) -%}
-{%- set message_path = path('user_message', params) -%}
-{%- set switch_path = path('homepage') -%}
-{%- set pdf_path = path('user_pdf') -%}
-{%- set pdf_right = path('user_rights_pdf') -%}
-{%- set excel_path = path('user_excel') -%}
-{%- set excel_right = path('user_rights_excel') -%}
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('user_add', params) }}">{{ 'user.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
-{# titles #}
-{%- set add_title = 'user.add.title' %}
-{%- set show_title = 'user.show.title' %}
-{%- set edit_title = 'user.edit.title' %}
-{%- set delete_title = 'user.delete.title' %}
-{%- set pdf_title = 'user.list.pdf_title' -%}
-{%- set excel_title = 'user.list.excel_title' -%}
+{% block global_actions -%}
+{{- _self.item_external(path('user_pdf'), 'user.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('user_excel'), 'user.list.excel_title', 'file-excel far') }}
+{{- _self.item_separator() }}
+{{- _self.item_external(path('user_rights_pdf'), 'user.list.rights_export', 'file-pdf far') }}
+{{- _self.item_external(path('user_rights_excel'), 'user.list.rights_excel', 'file-excel far') }}
+{%- endblock %}
 
-{# other acions #}
-{% block table_actions %}
-{{ _self.item_data(password_path, 'index.change_password', 'unlock-alt') }}
-{{ _self.item_data(image_path, 'user.image.title', 'image far') }}
-{{ _self.item_data(rights_path, 'user.list.rights_title', 'unlock') }}
-{{ _self.item_data(message_path, 'user.message.title', 'envelope far', {'data-callback': 'userSendMessage', 'data-id': app.user.id}) }}
+{% block show_actions -%}
+{{- _self.item_path(path('user_show', params), 'user.show.title', 'tv', show_class) }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{- _self.item_path(path('user_edit', params), 'user.edit.title', 'pencil', edit_class) }}
+{%- endblock %}
+
+{% block delete_actions -%}
+{{- _self.item_path(path('user_delete', params), 'user.delete.title', 'times', 'btn-delete btn-user-delete') }}
+{%- endblock %}
+
+{% block add_actions -%}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('user_add', params), 'user.add.title', 'file far', 'btn-add') }}
+{%- endblock %}
+
+{% block other_actions -%}
+{% if allow_edit %}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('user_password', params), 'index.change_password', 'unlock-alt', 'btn-password') }}
+{{- _self.item_path(path('user_image', params), 'user.image.title', 'image far', 'btn-image') }}
+{{- _self.item_path(path('user_rights', params), 'user.list.rights_title', 'unlock', 'btn-rights') }}
+{{- _self.item_path(path('user_message', params), 'user.message.title', 'envelope far', 'btn-user-message') }}
+{% endif %}
 {%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_SUPER_ADMIN') -%}
-    {{ icons.dropdownSeparator() }}
-    {{ _self.item_data(switch_path, 'user.switch.take.title', 'user-plus', {'data-callback': 'userSwitch', 'data-id': app.user.id}) }}
+    {{- _self.item_separator() }}
+    {{- _self.item_path(path('homepage', {'_switch_user': 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
-{{ icons.dropdownSeparator() }}
-{{ _self.item_external(pdf_right, 'user.list.rights_export', 'dropdown-item', 'file-pdf far') }}
-{{ _self.item_external(excel_right, 'user.list.rights_excel', 'dropdown-item', 'file-excel far') }}
-{{ icons.dropdownSeparator() }}
-{{ parent() }}
-{{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('user_card') }}
-{% endblock %}
+{%- endblock %}
+
+{% block custom_view_header -%}
+<span class="mr-1">%imageName%</span>
+{%- if row_edit -%}
+    <a href="{{ path('user_edit', params) }}" class="item-link text-body" title="{{ 'user.edit.title'|trans }}">%username%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('user_show', params) }}" class="item-link text-body" title="{{ 'user.show.title'|trans }}">%username%</a>
+{%- else -%}
+    <span>%username%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%email%') }}
+{{ _self.property_line() }}
+{{ _self.property_row('user.fields.role', '%role%') }}
+{{ _self.property_row('user.fields.enabled', '%enabled%') }}
+{{ _self.property_row('user.fields.lastLogin', '%lastLogin%') }}
+{%- endblock %}

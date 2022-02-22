@@ -1,67 +1,72 @@
 {% extends 'cards/card_table.html.twig' %}
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
-{# macros #}
-{% macro fill_categories(categories, total) %}
-<button class="dropdown-item dropdown-category active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
-{% for category in categories %}
-    <button class="dropdown-item dropdown-category" type="button" data-id="{{ category.id }}">{{ category.code }}</button>
-{% endfor %}
-{% endmacro %}
 
 {# parameters #}
 {%- set title = 'task.list.title' -%}
 {%- set title_icon = 'tasks' -%}
+{%- set defer_url = url('task_table') -%}
+{%- set category_id = customData.category.id|default(0) -%}
 {%- set object_type = ENTITY_TASK -%}
 
-{# actions #}
-{%- set params = {'id': 0} -%}
-{%- set add_path = path('task_add') -%}
-{%- set show_path = path('task_show', params) -%}
-{%- set edit_path = path('task_edit', params) -%}
-{%- set delete_path = path('task_delete', params) -%}
-{%- set clone_path = path('task_clone', params) -%}
-{%- set compute_path = path('task_compute', params) -%}
-{%- set pdf_path = path('task_pdf') -%}
-{%- set excel_path = path('task_excel') -%}
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('task_add', params) }}">{{ 'task.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
-{# titles #}
-{%- set add_title = 'task.add.title' %}
-{%- set show_title = 'task.show.title' %}
-{%- set edit_title = 'task.edit.title' %}
-{%- set delete_title = 'task.delete.title' %}
-{%- set pdf_title = 'task.list.pdf_title' -%}
-{%- set excel_title = 'task.list.excel_title' -%}
-
-{# highlight search #}
-{%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
-
-{% block search_input -%}
-<div class="input-group-append" id="dropdown-menu-category">
-    <button id="button-category" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'task.fields.category'|trans }}" title="{{ 'task.list.category_help'|trans }}">
-        {{- 'task.fields.category'|trans -}}
+{% block toolbar_actions -%}
+<div class="input-group-append">
+    <button id="categoryId" data-value="{{ category_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'task.fields.category'|trans }}" title="{{ 'task.list.category_help'|trans }}">
+        <i class="fa-regular fa-folder"></i>&nbsp;{{- customData.category ? customData.category.code : 'task.fields.category'|trans -}}
     </button>
-    <div class="dropdown-menu">
-        {{ _self.fill_categories(categories, total) -}}
+    <div class="dropdown-menu" aria-labelledby="categoryId">
+        {{ _self.output_dropdown('category', 0, category_id, 'task.list.category_all_text'|trans) }}
+        {% for category in customData.categories %}
+        {{ _self.output_dropdown('category', category.id, category_id, category.code) }}
+        {% endfor %}
     </div>
-    <input type="hidden" id="category" name="category">
 </div>
 {%- endblock %}
 
-{% block table_actions -%}
-{% if is_granted(ATTRIBUTE_ADD, object_type) %}
-{{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
-{{ icons.dropdownSeparator() }}
-{% endif %}
-{{ _self.item_data(compute_path, 'taskcompute.title', 'keyboard') }}
-{{ icons.dropdownSeparator() }}
-{{ parent() }}
-{{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('task_card') }}
+{% block global_actions -%}
+{{- _self.item_external(path('task_pdf'), 'task.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('task_excel'), 'task.list.excel_title', 'file-excel far') }}
 {%- endblock %}
 
-{% block javascripts -%}
-{{- parent() }}
-{{- asset_js('js/application/task_table.js') }}
-{% endblock %}
+{% block show_actions -%}
+{{- _self.item_path(path('task_show', params), 'task.show.title', 'tv', show_class) }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{- _self.item_path(path('task_edit', params), 'task.edit.title', 'pencil', edit_class) }}
+{%- endblock %}
+
+{% block delete_actions -%}
+{{- _self.item_path(path('task_delete', params), 'task.delete.title', 'times', 'btn-delete') }}
+{%- endblock %}
+
+{% block add_actions -%}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('task_add', params), 'task.add.title', 'file far', 'btn-add') }}
+{{- _self.item_path(path('task_clone', params), 'common.button_clone', 'copy far', 'btn-task-clone') }}
+{%- endblock %}
+
+{% block other_actions -%}
+{% if allow_show %}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('task_compute', params), 'taskcompute.title', 'keyboard', 'btn-task-compute') }}
+{% endif %}
+{%- endblock %}
+
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('task_edit', params) }}" class="item-link text-body" title="{{ 'task.edit.title'|trans }}">%name%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('task_show', params) }}" class="item-link text-body" title="{{ 'task.show.title'|trans }}">%name%</a>
+{%- else -%}
+    <span>%name%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%group.code% / %category.code%') }}
+{{ _self.property_row('task.fields.unit', '%unit%') }}
+{{ _self.property_row('task.fields.items', '%items%') }}
+{%- endblock %}

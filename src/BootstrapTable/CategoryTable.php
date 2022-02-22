@@ -59,8 +59,8 @@ class CategoryTable extends AbstractEntityTable
      */
     public function formatProducts(\Countable $products, Category $category): string
     {
-        return $this->twig->render('table/_cell_table_link.html.twig', [
-            'route' => 'table_product',
+        return $this->twig->render('macros/_cell_table_link.html.twig', [
+            'route' => 'product_table',
             'count' => $products->count(),
             'title' => 'category.list.product_title',
             'parameters' => [
@@ -74,8 +74,8 @@ class CategoryTable extends AbstractEntityTable
      */
     public function formatTasks(\Countable $tasks, Category $category): string
     {
-        return $this->twig->render('table/_cell_table_link.html.twig', [
-            'route' => 'table_task',
+        return $this->twig->render('macros/_cell_table_link.html.twig', [
+            'route' => 'task_table',
             'count' => $tasks->count(),
             'title' => 'category.list.task_title',
             'parameters' => [

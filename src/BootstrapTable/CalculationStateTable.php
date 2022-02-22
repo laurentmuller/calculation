@@ -48,8 +48,8 @@ class CalculationStateTable extends AbstractEntityTable
      */
     public function formatCalculations(\Countable $calculations, CalculationState $state): string
     {
-        return $this->twig->render('table/_cell_table_link.html.twig', [
-            'route' => 'table_calculation',
+        return $this->twig->render('macros/_cell_table_link.html.twig', [
+            'route' => 'calculation_table',
             'count' => $calculations->count(),
             'title' => 'calculationstate.list.calculation_title',
             'parameters' => [

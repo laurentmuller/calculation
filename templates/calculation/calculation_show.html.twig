@@ -16,7 +16,7 @@
 {%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set list_path = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}
+{%- set list_path = 'calculation_table' -%}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) and item.editable ? path('calculation_edit', params) : null -%}
 {%- set state_path = is_granted(ATTRIBUTE_EDIT, item) and not item.editable ? path('calculation_state', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}

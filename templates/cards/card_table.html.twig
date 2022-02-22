@@ -1,195 +1,292 @@
 {% extends 'cards/card_base.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'macros/_attributes.html.twig' as tools %}
-{% import 'macros/_datatables.html.twig' as helper %}
 
-{% macro button(path, text, class, title, icon, separator=false) %}
-{%- if path -%}
-    <a href="#" class="btn btn-secondary {{ class|default('') }}" data-path="{{ path }}"{% if title %} title="{{ title|default(text)|trans }}"{% endif %}{% if separator %} data-separator="true"{% endif %}>
-        {{- icons.icon(icon ~ ' fa-fw') -}}
-    </a>
-{%- endif -%}
-{% endmacro %}
+{% macro output_column(column) -%}
+<th{{ tools.attribs(column.attributes, 'data-') }}>
+    {{- column.title ? column.title|trans : '&nbsp;'|raw -}}
+</th>
+{%- endmacro %}
 
-{% macro item_data(path, text, icon, attributes={}) %}
-{%- if path -%}
-    <a href="#" data-path="{{ path }}" class="dropdown-item"{{ tools.attribs(attributes) }}>
-        {{- icons.icon(icon ~ ' fa-fw', text) -}}
-    </a>
-{%- endif -%}
-{% endmacro %}
+{# macros #}
+{% macro output_dropdown(suffix, value, selection, text) -%}
+<button type="button" data-value="{{ value }}" class="dropdown-item dropdown-{{ suffix }}{% if value == selection %} active{% endif %}">
+    {{- text|default(value)|capitalize -}}
+</button>
+{%- endmacro %}
 
-{% macro item_data_external(path, text, icon) %}
-{%- if path -%}
-    <a href="#" data-path="{{ path }}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-        {{- icons.icon(icon ~ ' fa-fw', text) -}}
-    </a>
-{%- endif -%}
-{% endmacro %}
+{% macro item_path(path, text, icon, class='') %}
+{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
+{{ icons.link(path, text, class, icon ~ ' fa-fw') }}
+{%- endmacro %}
 
-{% macro item_external(path, text, class, icon) %}
-{%- if path -%}
-    <a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
-        {{- icons.icon(icon ~ ' fa-fw', text) -}}
-    </a>
-{%- endif -%}
-{% endmacro %}
+{% macro item_path_external(path, text, icon, class='') %}
+{%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
+{{ icons.linkExternal(path, text, class, icon ~ ' fa-fw') }}
+{%- endmacro %}
+
+{% macro item_global(path, text, icon) %}
+{{ icons.dropdownItem(path, text, icon) }}
+{%- endmacro %}
+
+{% macro item_external(path, text, icon, class='') %}
+{%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
+{{ icons.linkExternal(path, text, class, icon ~ ' fa-fw') }}
+{%- endmacro %}
+
+{% macro item_separator() %}
+{{ icons.dropdownSeparator() }}
+{%- endmacro %}
+
+{% macro output_sort(column, sort, order) -%}
+{%- set icon = column.numeric ? 'numeric' : 'alpha' -%}
+{%- set active = (column.field == sort and 'asc' == order) ? ' active' : '' -%}
+<button type="button" class="dropdown-item dropdown-menu-sort{{ active }}" data-sort="{{ column.field }}" data-order="asc">
+    {{- icons.icon('fa-fw fa-sort-' ~ icon ~ '-up', 'list.sort_ascending_title', null, {'%name%': column.title|trans}) -}}
+</button>
+{%- set active = (column.field == sort and 'desc' == order) ? ' active' : '' -%}
+<button type="button" class="dropdown-item dropdown-menu-sort{{ active }}" data-sort="{{ column.field }}" data-order="desc">
+    {{- icons.icon('fa-fw fa-sort-' ~ icon ~ '-down', 'list.sort_desscending_title', null, {'%name%': column.title|trans}) -}}
+</button>
+{%- endmacro %}
+
+{% macro property_row(field, value, class='') -%}
+{% set class = ('col-8 text-truncate user-select-none ' ~ class)|trim %}
+<div class="row rowlink-skip no-gutters">
+    <div class="col-4 user-select-none">{{ field|trans }}</div>
+    <div class="{{ class }}">{{ value|raw }}</div>
+</div>
+{%- endmacro %}
+
+{% macro property_value(value, class='') -%}
+{% set class = ('text-truncate user-select-none ' ~ class)|trim %}
+<div class="{{ class }}">{{ value|raw }}</div>
+{%- endmacro %}
+
+{% macro property_both(leftValue, rightValue, left_class='', right_class='') -%}
+{% set left_class = ('col-4 user-select-none ' ~ left_class)|trim %}
+{% set right_class = ('col-8 user-select-none ' ~ right_class)|trim %}
+<div class="row rowlink-skip no-gutters">
+    <div class="{{ left_class }}">{{ leftValue|raw }}</div>
+    <div class="{{ right_class }}">{{ rightValue|raw }}</div>
+</div>
+{%- endmacro %}
+
+{% macro property_line() -%}
+<div><hr class="my-1"></div>
+{%- endmacro %}
+
+{% macro button_view(text, icon, view, selection) %}
+<button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} active{% endif %}" data-value="{{ view }}">
+    {{- icons.icon(icon ~ ' fa-fw', text) -}}
+</button>
+{%- endmacro %}
+
+{# granted actions #}
+{%- set object_type = object_type|default('none') -%}
+{%- set allow_show = is_granted(ATTRIBUTE_SHOW, object_type) -%}
+{%- set allow_add = is_granted(ATTRIBUTE_ADD, object_type) -%}
+{%- set allow_edit = is_granted(ATTRIBUTE_EDIT, object_type) -%}
+{%- set allow_delete = is_granted(ATTRIBUTE_DELETE, object_type) -%}
+{%- set allow_export = is_granted(ATTRIBUTE_EXPORT, object_type) -%}
+
+{# default action #}
+{%- set row_none = app.actionNone -%}
+{%- set row_show = allow_show and app.actionShow -%}
+{%- set row_edit = allow_edit and app.actionEdit -%}
+{%- set show_class = 'btn-show' ~ (row_show ? ' btn-default' : '') -%}
+{%- set edit_class = 'btn-edit' ~ (row_edit ? ' btn-default' : '') -%}
+{% if not row_edit and not row_none and allow_show %}
+    {%- set row_show = true -%}
+    {%- set show_class = 'btn-show btn-default' -%}
+{% elseif not row_show and not row_none and allow_edit %}
+    {%- set row_edit = true -%}
+    {%- set edit_class = 'btn-edit btn-default' -%}
+{% endif %}
 
 {# parameters #}
-{%- set object_type = object_type|default('none') -%}
-{%- set ajax_path = path(app.request.get('_route')) -%}
-{%- set ajax_lang = path('ajax_language') -%}
-{%- set show_search = (show_search is defined ? show_search : true) and results.recordsTotal > 10 -%}
-{%- set show_length = (show_length is defined ? show_length : true) and results.recordsTotal > 10 -%}
-
-{%- set id = app.request.get('id', 0) -%}
-{%- set ordercolumn = app.session.get(object_type ~ '.ordercolumn') -%}
-{%- set orderdir = app.session.get(object_type ~ '.orderdir') -%}
-{%- set pagelength = app.session.get(object_type ~ '.pagelength', 15) -%}
-
-{%- set is_pdf_action = pdf_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
-{%- set is_excel_action = excel_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
-{%- set is_other_actions = is_pdf_action or is_excel_action or (is_other_actions ?? false) -%}
-{%- set row_link = not app.actionNone and (is_granted(ATTRIBUTE_EDIT, object_type) or is_granted(ATTRIBUTE_SHOW, object_type)) -%}
+{%- set allow_search = attributes.search|default(true|json_encode) == true|json_encode -%}
+{%- set allow_global = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
+{%- set row_selector = 'table-primary' -%}
+{%- set caller = path(app.request.get('_route')) -%}
+{%- set params = params|default({})|merge({'caller': caller}) -%}
+{%- set id = params.id|default(0) -%}
+{%- set limit = params.limit|default(20) -%}
+{%- set custom_view = attributes['custom-view']|default(false) -%}
+{%- set attributes = attributes|default({})|merge({
+    'classes': 'table table-hover table-list table-sm',
+    'row-selector': 'tbody .' ~ row_selector,
+    'custom-selector': '.custom-item.' ~ row_selector,
+    'row-class': row_selector,
+    'single-select': true,
+    'toggle-selector': '#toggle',
+    'undefined-text': '&nbsp;',
+    'silent-sort': 'false',
+    'side-pagination': "server",
+    'show-extended-pagination': 'true',
+    'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
+    'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
+    'pagination-parts': '["pageInfo", "pageList"]',
+    'pagination-loop': "false",
+    'pagination': 'true',
+    'loading-template': 'loadingTemplate',
+    'error-message': 'error_page.description'|trans,
+    'default-action': app.editAction,
+    'defer-url': defer_url ?? false,
+    'save-url': url('ajax_save_table'),
+    'caller': caller
+}) -%}
 
 {# classes #}
 {% block card_container_class '' %}
-{% block card_body_class ' px-3 pb-0 pt-2' %}
-{% block card_footer_class ' footer-place-holder' %}
+{% block card_body_class ' px-3 pt-0 pb-2' %}
 
-{% block card_header %}
+{# header #}
+{% block card_header -%}
 <div class="row">
-    <div class="col-lg-5 mt-1">{{ parent() }}</div>
-    <div class="col-lg-7 text-lg-right d-print-none">
-        {# actions toolbar #}
-        <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-            {% if show_path|default(false) and is_granted(ATTRIBUTE_SHOW, object_type) %}
-                {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show disabled', show_title ?? false, 'tv') }}
-            {% endif %}
-            {% if edit_path|default(false) and is_granted(ATTRIBUTE_EDIT, object_type) %}
-                {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit disabled', edit_title ?? false, 'pencil') }}
-            {% endif %}
-            {% if delete_path|default(false) and is_granted(ATTRIBUTE_DELETE, object_type) %}
-                {{ _self.button(delete_path|default(false), 'common.button_delete', 'btn-table-delete disabled', delete_title ?? false, 'times', true) }}
-            {% endif %}
-            {% if add_path|default(false) and is_granted(ATTRIBUTE_ADD, object_type) %}
-                {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add', add_title ?? false, 'file far') }}
-            {% endif %}
-            {% block other_actions -%}
-            {%- if is_other_actions -%}
-            <div id="other_actions" class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.other_actions'|trans }}">
-                <button id="other_actions_button" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'common.other_actions'|trans }}">
-                    <i class="fa-solid fa-bars"></i>
+    <div class="col-md-4">{{ parent() }}</div>
+    <div class="col-md-8 d-print-none text-md-right">{% block header_actions -%}{%- endblock %}</div>
+</div>
+{%- endblock %}
+
+{# body #}
+{% block card_body -%}
+{# toolbar #}
+<div class="row my-2 d-print-none">
+    <div class="col-auto col-search mr-auto">
+        {% if allow_search %}
+        <div class="form-inline">
+            <div class="btn-group btn-group-sm btn-group-search" role="group">
+                <div class="input-group input-group-sm input-group-search search">
+                    {% block toolbar_actions -%}{%- endblock %}
+                    <div class="input-group-append">
+                        <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
+                            <i class="fa-solid fa-eraser"></i>
+                        </button>
+                    </div>
+                 </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-auto col-toolbar mt-1 mt-md-0">
+        <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
+            <div class="btn-group btn-group-sm btn-group-sort" role="group">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_sort" data-toggle="dropdown" title="{{ 'list.sort_title'|trans }}">
+                    <i class="fa-solid fa-sort-amount-down-alt"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="other_actions_button">
-                    {% block table_actions -%}
-                    {% if is_pdf_action %}
-                        {% set pdf_title = pdf_title|default('common.button_pdf_list') %}
-                        {{ _self.item_external(pdf_path|default(false), pdf_title, 'dropdown-item btn-pdf-list', 'file-pdf far') }}
-                    {% endif %}
-                    {% if is_excel_action %}
-                        {% set excel_title = excel_title|default('common.button_excel_list') %}
-                        {{ icons.dropdownItem(excel_path, excel_title, 'file-excel far') }}
-                    {% endif %}
-                    {%- endblock %}
+                <div class="dropdown-menu" aria-labelledby="button_sort">
+                {% for column in columns|filter(c => c.sortable and c.visible) -%}
+                    {{ _self.output_sort(column, params.sort, params.order) }}
+                    {% if not loop.last %}{{ _self.item_separator }}{% endif %}
+                {%- endfor %}
                 </div>
             </div>
-            {%- endif -%}
-            {%- endblock %}
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block card_body %}
-{% if show_length or show_search -%}
-<div class="row mb-2 d-print-none">
-    {# search #}
-    {% if show_search -%}
-    <div class="col-lg-auto">
-        <div class="form-inline">
-             <div class="input-group input-group-sm">
-                <input type="text" id="table_search" name="table_search" class="form-control form-control-sm" autocomplete="off" placeholder="{{ 'datatable.search'|trans }}">
-                {% block search_input -%}{%- endblock %}
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
-                        <i class="fa-solid fa-eraser"></i>
-                    </button>
+            {% if pageList is defined and pageList|length > 1 %}
+            <div class="btn-group btn-group-sm" role="group">
+                {# menu is created on the prebody event #}
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-toggle="dropdown" title="{{ 'list.limit_title'|trans }}">
+                    {{- params.limit -}}
+                </button>
+                <div class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></div>
+            </div>
+            {% endif %}
+            <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="button_view" data-toggle="dropdown" title="{{ 'common.view_title'|trans }}">
+                {%- if params.view == 'card' -%}
+                    <i class="fa-fw fa-solid fa-grip-horizontal"></i>
+                {%- elseif params.view == 'custom' -%}
+                    <i class="fa-fw fa-solid fa-border-none"></i>
+                {%- else -%}
+                    <i class="fa-fw fa-solid fa-table"></i>
+                {%- endif -%}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="button_view">
+                    {{ _self.button_view('common.view_table', 'table', 'table', params.view) }}
+                    {% if custom_view %}
+                    {{ _self.button_view('common.view_custom', 'grip-horizontal', 'custom', params.view) }}
+                    {% endif %}
+                    {{ _self.button_view('common.view_card', 'list', 'card', params.view) }}
                 </div>
+            </div>
+            {% if allow_global %}
+            <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-toggle="dropdown" title="{{ 'common.other_actions'|trans }}">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="button_other_actions">
+                {% block global_actions -%}{%- endblock %}
+                </div>
+            </div>
+            {% endif %}
 
-             </div>
         </div>
     </div>
-    {%- endif %}
-
-    {% if show_length -%}
-    <div class="col-lg-auto ml-auto">
-        <div class="form-inline">
-            <label class="mr-2" for="table_length">{{ 'datatable.show'|trans }}</label>
-            <select id="table_length" name="table_length" class="form-control form-control-sm custom-select custom-select-sm">
-                {{ helper.page(10, pagelength) }}
-                {{ helper.page(15, pagelength, results.recordsTotal > 10) }}
-                {{ helper.page(20, pagelength, results.recordsTotal > 15) }}
-                {{ helper.page(25, pagelength, results.recordsTotal > 20) }}
-                {{ helper.page(30, pagelength, results.recordsTotal > 25) }}
-                {{ helper.page(50, pagelength, results.recordsTotal > 30) }}
-            </select>
-            <label class="ml-lg-2">{{ 'datatable.elements'|trans }}</label>
+</div>
+{# table #}
+<table id="table-edit"{{ tools.attribs(attributes, 'data-') }}>
+    <thead>
+        <tr>
+            {% for column in columns %}
+            {{ _self.output_column(column) }}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody{% if row_link|default(true) %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
+        {% for row in rows %}
+        <tr{% if row.id == id %} class="{{ row_selector }}"{%- set row_selector = '' -%}{% endif %}>
+            {% for column in columns %}
+            <td>{{ row[column.alias]|raw }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{# dropdown actions #}
+<div id="dropdown-actions" class="dropdown d-print-none d-none">
+    {{ icons.dropdownEllipsis() }}
+    <div class="dropdown-menu dropdown-menu-right dropdown-menu-actions">
+        {% if allow_show %}{% block show_actions -%}{%- endblock %}{% endif %}
+        {% if allow_edit %}{% block edit_actions -%}{%- endblock %}{% endif %}
+        {% if allow_delete %}{% block delete_actions -%}{%- endblock %}{% endif %}
+        {% if allow_add %}{% block add_actions -%}{%- endblock %}{% endif %}
+        {% block other_actions -%}{%- endblock %}
+    </div>
+</div>
+{# custom view template #}
+{% if custom_view %}
+<div id="custom-view" class="d-none">
+    <div class="col mb-2 px-1">
+        <div class="custom-item border rounded h-100 px-2 py-1{% block custom_view_card_class %}{%- endblock %}">
+            <div class="row rowlink-skip no-gutters">
+                <div class="col-11 text-truncate font-weight-bold{% if row_edit or row_show %} rowlink-skip{% endif %}">{% block custom_view_header -%}{%- endblock %}</div>
+                <div class="col-1 text-right rowlink-skip d-print-none custom-view-actions"></div>
+            </div>
+            {% block custom_view_body -%}{%- endblock %}
         </div>
     </div>
-    {%- endif %}
 </div>
-{%- endif %}
-
-{%- set attributes = attributes|default({})|merge({
-        'id': 'data-table',
-        'row-link': row_link,
-        'edit-action': app.actionEdit,
-        'class': 'table table-list table-hover table-sm dataTable border-bottom w-100',
-        'data-ajax': ajax_path,
-        'data-lang': ajax_lang,
-        'data-total': results.recordsTotal,
-        'data-filtered': results.recordsFiltered,
-        'data-pagelength': pagelength,
-        'data-ordercolumn': ordercolumn,
-        'data-orderdir': orderdir,
-        'data-debug': app.debug
-}) -%}
-<div class="table-responsive-sm">
-    <table{{ tools.attribs(attributes) }}>
-        {{ helper.headers(columns) }}
-        <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
-            {% for row in results.data -%}
-                <tr{% if row[0] == id %} class="datatables-selection"{% endif %}>
-                {% for cell in row -%}
-                    <td class="{{ columns[loop.index0].class }}">{{ columns[loop.index0].rawData ? cell|raw : cell }}</td>
-                {%- endfor %}
-                </tr>
-            {%- endfor %}
-        </tbody>
-    </table>
-</div>
-{% endblock %}
+{% endif %}
+{%- endblock -%}
 
 {% block stylesheets %}
-{{ asset_css('css/datatables.css') }}
+{{ asset_css('css/bootstrap-table.css') }}
 {%- endblock -%}
 
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}
 {{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
-{{ asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
-{{ asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
-{{ asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
-{{ asset_js('js/vendor/datatables/js/datatables.mark.js') }}
+{{ asset_js('js/vendor/bootstrap-table/bootstrap-table.js') }}
+{{ asset_js('js/vendor/bootstrap-table/bootstrap-table-defer-url.js') }}
+{{ asset_js('js/vendor/bootstrap-table/bootstrap-table-custom-view.js') }}
 {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}
+{{ asset_js('js/extensions/bootstrap-table-extensions.js') }}
+{{ asset_js('js/extensions/bootstrap-table-fr-CH.js') }}
 {{ asset_js('js/extensions/contextmenu-extensions.js') }}
-{{ asset_js('js/extensions/datatables-extensions.js') }}
-{{ asset_js('js/application/datatables.js') }}
+{{ asset_js('js/application/bootstrap_table.js') }}
 {% else %}
-{{ asset_js('js/datatables.js') }}
+{{ asset_js('js/bootstrap_tables.js') }}
 {% endif %}
 {%- endblock -%}

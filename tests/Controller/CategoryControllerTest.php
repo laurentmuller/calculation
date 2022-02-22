@@ -33,10 +33,6 @@ class CategoryControllerTest extends AbstractControllerTest
             ['/category', self::ROLE_ADMIN],
             ['/category', self::ROLE_SUPER_ADMIN],
 
-            ['/category/card', self::ROLE_USER],
-            ['/category/card', self::ROLE_ADMIN],
-            ['/category/card', self::ROLE_SUPER_ADMIN],
-
             ['/category/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/category/add', self::ROLE_ADMIN],
             ['/category/add', self::ROLE_SUPER_ADMIN],

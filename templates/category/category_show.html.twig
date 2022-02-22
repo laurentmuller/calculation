@@ -11,7 +11,7 @@
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('category_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('category_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'category_card') -%}
+{%- set cancel_path = cancel_url(app.request, id, 'category_table') -%}
 
 {# properties #}
 {% block property_body %}

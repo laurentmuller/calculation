@@ -39,10 +39,9 @@ class IndexController extends AbstractController
     public function invoke(CalculationRepository $calculRepository, CalculationStateRepository $stateRepository): Response
     {
         // get values to display
-        $tabular = $this->isDisplayTabular();
         $months = $calculRepository->getByMonth();
         $states = $stateRepository->getListCountCalculations();
-        $calculations = $calculRepository->getLastCalculations($tabular ? 10 : 6);
+        $calculations = $calculRepository->getLastCalculations(10);
         $min_margin = $this->getApplication()->getMinMargin();
 
         // get state count, overall total and items total

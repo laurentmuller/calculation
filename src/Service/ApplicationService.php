@@ -297,6 +297,16 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Gets a value indicating table display mode.
+     *
+     * @return string the tabular, custom or card mode
+     */
+    public function getDisplayMode(): string
+    {
+        return (string) $this->getPropertyString(self::P_DISPLAY_MODE, self::DEFAULT_DISPLAY_MODE);
+    }
+
+    /**
      * Gets the action to trigger within the entities.
      * <p>
      * Possible values are:
@@ -387,7 +397,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
             self::P_MIN_MARGIN => $this->getMinMargin(),
 
-            self::P_DISPLAY_TABULAR => $this->isDisplayTabular(),
+            self::P_DISPLAY_MODE => $this->getDisplayMode(),
             self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
 
             self::P_QR_CODE => $this->isQrCode(),
@@ -589,16 +599,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function isDisplayCaptcha(): bool
     {
         return $this->isPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->getDebug());
-    }
-
-    /**
-     * Gets a value indicating how entities are displayed.
-     *
-     * @return bool true, displays the entities in tabular mode; false, displays entities as cards
-     */
-    public function isDisplayTabular(): bool
-    {
-        return $this->isPropertyBoolean(self::P_DISPLAY_TABULAR, self::DEFAULT_TABULAR);
     }
 
     /**

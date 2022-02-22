@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\CalculationDataTable;
+use App\BootstrapTable\CalculationTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Form\Calculation\CalculationEditStateType;
@@ -29,8 +29,6 @@ use App\Response\SpreadsheetResponse;
 use App\Service\CalculationService;
 use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
-use App\Util\FormatUtils;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -48,16 +46,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * @Route("/calculation")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" },
- *     {"label" = "calculation.list.title", "route" = "table_calculation", "params" = {
- *         "id" = "$params.[id]",
- *         "search" = "$params.[search]",
- *         "sort" = "$params.[sort]",
- *         "order" = "$params.[order]",
- *         "offset" = "$params.[offset]",
- *         "limit" = "$params.[limit]",
- *         "view" = "$params.[view]"
- *     }}
+ *     {"label" = "index.title", "route" = "homepage"}
  * })
  * @template-extends AbstractEntityController<Calculation>
  */
@@ -81,7 +70,8 @@ class CalculationController extends AbstractEntityController
      *
      * @Route("/add", name="calculation_add")
      * @Breadcrumb({
-     *     {"label" = "breadcrumb.add"}
+     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
+     *     {"label" = "calculation.add.title"}
      * })
      */
     public function add(Request $request): Response
@@ -108,31 +98,11 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Show the calculations, as card.
-     *
-     * @Route("/card", name="calculation_card")
-     */
-    public function card(Request $request): Response
-    {
-        $sortedFields = [
-            ['name' => 'id', 'label' => 'calculation.fields.id', 'numeric' => true],
-            ['name' => 'date', 'label' => 'calculation.fields.date'],
-            ['name' => 'customer', 'label' => 'calculation.fields.customer'],
-            ['name' => 'description', 'label' => 'calculation.fields.description'],
-            ['name' => 'overallTotal', 'label' => 'calculation.fields.total', 'numeric' => true],
-        ];
-        $parameters = [
-            'min_margin' => $this->getApplication()->getMinMargin(),
-        ];
-
-        return $this->renderCard($request, 'id', Criteria::DESC, $sortedFields, $parameters);
-    }
-
-    /**
      * Edit a copy (cloned) calculation.
      *
-     * @Route("/clone/{id}", name="calculation_clone", requirements={"id" = "\d+" })
+     * @Route("/clone/{id}", name="calculation_clone", requirements={"id" = "\d+"})
      * @Breadcrumb({
+     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
      *     {"label" = "breadcrumb.clone"}
      * })
      */
@@ -153,10 +123,11 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      *
-     * @Route("/delete/{id}", name="calculation_delete", requirements={"id" = "\d+" })
+     * @Route("/delete/{id}", name="calculation_delete", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.delete"}
+     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
+     *     {"label" = "breadcrumb.delete"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
@@ -176,10 +147,11 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a calculation.
      *
-     * @Route("/edit/{id}", name="calculation_edit", requirements={"id" = "\d+" })
+     * @Route("/edit/{id}", name="calculation_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
+     *     {"label" = "breadcrumb.edit"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function edit(Request $request, Calculation $item): Response
@@ -212,7 +184,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a Spreadsheet document.
      *
-     * @Route("/excel/{id}", name="calculation_excel_id", requirements={"id" = "\d+" })
+     * @Route("/excel/{id}", name="calculation_excel_id", requirements={"id" = "\d+"})
      */
     public function excelById(Calculation $calculation): SpreadsheetResponse
     {
@@ -245,7 +217,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a PDF document.
      *
-     * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id" = "\d+" })
+     * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id" = "\d+"})
      */
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
@@ -259,10 +231,11 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      *
-     * @Route("/show/{id}", name="calculation_show", requirements={"id" = "\d+" })
+     * @Route("/show/{id}", name="calculation_show", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.property" }
+     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
+     *     {"label" = "breadcrumb.property"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function show(Calculation $item): Response
@@ -279,10 +252,11 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      *
-     * @Route("/state/{id}", name="calculation_state", requirements={"id" = "\d+" })
+     * @Route("/state/{id}", name="calculation_state", requirements={"id" = "\d+"})
      * @Breadcrumb({
-     *     {"label" = "$item.display" },
-     *     {"label" = "breadcrumb.edit" }
+     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
+     *     {"label" = "calculation.list.state_title"},
+     *     {"label" = "$item.display"}
      * })
      */
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
@@ -314,33 +288,16 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Show calculations, as table.
+     * Render the table view.
      *
      * @Route("", name="calculation_table")
+     * @Breadcrumb({
+     *     {"label" = "calculation.list.title"}
+     * })
      */
-    public function table(Request $request, CalculationDataTable $table, CalculationStateRepository $repository): Response
+    public function table(Request $request, CalculationTable $table, CalculationStateRepository $repository): Response
     {
-        $attributes = [];
-        $parameters = [];
-
-        // callback?
-        if (!$request->isXmlHttpRequest()) {
-            // attributes
-            $margin = $this->getApplication()->getMinMargin();
-            $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]);
-            $attributes = [
-                'min_margin' => $margin,
-                'min_margin_text' => $margin_text,
-            ];
-
-            // parameters
-            $states = $repository->getListCountCalculations();
-            $parameters = [
-                'states' => $states,
-            ];
-        }
-
-        return $this->renderTable($request, $table, $attributes, $parameters);
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table.html.twig');
     }
 
     /**

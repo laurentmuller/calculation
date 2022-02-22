@@ -14,12 +14,9 @@
         {% endif -%}
         {{- icons.dropdownItem(path('admin_product'), 'product.update.title', 'file-alt far') -}}
         {{- icons.dropdownSeparator -}}
-        {%- set href = is_tabular ? path('below_table') : path('below_card') -%}
-        {{- icons.dropdownItem(href, 'below.title', 'percent') -}}
-        {%- set href = is_tabular ? path('duplicate_table') : path('duplicate_card') -%}
-        {{- icons.dropdownItem(href, 'duplicate.title', 'copy far') -}}
-        {%- set href = is_tabular ? path('empty_table') : path('empty_card') -%}
-        {{- icons.dropdownItem(href, 'empty.title', 'file-code far') -}}
+        {{- icons.dropdownItem(path('below_table'), 'below.title', 'percent') -}}
+        {{- icons.dropdownItem(path('duplicate_table'), 'duplicate.title', 'copy far') -}}
+        {{- icons.dropdownItem(path('empty_table'), 'empty.title', 'file-code far') -}}
         {%- if is_granted_task -%}
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('task_compute', {'id': 0, 'caller': path('homepage')}), 'taskcompute.title', 'keyboard') -}}

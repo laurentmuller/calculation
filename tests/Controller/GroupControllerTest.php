@@ -31,10 +31,6 @@ class GroupControllerTest extends AbstractControllerTest
             ['/group', self::ROLE_ADMIN],
             ['/group', self::ROLE_SUPER_ADMIN],
 
-            ['/group/card', self::ROLE_USER],
-            ['/group/card', self::ROLE_ADMIN],
-            ['/group/card', self::ROLE_SUPER_ADMIN],
-
             ['/group/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/group/add', self::ROLE_ADMIN],
             ['/group/add', self::ROLE_SUPER_ADMIN],

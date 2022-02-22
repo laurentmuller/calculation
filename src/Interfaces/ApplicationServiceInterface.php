@@ -27,6 +27,11 @@ interface ApplicationServiceInterface
     public const DEFAULT_ACTION = ActionInterface::ACTION_EDIT;
 
     /**
+     * The default display mode (string).
+     */
+    public const DEFAULT_DISPLAY_MODE = TableInterface::VIEW_TABLE;
+
+    /**
      * The default number of items displayed in the tables (integer).
      */
     public const DEFAULT_LIST_LENGTH = 15;
@@ -60,11 +65,6 @@ interface ApplicationServiceInterface
      * The default display message sub-title (boolean).
      */
     public const DEFAULT_SUB_TITLE = false;
-
-    /**
-     * The default display mode (boolean).
-     */
-    public const DEFAULT_TABULAR = true;
 
     /**
      * The default timeout of the flashbag messages (integer).
@@ -144,11 +144,17 @@ interface ApplicationServiceInterface
     public const P_DISPLAY_CAPTCHA = 'display_captcha';
 
     /**
-     * The property name for the display mode (boolean).
-     *
-     * When <code>true</code>, displays the entities in tabular mode (default); when <code>false</code>, displays entities as cards.
+     * The property name for the display mode (string).
+     * <p>
+     * Possible values are:
+     * <ul>
+     * <li>'<code>table</code>': Show values as table (default).</li>
+     * <li>'<code>custom</code>': Show values as card.</li>
+     * <li>'<code>card</code>': Show values as detailled.</li>
+     * </ul>
+     * </p>.
      */
-    public const P_DISPLAY_TABULAR = 'display_tabular';
+    public const P_DISPLAY_MODE = 'display_mode';
 
     /**
      * The property name for the action to trigger within the entities (string).

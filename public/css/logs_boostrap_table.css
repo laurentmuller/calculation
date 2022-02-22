@@ -34,37 +34,23 @@
         max-width:10rem;
     }
 }
-/*
-@media ( min-width : 992px) {
-    .message {
-        max-width:10rem;
-    }
-}
 
-@media ( min-width : 1200px) {
-    .message {
-        max-width:10rem;
-    }
-}
-*/
-
-.debug {
+td.debug {
     border-left-color: var(--secondary) !important;
 }
 
-.info,
-.notice {
+td.info,
+td.notice {
     border-left-color: var(--info) !important;
 }
 
-.warning {
+td.warning {
     border-left-color: var(--warning) !important;
 }
 
-.error,
-.critical,
-.alert,
-.emergency {
+td.error,
+td.critical,
+td.alert,
+td.emergency {
     border-left-color: var(--danger) !important;
 }
-

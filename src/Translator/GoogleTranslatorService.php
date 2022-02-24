@@ -134,7 +134,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
         $query = [
             'q' => $text,
             'target' => $to,
-            'source' => $from ?: '',
+            'source' => $from ?? '',
             'format' => $html ? 'html' : 'text',
         ];
 
@@ -161,17 +161,17 @@ class GoogleTranslatorService extends AbstractTranslatorService
         }
 
         // from
-        /** @var bool|string $from */
-        $from = $this->getProperty($translation, 'detectedSourceLanguage', false);
-        if (!\is_string($from)) {
-            return false;
+        /** @psalm-var bool|string $detectedSourceLanguage */
+        $detectedSourceLanguage = $this->getProperty($translation, 'detectedSourceLanguage', false);
+        if (\is_string($detectedSourceLanguage)) {
+            $from = $detectedSourceLanguage;
         }
 
         return [
             'source' => $text,
             'target' => $target,
             'from' => [
-                'tag' => $from,
+                'tag' => $from ?? '',
                 'name' => $this->findLanguage($from),
             ],
             'to' => [

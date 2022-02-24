@@ -132,7 +132,7 @@ class BingTranslatorService extends AbstractTranslatorService
         // query
         $query = [
             'to' => $to,
-            'from' => $from ?: '',
+            'from' => $from ?? '',
             'textType' => $html ? 'html' : 'plain',
         ];
 
@@ -167,24 +167,21 @@ class BingTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-        // detected language
-        $detectedLanguage = $this->getProperty($result, 'detectedLanguage', false);
-        if (!\is_array($detectedLanguage)) {
-            return false;
-        }
-
         // from
-        /** @var bool|string $from */
-        $from = $this->getProperty($detectedLanguage, 'language', false);
-        if (!\is_string($from)) {
-            return false;
+        $detectedLanguage = $this->getPropertyArray($result, 'detectedLanguage', false);
+        if (\is_array($detectedLanguage)) {
+            /** @psalm-var bool|string $language */
+            $language = $this->getProperty($detectedLanguage, 'language', false);
+            if (\is_string($language)) {
+                $from = $language;
+            }
         }
 
         return [
             'source' => $text,
             'target' => $target,
             'from' => [
-                'tag' => $from,
+                'tag' => $from ?? '',
                 'name' => $this->findLanguage($from),
             ],
             'to' => [

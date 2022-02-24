@@ -4,7 +4,7 @@
 {%- set title = 'product.list.title' -%}
 {%- set title_icon = 'file-alt far' -%}
 {%- set defer_url = url('product_table') -%}
-{%- set category_id = customData.category.id|default(0) -%}
+{%- set categoryid = customData.category.id|default(0) -%}
 {%- set object_type = ENTITY_PRODUCT -%}
 
 {% block header_actions -%}
@@ -14,13 +14,13 @@
 {% block toolbar_actions -%}
 {% if customData.categories|length > 1 %}
 <div class="input-group-append">
-    <button id="categoryId" data-value="{{ category_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
+    <button id="categoryid" data-value="{{ categoryid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
         <i class="fa-regular fa-folder"></i>&nbsp;{{- customData.category ? customData.category.code : 'product.fields.category'|trans -}}
     </button>
-    <div class="dropdown-menu" aria-labelledby="categoryId">
-        {{ _self.output_dropdown('category', 0, category_id, 'product.list.category_all_text'|trans) }}
+    <div class="dropdown-menu" aria-labelledby="categoryid">
+        {{ _self.output_dropdown('category', 0, categoryid, 'product.list.category_all_text'|trans) }}
         {% for category in customData.categories %}
-        {{ _self.output_dropdown('category', category.id, category_id, category.code) }}
+        {{ _self.output_dropdown('category', category.id, categoryid, category.code) }}
         {% endfor %}
     </div>
 </div>

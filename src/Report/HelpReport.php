@@ -185,7 +185,7 @@ class HelpReport extends AbstractReport
     private function formatFieldType(array $field): string
     {
         $default = $field['type'] ?? 'text';
-        $type = $this->trans('help.types.' . $default);
+        $type = $this->trans("help.types.$default");
         if ($length = $field['length'] ?? null) {
             return "$type ($length)";
         }

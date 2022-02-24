@@ -665,7 +665,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param array<string, mixed> $properties the properties to set
      */
-    public function setProperties(array $properties): void
+    public function setProperties(array $properties): self
     {
         if (!empty($properties)) {
             $repository = $this->getRepository();
@@ -680,6 +680,19 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             // reload
             $this->updateAdapter();
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets a single property value.
+     *
+     * @param string $name  the property name
+     * @param mixed  $value the property value
+     */
+    public function setProperty(string $name, $value): self
+    {
+        return $this->setProperties([$name => $value]);
     }
 
     /**

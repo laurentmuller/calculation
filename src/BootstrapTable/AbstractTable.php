@@ -225,14 +225,6 @@ abstract class AbstractTable implements SortModeInterface
     abstract protected function getColumnDefinitions(): string;
 
     /**
-     * Gets the JavaScript function used to format the custom view.
-     */
-    protected function getCustomViewFormatter(): string
-    {
-        return 'customViewFormatter';
-    }
-
-    /**
      * Gets the default sorting column.
      */
     protected function getDefaultColumn(): ?Column
@@ -338,14 +330,6 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Returns a value indicating if the custom view is allowed (true by default).
-     */
-    protected function isCustomViewAllowed(): bool
-    {
-        return true;
-    }
-
-    /**
      * Maps the given entities.
      *
      * @param array<array|AbstractEntity> $entities the entities to map
@@ -433,19 +417,13 @@ abstract class AbstractTable implements SortModeInterface
             'page-number' => $query->page,
             'page-size' => $limit,
 
-            'card-view' => \json_encode($query->isViewCard()),
-
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
-        ], $results->attributes);
 
-        // custom view?
-        if ($this->isCustomViewAllowed()) {
-            $results->attributes = \array_merge([
-                'show-custom-view' => \json_encode($query->isViewCustom()),
-                'custom-view' => $this->getCustomViewFormatter(),
-            ], $results->attributes);
-        }
+            'custom-view' => 'customViewFormatter',
+            'card-view' => \json_encode($query->isViewCard()),
+            'show-custom-view' => \json_encode($query->isViewCustom()),
+        ], $results->attributes);
     }
 
     /**

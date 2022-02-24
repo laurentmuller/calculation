@@ -32,7 +32,7 @@ class CategoryTable extends AbstractEntityTable
     /**
      * The group parameter name (int).
      */
-    public const PARAM_GROUP = 'groupId';
+    public const PARAM_GROUP = 'groupid';
 
     /**
      * The group repository.

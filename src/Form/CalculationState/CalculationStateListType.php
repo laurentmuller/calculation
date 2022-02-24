@@ -49,7 +49,9 @@ class CalculationStateListType extends AbstractListEntityType
         $resolver->setDefaults([
             'choice_label' => 'code',
             'group_by' => function (CalculationState $entity): string {
-                return $this->trans('calculationstate.list.' . ($entity->isEditable() ? 'editable' : 'not_editable'));
+                $id = $entity->isEditable() ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable';
+
+                return $this->trans($id);
             },
             'query_builder' => function (CalculationStateRepository $repository): QueryBuilder {
                 return $repository->getQueryBuilderByEditable();

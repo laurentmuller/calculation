@@ -13,15 +13,15 @@
 
 {% block toolbar_actions -%}
 {% if customData.states is defined and customData.states|length > 1 %}
-{%- set state_id = customData.state.id|default(0) -%}
+{%- set stateid = customData.state.id|default(0) -%}
 <div class="input-group-append">
-    <button id="stateId" data-value="{{ state_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
+    <button id="stateid" data-value="{{ stateid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
         <i class="fa-regular fa-flag"></i>&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
     </button>
-    <div class="dropdown-menu" aria-labelledby="stateId">
-        {{ _self.output_dropdown('state', 0, state_id, 'datatable.all'|trans) }}
+    <div class="dropdown-menu" aria-labelledby="stateid">
+        {{ _self.output_dropdown('state', 0, stateid, 'datatable.all'|trans) }}
         {% for state in customData.states %}
-        {{ _self.output_dropdown('state', state.id, state_id, state.code) }}
+        {{ _self.output_dropdown('state', state.id, stateid, state.code) }}
         {% endfor %}
     </div>
 </div>

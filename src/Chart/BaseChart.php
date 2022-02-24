@@ -21,9 +21,9 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
  *
  * @author Laurent Muller
  *
- * @method Basechart style(array $styles) set the CSS style options.
- * @method Basechart xAxis(array $xAxis)  set the x axis options.
- * @method Basechart yAxis(array $yAxis)  set the y axis options.
+ * @method BaseChart style(array $styles) set the CSS style options.
+ * @method BaseChart xAxis(array $xAxis)  set the x axis options.
+ * @method BaseChart yAxis(array $yAxis)  set the y axis options.
  *
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x axis options.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y axis options.
@@ -34,7 +34,7 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $plotOptions the plot options.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $lang        the language.
  */
-class Basechart extends Highchart
+class BaseChart extends Highchart
 {
     /**
      * The identifier (#id) of the div where to render the chart.

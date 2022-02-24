@@ -810,7 +810,7 @@ parameters:
         message_sub_title: Sous-titre
         minimum_margin: Marge minimum
         display_captcha: Code de contrôle
-        display_tabular: Mode d'affichage
+        display_mode: Mode d'affichage
         mintrength: Force minimum
         qr_code: Code QR sur les calculations
         print_address: Imprimer l'adresse

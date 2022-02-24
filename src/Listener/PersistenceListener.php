@@ -79,7 +79,8 @@ class PersistenceListener implements EventSubscriber
         $this->debug = $kernel->isDebug();
         $this->appName = $appName;
         $this->setTranslator($translator);
-        $this->title = $this->trans('environment.' . $kernel->getEnvironment());
+        $id = \sprintf('environment.%s', $kernel->getEnvironment());
+        $this->title = $this->trans($id);
     }
 
     /**

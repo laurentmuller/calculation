@@ -51,7 +51,7 @@
     {% if states|length %}
     <div class="card-body index-parent no-gutters p-2">
         {% for state in states %}
-            {%- set parameters = {'stateId': state.id} -%}
+            {%- set parameters = {'stateid': state.id} -%}
             {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters, state.margin, min_margin) }}
         {% endfor %}
         {{ _self.cardEntry(states_count, states_total, 'calculation.fields.total'|trans, '', list_path, [], states_margin, min_margin) }}

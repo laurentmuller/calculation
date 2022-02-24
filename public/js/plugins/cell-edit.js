@@ -21,7 +21,13 @@
             if (this.$target && this.$target.length === 0) {
                 this.$target = null;
             }
-            this.$element.on('click', $.proxy(this._click, this));
+
+            this.clickProxy = $.proxy(this._click, this);
+            this.blurProxy = $.proxy(this._blur, this);
+            this.inputProxy = $.proxy(this._input, this);
+            this.keydownProxy = $.proxy(this._keydown, this);
+
+            this.$element.on('click', this.clickProxy);
             if (this.options.autoEdit) {
                 this.$element.trigger('click');
             }
@@ -29,9 +35,9 @@
 
         destroy() {
             if (this.$input) {
-                this._cancel($.Event('blur'), false); // jslint ignore:line
+                this._cancel(null, false);
             }
-            this.$element.off('click', $.proxy(this._click, this));
+            this.$element.off('click', this.clickProxy);
             this.$element.removeData('cell-edit');
         }
 
@@ -39,7 +45,9 @@
         // private functions
         // -----------------------------
         _click(e) {
-            e.stopPropagation();
+            if (e) {
+                e.stopPropagation();
+            }
             if (this.$input && this.$input.is(':focus')) {
                 return this;
             }
@@ -54,25 +62,26 @@
             const required = options.required;
             const valid = !required || '' + this.value;
             const className = valid ? options.inputClass : options.inputClass + ' is-invalid';
-            const title = valid ? options.tooltipEdit : options.tooltipError ;
             const customClass = valid ? options.tooltipEditClass : options.tooltipErrorClass;
+            const title = valid ? options.tooltipEdit : options.tooltipError ;
 
             this.$input = $('<input>', {
-                'type': options.type,
-                'value': this.value,
-                'required': required,
-                'class': className,
-                'title': title,
                 'data-custom-class': customClass,
+                'type': options.type,
+                'required': required,
+                'value': this.value,
+                'class': className,
+                'title': title
             });
 
             this.$element.addClass(options.cellClass);
             this.$element.empty().append(this.$input);
             this.$element.parents('tr').addClass(options.rowClass);
 
-            this.$input.on('blur', $.proxy(this._blur, this));
-            this.$input.on('input', $.proxy(this._input, this));
-            this.$input.on('keydown', $.proxy(this._keydown, this));
+            this.$input.on('blur', this.blurProxy);
+            this.$input.on('input', this.inputProxy);
+            this.$input.on('keydown', this.keydownProxy);
+
             if ($.isFunction(options.onStartEdit)) {
                 options.onStartEdit();
             }
@@ -111,18 +120,22 @@
         }
 
         _keydown(e) {
-            switch (e.which) {
+            if (e) {
+                switch (e.which) {
                 case 13: // enter
                     return this._update(e);
                 case 27: // escape
                     return this._cancel(e);
                 default:
                     return this;
+                }
             }
         }
 
         _update(e) {
-            e.stopPropagation();
+            if (e) {
+                e.stopPropagation();
+            }
             if (!this.$input.val()) {
                 return;
             }
@@ -153,9 +166,9 @@
                 e.stopPropagation();
             }
             if (this.$input) {
-                this.$input.off('blur', $.proxy(this._blur, this));
-                this.$input.off('input', $.proxy(this._input, this));
-                this.$input.off('keydown', $.proxy(this._keydown, this));
+                this.$input.off('blur', this.blurProxy);
+                this.$input.off('input', this.inputProxy);
+                this.$input.off('keydown', this.keydownProxy);
                 this.$input.tooltip('dispose');
                 this.$input.remove();
                 this.$input = null;
@@ -176,9 +189,9 @@
 
         _removeInput() {
             if (this.$input) {
-                this.$input.off('blur', $.proxy(this._blur, this));
-                this.$input.off('input', $.proxy(this._input, this));
-                this.$input.off('keydown', $.proxy(this._keydown, this));
+                this.$input.off('blur', this.blurProxy);
+                this.$input.off('input', this.inputProxy);
+                this.$input.off('keydown', this.keydownProxy);
                 this.$input.tooltip('dispose');
                 this.$input.remove();
                 this.$input = null;

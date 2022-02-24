@@ -4,7 +4,7 @@
 {%- set title = 'category.list.title' -%}
 {%- set title_icon = 'folder far' -%}
 {%- set defer_url = url('category_table') -%}
-{%- set group_id = customData.group.id|default(0) -%}
+{%- set groupid = customData.group.id|default(0) -%}
 {%- set object_type = ENTITY_CATEGORY -%}
 
 {% block header_actions -%}
@@ -14,13 +14,13 @@
 {% block toolbar_actions -%}
 {% if customData.groups|length > 1 %}
 <div class="input-group-append">
-    <button id="groupId" data-value="{{ group_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
+    <button id="groupid" data-value="{{ groupid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
         <i class="fa-solid fa-code-branch"></i>&nbsp;{{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
     </button>
-    <div class="dropdown-menu" aria-labelledby="groupId">
-        {{ _self.output_dropdown('group', 0, group_id, 'datatable.all'|trans) }}
+    <div class="dropdown-menu" aria-labelledby="groupid">
+        {{ _self.output_dropdown('group', 0, groupid, 'datatable.all'|trans) }}
         {% for group in customData.groups %}
-        {{ _self.output_dropdown('group', group.id, group_id, group.code) }}
+        {{ _self.output_dropdown('group', group.id, groupid, group.code) }}
         {% endfor %}
     </div>
 </div>

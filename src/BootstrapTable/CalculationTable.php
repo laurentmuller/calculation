@@ -32,7 +32,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * The state parameter name (int).
      */
-    public const PARAM_STATE = 'stateId';
+    public const PARAM_STATE = 'stateid';
 
     /**
      * The calculation state repository.

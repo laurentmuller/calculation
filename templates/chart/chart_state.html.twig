@@ -27,7 +27,7 @@
         </thead>
         <tbody data-link="row" class="rowlink">
             {% for item in data -%}
-            {%- set parameters = {'stateId': item.id} -%}
+            {%- set parameters = {'stateid': item.id} -%}
             <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
                 <td class="text-nowrap">
                     <span class="mr-2 text-border" style="border-left-width: 2.5rem !important; {{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, parameters) }}">{{- item.code }}</a>

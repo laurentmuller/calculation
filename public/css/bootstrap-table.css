@@ -121,3 +121,13 @@ tr.text-muted td .text-danger {
 .bootstrap-table img {
     mix-blend-mode: multiply;
 }
+
+/**
+ * Checkbox on the right
+ */
+.dropdown-item-checked::before {
+    content: '\f00c';
+    font-family: 'FontAwesome';
+    font-weight: 600;
+    float: right;
+}

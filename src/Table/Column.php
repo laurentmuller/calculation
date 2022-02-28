@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\AbstractEntity;
 use App\Interfaces\SortModeInterface;
@@ -70,7 +70,7 @@ class Column implements SortModeInterface
     /**
      * The field formatter (server side).
      *
-     * @var string|callable|null
+     * @var callable|string|null
      */
     private $fieldFormatter = null;
 
@@ -125,7 +125,7 @@ class Column implements SortModeInterface
      * @param AbstractTable $parent the table owner
      * @param string        $path   the path to the JSON file definitions
      *
-     * @return Column[] the column definitions
+     * @return array<self> the column definitions
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {
@@ -224,7 +224,7 @@ class Column implements SortModeInterface
     }
 
     /**
-     * @return string|callable|null
+     * @return callable|string|null
      */
     public function getFieldFormatter()
     {
@@ -285,7 +285,7 @@ class Column implements SortModeInterface
     /**
      * Map the given object to a string value using this field property.
      *
-     * @param array|AbstractEntity $objectOrArray the object to map
+     * @param AbstractEntity|array $objectOrArray the object to map
      * @param PropertyAccessor     $accessor      the property accessor to get the object value
      *
      * @return string the mapped value
@@ -351,7 +351,7 @@ class Column implements SortModeInterface
     }
 
     /**
-     * @param string|callable|null $fieldFormatter
+     * @param callable|string|null $fieldFormatter
      */
     public function setFieldFormatter($fieldFormatter): self
     {
@@ -424,7 +424,7 @@ class Column implements SortModeInterface
     /**
      * Formats the given value using the field formatter if applicable.
      *
-     * @param array|AbstractEntity $objectOrArray the object to map
+     * @param AbstractEntity|array $objectOrArray the object to map
      * @param mixed                $value         the value to format
      *
      * @return string the formatted value

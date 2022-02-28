@@ -10,10 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\Group;
 use App\Repository\GroupRepository;
+use App\Util\FileUtils;
 use Twig\Environment;
 
 /**
@@ -58,7 +59,7 @@ class GroupTable extends AbstractEntityTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/group.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'group.json');
     }
 
     /**

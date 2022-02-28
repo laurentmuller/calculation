@@ -643,13 +643,13 @@
          *            timeout - The time out.
          */
         updateProgress: function($progress, endTime, timeout) {
-            let percent = (endTime - new Date().getTime() / timeout) * 100;
-            percent = Number.parseInt(percent, 10);
+            const time = new Date().getTime();
+            const delta_time = (endTime - time) / timeout;
+            const percent = Number.parseInt(delta_time * 100, 10);
             $progress.css('width', percent + '%');
             if (percent === 0) {
                 $progress.parents('.toast').removeInterval();
             }
         }
     };
-
 }(window, jQuery));

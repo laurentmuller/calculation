@@ -10,10 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Repository\CategoryRepository;
 use App\Repository\TaskRepository;
+use App\Util\FileUtils;
 
 /**
  * The tasks table.
@@ -44,7 +45,7 @@ class TaskTable extends AbstractCategoryItemTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/task.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'task.json');
     }
 
     /**

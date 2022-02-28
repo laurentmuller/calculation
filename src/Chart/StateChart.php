@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
-use App\BootstrapTable\CalculationTable;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Service\ThemeService;
+use App\Table\CalculationTable;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorTrait;
 use Laminas\Json\Expr;

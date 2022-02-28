@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\BootstrapTable\AbstractTable;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\TableInterface;
+use App\Table\AbstractTable;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +41,7 @@ trait TableTrait
         // update request parameters
         $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
         if (\is_string($view)) {
-            $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
+            $this->updateRequest($request, TableInterface::PARAM_LIMIT, \App\Table\AbstractTable::getDefaultPageSize($view), $view);
         }
 
         // check empty

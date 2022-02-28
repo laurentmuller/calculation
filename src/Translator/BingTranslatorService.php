@@ -139,42 +139,15 @@ class BingTranslatorService extends AbstractTranslatorService
         // post
         /** @var bool|array $response */
         $response = $this->post(self::URI_TRANSLATE, $data, $query);
-        if (!\is_array($response)) {
+
+        // translation
+        if (!$target = $this->getTranslation($response)) {
             return false;
         }
 
-        // check response
-        if (!$this->isValidArray($response, 'response')) {
-            return false;
-        }
-
-        // get first result
-        /** @var array $result */
-        $result = $response[0];
-
-        // translations
-        $translations = $this->getPropertyArray($result, 'translations');
-        if (!\is_array($translations)) {
-            return false;
-        }
-
-        /** @var array $translation */
-        $translation = $translations[0];
-
-        // target
-        $target = $this->getProperty($translation, 'text');
-        if (!\is_string($target)) {
-            return false;
-        }
-
-        // from
-        $detectedLanguage = $this->getPropertyArray($result, 'detectedLanguage', false);
-        if (\is_array($detectedLanguage)) {
-            /** @psalm-var bool|string $language */
-            $language = $this->getProperty($detectedLanguage, 'language', false);
-            if (\is_string($language)) {
-                $from = $language;
-            }
+        // detect from
+        if ($language = $this->detectLanguage($response)) {
+            $from = $language;
         }
 
         return [
@@ -239,6 +212,30 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
+     * @param mixed|bool $response
+     */
+    private function detectLanguage($response): ?string
+    {
+        if (!\is_array($response)) {
+            return null;
+        }
+        if (!$this->isValidArray($response, 'response')) {
+            return null;
+        }
+        if (!\is_array($result = $response[0])) {
+            return null;
+        }
+        if (!\is_array($detectedLanguage = $this->getPropertyArray($result, 'detectedLanguage', false))) {
+            return null;
+        }
+        if (!\is_string($language = $this->getProperty($detectedLanguage, 'language', false))) {
+            return null;
+        }
+
+        return $language;
+    }
+
+    /**
      * Make a HTTP-GET call.
      *
      * @param string $uri   the uri to append to the host name
@@ -283,6 +280,33 @@ class BingTranslatorService extends AbstractTranslatorService
 
         // ok
         return $response;
+    }
+
+    /**
+     * @param mixed|bool $response
+     */
+    private function getTranslation($response): ?string
+    {
+        if (!\is_array($response)) {
+            return null;
+        }
+        if (!$this->isValidArray($response, 'response')) {
+            return null;
+        }
+        if (!\is_array($result = $response[0])) {
+            return null;
+        }
+        if (!\is_array($translations = $this->getPropertyArray($result, 'translations'))) {
+            return null;
+        }
+        if (!\is_array($translation = $translations[0])) {
+            return null;
+        }
+        if (!\is_string($target = $this->getProperty($translation, 'text'))) {
+            return null;
+        }
+
+        return $target;
     }
 
     /**

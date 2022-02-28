@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\CalculationBelowTable;
 use App\Entity\Calculation;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDocument;
+use App\Table\CalculationBelowTable;
 use App\Traits\TableTrait;
 use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

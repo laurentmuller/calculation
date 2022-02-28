@@ -10,12 +10,13 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Interfaces\TableInterface;
 use App\Service\SearchService;
 use App\Traits\CheckerTrait;
 use App\Traits\TranslatorTrait;
+use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -55,27 +56,27 @@ class SearchTable extends AbstractTable
     /**
      * The entity column name.
      */
-    private const COLUMN_ENTITY_NAME = 'entityName';
+    private const COLUMN_ENTITY_NAME = 'entityname';
 
     /**
      * The field column name.
      */
-    private const COLUMN_FIELD_NAME = 'fieldName';
+    private const COLUMN_FIELD_NAME = 'fieldname';
 
     /**
      * The delete granted column name.
      */
-    private const COLUMN_GRANTED_DELETE = 'deleteGranted';
+    private const COLUMN_GRANTED_DELETE = 'deletegranted';
 
     /**
      * The edit granted column name.
      */
-    private const COLUMN_GRANTED_EDIT = 'editGranted';
+    private const COLUMN_GRANTED_EDIT = 'editgranted';
 
     /**
      * The show granted column name.
      */
-    private const COLUMN_GRANTED_SHOW = 'showGranted';
+    private const COLUMN_GRANTED_SHOW = 'showgranted';
 
     /**
      * The default sort columns order.
@@ -123,7 +124,7 @@ class SearchTable extends AbstractTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/search.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'search.json');
     }
 
     /**
@@ -204,7 +205,7 @@ class SearchTable extends AbstractTable
             $item[self::COLUMN_ENTITY_NAME] = $entity;
             $item[self::COLUMN_FIELD_NAME] = $this->trans("{$lowerType}.fields.{$field}");
 
-            /** @var string|int|float|bool $content */
+            /** @var scalar $content */
             $content = $item[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'Calculation.id':

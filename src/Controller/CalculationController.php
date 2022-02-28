@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\CalculationTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Form\Calculation\CalculationEditStateType;
@@ -28,6 +27,7 @@ use App\Response\SpreadsheetResponse;
 use App\Service\CalculationService;
 use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
+use App\Table\CalculationTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

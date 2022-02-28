@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\BootstrapTable\AbstractCategoryItemTable;
-use App\BootstrapTable\CalculationTable;
-use App\BootstrapTable\CategoryTable;
-use App\BootstrapTable\LogTable;
-use App\BootstrapTable\SearchTable;
 use App\Controller\AbstractController;
 use App\Interfaces\TableInterface;
+use App\Table\AbstractCategoryItemTable;
+use App\Table\CalculationTable;
+use App\Table\CategoryTable;
+use App\Table\LogTable;
+use App\Table\SearchTable;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

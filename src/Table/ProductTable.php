@@ -10,10 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Util\FileUtils;
 
 /**
  * The products table.
@@ -44,7 +45,7 @@ class ProductTable extends AbstractCategoryItemTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/product.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'product.json');
     }
 
     /**

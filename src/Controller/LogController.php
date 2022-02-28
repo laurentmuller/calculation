@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\LogTable;
 use App\Report\LogReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
+use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Util\FileUtils;
 use App\Util\Utils;

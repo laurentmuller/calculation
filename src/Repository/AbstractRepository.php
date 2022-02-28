@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\AbstractEntity;
 use App\Util\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
@@ -35,6 +35,17 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public const DEFAULT_ALIAS = 'e';
 
     /**
+     * Add the given entity to the database.
+     */
+    public function add(AbstractEntity $entity, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($entity);
+        if ($flush) {
+            $this->flush();
+        }
+    }
+
+    /**
      * Creates a default query builder.
      *
      * @param string $alias the entity alias
@@ -42,6 +53,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->createQueryBuilder($alias);
+    }
+
+    /**
+     * Flushes all changes to objects that have been queued up to now to the database.
+     */
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -82,14 +101,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         return $builder->getQuery()
             ->getSingleColumnResult();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getEntityManager(): EntityManagerInterface
-    {
-        return parent::getEntityManager();
     }
 
     /**
@@ -187,6 +198,17 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return "$alias.$field";
+    }
+
+    /**
+     * Remove the given entity from the database.
+     */
+    public function remove(AbstractEntity $entity, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($entity);
+        if ($flush) {
+            $this->flush();
+        }
     }
 
     /**

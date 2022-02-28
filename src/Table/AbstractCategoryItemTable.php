@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\Category;
 use App\Repository\AbstractCategoryItemRepository;

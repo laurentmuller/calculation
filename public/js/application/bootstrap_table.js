@@ -216,11 +216,11 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
-    if ($action.is('.btn-show') && !row.showGranted) {
+    if ($action.is('.btn-show') && !row.showgranted) {
         $action.remove();
-    } else if ($action.is('.btn-edit') && !row.editGranted) {
+    } else if ($action.is('.btn-edit') && !row.editgranted) {
         $action.remove();
-    } else if ($action.is('.btn-delete') && !row.deleteGranted) {
+    } else if ($action.is('.btn-delete') && !row.deletegranted) {
         $action.remove();
     } else {
         const id = row.id;

@@ -141,30 +141,15 @@ class GoogleTranslatorService extends AbstractTranslatorService
         // get
         /** @var bool|array $response */
         $response = $this->get(self::URI_TRANSLATE, $query);
-        if (!\is_array($response)) {
+
+        // translation
+        if (!$target = $this->getTranslation($response)) {
             return false;
         }
 
-        // translations
-        $translations = $this->getPropertyArray($response, 'translations');
-        if (!\is_array($translations)) {
-            return false;
-        }
-
-        /** @var array $translation */
-        $translation = $translations[0];
-
-        // target
-        $target = $this->getProperty($translation, 'translatedText');
-        if (!\is_string($target)) {
-            return false;
-        }
-
-        // from
-        /** @psalm-var bool|string $detectedSourceLanguage */
-        $detectedSourceLanguage = $this->getProperty($translation, 'detectedSourceLanguage', false);
-        if (\is_string($detectedSourceLanguage)) {
-            $from = $detectedSourceLanguage;
+        // detect from
+        if ($language = $this->detectLanguage($response)) {
+            $from = $language;
         }
 
         return [
@@ -220,6 +205,27 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
+     * @param mixed|bool $response
+     */
+    private function detectLanguage($response): ?string
+    {
+        if (!\is_array($response)) {
+            return null;
+        }
+        if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
+            return null;
+        }
+        if (!\is_array($translation = $translations[0])) {
+            return null;
+        }
+        if (!\is_string($language = $this->getProperty($translation, 'detectedSourceLanguage', false))) {
+            return null;
+        }
+
+        return $language;
+    }
+
+    /**
      * Make a HTTP-GET call.
      *
      * @param string $uri   the uri to append to the host name
@@ -263,5 +269,26 @@ class GoogleTranslatorService extends AbstractTranslatorService
         }
 
         return $data;
+    }
+
+    /**
+     * @param mixed|bool $response
+     */
+    private function getTranslation($response): ?string
+    {
+        if (!\is_array($response)) {
+            return null;
+        }
+        if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
+            return null;
+        }
+        if (!\is_array($translation = $translations[0])) {
+            return null;
+        }
+        if (!\is_string($target = $this->getProperty($translation, 'translatedText'))) {
+            return null;
+        }
+
+        return $target;
     }
 }

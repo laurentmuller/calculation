@@ -10,9 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Repository\GlobalMarginRepository;
+use App\Util\FileUtils;
 
 /**
  * The global margins table.
@@ -35,7 +36,7 @@ class GlobalMarginTable extends AbstractEntityTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/global_margin.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'global_margin.json');
     }
 
     /**

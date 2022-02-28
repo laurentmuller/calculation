@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
@@ -88,8 +88,8 @@ class DataQuery implements SortModeInterface
     /**
      * Gets a custom data.
      *
-     * @param string $name    the custom data name to get value for
-     * @param mixed  $default the default value to returns if the custom data is not present
+     * @param string     $name    the custom data name to get value for
+     * @param mixed|null $default the default value to returns if the custom data is not present
      *
      * @return mixed the custom data, if present; the default value otherwise
      */

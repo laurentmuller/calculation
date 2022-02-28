@@ -10,11 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Traits\RoleTranslatorTrait;
+use App\Util\FileUtils;
 use App\Util\Utils;
 use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -91,7 +92,7 @@ class UserTable extends AbstractEntityTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/user.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'user.json');
     }
 
     /**

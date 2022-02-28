@@ -10,9 +10,8 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
-use App\Entity\AbstractEntity;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Util\Utils;
@@ -130,7 +129,7 @@ abstract class AbstractEntityTable extends AbstractTable
         $this->limit($query, $builder);
 
         // get result and map entities
-        /** @var AbstractEntity[] $entities */
+        /** @var array<\App\Entity\AbstractEntity> $entities */
         $entities = $builder->getQuery()->getResult();
         $results->rows = $this->mapEntities($entities);
 

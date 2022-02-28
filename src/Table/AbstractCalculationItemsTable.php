@@ -10,9 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Repository\CalculationRepository;
+use App\Util\FileUtils;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -42,12 +43,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @return string the formatted items
      *
-     * @psalm-param array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int
-     *      }> $items
+     * @psalm-param array<array{description: string, quantity: float, price: float, count: int}> $items
      */
     abstract public function formatItems(array $items): string;
 
@@ -90,7 +86,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/calculation_items.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'calculation_items.json');
     }
 
     /**
@@ -107,18 +103,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-return array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}
-     *      }>
+     * @psalm-return array<int, array{id: int, date: \DateTimeInterface, stateCode: string, customer: string, description: string, items: array{description: string, quantity: float, price: float, count: int}}>
      */
     abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array;
 
@@ -127,18 +112,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @param array $items the invalid calculation items
      *
-     * @psalm-param array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}
-     *      }> $items
+     * @psalm-param array<int, array{id: int, date: \DateTimeInterface, stateCode: string, customer: string, description: string, items: array{description: string, quantity: float, price: float, count: int}}> $items
      */
     abstract protected function getItemsCount(array $items): int;
 

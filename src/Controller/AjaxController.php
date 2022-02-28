@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\AbstractTable;
 use App\Entity\Task;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
@@ -26,6 +25,7 @@ use App\Service\CaptchaImageService;
 use App\Service\FakerService;
 use App\Service\SwissPostService;
 use App\Service\TaskService;
+use App\Table\AbstractTable;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;

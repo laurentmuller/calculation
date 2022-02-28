@@ -10,9 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Repository\CustomerRepository;
+use App\Util\FileUtils;
 
 /**
  * The customers table.
@@ -32,7 +33,7 @@ class CustomerTable extends AbstractEntityTable
 
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/customer.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'customer.json');
     }
 
     /**

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\AbstractEntity;
 use App\Interfaces\SortModeInterface;
@@ -34,7 +34,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * The column definitions.
      *
-     * @var Column[]
+     * @var array<Column>
      */
     protected ?array $columns = null;
 
@@ -88,7 +88,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the column definitions.
      *
-     * @return Column[]
+     * @return array<Column>
      */
     public function getColumns(): array
     {
@@ -186,7 +186,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Create the columns.
      *
-     * @return Column[] the columns
+     * @return array<Column> the columns
      */
     protected function createColumns(): array
     {
@@ -200,7 +200,7 @@ abstract class AbstractTable implements SortModeInterface
      *
      * @param int $totalNotFiltered the number of not filtered entities
      *
-     * @return int[] the allowed page list
+     * @return array<int> the allowed page list
      */
     protected function getAllowedPageList(int $totalNotFiltered): array
     {
@@ -257,10 +257,10 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the request parameter value.
      *
-     * @param Request                    $request       the request to get value from
-     * @param string                     $name          the parameter name
-     * @param string|int|float|bool|null $default       the default value if not found
-     * @param bool                       $useSessionKey true to use session key; false to use the parameter name
+     * @param Request     $request       the request to get value from
+     * @param string      $name          the parameter name
+     * @param scalar|null $default       the default value if not found
+     * @param bool        $useSessionKey true to use session key; false to use the parameter name
      *
      * @return mixed the parameter value
      *
@@ -273,7 +273,7 @@ abstract class AbstractTable implements SortModeInterface
 
         // find in session
         if (null !== $session) {
-            /** @var string|int|float|bool|null $default */
+            /** @var scalar|null $default */
             $default = $session->get($key, $default);
         }
 
@@ -322,7 +322,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Implode the given page list.
      *
-     * @param int[] $pageList the page list
+     * @param array<int> $pageList the page list
      */
     protected function implodePageList(array $pageList): string
     {
@@ -332,7 +332,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Maps the given entities.
      *
-     * @param array<array|AbstractEntity> $entities the entities to map
+     * @param array<AbstractEntity|array> $entities the entities to map
      *
      * @return array<array<string, string>> the mapped entities
      */
@@ -354,8 +354,8 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Map the given object to an array where the keys are the column field.
      *
-     * @param array|AbstractEntity $objectOrArray the object to map
-     * @param Column[]             $columns       the column definitions
+     * @param AbstractEntity|array $objectOrArray the object to map
+     * @param array<Column>        $columns       the column definitions
      * @param PropertyAccessor     $accessor      the property accessor to get the object values
      *
      * @return array<string, string> the mapped object

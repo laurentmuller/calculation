@@ -33,8 +33,7 @@ jobs:
       - name: Download dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer require rector -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
+          composer bin rector/rector install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Rector
         uses: zingimmick/rector-action@0.0.2

@@ -35,5 +35,5 @@ jobs:
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin vimeo/psalm install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Psalm
-        uses: docker://vimeo/psalm-github-actions
+      - name: Run Psalm
+        uses: vendor/bin/psalm src

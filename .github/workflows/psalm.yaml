@@ -1,10 +1,9 @@
-name: Psalm Static analysis
+name: Psalm
 
 on: [push, pull_request]
 
 jobs:
-  psalm:
-    name: Psalm with PHP 7.4
+  build:
     runs-on: ubuntu-latest
 
     steps:

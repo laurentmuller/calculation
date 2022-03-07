@@ -88,7 +88,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     {
         return $this->createDefaultQueryBuilder()
             ->addOrderBy(self::CATEGORY_ALIAS . '.code')
-            ->addOrderBy(CategoryRepository::GROUP_ALIAS . '.code')
+            ->addOrderBy(self::GROUP_ALIAS . '.code')
             ->addOrderBy(self::DEFAULT_ALIAS . '.description');
     }
 

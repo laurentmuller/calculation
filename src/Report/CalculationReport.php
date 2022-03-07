@@ -24,7 +24,6 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
 use Endroid\QrCode\Writer\PngWriter;
 use Psr\Log\LoggerAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Report for a calculation.
@@ -75,11 +74,6 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
     public function getMinMargin(): float
     {
         return $this->minMargin;
-    }
-
-    public function getTranslator(): ?TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -235,18 +229,16 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         if (null !== $this->qrcode) {
             try {
                 // temp file
-                $path = FileUtils::tempfile('qr_code');
+                $path = (string) FileUtils::tempfile('qr_code');
 
-                // build
-                $result = Builder::create()
+                // build and save
+                Builder::create()
                     ->roundBlockSizeMode(new RoundBlockSizeModeNone())
                     ->writer(new PngWriter())
                     ->data($this->qrcode)
                     ->margin(0)
-                    ->build();
-
-                // save
-                $result->saveToFile((string) $path);
+                    ->build()
+                    ->saveToFile($path);
 
                 // position
                 $size = $this->getQrCodeSize();

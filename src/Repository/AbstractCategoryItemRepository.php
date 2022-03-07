@@ -32,6 +32,11 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     public const CATEGORY_ALIAS = 'c';
 
     /**
+     * The alias for the group entity.
+     */
+    public const GROUP_ALIAS = CategoryRepository::GROUP_ALIAS;
+
+    /**
      * Count the number of products or tasks for the given category.
      *
      * @param Category $category the category to search for
@@ -54,8 +59,10 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin($alias . '.category', self::CATEGORY_ALIAS)
-            ->innerJoin(self::CATEGORY_ALIAS . '.group', CategoryRepository::GROUP_ALIAS);
+            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
+            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS)
+            ->addSelect(self::CATEGORY_ALIAS)
+            ->addSelect(self::GROUP_ALIAS);
     }
 
     /**
@@ -65,9 +72,9 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     {
         switch ($field) {
             case 'group.id':
-                return parent::getSearchFields('id', CategoryRepository::GROUP_ALIAS);
+                return parent::getSearchFields('id', self::GROUP_ALIAS);
             case 'group.code':
-                return parent::getSearchFields('code', CategoryRepository::GROUP_ALIAS);
+                return parent::getSearchFields('code', self::GROUP_ALIAS);
             case 'category.id':
                 return parent::getSearchFields('id', self::CATEGORY_ALIAS);
             case 'category.code':
@@ -85,7 +92,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
         switch ($field) {
             case 'group.id':
             case 'group.code':
-                return parent::getSortField('code', CategoryRepository::GROUP_ALIAS);
+                return parent::getSortField('code', self::GROUP_ALIAS);
             case 'category.id':
             case 'category.code':
                 return parent::getSortField('code', self::CATEGORY_ALIAS);

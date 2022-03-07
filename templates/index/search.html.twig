@@ -3,20 +3,19 @@
 {# parameters #}
 {%- set title = 'search.title' -%}
 {%- set title_icon = 'search' -%}
-{%- set defer_url = url('search') -%}
-{%- set entity = entity|default('') -%}
 {%- set path = path('homepage') -%}
 {%- set allow_global = false -%}
+{%- set entity = customData.entity|default('') -%}
 
 {% block header_actions %}
 <small id="search_minimum" class="text-danger d-print-none">{{ 'search.minimum'|trans }}</small>
 {% endblock %}
 
 {% block toolbar_actions -%}
-{% if customData.entities|length > 1 %}
+{% if customData.entities and customData.entities|length > 1 %}
 <div class="input-group-append btn-dropdown">
     <button id="entity" data-value="{{ entity }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'datatable.all'|trans }}" title="{{ 'search.entity_help'|trans }}">
-        {{- customData.entity ? customData.entity : 'datatable.all'|trans -}}
+        {{- entity ? customData.entities[entity]|trans : 'datatable.all'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="entity">
         {{ _self.output_dropdown('entity', '', entity, 'datatable.all'|trans) }}
@@ -37,9 +36,10 @@
 {%- endblock %}
 
 {% block custom_view_header -%}
-<a href="#" class="item-link text-body">%entityName%</a>
+<a href="#" class="item-link text-body">%entityname%</a>
 {%- endblock %}
 
 {% block custom_view_body -%}
-{{ _self.property_both('%fieldName%', '%content%', '', 'text-truncate') }}
+{{ _self.property_row('search.fields.field', '%fieldname%') }}
+{{ _self.property_row('search.fields.content', '%content%', 'text-truncate') }}
 {%- endblock %}

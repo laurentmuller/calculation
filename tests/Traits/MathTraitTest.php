@@ -26,50 +26,135 @@ class MathTraitTest extends TestCase
 {
     use MathTrait;
 
-    public function testBitTest(): void
+    public function getIsBitSet(): array
     {
-        $this->assertTrue($this->isBitSet(31, 1));
-        $this->assertTrue($this->isBitSet(31, 2));
-        $this->assertTrue($this->isBitSet(31, 4));
-        $this->assertTrue($this->isBitSet(31, 8));
-        $this->assertTrue($this->isBitSet(31, 16));
+        return [
+            [31, 1],
+            [31, 2],
+            [31, 4],
+            [31, 8],
+            [31, 16],
 
-        $this->assertFalse($this->isBitSet(0, 1));
-        $this->assertFalse($this->isBitSet(0, 2));
-        $this->assertFalse($this->isBitSet(0, 4));
-        $this->assertFalse($this->isBitSet(0, 8));
-        $this->assertFalse($this->isBitSet(0, 16));
+            [0, 1, false],
+            [0, 2, false],
+            [0, 4, false],
+            [0, 8, false],
+            [0, 16, false],
+        ];
     }
 
-    public function testFloatEquals(): void
+    public function getIsFloatEquals(): array
     {
-        $this->assertTrue($this->isFloatEquals(0, 0));
-        $this->assertFalse($this->isFloatEquals(1, 0));
+        return [
+            [0, 0],
+            [0, 0.01, 0],
+            [0, 0.01, 1],
 
-        $this->assertTrue($this->isFloatZero(0));
-        $this->assertFalse($this->isFloatZero(1));
+            [1, 0, 2, false],
+            [0, 0.01, 2, false],
+        ];
     }
 
-    public function testRound(): void
+    public function getIsFloatZero(): array
     {
-        $this->assertEquals(0.0, $this->round(0));
-        $this->assertEquals(1.5, $this->round(1.5));
-        $this->assertEquals(1.55, $this->round(1.55));
-        $this->assertEquals(1.55, $this->round(1.5545));
-        $this->assertEquals(1.50, $this->round(1.52, 1));
+        return [
+            [0],
+            [0, 0],
+            [0, 1],
+            [0, 2],
+            [0.001, 1],
+            [0.001, 2],
+
+            [1, 2, false],
+            [0.1, 1, false],
+            [0.1, 2, false],
+            [0.001, 3, false],
+        ];
     }
 
-    public function testSafeDivide(): void
+    public function getRound(): array
     {
-        $this->assertEquals(0.0, $this->safeDivide(100, 0));
-        $this->assertEquals(10.0, $this->safeDivide(100, 10));
+        return [
+            [0, 0.0],
+            [1.5, 1.5],
+            [1.55, 1.55],
+            [1.5545, 1.55],
+            [1.52, 1.5, 1],
+        ];
+    }
+
+    public function getSafeDivide(): array
+    {
+        return [
+            [100, 0,  0.0],
+            [100, 5,  20.0],
+            [100, 10,  10.0],
+            [100, 0,  11.0,  11.0],
+        ];
+    }
+
+    public function getValidateIntRange(): array
+    {
+        return [
+            [0,  0, 100, 0],
+            [50,  0, 100, 50],
+            [-1,  0, 100, 0],
+            [101,  0, 100, 100],
+        ];
+    }
+
+    /**
+     * @dataProvider getIsBitSet
+     */
+    public function testIsBitSet(int $value, int $mask, bool $expected = true): void
+    {
+        $actual = $this->isBitSet($value, $mask);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getIsFloatEquals
+     */
+    public function testIsFloatEquals(float $val1, float $val2, int $precision = 2, bool $expected = true): void
+    {
+        $actual = $this->isFloatEquals($val1, $val2, $precision);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getIsFloatZero
+     */
+    public function testIsFloatZero(float $val, int $precision = 2, bool $expected = true): void
+    {
+        $actual = $this->isFloatZero($val, $precision);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getRound
+     */
+    public function testRound(float $val, float $expected, int $precision = 2): void
+    {
+        $actual = $this->round($val, $precision);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getSafeDivide
+     */
+    public function testSafeDivide(float $dividend, float $divisor, float $expected, float $default = 0.0): void
+    {
+        $actual = $this->safeDivide($dividend, $divisor, $default);
+        $this->assertSame($expected, $actual);
         $this->assertEquals(11.0, $this->safeDivide(100, 0, 11));
     }
 
-    public function testValidateIntRange(): void
+    /**
+     * @dataProvider getValidateIntRange
+     */
+    public function testValidateIntRange(int $value, int $min, int $max, int $expected): void
     {
-        $this->assertEquals(0, $this->validateIntRange(0, 0, 100));
-        $this->assertEquals(0, $this->validateIntRange(-1, 0, 100));
-        $this->assertEquals(100, $this->validateIntRange(101, 0, 100));
+        $actual = $this->validateIntRange($value, $min, $max);
+        $this->assertSame($expected, $actual);
     }
 }

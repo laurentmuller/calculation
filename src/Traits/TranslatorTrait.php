@@ -38,8 +38,8 @@ trait TranslatorTrait
      */
     public function isTransDefined(string $id, ?string $domain = null, ?string $locale = null): bool
     {
-        if (($translator = $this->doGetTranslator()) && $translator instanceof TranslatorBagInterface) {
-            $catalogue = $translator->getCatalogue($locale);
+        if ($this->translator instanceof TranslatorBagInterface) {
+            $catalogue = $this->translator->getCatalogue($locale);
 
             return $catalogue->defines($id, $domain ?? 'messages');
         }
@@ -67,26 +67,10 @@ trait TranslatorTrait
      */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        if ($translator = $this->doGetTranslator()) {
-            return $translator->trans($id, $parameters, $domain, $locale);
+        if ($this->translator instanceof TranslatorInterface) {
+            return $this->translator->trans($id, $parameters, $domain, $locale);
         }
 
         return $id;
-    }
-
-    /**
-     * Gets the translator.
-     *
-     * @psalm-suppress UnnecessaryVarAnnotation
-     */
-    protected function doGetTranslator(): ?TranslatorInterface
-    {
-        if (null === $this->translator && \method_exists($this, 'getTranslator')) {
-            /** @var TranslatorInterface $translator */
-            $translator = $this->getTranslator();
-            $this->translator = $translator;
-        }
-
-        return $this->translator;
     }
 }

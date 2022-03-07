@@ -20,7 +20,7 @@
         "title": "group.fields.margins",
         "sortable": false,
         "searchable": false,
-        "class": "text-currency",
+        "class": "text-currency rowlink-skip",
         "fieldFormatter": "formatCountable"
     },
     {

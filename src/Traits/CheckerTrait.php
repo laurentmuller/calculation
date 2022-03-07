@@ -37,12 +37,7 @@ trait CheckerTrait
     private array $rights = [];
 
     /**
-     * Returns if the given action for the given subject is granted.
-     *
-     * @param string $action  the action to be tested
-     * @param string $subject the subject (the entity name)
-     *
-     * @return bool true if the action is granted
+     * Returns if the given action for the given subject (entity name) is granted.
      */
     protected function isGranted(string $action, string $subject): bool
     {
@@ -59,11 +54,7 @@ trait CheckerTrait
     }
 
     /**
-     * Returns if the given subject can be added.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be added
+     * Returns if the given subject (entity name) can be added.
      */
     protected function isGrantedAdd(string $subject): bool
     {
@@ -71,11 +62,7 @@ trait CheckerTrait
     }
 
     /**
-     * Returns if the given subject can be deleted.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be deleted
+     * Returns if the given subject (entity name) can be deleted.
      */
     protected function isGrantedDelete(string $subject): bool
     {
@@ -83,11 +70,7 @@ trait CheckerTrait
     }
 
     /**
-     * Returns if the given subject can be edited.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be edited
+     * Returns if the given subject (entity name) can be edited.
      */
     protected function isGrantedEdit(string $subject): bool
     {
@@ -95,11 +78,7 @@ trait CheckerTrait
     }
 
     /**
-     * Returns if the given subject can be exported.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be exported
+     * Returns if the given subject (entity name) can be exported.
      */
     protected function isGrantedExport(string $subject): bool
     {
@@ -107,11 +86,7 @@ trait CheckerTrait
     }
 
     /**
-     * Returns if the given list of subjects can be displayed.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the list of subjects can be displayed
+     * Returns if the given list of subjects (entity name) can be displayed.
      */
     protected function isGrantedList(string $subject): bool
     {
@@ -119,11 +94,7 @@ trait CheckerTrait
     }
 
     /**
-     * Returns if the given subject can be displayed.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be displayed
+     * Returns if the given subject (entity name) can be displayed.
      */
     protected function isGrantedShow(string $subject): bool
     {

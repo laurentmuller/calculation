@@ -273,17 +273,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets the translator.
-     *
-     * @psalm-suppress InvalidNullableReturnType
-     * @psalm-suppress NullableReturnStatement
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-    /**
      * This filter replaces duplicated spaces and/or linebreaks with single space.
      *
      * It also remove whitespace from the beginning and at the end of the string.

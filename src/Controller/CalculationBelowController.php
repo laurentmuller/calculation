@@ -32,6 +32,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/below")
  * @IsGranted("ROLE_ADMIN")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage"}
+ * })
  */
 class CalculationBelowController extends AbstractController
 {

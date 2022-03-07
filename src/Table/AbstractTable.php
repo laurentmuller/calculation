@@ -170,10 +170,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Process the given query and returns the results.
-     *
-     * @param DataQuery $query the query to handle
-     *
-     * @return DataResults the results
      */
     public function processQuery(DataQuery $query): DataResults
     {
@@ -186,7 +182,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Create the columns.
      *
-     * @return array<Column> the columns
+     * @return Column[] the columns
      */
     protected function createColumns(): array
     {
@@ -200,7 +196,7 @@ abstract class AbstractTable implements SortModeInterface
      *
      * @param int $totalNotFiltered the number of not filtered entities
      *
-     * @return array<int> the allowed page list
+     * @return int[] the allowed page list
      */
     protected function getAllowedPageList(int $totalNotFiltered): array
     {
@@ -257,13 +253,12 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the request parameter value.
      *
-     * @param Request     $request       the request to get value from
-     * @param string      $name          the parameter name
-     * @param scalar|null $default       the default value if not found
-     * @param bool        $useSessionKey true to use session key; false to use the parameter name
+     * @param Request                    $request       the request to get value from
+     * @param string                     $name          the parameter name
+     * @param string|int|float|bool|null $default       the default value if not found
+     * @param bool                       $useSessionKey true to use session key; false to use the parameter name
      *
-     * @return mixed the parameter value
-     *
+     * @return string|int|float|bool|null
      * @psalm-suppress InvalidScalarArgument
      */
     protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true, string $prefix = '')
@@ -273,17 +268,17 @@ abstract class AbstractTable implements SortModeInterface
 
         // find in session
         if (null !== $session) {
-            /** @var scalar|null $default */
+            /** @psalm-var string|int|float|bool|null $default */
             $default = $session->get($key, $default);
         }
 
         // find in cookies
         $cookieName = '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
         // @phpstan-ignore-next-line
-        $cokiesValue = $request->cookies->get($cookieName, $default);
+        $cokieValue = $request->cookies->get($cookieName, $default);
 
         // find in request
-        $value = Utils::getRequestInputBag($request)->get($name, $cokiesValue);
+        $value = Utils::getRequestInputBag($request)->get($name, $cokieValue);
 
         // save
         if (null !== $session) {
@@ -309,10 +304,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Handle the query parameters.
-     *
-     * @param DataQuery $query the query parameters
-     *
-     * @return DataResults the data results
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
@@ -322,7 +313,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Implode the given page list.
      *
-     * @param array<int> $pageList the page list
+     * @param int[] $pageList the page list
      */
     protected function implodePageList(array $pageList): string
     {
@@ -376,9 +367,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Update the results before sending back.
-     *
-     * @param DataQuery   $query   the data query
-     * @param DataResults $results the results to update
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {

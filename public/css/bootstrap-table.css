@@ -125,9 +125,13 @@ tr.text-muted td .text-danger {
 /**
  * Checkbox on the right
  */
-.dropdown-item-checked::before {
+.dropdown-menu-checked {
+    min-width: 13rem;
+}
+.dropdown-item-checked::after {
     content: '\f00c';
     font-family: 'FontAwesome';
     font-weight: 600;
+    margin-left: 0.5rem;
     float: right;
 }

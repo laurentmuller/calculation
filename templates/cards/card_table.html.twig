@@ -131,7 +131,7 @@
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
     'default-action': app.editAction,
-    'defer-url': defer_url ?? false,
+    'defer-url': url(app.request.get('_route')),
     'save-url': url('ajax_save_table'),
     'caller': caller
 }) -%}
@@ -197,7 +197,7 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 {# display mode #}
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="button_other_actions">
+                <div class="dropdown-menu dropdown-menu-checked dropdown-menu-right" aria-labelledby="button_other_actions">
                 {{ _self.button_view('common.view_table', 'table', 'table', params.view) }}
                 {{ _self.button_view('common.view_custom', 'grip-horizontal', 'custom', params.view) }}
                 {{ _self.button_view('common.view_card', 'list', 'card', params.view) }}

@@ -118,8 +118,6 @@ class SimpleEditorType extends AbstractType
 
     /**
      * Gets the class name when the required option is set.
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function getWidgetClass(FormView $view): string
     {

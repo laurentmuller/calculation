@@ -3,7 +3,6 @@
 {# parameters #}
 {%- set title = title|default('calculation.list.title') -%}
 {%- set title_icon = title_icon|default('calculator') -%}
-{%- set defer_url = defer_url|default(url('calculation_table')) -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
 
@@ -13,7 +12,7 @@
 
 {% block toolbar_actions -%}
 {% if customData.states is defined and customData.states|length > 1 %}
-{%- set stateid = customData.state.id|default(0) -%}
+{%- set stateid = customData.state ? customData.state.id : 0 -%}
 <div class="input-group-append">
     <button id="stateid" data-value="{{ stateid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
         <i class="fa-regular fa-flag"></i>&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}

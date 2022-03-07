@@ -133,6 +133,7 @@ $.fn.extend({
                     $this.updateCardView().highlight().updateHref(content);
                 }
                 $this.updateHistory().toggleClass('table-hover', isData);
+                $this.toggleClass('table-hover', isData);
 
                 // update pagination links
                 $('.fixed-table-pagination .page-link').each(function (_index, element) {

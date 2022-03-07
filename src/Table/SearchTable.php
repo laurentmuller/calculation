@@ -182,6 +182,7 @@ class SearchTable extends AbstractTable
                 'entity' => $entity,
                 'entities' => $this->service->getEntities(),
             ];
+            $results->addParameter(self::PARAM_ENTITY, $entity);
         }
 
         return $results;
@@ -205,7 +206,7 @@ class SearchTable extends AbstractTable
             $item[self::COLUMN_ENTITY_NAME] = $entity;
             $item[self::COLUMN_FIELD_NAME] = $this->trans("{$lowerType}.fields.{$field}");
 
-            /** @var scalar $content */
+            /** @var string|int|float|bool|null $content */
             $content = $item[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'Calculation.id':

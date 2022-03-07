@@ -268,14 +268,6 @@ final class CalculationService
     }
 
     /**
-     * Gets the translator.
-     */
-    public function getTranslator(): ?TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-    /**
      * Update the total of the given calculation.
      *
      * @param calculation $calculation the calculation to update
@@ -370,6 +362,16 @@ final class CalculationService
     private function computeGroups(array $groups, ?callable $callback, float $userMargin, ?float $globalMargin = null): array
     {
         // create group rows
+        /**
+         * @var array<array{
+         *      id: int,
+         *      description: string,
+         *      amount: float,
+         *      margin: float,
+         *      margin_amount: float,
+         *      total: float
+         * }> $result
+         */
         $result = $callback ? \array_map($callback, $groups) : $groups;
 
         // groups amount
@@ -451,11 +453,6 @@ final class CalculationService
 
     /**
      * Gets the global margin, in percent, for the given amount.
-     *
-     * @param float $amount the amount to get margin for
-     *
-     * @return float the margin in percent
-     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getGlobalMargin(float $amount): float
     {
@@ -468,8 +465,6 @@ final class CalculationService
 
     /**
      * Gets the group for the given identifier.
-     *
-     * @param int $id the group identifier
      */
     private function getGroup(int $id): ?Group
     {
@@ -478,12 +473,6 @@ final class CalculationService
 
     /**
      * Gets the margin, in percent, for the given group and amount.
-     *
-     * @param Group $group  the group
-     * @param float $amount the amount to get percent for
-     *
-     * @return float the margin, in percent, if found; 0 otherwise
-     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getGroupMargin(Group $group, float $amount): float
     {
@@ -496,8 +485,6 @@ final class CalculationService
 
     /**
      * Gets the total amount of the groups.
-     *
-     * @param array $groups the groups
      */
     private function getGroupsAmount(array $groups): float
     {
@@ -508,8 +495,6 @@ final class CalculationService
 
     /**
      * Gets the total margin amount of the groups.
-     *
-     * @param array $groups the groups
      */
     private function getGroupsMargin(array $groups): float
     {

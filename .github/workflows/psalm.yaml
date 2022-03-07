@@ -36,4 +36,4 @@ jobs:
           composer bin vimeo/psalm install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run Psalm
-        uses: vendor/bin/psalm src
+        run: vendor/bin/psalm src

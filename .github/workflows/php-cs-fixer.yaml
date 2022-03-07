@@ -3,8 +3,8 @@ name: PHP-CS-Fixer
 on: [push, pull_request]
 
 jobs:
-  php-cs-fixer:
-    name: PHP-cs-fixer with PHP 7.4
+  build:
+    name: PHP-CS-Fixer with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:

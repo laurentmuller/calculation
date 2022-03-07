@@ -3,7 +3,7 @@ name: PHP-Lint
 on: [push, pull_request]
 
 jobs:
-  linters:
+  build:
     name: Linters with PHP 7.4
     runs-on: ubuntu-latest
 

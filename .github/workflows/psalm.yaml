@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
+    name: Psalm with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:

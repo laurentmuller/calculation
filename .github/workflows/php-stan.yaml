@@ -3,8 +3,8 @@ name: PHP-Stan
 on: [push, pull_request]
 
 jobs:
-  phpstan:
-    name: PHPStan with PHP 7.4
+  build:
+    name: PHP-Stan with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:

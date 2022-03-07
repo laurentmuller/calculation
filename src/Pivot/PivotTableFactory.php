@@ -389,7 +389,7 @@ class PivotTableFactory
     /**
      * Checks if all elements of the given array are instance of PivotField class.
      *
-     * @param array|mixed $fields the array to validate
+     * @param mixed $fields the single value or an array to validate
      *
      * @return PivotField[] the pivot fields
      *
@@ -403,7 +403,6 @@ class PivotTableFactory
 
         /** @var PivotField[] $result */
         $result = [];
-
         foreach ($fields as $field) {
             if (!$field instanceof PivotField) {
                 throw new UnexpectedTypeException($field, PivotField::class);

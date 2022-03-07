@@ -1,10 +1,10 @@
-name: PHP-Unit
+name: PHPUnit
 
 on: [push, pull_request]
 
 jobs:
   build:
-    name: PHP-Unit with PHP 7.4
+    name: PHPUnit with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:

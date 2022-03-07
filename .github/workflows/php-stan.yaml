@@ -1,10 +1,10 @@
-name: PHP-Stan
+name: PHPStan
 
 on: [push, pull_request]
 
 jobs:
   build:
-    name: PHP-Stan with PHP 7.4
+    name: PHPStan with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:

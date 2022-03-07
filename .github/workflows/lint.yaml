@@ -34,6 +34,10 @@ jobs:
         id: install
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+      - name: Download Symfony CLI
+        if: always() && steps.install.outcome == 'success'
+        run: wget https://get.symfony.com/cli/installer -O - | bash
+
       - name: Lint YAML files
         if: always() && steps.install.outcome == 'success'
         run: 'php bin/console lint:yaml translations config .github/workflows --parse-tags'
@@ -57,10 +61,6 @@ jobs:
       - name: Lint Composer config
         if: always() && steps.install.outcome == 'success'
         run: composer validate --strict
-
-      - name: Download Symfony CLI
-        if: always() && steps.install.outcome == 'success'
-        run: wget https://get.symfony.com/cli/installer -O - | bash
 
       - name: Check if any dependencies are compromised
         if: always() && steps.install.outcome == 'success'

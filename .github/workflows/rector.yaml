@@ -33,7 +33,7 @@ jobs:
       - name: Download dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin phpstan/phpstan install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin rector/rector install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
 
       - name: Rector

@@ -201,7 +201,7 @@ class UpdateController extends AbstractController
      *
      * @return string[]
      */
-    private function getGenders()
+    private function getGenders(): array
     {
         return [Person::GENDER_MALE, Person::GENDER_FEMALE];
     }

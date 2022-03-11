@@ -1,5 +1,10 @@
-{# imports #}
 {% import 'about/_about_macro.html.twig' as tools %}
+
+{# parameters #}
+{%- set runtime_packages = info.packages.runtime|default([]) -%}
+{%- set debug_packages = info.packages.debug|default([]) -%}
+{%- set runtime_routes = info.routes.runtime|default([]) -%}
+{%- set debug_routes = info.routes.debug|default([]) -%}
 
 <div class="phpversion">
     <table id="data-table-symfony" class="table table-hover table-sm mb-0">
@@ -8,29 +13,29 @@
                 <td colspan="2">
                     <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer">
                         <img alt="Symfony" width="66" height="66" src="{{ asset('images/symfony.png') }}">
-                        <h1 class="p text-body">{{ 'about.version'|trans({'%version%': version}) }}</h1>
+                        <h1 class="p text-body">{{ 'about.version'|trans({'%version%': info.version}) }}</h1>
                     </a>
                 </td>
             </tr>
             {{ tools.headerInfo('Kernel') }}
-            {{ tools.rowInfo('Environment', environment) }}
+            {{ tools.rowInfo('Environment', info.environment) }}
             {{ tools.rowInfo('Mode', app_mode) }}
 
             {{ tools.rowInfo('Intl Locale', locale) }}
-            {{ tools.rowInfo('Timezone', timezone) }}
-            {{ tools.rowInfo('Charset', charset) }}
+            {{ tools.rowInfo('Timezone', info.timezone) }}
+            {{ tools.rowInfo('Charset', info.charset) }}
 
-            {{ tools.rowInfo('Debug', debug ? 'enabled' : 'disabled') }}
-            {{ tools.rowInfo('OPcache', zend_opcache_enabled ? 'enabled' : 'disabled') }}
-            {{ tools.rowInfo('APCu', apcu_enabled ? 'enabled' : 'disabled') }}
-            {{ tools.rowInfo('Xdebug', xdebug_enabled ? 'enabled' : 'disabled') }}
+            {{ tools.rowInfo('Debug', app.debug ? 'enabled' : 'disabled') }}
+            {{ tools.rowInfo('OPcache', info.zendCacheLoaded ? 'enabled' : 'disabled') }}
+            {{ tools.rowInfo('APCu', info.apcuLoaded ? 'enabled' : 'disabled') }}
+            {{ tools.rowInfo('Xdebug', info.xdebugLoaded ? 'enabled' : 'disabled') }}
 
-            {{ tools.rowInfo('End of maintenance', endOfMaintenance) }}
-            {{ tools.rowInfo('End of product life', endOfLife) }}
+            {{ tools.rowInfo('End of maintenance', info.endOfMaintenanceInfo) }}
+            {{ tools.rowInfo('End of product life', info.endOfLifeInfo) }}
             {{ tools.headerInfo('Directories') }}
-            {{ tools.rowInfo('Project', projectDir) }}
-            {{ tools.rowInfo('Logs', logDir) }}
-            {{ tools.rowInfo('Cache', cacheDir) }}
+            {{ tools.rowInfo('Project', info.projectDir) }}
+            {{ tools.rowInfo('Logs', info.logInfo) }}
+            {{ tools.rowInfo('Cache', info.cacheInfo) }}
         </tbody>
     </table>
 
@@ -40,11 +45,11 @@
 
     <div class="accordion" id="symfonyAccordion">
         {# bundles #}
-        {% if bundles|length %}
+        {% if info.bundles|length %}
         <table id="data-table-bundles" class="table table-hover table-sm mb-0">
-            {{ tools.headerLinkInfo('Bundles', 'bundles', bundles|length) }}
+            {{ tools.headerLinkInfo('Bundles', 'bundles', info.bundles|length) }}
             <tbody class="collapse" id="bundles" data-parent="#symfonyAccordion">
-                {% for bundle in bundles %}
+                {% for bundle in info.bundles %}
                     {{ tools.rowInfo(bundle.name, bundle.path, 'pl-3') }}
                 {% endfor %}
             </tbody>
@@ -52,11 +57,11 @@
         {% endif %}
 
         {# rumtime packages #}
-        {% if runtimePackages|length %}
+        {% if runtime_packages|length %}
         <table id="data-table-runtime-packages" class="table table-hover table-sm mb-0">
-            {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtimePackages|length, 2) }}
+            {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtime_packages|length, 2) }}
             <tbody class="collapse" id="runtime-packages" data-parent="#symfonyAccordion">
-                {% for package in runtimePackages %}
+                {% for package in runtime_packages %}
                     {{ tools.rowPackage(package) }}
                 {% endfor %}
             </tbody>
@@ -64,11 +69,11 @@
         {% endif %}
 
         {# debug packages #}
-        {% if debugPackages|length %}
+        {% if debug_packages|length %}
         <table id="data-table-development-packages" class="table table-hover table-sm mb-0">
-            {{ tools.headerLinkInfo('Debug Packages', 'development-packages', debugPackages|length, 2) }}
+            {{ tools.headerLinkInfo('Debug Packages', 'development-packages', debug_packages|length, 2) }}
             <tbody class="collapse" id="development-packages" data-parent="#symfonyAccordion">
-                {% for package in debugPackages %}
+                {% for package in debug_packages %}
                     {{ tools.rowPackage(package) }}
                 {% endfor %}
             </tbody>
@@ -76,11 +81,11 @@
         {% endif %}
 
         {# runtime routes #}
-        {% if runtimeRoutes|length %}
+        {% if runtime_routes|length %}
             <table id="data-table-routes" class="table table-hover table-sm mb-0">
-                {{ tools.headerLinkInfo('Routes', 'application-routes', runtimeRoutes|length) }}
+                {{ tools.headerLinkInfo('Routes', 'application-routes', runtime_routes|length) }}
                 <tbody class="collapse" id="application-routes" data-parent="#symfonyAccordion">
-                    {% for route in runtimeRoutes %}
+                    {% for route in runtime_routes %}
                         {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
                     {% endfor %}
                 </tbody>
@@ -88,11 +93,11 @@
         {% endif %}
 
         {# debug routes #}
-        {% if debugRoutes|length %}
+        {% if debug_routes|length %}
             <table id="data-table-routes-dev" class="table table-hover table-sm mb-0">
-                {{ tools.headerLinkInfo('Debug Routes', 'symfony-routes', debugRoutes|length) }}
+                {{ tools.headerLinkInfo('Debug Routes', 'symfony-routes', debug_routes|length) }}
                 <tbody class="collapse" id="symfony-routes" data-parent="#symfonyAccordion">
-                    {% for route in debugRoutes %}
+                    {% for route in debug_routes %}
                         {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
                     {% endfor %}
                 </tbody>

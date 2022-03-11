@@ -12,9 +12,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Repository\CalculationRepository;
-use App\Repository\CalculationStateRepository;
+use App\Entity\Calculation;
+use App\Entity\CalculationState;
+use App\Entity\Category;
+use App\Entity\GlobalMargin;
+use App\Entity\Group;
+use App\Entity\Product;
+use App\Entity\Task;
 use App\Traits\MathTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,29 +42,73 @@ class IndexController extends AbstractController
      *     {"label" = "index.title"}
      * })
      */
-    public function invoke(CalculationRepository $calculRepository, CalculationStateRepository $stateRepository): Response
+    public function invoke(EntityManagerInterface $manager): Response
     {
-        // get values to display
-        $months = $calculRepository->getByMonth();
-        $states = $stateRepository->getListCountCalculations();
-        $calculations = $calculRepository->getLastCalculations(10);
-        $min_margin = $this->getApplication()->getMinMargin();
+        $application = $this->getApplication();
+        $parameters = [
+            'min_margin' => $application->getMinMargin(),
+            'calculations' => $this->getCalculations($manager, $application->getPanelCalculation()),
+        ];
+        if ($application->isPanelState()) {
+            $parameters['states'] = $this->getStates($manager);
+        }
+        if ($application->isPanelMonth()) {
+            $parameters['months'] = $this->getMonths($manager);
+        }
+        if ($application->isPanelCatalog()) {
+            $parameters['task_count'] = $this->count($manager, Task::class);
+            $parameters['group_count'] = $this->count($manager, Group::class);
+            $parameters['product_count'] = $this->count($manager, Product::class);
+            $parameters['category_count'] = $this->count($manager, Category::class);
+            $parameters['margin_count'] = $this->count($manager, GlobalMargin::class);
+            $parameters['state_count'] = $this->count($manager, CalculationState::class);
+        }
 
-        // get state count, overall total and items total
-        $states_count = \array_sum(\array_column($states, 'count'));
-        $states_total = \array_sum(\array_column($states, 'total'));
-        $states_items = \array_sum(\array_column($states, 'items'));
-        $states_margin = $this->safeDivide($states_total, $states_items);
+        return $this->renderForm('index/index.html.twig', $parameters);
+    }
 
-        // render view
-        return $this->renderForm('index/index.html.twig', [
-            'calculations' => $calculations,
-            'min_margin' => $min_margin,
-            'states_count' => $states_count,
-            'states_total' => $states_total,
-            'states_margin' => $states_margin,
-            'states' => $states,
-            'months' => $months,
-        ]);
+    /**
+     * @psalm-param class-string<T> $className
+     * @psalm-template T
+     */
+    private function count(EntityManagerInterface $manager, $className): int
+    {
+        // @phpstan-ignore-next-line
+        return $manager->getRepository($className)->count([]);
+    }
+
+    private function getCalculations(EntityManagerInterface $manager, int $maxResults): array
+    {
+        // @phpstan-ignore-next-line
+        return $manager->getRepository(Calculation::class)->getLastCalculations($maxResults);
+    }
+
+    private function getMonths(EntityManagerInterface $manager): array
+    {
+        // @phpstan-ignore-next-line
+        return $manager->getRepository(Calculation::class)->getByMonth();
+    }
+
+    private function getStates(EntityManagerInterface $manager): array
+    {
+        // @phpstan-ignore-next-line
+        $states = $manager->getRepository(CalculationState::class)->getListCountCalculations();
+
+        // add overall entry
+        $count = \array_sum(\array_column($states, 'count'));
+        $total = \array_sum(\array_column($states, 'total'));
+        $items = \array_sum(\array_column($states, 'items'));
+        $margin = $this->safeDivide($total, $items);
+
+        $states[] = [
+            'id' => 0,
+            'color' => false,
+            'code' => $this->trans('calculation.fields.total'),
+            'count' => $count,
+            'total' => $total,
+            'margin' => $margin,
+        ];
+
+        return $states;
     }
 }

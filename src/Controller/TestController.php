@@ -588,7 +588,7 @@ class TestController extends AbstractController
                 $nodes[] = $node;
             }
 
-            //root
+            // root
             $root = [
                 'id' => 'root',
                 'text' => 'Catalogue',

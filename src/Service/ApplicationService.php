@@ -363,6 +363,14 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Returns a value indicating number of displayed calculation in the home page.
+     */
+    public function getPanelCalculation(): int
+    {
+        return $this->getPropertyInteger(self::P_PANEL_CALCULATION, self::DEFAULT_PANEL_CALCULATION);
+    }
+
+    /**
      * Gets all properties.
      *
      * @param string[] $excluded the property keys to exclude
@@ -406,6 +414,11 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
             self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
             self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
+
+            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
+            self::P_PANEL_STATE => $this->isPanelState(),
+            self::P_PANEL_MONTH => $this->isPanelMonth(),
+            self::P_PANEL_CATALOG => $this->isPanelCatalog(),
         ];
 
         // exlude keys
@@ -625,6 +638,30 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function isMessageSubTitle(): bool
     {
         return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+    }
+
+    /**
+     * Returns a value indicating if the catalog panel is displayed in the home page.
+     */
+    public function isPanelCatalog(): bool
+    {
+        return $this->isPropertyBoolean(self::P_PANEL_CATALOG, true);
+    }
+
+    /**
+     * Returns a value indicating if the month panel is displayed in the home page.
+     */
+    public function isPanelMonth(): bool
+    {
+        return $this->isPropertyBoolean(self::P_PANEL_MONTH, true);
+    }
+
+    /**
+     * Returns a value indicating if the state panel is displayed in the home page.
+     */
+    public function isPanelState(): bool
+    {
+        return $this->isPropertyBoolean(self::P_PANEL_STATE, true);
     }
 
     /**

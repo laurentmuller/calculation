@@ -263,7 +263,7 @@ class CalculationController extends AbstractEntityController
         $oldState = $item->getState();
         $form = $this->createForm(CalculationEditStateType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            //change?
+            // change?
             if ($oldState !== $item->getState()) {
                 // update
                 $manager->flush();

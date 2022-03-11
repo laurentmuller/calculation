@@ -116,7 +116,7 @@ class DatabaseTest extends KernelTestCase
         $this->assertNotNull($repository);
 
         $result = $repository->findAll();
-        $this->assertEquals($expected, \count($result));
+        $this->assertCount($expected, $result);
     }
 
     /**

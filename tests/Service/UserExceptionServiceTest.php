@@ -124,7 +124,7 @@ class UserExceptionServiceTest extends TestCase
     public function testMessageData(\Throwable $e, int $count = 0): void
     {
         $result = $this->mapException($e);
-        $this->assertEquals($count, \count($result->getMessageData()));
+        $this->assertCount($count, $result->getMessageData());
     }
 
     /**

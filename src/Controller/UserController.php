@@ -100,7 +100,7 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($item)) {
             $this->warningTrans('user.delete.connected');
 
-            //redirect
+            // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
@@ -201,7 +201,7 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($user)) {
             $this->warningTrans('user.message.connected');
 
-            //redirect
+            // redirect
             return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
 

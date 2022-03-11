@@ -18,18 +18,18 @@
 <table class="table table-borderless table-sm mb-0">
     <tbody>
         <tr>
-            <td class="font-weight-bold">{{ 'pivot.value'|trans }}</td>
-            <td class="text-currency" colspan="2">{{ value }}</td>
-        </tr>
-        <tr>
-            <td class="border-top font-weight-bold">{{ 'pivot.line'|trans }}</td>
-            <td class="border-top">{{ cell.rowTitle(separator)|raw }}</td>
-            <td class="border-top text-currency">{{ _self.format(cell.row.value) }}</td>
+            <td class="font-weight-bold">{{ 'pivot.line'|trans }}</td>
+            <td>{{ cell.rowTitle(separator)|raw }}</td>
+            <td class="text-currency">{{ _self.format(cell.row.value) }}</td>
         </tr>
         <tr>
             <td class="font-weight-bold">{{ 'pivot.column'|trans }}</td>
             <td>{{ cell.columnTitle(separator)|raw }}</td>
             <td class="text-currency">{{ _self.format(cell.column.value) }}</td>
+        </tr>
+        <tr>
+            <td class="border-top font-weight-bold">{{ 'pivot.value'|trans }}</td>
+            <td class="border-top font-weight-bold text-currency" colspan="2">{{ value }}</td>
         </tr>
     </tbody>
 </table>
@@ -37,7 +37,7 @@
 
 {% macro outputPopoverTitle(cell, separator) -%}
 {%- set titles = cell.titles|default(cell.title)|default('') -%}
-<p class="mb-0">{{ titles|join(separator)|raw }}{{ separator|raw }}{{ _self.format(cell.value) }}</p>
+<p class="mb-0">{{ titles|join(separator)|raw }}{{ separator|raw }}<span class="font-weight-bold">{{ _self.format(cell.value) }}</span></p>
 {%- endmacro %}
 
 {% macro outputHeaders(nodes, separator) -%}

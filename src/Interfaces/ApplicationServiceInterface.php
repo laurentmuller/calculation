@@ -39,7 +39,12 @@ interface ApplicationServiceInterface
     /**
      * The default minimum margin of a calculation (float).
      */
-    public const DEFAULT_MIN_MARGIN = 3;
+    public const DEFAULT_MIN_MARGIN = 1.1;
+
+    /**
+     * The default number of displayed calculation in the home page (int).
+     */
+    public const DEFAULT_PANEL_CALCULATION = 10;
 
     /**
      * The default position of the flashbag messages (string).
@@ -148,9 +153,9 @@ interface ApplicationServiceInterface
      * <p>
      * Possible values are:
      * <ul>
-     * <li>'<code>table</code>': Show values as table (default).</li>
-     * <li>'<code>custom</code>': Show values as card.</li>
-     * <li>'<code>card</code>': Show values as detailled.</li>
+     * <li>'<code>table</code>': Show values within a table (default).</li>
+     * <li>'<code>custom</code>': Show values as cards.</li>
+     * <li>'<code>card</code>': Show detailled values.</li>
      * </ul>
      * </p>.
      */
@@ -204,6 +209,26 @@ interface ApplicationServiceInterface
      * The property name for the minimum password strength (int).
      */
     public const P_MIN_STRENGTH = 'minstrength';
+
+    /**
+     * The property name for the number of displayed calculation in the home page (int).
+     */
+    public const P_PANEL_CALCULATION = 'panel_calculation';
+
+    /**
+     * The property name for displaying catalog panel in the home page (bool).
+     */
+    public const P_PANEL_CATALOG = 'panel_catalog';
+
+    /**
+     * The property name for displaying month panel in the home page (bool).
+     */
+    public const P_PANEL_MONTH = 'panel_month';
+
+    /**
+     * The property name for displaying state panel in the home page (bool).
+     */
+    public const P_PANEL_STATE = 'panel_state';
 
     /**
      * The property name to output the customer address in PDF documents.

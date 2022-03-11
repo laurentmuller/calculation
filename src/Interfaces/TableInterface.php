@@ -105,17 +105,17 @@ interface TableInterface
     public const PARAM_VIEW = 'view';
 
     /**
-     * The view name to show values as card (detailled view).
+     * The view name to show detailled values.
      */
     public const VIEW_CARD = 'card';
 
     /**
-     * The view name to show values as custom (mosaic view).
+     * The view name to show values as cards.
      */
     public const VIEW_CUSTOM = 'custom';
 
     /**
-     * The view name to show values as table (default view).
+     * The view name to show values within a table (default view).
      */
     public const VIEW_TABLE = 'table';
 }

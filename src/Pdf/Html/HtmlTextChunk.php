@@ -34,7 +34,6 @@ class HtmlTextChunk extends AbstractHtmlChunk
         self::H6,
         self::PARAGRAPH,
         self::LIST_ITEM,
-        // self::SAMP,
     ];
 
     /**
@@ -125,7 +124,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
                 case self::ALIGN_CENTER:
                 case self::ALIGN_JUSTIFIED:
                     $height = \max($report->getFontSize(), self::LINE_HEIGHT);
-                    $report->MultiCell(0, $height, $text, 0, $align); //, true);
+                    $report->MultiCell(0, $height, $text, 0, $align);
                     $report->SetY($report->GetY() - $report->getLastHeight());
 
                     return;

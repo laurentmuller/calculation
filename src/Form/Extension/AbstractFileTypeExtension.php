@@ -99,7 +99,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
      *
      * @see https://symfony.com/doc/current/reference/constraints/File.html#maxsize
      */
-    private function normalizeSize($size)
+    private function normalizeSize($size): ?int
     {
         if (empty($size)) {
             return null;

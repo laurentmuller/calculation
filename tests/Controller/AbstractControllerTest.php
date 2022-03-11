@@ -77,14 +77,16 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
      * Checks the given route.
      *
      * @param string $url      the URL to be tested
-     * @param string $username the user name to login
+     * @param string $username the user name to login or empty('') if none
      * @param int    $expected the expected result
      * @param string $method   the request method
      */
     protected function checkRoute(string $url, string $username, int $expected = Response::HTTP_OK, string $method = Request::METHOD_GET): void
     {
         $isExcel = false !== \stripos($url, '/excel');
-        $this->loginUserName($username);
+        if (!empty($username)) {
+            $this->loginUserName($username);
+        }
         if ($isExcel) {
             \ob_start();
         }

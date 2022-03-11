@@ -554,7 +554,7 @@ class HelpReport extends AbstractReport
              * @psalm-param null|array{description: string|null, image: string|null}  $rootMenu
              */
             if ($rootMenu = $this->service->getMainMenu()) {
-                //description
+                // description
                 /** @psalm-var string|null $description */
                 $description = $rootMenu['description'] ?? null;
                 if (null !== $description) {

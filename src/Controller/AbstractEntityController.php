@@ -105,7 +105,7 @@ abstract class AbstractEntityController extends AbstractController
         // save display
         $display = $item->getDisplay();
 
-        //add item as parameter
+        // add item as parameter
         $parameters['item'] = $item;
 
         // create form and handle request

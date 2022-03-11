@@ -245,7 +245,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
                 $x = $this->GetPageWidth() - $this->getRightMargin() - $size;
                 $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1;
 
-                //render
+                // render
                 $this->Image($path, $x, $y, $size, $size, 'png', $this->getQrCodeLink());
             } catch (\Exception $e) {
                 $this->logException($e, $this->trans('generate.error.failed'));

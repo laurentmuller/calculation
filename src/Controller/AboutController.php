@@ -19,14 +19,11 @@ use App\Util\DatabaseInfo;
 use App\Util\PhpInfo;
 use App\Util\SymfonyInfo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Controller for application informations.
@@ -46,30 +43,26 @@ class AboutController extends AbstractController
     public function about(): Response
     {
         return $this->renderForm('about/about.html.twig', [
-            'customer' => $this->getApplication()->getCustomer(),
-            'link' => false,
-        ]);
+            'customer' => $this->getApplication()->getCustomer(), ]);
     }
 
     /**
      * Export the licence and policy pages to PDF.
      *
      * @Route("/pdf", name="about_pdf")
+     * @IsGranted("ROLE_USER")
      */
     public function aboutPdf(string $appName): PdfResponse
     {
-        // content
-        $content = $this->renderView('about/about_content.html.twig', [
-            'app_home_url' => $this->getHomeUrl(),
+        $templateParameters = [
+            'comments' => false,
             'link' => false,
-        ]);
+        ];
+        $titleParameters = [
+            '%app_name%' => $appName,
+        ];
 
-        // create report
-        $report = new HtmlReport($this);
-        $report->setContent($content)->setTitleTrans('index.menu_info', ['%app_name%' => $appName], true);
-
-        // render
-        return $this->renderPdfDocument($report);
+        return $this->outputReport('about/about_content.html.twig', $templateParameters, 'index.menu_info', $titleParameters);
     }
 
     /**
@@ -80,13 +73,12 @@ class AboutController extends AbstractController
     public function licence(): Response
     {
         return $this->renderForm('about/licence.html.twig', [
-            'app_home_url' => $this->getHomeUrl(),
             'link' => true,
         ]);
     }
 
     /**
-     * Render the licence informations content.
+     * Render the licence informations.
      *
      * @Route("/licence/content", name="about_licence_content")
      * @IsGranted("ROLE_USER")
@@ -107,25 +99,18 @@ class AboutController extends AbstractController
      */
     public function licencePdf(): PdfResponse
     {
-        // get content
-        $ontent = $this->renderView('about/licence_content.html.twig', [
-            'app_home_url' => $this->getHomeUrl(),
+        $templateParameters = [
             'link' => false,
-        ]);
+        ];
 
-        // create report
-        $report = new HtmlReport($this);
-        $report->setContent($ontent)->setTitleTrans('about.licence');
-
-        // render
-        return $this->renderPdfDocument($report);
+        return $this->outputReport('about/licence_content.html.twig', $templateParameters, 'about.licence');
     }
 
     /**
-     * Render the MySql informations content.
+     * Render the MySql informations.
      *
      * @Route("/mysql/content", name="about_mysql_content")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function mysqlContent(DatabaseInfo $info): JsonResponse
     {
@@ -142,10 +127,10 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Render the PHP informations content.
+     * Render the PHP informations.
      *
      * @Route("/php/content", name="about_php_content")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function phpContent(Request $request, PhpInfo $info): JsonResponse
     {
@@ -163,136 +148,77 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Download the php.ini as JSON.
+     * Exports the PHP informations as PDF.
      *
-     * @Route("/php/ini", name="about_php_ini")
+     * @Route("/php/pdf", name="about_php_pdf")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
-    public function phpIni(PhpInfo $info): JsonResponse
+    public function phpPdf(PhpInfo $info): Response
     {
-        // get content
-        $array = $info->asArray();
-
-        // create headers
-        $disposition = HeaderUtils::makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'php_info.json');
-        $headers = [
-            'Content-Disposition' => $disposition,
-            'Cache-Control' => 'private, max-age=0, must-revalidate',
-        ];
-
-        // create response
-        $response = $this->json($array, JsonResponse::HTTP_OK, $headers);
-        $response->setEncodingOptions(\JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
-
-        return $response;
-    }
-
-    /**
-     * Exports the php.ini as PDF.
-     *
-     * @Route("/php/ini/pdf", name="about_php_ini_pdf")
-     */
-    public function phpIniPdf(PhpInfo $info): PdfResponse
-    {
-        // get content
         $content = $info->asArray();
+        $version = $info->getVersion();
+        $report = new PhpIniReport($this, $content, $version);
 
-        // create report
-        $report = new PhpIniReport($this);
-        $report->setContent($content);
-
-        // render
         return $this->renderPdfDocument($report);
     }
 
     /**
-     * Display the private policy page.
+     * Display the policy page.
      *
      * @Route("/policy", name="about_policy")
      */
     public function policy(): Response
     {
         return $this->renderForm('about/policy.html.twig', [
-            'app_home_url' => $this->getHomeUrl(),
+            'comments' => false,
             'link' => true,
         ]);
     }
 
     /**
-     * Render the policy informations content.
+     * Render the policy informations.
      *
      * @Route("/policy/content", name="about_policy_content")
      * @IsGranted("ROLE_USER")
      */
     public function policyContent(): JsonResponse
     {
-        $content = $this->renderView('about/policy_content.html.twig');
-
-        return $this->jsonTrue([
-            'content' => $content,
+        $content = $this->renderView('about/policy_content.html.twig', [
+            'comments' => true,
+            'link' => false,
         ]);
+
+        return $this->jsonTrue(['content' => $content]);
     }
 
     /**
-     * Export the policy page to PDF.
+     * Export the policy to PDF.
      *
      * @Route("/policy/pdf", name="about_policy_pdf")
      */
     public function policyPdf(): PdfResponse
     {
-        // get content
-        $content = $this->renderView('about/policy_content.html.twig', [
-            'app_home_url' => $this->getHomeUrl(),
+        $templateParameters = [
+            'comments' => false,
             'link' => false,
-        ]);
+        ];
 
-        // create report
-        $report = new HtmlReport($this);
-        $report->setContent($content)->setTitleTrans('about.policy', [], true);
-
-        // render
-        return $this->renderPdfDocument($report);
+        return $this->outputReport('about/policy_content.html.twig', $templateParameters, 'about.policy');
     }
 
     /**
-     * Render Symfony informations content.
+     * Render Symfony informations.
      *
      * @Route("/symfony/content", name="about_symfony_content")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function symfonyContent(SymfonyInfo $info): JsonResponse
     {
         $locale = \Locale::getDefault();
         $localeName = Locales::getName($locale, 'en');
-
-        $routes = $info->getRoutes();
-        $packages = $info->getPackages();
-
         $parameters = [
-            'charset' => $info->getCharset(),
-            'timezone' => $info->getTimeZone(),
-            'environment' => $info->getEnvironment(),
-            'version' => $info->getVersion(),
-
-            'bundles' => $info->getBundles(),
-            'runtimePackages' => $packages['runtime'] ?? [],
-            'debugPackages' => $packages['debug'] ?? [],
-
-            'runtimeRoutes' => $routes['runtime'] ?? [],
-            'debugRoutes' => $routes['debug'] ?? [],
-
-            'projectDir' => $info->getProjectDir(),
-            'cacheDir' => $info->getCacheInfo(),
-            'logDir' => $info->getLogInfo(),
-
-            'endOfLife' => $info->getEndOfLifeInfo(),
-            'endOfMaintenance' => $info->getEndOfMaintenanceInfo(),
-
+            'info' => $info,
             'locale' => $localeName . ' - ' . $locale,
-
-            'debug' => $info->isDebug(),
-            'apcu_enabled' => $info->isApcuLoaded(),
-            'xdebug_enabled' => $info->isXdebugLoaded(),
-            'zend_opcache_enabled' => $info->isZendCacheLoaded(),
         ];
         $content = $this->renderView('about/symfony_content.html.twig', $parameters);
 
@@ -334,22 +260,6 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Gets the home page URL.
-     */
-    private function getHomeUrl(): string
-    {
-        $url = $this->generateUrl(self::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
-        if (false !== $pos = \stripos($url, '/web')) {
-            $url = \substr($url, 0, $pos);
-        }
-        if (false !== $pos = \stripos($url, '/app_dev.php')) {
-            $url = \substr($url, 0, $pos);
-        }
-
-        return \rtrim($url, '/');
-    }
-
-    /**
      * Returns a string with the names of all modules compiled and loaded.
      *
      * @return string all the modules names
@@ -360,5 +270,22 @@ class AboutController extends AbstractController
         \sort($extensions);
 
         return \implode(', ', $extensions);
+    }
+
+    private function outputReport(string $template, array $templateParameters, ?string $title = null, array $titleParameters = []): PdfResponse
+    {
+        // get content
+        $content = $this->renderView($template, $templateParameters);
+
+        // create report
+        $report = new HtmlReport($this);
+        $report->setContent($content);
+
+        // title
+        if ($title) {
+            $report->setTitleTrans($title, $titleParameters, true);
+        }
+
+        return $this->renderPdfDocument($report);
     }
 }

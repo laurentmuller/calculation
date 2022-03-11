@@ -32,7 +32,7 @@ class ProductsReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        //title
+        // title
         $this->setTitleTrans('product.list.title');
 
         // new page

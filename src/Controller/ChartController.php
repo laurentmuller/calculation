@@ -36,7 +36,7 @@ class ChartController extends AbstractController
      *
      * @Route("/month/{count}", name="chart_by_month", requirements={"count" = "\d+" })
      */
-    public function month(int $count = 6, MonthChart $chart): Response
+    public function month(MonthChart $chart, int $count = 6): Response
     {
         $data = $chart->generate($count);
 

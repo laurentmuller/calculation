@@ -1,5 +1,4 @@
 {% extends 'cards/card_base.html.twig' %}
-{# imports #}
 {% import 'about/_about_macro.html.twig' as tools %}
 {% import 'macros/_icons.html.twig' as icons %}
 
@@ -7,6 +6,7 @@
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'info-circle' -%}
 {%- set title_parameters = {'%app_name%': app_name} -%}
+{%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 
 {% block card_class ' mb-2' %}
 {% block card_container_class '' %}
@@ -40,24 +40,21 @@
 <div class="accordion" id="accordionAbout">
 {{ tools.aboutCard('licence') }}
 {{ tools.aboutCard('policy') }}
-{% if is_granted('ROLE_ADMIN') %}
+{% if super_admin %}
     {{ tools.aboutCard('symfony') }}
     {{ tools.aboutCard('php') }}
     {{ tools.aboutCard('mysql') }}
 {% endif %}
 </div>
 <div class="row no-gutters mt-2 pb-3 d-print-none">
-    <div class="col mr-auto">
-        {{ icons.homepage() }}
-        {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
-    </div>
-    {% if app.debug or is_granted('ROLE_SUPER_ADMIN') -%}
-    <div class="col text-right">
-        {{ icons.button_pdf('about_pdf') }}
-        {{ icons.link(path('about_php_ini'), 'about.php_ini', 'btn btn-form btn-outline-info') }}
-        {{ icons.linkExternal(path('about_php_ini_pdf'), 'about.php_ini', 'btn btn-form btn-outline-secondary', 'file-pdf far') }}
-    </div>
+    <div class="col">
+    {{ icons.homepage() }}
+    {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
+    {{ icons.button_pdf('about_pdf') }}
+    {% if super_admin %}
+        {{ icons.linkExternal(path('about_php_pdf'), 'about.php_pdf', 'btn btn-form btn-outline-secondary', 'file-pdf far') }}
     {%- endif %}
+    </div>
 </div>
 {% endblock %}
 

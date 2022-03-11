@@ -524,7 +524,7 @@ class FormHelper
      */
     public function addVichImageType(): self
     {
-        //see https://github.com/kartik-v/bootstrap-fileinput
+        // see https://github.com/kartik-v/bootstrap-fileinput
         $this->notRequired()
             ->updateRowAttribute('class', 'mb-0')
             ->updateOptions([

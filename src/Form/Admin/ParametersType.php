@@ -65,28 +65,16 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
-
         $helper = new FormHelper($builder, 'parameters.fields.');
-
-        // customer
         $this->addCustomerSection($helper);
-
-        // default values
         $this->addDefaultValueSection($helper);
-
-        // display
+        $this->addDefaultProductSection($helper);
         $this->addDisplaySection($helper);
-
-        // flashbag
         $this->addFlashbagSection($helper);
 
-        // options
         if ($this->superAdmin) {
+            $this->addHomePageSection($helper);
             $this->addOptionsSection($helper);
-        }
-
-        // security
-        if ($this->superAdmin) {
             $this->addSecuritySection($helper);
         }
     }
@@ -95,16 +83,13 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     {
         $helper->field(self::P_CUSTOMER_NAME)
             ->updateAttribute('spellcheck', 'false')
-            ->rowClass('ml-1 mt-1')
             ->addTextType();
 
         $helper->field(self::P_CUSTOMER_ADDRESS)
-            ->rowClass('ml-1 mt-1')
             ->notRequired()
             ->addTextType();
 
         $helper->field(self::P_CUSTOMER_ZIP_CITY)
-            ->rowClass('ml-1 mt-1')
             ->notRequired()
             ->addTextType();
 
@@ -125,6 +110,24 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->addUrlType();
     }
 
+    private function addDefaultProductSection(FormHelper $helper): void
+    {
+        $helper->field(self::P_DEFAULT_PRODUCT)
+            ->notRequired()
+            ->updateOption('placeholder', 'parameters.placehoders.' . self::P_DEFAULT_PRODUCT)
+            ->updateAttribute('data-default', '')
+            ->add(ProductListType::class);
+
+        $helper->field(self::P_DEFAULT_PRODUCT_QUANTITY)
+            ->updateAttribute('data-default', FormatUtils::formatAmount(0))
+            ->addNumberType();
+
+        $helper->field(self::P_DEFAULT_PRODUCT_EDIT)
+            ->updateAttribute('data-default', \json_encode(false))
+            ->notRequired()
+            ->addCheckboxType();
+    }
+
     private function addDefaultValueSection(FormHelper $helper): void
     {
         $helper->field(self::P_DEFAULT_STATE)
@@ -137,23 +140,6 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
             ->percent(true)
             ->addPercentType(0);
-
-        $helper->field(self::P_DEFAULT_PRODUCT)
-            ->notRequired()
-            ->updateOption('placeholder', 'parameters.placehoders.' . self::P_DEFAULT_PRODUCT)
-            ->help('parameters.helps.' . self::P_DEFAULT_PRODUCT)
-            ->updateAttribute('data-default', '')
-            ->add(ProductListType::class);
-
-        $helper->field(self::P_DEFAULT_PRODUCT_QUANTITY)
-            ->updateAttribute('data-default', FormatUtils::formatAmount(0))
-            ->addNumberType();
-
-        $helper->field(self::P_DEFAULT_PRODUCT_EDIT)
-            ->updateAttribute('data-default', \json_encode(true))
-            ->rowClass('ml-2')
-            ->notRequired()
-            ->addCheckboxType();
     }
 
     private function addDisplaySection(FormHelper $helper): void
@@ -193,19 +179,53 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ]);
     }
 
+    private function addHomePageSection(FormHelper $helper): void
+    {
+        $helper->field(self::P_PANEL_STATE)
+            ->label('index.panel_state')
+            ->updateAttribute('data-default', 1)
+            ->help('parameters.helps.' . self::P_PANEL_STATE)
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field(self::P_PANEL_MONTH)
+            ->label('index.panel_month')
+            ->updateAttribute('data-default', 1)
+            ->help('parameters.helps.' . self::P_PANEL_MONTH)
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field(self::P_PANEL_CATALOG)
+            ->label('index.panel_count')
+            ->updateAttribute('data-default', 1)
+            ->help('parameters.helps.' . self::P_PANEL_CATALOG)
+            ->rowClass('mb-1')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field(self::P_PANEL_CALCULATION)
+            ->updateAttribute('data-default', self::DEFAULT_PANEL_CALCULATION)
+            ->help('parameters.helps.' . self::P_PANEL_CALCULATION)
+            ->labelClass('radio-inline')
+            // ->notRequired()
+            ->updateOptions([
+                'choice_translation_domain' => false,
+                'expanded' => true,
+            ])
+            ->addChoiceType($this->getCalculationChoices());
+    }
+
     private function addOptionsSection(FormHelper $helper): void
     {
         $helper->field(self::P_QR_CODE)
             ->updateAttribute('data-default', (int) self::DEFAULT_QR_CODE)
             ->help('parameters.helps.' . self::P_QR_CODE)
-            ->rowClass('ml-3 mt-2')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field(self::P_PRINT_ADDRESS)
             ->updateAttribute('data-default', (int) self::DEFAULT_PRINT_ADDRESS)
             ->help('parameters.helps.' . self::P_PRINT_ADDRESS)
-            ->rowClass('ml-3 mt-2')
             ->notRequired()
             ->addCheckboxType();
     }
@@ -231,10 +251,20 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             $helper->field($option)
                 ->label("password.{$option}")
                 ->updateAttribute('data-default', 0)
-                ->rowClass('mb-1 ml-1')
+                ->rowClass('mb-1')
                 ->notRequired()
                 ->addCheckboxType();
         }
+    }
+
+    /**
+     * Gets the displayed calculations choices.
+     */
+    private function getCalculationChoices(): array
+    {
+        $values = [5, 10, 15, 20, 25];
+
+        return \array_combine($values, $values);
     }
 
     /**

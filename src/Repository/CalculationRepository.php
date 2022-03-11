@@ -263,7 +263,7 @@ class CalculationRepository extends AbstractRepository
             $item['margin'] = (float) $item['margin'];
         }
 
-        //reverse
+        // reverse
         return \array_reverse($result);
     }
 

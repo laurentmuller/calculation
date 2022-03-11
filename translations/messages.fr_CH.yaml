@@ -612,10 +612,17 @@ index:
     menu_site_map: Plan du site
     menu_chart_title: Afficher le graphique
     panel_last: Dernières calculations
-    panel_month: Résumé par mois
+    panel_month: Calculations par mois
     panel_month_title: Afficher les calculations pour ce mois
     panel_state: Calculations par statut
     panel_state_title: Afficher les calculations pour ce statut
+    panel_count: Catalogue
+    panel_title_group: Afficher la liste des groupes
+    panel_title_category: Afficher la liste des catégories
+    panel_title_product: Afficher la liste des produits
+    panel_title_task: Afficher la liste des tâches
+    panel_title_margin: Afficher la liste des marges globales
+    panel_title_state: Afficher la liste des statuts
     toggle_navigation: Basculer la navigation
     disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profile a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
 about:
@@ -639,7 +646,7 @@ about:
     extern_link: Lien externe
     loading: Recherche des informations...
     error: Erreur lors du chargement des informations.
-    php_ini: PHP.ini
+    php_pdf: PHP Info
 list:
     limit_title: Nombre d'éléments affichés par page
     pdf_title: Télécharger la liste
@@ -753,11 +760,15 @@ parameters:
     customize: Personnaliser
     group_customer: Client
     group_default: Valeurs par défaut
+    group_product: Article par défaut
+    group_product_help: L'article sélectionné est ajouté automatiquement à chaque nouvelle calculation.
     group_message: Messages
     group_display: Affichage
     group_security: Sécurité
     group_password: Options du mot de passe
     group_options: Options
+    group_home: Page d'accueil
+    group_home_help: Les élements sélectionnés sont afficher sur la page d'accueil.
     action_display: Afficher
     action_test: Tester
     editAction:
@@ -817,12 +828,16 @@ parameters:
         default_product: Article
         default_product_quantity: Quantité
         default_product_edit: Editer l'article lors de l'affichage de la nouvelle calculation
+        panel_calculation: Calculations
     placehoders:
         default_product: <Aucun article sélectionné>
     helps:
         qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
         print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
-        default_product: L'article sélectionné est ajouté automatiquement à une nouvelle calculation.
+        panel_state: Afficher la liste des calculations regroupées par status.
+        panel_month: Afficher la liste des calculations regroupées par mois.
+        panel_catalog: Afficher le nombre d'objets dans le catalogue (base de données).
+        panel_calculation: Nombre de calculations à afficher.
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?

@@ -82,7 +82,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
             }
 
             foreach ($entity->getItems() as $item) {
-                //check for new page
+                // check for new page
                 $count = 1 + \max($item->count(), 1);
                 $height = $count * self::LINE_HEIGHT;
                 if ($this->isPrintable($height)) {

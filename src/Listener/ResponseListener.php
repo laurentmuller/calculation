@@ -193,7 +193,7 @@ class ResponseListener implements EventSubscriberInterface
             'frame-ancestors' => self::CSP_SELF,
 
             // nonce + asset
-            'script-src' => [$nonce], //, $asset;
+            'script-src' => [$nonce],
             'script-src-elem' => [$nonce, $asset, self::CSP_UNSAFE_INLINE, self::ICONIFY_URL],
 
             // self + asset

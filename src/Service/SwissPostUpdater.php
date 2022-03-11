@@ -408,7 +408,7 @@ class SwissPostUpdater
             $this->database->commitTransaction();
         }
 
-        //close
+        // close
         $this->closeStream();
 
         return true;

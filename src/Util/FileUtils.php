@@ -49,7 +49,7 @@ final class FileUtils
      */
     public static function decodeJson(string $file, bool $assoc = true)
     {
-        //file?
+        // file?
         if (!self::isFile($file)) {
             throw new \InvalidArgumentException("The file '$file' can not be found.");
         }

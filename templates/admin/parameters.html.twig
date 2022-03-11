@@ -3,15 +3,18 @@
 {% form_theme form with _self %}
 
 {# macros #}
-{% macro collapseLine(href) %}
+{% macro collapseLine(href, expanded=false) %}
 {%- set name = ('parameters.group_' ~ href)|trans -%}
 {%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
+{%- set icon = expanded ? 'fa-caret-down' : 'fa-caret-left' -%}
 <div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
-    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">
+    <a href="#{{ href }}" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">
         {{- name -}}
     </a>
-    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}"><i class="fa-solid fa-fw fa-lg fa-caret-left"></i></a>
+    <a href="#{{ href }}" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}">
+        <i class="fa-solid fa-fw fa-lg {{ icon }}"></i>
+    </a>
 </div>
 {% endmacro %}
 
@@ -38,89 +41,117 @@
 
 {% block card_body -%}
 <div class="accordion" id="parent_accordion">
-    {{ _self.collapseLine('customer') }}
+    {{ _self.collapseLine('customer', true) }}
     <div class="toggle-icon collapse show" id="customer" data-parent="#parent_accordion" aria-expanded="true">
-        {{ form_row(form.customer_name) }}
-        {{ form_row(form.customer_address) }}
-        {{ form_row(form.customer_zip_city) }}
-        <div class="form-row ml-0 mt-1">
-            <div class="col-md-6">{{ form_row(form.customer_phone) }}</div>
-            <div class="col-md-6">{{ form_row(form.customer_fax) }}</div>
-        </div>
-        <div class="form-row ml-0 mt-1">
-            <div class="col-md-6">{{ form_row(form.customer_email) }}</div>
-            <div class="col-md-6">{{ form_row(form.customer_url) }}</div>
+        <div class="ml-2 mt-1">
+            {{ form_row(form.customer_name) }}
+            {{ form_row(form.customer_address) }}
+            {{ form_row(form.customer_zip_city) }}
+            <div class="form-row ml-0 mt-1">
+                <div class="col-md-6">{{ form_row(form.customer_phone) }}</div>
+                <div class="col-md-6">{{ form_row(form.customer_fax) }}</div>
+            </div>
+            <div class="form-row ml-0 mt-1">
+                <div class="col-md-6">{{ form_row(form.customer_email) }}</div>
+                <div class="col-md-6">{{ form_row(form.customer_url) }}</div>
+            </div>
         </div>
     </div>
     {{ _self.collapseLine('default') }}
     <div class="toggle-icon collapse" id="default" data-parent="#parent_accordion">
-        <div class="form-row ml-0 mt-1">
-            <div class="col-md-4">
-                {{ form_row(form.default_state) }}
-            </div>
-             <div class="col-md-4">
-                {{ form_row(form.default_category) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.minimum_margin) }}
-            </div>
-        </div>
-        <div class="form-row ml-0 mt-1">
-            <div class="col-md-8">
-                {{ form_row(form.default_product) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.default_product_quantity) }}
+        <div class="ml-2 mt-1">
+            <div class="form-row">
+                <div class="col-md-4">
+                    {{ form_row(form.default_state) }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form_row(form.default_category) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.minimum_margin) }}
+                </div>
             </div>
         </div>
-        <div class="form-row ml-0 mt-1">
-            {{ form_row(form.default_product_edit) }}
+    </div>
+    {{ _self.collapseLine('product') }}
+    <div class="toggle-icon collapse" id="product" data-parent="#parent_accordion">
+        <div class="ml-2 mt-1">
+            <small class="mb-2 form-text text-muted">{{ 'parameters.group_product_help'|trans }}</small>
+            <div class="form-row">
+                <div class="col-md-8">
+                    {{ form_row(form.default_product) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.default_product_quantity) }}
+                </div>
+            </div>
+            <div class="form-row ml-0">
+                {{ form_row(form.default_product_edit) }}
+            </div>
         </div>
     </div>
     {{ _self.collapseLine('display') }}
     <div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
-        <div class="form-row ml-0 mt-1">
-            <div class="col-md-7">
-                {{ form_row(form.display_mode) }}
-            </div>
-            <div class="col-md-5">
-                {{ form_row(form.edit_action) }}
+        <div class="ml-2 mt-1">
+            <div class="form-row">
+                <div class="col-md-7">
+                    {{ form_row(form.display_mode) }}
+                </div>
+                <div class="col-md-5">
+                    {{ form_row(form.edit_action) }}
+                </div>
             </div>
         </div>
     </div>
     {{ _self.collapseLine('message') }}
     <div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
-        <div class="form-row ml-0 mt-1">
-            <div class="col-md-4">
-                {{ form_row(form.message_position) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.message_timeout) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.message_sub_title) }}
+        <div class="ml-2 mt-1">
+            <div class="form-row">
+                <div class="col-md-4">
+                    {{ form_row(form.message_position) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.message_timeout) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.message_sub_title) }}
+                </div>
             </div>
         </div>
     </div>
     {% if super_admin %}
+    {{ _self.collapseLine('home') }}
+    <div class="toggle-icon collapse" id="home" data-parent="#parent_accordion">
+        <div class="ml-2 mt-1">
+            <small class="mb-2 form-text text-muted">{{ 'parameters.group_home_help'|trans }}</small>
+            {{ form_row(form.panel_state) }}
+            {{ form_row(form.panel_month) }}
+            {{ form_row(form.panel_catalog) }}
+            {{ form_row(form.panel_calculation) }}
+        </div>
+    </div>
     {{ _self.collapseLine('options') }}
     <div class="toggle-icon collapse" id="options" data-parent="#parent_accordion">
-        {{ form_row(form.qr_code) }}
-        {{ form_row(form.print_address) }}
+        <div class="ml-2 mt-2">
+            {{ form_row(form.qr_code) }}
+            {{ form_row(form.print_address) }}
+        </div>
     </div>
     {{ _self.collapseLine('security') }}
     <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
-        <div class="form-row ml-0 mt-1">
-            <div class="col-md-6">
-                {{ form_row(form.display_captcha) }}
+         <div class="ml-2 mt-2">
+            <div class="form-row">
+                <div class="col-md-6">
+                    {{ form_row(form.display_captcha) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.minstrength) }}
+                </div>
             </div>
-            <div class="col-md-6">
-                {{ form_row(form.minstrength) }}
+            <label class="horizontal-line">{{ 'parameters.group_password'|trans }}</label>
+            <div class="ml-2">
+                {{ form_rest(form) }}
             </div>
-        </div>
-        <label class="horizontal-line">{{ 'parameters.group_password'|trans }}</label>
-        <div class="ml-2">
-            {{ form_rest(form) }}
         </div>
     </div>
     {% endif %}

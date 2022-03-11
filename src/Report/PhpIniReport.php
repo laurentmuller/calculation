@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfFont;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
@@ -25,24 +26,23 @@ use App\Pdf\PdfTextColor;
  */
 class PhpIniReport extends AbstractReport
 {
-    /**
-     * The content to export.
-     */
-    private ?array $content = null;
+    private array $content;
 
     /**
      * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(AbstractController $controller, array $content, string $version)
     {
         parent::__construct($controller);
-        if ($title = \php_ini_loaded_file()) {
-            $this->SetTitle($title);
-        } else {
-            $this->SetTitle('php.ini');
+        if ($description = \php_ini_loaded_file()) {
+            $this->header->setDescription($description);
         }
+        $title = $this->trans('about.php');
+        if (!empty($version)) {
+            $title .= ' ' . $version;
+        }
+        $this->SetTitle($title);
+        $this->content = $content;
     }
 
     /**
@@ -50,19 +50,15 @@ class PhpIniReport extends AbstractReport
      */
     public function render(): bool
     {
-        // content?
         $content = $this->content;
         if (empty($content)) {
             return false;
         }
 
-        // sort keys
-        \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-
-        // new page
         $this->AddPage();
 
-        // create table
+        \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
+
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumn(PdfColumn::left('Directive', 40))
@@ -70,7 +66,6 @@ class PhpIniReport extends AbstractReport
             ->addColumn(PdfColumn::left('Master Value', 30))
             ->outputHeaders();
 
-        // output content
         /** @var array<string, mixed> $value */
         foreach ($content as $key => $value) {
             $table->setGroupKey($key);
@@ -81,21 +76,7 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * Sets the content to export.
-     */
-    public function setContent(array $content): self
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Converts the given variable to a string.
-     *
      * @param mixed $var the variable to convert
-     *
-     * @return string the converted variable
      */
     private function convert($var): string
     {
@@ -108,33 +89,26 @@ class PhpIniReport extends AbstractReport
 
     /**
      * Gets the cell style for the given value.
-     *
-     * @param string $var the value to get style for
-     *
-     * @return PdfStyle|null the style, if applicable; null otherwise
      */
     private function getCellStyle(string $var): ?PdfStyle
     {
-        if (\preg_match('/#[0-9A-Fa-f]{6}/i', $var) && $color = PdfTextColor::create($var)) {
-            return PdfStyle::getCellStyle()->setTextColor($color);
+        $color = null;
+        $fontStyle = PdfFont::STYLE_REGULAR;
+        if (\preg_match('/#[0-9A-Fa-f]{6}/i', $var)) {
+            $color = PdfTextColor::create($var);
         } elseif ('No value' === $var) {
             $color = PdfTextColor::create('#7F7F7F');
-            $style = PdfStyle::getCellStyle()->setFontItalic(true);
-            if (null !== $color) {
-                $style->setTextColor($color);
-            }
-
-            return $style;
+            $fontStyle = PdfFont::STYLE_ITALIC;
+        }
+        if (null !== $color) {
+            return PdfStyle::getCellStyle()->setTextColor($color)->setFontStyle($fontStyle);
         }
 
         return null;
     }
 
     /**
-     * Output the given entries to the given table.
-     *
-     * @param PdfGroupTableBuilder $table   the table to update
-     * @param array<string, mixed> $entries the entries to output
+     * @param array<string, mixed> $entries
      */
     private function outputEntries(PdfGroupTableBuilder $table, array $entries): void
     {
@@ -160,9 +134,7 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * Sorts the given entries.
-     *
-     * @param array<string, mixed> $entries the entries to sort
+     * @param array<string, mixed> $entries
      */
     private function sortEntries(array &$entries): void
     {

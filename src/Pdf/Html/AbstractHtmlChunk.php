@@ -183,8 +183,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Gets the parent.
-     *
-     * @return \App\Pdf\Html\HtmlParentChunk|null
      */
     public function getParent(): ?HtmlParentChunk
     {
@@ -207,8 +205,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Gets the style.
-     *
-     * @return \App\Pdf\Html\HtmlStyle|null
      */
     public function getStyle(): ?HtmlStyle
     {
@@ -305,7 +301,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
         // clear
         $this->className = null;
 
-        //check names
+        // check names
         if ($className) {
             $names = \explode(' ', \strtolower($className));
             $className = \array_reduce($names, function (string $carry, string $name) {
@@ -336,8 +332,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Sets the style.
-     *
-     * @param \App\Pdf\Html\HtmlStyle|null $style
      */
     public function setStyle(?HtmlStyle $style): self
     {

@@ -141,7 +141,7 @@ final class CalculationService
      */
     public function createGroupsFromCalculation(Calculation $calculation): array
     {
-        //empty?
+        // empty?
         if ($calculation->isEmpty()) {
             return [$this->createEmptyGroup()];
         }
@@ -205,7 +205,7 @@ final class CalculationService
                 continue;
             }
 
-            //create group if needed
+            // create group if needed
             $id = (int) $group->getId();
             if (!\array_key_exists($id, $groups)) {
                 $groups[$id] = [

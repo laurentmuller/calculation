@@ -163,7 +163,6 @@ class AdminController extends AbstractController
         // form
         $form = $this->createForm(ParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
-            //save properties
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $application->setProperties($data);

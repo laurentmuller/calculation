@@ -83,14 +83,12 @@ services:
     # used to update calculation when groups, categories or items change
     App\Listener\CalculationListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Entity\CalculationGroup'}
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Entity\CalculationCategory'}
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Entity\CalculationItem'}
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\ParentCalculationInterface'}
 
     # used to update TimestampableInterface
     App\Listener\TimestampableListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Listener\TimestampableListener'}
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\TimestampableInterface'}
 
     # used to update user image
     App\Listener\UserImageListener:

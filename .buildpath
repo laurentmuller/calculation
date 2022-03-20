@@ -102,12 +102,12 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/doctrine/persistence/lib/Doctrine/Common">
+	<buildpathentry kind="src" path="vendor/doctrine/persistence/src/Common">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/doctrine/persistence/lib/Doctrine/Persistence">
+	<buildpathentry kind="src" path="vendor/doctrine/persistence/src/Persistence">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

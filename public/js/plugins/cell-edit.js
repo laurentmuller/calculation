@@ -18,10 +18,11 @@
             this.$element = $(element);
             this.options = $.extend(true, CellEdit.DEFAULTS, this.$element.data(), options);
             this.$target = $(this.options.target);
+            this.proxy = $.proxy(this._click, this);
             if (this.$target && this.$target.length === 0) {
                 this.$target = null;
             }
-            this.$element.on('click', $.proxy(this._click, this));
+            this.$element.on('click', this.proxy);
             if (this.options.autoEdit) {
                 this.$element.trigger('click');
             }
@@ -31,7 +32,7 @@
             if (this.$input) {
                 this._cancel($.Event('blur'), false); // jslint ignore:line
             }
-            this.$element.off('click', $.proxy(this._click, this));
+            this.$element.off('click', this.proxy);
             this.$element.removeData('cell-edit');
         }
 

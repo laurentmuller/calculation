@@ -1885,7 +1885,6 @@ const MoveHandler = {
         const $cell = $(this);
         $cell.celledit({
             'inputClass': 'form-control form-control-sm text-right my-n1 mx-0',
-
             'type': 'number',
             'required': true,
             'autoEdit': true,
@@ -1897,7 +1896,6 @@ const MoveHandler = {
             'formatter': function (value) {
                 return Application.formatValue(value);
             },
-
             'onStartEdit': function () {
                 $cell.removeClass('empty-cell');
                 $('.dropdown-menu.show').removeClass('show');

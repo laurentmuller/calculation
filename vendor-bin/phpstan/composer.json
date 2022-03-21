@@ -8,7 +8,7 @@
 		"phpstan/phpstan-symfony" : "^0.12.22",
 		"slam/phpstan-extensions" : "^5.1",
 		"spaze/phpstan-disallowed-calls" : "^1.4",
-		"taptima/phpstan-custom" : "^1.0",
+		"taptima/phpstan-custom" : "^2.0",
 		"phpstan/extension-installer" : "^1.1"
 	},
 	"config" : {

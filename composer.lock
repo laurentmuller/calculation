@@ -2401,12 +2401,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/ObHighchartsBundle.git",
-                "reference": "f552e3038b121cec6fccdf3c9f3dbf98d01ef137"
+                "reference": "b4b3060d0c0513d456a47da9b37c23e5021f565c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/f552e3038b121cec6fccdf3c9f3dbf98d01ef137",
-                "reference": "f552e3038b121cec6fccdf3c9f3dbf98d01ef137",
+                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/b4b3060d0c0513d456a47da9b37c23e5021f565c",
+                "reference": "b4b3060d0c0513d456a47da9b37c23e5021f565c",
                 "shasum": ""
             },
             "require": {
@@ -2459,7 +2459,7 @@
             "support": {
                 "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/master"
             },
-            "time": "2022-03-21T16:10:22+00:00"
+            "time": "2022-03-21T16:14:07+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "86e0bfa898c358896ec9db88c332a7a4",
+    "content-hash": "792f499951fc0223f2ff6ff6c98dba7c",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -541,21 +541,21 @@
         },
         {
             "name": "taptima/phpstan-custom",
-            "version": "1.1",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/taptima/phpstan-custom.git",
-                "reference": "03c34c0caa1a52925c5d878497f7a2d43bf1abb4"
+                "reference": "077f0a9abb487145064670e735a3620e0edd484e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/taptima/phpstan-custom/zipball/03c34c0caa1a52925c5d878497f7a2d43bf1abb4",
-                "reference": "03c34c0caa1a52925c5d878497f7a2d43bf1abb4",
+                "url": "https://api.github.com/repos/taptima/phpstan-custom/zipball/077f0a9abb487145064670e735a3620e0edd484e",
+                "reference": "077f0a9abb487145064670e735a3620e0edd484e",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2",
-                "phpstan/phpstan": "^0.12.2",
+                "php": "^7.4 || ^8.0",
+                "phpstan/phpstan": "^0.12.33",
                 "phpstan/phpstan-doctrine": "^0.12"
             },
             "conflict": {
@@ -568,7 +568,7 @@
                 "doctrine/common": "^2.7",
                 "doctrine/orm": "^2.5",
                 "ergebnis/composer-normalize": "^2.0.2",
-                "friendsofphp/php-cs-fixer": "^2.16",
+                "friendsofphp/php-cs-fixer": "^2.18",
                 "jakub-onderka/php-parallel-lint": "^1.0",
                 "phing/phing": "^2.16.0",
                 "phpstan/phpstan-phpunit": "^0.12",
@@ -610,9 +610,9 @@
             ],
             "support": {
                 "issues": "https://github.com/taptima/phpstan-custom/issues",
-                "source": "https://github.com/taptima/phpstan-custom/tree/1.1"
+                "source": "https://github.com/taptima/phpstan-custom/tree/2.0"
             },
-            "time": "2020-07-30T06:49:43+00:00"
+            "time": "2021-09-14T05:07:57+00:00"
         }
     ],
     "packages-dev": [],
@@ -622,7 +622,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4"
+        "php": "^8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"

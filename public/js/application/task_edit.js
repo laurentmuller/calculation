@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, sortable */
+/* globals sortable */
 
 /**
  * Update the user interface.
@@ -67,7 +67,7 @@ function startDragItems() {
 
 /**
  * Gets the maximum of the maximum column.
- * 
+ *
  * @param {JQuery}
  *            table - the parent table.
  * @returns float - the maximum.
@@ -84,7 +84,7 @@ function getMaxValue($table) {
 
 /**
  * Gets the minimum of the value column.
- * 
+ *
  * @param {JQuery}
  *            table - the parent table.
  * @returns float - the minimum.
@@ -101,7 +101,7 @@ function getMinValue($table) {
 
 /**
  * Gets the next available item index used for the prototype.
- * 
+ *
  * @returns int the next index.
  */
 function getNextItemIndex() {
@@ -116,7 +116,7 @@ function getNextItemIndex() {
 
 /**
  * Gets the next available margin index used for the prototype.
- * 
+ *
  * @returns int the next index.
  */
 function getNextMarginIndex() {
@@ -131,7 +131,7 @@ function getNextMarginIndex() {
 
 /**
  * Gets the item prototype.
- * 
+ *
  * @returns string the prototype.
  */
 function getItemPrototype() {
@@ -141,7 +141,7 @@ function getItemPrototype() {
 
 /**
  * Gets the margin prototype.
- * 
+ *
  * @param {JQuery}
  *            table - the parent table.
  * @returns string the prototype.
@@ -153,7 +153,7 @@ function getMarginPrototype($table) {
 
 /**
  * Adds a new item.
- * 
+ *
  * @return {jQuery} the newly created item for chaining.
  */
 function addItem() {
@@ -187,7 +187,7 @@ function addItem() {
 
 /**
  * Remove an item.
- * 
+ *
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  */
@@ -203,7 +203,7 @@ function removeItem($caller) {
 
 /**
  * Move up an item.
- * 
+ *
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  * @return {jQuery} the item for chaining.
@@ -232,7 +232,7 @@ function moveUpItem($caller) {
 
 /**
  * Move down an item.
- * 
+ *
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  * @return {jQuery} the item for chaining.
@@ -261,7 +261,7 @@ function moveDownItem($caller) {
 
 /**
  * Adds a new margin.
- * 
+ *
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  */
@@ -296,7 +296,7 @@ function addMargin($caller) {
 
 /**
  * Remove a margin (row).
- * 
+ *
  * @param {jQuery}
  *            $caller - the caller.
  */
@@ -311,7 +311,7 @@ function removeMargin($caller) {
 
 /**
  * Sort margins.
- * 
+ *
  * @param {jQuery}
  *            $caller - the caller.
  */
@@ -339,43 +339,6 @@ function sortMargins($caller) {
             return 0;
         }
     }).appendTo($body);
-}
-
-/**
- * Initialize a search for an element.
- * 
- * @param {jQuery}
- *            $element - The element to handle.
- * @param {String]
- *            url - The search URL.
- * @param {string}
- *            error - The message to display on search error.
- * @returns {jQuery} The element for chaining.
- */
-function initSearchElement($element, url, error) {
-    'use strict';
-
-    $element.typeahead({
-        valueField: '',
-        ajax: {
-            url: url
-        },
-        matcher: function () {
-            return true;
-        },
-        grepper: function (data) {
-            return data;
-        },
-        onSelect: function () {
-            $element.select();
-        },
-        onError: function () {
-            const title = $("#edit-form").data("title");
-            Toaster.danger(error, title, $("#flashbags").data());
-        }
-    });
-
-    return $element;
 }
 
 /**
@@ -423,14 +386,20 @@ function initSearchElement($element, url, error) {
 
     // initalize search
     const $form = $("#edit-form");
-    initSearchElement($("#task_unit"), $form.data("unit-search"), $form.data("unit-error"));
-    initSearchElement($("#task_supplier"), $form.data("supplier-search"), $form.data("supplier-error"));
+    $("#task_unit").initTypeahead({
+        url: $form.data("unit-search"),
+        error: $form.data("unit-error")
+    });
+    $("#task_supplier").initTypeahead({
+        url: $form.data("supplier-search"),
+        error: $form.data("supplier-error")
+    });
 
     // start drag & drop
     startDragItems();
 
     // initalize validation
-    $('#edit-form').initValidator();
+    $form.initValidator();
 
     // update UI
     updateUI();

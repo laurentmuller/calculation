@@ -15,9 +15,10 @@ const SearchHelper = {
     init: function () {
         'use strict';
 
-        this.initSearchCustomer();
-        this.initSearchProduct();
-        this.initSearchUnits();
+        const $form = $('#edit-form');
+        this.initSearchCustomer($form);
+        this.initSearchProduct($form);
+        this.initSearchUnits($form);
 
         return this;
     },
@@ -25,35 +26,37 @@ const SearchHelper = {
     /**
      * Initialize the type ahead search customers.
      *
+     * @param {jQuery}
+     *            $form - the parent form.
      * @return {Typeahead} The type ahead instance.
      */
-    initSearchCustomer: function () {
+    initSearchCustomer: function ($form) {
         'use strict';
 
-        const $element = $('#calculation_customer');
-        return $element.initSearch({
-            url: $('#edit-form').data('search-customer'),
-            error: $('#edit-form').data('error-customer')
+        return $('#calculation_customer').initTypeahead({
+            url: $form.data('search-customer'),
+            error: $form.data('error-customer')
         });
     },
 
     /**
      * Initialize the type ahead search products.
      *
+     * @param {jQuery}
+     *            $form - the parent form.
+     *
      * @return {Typeahead} The type ahead instance.
      */
-    initSearchProduct: function () {
+    initSearchProduct: function ($form) {
         'use strict';
 
         const $element = $('#item_search_input');
-        return $element.initSearch({
+        return $element.initTypeahead({
             alignWidth: false,
             valueField: 'description',
             displayField: 'description',
-
-            url: $('#edit-form').data('search-product'),
-            error: $('#edit-form').data('error-product'),
-
+            url: $form.data('search-product'),
+            error: $form.data('error-product'),
             onSelect: function (item) {
                 // copy values
                 $('#item_description').val(item.description);
@@ -78,15 +81,17 @@ const SearchHelper = {
     /**
      * Initialize the type ahead search product units.
      *
+     * @param {jQuery}
+     *            $form - the parent form.
+     *
      * @return {Typeahead} The type ahead instance.
      */
-    initSearchUnits: function () {
+    initSearchUnits: function ($form) {
         'use strict';
 
-        const $element = $('#item_unit');
-        return $element.initSearch({
-            url: $('#edit-form').data('search-unit'),
-            error: $('#edit-form').data('error-unit')
+        return $('#item_unit').initTypeahead({
+            url: $form.data('search-unit'),
+            error: $form.data('error-unit')
         });
     }
 };
@@ -343,7 +348,8 @@ const Application = {
     },
 
     /**
-     * Parse the given value as float. If the parsed valus is NaN, 0 is returned.
+     * Parse the given value as float. If the parsed valus is NaN, 0 is
+     * returned.
      *
      * @param {string}
      *            value - the value to parse.
@@ -668,7 +674,9 @@ const Application = {
      *            string1 - the first string to compare.
      * @param {string}
      *            string2 - the second string to compare.
-     * @return {int} a negative value if string1 comes before string2; a positive value if string1 comes after string2; 0 if they are considered equal.
+     * @return {int} a negative value if string1 comes before string2; a
+     *         positive value if string1 comes after string2; 0 if they are
+     *         considered equal.
      */
     compareStrings: function (string1, string2) {
         'use strict';
@@ -684,7 +692,8 @@ const Application = {
      * Sort items of a category.
      *
      * @param {jQuery}
-     *            $element - the caller element (button or tbody) used to find the category.
+     *            $element - the caller element (button or tbody) used to find
+     *            the category.
      * @return {Application} This instance for chaining.
      */
     sortItems: function ($element) {
@@ -713,7 +722,8 @@ const Application = {
      * Sort categories by name.
      *
      * @param {jQuery}
-     *            $element - the caller element (button, row or thead) used to find the group and the categories.
+     *            $element - the caller element (button, row or thead) used to
+     *            find the group and the categories.
      * @return {Application} This instance for chaining.
      */
     sortCategories: function ($element) {
@@ -909,7 +919,8 @@ const Application = {
 
 
     /**
-     * Display the edit item dialog. This function copy the element to the dialog and display it.
+     * Display the edit item dialog. This function copy the element to the
+     * dialog and display it.
      *
      * @param {jQuery}
      *            $source - the caller element (normally a button).
@@ -945,7 +956,8 @@ const Application = {
     },
 
     /**
-     * Remove a calculation category. If the parent group is empty after deletion, then group is also deleted.
+     * Remove a calculation category. If the parent group is empty after
+     * deletion, then group is also deleted.
      *
      * @param {jQuery}
      *            $element - the caller element (normally a button).
@@ -1263,7 +1275,8 @@ const Application = {
 $.fn.extend({
 
     /**
-     * Gets the index, for a row, of the first item input. For example: calculation_groups_4_items_12_total will return 12.
+     * Gets the index, for a row, of the first item input. For example:
+     * calculation_groups_4_items_12_total will return 12.
      *
      * @returns {int} - the index, if found; -1 otherwise.
      */
@@ -1276,7 +1289,8 @@ $.fn.extend({
     },
 
     /**
-     * Finds an input element that have the name attribute within a given substring.
+     * Finds an input element that have the name attribute within a given
+     * substring.
      *
      * @param {string}
      *            name - the partial attribute name.
@@ -1293,7 +1307,8 @@ $.fn.extend({
      * Fade out and remove the selected element.
      *
      * @param {function}
-     *            callback - the optional function to call after the element is removed.
+     *            callback - the optional function to call after the element is
+     *            removed.
      */
     removeFadeOut: function (callback) {
         'use strict';
@@ -1432,14 +1447,11 @@ $.fn.extend({
         'use strict';
 
         const $element = $(this);
-
-        // default options
         const defaults = {
             valueField: '',
             ajax: {
                 url: options.url
             },
-            // overridden functions (all are set in the server side)
             matcher: function () {
                 return true;
             },
@@ -1570,7 +1582,8 @@ const MoveHandler = {
      * @param {jQuery}
      *            $target - the target group.
      * @param {boolean}
-     *            up - true to move before the target (up); false to move after (down).
+     *            up - true to move before the target (up); false to move after
+     *            (down).
      * @return {jQuery} - the moved group.
      */
     moveGroup: function ($source, $target, up) {
@@ -1669,7 +1682,8 @@ const MoveHandler = {
      * @param {jQuery}
      *            $target - the target category.
      * @param {boolean}
-     *            up - true to move before the target (up); false to move after (down).
+     *            up - true to move before the target (up); false to move after
+     *            (down).
      * @return {jQuery} - the moved category.
      */
     moveCategory: function ($source, $target, up) {
@@ -1762,7 +1776,8 @@ const MoveHandler = {
      * @param {jQuery}
      *            $target - the target item.
      * @param {boolean}
-     *            up - true to move before the target (up); false to move after (down).
+     *            up - true to move before the target (up); false to move after
+     *            (down).
      * @return {jQuery} - the moved item.
      */
     moveItem: function ($source, $target, up) {

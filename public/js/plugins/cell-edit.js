@@ -177,7 +177,6 @@
             this.$element.html(this.html || '');
             this.$element.removeClass(options.cellClass);
             this.$element.parents('tr').removeClass(options.rowClass);
-
             if (notify && $.isFunction(options.onCancelEdit)) {
                 options.onCancelEdit();
             }
@@ -185,17 +184,6 @@
                 this.destroy();
             }
             return this;
-        }
-
-        _removeInput() {
-            if (this.$input) {
-                this.$input.off('blur', this.blurProxy);
-                this.$input.off('input', this.inputProxy);
-                this.$input.off('keydown', this.keydownProxy);
-                this.$input.tooltip('dispose');
-                this.$input.remove();
-                this.$input = null;
-            }
         }
 
         _parse(value) {

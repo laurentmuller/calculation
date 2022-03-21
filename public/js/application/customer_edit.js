@@ -1,12 +1,18 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster */
-
 /**
  * ready function
  */
 (function ($) {
     'use strict';
+
+    // get controls
+    const $form = $('#edit-form');
+    const $title = $('#customer_title');
+    const $address = $('#customer_address');
+    const $zip = $('#customer_zipCode');
+    const $city = $('#customer_city');
+    const addressUrl = $form.data('search-address');
 
     // default typeahead options
     const defaultOptions = {
@@ -15,42 +21,24 @@
         ajax: {
             triggerLength: 2
         },
-        matcher: function () {
-            return true;
-        },
-        grepper: function (data) {
-            return data;
-        },
-        onError: function () {
-            const title = $('#edit-form').data('title');
-            const message = $('#edit-form').data('error');
-            Toaster.danger(message, title, $('#flashbags').data());
-        }
+        error: $form.data('error')
     };
 
-    // get controls
-    const $title = $('#customer_title');
-    const $address = $('#customer_address');
-    const $zip = $('#customer_zipCode');
-    const $city = $('#customer_city');
-    const addressUrl = $('#edit-form').data('search-address');
-
     // title typeahead
-    $title.typeahead($.extend({}, defaultOptions, {
+    $title.initTypeahead($.extend({}, defaultOptions, {
         valueField: false,
         displayField: 'name',
         ajax: {
-            url: $('#edit-form').data('search-title'),
+            url: $form.data('search-title'),
             triggerLength: 1
         },
-
         onSelect: function () {
             $title.select();
         }
     }));
 
     // address typeahead
-    $address.typeahead($.extend({}, defaultOptions, {
+    $address.initTypeahead($.extend({}, defaultOptions, {
         valueField: 'street',
         ajax: {
             url: addressUrl,
@@ -68,7 +56,7 @@
     }));
 
     // zip typeahead
-    $zip.typeahead($.extend({}, defaultOptions, {
+    $zip.initTypeahead($.extend({}, defaultOptions, {
         valueField: 'zip',
         ajax: {
             url: addressUrl,
@@ -85,7 +73,7 @@
     }));
 
     // city typeahead
-    $city.typeahead($.extend({}, defaultOptions, {
+    $city.initTypeahead($.extend({}, defaultOptions, {
         valueField: 'name',
         ajax: {
             url: addressUrl,
@@ -126,5 +114,5 @@
     };
 
     // initialize
-    $('form').initValidator(options);
+    $form.initValidator(options);
 }(jQuery));

@@ -12,6 +12,11 @@
 <!--#include file="plugins/plugin-input.js" -->
 
 /**
+ * Extensions
+ */
+<!--#include file="extensions/typeahead-extensions.js" -->
+
+/**
  * Specific Files
  */
 <!--#include file="application/product_edit.js" -->

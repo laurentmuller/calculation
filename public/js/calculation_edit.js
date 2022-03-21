@@ -15,6 +15,7 @@
  * Extensions files
  */
 <!--#include file="extensions/contextmenu-extensions.js" -->
+<!--#include file="extensions/typeahead-extensions.js" -->
 
 /**
  * Plugin Files

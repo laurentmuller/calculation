@@ -11,7 +11,11 @@
 <!--#include file="plugins/plugin-typeahead.js" -->
 
 /**
+ * Extensions files
+ */
+<!--#include file="extensions/typeahead-extensions.js" -->
+
+/**
  * Specific Files
  */
 <!--#include file="application/customer_edit.js" -->
- 

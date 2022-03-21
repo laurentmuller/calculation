@@ -17,6 +17,11 @@
 <!--#include file="plugins/plugin-input.js" -->
 
 /**
+ * Extensions
+ */
+<!--#include file="extensions/typeahead-extensions.js" -->
+
+/**
  * Specific Files
  */
 <!--#include file="application/task_edit.js" -->

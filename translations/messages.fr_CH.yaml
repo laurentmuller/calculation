@@ -752,6 +752,7 @@ test:
     html: Exportation HTML
     recaptcha: reCAPTCHA
     editor: Editeur Simple
+    tree_view: Bootstrap TreeView
 parameters:
     title: Paramètres
     description: Définition des paramètres de l'application.

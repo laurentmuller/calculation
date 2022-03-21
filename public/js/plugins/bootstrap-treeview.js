@@ -342,8 +342,7 @@
                 const options = that.options;
                 const $item = $group.prev('.list-group-item');
                 const $icon = $item.find('.state-icon');
-
-                const event = $.Event('togglegroup', { // jshint ignore:line
+                const event = new $.Event('togglegroup', {
                     'item': $item,
                     'expanding': $icon.hasClass(options.collapseIcon)});
                 if (!that.trigger(event)) {
@@ -496,7 +495,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event('collapseall', { // jshint ignore:line
+            const event = new $.Event('collapseall', {
                 'items': $items});
             if (!that.trigger(event)) {
                 return that;
@@ -524,8 +523,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-
-            const event = $.Event('expandall', { // jshint ignore:line
+            const event = new $.Event('expandall', {
                 'items': $items});
             if (!that.trigger(event)) {
                 return that;
@@ -561,7 +559,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event('expandtolevel', { // jshint ignore:line
+            const event = new $.Event('expandtolevel', {
                 'level': level,
                 'items': $items});
             if (!that.trigger(event)) {

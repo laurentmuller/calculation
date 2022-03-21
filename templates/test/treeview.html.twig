@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {# parameters #}
-{% set title = 'Bootstrap TreeView' %}
+{% set title = 'test.tree_view' %}
 {% set title_icon = 'table' %}
 
 {% block body -%}
@@ -85,7 +85,7 @@
             <label for="category">Catégorie</label>
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <span class="input-group-text">@</span>
                 </div>
                 <select id="category" class="form-control" multiple="multiple" data-delete="Supprimer la catégorie">
                     {% for category in categories -%}
@@ -116,7 +116,7 @@
 {{ parent() }}
 {{ asset_js('js/plugins/bootstrap-treeview.js') }}
 {{ asset_js('js/vendor/select2/js/select2.js') }}
-{{ asset_js('js/vendor/select2/js/i18n/fr.min.js') }}
+{{ asset_js('js/vendor/select2/js/i18n/fr.js') }}
 {{ asset_js('js/extensions/select2-extensions.js') }}
 {{ asset_js('js/test/treeview.js') }}
 {% endblock %}

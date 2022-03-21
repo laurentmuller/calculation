@@ -71,6 +71,12 @@ services:
     App\Service\EntityDirectoryNamer:
         public: true
 
+    # make public to use with calculation controller
+    # SlopeIt\BreadcrumbBundle\Service\BreadcrumbItemFactory:
+    #     public: true
+    # SlopeIt\BreadcrumbBundle\Service\BreadcrumbBuilder:
+    #     public: true
+
     # validators
     App\Validator\RecaptchaValidator:
         arguments: ['%google_recaptcha_secret_key%']

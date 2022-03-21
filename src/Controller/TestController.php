@@ -562,11 +562,8 @@ class TestController extends AbstractController
         // JSON?
         if ($request->isXmlHttpRequest()) {
             $count = 0;
-
-            $groups = $repository->findAllByCode();
-
             $nodes = [];
-
+            $groups = $repository->findAllByCode();
             foreach ($groups as $group) {
                 $node = [
                     'id' => 'group-' . (string) $group->getId(),

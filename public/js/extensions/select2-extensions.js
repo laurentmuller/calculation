@@ -83,7 +83,7 @@
     $.fn.extend({
         /**
          * Initialize a select with select2 plugin.
-         * 
+         *
          * @param {object}
          *            options - The select2 options.
          */
@@ -125,7 +125,7 @@
                 }).on('change', function () {
                     const $removes = $select.next('.select2').find('.select2-selection__choice__remove');
                     if ($removes.length) {
-                        $removes.text('').addClass('fas fa-times border-left');
+                        $removes.text('').addClass('border-0 fas fa-times m-0 px-1 bg-transparent');
                         const title = $select.data('delete');
                         if (title) {
                             $removes.attr('title', title);
@@ -134,9 +134,7 @@
                 }).css('width', '');
 
                 const select2 = $select.data('select2');
-                if (multiple) {
-                    select2.$container.addClass('form-control');
-                } else {
+                if (!multiple) {
                     select2.on('keypress', function (e) {
                         if (!select2.isOpen()) {
                             select2KeyPress($select, e);

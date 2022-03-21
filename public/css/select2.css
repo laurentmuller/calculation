@@ -8,6 +8,9 @@
     padding: 2px;
 }
 
+.input-group .select2-container--bootstrap4 {
+    flex: 1 1;
+}
 .select2-container--bootstrap4 .select2-results__option {
     color: initial;
     padding: 0 0.75rem;
@@ -25,9 +28,11 @@
 .select2-container .select2-selection--multiple,
 .select2-results__option--selectable {
     cursor: inherit;
+    height: 100%;
 }
+
 .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
-    margin-top: 3px;
+    /*margin-top: 3px;*/
     margin-left: 2px;
     padding-right: 0;
 }

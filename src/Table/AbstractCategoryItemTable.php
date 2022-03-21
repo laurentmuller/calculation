@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\Category;
 use App\Repository\AbstractCategoryItemRepository;
@@ -32,7 +32,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     /**
      * The category parameter name (int).
      */
-    public const PARAM_CATEGORY = 'categoryId';
+    public const PARAM_CATEGORY = 'categoryid';
 
     /**
      * The category repository.

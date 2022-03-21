@@ -310,7 +310,7 @@ class OpenWeatherController extends AbstractController
                     }
                 }
 
-                //close
+                // close
                 $db->commitTransaction();
                 $db->compact();
                 $db->close();

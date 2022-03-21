@@ -1,10 +1,10 @@
-name: PHP-CS-Fixer
+name: PHPUnit
 
 on: [push, pull_request]
 
 jobs:
   build:
-    name: PHP-CS-Fixer with PHP 7.4
+    name: PHPUnit with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +33,7 @@ jobs:
       - name: Download dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin php-cs-fixer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin simple-phpunit install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Run php-cs-fixer
-        run: vendor/bin/php-cs-fixer fix --diff --dry-run --verbose
+      - name: Run PHPUnit
+        run: vendor/bin/simple-phpunit

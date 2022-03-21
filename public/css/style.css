@@ -41,7 +41,7 @@
  * required
  */
 span.required:after,
-label.required:after,
+label.required:not(.form-check-label):after,
 legend.required:after,
 th.required:after,
 td.required:after {

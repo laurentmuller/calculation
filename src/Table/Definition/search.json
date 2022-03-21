@@ -4,13 +4,13 @@
         "visible": false
     },
     {
-        "field": "entityName",
+        "field": "entityname",
         "title": "search.fields.entity",
         "searchable": false,
         "class": "text-cell w-20"
     },
     {
-        "field": "fieldName",
+        "field": "fieldname",
         "title": "search.fields.field",
         "searchable": false,
         "class": "text-cell w-20"
@@ -36,15 +36,15 @@
         "visible": false
     },
     {
-        "field": "showGranted",
+        "field": "showgranted",
         "visible": false
     },
     {
-        "field": "editGranted",
+        "field": "editgranted",
         "visible": false
     },
     {
-        "field": "deleteGranted",
+        "field": "deletegranted",
         "visible": false
     }
 ]

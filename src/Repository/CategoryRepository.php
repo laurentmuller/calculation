@@ -62,7 +62,8 @@ class CategoryRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.group", self::GROUP_ALIAS);
+            ->innerJoin("$alias.group", self::GROUP_ALIAS)
+            ->addSelect(self::GROUP_ALIAS);
     }
 
     /**

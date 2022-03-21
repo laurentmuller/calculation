@@ -35,7 +35,7 @@
         "title": "task.fields.items",
         "sortable": false,
         "searchable": false,
-        "class": "text-operation",
+        "class": "text-operation rowlink-skip",
         "fieldFormatter": "formatCountable"
     },
     {

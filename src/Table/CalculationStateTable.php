@@ -10,11 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use App\Traits\TranslatorTrait;
+use App\Util\FileUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -75,7 +76,7 @@ class CalculationStateTable extends AbstractEntityTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/calculation_state.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'calculation_state.json');
     }
 
     /**

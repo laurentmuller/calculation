@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\CalculationDuplicateTable;
 use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDuplicateDocument;
+use App\Table\CalculationDuplicateTable;
 use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;

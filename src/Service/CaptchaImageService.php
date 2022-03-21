@@ -285,7 +285,7 @@ class CaptchaImageService
             $x = \intdiv($width - $textWidth, 2);
             $y = \intdiv($height - $textHeight, 2) + $size;
 
-            //draw
+            // draw
             /** @psalm-var array $item */
             foreach ($items as $item) {
                 $char = (string) $item['char'];

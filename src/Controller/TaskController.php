@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\TaskTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
@@ -23,6 +22,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\TaskService;
 use App\Spreadsheet\TasksDocument;
+use App\Table\TaskTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;

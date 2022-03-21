@@ -30,6 +30,14 @@ final class FileUtils
     ];
 
     /**
+     * Concat all given segments with the directory separator.
+     */
+    public static function buildPath(string ...$segments): string
+    {
+        return \implode(\DIRECTORY_SEPARATOR, $segments);
+    }
+
+    /**
      * Decode the given file as JSON.
      *
      * @param string $file  the path to the file
@@ -41,7 +49,7 @@ final class FileUtils
      */
     public static function decodeJson(string $file, bool $assoc = true)
     {
-        //file?
+        // file?
         if (!self::isFile($file)) {
             throw new \InvalidArgumentException("The file '$file' can not be found.");
         }
@@ -153,7 +161,7 @@ final class FileUtils
 
         $flags = \SplFileObject::DROP_NEW_LINE;
         if ($skipEmpty) {
-            $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;
+            $flags |= \SplFileObject::DROP_NEW_LINE | \SplFileObject::READ_AHEAD;
         }
 
         try {

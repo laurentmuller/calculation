@@ -15,6 +15,7 @@ namespace App\Chart;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Service\ThemeService;
+use App\Table\CalculationTable;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorTrait;
 use Laminas\Json\Expr;
@@ -26,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class StateChart extends Basechart
+class StateChart extends BaseChart
 {
     use MathTrait;
     use TranslatorTrait;
@@ -64,7 +65,7 @@ class StateChart extends Basechart
         }
 
         $data = \array_map(function (array $state): array {
-            $url = $this->generator->generate('calculation_table', ['stateId' => $state['id']]);
+            $url = $this->generator->generate('calculation_table', [CalculationTable::PARAM_STATE => $state['id']]);
 
             return [
                 'name' => $state['code'],
@@ -166,7 +167,7 @@ class StateChart extends Basechart
             [
                 'data' => $data,
                 'name' => $this->trans('title_by_state', [], 'chart'),
-                'type' => Basechart::TYPE_PIE,
+                'type' => self::TYPE_PIE,
             ],
         ];
     }

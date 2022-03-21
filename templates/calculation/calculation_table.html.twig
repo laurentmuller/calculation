@@ -3,7 +3,6 @@
 {# parameters #}
 {%- set title = title|default('calculation.list.title') -%}
 {%- set title_icon = title_icon|default('calculator') -%}
-{%- set defer_url = defer_url|default(url('calculation_table')) -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
 
@@ -13,15 +12,15 @@
 
 {% block toolbar_actions -%}
 {% if customData.states is defined and customData.states|length > 1 %}
-{%- set state_id = customData.state.id|default(0) -%}
+{%- set stateid = customData.state ? customData.state.id : 0 -%}
 <div class="input-group-append">
-    <button id="stateId" data-value="{{ state_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
+    <button id="stateid" data-value="{{ stateid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
         <i class="fa-regular fa-flag"></i>&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
     </button>
-    <div class="dropdown-menu" aria-labelledby="stateId">
-        {{ _self.output_dropdown('state', 0, state_id, 'datatable.all'|trans) }}
+    <div class="dropdown-menu" aria-labelledby="stateid">
+        {{ _self.output_dropdown('state', 0, stateid, 'datatable.all'|trans) }}
         {% for state in customData.states %}
-        {{ _self.output_dropdown('state', state.id, state_id, state.code) }}
+        {{ _self.output_dropdown('state', state.id, stateid, state.code) }}
         {% endfor %}
     </div>
 </div>
@@ -31,7 +30,7 @@
 {% block global_actions -%}
 {{- _self.item_external(path('calculation_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
 {{- _self.item_external(path('calculation_excel'), 'calculation.list.excel_title', 'file-excel far') }}
-{% if is_granted('ROLE_ADMIN') -%}
+{% if app.user and app.user.username == 'Bibi' -%}
     {{- _self.item_separator() }}
     {{- _self.item_path(path('admin_calculation'), 'calculation.update.title', 'pencil') }}
 {%- endif %}

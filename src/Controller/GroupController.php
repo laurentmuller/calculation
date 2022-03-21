@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\GroupTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Group;
 use App\Form\Group\GroupType;
@@ -22,6 +21,7 @@ use App\Repository\GroupRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GroupsDocument;
+use App\Table\GroupTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;

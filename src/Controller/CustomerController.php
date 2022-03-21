@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\CustomerTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
@@ -21,6 +20,7 @@ use App\Repository\CustomerRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CustomersDocument;
+use App\Table\CustomerTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;

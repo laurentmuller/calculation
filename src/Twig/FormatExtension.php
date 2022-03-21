@@ -163,17 +163,6 @@ final class FormatExtension extends AbstractExtension
     }
 
     /**
-     * Gets the translator.
-     *
-     * @psalm-suppress InvalidNullableReturnType
-     * @psalm-suppress NullableReturnStatement
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-    /**
      * Formats a time for the current locale; ignoring the date part.
      *
      * @param Environment                    $env        the Twig environment

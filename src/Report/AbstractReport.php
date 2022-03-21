@@ -17,6 +17,7 @@ use App\Pdf\PdfDocument;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
 use App\Util\FormatUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract report.
@@ -80,6 +81,14 @@ abstract class AbstractReport extends PdfDocument
     public function booleanFilter($value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
         return $this->extension->booleanFilter($value, $true, $false, $translate);
+    }
+
+    /**
+     * Gets the translator.
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->controller->getTranslator();
     }
 
     /**

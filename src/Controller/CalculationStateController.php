@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\CalculationStateTable;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
@@ -23,6 +22,7 @@ use App\Repository\CalculationStateRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CalculationStatesDocument;
+use App\Table\CalculationStateTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -218,7 +218,7 @@ class CalculationStateController extends AbstractEntityController
         $application = $this->getApplication();
         $id = $application->getDefaultStateId();
         if ($id === $item->getId()) {
-            $application->setProperties([ApplicationServiceInterface::P_DEFAULT_STATE => null]);
+            $application->setProperty(ApplicationServiceInterface::P_DEFAULT_STATE, null);
         }
         parent::deleteFromDatabase($item);
     }

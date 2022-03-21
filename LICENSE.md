@@ -149,6 +149,6 @@ Avant que la modification ne prenne effet, nous vous en informerons par e-mail e
 Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour prendre connaissance de toute modification. Les modifications apportées à la présente politique de confidentialité prennent effet lorsqu'elles sont publiées sur cette page.
 
 ## Nous contacter
-Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu).
+Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
 
 <p align="right"><sup>Dernière mise à jour : Janvier 2022</sup></p>

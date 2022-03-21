@@ -38,7 +38,7 @@ final class SymfonyInfo
         'version',
         'description',
         'homepage',
-        //'type',
+        // 'type',
         // 'keywords',
         // 'authors',
         // 'license',
@@ -217,7 +217,7 @@ final class SymfonyInfo
                         'runtime' => $this->processPackages((array) $content['packages'], false),
                     ];
 
-                    //development packages
+                    // development packages
                     if ($this->isDebug()) {
                         $result['debug'] = $this->processPackages((array) $content['packages-dev'], true);
                     }

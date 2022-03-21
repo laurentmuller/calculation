@@ -109,7 +109,7 @@ class ResetPasswordController extends AbstractController
 
         $token = $this->getTokenFromSession();
         if (null === $token) {
-            throw $this->createNotFoundException($this->trans('reset_not_found_password_token'));
+            throw $this->createNotFoundException($this->trans('reset_not_found_password_token', [], 'security'));
         }
 
         try {
@@ -134,7 +134,7 @@ class ResetPasswordController extends AbstractController
             $plainPassword = (string) $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
-            $this->repository->getEntityManager()->flush();
+            $this->repository->flush();
 
             // the session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();

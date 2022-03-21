@@ -25,6 +25,10 @@ class SearchControllerTest extends AbstractControllerTest
             ['/search', self::ROLE_USER],
             ['/search', self::ROLE_ADMIN],
             ['/search', self::ROLE_SUPER_ADMIN],
+
+            ['/search?search=22', self::ROLE_USER],
+            ['/search?search=22', self::ROLE_ADMIN],
+            ['/search?search=22', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

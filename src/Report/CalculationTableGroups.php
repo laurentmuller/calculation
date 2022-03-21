@@ -39,8 +39,8 @@ class CalculationTableGroups extends PdfTableBuilder
     public function __construct(CalculationReport $parent)
     {
         parent::__construct($parent);
+        $this->setTranslator($parent->getTranslator());
         $this->calculation = $parent->getCalculation();
-        $this->translator = $parent->getTranslator();
     }
 
     /**

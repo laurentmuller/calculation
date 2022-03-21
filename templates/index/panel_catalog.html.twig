@@ -1,0 +1,42 @@
+{% import "macros/_icons.html.twig" as icons %}
+
+{% macro cardEntry(count, title, list_path, list_title, icon) -%}
+<div class="card index-child m-1">
+    <div class="card-body p-2">
+        <div class="card-title mb-1">
+            {%- if list_path -%}
+                {{- icons.link(path(list_path), title, 'card-link', icon, list_title) -}}
+            {% else %}
+                {{- title|trans -}}
+            {%- endif -%}
+        </div>
+        <h3 class="font-weight-normal my-1">
+            {{- count|integer -}}
+        </h3>
+    </div>
+</div>
+{%- endmacro %}
+
+{# list access #}
+{%- set task_path = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) ? 'task_table' : false -%}
+{%- set group_path = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) ? 'group_table' : false -%}
+{%- set product_path = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) ? 'product_table' : false -%}
+{%- set category_path = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) ? 'category_table' : false -%}
+{%- set margin_path = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) ? 'globalmargin_table' : false -%}
+{%- set state_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) ? 'calculationstate_table' : false -%}
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">
+            {{ icons.icon("database", "index.panel_count") }}
+        </h1>
+    </div>
+    <div class="card-body index-parent no-gutters p-2">
+        {{ _self.cardEntry(product_count, 'product.list.title', product_path, 'index.panel_title_product', 'file-alt far') }}
+        {{ _self.cardEntry(task_count, 'task.list.title', task_path, 'index.panel_title_task', 'tasks') }}
+        {{ _self.cardEntry(category_count, 'category.list.title', category_path, 'index.panel_title_category', 'folder far') }}
+        {{ _self.cardEntry(group_count, 'group.list.title', group_path, 'index.panel_title_group', 'code-branch') }}
+        {{ _self.cardEntry(state_count, 'calculationstate.list.title', state_path, 'index.panel_title_state', 'flag far') }}
+        {{ _self.cardEntry(margin_count, 'globalmargin.list.title', margin_path, 'index.panel_title_margin', 'percent') }}
+    </div>
+</div>

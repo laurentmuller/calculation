@@ -38,7 +38,7 @@ trait FileTrait
      */
     public function decodeJsonFile(string $file, bool $assoc = true)
     {
-        //file?
+        // file?
         if (!$this->isFile($file)) {
             throw new \InvalidArgumentException("The file '$file' can not be found.");
         }

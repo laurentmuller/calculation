@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
+use App\Kernel;
 use App\Service\UrlGeneratorService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
@@ -51,6 +52,11 @@ final class FunctionExtension extends AbstractExtension
     private ?string $nonce = null;
 
     /**
+     * The file version.
+     */
+    private int $version;
+
+    /**
      * The real path of the public directory.
      */
     private string $webDir;
@@ -60,9 +66,13 @@ final class FunctionExtension extends AbstractExtension
      */
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator, UrlGeneratorService $generator)
     {
-        $this->webDir = (string) \realpath($kernel->getProjectDir() . '/public');
-        $this->setTranslator($translator);
         $this->generator = $generator;
+        $this->setTranslator($translator);
+
+        $projectDir = $kernel->getProjectDir();
+        $filename = FileUtils::buildPath($projectDir, 'composer.lock');
+        $this->webDir = (string) \realpath(FileUtils::buildPath($projectDir, 'public'));
+        $this->version = $this->fileExists($filename) ? (int) \filemtime($filename) : Kernel::VERSION_ID;
     }
 
     /**
@@ -166,7 +176,7 @@ final class FunctionExtension extends AbstractExtension
         $alternate = $this->getAlternateParameter($parameters);
         $params = $this->reduceParameters($parameters);
 
-        return \sprintf('<link rel="stylesheet%s" href="%s" nonce="%s"%s>', $alternate, $url, $nonce, $params);
+        return \sprintf('<link rel="stylesheet%s" href="%s?v=%d" nonce="%s"%s>', $alternate, $url, $this->version, $nonce, $params);
     }
 
     /**
@@ -185,7 +195,7 @@ final class FunctionExtension extends AbstractExtension
         $url = $this->getAssetUrl($env, $path, $packageName);
         $params = $this->reduceParameters($parameters);
 
-        return \sprintf('<script src="%s" nonce="%s"%s></script>', $url, $nonce, $params);
+        return \sprintf('<script src="%s?v=%d" nonce="%s"%s></script>', $url, $this->version, $nonce, $params);
     }
 
     /**
@@ -260,17 +270,6 @@ final class FunctionExtension extends AbstractExtension
         $size = (array) \getimagesize($fullPath);
 
         return (int) $size[0];
-    }
-
-    /**
-     * Gets the translator.
-     *
-     * @psalm-suppress InvalidNullableReturnType
-     * @psalm-suppress NullableReturnStatement
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**

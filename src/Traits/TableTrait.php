@@ -12,9 +12,10 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\BootstrapTable\AbstractTable;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\TableInterface;
+use App\Table\AbstractTable;
+use App\Table\DataResults;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,20 +39,20 @@ trait TableTrait
             $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $subject);
         }
 
-        // update request parameters
-        $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-        if (\is_string($view)) {
-            $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
-        }
-
-        // check empty
-        if ($emptyMessage = $table->checkEmpty()) {
-            $this->infoTrans($emptyMessage);
-
-            return $this->redirectToHomePage();
-        }
-
         try {
+            // update request parameters
+            $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+            if (\is_string($view)) {
+                $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
+            }
+
+            // check empty
+            if ($message = $table->checkEmpty()) {
+                $this->infoTrans($message);
+
+                return $this->redirectToHomePage();
+            }
+
             // get query and results
             $query = $table->getDataQuery($request);
             $results = $table->processQuery($query);
@@ -76,7 +77,7 @@ trait TableTrait
             $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE, $query->view);
 
             return $response;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $status = Response::HTTP_BAD_REQUEST;
             $parameters = [
                 'result' => false,
@@ -95,6 +96,20 @@ trait TableTrait
     }
 
     /**
+     * @param string|int|float|bool|null $default the default value if the result parameter is null
+     */
+    protected function saveCookie(Response $response, DataResults $results, string $key, $default = null, string $prefix = '', string $modify = '+1 year'): void
+    {
+        /** @psalm-var string|int|float|bool|array|null $value */
+        $value = $results->getParams($key, $default);
+        if (null !== $value) {
+            $this->setCookie($response, $key, $value, $prefix, $modify);
+        } else {
+            $this->clearCookie($response, $key, $prefix);
+        }
+    }
+
+    /**
      * @param string|int|float|bool|null $default the default value if the input key does not exist
      *
      * @return string|int|float|bool|null the request value, the cookie value or the default value
@@ -105,10 +120,9 @@ trait TableTrait
         $input = Utils::getRequestInputBag($request);
         $value = $input->get($key);
         if (null === $value) {
-            $cookies = $request->cookies;
             $name = $this->getCookieName($key, $prefix);
             // @phpstan-ignore-next-line
-            $value = $cookies->get($name, $default);
+            $value = $request->cookies->get($name, $default);
             if (null !== $value) {
                 $input->set($key, $value);
             }

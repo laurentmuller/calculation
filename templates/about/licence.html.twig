@@ -1,28 +1,32 @@
 {% extends 'cards/card_base.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title = 'about.licence' -%}
 {%- set title_icon = 'info-circle' -%}
 {%- set accepted = app.request.cookies.get('POLICY_ACCEPTED') -%}
+{%- set authenticate = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 
-{% block card_container_class '' %}
+{% block card_container_class authenticate ? '' : ' mt-3' %}
+{% block navigation -%}{% if authenticate %}{{ parent() }}{% endif %}{%- endblock %}
 
 {% block card_body %}
 {% include 'about/licence_content.html.twig' %}
 {% endblock %}
 
 {% block card_footer %}
-{{ icons.homepage() }}
-{% if not accepted %}
-<button type="button" class="btn btn-form btn-success btn-accept" data-target="{{ path('homepage') }}" title="{{ 'cookiebanner.close_title'|trans }}">
-    {{- 'cookiebanner.accept'|trans -}}
-</button>
+{% if authenticate %}
+    {{ icons.homepage() }}
+    {% if not accepted %}
+    <button type="button" class="btn btn-form btn-success btn-accept" data-target="{{ path('homepage') }}" title="{{ 'cookiebanner.close_title'|trans }}">
+        {{- 'cookiebanner.accept'|trans -}}
+    </button>
+    {% endif %}
 {% endif %}
 {{ icons.link(path('about_policy'), 'about.policy', 'btn btn-form btn-outline-info') }}
-{% if app.debug or app_mode == 'dev' %}
-    {{ icons.button_pdf('about_licence_pdf') }}
+{{ icons.button_pdf('about_licence_pdf') }}
+{% if not authenticate %}
+    {{ icons.link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
 {% endif %}
 {% endblock %}
 

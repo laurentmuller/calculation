@@ -26,7 +26,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class MonthChart extends Basechart
+class MonthChart extends BaseChart
 {
     use MathTrait;
     use TranslatorTrait;
@@ -79,7 +79,7 @@ class MonthChart extends Basechart
         $click = $this->getClickExpression();
 
         // update
-        $this->setType(Basechart::TYPE_COLUMN)
+        $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
             ->hideLegend()
             ->xAxis($xAxis)

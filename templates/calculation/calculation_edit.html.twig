@@ -26,20 +26,18 @@
 {%- set title_parameters = new ? {} : {'%id%': item.id|identifier} -%}
 {%- set form_attr = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- if editable -%}
-{%- set form_attr = form_attr|merge({
-                               'data-title': title|trans(title_parameters),
-                               'data-update': url('ajax_update'),
-                               'data-edit': (new ? app.defaultEdit : false)|json_encode,
-                               'data-search-customer': url('ajax_search_customer'),
-                               'data-search-product': url('ajax_search_product'),
-                               'data-search-unit': url('ajax_search_unit'),
-                               'data-error-update': 'calculation.edit.error.update_total'|trans,
-                               'data-error-customer': 'calculation.edit.error.search_customer'|trans,
-                               'data-error-product': 'calculation.edit.error.search_product'|trans,
-                               'data-error-unit': 'calculation.edit.error.search_unit'|trans,
-                               'data-error-margin': 'calculation.edit.error.user_margin'|trans,
-
-                               }) -%}
+    {%- set form_attr = form_attr|merge({
+        'data-title': title|trans(title_parameters),
+        'data-update': url('ajax_update'),
+        'data-edit': (new ? app.defaultEdit : false)|json_encode,
+        'data-search-customer': url('ajax_search_customer'),
+        'data-search-product': url('ajax_search_product'),
+        'data-search-unit': url('ajax_search_unit'),
+        'data-error-update': 'calculation.edit.error.update_total'|trans,
+        'data-error-customer': 'calculation.edit.error.search_customer'|trans,
+        'data-error-product': 'calculation.edit.error.search_product'|trans,
+        'data-error-unit': 'calculation.edit.error.search_unit'|trans,
+        'data-error-margin': 'calculation.edit.error.user_margin'|trans}) -%}
 {%- endif -%}
 
 {# cancel path #}

@@ -72,15 +72,20 @@ class PivotTableFactory
     /**
      * Constructor.
      *
-     * @param array  $dataset the dataset where each entry is also an array of field/value
-     * @param string $title   the table title
+     * @psalm-param class-string<T>|null $aggregatorClass
+     *
+     * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class
      */
-    public function __construct(array $dataset, ?string $title = null)
+    public function __construct(array $dataset, ?string $title = null, ?string $aggregatorClass = null)
     {
-        $this->title = $title;
+        $aggregatorClass ??= SumAggregator::class;
+        if (!\is_subclass_of($aggregatorClass, AbstractAggregator::class)) {
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractAggregator::class, $aggregatorClass));
+        }
+
         $this->dataset = $dataset;
-        // @phpstan-ignore-next-line
-        $this->aggregatorClass = SumAggregator::class;
+        $this->title = $title;
+        $this->aggregatorClass = $aggregatorClass;
     }
 
     /**
@@ -217,10 +222,8 @@ class PivotTableFactory
 
     /**
      * Gets the dataset.
-     *
-     * @return array
      */
-    public function getDataset()
+    public function getDataset(): array
     {
         return $this->dataset;
     }
@@ -256,14 +259,13 @@ class PivotTableFactory
     /**
      * Creates a new instance.
      *
-     * @param array  $dataset the dataset
-     * @param string $title   the table title
+     * @param class-string<AbstractAggregator>|null $aggregatorClass
      *
-     * @psalm-return PivotTableFactory<AbstractAggregator>
+     * @return PivotTableFactory<AbstractAggregator>
      */
-    public static function instance(array $dataset, ?string $title = null): self
+    public static function instance(array $dataset, ?string $title = null, ?string $aggregatorClass = null): self
     {
-        return new self($dataset, $title);
+        return new self($dataset, $title, $aggregatorClass);
     }
 
     /**
@@ -389,7 +391,7 @@ class PivotTableFactory
     /**
      * Checks if all elements of the given array are instance of PivotField class.
      *
-     * @param array|mixed $fields the array to validate
+     * @param mixed $fields the single value or an array to validate
      *
      * @return PivotField[] the pivot fields
      *
@@ -403,7 +405,6 @@ class PivotTableFactory
 
         /** @var PivotField[] $result */
         $result = [];
-
         foreach ($fields as $field) {
             if (!$field instanceof PivotField) {
                 throw new UnexpectedTypeException($field, PivotField::class);

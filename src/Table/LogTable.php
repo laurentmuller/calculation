@@ -10,11 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\Log;
 use App\Interfaces\EntityVoterInterface;
 use App\Service\LogService;
+use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -142,7 +143,7 @@ class LogTable extends AbstractTable implements \Countable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/log.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'log.json');
     }
 
     /**
@@ -167,7 +168,7 @@ class LogTable extends AbstractTable implements \Countable
             return $results;
         }
 
-        /** @var Log[] $entities */
+        /** @var array<Log> $entities */
         $entities = $entries[LogService::KEY_LOGS];
         if (empty($entities)) {
             $results->status = Response::HTTP_PRECONDITION_FAILED;

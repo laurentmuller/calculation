@@ -172,7 +172,8 @@ class CalculationRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.state", self::STATE_ALIAS);
+            ->innerJoin("$alias.state", self::STATE_ALIAS)
+            ->addSelect(self::STATE_ALIAS);
     }
 
     /**
@@ -262,7 +263,7 @@ class CalculationRepository extends AbstractRepository
             $item['margin'] = (float) $item['margin'];
         }
 
-        //reverse
+        // reverse
         return \array_reverse($result);
     }
 

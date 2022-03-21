@@ -408,7 +408,7 @@ class SwissPostUpdater
             $this->database->commitTransaction();
         }
 
-        //close
+        // close
         $this->closeStream();
 
         return true;
@@ -500,7 +500,7 @@ class SwissPostUpdater
     private function updateValidity(): void
     {
         if ($this->results->isValid() && null !== $validity = $this->results->getValidity()) {
-            $this->application->setProperties([ApplicationServiceInterface::P_LAST_IMPORT => $validity]);
+            $this->application->setProperty(ApplicationServiceInterface::P_LAST_IMPORT, $validity);
         }
     }
 

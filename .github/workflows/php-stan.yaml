@@ -1,15 +1,15 @@
-name: PHP-Stan
+name: PHPStan
 
 on: [push, pull_request]
 
 jobs:
-  phpstan:
+  build:
     name: PHPStan with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2
@@ -37,4 +37,3 @@ jobs:
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze --no-progress
-

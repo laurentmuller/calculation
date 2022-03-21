@@ -24,6 +24,7 @@ use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TranslatorFlashMessageTrait;
 use App\Util\Utils;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
@@ -111,11 +112,20 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Gets a boolean container parameter by its name.
+     */
+    public function getBoolParameter(string $name): bool
+    {
+        /* @psalm-var bool */
+        return (bool) $this->getParameter($name);
+    }
+
+    /**
      * Gets the request stack.
      */
     public function getRequestStack(): RequestStack
     {
-        /** @var RequestStack $requestStack */
+        /** @psalm-var RequestStack $requestStack */
         $requestStack = $this->container->get('request_stack');
 
         return $requestStack;
@@ -138,7 +148,7 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if (!$this->translator instanceof TranslatorInterface) {
+        if (null === $this->translator) {
             $this->translator = $this->getService(TranslatorInterface::class);
         }
 
@@ -194,7 +204,7 @@ abstract class AbstractController extends BaseController
      */
     public function isDebug(): bool
     {
-        return (bool) $this->getParameter('kernel.debug');
+        return $this->getBoolParameter('kernel.debug');
     }
 
     /**
@@ -203,6 +213,19 @@ abstract class AbstractController extends BaseController
     public function redirectToHomePage(): RedirectResponse
     {
         return $this->redirectToRoute(self::HOME_PAGE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
+    {
+        $previous = parent::setContainer($container);
+        if (null === $this->translator) {
+            $this->setTranslator($this->getService(TranslatorInterface::class));
+        }
+
+        return $previous;
     }
 
     /**
@@ -305,11 +328,11 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets a container parameter by its name.
+     * Gets a string container parameter by its name.
      */
     protected function getStringParameter(string $name): string
     {
-        /** @var string $value */
+        /** @psalm-var string $value */
         $value = $this->getParameter($name);
 
         return $value;

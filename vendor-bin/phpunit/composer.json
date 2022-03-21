@@ -1,6 +1,7 @@
 {
     "require": {
 		"php" : "^7.4",
+		"phpunit/phpunit": "^9.5",
         "symfony/phpunit-bridge": "^6.0"
     },
 	"config" : {

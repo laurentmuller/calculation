@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\BootstrapTable\DataResults;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,32 +22,26 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait CookieTrait
 {
+    /**
+     * Clears a cookie in the browser.
+     */
     protected function clearCookie(Response $response, string $key, string $prefix = ''): void
     {
         $name = $this->getCookieName($key, $prefix);
         $response->headers->clearCookie($name);
     }
 
+    /**
+     * Gets the cookie name.
+     */
     protected function getCookieName(string $key, string $prefix = ''): string
     {
         return '' === $prefix ? \strtoupper($key) : \strtoupper("{$prefix}_{$key}");
     }
 
     /**
-     * @param string|int|float|bool|null $default the default value if the result parameter is null
-     */
-    protected function saveCookie(Response $response, DataResults $results, string $key, $default = null, string $prefix = '', string $modify = '+1 year'): void
-    {
-        /** @psalm-var string|int|float|bool|array|null $value */
-        $value = $results->getParams($key, $default);
-        if (null !== $value) {
-            $this->setCookie($response, $key, $value, $prefix, $modify);
-        } else {
-            $this->clearCookie($response, $key, $prefix);
-        }
-    }
-
-    /**
+     * Sets a cookie in the browser.
+     *
      * @param mixed $value the cookie value
      */
     protected function setCookie(Response $response, string $key, $value, string $prefix = '', string $modify = '+1 year'): void

@@ -140,7 +140,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
                 }
             }
 
-            //check loaded files
+            // check loaded files
             $expected = \array_reduce($plugins, function (int $carry, \stdClass $plugin) {
                 if (\property_exists($plugin, 'disabled') && null !== $plugin->disabled && $plugin->disabled) {
                     return $carry;

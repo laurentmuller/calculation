@@ -10,12 +10,13 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Util\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +33,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * The state parameter name (int).
      */
-    public const PARAM_STATE = 'stateId';
+    public const PARAM_STATE = 'stateid';
 
     /**
      * The calculation state repository.
@@ -80,16 +81,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Gets calculation states.
      *
-     * @psalm-return array<array{
-     *      id: int,
-     *      code: string,
-     *      editable: boolean,
-     *      color: string,
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      margin: float,
-     *      marginAmount: float}>
+     * @psalm-return array<array{id: int, code: string, editable: bool, color: string, count: int, items: float, total: float, margin: float, marginAmount: float}>
      */
     protected function getCalculationStates(): array
     {
@@ -101,7 +93,7 @@ class CalculationTable extends AbstractEntityTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/calculation.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'calculation.json');
     }
 
     /**

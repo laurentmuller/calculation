@@ -164,8 +164,7 @@ class PivotController extends AbstractController
         $title = $this->trans('calculation.list.title');
 
         // create pivot table
-        return PivotTableFactory::instance($dataset, $title)
-            ->setAggregatorClass(SumAggregator::class)
+        return PivotTableFactory::instance($dataset, $title, SumAggregator::class)
             ->setColumnFields($columns)
             ->setRowFields($rows)
             ->setDataField($data)

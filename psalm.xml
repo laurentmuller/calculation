@@ -3,7 +3,9 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         allowStringToStandInForClass="true"
+        findUnusedPsalmSuppress="true"
         resolveFromConfigFile="true"
+        phpVersion="7.4"
         errorLevel="1">
 
     <projectFiles>
@@ -12,6 +14,25 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <!-- These classes have been added in PHP 8.1 -->
+                <referencedClass name="UnitEnum"/>
+                <referencedClass name="BackedEnum"/>
+                <referencedClass name="ReflectionIntersectionType"/>
+            </errorLevel>
+        </UndefinedClass>
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <!-- These classes have been added in PHP 8.1 -->
+                <referencedClass name="UnitEnum"/>
+                <referencedClass name="BackedEnum"/>
+                <referencedClass name="ReflectionIntersectionType"/>
+            </errorLevel>
+        </UndefinedDocblockClass>
+    </issueHandlers>
 
     <plugins>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin" />

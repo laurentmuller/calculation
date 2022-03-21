@@ -1,15 +1,15 @@
-name: PHP-Units
+name: Rector
 
 on: [push, pull_request]
 
 jobs:
-  phpunit:
-    name: PHPUnit with PHP 7.4
+  build:
+    name: Rector with PHP 7.4
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2
@@ -33,7 +33,7 @@ jobs:
       - name: Download dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin simple-phpunit install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin rector install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Run PHPUnit
-        run: vendor/bin/simple-phpunit
+      - name: Run Rector
+        run: vendor/bin/rector process src --dry-run

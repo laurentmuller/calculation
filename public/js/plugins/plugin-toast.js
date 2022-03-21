@@ -617,7 +617,9 @@
                     const timeout = options.timeout;
                     const endTime = new Date().getTime() + timeout;
                     const $progress = $toast.find('.progress-bar');
-                    $toast.createInterval(that.updateProgress, 10, $progress, endTime, timeout);
+                    if ($progress.length) {
+                        $toast.createInterval(that.updateProgress, 10, $progress, endTime, timeout);
+                    }
                 }
             }).on('hide.bs.toast', function () {
                 if (options.progress) {
@@ -636,20 +638,20 @@
          * Update the progress bar.
          *
          * @param {jQuery}
-         *            $progress - the progress bar to update.
+         *            $progress - The progress bar to update.
          * @param {Number}
          *            endTime - The end time.
          * @param {Number}
          *            timeout - The time out.
          */
         updateProgress: function($progress, endTime, timeout) {
-            let percent = (endTime - new Date().getTime() / timeout) * 100;
-            percent = Number.parseInt(percent, 10);
+            const time = new Date().getTime();
+            const delta = (endTime - time) / timeout;
+            const percent = Number.parseInt(delta * 100, 10);
             $progress.css('width', percent + '%');
             if (percent === 0) {
                 $progress.parents('.toast').removeInterval();
             }
         }
     };
-
 }(window, jQuery));

@@ -707,7 +707,7 @@ class PdfTableBuilder implements PdfConstantsInterface
             return;
         }
 
-        //default
+        // default
         $parent->MultiCell($bounds->width(), $height, $text, self::BORDER_NONE, $alignment);
     }
 

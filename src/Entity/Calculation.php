@@ -453,7 +453,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      *
      * @return \Generator<CalculationItem>
      */
-    public function getItems(): \Traversable
+    public function getItems(): \Generator
     {
         foreach ($this->groups as $group) {
             foreach ($group->getCategories() as $category) {

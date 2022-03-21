@@ -80,7 +80,7 @@ class SwitchUserListener implements EventSubscriberInterface
             $id = 'user.switch.take.default';
         }
 
-        //display message
+        // display message
         $this->succesTrans($id, [
             '%orignal%' => $original,
             '%name%' => $name,

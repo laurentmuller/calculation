@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\CategoryTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\Category\CategoryType;
@@ -24,6 +23,7 @@ use App\Repository\TaskRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CategoriesDocument;
+use App\Table\CategoryTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;

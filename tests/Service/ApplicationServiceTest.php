@@ -62,9 +62,30 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
         $this->assertNull($service->getDefaultCategory());
         $this->assertEquals(0, $service->getDefaultCategoryId());
 
-        $this->assertEquals(3.0, $service->getMinMargin());
+        $this->assertNull($service->getDefaultProduct());
+        $this->assertEquals(0, $service->getDefaultProductId());
+        $this->assertEquals(0, $service->getDefaultQuantity());
+        $this->assertTrue($service->isDefaultEdit());
+
+        $this->assertEquals(1.1, $service->getMinMargin());
         $this->assertEquals(-1, $service->getMinStrength());
         $this->assertEquals(4000, $service->getMessageTimeout());
+
+        $this->assertTrue($service->isPanelCatalog());
+        $this->assertTrue($service->isPanelMonth());
+        $this->assertTrue($service->isPanelState());
+
+        $this->assertEquals('edit', $service->getEditAction());
+        $this->assertTrue($service->isActionEdit());
+        $this->assertFalse($service->isActionNone());
+        $this->assertFalse($service->isActionShow());
+
+        $this->assertEquals('bottom-right', $service->getMessagePosition());
+        $this->assertEquals(4000, $service->getMessageTimeout());
+        $this->assertFalse($service->isMessageSubTitle());
+
+        $this->assertEquals(-1, $service->getMinStrength());
+        $this->assertEquals('table', $service->getDisplayMode());
     }
 
     /**

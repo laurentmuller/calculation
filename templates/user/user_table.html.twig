@@ -3,7 +3,6 @@
 {# parameters #}
 {%- set title = 'user.list.title' -%}
 {%- set title_icon = 'user far' -%}
-{%- set defer_url = url('user_table') -%}
 {%- set object_type = ENTITY_USER -%}
 {%- set attributes = attributes|default({})|merge({'user-id': app.user.id}) -%}
 

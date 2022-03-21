@@ -12,6 +12,24 @@
 {{ icons.linkExternal(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
 {%- endmacro %}
 
+{% macro add_entity_entry(prefix, icon, is_list, is_add, is_export, parameters=[]) -%}
+{% if is_list  %}
+<li>{{ _self.link(prefix ~ '_table', prefix ~ '.list.title', icon) }}
+    {% if is_add or is_export %}
+    <ul>
+        {% if is_add %}
+        <li>{{ _self.link(prefix ~ '_add', prefix ~ '.add.title', 'file far', null, parameters) }}</li>
+        {% endif %}
+        {% if is_export %}
+        <li>{{ _self.linkExternal(prefix ~ '_pdf', prefix ~ '.list.pdf_title', 'file-pdf far') }}</li>
+        <li>{{ _self.linkExternal(prefix ~ '_excel', prefix ~ '.list.excel_title', 'file-excel far') }}</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</li>
+{% endif %}
+{%- endmacro %}
+
 {# parameters #}
 {%- set title = 'index.menu_site_map' -%}
 {%- set title_icon = 'sitemap' -%}
@@ -31,9 +49,17 @@
 {%- set is_add_product = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
 {%- set is_export_product = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
 
+{%- set is_list_task = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) -%}
+{%- set is_add_task = is_granted(ATTRIBUTE_ADD, ENTITY_TASK) -%}
+{%- set is_export_task = is_granted(ATTRIBUTE_EXPORT, ENTITY_TASK) -%}
+
 {%- set is_list_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
 {%- set is_add_category = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
 {%- set is_export_category = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
+
+{%- set is_list_group = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) -%}
+{%- set is_add_group = is_granted(ATTRIBUTE_ADD, ENTITY_GROUP) -%}
+{%- set is_export_group = is_granted(ATTRIBUTE_EXPORT, ENTITY_GROUP) -%}
 
 {%- set is_list_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
 {%- set is_add_state = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
@@ -43,9 +69,9 @@
 {%- set is_add_margin = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_export_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
 
-{%- set is_list_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
-{%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_dev -%}
-{%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_list_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_bibi -%}
+{%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_bibi -%}
+{%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_bibi -%}
 
 {# class #}
 {% block container_class 'container-fluid' %}
@@ -91,85 +117,17 @@
                 </ul>
             </li>
             {% endif %}
-            {%- if is_list_product or is_list_category or is_list_state or is_list_margin or is_list_customer -%}
+            {%- if is_list_product or is_list_task or is_list_category or is_list_group or is_list_state or is_list_margin or is_list_customer -%}
             <li>
                 <span class="rounded">{{- icons.icon('database', 'index.menu_data') -}}</span>
                 <ul>
-                    {% if is_list_product  %}
-                    <li>{{ _self.link('product_table', 'product.list.title', 'file-alt far') }}
-                        {% if is_add_product or is_export_product %}
-                        <ul>
-                            {% if is_add_product %}
-                            <li>{{ _self.link('product_add', 'product.add.title', 'file far', null, route_params) }}</li>
-                            {% endif %}
-                            {% if is_export_product %}
-                            <li>{{ _self.linkExternal('product_pdf', 'product.list.pdf_title', 'file-pdf far') }}</li>
-                            <li>{{ _self.linkExternal('product_excel', 'product.list.excel_title', 'file-excel far') }}</li>
-                            {% endif %}
-                        </ul>
-                        {% endif %}
-                    </li>
-                    {% endif %}
-                    {% if is_list_category  %}
-                    <li>{{ _self.link('category_table', 'category.list.title', 'folder far') }}
-                        {% if is_add_category or is_export_category %}
-                        <ul>
-                            {% if is_add_category %}
-                            <li>{{ _self.link('category_add', 'category.add.title', 'file far', null, route_params) }}</li>
-                            {% endif %}
-                            {% if is_export_category %}
-                            <li>{{ _self.linkExternal('category_pdf', 'category.list.pdf_title', 'file-pdf far') }}</li>
-                            <li>{{ _self.linkExternal('category_excel', 'category.list.excel_title', 'file-excel far') }}</li>
-                            {% endif %}
-                        </ul>
-                        {% endif %}
-                    </li>
-                    {% endif %}
-                    {% if is_list_state  %}
-                    <li>{{ _self.link('calculationstate_table', 'calculationstate.list.title', 'flag far') }}
-                        {% if is_add_state or is_export_state %}
-                        <ul>
-                            {% if is_add_state %}
-                            <li>{{ _self.link('calculationstate_add', 'calculationstate.add.title', 'file far', null, route_params) }}</li>
-                            {% endif %}
-                            {% if is_export_state %}
-                            <li>{{ _self.linkExternal('calculationstate_pdf', 'calculationstate.list.pdf_title', 'file-pdf far') }}</li>
-                            <li>{{ _self.linkExternal('calculationstate_excel', 'calculationstate.list.excel_title', 'file-excel far') }}</li>
-                            {% endif %}
-                        </ul>
-                        {% endif %}
-                    </li>
-                    {% endif %}
-                    {% if is_list_margin %}
-                    <li>{{ _self.link('globalmargin_table', 'globalmargin.list.title', 'percent') }}
-                        {% if is_add_margin or is_export_margin %}
-                        <ul>
-                            {% if is_add_margin %}
-                            <li>{{ _self.link('globalmargin_add', 'globalmargin.add.title', 'file far', null, route_params) }}</li>
-                            {% endif %}
-                            {% if is_export_margin %}
-                            <li>{{ _self.linkExternal('globalmargin_pdf', 'globalmargin.list.pdf_title', 'file-pdf far') }}</li>
-                            <li>{{ _self.linkExternal('globalmargin_excel', 'globalmargin.list.excel_title', 'file-excel far') }}</li>
-                            {% endif %}
-                        </ul>
-                        {% endif %}
-                    </li>
-                    {% endif %}
-                    {% if is_list_customer %}
-                    <li>{{ _self.link('customer_table', 'customer.list.title', 'address-card far') }}
-                        {% if is_add_customer or is_export_customer %}
-                        <ul>
-                            {% if is_add_customer %}
-                            <li>{{ _self.link('customer_add', 'customer.add.title', 'file far', null, route_params) }}</li>
-                            {% endif %}
-                            {% if is_export_customer %}
-                            <li>{{ _self.linkExternal('customer_pdf', 'customer.list.pdf_title', 'file-pdf far') }}</li>
-                            <li>{{ _self.linkExternal('customer_excel', 'customer.list.excel_title', 'file-excel far') }}</li>
-                            {% endif %}
-                        </ul>
-                        {% endif %}
-                    </li>
-                    {% endif %}
+                    {{ _self.add_entity_entry('product', 'file-alt far', is_list_product, is_add_product, is_export_product, route_params) }}
+                    {{ _self.add_entity_entry('task', 'tasks', is_list_task, is_add_task, is_export_task, route_params) }}
+                    {{ _self.add_entity_entry('category', 'folder far', is_list_category, is_add_category, is_export_category, route_params) }}
+                    {{ _self.add_entity_entry('group', 'code-branch', is_list_group, is_add_group, is_export_group, route_params) }}
+                    {{ _self.add_entity_entry('calculationstate', 'flag far', is_list_state, is_add_state, is_export_state, route_params) }}
+                    {{ _self.add_entity_entry('globalmargin', 'percent', is_list_margin, is_add_margin, is_export_margin, route_params) }}
+                    {{ _self.add_entity_entry('customer', 'address-card far', is_list_customer, is_add_customer, is_export_customer, route_params) }}
                 </ul>
             </li>
             {% endif %}
@@ -177,11 +135,17 @@
                 <span>{{- icons.icon('tools', 'index.menu_tools') -}}</span>
                 <ul>
                     <li>{{ _self.link('search', 'search.title', 'search') }}</li>
-                    {% if is_admin %}
+                    {% if is_bibi %}
                     <li>{{ _self.link('admin_calculation', 'calculation.update.title', 'pencil') }}</li>
+                    {% endif %}
+                    {% if is_admin %}
+                    <li>{{ _self.link('admin_product', 'product.update.title', 'file-alt far') }}</li>
+                    {% endif %}
                     <li>{{ _self.link('below_table', 'below.title', 'percent') }}</li>
                     <li>{{ _self.link('duplicate_table', 'duplicate.title', 'copy far') }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
+                    {% if is_list_task %}
+                    <li>{{ _self.link('task_compute', 'taskcompute.title', 'keyboard', null, route_params|merge({'id': 0})) }}</li>
                     {% endif %}
                 </ul>
             </li>

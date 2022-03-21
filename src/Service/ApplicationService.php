@@ -363,6 +363,14 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Returns a value indicating number of displayed calculation in the home page.
+     */
+    public function getPanelCalculation(): int
+    {
+        return $this->getPropertyInteger(self::P_PANEL_CALCULATION, self::DEFAULT_PANEL_CALCULATION);
+    }
+
+    /**
      * Gets all properties.
      *
      * @param string[] $excluded the property keys to exclude
@@ -406,6 +414,11 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
             self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
             self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
+
+            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
+            self::P_PANEL_STATE => $this->isPanelState(),
+            self::P_PANEL_MONTH => $this->isPanelMonth(),
+            self::P_PANEL_CATALOG => $this->isPanelCatalog(),
         ];
 
         // exlude keys
@@ -628,6 +641,30 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Returns a value indicating if the catalog panel is displayed in the home page.
+     */
+    public function isPanelCatalog(): bool
+    {
+        return $this->isPropertyBoolean(self::P_PANEL_CATALOG, true);
+    }
+
+    /**
+     * Returns a value indicating if the month panel is displayed in the home page.
+     */
+    public function isPanelMonth(): bool
+    {
+        return $this->isPropertyBoolean(self::P_PANEL_MONTH, true);
+    }
+
+    /**
+     * Returns a value indicating if the state panel is displayed in the home page.
+     */
+    public function isPanelState(): bool
+    {
+        return $this->isPropertyBoolean(self::P_PANEL_STATE, true);
+    }
+
+    /**
      * Gets a value indicating if output the customer address in the PDF documents.
      *
      * @return bool true to output; false if none
@@ -665,7 +702,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param array<string, mixed> $properties the properties to set
      */
-    public function setProperties(array $properties): void
+    public function setProperties(array $properties): self
     {
         if (!empty($properties)) {
             $repository = $this->getRepository();
@@ -680,6 +717,19 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             // reload
             $this->updateAdapter();
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets a single property value.
+     *
+     * @param string $name  the property name
+     * @param mixed  $value the property value
+     */
+    public function setProperty(string $name, $value): self
+    {
+        return $this->setProperties([$name => $value]);
     }
 
     /**

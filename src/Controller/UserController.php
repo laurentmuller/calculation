@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\UserTable;
 use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Form\User\UserChangePasswordType;
@@ -31,6 +30,7 @@ use App\Response\SpreadsheetResponse;
 use App\Security\EntityVoter;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
+use App\Table\UserTable;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -100,7 +100,7 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($item)) {
             $this->warningTrans('user.delete.connected');
 
-            //redirect
+            // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
@@ -201,7 +201,7 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($user)) {
             $this->warningTrans('user.message.connected');
 
-            //redirect
+            // redirect
             return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
 

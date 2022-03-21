@@ -23,7 +23,6 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TableTrait;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,7 +105,7 @@ abstract class AbstractEntityController extends AbstractController
         // save display
         $display = $item->getDisplay();
 
-        //add item as parameter
+        // add item as parameter
         $parameters['item'] = $item;
 
         // create form and handle request
@@ -161,9 +160,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {
-        $em = $this->getManager();
-        $em->remove($item);
-        $em->flush();
+        $this->repository->remove($item);
     }
 
     /**
@@ -275,14 +272,6 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Gets the entity manager.
-     */
-    protected function getManager(): EntityManagerInterface
-    {
-        return $this->repository->getEntityManager();
-    }
-
-    /**
      * Gets the Twig template (path) name used to show an entity.
      */
     protected function getShowTemplate(): string
@@ -332,11 +321,11 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function saveToDatabase(AbstractEntity $item): void
     {
-        $em = $this->getManager();
         if ($item->isNew()) {
-            $em->persist($item);
+            $this->repository->add($item);
+        } else {
+            $this->repository->flush();
         }
-        $em->flush();
     }
 
     /**

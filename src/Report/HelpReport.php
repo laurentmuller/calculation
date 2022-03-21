@@ -185,7 +185,7 @@ class HelpReport extends AbstractReport
     private function formatFieldType(array $field): string
     {
         $default = $field['type'] ?? 'text';
-        $type = $this->trans('help.types.' . $default);
+        $type = $this->trans("help.types.$default");
         if ($length = $field['length'] ?? null) {
             return "$type ($length)";
         }
@@ -554,7 +554,7 @@ class HelpReport extends AbstractReport
              * @psalm-param null|array{description: string|null, image: string|null}  $rootMenu
              */
             if ($rootMenu = $this->service->getMainMenu()) {
-                //description
+                // description
                 /** @psalm-var string|null $description */
                 $description = $rootMenu['description'] ?? null;
                 if (null !== $description) {

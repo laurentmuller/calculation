@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\AbstractEntity;
 use App\Interfaces\SortModeInterface;
@@ -34,7 +34,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * The column definitions.
      *
-     * @var Column[]
+     * @var array<Column>
      */
     protected ?array $columns = null;
 
@@ -88,7 +88,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the column definitions.
      *
-     * @return Column[]
+     * @return array<Column>
      */
     public function getColumns(): array
     {
@@ -170,10 +170,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Process the given query and returns the results.
-     *
-     * @param DataQuery $query the query to handle
-     *
-     * @return DataResults the results
      */
     public function processQuery(DataQuery $query): DataResults
     {
@@ -225,14 +221,6 @@ abstract class AbstractTable implements SortModeInterface
     abstract protected function getColumnDefinitions(): string;
 
     /**
-     * Gets the JavaScript function used to format the custom view.
-     */
-    protected function getCustomViewFormatter(): string
-    {
-        return 'customViewFormatter';
-    }
-
-    /**
      * Gets the default sorting column.
      */
     protected function getDefaultColumn(): ?Column
@@ -270,8 +258,7 @@ abstract class AbstractTable implements SortModeInterface
      * @param string|int|float|bool|null $default       the default value if not found
      * @param bool                       $useSessionKey true to use session key; false to use the parameter name
      *
-     * @return mixed the parameter value
-     *
+     * @return string|int|float|bool|null
      * @psalm-suppress InvalidScalarArgument
      */
     protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true, string $prefix = '')
@@ -281,17 +268,17 @@ abstract class AbstractTable implements SortModeInterface
 
         // find in session
         if (null !== $session) {
-            /** @var string|int|float|bool|null $default */
+            /** @psalm-var string|int|float|bool|null $default */
             $default = $session->get($key, $default);
         }
 
         // find in cookies
         $cookieName = '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
         // @phpstan-ignore-next-line
-        $cokiesValue = $request->cookies->get($cookieName, $default);
+        $cokieValue = $request->cookies->get($cookieName, $default);
 
         // find in request
-        $value = Utils::getRequestInputBag($request)->get($name, $cokiesValue);
+        $value = Utils::getRequestInputBag($request)->get($name, $cokieValue);
 
         // save
         if (null !== $session) {
@@ -317,10 +304,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Handle the query parameters.
-     *
-     * @param DataQuery $query the query parameters
-     *
-     * @return DataResults the data results
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
@@ -338,17 +321,9 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Returns a value indicating if the custom view is allowed (true by default).
-     */
-    protected function isCustomViewAllowed(): bool
-    {
-        return true;
-    }
-
-    /**
      * Maps the given entities.
      *
-     * @param array<array|AbstractEntity> $entities the entities to map
+     * @param array<AbstractEntity|array> $entities the entities to map
      *
      * @return array<array<string, string>> the mapped entities
      */
@@ -370,8 +345,8 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Map the given object to an array where the keys are the column field.
      *
-     * @param array|AbstractEntity $objectOrArray the object to map
-     * @param Column[]             $columns       the column definitions
+     * @param AbstractEntity|array $objectOrArray the object to map
+     * @param array<Column>        $columns       the column definitions
      * @param PropertyAccessor     $accessor      the property accessor to get the object values
      *
      * @return array<string, string> the mapped object
@@ -392,9 +367,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Update the results before sending back.
-     *
-     * @param DataQuery   $query   the data query
-     * @param DataResults $results the results to update
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
@@ -433,19 +405,13 @@ abstract class AbstractTable implements SortModeInterface
             'page-number' => $query->page,
             'page-size' => $limit,
 
-            'card-view' => \json_encode($query->isViewCard()),
-
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
-        ], $results->attributes);
 
-        // custom view?
-        if ($this->isCustomViewAllowed()) {
-            $results->attributes = \array_merge([
-                'show-custom-view' => \json_encode($query->isViewCustom()),
-                'custom-view' => $this->getCustomViewFormatter(),
-            ], $results->attributes);
-        }
+            'custom-view' => 'customViewFormatter',
+            'card-view' => \json_encode($query->isViewCard()),
+            'show-custom-view' => \json_encode($query->isViewCustom()),
+        ], $results->attributes);
     }
 
     /**

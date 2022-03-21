@@ -1,18 +1,18 @@
 <p class="text-justify">
 <strong>{{ app_owner }}</strong> (désigné ci-après par "Fournisseur") exploite le site web <strong>{{ app_name }}</strong> (désigné ci-après par le terme "Application").
 </p>
+
 <p class="text-justify">
 Cette page vous explique nos politiques en matière de collecte, d'utilisation et de communication des données à caractère
- personnel lorsque vous utilisez notre application ainsi que les choix qui s'offrent à vous en ce qui concerne ces données.
-</p>
+ personnel lorsque vous utilisez notre application ainsi que les choix qui s'offrent à vous en ce qui concerne ces données.</p>
+
 <p class="text-justify">
 Nous utilisons vos données pour fournir et améliorer l'application. En utilisant l'application, vous consentez à la collecte et
- à l'utilisation d'informations conformément à la présente politique.
-</p>
-<p>
+ à l'utilisation d'informations conformément à la présente politique.</p>
+
+<p class="text-justify">
 Sauf définition contraire, les termes utilisés dans la présente politique de confidentialité ont la même signification que dans
- notre {% if link ?? false %}<a href="{{ path('about_licence') }}">Accord de licence</a>{% else %}accord de licence{% endif %}.
-</p>
+ notre {% if link %}<a href="{{ path('about_licence') }}">Accord de licence</a>{% else %}accord de licence{% endif %}.</p>
 
 <h4>Définitions</h4>
 <ul>
@@ -62,11 +62,14 @@ Sauf définition contraire, les termes utilisés dans la présente politique de 
 <h6>Suivi et données de cookies</h6>
 <p class="text-justify">Nous avons recours à des cookies et à d'autres technologies de suivi similaires pour effectuer un suivi des activités
  effectuées dans notre application, et nous conservons certaines informations.</p>
+
 <p class="text-justify">Les cookies sont des fichiers à faible volume de données pouvant comporter un identifiant unique anonyme. Les cookies
  sont envoyés à votre navigateur depuis un site web et sont stockés sur votre dispositif. D'autres technologies de suivi telles que les pixels,
  les balises et les scripts sont également utilisées pour recueillir et suivre des informations et afin d'améliorer et d'analyser notre application.</p>
+
 <p class="text-justify">Vous pouvez demander à votre navigateur de refuser tous les cookies ou de vous avertir lorsqu'un cookie est envoyé.
  Toutefois, si vous n'acceptez pas les cookies, il se peut que vous ne puissiez pas utiliser certains éléments de notre application.</p>
+
 <p class="text-justify">Exemples de cookies que nous utilisons :</p>
 <ul>
     <li><strong>Cookies de session.</strong> Nous utilisons des cookies de session pour faire fonctionner notre application.</li>
@@ -90,8 +93,10 @@ Sauf définition contraire, les termes utilisés dans la présente politique de 
 <p class="text-justify">Les informations vous concernant, notamment vos données à caractère personnel, peuvent être transférées de votre région,
  province, pays, ou autre division territoriale vers des ordinateurs – et stockées sur ces derniers – situés à un endroit où la législation
  relative à la protection des données diffère de celle du territoire où vous résidez.</p>
+
 <p class="text-justify">Si vous résidez hors de Suisse et que vous choisissez de nous communiquer des informations, sachez que nous transférons
  les données, y compris les données à caractère personnel, vers la Suisse et que nous les y traitons.</p>
+
 <p class="text-justify">En acceptant la présente politique de confidentialité puis en soumettant ces informations, vous consentez à ce transfert.</p>
 <p class="text-justify">Le fournisseur prendra toutes les mesures raisonnablement nécessaires pour faire en sorte que vos données soient traitées
  de manière sécurisée et conformément à la présente politique de confidentialité et vos données à caractère personnel ne seront transférées vers
@@ -119,6 +124,7 @@ Sauf définition contraire, les termes utilisés dans la présente politique de 
 <p class="text-justify">Nous pouvons faire appel à des sociétés tierces et à des tierces personnes pour faciliter la prestation de notre service
  ("Prestataires de services"), assurer l'application en notre nom, assurer des services liés à l'application ou nous aider à analyser la façon
  dont notre application est utilisée.</p>
+
 <p class="text-justify">Ces tiers n'ont accès à vos données à caractère personnel que pour effectuer ces tâches en notre nom et il leur est interdit
  de les communiquer ou de les utiliser à quelle qu'autre fin.</p>
 
@@ -126,6 +132,7 @@ Sauf définition contraire, les termes utilisés dans la présente politique de 
 <p class="text-justify">Il se peut que notre application contienne des liens pointant vers d'autres sites que nous n'exploitons pas. Si vous cliquez
  sur un lien de tiers, vous serez redirigé vers le site de ce tiers. Nous vous recommandons vivement d'examiner la politique de confidentialité de
  chacun des sites que vous consultez.</p>
+
 <p class="text-justify">Nous n'avons aucun contrôle sur le contenu, les politiques ou pratiques de confidentialité des sites ou services de tiers
  et déclinons toute responsabilité en ce qui les concerne.</p>
 
@@ -145,5 +152,5 @@ Sauf définition contraire, les termes utilisés dans la présente politique de 
  modification. Les modifications apportées à la présente politique de confidentialité prennent effet lorsqu'elles sont publiées sur cette page.</p>
 
 <h4>Nous contacter</h4>
-<p class="text-justify">Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par courrier éléctronique.</p>
+<p class="text-justify">Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par {% if comments %}<a href="{{ path('user_comment') }}">courrier éléctronique</a>{% else %}courrier éléctronique{% endif %}.</p>
 <p class="mb-0 text-right">{{ app_owner_city }}, {{ "now"|localedate('none', null, null, 'MMMM Y')|capitalize }}</p>

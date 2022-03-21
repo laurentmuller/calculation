@@ -163,7 +163,6 @@ class AdminController extends AbstractController
         // form
         $form = $this->createForm(ParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
-            //save properties
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $application->setProperties($data);
@@ -235,7 +234,7 @@ class AdminController extends AbstractController
 
             // update last date
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
+                $application->setProperty(ApplicationServiceInterface::P_UPDATE_CALCULATIONS, new \DateTime());
             }
 
             return $this->renderForm('calculation/calculation_result.html.twig', [
@@ -274,7 +273,7 @@ class AdminController extends AbstractController
 
             // update last date
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setProperties([ApplicationServiceInterface::P_UPDATE_PRODUCTS => new \DateTime()]);
+                $application->setProperty(ApplicationServiceInterface::P_UPDATE_PRODUCTS, new \DateTime());
             }
 
             return $this->renderForm('product/product_result.html.twig', [
@@ -312,9 +311,7 @@ class AdminController extends AbstractController
         // form
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
-            $this->getApplication()->setProperties([
-                $property => $role->getRights(),
-            ]);
+            $this->getApplication()->setProperty($property, $role->getRights());
             $this->succesTrans('admin.rights.success', ['%name%' => $role->getName()]);
 
             return $this->redirectToHomePage();

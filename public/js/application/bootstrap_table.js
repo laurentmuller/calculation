@@ -216,11 +216,11 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
-    if ($action.is('.btn-show') && !row.showGranted) {
+    if ($action.is('.btn-show') && !row.showgranted) {
         $action.remove();
-    } else if ($action.is('.btn-edit') && !row.editGranted) {
+    } else if ($action.is('.btn-edit') && !row.editgranted) {
         $action.remove();
-    } else if ($action.is('.btn-delete') && !row.deleteGranted) {
+    } else if ($action.is('.btn-delete') && !row.deletegranted) {
         $action.remove();
     } else {
         const id = row.id;
@@ -426,7 +426,7 @@ $.fn.extend({
 
     const $table = $('#table-edit');
     const $sortButton = $('#button_sort');
-    const $viewButton = $('#button_view');
+    const $viewButtons = $('.dropdown-menu-view');
     const $pageButton = $('#button_page');
     const $clearButton = $('#clear_search');
     const $searchMinimum = $('#search_minimum');
@@ -496,11 +496,11 @@ $.fn.extend({
             // update UI
             if (data.length === 0) {
                 $('.card-footer').hide();
-                $viewButton.toggleDisabled(true);
+                $viewButtons.toggleDisabled(true);
                 $sortButton.toggleDisabled(true);
             } else {
                 $('.card-footer').show();
-                $viewButton.toggleDisabled(false);
+                $viewButtons.toggleDisabled(false);
                 $sortButton.toggleDisabled(false);
             }
 
@@ -652,8 +652,10 @@ $.fn.extend({
     }
 
     // handle view buttons
-    $('#button_view').initDropdown(false, true).on('input', function () {
-        const view = $(this).getDataValue();
+    $viewButtons.on('click', function () {
+        $viewButtons.removeClass('dropdown-item-checked');
+        const view = $(this).addClass('dropdown-item-checked').getDataValue();
+        $('#button_other_actions').focus();
         $table.setDisplayMode(view);
     });
 

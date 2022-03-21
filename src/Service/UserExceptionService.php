@@ -78,7 +78,7 @@ class UserExceptionService
             return $this->createUserException('send_email_error', $e, $parameters, $code);
         }
 
-        //default
+        // default
         return $this->createUserException('error_unknown', $e, $parameters, $code);
     }
 }

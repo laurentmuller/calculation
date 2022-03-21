@@ -12,15 +12,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\ProductTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
+use App\Interfaces\ApplicationServiceInterface;
 use App\Report\ProductsReport;
 use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\ProductsDocument;
+use App\Table\ProductTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -192,6 +193,21 @@ class ProductController extends AbstractEntityController
     public function table(Request $request, ProductTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'product/product_table.html.twig');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function deleteFromDatabase(AbstractEntity $item): void
+    {
+        // update default product (if applicable)
+        $application = $this->getApplication();
+        $id = $application->getDefaultProductId();
+        if ($id === $item->getId()) {
+            $application->setProperty(ApplicationServiceInterface::P_DEFAULT_PRODUCT, null);
+        }
+
+        parent::deleteFromDatabase($item);
     }
 
     /**

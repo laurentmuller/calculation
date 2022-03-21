@@ -10,12 +10,13 @@
 
 declare(strict_types=1);
 
-namespace App\BootstrapTable;
+namespace App\Table;
 
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
+use App\Util\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +33,7 @@ class CategoryTable extends AbstractEntityTable
     /**
      * The group parameter name (int).
      */
-    public const PARAM_GROUP = 'groupId';
+    public const PARAM_GROUP = 'groupid';
 
     /**
      * The group repository.
@@ -101,7 +102,7 @@ class CategoryTable extends AbstractEntityTable
      */
     protected function getColumnDefinitions(): string
     {
-        return __DIR__ . '/Definition/category.json';
+        return FileUtils::buildPath(__DIR__, 'Definition', 'category.json');
     }
 
     /**

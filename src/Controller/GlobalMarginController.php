@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\GlobalMarginTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
 use App\Form\GlobalMargin\GlobalMarginType;
@@ -21,6 +20,7 @@ use App\Repository\GlobalMarginRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GlobalMarginsDocument;
+use App\Table\GlobalMarginTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;

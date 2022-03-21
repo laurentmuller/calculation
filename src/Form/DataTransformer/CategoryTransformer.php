@@ -49,7 +49,7 @@ class CategoryTransformer implements DataTransformerInterface
         }
 
         if (!\is_numeric($value)) {
-            $message = \sprintf('A number expected, a "%s" given.', get_debug_type($value));
+            $message = \sprintf('A number expected, a "%s" given.', \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 
@@ -74,7 +74,7 @@ class CategoryTransformer implements DataTransformerInterface
         }
 
         if (!$value instanceof Category) {
-            $message = \sprintf('A category expected, a "%s" given.', get_debug_type($value));
+            $message = \sprintf('A category expected, a "%s" given.', \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 

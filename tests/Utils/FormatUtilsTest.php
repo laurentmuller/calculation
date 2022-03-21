@@ -88,14 +88,14 @@ class FormatUtilsTest extends TestCase
         return [
             [$this->createDate(), '20.02.2022 12:59'],
             [$this->createDate(), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
-            [$this->createDate(), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
+            [$this->createDate(), '20 févr. 2022, 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
             [$this->createDate(), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
 
             [$this->createDate(), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM],
             [$this->createDate(), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG],
 
-            [$this->createDate(), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
-            [$this->createDate(), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
+            [$this->createDate(), '20 févr. 2022, 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
+            [$this->createDate(), '20 févr. 2022, 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
 
             [$this->createDate(), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM],
             [$this->createDate(), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG],
@@ -271,10 +271,10 @@ class FormatUtilsTest extends TestCase
         $actual = FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
         $this->assertEquals($expected, $actual);
 
-        $contains = str_contains($actual, self::PERCENT_SIGN);
+        $contains = \str_contains($actual, self::PERCENT_SIGN);
         $this->assertEquals($includeSign, $contains);
 
-        $ends_with = str_ends_with($actual, self::PERCENT_SIGN);
+        $ends_with = \str_ends_with($actual, self::PERCENT_SIGN);
         $this->assertEquals($ends_with, $contains);
     }
 

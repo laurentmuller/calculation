@@ -73,7 +73,7 @@ class SwissPostUpdater
     private SwissPostUpdateResult $results;
     private ?string $sourceName = null;
 
-    /** @psalm-var bool|resource */
+    /** @var bool|resource */
     private $stream = false;
 
     public function __construct(TranslatorInterface $translator, ApplicationService $application, FormFactoryInterface $factory, SwissPostService $service)

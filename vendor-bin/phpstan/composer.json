@@ -1,6 +1,6 @@
 {
 	"require" : {
-		"php" : "^7.4",
+		"php" : "^8.0",
 		"phpstan/phpstan" : "^0.12.83",
 		"phpstan/phpstan-deprecation-rules" : "^0.12.6",
 		"phpstan/phpstan-doctrine" : "^0.12.33",

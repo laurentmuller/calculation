@@ -37,7 +37,7 @@ trait CacheTrait
      */
     public function cleanKey(string $key): string
     {
-        /** @var string[] $reservedCharacters */
+        /** @var string[]|null $reservedCharacters */
         static $reservedCharacters;
         if (!$reservedCharacters) {
             $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);

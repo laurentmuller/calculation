@@ -60,7 +60,7 @@ class PivotTableFactory
      *
      * @var PivotField[]
      */
-    private $rowFields = [];
+    private array $rowFields = [];
 
     /**
      * The title.

@@ -280,7 +280,9 @@ class UtilsTest extends TestCase
      */
     public function testGetShortName($var, $expected, bool $exception = false): void
     {
-        if ($exception) {
+        if (null === $var) {
+            $this->expectException(\TypeError::class);
+        } elseif ($exception) {
             $this->expectException(\ReflectionException::class);
         }
         $actual = Utils::getShortName($var);

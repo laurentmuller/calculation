@@ -100,14 +100,14 @@ class StrengthValidator extends AbstractConstraintValidator
             try {
                 $userInputs[] = (string) $this->getPropertyAccessor()->getValue($object, $path);
             } catch (NoSuchPropertyException $e) {
-                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, get_debug_type($constraint)) . $e->getMessage(), 0, $e);
+                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, \get_debug_type($constraint)) . $e->getMessage(), 0, $e);
             }
         }
         if ($path = $constraint->emailPath) {
             try {
                 $userInputs[] = (string) $this->getPropertyAccessor()->getValue($object, $path);
             } catch (NoSuchPropertyException $e) {
-                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, get_debug_type($constraint)) . $e->getMessage(), 0, $e);
+                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, \get_debug_type($constraint)) . $e->getMessage(), 0, $e);
             }
         }
 

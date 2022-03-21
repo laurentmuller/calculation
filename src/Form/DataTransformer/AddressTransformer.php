@@ -35,7 +35,7 @@ class AddressTransformer implements DataTransformerInterface
         }
 
         if (!\is_string($value)) {
-            $message = \sprintf('A string expected, a "%s" given.', get_debug_type($value));
+            $message = \sprintf('A string expected, a "%s" given.', \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 
@@ -59,7 +59,7 @@ class AddressTransformer implements DataTransformerInterface
         }
 
         if (!$value instanceof Address) {
-            $message = \sprintf('An Address expected, a "%s" given.', get_debug_type($value));
+            $message = \sprintf('An Address expected, a "%s" given.', \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 

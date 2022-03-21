@@ -317,7 +317,7 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/psr/log/Psr/Log">
+	<buildpathentry kind="src" path="vendor/psr/log/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

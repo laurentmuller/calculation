@@ -39,7 +39,7 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * The image to handle.
      *
-     * @var resource
+     * @var \GdImage
      */
     protected $image;
 
@@ -53,8 +53,8 @@ class ImageHandler implements ImageExtensionInterface
      */
     public function __construct($image, ?string $filename = null)
     {
-        if (!\is_resource($image)) {
-            throw new \InvalidArgumentException('The image must be a resource.');
+        if (!$image instanceof \GdImage) {
+            throw new \InvalidArgumentException('The image must be an instance of \GdImage.');
         }
 
         $this->image = $image;
@@ -367,7 +367,7 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Gets the image.
      *
-     * @return resource
+     * @return \GdImage
      */
     public function getImage()
     {

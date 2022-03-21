@@ -252,7 +252,7 @@ final class SymfonyInfo
                     'name' => $name,
                     'path' => $route->getPath(),
                 ];
-                if (str_starts_with($name, '_')) {
+                if (\str_starts_with($name, '_')) {
                     $result['debug'][$name] = $item;
                 } else {
                     $result['runtime'][$name] = $item;

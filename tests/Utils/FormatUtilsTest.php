@@ -200,7 +200,7 @@ class FormatUtilsTest extends TestCase
     public function testDecimal(): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
+        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         $this->assertEquals('.', FormatUtils::getDecimal());
     }
 
@@ -268,6 +268,7 @@ class FormatUtilsTest extends TestCase
     public function testFormatPercent($number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
+        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
         $this->assertEquals($expected, $actual);
 
@@ -294,14 +295,14 @@ class FormatUtilsTest extends TestCase
     public function testGrouping(): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
+        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         $this->assertEquals("'", FormatUtils::getGrouping());
     }
 
     public function testPercent(): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
+        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         $this->assertEquals(self::PERCENT_SIGN, FormatUtils::getPercent());
     }
 

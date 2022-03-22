@@ -10,7 +10,6 @@ parameters:
 
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php
-    - vendor/symfony/polyfill-php80/Resources/stubs/Stringable.php
 
     doctrine:
         repositoryClass: App\Repository\AbstractRepository

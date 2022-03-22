@@ -109,6 +109,14 @@ class HelpReport extends AbstractReport
     }
 
     /**
+     * Convert the BR tags to the end of line symbol of this platform.
+     */
+    private function br2nl(string $str): string
+    {
+        return \preg_replace('/\<br(\s*)?\/?\>/i', \PHP_EOL, $str);
+    }
+
+    /**
      * @psalm-param array{entity: null|string} $dialog
      * @psalm-return null|array{
      *      id: string,
@@ -255,7 +263,11 @@ class HelpReport extends AbstractReport
      */
     private function outputDetails(array $details): void
     {
-        $text = \strip_tags(\implode(' ', $details));
+        $text = \array_reduce($details, function (string $carry, string $str): string {
+            $str = \strip_tags($this->br2nl($str));
+
+            return empty($carry) ? $str : $carry . ' ' . $str;
+        }, '');
         $this->MultiCell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::ALIGN_LEFT);
     }
 

@@ -585,10 +585,11 @@
 			"image": "home.png",
 			"description": "Page principale de l'application.",
 			"details": [
-				"Cette page est divisée en trois parties<br>",
+				"Cette page est divisée en quatre parties<br>",
 				"- La partie principale contient la liste des dernières calculations.<br>",
 				"- La deuxième partie contient la liste des calculations regroupées par status.<br>",
-				"- La troisième partie contient la liste des calculations regroupées par mois."
+				"- La troisième partie contient la liste des calculations regroupées par mois.<br>",
+				"- La dernière partie contient le nombre d'objets dans le catalogue (base de données)."
 			]
 		},
 		{

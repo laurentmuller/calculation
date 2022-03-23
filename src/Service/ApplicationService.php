@@ -198,8 +198,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default category.
-     *
-     * @return Category|null the category, if any; null otherwise
      */
     public function getDefaultCategory(): ?Category
     {
@@ -218,8 +216,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default category identifier.
-     *
-     * @return int the category identifer, if any; 0 otherwise
      */
     public function getDefaultCategoryId(): int
     {
@@ -228,8 +224,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product.
-     *
-     * @return product|null the product, if any; null otherwise
      */
     public function getDefaultProduct(): ?Product
     {
@@ -248,8 +242,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product identifier.
-     *
-     * @return int the product identifer, if any; 0 otherwise
      */
     public function getDefaultProductId(): int
     {
@@ -258,8 +250,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product quantity.
-     *
-     * @return float the default product quantity, if any; 0 otherwise
      */
     public function getDefaultQuantity(): float
     {
@@ -268,8 +258,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default calculation state.
-     *
-     * @return CalculationState|null the calculation state, if any; null otherwise
      */
     public function getDefaultState(): ?CalculationState
     {
@@ -288,8 +276,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default calculation state identifier.
-     *
-     * @return int the calculation state identifer, if any; 0 otherwise
      */
     public function getDefaultStateId(): int
     {
@@ -298,8 +284,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets a value indicating table display mode.
-     *
-     * @return string the tabular, custom or card mode
      */
     public function getDisplayMode(): string
     {
@@ -374,8 +358,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * Gets all properties.
      *
      * @param string[] $excluded the property keys to exclude
-     *
-     * @return array the properties with names and values
      */
     public function getProperties(array $excluded = []): array
     {
@@ -399,7 +381,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
             self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
 
-            self::P_UPDATE_CALCULATIONS => $this->getUpdateCalculations(),
             self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
             self::P_LAST_IMPORT => $this->getLastImport(),
 
@@ -434,8 +415,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param array  $default the default value if the property is not found
-     *
-     * @return array the array values, if found; the default value otherwise
      */
     public function getPropertyArray(string $name, array $default): array
     {
@@ -460,8 +439,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string                  $name    the property name to search for
      * @param \DateTimeInterface|null $default the default value if the property is not found
-     *
-     * @return \DateTimeInterface|null the date value, if found; the default value otherwise
      */
     public function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
@@ -481,8 +458,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param float  $default the default value if the property is not found
-     *
-     * @return float the float value, if found; the default value otherwise
      */
     public function getPropertyFloat(string $name, float $default = 0.0): float
     {
@@ -494,8 +469,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param int    $default the default value if the property is not found
-     *
-     * @return int the integer value, if found; the default value otherwise
      */
     public function getPropertyInteger(string $name, int $default = 0): int
     {
@@ -507,8 +480,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string      $name    the property name to search for
      * @param string|null $default the default value if the property is not found
-     *
-     * @return string|null the string value, if found; the default value otherwise
      */
     public function getPropertyString(string $name, ?string $default = null): ?string
     {
@@ -522,19 +493,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the last calculations update.
-     *
-     * @return \DateTimeInterface|null the last update or null if none
-     */
-    public function getUpdateCalculations(): ?\DateTimeInterface
-    {
-        return $this->getPropertyDate(self::P_UPDATE_CALCULATIONS);
-    }
-
-    /**
      * Gets the last products update.
-     *
-     * @return \DateTimeInterface|null the last update or null if none
      */
     public function getUpdateProducts(): ?\DateTimeInterface
     {
@@ -566,8 +525,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the default action is to edit the entity.
-     *
-     * @return bool true to edit the entity
      */
     public function isActionEdit(): bool
     {
@@ -576,8 +533,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the default action is to do nothing.
-     *
-     * @return bool true to do nothing with the entity
      */
     public function isActionNone(): bool
     {
@@ -586,8 +541,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the default action is to show the entity.
-     *
-     * @return bool true to show the entity
      */
     public function isActionShow(): bool
     {
@@ -596,8 +549,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product edit on new calculation.
-     *
-     * @return bool the default edit product
      */
     public function isDefaultEdit(): bool
     {
@@ -606,8 +557,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets a value indicating the image captcha is displayed when login.
-     *
-     * @return bool true to display the image; false to hide
      */
     public function isDisplayCaptcha(): bool
     {
@@ -618,8 +567,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * Returns if the given value is below the minimum margin.
      *
      * @param Calculation|float $value the calculation or the margin to be tested
-     *
-     * @return bool true if below the minimum; false otherwise
      */
     public function isMarginBelow($value): bool
     {
@@ -632,8 +579,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns if the flashbag message sub-title is displayed (default: true).
-     *
-     * @return bool true if displayed
      */
     public function isMessageSubTitle(): bool
     {
@@ -665,9 +610,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets a value indicating if output the customer address in the PDF documents.
-     *
-     * @return bool true to output; false if none
+     * Gets a value indicating if the customer address is output within the PDF documents.
      */
     public function isPrintAddress(): bool
     {
@@ -679,8 +622,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param bool   $default the default value if the property is not found
-     *
-     * @return bool the boolean value, if found; the default value otherwise
      */
     public function isPropertyBoolean(string $name, bool $default = false): bool
     {
@@ -688,9 +629,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets a value indicating if output a qr-code at the end of the PDF document.
-     *
-     * @return bool true to output; false if none
+     * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
      */
     public function isQrCode(): bool
     {

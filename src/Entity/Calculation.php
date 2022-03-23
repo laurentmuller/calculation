@@ -675,13 +675,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function isMarginBelow(float $margin): bool
     {
-        if ($this->isEmpty()) {
+        if ($this->isEmpty() || $this->isFloatZero($this->getOverallTotal())) {
             return false;
-        } elseif ($this->isFloatZero($this->getOverallTotal())) {
-            return false;
-        } else {
-            return $this->getOverallMargin() < $margin;
         }
+
+        return $this->getOverallMargin() < $margin;
     }
 
     /**

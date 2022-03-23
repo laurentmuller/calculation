@@ -9,9 +9,6 @@
         {{- icons.dropdownItem(path('search'), 'search.title', 'search') -}}
         {% if is_admin %}
         {{- icons.dropdownSeparator -}}
-        {% if is_test %}
-        {{- icons.dropdownItem(path('admin_calculation'), 'calculation.update.title', 'calculator') -}}
-        {% endif -%}
         {{- icons.dropdownItem(path('admin_product'), 'product.update.title', 'file-alt far') -}}
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('below_table'), 'below.title', 'percent') -}}

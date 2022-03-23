@@ -30,10 +30,6 @@
 {% block global_actions -%}
 {{- _self.item_external(path('calculation_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
 {{- _self.item_external(path('calculation_excel'), 'calculation.list.excel_title', 'file-excel far') }}
-{% if app.user and app.user.username == 'Bibi' -%}
-    {{- _self.item_separator() }}
-    {{- _self.item_path(path('admin_calculation'), 'calculation.update.title', 'pencil') }}
-{%- endif %}
 {%- endblock %}
 
 {% block show_actions -%}

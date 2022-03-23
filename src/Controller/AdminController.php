@@ -18,7 +18,6 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Security\EntityVoter;
-use App\Service\CalculationUpdater;
 use App\Service\ProductUpdater;
 use App\Service\SwissPostUpdater;
 use App\Util\SymfonyInfo;
@@ -150,7 +149,6 @@ class AdminController extends AbstractController
         // properties
         $application = $this->getApplication();
         $data = $application->getProperties([
-            ApplicationServiceInterface::P_UPDATE_CALCULATIONS,
             ApplicationServiceInterface::P_UPDATE_PRODUCTS,
             ApplicationServiceInterface::P_LAST_IMPORT,
         ]);
@@ -212,46 +210,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Update calculations.
-     *
-     * @Route("/calculation", name="admin_calculation")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function updateCalculation(Request $request, CalculationUpdater $updater): Response
-    {
-        // create form
-        $query = $updater->createUpdateQuery();
-        $form = $updater->createForm($query);
-        $application = $this->getApplication();
-
-        // handle request
-        if ($this->handleRequestForm($request, $form)) {
-            // save query
-            $updater->saveUpdateQuery($query);
-
-            // update
-            $result = $updater->update($query);
-
-            // update last date
-            if (!$query->isSimulate() && $result->isValid()) {
-                $application->setProperty(ApplicationServiceInterface::P_UPDATE_CALCULATIONS, new \DateTime());
-            }
-
-            return $this->renderForm('calculation/calculation_result.html.twig', [
-                'result' => $result,
-                'query' => $query,
-            ]);
-        }
-
-        // display
-        return $this->renderForm('calculation/calculation_update.html.twig', [
-            'last_update' => $application->getUpdateCalculations(),
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * Update calculation totals.
+     * Update product prices.
      *
      * @Route("/product", name="admin_product")
      * @IsGranted("ROLE_ADMIN")

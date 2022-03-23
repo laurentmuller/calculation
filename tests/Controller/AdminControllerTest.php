@@ -44,10 +44,6 @@ class AdminControllerTest extends AbstractControllerTest
             ['/admin/rights/user', self::ROLE_ADMIN],
             ['/admin/rights/user', self::ROLE_SUPER_ADMIN],
 
-            ['/admin/calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/calculation', self::ROLE_ADMIN],
-            ['/admin/calculation', self::ROLE_SUPER_ADMIN],
-
             ['/admin/product', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/admin/product', self::ROLE_ADMIN],
             ['/admin/product', self::ROLE_SUPER_ADMIN],

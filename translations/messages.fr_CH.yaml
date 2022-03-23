@@ -89,46 +89,6 @@ calculation:
     state:
         newstate: Nouveau statut
         success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
-    update:
-        title: Mise à jour des calculations
-        description: Cette page vous permet de mettre à jour les calculations.
-        last_update: 'Dernière mise à jour : %date%'
-        closeCalculations: Mettre à jour toutes les calculations
-        closeCalculations_help: Inclus les calculations avec le statut non-modifiables (%codes%).
-        emptyCalculations: Supprimer les calculations vides
-        emptyCalculations_help: Supprime les calculations ne contenant aucun article.
-        emptyItems: Supprimer les articles vides
-        emptyItems_help: Supprime les articles avec une quantité ou un prix égale à 0.
-        sortItems: Trier les articles
-        sortItems_help: Trie les articles par ordre alphabétique.
-        duplicateItems: Supprimer les articles en double
-        duplicateItems_help: Supprime les articles contenu plus d'une fois dans une calculation.
-        copyCodes: Mettre à jour les groupes et les catégories.
-        copyCodes_help: Copie les noms des groupes et des catégories depuis le catalogue.
-        simulate: Simuler la mise à jour
-        simulate_help: Simule une mise à jour sans enregister les changements dans la base de données.
-        confirm: Confirmer la mise à jour des données
-    result:
-        description: Résultats de la mise à jour des calculations.
-        simulate: La mise à jour a été simulée. Aucune calculation n'a été modifiée dans la base de données.
-        empty: Aucune calculation n'a été mise à jour.
-        updateCalculations: Calculations mises à jour
-        skipCalculations: Calculations inchangées
-        emptyCalculations: Calculations vides
-        unmodifiableCalculations: Calculations non-modifiables
-        sortItems: Articles triées
-        emptyItems: Articles vides
-        duplicateItems: Articles en double
-        copyCodes: Groupes et catégories
-        new_update: Nouvelle mise à jour
-        total: Total
-        actions:
-            sortItems: Trie des articles.
-            emptyItems: Suppression des articles vides.
-            duplicateItems: Suppression des articles à double.
-            emptyCalculations: Suppression de la calculation vide.
-            copyCodes: Mise à jour des groupes et des catégories.
-            total: Mise à jour du total :<ul><li>Ancien montant %oldTotal%</li><li>Nouveau montant %newTotal%</li></ul>
 calculationgroup:
     name: Groupe
     fields:

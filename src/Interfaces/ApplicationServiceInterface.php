@@ -241,11 +241,6 @@ interface ApplicationServiceInterface
     public const P_QR_CODE = 'qr_code';
 
     /**
-     * The property name for the last calculations update (date).
-     */
-    public const P_UPDATE_CALCULATIONS = 'update_calculations';
-
-    /**
      * The property name for the last products update (date).
      */
     public const P_UPDATE_PRODUCTS = 'update_products';

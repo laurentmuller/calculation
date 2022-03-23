@@ -135,9 +135,6 @@
                 <span>{{- icons.icon('tools', 'index.menu_tools') -}}</span>
                 <ul>
                     <li>{{ _self.link('search', 'search.title', 'search') }}</li>
-                    {% if is_bibi %}
-                    <li>{{ _self.link('admin_calculation', 'calculation.update.title', 'pencil') }}</li>
-                    {% endif %}
                     {% if is_admin %}
                     <li>{{ _self.link('admin_product', 'product.update.title', 'file-alt far') }}</li>
                     {% endif %}

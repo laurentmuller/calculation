@@ -33,7 +33,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "files": [
                 "css/all.css",
                 "webfonts/fa-brands-400.ttf",

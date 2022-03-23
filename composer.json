@@ -31,13 +31,13 @@
 		"doctrine/annotations": "^1.0",
 		"doctrine/doctrine-bundle": "^2.5",
 		"doctrine/orm": "^2.10",
+		"ehymel/highcharts-bundle": "^1.7",
 		"endroid/qr-code": "^4.2",
 		"erusev/parsedown": "^1.7",
 		"fakerphp/faker": "^1.14",
 		"google/recaptcha": "^1.2",
 		"imagine/imagine": "^1.2",
 		"knplabs/knp-time-bundle": "^1.17",
-		"ob/highcharts-bundle": "dev-master",
 		"phpoffice/phpspreadsheet": "^1.16",
 		"robquistnl/simplehtmltotext": "^1.1",
 		"sensio/framework-extra-bundle": "^6.1",
@@ -139,11 +139,5 @@
 		"bin" : "echo 'bin not installed'",
 		"post-install-cmd" : "@composer bin all install --ansi",
 		"post-update-cmd" : "@composer bin all update --ansi"
-	},
-	"repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laurentmuller/ObHighchartsBundle"
-        }
-    ]	
+	}
 }

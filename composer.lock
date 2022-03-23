@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c3641c02e3e2733f29ec145822cfa06",
+    "content-hash": "8f0430f3492428555cff32736228b306",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1454,6 +1454,72 @@
             "time": "2021-10-11T09:18:27+00:00"
         },
         {
+            "name": "ehymel/highcharts-bundle",
+            "version": "1.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ehymel/HighchartsBundle.git",
+                "reference": "22fbdc70c0bca3086e11d2c2c6e80982eec478ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ehymel/HighchartsBundle/zipball/22fbdc70c0bca3086e11d2c2c6e80982eec478ef",
+                "reference": "22fbdc70c0bca3086e11d2c2c6e80982eec478ef",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-json": "^3.1",
+                "php": "^7.2 || ^8.0",
+                "symfony/config": "^4.4 || ^5.0 || ^6.0",
+                "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
+                "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0",
+                "symfony/yaml": "^4.4 || ^5.0 || ^6.0",
+                "twig/twig": "^2.10 || ^3.0"
+            },
+            "require-dev": {
+                "nyholm/symfony-bundle-test": "^1.6.1",
+                "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
+                "symfony/phpunit-bridge": "^4.4 || ^5.0 || ^6.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ob\\HighchartsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Aubé"
+                }
+            ],
+            "description": "Symfony Bundle that ease the use of highcharts to display rich graph and charts in your app",
+            "homepage": "https://github.com/ehymel/ObHighchartsBundle",
+            "keywords": [
+                "chart",
+                "charting",
+                "charts",
+                "graph",
+                "graphs",
+                "highcharts",
+                "marcaube",
+                "ob",
+                "symfony"
+            ],
+            "support": {
+                "source": "https://github.com/ehymel/HighchartsBundle/tree/1.7.2"
+            },
+            "time": "2021-12-20T18:36:42+00:00"
+        },
+        {
             "name": "endroid/qr-code",
             "version": "4.4.7",
             "source": {
@@ -2394,72 +2460,6 @@
                 }
             ],
             "time": "2021-07-05T08:18:36+00:00"
-        },
-        {
-            "name": "ob/highcharts-bundle",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laurentmuller/ObHighchartsBundle.git",
-                "reference": "b4b3060d0c0513d456a47da9b37c23e5021f565c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/b4b3060d0c0513d456a47da9b37c23e5021f565c",
-                "reference": "b4b3060d0c0513d456a47da9b37c23e5021f565c",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-json": "^3.1",
-                "php": "^7.2 || ^8.0",
-                "symfony/config": "^4.4 || ^5.0",
-                "symfony/dependency-injection": "^4.4 || ^5.0",
-                "symfony/http-kernel": "^4.4 || ^5.0",
-                "symfony/yaml": "^4.4 || ^5.0",
-                "twig/twig": "^2.10 || ^3.0"
-            },
-            "require-dev": {
-                "nyholm/symfony-bundle-test": "^1.6.1",
-                "symfony/framework-bundle": "^4.4 || ^5.0",
-                "symfony/phpunit-bridge": "^4.4 || ^5.0"
-            },
-            "default-branch": true,
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.8.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Ob\\HighchartsBundle\\": ""
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marc Aubé"
-                }
-            ],
-            "description": "Symfony Bundle that ease the use of highcharts to display rich graph and charts in your app",
-            "homepage": "https://github.com/marcaube/ObHighchartsBundle",
-            "keywords": [
-                "chart",
-                "charting",
-                "charts",
-                "graph",
-                "graphs",
-                "highcharts",
-                "marcaube",
-                "ob",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/master"
-            },
-            "time": "2022-03-21T16:14:07+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -11511,9 +11511,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "ob/highcharts-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

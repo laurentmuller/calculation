@@ -122,6 +122,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/ehymel/highcharts-bundle">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/endroid/qr-code/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -203,11 +208,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/nikic/php-parser/lib/PhpParser">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/ob/highcharts-bundle">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

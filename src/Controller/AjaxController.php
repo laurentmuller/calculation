@@ -547,16 +547,11 @@ class AjaxController extends AbstractController
             return $response;
         }
 
-        // parameters
-        /** @psalm-var array|null $source */
-        $source = Utils::getRequestInputBag($request)->get('calculation');
-        if (null === $source) {
-            return $this->jsonFalse([
-                'message' => $this->trans('calculation.edit.error.update_total'),
-            ]);
-        }
-
         try {
+            // source
+            $input = Utils::getRequestInputBag($request);
+            $source = $input->all('calculation');
+
             // compute
             $parameters = $service->createGroupsFromData($source);
 

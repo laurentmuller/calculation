@@ -137,7 +137,7 @@ class BaseChart extends Highchart
     public function setBackground(string $color): self
     {
         // @phpstan-ignore-next-line
-        $this->chart->backgroundColor('transparent');
+        $this->chart->backgroundColor($color);
 
         return $this;
     }

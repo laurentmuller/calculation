@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\MarginInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sy_TaskItemMargin")
  * @ORM\Entity(repositoryClass="App\Repository\TaskItemMarginRepository")
  */
-class TaskItemMargin extends AbstractEntity
+class TaskItemMargin extends AbstractEntity implements MarginInterface
 {
     /**
      * The maximum quantity (exclusive) to apply within this value.
@@ -62,22 +63,24 @@ class TaskItemMargin extends AbstractEntity
     private float $value = 0.0;
 
     /**
-     * Checks if this margin is between this minimum (inclusive) and this maximum (exlcusive) quantity.
-     *
-     * @param float $quantity the quantity to verify
-     *
-     * @return bool true if within this range
+     * {@inheritdoc}
      */
-    public function contains(float $quantity): bool
+    public function contains(float $value): bool
     {
-        return $quantity >= $this->minimum && $quantity < $this->maximum;
+        return $value >= $this->minimum && $value < $this->maximum;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getMaximum(): float
     {
         return $this->maximum;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getMinimum(): float
     {
         return $this->minimum;

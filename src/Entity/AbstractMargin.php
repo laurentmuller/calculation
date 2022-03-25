@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\MarginInterface;
 use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\MappedSuperclass
  */
-abstract class AbstractMargin extends AbstractEntity
+abstract class AbstractMargin extends AbstractEntity implements MarginInterface
 {
     /**
      * The margin in percent (%) to use when an amount is within this range.
@@ -54,21 +55,15 @@ abstract class AbstractMargin extends AbstractEntity
     protected float $minimum = 0.0;
 
     /**
-     * Checks if the given amount is between this minimum (inclusive) and this maximum (exlcusive).
-     *
-     * @param float $amount the amount to verify
-     *
-     * @return bool true if within this range
+     * {@inheritdoc}
      */
-    public function contains(float $amount): bool
+    public function contains(float $value): bool
     {
-        return $amount >= $this->minimum && $amount < $this->maximum;
+        return $value >= $this->minimum && $value < $this->maximum;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {
@@ -92,7 +87,7 @@ abstract class AbstractMargin extends AbstractEntity
     }
 
     /**
-     * Get maximum.
+     * {@inheritDoc}
      */
     public function getMaximum(): float
     {
@@ -100,7 +95,7 @@ abstract class AbstractMargin extends AbstractEntity
     }
 
     /**
-     * Get minimum.
+     * {@inheritDoc}
      */
     public function getMinimum(): float
     {

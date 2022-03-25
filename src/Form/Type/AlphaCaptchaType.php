@@ -52,7 +52,7 @@ class AlphaCaptchaType extends AbstractType
      */
     public function __construct(RequestStack $requestStack, TranslatorInterface $translator, iterable $captchas)
     {
-        $this->requestStack = $requestStack;
+        $this->setRequestStack($requestStack);
         $this->dataError = $translator->trans('required', [], 'captcha');
         $captchas = $captchas instanceof \Traversable ? \iterator_to_array($captchas) : $captchas;
         $this->captcha = $captchas[\array_rand($captchas)];

@@ -15,8 +15,6 @@ namespace App\Chart;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use App\Service\ThemeService;
-use App\Traits\MathTrait;
-use App\Traits\TranslatorTrait;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,28 +26,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class MonthChart extends BaseChart
 {
-    use MathTrait;
-    use TranslatorTrait;
-
-    private ApplicationService $application;
     private CalculationRepository $repository;
-    private ThemeService $service;
     private string $url;
 
     /**
      * Contructor.
      */
-    public function __construct(ApplicationService $application, CalculationRepository $repository, ThemeService $service, TranslatorInterface $translator, UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, CalculationRepository $repository, UrlGeneratorInterface $generator)
     {
-        parent::__construct();
-        $this->initLangOptions();
-        $this->application = $application;
+        parent::__construct($application, $service, $translator);
         $this->repository = $repository;
-        $this->service = $service;
         $this->url = $generator->generate('calculation_table');
-        $this->setTranslator($translator);
     }
 
+    /**
+     * Generate the chart data.
+     *
+     * @param int $months the number of months to display
+     */
     public function generate(int $months): array
     {
         // get values
@@ -220,14 +214,6 @@ class MonthChart extends BaseChart
         }, $data);
     }
 
-    /**
-     * Gets the chart's label foreground.
-     */
-    private function getForeground(): string
-    {
-        return $this->service->isDarkTheme() ? 'white' : 'black';
-    }
-
     private function getFormatterExpression(): Expr
     {
         $function = <<<EOF
@@ -365,7 +351,7 @@ class MonthChart extends BaseChart
             'type' => 'datetime',
             'categories' => $dates,
             'labels' => [
-                'format' => '{value:%b %Y}',
+                'format' => '{value:%B %Y}',
                 'style' => [
                     'color' => $color,
                     'fontSize' => '12px',

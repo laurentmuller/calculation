@@ -76,7 +76,7 @@ class CaptchaImageService
      */
     public function __construct(RequestStack $requestStack, KernelInterface $kernel)
     {
-        $this->requestStack = $requestStack;
+        $this->setRequestStack($requestStack);
         $this->font = $kernel->getProjectDir() . self::FONT_PATH;
     }
 

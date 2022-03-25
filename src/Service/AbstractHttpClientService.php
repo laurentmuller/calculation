@@ -90,7 +90,7 @@ abstract class AbstractHttpClientService
             throw new \InvalidArgumentException('The API key is empty.');
         }
         if (!$isDebug) {
-            $this->adapter = $adapter;
+            $this->setAdatper($adapter);
         }
         $this->key = $key;
     }

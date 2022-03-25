@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a margin of a task item.
@@ -25,23 +26,38 @@ use Doctrine\ORM\Mapping as ORM;
 class TaskItemMargin extends AbstractEntity
 {
     /**
+     * The maximum quantity (exclusive) to apply within this value.
+     *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
+     * @Assert\Type(type="float")
+     * @Assert\GreaterThanOrEqual(0)
+     * @Assert\GreaterThan(propertyPath="minimum", message="margin.maximum_greater_minimum")
      */
     private float $maximum = 0.0;
 
     /**
+     * The minimum quantity (inclusive) to apply within this value.
+     *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
+     * @Assert\Type(type="float")
+     * @Assert\GreaterThanOrEqual(0)
      */
     private float $minimum = 0.0;
 
     /**
+     * The parent task item.
+     *
      * @ORM\ManyToOne(targetEntity=TaskItem::class, inversedBy="margins")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?TaskItem $taskItem = null;
 
     /**
+     * The value to use when a quantity is within this range.
+     *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
+     * @Assert\Type(type="float")
+     * @Assert\GreaterThanOrEqual(0)
      */
     private float $value = 0.0;
 

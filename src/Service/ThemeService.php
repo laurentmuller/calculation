@@ -102,7 +102,7 @@ class ThemeService
         $this->stack = $stack;
         $this->projectDir = $projectDir;
         if (!$isDebug) {
-            $this->adapter = $adapter;
+            $this->setAdatper($adapter);
         }
     }
 

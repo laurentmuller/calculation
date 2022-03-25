@@ -49,7 +49,7 @@ class TranslatorFactory
      */
     public function __construct(RequestStack $requestStack, iterable $translators)
     {
-        $this->requestStack = $requestStack;
+        $this->setRequestStack($requestStack);
         $this->translators = $translators instanceof \Traversable ? \iterator_to_array($translators) : $translators;
     }
 

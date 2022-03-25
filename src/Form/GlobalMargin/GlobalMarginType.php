@@ -74,7 +74,7 @@ class GlobalMarginType extends AbstractMarginType
 
             // check minimum
             if ($min >= $margin->getMinimum() && $min < $margin->getMaximum()) {
-                $context->buildViolation('abstract_margin.minimum_overlap')
+                $context->buildViolation('margin.minimum_overlap')
                     ->atPath('minimum')
                     ->addViolation();
                 break;
@@ -82,7 +82,7 @@ class GlobalMarginType extends AbstractMarginType
 
             // check maximum
             if ($max > $margin->getMinimum() && $max < $margin->getMaximum()) {
-                $context->buildViolation('abstract_margin.maximum_overlap')
+                $context->buildViolation('margin.maximum_overlap')
                     ->atPath('maximum')
                     ->addViolation();
                 break;

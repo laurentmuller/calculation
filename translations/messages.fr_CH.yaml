@@ -503,7 +503,11 @@ common:
     empty_date: Inconnue
     no_script_support: Votre navigateur ne supporte pas JavaScript !
     entity_created: 'Création : %date% - %user%'
+    entity_created_short: '%date% - %user%'
+    entity_created_tooltip: Date de création - Nom de l'utilisateur
     entity_updated: 'Mise à jour : %date% - %user%'
+    entity_updated_short: '%date% - %user%'
+    entity_updated_tooltip: Date de mise à jour - Nom de l'utilisateur
     clone_description: '%description% - Copie'
     view_title: Affichage
     view_table: Vue table
@@ -797,7 +801,7 @@ parameters:
         print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
         panel_state: Afficher la liste des calculations regroupées par status.
         panel_month: Afficher la liste des calculations regroupées par mois.
-        panel_catalog: Afficher le nombre d'objets dans le catalogue (base de données).
+        panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
         panel_calculation: Nombre de calculations à afficher.
 clear_cache:
     title: Vider le cache

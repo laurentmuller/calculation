@@ -12,9 +12,14 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
+use App\Service\ApplicationService;
+use App\Service\ThemeService;
+use App\Traits\MathTrait;
+use App\Traits\TranslatorTrait;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
 use Ob\HighchartsBundle\Highcharts\Highchart;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * High chart with method shortcuts.
@@ -25,17 +30,22 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
  * @method BaseChart xAxis(array $xAxis)  set the x axis options.
  * @method BaseChart yAxis(array $yAxis)  set the y axis options.
  *
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x axis options.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y axis options.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x axis.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y axis.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $chart       the chart.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $credits     the credits.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $legend      the legend.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $tooltip     the tooltip.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $plotOptions the plot options.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $lang        the language.
+ * @property array                                       $colors      the colors.
+ * @property array                                       $series      the series.
  */
 class BaseChart extends Highchart
 {
+    use MathTrait;
+    use TranslatorTrait;
+
     /**
      * The identifier (#id) of the div where to render the chart.
      */
@@ -61,18 +71,32 @@ class BaseChart extends Highchart
      */
     public const TYPE_SP_LINE = 'spline';
 
+    protected ApplicationService $application;
+    protected ThemeService $service;
+
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator)
     {
         parent::__construct();
-        $this->hideCredits();
-        // @phpstan-ignore-next-line
-        $this->chart->renderTo(self::CONTAINER);
-        // @phpstan-ignore-next-line
-        $this->chart->backgroundColor('transparent');
-        $this->style(['fontFamily' => 'var(--font-family-sans-serif)']);
+        $this->application = $application;
+        $this->service = $service;
+        $this->setTranslator($translator);
+
+        $this->hideCredits()
+            ->initLangOptions()
+            ->setRenderTo(self::CONTAINER)
+            ->setBackground('transparent')
+            ->setFontFamily('var(--font-family-sans-serif)');
+    }
+
+    /**
+     * Gets the foreground of the graph label; depending on the theme of the application.
+     */
+    public function getForeground(): string
+    {
+        return $this->service->isDarkTheme() ? 'white' : 'black';
     }
 
     /**
@@ -108,19 +132,33 @@ class BaseChart extends Highchart
     }
 
     /**
-     * Initialize the language options for this chart.
+     * Sets background color for the outer chart area.
      */
-    public function initLangOptions(): self
+    public function setBackground(string $color): self
     {
-        // array options
-        $this->setLangOption('months', \array_values(DateUtils::getMonths()))
-            ->setLangOption('shortMonths', \array_values(DateUtils::getShortMonths()))
-            ->setLangOption('weekdays', \array_values(DateUtils::getWeekdays()))
-            ->setLangOption('shortWeekdays', \array_values(DateUtils::getShortWeekdays()));
+        // @phpstan-ignore-next-line
+        $this->chart->backgroundColor('transparent');
 
-        // format options
-        $this->setLangOption('thousandsSep', FormatUtils::getGrouping())
-            ->setLangOption('decimalPoint', FormatUtils::getDecimal());
+        return $this;
+    }
+
+    /**
+     * Sets the font family.
+     */
+    public function setFontFamily(string $font): self
+    {
+        $this->style(['fontFamily' => $font]);
+
+        return $this;
+    }
+
+    /**
+     * Sets the HTML element where the chart will be rendered.
+     */
+    public function setRenderTo(string $id): self
+    {
+        // @phpstan-ignore-next-line
+        $this->chart->renderTo($id);
 
         return $this;
     }
@@ -129,7 +167,6 @@ class BaseChart extends Highchart
      * Sets the chart title.
      *
      * @param string $title the title to set or null to hide
-     *
      * @psalm-suppress MixedMethodCall
      */
     public function setTitle(?string $title): self
@@ -142,7 +179,7 @@ class BaseChart extends Highchart
     /**
      * Sets the chart type.
      *
-     * @param string $type the chart type to set like 'pie' or 'column'. Can be on of this predefined 'TYPE_' constants.
+     * @param 'column'|'line'|'pie'|'spline' $type the chart type to set
      */
     public function setType(string $type): self
     {
@@ -196,14 +233,22 @@ class BaseChart extends Highchart
     }
 
     /**
-     * Sets a language option for this chart.
-     *
-     * @param string $id    the option identifier
-     * @param mixed  $value the option value to set
+     * Initialize the language options.
      */
-    private function setLangOption($id, $value): self
+    private function initLangOptions(): self
     {
-        $this->lang->{$id}($value);
+        $options = [
+            'thousandsSep' => FormatUtils::getGrouping(),
+            'decimalPoint' => FormatUtils::getDecimal(),
+            'months' => \array_values(DateUtils::getMonths()),
+            'weekdays' => \array_values(DateUtils::getWeekdays()),
+            'shortMonths' => \array_values(DateUtils::getShortMonths()),
+            'shortWeekdays' => \array_values(DateUtils::getShortWeekdays()),
+        ];
+
+        foreach ($options as $id => $value) {
+            $this->lang->{$id}($value);
+        }
 
         return $this;
     }

@@ -39,7 +39,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     public function __construct(CacheItemPoolInterface $adapter, bool $isDebug)
     {
         if (!$isDebug) {
-            $this->adapter = $adapter;
+            $this->setAdatper($adapter);
         }
     }
 

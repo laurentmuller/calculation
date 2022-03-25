@@ -170,9 +170,9 @@ trait CacheTrait
     /**
      * Sets the adapter.
      */
-    public function setAdatper(CacheItemPoolInterface $adpter): void
+    public function setAdatper(CacheItemPoolInterface $adapter): void
     {
-        $this->adapter = $adpter;
+        $this->adapter = $adapter;
     }
 
     /**

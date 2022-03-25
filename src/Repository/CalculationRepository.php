@@ -713,8 +713,7 @@ class CalculationRepository extends AbstractRepository
     {
         $year = (int) $item['year'];
         $month = (int) $item['month'];
-        $day = 1 === $month ? 10 : 1;
-        $time = "$year-$month-$day";
+        $time = "$year-$month-10";
 
         return new \DateTime($time);
     }

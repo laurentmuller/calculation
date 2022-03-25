@@ -72,9 +72,11 @@ trait TimestampableTrait
     /**
      * Gets the text for the created date and user name.
      */
-    public function getCreatedText(TranslatorInterface $translator): string
+    public function getCreatedText(TranslatorInterface $translator, bool $short = false): string
     {
-        return $this->formatDateAndUser($this->createdAt, $this->createdBy, $translator, 'common.entity_created');
+        $id = $short ? 'common.entity_created_short' : 'common.entity_created';
+
+        return $this->formatDateAndUser($this->createdAt, $this->createdBy, $translator, $id);
     }
 
     /**
@@ -96,9 +98,11 @@ trait TimestampableTrait
     /**
      * Gets the text for the updated date and user name.
      */
-    public function getUpdatedText(TranslatorInterface $translator): string
+    public function getUpdatedText(TranslatorInterface $translator, bool $short = false): string
     {
-        return $this->formatDateAndUser($this->updatedAt, $this->updatedBy, $translator, 'common.entity_updated');
+        $id = $short ? 'common.entity_updated_short' : 'common.entity_updated';
+
+        return $this->formatDateAndUser($this->updatedAt, $this->updatedBy, $translator, $id);
     }
 
     /**
@@ -152,14 +156,14 @@ trait TimestampableTrait
     /**
      * Format the date and user.
      */
-    private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $key): string
+    private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $id): string
     {
         $date = null !== $date ? FormatUtils::formatDateTime($date) : $translator->trans('common.empty_date');
         if (null === $user || '' === $user) {
             $user = $translator->trans('common.empty_user');
         }
 
-        return $translator->trans($key, [
+        return $translator->trans($id, [
             '%date%' => $date,
             '%user%' => $user,
         ]);

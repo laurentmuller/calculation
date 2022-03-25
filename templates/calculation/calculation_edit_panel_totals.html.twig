@@ -5,7 +5,7 @@
     <div class="card-header">
         <h1 class="card-title">{{ icons.icon('list-ul', 'calculation.edit.panel_resume') }}</h1>
     </div>
-    <div class="card-body py-1">
+    <div class="card-body py-1 px-2">
         <div class="table-responsive-sm">
             <table id="totals-table" class="table table-overview table-sm">
                 <tbody>
@@ -14,13 +14,13 @@
             </table>
         </div>
     </div>
-    <div class="card-footer py-1{% if new %} d-none{% endif %}">
+    <div class="card-footer py-1 px-3{% if new %} d-none{% endif %}">
         <div class="row">
-            <div class="col-md-6 small text-muted my-md-1">
-               <span>{{ created_item|raw }}</span>
+            <div class="col-sm-6 small text-muted my-sm-1">
+               <span title="{{ 'common.entity_created_tooltip'|trans }}">{{ created_item|raw }}</span>
             </div>
-            <div class="col-md-6 small text-muted my-md-1 text-md-right">
-                <span>{{ updated_item|raw }}</span>
+            <div class="col-sm-6 small text-muted my-sm-1 text-sm-right">
+                <span title="{{ 'common.entity_updated_tooltip'|trans }}">{{ updated_item|raw }}</span>
             </div>
         </div>
     </div>

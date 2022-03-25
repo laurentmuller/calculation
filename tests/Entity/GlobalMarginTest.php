@@ -21,6 +21,12 @@ use App\Entity\GlobalMargin;
  */
 class GlobalMarginTest extends AbstractEntityValidatorTest
 {
+    public function testAllLessZero(): void
+    {
+        $margin = $this->getGlobalMargin(-2, -1, -1);
+        $this->validate($margin, 3);
+    }
+
     public function testMarginLessZero(): void
     {
         $margin = $this->getGlobalMargin(0, 1, -1);

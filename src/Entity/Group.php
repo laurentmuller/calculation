@@ -14,6 +14,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -327,15 +328,19 @@ class Group extends AbstractEntity
      */
     public function validate(ExecutionContextInterface $context): void
     {
-        // margins?
+        /** @psalm-var ArrayCollection<int, GroupMargin> $margins */
         $margins = $this->getMargins();
-        if ($margins->isEmpty()) {
+        if (\count($margins) < 2) {
             return;
         }
 
+        // sort
+        $criteria = Criteria::create()
+            ->orderBy(['minimum' => Criteria::ASC]);
+        $margins = $margins->matching($criteria);
+
         $lastMin = null;
         $lastMax = null;
-
         foreach ($margins as $key => $margin) {
             // get values
             $min = $margin->getMinimum();
@@ -347,25 +352,25 @@ class Group extends AbstractEntity
                 $lastMax = $max;
             } elseif ($min <= $lastMin) {
                 // the minimum is smaller than the previous maximum
-                $context->buildViolation('abstract_margin.minimum_overlap')
+                $context->buildViolation('margin.minimum_overlap')
                     ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;
             } elseif ($min >= $lastMin && $min < $lastMax) {
                 // the minimum is overlapping the previous margin
-                $context->buildViolation('abstract_margin.minimum_overlap')
+                $context->buildViolation('margin.minimum_overlap')
                     ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;
             } elseif ($max > $lastMin && $max < $lastMax) {
                 // the maximum is overlapping the previous margin
-                $context->buildViolation('abstract_margin.maximum_overlap')
+                $context->buildViolation('margin.maximum_overlap')
                     ->atPath("margins[$key].maximum")
                     ->addViolation();
                 break;
             } elseif ($min !== $lastMax) {
                 // the minimum is not equal to the previous maximum
-                $context->buildViolation('abstract_margin.minimum_discontinued')
+                $context->buildViolation('margin.minimum_discontinued')
                     ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;

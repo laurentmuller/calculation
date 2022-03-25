@@ -16,8 +16,6 @@ use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Service\ThemeService;
 use App\Table\CalculationTable;
-use App\Traits\MathTrait;
-use App\Traits\TranslatorTrait;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -29,28 +27,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class StateChart extends BaseChart
 {
-    use MathTrait;
-    use TranslatorTrait;
-
-    private ApplicationService $application;
     private UrlGeneratorInterface $generator;
     private CalculationStateRepository $repository;
-    private ThemeService $service;
 
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application, CalculationStateRepository $repository, ThemeService $service, TranslatorInterface $translator, UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, CalculationStateRepository $repository, UrlGeneratorInterface $generator)
     {
-        parent::__construct();
-        $this->initLangOptions();
-        $this->application = $application;
+        parent::__construct($application, $service, $translator);
         $this->repository = $repository;
-        $this->service = $service;
         $this->generator = $generator;
-        $this->setTranslator($translator);
     }
 
+    /**
+     * Generate the chart data.
+     */
     public function generate(): array
     {
         $states = $this->repository->getListCountCalculations();
@@ -132,14 +124,6 @@ class StateChart extends BaseChart
         return \array_map(function (array $state): string {
             return $state['color'];
         }, $states);
-    }
-
-    /**
-     * Gets the chart's label foreground.
-     */
-    private function getForeground(): string
-    {
-        return $this->service->isDarkTheme() ? 'white' : 'black';
     }
 
     private function getPie(): array

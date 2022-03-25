@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class AbstractMargin extends AbstractEntity
 {
     /**
-     * The margin in percent (%).
+     * The margin in percent (%) to use when an amount is within this range.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
      * @Assert\Type(type="float")
@@ -40,7 +40,7 @@ abstract class AbstractMargin extends AbstractEntity
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
      * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(0)
-     * @Assert\GreaterThan(propertyPath="minimum", message="abstract_margin.maximum_geather_minimum")
+     * @Assert\GreaterThan(propertyPath="minimum", message="margin.maximum_greater_minimum")
      */
     protected float $maximum = 0.0;
 

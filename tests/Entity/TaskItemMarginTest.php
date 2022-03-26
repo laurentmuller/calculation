@@ -51,6 +51,19 @@ class TaskItemMarginTest extends AbstractEntityValidatorTest
         $this->validate($margin, 1);
     }
 
+    public function testValues(): void
+    {
+        $margin = $this->getTaskItemMargin(0, 100, 10);
+        $this->assertEquals(0, $margin->getMinimum());
+        $this->assertEquals(100, $margin->getMaximum());
+        $this->assertEquals(10, $margin->getValue());
+
+        $this->assertFalse($margin->contains(-1));
+        $this->assertTrue($margin->contains(0));
+        $this->assertTrue($margin->contains(99));
+        $this->assertFalse($margin->contains(100));
+    }
+
     private function getTaskItemMargin(float $minimum, float $maximum, float $value): TaskItemMargin
     {
         $entity = new TaskItemMargin();

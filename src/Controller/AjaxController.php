@@ -233,7 +233,7 @@ class AjaxController extends AbstractController
             ->compute($request);
 
         /** @psalm-var array $data */
-        $data = \array_merge((array) $service->jsonSerialize(), [
+        $data = \array_merge($service->jsonSerialize(), [
             'message' => $this->trans('taskcompute.success'),
         ]);
 

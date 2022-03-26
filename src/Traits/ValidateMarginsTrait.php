@@ -21,15 +21,14 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *
  * @author Laurent Muller
  */
-trait ValidateMarginsTraits
+trait ValidateMarginsTrait
 {
     /**
      * @Assert\Callback
-     * @template T of \App\Interfaces\MarginInterface
      */
     public function validateMargins(ExecutionContextInterface $context): void
     {
-        /** @var \Doctrine\Common\Collections\ArrayCollection<int, T> $margins */
+        /** @var \Doctrine\Common\Collections\ArrayCollection<int, \App\Interfaces\MarginInterface> $margins */
         $margins = $this->getMargins();
         if (\count($margins) < 2) {
             return;

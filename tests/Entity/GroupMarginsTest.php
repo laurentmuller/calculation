@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  *
  * @see Category
  */
-class CategoryContraintTest extends ConstraintValidatorTestCase
+class GroupMarginsTest extends ConstraintValidatorTestCase
 {
     public function testInvalidMaximum(): void
     {
@@ -33,7 +33,7 @@ class CategoryContraintTest extends ConstraintValidatorTestCase
         $group->addMargin($this->createMargin(100, 99, 0.2));
 
         $context = $this->context;
-        $group->validate($context);
+        $group->validateMargins($context);
         $violations = $context->getViolations();
         $this->assertEquals(1, $violations->count());
 
@@ -48,7 +48,7 @@ class CategoryContraintTest extends ConstraintValidatorTestCase
         $group->addMargin($this->createMargin(99, 200, 0.2));
 
         $context = $this->context;
-        $group->validate($context);
+        $group->validateMargins($context);
         $violations = $context->getViolations();
         $this->assertEquals(1, $violations->count());
 
@@ -63,7 +63,7 @@ class CategoryContraintTest extends ConstraintValidatorTestCase
         $group->addMargin($this->createMargin(100, 200, 0.2));
 
         $context = $this->context;
-        $group->validate($context);
+        $group->validateMargins($context);
         $violations = $context->getViolations();
         $this->assertEquals(0, $violations->count());
     }

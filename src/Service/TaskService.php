@@ -55,18 +55,16 @@ class TaskService implements \JsonSerializable
 
         if (null !== $this->task) {
             $quantity = $this->quantity;
-            foreach ($this->task->getItems() as $item) {
+            $items = $this->task->getItems();
+            foreach ($items as $item) {
                 $checked = false;
                 $id = $item->getId();
                 $value = $amount = 0.0;
                 if (\in_array($id, $this->items, true)) {
                     $checked = true;
-                    $margin = $item->getMargin($quantity);
-                    if (null !== $margin) {
-                        $value = $margin->getValue();
-                        $amount = $value * $this->quantity;
-                        $this->overall += $amount;
-                    }
+                    $value = $item->findValue($quantity);
+                    $amount = $value * $this->quantity;
+                    $this->overall += $amount;
                 }
                 $this->results[] = [
                     'id' => $id,
@@ -162,10 +160,8 @@ class TaskService implements \JsonSerializable
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $id = null !== $this->task ? $this->task->getId() : null;
         $unit = null !== $this->task ? $this->task->getUnit() : null;
@@ -257,7 +253,7 @@ class TaskService implements \JsonSerializable
     private function parseRequest(Request $request): array
     {
         /** @var int[]|null $items */
-        $items = Utils::getRequestInputBag($request)->get('items');
+        $items = Utils::getRequestInputBag($request)->all('items');
         if (\is_array($items)) {
             return \array_map('intval', $items);
         }

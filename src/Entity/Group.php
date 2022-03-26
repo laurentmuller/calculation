@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\ValidateMarginsTraits;
+use App\Traits\ValidateMarginsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Group extends AbstractEntity
 {
-    use ValidateMarginsTraits;
+    use ValidateMarginsTrait;
 
     /**
      * The categories.
@@ -193,7 +193,7 @@ class Group extends AbstractEntity
     /**
      * Finds the margin in percent for the given amount.
      *
-     * @param float $amount the amount to get percent
+     * @param float $amount the amount to get percent for
      *
      * @return float the percent of the group margin, if found; 0 otherwise
      *

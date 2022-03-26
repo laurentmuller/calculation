@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Traits\PositionTrait;
-use App\Traits\ValidateMarginsTraits;
+use App\Traits\ValidateMarginsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class TaskItem extends AbstractEntity implements \Countable
 {
     use PositionTrait;
-    use ValidateMarginsTraits;
+    use ValidateMarginsTrait;
 
     /**
      * @ORM\OneToMany(targetEntity=TaskItemMargin::class, mappedBy="taskItem", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -99,17 +99,9 @@ class TaskItem extends AbstractEntity implements \Countable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getDisplay(): string
-    {
-        return (string) $this->name;
-    }
-
-    /**
      * Gets the margin for the given quantity.
      */
-    public function getMargin(float $quantity): ?TaskItemMargin
+    public function findMargin(float $quantity): ?TaskItemMargin
     {
         foreach ($this->margins as $margin) {
             if ($margin->contains($quantity)) {
@@ -118,6 +110,30 @@ class TaskItem extends AbstractEntity implements \Countable
         }
 
         return null;
+    }
+
+    /**
+     * Finds the item margin value for the given quantity.
+     *
+     * @param float $quantity the quantity to get value for
+     *
+     * @return float the value of the item margin, if found; 0 otherwise
+     *
+     * @see TaskItem::findMargin()
+     */
+    public function findValue(float $quantity): float
+    {
+        $margin = $this->findMargin($quantity);
+
+        return null !== $margin ? $margin->getValue() : 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplay(): string
+    {
+        return (string) $this->name;
     }
 
     /**

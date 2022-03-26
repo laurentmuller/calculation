@@ -72,7 +72,7 @@ class GroupTest extends AbstractEntityValidatorTest
     public function testNotDuplicate(): void
     {
         $first = new Group();
-        $first->setCode('code');
+        $first->setCode('code1');
 
         try {
             $this->saveEntity($first);

@@ -26,14 +26,11 @@ class EntityFileNamer implements NamerInterface
 {
     use FileExtensionTrait;
 
-    private Transliterator $transliterator;
-
     /**
      * Constructor.
      */
-    public function __construct(Transliterator $transliterator)
+    public function __construct(private Transliterator $transliterator)
     {
-        $this->transliterator = $transliterator;
     }
 
     /**

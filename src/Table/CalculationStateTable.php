@@ -30,18 +30,12 @@ class CalculationStateTable extends AbstractEntityTable
     use TranslatorTrait;
 
     /**
-     * The template renderer.
-     */
-    private Environment $twig;
-
-    /**
      * Constructor.
      */
-    public function __construct(CalculationStateRepository $repository, TranslatorInterface $translator, Environment $twig)
+    public function __construct(CalculationStateRepository $repository, TranslatorInterface $translator, private Environment $twig)
     {
         parent::__construct($repository);
         $this->setTranslator($translator);
-        $this->twig = $twig;
     }
 
     /**

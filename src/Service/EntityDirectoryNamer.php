@@ -24,16 +24,13 @@ use Vich\UploaderBundle\Util\Transliterator;
  */
 class EntityDirectoryNamer implements DirectoryNamerInterface
 {
-    private EntityManagerInterface $manager;
-    private Transliterator $transliterator;
-
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, Transliterator $transliterator)
-    {
-        $this->manager = $manager;
-        $this->transliterator = $transliterator;
+    public function __construct(
+        private EntityManagerInterface $manager,
+        private Transliterator $transliterator
+    ) {
     }
 
     /**

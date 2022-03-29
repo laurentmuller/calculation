@@ -64,26 +64,22 @@ class SwissPostUpdater
      */
     private const STATE_FILE = 'swiss_state.csv';
 
-    private ApplicationService $application;
     private ?\ZipArchive $archive = null;
     private ?SwissDatabase $database = null;
     private string $databaseName;
     private string $dataDirectory;
-    private FormFactoryInterface $factory;
     private SwissPostUpdateResult $results;
     private ?string $sourceName = null;
 
     /** @var bool|resource */
     private $stream = false;
 
-    public function __construct(TranslatorInterface $translator, ApplicationService $application, FormFactoryInterface $factory, SwissPostService $service)
+    public function __construct(private ApplicationService $application, private FormFactoryInterface $factory, SwissPostService $service, TranslatorInterface $translator)
     {
-        $this->setTranslator($translator);
-        $this->application = $application;
-        $this->factory = $factory;
         $this->dataDirectory = $service->getDataDirectory();
         $this->databaseName = $service->getDatabaseName();
         $this->results = new SwissPostUpdateResult();
+        $this->setTranslator($translator);
     }
 
     /**

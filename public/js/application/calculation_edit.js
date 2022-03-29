@@ -1909,4 +1909,3 @@ const MoveHandler = {
     }
 
 }(jQuery));
-

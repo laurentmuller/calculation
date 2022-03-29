@@ -67,23 +67,16 @@ final class CalculationService
      */
     public const ROW_USER_MARGIN = 5;
 
-    private GlobalMarginRepository $globalRepository;
-
-    private GroupRepository $groupRepository;
-
-    private GroupMarginRepository $marginRepository;
-
-    private ApplicationService $service;
-
     /**
      * Constructor.
      */
-    public function __construct(GlobalMarginRepository $globalRepository, GroupMarginRepository $marginRepository, GroupRepository $groupRepository, ApplicationService $service, TranslatorInterface $translator)
-    {
-        $this->globalRepository = $globalRepository;
-        $this->marginRepository = $marginRepository;
-        $this->groupRepository = $groupRepository;
-        $this->service = $service;
+    public function __construct(
+        private GlobalMarginRepository $globalRepository,
+        private GroupMarginRepository $marginRepository,
+        private GroupRepository $groupRepository,
+        private ApplicationService $service,
+        TranslatorInterface $translator
+    ) {
         $this->setTranslator($translator);
     }
 

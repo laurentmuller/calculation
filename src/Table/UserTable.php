@@ -31,18 +31,13 @@ class UserTable extends AbstractEntityTable
 {
     use RoleTranslatorTrait;
 
-    private DateTimeFormatter $formatter;
-    private Environment $twig;
-
     /**
      * Contructor.
      */
-    public function __construct(UserRepository $repository, TranslatorInterface $translator, Environment $twig, DateTimeFormatter $formatter)
+    public function __construct(UserRepository $repository, TranslatorInterface $translator, private Environment $twig, private DateTimeFormatter $formatter)
     {
         parent::__construct($repository);
         $this->setTranslator($translator);
-        $this->twig = $twig;
-        $this->formatter = $formatter;
     }
 
     /**

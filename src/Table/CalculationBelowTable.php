@@ -27,17 +27,11 @@ use Twig\Environment;
 class CalculationBelowTable extends CalculationTable implements \Countable
 {
     /**
-     * The application service.
-     */
-    private ApplicationService $service;
-
-    /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, CalculationStateRepository $stateRepository, Environment $twig, ApplicationService $service)
+    public function __construct(CalculationRepository $repository, protected CalculationStateRepository $stateRepository, protected Environment $twig, private ApplicationService $service)
     {
         parent::__construct($repository, $stateRepository, $twig);
-        $this->service = $service;
     }
 
     /**

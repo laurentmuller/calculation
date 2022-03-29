@@ -192,9 +192,9 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Constructor.
      *
-     * @param string $orientation the page orientation. One of the ORIENTATION_XX contants.
-     * @param string $unit        the measure unit. One of the UNIT_XX contants.
-     * @param mixed  $size        the document size. One of the SIZE_XX contants or an array containing
+     * @param string $orientation the page orientation. One of the ORIENTATION_XX contents.
+     * @param string $unit        the measure unit. One of the UNIT_XX contents.
+     * @param mixed  $size        the document size. One of the SIZE_XX contents or an array containing
      *                            the width and height of the document.
      */
     public function __construct(string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, $size = self::SIZE_A4)

@@ -186,7 +186,7 @@ abstract class AbstractHttpClientService
      *
      * @return mixed the value, if found; the default otherwise
      */
-    protected function getUrlCacheValue(string $url, $default = null)
+    protected function getUrlCacheValue(string $url, $default = null): mixed
     {
         $key = $this->getUrlKey($url);
 
@@ -288,7 +288,7 @@ abstract class AbstractHttpClientService
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
      */
-    protected function setUrlCacheValue(string $url, $value, $time = null): self
+    protected function setUrlCacheValue(string $url, mixed $value, $time = null): self
     {
         $key = $this->getUrlKey($url);
 

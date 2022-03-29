@@ -106,7 +106,7 @@ class AkismetService extends AbstractHttpClientService
     }
 
     /**
-     * Verifiy if the given comment is a spam.
+     * Verify if the given comment is a spam.
      * <p>
      * The parameters options can be one of the following:
      * </p>
@@ -139,7 +139,7 @@ class AkismetService extends AbstractHttpClientService
      * </ul>.
      *
      * @param string $content the content to validate
-     * @param array  $options the parameters options to override
+     * @param array  $options the parameter options to override
      *
      * @return bool true if the comment is a spam; false otherwise
      */

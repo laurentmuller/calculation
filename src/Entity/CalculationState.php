@@ -89,7 +89,7 @@ class CalculationState extends AbstractEntity
     /**
      * Clone this calculation state.
      *
-     * @param string $code the new code
+     * @param string|null $code the new code
      */
     public function clone(?string $code = null): self
     {
@@ -124,8 +124,6 @@ class CalculationState extends AbstractEntity
 
     /**
      * Get code.
-     *
-     * @return string
      */
     public function getCode(): ?string
     {
@@ -142,8 +140,6 @@ class CalculationState extends AbstractEntity
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -152,8 +148,6 @@ class CalculationState extends AbstractEntity
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {
@@ -200,8 +194,6 @@ class CalculationState extends AbstractEntity
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {

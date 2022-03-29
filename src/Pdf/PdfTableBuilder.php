@@ -46,12 +46,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     protected array $columns = [];
 
     /**
-     * Use the document width.
-     */
-    protected bool $fullWidth = false;
-
-    /**
-     * The heder style.
+     * The header style.
      */
     protected ?PdfStyle $headerStyle = null;
 
@@ -59,11 +54,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      * The cell listener.
      */
     protected ?PdfCellListenerInterface $listener = null;
-
-    /**
-     * The parent document.
-     */
-    protected PdfDocument $parent;
 
     /**
      * Print headers when a new page is added.
@@ -81,23 +71,19 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfDocument $parent    the parent document to print in
      * @param bool        $fullWidth a value indicating if the table take all the printable width
      */
-    public function __construct(PdfDocument $parent, bool $fullWidth = true)
+    public function __construct(protected PdfDocument $parent, protected bool $fullWidth = true)
     {
-        $this->parent = $parent;
-        $this->fullWidth = $fullWidth;
     }
 
     /**
      * Adds cell to the current row.
      *
-     * @param string   $text      the text of the cell
-     * @param int      $cols      the number of columns to span
-     * @param PdfStyle $style     the row style to use or null to use the default cell style
-     * @param string   $alignment the cell alignment
+     * @param string|null   $text      the text of the cell
+     * @param int           $cols      the number of columns to span
+     * @param PdfStyle|null $style     the row style to use or null to use the default cell style
+     * @param string|null   $alignment the cell alignment
      *
      * @return self this instance
-     *
-     * @throws \InvalidArgumentException if not current row is defined
      */
     public function add(?string $text, int $cols = 1, ?PdfStyle $style = null, ?string $alignment = self::ALIGN_INHERITED): self
     {
@@ -108,7 +94,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      * Adds the given cell to the list of cells.
      * Do nothing if the given cell is <code>null</code>.
      *
-     * @param \App\Pdf\PdfCell $cell The cell to add
+     * @param PdfCell|null $cell The cell to add
      *
      * @return self this instance
      *
@@ -132,6 +118,8 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfCell[] $cells the cells to add
      *
      * @return self this instance
+     *
+     * @throws \InvalidArgumentException if no current row is started
      */
     public function addCells(array $cells): self
     {
@@ -145,7 +133,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Adds the given column to the list of columns.
      *
-     * @param \App\Pdf\PdfColumn $column the column to add
+     * @param PdfColumn|null $column the column to add
      *
      * @return self this instance
      */
@@ -316,7 +304,7 @@ class PdfTableBuilder implements PdfConstantsInterface
         $this->rowStyle = null;
 
         // check new page
-        $height = $this->getRowHeigth($texts, $widths, $styles, $cells);
+        $height = $this->getRowHeight($texts, $widths, $styles, $cells);
         $this->checkNewPage($height);
 
         // output
@@ -375,8 +363,6 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * Gets the cell listener.
-     *
-     * @return \App\Pdf\PdfCellListenerInterface
      */
     public function getListener(): ?PdfCellListenerInterface
     {
@@ -385,8 +371,6 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * Gets the parent.
-     *
-     * @return \App\Pdf\PdfDocument
      */
     public function getParent(): PdfDocument
     {
@@ -445,8 +429,8 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Output a row.
      *
-     * @param PdfCell[] $cells the cells to output
-     * @param PdfStyle  $style the row style or null for default cell style
+     * @param PdfCell[]     $cells the cells to output
+     * @param PdfStyle|null $style the row style or null for default cell style
      *
      * @return self this instance
      *
@@ -489,10 +473,6 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * Sets the cell listener.
-     *
-     * @param \App\Pdf\PdfCellListenerInterface $listener
-     *
-     * @return self this instance
      */
     public function setListener(?PdfCellListenerInterface $listener): self
     {
@@ -505,8 +485,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      * Sets if the header row is printed when a new page is added.
      *
      * @param bool $repeatHeader true to print the header on each new pages
-     *
-     * @return self this instance
      */
     public function setRepeatHeader(bool $repeatHeader): self
     {
@@ -518,9 +496,9 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Output a row with a single cell.
      *
-     * @param string   $text      the text of the cell
-     * @param PdfStyle $style     the row style to use or null to use the default cell style
-     * @param string   $alignment the cell alignment
+     * @param string|null   $text      the text of the cell
+     * @param PdfStyle|null $style     the row style to use or null to use the default cell style
+     * @param string|null   $alignment the cell alignment
      *
      * @return self this instance
      *
@@ -750,16 +728,16 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Gets the cell height.
      *
-     * @param string   $text  the cell text
-     * @param float    $width the cell width
-     * @param PdfStyle $style the cell style
-     * @param PdfCell  $cell  the cell
+     * @param string|null $text  the cell text
+     * @param float       $width the cell width
+     * @param PdfStyle    $style the cell style
+     * @param PdfCell     $cell  the cell
      *
      * @return float the cell height
      *
-     * @see \App\Pdf\PdfTableBuilder::getRowHeigth()
+     * @see \App\Pdf\PdfTableBuilder::getRowHeight()
      */
-    protected function getCellHeigth(?string $text, float $width, PdfStyle $style, PdfCell $cell): float
+    protected function getCellHeight(?string $text, float $width, PdfStyle $style, PdfCell $cell): float
     {
         $parent = $this->parent;
 
@@ -787,7 +765,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @return int the number of columns span
      *
-     * @see \App\Pdf\PdfCell::getCols();
+     * @see PdfCell::getCols();
      */
     protected function getCellsSpan(): int
     {
@@ -799,21 +777,21 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Gets the row height.
      *
-     * @param string[]   $texts  the cells texts
-     * @param float[]    $widths the cells widths
-     * @param PdfStyle[] $styles the cells styles
+     * @param string[]   $texts  the cell texts
+     * @param float[]    $widths the cell widths
+     * @param PdfStyle[] $styles the cell styles
      * @param PdfCell[]  $cells  the cells
      *
      * @return float the line height
      *
-     * @see \App\Pdf\PdfTableBuilder::getCellHeigth()
+     * @see PdfTableBuilder::getCellHeight()
      */
-    protected function getRowHeigth(array $texts, array $widths, array $styles, array $cells): float
+    protected function getRowHeight(array $texts, array $widths, array $styles, array $cells): float
     {
         $height = 0;
         $len = \count($texts);
         for ($i = 0; $i < $len; ++$i) {
-            $height = \max($height, $this->getCellHeigth($texts[$i], $widths[$i], $styles[$i], $cells[$i]));
+            $height = \max($height, $this->getCellHeight($texts[$i], $widths[$i], $styles[$i], $cells[$i]));
         }
 
         return $height;

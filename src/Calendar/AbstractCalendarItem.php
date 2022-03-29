@@ -22,25 +22,13 @@ use App\Util\Utils;
 abstract class AbstractCalendarItem implements \JsonSerializable
 {
     /**
-     * The parent's calendar.
-     */
-    protected Calendar $calendar;
-
-    /**
-     * The item's key.
-     */
-    protected string $key;
-
-    /**
      * Constructor.
      *
      * @param Calendar $calendar the parent's calendar
      * @param string   $key      the unique key
      */
-    public function __construct(Calendar $calendar, string $key)
+    public function __construct(protected Calendar $calendar, protected string $key)
     {
-        $this->calendar = $calendar;
-        $this->key = $key;
         $this->reset();
     }
 

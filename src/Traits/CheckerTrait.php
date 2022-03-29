@@ -37,6 +37,14 @@ trait CheckerTrait
     private array $rights = [];
 
     /**
+     * Sets the authorization checker.
+     */
+    public function setChecker(AuthorizationCheckerInterface $checker): void
+    {
+        $this->checker = $checker;
+    }
+
+    /**
      * Returns if the given action for the given subject (entity name) is granted.
      */
     protected function isGranted(string $action, string $subject): bool

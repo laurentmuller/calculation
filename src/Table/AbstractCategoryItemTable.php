@@ -35,19 +35,13 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     public const PARAM_CATEGORY = 'categoryid';
 
     /**
-     * The category repository.
-     */
-    protected CategoryRepository $categoryRepository;
-
-    /**
      * Constructor.
      *
      * @psalm-param AbstractCategoryItemRepository<T> $repository
      */
-    public function __construct(AbstractCategoryItemRepository $repository, CategoryRepository $categoryRepository)
+    public function __construct(AbstractCategoryItemRepository $repository, protected CategoryRepository $categoryRepository)
     {
         parent::__construct($repository);
-        $this->categoryRepository = $categoryRepository;
     }
 
     /**

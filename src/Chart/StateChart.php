@@ -27,17 +27,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class StateChart extends BaseChart
 {
-    private UrlGeneratorInterface $generator;
-    private CalculationStateRepository $repository;
-
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, CalculationStateRepository $repository, UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private CalculationStateRepository $repository, private UrlGeneratorInterface $generator)
     {
         parent::__construct($application, $service, $translator);
-        $this->repository = $repository;
-        $this->generator = $generator;
     }
 
     /**

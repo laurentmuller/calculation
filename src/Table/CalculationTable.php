@@ -36,23 +36,11 @@ class CalculationTable extends AbstractEntityTable
     public const PARAM_STATE = 'stateid';
 
     /**
-     * The calculation state repository.
-     */
-    protected CalculationStateRepository $stateRepository;
-
-    /**
-     * The template renderer.
-     */
-    private Environment $twig;
-
-    /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, CalculationStateRepository $stateRepository, Environment $twig)
+    public function __construct(CalculationRepository $repository, protected CalculationStateRepository $stateRepository, protected Environment $twig)
     {
         parent::__construct($repository);
-        $this->stateRepository = $stateRepository;
-        $this->twig = $twig;
     }
 
     /**

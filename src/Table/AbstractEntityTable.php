@@ -33,7 +33,7 @@ abstract class AbstractEntityTable extends AbstractTable
     private const WHERE_PART = 'where';
 
     /**
-     * The respository.
+     * The repository.
      *
      * @psalm-var AbstractRepository<T> $repository
      */

@@ -36,22 +36,16 @@ class UsersDocument extends AbstractArrayDocument
 {
     use RoleTranslatorTrait;
 
-    private PropertyMappingFactory $factory;
     private ?string $fieldName = null;
-    private DateTimeFormatter $formatter;
-    private StorageInterface $storage;
 
     /**
      * Constructor.
      *
      * @param User[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter)
+    public function __construct(AbstractController $controller, array $entities, private PropertyMappingFactory $factory, private StorageInterface $storage, private DateTimeFormatter $formatter)
     {
         parent::__construct($controller, $entities);
-        $this->factory = $factory;
-        $this->storage = $storage;
-        $this->formatter = $formatter;
     }
 
     /**

@@ -31,7 +31,7 @@ class EntityProvider extends Base
      *
      * @var array<string, array<mixed>>
      */
-    private array $distincValues = [];
+    private array $distinctValues = [];
 
     /**
      * The cached entities.
@@ -75,18 +75,18 @@ class EntityProvider extends Base
      *
      * @return mixed|null a random value or null if none
      */
-    protected function distinctValue(string $field, bool $allowNull = false)
+    protected function distinctValue(string $field, bool $allowNull = false): mixed
     {
         // already loaded?
-        if (!\array_key_exists($field, $this->distincValues) || empty($this->distincValues[$field])) {
-            $this->distincValues[$field] = $this->getRepository()->getDistinctValues($field);
+        if (!\array_key_exists($field, $this->distinctValues) || empty($this->distinctValues[$field])) {
+            $this->distinctValues[$field] = $this->getRepository()->getDistinctValues($field);
         }
 
         if ($allowNull) {
-            return $this->randomElement(\array_merge($this->distincValues[$field], [null]));
+            return $this->randomElement(\array_merge($this->distinctValues[$field], [null]));
         }
 
-        return $this->randomElement($this->distincValues[$field]);
+        return $this->randomElement($this->distinctValues[$field]);
     }
 
     /**

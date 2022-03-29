@@ -37,11 +37,6 @@ class PdfHeader implements PdfConstantsInterface
     protected ?string $description = null;
 
     /**
-     * the parent document.
-     */
-    protected PdfDocument $parent;
-
-    /**
      * The style for the customer name.
      */
     private ?PdfStyle $nameStyle = null;
@@ -59,9 +54,8 @@ class PdfHeader implements PdfConstantsInterface
     /**
      * Constructor.
      */
-    public function __construct(PdfDocument $parent)
+    public function __construct(protected PdfDocument $parent)
     {
-        $this->parent = $parent;
     }
 
     /**

@@ -43,16 +43,10 @@ class LogTable extends AbstractTable implements \Countable
     private const COLUMN_DATE = 'createdAt';
 
     /**
-     * The log service.
-     */
-    private LogService $service;
-
-    /**
      * Constructor.
      */
-    public function __construct(LogService $service)
+    public function __construct(private LogService $service)
     {
-        $this->service = $service;
     }
 
     /**

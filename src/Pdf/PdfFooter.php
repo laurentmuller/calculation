@@ -23,10 +23,6 @@ use App\Util\FormatUtils;
 class PdfFooter implements PdfConstantsInterface
 {
     /**
-     * the parent document.
-     */
-    protected PdfDocument $parent;
-    /**
      * The footer text.
      */
     protected ?string $text = null;
@@ -39,9 +35,8 @@ class PdfFooter implements PdfConstantsInterface
     /**
      * Constructor.
      */
-    public function __construct(PdfDocument $parent)
+    public function __construct(protected PdfDocument $parent)
     {
-        $this->parent = $parent;
     }
 
     /**

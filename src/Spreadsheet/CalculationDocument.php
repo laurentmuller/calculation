@@ -40,11 +40,6 @@ class CalculationDocument extends AbstractDocument
     private const COLOR_BORDER = 'DDDDDD';
 
     /**
-     * The calculation to render.
-     */
-    private Calculation $calculation;
-
-    /**
      * The active sheet.
      */
     private ?Worksheet $sheet = null;
@@ -55,10 +50,9 @@ class CalculationDocument extends AbstractDocument
      * @param AbstractController $controller  the parent controller
      * @param Calculation        $calculation the calculation to render
      */
-    public function __construct(AbstractController $controller, Calculation $calculation)
+    public function __construct(AbstractController $controller, private Calculation $calculation)
     {
         parent::__construct($controller);
-        $this->calculation = $calculation;
     }
 
     /**

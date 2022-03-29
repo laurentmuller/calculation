@@ -52,16 +52,11 @@ class ProductUpdater implements LoggerAwareInterface
     private const KEY_SIMULATE = 'product.update.simulated';
     private const KEY_TYPE = 'product.update.type';
 
-    private FormFactoryInterface $factory;
-    private EntityManagerInterface $manager;
-
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, FormFactoryInterface $factory, RequestStack $requestStack, TranslatorInterface $translator)
+    public function __construct(private EntityManagerInterface $manager, private FormFactoryInterface $factory, RequestStack $requestStack, TranslatorInterface $translator)
     {
-        $this->manager = $manager;
-        $this->factory = $factory;
         $this->setRequestStack($requestStack);
         $this->setTranslator($translator);
     }

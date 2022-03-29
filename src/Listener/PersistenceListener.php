@@ -56,11 +56,6 @@ class PersistenceListener implements EventSubscriber
     ];
 
     /**
-     * The application name.
-     */
-    private string $appName;
-
-    /**
      * The debug mode.
      */
     private bool $debug;
@@ -73,12 +68,11 @@ class PersistenceListener implements EventSubscriber
     /**
      * Constructor.
      */
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, string $appName)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, private string $appName)
     {
-        $this->requestStack = $requestStack;
         $this->debug = $kernel->isDebug();
-        $this->appName = $appName;
         $this->setTranslator($translator);
+        $this->setRequestStack($requestStack);
         $id = \sprintf('environment.%s', $kernel->getEnvironment());
         $this->title = $this->trans($id);
     }

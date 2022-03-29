@@ -89,7 +89,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static the blue color
      */
-    public static function blue(): self
+    public static function blue(): static
     {
         return new static(self::MIN_VALUE, self::MIN_VALUE, self::MAX_VALUE);
     }
@@ -101,7 +101,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static The border cell color
      */
-    public static function cellBorder(): self
+    public static function cellBorder(): static
     {
         return new static(221, 221, 221);
     }
@@ -115,7 +115,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @see AbstractPdfColor::parse()
      */
-    public static function create($rgb): ?self
+    public static function create($rgb): ?static
     {
         if (\is_string($rgb)) {
             $rgb = self::parse($rgb);
@@ -135,7 +135,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static the dark-green color
      */
-    public static function darkGreen(): self
+    public static function darkGreen(): static
     {
         return new static(self::MIN_VALUE, 128, self::MIN_VALUE);
     }
@@ -181,7 +181,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static the green color
      */
-    public static function green(): self
+    public static function green(): static
     {
         return new static(self::MIN_VALUE, self::MAX_VALUE, self::MIN_VALUE);
     }
@@ -193,7 +193,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static the header color
      */
-    public static function header(): self
+    public static function header(): static
     {
         return new static(245, 245, 245);
     }
@@ -205,7 +205,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static the link color
      */
-    public static function link(): self
+    public static function link(): static
     {
         return static::blue();
     }
@@ -258,7 +258,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static the red color
      */
-    public static function red(): self
+    public static function red(): static
     {
         return new static(self::MAX_VALUE, self::MIN_VALUE, self::MIN_VALUE);
     }
@@ -329,7 +329,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static the white color
      */
-    public static function white(): self
+    public static function white(): static
     {
         return new static(self::MAX_VALUE, self::MAX_VALUE, self::MAX_VALUE);
     }

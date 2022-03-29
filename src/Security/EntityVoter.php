@@ -68,14 +68,11 @@ class EntityVoter extends Voter implements EntityVoterInterface
      */
     private const ENTITY_PREFIX = 'Entity';
 
-    private ApplicationService $service;
-
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $service)
+    public function __construct(private ApplicationService $service)
     {
-        $this->service = $service;
     }
 
     /**

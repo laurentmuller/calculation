@@ -32,11 +32,6 @@ class Week extends AbstractCalendarItem
     public const KEY_FORMAT = 'Y.W';
 
     /**
-     * The week number (1 - 53).
-     */
-    protected int $number;
-
-    /**
      * Constructor.
      *
      * @param Calendar $calendar the parent calendar
@@ -44,7 +39,7 @@ class Week extends AbstractCalendarItem
      *
      * @throws CalendarException if the number is not between 1 and 53 inclusive
      */
-    public function __construct(Calendar $calendar, int $number)
+    public function __construct(Calendar $calendar, protected int $number)
     {
         if ($number < 1 || $number > 53) {
             throw new CalendarException("The week number $number is not between 1 and 53 inclusive.");
@@ -52,7 +47,6 @@ class Week extends AbstractCalendarItem
 
         $key = self::formatKey($calendar->getYear(), $number);
         parent::__construct($calendar, $key);
-        $this->number = $number;
     }
 
     /**

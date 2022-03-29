@@ -64,14 +64,11 @@ class UrlGeneratorService
         SearchTable::PARAM_ENTITY,
     ];
 
-    private UrlGeneratorInterface $generator;
-
     /**
      * Constructor.
      */
-    public function __construct(UrlGeneratorInterface $generator)
+    public function __construct(private UrlGeneratorInterface $generator)
     {
-        $this->generator = $generator;
     }
 
     /**

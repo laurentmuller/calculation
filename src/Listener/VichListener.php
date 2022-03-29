@@ -34,14 +34,11 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 {
     use FileExtensionTrait;
 
-    private ImageResizer $resizer;
-
     /**
      * Constructor.
      */
-    public function __construct(ImageResizer $resizer)
+    public function __construct(private ImageResizer $resizer)
     {
-        $this->resizer = $resizer;
     }
 
     /**

@@ -12,6 +12,7 @@ symfony.lock
 .phpunit
 .phpunit.result.cache
 /phpunit.xml
+/tests/Data/db_test.sqlite
 ###< symfony/phpunit-bridge ###
 
 ###> application ###

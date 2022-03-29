@@ -23,11 +23,8 @@ trait PdfBorderTrait
 {
     /**
      * The border style.
-     *
-     * @var string|int
-     * @noRector
      */
-    protected $border = PdfConstantsInterface::BORDER_ALL;
+    protected string|int $border = PdfConstantsInterface::BORDER_ALL;
 
     /**
      * Gets the border style.
@@ -50,7 +47,7 @@ trait PdfBorderTrait
      *                    </li>
      *                    </ul>
      */
-    public function getBorder()
+    public function getBorder(): int|string
     {
         return $this->border;
     }
@@ -88,7 +85,7 @@ trait PdfBorderTrait
      *
      * @return self this instance
      */
-    public function setBorder($border): self
+    public function setBorder(int|string $border): self
     {
         $this->border = $this->validateBorder($border);
 
@@ -144,7 +141,7 @@ trait PdfBorderTrait
      *
      * @return string|int a valid border
      */
-    protected function validateBorder($border)
+    protected function validateBorder($border): string|int
     {
         if (empty($border)) {
             return PdfConstantsInterface::BORDER_NONE;

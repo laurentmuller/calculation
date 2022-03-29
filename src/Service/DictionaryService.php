@@ -17,7 +17,7 @@ namespace App\Service;
  *
  * @author Laurent Muller
  */
-class DictionnaryService
+class DictionaryService
 {
     private const DICTIONNARY = [
         'Accointance',

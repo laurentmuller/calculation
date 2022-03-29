@@ -46,11 +46,6 @@ class Comment
     private ?Address $fromAddress = null;
 
     /**
-     * The mail type.
-     */
-    private bool $mail;
-
-    /**
      * The message.
      *
      * @Assert\NotNull
@@ -76,9 +71,8 @@ class Comment
      *
      * @param bool $mail true to send an e-mail, false to send a comment
      */
-    public function __construct(bool $mail)
+    public function __construct(private bool $mail)
     {
-        $this->mail = $mail;
     }
 
     /**

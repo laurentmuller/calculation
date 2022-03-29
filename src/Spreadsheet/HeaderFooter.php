@@ -27,8 +27,6 @@ class HeaderFooter
     public const PART_LEFT = '&L';
     public const PART_RIGHT = '&R';
 
-    private int $fontSize;
-    private bool $isHeader;
     private String $textCenter = '';
     private String $textLeft = '';
     private String $textRight = '';
@@ -38,10 +36,8 @@ class HeaderFooter
      *
      * @param bool $isHeader true to apply to the work sheet header, false to apply to the work sheet footer
      */
-    public function __construct(bool $isHeader, int $fontSize = self::DEFAULT_FONT_SIZE)
+    public function __construct(private bool $isHeader, private int $fontSize = self::DEFAULT_FONT_SIZE)
     {
-        $this->isHeader = $isHeader;
-        $this->fontSize = $fontSize;
     }
 
     /**

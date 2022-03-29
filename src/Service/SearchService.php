@@ -56,7 +56,7 @@ class SearchService
     public const COLUMN_TYPE = 'type';
 
     /**
-     * Limit value to returns all rows.
+     * Limit value to return all rows.
      */
     public const NO_LIMIT = -1;
 
@@ -78,16 +78,6 @@ class SearchService
     private const SEARCH_PARAM = 'search';
 
     /**
-     * The debug mode.
-     */
-    private bool $debug;
-
-    /**
-     * The manager.
-     */
-    private EntityManagerInterface $manager;
-
-    /**
      * The result set mapping.
      */
     private ?ResultSetMapping $mapping = null;
@@ -102,18 +92,16 @@ class SearchService
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, bool $isDebug)
+    public function __construct(private EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, private bool $isDebug)
     {
-        $this->manager = $manager;
-        $this->checker = $checker;
-        $this->debug = $isDebug;
+        $this->setChecker($checker);
     }
 
     /**
      * Gets the number of returned rows.
      *
-     * @param string $search the term to search
-     * @param string $entity the entity to search in or null for all
+     * @param string|null $search the term to search
+     * @param string|null $entity the entity to search in or null for all
      *
      * @return int the number of rows
      */
@@ -146,7 +134,7 @@ class SearchService
             $this->getEntityName(Group::class) => 'group.name',
             $this->getEntityName(CalculationState::class) => 'calculationstate.name',
         ];
-        if ($this->debug) {
+        if ($this->isDebug) {
             $entities[$this->getEntityName(Customer::class)] = 'customer.name';
         }
 
@@ -158,10 +146,10 @@ class SearchService
      *
      * Do nothing if the search term is empty or if the limit is equal to 0.
      *
-     * @param string $search the term to search
-     * @param string $entity the entity name to search in or null for all
-     * @param int    $limit  the number of rows to return or -1 for all
-     * @param int    $offset the zero based index of the first row to return
+     * @param string|null $search the term to search
+     * @param string|null $entity the entity name to search in or null for all
+     * @param int         $limit  the number of rows to return or -1 for all
+     * @param int         $offset the zero based index of the first row to return
      *
      * @return array the array of results for the given search (can be empty)
      * @psalm-return array<array{
@@ -300,9 +288,9 @@ class SearchService
     /**
      * Creates a query builder.
      *
-     * @param string $class   the entity class
-     * @param string $field   the field name
-     * @param string $content the field content to search in or null to use the field name
+     * @param string      $class   the entity class
+     * @param string      $field   the field name
+     * @param string|null $content the field content to search in or null to use the field name
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
@@ -322,9 +310,9 @@ class SearchService
     /**
      * Creates the native query and returns the array result.
      *
-     * @param string $search the term to search
-     * @param string $entity the entity to search in or null for all
-     * @param string $extra  a SQL statement to add to the default native SELECT SQL statement
+     * @param string      $search the term to search
+     * @param string|null $entity the entity to search in or null for all
+     * @param string      $extra  a SQL statement to add to the default native SELECT SQL statement
      *
      * @psalm-return array<array{
      *      id: int,
@@ -426,7 +414,7 @@ class SearchService
                 ->createCalculationItemQuery();
 
             // debug queries
-            if ($this->debug) {
+            if ($this->isDebug) {
                 $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company', 'address', 'zipCode', 'city'])
                     ->createCalculationGroupQuery();
             }

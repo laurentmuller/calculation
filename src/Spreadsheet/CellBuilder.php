@@ -61,11 +61,6 @@ class CellBuilder
     private int $indent = 0;
 
     /**
-     * The parent work sheet.
-     */
-    private Worksheet $sheet;
-
-    /**
      * The vertical aligment.
      */
     private string $vertical = '';
@@ -75,9 +70,8 @@ class CellBuilder
      *
      * @param Worksheet $sheet the sheet used to set cell values and styles
      */
-    public function __construct(Worksheet $sheet)
+    public function __construct(private Worksheet $sheet)
     {
-        $this->sheet = $sheet;
     }
 
     /**

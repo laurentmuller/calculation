@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Captcha;
 
-use App\Service\DictionnaryService;
+use App\Service\DictionaryService;
 use App\Traits\TranslatorTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,16 +26,10 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     use TranslatorTrait;
 
     /**
-     * The dictionnary service to get random word.
-     */
-    protected DictionnaryService $dictionnary;
-
-    /**
      * Constructor.
      */
-    public function __construct(DictionnaryService $dictionnary, TranslatorInterface $translator)
+    public function __construct(protected DictionaryService $dictionary, TranslatorInterface $translator)
     {
-        $this->dictionnary = $dictionnary;
         $this->setTranslator($translator);
     }
 
@@ -81,6 +75,6 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
      */
     protected function getRandomWord(): string
     {
-        return $this->dictionnary->getRandomWord();
+        return $this->dictionary->getRandomWord();
     }
 }

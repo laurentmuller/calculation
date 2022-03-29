@@ -26,17 +26,11 @@ use Twig\Environment;
 class GroupTable extends AbstractEntityTable
 {
     /**
-     * The template renderer.
-     */
-    private Environment $twig;
-
-    /**
      * Constructor.
      */
-    public function __construct(GroupRepository $repository, Environment $twig)
+    public function __construct(GroupRepository $repository, private Environment $twig)
     {
         parent::__construct($repository);
-        $this->twig = $twig;
     }
 
     /**

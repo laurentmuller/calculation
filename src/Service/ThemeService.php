@@ -84,7 +84,7 @@ class ThemeService
     private const KEY_THEMES = 'themes';
 
     /**
-     * The themes directory.
+     * The theme's directory.
      */
     private const THEME_DIRECTORY = 'themes/';
 

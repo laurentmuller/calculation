@@ -30,17 +30,11 @@ class LoginListener implements EventSubscriberInterface
 {
     use TranslatorFlashMessageTrait;
 
-    private string $appNameVersion;
-
-    private EntityManagerInterface $manager;
-
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, TranslatorInterface $translator, string $appNameVersion)
+    public function __construct(private EntityManagerInterface $manager, TranslatorInterface $translator, private string $appNameVersion)
     {
-        $this->manager = $manager;
-        $this->appNameVersion = $appNameVersion;
         $this->setTranslator($translator);
     }
 

@@ -22,19 +22,13 @@ use App\Controller\AbstractController;
 abstract class AbstractDocument extends SpreadsheetDocument
 {
     /**
-     * The parent controller.
-     */
-    protected AbstractController $controller;
-
-    /**
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(protected AbstractController $controller)
     {
         parent::__construct($controller->getTranslator());
-        $this->controller = $controller;
     }
 
     /**

@@ -27,15 +27,12 @@ class LogoutListener implements EventSubscriberInterface
 {
     use TranslatorFlashMessageTrait;
 
-    private string $appNameVersion;
-
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, string $appNameVersion)
+    public function __construct(TranslatorInterface $translator, private string $appNameVersion)
     {
         $this->setTranslator($translator);
-        $this->appNameVersion = $appNameVersion;
     }
 
     /**

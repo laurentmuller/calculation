@@ -42,11 +42,6 @@ final class FunctionExtension extends AbstractExtension
     private ?AssetExtension $asset = null;
 
     /**
-     * The URL generator service.
-     */
-    private UrlGeneratorService $generator;
-
-    /**
      * The nonce value.
      */
     private ?string $nonce = null;
@@ -64,9 +59,8 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, TranslatorInterface $translator, UrlGeneratorService $generator)
+    public function __construct(KernelInterface $kernel, TranslatorInterface $translator, private UrlGeneratorService $generator)
     {
-        $this->generator = $generator;
         $this->setTranslator($translator);
 
         $projectDir = $kernel->getProjectDir();

@@ -71,17 +71,12 @@ class BaseChart extends Highchart
      */
     public const TYPE_SP_LINE = 'spline';
 
-    protected ApplicationService $application;
-    protected ThemeService $service;
-
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator)
+    public function __construct(protected ApplicationService $application, protected ThemeService $service, TranslatorInterface $translator)
     {
         parent::__construct();
-        $this->application = $application;
-        $this->service = $service;
         $this->setTranslator($translator);
 
         $this->hideCredits()

@@ -24,16 +24,10 @@ use Doctrine\Common\Collections\Criteria;
 abstract class AbstractCalculationItemsTable extends AbstractTable implements \Countable
 {
     /**
-     * The repository to get entities.
-     */
-    protected CalculationRepository $repository;
-
-    /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository)
+    public function __construct(protected CalculationRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     /**

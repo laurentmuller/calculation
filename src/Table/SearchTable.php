@@ -87,15 +87,12 @@ class SearchTable extends AbstractTable
         self::COLUMN_FIELD_NAME,
     ];
 
-    private SearchService $service;
-
     /**
      * Constructor.
      */
-    public function __construct(SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
+    public function __construct(private SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
     {
-        $this->service = $service;
-        $this->checker = $checker;
+        $this->setChecker($checker);
         $this->setTranslator($translator);
     }
 

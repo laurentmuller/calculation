@@ -32,15 +32,13 @@ class MailService
     private string $appNameVersion;
     private string $homeUrl;
 
-    private MailerInterface $mailer;
     private ?MarkdownInterface $markdown = null;
 
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, MailerInterface $mailer, UrlGeneratorInterface $generator, string $appNameVersion)
+    public function __construct(TranslatorInterface $translator, private MailerInterface $mailer, UrlGeneratorInterface $generator, string $appNameVersion)
     {
-        $this->mailer = $mailer;
         $this->appNameVersion = $appNameVersion;
         $this->homeUrl = $generator->generate(AbstractController::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
         $this->setTranslator($translator);

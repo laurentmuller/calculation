@@ -32,11 +32,6 @@ class Month extends AbstractCalendarItem
     public const KEY_FORMAT = 'Y.m';
 
     /**
-     * The month number (1 - 12).
-     */
-    protected int $number;
-
-    /**
      * Constructor.
      *
      * @param Calendar $calendar the parent calendar
@@ -44,7 +39,7 @@ class Month extends AbstractCalendarItem
      *
      * @throws CalendarException if the number is not between 1 and 12 inclusive
      */
-    public function __construct(Calendar $calendar, int $number)
+    public function __construct(Calendar $calendar, protected int $number)
     {
         if ($number < 1 || $number > 12) {
             throw new CalendarException("The month number $number is not between 1 and 12 inclusive.");
@@ -52,7 +47,6 @@ class Month extends AbstractCalendarItem
 
         $key = self::formatKey($calendar->getYear(), $number);
         parent::__construct($calendar, $key);
-        $this->number = $number;
     }
 
     /**

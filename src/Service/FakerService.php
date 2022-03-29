@@ -34,14 +34,12 @@ use Doctrine\ORM\EntityManagerInterface;
 class FakerService
 {
     private ?Generator $generator = null;
-    private EntityManagerInterface $manager;
 
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(private EntityManagerInterface $manager)
     {
-        $this->manager = $manager;
     }
 
     /**

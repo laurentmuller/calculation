@@ -90,16 +90,6 @@ class ResponseListener implements EventSubscriberInterface
     private string $asset;
 
     /**
-     * The debug mode.
-     */
-    private bool $debug;
-
-    /**
-     * The nonce extension.
-     */
-    private NonceExtension $extension;
-
-    /**
      * The reporting URL.
      */
     private string $reportUrl;
@@ -107,14 +97,12 @@ class ResponseListener implements EventSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(RouterInterface $router, ParameterBagInterface $params, NonceExtension $extension, bool $isDebug)
+    public function __construct(RouterInterface $router, ParameterBagInterface $params, private NonceExtension $extension, private bool $isDebug)
     {
         /** @var string $asset */
         $asset = $params->get('asset_base');
 
         $this->reportUrl = $router->generate('log_csp');
-        $this->extension = $extension;
-        $this->debug = $isDebug;
         $this->asset = $asset;
     }
 
@@ -144,7 +132,7 @@ class ResponseListener implements EventSubscriberInterface
         $headers = $response->headers;
 
         // developement firewall?
-        if ($this->debug && $this->isDevFirewall($request)) {
+        if ($this->isDebug && $this->isDevFirewall($request)) {
             return;
         }
 

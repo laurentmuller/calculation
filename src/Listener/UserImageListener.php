@@ -26,14 +26,11 @@ use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
  */
 class UserImageListener implements ImageExtensionInterface
 {
-    private PropertyMappingFactory $factory;
-
     /**
      * Constructor.
      */
-    public function __construct(PropertyMappingFactory $factory)
+    public function __construct(private PropertyMappingFactory $factory)
     {
-        $this->factory = $factory;
     }
 
     /**

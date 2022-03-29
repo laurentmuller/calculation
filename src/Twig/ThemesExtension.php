@@ -26,16 +26,13 @@ use Twig\TwigFunction;
  */
 final class ThemesExtension extends AbstractExtension
 {
-    private ThemeService $service;
-
     /**
      * Constructor.
      *
      * @param ThemeService $service the theme service
      */
-    public function __construct(ThemeService $service)
+    public function __construct(private ThemeService $service)
     {
-        $this->service = $service;
     }
 
     /**

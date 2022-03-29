@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * The index controler for home page.
+ * The index controller for home page.
  *
  * @author Laurent Muller
  */

@@ -183,15 +183,15 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the connected user name.
+     * Gets the connected username.
      *
-     * @return string|null the user name or null if not connected
+     * @return string|null the username or null if not connected
      */
     public function getUserName(): ?string
     {
         $user = $this->getUser();
         if ($user instanceof User) {
-            return $user->getUsername();
+            return $user->getUserIdentifier();
         }
 
         return null;
@@ -199,8 +199,6 @@ abstract class AbstractController extends BaseController
 
     /**
      * Returns if the debug mode is enabled.
-     *
-     * @return bool true if enabled
      */
     public function isDebug(): bool
     {
@@ -244,11 +242,11 @@ abstract class AbstractController extends BaseController
     /**
      * Creates and returns a form helper instance.
      *
-     * @param string $labelPrefix the label prefix. If the prefix is not null, the label is automatically added when the field property is set.
-     * @param mixed  $data        the initial data
-     * @param array  $options     the initial options
+     * @param string|null $labelPrefix the label prefix. If the prefix is not null, the label is automatically added when the field property is set.
+     * @param mixed|null  $data        the initial data
+     * @param array       $options     the initial options
      */
-    protected function createFormHelper(string $labelPrefix = null, $data = null, array $options = []): FormHelper
+    protected function createFormHelper(string $labelPrefix = null, mixed $data = null, array $options = []): FormHelper
     {
         $builder = $this->createFormBuilder($data, $options);
 
@@ -294,9 +292,9 @@ abstract class AbstractController extends BaseController
     /**
      * Returns the request parameter value converted to string.
      *
-     * @param Request $request the request to get parameter value from
-     * @param string  $key     the parameter key
-     * @param string  $default the default value if the parameter key does not exist
+     * @param Request     $request the request to get parameter value from
+     * @param string      $key     the parameter key
+     * @param string|null $default the default value if the parameter key does not exist
      */
     protected function getRequestString(Request $request, string $key, string $default = null): ?string
     {

@@ -17,7 +17,7 @@ use Doctrine\DBAL\Result;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Service to get database informations.
+ * Service to get database information.
  *
  * @author Laurent Muller
  */
@@ -63,7 +63,7 @@ final class DatabaseInfo
     }
 
     /**
-     * Gets the database server informations.
+     * Gets the database information.
      *
      * @psalm-suppress InternalMethod
      */

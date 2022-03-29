@@ -86,6 +86,9 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
         return $this->minimum;
     }
 
+    /**
+     * Gets the parent task item.
+     */
     public function getTaskItem(): ?TaskItem
     {
         return $this->taskItem;
@@ -99,6 +102,9 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
         return $this->value;
     }
 
+    /**
+     * Sets the maximum.
+     */
     public function setMaximum(float $maximum): self
     {
         $this->maximum = $maximum;
@@ -106,6 +112,9 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
         return $this;
     }
 
+    /**
+     * Sets the minimum.
+     */
     public function setMinimum(float $minimum): self
     {
         $this->minimum = $minimum;
@@ -113,6 +122,9 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
         return $this;
     }
 
+    /**
+     * Sets the parent task item.
+     */
     public function setTaskItem(?TaskItem $taskItem): self
     {
         $this->taskItem = $taskItem;

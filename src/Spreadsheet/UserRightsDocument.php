@@ -151,7 +151,7 @@ class UserRightsDocument extends AbstractArrayDocument
         }
 
         if ($entity instanceof User) {
-            $text = $entity->getUsername();
+            $text = $entity->getUserIdentifier();
             if ($entity->isEnabled()) {
                 $description .= $role;
             } else {

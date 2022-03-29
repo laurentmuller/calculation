@@ -68,7 +68,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     /**
      * {@inheritdoc}
      */
-    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         switch ($field) {
             case 'group.id':

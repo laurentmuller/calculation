@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
     /**
-     * Send comment to the web master.
+     * Send comment to the webmaster.
      *
      * @Route("/comment", name="user_comment")
      * @IsGranted("ROLE_USER")
@@ -59,7 +59,7 @@ class CommentController extends AbstractController
             try {
                 // send
                 $comment->send($mailer);
-                $this->succesTrans('user.comment.success');
+                $this->successTrans('user.comment.success');
 
                 // home page
                 return $this->redirectToHomePage();

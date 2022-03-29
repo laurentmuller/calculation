@@ -87,9 +87,9 @@ class PivotTable extends AbstractPivotAggregator
      * Constructor.
      *
      * @param AbstractAggregator $aggregator the aggregator function
-     * @param string             $title      the table title
+     * @param string|null        $title      the table title
      */
-    public function __construct(AbstractAggregator $aggregator, ?string $title = null)
+    public function __construct(protected AbstractAggregator $aggregator, ?string $title = null)
     {
         parent::__construct($aggregator);
 
@@ -100,8 +100,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Adds a cell.
-     *
-     * @param PivotCell $cell the cell to add
      */
     public function addCell(PivotCell $cell): self
     {
@@ -136,7 +134,7 @@ class PivotTable extends AbstractPivotAggregator
      *
      * @return PivotCell|null the cell, if found; null otherwise
      */
-    public function findCellByKey($columnKey, $rowKey): ?PivotCell
+    public function findCellByKey(mixed $columnKey, mixed $rowKey): ?PivotCell
     {
         foreach ($this->cells as $cell) {
             if ($cell->equalsKey($columnKey, $rowKey)) {
@@ -206,7 +204,7 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * Gets the column fields.
      *
-     * @return PivotField[]
+     * @return PivotField[]|null
      */
     public function getColumnFields(): ?array
     {
@@ -215,8 +213,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Gets the data field.
-     *
-     * @return PivotField
      */
     public function getDataField(): ?PivotField
     {
@@ -225,8 +221,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Gets the key field.
-     *
-     * @return PivotField
      */
     public function getKeyField(): ?PivotField
     {
@@ -244,7 +238,7 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * Gets the row fields.
      *
-     * @return PivotField[]
+     * @return PivotField[]|null
      */
     public function getRowFields(): ?array
     {
@@ -253,8 +247,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Gets the table title.
-     *
-     * @return string
      */
     public function getTitle(): ?string
     {
@@ -263,8 +255,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Gets the total title.
-     *
-     * @return string
      */
     public function getTotalTitle(): ?string
     {
@@ -340,8 +330,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Sets the table title.
-     *
-     * @param string $title
      */
     public function setTitle(?string $title): self
     {
@@ -352,8 +340,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Sets the total title.
-     *
-     * @param string $totalTitle
      */
     public function setTotalTitle(?string $totalTitle): self
     {
@@ -371,7 +357,7 @@ class PivotTable extends AbstractPivotAggregator
      *
      * @psalm-suppress MixedAssignment
      */
-    private function serialize(array &$result, string $name, $value): self
+    private function serialize(array &$result, string $name, mixed $value): self
     {
         if ($value) {
             $result[$name] = $value;

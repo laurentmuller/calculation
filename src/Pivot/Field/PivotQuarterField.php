@@ -26,11 +26,8 @@ class PivotQuarterField extends PivotDateField
 
     /**
      * Constructor.
-     *
-     * @param string $name  the field name
-     * @param string $title the field title
      */
-    public function __construct(string $name, ?string $title = null)
+    public function __construct(protected string $name, protected ?string $title = null)
     {
         parent::__construct($name, self::PART_MONTH, $title);
     }
@@ -38,7 +35,7 @@ class PivotQuarterField extends PivotDateField
     /**
      * {@inheritdoc}
      */
-    public function getDisplayValue($value)
+    public function getDisplayValue(mixed $value): string
     {
         return $this->formatQuarter((int) $value);
     }
@@ -46,7 +43,7 @@ class PivotQuarterField extends PivotDateField
     /**
      * Gets the callback used to format a quarter.
      *
-     * @return callable(int): string|null the callback, if set; null otherwise
+     * @pslam-return callable(int): string|null the callback, if set; null otherwise
      */
     public function getFormatter(): ?callable
     {
@@ -58,7 +55,8 @@ class PivotQuarterField extends PivotDateField
      *
      * The function receive the quarter (1 to 4) as parameter and must return a string.
      *
-     * @param callable(int): string|null $formatter the callback to set; null to use default
+     * @param ?callable $formatter the optional callback
+     * @psalm-param callable(int): string|null $formatter
      */
     public function setFormatter(?callable $formatter): self
     {
@@ -70,7 +68,7 @@ class PivotQuarterField extends PivotDateField
     /**
      * {@inheritdoc}
      */
-    protected function doGetValue(\DateTimeInterface $date)
+    protected function doGetValue(\DateTimeInterface $date): int
     {
         $value = parent::doGetValue($date);
 
@@ -87,17 +85,13 @@ class PivotQuarterField extends PivotDateField
         if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $quarter);
         }
-        switch ($quarter) {
-            case 1:
-                return '1st quarter';
-            case 2:
-                return '2nd quarter';
-            case 3:
-                return '3rd quarter';
-            case 4:
-                return '4th quarter';
-            default:
-                return (string) $quarter;
-        }
+
+        return match ($quarter) {
+            1 => '1st quarter',
+            2 => '2nd quarter',
+            3 => '3rd quarter',
+            4 => '4th quarter',
+            default => (string) $quarter,
+        };
     }
 }

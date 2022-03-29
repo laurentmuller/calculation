@@ -38,9 +38,8 @@ trait PdfCellListenerTrait
      * {@inheritdoc}
      *
      * @see PdfCellListenerInterface::onDrawCellBorder()
-     * @psalm-param int|string $border  the border style
      */
-    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, $border): bool
+    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, int|string $border): bool
     {
         return false;
     }

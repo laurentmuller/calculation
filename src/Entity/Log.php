@@ -115,7 +115,7 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Gets the extra informations.
+     * Gets the extra information.
      */
     public function getExtra(): ?array
     {
@@ -177,7 +177,7 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Sets the extra informations.
+     * Sets the extra information.
      */
     public function setExtra(?array $extra): self
     {

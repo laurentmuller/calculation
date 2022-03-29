@@ -58,7 +58,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     }
 
     /**
-     * Gets all users order by user name.
+     * Gets all users order by username.
      *
      * @return User[]
      */
@@ -76,7 +76,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     }
 
     /**
-     * Finds a user by their user name.
+     * Finds a user by their username.
      */
     public function findByUsername(string $username): ?User
     {
@@ -84,7 +84,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     }
 
     /**
-     * Finds a user by their user name or email.
+     * Finds a user by their username or email.
      */
     public function findByUsernameOrEmail(string $usernameOrEmail): ?User
     {
@@ -110,7 +110,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     }
 
     /**
-     * Gets the query builder for the list of users sorted by user name.
+     * Gets the query builder for the list of users sorted by username.
      *
      * @param string $alias the default entity alias
      */

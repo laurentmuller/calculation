@@ -22,16 +22,6 @@ use App\Pivot\Aggregator\AbstractAggregator;
 class PivotCell extends AbstractPivotAggregator
 {
     /**
-     * The parent column.
-     */
-    private PivotNode $column;
-
-    /**
-     * The parent row.
-     */
-    private PivotNode $row;
-
-    /**
      * Constructor.
      *
      * @param AbstractAggregator $aggregator the aggregator function
@@ -39,12 +29,9 @@ class PivotCell extends AbstractPivotAggregator
      * @param PivotNode          $row        the parent row
      * @param mixed              $value      the initial value
      */
-    public function __construct(AbstractAggregator $aggregator, PivotNode $column, PivotNode $row, $value = null)
+    public function __construct(protected AbstractAggregator $aggregator, private PivotNode $column, private PivotNode $row, mixed $value = null)
     {
         parent::__construct($aggregator, $value);
-
-        $this->column = $column;
-        $this->row = $row;
     }
 
     /**
@@ -52,10 +39,8 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @param mixed $columnKey the column key to compare to
      * @param mixed $rowKey    the row key to compare to
-     *
-     * @return bool true if equal
      */
-    public function equalsKey($columnKey, $rowKey): bool
+    public function equalsKey(mixed $columnKey, $rowKey): bool
     {
         return $this->column->equalsKey($columnKey) && $this->row->equalsKey($rowKey);
     }
@@ -78,8 +63,6 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @param string $columnPath the column path to compare to
      * @param string $rowPath    the row path to compare to
-     *
-     * @return bool true if equal
      */
     public function equalsPath(string $columnPath, string $rowPath): bool
     {
@@ -121,7 +104,7 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @return mixed the formatted result
      */
-    public function getFormattedResult()
+    public function getFormattedResult(): mixed
     {
         return $this->getAggregator()->getFormattedResult();
     }
@@ -131,7 +114,7 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @return mixed the result
      */
-    public function getResult()
+    public function getResult(): mixed
     {
         return $this->getAggregator()->getResult();
     }

@@ -157,7 +157,7 @@ class AkismetService extends AbstractHttpClientService
 
                 'comment_content' => $content,
                 'comment_type' => 'contact-form',
-                'comment_author' => $user->getUsername(), // 'viagra-test-123',
+                'comment_author' => $user->getUserIdentifier(), // 'viagra-test-123',
                 'comment_author_email' => $user->getEmail(),
                 'comment_date_gmt' => (new \DateTime())->format(\DateTime::ISO8601),
 
@@ -247,9 +247,6 @@ class AkismetService extends AbstractHttpClientService
     private function checkError(ResponseInterface $response): void
     {
         $headers = $response->getHeaders();
-        $help = $headers['x-akismet-debug-help'][0] ?? '';
-        if ('' !== $help) {
-        }
         $code = (int) ($headers['X-akismet-alert-code'][0] ?? 0);
         if (0 !== $code) {
             $message = $this->trans((string) $code, [], 'askimet');

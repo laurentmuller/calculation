@@ -39,7 +39,7 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets the the list of calculation states sorted by code.
+     * Gets the list of calculation states sorted by code.
      *
      * @return CalculationState[] the calculation states
      */
@@ -55,7 +55,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
-     * @param float $margin the minimumn margin
+     * @param float $margin the minimum margin
      *
      * @return array the states with the number and the sum of calculations
      * @psalm-return array<array{

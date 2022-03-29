@@ -34,18 +34,18 @@ class PdfColumn implements PdfConstantsInterface
     protected ?string $text = null;
 
     /**
-     * The column's wdith.
+     * The column's width.
      */
     protected float $width = 0.0;
 
     /**
      * Constructor.
      *
-     * @param string $text  the column text
-     * @param float  $width the column width
-     * @param string $align the column alignment. Must be one of the ALIGN_XX constant.
-     * @param bool   $fixed true if the column width is fixed. This property is used only if the
-     *                      parent's table use the all the document width.
+     * @param string|null $text  the column text
+     * @param float       $width the column width
+     * @param string      $align the column alignment. Must be one of the ALIGN_XX constant.
+     * @param bool        $fixed true if the column width is fixed. This property is used only if the
+     *                           parent's table use the all the document width.
      */
     public function __construct(?string $text, float $width, string $align = self::ALIGN_LEFT, bool $fixed = false)
     {
@@ -58,10 +58,10 @@ class PdfColumn implements PdfConstantsInterface
     /**
      * Create a column with center alignment.
      *
-     * @param string $text  the column text
-     * @param float  $width the column width
-     * @param bool   $fixed true if the column width is fixed. This property is used only if the
-     *                      parent's table use the all the document width.
+     * @param string|null $text  the column text
+     * @param float       $width the column width
+     * @param bool        $fixed true if the column width is fixed. This property is used only if the
+     *                           parent's table use the all the document width.
      *
      * @return PdfColumn the new newly created column
      */
@@ -72,8 +72,6 @@ class PdfColumn implements PdfConstantsInterface
 
     /**
      * Gets the column text.
-     *
-     * @return string
      */
     public function getText(): ?string
     {
@@ -104,10 +102,10 @@ class PdfColumn implements PdfConstantsInterface
     /**
      * Create a column with left alignment.
      *
-     * @param string $text  the column text
-     * @param float  $width the column width
-     * @param bool   $fixed true if the column width is fixed. This property is used only if the
-     *                      parent's table use the all the document width.
+     * @param string|null $text  the column text
+     * @param float       $width the column width
+     * @param bool        $fixed true if the column width is fixed. This property is used only if the
+     *                           parent's table use the all the document width.
      *
      * @return PdfColumn the new newly created column
      */
@@ -119,10 +117,10 @@ class PdfColumn implements PdfConstantsInterface
     /**
      * Create a column with right alignment.
      *
-     * @param string $text  the column text
-     * @param float  $width the column width
-     * @param bool   $fixed true if the column width is fixed. This property is used only if the
-     *                      parent's table use the all the document width.
+     * @param string|null $text  the column text
+     * @param float       $width the column width
+     * @param bool        $fixed true if the column width is fixed. This property is used only if the
+     *                           parent's table use the all the document width.
      *
      * @return PdfColumn the new newly created column
      */
@@ -150,8 +148,6 @@ class PdfColumn implements PdfConstantsInterface
 
     /**
      * Sets the column text.
-     *
-     * @param string $text
      *
      * @return self this instance
      */

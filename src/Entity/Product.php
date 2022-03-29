@@ -93,8 +93,6 @@ class Product extends AbstractCategoryItemEntity
 
     /**
      * Set the description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {

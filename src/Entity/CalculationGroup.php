@@ -293,8 +293,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
 
     /**
      * Set code.
-     *
-     * @param string $code
      */
     public function setCode(?string $code): self
     {
@@ -309,7 +307,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
      * @param Group $group  the group to copy values from
      * @param bool  $update true to update the total amount and the margin
      */
-    public function setGroup(Group $group, $update = false): self
+    public function setGroup(Group $group, bool $update = false): self
     {
         // copy
         $this->group = $group;

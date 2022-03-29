@@ -35,11 +35,7 @@ class PropertyRepository extends AbstractRepository
     }
 
     /**
-     * Gets a property by it's name.
-     *
-     * @param string $name the property name to search for
-     *
-     * @return Property|null the property or null if the property can not be found
+     * Gets a property by its name.
      */
     public function findOneByName(string $name): ?Property
     {

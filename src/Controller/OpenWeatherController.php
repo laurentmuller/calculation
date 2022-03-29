@@ -70,17 +70,11 @@ class OpenWeatherController extends AbstractController
      */
     private const PREFIX_KEY = 'openweather.';
 
-    /*
-     * the service
-     */
-    private OpenWeatherService $service;
-
     /**
      * Constructor.
      */
-    public function __construct(OpenWeatherService $service)
+    public function __construct(private OpenWeatherService $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -247,7 +241,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Import cities.
      *
-     * Data can be dowloaded from the <a href="http://bulk.openweathermap.org/sample/">sample directory</a>.
+     * Data can be downloaded from the <a href="http://bulk.openweathermap.org/sample/">sample directory</a>.
      *
      * @Route("/import", name="openweather_import")
      * @IsGranted("ROLE_ADMIN")

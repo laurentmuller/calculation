@@ -46,11 +46,6 @@ class PivotTableFactory
     private ?PivotField $dataField = null;
 
     /**
-     * The data source.
-     */
-    private array $dataset;
-
-    /**
      * The key field.
      */
     private ?PivotField $keyField = null;
@@ -63,28 +58,18 @@ class PivotTableFactory
     private array $rowFields = [];
 
     /**
-     * The title.
-     *
-     * @var string
-     */
-    private ?string $title;
-
-    /**
      * Constructor.
      *
      * @psalm-param class-string<T>|null $aggregatorClass
      *
      * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class
      */
-    public function __construct(array $dataset, ?string $title = null, ?string $aggregatorClass = null)
+    public function __construct(private array $dataset, private ?string $title = null, ?string $aggregatorClass = null)
     {
         $aggregatorClass ??= SumAggregator::class;
         if (!\is_subclass_of($aggregatorClass, AbstractAggregator::class)) {
             throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractAggregator::class, $aggregatorClass));
         }
-
-        $this->dataset = $dataset;
-        $this->title = $title;
         $this->aggregatorClass = $aggregatorClass;
     }
 
@@ -212,8 +197,6 @@ class PivotTableFactory
 
     /**
      * Gets the data field.
-     *
-     * @return PivotField
      */
     public function getDataField(): ?PivotField
     {
@@ -248,8 +231,6 @@ class PivotTableFactory
 
     /**
      * Gets the table title.
-     *
-     * @return string
      */
     public function getTitle(): ?string
     {
@@ -270,8 +251,6 @@ class PivotTableFactory
 
     /**
      * Returns a value indicating if data are valid.
-     *
-     * @return bool true if valid
      */
     public function isValid(): bool
     {
@@ -302,13 +281,13 @@ class PivotTableFactory
     /**
      * Sets the column fields.
      *
-     * @param PivotField[]|PivotField $fields the fields to set
+     * @param PivotField|PivotField[] $fields the fields to set
      *
      * @psalm-return PivotTableFactory<T>
      *
      * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
      */
-    public function setColumnFields($fields): self
+    public function setColumnFields(array|PivotField $fields): self
     {
         $this->columnFields = $this->checkFields($fields);
 
@@ -344,13 +323,13 @@ class PivotTableFactory
     /**
      * Sets the row fields.
      *
-     * @param PivotField[]|PivotField $fields the fields to set
+     * @param PivotField|PivotField[] $fields the fields to set
      *
      * @psalm-return PivotTableFactory<T>
      *
      * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
      */
-    public function setRowFields($fields): self
+    public function setRowFields(array|PivotField $fields): self
     {
         $this->rowFields = $this->checkFields($fields);
 
@@ -397,7 +376,7 @@ class PivotTableFactory
      *
      * @throws UnexpectedTypeException if one of the given fields is not an instanceof of the PivotField class
      */
-    private function checkFields($fields): array
+    private function checkFields(mixed $fields): array
     {
         if (!\is_array($fields)) {
             $fields = [$fields];
@@ -420,7 +399,7 @@ class PivotTableFactory
      *
      * @param mixed $value the initial value
      */
-    private function createAggregator($value = null): AbstractAggregator
+    private function createAggregator(mixed $value = null): AbstractAggregator
     {
         /** @psalm-var class-string<AbstractAggregator> $class */
         $class = $this->aggregatorClass;

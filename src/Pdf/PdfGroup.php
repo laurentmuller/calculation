@@ -41,12 +41,12 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     /**
      * Constructor.
      *
-     * @param mixed      $key       the group key
-     * @param string     $alignment the group alignment
-     * @param int|string $border    the group border
-     * @param PdfStyle   $style     the group style or null for default style
+     * @param mixed         $key       the group key
+     * @param string        $alignment the group alignment
+     * @param int|string    $border    the group border
+     * @param PdfStyle|null $style     the group style or null for default style
      */
-    public function __construct($key = null, string $alignment = self::ALIGN_LEFT, $border = self::BORDER_ALL, ?PdfStyle $style = null)
+    public function __construct($key = null, string $alignment = self::ALIGN_LEFT, int|string $border = self::BORDER_ALL, ?PdfStyle $style = null)
     {
         $this->setKey($key)
             ->setAlignment($alignment)
@@ -66,10 +66,8 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 
     /**
      * Gets the key.
-     *
-     * @return mixed
      */
-    public function getKey()
+    public function getKey(): mixed
     {
         return $this->key;
     }
@@ -90,8 +88,6 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 
     /**
      * Gets the style.
-     *
-     * @return \App\Pdf\PdfStyle
      */
     public function getStyle(): ?PdfStyle
     {
@@ -100,8 +96,6 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 
     /**
      * Returns if the key is not empty.
-     *
-     * @return bool true if not empty
      */
     public function isKey(): bool
     {
@@ -109,9 +103,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     }
 
     /**
-     * Output this group.
-     *
-     * @param PdfGroupTableBuilder $parent the parent table
+     * Output this group to the given parent table.
      */
     public function output(PdfGroupTableBuilder $parent): void
     {
@@ -123,10 +115,8 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 
     /**
      * Sets the key.
-     *
-     * @param mixed $key
      */
-    public function setKey($key): self
+    public function setKey(mixed $key): self
     {
         $this->key = $key;
 

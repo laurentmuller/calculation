@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 /**
- * Extends the PDF table builder by adding a group row when headers and/or new pages are
- * outputed.
+ * Extends the PDF table builder by adding a group row when headers and/or new pages are output.
  *
  * @author Laurent Muller
  */
@@ -82,7 +81,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function getGroupStyle(): ?PdfStyle
     {
-        return null !== $this->group ? $this->group->getStyle() : null;
+        return $this->group?->getStyle();
     }
 
     /**
@@ -160,9 +159,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function setGroupStyle(?PdfStyle $style): self
     {
-        if (null !== $this->group) {
-            $this->group->setStyle($style);
-        }
+        $this->group?->setStyle($style);
 
         return $this;
     }

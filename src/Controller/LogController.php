@@ -103,7 +103,7 @@ class LogController extends AbstractController
             }
 
             // OK
-            $this->succesTrans('log.delete.success');
+            $this->successTrans('log.delete.success');
 
             return $this->redirectToHomePage();
         }

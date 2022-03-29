@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controller for calculations where items has the price or the quantity is equal to 0.
+ * Controller for calculations where items have the price or the quantity is equal to 0.
  *
  * @author Laurent Muller
  *
@@ -58,7 +58,7 @@ class CalculationEmptyController extends AbstractController
     }
 
     /**
-     * Export the calculations where items has the price or the quantity is equal to 0.
+     * Export the calculations where items have the price or the quantity is equal to 0.
      *
      * @Route("/pdf", name="empty_pdf")
      */

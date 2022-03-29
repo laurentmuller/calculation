@@ -120,7 +120,7 @@ class Comment
     /**
      * Returns if this is an e-mail or a comment.
      *
-     * @return bool true if e-mail, false if comment
+     * @return bool True if e-mail, false if comment
      */
     public function isMail(): bool
     {
@@ -169,11 +169,9 @@ class Comment
     /**
      * Sets the "from" address.
      *
-     * @param Address|User|string $fromAddress
-     *
      * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
      */
-    public function setFromAddress($fromAddress): self
+    public function setFromAddress(Address|User|string $fromAddress): self
     {
         if ($fromAddress instanceof User) {
             $this->fromAddress = $fromAddress->getAddress();
@@ -207,11 +205,9 @@ class Comment
     /**
      * Sets the "to" address.
      *
-     * @param Address|User|string $toAddress
-     *
      * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
      */
-    public function setToAddress($toAddress): self
+    public function setToAddress(Address|User|string $toAddress): self
     {
         if ($toAddress instanceof User) {
             $this->toAddress = $toAddress->getAddress();

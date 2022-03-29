@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  *
- * @see App\Interfaces\TimestampableInterface
+ * @see \App\Interfaces\TimestampableInterface
  */
 trait TimestampableTrait
 {
@@ -33,7 +33,7 @@ trait TimestampableTrait
     protected ?\DateTimeInterface $createdAt = null;
 
     /**
-     * The creation user name.
+     * The creation username.
      *
      * @ORM\Column(nullable=true)
      */
@@ -47,7 +47,7 @@ trait TimestampableTrait
     protected ?\DateTimeInterface $updatedAt = null;
 
     /**
-     * The updated user name.
+     * The updated username.
      *
      * @ORM\Column(nullable=true)
      */
@@ -62,7 +62,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the creation user name.
+     * Gets the creation username.
      */
     public function getCreatedBy(): ?string
     {
@@ -70,7 +70,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the text for the created date and user name.
+     * Gets the text for the created date and username.
      */
     public function getCreatedText(TranslatorInterface $translator, bool $short = false): string
     {
@@ -88,7 +88,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the updated user name.
+     * Gets the updated username.
      */
     public function getUpdatedBy(): ?string
     {
@@ -96,7 +96,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the text for the updated date and user name.
+     * Gets the text for the updated date and username.
      */
     public function getUpdatedText(TranslatorInterface $translator, bool $short = false): string
     {
@@ -116,7 +116,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Sets the creation user name.
+     * Sets the creation username.
      */
     public function setCreatedBy(string $createdBy): self
     {
@@ -126,7 +126,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Sets the updated date and user name.
+     * Sets the updated date and username.
      */
     public function setUpdated(\DateTimeInterface $updatedAt, string $updatedBy): self
     {
@@ -144,7 +144,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Sets the updated user name.
+     * Sets the updated username.
      */
     public function setUpdatedBy(string $updatedBy): self
     {
@@ -154,7 +154,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Format the date and user.
+     * Format the date and username.
      */
     private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $id): string
     {

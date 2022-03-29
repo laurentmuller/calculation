@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AboutController extends AbstractController
 {
     /**
-     * Display informations about the application.
+     * Display information about the application.
      *
      * @Route("", name="about")
      * @IsGranted("ROLE_USER")
@@ -78,7 +78,7 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Render the licence informations.
+     * Render the licence information.
      *
      * @Route("/licence/content", name="about_licence_content")
      * @IsGranted("ROLE_USER")
@@ -107,7 +107,7 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Render the MySql informations.
+     * Render the MySql information.
      *
      * @Route("/mysql/content", name="about_mysql_content")
      * @IsGranted("ROLE_SUPER_ADMIN")
@@ -127,7 +127,7 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Render the PHP informations.
+     * Render the PHP information.
      *
      * @Route("/php/content", name="about_php_content")
      * @IsGranted("ROLE_SUPER_ADMIN")
@@ -148,7 +148,7 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Exports the PHP informations as PDF.
+     * Exports the PHP information as PDF.
      *
      * @Route("/php/pdf", name="about_php_pdf")
      * @IsGranted("ROLE_SUPER_ADMIN")
@@ -176,7 +176,7 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Render the policy informations.
+     * Render the policy information.
      *
      * @Route("/policy/content", name="about_policy_content")
      * @IsGranted("ROLE_USER")
@@ -207,7 +207,7 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Render Symfony informations.
+     * Render Symfony information.
      *
      * @Route("/symfony/content", name="about_symfony_content")
      * @IsGranted("ROLE_SUPER_ADMIN")
@@ -229,10 +229,8 @@ class AboutController extends AbstractController
 
     /**
      * Gets the Apache version.
-     *
-     * @return string|bool the Apache version on success or <code>false</code> on failure
      */
-    private function getApacheVersion(Request $request)
+    private function getApacheVersion(Request $request): bool|string
     {
         $matches = [];
         $regex = '/Apache\/(?P<version>[1-9]\d*\.\d[^\s]*)/i';

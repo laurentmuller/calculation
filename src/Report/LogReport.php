@@ -91,7 +91,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     /**
      * {@inheritdoc}
      */
-    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, $border): bool
+    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, int|string $border): bool
     {
         // started?
         if (!$this->started) {

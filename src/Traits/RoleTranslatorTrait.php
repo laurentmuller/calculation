@@ -30,7 +30,7 @@ trait RoleTranslatorTrait
      *
      * @return string the translated role
      */
-    public function translateRole($role): string
+    public function translateRole(RoleInterface|string $role): string
     {
         if ($role instanceof RoleInterface) {
             $role = $role->getRole();

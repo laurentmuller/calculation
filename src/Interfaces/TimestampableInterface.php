@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Class implementing this interface deals with the creation and update informations.
+ * Class implementing this interface deals with the creation and update information.
  *
  * @author Laurent Muller
  */
@@ -25,7 +25,7 @@ interface TimestampableInterface
     public function getCreatedAt(): ?\DateTimeInterface;
 
     /**
-     * Gets the creation user name.
+     * Gets the creation username.
      */
     public function getCreatedBy(): ?string;
 
@@ -35,7 +35,7 @@ interface TimestampableInterface
     public function getUpdatedAt(): ?\DateTimeInterface;
 
     /**
-     * Gets the updated user name.
+     * Gets the updated username.
      */
     public function getUpdatedBy(): ?string;
 
@@ -45,7 +45,7 @@ interface TimestampableInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): self;
 
     /**
-     * Sets the creation user name.
+     * Sets the creation username.
      */
     public function setCreatedBy(string $createdBy): self;
 
@@ -55,7 +55,7 @@ interface TimestampableInterface
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self;
 
     /**
-     * Sets the updated user name.
+     * Sets the updated username.
      */
     public function setUpdatedBy(string $updatedBy): self;
 }

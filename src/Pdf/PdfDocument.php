@@ -316,7 +316,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the current page size.
      *
-     * @return float[] the current page size. Is one of the of the SIZE_XX contants.
+     * @return float[] the current page size. Is one of the SIZE_XX constants.
      */
     public function getCurrentPageSize(): array
     {
@@ -326,8 +326,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the current rotation.
      *
-     * @return int the current orientation (0, 90, 180 or 270 degrees)
-     *             contants
+     * @return int the current orientation (0, 90, 180 or 270 degrees) constants
      */
     public function getCurrentRotation(): int
     {
@@ -337,8 +336,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the default orientation.
      *
-     * @return string the default orientation. Is one of the of the ORIENTATION_XX
-     *                contants.
+     * @return string the default orientation. Is one of the ORIENTATION_XX contents.
      */
     public function getDefaultOrientation(): string
     {
@@ -401,10 +399,8 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * Gets the number of lines to use for the given text and width.
      * Computes the number of lines a MultiCell of the given width will take.
      *
-     * @param string $text
-     *                      the text to compute
-     * @param float  $width
-     *                      the desired width. If 0, the width extends up to the right margin.
+     * @param string|null $text  the text to compute
+     * @param float       $width the desired width. If 0, the width extends up to the right margin.
      *
      * @return int the number of lines
      */
@@ -595,8 +591,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Returns if the given height would not cause an overflow (new page).
      *
-     * @param float $height
-     *                      the desired height
+     * @param float $height the desired height
      *
      * @return bool true if printable within the current page; false if a new page is
      *              needed
@@ -652,7 +647,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      */
     public function pixels2mm(float $pixels): float
     {
-        return $pixels * 25.4 / 72;
+        return $pixels * 25.4 / 72.0;
     }
 
     /**
@@ -664,14 +659,14 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      */
     public function pixels2UserUnit(float $pixels): float
     {
-        return $pixels * 72 / 96 / $this->k;
+        return $pixels * 72.0 / 96.0 / $this->k;
     }
 
     /**
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
      * @param PdfRectangle $bounds the rectangle to output
-     * @param string|int   $style  the style of rendering. Possible values are:
+     * @param int|string   $style  the style of rendering. Possible values are:
      *                             <ul>
      *                             <li>'<b>D</b>' or an empty string (''): Draw. This is the default value.</li>
      *                             <li>'<b>F</b>': Fill</li>
@@ -680,7 +675,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      *                             <li><b>PdfConstantsInterface.BORDER_NONE</b>: Do nothing.</li>
      *                             </ul>
      */
-    public function rectangle(PdfRectangle $bounds, $style = self::RECT_BORDER): self
+    public function rectangle(PdfRectangle $bounds, int|string $style = self::RECT_BORDER): self
     {
         if (self::BORDER_NONE !== $style) {
             if (self::BORDER_ALL === $style) {
@@ -706,8 +701,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Sets the cell margins. The minimum value allowed is 0.
      *
-     * @param float $margin
-     *                      the margins to set
+     * @param float $margin the margins to set
      *
      * @return float the old margins
      */
@@ -755,16 +749,16 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
 
     /**
      * This method prints text from the current position in the same way as Write().
-     * An additional parameter allows to reduce or increase the font size; it's useful for initials.
-     * A second parameter allows to specify an offset so that text is placed at a superscripted or subscripted position.
+     * An additional parameter allows reducing or increase the font size; it's useful for initials.
+     * A second parameter allows to specify an offset so that text is placed at a superscripted or subscribed position.
      *
      * @param float      $h        the line height
      * @param string     $text     the string to print
      * @param float      $fontSize the size of font in points (9 by default)
      * @param float      $offset   the offset of text in points (positive means superscript, negative subscript; 0 by default)
-     * @param string|int $link     an URL or an identifier returned by AddLink()
+     * @param int|string $link     a URL or an identifier returned by AddLink()
      */
-    public function subWrite(float $h, string $text, float $fontSize = PdfFont::DEFAULT_SIZE, float $offset = 0.0, $link = ''): self
+    public function subWrite(float $h, string $text, float $fontSize = PdfFont::DEFAULT_SIZE, float $offset = 0.0, int|string $link = ''): self
     {
         // resize font
         $oldFontSize = $this->FontSizePt;
@@ -791,7 +785,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Prints a character string. The origin is on the left of the first character, on the baseline. This method allows to place a string precisely on the page, but it is usually easier to use Cell(), MultiCell() or Write() which are the standard methods to print text.
+     * Prints a character string. The origin is on the left of the first character, on the baseline.This method allows to place a string precisely on the page, but it is usually easier to use Cell(), MultiCell() or Write() which are the standard methods to print text.
      *
      * @param float  $x   the abscissa of the origin
      * @param float  $y   the ordinate of the origin
@@ -808,7 +802,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      *
      * @param float      $h    the line height
      * @param string     $txt  the string to print
-     * @param string|int $link an URL or an identifier returned by AddLink()
+     * @param string|int $link a URL or an identifier returned by AddLink()
      */
     public function Write($h, $txt, $link = ''): void
     {
@@ -818,7 +812,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Clean the given text.
      *
-     * @param string $str the text to convert
+     * @param string|null $str the text to convert
      *
      * @return string|null the converted text
      */

@@ -60,7 +60,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     /**
      * Gets all products for the given category.
      *
-     * @param Category $category     the category to serach products for
+     * @param Category $category     the category to search products for
      * @param bool     $excludeEmpty true to exclude products with an empty price (0.00)
      *
      * @return Product[] the products
@@ -123,7 +123,7 @@ class ProductRepository extends AbstractCategoryItemRepository
             $expr->like('g.code', $param),
         );
         $builder->where($or)
-            ->setParameter($param, "%{$value}%", Types::STRING);
+            ->setParameter($param, "%$value%", Types::STRING);
 
         return $builder->getQuery()->getArrayResult();
     }

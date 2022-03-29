@@ -82,7 +82,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     public const STYLE_REGULAR = '';
 
     /**
-     * The uderline font style.
+     * The underline font style.
      */
     public const STYLE_UNDERLINE = 'U';
 
@@ -250,7 +250,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Sets the font name.
      *
-     * @param string $name the name or null for default
+     * @param string|null $name the name or null for default
      *
      * @return self this instance
      */

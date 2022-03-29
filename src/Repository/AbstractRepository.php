@@ -66,9 +66,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Gets sorted, distinct and not null values of the given column.
      *
-     * @param string $field the field name (column) to get values for
-     * @param string $value a value to search within the column or <code>null</code> for all
-     * @param int    $limit the maximum number of results to retrieve (the "limit") or <code>-1</code> for all
+     * @param string      $field the field name (column) to get values for
+     * @param string|null $value a value to search within the column or <code>null</code> for all
+     * @param int         $limit the maximum number of results to retrieve (the "limit") or <code>-1</code> for all
      *
      * @return array an array, maybe empty; of matching values
      */
@@ -89,7 +89,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $param = 'search';
             $like = $expr->like($name, ':' . $param);
             $builder->where($like)
-                ->setParameter($param, "%{$value}%");
+                ->setParameter($param, "%$value%");
         } else {
             $builder->where($expr->isNotNull($name));
         }
@@ -126,7 +126,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @return string|string[] one on more database search fields
      */
-    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return "$alias.$field";
     }
@@ -134,21 +134,18 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Creates a search query.
      *
-     * @param array  $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
-     * @param array  $criterias    the filter criterias (the where clause)
-     * @param string $alias        the entity alias
+     * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
+     * @param array<Criteria|string> $criterias    the filter criteria (the where clause)
+     * @param string                 $alias        the entity alias
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
-     *
-     * @psalm-param array<Criteria|string> $criterias
-     * @psalm-param array<string, string>  $sortedFields
      */
     public function getSearchQuery(array $sortedFields = [], array $criterias = [], string $alias = self::DEFAULT_ALIAS): Query
     {
         // builder
         $builder = $this->createDefaultQueryBuilder($alias);
 
-        // criterias
+        // criteria
         if (!empty($criterias)) {
             foreach ($criterias as $criteria) {
                 if ($criteria instanceof Criteria) {
@@ -222,7 +219,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function addPrefixes(string $alias, array $names): array
     {
         return \array_map(function (string $name) use ($alias): string {
-            return "{$alias}.{$name}";
+            return "$alias.$name";
         }, $names);
     }
 

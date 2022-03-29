@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Calculation;
+use App\Entity\User;
 use App\Form\Admin\ParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
@@ -120,7 +121,7 @@ class TestController extends AbstractController
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $user = $this->getUser();
-            if (null !== $user) {
+            if ($user instanceof User) {
                 /** @psalm-var array $data */
                 $data = $form->getData();
                 $message = (string) $data['message'];
@@ -135,7 +136,7 @@ class TestController extends AbstractController
                     } else {
                         $service->sendComment($email, $user, $message, $importance);
                     }
-                    $this->succesTrans('user.comment.success');
+                    $this->successTrans('user.comment.success');
 
                     return $this->redirectToHomePage();
                 } catch (\Exception $e) {
@@ -313,7 +314,7 @@ class TestController extends AbstractController
 
             $message .= '</ul>';
 
-            return $this->succes($message)
+            return $this->success($message)
                 ->redirectToHomePage();
         }
 
@@ -381,7 +382,7 @@ class TestController extends AbstractController
                     }
                 }
                 $html .= '</table>';
-                $this->succes('reCAPTCHA|' . $html);
+                $this->success('reCAPTCHA|' . $html);
 
                 return $this->redirectToHomePage();
             }

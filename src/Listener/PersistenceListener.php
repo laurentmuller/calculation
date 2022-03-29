@@ -127,7 +127,7 @@ class PersistenceListener implements EventSubscriber
             if ($entity instanceof User && $this->isLastLogin($args, $entity)) {
                 $id = 'security.login.success';
                 $params = [
-                    '%username%' => $entity->getUsername(),
+                    '%username%' => $entity->getUserIdentifier(),
                     '%appname%' => $this->appName,
                 ];
             } else {

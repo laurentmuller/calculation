@@ -81,7 +81,7 @@ class PdfHeader implements PdfConstantsInterface
     }
 
     /**
-     * Sets the customer informations.
+     * Sets the customer's information.
      */
     public function setCustomer(CustomerInformation $customer): self
     {

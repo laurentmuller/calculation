@@ -25,19 +25,19 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     use MathTrait;
 
     /**
-     * The children chunks.
+     * The children chunk.
      *
      * @var AbstractHtmlChunk[]
      */
-    protected $children;
+    protected array $children;
 
     /**
      * Constructor.
      *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
+     * @param string               $name   the tag name
+     * @param HtmlParentChunk|null $parent the parent chunk
      */
-    public function __construct(string $name, ?self $parent = null)
+    public function __construct(protected string $name, ?self $parent = null)
     {
         parent::__construct($name, $parent);
         $this->children = [];

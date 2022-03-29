@@ -40,27 +40,21 @@ class PivotDateField extends PivotField
     public const PART_YEAR = 'Y';
 
     /**
-     * The date format.
-     */
-    protected string $format;
-
-    /**
      * Constructor.
      *
-     * @param string $name   the field name
-     * @param string $format the format used to extract the date part
-     * @param string $title  the field title
+     * @param string      $name   the field name
+     * @param string      $format the format used to extract the date part
+     * @param string|null $title  the field title
      */
-    public function __construct(string $name, string $format, ?string $title = null)
+    public function __construct(protected string $name, protected string $format, protected ?string $title = null)
     {
         parent::__construct($name, $title);
-        $this->format = $format;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getValue(array $row)
+    public function getValue(array $row): float|int|string|\DateTimeInterface|null
     {
         /** @psalm-var mixed $value */
         $value = $this->getRowValue($row);
@@ -73,12 +67,8 @@ class PivotDateField extends PivotField
 
     /**
      * Gets the value for the given date.
-     *
-     * @param \DateTimeInterface $date the date
-     *
-     * @return int
      */
-    protected function doGetValue(\DateTimeInterface $date)
+    protected function doGetValue(\DateTimeInterface $date): int
     {
         return (int) $date->format($this->format);
     }

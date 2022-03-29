@@ -19,8 +19,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * Trait for files manipulation.
  *
  * @author Laurent Muller
- *
- * @see Symfony\Component\Filesystem\Filesystem
  */
 trait FileTrait
 {
@@ -36,7 +34,7 @@ trait FileTrait
      *
      * @throws \InvalidArgumentException if the file can not be decoded
      */
-    public function decodeJsonFile(string $file, bool $assoc = true)
+    public function decodeJsonFile(string $file, bool $assoc = true): mixed
     {
         // file?
         if (!$this->isFile($file)) {
@@ -61,13 +59,13 @@ trait FileTrait
     /**
      * Atomically dumps content into a file.
      *
-     * @param string|\SplFileInfo $file      the file to write to
-     * @param string|resource     $content   the data to write into the file
+     * @param \SplFileInfo|string $file      the file to write to
+     * @param mixed               $content   the data to write into the file
      * @param bool                $useNative true to use the native <code>file_put_contents</code> function, false to use the file system
      *
      * @return bool true on success, false on failure
      */
-    public function dumpFile($file, $content, bool $useNative = false): bool
+    public function dumpFile(\SplFileInfo|string $file, mixed $content, bool $useNative = false): bool
     {
         if ($file instanceof \SplFileInfo) {
             $file = $file->getRealPath();
@@ -89,11 +87,11 @@ trait FileTrait
     /**
      * Checks the existence of the given file.
      *
-     * @param string|\SplFileInfo $file the file to verfiy
+     * @param \SplFileInfo|string $file the file to verfiy
      *
      * @return bool true if the file exists, false otherwise
      */
-    public function fileExists($file): bool
+    public function fileExists(\SplFileInfo|string $file): bool
     {
         if ($file instanceof \SplFileInfo) {
             $file = $file->getRealPath();
@@ -122,11 +120,11 @@ trait FileTrait
     /**
      * Tells whether the given filen is a regular file.
      *
-     * @param string|\SplFileInfo $file the path to the file
+     * @param \SplFileInfo|string $file the path to the file
      *
      * @return bool true if the file exists and is a regular file, false otherwise
      */
-    public function isFile($file): bool
+    public function isFile(\SplFileInfo|string $file): bool
     {
         if ($file instanceof \SplFileInfo) {
             $file = $file->getRealPath();
@@ -138,18 +136,18 @@ trait FileTrait
     /**
      * Deletes a file or a directory.
      *
-     * @param string|\SplFileInfo|resource $file the file to delete
+     * @param \SplFileInfo|string $file the file to delete
      *
      * @return bool true on success, false on failure
      */
-    public function removeFile($file): bool
+    public function removeFile(\SplFileInfo|string $file): bool
     {
         if ($file instanceof \SplFileInfo) {
             $file = $file->getRealPath();
         }
 
         try {
-            if ($this->exists($file)) {
+            if ($this->fileExists($file)) {
                 $this->getFilesystem()->remove($file);
 
                 return true;

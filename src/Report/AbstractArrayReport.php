@@ -15,7 +15,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 
 /**
- * Asbtract report to render an array of objects.
+ * Abstract report rendering an array of objects.
  *
  * @author Laurent Muller
  *
@@ -35,7 +35,7 @@ abstract class AbstractArrayReport extends AbstractReport
      *
      * @param AbstractController $controller  the parent controller
      * @param array              $entities    the entities to render
-     * @param string             $orientation the page orientation. One of the ORIENTATION_XX contants.
+     * @param string             $orientation the page orientation. One of the ORIENTATION_XX contents.
      * @psalm-param T[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, string $orientation = self::ORIENTATION_PORTRAIT)

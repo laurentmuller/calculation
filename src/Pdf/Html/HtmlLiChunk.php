@@ -25,10 +25,10 @@ class HtmlLiChunk extends HtmlParentChunk
     /**
      * Constructor.
      *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
+     * @param string               $name   the tag name
+     * @param HtmlParentChunk|null $parent the parent chunk
      */
-    public function __construct(string $name, ?HtmlParentChunk $parent = null)
+    public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
     {
         parent::__construct($name, $parent);
     }
@@ -74,8 +74,6 @@ class HtmlLiChunk extends HtmlParentChunk
 
     /**
      * Finds the parent's font.
-     *
-     * @return PdfFont|null the parent font, if found; <code>null</code> otherwise
      */
     private function findFont(): ?PdfFont
     {
@@ -95,10 +93,6 @@ class HtmlLiChunk extends HtmlParentChunk
 
     /**
      * Gets the bullet margin.
-     *
-     * @param HtmlReport $report the report used to mesure the margin
-     *
-     * @return float the margin
      */
     private function getBulletMargin(HtmlReport $report): float
     {
@@ -122,9 +116,7 @@ class HtmlLiChunk extends HtmlParentChunk
     }
 
     /**
-     * Finds the ordered or the unorders parent's list.
-     *
-     * @return HtmlParentChunk|null the parent, if found; <code>null</code> otherwise
+     * Finds the ordered or the unordered parent's list.
      */
     private function getParentList(): ?HtmlParentChunk
     {

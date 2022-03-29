@@ -270,7 +270,7 @@ class CalculationController extends AbstractEntityController
             }
 
             // message
-            $this->succesTrans('calculation.state.success', ['%name%' => $item->getDisplay()]);
+            $this->successTrans('calculation.state.success', ['%name%' => $item->getDisplay()]);
 
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }

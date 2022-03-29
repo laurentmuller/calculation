@@ -27,15 +27,11 @@ trait LoggerTrait
     /**
      * Logs with an arbitrary level message.
      *
-     * @param mixed $level
-     *
      * @throws \Psr\Log\InvalidArgumentException if level is not defined
      */
-    public function log($level, string $message, array $context = []): void
+    public function log(mixed $level, string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->log($level, $message, $context);
-        }
+        $this->logger?->log($level, $message, $context);
     }
 
     /**
@@ -43,9 +39,7 @@ trait LoggerTrait
      */
     public function logAlert(string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->alert($message, $context);
-        }
+        $this->logger?->alert($message, $context);
     }
 
     /**
@@ -53,9 +47,7 @@ trait LoggerTrait
      */
     public function logCritical(string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->critical($message, $context);
-        }
+        $this->logger?->critical($message, $context);
     }
 
     /**
@@ -63,9 +55,7 @@ trait LoggerTrait
      */
     public function logEmergency(string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->emergency($message, $context);
-        }
+        $this->logger?->emergency($message, $context);
     }
 
     /**
@@ -73,9 +63,7 @@ trait LoggerTrait
      */
     public function logError(string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->error($message, $context);
-        }
+        $this->logger?->error($message, $context);
     }
 
     /**
@@ -92,9 +80,7 @@ trait LoggerTrait
      */
     public function logInfo(string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->info($message, $context);
-        }
+        $this->logger?->info($message, $context);
     }
 
     /**
@@ -102,9 +88,7 @@ trait LoggerTrait
      */
     public function logNotice(string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->notice($message, $context);
-        }
+        $this->logger?->notice($message, $context);
     }
 
     /**
@@ -112,8 +96,6 @@ trait LoggerTrait
      */
     public function logWarning(string $message, array $context = []): void
     {
-        if (null !== $this->logger) {
-            $this->logger->warning($message, $context);
-        }
+        $this->logger?->warning($message, $context);
     }
 }

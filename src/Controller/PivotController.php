@@ -34,14 +34,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PivotController extends AbstractController
 {
-    private CalculationRepository $repository;
-
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository)
+    public function __construct(private CalculationRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     /**

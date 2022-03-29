@@ -92,7 +92,7 @@ class UsersReport extends AbstractArrayReport
 
             $table->startRow()
                 ->addCell($cell)
-                ->add($entity->getUsername())
+                ->add($entity->getUserIdentifier())
                 ->add($entity->getEmail())
                 ->add($role)
                 ->add($text, 1, $style)

@@ -27,14 +27,14 @@ trait PdfAlignmentTrait
     /**
      * Gets the alignment.
      *
-     * @return string one of the ALIGN_XX constants.The value can be:
-     *                <ul>
-     *                <li>'' (an empty string): inherit.</li>
-     *                <li>'<b>L</b>' : left align.</li>
-     *                <li>'<b>C</b>' : center.</li>
-     *                <li>'<b>R</b>' : right align.</li>
-     *                <li>'<b>J</b>' : justification.</li>
-     *                </ul>
+     * @return string|null one of the ALIGN_XX constants.The value can be:
+     *                     <ul>
+     *                     <li>'' (an empty string): inherit.</li>
+     *                     <li>'<b>L</b>' : left align.</li>
+     *                     <li>'<b>C</b>' : center.</li>
+     *                     <li>'<b>R</b>' : right align.</li>
+     *                     <li>'<b>J</b>' : justification.</li>
+     *                     </ul>
      */
     public function getAlignment(): ?string
     {

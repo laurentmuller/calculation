@@ -138,8 +138,6 @@ class Customer extends AbstractEntity
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {
@@ -193,7 +191,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Gets the full name or if null the company.
+     * Gets the full name, if applicable; the company otherwise.
      */
     public function getNameOrCompany(): ?string
     {
@@ -328,8 +326,8 @@ class Customer extends AbstractEntity
     public function setWebSite(?string $webSite): self
     {
         $webSite = $this->trim($webSite);
-        if ($webSite && 'http' !== \substr($webSite, 0, 4)) {
-            $webSite = 'http://' . $webSite;
+        if ($webSite && !\str_starts_with($webSite, 'http')) {
+            $webSite = "https://$webSite";
         }
         $this->webSite = $webSite;
 
@@ -380,13 +378,13 @@ class Customer extends AbstractEntity
      * if one of elements is empty, the other element is returned
      * else both elements are returned with the separator.
      *
-     * @param string $str1 the first element
-     * @param string $str2 the second element
-     * @param string $sep  the separator
+     * @param string|null $str1 the first element
+     * @param string|null $str2 the second element
+     * @param string      $sep  the separator
      *
      * @return string the joined elements
      */
-    private function concat(?string $str1, ?string $str2, $sep = ' '): string
+    private function concat(?string $str1, ?string $str2, string $sep = ' '): string
     {
         return \implode($sep, \array_filter([$str1, $str2]));
     }

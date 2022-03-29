@@ -67,7 +67,7 @@ trait FlashMessageTrait
      *
      * @param string $message the message to add
      */
-    protected function succes(string $message): self
+    protected function success(string $message): self
     {
         return $this->addFlashMessage('success', $message);
     }

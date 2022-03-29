@@ -101,7 +101,7 @@ class TaskController extends AbstractEntityController
      *     {"label" = "taskcompute.title"}
      * })
      */
-    public function compute(Request $request, Task $task = null, TaskService $service, TaskRepository $repository): Response
+    public function compute(Request $request, TaskService $service, TaskRepository $repository, Task $task = null): Response
     {
         // get tasks
         /** @var Task[] $tasks */

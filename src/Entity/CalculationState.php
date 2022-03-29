@@ -156,8 +156,6 @@ class CalculationState extends AbstractEntity
 
     /**
      * Returns if this state contains one or more calculations.
-     *
-     * @return bool true if contains calculations
      */
     public function hasCalculations(): bool
     {

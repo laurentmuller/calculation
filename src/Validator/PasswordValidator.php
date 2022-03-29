@@ -145,7 +145,7 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * Checks the presence of one or more number characters.
+     * Checks the presence of one or more numbers characters.
      *
      * @param Password $constraint the password constraint
      * @param string   $value      the value to validate

@@ -106,7 +106,7 @@ final class FormatUtils
      *
      * @param float|int|string $number the value to format
      */
-    public static function formatInt($number): string
+    public static function formatInt(float|int|string $number): string
     {
         return self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format((float) $number);
     }

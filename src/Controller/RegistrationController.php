@@ -42,11 +42,8 @@ class RegistrationController extends AbstractController
     private const REGISTER_ROUTE = 'user_register';
     private const VERIFY_ROUTE = 'verify_email';
 
-    private EmailVerifier $verifier;
-
-    public function __construct(EmailVerifier $verifier)
+    public function __construct(private EmailVerifier $verifier)
     {
-        $this->verifier = $verifier;
     }
 
     /**
@@ -126,7 +123,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
 
-        $this->succesTrans('registration.confirmed', ['%username%' => $user->getUsername()]);
+        $this->successTrans('registration.confirmed', ['%username%' => $user->getUserIdentifier()]);
 
         return $this->redirectToHomePage();
     }

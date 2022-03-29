@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents a category of prodcuts.
+ * Represents a category of products and tasks.
  *
  * @author Laurent Muller
  *
@@ -65,7 +65,7 @@ class Category extends AbstractEntity
     private Collection $products;
 
     /**
-     * The list of taks that fall into this category.
+     * The list of tasks that fall into this category.
      *
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="category")
      *
@@ -109,7 +109,9 @@ class Category extends AbstractEntity
     /**
      * Clone this category.
      *
-     * @param string $code the new code
+     * @param string|null $code the new code
+     *
+     * @return Category
      */
     public function clone(?string $code = null): self
     {
@@ -149,8 +151,6 @@ class Category extends AbstractEntity
 
     /**
      * Get code.
-     *
-     * @return string
      */
     public function getCode(): ?string
     {
@@ -159,8 +159,6 @@ class Category extends AbstractEntity
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -169,8 +167,6 @@ class Category extends AbstractEntity
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {
@@ -203,7 +199,7 @@ class Category extends AbstractEntity
      */
     public function getGroupCode(): ?string
     {
-        return null !== $this->group ? $this->group->getCode() : null;
+        return $this->group?->getCode();
     }
 
     /**
@@ -211,7 +207,7 @@ class Category extends AbstractEntity
      */
     public function getGroupId(): ?int
     {
-        return null !== $this->group ? $this->group->getId() : null;
+        return $this->group?->getId();
     }
 
     /**
@@ -236,8 +232,6 @@ class Category extends AbstractEntity
 
     /**
      * Returns if this category contains one or more products.
-     *
-     * @return bool true if contains products
      */
     public function hasProducts(): bool
     {
@@ -246,8 +240,6 @@ class Category extends AbstractEntity
 
     /**
      * Returns if this category contains one or more tasks.
-     *
-     * @return bool true if contains tasks
      */
     public function hasTasks(): bool
     {
@@ -277,8 +269,6 @@ class Category extends AbstractEntity
 
     /**
      * Set code.
-     *
-     * @param string $code
      */
     public function setCode(?string $code): self
     {
@@ -289,8 +279,6 @@ class Category extends AbstractEntity
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {

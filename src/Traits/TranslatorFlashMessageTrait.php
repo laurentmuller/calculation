@@ -74,10 +74,10 @@ trait TranslatorFlashMessageTrait
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
-    protected function succesTrans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    protected function successTrans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         $message = $this->trans($id, $parameters, $domain, $locale);
-        $this->succes($message);
+        $this->success($message);
 
         return $message;
     }

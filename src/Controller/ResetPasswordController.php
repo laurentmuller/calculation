@@ -45,13 +45,8 @@ class ResetPasswordController extends AbstractController
     private const CHECK_ROUTE = 'app_check_email';
     private const FORGET_ROUTE = 'app_forgot_password_request';
 
-    private ResetPasswordHelperInterface $helper;
-    private UserRepository $repository;
-
-    public function __construct(ResetPasswordHelperInterface $helper, UserRepository $repository)
+    public function __construct(private ResetPasswordHelperInterface $helper, private UserRepository $repository)
     {
-        $this->helper = $helper;
-        $this->repository = $repository;
     }
 
     /**
@@ -62,7 +57,7 @@ class ResetPasswordController extends AbstractController
     public function checkEmail(): Response
     {
         // Prevent users from directly accessing this page
-        // Generate a fake token if the user does not exist or someone hit this page directly.
+        // Generates a fake token if the user does not exist or someone hit this page directly.
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             $resetToken = $this->helper->generateFakeResetToken();
         }
@@ -152,7 +147,7 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * Send an email to the user for resetting the password.
+     * Send email to the user for resetting the password.
      */
     private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer, UserExceptionService $service): RedirectResponse
     {
@@ -182,7 +177,7 @@ class ResetPasswordController extends AbstractController
             ->subject($subject)
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
-                'username' => $user->getUsername(),
+                'username' => $user->getUserIdentifier(),
                 'resetToken' => $resetToken,
             ]);
 

@@ -37,7 +37,7 @@ class CategoryRepository extends AbstractRepository
     public const FILTER_PRODUCTS = 1;
 
     /**
-     * The filter type to display only categories that contain one or more taks.
+     * The filter type to display only categories that contain one or more tasks.
      */
     public const FILTER_TASKS = 2;
 
@@ -136,7 +136,7 @@ class CategoryRepository extends AbstractRepository
     /**
      * {@inheritdoc}
      */
-    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         switch ($field) {
             case 'group.id':

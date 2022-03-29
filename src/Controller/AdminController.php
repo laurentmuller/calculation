@@ -33,7 +33,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controller for administation tasks.
+ * Controller for administration tasks.
  *
  * @author Laurent Muller
  *
@@ -78,7 +78,7 @@ class AdminController extends AbstractController
                     'options' => $options,
                     'content' => $content,
                 ];
-                $message = $this->succesTrans('clear_cache.success');
+                $message = $this->successTrans('clear_cache.success');
                 $logger->info($message, $context);
 
                 return $this->redirectToHomePage();
@@ -164,7 +164,7 @@ class AdminController extends AbstractController
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $application->setProperties($data);
-            $this->succesTrans('parameters.success');
+            $this->successTrans('parameters.success');
 
             return $this->redirectToHomePage();
         }
@@ -271,7 +271,7 @@ class AdminController extends AbstractController
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
             $this->getApplication()->setProperty($property, $role->getRights());
-            $this->succesTrans('admin.rights.success', ['%name%' => $role->getName()]);
+            $this->successTrans('admin.rights.success', ['%name%' => $role->getName()]);
 
             return $this->redirectToHomePage();
         }

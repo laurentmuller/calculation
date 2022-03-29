@@ -59,7 +59,7 @@ class EmailVerifier
         $signature = $this->generateSignature($verifyEmailRouteName, $user);
 
         $context = [
-            'username' => $user->getUsername(),
+            'username' => $user->getUserIdentifier(),
             'signedUrl' => $signature->getSignedUrl(),
             'expiresAtMessageKey' => $signature->getExpirationMessageKey(),
             'expiresAtMessageData' => $signature->getExpirationMessageData(),

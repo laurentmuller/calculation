@@ -158,7 +158,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
      */
     public function getCalculation(): ?Calculation
     {
-        return null !== $this->group ? $this->group->getCalculation() : null;
+        return $this->group?->getCalculation();
     }
 
     /**
@@ -171,8 +171,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
 
     /**
      * Get code.
-     *
-     * @return string
      */
     public function getCode(): ?string
     {
@@ -257,10 +255,10 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
     /**
      * Set the category.
      *
-     * @param \App\Entity\Category $category the category to copy values from
-     * @param bool                 $update   true to update the amount and the margin
+     * @param Category $category the category to copy values from
+     * @param bool     $update   true to update the amount and the margin
      */
-    public function setCategory(Category $category, $update = false): self
+    public function setCategory(Category $category, bool $update = false): self
     {
         // copy
         $this->category = $category;

@@ -47,7 +47,7 @@ final class FileUtils
      *
      * @throws \InvalidArgumentException if the file can not be decoded
      */
-    public static function decodeJson(string $file, bool $assoc = true)
+    public static function decodeJson(string $file, bool $assoc = true): mixed
     {
         // file?
         if (!self::isFile($file)) {
@@ -73,12 +73,12 @@ final class FileUtils
     /**
      * Atomically dumps content into a file.
      *
-     * @param string|\SplFileInfo $file    the file to write to
-     * @param string|resource     $content the data to write into the file
+     * @param \SplFileInfo|string $file    the file to write to
+     * @param string              $content the data to write into the file
      *
      * @return bool true on success, false on failure
      */
-    public static function dumpFile($file, $content): bool
+    public static function dumpFile(\SplFileInfo|string $file, string $content): bool
     {
         $file = self::getRealPath($file);
 
@@ -96,11 +96,11 @@ final class FileUtils
     /**
      * Checks the existence of the given file.
      *
-     * @param string|\SplFileInfo $file the file to verfiy
+     * @param \SplFileInfo|string $file the file to verfiy
      *
      * @return bool true if the file exists, false otherwise
      */
-    public static function exists($file): bool
+    public static function exists(\SplFileInfo|string $file): bool
     {
         $file = self::getRealPath($file);
 
@@ -127,7 +127,7 @@ final class FileUtils
             }
         }
 
-        // must never reached
+        // must never reach
         return 'unknown';
     }
 
@@ -177,13 +177,13 @@ final class FileUtils
     }
 
     /**
-     * Tells whether the given filen is a regular file.
+     * Tells whether the given file is a regular file.
      *
-     * @param string|\SplFileInfo $file the path to the file
+     * @param \SplFileInfo|string $file the path to the file
      *
      * @return bool true if the file exists and is a regular file, false otherwise
      */
-    public static function isFile($file): bool
+    public static function isFile(\SplFileInfo|string $file): bool
     {
         $file = self::getRealPath($file);
 
@@ -193,11 +193,11 @@ final class FileUtils
     /**
      * Deletes a file or a directory.
      *
-     * @param string|\SplFileInfo $file the file to delete
+     * @param \SplFileInfo|string $file the file to delete
      *
      * @return bool true on success, false on failure
      */
-    public static function remove($file): bool
+    public static function remove(\SplFileInfo|string $file): bool
     {
         $file = self::getRealPath($file);
 
@@ -290,10 +290,8 @@ final class FileUtils
 
     /**
      * Gets the real path of the given file.
-     *
-     * @param string|\SplFileInfo $file
      */
-    private static function getRealPath($file): string
+    private static function getRealPath(\SplFileInfo|string $file): string
     {
         if ($file instanceof \SplFileInfo) {
             return (string) $file->getRealPath();

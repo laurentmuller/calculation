@@ -141,7 +141,7 @@ trait PdfBorderTrait
      *
      * @return string|int a valid border
      */
-    protected function validateBorder($border): string|int
+    protected function validateBorder(mixed $border): string|int
     {
         if (empty($border)) {
             return PdfConstantsInterface::BORDER_NONE;

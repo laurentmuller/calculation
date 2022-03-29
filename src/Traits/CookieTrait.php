@@ -44,7 +44,7 @@ trait CookieTrait
      *
      * @param mixed $value the cookie value
      */
-    protected function setCookie(Response $response, string $key, $value, string $prefix = '', string $modify = '+1 year'): void
+    protected function setCookie(Response $response, string $key, mixed $value, string $prefix = '', string $modify = '+1 year'): void
     {
         $name = $this->getCookieName($key, $prefix);
         $expire = (new \DateTime())->modify($modify);

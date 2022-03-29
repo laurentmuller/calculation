@@ -102,7 +102,7 @@ class PdfTocDocument extends PdfDocument
         $startPage = $this->page;
 
         // add TOC label
-        $this->tocOuputTitle($title, $titleFontSize, $fontName);
+        $this->tocOutputTitle($title, $titleFontSize, $fontName);
 
         // add TOC entries
         foreach ($this->tocEntries as $entry) {
@@ -178,7 +178,7 @@ class PdfTocDocument extends PdfDocument
      * @param float  $fontSize the font size to use for the TOC title or 0 to use the current size
      * @param string $fontName the font name to use for the TOC title and entries or empty('') to use the current font name
      */
-    private function tocOuputTitle(string $title, float $fontSize, string $fontName): void
+    private function tocOutputTitle(string $title, float $fontSize, string $fontName): void
     {
         if ('' !== $title) {
             $this->SetFont($fontName, 'B', $fontSize);

@@ -169,8 +169,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Clone this calculation.
      *
-     * @param CalculationState $state       the new state
-     * @param string           $description the new description
+     * @param CalculationState|null $state       the new state
+     * @param string|null           $description the new description
+     *
+     * @return Calculation
      */
     public function clone(?CalculationState $state = null, ?string $description = null): self
     {
@@ -556,7 +558,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getStateColor(): ?string
     {
-        return null !== $this->state ? $this->state->getColor() : null;
+        return $this->state?->getColor();
     }
 
     /**
@@ -584,7 +586,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get user toal margin amount.
+     * Get user total margin amount.
      */
     public function getUserMarginTotal(): float
     {
@@ -775,8 +777,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Set customer.
-     *
-     * @param string $customer
      */
     public function setCustomer(?string $customer): self
     {
@@ -797,8 +797,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {

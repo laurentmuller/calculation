@@ -55,9 +55,9 @@ class PdfFooter implements PdfConstantsInterface
         PdfStyle::getDefaultStyle()->setFontSize(8)->apply($this->parent);
 
         // pages (left) +  text and url (center) + date (right)
-        $this->ouputText($this->getPage(), $cellWidth, self::ALIGN_LEFT)
-            ->ouputText($this->text ?? '', $cellWidth, self::ALIGN_CENTER, $this->url ?? '')
-            ->ouputText($this->getDate(), $cellWidth, self::ALIGN_RIGHT);
+        $this->outputText($this->getPage(), $cellWidth, self::ALIGN_LEFT)
+            ->outputText($this->text ?? '', $cellWidth, self::ALIGN_CENTER, $this->url ?? '')
+            ->outputText($this->getDate(), $cellWidth, self::ALIGN_RIGHT);
 
         // reset
         $this->parent->setCellMargin($margins);
@@ -99,7 +99,7 @@ class PdfFooter implements PdfConstantsInterface
     /**
      * Output the given text.
      */
-    private function ouputText(string $text, float $cellWidth, string $align, string $link = ''): self
+    private function outputText(string $text, float $cellWidth, string $align, string $link = ''): self
     {
         $this->parent->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, $align, false, $link);
 

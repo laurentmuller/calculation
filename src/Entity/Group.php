@@ -110,7 +110,7 @@ class Group extends AbstractEntity
     /**
      * Clone this group.
      *
-     * @param string $code the new code
+     * @param string|null $code the new code
      */
     public function clone(?string $code = null): self
     {
@@ -151,7 +151,7 @@ class Group extends AbstractEntity
     }
 
     /**
-     * Gets the number of prodcuts.
+     * Gets the number of products.
      */
     public function countProducts(): int
     {
@@ -219,8 +219,6 @@ class Group extends AbstractEntity
 
     /**
      * Get code.
-     *
-     * @return string
      */
     public function getCode(): ?string
     {
@@ -229,8 +227,6 @@ class Group extends AbstractEntity
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -239,8 +235,6 @@ class Group extends AbstractEntity
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {
@@ -260,8 +254,6 @@ class Group extends AbstractEntity
 
     /**
      * Returns if this group contains one or more categories.
-     *
-     * @return bool true if contains products
      */
     public function hasCategories(): bool
     {
@@ -270,8 +262,6 @@ class Group extends AbstractEntity
 
     /**
      * Returns if this group contains one or more margins.
-     *
-     * @return bool true if contains margins
      */
     public function hasMargins(): bool
     {
@@ -314,8 +304,6 @@ class Group extends AbstractEntity
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {
@@ -336,7 +324,7 @@ class Group extends AbstractEntity
     }
 
     /**
-     * Iteratively reduce this categories to a single value using the callback function.
+     * Iteratively reduce these categories to a single value using the callback function.
      *
      * @psalm-param callable(int, Category): int $callback
      */

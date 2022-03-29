@@ -42,11 +42,11 @@ abstract class AbstractReport extends PdfDocument
      * Constructor.
      *
      * @param AbstractController $controller  the parent controller
-     * @param string             $orientation the page orientation. One of the ORIENTATION_XX contants.
-     * @param string             $unit        the measure unit. One of the UNIT_XX contants.
-     * @param mixed              $size        the document size. One of the SIZE_XX contants or an array containing the width and height of the document.
+     * @param string             $orientation the page orientation. One of the ORIENTATION_XX constants.
+     * @param string             $unit        the measure unit. One of the UNIT_XX constants.
+     * @param mixed              $size        the document size. One of the SIZE_XX constants or an array containing the width and height of the document.
      */
-    public function __construct(AbstractController $controller, string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, $size = self::SIZE_A4)
+    public function __construct(AbstractController $controller, string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, mixed $size = self::SIZE_A4)
     {
         parent::__construct($orientation, $unit, $size);
 
@@ -73,12 +73,12 @@ abstract class AbstractReport extends PdfDocument
     /**
      * Filter to format a boolean value.
      *
-     * @param bool   $value     the value to format
-     * @param string $true      the text to use when the value is <b>TRUE</b> or <code>null</code> to use default
-     * @param string $false     the text to use when the value is <b>FALSE</b> or <code>null</code> to use default
-     * @param bool   $translate <code>TRUE</code> to translate texts
+     * @param bool        $value     the value to format
+     * @param string|null $true      the text to use when the value is <b>TRUE</b> or <code>null</code> to use default
+     * @param string|null $false     the text to use when the value is <b>FALSE</b> or <code>null</code> to use default
+     * @param bool        $translate <code>TRUE</code> to translate texts
      */
-    public function booleanFilter($value, ?string $true = null, ?string $false = null, bool $translate = false): string
+    public function booleanFilter(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
         return $this->extension->booleanFilter($value, $true, $false, $translate);
     }

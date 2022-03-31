@@ -172,7 +172,7 @@ class TaskController extends AbstractEntityController
      *
      * @Route("/excel", name="task_excel")
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
+     * @throws NotFoundHttpException if no category is found
      */
     public function excel(): SpreadsheetResponse
     {
@@ -192,7 +192,7 @@ class TaskController extends AbstractEntityController
      *
      * @Route("/pdf", name="task_pdf")
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
+     * @throws NotFoundHttpException if no category is found
      */
     public function pdf(): PdfResponse
     {

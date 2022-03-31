@@ -104,7 +104,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
      *
      * @return string the entity name
      */
-    public static function getEntityName($subject): string
+    public static function getEntityName(mixed $subject): string
     {
         if (\is_string($subject)) {
             $name = $subject;

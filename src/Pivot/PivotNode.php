@@ -353,8 +353,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     public function getPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
         if (!$this->isRoot()) {
-            // @phpstan-ignore-next-line
-            $keys = \array_map(function ($value) {
+            $keys = \array_map(function (mixed $value): string {
                 return (string) $value;
             }, $this->getKeys());
 
@@ -584,9 +583,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
             }
         }
 
-        if (null !== $this->parent) {
-            $this->parent->update();
-        }
+        $this->parent?->update();
 
         return $this;
     }

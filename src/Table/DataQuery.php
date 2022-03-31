@@ -78,7 +78,7 @@ class DataQuery implements SortModeInterface
      * @param string $name  the custom data name
      * @param mixed  $value custom data value
      */
-    public function addCustomData(string $name, $value): self
+    public function addCustomData(string $name, mixed $value): self
     {
         $this->customData[$name] = $value;
 

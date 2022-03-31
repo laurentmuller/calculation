@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
-use App\Kernel;
 use App\Service\UrlGeneratorService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -72,7 +72,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks if the given asset path exists.
      *
-     * @param string $path the path to be verified
+     * @param string|null $path the path to be verified
      *
      * @return bool true if exists
      */
@@ -93,7 +93,7 @@ final class FunctionExtension extends AbstractExtension
             return false;
         }
 
-        // file exists?
+        // file exist?
         if (!FileUtils::isFile($file)) {
             return false;
         }
@@ -108,12 +108,12 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Returns the given asset path, if exist; the default path otherwise.
+     * Returns the given asset path, if existing; the default path otherwise.
      *
-     * @param string $path    the path to be verified
-     * @param string $default the default path
+     * @param string|null $path    the path to be verified
+     * @param string|null $default the default path
      *
-     * @return string the path, if exist, the default path otherwise
+     * @return string|null the path, if existing, the default path otherwise
      */
     public function assetIf(?string $path = null, ?string $default = null): ?string
     {
@@ -144,7 +144,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks the existence of file or directory.
      *
-     * @param string $filename the path to the file or directory
+     * @param string|null $filename the path to the file or directory
      *
      * @return bool true if the file or directory exists, false otherwise
      */
@@ -154,42 +154,40 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a style sheet tag with a nonce value.
+     * Output a link style sheet tag with a nonce value.
      *
      * @param Environment $env         the Twig environnement
      * @param string      $path        a public path
      * @param array       $parameters  additional parameters
-     * @param string      $packageName the name of the asset package to use
-     *
-     * @return string the style sheet tag
+     * @param string|null $packageName the name of the asset package to use
      */
     public function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
-        $nonce = $this->getNonce($env);
-        $url = $this->getAssetUrl($env, $path, $packageName);
         $alternate = $this->getAlternateParameter($parameters);
+        $url = $this->getAssetUrl($env, $path, $packageName);
+        $version = $this->version;
+        $nonce = $this->getNonce($env);
         $params = $this->reduceParameters($parameters);
 
-        return \sprintf('<link rel="stylesheet%s" href="%s?v=%d" nonce="%s"%s>', $alternate, $url, $this->version, $nonce, $params);
+        return \sprintf('<link rel="stylesheet%s" href="%s?v=%d" nonce="%s"%s>', $alternate, $url, $version, $nonce, $params);
     }
 
     /**
-     * Output a java script tag with a nonce value.
+     * Output a script source tag with a nonce value.
      *
      * @param Environment $env         the Twig environnement
      * @param string      $path        a public path
      * @param array       $parameters  additional parameters
-     * @param string      $packageName the name of the asset package to use
-     *
-     * @return string the java script tag
+     * @param string|null $packageName the name of the asset package to use
      */
     public function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
-        $nonce = $this->getNonce($env);
         $url = $this->getAssetUrl($env, $path, $packageName);
+        $version = $this->version;
+        $nonce = $this->getNonce($env);
         $params = $this->reduceParameters($parameters);
 
-        return \sprintf('<script src="%s?v=%d" nonce="%s"%s></script>', $url, $this->version, $nonce, $params);
+        return \sprintf('<script src="%s?v=%d" nonce="%s"%s></script>', $url, $version, $nonce, $params);
     }
 
     /**
@@ -215,7 +213,7 @@ final class FunctionExtension extends AbstractExtension
         ];
 
         return [
-            // asssets
+            // assets
             new TwigFunction('asset_exists', [$this, 'assetExists']),
             new TwigFunction('file_exists', [$this, 'fileExists']),
 
@@ -240,8 +238,6 @@ final class FunctionExtension extends AbstractExtension
      * Gets the image height.
      *
      * @param string $path an existing image path relative to the public directory
-     *
-     * @return int the image height
      */
     public function getImageHeight(string $path): int
     {
@@ -255,8 +251,6 @@ final class FunctionExtension extends AbstractExtension
      * Gets the image width.
      *
      * @param string $path an existing image path relative to the public directory
-     *
-     * @return int the image width
      */
     public function getImageWidth(string $path): int
     {
@@ -269,7 +263,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * This filter replaces duplicated spaces and/or linebreaks with single space.
      *
-     * It also remove whitespace from the beginning and at the end of the string.
+     * It also removes whitespace from the beginning and at the end of the string.
      *
      * @param string $value the value to clean
      *
@@ -291,8 +285,6 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param Request $request the request
      * @param int     $id      the entity identifier
-     *
-     * @return array the parameters
      */
     public function routeParams(Request $request, int $id = 0): array
     {
@@ -322,7 +314,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param Environment $env         the Twig environnement
      * @param string      $path        a public path
-     * @param string      $packageName the optional name of the asset package to use
+     * @param string|null $packageName the optional name of the asset package to use
      *
      * @return string the public path of the asset
      */
@@ -349,8 +341,6 @@ final class FunctionExtension extends AbstractExtension
      * Generates a random nonce parameter.
      *
      * @param Environment $env the Twig environnement
-     *
-     * @return string the random nonce parameter
      */
     private function getNonce(Environment $env): string
     {
@@ -372,9 +362,7 @@ final class FunctionExtension extends AbstractExtension
     private function reduceParameters(array $parameters): string
     {
         if (!empty($parameters)) {
-            /** @psalm-suppress MissingClosureParamType */
-            // @phpstan-ignore-next-line
-            $callback = function (string $carry, string $key, $value): string {
+            $callback = function (string $carry, string $key, mixed $value): string {
                 return $carry . ' ' . $key . '="' . \htmlspecialchars((string) $value) . '"';
             };
 

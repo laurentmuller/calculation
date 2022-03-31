@@ -108,7 +108,7 @@ class ResetPasswordController extends AbstractController
         }
 
         try {
-            /** @var \App\Entity\User $user */
+            /** @var User $user */
             $user = $this->helper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             if ($request->hasSession()) {

@@ -73,10 +73,7 @@ final class DatabaseInfo
                 $result[$key] = $params[$key] ?? null;
             }
 
-            // @phpstan-ignore-next-line
-            return \array_filter($result, function ($value): bool {
-                return Utils::isString($value);
-            });
+            return \array_filter($result, fn (mixed $value): bool => Utils::isString($value));
         } catch (\Exception) {
         }
 
@@ -105,6 +102,8 @@ final class DatabaseInfo
 
     /**
      * Prepares an SQL statement and return the result.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     private function executeQuery(string $sql): Result
     {

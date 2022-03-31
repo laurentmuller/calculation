@@ -82,8 +82,6 @@ trait PdfBorderTrait
      *                           </ul>
      *                           </li>
      *                           </ul>
-     *
-     * @return self this instance
      */
     public function setBorder(int|string $border): self
     {
@@ -161,7 +159,7 @@ trait PdfBorderTrait
                 case PdfConstantsInterface::BORDER_RIGHT:
                 case PdfConstantsInterface::BORDER_TOP:
                 case PdfConstantsInterface::BORDER_BOTTOM:
-                    if (false === \strpos($result, $border[$i])) {
+                    if (!\str_contains($result, $border[$i])) {
                         $result .= $border[$i];
                     }
                     break;

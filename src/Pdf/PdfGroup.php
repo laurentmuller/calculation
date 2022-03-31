@@ -41,12 +41,12 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     /**
      * Constructor.
      *
-     * @param mixed         $key       the group key
+     * @param mixed|null    $key       the group key
      * @param string        $alignment the group alignment
      * @param int|string    $border    the group border
      * @param PdfStyle|null $style     the group style or null for default style
      */
-    public function __construct($key = null, string $alignment = self::ALIGN_LEFT, int|string $border = self::BORDER_ALL, ?PdfStyle $style = null)
+    public function __construct(mixed $key = null, string $alignment = self::ALIGN_LEFT, int|string $border = self::BORDER_ALL, ?PdfStyle $style = null)
     {
         $this->setKey($key)
             ->setAlignment($alignment)
@@ -59,9 +59,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
      */
     public function apply(PdfDocument $doc): void
     {
-        if (null !== $this->style) {
-            $this->style->apply($doc);
-        }
+        $this->style?->apply($doc);
     }
 
     /**

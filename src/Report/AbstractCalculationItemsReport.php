@@ -130,10 +130,10 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
         $columns = [
             PdfColumn::center($this->trans('calculation.fields.id'), 17, true),
             PdfColumn::center($this->trans('calculation.fields.date'), 20, true),
-            PdfColumn::left($this->trans('calculation.fields.state'), 12, false),
-            PdfColumn::left($this->trans('calculation.fields.customer'), 35, false),
-            PdfColumn::left($this->trans('calculation.fields.description'), 60, false),
-            PdfColumn::left($this->trans('calculation.fields.items'), 60, false),
+            PdfColumn::left($this->trans('calculation.fields.state'), 12),
+            PdfColumn::left($this->trans('calculation.fields.customer'), 3),
+            PdfColumn::left($this->trans('calculation.fields.description'), 60),
+            PdfColumn::left($this->trans('calculation.fields.items'), 60),
         ];
 
         $table = new PdfTableBuilder($this);

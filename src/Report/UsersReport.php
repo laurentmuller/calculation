@@ -148,9 +148,9 @@ class UsersReport extends AbstractArrayReport
         if ($width > $height) {
             $cell->resize(0, $size);
         } elseif ($width < $height) {
-            $cell->resize($size, 0);
+            $cell->resize($size);
         } elseif ($width !== $size) {
-            $cell->resize($size, 0);
+            $cell->resize($size);
         }
 
         return $cell;

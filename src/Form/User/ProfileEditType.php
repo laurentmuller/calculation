@@ -49,7 +49,7 @@ class ProfileEditType extends AbstractEntityType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        // user name
+        // username
         $helper->field('username')
             ->autocomplete('username')
             ->add(UserNameType::class);

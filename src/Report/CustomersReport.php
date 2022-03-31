@@ -28,11 +28,6 @@ use App\Pdf\PdfStyle;
 class CustomersReport extends AbstractArrayReport
 {
     /**
-     * The group customers by first letter.
-     */
-    private bool $grouped = true;
-
-    /**
      * The other group name.
      */
     private string $other;
@@ -44,11 +39,10 @@ class CustomersReport extends AbstractArrayReport
      * @param Customer[]         $entities   the customers to export
      * @param bool               $grouped    true if the customers are grouped by the first letter
      */
-    public function __construct(AbstractController $controller, array $entities, bool $grouped = true)
+    public function __construct(AbstractController $controller, array $entities, private bool $grouped = true)
     {
         parent::__construct($controller, $entities, self::ORIENTATION_LANDSCAPE);
         $this->other = $this->trans('report.other');
-        $this->grouped = $grouped;
     }
 
     /**
@@ -111,7 +105,7 @@ class CustomersReport extends AbstractArrayReport
     }
 
     /**
-     * Groups customers by a the first character of the name or company.
+     * Groups customers by the first character of the name or company.
      *
      * @param Customer[] $customers the customers to group
      *

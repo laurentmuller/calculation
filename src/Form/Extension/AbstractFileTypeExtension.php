@@ -91,7 +91,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
     /**
      * Normalize the given size.
      *
-     * @param string|int $size the size to normalize
+     * @param int|string $size the size to normalize
      *
      * @return int|null the normalized size
      *
@@ -99,7 +99,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
      *
      * @see https://symfony.com/doc/current/reference/constraints/File.html#maxsize
      */
-    private function normalizeSize($size): ?int
+    private function normalizeSize(int|string $size): ?int
     {
         if (empty($size)) {
             return null;
@@ -119,6 +119,6 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
         if (\preg_match('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', (string) $size, $matches)) {
             return (int) $matches[1] * $factors[\strtolower($matches[2])];
         }
-        throw new InvalidOptionsException("\"{$size}\" is not a valid size.");
+        throw new InvalidOptionsException("\"$size\" is not a valid size.");
     }
 }

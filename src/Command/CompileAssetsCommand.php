@@ -87,7 +87,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             $source .= '/' . (string) $configuration->source;
         }
         if (!$this->exists($source)) {
-            $this->writeError("The source directory '{$source}' does not exist.");
+            $this->writeError("The source directory '$source' does not exist.");
 
             return Command::SUCCESS;
         }
@@ -102,13 +102,13 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         // uglifyjs arguments
         if ($this->propertyExists($configuration, 'js_args') && !empty($uglifyJsArgs = \trim((string) $configuration->js_args))) {
             $this->uglifyJsArgs = $uglifyJsArgs;
-            $this->writeVerbose("UglifyJs arguments: {$uglifyJsArgs}");
+            $this->writeVerbose("UglifyJs arguments: $uglifyJsArgs");
         }
 
         // cleancss arguments
         if ($this->propertyExists($configuration, 'css_args') && !empty($cleanCssArgs = \trim((string) $configuration->css_args))) {
             $this->cleanCssArgs = $cleanCssArgs;
-            $this->writeVerbose("CleanCss arguments: {$cleanCssArgs}");
+            $this->writeVerbose("CleanCss arguments: $cleanCssArgs");
         }
 
         // check uglifyjs
@@ -126,7 +126,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         try {
             // create finder
             if (null === $finder = $this->createFinder($source, $configuration)) {
-                $this->writeVerbose("No file to process in '{$source}' directory.");
+                $this->writeVerbose("No file to process in '$source' directory.");
 
                 return Command::SUCCESS;
             }
@@ -153,7 +153,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             $this->rename($targetTemp, $target);
 
             // result
-            $this->writeVerbose("Installed and compressed {$countJs} javascripts, {$countCss} style sheets to '{$target}' directory.");
+            $this->writeVerbose("Installed and compressed $countJs javascripts, $countCss style sheets to '$target' directory.");
         } finally {
             // remove temp directory
             $this->remove($targetTemp);
@@ -185,7 +185,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
                 return 'Error while executing ' . $this->cleanCssBinary . ', install Node.js and clean-css.';
             }
             if (\version_compare($output, '4.2') < 0) {
-                return "Update to clean-css 4.2 or newer. Actual version: {$output}.";
+                return "Update to clean-css 4.2 or newer. Actual version: $output.";
             }
         }
 
@@ -208,7 +208,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
                 $output = \substr($output, $pos + 1);
             }
             if (\version_compare($output, '3.3') < 0) {
-                return "Update to uglify-es 3.3 or newer. Actual version: {$output}.";
+                return "Update to uglify-es 3.3 or newer. Actual version: $output.";
             }
         }
 
@@ -229,11 +229,11 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             return $content;
         }
 
-        $this->writeVeryVerbose("Compressing {$origFile}");
+        $this->writeVeryVerbose("Compressing $origFile");
         $cmd = \escapeshellarg($this->cleanCssBinary) . ' ' . $this->cleanCssArgs;
         [$ok, $output] = $this->executeCommand($cmd, $content, false);
         if (!$ok) {
-            $this->writeError("Error while executing {$cmd}");
+            $this->writeError("Error while executing $cmd");
             $this->writeError($output);
 
             return $content;
@@ -256,11 +256,11 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             return $content;
         }
 
-        $this->writeVeryVerbose("Compressing {$origFile}");
+        $this->writeVeryVerbose("Compressing $origFile");
         $cmd = \escapeshellarg($this->uglifyJsBinary) . ' ' . $this->uglifyJsArgs;
         $result = $this->executeCommand($cmd, $content, false);
         if (!$result[0]) {
-            $this->writeError("Error while executing {$cmd}");
+            $this->writeError("Error while executing $cmd");
             $this->writeError($result[1]);
 
             return $content;
@@ -349,20 +349,20 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         return (string) \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function (array $matches) use ($dir): string {
             $file = $dir . '/' . $matches[1];
             if (!\is_file($file)) {
-                $this->writeError("Expanding file {$file} not found!");
+                $this->writeError("Expanding file $file not found!");
 
                 return $matches[0];
             }
 
-            $this->writeVeryVerbose("Including {$file}");
+            $this->writeVeryVerbose("Including $file");
             $content = (string) \file_get_contents($file);
             $newDir = \dirname($file);
             $content = $this->expandCssImports($content, $file);
             if ($newDir !== $dir) {
                 $tmp = $dir . '/';
-                if (\substr($newDir, 0, \strlen($tmp)) === $tmp) {
+                if (\str_starts_with($newDir, $tmp)) {
                     $content = \preg_replace('#\burl\(["\']?(?=[.\w])(?!\w+:)#', '$0' . \substr($newDir, \strlen($tmp)) . '/', $content);
-                } elseif (false !== \strpos($content, 'url(')) {
+                } elseif (\str_contains($content, 'url(')) {
                     return $matches[0];
                 }
             }
@@ -386,11 +386,11 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         return (string) \preg_replace_callback('~<!--#include\s+file="(.+)"\s+-->~U', function (array $matches) use ($dir) {
             $file = $dir . '/' . $matches[1];
             if (!\is_file($file)) {
-                $this->writeError("Expanding file {$file} not found!");
+                $this->writeError("Expanding file $file not found!");
 
                 return $matches[0];
             }
-            $this->writeVeryVerbose("Including {$file}");
+            $this->writeVeryVerbose("Including $file");
 
             return $this->expandJsImports((string) \file_get_contents($file), $file);
         }, $content);
@@ -401,7 +401,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         // check file
         $assetFile = $publicDir . '/' . self::ASSETS_FILE_NAME;
         if (!$this->exists($publicDir) || !$this->exists($assetFile)) {
-            $this->writeVerbose("The file '{$assetFile}' does not exist.");
+            $this->writeVerbose("The file '$assetFile' does not exist.");
 
             return null;
         }

@@ -249,7 +249,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         // password options
         foreach (self::PASSWORD_OPTIONS as $option) {
             $helper->field($option)
-                ->label("password.{$option}")
+                ->label("password.$option")
                 ->updateAttribute('data-default', 0)
                 ->rowClass('mb-1')
                 ->notRequired()
@@ -301,7 +301,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     {
         $result = [];
         for ($i = 1; $i < 6; ++$i) {
-            $result["parameters.message_timeout.{$i}"] = $i * 1000;
+            $result["parameters.message_timeout.$i"] = $i * 1000;
         }
 
         return $result;

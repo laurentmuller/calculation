@@ -132,7 +132,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      *
      * @return self this instance
      */
-    public function setGroupKey($key, bool $output = true): self
+    public function setGroupKey(mixed $key, bool $output = true): self
     {
         if ($this->group && $this->group->getKey() !== $key) {
             $this->group->setKey($key);

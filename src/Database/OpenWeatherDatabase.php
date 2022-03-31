@@ -145,8 +145,8 @@ class OpenWeatherDatabase extends AbstractDatabase
         $country = $this->likeValue($country);
 
         $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
-        $stmt->bindParam(':name', $city, \SQLITE3_TEXT);
-        $stmt->bindParam(':country', $country, \SQLITE3_TEXT);
+        $stmt->bindParam(':name', $city);
+        $stmt->bindParam(':country', $country);
         $stmt->bindParam(':limit', $limit, \SQLITE3_INTEGER);
 
         return $this->executeAndfetch($stmt);
@@ -168,8 +168,8 @@ class OpenWeatherDatabase extends AbstractDatabase
     {
         $stmt = $this->getStatement(self::INSERT_CITY);
         $stmt->bindParam(':id', $id, \SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $name, \SQLITE3_TEXT);
-        $stmt->bindParam(':country', $country, \SQLITE3_TEXT);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':country', $country);
         $stmt->bindParam(':latitude', $latitude, \SQLITE3_FLOAT);
         $stmt->bindParam(':longitude', $longitude, \SQLITE3_FLOAT);
 

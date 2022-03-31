@@ -206,7 +206,7 @@ class ResponseListener implements EventSubscriberInterface
         $result = '';
         foreach ($csp as $key => $entries) {
             $value = \implode(' ', (array) $entries);
-            $result .= "{$key} {$value};";
+            $result .= "$key $value;";
         }
 
         return $result;
@@ -219,7 +219,7 @@ class ResponseListener implements EventSubscriberInterface
     {
         $nonce = $this->extension->getNonce();
 
-        return "'nonce-{$nonce}'";
+        return "'nonce-$nonce'";
     }
 
     /**

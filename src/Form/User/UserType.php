@@ -44,9 +44,9 @@ class UserType extends AbstractEntityType
     }
 
     /**
-     * @param \DateTimeInterface|string $lastLogin
+     * Format the last login date.
      */
-    public function formatLastLogin($lastLogin): ?string
+    public function formatLastLogin(\DateTimeInterface|string $lastLogin): ?string
     {
         if ($lastLogin instanceof \DateTimeInterface) {
             return $this->formatter->formatDiff($lastLogin, new \DateTime());

@@ -123,8 +123,8 @@ class CalculationTableItems extends PdfGroupTableBuilder
     /**
      * Adds formatted amount with an error style if the amount is equal to 0.
      *
-     * @param float    $amount     the amount to output
-     * @param PdfStyle $errorStyle the error style to use when amount is equal to 0
+     * @param float         $amount     the amount to output
+     * @param PdfStyle|null $errorStyle the error style to use when amount is equal to 0
      */
     protected function addAmount(float $amount, ?PdfStyle $errorStyle): self
     {

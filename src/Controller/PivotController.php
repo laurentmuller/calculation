@@ -49,7 +49,7 @@ class PivotController extends AbstractController
     public function pivot(): Response
     {
         return $this->renderForm('calculation/calculation_pivot.html.twig', [
-            'highlight' => $this->isSessionBool('highlight', false),
+            'highlight' => $this->isSessionBool('highlight'),
             'popover' => $this->isSessionBool('popover', true),
             'table' => $this->getTable(),
         ]);

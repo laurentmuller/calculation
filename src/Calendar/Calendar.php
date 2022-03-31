@@ -119,7 +119,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Constructor.
      *
-     * @param int $year the year to generate
+     * @param int|null $year the year to generate
      */
     public function __construct(?int $year = null)
     {
@@ -218,13 +218,13 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Gets the month for the given key.
      *
-     * @param int|\DateTimeInterface|string $key the month key. Can be an integer (1 - 12), a date time interface or a formatted date ('Y.m').
+     * @param \DateTimeInterface|int|string $key the month key. Can be an integer (1 - 12), a date time interface or a formatted date ('Y.m').
      *
      * @return Month|null the month, if found, null otherwise
      *
      * @see Month::KEY_FORMAT
      */
-    public function getMonth($key): ?Month
+    public function getMonth(\DateTimeInterface|int|string $key): ?Month
     {
         if ($key instanceof \DateTimeInterface) {
             $key = $key->format(Month::KEY_FORMAT);
@@ -303,13 +303,13 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Gets the week for the given key.
      *
-     * @param int|\DateTimeInterface|string $key the week key. Can be an integer (1 - 53), a date time interface or a formatted date ('Y.W').
+     * @param \DateTimeInterface|int|string $key the week key. Can be an integer (1 - 53), a date time interface or a formatted date ('Y.W').
      *
      * @return Week|null the week, if found, null otherwise
      *
      * @see Week::KEY_FORMAT
      */
-    public function getWeek($key): ?Week
+    public function getWeek(\DateTimeInterface|int|string $key): ?Week
     {
         if ($key instanceof \DateTimeInterface) {
             $key = $key->format(Week::KEY_FORMAT);
@@ -498,14 +498,14 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     private function checkArray(array $array, int $length): void
     {
         if ($length !== \count($array)) {
-            throw new CalendarException("The array must contains {$length} values.");
+            throw new CalendarException("The array must contains $length values.");
         }
         for ($i = 1; $i <= $length; ++$i) {
             if (!\array_key_exists($i, $array)) {
-                throw new CalendarException("The array must contains the key {$i}.");
+                throw new CalendarException("The array must contains the key $i.");
             }
             if (!\is_string($array[$i])) {
-                throw new CalendarException("The value {$array[$i]} for the key {$i} must be a string.");
+                throw new CalendarException("The value $array[$i] for the key $i must be a string.");
             }
         }
     }

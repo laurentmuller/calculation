@@ -109,13 +109,13 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Creates a new instance.
      *
-     * @param int[]|string $rgb an array containing the red, green and blue values or a hexadecimal string
+     * @param string|int[] $rgb an array containing the red, green and blue values or a hexadecimal string
      *
      * @return static|null the color or null if the RGB value can not be parsed
      *
      * @see AbstractPdfColor::parse()
      */
-    public static function create($rgb): ?static
+    public static function create(array|string $rgb): ?static
     {
         if (\is_string($rgb)) {
             $rgb = self::parse($rgb);

@@ -719,7 +719,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the subject property.
      *
-     * @param string $subject the subject
+     * @param string|null $subject the subject
      */
     public function setSubject(?string $subject): self
     {

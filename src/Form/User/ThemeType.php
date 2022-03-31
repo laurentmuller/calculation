@@ -29,7 +29,7 @@ class ThemeType extends AbstractHelperType
     use TranslatorTrait;
 
     /**
-     * The backgound choices.
+     * The background choices.
      */
     public const BACKGROUND_CHOICES = [
         'theme.background.dark' => 'bg-dark',
@@ -97,12 +97,12 @@ class ThemeType extends AbstractHelperType
         foreach (self::BACKGROUND_CHOICES as $keyBackground => $valueBackground) {
             foreach (self::FOREGROUND_CHOICES as $keyForeground => $valueForeground) {
                 $key = $this->trans($keyBackground) . ' - ' . $this->trans($keyForeground);
-                $value = "{$valueForeground} {$valueBackground}";
+                $value = "$valueForeground $valueBackground";
                 $choices[$key] = $value;
             }
         }
 
-        // remove uncontrasted values
+        // remove un-contrasted values
         $choices = \array_diff($choices, ['navbar-light bg-dark', 'navbar-dark bg-light', 'navbar-dark bg-white']);
 
         $helper->field('background')

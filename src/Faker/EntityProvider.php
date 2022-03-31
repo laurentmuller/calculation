@@ -29,7 +29,7 @@ class EntityProvider extends Base
     /**
      * The cached distinct values.
      *
-     * @var array<string, array<mixed>>
+     * @var array<string, array>
      */
     private array $distinctValues = [];
 

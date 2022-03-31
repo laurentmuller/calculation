@@ -118,9 +118,7 @@ trait CacheTrait
     public function getCacheItems(array $keys)
     {
         if (null !== $this->adapter) {
-            $keys = \array_map(function (string $key) {
-                return $this->cleanKey($key);
-            }, $keys);
+            $keys = \array_map(fn (string $key) => $this->cleanKey($key), $keys);
 
             return $this->adapter->getItems($keys);
         }

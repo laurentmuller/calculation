@@ -103,7 +103,7 @@ class ThemeController extends AbstractController
         $headers = $response->headers;
         $path = $this->getStringParameter('cookie_path');
         if (Utils::isString($value)) {
-            $time = (int) \strtotime("now + {$days} day");
+            $time = (int) \strtotime("now + $days day");
             $secure = $this->getBoolParameter('cookie_secure');
             $cookie = new Cookie($name, $value, $time, $path, null, $secure, true, true);
             $headers->setCookie($cookie);

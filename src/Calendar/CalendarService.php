@@ -59,11 +59,9 @@ class CalendarService
     /**
      * Returns a calendar for specified year.
      *
-     * @param int $year the year to generate calendar for or null for the current year
+     * @param int|null $year the year to generate calendar for or null for the current year
      *
      * @return Calendar the generated calendar
-     *
-     * @throws CalendarException if the month, the week or the day class model are set and does not exist
      */
     public function generate(?int $year = null): Calendar
     {

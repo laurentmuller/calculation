@@ -86,8 +86,8 @@ class SimpleEditorType extends AbstractType
      */
     private function getGroupedActions(array $options): array
     {
-        /** @var array $exisiting */
-        $exisiting = $options['actions'] ?? [];
+        /** @var array $existing */
+        $existing = $options['actions'] ?? [];
 
         /**
          * @var array<array{
@@ -103,7 +103,7 @@ class SimpleEditorType extends AbstractType
          *      attributes: array<string, string>,
          *      actions: array}> $actions
          */
-        $actions = \array_filter($exisiting, static function (array $action): bool {
+        $actions = \array_filter($existing, static function (array $action): bool {
             return !empty($action['exec']) || !empty($action['actions']);
         });
         $this->updateActions($actions);

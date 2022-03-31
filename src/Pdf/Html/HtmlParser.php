@@ -335,6 +335,6 @@ class HtmlParser
         }
 
         // add encoding
-        return "<?xml encoding='UTF-8'>{$content}";
+        return "<?xml encoding='UTF-8'>$content";
     }
 }

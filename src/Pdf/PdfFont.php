@@ -139,7 +139,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
                 case self::STYLE_BOLD:
                 case self::STYLE_ITALIC:
                 case self::STYLE_UNDERLINE:
-                    if (false === \strpos($this->style, $style[$i])) {
+                    if (!\str_contains($this->style, $style[$i])) {
                         $this->style .= $style[$i];
                     }
                     break;

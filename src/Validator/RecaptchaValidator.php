@@ -47,7 +47,7 @@ class RecaptchaValidator extends AbstractConstraintValidator
             /** @var string[] $errorCodes */
             $errorCodes = $result->getErrorCodes();
             foreach ($errorCodes as $code) {
-                $this->context->addViolation("recaptcha.{$code}");
+                $this->context->addViolation("recaptcha.$code");
             }
         }
     }

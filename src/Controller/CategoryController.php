@@ -159,11 +159,11 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
-     * Export the categories to a Spreadsheetl document.
+     * Export the categories to a Spreadsheet document.
      *
      * @Route("/excel", name="category_excel")
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
+     * @throws NotFoundHttpException if no category is found
      */
     public function excel(): SpreadsheetResponse
     {
@@ -183,7 +183,7 @@ class CategoryController extends AbstractEntityController
      *
      * @Route("/pdf", name="category_pdf")
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
+     * @throws NotFoundHttpException if no category is found
      */
     public function pdf(): PdfResponse
     {

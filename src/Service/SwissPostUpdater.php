@@ -108,9 +108,9 @@ class SwissPostUpdater
     /**
      * Import data from the given source file.
      *
-     * @param UploadedFile|string|null $sourceFile the source file to import
+     * @param string|UploadedFile|null $sourceFile the source file to import
      */
-    public function import($sourceFile): SwissPostUpdateResult
+    public function import(string|UploadedFile|null $sourceFile): SwissPostUpdateResult
     {
         $this->results = new SwissPostUpdateResult();
 
@@ -124,8 +124,8 @@ class SwissPostUpdater
             $this->sourceName = $sourceFile->getClientOriginalName();
             $sourceFile = $sourceFile->getPathname();
         } else {
-            $sourceFile = $sourceFile;
             $this->sourceName = \basename($sourceFile);
+            $sourceFile = $sourceFile;
         }
 
         // exist?
@@ -200,9 +200,7 @@ class SwissPostUpdater
      */
     private function closeArchive(): void
     {
-        if (null !== $this->archive) {
-            $this->archive->close();
-        }
+        $this->archive?->close();
         $this->archive = null;
     }
 
@@ -400,9 +398,7 @@ class SwissPostUpdater
         }
 
         // last commit
-        if (null !== $this->database) {
-            $this->database->commitTransaction();
-        }
+        $this->database?->commitTransaction();
 
         // close
         $this->closeStream();

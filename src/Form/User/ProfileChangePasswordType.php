@@ -27,7 +27,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * Type to change the proilfe of the current (logged) user.
+ * Type to change the profile of the current (logged) user.
  *
  * @author Laurent Muller
  *

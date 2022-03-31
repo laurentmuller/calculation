@@ -56,7 +56,7 @@ final class DateUtils
     }
 
     /**
-     * Retuns a new date with the given interval added.
+     * Returns a new date with the given interval added.
      *
      * @param \DateTimeInterface   $date     the date
      * @param \DateInterval|string $interval the interval to add
@@ -200,7 +200,7 @@ final class DateUtils
      *
      * @return \DateTimeInterface the new date
      */
-    public static function sub(\DateTimeInterface $date, $interval): \DateTimeInterface
+    public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
         if (\is_string($interval)) {
             $interval = new \DateInterval($interval);

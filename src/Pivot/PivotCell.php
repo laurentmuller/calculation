@@ -40,7 +40,7 @@ class PivotCell extends AbstractPivotAggregator
      * @param mixed $columnKey the column key to compare to
      * @param mixed $rowKey    the row key to compare to
      */
-    public function equalsKey(mixed $columnKey, $rowKey): bool
+    public function equalsKey(mixed $columnKey, mixed $rowKey): bool
     {
         return $this->column->equalsKey($columnKey) && $this->row->equalsKey($rowKey);
     }

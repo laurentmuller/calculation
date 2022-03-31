@@ -101,13 +101,13 @@ abstract class AbstractReport extends PdfDocument
     /**
      * Renders a line with the given number of elements.
      *
-     * @param int|array|\Countable $count      the number of elements, an array or a \Countable object
+     * @param \Countable|array|int $count      the number of elements, an array or a \Countable object
      * @param string               $align      the text alignment
      * @param bool                 $resetStyle true to reset style before output the line
      *
      * @return bool true if the number of elements is greather than 0
      */
-    public function renderCount($count, string $align = self::ALIGN_LEFT, bool $resetStyle = true): bool
+    public function renderCount(\Countable|array|int $count, string $align = self::ALIGN_LEFT, bool $resetStyle = true): bool
     {
         // reset
         if ($resetStyle) {
@@ -133,7 +133,7 @@ abstract class AbstractReport extends PdfDocument
      * @param string $id     the title id (may also be an object that can be cast to string)
      * @param bool   $isUTF8 true to encode to UTF-8
      */
-    public function setTitleTrans(string $id, array $parameters = [], $isUTF8 = false, ?string $domain = null, ?string $locale = null): self
+    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, ?string $domain = null, ?string $locale = null): self
     {
         $title = $this->trans($id, $parameters, $domain, $locale);
         $this->SetTitle($title, $isUTF8);

@@ -58,7 +58,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
      */
     public function onPostUpload(Event $event): void
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $event->getObject();
         $mapping = $event->getMapping();
 
@@ -94,7 +94,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
      */
     public function onPreRemove(Event $event): void
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $event->getObject();
         $mapping = $event->getMapping();
 
@@ -123,7 +123,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
      */
     public function onPreUpload(Event $event): void
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $event->getObject();
         $mapping = $event->getMapping();
 

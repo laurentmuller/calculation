@@ -242,7 +242,7 @@ class PlainType extends AbstractType
      * @param \DateTimeInterface|int|null $value   the value to transform
      * @param array                       $options the options
      */
-    private function formatDate($value, array $options): string
+    private function formatDate(\DateTimeInterface|int|null $value, array $options): string
     {
         $calendar = $this->getCalendarFormat($options);
         $timezone = $this->getOptionString($options, 'time_zone');
@@ -261,7 +261,7 @@ class PlainType extends AbstractType
      *
      * @return string the formatted number
      */
-    private function formatNumber($value, array $options): string
+    private function formatNumber(float|int|string $value, array $options): string
     {
         $type = $this->getOptionString($options, 'number_pattern', '');
 
@@ -340,12 +340,12 @@ class PlainType extends AbstractType
     /**
      * Gets the string value from the array options.
      *
-     * @param array  $options      the array options
-     * @param string $name         the option name
-     * @param string $defaultValue the default value if option is not set
-     * @param bool   $translate    true to translate the default value
+     * @param array       $options      the array options
+     * @param string      $name         the option name
+     * @param string|null $defaultValue the default value if option is not set
+     * @param bool        $translate    true to translate the default value
      *
-     * @return string the option value
+     * @return string|null the option value
      */
     private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
     {
@@ -362,7 +362,7 @@ class PlainType extends AbstractType
      *
      * @throws TransformationFailedException if the value can not be mapped to a string
      */
-    private function transformValue($value, array $options): string
+    private function transformValue(mixed $value, array $options): string
     {
         // transformer?
         /** @var callable|null $callback */
@@ -381,7 +381,7 @@ class PlainType extends AbstractType
         }
 
         // value?
-        if (null === $value || (\is_string($value) && '' === $value)) {
+        if (null === $value || '' === $value) {
             /** @var callable|null $callback */
             $callback = $options['empty_value'] ?? null;
             if (\is_callable($callback)) {
@@ -393,8 +393,7 @@ class PlainType extends AbstractType
 
         // array?
         if (\is_array($value)) {
-            // @phpstan-ignore-next-line
-            $callback =  /** @param mixed $item */ function ($item) use ($options): string {
+            $callback = function (mixed $item) use ($options): string {
                 return $this->transformValue($item, $options);
             };
             $values = \array_map($callback, $value);

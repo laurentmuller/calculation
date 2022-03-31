@@ -86,7 +86,7 @@ class FormHelper
     /**
      * The labels prefix.
      */
-    private ?string $labelPrefix = null;
+    private ?string $labelPrefix;
 
     /**
      * The options.
@@ -106,7 +106,7 @@ class FormHelper
      * Constructor.
      *
      * @param FormBuilderInterface $builder     the parent builder
-     * @param string               $labelPrefix the label prefix. If the prefix is not null,
+     * @param string|null          $labelPrefix the label prefix. If the prefix is not null,
      *                                          the label is automatically added when the field property is
      *                                          set.
      */
@@ -429,10 +429,10 @@ class FormHelper
     }
 
     /**
-     * Add an repeat password type to the builder and reset all values to default.
+     * Add a repeat password type to the builder and reset all values to default.
      *
      * @param string $passwordLabel the label used for the password
-     * @param string $confirmLabel  the label used for the confim password
+     * @param string $confirmLabel  the label used for the confirmation password
      */
     public function addRepeatPasswordType(string $passwordLabel = 'user.password.label', string $confirmLabel = 'user.password.confirmation'): self
     {
@@ -455,7 +455,7 @@ class FormHelper
     }
 
     /**
-     * Adds asubmit event listener.
+     * Adds a submit event listener.
      *
      * The SUBMIT event is dispatched after the Form::submit() method
      * has changed the view data by the request data.
@@ -500,7 +500,7 @@ class FormHelper
     /**
      * Add an Url type to the builder and reset all values to default.
      *
-     * @param string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
+     * @param string|null $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
      */
     public function addUrlType(?string $default_protocol = 'https'): self
     {
@@ -510,7 +510,7 @@ class FormHelper
     }
 
     /**
-     * Add an user list type to the builder and reset all values to default.
+     * Add a user list type to the builder and reset all values to default.
      *
      * This type display a drop-down list of user entities.
      */
@@ -556,11 +556,11 @@ class FormHelper
      *
      * For Google Chrome, if You want to disable the auto-complete set a random string as attribute like 'nope'.
      *
-     * @param string|bool $autocomplete the autocomplete ('on'/'off') or false to remove
+     * @param bool|string $autocomplete the autocomplete ('on'/'off') or false to remove
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
      */
-    public function autocomplete($autocomplete): self
+    public function autocomplete(bool|string $autocomplete): self
     {
         $autocomplete = empty($autocomplete) ? null : $autocomplete;
 
@@ -624,7 +624,7 @@ class FormHelper
     /**
      * Sets the translation domain.
      *
-     * @param string $domain the translation domain or null for default
+     * @param string|null $domain the translation domain or null for default
      */
     public function domain(?string $domain): self
     {
@@ -693,7 +693,7 @@ class FormHelper
     /**
      * Sets the help property.
      *
-     * @param string $help the help identifier to translate
+     * @param string|null $help the help identifier to translate
      */
     public function help(?string $help): self
     {
@@ -733,7 +733,7 @@ class FormHelper
     /**
      * Sets the label property.
      *
-     * @param string $label the label identifier to translate
+     * @param string|null $label the label identifier to translate
      */
     public function label(?string $label): self
     {
@@ -845,7 +845,7 @@ class FormHelper
     /**
      * Sets the tab index.
      *
-     * @param int $index the index or null to remove
+     * @param int|null $index the index or null to remove
      */
     public function tabindex(?int $index): self
     {
@@ -861,7 +861,7 @@ class FormHelper
      * @param mixed  $value the attribute value or null to remove
      * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateAttribute(string $name, $value, bool $force = false): self
+    public function updateAttribute(string $name, mixed $value, bool $force = false): self
     {
         return $this->updateEntry($this->attributes, $name, $value, $force);
     }
@@ -869,7 +869,7 @@ class FormHelper
     /**
      * Update attributes.
      *
-     * @param array $attributes the attributes names and values
+     * @param array $attributes the attribute's name and value
      * @param bool  $force      true to put the option, even if the value is null
      * @psalm-param array<string, mixed> $attributes
      */
@@ -890,7 +890,7 @@ class FormHelper
      * @param mixed  $value the attribute value
      * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateHelpAttribute(string $name, $value, bool $force = false): self
+    public function updateHelpAttribute(string $name, mixed $value, bool $force = false): self
     {
         return $this->updateEntry($this->helpAttributes, $name, $value, $force);
     }
@@ -902,7 +902,7 @@ class FormHelper
      * @param mixed  $value the attribute value
      * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateLabelAttribute(string $name, $value, bool $force = false): self
+    public function updateLabelAttribute(string $name, mixed $value, bool $force = false): self
     {
         return $this->updateEntry($this->labelAttributes, $name, $value, $force);
     }
@@ -914,7 +914,7 @@ class FormHelper
      * @param mixed  $value the option value
      * @param bool   $force true to put the option, even if the value is null
      */
-    public function updateOption(string $name, $value, bool $force = false): self
+    public function updateOption(string $name, mixed $value, bool $force = false): self
     {
         return $this->updateEntry($this->options, $name, $value, $force);
     }
@@ -922,7 +922,7 @@ class FormHelper
     /**
      * Update options.
      *
-     * @param array<string, mixed> $options the options names and values
+     * @param array<string, mixed> $options the option's name and value
      * @param bool                 $force   true to put the option, even if the value is null
      */
     public function updateOptions(array $options, bool $force = false): self
@@ -942,7 +942,7 @@ class FormHelper
      * @param mixed  $value the attribute value
      * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateRowAttribute(string $name, $value, bool $force = false): self
+    public function updateRowAttribute(string $name, mixed $value, bool $force = false): self
     {
         return $this->updateEntry($this->rowAttributes, $name, $value, $force);
     }
@@ -990,7 +990,7 @@ class FormHelper
      * @psalm-param array<string, mixed> $array
      * @psalm-suppress MixedAssignment
      */
-    private function updateEntry(array &$array, string $name, $value, bool $force): self
+    private function updateEntry(array &$array, string $name, mixed $value, bool $force): self
     {
         if (null !== $value || $force) {
             $array[$name] = $value;

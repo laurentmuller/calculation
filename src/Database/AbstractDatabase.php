@@ -166,12 +166,12 @@ abstract class AbstractDatabase extends \SQLite3
     /**
      * Set a pragma statement.
      *
-     * @param string $name  the pragma name
-     * @param mixed  $value the optional pragma value
+     * @param string     $name  the pragma name
+     * @param mixed|null $value the optional pragma value
      *
      * @return bool true if the succeeded, false on failure
      */
-    public function pragma(string $name, $value = null): bool
+    public function pragma(string $name, mixed $value = null): bool
     {
         if (null !== $value) {
             return $this->exec("PRAGMA $name = $value");
@@ -200,14 +200,14 @@ abstract class AbstractDatabase extends \SQLite3
      * Binds a parameter to the given statement variable.
      *
      * @param \SQLite3Stmt $stmt  the statement to bind parameter with
-     * @param string|int   $name  either a string or an int identifying the statement variable to which the parameter should be bound
+     * @param int|string   $name  either a string or an int identifying the statement variable to which the parameter should be bound
      * @param mixed        $value the parameter to bind to a statement variable
-     * @param int          $type  the optional data type of the parameter to bind
+     * @param int|null     $type  the optional data type of the parameter to bind
      *
      * @return bool true if the parameter is bound to the statement variable, false
      *              on failure
      */
-    protected function bindParam(\SQLite3Stmt $stmt, $name, $value, int $type = null): bool
+    protected function bindParam(\SQLite3Stmt $stmt, int|string $name, mixed $value, int $type = null): bool
     {
         if (null !== $type) {
             return $stmt->bindParam($name, $value, $type);
@@ -226,8 +226,8 @@ abstract class AbstractDatabase extends \SQLite3
      */
     protected function createIndex(string $table, string $column): bool
     {
-        $name = "idx_{$table}_{$column}";
-        $query = "CREATE INDEX IF NOT EXISTS {$name} ON {$table}({$column})";
+        $name = "idx_{$table}_$column";
+        $query = "CREATE INDEX IF NOT EXISTS $name ON $table($column)";
 
         return $this->exec($query);
     }
@@ -245,15 +245,12 @@ abstract class AbstractDatabase extends \SQLite3
      * @param \SQLite3Stmt $stmt the statement to execute
      * @param int          $mode controls how the next row will be returned to the caller. This value
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
-     * @psalm-suppress RedundantConditionGivenDocblockType
      */
     protected function executeAndfetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {
         $rows = [];
-
-        /** @var \SQLite3Result $result */
         $result = $stmt->execute();
-        if (false !== $result) {
+        if ($result instanceof \SQLite3Result) {
             while ($row = $result->fetchArray($mode)) {
                 $rows[] = $row;
             }
@@ -272,7 +269,7 @@ abstract class AbstractDatabase extends \SQLite3
      *
      * @param string $query the SQL query to prepare
      *
-     * @return \SQLite3Stmt the statement object on success or false on failure
+     * @return \SQLite3Stmt|null the statement object on success or false on failure
      */
     protected function getStatement(string $query): ?\SQLite3Stmt
     {
@@ -328,7 +325,7 @@ abstract class AbstractDatabase extends \SQLite3
         // create statement
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement($query);
-        $stmt->bindParam(':value', $value, \SQLITE3_TEXT);
+        $stmt->bindParam(':value', $value);
         $stmt->bindParam(':limit', $limit, \SQLITE3_INTEGER);
 
         // execute

@@ -15,7 +15,7 @@ namespace App\Repository;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -57,6 +57,6 @@ class GroupMarginRepository extends AbstractRepository
             ->setParameter('amount', $amount, Types::FLOAT);
 
         // execute
-        return (float) $builder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+        return (float) $builder->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 }

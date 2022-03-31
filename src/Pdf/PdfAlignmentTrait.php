@@ -62,8 +62,6 @@ trait PdfAlignmentTrait
      *                               <li>'<b>R</b>' : right align.</li>
      *                               <li>'<b>J</b>' : justification.</li>
      *                               </ul>
-     *
-     * @return self this instance
      */
     public function setAlignment(?string $alignment): self
     {

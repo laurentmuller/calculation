@@ -174,7 +174,7 @@ class SearchService
         }
 
         // sort, limit and offset
-        $extra = " LIMIT {$limit} OFFSET {$offset}";
+        $extra = " LIMIT $limit OFFSET $offset";
 
         // return result
         return $this->getArrayResult((string) $search, $entity, $extra);
@@ -189,7 +189,7 @@ class SearchService
         if ($this->isGrantedSearch($class)) {
             $fields = ['date', 'createdAt', 'updatedAt'];
             foreach ($fields as $field) {
-                $content = "date_format(e.{$field}, '%d.%m.%Y')";
+                $content = "date_format(e.$field, '%d.%m.%Y')";
                 $key = $this->getKey($class, $field);
                 $sql = (string) $this->createQueryBuilder($class, $field, $content)
                     ->getQuery()
@@ -295,13 +295,13 @@ class SearchService
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
         $name = Utils::getShortName($class);
-        $content = $content ?: "e.{$field}";
-        $where = "{$content} LIKE :" . self::SEARCH_PARAM;
+        $content = $content ?: "e.$field";
+        $where = "$content LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()
             ->select('e.id')
-            ->addSelect("'{$name}'")
-            ->addSelect("'{$field}'")
+            ->addSelect("'$name'")
+            ->addSelect("'$field'")
             ->addSelect($content)
             ->from($class, 'e')
             ->where($where);
@@ -347,7 +347,7 @@ class SearchService
         $query = $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
 
         // set parameter
-        $query->setParameter(self::SEARCH_PARAM, "%{$search}%");
+        $query->setParameter(self::SEARCH_PARAM, "%$search%");
 
         /**
          * @var array<array{
@@ -429,7 +429,7 @@ class SearchService
 
                 // replace column's names
                 foreach ($columns as $index => $name) {
-                    $query = \preg_replace("/AS[ ]\\w+[{$index}]/i", "AS {$name}", $query);
+                    $query = \preg_replace("/AS[ ]\\w+[$index]/i", "AS $name", $query);
                 }
             }
         }

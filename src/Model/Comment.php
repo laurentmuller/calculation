@@ -130,7 +130,7 @@ class Comment
     /**
      * Sends this message using the given mailer.
      *
-     * @throws TransportExceptionInterface if the email can not be send
+     * @throws TransportExceptionInterface if the email can not be sent
      */
     public function send(MailerInterface $mailer): void
     {

@@ -378,7 +378,7 @@ class TestController extends AbstractController
                         } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
                             $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
                         }
-                        $html .= "<tr><td>{$key}<td><td>:</td><td>{$value}</td></tr>";
+                        $html .= "<tr><td>$key<td><td>:</td><td>$value</td></tr>";
                     }
                 }
                 $html .= '</table>';
@@ -387,9 +387,8 @@ class TestController extends AbstractController
                 return $this->redirectToHomePage();
             }
 
-            // @phpstan-ignore-next-line
-            $errorCodes = \array_map(function ($code) use ($translator): string {
-                return $translator->trans("recaptcha.{$code}", [], 'validators');
+            $errorCodes = \array_map(function (mixed $code) use ($translator): string {
+                return $translator->trans("recaptcha.$code", [], 'validators');
             }, $result->getErrorCodes());
             if (empty($errorCodes)) {
                 $errorCodes[] = $translator->trans('recaptcha.unknown-error', [], 'validators');
@@ -490,13 +489,13 @@ class TestController extends AbstractController
         $doc->AddPage();
         $doc->tocStart();
         $doc->Cell(0, 5, 'TOC1', 0, 1, 'L');
-        $doc->tocAddEntry('TOC1', 0);
+        $doc->tocAddEntry('TOC1');
         $doc->Cell(0, 5, 'TOC1.1', 0, 1, 'L');
         $doc->tocAddEntry('TOC1.1', 1);
 
         $doc->AddPage();
         $doc->Cell(0, 5, 'TOC2', 0, 1, 'L');
-        $doc->tocAddEntry('TOC2', 0);
+        $doc->tocAddEntry('TOC2');
 
         $doc->AddPage();
         for ($i = 3; $i <= 25; ++$i) {
@@ -504,7 +503,7 @@ class TestController extends AbstractController
                 $doc->AddPage();
             }
             $doc->Cell(0, 5, 'TOC' . $i, 0, 1, 'L');
-            $doc->tocAddEntry('TOC' . $i, 0);
+            $doc->tocAddEntry('TOC' . $i);
         }
         $doc->tocStop();
         $doc->tocOutput(2);
@@ -615,7 +614,7 @@ class TestController extends AbstractController
         $query = $this->getRequestString($request, 'query');
         $entity = $this->getRequestString($request, 'entity');
         $limit = $this->getRequestInt($request, 'limit', 25);
-        $offset = $this->getRequestInt($request, 'offset', 0);
+        $offset = $this->getRequestInt($request, 'offset');
 
         $count = $service->count($query, $entity);
         $results = $service->search($query, $entity, $limit, $offset);
@@ -623,11 +622,11 @@ class TestController extends AbstractController
         foreach ($results as &$row) {
             $type = \strtolower($row[SearchService::COLUMN_TYPE]);
             $field = $row[SearchService::COLUMN_FIELD];
-            $row['entityName'] = $this->trans("{$type}.name");
-            $row['fieldName'] = $this->trans("{$type}.fields.{$field}");
+            $row['entityName'] = $this->trans("$type.name");
+            $row['fieldName'] = $this->trans("$type.fields.$field");
 
             $content = $row[SearchService::COLUMN_CONTENT];
-            switch ("{$type}.{$field}") {
+            switch ("$type.$field") {
                 case 'calculation.id':
                     $content = FormatUtils::formatId((int) $content);
                     break;
@@ -658,7 +657,7 @@ class TestController extends AbstractController
     public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
     {
         $generator = $fakerService->getGenerator();
-        $comment = $generator->realText(145, 2);
+        $comment = $generator->realText(145);
         $value = $akismetservice->verifyComment($comment);
         if ($lastError = $akismetservice->getLastError()) {
             return $this->json($lastError);

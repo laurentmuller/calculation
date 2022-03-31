@@ -105,7 +105,7 @@ class PivotTableFactory
             }
 
             // value
-            $value = null !== $dataField ? $dataField->getValue($row) : null;
+            $value = $dataField?->getValue($row);
 
             // find or create columns
             $currentCol = $table->getColumn();

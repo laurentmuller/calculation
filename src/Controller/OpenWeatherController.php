@@ -332,9 +332,7 @@ class OpenWeatherController extends AbstractController
                     'result' => true,
                 ]);
             } finally {
-                if (null !== $db) {
-                    $db->close();
-                }
+                $db?->close();
                 if (null !== $file) {
                     FileUtils::remove($file);
                 }
@@ -535,7 +533,7 @@ class OpenWeatherController extends AbstractController
 
     private function getRequestCityId(Request $request): int
     {
-        return $this->getRequestInt($request, self::KEY_CITY_ID, 0);
+        return $this->getRequestInt($request, self::KEY_CITY_ID);
     }
 
     private function getRequestCount(Request $request, int $default = 5): int

@@ -150,9 +150,9 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     /**
      * Draws the left border if applicable.
      *
-     * @param string|int $border the border style
+     * @param int|string $border the border style
      */
-    private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, $border): bool
+    private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, int|string $border): bool
     {
         if ($level && $color = $this->getColor($level)) {
             // get values

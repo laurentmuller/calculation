@@ -151,7 +151,7 @@ class ProductUpdater implements LoggerAwareInterface
             ->setFixed($this->getSessionFloat(self::KEY_FIXED, 0))
             ->setType((string) $this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT))
             ->setSimulate($this->isSessionBool(self::KEY_SIMULATE, true))
-            ->setRound($this->isSessionBool(self::KEY_ROUND, false));
+            ->setRound($this->isSessionBool(self::KEY_ROUND));
 
         return $query;
     }
@@ -213,7 +213,7 @@ class ProductUpdater implements LoggerAwareInterface
     {
         $newPrice = $query->isPercent() ? $oldPrice * (1 + $query->getValue()) : $oldPrice + $query->getValue();
         if ($query->isRound()) {
-            $newPrice = \round($newPrice * 20, 0) / 20;
+            $newPrice = \round($newPrice * 20) / 20;
         }
 
         return $this->round($newPrice);

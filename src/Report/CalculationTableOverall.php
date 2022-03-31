@@ -52,7 +52,7 @@ class CalculationTableOverall extends PdfTableBuilder
         $calculation = $this->calculation;
 
         $columns = [
-            PdfColumn::left(null, 50, false),
+            PdfColumn::left(null, 50),
             PdfColumn::right(null, 20, true),
             PdfColumn::right(null, 20, true),
             PdfColumn::right(null, 20, true),

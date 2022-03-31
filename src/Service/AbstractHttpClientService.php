@@ -245,9 +245,9 @@ abstract class AbstractHttpClientService
     /**
      * Sets the last error.
      *
-     * @param int        $code    the error code
-     * @param string     $message the error message
-     * @param \Exception $e       the optional source exception
+     * @param int             $code    the error code
+     * @param string          $message the error message
+     * @param \Exception|null $e       the optional source exception
      *
      * @return bool this function returns always false
      */
@@ -276,11 +276,11 @@ abstract class AbstractHttpClientService
      *
      * @param string                 $url   The URL for which to save the value
      * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
-     * @param int|\DateInterval|null $time  The period of time from the present after which the item must be considered
+     * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
      */
-    protected function setUrlCacheValue(string $url, mixed $value, $time = null): self
+    protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): self
     {
         $key = $this->getUrlKey($url);
 

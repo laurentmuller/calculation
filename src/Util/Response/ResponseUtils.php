@@ -27,8 +27,8 @@ class ResponseUtils
      *
      * @param string $name     the document name
      * @param string $mimetype the document mime type
-     * @param bool   $inline   <code>true</code> to send the file inline to the browser. The document viewer is used if available.
-     *                         <code>false</code> to send to the browser and force a file download with the name given.
+     * @param bool   $inline   True to send the file inline to the browser. The document viewer is used if available.
+     *                         False to send to the browser and force a file download with the name given.
      */
     public static function buildHeaders(string $name, string $mimetype, bool $inline): array
     {

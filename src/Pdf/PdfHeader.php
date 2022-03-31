@@ -256,10 +256,7 @@ class PdfHeader implements PdfConstantsInterface
         $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT);
     }
 
-    /**
-     * @param string|int $border
-     */
-    private function outputText(float $width, float $height, string $text, $border, int $move, string $align, string $link = ''): void
+    private function outputText(float $width, float $height, string $text, int|string $border, int $move, string $align, string $link = ''): void
     {
         $this->parent->Cell($width, $height, $text, $border, $move, $align, false, $link);
     }

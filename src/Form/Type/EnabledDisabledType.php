@@ -15,7 +15,7 @@ namespace App\Form\Type;
 use App\Form\AbstractChoiceType;
 
 /**
- * A Enabled/Disabled (translated) choice type.
+ * An Enabled/Disabled (translated) choice type.
  *
  * @author Laurent Muller
  */

@@ -90,8 +90,6 @@ final class HtmlStyleFactory
 
     /**
      * Gets the default style.
-     *
-     * @return \App\Pdf\Html\HtmlStyle
      */
     public static function default(): HtmlStyle
     {

@@ -76,7 +76,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws SyntaxError if the date format or the time format is unknown
      */
-    public function dateFilter(Environment $env, $date, ?string $dateFormat = null, $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    public function dateFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar, $pattern);
     }
@@ -98,7 +98,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @psalm-suppress UndefinedFunction
      */
-    public function dateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    public function dateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         /** @psalm-var array<string, int> $formats */
         static $formats = [
@@ -176,7 +176,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @return string the formatted date
      */
-    public function timeFilter(Environment $env, $date, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    public function timeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
     }

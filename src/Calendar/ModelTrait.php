@@ -38,7 +38,7 @@ trait ModelTrait
     {
         $name = $className ?: $defaultClass;
         if (!\class_exists($name)) {
-            throw new CalendarException("Class '{$name}' not found.");
+            throw new CalendarException("Class '$name' not found.");
         }
 
         return $name;

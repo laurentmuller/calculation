@@ -564,9 +564,9 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     /**
      * Returns if the given value is below the minimum margin.
      *
-     * @param Calculation|float $value the calculation or the margin to be tested
+     * @param float|Calculation $value the calculation or the margin to be tested
      */
-    public function isMarginBelow($value): bool
+    public function isMarginBelow(float|Calculation $value): bool
     {
         if ($value instanceof Calculation) {
             return $value->isMarginBelow($this->getMinMargin());
@@ -664,7 +664,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * @param string $name  the property name
      * @param mixed  $value the property value
      */
-    public function setProperty(string $name, $value): self
+    public function setProperty(string $name, mixed $value): self
     {
         return $this->setProperties([$name => $value]);
     }
@@ -692,7 +692,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @return mixed the value, if hit; the default value otherwise
      */
-    private function getItemValue(string $name, $default)
+    private function getItemValue(string $name, mixed $default)
     {
         $item = $this->getAdapter()->getItem($name);
         if ($item->isHit()) {
@@ -737,14 +737,14 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @return bool false if the item could not be queued or if a commit was attempted and failed; true otherwise
      */
-    private function saveDeferredItem(CacheItemPoolInterface $adapter, string $key, $value): bool
+    private function saveDeferredItem(CacheItemPoolInterface $adapter, string $key, mixed $value): bool
     {
         $item = $adapter->getItem($key);
         $item->expiresAfter(self::CACHE_TIMEOUT)
             ->set($value);
 
         if (!$adapter->saveDeferred($item)) {
-            $this->logWarning("Unable to deferred persist item '{$key}'.", $this->getLogContext());
+            $this->logWarning("Unable to deferred persist item '$key'.", $this->getLogContext());
 
             return false;
         }
@@ -759,7 +759,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * @param string             $name       the property name
      * @param mixed              $value      the property value
      */
-    private function saveProperty(PropertyRepository $repository, string $name, $value): void
+    private function saveProperty(PropertyRepository $repository, string $name, mixed $value): void
     {
         // get or create property
         $property = $repository->findOneByName($name);

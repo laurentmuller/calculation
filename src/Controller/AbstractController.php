@@ -317,7 +317,7 @@ abstract class AbstractController extends BaseController
      * @throws \Psr\Container\NotFoundExceptionInterface  no entry was found for the identifier
      * @throws \Psr\Container\ContainerExceptionInterface error while retrieving the entry
      */
-    protected function getService(string $id)
+    protected function getService(string $id): mixed
     {
         /** @psalm-var T $service */
         $service = $this->container->get($id);
@@ -391,7 +391,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Render the given PDF document and ouput the response.
+     * Render the given PDF document and output the response.
      *
      * @param PdfDocument $doc    the document to render
      * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
@@ -408,8 +408,8 @@ abstract class AbstractController extends BaseController
         }
 
         // title
-        if (empty($name) && !empty($doc->getTitle())) {
-            $name = (string) $doc->getTitle() . '.pdf';
+        if (empty($name) && \is_string($title = $doc->getTitle())) {
+            $name = \sprintf('%s.pdf', $title);
         }
 
         // create response
@@ -417,7 +417,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Render the given Spreadsheet document and ouput the response.
+     * Render the given Spreadsheet document and output the response.
      *
      * @param SpreadsheetDocument $doc    the document to render
      * @param bool                $inline <code>true</code> to send the file inline to the browser. The Spreadsheet viewer is used if available.
@@ -434,8 +434,8 @@ abstract class AbstractController extends BaseController
         }
 
         // title
-        if (empty($name) && !empty($doc->getTitle())) {
-            $name = (string) $doc->getTitle() . '.xlsx';
+        if (empty($name) && \is_string($title = $doc->getTitle())) {
+            $name = \sprintf('%s.xlsx', $title);
         }
 
         return new SpreadsheetResponse($doc, $inline, $name);

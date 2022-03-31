@@ -130,7 +130,7 @@ class ThemeService
     /**
      * Gets the current theme.
      *
-     * @param Request $request the optional request
+     * @param Request|null $request the optional request
      *
      * @return Theme the current theme, if any; the default theme otherwise
      */
@@ -172,7 +172,7 @@ class ThemeService
     /**
      * Gets the theme background.
      *
-     * @param Request $request the request
+     * @param Request|null $request the request
      */
     public function getThemeBackground(?Request $request = null): string
     {
@@ -186,7 +186,7 @@ class ThemeService
     /**
      * Gets the themes.
      *
-     * @return \App\Model\Theme[]
+     * @return Theme[]
      */
     public function getThemes(): array
     {
@@ -241,7 +241,7 @@ class ThemeService
     /**
      * Returns if the current theme is a dark theme.
      *
-     * @param Request $request the optional request
+     * @param Request|null $request the optional request
      *
      * @return bool true if dark; false otherwise
      */
@@ -253,7 +253,7 @@ class ThemeService
     /**
      * Gets the current request.
      *
-     * @param Request $request the optional request
+     * @param Request|null $request the optional request
      *
      * @return Request|null the request, if any; null otherwise
      */

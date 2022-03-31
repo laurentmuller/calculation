@@ -156,7 +156,7 @@ class GroupController extends AbstractEntityController
      *
      * @Route("/excel", name="group_excel")
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no group is found
+     * @throws NotFoundHttpException if no group is found
      */
     public function excel(): SpreadsheetResponse
     {
@@ -176,7 +176,7 @@ class GroupController extends AbstractEntityController
      *
      * @Route("/pdf", name="group_pdf")
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no group is found
+     * @throws NotFoundHttpException if no group is found
      */
     public function pdf(): PdfResponse
     {

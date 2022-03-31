@@ -132,7 +132,7 @@ class HtmlOlChunk extends HtmlParentChunk
                 break;
         }
 
-        return "{$text}.";
+        return "$text.";
     }
 
     /**

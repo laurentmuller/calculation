@@ -65,10 +65,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table = $this->createTable();
 
         // styles
-        $groupStyle = $table->getGroupStyle();
-        if (null !== $groupStyle) {
-            $groupStyle->setFontBold();
-        }
+        $table->getGroupStyle()?->setFontBold();
         $itemStyle = PdfStyle::getCellStyle()
             ->setIndent(4);
         $emptyStyle = PdfStyle::getCellStyle()

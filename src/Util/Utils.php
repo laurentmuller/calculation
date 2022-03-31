@@ -34,7 +34,7 @@ final class Utils
     /**
      * Applies the callback to the keys and elements of the given array.
      * <p>
-     * The callable function must by of type <code>function($key, $value)</code>.
+     * The callable function must be of type <code>function($key, $value)</code>.
      * </p>.
      *
      * @param callable $callback the callback function to run for each key and element in array
@@ -50,24 +50,18 @@ final class Utils
     /**
      * Iteratively reduce the array to a single value using a callback function.
      *
-     * The callable function must by of type <code>function($carry, $key, $value)</code>.
+     * The callable function must be of type <code>function($carry, $key, $value)</code>.
      *
      * @param array    $array    the input array
      * @param callable $callback the callback function
      * @param mixed    $initial  the optional initial value. It will be used at the beginning of the process, or as a final result in case the array is empty
      *
      * @return mixed the resulting value
-     * @psalm-suppress MissingClosureReturnType
      * @psalm-suppress MixedArrayOffset
      */
-    public static function arrayReduceKey(array $array, callable $callback, $initial = null)
+    public static function arrayReduceKey(array $array, callable $callback, mixed $initial = null): mixed
     {
-        /*
-         * @var mixed $carry
-         * @var mixed $key
-         */
-        // @phpstan-ignore-next-line
-        return \array_reduce(\array_keys($array), function ($carry, $key) use ($callback, $array) {
+        return \array_reduce(\array_keys($array), function (mixed $carry, mixed $key) use ($callback, $array): mixed {
             return $callback($carry, $key, $array[$key]);
         }, $initial);
     }
@@ -109,13 +103,13 @@ final class Utils
      * @return int -1 if the first value is less than the second value;
      *             1 if the second value is greater than the first value and
      *             0 if both values are equal.
-     *             If $ascending if false, the result is inversed.
+     *             If $ascending is false, the result is reversed.
      *
      * @throws \Symfony\Component\PropertyAccess\Exception\InvalidArgumentException If the property path is invalid
      * @throws \Symfony\Component\PropertyAccess\Exception\AccessException          If a property/index does not exist or is not public
      * @throws \Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException  If a value within the path is neither object
      */
-    public static function compare($a, $b, string $field, PropertyAccessorInterface $accessor, bool $ascending = true): int
+    public static function compare(object|array $a, object|array $b, string $field, PropertyAccessorInterface $accessor, bool $ascending = true): int
     {
         /** @var mixed $valueA */
         $valueA = $accessor->getValue($a, $field);
@@ -163,9 +157,9 @@ final class Utils
      *
      * @param mixed $expression the variable to export
      *
-     * @return string the variable representation
+     * @return string|null the variable representation
      */
-    public static function exportVar($expression): ?string
+    public static function exportVar(mixed $expression): ?string
     {
         try {
             $export = \var_export($expression, true);
@@ -184,7 +178,7 @@ final class Utils
             ];
 
             return \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return (string) $expression;
         }
     }
@@ -199,11 +193,10 @@ final class Utils
      * @param array    $array    the array to search in
      * @param callable $callback the filter callback
      *
-     * @return mixed|null the first matching item, if any; null otherwise
-     *
+     * @return mixed the first matching item, if any; null otherwise
      * @psalm-param callable(mixed): bool $callback
      */
-    public static function findFirst(array $array, callable $callback)
+    public static function findFirst(array $array, callable $callback): mixed
     {
         /** @psalm-var mixed $value */
         foreach ($array as $value) {
@@ -243,7 +236,7 @@ final class Utils
     }
 
     /**
-     * Gets the request input bag, depending of the request method.
+     * Gets the request input bag, depending on the request method.
      */
     public static function getRequestInputBag(Request $request): InputBag
     {
@@ -267,7 +260,7 @@ final class Utils
      *
      * @psalm-suppress ArgumentTypeCoercion
      */
-    public static function getShortName($var): string
+    public static function getShortName(object|string $var): string
     {
         // @phpstan-ignore-next-line
         return (new \ReflectionClass($var))->getShortName();
@@ -279,13 +272,13 @@ final class Utils
      * Any additional keys (if any) will be used for grouping the next set of sub-arrays.
      *
      * @param array               $array the array to be grouped
-     * @param string|int|callable $key   a set of keys to group by
+     * @param callable|int|string $key   a set of keys to group by
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedArrayAccess
      * @psalm-suppress MixedArrayOffset
      * @psalm-suppress PossiblyNullArrayOffset
      */
-    public static function groupBy(array $array, $key): array
+    public static function groupBy(array $array, callable|int|string $key): array
     {
         $callable = \is_callable($key) ? $key : null;
 
@@ -328,7 +321,7 @@ final class Utils
      *
      * @return bool true if not empty string
      */
-    public static function isString($var): bool
+    public static function isString(mixed $var): bool
     {
         return \is_string($var) && '' !== $var;
     }
@@ -407,7 +400,7 @@ final class Utils
      *
      * @return float the variable as float
      */
-    public static function toFloat($var): float
+    public static function toFloat(mixed $var): float
     {
         return \is_float($var) ? $var : (float) $var;
     }
@@ -419,7 +412,7 @@ final class Utils
      *
      * @return int the variable as integer
      */
-    public static function toInt($var): int
+    public static function toInt(mixed $var): int
     {
         return \is_int($var) ? $var : (int) $var;
     }
@@ -431,13 +424,13 @@ final class Utils
      *
      * @return string the variable as string
      */
-    public static function toString($var): string
+    public static function toString(mixed $var): string
     {
         return \is_string($var) ? $var : (string) $var;
     }
 
     /**
-     * Creates an unicode string.
+     * Creates a unicode string.
      *
      * @param string $string     the string content
      * @param bool   $ignorecase true to ignore case considerations

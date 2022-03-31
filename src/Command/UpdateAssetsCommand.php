@@ -105,14 +105,14 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             // parse plugins
             foreach ($plugins as $plugin) {
                 // disabled?
-                if (\property_exists($plugin, 'disabled') && null !== $plugin->disabled && $plugin->disabled) {
+                if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
                     continue;
                 }
 
                 $name = (string) $plugin->name;
                 $version = (string) $plugin->version;
                 $display = (string) ($plugin->display ?? $plugin->name);
-                $this->writeVerbose("Installing '{$display} v{$version}'.");
+                $this->writeVerbose("Installing '$display v$version'.");
 
                 // copy files
                 /** @var string[] $files */
@@ -149,7 +149,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
                 return $carry + \count((array) $plugin->files);
             }, 0);
             if ($expected !== $countFiles) {
-                $this->writeError("Not all files has been loaded! Expected: {$expected}, Loaded: {$countFiles}.");
+                $this->writeError("Not all files has been loaded! Expected: $expected, Loaded: $countFiles.");
             }
 
             // bootswatch
@@ -162,7 +162,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             $this->rename($targetTemp, $target);
 
             // result
-            $this->writeVerbose("Installed {$countPlugins} plugins and {$countFiles} files to the directory '{$target}'.");
+            $this->writeVerbose("Installed $countPlugins plugins and $countFiles files to the directory '$target'.");
         } finally {
             // remove temp directory
             $this->remove($targetTemp);
@@ -181,7 +181,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function checkApiCdnjsLastVersion(string $name, string $version): void
     {
-        $url = "https://api.cdnjs.com/libraries/{$name}?fields=version";
+        $url = "https://api.cdnjs.com/libraries/$name?fields=version";
         $this->checkVersion($url, $name, $version, ['version']);
     }
 
@@ -195,7 +195,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function checkJsDelivrLastVersion(string $name, string $version): void
     {
-        $url = "https://data.jsdelivr.com/v1/package/npm/{$name}";
+        $url = "https://data.jsdelivr.com/v1/package/npm/$name";
         $this->checkVersion($url, $name, $version, ['tags', 'latest']);
     }
 
@@ -229,7 +229,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         /** @var string $newVersion */
         $newVersion = $content;
         if (\version_compare($version, $newVersion, '<')) {
-            $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$newVersion}'.");
+            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.");
         }
     }
 
@@ -352,7 +352,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
         // rename
         foreach ($renames as $reg => $replace) {
-            $pattern = "/{$reg}/";
+            $pattern = "/$reg/";
             $targetFile = (string) \preg_replace($pattern, $replace, $targetFile);
         }
 
@@ -391,7 +391,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $matches = [];
         foreach ($entries as $entry) {
             $pattern = '/^\s*' . \preg_quote($entry, '/') . '\s*:\s*.*;/m';
-            if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER, 0))) {
+            if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER))) {
                 /** @var string $matche */
                 foreach ($matches as $matche) {
                     $result[] = $matche[0];
@@ -410,11 +410,11 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @return string[]|bool the styles, if found; false otherwise
      */
-    private function findStyles(string $content, string $style)
+    private function findStyles(string $content, string $style): array|false
     {
         $matches = [];
         $pattern = '/^' . \preg_quote($style, '/') . '\s+\{([^}]+)\}/m';
-        if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER, 0))) {
+        if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER))) {
             $result = [];
             foreach ($matches as $matche) {
                 $result[] = $matche[0];
@@ -514,7 +514,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $relative = \rtrim($this->makePathRelative('/' . ThemeService::DEFAULT_CSS, '/' . $target), '/');
         $targetFile = $targetDir . $relative;
         if (!$this->exists($targetFile)) {
-            $this->writeError("The file '{$targetFile}' for default theme does not exist.");
+            $this->writeError("The file '$targetFile' for default theme does not exist.");
 
             return 0;
         }
@@ -530,7 +530,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             if ($source instanceof \stdClass) {
                 // message
                 $version = (string) $source->version;
-                $this->writeVerbose("Installing 'bootswatch v{$version}'.");
+                $this->writeVerbose("Installing 'bootswatch v$version'.");
 
                 // themes
                 /** @var \stdClass[] $themes */
@@ -570,7 +570,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         // check file
         $vendorFile = $publicDir . '/' . self::VENDOR_FILE_NAME;
         if (!$this->exists($publicDir) || !$this->exists($vendorFile)) {
-            $this->writeVerbose("The file '{$vendorFile}' does not exist.");
+            $this->writeVerbose("The file '$vendorFile' does not exist.");
 
             return null;
         }

@@ -84,7 +84,7 @@ class UpdateController extends AbstractController
         $generator = $service->getGenerator();
         $states = $this->getCalculationState($manager);
 
-        /** @var \App\Entity\Calculation[] $calculations */
+        /** @var Calculation[] $calculations */
         $calculations = $manager->getRepository(Calculation::class)->findAll();
 
         try {
@@ -135,7 +135,7 @@ class UpdateController extends AbstractController
         $accessor = PropertyAccess::createPropertyAccessor();
         $generator = $service->getGenerator();
 
-        /** @var \App\Entity\Customer[] $customers */
+        /** @var Customer[] $customers */
         $customers = $manager->getRepository(Customer::class)->findAll();
 
         try {
@@ -214,7 +214,7 @@ class UpdateController extends AbstractController
      * @param string           $property the property name
      * @param mixed            $value    the new value to set
      */
-    private function replace(PropertyAccessor $accessor, $element, string $property, $value): self
+    private function replace(PropertyAccessor $accessor, object|array $element, string $property, mixed $value): self
     {
         $accessor->setValue($element, $property, $value);
 

@@ -45,7 +45,7 @@ trait DaysTrait
      *
      * @see Day::KEY_FORMAT
      */
-    public function getDay($key): ?Day
+    public function getDay(\DateTimeInterface|string $key): ?Day
     {
         if ($key instanceof \DateTimeInterface) {
             $key = $key->format(Day::KEY_FORMAT);

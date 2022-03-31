@@ -22,3 +22,7 @@ symfony.lock
 /resources/data/swiss.sqlite
 /resources/data/openweather.sqlite
 ###< application ###
+
+###> phpstorm ###
+/.idea
+###< phpstorm ###

@@ -89,9 +89,9 @@ trait FileTrait
      *
      * @param string $filename the file to read
      *
-     * @return \stdClass|bool the content of file, as JSON, if success; false otherwise
+     * @return \stdClass|false the content of file, as JSON, if success; false otherwise
      */
-    protected function loadJson(string $filename)
+    protected function loadJson(string $filename): \stdClass|false
     {
         if (false === ($content = $this->readFile($filename))) {
             return false;
@@ -100,12 +100,12 @@ trait FileTrait
         $data = \json_decode((string) $content);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             $this->writeError(\json_last_error_msg());
-            $this->writeError("Unable to decode file '{$filename}'.");
+            $this->writeError("Unable to decode file '$filename'.");
 
             return false;
         }
         if (!($data instanceof \stdClass)) {
-            $this->writeError("Unable to decode file '{$filename}'.");
+            $this->writeError("Unable to decode file '$filename'.");
 
             return false;
         }
@@ -130,12 +130,12 @@ trait FileTrait
      * Checks if the object or class has the given property.
      *
      * @param \stdClass       $var        the object to test for
-     * @param string[]|string $properties the properties names to check
+     * @param string|string[] $properties the properties name to check
      * @param bool            $log        true to output error
      *
      * @return bool true if the property exists, false if it doesn't exist
      */
-    protected function propertyExists(\stdClass $var, $properties, bool $log = false): bool
+    protected function propertyExists(\stdClass $var, array|string $properties, bool $log = false): bool
     {
         if (!\is_array($properties)) {
             $properties = [$properties];
@@ -143,7 +143,7 @@ trait FileTrait
         foreach ($properties as $property) {
             if (!\property_exists($var, $property) || empty($var->{$property})) {
                 if ($log) {
-                    $this->writeError("Unable to find the '{$property}' property.");
+                    $this->writeError("Unable to find the '$property' property.");
                 }
 
                 return false;
@@ -158,11 +158,11 @@ trait FileTrait
      *
      * @param string $filename the file to read
      *
-     * @return string|bool the content of file, if success; false otherwise
+     * @return string|false the content of file, if success; false otherwise
      */
-    protected function readFile(string $filename)
+    protected function readFile(string $filename): string|false
     {
-        $this->writeVeryVerbose("Load '{$filename}'");
+        $this->writeVeryVerbose("Load '$filename'");
         if (\is_file($filename)) {
             $content = \file_get_contents($filename);
         } else {
@@ -170,7 +170,7 @@ trait FileTrait
             $response = $client->request('GET', $filename);
             $code = $response->getStatusCode();
             if (Response::HTTP_OK !== $code) {
-                $this->writeError("Unable to get content of '{$filename}'.");
+                $this->writeError("Unable to get content of '$filename'.");
 
                 return false;
             }
@@ -178,12 +178,12 @@ trait FileTrait
         }
 
         if (false === $content) {
-            $this->writeError("Unable to get content of '{$filename}'.");
+            $this->writeError("Unable to get content of '$filename'.");
 
             return false;
         }
         if (empty($content)) {
-            $this->writeError("The content of '{$filename}' is empty.");
+            $this->writeError("The content of '$filename' is empty.");
 
             return false;
         }
@@ -196,10 +196,10 @@ trait FileTrait
      *
      * @param string $file A filename to remove
      */
-    protected function remove($file): void
+    protected function remove(string $file): void
     {
         if ($this->exists($file)) {
-            $this->writeVeryVerbose("Remove '{$file}'.");
+            $this->writeVeryVerbose("Remove '$file'.");
             $this->getFilesystem()->remove($file);
         }
     }
@@ -211,9 +211,9 @@ trait FileTrait
      * @param string $target    The new filename or directory
      * @param bool   $overwrite Whether to overwrite the target if it already exists
      */
-    protected function rename(string $origin, string $target, $overwrite = true): void
+    protected function rename(string $origin, string $target, bool $overwrite = true): void
     {
-        $this->writeVeryVerbose("Rename '{$origin}' to '{$target}'.");
+        $this->writeVeryVerbose("Rename '$origin' to '$target'.");
         $this->getFilesystem()->rename($origin, $target, $overwrite);
     }
 
@@ -241,7 +241,7 @@ trait FileTrait
      */
     protected function writeFile(string $filename, string $content): void
     {
-        $this->writeVeryVerbose("Save '{$filename}'");
+        $this->writeVeryVerbose("Save '$filename'");
         $this->getFilesystem()->dumpFile($filename, $content);
     }
 }

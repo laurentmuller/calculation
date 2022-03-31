@@ -78,7 +78,7 @@ class PhpIniReport extends AbstractReport
     /**
      * @param mixed $var the variable to convert
      */
-    private function convert($var): string
+    private function convert(mixed $var): string
     {
         if (\is_bool($var)) {
             return \ucfirst((string) \json_encode($var));

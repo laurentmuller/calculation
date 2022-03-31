@@ -49,15 +49,13 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     /**
      * Constructor.
      *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
+     * @param string               $name   the tag name
+     * @param HtmlParentChunk|null $parent the parent chunk
      */
     public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
     {
         // add to parent
-        if (null !== $parent) {
-            $parent->add($this);
-        }
+        $parent?->add($this);
 
         // style
         $this->updateStyle();
@@ -83,9 +81,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function applyStyle(HtmlReport $report): self
     {
-        if (null !== $this->style) {
-            $this->style->apply($report);
-        }
+        $this->style?->apply($report);
 
         return $this;
     }
@@ -281,7 +277,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
         if ($className) {
             $names = \explode(' ', \strtolower($className));
             $className = \array_reduce($names, function (string $carry, string $name) {
-                if (!empty($name = \trim($name)) && false === \strpos($carry, $name)) {
+                if (!empty($name = \trim($name)) && !\str_contains($carry, $name)) {
                     return \trim($carry . ' ' . $name);
                 }
 

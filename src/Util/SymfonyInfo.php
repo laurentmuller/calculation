@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use App\Kernel;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Utility class to get Symfony informations.
+ * Utility class to get Symfony information.
  *
  * @author Laurent Muller
  *
@@ -192,7 +192,7 @@ final class SymfonyInfo
     }
 
     /**
-     * Gets packages informations.
+     * Gets packages information.
      */
     public function getPackages(): array
     {
@@ -214,7 +214,7 @@ final class SymfonyInfo
                     if ($this->isDebug()) {
                         $result['debug'] = $this->processPackages((array) $content['packages-dev'], true);
                     }
-                } catch (\InvalidArgumentException $e) {
+                } catch (\InvalidArgumentException) {
                     // ignore
                 }
             }
@@ -372,15 +372,15 @@ final class SymfonyInfo
      * Process the given packages.
      *
      * @param array $packages the packages to process
-     * @param bool  $isDev    true if packages are requiered onyl for development mode
+     * @param bool  $dev      true if packages are required only for development mode
      */
-    private function processPackages(array $packages, bool $isDev): array
+    private function processPackages(array $packages, bool $dev): array
     {
         $result = [];
         /** @psalm-var array $entry */
         foreach ($packages as $entry) {
             $package = [];
-            $package['dev'] = $isDev;
+            $package['dev'] = $dev;
             foreach (self::PACKAGE_PROPERTIES as $key) {
                 $value = (string) ($entry[$key] ?? '');
                 switch ($key) {

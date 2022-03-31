@@ -264,8 +264,8 @@ class SwissDatabase extends AbstractDatabase
         // parameters
         $stmt->bindParam(':id', $data[0], \SQLITE3_INTEGER);
         $stmt->bindParam(':zip', $data[1], \SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $data[2], \SQLITE3_TEXT);
-        $stmt->bindParam(':state_id', $data[3], \SQLITE3_TEXT);
+        $stmt->bindParam(':name', $data[2]);
+        $stmt->bindParam(':state_id', $data[3]);
 
         // execute
         return false !== $stmt->execute();
@@ -295,8 +295,8 @@ class SwissDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::INSERT_STATE);
 
         // parameters
-        $stmt->bindParam(':id', $data[0], \SQLITE3_TEXT);
-        $stmt->bindParam(':name', $data[1], \SQLITE3_TEXT);
+        $stmt->bindParam(':id', $data[0]);
+        $stmt->bindParam(':name', $data[1]);
 
         // execute
         return false !== $stmt->execute();
@@ -327,7 +327,7 @@ class SwissDatabase extends AbstractDatabase
 
         // parameters
         $stmt->bindParam(':city_id', $data[0], \SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $data[1], \SQLITE3_TEXT);
+        $stmt->bindParam(':name', $data[1]);
 
         // execute
         return false !== $stmt->execute();

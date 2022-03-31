@@ -14,9 +14,6 @@ namespace App\Pdf;
 
 use App\Traits\MathTrait;
 use App\Util\Utils;
-use InvalidArgumentException;
-use LengthException;
-use OutOfRangeException;
 
 /**
  * Class to build a table.
@@ -97,7 +94,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     public function addCell(?PdfCell $cell): self
     {
         if (!$this->isRowStarted()) {
-            throw new InvalidArgumentException('No current row is started.');
+            throw new \InvalidArgumentException('No current row is started.');
         }
         if (null !== $cell) {
             $this->cells[] = $cell;
@@ -181,7 +178,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     {
         // started?
         if (!$this->isRowStarted()) {
-            throw new InvalidArgumentException('No row started.');
+            throw new \InvalidArgumentException('No row started.');
         }
 
         // add remaining cells
@@ -208,10 +205,10 @@ class PdfTableBuilder implements PdfConstantsInterface
     {
         // check
         if (empty($this->cells)) {
-            throw new LengthException('No cell to add.');
+            throw new \LengthException('No cell to add.');
         }
         if ($this->getCellsSpan() !== $this->getColumnsCount()) {
-            throw new OutOfRangeException('Invalid spanned cells.');
+            throw new \OutOfRangeException('Invalid spanned cells.');
         }
 
         // copy
@@ -391,7 +388,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     public function outputHeaders(): self
     {
         if (empty($this->columns)) {
-            throw new LengthException('No column is defined.');
+            throw new \LengthException('No column is defined.');
         }
 
         $this->startHeaderRow();
@@ -506,7 +503,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     public function startRow(?PdfStyle $style = null): self
     {
         if ($this->isRowStarted()) {
-            throw new InvalidArgumentException('A row is already started.');
+            throw new \InvalidArgumentException('A row is already started.');
         }
         $this->rowStyle = $style ?: PdfStyle::getCellStyle();
 
@@ -599,9 +596,9 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfDocument  $parent the parent document
      * @param int          $index  the column index
      * @param PdfRectangle $bounds the cell bounds
-     * @param string|int   $border the border style
+     * @param int|string   $border the border style
      */
-    protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, $border): void
+    protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, int|string $border): void
     {
         // handle by listener?
         if ($this->listener && $this->listener->onDrawCellBorder($this, $index, $bounds, $border)) {

@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
 /**
- * Extends URL type by adding the default protocol as data attribute.
+ * Extends the URL type by adding the default protocol as data attribute.
  *
  * @author Laurent Muller
  */

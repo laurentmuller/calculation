@@ -72,10 +72,10 @@ trait SessionTrait
     /**
      * Gets a session attribute, as float value.
      *
-     * @param string $key     the attribute name
-     * @param float  $default the default value if not found
+     * @param string     $key     the attribute name
+     * @param float|null $default the default value if not found
      *
-     * @return float the session value, if found; the default value otherwise
+     * @return float|null the session value, if found; the default value otherwise
      */
     protected function getSessionFloat(string $key, ?float $default): ?float
     {
@@ -85,10 +85,10 @@ trait SessionTrait
     /**
      * Gets a session attribute, as integer value.
      *
-     * @param string $key     the attribute name
-     * @param int    $default the default value if not found
+     * @param string   $key     the attribute name
+     * @param int|null $default the default value if not found
      *
-     * @return int the session value, if found; the default value otherwise
+     * @return int|null the session value, if found; the default value otherwise
      */
     protected function getSessionInt(string $key, ?int $default): ?int
     {
@@ -111,10 +111,10 @@ trait SessionTrait
     /**
      * Gets a session attribute, as string value.
      *
-     * @param string $key     the attribute name
-     * @param string $default the default value if not found
+     * @param string      $key     the attribute name
+     * @param string|null $default the default value if not found
      *
-     * @return string the session value, if found; the default value otherwise
+     * @return string|null the session value, if found; the default value otherwise
      */
     protected function getSessionString(string $key, ?string $default = null): ?string
     {
@@ -129,7 +129,7 @@ trait SessionTrait
      *
      * @return mixed the session value, if found; the default value otherwise
      */
-    protected function getSessionValue(string $key, $default = null)
+    protected function getSessionValue(string $key, mixed $default = null): mixed
     {
         if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
@@ -176,9 +176,9 @@ trait SessionTrait
      *
      * @param string $key the attribute name
      *
-     * @return mixed|null the removed value or null when attribute does not exist
+     * @return mixed the removed value or null when attribute does not exist
      */
-    protected function removeSessionValue(string $key)
+    protected function removeSessionValue(string $key): mixed
     {
         if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
@@ -198,7 +198,7 @@ trait SessionTrait
      */
     protected function removeSessionValues(array $keys): array
     {
-        return \array_map(function (string $key) {
+        return \array_map(function (string $key): mixed {
             return $this->removeSessionValue($key);
         }, $keys);
     }
@@ -225,7 +225,7 @@ trait SessionTrait
      * @param string $key   the attribute name
      * @param mixed  $value the attribute value or null to remove
      */
-    protected function setSessionValue(string $key, $value): self
+    protected function setSessionValue(string $key, mixed $value): self
     {
         if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);

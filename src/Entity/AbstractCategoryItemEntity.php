@@ -16,9 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Abstract entity with a category, a unit and an supplier.
+ * Abstract entity with a category, a unit and a supplier.
  *
- * A protected $category variable must declared.
+ * A protected $category variable must present.
  *
  * @author Laurent Muller
  *
@@ -58,9 +58,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getCategoryCode(): ?string
     {
-        $category = $this->getCategory();
-
-        return null !== $category ? $category->getCode() : null;
+        return $this->getCategory()?->getCode();
     }
 
     /**
@@ -68,9 +66,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getCategoryId(): ?int
     {
-        $category = $this->getCategory();
-
-        return null !== $category ? $category->getId() : null;
+        return $this->getCategory()?->getId();
     }
 
     /**
@@ -78,9 +74,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getGroup(): ?Group
     {
-        $category = $this->getCategory();
-
-        return null !== $category ? $category->getGroup() : null;
+        return $this->getCategory()?->getGroup();
     }
 
     /**
@@ -88,9 +82,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getGroupCode(): ?string
     {
-        $category = $this->getCategory();
-
-        return null !== $category ? $category->getGroupCode() : null;
+        return $this->getCategory()?->getGroupCode();
     }
 
     /**

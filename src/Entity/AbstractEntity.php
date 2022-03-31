@@ -66,7 +66,7 @@ abstract class AbstractEntity
      */
     public function getId(): ?int
     {
-        return $this->id ? $this->id : null;
+        return $this->id;
     }
 
     /**

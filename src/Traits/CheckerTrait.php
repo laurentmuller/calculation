@@ -24,8 +24,6 @@ trait CheckerTrait
 {
     /**
      * The authorization checker to get user rights.
-     *
-     * @var AuthorizationCheckerInterface
      */
     protected ?AuthorizationCheckerInterface $checker = null;
 

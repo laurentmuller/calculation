@@ -81,9 +81,9 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the lastest exchange rates from the given curreny code to all the other currencies supported.
+     * Gets the latest exchange rates from the given currency code to all the other currencies supported.
      *
-     * @param string $code the base curreny code
+     * @param string $code the base currency code
      *
      * @return array an array with the currency code as key and the currency rate as value or an empty array if an error occurs
      */
@@ -110,10 +110,10 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the exchange rate from the base curreny code to the target currency code.
+     * Gets the exchange rate from the base currency code to the target currency code.
      *
-     * @param string $baseCode   the base curreny code
-     * @param string $targetCode the target curreny code
+     * @param string $baseCode   the base currency code
+     * @param string $targetCode the target currency code
      *
      * @return float the exchange rate or 0.0 if an error occurs.
      */
@@ -140,10 +140,10 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the exchange rate, last and next update dates from the base curreny code to the target currency code.
+     * Gets the exchange rate, last and next update dates from the base currency code to the target currency code.
      *
-     * @param string $baseCode   the base curreny code
-     * @param string $targetCode the target curreny code
+     * @param string $baseCode   the base currency code
+     * @param string $targetCode the target currency code
      *
      * @return array|null the exchange rate, the next update and last update dates or null if an error occurs
      * @psalm-return null|array{

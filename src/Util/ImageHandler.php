@@ -17,7 +17,7 @@ use App\Interfaces\ImageExtensionInterface;
 /**
  * Handler for images.
  *
- * The underlaying image resource and allocated colors are automatically destroyed as soon
+ * The underlying image resource and allocated colors are automatically destroyed as soon
  * as there are no other references to this instance.
  *
  * @author Laurent Muller
@@ -25,40 +25,20 @@ use App\Interfaces\ImageExtensionInterface;
 class ImageHandler implements ImageExtensionInterface
 {
     /**
-     * The allocate colors.
+     * The allocated colors.
      *
      * @var int[]
      */
     protected array $colors = [];
 
     /**
-     * The image file name.
-     */
-    protected ?string $filename = null;
-
-    /**
-     * The image to handle.
-     *
-     * @var \GdImage
-     */
-    protected $image;
-
-    /**
      * Constructor.
      *
-     * @param mixed  $image    the image to handle
-     * @param string $filename the file name or null if none
-     *
-     * @throws \InvalidArgumentException if the given image is not a resource
+     * @param \GdImage    $image    the image to handle
+     * @param string|null $filename the file name or null if none
      */
-    public function __construct($image, ?string $filename = null)
+    public function __construct(private \GdImage $image, private ?string $filename = null)
     {
-        if (!$image instanceof \GdImage) {
-            throw new \InvalidArgumentException('The image must be an instance of \GdImage.');
-        }
-
-        $this->image = $image;
-        $this->filename = $filename;
     }
 
     /**
@@ -81,9 +61,9 @@ class ImageHandler implements ImageExtensionInterface
      * @param int $green the value of green component
      * @param int $blue  the value of blue component
      *
-     * @return int|bool the color identifier on success, false if the allocation failed
+     * @return int|false the color identifier on success, false if the allocation failed
      */
-    public function allocate(int $red, int $green, int $blue)
+    public function allocate(int $red, int $green, int $blue): int|false
     {
         if (false !== $color = \imagecolorallocate($this->image, $red, $green, $blue)) {
             $this->colors[] = $color;
@@ -102,9 +82,9 @@ class ImageHandler implements ImageExtensionInterface
      * @param int $blue  the value of blue component
      * @param int $alpha a value between 0 and 127
      *
-     * @return int|bool the color identifier on success, false if the allocation failed
+     * @return int|false the color identifier on success, false if the allocation failed
      */
-    public function allocateAlpha(int $red = 0, int $green = 0, int $blue = 0, int $alpha = 127)
+    public function allocateAlpha(int $red = 0, int $green = 0, int $blue = 0, int $alpha = 127): int|false
     {
         if (false !== $color = \imagecolorallocatealpha($this->image, $red, $green, $blue, $alpha)) {
             $this->colors[] = $color;
@@ -116,9 +96,9 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Allocate the black color for this image.
      *
-     * @return int|bool the color identifier on success, false if the allocation failed
+     * @return int|false the color identifier on success, false if the allocation failed
      */
-    public function allocateBlack()
+    public function allocateBlack(): int|false
     {
         return $this->allocate(0, 0, 0);
     }
@@ -126,9 +106,9 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Allocate the white color for this image.
      *
-     * @return int|bool the color identifier on success, false if the allocation failed
+     * @return int|false the color identifier on success, false if the allocation failed
      */
-    public function allocateWhite()
+    public function allocateWhite(): int|false
     {
         return $this->allocate(255, 255, 255);
     }
@@ -136,7 +116,7 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Set the blending mode for this image.
      *
-     * @param bool $blendmode whether to enable the blending mode or not. On true color imagesthe default value is true otherwise.
+     * @param bool $blendmode whether to enable the blending mode or not
      *
      * @return bool true on success or false on failure
      */
@@ -228,7 +208,7 @@ class ImageHandler implements ImageExtensionInterface
     }
 
     /**
-     * Create a new image handler from file or URL. This methos uses the file extension to create the handler.
+     * Create a new image handler from file or URL. This method uses the file extension to create the handler.
      *
      * @param string $filename the path to the image
      *
@@ -237,26 +217,15 @@ class ImageHandler implements ImageExtensionInterface
     public static function fromName(string $filename): ?self
     {
         $ext = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
-        switch ($ext) {
-            case self::EXTENSION_BMP:
-                return self::fromBmp($filename);
 
-            case self::EXTENSION_GIF:
-                return self::fromGif($filename);
-
-            case self::EXTENSION_JPEG:
-            case self::EXTENSION_JPG:
-                return self::fromJpeg($filename);
-
-            case self::EXTENSION_PNG:
-                return self::fromPng($filename);
-
-            case self::EXTENSION_XBM:
-                return self::fromXbm($filename);
-
-            default:
-                return null;
-        }
+        return match ($ext) {
+            self::EXTENSION_BMP => self::fromBmp($filename),
+            self::EXTENSION_GIF => self::fromGif($filename),
+            self::EXTENSION_JPEG, self::EXTENSION_JPG => self::fromJpeg($filename),
+            self::EXTENSION_PNG => self::fromPng($filename),
+            self::EXTENSION_XBM => self::fromXbm($filename),
+            default => null,
+        };
     }
 
     /**
@@ -366,10 +335,8 @@ class ImageHandler implements ImageExtensionInterface
 
     /**
      * Gets the image.
-     *
-     * @return \GdImage
      */
-    public function getImage()
+    public function getImage(): \GdImage
     {
         return $this->image;
     }
@@ -445,16 +412,16 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a BMP image to either the browser or a file.
      *
-     * @param resource|string|null $to the path or an open stream resource (which is automatically being closed
-     *                                 after this function returns) to save the file to. If not set or null, the
-     *                                 raw image stream will be outputted directly.</p>
-     *                                 <p>
-     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                 </p>
+     * @param string|null $to the path or an open stream resource, which is automatically being closed
+     *                        after this function returns, to save the file to. If not set or null, the
+     *                        raw image stream will be outputted directly.
+     *                        <p>
+     *                        <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                        </p>
      *
      * @return bool true on success or false on failure
      */
-    public function toBmp($to = null): bool
+    public function toBmp(?string $to = null): bool
     {
         return \imagebmp($this->image, $to);
     }
@@ -462,16 +429,16 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a GIF image to either the browser or a file.
      *
-     * @param resource|string|null $to the path or an open stream resource (which is automatically being closed
-     *                                 after this function returns) to save the file to. If not set or null, the
-     *                                 raw image stream will be outputted directly.</p>
-     *                                 <p>
-     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                 </p>
+     * @param string|null $to the path or an open stream resource, which is automatically being closed
+     *                        after this function returns, to save the file to. If not set or null, the
+     *                        raw image stream will be outputted directly.
+     *                        <p>
+     *                        <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                        </p>
      *
      * @return bool true on success or false on failure
      */
-    public function toGif($to = null): bool
+    public function toGif(?string $to = null): bool
     {
         return \imagegif($this->image, $to);
     }
@@ -479,19 +446,19 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a JPEG image to either the browser or a file.
      *
-     * @param resource|string|null $to      the path or an open stream resource (which is automatically being closed
-     *                                      after this function returns) to save the file to. If not set or null, the
-     *                                      raw image stream will be outputted directly.</p>
-     *                                      <p>
-     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                      </p>
-     * @param int                  $quality the quality is optional, and ranges from 0 (worst quality, smaller file)
-     *                                      to 100 (best quality, biggest file). The default is the default IJG quality value
-     *                                      (about 75).
+     * @param string|null $to      the path or an open stream resource, which is automatically being closed
+     *                             after this function returns, to save the file to. If not set or null, the
+     *                             raw image stream will be outputted directly.
+     *                             <p>
+     *                             <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                             </p>
+     * @param int         $quality the quality is optional, and ranges from 0 (the worst quality, smaller file)
+     *                             to 100 (the best quality, biggest file). The default is the default IJG quality value
+     *                             (about 75).
      *
      * @return bool true on success or false on failure
      */
-    public function toJpeg($to = null, int $quality = -1): bool
+    public function toJpeg(?string $to = null, int $quality = -1): bool
     {
         return \imagejpeg($this->image, $to, $quality);
     }
@@ -499,20 +466,20 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a PNG image to either the browser or a file.
      *
-     * @param resource|string|null $to      the path or an open stream resource (which is automatically being closed
-     *                                      after this function returns) to save the file to. If not set or null, the
-     *                                      raw image stream will be outputted directly.</p>
-     *                                      <p>
-     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                      </p>
-     * @param int                  $quality the compression level: from 0 (no compression) to 9. The current default is 6.
-     * @param int                  $filters allows reducing the PNG file size. It is a bitmask field which may be set to any
-     *                                      combination of the PNG_FILTER_XX constants. PNG_NO_FILTER or PNG_ALL_FILTERS may also be
-     *                                      used to respectively disable or activate all filters.
+     * @param string|null $to      the path or an open stream resource, which is automatically being closed
+     *                             after this function returns, to save the file to. If not set or null, the
+     *                             raw image stream will be outputted directly.
+     *                             <p>
+     *                             <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                             </p>
+     * @param int         $quality the compression level: from 0 (no compression) to 9. The current default is 6.
+     * @param int         $filters allows reducing the PNG file size. It is a bitmask field which may be set to any
+     *                             combination of the PNG_FILTER_XX constants. PNG_NO_FILTER or PNG_ALL_FILTERS may also be
+     *                             used to respectively disable or activate all filters.
      *
      * @return bool true on success or false on failure
      */
-    public function toPng($to = null, int $quality = -1, int $filters = -1): bool
+    public function toPng(?string $to = null, int $quality = -1, int $filters = -1): bool
     {
         return \imagepng($this->image, $to, $quality, $filters);
     }
@@ -520,19 +487,19 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a WBMP (Wireless Bitmaps) image to either the browser or a file.
      *
-     * @param resource|string $to         the path or an open stream resource (which is automatically being closed
-     *                                    after this function returns) to save the file to. If not set or null, the
-     *                                    raw image stream will be outputted directly.</p>
-     *                                    <p>
-     *                                    <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                    </p>
-     * @param int             $foreground you can set the foreground color with this parameter by setting an
-     *                                    identifier obtained from allocate. The default foreground color
-     *                                    is black. All other colors are treated as background.
+     * @param string|null $to         the path or an open stream resource, which is automatically being closed
+     *                                after this function returns, to save the file to. If not set or null, the
+     *                                raw image stream will be outputted directly.
+     *                                <p>
+     *                                <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                </p>
+     * @param ?int        $foreground you can set the foreground color with this parameter by setting an
+     *                                identifier obtained from allocate. The default foreground color
+     *                                is black. All other colors are treated as background.
      *
      * @return bool true on success or false on failure
      */
-    public function toWbmp($to = null, ?int $foreground = null): bool
+    public function toWbmp(?string $to = null, ?int $foreground = null): bool
     {
         if ($foreground) {
             return \imagewbmp($this->image, $to, $foreground);
@@ -544,17 +511,17 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a JPEG image to either the browser or a file.
      *
-     * @param resource|string $to      the path or an open stream resource (which is automatically being closed
-     *                                 after this function returns) to save the file to. If not set or null, the
-     *                                 raw image stream will be outputted directly.</p>
-     *                                 <p>
-     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                 </p>
-     * @param int             $quality the ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file)
+     * @param string|null $to      the path or an open stream resource, which is automatically being closed
+     *                             after this function returns, to save the file to. If not set or null, the
+     *                             raw image stream will be outputted directly.
+     *                             <p>
+     *                             <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                             </p>
+     * @param int         $quality the ranges from 0 (the worst quality, smaller file) to 100 (the best quality, biggest file)
      *
      * @return bool true on success or false on failure
      */
-    public function toWebp($to = null, int $quality = 80): bool
+    public function toWebp(?string $to = null, int $quality = 80): bool
     {
         return \imagewebp($this->image, $to, $quality);
     }
@@ -562,18 +529,17 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Output a XBM image to either the browser or a file.
      *
-     * @param string|null $to         the path to save the file to. If not set or null, the
-     *                                raw image stream will be outputted directly.</p>
+     * @param string|null $to         the path to save the file to. If not set or null, the raw image stream will be outputted directly.
      *                                <p>
      *                                <code>null</code> is invalid if the quality and filters arguments are not used.
      *                                </p>
-     * @param int         $foreground you can set the foreground color with this parameter by setting an
+     * @param int|null    $foreground you can set the foreground color with this parameter by setting an
      *                                identifier obtained from allocate. The default foreground color
      *                                is black. All other colors are treated as background.
      *
      * @return bool true on success or false on failure
      */
-    public function toXbm($to = null, ?int $foreground = null): bool
+    public function toXbm(?string $to = null, ?int $foreground = null): bool
     {
         if ($foreground) {
             return \imagexbm($this->image, $to, $foreground);
@@ -645,7 +611,7 @@ class ImageHandler implements ImageExtensionInterface
      *                    </tr>
      *                    </table>
      */
-    public function ttfBox(float $size, float $angle, string $fontfile, string $text)
+    public function ttfBox(float $size, float $angle, string $fontfile, string $text): array|bool
     {
         /** @var int[]|bool $result */
         $result = \imagettfbbox($size, $angle, $fontfile, $text);
@@ -705,9 +671,9 @@ class ImageHandler implements ImageExtensionInterface
      * @param float  $angle    The angle in degrees, with 0 degrees being left-to-right reading text.
      *                         Higher values represent a counter-clockwise rotation. For example, a
      *                         value of 90 would result in bottom-to-top reading text.
-     * @param int    $x        The coordinates given by x and y will define the basepoint of the first
+     * @param int    $x        The coordinates given by x and y will define the base point of the first
      *                         character (roughly the lower-left corner of the character)
-     * @param int    $y        The y-coordinate. This sets the position of the fonts baseline, not the
+     * @param int    $y        The y-coordinate. This sets the position of the font baseline, not the
      *                         very bottom of the character.
      * @param int    $color    a color identifier created with allocate
      * @param string $fontfile the path to the TrueType font
@@ -725,50 +691,50 @@ class ImageHandler implements ImageExtensionInterface
      *                         If a character is used in the string which is not supported by the
      *                         font, a hollow rectangle will replace the character.
      *
-     * @return array|bool an array with 8 elements representing four points making the bounding box of the
-     *                    text on success and false on error.<br>
-     *                    The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
-     *                    corner seeing the text horizontally.<br>
-     *                    <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                    <tr>
-     *                    <th>Key</th>
-     *                    <th>Content</th>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>0</td>
-     *                    <td>The lower left corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>1</td>
-     *                    <td>The lower left corner, Y position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>2</td>
-     *                    <td>The lower right corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>3</td>
-     *                    <td>The lower right corner, Y position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>4</td>
-     *                    <td>The upper right corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>5</td>
-     *                    <td>The upper right corner, Y position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>6</td>
-     *                    <td>The upper left corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>7</td>
-     *                    <td>The upper left corner, Y position.</td>
-     *                    </tr>
-     *                    </table>
+     * @return array|false an array with 8 elements representing four points making the bounding box of the
+     *                     text on success and false on error.<br>
+     *                     The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
+     *                     corner seeing the text horizontally.<br>
+     *                     <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *                     <tr>
+     *                     <th>Key</th>
+     *                     <th>Content</th>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>0</td>
+     *                     <td>The lower left corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>1</td>
+     *                     <td>The lower left corner, Y position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>2</td>
+     *                     <td>The lower right corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>3</td>
+     *                     <td>The lower right corner, Y position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>4</td>
+     *                     <td>The upper right corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>5</td>
+     *                     <td>The upper right corner, Y position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>6</td>
+     *                     <td>The upper left corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>7</td>
+     *                     <td>The upper left corner, Y position.</td>
+     *                     </tr>
+     *                     </table>
      */
-    public function ttfText(float $size, float $angle, int $x, int $y, int $color, string $fontfile, string $text)
+    public function ttfText(float $size, float $angle, int $x, int $y, int $color, string $fontfile, string $text): array|false
     {
         return \imagettftext($this->image, $size, $angle, $x, $y, $color, $fontfile, $text);
     }

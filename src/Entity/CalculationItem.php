@@ -90,7 +90,7 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      */
     public function getCalculation(): ?Calculation
     {
-        return null !== $this->category ? $this->category->getCalculation() : null;
+        return $this->category?->getCalculation();
     }
 
     /**
@@ -103,8 +103,6 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -149,8 +147,6 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
 
     /**
      * Get unit.
-     *
-     * @return string
      */
     public function getUnit(): ?string
     {
@@ -159,8 +155,6 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
 
     /**
      * Returns if the price or the quantity are equal to zero.
-     *
-     * @return bool true if the price or the quantity are equal to zero
      */
     public function isEmpty(): bool
     {
@@ -169,8 +163,6 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
 
     /**
      * Returns if the price is equal to zero.
-     *
-     * @return bool true if equal to zero
      */
     public function isEmptyPrice(): bool
     {
@@ -178,9 +170,7 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
     }
 
     /**
-     * Returns if the the quantity is equal to zero.
-     *
-     * @return bool true if equal to zero
+     * Returns if the quantity is equal to zero.
      */
     public function isEmptyQuantity(): bool
     {
@@ -199,8 +189,6 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {
@@ -231,8 +219,6 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
 
     /**
      * Set unit.
-     *
-     * @param string $unit
      */
     public function setUnit(?string $unit): self
     {

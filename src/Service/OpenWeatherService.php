@@ -66,7 +66,7 @@ class OpenWeatherService extends AbstractHttpClientService
     public const EXCLUDE_MINUTELY = 'minutely';
 
     /**
-     * The maximim number of city identifiers to retrieve.
+     * The maximum number of city identifiers to retrieve.
      */
     public const MAX_GROUP = 20;
 
@@ -146,12 +146,12 @@ class OpenWeatherService extends AbstractHttpClientService
     private const URI_DAILY = 'forecast/daily';
 
     /**
-     * 5 day / 3 hour forecast URI.
+     * 5 days / 3 hours forecast URI.
      */
     private const URI_FORECAST = 'forecast';
 
     /**
-     * Current condition URI for a group (mutliple cities).
+     * Current condition URI for a group (multiple cities).
      */
     private const URI_GROUP = 'group';
 
@@ -208,9 +208,9 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int    $cityId the city identifier
      * @param string $units  the units to use
      *
-     * @return array|bool the current conditions if success; false on error
+     * @return array|false the current conditions if success; false on error
      */
-    public function current(int $cityId, string $units = self::UNIT_METRIC)
+    public function current(int $cityId, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
             'id' => $cityId,
@@ -224,15 +224,15 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns 16 day / daily forecat conditions data for a specific location.
+     * Returns 16 day / daily forecast conditions data for a specific location.
      *
      * @param int    $cityId the city identifier
      * @param int    $count  the number of result to return or -1 for all
      * @param string $units  the units to use
      *
-     * @return array|bool the current conditions if success; false on error
+     * @return array|false the current conditions if success; false on error
      */
-    public function daily(int $cityId, int $count = -1, string $units = self::UNIT_METRIC)
+    public function daily(int $cityId, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
             'id' => $cityId,
@@ -249,15 +249,15 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns 5 day / 3 hour forecat conditions data for a specific location.
+     * Returns 5 days / 3 hours forecast conditions data for a specific location.
      *
      * @param int    $cityId the city identifier
      * @param int    $count  the number of result to return or -1 for all
      * @param string $units  the units to use
      *
-     * @return array|bool the current conditions if success; false on error
+     * @return array|false the current conditions if success; false on error
      */
-    public function forecast(int $cityId, int $count = -1, string $units = self::UNIT_METRIC)
+    public function forecast(int $cityId, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
             'id' => $cityId,
@@ -312,20 +312,20 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns current conditions data for a group of cities.
      *
-     * @param int[]  $cityIds the city identifiers. The maximim number of city identifiers are 20.
+     * @param int[]  $cityIds the city identifiers. The maximum number of city identifiers are 20.
      * @param string $units   the units to use
      *
      * @return array|bool the conditions for the given cities if success; false on error
      *
      * @throws \InvalidArgumentException if the number of city identifiers is greater than 20
      *
-     *  @psalm-return bool|array<array{
+     * @psalm-return array<array{
      *      cnt: int,
      *      units: array,
      *      list: array<int, array>
-     *  }>
+     *  }>|bool
      */
-    public function group(array $cityIds, string $units = self::UNIT_METRIC)
+    public function group(array $cityIds, string $units = self::UNIT_METRIC): array|bool
     {
         if (\count($cityIds) > self::MAX_GROUP) {
             throw new \InvalidArgumentException('The number of city identifiers is greater than 20.');
@@ -361,9 +361,9 @@ class OpenWeatherService extends AbstractHttpClientService
      *                            </ul>
      * @param string   $units     the units to use
      *
-     * @return array|bool the essential conditions if success; false on error
+     * @return array|false the essential conditions if success; false on error
      */
-    public function onecall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, array $exclude = [])
+    public function onecall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, array $exclude = []): array|false
     {
         $query = [
             'lat' => $latitude,
@@ -387,16 +387,16 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      * @param int    $limit the maximum number of cities to return
      *
-     * @return array|bool the search result if success; false on error
+     * @return array|false the search result if success; false on error
      *
-     * @psalm-return bool|array<array{
+     * @psalm-return array<array{
      *      id: int,
      *      name: string,
      *      country: string,
      *      latitude: float,
-     *      longitude: float}>
+     *      longitude: float}>|false
      */
-    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25)
+    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array|false
     {
         // find from cache
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units]);
@@ -502,14 +502,14 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Make a HTTP-GET call.
+     * Make an HTTP-GET call.
      *
      * @param string $uri   the uri to append to the host name
      * @param array  $query an associative array of query string values to add to the request
      *
-     * @return array|bool the JSON response on success, false on failure
+     * @return array|false the JSON response on success, false on failure
      */
-    private function get(string $uri, array $query = [])
+    private function get(string $uri, array $query = []): array|false
     {
         // find from cache
         $key = $this->getCacheKey($uri, $query);
@@ -563,7 +563,7 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         try {
             return Countries::getName($country);
-        } catch (MissingResourceException $e) {
+        } catch (MissingResourceException) {
             return null;
         }
     }
@@ -605,9 +605,9 @@ class OpenWeatherService extends AbstractHttpClientService
      * Update result.
      *
      * @param array                                   $result   the result to process
-     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param \DateTimeZone|\IntlTimeZone|string|null $timezone the timezone identifier
      */
-    private function updateResult(array &$result, $timezone = null): void
+    private function updateResult(array &$result, \DateTimeZone|\IntlTimeZone|string $timezone = null): void
     {
         /** @psalm-var mixed $value */
         foreach ($result as $key => &$value) {

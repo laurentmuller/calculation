@@ -37,6 +37,7 @@ class FormatUtilsTest extends TestCase
         return [
             [0, '0.00'],
             [0.0, '0.00'],
+            [-0.0, '0.00'],
             ['0', '0.00'],
             ['0.0', '0.00'],
 
@@ -119,20 +120,24 @@ class FormatUtilsTest extends TestCase
         return [
             [0, '000000'],
             [0.0, '000000'],
+            [-0.0, '000000'],
             ['0', '000000'],
             ['0.0', '000000'],
             [1, '000001'],
             [1.0, '000001'],
             [-0, '000000'],
             [null, '000000'],
+            [123456, '123456'],
+            [-123456, '-123456'],
         ];
     }
 
-    public function getInts(): array
+    public function getIntegers(): array
     {
         return [
             [0, '0'],
             [0.0, '0'],
+            [-0.0, '0'],
             ['0', '0'],
             ['0.0', '0'],
             [1, '1'],
@@ -140,6 +145,8 @@ class FormatUtilsTest extends TestCase
             [-1, '-1'],
             [-1.0, '-1'],
             [null, '0'],
+            [1000, "1'000"],
+            [-1000, "-1'000"],
         ];
     }
 
@@ -181,10 +188,9 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     *  @param mixed $pattern
      *  @dataProvider getDateFormatterPatterns
      */
-    public function testDateFormatterPattern($pattern, string $expected, ?int $datetype = null, ?int $timetype = null): void
+    public function testDateFormatterPattern(mixed $pattern, string $expected, ?int $datetype = null, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -205,10 +211,9 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     *  @param mixed $number
      *  @dataProvider getAmounts
      */
-    public function testFormatAmount($number, string $expected): void
+    public function testFormatAmount(mixed $number, string $expected): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         $actual = FormatUtils::formatAmount($number);
@@ -216,11 +221,9 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     *  @param mixed $date
-     *  @param mixed $expected
      *  @dataProvider getDates
      */
-    public function testFormatDate($date, $expected, ?int $datetype = null): void
+    public function testFormatDate(mixed $date, mixed $expected, ?int $datetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -229,11 +232,9 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     *  @param mixed $date
-     *  @param mixed $expected
      *  @dataProvider getDateTimes
      */
-    public function testFormatDateTime($date, $expected, ?int $datetype = null, ?int $timetype = null): void
+    public function testFormatDateTime(mixed $date, mixed $expected, ?int $datetype = null, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -242,30 +243,27 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     *  @param mixed $number
      *  @dataProvider getIds
      */
-    public function testFormatId($number, string $expected): void
+    public function testFormatId(mixed $number, string $expected): void
     {
         $actual = FormatUtils::formatId($number);
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     *  @param mixed $number
-     *  @dataProvider getInts
+     *  @dataProvider getIntegers
      */
-    public function testFormatInt($number, string $expected): void
+    public function testFormatInteger(mixed $number, string $expected): void
     {
         $actual = FormatUtils::formatInt($number);
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     *  @param mixed $number
      *  @dataProvider getPercents
      */
-    public function testFormatPercent($number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
+    public function testFormatPercent(mixed $number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
@@ -280,11 +278,9 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     *  @param mixed $date
-     *  @param mixed $expected
      *  @dataProvider getTimes
      */
-    public function testFormatTime($date, $expected, ?int $timetype = null): void
+    public function testFormatTime(mixed $date, mixed $expected, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);

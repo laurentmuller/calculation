@@ -44,7 +44,7 @@ class CategoryTable extends AbstractEntityTable
     }
 
     /**
-     * Formatter for the products column.
+     * Formatter for the product's column.
      */
     public function formatProducts(\Countable $products, Category $category): string
     {
@@ -53,13 +53,13 @@ class CategoryTable extends AbstractEntityTable
             'count' => $products->count(),
             'title' => 'category.list.product_title',
             'parameters' => [
-                ProductTable::PARAM_CATEGORY => $category->getId(),
+                AbstractCategoryItemTable::PARAM_CATEGORY => $category->getId(),
             ],
         ]);
     }
 
     /**
-     * Formatter for the tasks column.
+     * Formatter for the task's column.
      */
     public function formatTasks(\Countable $tasks, Category $category): string
     {
@@ -68,7 +68,7 @@ class CategoryTable extends AbstractEntityTable
             'count' => $tasks->count(),
             'title' => 'category.list.task_title',
             'parameters' => [
-                TaskTable::PARAM_CATEGORY => $category->getId(),
+                AbstractCategoryItemTable::PARAM_CATEGORY => $category->getId(),
             ],
         ]);
     }
@@ -138,7 +138,7 @@ class CategoryTable extends AbstractEntityTable
     }
 
     /**
-     * Gets groups.
+     * Gets groupes.
      */
     private function getGroups(): array
     {

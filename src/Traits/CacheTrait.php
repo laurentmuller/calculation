@@ -49,14 +49,11 @@ trait CacheTrait
     /**
      * Removes the item from the cache pool.
      *
-     * @param string $key
-     *                    The key to delete
+     * @param string $key The key to delete
      *
-     * @throws \InvalidArgumentException
-     *                                   If the $key string is not a legal value
+     * @throws \InvalidArgumentException If the $key string is not a legal value
      *
-     * @return bool
-     *              True if the item was successfully removed. False if there was an error.
+     * @return bool True if the item was successfully removed. False if there was an error.
      */
     public function deleteCacheItem(string $key): bool
     {
@@ -70,14 +67,11 @@ trait CacheTrait
     /**
      * Removes multiple items from the cache pool.
      *
-     * @param string[] $keys
-     *                       An array of keys that should be removed from the pool
+     * @param string[] $keys An array of keys that should be removed from the pool
      *
-     * @return bool
-     *              True if the items were successfully removed. False if there was an error.
+     * @return bool True if the items were successfully removed. False if there was an error.
      *
-     * @throws \InvalidArgumentException
-     *                                   If any of the keys in $keys are not a legal value
+     * @throws \InvalidArgumentException If any of the keys in $keys are not a legal value
      */
     public function deleteCacheItems(array $keys): bool
     {
@@ -99,8 +93,7 @@ trait CacheTrait
      *
      * @return CacheItemInterface|null the cache item, if found; null otherwise
      *
-     * @throws \InvalidArgumentException
-     *                                   If the $key string is not a legal value
+     * @throws \InvalidArgumentException If the $key string is not a legal value
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
@@ -138,13 +131,13 @@ trait CacheTrait
     /**
      * Gets the value from this cache for the given key.
      *
-     * @param string         $key     The key for which to return the corresponding value
-     * @param mixed|callable $default The default value to return or a callable function to get the defaule value.
-     *                                If the callable function returns a value, this value is saved to the cache.
+     * @param string $key     The key for which to return the corresponding value
+     * @param mixed  $default The default value to return or a callable function to get the default value.
+     *                        If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
      */
-    public function getCacheValue(string $key, $default = null)
+    public function getCacheValue(string $key, mixed $default = null): mixed
     {
         // clean key
         $key = $this->cleanKey($key);
@@ -170,7 +163,7 @@ trait CacheTrait
     /**
      * Sets the adapter.
      */
-    public function setAdatper(CacheItemPoolInterface $adapter): void
+    public function setAdapter(CacheItemPoolInterface $adapter): void
     {
         $this->adapter = $adapter;
     }
@@ -184,7 +177,7 @@ trait CacheTrait
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
      */
-    public function setCacheValue(string $key, $value, $time = null): self
+    public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): self
     {
         // clean key
         $key = $this->cleanKey($key);

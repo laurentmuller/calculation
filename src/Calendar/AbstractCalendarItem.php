@@ -62,8 +62,6 @@ abstract class AbstractCalendarItem implements \JsonSerializable
 
     /**
      * Gets the today day.
-     *
-     * @return \App\Calendar\Day
      */
     public function getToday(): Day
     {

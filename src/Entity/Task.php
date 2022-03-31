@@ -98,7 +98,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      */
     public function clone(?string $name = null): self
     {
-        /** @var Task $copy */
         $copy = clone $this;
         if (null !== $name) {
             $copy->setName($name);

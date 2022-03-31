@@ -58,7 +58,7 @@ class HelpService
     public function __construct(CacheItemPoolInterface $adapter, TranslatorInterface $translator, string $projectDir, bool $isDebug)
     {
         if (!$isDebug) {
-            $this->setAdatper($adapter);
+            $this->setAdapter($adapter);
         }
         $this->setTranslator($translator);
         $this->file = $projectDir . self::FILE_PATH;

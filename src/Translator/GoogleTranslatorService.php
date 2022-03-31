@@ -36,7 +36,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     private const PARAM_KEY = 'google_translator_key';
 
     /**
-     * The detect URI.
+     * The detection language URI.
      */
     private const URI_DETECT = 'detect';
 
@@ -46,7 +46,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     private const URI_LANGUAGE = 'languages';
 
     /**
-     * The translate URI.
+     * The translation URI.
      */
     private const URI_TRANSLATE = '';
 
@@ -66,12 +66,10 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    public function detect(string $text)
+    public function detect(string $text): array|false
     {
         // query
         $query = ['q' => $text];
-
-        /** @var bool|array $response */
         $response = $this->get(self::URI_DETECT, $query);
         if (!\is_array($response)) {
             return false;
@@ -128,7 +126,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    public function translate(string $text, string $to, ?string $from = null, bool $html = false)
+    public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
     {
         // query
         $query = [
@@ -137,10 +135,9 @@ class GoogleTranslatorService extends AbstractTranslatorService
             'source' => $from ?? '',
             'format' => $html ? 'html' : 'text',
         ];
-
-        // get
-        /** @var bool|array $response */
-        $response = $this->get(self::URI_TRANSLATE, $query);
+        if (false === $response = $this->get(self::URI_TRANSLATE, $query)) {
+            return false;
+        }
 
         // translation
         if (!$target = $this->getTranslation($response)) {
@@ -169,13 +166,11 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    protected function doGetLanguages()
+    protected function doGetLanguages(): array|false
     {
         // query
         $query = ['target' => self::getAcceptLanguage()];
-
-        $response = $this->get(self::URI_LANGUAGE, $query);
-        if (!\is_array($response)) {
+        if (false === $response = $this->get(self::URI_LANGUAGE, $query)) {
             return false;
         }
 
@@ -204,14 +199,8 @@ class GoogleTranslatorService extends AbstractTranslatorService
         return [self::BASE_URI => self::HOST_NAME];
     }
 
-    /**
-     * @param mixed|bool $response
-     */
-    private function detectLanguage($response): ?string
+    private function detectLanguage(array $response): ?string
     {
-        if (!\is_array($response)) {
-            return null;
-        }
         if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
             return null;
         }
@@ -226,14 +215,14 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * Make a HTTP-GET call.
+     * Make an HTTP-GET call.
      *
      * @param string $uri   the uri to append to the host name
      * @param array  $query an associative array of query string values to add to the request
      *
-     * @return mixed|bool the data response on success, false otherwise
+     * @return array|false the data response on success, false otherwise
      */
-    private function get(string $uri, array $query = [])
+    private function get(string $uri, array $query = []): array|false
     {
         // add key parameter
         $query['key'] = $this->key;
@@ -271,14 +260,8 @@ class GoogleTranslatorService extends AbstractTranslatorService
         return $data;
     }
 
-    /**
-     * @param mixed|bool $response
-     */
-    private function getTranslation($response): ?string
+    private function getTranslation(array $response): ?string
     {
-        if (!\is_array($response)) {
-            return null;
-        }
         if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
             return null;
         }

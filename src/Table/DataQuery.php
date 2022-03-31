@@ -89,11 +89,11 @@ class DataQuery implements SortModeInterface
      * Gets a custom data.
      *
      * @param string     $name    the custom data name to get value for
-     * @param mixed|null $default the default value to returns if the custom data is not present
+     * @param mixed|null $default the default value to return if the custom data is not present
      *
      * @return mixed the custom data, if present; the default value otherwise
      */
-    public function getCustomData(string $name, $default = null)
+    public function getCustomData(string $name, mixed $default = null): mixed
     {
         return $this->customData[$name] ?? $default;
     }

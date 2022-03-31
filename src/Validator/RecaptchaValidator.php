@@ -25,18 +25,12 @@ use Symfony\Component\Validator\Constraint;
 class RecaptchaValidator extends AbstractConstraintValidator
 {
     /**
-     * The reCaptcha secret key.
-     */
-    protected string $secret;
-
-    /**
      * Constructor.
      *
      * @param string $secret the reCaptcha secret key
      */
-    public function __construct(string $secret)
+    public function __construct(private string $secret)
     {
-        $this->secret = $secret;
         parent::__construct(Recaptcha::class);
     }
 

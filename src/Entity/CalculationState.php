@@ -156,8 +156,6 @@ class CalculationState extends AbstractEntity
 
     /**
      * Returns if this state contains one or more calculations.
-     *
-     * @return bool true if contains calculations
      */
     public function hasCalculations(): bool
     {
@@ -165,7 +163,7 @@ class CalculationState extends AbstractEntity
     }
 
     /**
-     * Get editable.
+     * Get a value indicating if calculations are editable.
      */
     public function isEditable(): bool
     {
@@ -203,7 +201,7 @@ class CalculationState extends AbstractEntity
     }
 
     /**
-     * Set editable.
+     * Set a value indicating if calculations are editable.
      */
     public function setEditable(bool $editable): self
     {

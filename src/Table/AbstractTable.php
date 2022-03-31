@@ -134,14 +134,11 @@ abstract class AbstractTable implements SortModeInterface
      */
     public static function getDefaultPageSize(string $view): int
     {
-        switch ($view) {
-            case TableInterface::VIEW_CARD:
-                return TableInterface::PAGE_SIZE_CARD;
-            case TableInterface::VIEW_CUSTOM:
-                return TableInterface::PAGE_SIZE_CUSTOM;
-            default: // TableInterface::VIEW_TABLE
-                return TableInterface::PAGE_SIZE;
-        }
+        return match ($view) {
+            TableInterface::VIEW_CARD => TableInterface::PAGE_SIZE_CARD,
+            TableInterface::VIEW_CUSTOM => TableInterface::PAGE_SIZE_CUSTOM,
+            default => TableInterface::PAGE_SIZE,
+        };
     }
 
     /**
@@ -241,7 +238,7 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Gets the default order to apply.
+     * Gets the default sort order.
      *
      * @return array<string, string> an array where each key is the field name and the value is the order direction ('asc' or 'desc')
      */
@@ -258,10 +255,9 @@ abstract class AbstractTable implements SortModeInterface
      * @param string|int|float|bool|null $default       the default value if not found
      * @param bool                       $useSessionKey true to use session key; false to use the parameter name
      *
-     * @return string|int|float|bool|null
      * @psalm-suppress InvalidScalarArgument
      */
-    protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true, string $prefix = '')
+    protected function getRequestValue(Request $request, string $name, string|int|float|bool|null $default = null, bool $useSessionKey = true, string $prefix = ''): string|int|float|bool|null
     {
         $key = $useSessionKey ? $this->getSessionKey($name) : $name;
         $session = $useSessionKey && $request->hasSession() ? $request->getSession() : null;
@@ -275,15 +271,13 @@ abstract class AbstractTable implements SortModeInterface
         // find in cookies
         $cookieName = '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
         // @phpstan-ignore-next-line
-        $cokieValue = $request->cookies->get($cookieName, $default);
+        $cookieValue = $request->cookies->get($cookieName, $default);
 
         // find in request
-        $value = Utils::getRequestInputBag($request)->get($name, $cokieValue);
+        $value = Utils::getRequestInputBag($request)->get($name, $cookieValue);
 
         // save
-        if (null !== $session) {
-            $session->set($key, $value);
-        }
+        $session?->set($key, $value);
 
         return $value;
     }
@@ -299,7 +293,7 @@ abstract class AbstractTable implements SortModeInterface
             $this->prefix = Utils::getShortName($this);
         }
 
-        return "{$this->prefix}.$name";
+        return "$this->prefix.$name";
     }
 
     /**
@@ -351,7 +345,7 @@ abstract class AbstractTable implements SortModeInterface
      *
      * @return array<string, string> the mapped object
      */
-    protected function mapValues($objectOrArray, array $columns, PropertyAccessor $accessor): array
+    protected function mapValues(AbstractEntity|array $objectOrArray, array $columns, PropertyAccessor $accessor): array
     {
         $callback = static function (array $result, Column $column) use ($objectOrArray, $accessor): array {
             $result[$column->getAlias()] = $column->mapValue($objectOrArray, $accessor);

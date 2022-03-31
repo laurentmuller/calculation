@@ -127,7 +127,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $this->date = new \DateTime();
         $this->createdAt = $this->updatedAt = new \DateTimeImmutable();
 
-        // clone groups
+        // clone groupes
         $this->groups = $this->groups->map(function (CalculationGroup $group) {
             return (clone $group)->setCalculation($this);
         });
@@ -135,8 +135,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Add a group.
-     *
-     * @param CalculationGroup $group the group to add
      */
     public function addGroup(CalculationGroup $group): self
     {
@@ -169,8 +167,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Clone this calculation.
      *
-     * @param CalculationState $state       the new state
-     * @param string           $description the new description
+     * @param CalculationState|null $state       the new state
+     * @param string|null           $description the new description
      */
     public function clone(?CalculationState $state = null, ?string $description = null): self
     {
@@ -264,8 +262,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Get customer.
-     *
-     * @return string
      */
     public function getCustomer(): ?string
     {
@@ -282,8 +278,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -379,7 +373,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get groups.
+     * Get groupes.
      *
      * @return CalculationGroup[]|Collection
      *
@@ -548,7 +542,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getStateCode(): ?string
     {
-        return null !== $this->state ? $this->state->getCode() : null;
+        return $this->state?->getCode();
     }
 
     /**
@@ -556,7 +550,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getStateColor(): ?string
     {
-        return null !== $this->state ? $this->state->getColor() : null;
+        return $this->state?->getColor();
     }
 
     /**
@@ -584,7 +578,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get user toal margin amount.
+     * Get user total margin amount.
      */
     public function getUserMarginTotal(): float
     {
@@ -650,7 +644,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Checks whether the groups is empty (contains no elements).
+     * Checks whether the groups are empty (contains no elements).
      *
      * @return bool true if the groups is empty, false otherwise
      */
@@ -775,8 +769,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Set customer.
-     *
-     * @param string $customer
      */
     public function setCustomer(?string $customer): self
     {
@@ -797,8 +789,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {

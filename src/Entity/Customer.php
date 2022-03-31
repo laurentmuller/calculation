@@ -328,8 +328,8 @@ class Customer extends AbstractEntity
     public function setWebSite(?string $webSite): self
     {
         $webSite = $this->trim($webSite);
-        if ($webSite && 'http' !== \substr($webSite, 0, 4)) {
-            $webSite = 'http://' . $webSite;
+        if ($webSite && !\str_starts_with($webSite, 'http')) {
+            $webSite = 'https://' . $webSite;
         }
         $this->webSite = $webSite;
 
@@ -386,7 +386,7 @@ class Customer extends AbstractEntity
      *
      * @return string the joined elements
      */
-    private function concat(?string $str1, ?string $str2, $sep = ' '): string
+    private function concat(?string $str1, ?string $str2, string $sep = ' '): string
     {
         return \implode($sep, \array_filter([$str1, $str2]));
     }

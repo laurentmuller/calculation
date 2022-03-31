@@ -198,14 +198,14 @@ class SearchTable extends AbstractTable
 
             // translate entity and field names
             $lowerType = \strtolower($type);
-            $entity = $this->trans("{$lowerType}.name");
+            $entity = $this->trans("$lowerType.name");
             $item[self::COLUMN_ACTION] = (int) $item['id'];
             $item[self::COLUMN_ENTITY_NAME] = $entity;
-            $item[self::COLUMN_FIELD_NAME] = $this->trans("{$lowerType}.fields.{$field}");
+            $item[self::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
 
             /** @var string|int|float|bool|null $content */
             $content = $item[SearchService::COLUMN_CONTENT];
-            switch ("{$type}.{$field}") {
+            switch ("$type.$field") {
                 case 'Calculation.id':
                     $content = $this->formatId((int) $content);
                     break;

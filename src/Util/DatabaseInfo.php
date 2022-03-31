@@ -17,20 +17,17 @@ use Doctrine\DBAL\Result;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Service to get database informations.
+ * Service to get database information.
  *
  * @author Laurent Muller
  */
 final class DatabaseInfo
 {
-    private EntityManagerInterface $manager;
-
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(private EntityManagerInterface $manager)
     {
-        $this->manager = $manager;
     }
 
     /**
@@ -55,15 +52,14 @@ final class DatabaseInfo
                     $values[$key] = (string) $entry['Value'];
                 }
             }
-        } catch (\Exception $e) {
-            // ignore
+        } catch (\Exception) {
         }
 
         return $values;
     }
 
     /**
-     * Gets the database server informations.
+     * Gets the database server information.
      *
      * @psalm-suppress InternalMethod
      */
@@ -81,8 +77,7 @@ final class DatabaseInfo
             return \array_filter($result, function ($value): bool {
                 return Utils::isString($value);
             });
-        } catch (\Exception $e) {
-            // ignore
+        } catch (\Exception) {
         }
 
         return $result;
@@ -102,8 +97,7 @@ final class DatabaseInfo
             if (false !== $entries) {
                 return (string) $entries['Value'];
             }
-        } catch (\Exception $e) {
-            // ignore
+        } catch (\Exception) {
         }
 
         return 'Unknown';

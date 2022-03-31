@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Util\FileUtils;
@@ -26,7 +27,7 @@ use Twig\Environment;
  * The calculations table.
  *
  * @author Laurent Muller
- * @template-extends AbstractEntityTable<\App\Entity\Calculation>
+ * @template-extends AbstractEntityTable<Calculation>
  */
 class CalculationTable extends AbstractEntityTable
 {
@@ -89,7 +90,7 @@ class CalculationTable extends AbstractEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['id' => Column::SORT_DESC];
+        return ['id' => SortModeInterface::SORT_DESC];
     }
 
     /**

@@ -81,7 +81,7 @@ class SwitchUserListener implements EventSubscriberInterface
         }
 
         // display message
-        $this->succesTrans($id, [
+        $this->successTrans($id, [
             '%orignal%' => $original,
             '%name%' => $name,
         ]);

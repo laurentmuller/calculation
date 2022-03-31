@@ -29,7 +29,7 @@ class MonthChart extends BaseChart
     private string $url;
 
     /**
-     * Contructor.
+     * Constructor.
      */
     public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private CalculationRepository $repository, UrlGeneratorInterface $generator)
     {
@@ -62,9 +62,9 @@ class MonthChart extends BaseChart
         // axes
         $color = $this->getForeground();
         $yAxis = $this->getYaxis($color);
-        $xAxis = $this->getXaxis($color, $dates);
+        $xAxis = $this->getXAxis($color, $dates);
 
-        // tootltip formatter
+        // tooltip formatter
         $formatter = $this->getFormatterExpression();
 
         // click event
@@ -166,7 +166,7 @@ class MonthChart extends BaseChart
     {
         $function = <<<EOF
             function() {
-                const href = "{$this->url}?search=" + Highcharts.dateFormat("%m.%Y", this.category);
+                const href = "$this->url?search=" + Highcharts.dateFormat("%m.%Y", this.category);
                 location.href = href;
             }
             EOF;
@@ -343,7 +343,7 @@ class MonthChart extends BaseChart
         }, $data);
     }
 
-    private function getXaxis(string $color, array $dates): array
+    private function getXAxis(string $color, array $dates): array
     {
         return [
             'type' => 'datetime',

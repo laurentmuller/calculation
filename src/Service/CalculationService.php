@@ -277,7 +277,7 @@ final class CalculationService
         /** @var CalculationGroup[] $groups */
         $groups = $calculation->getGroups();
 
-        // 1. udpate each groups
+        // 1. update each groups
         foreach ($groups as $group) {
             $group->update();
         }
@@ -328,8 +328,8 @@ final class CalculationService
             }
         }
 
-        // add emtpy
-        $group = [
+        // add empty
+        $new_group = [
             'id' => $id,
             'amount' => 0.0,
             'margin' => 0.0,
@@ -337,18 +337,18 @@ final class CalculationService
             'total' => 0.0,
             'description' => 'Unknown',
         ];
-        $groups[] = $group;
+        $groups[] = $new_group;
 
-        return $group;
+        return $new_group;
     }
 
     /**
      * Creates calculation's total groups.
      *
-     * @param array    $groups       the calculation groups
-     * @param callable $callback     the function to create a group lines
-     * @param float    $userMargin   the user margin
-     * @param float    $globalMargin the global margin or null to compute new global margin
+     * @param array         $groups       the calculation groups
+     * @param callable|null $callback     the function to create a group lines
+     * @param float         $userMargin   the user margin
+     * @param float|null    $globalMargin the global margin or null to compute new global margin
      *
      * @return array the total groups
      */

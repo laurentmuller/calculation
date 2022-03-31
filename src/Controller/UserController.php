@@ -168,7 +168,7 @@ class UserController extends AbstractEntityController
             $this->saveToDatabase($item);
 
             // message
-            $this->succesTrans('user.image.success', ['%name%' => $item->getDisplay()]);
+            $this->successTrans('user.image.success', ['%name%' => $item->getDisplay()]);
 
             // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
@@ -218,7 +218,7 @@ class UserController extends AbstractEntityController
             try {
                 // send
                 $comment->send($mailer);
-                $this->succesTrans('user.message.success', ['%name%' => $user->getDisplay()]);
+                $this->successTrans('user.message.success', ['%name%' => $user->getDisplay()]);
 
                 // list
                 return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
@@ -269,7 +269,7 @@ class UserController extends AbstractEntityController
             $this->saveToDatabase($item);
 
             // message
-            $this->succesTrans('user.change_password.change_success', ['%name%' => $item->getDisplay()]);
+            $this->successTrans('user.change_password.change_success', ['%name%' => $item->getDisplay()]);
 
             // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
@@ -337,7 +337,7 @@ class UserController extends AbstractEntityController
             $manager->flush();
 
             // message
-            $this->succesTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
+            $this->successTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
 
             // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());

@@ -45,20 +45,20 @@ interface ComparableInterface
     public function isEqual(self $other): bool;
 
     /**
-     * Returns if this instance is greather than to the other object.
+     * Returns if this instance is greater than to the other object.
      *
      * @param ComparableInterface $other the other object to compare to
      *
-     * @return bool true if greather than
+     * @return bool true if greater than
      */
     public function isGreaterThan(self $other): bool;
 
     /**
-     * Returns if this instance is greather than or equal to the other object.
+     * Returns if this instance is greater than or equal to the other object.
      *
      * @param ComparableInterface $other the other object to compare to
      *
-     * @return bool true if greather than or equal
+     * @return bool true if greater than or equal
      */
     public function isGreaterThanOrEqual(self $other): bool;
 

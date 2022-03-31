@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Entity\Log;
 use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\SortModeInterface;
 use App\Service\LogService;
 use App\Util\FileUtils;
 use App\Util\Utils;
@@ -145,7 +146,7 @@ class LogTable extends AbstractTable implements \Countable
      */
     protected function getDefaultOrder(): array
     {
-        return [self::COLUMN_DATE => Column::SORT_DESC];
+        return [self::COLUMN_DATE => SortModeInterface::SORT_DESC];
     }
 
     /**
@@ -247,7 +248,7 @@ class LogTable extends AbstractTable implements \Countable
         }
 
         $fields = [
-            $field => Column::SORT_ASC === $direction,
+            $field => SortModeInterface::SORT_ASC === $direction,
         ];
         if (self::COLUMN_DATE !== $field) {
             $fields[self::COLUMN_DATE] = false;

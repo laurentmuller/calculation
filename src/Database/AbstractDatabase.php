@@ -27,11 +27,6 @@ abstract class AbstractDatabase extends \SQLite3
     public const IN_MEMORY = ':memory:';
 
     /**
-     * The file name.
-     */
-    protected string $filename;
-
-    /**
      * The opened statements.
      *
      * @var \SQLite3Stmt[]
@@ -55,11 +50,8 @@ abstract class AbstractDatabase extends \SQLite3
      * @param string $encryption_key An optional encryption key used when encrypting and decrypting an SQLite database. If the
      *                               SQLite encryption module is not installed, this parameter will have no effect.
      */
-    public function __construct(string $filename, bool $readonly = false, string $encryption_key = '')
+    public function __construct(protected string $filename, bool $readonly = false, string $encryption_key = '')
     {
-        // copy
-        $this->filename = $filename;
-
         // check creation state
         $create = '' === $filename || self::IN_MEMORY === $filename || !FileUtils::exists($filename) || 0 === \filesize($filename);
 

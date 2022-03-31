@@ -98,7 +98,7 @@ trait TableTrait
     /**
      * @param string|int|float|bool|null $default the default value if the result parameter is null
      */
-    protected function saveCookie(Response $response, DataResults $results, string $key, $default = null, string $prefix = '', string $modify = '+1 year'): void
+    protected function saveCookie(Response $response, DataResults $results, string $key, string|int|float|bool|null $default = null, string $prefix = '', string $modify = '+1 year'): void
     {
         /** @psalm-var string|int|float|bool|array|null $value */
         $value = $results->getParams($key, $default);
@@ -115,7 +115,7 @@ trait TableTrait
      * @return string|int|float|bool|null the request value, the cookie value or the default value
      * @psalm-suppress InvalidScalarArgument
      */
-    private function updateRequest(Request $request, string $key, $default = null, string $prefix = '')
+    private function updateRequest(Request $request, string $key, string|int|float|bool|null $default = null, string $prefix = ''): string|int|float|bool|null
     {
         $input = Utils::getRequestInputBag($request);
         $value = $input->get($key);

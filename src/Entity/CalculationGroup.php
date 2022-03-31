@@ -228,7 +228,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     }
 
     /**
-     * Checks whether the categories is empty (contains no categories).
+     * Checks whether the categories are empty (contains no categories).
      *
      * @return bool true if the groups is empty, false otherwise
      */
@@ -293,8 +293,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
 
     /**
      * Set code.
-     *
-     * @param string $code
      */
     public function setCode(?string $code): self
     {
@@ -309,7 +307,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
      * @param Group $group  the group to copy values from
      * @param bool  $update true to update the total amount and the margin
      */
-    public function setGroup(Group $group, $update = false): self
+    public function setGroup(Group $group, bool $update = false): self
     {
         // copy
         $this->group = $group;
@@ -368,7 +366,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     }
 
     /**
-     * Update the total amount, the margin and this categories.
+     * Update the categories and the total amount.
      */
     public function update(): self
     {

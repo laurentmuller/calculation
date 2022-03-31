@@ -193,7 +193,7 @@ abstract class AbstractEntityController extends AbstractController
             /** @psalm-var string $key */
             $key = $isNew ? $parameters['success'] ?? 'common.add_success' : $parameters['success'] ?? 'common.edit_success';
             $message = $this->trans($key, ['%name%' => $item->getDisplay()]);
-            $this->succes($message);
+            $this->success($message);
 
             // redirect
             $id = $item->getId();

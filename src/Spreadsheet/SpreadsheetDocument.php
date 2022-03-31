@@ -80,8 +80,6 @@ class SpreadsheetDocument extends Spreadsheet
 
     /**
      * Constructor.
-     *
-     * @param TranslatorInterface $translator the translator used for the title, the headers and the boolean formats
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -146,7 +144,7 @@ class SpreadsheetDocument extends Spreadsheet
      * Initialize this service.
      *
      * @param AbstractController $controller the controller to get properties
-     * @param string             $title      the spread sheet title to translate
+     * @param string             $title      the spreadsheet title to translate
      * @param bool               $landscape  true to set landscape orientation, false for default (portrait)
      */
     public function initialize(AbstractController $controller, string $title, bool $landscape = false): self
@@ -199,7 +197,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the category property.
      *
-     * @param string $category the category
+     * @param string|null $category the category
      */
     public function setCategory(?string $category): self
     {
@@ -270,7 +268,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int       $rowIndex    the row index of the cell (1 = First row)
      * @param mixed     $value       the value of the cell
      */
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): self
+    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, mixed $value): self
     {
         if (null !== $value) {
             if ($value instanceof \DateTimeInterface) {
@@ -318,7 +316,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the company name property.
      *
-     * @param string $company the company name
+     * @param string|null $company the company name
      */
     public function setCompany(?string $company): self
     {
@@ -468,7 +466,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the price format ('#,##0.00') for the given column and whith the red color when value is equal to 0.
+     * Sets the price format ('#,##0.00') for the given column and with the red color when value is equal to 0.
      *
      * @param int $columnIndex the column index (A = 1)
      */
@@ -552,12 +550,12 @@ class SpreadsheetDocument extends Spreadsheet
                     ->setHorizontal($alignment);
             }
             $sheet->getColumnDimension($name)->setAutoSize(true);
-            $sheet->setCellValue("{$name}{$rowIndex}", $this->trans($id));
+            $sheet->setCellValue("$name$rowIndex", $this->trans($id));
         }
 
         $firstName = $this->stringFromColumnIndex($columnIndex);
         $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
-        $sheet->getStyle("{$firstName}{$rowIndex}:{$lastName}{$rowIndex}")->getFont()->setBold(true);
+        $sheet->getStyle("$firstName$rowIndex:$lastName$rowIndex")->getFont()->setBold(true);
         $sheet->freezePane('A' . ($rowIndex + 1));
 
         $sheet->getPageSetup()
@@ -571,8 +569,6 @@ class SpreadsheetDocument extends Spreadsheet
 
     /**
      * Set the manager property.
-     *
-     * @param string $manager the manager
      */
     public function setManager(?string $manager): self
     {
@@ -584,7 +580,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the margins of the the active sheet.
+     * Sets the margins of the active sheet.
      *
      * @param float $margins the margins to set
      */
@@ -748,9 +744,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the user name for the creator and the last modified properties.
-     *
-     * @param string $userName the user name
+     * Sets the username for the creator and the last modified properties.
      */
     public function setUserName(?string $userName): self
     {

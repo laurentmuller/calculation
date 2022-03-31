@@ -75,7 +75,7 @@ class LogoutListener implements EventSubscriberInterface
                 '%username%' => $username,
                 '%appname%' => $this->appNameVersion,
             ];
-            $this->succesTrans('security.logout.success', $params);
+            $this->successTrans('security.logout.success', $params);
         }
     }
 }

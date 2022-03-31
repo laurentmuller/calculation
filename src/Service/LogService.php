@@ -76,7 +76,7 @@ class LogService
     public function __construct(KernelInterface $kernel, CacheItemPoolInterface $adapter)
     {
         $this->fileName = $this->buildLogFile($kernel);
-        $this->setAdatper($adapter);
+        $this->setAdapter($adapter);
     }
 
     /**

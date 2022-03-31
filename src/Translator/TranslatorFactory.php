@@ -119,7 +119,7 @@ class TranslatorFactory
     }
 
     /**
-     * Gets the registred translator services.
+     * Gets the registered translator services.
      *
      * @return TranslatorServiceInterface[]
      */

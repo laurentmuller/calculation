@@ -25,8 +25,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * Service using the HttpClient.
  *
  * @author Laurent Muller
- *
- * @see Symfony\Component\HttpClient\HttpClient
  */
 abstract class AbstractHttpClientService
 {
@@ -43,7 +41,7 @@ abstract class AbstractHttpClientService
     protected const BODY = 'body';
 
     /**
-     * The headers parameter name.
+     * The header's parameter name.
      */
     protected const HEADERS = 'headers';
 
@@ -63,11 +61,6 @@ abstract class AbstractHttpClientService
     protected ?HttpClientInterface $client = null;
 
     /**
-     * The API key.
-     */
-    protected string $key;
-
-    /**
      * The last error.
      *
      * @psalm-var null|array{
@@ -83,16 +76,15 @@ abstract class AbstractHttpClientService
      *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(CacheItemPoolInterface $adapter, bool $isDebug, string $key)
+    public function __construct(CacheItemPoolInterface $adapter, bool $isDebug, protected string $key)
     {
         // check key
         if (empty($key)) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
         if (!$isDebug) {
-            $this->setAdatper($adapter);
+            $this->setAdapter($adapter);
         }
-        $this->key = $key;
     }
 
     /**
@@ -181,7 +173,7 @@ abstract class AbstractHttpClientService
      * Gets the value from this cache for the given URL.
      *
      * @param string         $url     The URL for which to return the corresponding value
-     * @param mixed|callable $default The default value to return or a callable function to get the defaule value.
+     * @param mixed|callable $default The default value to return or a callable function to get the default value.
      *                                If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
@@ -209,7 +201,7 @@ abstract class AbstractHttpClientService
      *
      * @param string $method  the method name ('GET', 'POST')
      * @param string $url     the URL request
-     * @param array  $options the additionnal options to add to the request
+     * @param array  $options the additional options to add to the request
      *
      * @return ResponseInterface the response
      *
@@ -224,7 +216,7 @@ abstract class AbstractHttpClientService
      * Requests an HTTP resource with the 'GET' method.
      *
      * @param string $url     the URL request
-     * @param array  $options the additionnal options to add to the request
+     * @param array  $options the additional options to add to the request
      *
      * @return ResponseInterface the response
      *
@@ -239,7 +231,7 @@ abstract class AbstractHttpClientService
      * Requests an HTTP resource with the 'POST' method.
      *
      * @param string $url     the URL request
-     * @param array  $options the additionnal options to add to the request
+     * @param array  $options the additional options to add to the request
      *
      * @return ResponseInterface the response
      *

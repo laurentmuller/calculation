@@ -30,9 +30,9 @@ trait TranslatorTrait
     /**
      * Checks if a message has a translation (it does not take into account the fallback mechanism).
      *
-     * @param string $id     the message id (may also be an object that can be cast to string)
-     * @param string $domain the domain for the message or null to use the default
-     * @param string $locale the locale or null to use the default
+     * @param string      $id     the message id (may also be an object that can be cast to string)
+     * @param string|null $domain the domain for the message or null to use the default
+     * @param string|null $locale the locale or null to use the default
      *
      * @return bool true if the message has a translation, false otherwise
      */

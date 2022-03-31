@@ -78,6 +78,9 @@ class TaskItem extends AbstractEntity implements \Countable
         });
     }
 
+    /**
+     * Adds a margin.
+     */
     public function addMargin(TaskItemMargin $margin): self
     {
         if (!$this->margins->contains($margin)) {
@@ -145,11 +148,17 @@ class TaskItem extends AbstractEntity implements \Countable
         return $this->margins;
     }
 
+    /**
+     * Gets the name.
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Gets the parent's task.
+     */
     public function getTask(): ?Task
     {
         return $this->task;
@@ -163,6 +172,9 @@ class TaskItem extends AbstractEntity implements \Countable
         return $this->margins->isEmpty();
     }
 
+    /**
+     * Remove a margin.
+     */
     public function removeMargin(TaskItemMargin $margin): self
     {
         if ($this->margins->removeElement($margin) && $margin->getTaskItem() === $this) {
@@ -172,6 +184,9 @@ class TaskItem extends AbstractEntity implements \Countable
         return $this;
     }
 
+    /**
+     * Sets the name.
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -179,6 +194,9 @@ class TaskItem extends AbstractEntity implements \Countable
         return $this;
     }
 
+    /**
+     * Sets the parent's task.
+     */
     public function setTask(?Task $task): self
     {
         $this->task = $task;

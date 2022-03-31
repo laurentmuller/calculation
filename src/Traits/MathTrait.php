@@ -62,8 +62,8 @@ trait MathTrait
     /**
      * Returns the rounded value to the specified precision.
      *
-     * @param float $val       the value to round
-     * @param int   $precision the optional number of decimal digits to round to
+     * @param float|null $val       the value to round
+     * @param int        $precision the optional number of decimal digits to round to
      *
      * @return float the rounded value or 0 if value is empty
      */
@@ -79,7 +79,7 @@ trait MathTrait
      * @param float $divisor  the divisor (denominator)
      * @param float $default  the default value to return when divisor is equal to 0
      *
-     * @return float the divison result
+     * @return float the division result
      */
     protected function safeDivide(float $dividend, float $divisor, float $default = 0.0): float
     {

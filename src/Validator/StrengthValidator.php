@@ -33,15 +33,12 @@ class StrengthValidator extends AbstractConstraintValidator
 {
     use StrengthTranslatorTrait;
 
-    private ?PropertyAccessorInterface $propertyAccessor;
-
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(TranslatorInterface $translator, private ?PropertyAccessorInterface $propertyAccessor = null)
     {
         parent::__construct(Strength::class);
-        $this->propertyAccessor = $propertyAccessor;
         $this->setTranslator($translator);
     }
 

@@ -76,7 +76,7 @@ class ThemeController extends AbstractController
                 ->updateCookie($response, ThemeService::KEY_BACKGROUND, $background)
                 ->updateCookie($response, ThemeService::KEY_DARK, (string) $dark);
 
-            $this->succesTrans('theme.success', ['%name%' => $theme->getName()]);
+            $this->successTrans('theme.success', ['%name%' => $theme->getName()]);
 
             return $response;
         }

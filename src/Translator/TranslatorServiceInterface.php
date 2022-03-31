@@ -30,12 +30,12 @@ interface TranslatorServiceInterface
      *                    <li>'name': The detected language display name.</li>
      *                    </ul>
      *                    Returns false if an error occurs.
-     * @psalm-return bool|array{
+     * @psalm-return array{
      *      tag: string,
      *      name: string|null
-     * }
+     * }|false
      */
-    public function detect(string $text);
+    public function detect(string $text): array|false;
 
     /**
      * Gets the API documentation.
@@ -55,10 +55,10 @@ interface TranslatorServiceInterface
     /**
      * Gets the set of languages currently supported by other operations of the service.
      *
-     * @return bool|array an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
-     * @psalm-return bool|array<string, string>
+     * @return array|false an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
+     * @psalm-return array<string, string>|false
      */
-    public function getLanguages();
+    public function getLanguages(): array|false;
 
     /**
      * Gets the last error.
@@ -75,31 +75,31 @@ interface TranslatorServiceInterface
     /**
      * Translates a text.
      *
-     * @param string $text the text to translate
-     * @param string $to   the language of the output text
-     * @param string $from the language of the input text. If the from parameter is not specified, automatic language detection is applied to determine the source language.
-     * @param bool   $html defines whether the text being translated is HTML text (true) or plain text (false)
+     * @param string      $text the text to translate
+     * @param string      $to   the language of the output text
+     * @param string|null $from the language of the input text. If the form parameter is not specified, automatic language detection is applied to determine the source language.
+     * @param bool        $html defines whether the text being translated is HTML text (true) or plain text (false)
      *
-     * @return bool|array on success, returns an array with the following entries:
-     *                    <ul>
-     *                    <li>'source': The source text.</li>
-     *                    <li>'target': The translated text.</li>
-     *                    <li>'from': The from values.
-     *                    <ul>
-     *                    <li>'tag': The language tag (BCP 47).</li>
-     *                    <li>'name': The language display name.</li>
-     *                    </ul>
-     *                    </li>
-     *                    <li>'to': The to values.
-     *                    <ul>
-     *                    <li>'tag': The language tag (BCP 47).</li>
-     *                    <li>'name': The language display name.</li>
-     *                    </ul>
-     *                    </li>
-     *                    </ul>
-     *                    Returns false if an error occurs.
+     * @return array|false on success, returns an array with the following entries:
+     *                     <ul>
+     *                     <li>'source': The source text.</li>
+     *                     <li>'target': The translated text.</li>
+     *                     <li>'from': The from values.
+     *                     <ul>
+     *                     <li>'tag': The language tag (BCP 47).</li>
+     *                     <li>'name': The language display name.</li>
+     *                     </ul>
+     *                     </li>
+     *                     <li>'to': The to values.
+     *                     <ul>
+     *                     <li>'tag': The language tag (BCP 47).</li>
+     *                     <li>'name': The language display name.</li>
+     *                     </ul>
+     *                     </li>
+     *                     </ul>
+     *                     Returns false if an error occurs.
      *
-     * @psalm-return bool|array{
+     * @psalm-return array{
      *      source: string,
      *      target: string,
      *      from: array {
@@ -108,7 +108,7 @@ interface TranslatorServiceInterface
      *      to: array {
      *          tag: string,
      *          name: string|null}
-     *      }
+     *      }|false
      */
-    public function translate(string $text, string $to, ?string $from = null, bool $html = false);
+    public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false;
 }

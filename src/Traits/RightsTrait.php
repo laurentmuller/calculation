@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Trait to set or get access rights.
  *
  * @property int[] $EntityCalculation      the rights for calculations.
- * @property int[] $EntityCalculationState the rights for calculation states.
+ * @property int[] $EntityCalculationState the rights for calculation state.
  * @property int[] $EntityGroup            the rights for groups.
  * @property int[] $EntityCategory         the rights for categories.
  * @property int[] $EntityCustomer         the rights for customers.
@@ -36,7 +36,7 @@ trait RightsTrait
     use MathTrait;
 
     /**
-     * The overwrite rights flag.
+     * The overwritten rights flag.
      *
      * @ORM\Column(type="boolean", options={"default" = 0})
      */
@@ -96,7 +96,7 @@ trait RightsTrait
     /**
      * Gets a value indicating if this rights overwrite the default rights.
      *
-     * @return bool true if overwrite, false to use the default rights
+     * @return bool true if overwritten, false to use the default rights
      */
     public function isOverwrite(): bool
     {

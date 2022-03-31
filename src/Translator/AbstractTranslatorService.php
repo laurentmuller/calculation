@@ -42,13 +42,13 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * Gets the display name of the language for the given BCP 47 language tag.
      *
-     * @param string $tag the BCP 47 language tag to earch for
+     * @param string|null $tag the BCP 47 language tag to search for
      *
      * @return string|null the display name, if found; null otherwise
      */
     public function findLanguage(?string $tag): ?string
     {
-        if ($tag && ($languages = $this->getLanguages()) && ($name = \array_search($tag, (array) $languages, true))) {
+        if ($tag && ($languages = $this->getLanguages()) && ($name = \array_search($tag, $languages, true))) {
             return $name;
         }
 
@@ -66,7 +66,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * {@inheritdoc}
      */
-    public function getLanguages()
+    public function getLanguages(): array|false
     {
         // already cached?
         $key = $this->getCacheKey();
@@ -90,10 +90,10 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * Gets the set of languages currently supported by other operations of the service.
      *
-     * @return bool|array an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
-     * @psalm-return bool|array<string, string>
+     * @return array|bool an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
+     * @psalm-return array<string, string>|false
      */
-    abstract protected function doGetLanguages();
+    abstract protected function doGetLanguages(): array|false;
 
     /**
      * Gets the cache key used to save or retrieve languages.
@@ -114,13 +114,13 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param string $name  the property name to search for
      * @param bool   $error true to create an error if the property is not found
      *
-     * @return mixed|bool the property value, if found; false if fail
+     * @return mixed the property value, if found; false if fail
      */
-    protected function getProperty(array $data, string $name, bool $error = true)
+    protected function getProperty(array $data, string $name, bool $error = true): mixed
     {
         if (!isset($data[$name])) {
             if ($error) {
-                return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the '{$name}' field.");
+                return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the '$name' field.");
             }
 
             return false;
@@ -148,11 +148,13 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param string $name  the property name to search for
      * @param bool   $error true to create an error if the property is not found
      *
-     * @return array|bool a none empty array, if found; false if fail
+     * @return array|false a none empty array, if found; false if fail
      */
-    protected function getPropertyArray(array $data, string $name, bool $error = true)
+    protected function getPropertyArray(array $data, string $name, bool $error = true): array|false
     {
-        if (false === $property = $this->getProperty($data, $name, $error)) {
+        /** @var mixed $property */
+        $property = $this->getProperty($data, $name, $error);
+        if (false === $property) {
             return false;
         }
 
@@ -172,17 +174,17 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      *
      * @return bool true if variable is an array and is not empty
      */
-    protected function isValidArray($var, string $name, bool $error = true): bool
+    protected function isValidArray(mixed $var, string $name, bool $error = true): bool
     {
         if (!\is_array($var)) {
             if ($error) {
-                return $this->setLastError(self::ERROR_NOT_FOUND, "The '{$name}' field is not an array.");
+                return $this->setLastError(self::ERROR_NOT_FOUND, "The '$name' field is not an array.");
             }
 
             return false;
         } elseif (empty($var)) {
             if ($error) {
-                return $this->setLastError(self::ERROR_NOT_FOUND, "The '{$name}' field is empty.");
+                return $this->setLastError(self::ERROR_NOT_FOUND, "The '$name' field is empty.");
             }
 
             return false;

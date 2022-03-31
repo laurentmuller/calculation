@@ -27,11 +27,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @author Laurent Muller
  *
  * @method BaseChart style(array $styles) set the CSS style options.
- * @method BaseChart xAxis(array $xAxis)  set the x axis options.
- * @method BaseChart yAxis(array $yAxis)  set the y axis options.
+ * @method BaseChart xAxis(array $xAxis)  set the x-axis options.
+ * @method BaseChart yAxis(array $yAxis)  set the y-axis options.
  *
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x axis.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y axis.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x-axis.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y-axis.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $chart       the chart.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $credits     the credits.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $legend      the legend.
@@ -161,7 +161,7 @@ class BaseChart extends Highchart
     /**
      * Sets the chart title.
      *
-     * @param string $title the title to set or null to hide
+     * @param string|null $title the title to set or null to hide
      * @psalm-suppress MixedMethodCall
      */
     public function setTitle(?string $title): self
@@ -174,7 +174,8 @@ class BaseChart extends Highchart
     /**
      * Sets the chart type.
      *
-     * @param 'column'|'line'|'pie'|'spline' $type the chart type to set
+     * @param string $type the chart type to set
+     * @psalm-param 'column'|'line'|'pie'|'spline' $type
      */
     public function setType(string $type): self
     {
@@ -185,11 +186,11 @@ class BaseChart extends Highchart
     }
 
     /**
-     * Sets the x axis categories.
+     * Sets the x-axis categories.
      *
      * @param mixed $categories the categories to set
      */
-    public function setXAxisCategories($categories): self
+    public function setXAxisCategories(mixed $categories): self
     {
         // @phpstan-ignore-next-line
         $this->xAxis->categories($categories);
@@ -198,9 +199,9 @@ class BaseChart extends Highchart
     }
 
     /**
-     * Sets the x axis title.
+     * Sets the x-axis title.
      *
-     * @param string $title the title to set or null to hide
+     * @param string|null $title the title to set or null to hide
      */
     public function setXAxisTitle(?string $title): self
     {
@@ -213,9 +214,9 @@ class BaseChart extends Highchart
     }
 
     /**
-     * Sets the y axis title.
+     * Sets the y-axis title.
      *
-     * @param string $title the title to set or null to hide
+     * @param string|null $title the title to set or null to hide
      */
     public function setYAxisTitle(?string $title): self
     {

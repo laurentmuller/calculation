@@ -137,8 +137,6 @@ class Property extends AbstractEntity
 
     /**
      * Gets the property value as string.
-     *
-     * @return string the property value
      */
     public function getString(): ?string
     {
@@ -147,8 +145,6 @@ class Property extends AbstractEntity
 
     /**
      * Sets the property value as an array. Internally the array is encoded as JSON string.
-     *
-     * @param array $value the value to set
      */
     public function setArray(?array $value): self
     {
@@ -157,8 +153,6 @@ class Property extends AbstractEntity
 
     /**
      * Sets the property value as boolean.
-     *
-     * @param bool $value the value to set
      */
     public function setBoolean(bool $value): self
     {
@@ -167,8 +161,6 @@ class Property extends AbstractEntity
 
     /**
      * Sets the property value as date.
-     *
-     * @param \DateTimeInterface|null $value the value to set
      */
     public function setDate(?\DateTimeInterface $value): self
     {
@@ -177,8 +169,6 @@ class Property extends AbstractEntity
 
     /**
      * Sets the property value as integer.
-     *
-     * @param int $value the value to set
      */
     public function setInteger(int $value): self
     {
@@ -187,8 +177,6 @@ class Property extends AbstractEntity
 
     /**
      * Sets the property name.
-     *
-     * @param string $name the name to set
      */
     public function setName(string $name): self
     {
@@ -199,8 +187,6 @@ class Property extends AbstractEntity
 
     /**
      * Sets the property value as string.
-     *
-     * @param string|null $value the value to set
      */
     public function setString(?string $value): self
     {
@@ -214,7 +200,7 @@ class Property extends AbstractEntity
      *
      * @param mixed $value the value to set. This function try first to convert the value to an appropriate type (bool, int, etc...).
      */
-    public function setValue($value): self
+    public function setValue(mixed $value): self
     {
         if (\is_bool($value)) {
             return $this->setBoolean($value);

@@ -20,7 +20,6 @@ use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\StrengthInterface;
-use App\Mime\NotificationEmail;
 use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
@@ -46,6 +45,7 @@ use App\Validator\Password;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\Twig\Mime\NotificationEmail as NotificationEmailAlias;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -98,7 +98,7 @@ class TestController extends AbstractController
     {
         $data = [
             'email' => $this->getUserEmail(),
-            'importance' => NotificationEmail::IMPORTANCE_MEDIUM,
+            'importance' => NotificationEmailAlias::IMPORTANCE_MEDIUM,
             'notification' => $this->isSessionBool('editor_notification', true),
         ];
 
@@ -135,7 +135,7 @@ class TestController extends AbstractController
                     } else {
                         $service->sendComment($email, $user, $message, $importance);
                     }
-                    $this->succesTrans('user.comment.success');
+                    $this->successTrans('user.comment.success');
 
                     return $this->redirectToHomePage();
                 } catch (\Exception $e) {
@@ -313,7 +313,7 @@ class TestController extends AbstractController
 
             $message .= '</ul>';
 
-            return $this->succes($message)
+            return $this->success($message)
                 ->redirectToHomePage();
         }
 
@@ -381,7 +381,7 @@ class TestController extends AbstractController
                     }
                 }
                 $html .= '</table>';
-                $this->succes('reCAPTCHA|' . $html);
+                $this->success('reCAPTCHA|' . $html);
 
                 return $this->redirectToHomePage();
             }

@@ -79,7 +79,7 @@ class DataResults implements \JsonSerializable
      * @param string $name  the attribute name
      * @param mixed  $value attribute value
      */
-    public function addAttribute(string $name, $value): self
+    public function addAttribute(string $name, mixed $value): self
     {
         $this->attributes[$name] = $value;
 
@@ -92,7 +92,7 @@ class DataResults implements \JsonSerializable
      * @param string $name  the custom data name
      * @param mixed  $value custom data value
      */
-    public function addCustomData(string $name, $value): self
+    public function addCustomData(string $name, mixed $value): self
     {
         $this->customData[$name] = $value;
 
@@ -100,12 +100,12 @@ class DataResults implements \JsonSerializable
     }
 
     /**
-     * Adds a parameter to this list of paramaters.
+     * Adds a parameter to this list of parameters.
      *
      * @param string $name  the parameter name
      * @param mixed  $value parameter value
      */
-    public function addParameter(string $name, $value): self
+    public function addParameter(string $name, mixed $value): self
     {
         $this->params[$name] = $value;
 
@@ -120,7 +120,7 @@ class DataResults implements \JsonSerializable
      *
      * @return mixed|null the custom data value, if found; the default value otherwise
      */
-    public function getCustomData(string $name, $default = null)
+    public function getCustomData(string $name, mixed $default = null): mixed
     {
         return $this->customData[$name] ?? $default;
     }
@@ -133,17 +133,15 @@ class DataResults implements \JsonSerializable
      *
      * @return mixed the parameter value, if found; the default value otherwise
      */
-    public function getParams(string $name, $default = null)
+    public function getParams(string $name, mixed $default = null): mixed
     {
         return $this->params[$name] ?? $default;
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             TableInterface::PARAM_TOTAL_NOT_FILTERED => $this->totalNotFiltered,

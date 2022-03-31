@@ -20,7 +20,7 @@ use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
 /**
- * The calculations table for margin below.
+ * The calculation table for margin below.
  *
  * @author Laurent Muller
  */

@@ -159,7 +159,7 @@ class AkismetService extends AbstractHttpClientService
                 'comment_type' => 'contact-form',
                 'comment_author' => $user->getUsername(), // 'viagra-test-123',
                 'comment_author_email' => $user->getEmail(),
-                'comment_date_gmt' => (new \DateTime())->format(\DateTime::ISO8601),
+                'comment_date_gmt' => (new \DateTime())->format(\DateTimeInterface::ISO8601),
 
                 'blog' => $request->getSchemeAndHttpHost(),
                 'blog_lang' => $request->getLocale(),

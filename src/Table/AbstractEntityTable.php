@@ -33,20 +33,12 @@ abstract class AbstractEntityTable extends AbstractTable
     private const WHERE_PART = 'where';
 
     /**
-     * The repository.
-     *
-     * @psalm-var AbstractRepository<T> $repository
-     */
-    protected AbstractRepository $repository;
-
-    /**
      * Constructor.
      *
      * @psalm-param AbstractRepository<T> $repository
      */
-    public function __construct(AbstractRepository $repository)
+    public function __construct(protected AbstractRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     /**
@@ -212,7 +204,7 @@ abstract class AbstractEntityTable extends AbstractTable
             }
             if (0 !== $expr->count()) {
                 $builder->andWhere($expr)
-                    ->setParameter(TableInterface::PARAM_SEARCH, "%{$search}%");
+                    ->setParameter(TableInterface::PARAM_SEARCH, "%$search%");
             }
         }
     }

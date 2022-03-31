@@ -148,12 +148,8 @@ final class PhpInfo
 
     /**
      * Converts the given variable.
-     *
-     * @param mixed $var the variable to convert
-     *
-     * @return string|int|float|bool the converted variable
      */
-    private function convert($var)
+    private function convert(mixed $var): string|int|float|bool
     {
         $value = \strtolower((string) $var);
         if (\in_array($value, ['yes', 'enabled', 'on', '1'], true)) {

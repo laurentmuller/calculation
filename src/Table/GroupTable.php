@@ -18,7 +18,7 @@ use App\Util\FileUtils;
 use Twig\Environment;
 
 /**
- * The goups table.
+ * The groups table.
  *
  * @author Laurent Muller
  * @template-extends AbstractEntityTable<Group>
@@ -34,7 +34,7 @@ class GroupTable extends AbstractEntityTable
     }
 
     /**
-     * Formatter for the categories column.
+     * Formatter for the category's column.
      */
     public function formatCategories(\Countable $categories, Group $group): string
     {

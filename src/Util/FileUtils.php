@@ -40,14 +40,14 @@ final class FileUtils
     /**
      * Decode the given file as JSON.
      *
-     * @param string $file  the path to the file
-     * @param bool   $assoc when true, returned objects will be converted into associative arrays
+     * @param string|\SplFileInfo $file  the path to the file
+     * @param bool                $assoc when true, returned objects will be converted into associative arrays
      *
-     * @return mixed the mixed the value encoded in json in appropriate PHP type
+     * @return array|\stdClass the value encoded in json in appropriate PHP type
      *
      * @throws \InvalidArgumentException if the file can not be decoded
      */
-    public static function decodeJson(string $file, bool $assoc = true)
+    public static function decodeJson(string|\SplFileInfo $file, bool $assoc = true): array|\stdClass
     {
         // file?
         if (!self::isFile($file)) {
@@ -55,6 +55,7 @@ final class FileUtils
         }
 
         // get content
+        $file = self::getRealPath($file);
         if (false === $json = \file_get_contents($file)) {
             throw new \InvalidArgumentException("Unable to get content of the file '$file'.");
         }
@@ -78,7 +79,7 @@ final class FileUtils
      *
      * @return bool true on success, false on failure
      */
-    public static function dumpFile($file, $content): bool
+    public static function dumpFile(string|\SplFileInfo $file, $content): bool
     {
         $file = self::getRealPath($file);
 
@@ -86,7 +87,7 @@ final class FileUtils
             self::getFilesystem()->dumpFile($file, $content);
 
             return true;
-        } catch (IOException $e) {
+        } catch (IOException) {
             // ignore
         }
 
@@ -96,11 +97,11 @@ final class FileUtils
     /**
      * Checks the existence of the given file.
      *
-     * @param string|\SplFileInfo $file the file to verfiy
+     * @param string|\SplFileInfo $file the file to verify
      *
      * @return bool true if the file exists, false otherwise
      */
-    public static function exists($file): bool
+    public static function exists(string|\SplFileInfo $file): bool
     {
         $file = self::getRealPath($file);
 
@@ -127,7 +128,7 @@ final class FileUtils
             }
         }
 
-        // must never reached
+        // must never reach
         return 'unknown';
     }
 
@@ -170,20 +171,20 @@ final class FileUtils
             $file->seek(\PHP_INT_MAX);
 
             return $file->key() + 1;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // ignore
             return 0;
         }
     }
 
     /**
-     * Tells whether the given filen is a regular file.
+     * Tells whether the given file is a regular file.
      *
      * @param string|\SplFileInfo $file the path to the file
      *
      * @return bool true if the file exists and is a regular file, false otherwise
      */
-    public static function isFile($file): bool
+    public static function isFile(string|\SplFileInfo $file): bool
     {
         $file = self::getRealPath($file);
 
@@ -197,7 +198,7 @@ final class FileUtils
      *
      * @return bool true on success, false on failure
      */
-    public static function remove($file): bool
+    public static function remove(string|\SplFileInfo $file): bool
     {
         $file = self::getRealPath($file);
 
@@ -207,7 +208,7 @@ final class FileUtils
 
                 return true;
             }
-        } catch (IOException $e) {
+        } catch (IOException) {
             // ignore
         }
 
@@ -229,7 +230,7 @@ final class FileUtils
             self::getFilesystem()->rename($origin, $target, $overwrite);
 
             return true;
-        } catch (IOException $e) {
+        } catch (IOException) {
             // ignore
         }
 
@@ -248,7 +249,7 @@ final class FileUtils
         }
 
         $size = 0;
-        $flags = \RecursiveDirectoryIterator::SKIP_DOTS;
+        $flags = \FilesystemIterator::SKIP_DOTS;
         $innerIterator = new \RecursiveDirectoryIterator($path, $flags);
         $outerIterator = new \RecursiveIteratorIterator($innerIterator);
 
@@ -263,7 +264,7 @@ final class FileUtils
     }
 
     /**
-     * Create temporary file with an unique name.
+     * Create temporary file with a unique name.
      *
      * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first three characters of prefix.
      * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
@@ -281,7 +282,7 @@ final class FileUtils
             }
 
             return $file;
-        } catch (IOException $e) {
+        } catch (IOException) {
             // ignore
         }
 
@@ -290,10 +291,8 @@ final class FileUtils
 
     /**
      * Gets the real path of the given file.
-     *
-     * @param string|\SplFileInfo $file
      */
-    private static function getRealPath($file): string
+    private static function getRealPath(string|\SplFileInfo $file): string
     {
         if ($file instanceof \SplFileInfo) {
             return (string) $file->getRealPath();

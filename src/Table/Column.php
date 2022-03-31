@@ -105,7 +105,7 @@ class Column implements SortModeInterface
     private ?string $styleFormatter = null;
 
     /**
-     * The column title to be transalted.
+     * The column title to be translated.
      */
     private ?string $title = null;
 
@@ -184,7 +184,7 @@ class Column implements SortModeInterface
             'card-visible' => \json_encode($this->isCardVisible()),
         ];
 
-        // optionnal
+        // optional
         if ($this->cardClass) {
             $result['card-class'] = $this->cardClass;
         }
@@ -211,7 +211,7 @@ class Column implements SortModeInterface
     public function getClass(): string
     {
         $class = (string) $this->class;
-        if ($this->visible && false === \strpos($class, 'rowlink-skip')) {
+        if ($this->visible && !\str_contains($class, 'rowlink-skip')) {
             return \trim($class . ' user-select-none cursor-pointer');
         }
 
@@ -223,10 +223,7 @@ class Column implements SortModeInterface
         return $this->field;
     }
 
-    /**
-     * @return callable|string|null
-     */
-    public function getFieldFormatter()
+    public function getFieldFormatter(): callable|string|null
     {
         return $this->fieldFormatter;
     }
@@ -290,7 +287,7 @@ class Column implements SortModeInterface
      *
      * @return string the mapped value
      */
-    public function mapValue($objectOrArray, PropertyAccessor $accessor): string
+    public function mapValue(AbstractEntity|array $objectOrArray, PropertyAccessor $accessor): string
     {
         // get value
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
@@ -350,10 +347,7 @@ class Column implements SortModeInterface
         return $this->updateProperty();
     }
 
-    /**
-     * @param callable|string|null $fieldFormatter
-     */
-    public function setFieldFormatter($fieldFormatter): self
+    public function setFieldFormatter(callable|string|null $fieldFormatter): self
     {
         $this->fieldFormatter = $fieldFormatter;
 
@@ -429,7 +423,7 @@ class Column implements SortModeInterface
      *
      * @return string the formatted value
      */
-    private function formatValue($objectOrArray, $value): string
+    private function formatValue(AbstractEntity|array $objectOrArray, mixed $value): string
     {
         if (\is_callable($this->fieldFormatter)) {
             return (string) \call_user_func($this->fieldFormatter, $value, $objectOrArray);

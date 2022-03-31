@@ -59,7 +59,7 @@ class CommentController extends AbstractController
             try {
                 // send
                 $comment->send($mailer);
-                $this->succesTrans('user.comment.success');
+                $this->successTrans('user.comment.success');
 
                 // home page
                 return $this->redirectToHomePage();

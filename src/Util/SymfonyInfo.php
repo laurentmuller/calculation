@@ -48,25 +48,18 @@ final class SymfonyInfo
         // 'time'
     ];
 
-    private KernelInterface $kernel;
-
     private ?array $packages = null;
-
-    private RouterInterface $router;
-
     private ?array $routes = null;
 
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, RouterInterface $router)
+    public function __construct(private KernelInterface $kernel, private RouterInterface $router)
     {
-        $this->kernel = $kernel;
-        $this->router = $router;
     }
 
     /**
-     * Gets bundles informations.
+     * Gets bundles information.
      */
     public function getBundles(): array
     {

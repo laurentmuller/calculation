@@ -25,12 +25,8 @@ trait RoleTranslatorTrait
 
     /**
      * Translate the given role.
-     *
-     * @param string|RoleInterface $role the role to translate
-     *
-     * @return string the translated role
      */
-    public function translateRole($role): string
+    public function translateRole(string|RoleInterface $role): string
     {
         if ($role instanceof RoleInterface) {
             $role = $role->getRole();

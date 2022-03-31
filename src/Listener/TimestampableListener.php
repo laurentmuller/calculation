@@ -26,7 +26,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  *
- * @see App\Interfaces\TimestampableInterface
+ * @see TimestampableInterface
  */
 class TimestampableListener implements DisableListenerInterface
 {

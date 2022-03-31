@@ -23,7 +23,7 @@ use Twig\Environment;
  * The calculation states table.
  *
  * @author Laurent Muller
- * @template-extends AbstractEntityTable<\App\Entity\CalculationState>
+ * @template-extends AbstractEntityTable<CalculationState>
  */
 class CalculationStateTable extends AbstractEntityTable
 {
@@ -39,7 +39,7 @@ class CalculationStateTable extends AbstractEntityTable
     }
 
     /**
-     * Formatter for the calculations column.
+     * Formatter for the calculation column.
      */
     public function formatCalculations(\Countable $calculations, CalculationState $state): string
     {

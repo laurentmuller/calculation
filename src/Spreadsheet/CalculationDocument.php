@@ -84,7 +84,7 @@ class CalculationDocument extends AbstractDocument
             ->fillBackground($row);
         ++$row;
 
-        // descripton and date
+        // description and date
         $this->mergeCells(1, 3, $row)
             ->renderBold(1, $row, $calculation->getDescription())
             ->mergeCells(4, 5, $row)
@@ -208,7 +208,7 @@ class CalculationDocument extends AbstractDocument
     }
 
     /**
-     * Fill the background of the given row.
+     * Fill the background for the given row.
      *
      * @param int $row the row to fill (1 = First row)
      */
@@ -245,9 +245,7 @@ class CalculationDocument extends AbstractDocument
      */
     private function mergeCells(int $startColumn, int $endColumn, int $row): self
     {
-        if (null !== $this->sheet) {
-            $this->sheet->mergeCellsByColumnAndRow($startColumn, $row, $endColumn, $row);
-        }
+        $this->sheet?->mergeCellsByColumnAndRow($startColumn, $row, $endColumn, $row);
 
         return $this;
     }
@@ -260,7 +258,7 @@ class CalculationDocument extends AbstractDocument
      * @param mixed $value  the value of the cell
      * @param bool  $bold   true to set the bold font
      */
-    private function renderAmount(int $column, int $row, $value, bool $bold = false): self
+    private function renderAmount(int $column, int $row, mixed $value, bool $bold = false): self
     {
         return $this->renderCell(
             $column,
@@ -283,7 +281,7 @@ class CalculationDocument extends AbstractDocument
      * @param string $alignment the horizontal alignment
      * @param string $format    the number format
      */
-    private function renderBold(int $column, int $row, $value, int $indent = 0, string $alignment = '', string $format = ''): self
+    private function renderBold(int $column, int $row, mixed $value, int $indent = 0, string $alignment = '', string $format = ''): self
     {
         return $this->renderCell($column, $row, $value, true, $indent, $alignment, $format);
     }
@@ -299,7 +297,7 @@ class CalculationDocument extends AbstractDocument
      * @param string $alignment the horizontal alignment
      * @param string $format    the number format
      */
-    private function renderCell(int $column, int $row, $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
+    private function renderCell(int $column, int $row, mixed $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
     {
         $coordinate = $this->stringFromColumnAndRowIndex($column, $row);
         if (null !== $this->sheet) {
@@ -326,9 +324,9 @@ class CalculationDocument extends AbstractDocument
      * Render the end of this document.
      *
      * @param int   $lastRow   the last row index
-     * @param int[] $emptyRows the indexes of empty rows
+     * @param int[] $emptyRows the empty rows indexes
      *
-     * @return bool this function return alwys true
+     * @return bool this function return always true
      */
     private function renderEnd(int $lastRow, array $emptyRows): bool
     {

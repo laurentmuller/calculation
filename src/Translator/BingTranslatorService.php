@@ -16,6 +16,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Microsoft BingTranslatorService Text API 3.0.
@@ -42,7 +43,7 @@ class BingTranslatorService extends AbstractTranslatorService
     private const PARAM_KEY = 'bing_translator_key';
 
     /**
-     * The detect URI.
+     * The detection language URI.
      */
     private const URI_DETECT = 'detect';
 
@@ -52,7 +53,7 @@ class BingTranslatorService extends AbstractTranslatorService
     private const URI_LANGUAGE = 'languages';
 
     /**
-     * The translate URI.
+     * The translation URI.
      */
     private const URI_TRANSLATE = 'translate';
 
@@ -72,14 +73,12 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    public function detect(string $text)
+    public function detect(string $text): array|false
     {
         // query
         $query = [['Text' => $text]];
 
-        /** @var bool|array $response */
-        $response = $this->post(self::URI_DETECT, $query);
-        if (!\is_array($response)) {
+        if (false === $response = $this->post(self::URI_DETECT, $query)) {
             return false;
         }
 
@@ -124,7 +123,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    public function translate(string $text, string $to, ?string $from = null, bool $html = false)
+    public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
     {
         // content
         $data = [['Text' => $text]];
@@ -137,11 +136,12 @@ class BingTranslatorService extends AbstractTranslatorService
         ];
 
         // post
-        /** @var bool|array $response */
-        $response = $this->post(self::URI_TRANSLATE, $data, $query);
+        if (false === $response = $this->post(self::URI_TRANSLATE, $data, $query)) {
+            return false;
+        }
 
         // translation
-        if (!$target = $this->getTranslation($response)) {
+        if (null === $target = $this->getTranslation($response)) {
             return false;
         }
 
@@ -167,7 +167,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    protected function doGetLanguages()
+    protected function doGetLanguages(): array|false
     {
         // query
         $query = ['scope' => 'translation'];
@@ -211,10 +211,35 @@ class BingTranslatorService extends AbstractTranslatorService
         ];
     }
 
-    /**
-     * @param mixed|bool $response
-     */
-    private function detectLanguage($response): ?string
+    private function checkResponse(ResponseInterface $response): array|false
+    {
+        if (Response::HTTP_OK !== $response->getStatusCode()) {
+            $content = $response->getContent(false);
+            /** @psalm-var array $value */
+            $value = \json_decode($content, true);
+        } else {
+            $value = $response->toArray(false);
+        }
+
+        // check error
+        if (isset($value['error'])) {
+            /**
+             * @var null|array{
+             *      result: bool,
+             *      code: string|int,
+             *      message: string,
+             *      exception?: array|\Exception} $error
+             */
+            $error = $value['error'];
+            $this->lastError = $error;
+
+            return false;
+        }
+
+        return $value;
+    }
+
+    private function detectLanguage(mixed $response): ?string
     {
         if (!\is_array($response)) {
             return null;
@@ -236,14 +261,14 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * Make a HTTP-GET call.
+     * Make an HTTP-GET call.
      *
      * @param string $uri   the uri to append to the host name
      * @param array  $query an associative array of query string values to add to the request
      *
-     * @return mixed|bool the HTTP response body on success, false on failure
+     * @return array|false the HTTP response body on success, false on failure
      */
-    private function get(string $uri, array $query = [])
+    private function get(string $uri, array $query = []): array|false
     {
         // add version
         $query['api-version'] = self::API_VERSION;
@@ -253,43 +278,11 @@ class BingTranslatorService extends AbstractTranslatorService
             self::QUERY => $query,
         ]);
 
-        // check status code
-        if (Response::HTTP_OK !== $response->getStatusCode()) {
-            $content = $response->getContent(false);
-            /** @var array|null */
-            $response = \json_decode($content, true);
-        } else {
-            // decode
-            $response = $response->toArray(false);
-        }
-
-        // check error
-        if (isset($response['error'])) {
-            /**
-             * @var null|array{
-             *      result: bool,
-             *      code: string|int,
-             *      message: string,
-             *      exception?: array|\Exception} $error
-             */
-            $error = $response['error'];
-            $this->lastError = $error;
-
-            return false;
-        }
-
-        // ok
-        return $response;
+        return $this->checkResponse($response);
     }
 
-    /**
-     * @param mixed|bool $response
-     */
-    private function getTranslation($response): ?string
+    private function getTranslation(array $response): ?string
     {
-        if (!\is_array($response)) {
-            return null;
-        }
         if (!$this->isValidArray($response, 'response')) {
             return null;
         }
@@ -310,15 +303,15 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * Make a HTTP-POST call.
+     * Make an HTTP-POST call.
      *
      * @param string $uri   the uri to append to the host name
      * @param array  $data  the JSON data
      * @param array  $query an associative array of query string values to add to the request
      *
-     * @return mixed|bool the HTTP response body on success, false on failure
+     * @return array|false the HTTP response body on success, false on failure
      */
-    private function post(string $uri, array $data, array $query = [])
+    private function post(string $uri, array $data, array $query = []): array|false
     {
         // add version
         $query['api-version'] = self::API_VERSION;
@@ -329,32 +322,6 @@ class BingTranslatorService extends AbstractTranslatorService
                 self::JSON => $data,
             ]);
 
-        // check status code
-        if (Response::HTTP_OK !== $response->getStatusCode()) {
-            $content = $response->getContent(false);
-            /** @var array|null */
-            $response = \json_decode($content, true);
-        } else {
-            // decode
-            $response = $response->toArray(false);
-        }
-
-        // check error
-        if (isset($response['error'])) {
-            /**
-             * @var null|array{
-             *      result: bool,
-             *      code: string|int,
-             *      message: string,
-             *      exception?: array|\Exception} $error
-             */
-            $error = $response['error'];
-            $this->lastError = $error;
-
-            return false;
-        }
-
-        // ok
-        return $response;
+        return $this->checkResponse($response);
     }
 }

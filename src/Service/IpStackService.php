@@ -33,7 +33,7 @@ class IpStackService extends AbstractHttpClientService
     /**
      * The host name.
      */
-    private const HOST_NAME = 'http://api.ipstack.com/';
+    private const HOST_NAME = 'https://api.ipstack.com/';
 
     /**
      * The parameter name for the API key.
@@ -60,11 +60,11 @@ class IpStackService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the IP informations.
+     * Gets the IP information.
      *
-     * @param Request $request the request to get client IP address or null for detecting the IP address
+     * @param Request|null $request the request to get client IP address or null for detecting the IP address
      *
-     * @return array|null the current Ip informations if success; null on error
+     * @return array|null the current Ip information if success; null on error
      */
     public function getIpInfo(?Request $request = null): ?array
     {

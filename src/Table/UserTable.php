@@ -32,7 +32,7 @@ class UserTable extends AbstractEntityTable
     use RoleTranslatorTrait;
 
     /**
-     * Contructor.
+     * Constructor.
      */
     public function __construct(UserRepository $repository, TranslatorInterface $translator, private Environment $twig, private DateTimeFormatter $formatter)
     {

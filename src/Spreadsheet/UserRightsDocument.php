@@ -75,14 +75,10 @@ class UserRightsDocument extends AbstractArrayDocument
                 $richText = new RichText();
                 $font = $richText->createTextRun($values[0])
                     ->getFont();
-                if (null !== $font) {
-                    $font->setBold(true);
-                }
+                $font?->setBold(true);
                 $font = $richText->createTextRun(' - ' . $values[1])
                     ->getFont();
-                if (null !== $font) {
-                    $font->setItalic(true);
-                }
+                $font?->setItalic(true);
                 parent::setCellValue($sheet, $columnIndex, $rowIndex, $richText);
             } else {
                 parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
@@ -151,7 +147,7 @@ class UserRightsDocument extends AbstractArrayDocument
         }
 
         if ($entity instanceof User) {
-            $text = $entity->getUsername();
+            $text = $entity->getUserIdentifier();
             if ($entity->isEnabled()) {
                 $description .= $role;
             } else {
@@ -199,7 +195,7 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     private function outputRole(Role $role, int &$row): void
     {
-        // allow to output user entity rights
+        // allow output user entity rights
         $outputUsers = $role->isAdmin() || $role->isSuperAdmin();
 
         $this->writeName = true;

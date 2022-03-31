@@ -41,7 +41,7 @@ class CellBuilder
     public const FORMAT_INT = '#,##0';
 
     /**
-     * The vold font.
+     * The bold font.
      */
     private bool $bold = false;
 
@@ -51,7 +51,7 @@ class CellBuilder
     private string $format = '';
 
     /**
-     * The horizontal aligment.
+     * The horizontal alignment.
      */
     private string $horizontal = '';
 
@@ -61,7 +61,7 @@ class CellBuilder
     private int $indent = 0;
 
     /**
-     * The vertical aligment.
+     * The vertical alignment.
      */
     private string $vertical = '';
 
@@ -80,7 +80,7 @@ class CellBuilder
      * @param string $coordinate the coordinate of the cell, eg: 'A1'
      * @param mixed  $value      the value of the cell
      */
-    public function apply(string $coordinate, $value): self
+    public function apply(string $coordinate, mixed $value): self
     {
         $style = $this->sheet->getStyle($coordinate);
         if ($this->bold) {
@@ -117,7 +117,7 @@ class CellBuilder
      * @param int   $row    the row index (1 = First row)
      * @param mixed $value  the value of the cell
      */
-    public function applyByColumnAndRow(int $column, int $row, $value): self
+    public function applyByColumnAndRow(int $column, int $row, mixed $value): self
     {
         $name = Coordinate::stringFromColumnIndex($column);
         $coordinate = $name . $row;

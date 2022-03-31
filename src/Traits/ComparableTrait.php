@@ -19,7 +19,7 @@ use App\Interfaces\ComparableInterface;
  *
  * @author Laurent Muller
  *
- * @see \App\Comparable\ComparableInterface
+ * @see ComparableInterface
  */
 trait ComparableTrait
 {

@@ -98,7 +98,7 @@ class CaptchaImageService
      * @param int  $width  the image width
      * @param int  $height the image height
      *
-     * @return string the image encoded with the base 64 or null if the image canot be created
+     * @return string|null the image encoded with the base 64 or null if the image canot be created
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {

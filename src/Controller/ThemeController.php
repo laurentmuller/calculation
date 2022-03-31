@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controller to select the web site theme.
+ * Controller to select the website theme.
  *
  * @author Laurent Muller
  *
@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ThemeController extends AbstractController
 {
     /**
-     * Display the page to select the web site theme.
+     * Display the page to select the website theme.
      *
      * @Route("/theme", name="user_theme")
      * @IsGranted("ROLE_USER")

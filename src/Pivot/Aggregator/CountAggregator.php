@@ -38,7 +38,7 @@ class CountAggregator extends AbstractAggregator
     /**
      * {@inheritdoc}
      */
-    public function getResult()
+    public function getResult(): int
     {
         return $this->result;
     }

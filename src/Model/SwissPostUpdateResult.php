@@ -145,7 +145,7 @@ class SwissPostUpdateResult
     }
 
     /**
-     * Gets the total number of valids.
+     * Gets the total number of valid entries.
      */
     public function getValids(): int
     {

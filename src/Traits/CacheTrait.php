@@ -113,7 +113,7 @@ trait CacheTrait
      *                        each item. A Cache item will be returned for each key, even if that
      *                        key is not found.
      *
-     * @throws \InvalidArgumentException If any of the keys in $keys are not a legal value
+     * @throws \Psr\Cache\InvalidArgumentException If any of the keys in $keys are not a legal value
      */
     public function getCacheItems(array $keys)
     {
@@ -136,6 +136,8 @@ trait CacheTrait
      *                        If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException If the $key string is not a legal value
      */
     public function getCacheValue(string $key, mixed $default = null): mixed
     {
@@ -173,9 +175,11 @@ trait CacheTrait
      *
      * @param string                 $key   The key for which to save the value
      * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
-     * @param int|\DateInterval|null $time  The period of time from the present after which the item must be considered
+     * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException If the $key string is not a legal value
      */
     public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): self
     {

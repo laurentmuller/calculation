@@ -93,7 +93,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
 
         if ($key instanceof User) {
-            $text = $key->getUsername();
+            $text = $key->getUserIdentifier();
             if ($key->isEnabled()) {
                 $description .= $this->translateRole($key);
             } else {

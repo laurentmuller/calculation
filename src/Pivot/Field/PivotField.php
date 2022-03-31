@@ -34,38 +34,25 @@ class PivotField implements \JsonSerializable
      */
     public const METHOD_STRING = 0;
 
-    protected int $method;
-
-    protected string $name;
-
-    /**
-     * @var string
-     */
-    protected ?string $title;
-
     /**
      * Constructor.
      *
-     * @param string $name  the field name
-     * @param string $title the field title
+     * @param string      $name  the field name
+     * @param string|null $title the field title
      */
-    public function __construct(string $name, ?string $title = null)
+    public function __construct(protected string $name, protected ?string $title = null, protected int $method = self::METHOD_STRING)
     {
-        $this->name = $name;
-        $this->title = $title;
-        $this->method = self::METHOD_STRING;
     }
 
     /**
      * Gets the display value.
-     *
      * The default implementation returns the value as is. Subclass can override, for example to map the value.
      *
      * @param mixed $value the field value
      *
      * @return mixed the display value
      */
-    public function getDisplayValue($value)
+    public function getDisplayValue(mixed $value): mixed
     {
         return $value;
     }
@@ -100,23 +87,17 @@ class PivotField implements \JsonSerializable
      * Gets the field value.
      *
      * @param array $row the dataset row
-     *
-     * @return float|int|string|\DateTimeInterface|null the value
      */
-    public function getValue(array $row)
+    public function getValue(array $row): float|int|string|\DateTimeInterface|null
     {
         /** @psalm-var mixed $value */
         $value = $this->getRowValue($row);
         if ($value) {
-            switch ($this->method) {
-                case self::METHOD_FLOAT:
-                    return (float) $value;
-                case self::METHOD_INTEGER:
-                    return (int) $value;
-                case self::METHOD_STRING:
-                default:
-                    return (string) $value;
-            }
+            return match ($this->method) {
+                self::METHOD_FLOAT => (float) $value,
+                self::METHOD_INTEGER => (int) $value,
+                default => (string) $value,
+            };
         }
 
         return null;
@@ -158,8 +139,6 @@ class PivotField implements \JsonSerializable
 
     /**
      * Sets the title.
-     *
-     * @param string $title
      */
     public function setTitle(?string $title): self
     {
@@ -169,9 +148,9 @@ class PivotField implements \JsonSerializable
     }
 
     /**
-     * @return mixed
+     * Gets the row value.
      */
-    protected function getRowValue(array $row)
+    protected function getRowValue(array $row): mixed
     {
         return $row[$this->name] ?? null;
     }

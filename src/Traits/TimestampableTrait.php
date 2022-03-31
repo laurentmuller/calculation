@@ -154,7 +154,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Format the date and user.
+     * Format the date and username.
      */
     private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $id): string
     {

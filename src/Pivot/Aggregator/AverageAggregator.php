@@ -46,7 +46,7 @@ class AverageAggregator extends AbstractAggregator
     /**
      * {@inheritdoc}
      */
-    public function getFormattedResult()
+    public function getFormattedResult(): float
     {
         return \round($this->getResult(), 2);
     }
@@ -54,7 +54,7 @@ class AverageAggregator extends AbstractAggregator
     /**
      * {@inheritdoc}
      */
-    public function getResult()
+    public function getResult(): float
     {
         return $this->safeDivide($this->sum, $this->count);
     }

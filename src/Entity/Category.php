@@ -165,8 +165,6 @@ class Category extends AbstractEntity
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

@@ -29,7 +29,7 @@ class HtmlParser
     /**
      * Constructor.
      *
-     * @param string $html the HTML content to parse
+     * @param string|null $html the HTML content to parse
      */
     public function __construct(?string $html)
     {
@@ -69,11 +69,11 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML line break chunk.
+     * Creates an HTML line break chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string          $class  the optional class name
+     * @param string|null     $class  the optional class name
      */
     private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlBrChunk
     {
@@ -84,11 +84,11 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML list item chunk.
+     * Creates an HTML list item chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string          $class  the optional class name
+     * @param string|null     $class  the optional class name
      */
     private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlLiChunk
     {
@@ -99,11 +99,11 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML ordered list chunk.
+     * Creates an HTML ordered list chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string          $class  the optional class name
+     * @param string|null     $class  the optional class name
      * @param \DOMNode        $node   the current node
      */
     private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlOlChunk
@@ -117,7 +117,7 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML page break chunk.
+     * Creates an HTML page break chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
@@ -128,11 +128,11 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML parent chunk.
+     * Creates an HTML parent chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string          $class  the optional class name
+     * @param string|null     $class  the optional class name
      */
     private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlParentChunk
     {
@@ -143,11 +143,11 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML text chunk.
+     * Creates an HTML text chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string          $class  the optional class name
+     * @param string|null     $class  the optional class name
      * @param \DOMNode        $node   the current node
      */
     private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): ?HtmlTextChunk
@@ -167,11 +167,11 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML unordered list chunk.
+     * Creates an HTML unordered list chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string          $class  the optional class name
+     * @param string|null     $class  the optional class name
      */
     private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlUlChunk
     {
@@ -199,11 +199,11 @@ class HtmlParser
     }
 
     /**
-     * Gets a attribute value for the given node.
+     * Gets an attribute value for the given node.
      *
-     * @param \DOMNode $node    the node to get attribute for
-     * @param string   $name    the attribute name to find
-     * @param string   $default the default value to returns if the attribute is not found
+     * @param \DOMNode    $node    the node to get attribute for
+     * @param string      $name    the attribute name to find
+     * @param string|null $default the default value to returns if the attribute is not found
      *
      * @return string|null the attribute value, if found; the default value otherwise
      */
@@ -274,15 +274,15 @@ class HtmlParser
         // create chunk
         switch ($node->nodeType) {
             case \XML_ELEMENT_NODE:
-                if (AbstractHtmlChunk::PAGE_BREAK === $class) {
+                if (HtmlConstantsInterface::PAGE_BREAK === $class) {
                     $this->createPageBreakChunk($name, $parent);
-                } elseif (AbstractHtmlChunk::LINE_BREAK === $name) {
+                } elseif (HtmlConstantsInterface::LINE_BREAK === $name) {
                     $this->createBrChunk($name, $parent, $class);
-                } elseif (AbstractHtmlChunk::LIST_ITEM === $name) {
+                } elseif (HtmlConstantsInterface::LIST_ITEM === $name) {
                     $parent = $this->createLiChunk($name, $parent, $class);
-                } elseif (AbstractHtmlChunk::LIST_ORDERED === $name) {
+                } elseif (HtmlConstantsInterface::LIST_ORDERED === $name) {
                     $parent = $this->createOlChunk($name, $parent, $class, $node);
-                } elseif (AbstractHtmlChunk::LIST_UNORDERED === $name) {
+                } elseif (HtmlConstantsInterface::LIST_UNORDERED === $name) {
                     $parent = $this->createUlChunk($name, $parent, $class);
                 } else {
                     $parent = $this->createParentChunk($name, $parent, $class);
@@ -316,7 +316,7 @@ class HtmlParser
     /**
      * Gets the clean HTML content.
      *
-     * @return string|null the HTML content or <code>null</code> if no content
+     * @return string|null the HTML content or null if no content
      */
     private function trimHtml(): ?string
     {

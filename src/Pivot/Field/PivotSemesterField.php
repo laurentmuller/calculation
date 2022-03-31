@@ -26,11 +26,8 @@ class PivotSemesterField extends PivotDateField
 
     /**
      * Constructor.
-     *
-     * @param string $name  the field name
-     * @param string $title the field title
      */
-    public function __construct(string $name, ?string $title = null)
+    public function __construct(protected string $name, protected ?string $title = null)
     {
         parent::__construct($name, self::PART_MONTH, $title);
     }
@@ -38,7 +35,7 @@ class PivotSemesterField extends PivotDateField
     /**
      * {@inheritdoc}
      */
-    public function getDisplayValue($value)
+    public function getDisplayValue($value): string
     {
         return $this->formatSemester((int) $value);
     }
@@ -46,7 +43,7 @@ class PivotSemesterField extends PivotDateField
     /**
      * Gets the callback used to format a semestre.
      *
-     * @return callable(int): string|null the callback, if set; null otherwise
+     * @pslam-return callable(int): string|null the callback, if set; null otherwise
      */
     public function getFormatter(): ?callable
     {
@@ -58,7 +55,8 @@ class PivotSemesterField extends PivotDateField
      *
      * The function receive the semestre (1 or 2 ) as parameter and must return a string.
      *
-     * @param callable(int): string|null $formatter the callback to set; null to use default
+     * @param ?callable $formatter the optional callback
+     * @psalm-param callable(int): string|null $formatter
      */
     public function setFormatter(?callable $formatter): self
     {
@@ -70,7 +68,7 @@ class PivotSemesterField extends PivotDateField
     /**
      * {@inheritdoc}
      */
-    protected function doGetValue(\DateTimeInterface $date)
+    protected function doGetValue(\DateTimeInterface $date): int
     {
         $value = parent::doGetValue($date);
 
@@ -87,14 +85,11 @@ class PivotSemesterField extends PivotDateField
         if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $semester);
         } else {
-            switch ($semester) {
-                case 1:
-                    return '1st semester';
-                case 2:
-                    return '2nd semester';
-                default:
-                    return (string) $semester;
-            }
+            return match ($semester) {
+                1 => '1st semester',
+                2 => '2nd semester',
+                default => (string) $semester,
+            };
         }
     }
 }

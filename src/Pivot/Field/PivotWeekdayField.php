@@ -31,11 +31,11 @@ class PivotWeekdayField extends PivotDateField
     /**
      * Constructor.
      *
-     * @param string $name  the field name
-     * @param string $title the field title
-     * @param bool   $short true to display the short day name, false to display the day name
+     * @param string      $name  the field name
+     * @param string|null $title the field title
+     * @param bool        $short true to display the short day name, false to display the day name
      */
-    public function __construct(string $name, ?string $title = null, bool $short = false)
+    public function __construct(protected string $name, protected ?string $title = null, bool $short = false)
     {
         parent::__construct($name, self::PART_WEEK_DAY, $title);
 
@@ -46,7 +46,7 @@ class PivotWeekdayField extends PivotDateField
     /**
      * {@inheritdoc}
      */
-    public function getDisplayValue($value)
+    public function getDisplayValue($value): mixed
     {
         if (\is_int($value) && \array_key_exists($value, $this->names)) {
             return $this->names[$value];

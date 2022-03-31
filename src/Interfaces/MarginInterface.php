@@ -20,7 +20,7 @@ namespace App\Interfaces;
 interface MarginInterface
 {
     /**
-     * Returns if the given value is between this minimum (inclusive) and this maximum (exlcusive).
+     * Returns if the given value is between this minimum (inclusive) and this maximum (exclusive).
      */
     public function contains(float $value): bool;
 

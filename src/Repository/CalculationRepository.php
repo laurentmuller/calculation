@@ -575,6 +575,7 @@ class CalculationRepository extends AbstractRepository
         $start = clone $today->setISODate($year, $week, 1);
         $end = clone $today->setISODate($year, $week, 7);
         if ($start < $end) {
+            return [];
         }
 
         return $this->getCalendarBuilder($year)
@@ -673,13 +674,13 @@ class CalculationRepository extends AbstractRepository
     /**
      * {@inheritdoc}
      */
-    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         switch ($field) {
             case 'date':
-                return "DATE_FORMAT({$alias}.{$field}, '%d.%m.%Y')";
+                return "DATE_FORMAT($alias.$field, '%d.%m.%Y')";
             case 'overallMargin':
-                return "IFELSE({$alias}.itemsTotal != 0, CEIL(100 * {$alias}.overallTotal / {$alias}.itemsTotal), 0)";
+                return "IFELSE($alias.itemsTotal != 0, CEIL(100 * $alias.overallTotal / $alias.itemsTotal), 0)";
             case 'state.id':
                 return parent::getSearchFields('id', self::STATE_ALIAS);
             case 'state.code':
@@ -698,7 +699,7 @@ class CalculationRepository extends AbstractRepository
     {
         switch ($field) {
             case 'overallMargin':
-                return "IFELSE({$alias}.itemsTotal != 0, {$alias}.overallTotal / {$alias}.itemsTotal, 0)";
+                return "IFELSE($alias.itemsTotal != 0, $alias.overallTotal / $alias.itemsTotal, 0)";
             case 'state.id':
             case 'state.code':
                 return parent::getSortField('code', self::STATE_ALIAS);

@@ -83,8 +83,6 @@ class Theme implements \JsonSerializable
 
     /**
      * Returns if this style sheet path exist.
-     *
-     * @return bool true if exist
      */
     public function exists(): bool
     {
@@ -105,8 +103,6 @@ class Theme implements \JsonSerializable
 
     /**
      * Gets the description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -143,10 +139,8 @@ class Theme implements \JsonSerializable
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'name' => $this->name,

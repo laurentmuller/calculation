@@ -74,8 +74,8 @@ final class FileUtils
     /**
      * Atomically dumps content into a file.
      *
-     * @param string|\SplFileInfo $file    the file to write to
-     * @param string|resource     $content the data to write into the file
+     * @param \SplFileInfo|string $file    the file to write to
+     * @param string              $content the data to write into the file
      *
      * @return bool true on success, false on failure
      */
@@ -96,10 +96,6 @@ final class FileUtils
 
     /**
      * Checks the existence of the given file.
-     *
-     * @param string|\SplFileInfo $file the file to verify
-     *
-     * @return bool true if the file exists, false otherwise
      */
     public static function exists(string|\SplFileInfo $file): bool
     {
@@ -110,8 +106,6 @@ final class FileUtils
 
     /**
      * Formats the size of the given path.
-     *
-     * @param string $path the file or directory path
      */
     public static function formatSize(string $path): string
     {
@@ -179,10 +173,6 @@ final class FileUtils
 
     /**
      * Tells whether the given file is a regular file.
-     *
-     * @param string|\SplFileInfo $file the path to the file
-     *
-     * @return bool true if the file exists and is a regular file, false otherwise
      */
     public static function isFile(string|\SplFileInfo $file): bool
     {
@@ -193,10 +183,6 @@ final class FileUtils
 
     /**
      * Deletes a file or a directory.
-     *
-     * @param string|\SplFileInfo $file the file to delete
-     *
-     * @return bool true on success, false on failure
      */
     public static function remove(string|\SplFileInfo $file): bool
     {

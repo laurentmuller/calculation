@@ -53,14 +53,12 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Constructor.
      *
-     * @param string            $path      the full image path
-     * @param int               $cols      the cell columns span
-     * @param \App\Pdf\PdfStyle $style     the cell style
-     * @param string            $alignment the cell alignment
-     *
-     * @throws \InvalidArgumentException if the path file does not exist
+     * @param string        $path      the full image path
+     * @param int           $cols      the cell columns span
+     * @param PdfStyle|null $style     the cell style
+     * @param string        $alignment the cell alignment
      */
-    public function __construct(string $path, $cols = 1, ?PdfStyle $style = null, string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
+    public function __construct(string $path, int $cols = 1, ?PdfStyle $style = null, string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
     {
         if (!FileUtils::exists($path)) {
             throw new \InvalidArgumentException("The image '{$path}' does not exist.");

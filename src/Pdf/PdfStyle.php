@@ -104,8 +104,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
      * <tr><td>Text color</td><td>:</td><td>White</i></td></tr>
      * </table>.
-     *
-     * @return PdfStyle the header style
      */
     public static function getBlackHeaderStyle(): self
     {
@@ -125,8 +123,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>RGB(221, 221, 221)</td></tr>
      * <tr><td>Text color</td><td>:</td><td>Black</i></td></tr>
      * </table>.
-     *
-     * @return PdfStyle the bold cell style
      */
     public static function getBoldCellStyle(): self
     {
@@ -143,8 +139,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>RGB(221, 221, 221)</td></tr>
      * <tr><td>Text color</td><td>:</td><td>Black</i></td></tr>
      * </table>.
-     *
-     * @return PdfStyle the cell style
      */
     public static function getCellStyle(): self
     {
@@ -162,8 +156,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
      * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
      * </table>.
-     *
-     * @return PdfStyle the default style
      */
     public static function getDefaultStyle(): self
     {
@@ -203,8 +195,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>RGB(221, 221, 221)</td></tr>
      * <tr><td>Text color</td><td>:</td><td>Black</i></td></tr>
      * </table>.
-     *
-     * @return PdfStyle the header style
      */
     public static function getHeaderStyle(): self
     {
@@ -238,8 +228,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
      * <tr><td>Text color</td><td>:</td><td>Blue</td></tr>
      * </table>.
-     *
-     * @return PdfStyle the link style
      */
     public static function getLinkStyle(): self
     {
@@ -256,8 +244,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
      * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
      * </table>.
-     *
-     * @return PdfStyle the no border style
      */
     public static function getNoBorderStyle(): self
     {
@@ -294,8 +280,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
      * <tr><td>Indent</td><td>:</td><td>0 mm</td></tr>
      * </table>.
-     *
-     * @return self this instance
      */
     public function reset(): self
     {
@@ -312,8 +296,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
      * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
      * </table>.
-     *
-     * @return self this instance
      */
     public function resetColors(): self
     {
@@ -324,8 +306,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets font to the default value. The default value is "<code>Arial, 9pt, regular</code>".
-     *
-     * @return self this instance
      */
     public function resetFont(): self
     {
@@ -334,8 +314,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the left indent to the default value. The default value is "<code>0 mm</code>".
-     *
-     * @return self this instance
      */
     public function resetIndent(): self
     {
@@ -344,8 +322,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the line width property to the default value. The default line width is "<code>0.2 mm</code>".
-     *
-     * @return self this instance
      */
     public function resetLine(): self
     {
@@ -354,8 +330,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the draw color.
-     *
-     * @return self this instance
      */
     public function setDrawColor(PdfDrawColor $drawColor): self
     {
@@ -366,8 +340,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the fill color.
-     *
-     * @return self this instance
      */
     public function setFillColor(PdfFillColor $fillColor): self
     {
@@ -378,8 +350,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font style.
-     *
-     * @return self this instance
      */
     public function setFont(PdfFont $font): self
     {
@@ -392,8 +362,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * Sets the font style to bold.
      *
      * @param bool $add true to add the bold style to the existing style; false to replace
-     *
-     * @return self this instance
      */
     public function setFontBold(bool $add = false): self
     {
@@ -409,8 +377,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * Sets the font style to italic.
      *
      * @param bool $add true to add the italic style to the existing style; false to replace
-     *
-     * @return self this instance
      */
     public function setFontItalic(bool $add = false): self
     {
@@ -425,8 +391,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font name.
      * Can be one of the FONT_NAME_XX constants.
-     *
-     * @return self this instance
      */
     public function setFontName(string $fontName): self
     {
@@ -437,8 +401,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font style to regular (default).
-     *
-     * @return self this instance
      */
     public function setFontRegular(): self
     {
@@ -449,8 +411,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font size in points.
-     *
-     * @return self this instance
      */
     public function setFontSize(float $fontSize): self
     {
@@ -462,8 +422,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font style.
      * Can be one of the FONT_STYLE_XX constants or any combination.
-     *
-     * @return self this instance
      */
     public function setFontStyle(string $fontStyle): self
     {
@@ -476,8 +434,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * Sets the font style to underline.
      *
      * @param bool $add true to add the underline style to the existing style; false to replace
-     *
-     * @return self this instance
      */
     public function setFontUnderline(bool $add = false): self
     {
@@ -491,8 +447,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the left indent.
-     *
-     * @return self this instance
      */
     public function setIndent(int $indent): self
     {
@@ -503,8 +457,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the line.
-     *
-     * @return self this instance
      */
     public function setLine(PdfLine $line): self
     {
@@ -515,8 +467,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the text color.
-     *
-     * @return self this instance
      */
     public function setTextColor(PdfTextColor $textColor): self
     {

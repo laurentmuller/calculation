@@ -124,14 +124,14 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Check if an user name or e-mail exist.
+     * Check if an username or e-mail exist.
      *
      * @Route("/checkuser", name="ajax_check_user")
      * @IsGranted("PUBLIC_ACCESS")
      */
     public function checkUser(Request $request, UserRepository $repository): JsonResponse
     {
-        // find user name
+        // find username
         $usernameOrEmail = $this->getRequestString($request, 'user');
         if (null !== $usernameOrEmail && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
             return $this->json(true);
@@ -175,7 +175,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Check if an user name already exists.
+     * Check if an username already exists.
      *
      * @Route("/checkusername", name="ajax_check_user_name")
      * @IsGranted("ROLE_USER")
@@ -446,7 +446,7 @@ class AjaxController extends AbstractController
      */
     public function searchSupplier(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
-        return $this->getDistincValuesForCategoryItem($request, $productRepository, $taskRepository, 'supplier');
+        return $this->getDistinctValuesForCategoryItem($request, $productRepository, $taskRepository, 'supplier');
     }
 
     /**
@@ -468,7 +468,7 @@ class AjaxController extends AbstractController
      */
     public function searchUnit(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
-        return $this->getDistincValuesForCategoryItem($request, $productRepository, $taskRepository, 'unit');
+        return $this->getDistinctValuesForCategoryItem($request, $productRepository, $taskRepository, 'unit');
     }
 
     /**
@@ -593,7 +593,7 @@ class AjaxController extends AbstractController
     /**
      * Checks if the given request is a XMLHttpRequest (ajax) call.
      *
-     * @return JsonResponse null if the request is a XMLHttpRequest call, a JSON error response otherwise
+     * @return JsonResponse|null null if the request is a XMLHttpRequest call, a JSON error response otherwise
      */
     private function checkAjaxCall(Request $request): ?JsonResponse
     {
@@ -642,11 +642,11 @@ class AjaxController extends AbstractController
      * Search distinct values from products and tasks.
      *
      * @param Request           $request           the request to get search parameters
-     * @param ProductRepository $productRepository the product respository to search in
-     * @param TaskRepository    $taskRepository    the task respository to search in
+     * @param ProductRepository $productRepository the product repository to search in
+     * @param TaskRepository    $taskRepository    the task repository to search in
      * @param string            $field             the field name to search for
      */
-    private function getDistincValuesForCategoryItem(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository, string $field): JsonResponse
+    private function getDistinctValuesForCategoryItem(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository, string $field): JsonResponse
     {
         try {
             $search = $this->getRequestString($request, 'query', '');

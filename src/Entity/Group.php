@@ -233,8 +233,6 @@ class Group extends AbstractEntity
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

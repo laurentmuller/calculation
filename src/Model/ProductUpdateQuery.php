@@ -56,7 +56,7 @@ class ProductUpdateQuery
      */
     public function getCategoryCode(): ?string
     {
-        return null !== $this->category ? $this->category->getCode() : null;
+        return $this->category?->getCode();
     }
 
     /**
@@ -64,7 +64,7 @@ class ProductUpdateQuery
      */
     public function getCategoryId(): int
     {
-        return null !== $this->category ? (int) $this->category->getId() : 0;
+        return (int) $this->category?->getId();
     }
 
     /**
@@ -76,7 +76,7 @@ class ProductUpdateQuery
     }
 
     /**
-     * Gets the formatted value, depending of the percent state.
+     * Gets the formatted value, depending on the percent state.
      */
     public function getFormattedValue(): string
     {
@@ -88,7 +88,7 @@ class ProductUpdateQuery
      */
     public function getGroupCode(): ?string
     {
-        return null !== $this->category ? $this->category->getGroupCode() : null;
+        return $this->category?->getGroupCode();
     }
 
     /**
@@ -166,7 +166,7 @@ class ProductUpdateQuery
     }
 
     /**
-     * Sets a value indicating if all products of the selected catagory must update.
+     * Sets a value indicating if all products of the selected category must update.
      */
     public function setAllProducts(bool $allProducts): self
     {

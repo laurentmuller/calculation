@@ -19,8 +19,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * Trait for files manipulation.
  *
  * @author Laurent Muller
- *
- * @see Symfony\Component\Filesystem\Filesystem
  */
 trait FileTrait
 {
@@ -91,10 +89,6 @@ trait FileTrait
 
     /**
      * Checks the existence of the given file.
-     *
-     * @param string|\SplFileInfo $file the file to verify
-     *
-     * @return bool true if the file exists, false otherwise
      */
     public function fileExists(string|\SplFileInfo $file): bool
     {
@@ -124,10 +118,6 @@ trait FileTrait
 
     /**
      * Tells whether the given file is a regular file.
-     *
-     * @param string|\SplFileInfo $file the path to the file
-     *
-     * @return bool true if the file exists and is a regular file, false otherwise
      */
     public function isFile(string|\SplFileInfo $file): bool
     {
@@ -140,10 +130,6 @@ trait FileTrait
 
     /**
      * Deletes a file or a directory.
-     *
-     * @param string|\SplFileInfo $file the file to delete
-     *
-     * @return bool true on success, false on failure
      */
     public function removeFile(string|\SplFileInfo $file): bool
     {

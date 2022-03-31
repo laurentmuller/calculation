@@ -31,11 +31,11 @@ class PivotMonthField extends PivotDateField
     /**
      * Constructor.
      *
-     * @param string $name  the field name
-     * @param string $title the field title
-     * @param bool   $short true to display the short month name, false to display the full month name
+     * @param string      $name  the field name
+     * @param string|null $title the field title
+     * @param bool        $short true to display the short month name, false to display the full month name
      */
-    public function __construct(string $name, ?string $title = null, bool $short = false)
+    public function __construct(protected string $name, protected ?string $title = null, bool $short = false)
     {
         parent::__construct($name, self::PART_MONTH, $title);
         $this->names = $short ? DateUtils::getShortMonths() : DateUtils::getMonths();
@@ -44,7 +44,7 @@ class PivotMonthField extends PivotDateField
     /**
      * {@inheritdoc}
      */
-    public function getDisplayValue($value)
+    public function getDisplayValue(mixed $value): mixed
     {
         if (\is_int($value) && \array_key_exists($value, $this->names)) {
             return $this->names[$value];

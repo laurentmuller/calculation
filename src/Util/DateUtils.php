@@ -103,7 +103,7 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $locale The locale to format names or null to use default
+     * @param string|null $locale The locale to format names or null to use default
      *
      * @return array<int, string>
      */
@@ -126,7 +126,7 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $locale The locale to format names or null to use default
+     * @param string|null $locale The locale to format names or null to use default
      *
      * @return array<int, string>
      */
@@ -150,8 +150,8 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstday The first day of the week, in english,  like 'sunday' or 'monday'
-     * @param string $locale   The locale to format names or null to use default
+     * @param string      $firstday The first day of the week, in english,  like 'sunday' or 'monday'
+     * @param string|null $locale   The locale to format names or null to use default
      *
      * @return array<int, string>
      */
@@ -176,8 +176,8 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstday the first day of the week, in english, like 'sunday' or 'monday'
-     * @param string $locale   The locale to format names or null to use default
+     * @param string      $firstday the first day of the week, in english, like 'sunday' or 'monday'
+     * @param string|null $locale   The locale to format names or null to use default
      *
      * @return array<int, string>
      */

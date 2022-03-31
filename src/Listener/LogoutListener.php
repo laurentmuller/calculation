@@ -54,7 +54,7 @@ class LogoutListener implements EventSubscriberInterface
     }
 
     /**
-     * Gets the user name from the given event.
+     * Gets the username from the given event.
      */
     private function getUsername(LogoutEvent $event): ?string
     {

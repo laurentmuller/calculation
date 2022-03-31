@@ -31,13 +31,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     private array $children = [];
 
     /**
-     * The key.
-     *
-     * @var mixed
-     */
-    private $key;
-
-    /**
      * The parent node.
      */
     private ?PivotNode $parent = null;
@@ -49,8 +42,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * The title.
-     *
-     * @var string
      */
     private ?string $title = null;
 
@@ -61,10 +52,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      * @param mixed              $key        the key
      * @param mixed              $value      the initial value
      */
-    public function __construct(AbstractAggregator $aggregator, $key = null, $value = null)
+    public function __construct(protected AbstractAggregator $aggregator, private mixed $key = null, mixed $value = null)
     {
         parent::__construct($aggregator, $value);
-        $this->key = $key;
     }
 
     public function __toString(): string
@@ -83,7 +73,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      *
      * @return self the newly created node
      */
-    public function add(AbstractAggregator $aggregator, $key = null, $value = null): self
+    public function add(AbstractAggregator $aggregator, mixed $key = null, mixed $value = null): self
     {
         $node = new self($aggregator, $key, $value);
         $this->addNode($node);
@@ -110,7 +100,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     /**
      * {@inheritdoc}
      */
-    public function addValue($value)
+    public function addValue(mixed $value): self
     {
         parent::addValue($value);
 
@@ -134,7 +124,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      *
      * @return bool true if equal
      */
-    public function equalsKey($key): bool
+    public function equalsKey(mixed $key): bool
     {
         return $key === $this->key;
     }
@@ -160,7 +150,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      *
      * @return self|null the child node, if found; null otherwise
      */
-    public function find($key): ?self
+    public function find(mixed $key): ?self
     {
         foreach ($this->children as $child) {
             if ($child->equalsKey($key)) {
@@ -199,7 +189,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      *
      * @return self|null the node, if found; null otherwise
      */
-    public function findRecursive($key): ?self
+    public function findRecursive(mixed $key): ?self
     {
         foreach ($this->children as $child) {
             if ($child->equalsKey($key)) {
@@ -265,10 +255,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * Gets the key.
-     *
-     * @return mixed
      */
-    public function getKey()
+    public function getKey(): mixed
     {
         return $this->key;
     }
@@ -417,7 +405,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     /**
      * Gets the index (position) in the parent's children.
      *
-     * @return int the index, if parent is set; -1 othwewise
+     * @return int the index, if parent is set; -1 otherwise
      */
     public function index(): int
     {
@@ -437,7 +425,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     /**
      * Returns if this node is empty.
      *
-     * @return bool true if this node does not contains children
+     * @return bool true if this node does not contain children
      */
     public function isEmpty(): bool
     {
@@ -504,8 +492,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * Sets the parent's node.
-     *
-     * @param PivotNode $parent the parent to set
      */
     public function setParent(?self $parent): self
     {
@@ -549,16 +535,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      */
     private function sort(): self
     {
-        switch ($this->sortMode) {
-            case self::SORT_ASC:
-                return $this->sortAscending();
-            case self::SORT_DESC:
-                return $this->sortDescending();
-            case self::SORT_NONE:
-            default:
-                // nothing to do
-                return $this;
-        }
+        return match ($this->sortMode) {
+            self::SORT_ASC => $this->sortAscending(),
+            self::SORT_DESC => $this->sortDescending(),
+            default => $this,
+        };
     }
 
     /**

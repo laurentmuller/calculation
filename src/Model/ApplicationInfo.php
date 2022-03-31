@@ -15,7 +15,7 @@ namespace App\Model;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * Contains application informations.
+ * Contains application information.
  *
  * @author Laurent Muller
  */

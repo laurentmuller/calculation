@@ -210,7 +210,7 @@ class CalendarController extends AbstractController
      *
      * @return int[]|bool the next year and month, if found; false otherwise
      */
-    private function nextMonth(array $yearsMonths, int $year, int $month)
+    private function nextMonth(array $yearsMonths, int $year, int $month): array|bool
     {
         $yearMonth = $year * 1000 + $month;
         $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth): bool {
@@ -232,7 +232,7 @@ class CalendarController extends AbstractController
      *
      * @return int[]|bool the next year and week, if found; false otherwise
      */
-    private function nextWeek(array $yearsWeeks, int $year, int $week)
+    private function nextWeek(array $yearsWeeks, int $year, int $week): array|bool
     {
         $yearWeek = $year * 1000 + $week;
         $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek): bool {
@@ -253,7 +253,7 @@ class CalendarController extends AbstractController
      *
      * @return int|bool the next year, if found; false otherwise
      */
-    private function nextYear(array $years, int $year)
+    private function nextYear(array $years, int $year): bool|int
     {
         $filtered = \array_filter($years, function (int $current) use ($year): bool {
             return $current > $year;
@@ -274,7 +274,7 @@ class CalendarController extends AbstractController
      *
      * @return int[]|bool the previous year and month, if found; false otherwise
      */
-    private function previousMonth(array $yearsMonths, int $year, int $month)
+    private function previousMonth(array $yearsMonths, int $year, int $month): array|bool
     {
         $yearMonth = $year * 1000 + $month;
         $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth): bool {
@@ -296,7 +296,7 @@ class CalendarController extends AbstractController
      *
      * @return int[]|bool the previous year and week, if found; false otherwise
      */
-    private function previousWeek(array $yearsWeeks, int $year, int $week)
+    private function previousWeek(array $yearsWeeks, int $year, int $week): array|bool
     {
         $yearWeek = $year * 1000 + $week;
         $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek): bool {
@@ -312,12 +312,12 @@ class CalendarController extends AbstractController
     /**
      * Gets the previous year.
      *
-     * @param int[] $years the availaible years
+     * @param int[] $years the available years
      * @param int   $year  the current year
      *
      * @return int|bool the previous year, if found; false otherwise
      */
-    private function previousYear(array $years, int $year)
+    private function previousYear(array $years, int $year): bool|int
     {
         $filtered = \array_filter($years, function (int $current) use ($year): bool {
             return $current < $year;
@@ -335,7 +335,7 @@ class CalendarController extends AbstractController
      *
      * @return int[]|bool the today year and month, if found; null otherwise
      */
-    private function todayMonth(array $yearsMonths, int $year, int $month)
+    private function todayMonth(array $yearsMonths, int $year, int $month): array|bool
     {
         $todayYear = (int) \date('Y');
         $todayMonth = (int) \date('n');
@@ -363,7 +363,7 @@ class CalendarController extends AbstractController
      *
      * @return int[]|bool the today year and weak, if found; null otherwise
      */
-    private function todayWeek(array $yearsWeeks, int $year, int $week)
+    private function todayWeek(array $yearsWeeks, int $year, int $week): array|bool
     {
         $todayYear = (int) \date('Y');
         $todayWeek = (int) \date('W');
@@ -390,7 +390,7 @@ class CalendarController extends AbstractController
      *
      * @return int|bool the today year, if found; null otherwise
      */
-    private function todayYear(array $years, int $year)
+    private function todayYear(array $years, int $year): bool|int
     {
         $todayYear = (int) \date('Y');
         if ($year !== $todayYear && \in_array($todayYear, $years, true)) {
@@ -403,12 +403,11 @@ class CalendarController extends AbstractController
     /**
      * Validate the given month.
      *
-     * @param int $month the optional month to validate
+     * @param int|null $month the optional month to validate
      *
      * @return int a valid month
      *
-     * @throws NotFoundHttpException if the month is not witin the range from 1 to 12
-     *                               inclusive
+     * @throws NotFoundHttpException if the month is not within the range from 1 to 12 inclusive
      */
     private function validateMonth(?int $month = null): int
     {
@@ -423,12 +422,11 @@ class CalendarController extends AbstractController
     /**
      * Validate the given week.
      *
-     * @param int $week the optional week to validate
+     * @param int|null $week the optional week to validate
      *
      * @return int a valid week
      *
-     * @throws NotFoundHttpException if the week is not witin the range from 1 to 53
-     *                               inclusive
+     * @throws NotFoundHttpException if the week is not within the range from 1 to 53 inclusive
      */
     private function validateWeek(?int $week = null): int
     {
@@ -443,7 +441,7 @@ class CalendarController extends AbstractController
     /**
      * Validate the given year.
      *
-     * @param int $year the optional year to validate
+     * @param int|null $year the optional year to validate
      *
      * @return int a valid year
      */

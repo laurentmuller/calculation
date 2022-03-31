@@ -33,7 +33,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controller for administation tasks.
+ * Controller for administration tasks.
  *
  * @author Laurent Muller
  *

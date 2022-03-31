@@ -80,10 +80,8 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @param string|null   $text      the text of the cell
      * @param int           $cols      the number of columns to span
-     * @param PdfStyle|null $style     the row style to use or null to use the default cell style
+     * @param PdfStyle|null $style     the cell style to use or null to use the default cell style
      * @param string|null   $alignment the cell alignment
-     *
-     * @return self this instance
      */
     public function add(?string $text, int $cols = 1, ?PdfStyle $style = null, ?string $alignment = self::ALIGN_INHERITED): self
     {
@@ -93,10 +91,6 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Adds the given cell to the list of cells.
      * Do nothing if the given cell is <code>null</code>.
-     *
-     * @param PdfCell|null $cell The cell to add
-     *
-     * @return self this instance
      *
      * @throws \InvalidArgumentException if no current row is started
      */
@@ -117,8 +111,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @param PdfCell[] $cells the cells to add
      *
-     * @return self this instance
-     *
      * @throws \InvalidArgumentException if no current row is started
      */
     public function addCells(array $cells): self
@@ -132,10 +124,6 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * Adds the given column to the list of columns.
-     *
-     * @param PdfColumn|null $column the column to add
-     *
-     * @return self this instance
      */
     public function addColumn(?PdfColumn $column): self
     {
@@ -150,8 +138,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      * Adds the given columns to the list of columns.
      *
      * @param PdfColumn[] $columns the columns to add
-     *
-     * @return self this instance
      */
     public function addColumns(array $columns): self
     {
@@ -189,8 +175,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @param bool $endRow true to ending the row after completed
      *
-     * @return self this instance
-     *
      * @throws \InvalidArgumentException if a row is not started
      */
     public function completeRow(bool $endRow = true): self
@@ -216,8 +200,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      * Output the current row.
      *
      * After this call, no more cell is defined.
-     *
-     * @return self this instance
      *
      * @throws \LengthException     if no cell is defined
      * @throws \OutOfRangeException if the number of spanned cells is not equal to the number of columns
@@ -387,8 +369,6 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * Returns if the header row is printed when a new page is added.
-     *
-     * @return bool true if header is printed on each new pages
      */
     public function isRepeatHeader(): bool
     {
@@ -397,8 +377,6 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * Returns a value indicating if a row is currently started.
-     *
-     * @return bool true if started
      */
     public function isRowStarted(): bool
     {
@@ -407,8 +385,6 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * Output a row with the header style and the columns texts.
-     *
-     * @return self this instance
      *
      * @throws \LengthException if no column is defined
      */
@@ -432,8 +408,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfCell[]     $cells the cells to output
      * @param PdfStyle|null $style the row style or null for default cell style
      *
-     * @return self this instance
-     *
      * @throws \InvalidArgumentException if a row is already started
      * @throws \LengthException          if no cell is defined
      * @throws \OutOfRangeException      if the number of spanned cells is not equal to the number of columns
@@ -449,8 +423,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      * Sets a value indicating if the table take all the printable width.
      *
      * @param bool $fullWidth true if the table take all the printable width
-     *
-     * @return self this instance
      */
     public function setFullWidth(bool $fullWidth): self
     {
@@ -516,8 +488,6 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Starts a new row with the custom header style, if set; with the default header style otherwise.
      *
-     * @return self this instance
-     *
      * @see PdfTableBuilder::getHeaderStyle()
      * @see PdfStyle::getHeaderStyle()
      *
@@ -531,11 +501,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Starts a new row.
      *
-     * @param PdfStyle $style the row style to use or <code>null</code> to use the default cell style
-     *
-     * @return self this instance
-     *
-     * @throws \InvalidArgumentException if a row is already started
+     * @param PdfStyle|null $style the row style to use or null to use the default cell style
      */
     public function startRow(?PdfStyle $style = null): self
     {
@@ -653,16 +619,16 @@ class PdfTableBuilder implements PdfConstantsInterface
             // draw each applicable border side
             $right = $bounds->right();
             $bottom = $bounds->bottom();
-            if (false !== \strpos($border, self::BORDER_LEFT)) {
+            if (\str_contains($border, self::BORDER_LEFT)) {
                 $parent->Line($x, $y, $x, $bottom);
             }
-            if (false !== \strpos($border, self::BORDER_RIGHT)) {
+            if (\str_contains($border, self::BORDER_RIGHT)) {
                 $parent->Line($right, $y, $right, $bottom);
             }
-            if (false !== \strpos($border, self::BORDER_TOP)) {
+            if (\str_contains($border, self::BORDER_TOP)) {
                 $parent->Line($x, $y, $right, $y);
             }
-            if (false !== \strpos($border, self::BORDER_BOTTOM)) {
+            if (\str_contains($border, self::BORDER_BOTTOM)) {
                 $parent->Line($x, $bottom, $right, $bottom);
             }
         }

@@ -36,8 +36,8 @@ class PdfCellBorder implements PdfDocumentUpdaterInterface
     /**
      * Constructor.
      *
-     * @param PdfDrawColor $color the color or null to use default (black)
-     * @param PdfLine      $line  the line or null  to use default (0.2mm)
+     * @param PdfDrawColor|null $color the color or null to use default (black)
+     * @param PdfLine|null      $line  the line or null  to use default (0.2mm)
      */
     public function __construct(?PdfDrawColor $color = null, ?PdfLine $line = null)
     {
@@ -73,8 +73,6 @@ class PdfCellBorder implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the color.
-     *
-     * @return \App\Pdf\PdfDrawColor
      */
     public function getColor(): PdfDrawColor
     {
@@ -83,8 +81,6 @@ class PdfCellBorder implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the line.
-     *
-     * @return \App\Pdf\PdfLine
      */
     public function getLine(): PdfLine
     {
@@ -93,10 +89,6 @@ class PdfCellBorder implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the color.
-     *
-     * @param \App\Pdf\PdfDrawColor $color
-     *
-     * @return self this instance
      */
     public function setColor(PdfDrawColor $color): self
     {
@@ -107,10 +99,6 @@ class PdfCellBorder implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the line.
-     *
-     * @param \App\Pdf\PdfLine $line
-     *
-     * @return self this instance
      */
     public function setLine(PdfLine $line): self
     {

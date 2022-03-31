@@ -59,12 +59,12 @@ class PdfCell
     /**
      * Constructor.
      *
-     * @param string   $text      the cell text
-     * @param int      $cols      the cell columns span
-     * @param PdfStyle $style     the cell style
-     * @param string   $alignment the cell alignment
+     * @param string|null   $text      the cell text
+     * @param int           $cols      the cell columns span
+     * @param PdfStyle|null $style     the cell style
+     * @param string|null   $alignment the cell alignment
      */
-    public function __construct(?string $text = null, $cols = 1, ?PdfStyle $style = null, ?string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
+    public function __construct(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
     {
         $this->setText($text)
             ->setCols($cols)
@@ -97,8 +97,6 @@ class PdfCell
 
     /**
      * Gets the bottom border style.
-     *
-     * @return \App\Pdf\PdfCellBorder
      */
     public function getBorderBottom(): ?PdfCellBorder
     {
@@ -107,8 +105,6 @@ class PdfCell
 
     /**
      * Gets the left border style.
-     *
-     * @return \App\Pdf\PdfCellBorder
      */
     public function getBorderLeft(): ?PdfCellBorder
     {
@@ -117,8 +113,6 @@ class PdfCell
 
     /**
      * Gets the right border style.
-     *
-     * @return \App\Pdf\PdfCellBorder
      */
     public function getBorderRight(): ?PdfCellBorder
     {
@@ -127,8 +121,6 @@ class PdfCell
 
     /**
      * Gets the top border style.
-     *
-     * @return \App\Pdf\PdfCellBorder
      */
     public function getBorderTop(): ?PdfCellBorder
     {
@@ -145,8 +137,6 @@ class PdfCell
 
     /**
      * Gets the style.
-     *
-     * @return \App\Pdf\PdfStyle
      */
     public function getStyle(): ?PdfStyle
     {
@@ -155,8 +145,6 @@ class PdfCell
 
     /**
      * Gets the text.
-     *
-     * @return string
      */
     public function getText(): ?string
     {
@@ -176,10 +164,6 @@ class PdfCell
 
     /**
      * Sets the bottom border style.
-     *
-     * @param \App\Pdf\PdfCellBorder $borderBottom
-     *
-     * @return self this instance
      */
     public function setBorderBottom(?PdfCellBorder $borderBottom): self
     {
@@ -190,10 +174,6 @@ class PdfCell
 
     /**
      * Sets the left border style.
-     *
-     * @param \App\Pdf\PdfCellBorder $borderLeft
-     *
-     * @return self this instance
      */
     public function setBorderLeft(?PdfCellBorder $borderLeft): self
     {
@@ -204,10 +184,6 @@ class PdfCell
 
     /**
      * Sets the right border style.
-     *
-     * @param \App\Pdf\PdfCellBorder $borderRight
-     *
-     * @return self this instance
      */
     public function setBorderRight(?PdfCellBorder $borderRight): self
     {
@@ -218,10 +194,6 @@ class PdfCell
 
     /**
      * Sets the top border style.
-     *
-     * @param \App\Pdf\PdfCellBorder $borderTop
-     *
-     * @return self this instance
      */
     public function setBorderTop(?PdfCellBorder $borderTop): self
     {
@@ -232,8 +204,6 @@ class PdfCell
 
     /**
      * Sets the columns span.
-     *
-     * @return self this instance
      */
     public function setCols(int $cols): self
     {
@@ -244,10 +214,6 @@ class PdfCell
 
     /**
      * Sets the style.
-     *
-     * @param \App\Pdf\PdfStyle $style
-     *
-     * @return self this instance
      */
     public function setStyle(?PdfStyle $style): self
     {
@@ -258,10 +224,6 @@ class PdfCell
 
     /**
      * Sets the text.
-     *
-     * @param string $text
-     *
-     * @return self this instance
      */
     public function setText(?string $text): self
     {

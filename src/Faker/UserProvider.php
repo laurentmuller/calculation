@@ -48,7 +48,7 @@ class UserProvider extends EntityProvider
     {
         $user = $this->user();
 
-        return ($user instanceof User) ? $user->getUsername() : null;
+        return ($user instanceof User) ? $user->getUserIdentifier() : null;
     }
 
     /**

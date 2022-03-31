@@ -177,7 +177,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
             $query['bgset'] = \sprintf('bg%d', $background);
         }
 
-        $url = 'https://robohash.org/' . \urlencode($this->getUsername());
+        $url = 'https://robohash.org/' . \urlencode($this->getUserIdentifier());
         if (!empty($query)) {
             return $url . '?' . \http_build_query($query);
         }
@@ -190,7 +190,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getDisplay(): string
     {
-        return $this->getUsername();
+        return $this->getUserIdentifier();
     }
 
     /**
@@ -248,11 +248,11 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * Gets the user name and e-mail.
+     * Gets the username and e-mail.
      */
     public function getNameAndEmail(): string
     {
-        return \sprintf('%s <%s>', $this->getUsername(), (string) $this->getEmail());
+        return \sprintf('%s <%s>', $this->getUserIdentifier(), (string) $this->getEmail());
     }
 
     /**
@@ -302,7 +302,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getUserIdentifier(): string
     {
-        return $this->getUsername();
+        return (string) $this->username;
     }
 
     /**
@@ -312,7 +312,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return $this->getUserIdentifier();
     }
 
     /**
@@ -382,8 +382,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      *
-     * @param File|UploadedFile $imageFile the file
-     * @param bool              $update    true to update the modification date
+     * @param File|null $imageFile the file
+     * @param bool      $update    true to update the modification date
      */
     public function setImageFile(?File $imageFile = null, bool $update = true): self
     {
@@ -433,7 +433,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * Sets the user name.
+     * Sets the username.
      */
     public function setUsername(string $username): self
     {

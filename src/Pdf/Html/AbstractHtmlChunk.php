@@ -37,11 +37,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     protected ?string $css = null;
 
     /**
-     * The tag name.
-     */
-    protected string $name;
-
-    /**
      * The parent chunk.
      */
     protected ?HtmlParentChunk $parent = null;
@@ -57,11 +52,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
      */
-    public function __construct(string $name, ?HtmlParentChunk $parent = null)
+    public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
     {
-        // copy
-        $this->name = $name;
-
         // add to parent
         if (null !== $parent) {
             $parent->add($this);
@@ -117,8 +109,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Gets the text alignment from this style or left, if none.
-     *
-     * @return string the text alignment
      */
     public function getAlignment(): string
     {
@@ -131,8 +121,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Gets the bottom margin from this style or 0 if none.
-     *
-     * @return float the bottom margin
      */
     public function getBottomMargin(): float
     {
@@ -161,8 +149,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Gets the left margin from this style or 0 if none.
-     *
-     * @return float the left margin
      */
     public function getLeftMargin(): float
     {
@@ -191,8 +177,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Gets the right margin from this style or 0 if none.
-     *
-     * @return float the right margin
      */
     public function getRightMargin(): float
     {
@@ -213,8 +197,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Gets the top margin from this style or 0 if none.
-     *
-     * @return float the top margin
      */
     public function getTopMargin(): float
     {
@@ -226,9 +208,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     }
 
     /**
-     * Returns if a stlye is defined.
-     *
-     * @return bool true if a style is defined
+     * Returns if a style is defined.
      */
     public function hasStyle(): bool
     {
@@ -236,7 +216,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     }
 
     /**
-     * Gets index of the this chunk.
+     * Gets index of this chunk.
      *
      * @return int the index; -1 if root
      */
@@ -267,9 +247,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     }
 
     /**
-     * Returns if a new line must added at the end of the report output.
-     *
-     * @return bool true if a new line must added
+     * Returns if a new line must add at the end of the report output.
      */
     public function isNewLine(): bool
     {
@@ -278,8 +256,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Output this chunk to the given report.
-     *
-     * @param HtmlReport $report the report to write to
      */
     public function output(HtmlReport $report): void
     {
@@ -421,9 +397,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     /**
      * Output the given text to the report.
      * By default, call the <code>write</code> method of the report.
-     *
-     * @param HtmlReport $report the report to write to
-     * @param string     $text   the text to output
      */
     protected function outputText(HtmlReport $report, string $text): void
     {
@@ -465,11 +438,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
                 break;
 
             case 'border-top-0':
-                break;
             case 'border-right-0':
-                break;
             case 'border-bottom-0':
-                break;
             case 'border-left-0':
                 break;
         }
@@ -523,7 +493,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     }
 
     /**
-     * Update this style, depending of the CSS.
+     * Update this style, depending on the CSS.
      */
     protected function updateCss(): self
     {
@@ -566,7 +536,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     }
 
     /**
-     * Update this style, depending of the tag name and class.
+     * Update this style, depending on the tag name and class.
      */
     protected function updateStyle(): self
     {

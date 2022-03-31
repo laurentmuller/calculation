@@ -92,7 +92,7 @@ abstract class AbstractEntity
     /**
      * Trim the given string.
      *
-     * @param string $str the value to trim
+     * @param string|null $str the value to trim
      *
      * @return string|null the trimmed string or null if empty
      */

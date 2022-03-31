@@ -215,11 +215,11 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * The value must be a hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>.
      *
-     * @param string $value a hexadecimal string
+     * @param string|null $value a hexadecimal string
      *
      * @return int[]|bool the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
      */
-    public static function parse(?string $value)
+    public static function parse(?string $value): array|bool
     {
         // string?
         if (!Utils::isString($value)) {
@@ -280,7 +280,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Sets the green component.
      *
-     * @param int $green the value to set. Must be bewtween 0 to 255 inclusive.
+     * @param int $green the value to set. Must be between 0 to 255 inclusive.
      *
      * @return self this instance
      */
@@ -294,7 +294,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Sets the red component.
      *
-     * @param int $red the value to set. Must be bewtween 0 to 255 inclusive.
+     * @param int $red the value to set. Must be between 0 to 255 inclusive.
      *
      * @return self this instance
      */
@@ -307,7 +307,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the red, the green and the blue values.
-     * All values must be bewtween 0 to 255 inclusive.
+     * All values must be between 0 to 255 inclusive.
      *
      * @param int $red   the red component
      * @param int $green the green component
@@ -335,7 +335,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Checks if the given value is between 0 to 255 (inclusive).
+     * Checks if the given value is between 0 and 255 (inclusive).
      *
      * @param int $value the value to verify
      *

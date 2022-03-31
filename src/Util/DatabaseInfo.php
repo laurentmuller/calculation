@@ -59,7 +59,7 @@ final class DatabaseInfo
     }
 
     /**
-     * Gets the database server information.
+     * Gets the database information.
      *
      * @psalm-suppress InternalMethod
      */

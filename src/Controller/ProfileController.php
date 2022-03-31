@@ -53,8 +53,7 @@ class ProfileController extends AbstractController
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
             $manager->flush();
-
-            $this->successTrans('profile.change_password.success', ['%username%' => $user->getUsername()]);
+            $this->successTrans('profile.change_password.success', ['%username%' => $user->getUserIdentifier()]);
 
             return $this->redirectToHomePage();
         }
@@ -84,7 +83,7 @@ class ProfileController extends AbstractController
         $form = $this->createForm(ProfileEditType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();
-            $this->successTrans('profile.edit.success', ['%username%' => $user->getUsername()]);
+            $this->successTrans('profile.edit.success', ['%username%' => $user->getUserIdentifier()]);
 
             return $this->redirectToHomePage();
         }

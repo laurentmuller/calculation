@@ -226,9 +226,9 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets sorted distinct and not null values of the given column.
      *
-     * @param string $field  the column name to get values for
-     * @param string $search a value to search within the column
-     * @param int    $limit  the maximum number of results to retrieve or -1 for all
+     * @param string      $field  the column name to get values for
+     * @param string|null $search a value to search within the column
+     * @param int         $limit  the maximum number of results to retrieve or -1 for all
      */
     protected function getDistinctValues(string $field, ?string $search = null, int $limit = -1): array
     {
@@ -251,15 +251,14 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the entities to display.
      *
-     * @param string $field     the optional sorted field
-     * @param string $mode      the optional sort mode ("ASC" or "DESC")
-     * @param array  $criterias the filter criterias
-     * @param string $alias     the entity alias
+     * @param string|null            $field     the optional sorted field
+     * @param string                 $mode      the optional sort mode ("ASC" or "DESC")
+     * @param array<Criteria|string> $criterias the filter criteria
+     * @param string                 $alias     the entity alias
      *
      * @return AbstractEntity[] the entities
-     *
-     * @psalm-param array<Criteria|string> $criterias
      * @psalm-return T[]
+     *
      * @psalm-suppress MixedReturnTypeCoercion
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
@@ -352,9 +351,9 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Update the parameters by adding the request query values.
      *
-     * @param Request $request    the request to get the query values
-     * @param array   $parameters the parameters to update
-     * @param int     $id         an optional entity identifier
+     * @param Request  $request    the request to get the query values
+     * @param array    $parameters the parameters to update
+     * @param int|null $id         an optional entity identifier
      */
     protected function updateQueryParameters(Request $request, array &$parameters, ?int $id = 0): void
     {

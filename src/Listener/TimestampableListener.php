@@ -102,7 +102,7 @@ class TimestampableListener implements DisableListenerInterface
     }
 
     /**
-     * Gets the connected user name.
+     * Gets the connected username.
      */
     private function getUserName(): string
     {

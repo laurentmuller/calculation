@@ -26,9 +26,9 @@ abstract class AbstractAggregator implements \JsonSerializable
     /**
      *  Constructor.
      *
-     *  @param mixed $value the initial value
+     *  @param mixed|null $value the initial value
      */
-    public function __construct($value = null)
+    public function __construct(mixed $value = null)
     {
         $this->init();
         if (null !== $value) {
@@ -39,6 +39,7 @@ abstract class AbstractAggregator implements \JsonSerializable
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
+        /** @psalm-var mixed $value */
         $value = $this->getFormattedResult();
 
         return \sprintf('%s(%s)', $name, (string) $value);
@@ -49,24 +50,20 @@ abstract class AbstractAggregator implements \JsonSerializable
      *
      * @param mixed $value the value to add
      */
-    abstract public function add($value): self;
+    abstract public function add(mixed $value): self;
 
     /**
      * Gets the formatted result.
-     *
-     * @return float|int the formatted result
      */
-    public function getFormattedResult()
+    public function getFormattedResult(): mixed
     {
         return $this->getResult();
     }
 
     /**
      * Gets the result.
-     *
-     * @return float|int the result
      */
-    abstract public function getResult();
+    abstract public function getResult(): mixed;
 
     /**
      * Initialize.
@@ -75,10 +72,8 @@ abstract class AbstractAggregator implements \JsonSerializable
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'name' => Utils::getShortName($this),

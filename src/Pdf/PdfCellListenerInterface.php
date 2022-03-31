@@ -31,7 +31,7 @@ interface PdfCellListenerInterface
     public function onDrawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool;
 
     /**
-     * Called when a cell border must be draw.
+     * Called when a cell border must be drawn.
      *
      * @param PdfTableBuilder $builder the table builder
      * @param int             $index   the column index
@@ -40,10 +40,10 @@ interface PdfCellListenerInterface
      *
      * @return bool false to call the default behavior; true if listener handle the draw function
      */
-    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, $border): bool;
+    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, int|string $border): bool;
 
     /**
-     * Called when the text must be draw within the cell.
+     * Called when the text must be drawn within the cell.
      *
      * @param PdfTableBuilder $builder the table builder
      * @param int             $index   the column index

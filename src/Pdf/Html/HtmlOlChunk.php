@@ -59,10 +59,10 @@ class HtmlOlChunk extends HtmlParentChunk
     /**
      * Constructor.
      *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
+     * @param string               $name   the tag name
+     * @param HtmlParentChunk|null $parent the parent chunk
      */
-    public function __construct(string $name, ?HtmlParentChunk $parent = null)
+    public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
     {
         parent::__construct($name, $parent);
         $this->type = self::TYPE_NUMBER;
@@ -137,8 +137,6 @@ class HtmlOlChunk extends HtmlParentChunk
 
     /**
      * Gets the bullet text for this number of children (if any).
-     *
-     * @return string the bullet text
      */
     public function getBulletMaximum(): string
     {

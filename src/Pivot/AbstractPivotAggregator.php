@@ -23,19 +23,13 @@ use App\Util\Utils;
 abstract class AbstractPivotAggregator implements \JsonSerializable
 {
     /**
-     * The aggregator function.
-     */
-    protected AbstractAggregator $aggregator;
-
-    /**
      * Constructor.
      *
      * @param AbstractAggregator $aggregator the aggregator function
      * @param mixed              $value      the initial value
      */
-    public function __construct(AbstractAggregator $aggregator, $value = null)
+    public function __construct(protected AbstractAggregator $aggregator, mixed $value = null)
     {
-        $this->aggregator = $aggregator;
         $this->addValue($value);
     }
 
@@ -49,12 +43,8 @@ abstract class AbstractPivotAggregator implements \JsonSerializable
 
     /**
      * Adds the given value to this value.
-     *
-     * @param mixed $value the value to add
-     *
-     * @return self
      */
-    public function addValue($value)
+    public function addValue(mixed $value): self
     {
         $this->aggregator->add($value);
 
@@ -71,10 +61,8 @@ abstract class AbstractPivotAggregator implements \JsonSerializable
 
     /**
      * Gets the value.
-     *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->aggregator->getResult();
     }

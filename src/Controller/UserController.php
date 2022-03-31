@@ -186,7 +186,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Send an email from the current user to an other user.
+     * Send an email from the current user to another user.
      *
      * @Route("/message/{id}", name="user_message", requirements={"id" = "\d+"})
      * @Breadcrumb({

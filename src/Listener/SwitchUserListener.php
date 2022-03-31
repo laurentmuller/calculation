@@ -88,7 +88,7 @@ class SwitchUserListener implements EventSubscriberInterface
     }
 
     /**
-     * Gets the original user name (if any).
+     * Gets the original username (if any).
      */
     private function getOriginalUsername(SwitchUserEvent $event): ?string
     {
@@ -101,7 +101,7 @@ class SwitchUserListener implements EventSubscriberInterface
     }
 
     /**
-     * Gets the target user name.
+     * Gets the target username.
      */
     private function getTargetUsername(SwitchUserEvent $event): string
     {

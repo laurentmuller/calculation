@@ -251,7 +251,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
         if (false !== ($content = $this->readFile($sourceFile))) {
-            return $this->dumpFile((string) $content, $targetFile, $prefixes, $suffixes, $renames);
+            return $this->dumpFile($content, $targetFile, $prefixes, $suffixes, $renames);
         }
 
         return false;
@@ -408,7 +408,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param string $content the style sheet content to search in
      * @param string $style   the style name to search for
      *
-     * @return string[]|bool the styles, if found; false otherwise
+     * @return string[]|false the styles, if found; false otherwise
      */
     private function findStyles(string $content, string $style): array|false
     {

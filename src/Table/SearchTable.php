@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Service\SearchService;
 use App\Traits\CheckerTrait;
@@ -44,47 +45,12 @@ class SearchTable extends AbstractTable
     public const PARAM_TYPE = 'type';
 
     /**
-     * The action column name.
-     */
-    private const COLUMN_ACTION = 'action';
-
-    /**
-     * The content column name.
-     */
-    private const COLUMN_CONTENT = SearchService::COLUMN_CONTENT;
-
-    /**
-     * The entity column name.
-     */
-    private const COLUMN_ENTITY_NAME = 'entityname';
-
-    /**
-     * The field column name.
-     */
-    private const COLUMN_FIELD_NAME = 'fieldname';
-
-    /**
-     * The delete granted column name.
-     */
-    private const COLUMN_GRANTED_DELETE = 'deletegranted';
-
-    /**
-     * The edit granted column name.
-     */
-    private const COLUMN_GRANTED_EDIT = 'editgranted';
-
-    /**
-     * The show granted column name.
-     */
-    private const COLUMN_GRANTED_SHOW = 'showgranted';
-
-    /**
      * The default sort columns order.
      */
     private const SORT_COLUMNS = [
-        self::COLUMN_CONTENT,
-        self::COLUMN_ENTITY_NAME,
-        self::COLUMN_FIELD_NAME,
+        SearchService::COLUMN_CONTENT,
+        SearchService::COLUMN_ENTITY_NAME,
+        SearchService::COLUMN_FIELD_NAME,
     ];
 
     /**
@@ -130,9 +96,9 @@ class SearchTable extends AbstractTable
     protected function getDefaultOrder(): array
     {
         return [
-            self::COLUMN_CONTENT => self::SORT_ASC,
-            self::COLUMN_ENTITY_NAME => self::SORT_ASC,
-            self::COLUMN_FIELD_NAME => self::SORT_ASC,
+            SearchService::COLUMN_CONTENT => SortModeInterface::SORT_ASC,
+            SearchService::COLUMN_ENTITY_NAME => SortModeInterface::SORT_ASC,
+            SearchService::COLUMN_FIELD_NAME => SortModeInterface::SORT_ASC,
         ];
     }
 
@@ -195,31 +161,17 @@ class SearchTable extends AbstractTable
         foreach ($items as &$item) {
             $type = (string) $item[SearchService::COLUMN_TYPE];
             $field = (string) $item[SearchService::COLUMN_FIELD];
-
-            // translate entity and field names
             $lowerType = \strtolower($type);
-            $entity = $this->trans("$lowerType.name");
-            $item[self::COLUMN_ACTION] = (int) $item['id'];
-            $item[self::COLUMN_ENTITY_NAME] = $entity;
-            $item[self::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
 
-            /** @var string|int|float|bool|null $content */
-            $content = $item[SearchService::COLUMN_CONTENT];
-            switch ("$type.$field") {
-                case 'Calculation.id':
-                    $content = $this->formatId((int) $content);
-                    break;
-                case 'Calculation.overallTotal':
-                case 'Product.price':
-                    $content = $this->formatAmount((float) $content);
-                    break;
-            }
-            $item[SearchService::COLUMN_CONTENT] = $content;
+            $item[SearchService::COLUMN_ACTION] = (int) $item['id'];
+            $item[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
+            $item[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
+            $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent("$type.$field", $item[SearchService::COLUMN_CONTENT]);
 
             // set authorizations
-            $item[self::COLUMN_GRANTED_SHOW] = $this->isGrantedShow($type);
-            $item[self::COLUMN_GRANTED_EDIT] = $this->isGrantedEdit($type);
-            $item[self::COLUMN_GRANTED_DELETE] = $this->isGrantedDelete($type);
+            $item[SearchService::COLUMN_GRANTED_SHOW] = $this->isGrantedShow($type);
+            $item[SearchService::COLUMN_GRANTED_EDIT] = $this->isGrantedEdit($type);
+            $item[SearchService::COLUMN_GRANTED_DELETE] = $this->isGrantedDelete($type);
         }
     }
 
@@ -259,7 +211,7 @@ class SearchTable extends AbstractTable
      */
     private function updateItem(array &$item): void
     {
-        $name = (string) $item[self::COLUMN_ENTITY_NAME];
+        $name = (string) $item[SearchService::COLUMN_ENTITY_NAME];
         $type = \strtolower((string) $item[SearchService::COLUMN_TYPE]);
 
         $icon = 'file far';
@@ -286,7 +238,7 @@ class SearchTable extends AbstractTable
                 $icon = 'address-card far';
                 break;
         }
-        $item[self::COLUMN_ENTITY_NAME] = \sprintf('<i class="fa-fw fa-%s" aria-hidden="true"></i>&nbsp;%s', $icon, $name);
+        $item[SearchService::COLUMN_ENTITY_NAME] = \sprintf('<i class="fa-fw fa-%s" aria-hidden="true"></i>&nbsp;%s', $icon, $name);
         $item[SearchService::COLUMN_TYPE] = $type;
         unset($item[SearchService::COLUMN_FIELD]);
     }

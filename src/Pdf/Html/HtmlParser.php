@@ -22,18 +22,12 @@ use App\Util\Utils;
 class HtmlParser
 {
     /**
-     * The HTML content.
-     */
-    protected ?string $html;
-
-    /**
      * Constructor.
      *
      * @param string|null $html the HTML content to parse
      */
-    public function __construct(?string $html)
+    public function __construct(protected ?string $html)
     {
-        $this->html = $html;
     }
 
     /**
@@ -203,7 +197,7 @@ class HtmlParser
      *
      * @param \DOMNode    $node    the node to get attribute for
      * @param string      $name    the attribute name to find
-     * @param string|null $default the default value to returns if the attribute is not found
+     * @param string|null $default the default value to return if the attribute is not found
      *
      * @return string|null the attribute value, if found; the default value otherwise
      */

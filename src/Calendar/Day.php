@@ -22,7 +22,7 @@ use App\Util\Utils;
  *
  * @psalm-consistent-constructor
  */
-class Day extends AbstractCalendarItem implements WeekDaysInterface
+class Day extends AbstractCalendarItem implements WeekDaysInterface, \Stringable
 {
     /**
      * The date format used to generate this key.
@@ -63,9 +63,9 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
      *
      * @param string $format a format accepted by date
      *
-     * @return string|bool the formatted date string on success or false on failure
+     * @return string|false the formatted date string on success or false on failure
      */
-    public function format(string $format)
+    public function format(string $format): string|false
     {
         return $this->date->format($format);
     }
@@ -194,8 +194,7 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
      */
     public function isInMonth(Month $month): bool
     {
-        return ($this->getMonth() === $month->getNumber())
-            && ($this->getYear() === $month->getYear());
+        return ($this->getMonth() === $month->getNumber()) && ($this->getYear() === $month->getYear());
     }
 
     /**
@@ -207,8 +206,7 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
      */
     public function isInWeek(Week $week): bool
     {
-        return ($this->getWeek() === $week->getNumber())
-            && ($this->getYear() === $week->getYear());
+        return ($this->getWeek() === $week->getNumber()) && ($this->getYear() === $week->getYear());
     }
 
     /**
@@ -224,19 +222,19 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
     }
 
     /**
-     * Returns if this is the last day of the week (sunnday).
+     * Returns if this is the last day of the week (sunday).
      */
     public function isLastInWeek(): bool
     {
-        return self::SUNNDAY === $this->getWeekDay();
+        return self::SUNDAY === $this->getWeekDay();
     }
 
     /**
-     * Returns if this day is in the week-end (saturday or sunnday).
+     * Returns if this day is in the weekend (saturday or sunday).
      */
     public function isWeekend(): bool
     {
-        return \in_array($this->getWeekDay(), [self::SATURDAY, self::SUNNDAY], true);
+        return \in_array($this->getWeekDay(), [self::SATURDAY, self::SUNDAY], true);
     }
 
     /**

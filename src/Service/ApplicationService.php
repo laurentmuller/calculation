@@ -121,7 +121,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the customer informations.
+     * Gets the customer information.
      */
     public function getCustomer(): CustomerInformation
     {
@@ -179,7 +179,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the customer web site (URL).
+     * Gets the customer website (URL).
      */
     public function getCustomerUrl(): ?string
     {
@@ -463,7 +463,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets a integer property.
+     * Gets an integer property.
      *
      * @param string $name    the property name to search for
      * @param int    $default the default value if the property is not found
@@ -576,7 +576,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns if the flashbag message sub-title is displayed (default: true).
+     * Returns if the flash bag message subtitle is displayed (default: true).
      */
     public function isMessageSubTitle(): bool
     {
@@ -670,7 +670,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Check if cache is up to date and if not load data from respository.
+     * Check if cache is up-to-date and if not load data from repository.
      */
     private function getAdapter(): CacheItemPoolInterface
     {

@@ -30,17 +30,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationGenerator extends AbstractEntityGenerator
 {
-    private CalculationRepository $repository;
-    private CalculationService $service;
-
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator, CalculationService $service, CalculationRepository $repository)
+    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator, private CalculationService $service, private CalculationRepository $repository)
     {
         parent::__construct($manager, $fakerService, $translator);
-        $this->service = $service;
-        $this->repository = $repository;
     }
 
     /**

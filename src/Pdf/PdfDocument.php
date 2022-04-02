@@ -262,7 +262,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      *                           <li>'<b>R</b>' : right align.</li>
      *                           </ul>
      * @param bool       $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
-     * @param string|int $link   an URL or an identifier returned by AddLink()
+     * @param string|int $link   a URL or an identifier returned by AddLink()
      */
     public function Cell($w, $h = 0.0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = ''): void
     {
@@ -297,8 +297,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the current orientation.
      *
-     * @return string the current orientation. Is one of the of the ORIENTATION_XX
-     *                contants.
+     * @return string the current orientation. Is one of the ORIENTATION_XX constants.
      */
     public function getCurrentOrientation(): string
     {
@@ -825,8 +824,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
                     return $result;
                 }
             }
-        } catch (\Exception $e) {
-            // ignore
+        } catch (\Exception) {
         }
 
         return $str;

@@ -620,22 +620,13 @@ class TestController extends AbstractController
         $results = $service->search($query, $entity, $limit, $offset);
 
         foreach ($results as &$row) {
-            $type = \strtolower($row[SearchService::COLUMN_TYPE]);
+            $type = $row[SearchService::COLUMN_TYPE];
             $field = $row[SearchService::COLUMN_FIELD];
-            $row['entityName'] = $this->trans("$type.name");
-            $row['fieldName'] = $this->trans("$type.fields.$field");
+            $lowerType = \strtolower($type);
 
-            $content = $row[SearchService::COLUMN_CONTENT];
-            switch ("$type.$field") {
-                case 'calculation.id':
-                    $content = FormatUtils::formatId((int) $content);
-                    break;
-                case 'calculation.overallTotal':
-                case 'product.price':
-                    $content = \number_format((float) $content, 2, '.', '');
-                    break;
-            }
-            $row[SearchService::COLUMN_CONTENT] = $content;
+            $row[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
+            $row[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
+            $row[SearchService::COLUMN_CONTENT] = $service->formatContent("$type.$field", $row[SearchService::COLUMN_CONTENT]);
         }
 
         $data = [
@@ -674,11 +665,11 @@ class TestController extends AbstractController
      */
     public function verifyAkismetKey(AkismetService $service): JsonResponse
     {
-        if (!($result = $service->verifyKey())) {
+        if (!$service->verifyKey()) {
             return $this->json($service->getLastError());
         }
 
-        return $this->json(['valid_key' => $result]);
+        return $this->json(['valid_key' => true]);
     }
 
     private function getCurrencies(): array

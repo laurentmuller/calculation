@@ -27,22 +27,10 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 class RightsType extends AbstractHelperType
 {
     /**
-     * Debug mode.
-     */
-    protected bool $debug;
-
-    /**
-     * Role hierarchy.
-     */
-    protected RoleHierarchyInterface $roleHierarchy;
-
-    /**
      * Constructor.
      */
-    public function __construct(RoleHierarchyInterface $roleHierarchy, bool $isDebug)
+    public function __construct(protected RoleHierarchyInterface $roleHierarchy, protected bool $isDebug)
     {
-        $this->roleHierarchy = $roleHierarchy;
-        $this->debug = $isDebug;
     }
 
     /**
@@ -82,7 +70,7 @@ class RightsType extends AbstractHelperType
             ->addRightType($helper, EntityVoterInterface::ENTITY_GLOBAL_MARGIN, 'globalmargin.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_USER, 'user.list.title');
 
-        if ($this->debug) {
+        if ($this->isDebug) {
             $this->addRightType($helper, EntityVoterInterface::ENTITY_CUSTOMER, 'customer.list.title');
         }
     }

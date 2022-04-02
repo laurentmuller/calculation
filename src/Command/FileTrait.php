@@ -37,7 +37,7 @@ trait FileTrait
     private ?Filesystem $fs = null;
 
     /**
-     * Change mode for a of file or a directory.
+     * Change mode for a file or a directory.
      *
      * @param string $filename  A file name to change mode
      * @param int    $mode      The new mode (octal)

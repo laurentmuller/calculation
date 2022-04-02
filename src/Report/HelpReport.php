@@ -33,21 +33,14 @@ class HelpReport extends AbstractReport
     private string $imagePath;
 
     /**
-     * The help service.
-     */
-    private HelpService $service;
-
-    /**
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
      * @param HelpService        $service    the help service
      */
-    public function __construct(AbstractController $controller, HelpService $service)
+    public function __construct(AbstractController $controller, private HelpService $service)
     {
         parent::__construct($controller);
-
-        $this->service = $service;
         $this->imagePath = $service->getImagePath();
     }
 

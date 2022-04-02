@@ -54,15 +54,12 @@ class HeaderFooter
     public function addDateTime(string $part = self::PART_RIGHT): self
     {
         $text = '&D - &T';
-        switch ($part) {
-            case self::PART_LEFT:
-                return $this->addLeft($text, false, false);
-            case self::PART_CENTER:
-                return $this->addCenter($text, false, false);
-            case self::PART_RIGHT:
-            default:
-                return $this->addRight($text, false, false);
-        }
+
+        return match ($part) {
+            self::PART_LEFT => $this->addLeft($text, false, false),
+            self::PART_CENTER => $this->addCenter($text, false, false),
+            default => $this->addRight($text, false, false),
+        };
     }
 
     /**
@@ -79,15 +76,12 @@ class HeaderFooter
     public function addPages(string $part = self::PART_LEFT): self
     {
         $text = 'Page &P / &N';
-        switch ($part) {
-            case self::PART_CENTER:
-                return $this->addCenter($text, false, false);
-            case self::PART_RIGHT:
-                return $this->addRight($text, false, false);
-            case self::PART_LEFT:
-            default:
-                return $this->addLeft($text, false, false);
-        }
+
+        return match ($part) {
+            self::PART_CENTER => $this->addCenter($text, false, false),
+            self::PART_RIGHT => $this->addRight($text, false, false),
+            default => $this->addLeft($text, false, false),
+        };
     }
 
     /**

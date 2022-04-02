@@ -19,7 +19,7 @@ use App\Util\FileUtils;
  *
  * @author Laurent Muller
  */
-abstract class AbstractDatabase extends \SQLite3
+abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 {
     /**
      * The in-memory database file name.
@@ -154,9 +154,9 @@ abstract class AbstractDatabase extends \SQLite3
     }
 
     /**
-     * Returns if an transaction is active.
+     * Returns if a transaction is active.
      *
-     * @return bool true if an transaction is active
+     * @return bool true if a transaction is active
      */
     public function isTransaction(): bool
     {

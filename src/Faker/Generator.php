@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Faker;
 
 /**
- * Extends Genrator with custom methods.
+ * Extends Generator with custom methods.
  *
- * @method string                        catchPhrase()                                           Gets a catch phrase.
+ * @method string                        catchPhrase()                                           Gets a catchphrase.
  * @method ?\App\Entity\Category         category()                                              Gets a random category.
  * @method int                           categoriesCount()                                       Gets the number of categories.
  * @method ?\App\Entity\Product          product()                                               Gets a random product.
@@ -29,7 +29,7 @@ namespace App\Faker;
  * @method int                           statesCount()                                           Gets the number of calculation states.
  * @method ?\App\Entity\User             user()                                                  Gets a random user.
  * @method int                           usersCount()                                            Gets the number of users.
- * @method ?string                       userName()                                              Gets a random user name.
+ * @method ?string                       userName()                                              Gets a random username.
  *
  * @author Laurent Muller
  */

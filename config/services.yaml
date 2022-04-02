@@ -4,7 +4,7 @@ parameters:
     # fixed
     locale:             fr_CH
     app_name:           Calculation
-    app_version:        2.0.0
+    app_version:        2.0.1
     app_owner:          bibi.nu
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
@@ -53,7 +53,7 @@ services:
             string $projectDir: '%kernel.project_dir%'
             bool $isDebug: '%kernel.debug%'
 
-    # makes classes in src/ available to be used as services
+    # make classes in src/ available to be used as services
     App\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Faker, Migrations,Tests,Traits,Kernel.php}'

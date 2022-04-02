@@ -40,9 +40,9 @@ interface WeekDaysInterface
     public const SATURDAY = 6;
 
     /**
-     * ISO-8601 numeric representation of sunnday.
+     * ISO-8601 numeric representation of sunday.
      */
-    public const SUNNDAY = 7;
+    public const SUNDAY = 7;
 
     /**
      * ISO-8601 numeric representation of thursday.

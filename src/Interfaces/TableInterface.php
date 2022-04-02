@@ -40,7 +40,7 @@ interface TableInterface
     public const PAGE_SIZE_CUSTOM = 15;
 
     /**
-     * The columns parameter name (array of columns).
+     * The column's parameter name (array of columns).
      */
     public const PARAM_COLUMNS = 'columns';
 
@@ -75,7 +75,7 @@ interface TableInterface
     public const PARAM_PAGE_LIST = 'pageList';
 
     /**
-     * The rows parameter name (array).
+     * The row's parameter name (array).
      */
     public const PARAM_ROWS = 'rows';
 
@@ -95,7 +95,7 @@ interface TableInterface
     public const PARAM_TOTAL = 'total';
 
     /**
-     * The total not filtred parameter name (int).
+     * The total not filtered parameter name (int).
      */
     public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
@@ -105,7 +105,7 @@ interface TableInterface
     public const PARAM_VIEW = 'view';
 
     /**
-     * The view name to show detailled values.
+     * The view name to show detailed values.
      */
     public const VIEW_CARD = 'card';
 

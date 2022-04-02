@@ -158,9 +158,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * Gets the URL of the avatar image.
      *
-     * @param int $size       the image size (only used if the value is greather than 0)
-     * @param int $set        the image set (only used if the value is between 2 to 5 inclusive)
-     * @param int $background the background set (only used if the value is between 1 to 2 inclusive)
+     * @param int $size       the image size (only used if the value is greater than 0)
+     * @param int $set        the image set (only used if the value is between 2 and 5 inclusive)
+     * @param int $background the background set (only used if the value is between 1 and 2 inclusive)
      *
      * @see https://robohash.org/
      */

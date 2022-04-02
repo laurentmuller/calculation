@@ -19,28 +19,8 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PdfRectangle
+class PdfRectangle implements \Stringable
 {
-    /**
-     * The height.
-     */
-    protected float $height;
-
-    /**
-     * The width.
-     */
-    protected float $width;
-
-    /**
-     * The x coordinate.
-     */
-    protected float $x;
-
-    /**
-     * The y coordinate.
-     */
-    protected float $y;
-
     /**
      * Constructor.
      *
@@ -49,12 +29,8 @@ class PdfRectangle
      * @param float $width  the width
      * @param float $height the height
      */
-    public function __construct(float $x, float $y, float $width, float $height)
+    public function __construct(protected float $x, protected float $y, protected float $width, protected float $height)
     {
-        $this->x = $x;
-        $this->y = $y;
-        $this->width = $width;
-        $this->height = $height;
     }
 
     public function __toString(): string

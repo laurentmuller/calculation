@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
+abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface, \Stringable
 {
     use MathTrait;
 
@@ -280,7 +280,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Sets the green component.
      *
-     * @param int $green the value to set. Must be between 0 to 255 inclusive.
+     * @param int $green the value to set. Must be between 0 and 255 inclusive.
      *
      * @return self this instance
      */
@@ -294,7 +294,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Sets the red component.
      *
-     * @param int $red the value to set. Must be between 0 to 255 inclusive.
+     * @param int $red the value to set. Must be between 0 and 255 inclusive.
      *
      * @return self this instance
      */
@@ -307,7 +307,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the red, the green and the blue values.
-     * All values must be between 0 to 255 inclusive.
+     * All values must be between 0 and 255 inclusive.
      *
      * @param int $red   the red component
      * @param int $green the green component

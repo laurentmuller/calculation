@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 /**
- * Class implementing this interface apply some changes to a <code>PdfDocument</code>.
+ * Class implementing this interface applies some changes to a <code>PdfDocument</code>.
  *
  * @author Laurent Muller
  */

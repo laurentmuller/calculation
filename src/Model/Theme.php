@@ -22,7 +22,7 @@ use App\Util\FileUtils;
  *
  * @author Laurent Muller
  */
-class Theme implements \JsonSerializable
+class Theme implements \JsonSerializable, \Stringable
 {
     /**
      * The dark theme names.

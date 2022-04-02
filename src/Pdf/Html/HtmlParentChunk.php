@@ -115,7 +115,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     }
 
     /**
-     * Checks whether the children is empty (contains no elements).
+     * Checks whether the children are empty (contains no elements).
      *
      * @return bool true if the collection is empty, false otherwise
      */
@@ -129,20 +129,11 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      */
     public function isNewLine(): bool
     {
-        switch ($this->name) {
-            case self::H1:
-            case self::H2:
-            case self::H3:
-            case self::H4:
-            case self::H5:
-            case self::H6:
-            case self::PARAGRAPH:
-               return true;
-            case self::LIST_ITEM:
-                return !self::isLastNewLine($this);
-            default:
-                return parent::isNewLine();
-        }
+        return match ($this->name) {
+            self::H1, self::H2, self::H3, self::H4, self::H5, self::H6, self::PARAGRAPH => true,
+            self::LIST_ITEM => !self::isLastNewLine($this),
+            default => parent::isNewLine(),
+        };
     }
 
     /**
@@ -172,7 +163,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     }
 
     /**
-     * Output this children chunks (if any) to the given report.
+     * Output these children chunks (if any) to the given report.
      *
      * @param HtmlReport $report the report to write to
      */

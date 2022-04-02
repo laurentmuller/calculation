@@ -21,15 +21,10 @@ use App\Traits\RoleTrait;
  *
  * @author Laurent Muller
  */
-class Role implements RoleInterface
+class Role implements RoleInterface, \Stringable
 {
     use RightsTrait;
     use RoleTrait;
-
-    /**
-     * The name.
-     */
-    protected ?string $name = null;
 
     /**
      * Constructor.
@@ -37,10 +32,9 @@ class Role implements RoleInterface
      * @param string      $role the role
      * @param string|null $name the optional name
      */
-    public function __construct(string $role, ?string $name = null)
+    public function __construct(string $role, protected ?string $name = null)
     {
         $this->role = $role;
-        $this->name = $name;
     }
 
     public function __toString(): string

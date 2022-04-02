@@ -44,16 +44,13 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         'pwned',
     ];
 
-    private ApplicationService $application;
-
     private bool $superAdmin = false;
 
     /**
      * Constructor.
      */
-    public function __construct(Security $security, ApplicationService $application)
+    public function __construct(Security $security, private ApplicationService $application)
     {
-        $this->application = $application;
         if (null !== ($user = $security->getUser())) {
             $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
         }

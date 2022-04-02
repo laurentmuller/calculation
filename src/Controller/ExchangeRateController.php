@@ -31,16 +31,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExchangeRateController extends AbstractController
 {
     /**
-     * The service.
-     */
-    private ExchangeRateService $service;
-
-    /**
      * Constructor.
      */
-    public function __construct(ExchangeRateService $service)
+    public function __construct(private ExchangeRateService $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -72,9 +66,9 @@ class ExchangeRateController extends AbstractController
     }
 
     /**
-     * Gets the exchange rates from the given curreny code to all the other currencies supported.
+     * Gets the exchange rates from the given currency code to all the other currencies supported.
      *
-     * @param string $code the base curreny code
+     * @param string $code the base currency code
      *
      * @Route("/latest/{code}", name="exchange_latest")
      */

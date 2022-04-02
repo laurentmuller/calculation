@@ -126,13 +126,10 @@ class PivotField implements \JsonSerializable
      */
     public function setMethod(int $method): self
     {
-        switch ($method) {
-            case self::METHOD_FLOAT:
-            case self::METHOD_INTEGER:
-            case self::METHOD_STRING:
-                $this->method = $method;
-                break;
-        }
+        $this->method = match ($method) {
+            self::METHOD_FLOAT, self::METHOD_INTEGER, self::METHOD_STRING => $method,
+            default => $this->method,
+        };
 
         return $this;
     }

@@ -20,7 +20,9 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Traits\CheckerTrait;
+use App\Util\FormatUtils;
 use App\Util\Utils;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
@@ -36,14 +38,44 @@ class SearchService
     use CheckerTrait;
 
     /**
+     * The action column name.
+     */
+    public const COLUMN_ACTION = 'action';
+
+    /**
      * The content column name.
      */
     public const COLUMN_CONTENT = 'content';
 
     /**
+     * The entity column name.
+     */
+    public const COLUMN_ENTITY_NAME = 'entityname';
+
+    /**
      * The field column name.
      */
     public const COLUMN_FIELD = 'field';
+
+    /**
+     * The field column name.
+     */
+    public const COLUMN_FIELD_NAME = 'fieldname';
+
+    /**
+     * The delete granted column name.
+     */
+    public const COLUMN_GRANTED_DELETE = 'deletegranted';
+
+    /**
+     * The edit granted column name.
+     */
+    public const COLUMN_GRANTED_EDIT = 'editgranted';
+
+    /**
+     * The show granted column name.
+     */
+    public const COLUMN_GRANTED_SHOW = 'showgranted';
 
     /**
      * The identifier column name.
@@ -117,6 +149,18 @@ class SearchService
 
         // count
         return \count($result);
+    }
+
+    /**
+     * Format the given content, depending on the given field.
+     */
+    public function formatContent(string $field, mixed $content): string
+    {
+        return match ($field) {
+            'Calculation.id' => FormatUtils::formatId((int) $content),
+            'Calculation.overallTotal', 'Product.price' => FormatUtils::formatAmount((float) $content),
+            default => (string) $content
+        };
     }
 
     /**
@@ -347,7 +391,7 @@ class SearchService
         $query = $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
 
         // set parameter
-        $query->setParameter(self::SEARCH_PARAM, "%$search%");
+        $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
 
         /**
          * @var array<array{

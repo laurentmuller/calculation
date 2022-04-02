@@ -74,7 +74,7 @@ class CalculationTableGroups extends PdfTableBuilder
             ->add($columns[4]->getText())
             ->endRow();
 
-        // groups
+        // groupes
         foreach ($groups as $group) {
             $this->startRow()
                 ->add($group->getCode())

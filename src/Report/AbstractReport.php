@@ -28,11 +28,6 @@ abstract class AbstractReport extends PdfDocument
 {
     use TranslatorTrait;
 
-    /**
-     * The parent controller.
-     */
-    protected AbstractController $controller;
-
     /*
      * The Twig extension to format values.
      */
@@ -46,11 +41,10 @@ abstract class AbstractReport extends PdfDocument
      * @param string             $unit        the measure unit. One of the UNIT_XX constants.
      * @param mixed              $size        the document size. One of the SIZE_XX constants or an array containing the width and height of the document.
      */
-    public function __construct(AbstractController $controller, string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, mixed $size = self::SIZE_A4)
+    public function __construct(protected AbstractController $controller, string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, mixed $size = self::SIZE_A4)
     {
         parent::__construct($orientation, $unit, $size);
 
-        $this->controller = $controller;
         $this->translator = $controller->getTranslator();
         $this->extension = new FormatExtension($this->translator);
 

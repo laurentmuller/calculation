@@ -56,7 +56,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Flushes all changes to objects that have been queued up to now to the database.
+     * Flushes all changes to the database.
      */
     public function flush(): void
     {
@@ -172,7 +172,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Gets the name of the single id field. Note that this only works on
      * entity classes that have a single-field primary key.
      *
-     * @throws \Doctrine\ORM\Mapping\MappingException if the class doesn't have an identifier or it has a composite primary key
+     * @throws \Doctrine\ORM\Mapping\MappingException if the class doesn't have an identifier, or it has a composite primary key
      */
     public function getSingleIdentifierFieldName(): string
     {

@@ -27,15 +27,12 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class CalculationGroupType extends AbstractEntityType
 {
-    private GroupTransformer $transformer;
-
     /**
      * Constructor.
      */
-    public function __construct(GroupTransformer $transformer)
+    public function __construct(private GroupTransformer $transformer)
     {
         parent::__construct(CalculationGroup::class);
-        $this->transformer = $transformer;
     }
 
     /**

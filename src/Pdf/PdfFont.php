@@ -19,7 +19,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PdfFont implements PdfDocumentUpdaterInterface
+class PdfFont implements PdfDocumentUpdaterInterface, \Stringable
 {
     /**
      * The default font name (Arial).
@@ -115,7 +115,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
             ->setSize($size);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $name = Utils::getShortName($this);
         $style = $this->getTextStyle();

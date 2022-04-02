@@ -75,7 +75,7 @@ class TranslatorFactory
     public function find(string $class): ?TranslatorServiceInterface
     {
         foreach ($this->translators as $translator) {
-            if ($class === \get_class($translator)) {
+            if ($class === $translator::class) {
                 return $translator;
             }
         }

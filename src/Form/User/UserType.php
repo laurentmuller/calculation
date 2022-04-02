@@ -30,17 +30,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class UserType extends AbstractEntityType
 {
-    private DateTimeFormatter $formatter;
-    private UserPasswordHasherInterface $hasher;
-
     /**
      * Constructor.
      */
-    public function __construct(UserPasswordHasherInterface $hasher, DateTimeFormatter $formatter)
+    public function __construct(private UserPasswordHasherInterface $hasher, private DateTimeFormatter $formatter)
     {
         parent::__construct(User::class);
-        $this->hasher = $hasher;
-        $this->formatter = $formatter;
     }
 
     /**
@@ -114,7 +109,9 @@ class UserType extends AbstractEntityType
             ->add(EnabledDisabledType::class);
 
         $helper->field('lastLogin')
-            ->updateOption('transformer', [$this, 'formatLastLogin'])
+            ->updateOption('transformer', function (\DateTimeInterface|string $lastLogin): ?string {
+                return $this->formatLastLogin($lastLogin);
+            })
             ->updateOption('empty_value', 'common.value_none')
             ->addPlainType(true);
 

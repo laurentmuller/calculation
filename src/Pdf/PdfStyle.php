@@ -15,13 +15,13 @@ namespace App\Pdf;
 use App\Util\Utils;
 
 /**
- * This class describe a style that can be apply to a PDF document.
+ * This class describe a style that can be applied to a PDF document.
  *
  * @author Laurent Muller
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class PdfStyle implements PdfDocumentUpdaterInterface
+class PdfStyle implements PdfDocumentUpdaterInterface, \Stringable
 {
     use PdfBorderTrait;
 

@@ -39,12 +39,12 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     use PdfCellListenerTrait;
 
     /**
-     * The border line width.
+     * The borderline width.
      */
     private const FULL_WIDTH = 0.5;
 
     /**
-     * The half border line width.
+     * The half borderline width.
      */
     private const HALF_WIDTH = 0.25;
 
@@ -205,27 +205,13 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     private function getColor(string $level): ?PdfDrawColor
     {
         if (!\array_key_exists($level, $this->colors)) {
-            switch ($level) {
-                case 'warning':
-                    $this->colors[$level] = PdfDrawColor::create('#ffc107');
-                    break;
-                case 'error':
-                case 'critical':
-                case 'alert':
-                case 'emergency':
-                    $this->colors[$level] = PdfDrawColor::create('#dc3545');
-                    break;
-                case 'debug':
-                    $this->colors[$level] = PdfDrawColor::create('#007bff');
-                    break;
-                case 'info':
-                case 'notice':
-                    $this->colors[$level] = PdfDrawColor::create('#17a2b8');
-                    break;
-                default:
-                    $this->colors[$level] = null;
-                    break;
-            }
+            $this->colors[$level] = match ($level) {
+                'warning' => PdfDrawColor::create('#ffc107'),
+                'error', 'critical', 'alert', 'emergency' => PdfDrawColor::create('#dc3545'),
+                'debug' => PdfDrawColor::create('#007bff'),
+                'info', 'notice' => PdfDrawColor::create('#17a2b8'),
+                default => null,
+            };
         }
 
         return $this->colors[$level];

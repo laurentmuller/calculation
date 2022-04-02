@@ -416,7 +416,7 @@ class SwissPostUpdater
     private function processStreet(array $data): void
     {
         if ($this->validateLength($data, 6) && null !== $this->database && $this->database->insertStreet([
-                $data[2],                         // city Id
+                $data[2],                         // city identifier
                 \ucfirst($this->clean($data[6])), // street name
         ])) {
             $this->results->addValidStreets();

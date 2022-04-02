@@ -90,17 +90,11 @@ class ThemeService
 
     private static ?Theme $defaultTheme = null;
 
-    private string $projectDir;
-
-    private RequestStack $stack;
-
     /**
      * Constructor.
      */
-    public function __construct(RequestStack $stack, CacheItemPoolInterface $adapter, string $projectDir, bool $isDebug)
+    public function __construct(private RequestStack $stack, CacheItemPoolInterface $adapter, private string $projectDir, bool $isDebug)
     {
-        $this->stack = $stack;
-        $this->projectDir = $projectDir;
         if (!$isDebug) {
             $this->setAdapter($adapter);
         }

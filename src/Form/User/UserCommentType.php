@@ -26,14 +26,11 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class UserCommentType extends AbstractType
 {
-    private AddressTransformer $transformer;
-
     /**
      * Constructor.
      */
-    public function __construct(AddressTransformer $transformer)
+    public function __construct(private AddressTransformer $transformer)
     {
-        $this->transformer = $transformer;
     }
 
     /**

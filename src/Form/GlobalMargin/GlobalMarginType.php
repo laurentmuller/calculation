@@ -29,17 +29,11 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class GlobalMarginType extends AbstractMarginType
 {
     /**
-     * The entity manager to check overlap.
-     */
-    private GlobalMarginRepository $repository;
-
-    /**
      * Constructor.
      */
-    public function __construct(GlobalMarginRepository $repository)
+    public function __construct(private GlobalMarginRepository $repository)
     {
         parent::__construct(GlobalMargin::class);
-        $this->repository = $repository;
     }
 
     /**

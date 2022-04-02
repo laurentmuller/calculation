@@ -209,15 +209,13 @@ class LogService
     /**
      * Gets the entries.
      *
-     * @return bool|array
-     *
-     * @psalm-return bool|array{
+     * @psalm-return array{
      *      file: string, logs:
      *      array<int, Log>,
      *      levels: array<string, int>,
-     *      channels: array<string, int>}
+     *      channels: array<string, int>}|false
      */
-    public function getEntries()
+    public function getEntries(): array|false
     {
         if ($entries = $this->getCachedValues()) {
             return $entries;
@@ -300,13 +298,13 @@ class LogService
     /**
      * Gets the cached values.
      *
-     * @return bool|array{
+     * @return array{
      *      file: string,
      *      logs: array<int, Log>,
      *      levels: array<string, int>,
-     *      channels: array<string, int>}
+     *      channels: array<string, int>}|false
      */
-    private function getCachedValues()
+    private function getCachedValues(): array|false
     {
         /** @psalm-var array{
          *      file: string,
@@ -415,13 +413,13 @@ class LogService
      *
      * @return array|bool an array with the file, logs, the levels and the channels; <code>false</code> if an error occurs or if the file is empty
      *
-     * @psalm-return bool|array{
+     * @psalm-return array{
      *      file: string,
      *      logs: array<int, Log>,
      *      levels: array<string, int>,
-     *      channels: array<string, int>}
+     *      channels: array<string, int>}|false
      */
-    private function readFile()
+    private function readFile(): array|false
     {
         // check file
         if (!$this->isFileValid()) {
@@ -472,7 +470,7 @@ class LogService
                 $this->increment($levels, $level);
                 $this->increment($channels, $channel);
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         } finally {
             if (\is_resource($handle)) {

@@ -26,14 +26,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CaptchaImageType extends AbstractType
 {
-    private UrlGeneratorInterface $generator;
-
     /**
      * Constructor.
      */
-    public function __construct(UrlGeneratorInterface $generator)
+    public function __construct(private UrlGeneratorInterface $generator)
     {
-        $this->generator = $generator;
     }
 
     /**

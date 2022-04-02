@@ -50,20 +50,12 @@ abstract class AbstractEntityController extends AbstractController
     protected string $lowerName;
 
     /**
-     * The repository.
-     *
-     * @psalm-var AbstractRepository<T>
-     */
-    protected AbstractRepository $repository;
-
-    /**
      * Constructor.
      *
      * @psalm-param AbstractRepository<T> $repository
      */
-    public function __construct(AbstractRepository $repository)
+    public function __construct(protected AbstractRepository $repository)
     {
-        $this->repository = $repository;
         $this->className = $repository->getClassName();
         $this->lowerName = \strtolower(Utils::getShortName($this->className));
     }

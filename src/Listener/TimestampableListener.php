@@ -72,7 +72,7 @@ class TimestampableListener implements DisableListenerInterface
                 $em->persist($entity);
 
                 // recompute
-                $class_name = \get_class($entity);
+                $class_name = $entity::class;
                 $metadata = $em->getClassMetadata($class_name);
                 $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
             }
@@ -86,7 +86,7 @@ class TimestampableListener implements DisableListenerInterface
      */
     protected function getEntities(UnitOfWork $unitOfWork): array
     {
-        /** @var array $entities */
+        /** @var AbstractEntity[] $entities */
         $entities = [
             ...$unitOfWork->getScheduledEntityInsertions(),
             ...$unitOfWork->getScheduledEntityUpdates(),

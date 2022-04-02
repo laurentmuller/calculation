@@ -126,7 +126,7 @@ class ProductUpdateQuery
     }
 
     /**
-     * Returns a value indicating if all products of the selected catagory must be updated.
+     * Returns a value indicating if all products of the selected category must be updated.
      */
     public function isAllProducts(): bool
     {
@@ -242,12 +242,10 @@ class ProductUpdateQuery
      */
     public function setType(string $type): self
     {
-        switch ($type) {
-            case self::UPDATE_FIXED:
-            case self::UPDATE_PERCENT:
-                $this->type = $type;
-                break;
-        }
+        $this->type = match ($type) {
+            self::UPDATE_PERCENT, self::UPDATE_FIXED => $type,
+            default => $this->type,
+        };
 
         return $this;
     }

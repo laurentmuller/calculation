@@ -28,14 +28,11 @@ class CategoryTransformer implements DataTransformerInterface
 {
     use TranslatorTrait;
 
-    private CategoryRepository $repository;
-
     /**
      * Constructor.
      */
-    public function __construct(CategoryRepository $repository, TranslatorInterface $translator)
+    public function __construct(private CategoryRepository $repository, TranslatorInterface $translator)
     {
-        $this->repository = $repository;
         $this->setTranslator($translator);
     }
 

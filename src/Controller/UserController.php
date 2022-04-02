@@ -71,7 +71,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Add an user.
+     * Add a user.
      *
      * @Route("/add", name="user_add")
      * @Breadcrumb({
@@ -115,7 +115,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Edit an user.
+     * Edit a user.
      *
      * @Route("/edit/{id}", name="user_edit", requirements={"id" = "\d+"})
      * @Breadcrumb({
@@ -150,7 +150,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Edit an user's image.
+     * Edit a user's image.
      *
      * @Route("/image/{id}", name="user_image", requirements={"id" = "\d+"})
      * @Breadcrumb({

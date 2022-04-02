@@ -21,7 +21,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeInterface
+class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeInterface, \Stringable
 {
     /**
      * The children.
@@ -456,7 +456,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     }
 
     /**
-     * Returns if this title if defined.
+     * Returns if this title is defined.
      *
      * @return bool true if defined
      */

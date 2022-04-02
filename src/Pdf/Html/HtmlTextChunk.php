@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class HtmlTextChunk extends AbstractHtmlChunk
+class HtmlTextChunk extends AbstractHtmlChunk implements \Stringable
 {
     /**
      * The names of parents to use with multi-cell.

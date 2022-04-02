@@ -19,7 +19,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PdfLine implements PdfDocumentUpdaterInterface
+class PdfLine implements PdfDocumentUpdaterInterface, \Stringable
 {
     /**
      * The default line width (0.2mm).
@@ -27,18 +27,12 @@ class PdfLine implements PdfDocumentUpdaterInterface
     public const DEFAULT_WIDTH = 0.2;
 
     /**
-     * The line width.
-     */
-    protected float $width;
-
-    /**
      * Constructor.
      *
      * @param float $width the line width
      */
-    public function __construct(float $width = self::DEFAULT_WIDTH)
+    public function __construct(protected float $width = self::DEFAULT_WIDTH)
     {
-        $this->width = $width;
     }
 
     public function __toString(): string

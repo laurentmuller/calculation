@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class AbstractPivotAggregator implements \JsonSerializable
+abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
 {
     /**
      * Constructor.

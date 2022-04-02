@@ -58,7 +58,7 @@ class PersistenceListener implements EventSubscriber
     /**
      * The debug mode.
      */
-    private bool $debug;
+    private bool $isDebug;
 
     /**
      * The message title.
@@ -70,7 +70,7 @@ class PersistenceListener implements EventSubscriber
      */
     public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, private string $appName)
     {
-        $this->debug = $kernel->isDebug();
+        $this->isDebug = $kernel->isDebug();
         $this->setTranslator($translator);
         $this->setRequestStack($requestStack);
         $id = \sprintf('environment.%s', $kernel->getEnvironment());
@@ -82,7 +82,7 @@ class PersistenceListener implements EventSubscriber
      */
     public function getSubscribedEvents(): array
     {
-        if ($this->debug) {
+        if ($this->isDebug) {
             return [
                 Events::postUpdate,
                 Events::postPersist,
@@ -149,7 +149,7 @@ class PersistenceListener implements EventSubscriber
     {
         /** @var AbstractEntity $entity */
         $entity = $args->getObject();
-        if (\in_array(\get_class($entity), self::CLASS_NAMES, true)) {
+        if (\in_array($entity::class, self::CLASS_NAMES, true)) {
             return $entity;
         }
 

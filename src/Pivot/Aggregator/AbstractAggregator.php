@@ -21,7 +21,7 @@ use App\Util\Utils;
  *
  * @psalm-consistent-constructor
  */
-abstract class AbstractAggregator implements \JsonSerializable
+abstract class AbstractAggregator implements \JsonSerializable, \Stringable
 {
     /**
      *  Constructor.

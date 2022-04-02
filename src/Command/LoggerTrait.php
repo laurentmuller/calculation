@@ -37,7 +37,7 @@ trait LoggerTrait
      *
      * @param string $message the message to output
      *
-     * @return string the concated message
+     * @return string the concat message
      */
     protected function concat(string $message): string
     {

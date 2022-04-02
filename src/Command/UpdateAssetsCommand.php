@@ -142,7 +142,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
             // check loaded files
             $expected = \array_reduce($plugins, function (int $carry, \stdClass $plugin) {
-                if (\property_exists($plugin, 'disabled') && null !== $plugin->disabled && $plugin->disabled) {
+                if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
                     return $carry;
                 }
 
@@ -238,7 +238,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @param string $sourceFile the source file
      * @param string $targetFile the target file
-     * @param array  $prefixes   the prefixes where each key is the file extension and the value is the text to preprend
+     * @param array  $prefixes   the prefixes where each key is the file extension and the value is the text to prepend
      * @param array  $suffixes   the suffixes where each key is the file extension and the value is the text to append
      * @param array  $renames    the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
      *
@@ -325,7 +325,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @param string $content    the content of the file
      * @param string $targetFile the file to write to
-     * @param array  $prefixes   the prefixes where each key is the file extension and the value is the text to preprend
+     * @param array  $prefixes   the prefixes where each key is the file extension and the value is the text to prepend
      * @param array  $suffixes   the suffixes where each key is the file extension and the value is the text to append
      * @param array  $renames    the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
      *
@@ -382,9 +382,9 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param string   $style   the style to search in
      * @param string[] $entries the style entries to search for
      *
-     * @return string[]|bool the style entries, if found; false otherwise
+     * @return string[]|false the style entries, if found; false otherwise
      */
-    private function findStyleEntries(string $style, array $entries)
+    private function findStyleEntries(string $style, array $entries): array|false
     {
         /** @var string[] $result */
         $result = [];
@@ -497,7 +497,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @param \stdClass $configuration the vendor configuration
      * @param string    $targetDir     the target directory
-     * @param array     $prefixes      the prefixes where each key is the file extension and the value is the text to preprend
+     * @param array     $prefixes      the prefixes where each key is the file extension and the value is the text to prepend
      * @param array     $suffixes      the suffixes where each key is the file extension and the value is the text to append
      * @param array     $renames       the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
      *

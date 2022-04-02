@@ -32,7 +32,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
     use MathTrait;
 
     /**
-     * The entities offset. This offsets are used to read/write rights.
+     * The entities offset. These offsets are used to read/write rights.
      */
     public const ENTITY_OFFSETS = [
         self::ENTITY_CALCULATION => 0,
@@ -52,7 +52,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
     public const INVALID_VALUE = -1;
 
     /**
-     * The attributes bit masks. This attributes are used to read or write bit set permissions.
+     * The attributes bit masks. These attributes are used to read or write bit set permissions.
      */
     public const MASK_ATTRIBUTES = [
         self::ATTRIBUTE_ADD => 1,
@@ -109,7 +109,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         if (\is_string($subject)) {
             $name = $subject;
         } elseif (\is_object($subject)) {
-            $name = \get_class($subject);
+            $name = $subject::class;
         } else {
             $name = (string) $subject;
         }

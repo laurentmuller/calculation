@@ -26,7 +26,7 @@ use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controller for application informations.
+ * Controller for application information.
  *
  * @author Laurent Muller
  *

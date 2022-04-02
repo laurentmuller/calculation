@@ -22,7 +22,7 @@ use App\Util\Utils;
  *
  * @psalm-consistent-constructor
  */
-class Month extends AbstractCalendarItem
+class Month extends AbstractCalendarItem implements \Stringable
 {
     use DaysTrait;
 
@@ -130,8 +130,7 @@ class Month extends AbstractCalendarItem
     {
         $today = $this->getToday();
 
-        return $this->getYear() === $today->getYear()
-            && $this->getNumber() === $today->getMonth();
+        return $this->getYear() === $today->getYear() && $this->getNumber() === $today->getMonth();
     }
 
     /**
@@ -147,9 +146,8 @@ class Month extends AbstractCalendarItem
         $number = $week->getNumber();
         $year = $week->getYear();
 
-        foreach ($weeks as /* @var Week $current */ $current) {
-            if ($year === $current->getYear()
-                && $number === $current->getNumber()) {
+        foreach ($weeks as $current) {
+            if ($year === $current->getYear() && $number === $current->getNumber()) {
                 return true;
             }
         }

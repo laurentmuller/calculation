@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * The log controler.
+ * The log controller.
  *
  * @author Laurent Muller
  *
@@ -134,7 +134,7 @@ class LogController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $doc = new LogsDocument($this, (array) $entries);
+        $doc = new LogsDocument($this, $entries);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -153,7 +153,7 @@ class LogController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $doc = new LogReport($this, (array) $entries);
+        $doc = new LogReport($this, $entries);
 
         return $this->renderPdfDocument($doc);
     }

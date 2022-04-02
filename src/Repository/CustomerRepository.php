@@ -78,14 +78,11 @@ class CustomerRepository extends AbstractRepository
      */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
-        switch ($field) {
-            case self::NAME_COMPANY_FIELD:
-                return $this->addPrefixes($alias, self::NAME_COMPANY_FIELDS);
-            case self::ZIP_CITY_FIELD:
-                return $this->addPrefixes($alias, self::ZIP_CITY_FIELDS);
-            default:
-                return parent::getSearchFields($field, $alias);
-        }
+        return match ($field) {
+            self::NAME_COMPANY_FIELD => $this->addPrefixes($alias, self::NAME_COMPANY_FIELDS),
+            self::ZIP_CITY_FIELD => $this->addPrefixes($alias, self::ZIP_CITY_FIELDS),
+            default => parent::getSearchFields($field, $alias),
+        };
     }
 
     /**
@@ -93,13 +90,10 @@ class CustomerRepository extends AbstractRepository
      */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
-        switch ($field) {
-            case self::NAME_COMPANY_FIELD:
-                return $this->concat($alias, self::NAME_COMPANY_FIELDS);
-            case self::ZIP_CITY_FIELD:
-                return $this->concat($alias, self::ZIP_CITY_FIELDS);
-            default:
-                return parent::getSortField($field, $alias);
-        }
+        return match ($field) {
+            self::NAME_COMPANY_FIELD => $this->concat($alias, self::NAME_COMPANY_FIELDS),
+            self::ZIP_CITY_FIELD => $this->concat($alias, self::ZIP_CITY_FIELDS),
+            default => parent::getSortField($field, $alias),
+        };
     }
 }

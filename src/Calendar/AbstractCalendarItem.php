@@ -19,7 +19,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class AbstractCalendarItem implements \JsonSerializable
+abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
 {
     /**
      * Constructor.

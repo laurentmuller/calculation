@@ -52,7 +52,7 @@ final class CalculationListener extends TimestampableListener
         }
 
         // exclude deleted and inserted calculations
-        /** @var array $entities */
+        /** @var AbstractEntity[] $entities */
         $entities = [
             ...$unitOfWork->getScheduledEntityDeletions(),
             ...$unitOfWork->getScheduledEntityInsertions(),

@@ -26,12 +26,12 @@ use Symfony\Component\Finder\SplFileInfo;
 class CompileAssetsCommand extends AbstractAssetsCommand
 {
     /**
-     * The assets configuration file name.
+     * The asset configuration file name.
      */
     private const ASSETS_FILE_NAME = 'assets.json';
 
     /**
-     * The cleancss arguments.
+     * The clean css arguments.
      */
     private string $cleanCssArgs = '--compatibility ie9 -O2';
 
@@ -105,7 +105,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             $this->writeVerbose("UglifyJs arguments: $uglifyJsArgs");
         }
 
-        // cleancss arguments
+        // clean css arguments
         if ($this->propertyExists($configuration, 'css_args') && !empty($cleanCssArgs = \trim((string) $configuration->css_args))) {
             $this->cleanCssArgs = $cleanCssArgs;
             $this->writeVerbose("CleanCss arguments: $cleanCssArgs");
@@ -117,7 +117,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             $this->uglifyJsBinary = null;
         }
 
-        // check cssclean
+        // check css clean
         if ($error = $this->checkCssClean()) {
             $this->writeError($error);
             $this->cleanCssBinary = null;
@@ -193,7 +193,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * Checks if the uglify JS binary exists.
+     * Checks if uglify JS binary exists.
      */
     private function checkUglifyJs(): ?string
     {

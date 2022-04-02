@@ -26,12 +26,10 @@ use App\Pdf\PdfTextColor;
  */
 class PhpIniReport extends AbstractReport
 {
-    private array $content;
-
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, array $content, string $version)
+    public function __construct(AbstractController $controller, private array $content, string $version)
     {
         parent::__construct($controller);
         if ($description = \php_ini_loaded_file()) {
@@ -42,7 +40,6 @@ class PhpIniReport extends AbstractReport
             $title .= ' ' . $version;
         }
         $this->SetTitle($title);
-        $this->content = $content;
     }
 
     /**

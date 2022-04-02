@@ -50,7 +50,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
         $resolver->setDefined('maxsizetotal')
             ->setAllowedTypes('maxsizetotal', ['integer', 'string']);
 
-        // the place holder
+        // the placeholder
         $resolver->setDefined('placeholder')
             ->setAllowedTypes('placeholder', ['null', 'string'])
             ->setDefault('placeholder', 'filetype.placeholder');

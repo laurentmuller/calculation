@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
+use App\Interfaces\RoleInterface;
 use App\Service\UrlGeneratorService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
@@ -196,9 +197,15 @@ final class FunctionExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('trans_role', [$this, 'translateRole']),
-            new TwigFilter('var_export', [Utils::class, 'exportVar']),
-            new TwigFilter('normalize_whitespace', [$this, 'normalizeWhitespace'], ['preserves_safety' => ['html']]),
+            new TwigFilter('trans_role', function (RoleInterface|string $role): string {
+                return $this->translateRole($role);
+            }),
+            new TwigFilter('var_export', function (mixed $expression): ?string {
+                return Utils::exportVar($expression);
+            }),
+            new TwigFilter('normalize_whitespace', function (string $value): string {
+                return $this->normalizeWhitespace($value);
+            }, ['preserves_safety' => ['html']]),
         ];
     }
 
@@ -214,20 +221,38 @@ final class FunctionExtension extends AbstractExtension
 
         return [
             // assets
-            new TwigFunction('asset_exists', [$this, 'assetExists']),
-            new TwigFunction('file_exists', [$this, 'fileExists']),
+            new TwigFunction('asset_exists', function (?string $path): bool {
+                return $this->assetExists($path);
+            }),
+            new TwigFunction('file_exists', function (?string $filename): bool {
+                return $this->fileExists($filename);
+            }),
 
-            new TwigFunction('asset_if', [$this, 'assetIf']),
-            new TwigFunction('asset_js', [$this, 'getAssetJs'], $assetOptions),
-            new TwigFunction('asset_css', [$this, 'getAssetCss'], $assetOptions),
+            new TwigFunction('asset_if', function (?string $path = null, ?string $default = null): ?string {
+                return $this->assetIf($path, $default);
+            }),
+            new TwigFunction('asset_js', function (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string {
+                return $this->getAssetJs($env, $path, $parameters, $packageName);
+            }, $assetOptions),
+            new TwigFunction('asset_css', function (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string {
+                return $this->getAssetCss($env, $path, $parameters, $packageName);
+            }, $assetOptions),
 
             // images
-            new TwigFunction('image_height', [$this, 'getImageHeight']),
-            new TwigFunction('image_width', [$this, 'getImageWidth']),
+            new TwigFunction('image_height', function (string $path): int {
+                return $this->getImageHeight($path);
+            }),
+            new TwigFunction('image_width', function (string $path): int {
+                return $this->getImageWidth($path);
+            }),
 
             // routes
-            new TwigFunction('cancel_url', [$this, 'cancelUrl']),
-            new TwigFunction('route_params', [$this, 'routeParams']),
+            new TwigFunction('cancel_url', function (Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string {
+                return $this->cancelUrl($request, $id, $defaultRoute);
+            }),
+            new TwigFunction('route_params', function (Request $request, int $id = 0): array {
+                return $this->routeParams($request, $id);
+            }),
 
             // php
             new TwigFunction('is_int', 'is_int'),

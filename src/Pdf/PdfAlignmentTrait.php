@@ -77,24 +77,13 @@ trait PdfAlignmentTrait
      */
     protected function getAlignmentText(): string
     {
-        $result = 'Left';
-        switch ($this->alignment) {
-            case PdfConstantsInterface::ALIGN_RIGHT:
-                $result = 'Right';
-                break;
-
-            case PdfConstantsInterface::ALIGN_CENTER:
-                $result = 'Center';
-                break;
-
-            case PdfConstantsInterface::ALIGN_INHERITED:
-                $result = 'Inherited';
-                break;
-
-            case PdfConstantsInterface::ALIGN_JUSTIFIED:
-                $result = 'Justified';
-                break;
-        }
+        $result = match ($this->alignment) {
+            PdfConstantsInterface::ALIGN_RIGHT => 'Right',
+            PdfConstantsInterface::ALIGN_CENTER => 'Center',
+            PdfConstantsInterface::ALIGN_INHERITED => 'Inherited',
+            PdfConstantsInterface::ALIGN_JUSTIFIED => 'Justified',
+            default => 'Left',
+        };
 
         return 'PdfAlignment(' . $result . ')';
     }
@@ -108,15 +97,9 @@ trait PdfAlignmentTrait
      */
     protected function validateAlignment(?string $alignment): string
     {
-        switch ($alignment) {
-            case PdfConstantsInterface::ALIGN_LEFT:
-            case PdfConstantsInterface::ALIGN_RIGHT:
-            case PdfConstantsInterface::ALIGN_CENTER:
-            case PdfConstantsInterface::ALIGN_INHERITED:
-            case PdfConstantsInterface::ALIGN_JUSTIFIED:
-                return $alignment;
-            default:
-                return PdfConstantsInterface::ALIGN_LEFT;
-        }
+        return match ($alignment) {
+            PdfConstantsInterface::ALIGN_LEFT, PdfConstantsInterface::ALIGN_RIGHT, PdfConstantsInterface::ALIGN_CENTER, PdfConstantsInterface::ALIGN_INHERITED, PdfConstantsInterface::ALIGN_JUSTIFIED => $alignment,
+            default => PdfConstantsInterface::ALIGN_LEFT,
+        };
     }
 }

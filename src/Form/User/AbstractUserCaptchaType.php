@@ -33,16 +33,10 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
     protected bool $displayCaptcha;
 
     /**
-     * The service.
-     */
-    protected CaptchaImageService $service;
-
-    /**
      * Constructor.
      */
-    public function __construct(CaptchaImageService $service, ApplicationService $application)
+    public function __construct(protected CaptchaImageService $service, ApplicationService $application)
     {
-        $this->service = $service;
         $this->displayCaptcha = $application->isDisplayCaptcha();
     }
 

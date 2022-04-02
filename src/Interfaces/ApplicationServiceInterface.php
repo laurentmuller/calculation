@@ -47,7 +47,7 @@ interface ApplicationServiceInterface
     public const DEFAULT_PANEL_CALCULATION = 10;
 
     /**
-     * The default position of the flashbag messages (string).
+     * The default position of the flash bag messages (string).
      */
     public const DEFAULT_POSITION = 'bottom-right';
 
@@ -72,7 +72,7 @@ interface ApplicationServiceInterface
     public const DEFAULT_SUB_TITLE = false;
 
     /**
-     * The default timeout of the flashbag messages (integer).
+     * The default timeout of the flash bag messages (integer).
      */
     public const DEFAULT_TIMEOUT = 4000;
 
@@ -107,7 +107,7 @@ interface ApplicationServiceInterface
     public const P_CUSTOMER_PHONE = 'customer_phone';
 
     /**
-     * The property name for the customer web site (string).
+     * The property name for the customer website (string).
      */
     public const P_CUSTOMER_URL = 'customer_url';
 
@@ -155,7 +155,7 @@ interface ApplicationServiceInterface
      * <ul>
      * <li>'<code>table</code>': Show values within a table (default).</li>
      * <li>'<code>custom</code>': Show values as cards.</li>
-     * <li>'<code>card</code>': Show detailled values.</li>
+     * <li>'<code>card</code>': Show detailed values.</li>
      * </ul>
      * </p>.
      */
@@ -186,17 +186,17 @@ interface ApplicationServiceInterface
     public const P_LIST_LENGTH = 'list-length';
 
     /**
-     * The property name for the position (default = 'bottom-right') of the flashbag messages (string).
+     * The property name for the position (default = 'bottom-right') of the flash bag messages (string).
      */
     public const P_MESSAGE_POSITION = 'message_position';
 
     /**
-     * The property name for displaying sub-title (default = true) of the flashbag messages (boolean).
+     * The property name for displaying subtitle (default = true) of the flash bag messages (boolean).
      */
     public const P_MESSAGE_SUB_TITLE = 'message_sub_title';
 
     /**
-     * The property name for the timeout (default = 4000 ms) of the flashbag messages in milliseconds (int).
+     * The property name for the timeout (default = 4000 ms) of the flash bag messages in milliseconds (int).
      */
     public const P_MESSAGE_TIMEOUT = 'message_timeout';
 

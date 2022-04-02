@@ -70,7 +70,7 @@ class ResponseListener implements EventSubscriberInterface
     private const GOOGLE_FRAME_URL = 'https://www.google.com';
 
     /**
-     * The Iconify icons url.
+     * The iconify icons url.
      */
     private const ICONIFY_URL = 'https://api.iconify.design';
 
@@ -121,7 +121,7 @@ class ResponseListener implements EventSubscriberInterface
      */
     public function onKernelResponse(ResponseEvent $event): void
     {
-        // master request?
+        // master request ?
         if (!$event->isMainRequest()) {
             return;
         }
@@ -131,7 +131,7 @@ class ResponseListener implements EventSubscriberInterface
         $response = $event->getResponse();
         $headers = $response->headers;
 
-        // developement firewall?
+        // development firewall ?
         if ($this->isDebug && $this->isDevFirewall($request)) {
             return;
         }

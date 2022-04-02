@@ -34,11 +34,6 @@ class CalculationsReport extends AbstractArrayReport
     use MathTrait;
 
     /**
-     * Set if the calculations are grouped by state.
-     */
-    protected bool $grouped = false;
-
-    /**
      * The minimum margin style.
      */
     protected ?PdfStyle $marginStyle = null;
@@ -55,11 +50,10 @@ class CalculationsReport extends AbstractArrayReport
      * @param Calculation[]      $entities   the calculations to render
      * @param bool               $grouped    true if calculations are grouped by state
      */
-    public function __construct(AbstractController $controller, array $entities, bool $grouped = true)
+    public function __construct(AbstractController $controller, array $entities, protected bool $grouped = true)
     {
         parent::__construct($controller, $entities, self::ORIENTATION_LANDSCAPE);
         $this->minMargin = $controller->getApplication()->getMinMargin();
-        $this->grouped = $grouped;
     }
 
     /**

@@ -13,18 +13,18 @@ declare(strict_types=1);
 namespace App\Util;
 
 /**
- * Utility class to get PHP informations.
+ * Utility class to get PHP information.
  *
  * @author Laurent Muller
  */
 final class PhpInfo
 {
     /**
-     * Gets PHP informations as array.
+     * Gets PHP information as array.
      * Note:
      * <ul>
      * <li>'yes', 'enabled', 1 and 'on' values are converted to boolean true.</li>
-     * <li>'no', 'disabled', 0 and'off' values are converted to boolean false.</li>
+     * <li>'no', 'disabled', 0 and 'off' values are converted to boolean false.</li>
      * <li>if applicable values are converted to integer or float.</li>
      * </ul>
      * In all other case, values are returned as string.
@@ -87,7 +87,7 @@ final class PhpInfo
     }
 
     /**
-     * Gets PHP informations as HTML.
+     * Gets PHP information as HTML.
      *
      * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
      *                  together in the optional what parameter.
@@ -115,7 +115,7 @@ final class PhpInfo
     }
 
     /**
-     * Gets PHP informations as text (raw data).
+     * Gets PHP information as text (raw data).
      *
      * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
      *                  together in the optional what parameter.

@@ -71,7 +71,7 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     abstract protected function getQuestion(string $word, int $letterIndex): string;
 
     /**
-     * Gets a random word from the dictionnary service.
+     * Gets a random word from the dictionary service.
      */
     protected function getRandomWord(): string
     {

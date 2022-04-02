@@ -25,7 +25,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @author Laurent Muller
  */
-class Column implements SortModeInterface
+class Column implements SortModeInterface, \Stringable
 {
     /**
      * The property name of the field formatter.
@@ -370,12 +370,10 @@ class Column implements SortModeInterface
     public function setOrder(string $order): self
     {
         $order = \strtolower($order);
-        switch ($order) {
-            case self::SORT_ASC:
-            case self::SORT_DESC:
-                $this->order = $order;
-            break;
-        }
+        $this->order = match ($order) {
+            self::SORT_ASC, self::SORT_DESC => $order,
+            default => $this->order,
+        };
 
         return $this;
     }

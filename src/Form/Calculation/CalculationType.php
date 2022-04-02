@@ -60,7 +60,7 @@ class CalculationType extends AbstractEntityType
         $helper->field('state')
             ->addCalculationStateListType();
 
-        // groups
+        // groupes
         $helper->field('groups')
             ->updateOption('prototype_name', '__groupIndex__')
             ->addCollectionType(CalculationGroupType::class);

@@ -51,17 +51,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CalculationController extends AbstractEntityController
 {
-    private CalculationService $service;
-    private TaskRepository $taskRepository;
-
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, CalculationService $service, TaskRepository $taskRepository)
+    public function __construct(CalculationRepository $repository, private CalculationService $service, private TaskRepository $taskRepository)
     {
         parent::__construct($repository);
-        $this->service = $service;
-        $this->taskRepository = $taskRepository;
     }
 
     /**

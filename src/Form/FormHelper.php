@@ -60,11 +60,6 @@ class FormHelper
     private array $attributes = [];
 
     /**
-     * The parent builder.
-     */
-    private FormBuilderInterface $builder;
-
-    /**
      * The field identifier.
      */
     private ?string $field = null;
@@ -110,9 +105,8 @@ class FormHelper
      *                                          the label is automatically added when the field property is
      *                                          set.
      */
-    public function __construct(FormBuilderInterface $builder, ?string $labelPrefix = null)
+    public function __construct(private FormBuilderInterface $builder, ?string $labelPrefix = null)
     {
-        $this->builder = $builder;
         $this->labelPrefix = empty($labelPrefix) ? null : $labelPrefix;
     }
 
@@ -588,7 +582,7 @@ class FormHelper
     }
 
     /**
-     * Creates the form within the underlaying form builder.
+     * Creates the form within the underlying form builder.
      *
      * @return FormInterface the form
      *

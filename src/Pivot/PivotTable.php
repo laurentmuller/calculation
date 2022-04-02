@@ -70,13 +70,6 @@ class PivotTable extends AbstractPivotAggregator
     private array $rowFields = [];
 
     /**
-     * The title.
-     *
-     * @var string
-     */
-    private ?string $title;
-
-    /**
      * The total title.
      *
      * @var string
@@ -89,13 +82,12 @@ class PivotTable extends AbstractPivotAggregator
      * @param AbstractAggregator $aggregator the aggregator function
      * @param string|null        $title      the table title
      */
-    public function __construct(protected AbstractAggregator $aggregator, ?string $title = null)
+    public function __construct(protected AbstractAggregator $aggregator, private ?string $title = null)
     {
         parent::__construct($aggregator);
 
         $this->rootCol = new PivotNode(clone $aggregator);
         $this->rootRow = new PivotNode(clone $aggregator);
-        $this->title = $title;
     }
 
     /**

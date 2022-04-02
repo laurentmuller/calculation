@@ -121,7 +121,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * Returns 5 day / 3 hour forecast conditions data for a specific location.
+     * Returns 5 days / 3 hours forecast conditions data for a specific location.
      *
      * @Route("/api/forecast", name="openweather_api_forecast")
      */
@@ -321,7 +321,7 @@ class OpenWeatherController extends AbstractController
                     if (!FileUtils::rename($temp_name, $target, true)) {
                         return $this->renderErrorResult('openweather.error.move_database');
                     }
-                } catch (IOException $e) {
+                } catch (IOException) {
                     return $this->renderErrorResult('openweather.error.move_database');
                 }
 

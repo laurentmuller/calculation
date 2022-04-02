@@ -24,13 +24,6 @@ use App\Controller\AbstractController;
 abstract class AbstractArrayReport extends AbstractReport
 {
     /**
-     * The entities to output.
-     *
-     * @pslam-var T[]
-     */
-    protected array $entities;
-
-    /**
      * Constructor.
      *
      * @param AbstractController $controller  the parent controller
@@ -38,10 +31,9 @@ abstract class AbstractArrayReport extends AbstractReport
      * @param string             $orientation the page orientation. One of the ORIENTATION_XX contents.
      * @psalm-param T[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, string $orientation = self::ORIENTATION_PORTRAIT)
+    public function __construct(AbstractController $controller, protected array $entities, string $orientation = self::ORIENTATION_PORTRAIT)
     {
         parent::__construct($controller, $orientation);
-        $this->entities = $entities;
     }
 
     /**

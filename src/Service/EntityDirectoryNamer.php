@@ -46,7 +46,7 @@ class EntityDirectoryNamer implements DirectoryNamerInterface
 
     private function getIdentifier(object $object): string
     {
-        $className = \get_class($object);
+        $className = $object::class;
         $identifiers = $this->manager->getClassMetadata($className)
             ->getIdentifierValues($object);
         $identifier = (string) \reset($identifiers);
@@ -56,7 +56,7 @@ class EntityDirectoryNamer implements DirectoryNamerInterface
 
     private function getShortClassName(object $object): string
     {
-        $className = \get_class($object);
+        $className = $object::class;
         $classParts = \explode('\\', $className);
         $firstPart = \array_pop($classParts);
 

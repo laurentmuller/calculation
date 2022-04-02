@@ -42,7 +42,7 @@ class UserProvider extends EntityProvider
     }
 
     /**
-     * Gets a random user name.
+     * Gets a random username.
      */
     public function userName(): ?string
     {

@@ -20,11 +20,11 @@ use App\Report\HtmlReport;
 use App\Util\Utils;
 
 /**
- * Represents a HTML chunk.
+ * Represents an HTML chunk.
  *
  * @author Laurent Muller
  */
-abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstantsInterface
+abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstantsInterface, \Stringable
 {
     /**
      * The class name.

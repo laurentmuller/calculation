@@ -76,7 +76,7 @@ class SimpleEditorType extends AbstractType
 
         try {
             return (array) FileUtils::decodeJson($file);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException) {
             return [];
         }
     }

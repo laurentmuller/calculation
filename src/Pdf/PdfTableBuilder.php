@@ -657,10 +657,10 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @param PdfDocument $parent the parent document
      * @param float       $height the row height
-     * @param string[]    $texts  the cells texts
-     * @param float[]     $widths the cells widths
-     * @param PdfStyle[]  $styles the cells styles
-     * @param string[]    $aligns the cells alignments
+     * @param string[]    $texts  the cells text
+     * @param float[]     $widths the cells width
+     * @param PdfStyle[]  $styles the cells style
+     * @param string[]    $aligns the cells alignment
      * @param PdfCell[]   $cells  the cells
      */
     protected function drawRow(PdfDocument $parent, float $height, array $texts, array $widths, array $styles, array $aligns, array $cells): void

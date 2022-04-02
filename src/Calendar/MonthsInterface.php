@@ -20,47 +20,47 @@ namespace App\Calendar;
 interface MonthsInterface
 {
     /**
-     * Numeric representation of of April.
+     * Numeric representation of April.
      */
     public const APRIL = 4;
 
     /**
-     * Numeric representation of of August.
+     * Numeric representation of August.
      */
     public const AUGUST = 8;
 
     /**
-     * Numeric representation of of December.
+     * Numeric representation of December.
      */
     public const DECEMBER = 12;
 
     /**
-     * Numeric representation of of February.
+     * Numeric representation of February.
      */
     public const FEBRUARY = 2;
 
     /**
-     * Numeric representation of of January.
+     * Numeric representation of January.
      */
     public const JANUARY = 1;
 
     /**
-     * Numeric representation of of July.
+     * Numeric representation of July.
      */
     public const JULY = 7;
 
     /**
-     * Numeric representation of of June.
+     * Numeric representation of June.
      */
     public const JUNE = 6;
 
     /**
-     * Numeric representation of of March.
+     * Numeric representation of March.
      */
     public const MARCH = 3;
 
     /**
-     * Numeric representation of of May.
+     * Numeric representation of May.
      */
     public const MAY = 5;
 
@@ -70,17 +70,17 @@ interface MonthsInterface
     public const MONTHS_COUNT = 12;
 
     /**
-     * Numeric representation of of November.
+     * Numeric representation of November.
      */
     public const NOVEMBER = 11;
 
     /**
-     * Numeric representation of of October.
+     * Numeric representation of October.
      */
     public const OCTOBER = 10;
 
     /**
-     * Numeric representation of of September.
+     * Numeric representation of September.
      */
     public const SEPTEMBER = 9;
 }

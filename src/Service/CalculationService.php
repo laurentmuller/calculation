@@ -166,7 +166,7 @@ final class CalculationService
      */
     public function createGroupsFromData(array $source): array
     {
-        // groups?
+        // groupes?
         if (!$this->isArrayKey($source, 'groups')) {
             return [
                 'result' => true,
@@ -211,7 +211,7 @@ final class CalculationService
                 ];
             }
 
-            // update group
+            // update groupe
             $current = &$groups[$id];
             $amount = (float) $current['amount'] + $value;
             $margin = $this->getGroupMargin($group, $amount);

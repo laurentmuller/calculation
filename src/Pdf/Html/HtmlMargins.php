@@ -19,7 +19,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class HtmlMargins
+class HtmlMargins implements \Stringable
 {
     /**
      * The bottom margin.

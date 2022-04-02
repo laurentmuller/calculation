@@ -23,7 +23,7 @@ use App\Util\Utils;
  *
  * @psalm-consistent-constructor
  */
-class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDaysInterface
+class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDaysInterface, \Stringable
 {
     use DaysTrait;
     use ModelTrait;
@@ -256,7 +256,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     }
 
     /**
-     * Gets months where key is month number (1 - 12).
+     * Gets months when key is month number (1 - 12).
      *
      * @return Month[]
      */
@@ -421,7 +421,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @param array<int, string> $monthNames the month names to set
      *
-     * @throws CalendarException if the array does not contains 12 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contain 12 values, if a key is missing or if one of the values is not a string
      */
     public function setMonthNames(array $monthNames): self
     {
@@ -436,7 +436,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @param array<int, string> $monthShortNames the month short names to set
      *
-     * @throws CalendarException if the array does not contains 12 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contain 12 values, if a key is missing or if one of the values is not a string
      */
     public function setMonthShortNames(array $monthShortNames): self
     {
@@ -451,7 +451,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @param array<int, string> $weekNames the week names to set
      *
-     * @throws CalendarException if the array does not contains 7 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contain 7 values, if a key is missing or if one of the values is not a string
      */
     public function setWeekNames(array $weekNames): self
     {
@@ -466,7 +466,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @param array<int, string> $weekShortNames the week short names to set
      *
-     * @throws CalendarException if the array does not contains 7 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contain 7 values, if a key is missing or if one of the values is not a string
      */
     public function setWeekShortNames(array $weekShortNames): self
     {

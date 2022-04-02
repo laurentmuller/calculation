@@ -20,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Abstrac command for assets.
+ * Abstract command for assets.
  *
  * @author Laurent Muller
  */

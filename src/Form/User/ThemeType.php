@@ -51,14 +51,11 @@ class ThemeType extends AbstractHelperType
         'theme.foreground.light' => 'navbar-light',
     ];
 
-    private ThemeService $service;
-
     /**
      * Constructor.
      */
-    public function __construct(ThemeService $service, TranslatorInterface $translator)
+    public function __construct(private ThemeService $service, TranslatorInterface $translator)
     {
-        $this->service = $service;
         $this->setTranslator($translator);
     }
 

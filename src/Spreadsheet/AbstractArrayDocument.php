@@ -24,23 +24,15 @@ use App\Controller\AbstractController;
 abstract class AbstractArrayDocument extends AbstractDocument
 {
     /**
-     * The entities to output.
-     *
-     * @pslam-var T[]
-     */
-    protected array $entities;
-
-    /**
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
      * @param array              $entities   the entities to render
      * @psalm-param T[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities)
+    public function __construct(AbstractController $controller, protected array $entities)
     {
         parent::__construct($controller);
-        $this->entities = $entities;
     }
 
     /**

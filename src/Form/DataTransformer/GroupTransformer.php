@@ -28,14 +28,11 @@ class GroupTransformer implements DataTransformerInterface
 {
     use TranslatorTrait;
 
-    private GroupRepository $repository;
-
     /**
      * Constructor.
      */
-    public function __construct(GroupRepository $repository, TranslatorInterface $translator)
+    public function __construct(private GroupRepository $repository, TranslatorInterface $translator)
     {
-        $this->repository = $repository;
         $this->setTranslator($translator);
     }
 

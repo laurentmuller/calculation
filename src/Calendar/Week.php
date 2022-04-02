@@ -113,8 +113,7 @@ class Week extends AbstractCalendarItem
     {
         $today = $this->getToday();
 
-        return $this->getYear() === $today->getYear()
-            && $this->getNumber() === $today->getWeek();
+        return $this->getYear() === $today->getYear() && $this->getNumber() === $today->getWeek();
     }
 
     /**
@@ -130,9 +129,8 @@ class Week extends AbstractCalendarItem
         $number = $month->getNumber();
         $year = $month->getYear();
 
-        foreach ($months as /* @var Month $current */ $current) {
-            if ($year === $current->getYear()
-                && $number === $current->getNumber()) {
+        foreach ($months as $current) {
+            if ($year === $current->getYear() && $number === $current->getNumber()) {
                 return true;
             }
         }

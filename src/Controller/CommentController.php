@@ -26,7 +26,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controller to send comments to the web master.
+ * Controller to send comments to the webmaster.
  *
  * @author Laurent Muller
  *

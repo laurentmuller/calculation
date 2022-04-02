@@ -21,7 +21,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PdfCellBorder implements PdfDocumentUpdaterInterface
+class PdfCellBorder implements PdfDocumentUpdaterInterface, \Stringable
 {
     /**
      * The border color.

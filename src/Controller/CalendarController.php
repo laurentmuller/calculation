@@ -248,7 +248,7 @@ class CalendarController extends AbstractController
     /**
      * Gets the next year.
      *
-     * @param int[] $years the availaible years
+     * @param int[] $years the available years
      * @param int   $year  the current year
      *
      * @return int|bool the next year, if found; false otherwise

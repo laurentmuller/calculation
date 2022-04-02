@@ -123,7 +123,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Check if an username or e-mail exist.
+     * Check if a username or e-mail exist.
      *
      * @Route("/checkuser", name="ajax_check_user")
      * @IsGranted("PUBLIC_ACCESS")
@@ -140,7 +140,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Check if an user e-mail already exists.
+     * Check if a user e-mail already exists.
      *
      * @Route("/checkuseremail", name="ajax_check_user_email")
      * @IsGranted("ROLE_USER")
@@ -174,7 +174,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Check if an username already exists.
+     * Check if a username already exists.
      *
      * @Route("/checkusername", name="ajax_check_user_name")
      * @IsGranted("ROLE_USER")
@@ -610,7 +610,7 @@ class AjaxController extends AbstractController
      * Search distinct values.
      *
      * @param Request            $request    the request to get search parameters
-     * @param AbstractRepository $repository the respository to search in
+     * @param AbstractRepository $repository the repository to search in
      * @param string             $field      the field name to search for
      *
      * @template T of \App\Entity\AbstractEntity

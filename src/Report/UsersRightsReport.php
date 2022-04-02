@@ -150,7 +150,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         // default rights for user role
         $count += $this->outputRoleUser($builder);
 
-        // users rights
+        // user rights
         $count += $this->outputUsers($entities, $builder);
 
         // count
@@ -158,7 +158,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     }
 
     /**
-     * Creates the rights table builder.
+     * Creates the right table builder.
      *
      * @return PdfGroupTableBuilder the table builder
      */
@@ -218,7 +218,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputRole(PdfGroupTableBuilder $builder, Role $role): void
     {
-        // allow to output user entity rights
+        // allow outputting user entity rights
         $outputUsers = $role->isAdmin() || $role->isSuperAdmin();
 
         // check new page
@@ -288,7 +288,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
         // render
         foreach ($users as $user) {
-            // allow to output user entity rights
+            // allow outputting user entity rights
             $outputUsers = $user->isAdmin() || $user->isSuperAdmin();
 
             // keep together

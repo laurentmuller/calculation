@@ -34,30 +34,15 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
 {
     use LoggerTrait;
 
-    /**
-     * The calculation.
-     */
-    private Calculation $calculation;
-
-    /**
-     * The minimum margin.
-     */
     private float $minMargin;
-
-    /**
-     * The QR code url.
-     */
-    private ?string $qrcode;
 
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, Calculation $calculation, ?string $qrcode = null)
+    public function __construct(AbstractController $controller, private Calculation $calculation, private ?string $qrcode = null)
     {
         parent::__construct($controller);
-        $this->calculation = $calculation;
         $this->minMargin = $controller->getApplication()->getMinMargin();
-        $this->qrcode = $qrcode;
     }
 
     /**

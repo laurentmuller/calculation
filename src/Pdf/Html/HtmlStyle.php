@@ -23,7 +23,7 @@ use App\Util\Utils;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class HtmlStyle extends PdfStyle
+class HtmlStyle extends PdfStyle implements \Stringable
 {
     use PdfAlignmentTrait;
 

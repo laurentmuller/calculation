@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\MappedSuperclass
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements \Stringable
 {
     use MathTrait;
     use SearchTrait;

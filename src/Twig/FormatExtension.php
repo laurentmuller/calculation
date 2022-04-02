@@ -92,13 +92,13 @@ final class FormatExtension extends AbstractExtension
      * @param string|null                    $calendar   the calendar type
      * @param string|null                    $pattern    the optional pattern to use when formatting
      *
-     * @throws SyntaxError if the date format or the time format is unknown
-     *
      * @return string the formatted date
      *
      * @psalm-suppress UndefinedFunction
+     *
+     * @throws SyntaxError if the date format or the time format is unknown
      */
-    public function dateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    public function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         /** @psalm-var array<string, int> $formats */
         static $formats = [
@@ -150,15 +150,31 @@ final class FormatExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('identifier', [FormatUtils::class, 'formatId']),
-            new TwigFilter('integer', [FormatUtils::class, 'formatInt']),
-            new TwigFilter('amount', [FormatUtils::class, 'formatAmount']),
-            new TwigFilter('percent', [FormatUtils::class, 'formatPercent']),
+            new TwigFilter('identifier', function (float|int|string|null $number): string {
+                return FormatUtils::formatId($number);
+            }),
+            new TwigFilter('integer', function (float|int|string|null $number): string {
+                return FormatUtils::formatInt($number);
+            }),
+            new TwigFilter('amount', function (float|int|string|null $number): string {
+                return FormatUtils::formatAmount($number);
+            }),
+            new TwigFilter('percent', function (float|int|string|null $number, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): string {
+                return FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
+            }),
 
-            new TwigFilter('boolean', [$this, 'booleanFilter']),
-            new TwigFilter('localedate', [$this, 'dateFilter'], ['needs_environment' => true]),
-            new TwigFilter('localetime', [$this, 'timeFilter'], ['needs_environment' => true]),
-            new TwigFilter('localedatetime', [$this, 'dateTimeFilter'], ['needs_environment' => true]),
+            new TwigFilter('boolean', function (bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string {
+                return $this->booleanFilter($value, $true, $false, $translate);
+            }),
+            new TwigFilter('localedate', function (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string {
+                return $this->dateFilter($env, $date, $dateFormat, $timezone, $calendar, $pattern);
+            }, ['needs_environment' => true]),
+            new TwigFilter('localetime', function (Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string {
+                return $this->timeFilter($env, $date, $timeFormat, $timezone, $calendar, $pattern);
+            }, ['needs_environment' => true]),
+            new TwigFilter('localedatetime', function (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string {
+                return $this->dateTimeFilter($env, $date, $dateFormat, $timeFormat, $timezone, $calendar, $pattern);
+            }, ['needs_environment' => true]),
         ];
     }
 

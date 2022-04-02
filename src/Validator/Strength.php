@@ -27,11 +27,6 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 class Strength extends Constraint
 {
     /**
-     * The property path to get the e-mail value.
-     */
-    public ?string $emailPath = null;
-
-    /**
      * The password strength (Value from 0 to 4 or -1 to disable).
      */
     public int $minstrength;
@@ -42,24 +37,17 @@ class Strength extends Constraint
     public string $minstrengthMessage = 'password.minstrength';
 
     /**
-     * The property path to get the user name value.
-     */
-    public ?string $userNamePath = null;
-
-    /**
      * Constructor.
      *
      * @throws InvalidArgumentException if the minstrength value is not between -1 and 4 (inclusive)
      */
-    public function __construct(int $minstrength, string $userNamePath = null, string $emailPath = null)
+    public function __construct(int $minstrength, public ?string $userNamePath = null, public ?string $emailPath = null)
     {
         if (!\in_array($minstrength, StrengthInterface::ALLOWED_LEVELS, true)) {
             $values = \implode(', ', StrengthInterface::ALLOWED_LEVELS);
             throw new InvalidArgumentException(\sprintf('The minstrength parameter "%s" for "%s" is invalid. Allowed values: [%s].', $minstrength, static::class, $values));
         }
         $this->minstrength = $minstrength;
-        $this->userNamePath = $userNamePath;
-        $this->emailPath = $emailPath;
     }
 
     /**

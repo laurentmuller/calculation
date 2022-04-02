@@ -648,7 +648,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('e.overallTotal                      AS calculation_overall_total')
             // state
             ->addSelect('s.code                              AS calculation_state')
-            // groups
+            // groupes
             ->addSelect('g.code                              AS item_group')
             // category
             ->addSelect('c.code                              AS item_category')
@@ -676,20 +676,14 @@ class CalculationRepository extends AbstractRepository
      */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
-        switch ($field) {
-            case 'date':
-                return "DATE_FORMAT($alias.$field, '%d.%m.%Y')";
-            case 'overallMargin':
-                return "IFELSE($alias.itemsTotal != 0, CEIL(100 * $alias.overallTotal / $alias.itemsTotal), 0)";
-            case 'state.id':
-                return parent::getSearchFields('id', self::STATE_ALIAS);
-            case 'state.code':
-                return parent::getSearchFields('code', self::STATE_ALIAS);
-            case 'state.color':
-                return parent::getSearchFields('color', self::STATE_ALIAS);
-            default:
-                return parent::getSearchFields($field, $alias);
-        }
+        return match ($field) {
+            'date' => "DATE_FORMAT($alias.$field, '%d.%m.%Y')",
+            'overallMargin' => "IFELSE($alias.itemsTotal != 0, CEIL(100 * $alias.overallTotal / $alias.itemsTotal), 0)",
+            'state.id' => parent::getSearchFields('id', self::STATE_ALIAS),
+            'state.code' => parent::getSearchFields('code', self::STATE_ALIAS),
+            'state.color' => parent::getSearchFields('color', self::STATE_ALIAS),
+            default => parent::getSearchFields($field, $alias),
+        };
     }
 
     /**
@@ -697,17 +691,12 @@ class CalculationRepository extends AbstractRepository
      */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
-        switch ($field) {
-            case 'overallMargin':
-                return "IFELSE($alias.itemsTotal != 0, $alias.overallTotal / $alias.itemsTotal, 0)";
-            case 'state.id':
-            case 'state.code':
-                return parent::getSortField('code', self::STATE_ALIAS);
-            case 'state.color':
-                return parent::getSortField('color', self::STATE_ALIAS);
-            default:
-                return parent::getSortField($field, $alias);
-        }
+        return match ($field) {
+            'overallMargin' => "IFELSE($alias.itemsTotal != 0, $alias.overallTotal / $alias.itemsTotal, 0)",
+            'state.id', 'state.code' => parent::getSortField('code', self::STATE_ALIAS),
+            'state.color' => parent::getSortField('color', self::STATE_ALIAS),
+            default => parent::getSortField($field, $alias),
+        };
     }
 
     private function convertToDate(array $item): \DateTimeInterface
@@ -746,13 +735,11 @@ class CalculationRepository extends AbstractRepository
     private function getDirection(string $direction, string $default): string
     {
         $direction = \strtoupper($direction);
-        switch ($direction) {
-            case Criteria::ASC:
-            case Criteria::DESC:
-                return $direction;
-            default:
-                return $default;
-        }
+
+        return match ($direction) {
+            Criteria::ASC, Criteria::DESC => $direction,
+            default => $default,
+        };
     }
 
     /**
@@ -764,17 +751,11 @@ class CalculationRepository extends AbstractRepository
      */
     private function getOrder(string $column): string
     {
-        switch ($column) {
-            case 'id':
-            case 'date':
-            case 'customer':
-            case 'description':
-                return "e.$column";
-            case 'state':
-                return 's.code';
-            default:
-                return 'e.id';
-        }
+        return match ($column) {
+            'id', 'date', 'customer', 'description' => "e.$column",
+            'state' => 's.code',
+            default => 'e.id',
+        };
     }
 
     /**

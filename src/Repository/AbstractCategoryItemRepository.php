@@ -70,18 +70,13 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
      */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
-        switch ($field) {
-            case 'group.id':
-                return parent::getSearchFields('id', self::GROUP_ALIAS);
-            case 'group.code':
-                return parent::getSearchFields('code', self::GROUP_ALIAS);
-            case 'category.id':
-                return parent::getSearchFields('id', self::CATEGORY_ALIAS);
-            case 'category.code':
-                return parent::getSearchFields('code', self::CATEGORY_ALIAS);
-            default:
-                return parent::getSearchFields($field, $alias);
-        }
+        return match ($field) {
+            'group.id' => parent::getSearchFields('id', self::GROUP_ALIAS),
+            'group.code' => parent::getSearchFields('code', self::GROUP_ALIAS),
+            'category.id' => parent::getSearchFields('id', self::CATEGORY_ALIAS),
+            'category.code' => parent::getSearchFields('code', self::CATEGORY_ALIAS),
+            default => parent::getSearchFields($field, $alias),
+        };
     }
 
     /**
@@ -89,15 +84,10 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
      */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
-        switch ($field) {
-            case 'group.id':
-            case 'group.code':
-                return parent::getSortField('code', self::GROUP_ALIAS);
-            case 'category.id':
-            case 'category.code':
-                return parent::getSortField('code', self::CATEGORY_ALIAS);
-            default:
-                return parent::getSortField($field, $alias);
-        }
+        return match ($field) {
+            'group.id', 'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
+            'category.id', 'category.code' => parent::getSortField('code', self::CATEGORY_ALIAS),
+            default => parent::getSortField($field, $alias),
+        };
     }
 }

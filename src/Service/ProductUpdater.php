@@ -73,9 +73,7 @@ class ProductUpdater implements LoggerAwareInterface
         // add fields
         $helper->field('category')
             ->label('product.fields.category')
-            ->updateOption('query_builder', static function (CategoryRepository $repository): QueryBuilder {
-                return $repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS);
-            })
+            ->updateOption('query_builder', static fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS))
             ->add(CategoryListType::class);
 
         $helper->field('allProducts')

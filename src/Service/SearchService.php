@@ -374,9 +374,7 @@ class SearchService
 
         // entity?
         if (Utils::isString($entity)) {
-            $queries = \array_filter($queries, function (string $key) use ($entity): bool {
-                return 0 === \stripos($key, (string) $entity);
-            }, \ARRAY_FILTER_USE_KEY);
+            $queries = \array_filter($queries, fn (string $key): bool => 0 === \stripos($key, (string) $entity), \ARRAY_FILTER_USE_KEY);
         }
 
         // empty?

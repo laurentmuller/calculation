@@ -481,9 +481,7 @@ final class CalculationService
      */
     private function getGroupsAmount(array $groups): float
     {
-        return \array_reduce($groups, function (float $carry, array $group): float {
-            return $carry + (float) $group['amount'];
-        }, 0);
+        return \array_reduce($groups, fn (float $carry, array $group): float => $carry + (float) $group['amount'], 0);
     }
 
     /**
@@ -491,9 +489,7 @@ final class CalculationService
      */
     private function getGroupsMargin(array $groups): float
     {
-        return \array_reduce($groups, function (float $carry, array $group): float {
-            return $carry + (float) $group['margin_amount'];
-        }, 0);
+        return \array_reduce($groups, fn (float $carry, array $group): float => $carry + (float) $group['margin_amount'], 0);
     }
 
     private function isArrayKey(array $array, string $key): bool
@@ -524,9 +520,7 @@ final class CalculationService
             /** @psalm-var array $categories */
             $categories = $group['categories'];
 
-            return \array_reduce($categories, function (float $carry, array $category): float {
-                return $carry + $this->reduceCategory($category);
-            }, 0);
+            return \array_reduce($categories, fn (float $carry, array $category): float => $carry + $this->reduceCategory($category), 0);
         }
 
         return 0;

@@ -111,9 +111,7 @@ class AjaxController extends AbstractController
             return $this->json(true);
         }
 
-        $errorCodes = \array_map(function (mixed $code) use ($translator): string {
-            return $translator->trans("recaptcha.$code", [], 'validators');
-        }, $result->getErrorCodes());
+        $errorCodes = \array_map(fn (mixed $code): string => $translator->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
         if (empty($errorCodes)) {
             $errorCodes[] = $translator->trans('recaptcha.unknown-error', [], 'validators');
         }

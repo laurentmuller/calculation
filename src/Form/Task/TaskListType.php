@@ -50,9 +50,7 @@ class TaskListType extends AbstractListEntityType
                     'data-unit' => $task->getUnit(),
                 ];
             },
-            'query_builder' => function (TaskRepository $repository): QueryBuilder {
-                return $repository->getSortedBuilder(false);
-            },
+            'query_builder' => fn (TaskRepository $repository): QueryBuilder => $repository->getSortedBuilder(false),
         ]);
     }
 }

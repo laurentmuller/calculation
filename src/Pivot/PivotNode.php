@@ -353,9 +353,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     public function getPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
         if (!$this->isRoot()) {
-            $keys = \array_map(function (mixed $value): string {
-                return (string) $value;
-            }, $this->getKeys());
+            $keys = \array_map(fn (mixed $value): string => (string) $value, $this->getKeys());
 
             return \implode($separator, $keys);
         }
@@ -547,9 +545,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     private function sortAscending(): self
     {
         if (!$this->isEmpty()) {
-            \usort($this->children, static function (self $left, self $right): int {
-                return $left->getKey() <=> $right->getKey();
-            });
+            \usort($this->children, static fn (self $left, self $right): int => $left->getKey() <=> $right->getKey());
         }
 
         return $this;
@@ -561,9 +557,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     private function sortDescending(): self
     {
         if (!$this->isEmpty()) {
-            \usort($this->children, static function (self $left, self $right): int {
-                return $right->getKey() <=> $left->getKey();
-            });
+            \usort($this->children, static fn (self $left, self $right): int => $right->getKey() <=> $left->getKey());
         }
 
         return $this;

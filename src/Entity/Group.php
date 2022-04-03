@@ -137,9 +137,7 @@ class Group extends AbstractEntity
      */
     public function countItems(): int
     {
-        return $this->reduceCategories(function (int $carry, Category $category): int {
-            return $carry + $category->countItems();
-        });
+        return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countItems());
     }
 
     /**
@@ -155,9 +153,7 @@ class Group extends AbstractEntity
      */
     public function countProducts(): int
     {
-        return $this->reduceCategories(function (int $carry, Category $category): int {
-            return $carry + $category->countProducts();
-        });
+        return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countProducts());
     }
 
     /**
@@ -165,9 +161,7 @@ class Group extends AbstractEntity
      */
     public function countTasks(): int
     {
-        return $this->reduceCategories(function (int $carry, Category $category): int {
-            return $carry + $category->countTasks();
-        });
+        return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countTasks());
     }
 
     /**

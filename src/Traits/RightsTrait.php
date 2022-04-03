@@ -145,9 +145,7 @@ trait RightsTrait
         }
 
         // filter
-        return \array_filter(EntityVoter::MASK_ATTRIBUTES, function (int $attribute) use ($value): bool {
-            return $this->isBitSet($value, $attribute);
-        });
+        return \array_filter(EntityVoter::MASK_ATTRIBUTES, fn (int $attribute): bool => $this->isBitSet($value, $attribute));
     }
 
     /**

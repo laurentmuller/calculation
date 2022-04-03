@@ -138,9 +138,7 @@ class SchemaController extends AbstractController
     private function getPrimaryKeys(Table $table): array
     {
         if ($table->hasPrimaryKey()) {
-            return \array_map(static function (Column $c): string {
-                return $c->getName();
-            }, $table->getPrimaryKeyColumns());
+            return \array_map(static fn (Column $c): string => $c->getName(), $table->getPrimaryKeyColumns());
         }
 
         return [];
@@ -157,9 +155,7 @@ class SchemaController extends AbstractController
     {
         $tables = $this->getManager()->listTables();
 
-        \usort($tables, function (Table $a, Table $b): int {
-            return \strnatcmp($a->getName(), $b->getName());
-        });
+        \usort($tables, fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
 
         return \array_map(static function (Table $table): array {
             return [

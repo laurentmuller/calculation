@@ -61,9 +61,7 @@ final class Utils
      */
     public static function arrayReduceKey(array $array, callable $callback, mixed $initial = null): mixed
     {
-        return \array_reduce(\array_keys($array), function (mixed $carry, mixed $key) use ($callback, $array): mixed {
-            return $callback($carry, $key, $array[$key]);
-        }, $initial);
+        return \array_reduce(\array_keys($array), fn (mixed $carry, mixed $key): mixed => $callback($carry, $key, $array[$key]), $initial);
     }
 
     /**
@@ -337,11 +335,7 @@ final class Utils
     public static function sortField(array &$array, string $field, bool $ascending = true): void
     {
         $accessor = self::getAccessor();
-
-        // @phpstan-ignore-next-line
-        \usort($array, function ($a, $b) use ($accessor, $field, $ascending) {
-            return self::compare($a, $b, $field, $accessor, $ascending);
-        });
+        \usort($array, fn ($a, $b) => self::compare($a, $b, $field, $accessor, $ascending));
     }
 
     /**

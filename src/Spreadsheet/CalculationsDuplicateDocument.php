@@ -47,9 +47,7 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
      */
     protected function formatItems(array $items): string
     {
-        $result = \array_map(function (array $item): string {
-            return \sprintf('%s (%d)', (string) $item['description'], (int) $item['count']);
-        }, $items);
+        $result = \array_map(fn (array $item): string => \sprintf('%s (%d)', (string) $item['description'], (int) $item['count']), $items);
 
         return \implode("\n", $result);
     }

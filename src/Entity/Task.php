@@ -75,9 +75,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
         parent::__clone();
 
         // clone items
-        $this->items = $this->items->map(function (TaskItem $item) {
-            return (clone $item)->setTask($this);
-        });
+        $this->items = $this->items->map(fn (TaskItem $item) => (clone $item)->setTask($this));
     }
 
     /**

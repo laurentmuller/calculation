@@ -91,9 +91,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
         parent::__clone();
 
         // clone items
-        $this->items = $this->items->map(function (CalculationItem $item) {
-            return (clone $item)->setCategory($this);
-        });
+        $this->items = $this->items->map(fn (CalculationItem $item) => (clone $item)->setCategory($this));
     }
 
     /**
@@ -305,9 +303,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
 
         // sort
         $items = $this->items->toArray();
-        \uasort($items, static function (CalculationItem $a, CalculationItem $b): int {
-            return \strcasecmp((string) $a->getDescription(), (string) $b->getDescription());
-        });
+        \uasort($items, static fn (CalculationItem $a, CalculationItem $b): int => \strcasecmp((string) $a->getDescription(), (string) $b->getDescription()));
 
         $position = 0;
         $changed = false;

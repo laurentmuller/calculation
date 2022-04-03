@@ -43,12 +43,8 @@ class ProductListType extends AbstractListEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'choice_label' => 'description',
-            'group_by' => function (Product $product): string {
-                return $this->getGroupBy($product);
-            },
-            'query_builder' => function (ProductRepository $repository): QueryBuilder {
-                return $repository->getQueryBuilderByCategory();
-            },
+            'group_by' => fn (Product $product): string => $this->getGroupBy($product),
+            'query_builder' => fn (ProductRepository $repository): QueryBuilder => $repository->getQueryBuilderByCategory(),
         ]);
     }
 

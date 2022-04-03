@@ -732,9 +732,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      */
     protected function getCellsSpan(): int
     {
-        return \array_reduce($this->cells, function (int $carry, PdfCell $cell) {
-            return $carry + $cell->getCols();
-        }, 0);
+        return \array_reduce($this->cells, fn (int $carry, PdfCell $cell) => $carry + $cell->getCols(), 0);
     }
 
     /**

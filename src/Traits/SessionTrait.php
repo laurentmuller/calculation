@@ -198,9 +198,7 @@ trait SessionTrait
      */
     protected function removeSessionValues(array $keys): array
     {
-        return \array_map(function (string $key): mixed {
-            return $this->removeSessionValue($key);
-        }, $keys);
+        return \array_map(fn (string $key): mixed => $this->removeSessionValue($key), $keys);
     }
 
     /**

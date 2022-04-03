@@ -62,9 +62,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     public function getGlobals(): array
     {
-        return (array) $this->getCacheValue(self::CACHE_KEY, function (): array {
-            return $this->callback();
-        });
+        return (array) $this->getCacheValue(self::CACHE_KEY, fn (): array => $this->callback());
     }
 
     /**
@@ -81,9 +79,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         $reflection = new \ReflectionClass($className);
 
         /** @var \ReflectionClassConstant[] $constants */
-        $constants = \array_filter($reflection->getReflectionConstants(), static function (\ReflectionClassConstant $constant) {
-            return $constant->isPublic();
-        });
+        $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $constant) => $constant->isPublic());
 
         foreach ($constants as $constant) {
             $values[$constant->getName()] = $constant->getValue();

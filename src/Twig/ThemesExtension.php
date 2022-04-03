@@ -41,21 +41,11 @@ final class ThemesExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('theme_css', function (Request $request): string {
-                return $this->getThemeCss($request);
-            }),
-            new TwigFunction('theme_name', function (Request $request): string {
-                return $this->getThemeName($request);
-            }),
-            new TwigFunction('theme_default', function (Request $request): bool {
-                return $this->isDefaultTheme($request);
-            }),
-            new TwigFunction('theme_background', function (Request $request): string {
-                return $this->getThemeBackground($request);
-            }),
-            new TwigFunction('theme_dark', function (Request $request): bool {
-                return $this->isDarkTheme($request);
-            }),
+            new TwigFunction('theme_css', fn (Request $request): string => $this->getThemeCss($request)),
+            new TwigFunction('theme_name', fn (Request $request): string => $this->getThemeName($request)),
+            new TwigFunction('theme_default', fn (Request $request): bool => $this->isDefaultTheme($request)),
+            new TwigFunction('theme_background', fn (Request $request): string => $this->getThemeBackground($request)),
+            new TwigFunction('theme_dark', fn (Request $request): bool => $this->isDarkTheme($request)),
         ];
     }
 

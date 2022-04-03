@@ -128,9 +128,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $this->createdAt = $this->updatedAt = new \DateTimeImmutable();
 
         // clone groupes
-        $this->groups = $this->groups->map(function (CalculationGroup $group) {
-            return (clone $group)->setCalculation($this);
-        });
+        $this->groups = $this->groups->map(fn (CalculationGroup $group) => (clone $group)->setCalculation($this));
     }
 
     /**

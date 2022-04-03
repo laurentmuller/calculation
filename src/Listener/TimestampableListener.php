@@ -96,9 +96,7 @@ class TimestampableListener implements DisableListenerInterface
             return [];
         }
 
-        return \array_filter($entities, static function (AbstractEntity $entity): bool {
-            return $entity instanceof TimestampableInterface;
-        });
+        return \array_filter($entities, static fn (AbstractEntity $entity): bool => $entity instanceof TimestampableInterface);
     }
 
     /**

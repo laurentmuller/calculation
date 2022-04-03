@@ -98,9 +98,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
         parent::__clone();
 
         // clone categories
-        $this->categories = $this->categories->map(function (CalculationCategory $category) {
-            return (clone $category)->setGroup($this);
-        });
+        $this->categories = $this->categories->map(fn (CalculationCategory $category) => (clone $category)->setGroup($this));
     }
 
     /**
@@ -344,9 +342,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
 
         // sort
         $categories = $this->categories->toArray();
-        \uasort($categories, static function (CalculationCategory $a, CalculationCategory $b): int {
-            return \strcasecmp((string) $a->getCode(), (string) $b->getCode());
-        });
+        \uasort($categories, static fn (CalculationCategory $a, CalculationCategory $b): int => \strcasecmp((string) $a->getCode(), (string) $b->getCode()));
 
         $position = 0;
         $changed = false;

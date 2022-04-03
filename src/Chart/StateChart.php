@@ -116,9 +116,7 @@ class StateChart extends BaseChart
      */
     private function getColors(array $states): array
     {
-        return \array_map(function (array $state): string {
-            return $state['color'];
-        }, $states);
+        return \array_map(fn (array $state): string => $state['color'], $states);
     }
 
     private function getPie(): array

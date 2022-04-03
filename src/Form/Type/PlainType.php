@@ -393,9 +393,7 @@ class PlainType extends AbstractType
 
         // array?
         if (\is_array($value)) {
-            $callback = function (mixed $item) use ($options): string {
-                return $this->transformValue($item, $options);
-            };
+            $callback = fn (mixed $item): string => $this->transformValue($item, $options);
             $values = \array_map($callback, $value);
             $separator = $this->getOptionString($options, 'separator', ', ');
 

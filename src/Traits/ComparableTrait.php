@@ -109,8 +109,6 @@ trait ComparableTrait
     public static function sort(array &$array, bool $ascending = true): void
     {
         $order = $ascending ? 1 : -1;
-        \usort($array, function (ComparableInterface $a, ComparableInterface $b) use ($order) {
-            return $order * $a->compare($b);
-        });
+        \usort($array, fn (ComparableInterface $a, ComparableInterface $b) => $order * $a->compare($b));
     }
 }

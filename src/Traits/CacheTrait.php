@@ -76,9 +76,7 @@ trait CacheTrait
     public function deleteCacheItems(array $keys): bool
     {
         if (null !== $this->adapter) {
-            $keys = \array_map(function (string $key) {
-                return $this->cleanKey($key);
-            }, $keys);
+            $keys = \array_map(fn (string $key) => $this->cleanKey($key), $keys);
 
             return $this->adapter->deleteItems($keys);
         }

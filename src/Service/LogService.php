@@ -153,9 +153,7 @@ class LogService
     public static function filterChannel(array $logs, ?string $value): array
     {
         if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value): bool {
-                return 0 === \strcasecmp((string) $value, (string) $log->getChannel());
-            });
+            return \array_filter($logs, fn (Log $log): bool => 0 === \strcasecmp((string) $value, (string) $log->getChannel()));
         }
 
         return $logs;
@@ -172,9 +170,7 @@ class LogService
     public static function filterLevel(array $logs, ?string $value): array
     {
         if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value): bool {
-                return 0 === \strcasecmp((string) $value, (string) $log->getLevel());
-            });
+            return \array_filter($logs, fn (Log $log): bool => 0 === \strcasecmp((string) $value, (string) $log->getLevel()));
         }
 
         return $logs;

@@ -313,9 +313,7 @@ class UtilsTest extends TestCase
             ['id' => 2, 'value' => '2'],
             ['id' => 2, 'value' => '3'],
         ];
-        $key = function (array $value) {
-            return $value['id'];
-        };
+        $key = fn (array $value) => $value['id'];
         $result = Utils::groupBy($array, $key);
 
         $this->assertIsArray($result);

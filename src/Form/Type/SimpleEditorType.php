@@ -103,9 +103,7 @@ class SimpleEditorType extends AbstractType
          *      attributes: array<string, string>,
          *      actions: array}> $actions
          */
-        $actions = \array_filter($existing, static function (array $action): bool {
-            return !empty($action['exec']) || !empty($action['actions']);
-        });
+        $actions = \array_filter($existing, static fn (array $action): bool => !empty($action['exec']) || !empty($action['actions']));
         $this->updateActions($actions);
 
         $groups = [];

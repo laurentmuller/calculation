@@ -292,9 +292,7 @@ class ExchangeRateService extends AbstractHttpClientService
     private function mapCodes(array $codes): array
     {
         // filter
-        $codes = \array_filter(\array_column($codes, 0), function (string $code): bool {
-            return Currencies::exists($code);
-        });
+        $codes = \array_filter(\array_column($codes, 0), fn (string $code): bool => Currencies::exists($code));
 
         // map
         $result = [];
@@ -309,9 +307,7 @@ class ExchangeRateService extends AbstractHttpClientService
             ];
         }
 
-        \uasort($result, function (array $a, array $b) {
-            return $a['name'] <=> $b['name'];
-        });
+        \uasort($result, fn (array $a, array $b) => $a['name'] <=> $b['name']);
 
         return $result;
     }

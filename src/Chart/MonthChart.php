@@ -188,9 +188,7 @@ class MonthChart extends BaseChart
      */
     private function getCount(array $data): array
     {
-        return \array_map(function (array $item): int {
-            return $item['count'];
-        }, $data);
+        return \array_map(fn (array $item): int => $item['count'], $data);
     }
 
     /**
@@ -207,9 +205,7 @@ class MonthChart extends BaseChart
      */
     private function getDates(array $data): array
     {
-        return \array_map(function (array $item): int {
-            return (int) $item['date']->getTimestamp() * 1000;
-        }, $data);
+        return \array_map(fn (array $item): int => (int) $item['date']->getTimestamp() * 1000, $data);
     }
 
     private function getFormatterExpression(): Expr
@@ -246,9 +242,7 @@ class MonthChart extends BaseChart
      */
     private function getItems(array $data): array
     {
-        return \array_map(function (array $item): float {
-            return $item['items'];
-        }, $data);
+        return \array_map(fn (array $item): float => $item['items'], $data);
     }
 
     /**
@@ -265,9 +259,7 @@ class MonthChart extends BaseChart
      */
     private function getMarginAmounts(array $data): array
     {
-        return \array_map(function (array $item): float {
-            return $item['total'] - $item['items'];
-        }, $data);
+        return \array_map(fn (array $item): float => $item['total'] - $item['items'], $data);
     }
 
     /**
@@ -284,9 +276,7 @@ class MonthChart extends BaseChart
      */
     private function getMarginPercents(array $data): array
     {
-        return \array_map(function (array $item): float {
-            return $item['margin'];
-        }, $data);
+        return \array_map(fn (array $item): float => $item['margin'], $data);
     }
 
     /**
@@ -303,9 +293,7 @@ class MonthChart extends BaseChart
      */
     private function getMargins(array $data): array
     {
-        return \array_map(function (array $item): float {
-            return $item['total'] - $item['items'];
-        }, $data);
+        return \array_map(fn (array $item): float => $item['total'] - $item['items'], $data);
     }
 
     private function getSeries(array $marginsData, array $itemsData): array
@@ -338,9 +326,7 @@ class MonthChart extends BaseChart
      */
     private function getSums(array $data): array
     {
-        return \array_map(function (array $item): float {
-            return $item['total'];
-        }, $data);
+        return \array_map(fn (array $item): float => $item['total'], $data);
     }
 
     private function getXAxis(string $color, array $dates): array

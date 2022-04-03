@@ -406,9 +406,7 @@ class OpenWeatherController extends AbstractController
             $cities = $this->service->search($query, $units, $limit);
 
             /** @var int[] $cityIds */
-            $cityIds = \array_map(function (array $city): int {
-                return $city['id'];
-            }, $cities);
+            $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
 
             /** @var null|array{
              *      units: array,

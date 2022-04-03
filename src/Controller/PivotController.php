@@ -133,12 +133,8 @@ class PivotController extends AbstractController
     private function getTable(): ?PivotTable
     {
         // callbacks
-        $semesterFormatter = function (int $semestre): string {
-            return $this->trans("pivot.semester.$semestre");
-        };
-        $quarterFormatter = function (int $quarter): string {
-            return $this->trans("pivot.quarter.$quarter");
-        };
+        $semesterFormatter = fn (int $semestre): string => $this->trans("pivot.semester.$semestre");
+        $quarterFormatter = fn (int $quarter): string => $this->trans("pivot.quarter.$quarter");
 
         // fields
         $key = PivotFieldFactory::integer('calculation_id', $this->trans('calculation.fields.id'));

@@ -51,9 +51,7 @@ class CategoryListType extends AbstractListEntityType
                     'data-group-code' => $category->getGroupCode(),
                 ];
             },
-            'query_builder' => function (CategoryRepository $repository): QueryBuilder {
-                return $repository->getQueryBuilderByGroup();
-            },
+            'query_builder' => fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(),
         ]);
     }
 }

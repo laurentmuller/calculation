@@ -53,9 +53,7 @@ class GeneratorController extends AbstractController
         $helper = $this->createFormHelper('generate.fields.', $data);
 
         $helper->field('entity')
-            ->updateOption('choice_attr', function (string $_choice, string $key): array {
-                return ['data-key' => $key];
-            })->addChoiceType([
+            ->updateOption('choice_attr', fn (string $_choice, string $key): array => ['data-key' => $key])->addChoiceType([
                 'customer.name' => $this->generateUrl(self::ROUTE_CUSTOMER),
                 'calculation.name' => $this->generateUrl(self::ROUTE_CALCULATION),
                 'product.name' => $this->generateUrl(self::ROUTE_PRODUCT),

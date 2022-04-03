@@ -138,9 +138,7 @@ class TaskService implements \JsonSerializable
         if (null !== $this->task && !empty($this->items)) {
             $items = $this->items;
 
-            return $this->task->filter(function (TaskItem $item) use ($items) {
-                return \in_array($item->getId(), $items, true);
-            });
+            return $this->task->filter(fn (TaskItem $item) => \in_array($item->getId(), $items, true));
         }
 
         return new ArrayCollection();
@@ -237,11 +235,7 @@ class TaskService implements \JsonSerializable
         $task = $this->task;
 
         /** @psalm-var int[] $items */
-        $items = $items->filter(function (TaskItem $item) use ($task) {
-            return $task === $item->getTask();
-        })->map(function (TaskItem $item) {
-            return (int) $item->getId();
-        })->toArray();
+        $items = $items->filter(fn (TaskItem $item) => $task === $item->getTask())->map(fn (TaskItem $item) => (int) $item->getId())->toArray();
         $this->items = $items;
 
         return $this;

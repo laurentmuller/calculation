@@ -241,9 +241,7 @@ class Comment
     {
         /** @var string[] $lines */
         $lines = (array) \preg_split('/\r\n|\r|\n/', (string) $this->message);
-        $result = \array_filter($lines, static function (string $line): bool {
-            return !empty($line) && 0 !== \strcasecmp('<p>&nbsp;</p>', $line);
-        });
+        $result = \array_filter($lines, static fn (string $line): bool => !empty($line) && 0 !== \strcasecmp('<p>&nbsp;</p>', $line));
 
         return \implode('', $result);
     }

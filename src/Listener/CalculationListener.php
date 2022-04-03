@@ -70,9 +70,7 @@ final class CalculationListener extends TimestampableListener
 
     private function getCalculations(array $entities): array
     {
-        return \array_filter($entities, static function (AbstractEntity $entity): bool {
-            return $entity instanceof Calculation;
-        });
+        return \array_filter($entities, static fn (AbstractEntity $entity): bool => $entity instanceof Calculation);
     }
 
     private function getParentCalculation(AbstractEntity $entity): ?Calculation

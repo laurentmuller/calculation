@@ -97,7 +97,7 @@ class UserExceptionServiceTest extends TestCase
     public function testInstancePrevious(\Throwable $e): void
     {
         $result = $this->mapException($e);
-        $this->assertInstanceOf(\get_class($e), $result->getPrevious());
+        $this->assertInstanceOf($e::class, $result->getPrevious());
     }
 
     /**

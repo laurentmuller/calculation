@@ -72,15 +72,11 @@ class UserRightsType extends RightsType
             ->addPlainType(true);
 
         $helper->field('role')
-            ->updateOption('transformer', function (string $role) {
-                return $this->translateRole($role);
-            })
+            ->updateOption('transformer', fn (string $role) => $this->translateRole($role))
             ->addPlainType(true);
 
         $helper->field('enabled')
-            ->updateOption('transformer', function (string $enabled) {
-                return $this->translateEnabled($enabled);
-            })
+            ->updateOption('transformer', fn (string $enabled) => $this->translateEnabled($enabled))
             ->addPlainType(true);
 
         $helper->field('overwrite')

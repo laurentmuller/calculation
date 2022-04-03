@@ -52,9 +52,7 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
      */
     protected function computeItemsCount(array $items): int
     {
-        return \array_reduce($items, function (int $carry, array $item) {
-            return $carry + \count((array) $item['items']);
-        }, 0);
+        return \array_reduce($items, fn (int $carry, array $item) => $carry + \count((array) $item['items']), 0);
     }
 
     /**

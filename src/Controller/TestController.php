@@ -387,9 +387,7 @@ class TestController extends AbstractController
                 return $this->redirectToHomePage();
             }
 
-            $errorCodes = \array_map(function (mixed $code) use ($translator): string {
-                return $translator->trans("recaptcha.$code", [], 'validators');
-            }, $result->getErrorCodes());
+            $errorCodes = \array_map(fn (mixed $code): string => $translator->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
             if (empty($errorCodes)) {
                 $errorCodes[] = $translator->trans('recaptcha.unknown-error', [], 'validators');
             }
@@ -453,9 +451,7 @@ class TestController extends AbstractController
         $to = new \DateTime((string) $this->getRequestString($request, 'date', 'today'));
         $from = DateUtils::sub($to, $interval);
         $calculations = $repository->getByInterval($from, $to);
-        $data = Utils::groupBy($calculations, function (Calculation $c) {
-            return FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG);
-        });
+        $data = Utils::groupBy($calculations, fn (Calculation $c) => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG));
 
         $today = new \DateTime('today');
         $previous = DateUtils::sub($to, $interval);
@@ -684,13 +680,9 @@ class TestController extends AbstractController
             ];
         }, Currencies::getCurrencyCodes());
 
-        $currencies = \array_filter($currencies, function (array $currency): bool {
-            return 0 === \preg_match('/\d|\(/', $currency['name']);
-        });
+        $currencies = \array_filter($currencies, fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name']));
 
-        \usort($currencies, function (array $left, array $right): int {
-            return \strnatcasecmp((string) $left['name'], (string) $right['name']);
-        });
+        \usort($currencies, fn (array $left, array $right): int => \strnatcasecmp((string) $left['name'], (string) $right['name']));
 
         return $currencies;
     }

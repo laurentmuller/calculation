@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Interfaces\FlashTypeInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -47,7 +48,7 @@ trait FlashMessageTrait
      */
     protected function error(string $message): self
     {
-        return $this->addFlashMessage('danger', $message);
+        return $this->addFlashMessage(FlashTypeInterface::DANGER, $message);
     }
 
     /**
@@ -58,7 +59,7 @@ trait FlashMessageTrait
      */
     protected function info(string $message): self
     {
-        return $this->addFlashMessage('info', $message);
+        return $this->addFlashMessage(FlashTypeInterface::INFO, $message);
     }
 
     /**
@@ -69,7 +70,7 @@ trait FlashMessageTrait
      */
     protected function success(string $message): self
     {
-        return $this->addFlashMessage('success', $message);
+        return $this->addFlashMessage(FlashTypeInterface::SUCCESS, $message);
     }
 
     /**
@@ -80,6 +81,6 @@ trait FlashMessageTrait
      */
     protected function warning(string $message): self
     {
-        return $this->addFlashMessage('warning', $message);
+        return $this->addFlashMessage(FlashTypeInterface::WARNING, $message);
     }
 }

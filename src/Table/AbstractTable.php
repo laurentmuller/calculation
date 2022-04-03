@@ -327,9 +327,7 @@ abstract class AbstractTable implements SortModeInterface
             $columns = $this->getColumns();
             $accessor = PropertyAccess::createPropertyAccessor();
 
-            return \array_map(function (AbstractEntity|array $entity) use ($columns, $accessor): array {
-                return $this->mapValues($entity, $columns, $accessor);
-            }, $entities);
+            return \array_map(fn (AbstractEntity|array $entity): array => $this->mapValues($entity, $columns, $accessor), $entities);
         }
 
         return [];

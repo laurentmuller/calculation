@@ -53,9 +53,7 @@ class CalculationStateListType extends AbstractListEntityType
 
                 return $this->trans($id);
             },
-            'query_builder' => function (CalculationStateRepository $repository): QueryBuilder {
-                return $repository->getQueryBuilderByEditable();
-            },
+            'query_builder' => fn (CalculationStateRepository $repository): QueryBuilder => $repository->getQueryBuilderByEditable(),
         ]);
     }
 }

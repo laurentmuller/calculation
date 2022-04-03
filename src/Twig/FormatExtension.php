@@ -150,31 +150,15 @@ final class FormatExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('identifier', function (float|int|string|null $number): string {
-                return FormatUtils::formatId($number);
-            }),
-            new TwigFilter('integer', function (float|int|string|null $number): string {
-                return FormatUtils::formatInt($number);
-            }),
-            new TwigFilter('amount', function (float|int|string|null $number): string {
-                return FormatUtils::formatAmount($number);
-            }),
-            new TwigFilter('percent', function (float|int|string|null $number, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): string {
-                return FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
-            }),
+            new TwigFilter('identifier', fn (float|int|string|null $number): string => FormatUtils::formatId($number)),
+            new TwigFilter('integer', fn (float|int|string|null $number): string => FormatUtils::formatInt($number)),
+            new TwigFilter('amount', fn (float|int|string|null $number): string => FormatUtils::formatAmount($number)),
+            new TwigFilter('percent', fn (float|int|string|null $number, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): string => FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode)),
 
-            new TwigFilter('boolean', function (bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string {
-                return $this->booleanFilter($value, $true, $false, $translate);
-            }),
-            new TwigFilter('localedate', function (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string {
-                return $this->dateFilter($env, $date, $dateFormat, $timezone, $calendar, $pattern);
-            }, ['needs_environment' => true]),
-            new TwigFilter('localetime', function (Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string {
-                return $this->timeFilter($env, $date, $timeFormat, $timezone, $calendar, $pattern);
-            }, ['needs_environment' => true]),
-            new TwigFilter('localedatetime', function (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string {
-                return $this->dateTimeFilter($env, $date, $dateFormat, $timeFormat, $timezone, $calendar, $pattern);
-            }, ['needs_environment' => true]),
+            new TwigFilter('boolean', fn (bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string => $this->booleanFilter($value, $true, $false, $translate)),
+            new TwigFilter('localedate', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->dateFilter($env, $date, $dateFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
+            new TwigFilter('localetime', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->timeFilter($env, $date, $timeFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
+            new TwigFilter('localedatetime', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->dateTimeFilter($env, $date, $dateFormat, $timeFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
         ];
     }
 

@@ -46,7 +46,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="app_logout")
      */
-    public function logout(): void
+    public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');
     }

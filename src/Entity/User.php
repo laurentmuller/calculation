@@ -125,6 +125,29 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     private bool $verified = false;
 
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->username,
+            'password' => $this->password,
+        ];
+    }
+
+    /**
+     * @psalm-param array{
+     *      id: int|null,
+     *      username: string|null,
+     *      password: string|null
+     *     } $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->username = $data['username'];
+        $this->password = $data['password'];
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -455,13 +478,13 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * {@inheritDoc}
      */
-    public function unserialize($serialized): void
+    public function unserialize($data): void
     {
         [
             $this->id,
             $this->username,
             $this->password,
-        ] = (array) \unserialize($serialized);
+        ] = (array) \unserialize($data);
     }
 
     /**

@@ -66,15 +66,15 @@ class SwissPostUpdater
 
     private ?\ZipArchive $archive = null;
     private ?SwissDatabase $database = null;
-    private string $databaseName;
-    private string $dataDirectory;
+    private readonly string $databaseName;
+    private readonly string $dataDirectory;
     private SwissPostUpdateResult $results;
     private ?string $sourceName = null;
 
     /** @var bool|resource */
     private $stream = false;
 
-    public function __construct(private ApplicationService $application, private FormFactoryInterface $factory, SwissPostService $service, TranslatorInterface $translator)
+    public function __construct(private readonly ApplicationService $application, private readonly FormFactoryInterface $factory, SwissPostService $service, TranslatorInterface $translator)
     {
         $this->dataDirectory = $service->getDataDirectory();
         $this->databaseName = $service->getDatabaseName();

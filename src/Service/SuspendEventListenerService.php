@@ -32,7 +32,7 @@ class SuspendEventListenerService
     /**
      * @var DisableListenerInterface[]
      */
-    private array $listeners;
+    private readonly array $listeners;
 
     /**
      * Constructor.

@@ -35,7 +35,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     /**
      * The password options.
      */
-    public const PASSWORD_OPTIONS = [
+    final public const PASSWORD_OPTIONS = [
         'letters',
         'numbers',
         'specialchar',
@@ -49,7 +49,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     /**
      * Constructor.
      */
-    public function __construct(Security $security, private ApplicationService $application)
+    public function __construct(Security $security, private readonly ApplicationService $application)
     {
         if (null !== ($user = $security->getUser())) {
             $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();

@@ -37,9 +37,9 @@ class AlphaCaptchaType extends AbstractType
 
     private const SESSION_KEY = 'alpha_captcha_answer';
 
-    private AlphaCaptchaInterface $captcha;
+    private readonly AlphaCaptchaInterface $captcha;
 
-    private string $dataError;
+    private readonly string $dataError;
 
     private ?string $previousAnswer = null;
 

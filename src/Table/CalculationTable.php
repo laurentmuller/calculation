@@ -39,7 +39,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, protected CalculationStateRepository $stateRepository, protected Environment $twig)
+    public function __construct(CalculationRepository $repository, protected readonly CalculationStateRepository $stateRepository, protected readonly Environment $twig)
     {
         parent::__construct($repository);
     }

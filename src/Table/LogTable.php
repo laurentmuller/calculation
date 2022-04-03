@@ -31,12 +31,12 @@ class LogTable extends AbstractTable implements \Countable
     /**
      * The channel parameter name.
      */
-    public const PARAM_CHANNEL = 'channel';
+    final public const PARAM_CHANNEL = 'channel';
 
     /**
      * The level parameter name.
      */
-    public const PARAM_LEVEL = 'level';
+    final public const PARAM_LEVEL = 'level';
 
     /**
      * The created at column name.
@@ -46,7 +46,7 @@ class LogTable extends AbstractTable implements \Countable
     /**
      * Constructor.
      */
-    public function __construct(private LogService $service)
+    public function __construct(private readonly LogService $service)
     {
     }
 

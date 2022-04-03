@@ -33,62 +33,62 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The database name.
      */
-    public const DATABASE_NAME = 'openweather.sqlite';
+    final public const DATABASE_NAME = 'openweather.sqlite';
 
     /**
      * The imperial degree.
      */
-    public const DEGREE_IMPERIAL = '°F';
+    final public const DEGREE_IMPERIAL = '°F';
 
     /**
      * The metric degree.
      */
-    public const DEGREE_METRIC = '°C';
+    final public const DEGREE_METRIC = '°C';
 
     /**
      * The parameter value to exclude the current data.
      */
-    public const EXCLUDE_CURRENT = 'current';
+    final public const EXCLUDE_CURRENT = 'current';
 
     /**
      * The parameter value to exclude the daily data.
      */
-    public const EXCLUDE_DAILY = 'daily';
+    final public const EXCLUDE_DAILY = 'daily';
 
     /**
      * The parameter value to exclude the hourly data.
      */
-    public const EXCLUDE_HOURLY = 'hourly';
+    final public const EXCLUDE_HOURLY = 'hourly';
 
     /**
      * The parameter value to exclude the minutely data.
      */
-    public const EXCLUDE_MINUTELY = 'minutely';
+    final public const EXCLUDE_MINUTELY = 'minutely';
 
     /**
      * The maximum number of city identifiers to retrieve.
      */
-    public const MAX_GROUP = 20;
+    final public const MAX_GROUP = 20;
 
     /**
      * The imperial speed.
      */
-    public const SPEED_IMPERIAL = 'mph';
+    final public const SPEED_IMPERIAL = 'mph';
 
     /**
      * The metric speed.
      */
-    public const SPEED_METRIC = 'm/s';
+    final public const SPEED_METRIC = 'm/s';
 
     /**
      * The imperial units parameter value.
      */
-    public const UNIT_IMPERIAL = 'imperial';
+    final public const UNIT_IMPERIAL = 'imperial';
 
     /**
      * The metric units parameter value.
      */
-    public const UNIT_METRIC = 'metric';
+    final public const UNIT_METRIC = 'metric';
 
     /**
      * The cache timeout (15 minutes).

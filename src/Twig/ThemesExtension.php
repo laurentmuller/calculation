@@ -31,7 +31,7 @@ final class ThemesExtension extends AbstractExtension
      *
      * @param ThemeService $service the theme service
      */
-    public function __construct(private ThemeService $service)
+    public function __construct(private readonly ThemeService $service)
     {
     }
 

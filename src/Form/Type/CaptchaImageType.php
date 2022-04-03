@@ -29,7 +29,7 @@ class CaptchaImageType extends AbstractType
     /**
      * Constructor.
      */
-    public function __construct(private UrlGeneratorInterface $generator)
+    public function __construct(private readonly UrlGeneratorInterface $generator)
     {
     }
 

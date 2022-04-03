@@ -28,7 +28,7 @@ class GroupTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(GroupRepository $repository, private Environment $twig)
+    public function __construct(GroupRepository $repository, private readonly Environment $twig)
     {
         parent::__construct($repository);
     }

@@ -45,7 +45,7 @@ class ResetPasswordController extends AbstractController
     private const CHECK_ROUTE = 'app_check_email';
     private const FORGET_ROUTE = 'app_forgot_password_request';
 
-    public function __construct(private ResetPasswordHelperInterface $helper, private UserRepository $repository)
+    public function __construct(private readonly ResetPasswordHelperInterface $helper, private readonly UserRepository $repository)
     {
     }
 

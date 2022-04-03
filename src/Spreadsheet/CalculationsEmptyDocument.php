@@ -27,12 +27,12 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
     /**
      * The price label.
      */
-    private string $priceLabel;
+    private readonly string $priceLabel;
 
     /**
      * The quantity label.
      */
-    private string $quantityLabel;
+    private readonly string $quantityLabel;
 
     /**
      * Constructor.

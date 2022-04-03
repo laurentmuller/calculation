@@ -63,7 +63,7 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * The base URI.
      */
-    private string $endpoint;
+    private readonly string $endpoint;
 
     /**
      * Constructor.

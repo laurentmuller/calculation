@@ -29,7 +29,7 @@ class RecaptchaValidator extends AbstractConstraintValidator
      *
      * @param string $secret the reCaptcha secret key
      */
-    public function __construct(private string $secret)
+    public function __construct(private readonly string $secret)
     {
         parent::__construct(Recaptcha::class);
     }

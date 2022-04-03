@@ -30,7 +30,7 @@ class Column implements SortModeInterface, \Stringable
     /**
      * The property name of the field formatter.
      */
-    public const FIELD_FORMATTER = 'fieldFormatter';
+    final public const FIELD_FORMATTER = 'fieldFormatter';
 
     /**
      * The field alias name.

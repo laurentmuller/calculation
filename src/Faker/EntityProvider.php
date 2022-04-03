@@ -45,7 +45,7 @@ class EntityProvider extends Base
      *
      * @psalm-var AbstractRepository<T>
      */
-    private AbstractRepository $repository;
+    private readonly AbstractRepository $repository;
 
     /**
      * Constructor.

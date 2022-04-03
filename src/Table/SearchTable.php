@@ -37,12 +37,12 @@ class SearchTable extends AbstractTable
     /**
      * The entity parameter name.
      */
-    public const PARAM_ENTITY = 'entity';
+    final public const PARAM_ENTITY = 'entity';
 
     /**
      * The type parameter name.
      */
-    public const PARAM_TYPE = 'type';
+    final public const PARAM_TYPE = 'type';
 
     /**
      * The default sort columns order.
@@ -56,7 +56,7 @@ class SearchTable extends AbstractTable
     /**
      * Constructor.
      */
-    public function __construct(private SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
+    public function __construct(private readonly SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
     {
         $this->setChecker($checker);
         $this->setTranslator($translator);

@@ -2,7 +2,7 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/.php_cs.cache
+/.php-cs-fixer.cache
 symfony.lock
 /var/
 /vendor/

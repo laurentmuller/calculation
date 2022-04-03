@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Interfaces\FlashTypeInterface;
+use App\Enums\FlashType;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -27,13 +27,16 @@ trait FlashMessageTrait
     /**
      * Adds a flash message with the given type to the current session.
      *
-     * @param string $type    the message type
-     * @param string $message the message content
+     * @param FlashType|string $type    the message type
+     * @param string           $message the message content
      */
-    protected function addFlashMessage(string $type, string $message): self
+    protected function addFlashMessage(FlashType|string $type, string $message): self
     {
         $session = $this->getSession();
         if ($session instanceof Session) {
+            if ($type instanceof FlashType) {
+                $type = $type->value;
+            }
             $session->getFlashBag()->add($type, $message);
         }
 
@@ -48,7 +51,7 @@ trait FlashMessageTrait
      */
     protected function error(string $message): self
     {
-        return $this->addFlashMessage(FlashTypeInterface::DANGER, $message);
+        return $this->addFlashMessage(FlashType::DANGER, $message);
     }
 
     /**
@@ -59,7 +62,7 @@ trait FlashMessageTrait
      */
     protected function info(string $message): self
     {
-        return $this->addFlashMessage(FlashTypeInterface::INFO, $message);
+        return $this->addFlashMessage(FlashType::INFO, $message);
     }
 
     /**
@@ -70,7 +73,7 @@ trait FlashMessageTrait
      */
     protected function success(string $message): self
     {
-        return $this->addFlashMessage(FlashTypeInterface::SUCCESS, $message);
+        return $this->addFlashMessage(FlashType::SUCCESS, $message);
     }
 
     /**
@@ -81,6 +84,6 @@ trait FlashMessageTrait
      */
     protected function warning(string $message): self
     {
-        return $this->addFlashMessage(FlashTypeInterface::WARNING, $message);
+        return $this->addFlashMessage(FlashType::WARNING, $message);
     }
 }

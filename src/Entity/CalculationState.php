@@ -32,7 +32,7 @@ class CalculationState extends AbstractEntity
     /**
      * The default color (black).
      */
-    public const DEFAULT_COLOR = '#000000';
+    final public const DEFAULT_COLOR = '#000000';
 
     /**
      * The code (unique).

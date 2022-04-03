@@ -30,7 +30,7 @@ class TranslatorFactory
     /**
      * The default translator service class name (Bing).
      */
-    public const DEFAULT_SERVICE = BingTranslatorService::class;
+    final public const DEFAULT_SERVICE = BingTranslatorService::class;
 
     /**
      * The key to save/retrieve the last used service.
@@ -40,7 +40,7 @@ class TranslatorFactory
     /**
      * @var TranslatorServiceInterface[]
      */
-    private array $translators;
+    private readonly array $translators;
 
     /**
      * Constructor.

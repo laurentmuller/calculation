@@ -37,7 +37,7 @@ class ImageHandler implements ImageExtensionInterface
      * @param \GdImage    $image    the image to handle
      * @param string|null $filename the file name or null if none
      */
-    public function __construct(private \GdImage $image, private ?string $filename = null)
+    public function __construct(private readonly \GdImage $image, private readonly ?string $filename = null)
     {
     }
 

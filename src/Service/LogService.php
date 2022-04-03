@@ -33,22 +33,22 @@ class LogService
     /**
      * The key for channels.
      */
-    public const KEY_CHANNELS = 'channels';
+    final public const KEY_CHANNELS = 'channels';
 
     /**
      * The key for file.
      */
-    public const KEY_FILE = 'file';
+    final public const KEY_FILE = 'file';
 
     /**
      * The key for levels.
      */
-    public const KEY_LEVELS = 'levels';
+    final public const KEY_LEVELS = 'levels';
 
     /**
      * The key for logs.
      */
-    public const KEY_LOGS = 'logs';
+    final public const KEY_LOGS = 'logs';
 
     /**
      * The application channel.

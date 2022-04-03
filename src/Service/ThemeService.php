@@ -31,42 +31,42 @@ class ThemeService
     /**
      * The default background class name for the navigation bar.
      */
-    public const DEFAULT_BACKGROUND = 'navbar-dark bg-dark';
+    final public const DEFAULT_BACKGROUND = 'navbar-dark bg-dark';
 
     /**
      * The default CSS theme path.
      */
-    public const DEFAULT_CSS = 'js/vendor/twitter-bootstrap/css/bootstrap.css';
+    final public const DEFAULT_CSS = 'js/vendor/twitter-bootstrap/css/bootstrap.css';
 
     /**
      * The default CSS theme dark (false).
      */
-    public const DEFAULT_DARK = false;
+    final public const DEFAULT_DARK = false;
 
     /**
      * The default theme description.
      */
-    public const DEFAULT_DESCRIPTION = 'The default Bootstrap theme.';
+    final public const DEFAULT_DESCRIPTION = 'The default Bootstrap theme.';
 
     /**
      * The default theme name.
      */
-    public const DEFAULT_NAME = 'Bootstrap';
+    final public const DEFAULT_NAME = 'Bootstrap';
 
     /**
      * The key name of the background style for the navigation bar.
      */
-    public const KEY_BACKGROUND = 'THEME_BACKGROUND';
+    final public const KEY_BACKGROUND = 'THEME_BACKGROUND';
 
     /**
      * The key name for css theme.
      */
-    public const KEY_CSS = 'THEME_CSS';
+    final public const KEY_CSS = 'THEME_CSS';
 
     /**
      * The key name for dark theme.
      */
-    public const KEY_DARK = 'THEME_DARK';
+    final public const KEY_DARK = 'THEME_DARK';
 
     /**
      * The JSON themes file name.
@@ -93,7 +93,7 @@ class ThemeService
     /**
      * Constructor.
      */
-    public function __construct(private RequestStack $stack, CacheItemPoolInterface $adapter, private string $projectDir, bool $isDebug)
+    public function __construct(private readonly RequestStack $stack, CacheItemPoolInterface $adapter, private readonly string $projectDir, bool $isDebug)
     {
         if (!$isDebug) {
             $this->setAdapter($adapter);

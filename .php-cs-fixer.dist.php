@@ -59,6 +59,5 @@ $config = new PhpCsFixer\Config();
 
 return $config
     ->setRiskyAllowed(true)
-    ->setUsingCache(false)
     ->setFinder($finder)
     ->setRules($rules);

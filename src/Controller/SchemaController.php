@@ -35,7 +35,7 @@ class SchemaController extends AbstractController
     /**
      * @var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      */
-    private AbstractSchemaManager $manager;
+    private readonly AbstractSchemaManager $manager;
 
     /**
      * Constructor.

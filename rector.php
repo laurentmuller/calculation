@@ -21,8 +21,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     // bootstrap file
-    $parameters->set(Option::BOOTSTRAP_FILES, [
-        __DIR__ . '/vendor/autoload.php'],
+    $parameters->set(
+        Option::BOOTSTRAP_FILES,
+        [
+        __DIR__ . '/vendor/autoload.php', ],
     );
 
     // rules to skip
@@ -31,7 +33,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     // rules to apply
-    $containerConfigurator->import(SetList::PHP_80);
+    $containerConfigurator->import(SetList::PHP_81);
     $containerConfigurator->import(SetList::CODE_QUALITY);
     $containerConfigurator->import(SymfonySetList::SYMFONY_54);
     $containerConfigurator->import(SymfonySetList::SYMFONY_CODE_QUALITY);

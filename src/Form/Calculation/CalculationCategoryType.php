@@ -30,7 +30,7 @@ class CalculationCategoryType extends AbstractEntityType
     /**
      * Constructor.
      */
-    public function __construct(private CategoryTransformer $transformer)
+    public function __construct(private readonly CategoryTransformer $transformer)
     {
         parent::__construct(CalculationCategory::class);
     }

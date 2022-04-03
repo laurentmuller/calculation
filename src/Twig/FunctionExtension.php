@@ -50,17 +50,17 @@ final class FunctionExtension extends AbstractExtension
     /**
      * The file version.
      */
-    private int $version;
+    private readonly int $version;
 
     /**
      * The real path of the public directory.
      */
-    private string $webDir;
+    private readonly string $webDir;
 
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, TranslatorInterface $translator, private UrlGeneratorService $generator)
+    public function __construct(KernelInterface $kernel, TranslatorInterface $translator, private readonly UrlGeneratorService $generator)
     {
         $this->setTranslator($translator);
 

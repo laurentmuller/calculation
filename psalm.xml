@@ -5,7 +5,7 @@
         allowStringToStandInForClass="true"
         findUnusedPsalmSuppress="true"
         resolveFromConfigFile="true"
-        phpVersion="8.0"
+        phpVersion="8.1"
         errorLevel="1">
 
     <projectFiles>

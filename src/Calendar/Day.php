@@ -239,10 +239,8 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface, \Stringable
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'day' => $this->getNumber(),

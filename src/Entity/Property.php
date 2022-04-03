@@ -30,12 +30,12 @@ class Property extends AbstractEntity
     /**
      * The value used for FALSE or 0 value.
      */
-    public const FALSE_VALUE = 0;
+    final public const FALSE_VALUE = 0;
 
     /**
      * The value used for TRUE value.
      */
-    public const TRUE_VALUE = 1;
+    final public const TRUE_VALUE = 1;
 
     /**
      * The property name (unique).

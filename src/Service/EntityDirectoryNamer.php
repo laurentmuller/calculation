@@ -28,8 +28,8 @@ class EntityDirectoryNamer implements DirectoryNamerInterface
      * Constructor.
      */
     public function __construct(
-        private EntityManagerInterface $manager,
-        private Transliterator $transliterator
+        private readonly EntityManagerInterface $manager,
+        private readonly Transliterator $transliterator
     ) {
     }
 

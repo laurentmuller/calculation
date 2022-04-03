@@ -33,12 +33,12 @@ class CategoryTable extends AbstractEntityTable
     /**
      * The group parameter name (int).
      */
-    public const PARAM_GROUP = 'groupid';
+    final public const PARAM_GROUP = 'groupid';
 
     /**
      * Constructor.
      */
-    public function __construct(CategoryRepository $repository, private GroupRepository $groupRepository, private Environment $twig)
+    public function __construct(CategoryRepository $repository, private readonly GroupRepository $groupRepository, private readonly Environment $twig)
     {
         parent::__construct($repository);
     }

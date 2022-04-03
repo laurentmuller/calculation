@@ -25,7 +25,7 @@ class MinStrengthType extends AbstractChoiceType
     /**
      * The map between level values and translatable texts.
      */
-    public const CHOICE_LEVELS = [
+    final public const CHOICE_LEVELS = [
         StrengthInterface::LEVEL_NONE => 'password.strength_level.none',
         StrengthInterface::LEVEL_VERY_WEEK => 'password.strength_level.very_weak',
         StrengthInterface::LEVEL_WEEK => 'password.strength_level.weak',

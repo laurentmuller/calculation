@@ -24,7 +24,7 @@ class SwissPostService
     /**
      * The database name.
      */
-    public const DATABASE_NAME = 'swiss.sqlite';
+    final public const DATABASE_NAME = 'swiss.sqlite';
 
     /**
      * The relative path to data.
@@ -32,9 +32,9 @@ class SwissPostService
     private const DATA_PATH = '/resources/data/';
 
     /**
-     * The data diretory.
+     * The data directory.
      */
-    private string $dataDirectory;
+    private readonly string $dataDirectory;
 
     /**
      * Constructor.

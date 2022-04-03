@@ -21,11 +21,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class HeaderFooter
 {
-    public const DEFAULT_FONT_SIZE = 11;
+    final public const DEFAULT_FONT_SIZE = 11;
 
-    public const PART_CENTER = '&C';
-    public const PART_LEFT = '&L';
-    public const PART_RIGHT = '&R';
+    final public const PART_CENTER = '&C';
+    final public const PART_LEFT = '&L';
+    final public const PART_RIGHT = '&R';
 
     private String $textCenter = '';
     private String $textLeft = '';
@@ -36,7 +36,7 @@ class HeaderFooter
      *
      * @param bool $isHeader true to apply to the work sheet header, false to apply to the work sheet footer
      */
-    public function __construct(private bool $isHeader, private int $fontSize = self::DEFAULT_FONT_SIZE)
+    public function __construct(private readonly bool $isHeader, private readonly int $fontSize = self::DEFAULT_FONT_SIZE)
     {
     }
 

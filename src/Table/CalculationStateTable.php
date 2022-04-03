@@ -32,7 +32,7 @@ class CalculationStateTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(CalculationStateRepository $repository, TranslatorInterface $translator, private Environment $twig)
+    public function __construct(CalculationStateRepository $repository, TranslatorInterface $translator, private readonly Environment $twig)
     {
         parent::__construct($repository);
         $this->setTranslator($translator);

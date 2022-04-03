@@ -36,7 +36,7 @@ class MailService
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, private MailerInterface $mailer, UrlGeneratorInterface $generator, private string $appNameVersion)
+    public function __construct(TranslatorInterface $translator, private readonly MailerInterface $mailer, UrlGeneratorInterface $generator, private readonly string $appNameVersion)
     {
         $this->homeUrl = $generator->generate(AbstractController::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
         $this->setTranslator($translator);

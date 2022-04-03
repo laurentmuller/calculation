@@ -40,57 +40,57 @@ class SearchService
     /**
      * The action column name.
      */
-    public const COLUMN_ACTION = 'action';
+    final public const COLUMN_ACTION = 'action';
 
     /**
      * The content column name.
      */
-    public const COLUMN_CONTENT = 'content';
+    final public const COLUMN_CONTENT = 'content';
 
     /**
      * The entity column name.
      */
-    public const COLUMN_ENTITY_NAME = 'entityname';
+    final public const COLUMN_ENTITY_NAME = 'entityname';
 
     /**
      * The field column name.
      */
-    public const COLUMN_FIELD = 'field';
+    final public const COLUMN_FIELD = 'field';
 
     /**
      * The field column name.
      */
-    public const COLUMN_FIELD_NAME = 'fieldname';
+    final public const COLUMN_FIELD_NAME = 'fieldname';
 
     /**
      * The delete granted column name.
      */
-    public const COLUMN_GRANTED_DELETE = 'deletegranted';
+    final public const COLUMN_GRANTED_DELETE = 'deletegranted';
 
     /**
      * The edit granted column name.
      */
-    public const COLUMN_GRANTED_EDIT = 'editgranted';
+    final public const COLUMN_GRANTED_EDIT = 'editgranted';
 
     /**
      * The show granted column name.
      */
-    public const COLUMN_GRANTED_SHOW = 'showgranted';
+    final public const COLUMN_GRANTED_SHOW = 'showgranted';
 
     /**
      * The identifier column name.
      */
-    public const COLUMN_ID = 'id';
+    final public const COLUMN_ID = 'id';
 
     /**
      * The type column name.
      */
-    public const COLUMN_TYPE = 'type';
+    final public const COLUMN_TYPE = 'type';
 
     /**
      * Limit value to return all rows.
      */
-    public const NO_LIMIT = -1;
+    final public const NO_LIMIT = -1;
 
     /**
      * The column names and types.
@@ -124,7 +124,7 @@ class SearchService
     /**
      * Constructor.
      */
-    public function __construct(private EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, private bool $isDebug)
+    public function __construct(private readonly EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, private readonly bool $isDebug)
     {
         $this->setChecker($checker);
     }

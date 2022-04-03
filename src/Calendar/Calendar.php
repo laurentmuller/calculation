@@ -31,17 +31,17 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * The default day model class.
      */
-    public const DEFAULT_DAY_MODEL = Day::class;
+    final public const DEFAULT_DAY_MODEL = Day::class;
 
     /**
      * The default month model class.
      */
-    public const DEFAULT_MONTH_MODEL = Month::class;
+    final public const DEFAULT_MONTH_MODEL = Month::class;
 
     /**
      * The default week model class.
      */
-    public const DEFAULT_WEEK_MODEL = Week::class;
+    final public const DEFAULT_WEEK_MODEL = Week::class;
 
     /**
      * The day model class.
@@ -382,10 +382,8 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'year' => $this->year,

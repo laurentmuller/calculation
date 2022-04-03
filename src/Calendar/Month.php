@@ -157,10 +157,8 @@ class Month extends AbstractCalendarItem implements \Stringable
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'month' => $this->getNumber(),

@@ -81,7 +81,7 @@ class FormHelper
     /**
      * The labels prefix.
      */
-    private ?string $labelPrefix;
+    private readonly ?string $labelPrefix;
 
     /**
      * The options.
@@ -105,7 +105,7 @@ class FormHelper
      *                                          the label is automatically added when the field property is
      *                                          set.
      */
-    public function __construct(private FormBuilderInterface $builder, ?string $labelPrefix = null)
+    public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)
     {
         $this->labelPrefix = empty($labelPrefix) ? null : $labelPrefix;
     }

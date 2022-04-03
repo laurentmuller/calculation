@@ -27,7 +27,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     /**
      * Constructor.
      */
-    public function __construct(protected CalculationRepository $repository)
+    public function __construct(protected readonly CalculationRepository $repository)
     {
     }
 

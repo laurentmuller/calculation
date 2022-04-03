@@ -50,7 +50,7 @@ class CalculationDocument extends AbstractDocument
      * @param AbstractController $controller  the parent controller
      * @param Calculation        $calculation the calculation to render
      */
-    public function __construct(AbstractController $controller, private Calculation $calculation)
+    public function __construct(AbstractController $controller, private readonly Calculation $calculation)
     {
         parent::__construct($controller);
     }

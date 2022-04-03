@@ -34,7 +34,7 @@ class UrlGeneratorService
     /**
      * The caller parameter name.
      */
-    public const PARAM_CALLER = 'caller';
+    final public const PARAM_CALLER = 'caller';
 
     /**
      * The parameter names.
@@ -67,7 +67,7 @@ class UrlGeneratorService
     /**
      * Constructor.
      */
-    public function __construct(private UrlGeneratorInterface $generator)
+    public function __construct(private readonly UrlGeneratorInterface $generator)
     {
     }
 

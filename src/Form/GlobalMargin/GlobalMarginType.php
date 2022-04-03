@@ -31,7 +31,7 @@ class GlobalMarginType extends AbstractMarginType
     /**
      * Constructor.
      */
-    public function __construct(private GlobalMarginRepository $repository)
+    public function __construct(private readonly GlobalMarginRepository $repository)
     {
         parent::__construct(GlobalMargin::class);
     }

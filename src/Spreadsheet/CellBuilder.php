@@ -28,17 +28,17 @@ class CellBuilder
     /**
      * The date time format ('dd/mm/yyyy hh:mm').
      */
-    public const FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
+    final public const FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
 
     /**
      * The identifier format ('000000').
      */
-    public const FORMAT_ID = '000000';
+    final public const FORMAT_ID = '000000';
 
     /**
      * The integer format ('#,##0').
      */
-    public const FORMAT_INT = '#,##0';
+    final public const FORMAT_INT = '#,##0';
 
     /**
      * The bold font.
@@ -70,7 +70,7 @@ class CellBuilder
      *
      * @param Worksheet $sheet the sheet used to set cell values and styles
      */
-    public function __construct(private Worksheet $sheet)
+    public function __construct(private readonly Worksheet $sheet)
     {
     }
 

@@ -42,7 +42,7 @@ class RegistrationController extends AbstractController
     private const REGISTER_ROUTE = 'user_register';
     private const VERIFY_ROUTE = 'verify_email';
 
-    public function __construct(private EmailVerifier $verifier)
+    public function __construct(private readonly EmailVerifier $verifier)
     {
     }
 

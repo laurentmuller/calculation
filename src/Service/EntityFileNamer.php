@@ -29,7 +29,7 @@ class EntityFileNamer implements NamerInterface
     /**
      * Constructor.
      */
-    public function __construct(private Transliterator $transliterator)
+    public function __construct(private readonly Transliterator $transliterator)
     {
     }
 

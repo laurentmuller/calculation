@@ -27,7 +27,7 @@ class CaptchaValidator extends AbstractConstraintValidator
     /**
      * Constructor.
      */
-    public function __construct(private CaptchaImageService $service)
+    public function __construct(private readonly CaptchaImageService $service)
     {
         parent::__construct(Captcha::class);
     }

@@ -10,12 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\Interfaces;
+namespace App\Enums;
 
-interface FlashTypeInterface
+enum FlashType: string
 {
-    public const DANGER = 'danger';
-    public const INFO = 'info';
-    public const SUCCESS = 'success';
-    public const WARNING = 'warning';
+    case DANGER = 'danger';
+    case INFO = 'info';
+    case SUCCESS = 'success';
+    case WARNING = 'warning';
 }

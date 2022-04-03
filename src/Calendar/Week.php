@@ -140,10 +140,8 @@ class Week extends AbstractCalendarItem
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'week' => $this->getNumber(),

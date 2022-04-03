@@ -69,7 +69,7 @@ class CaptchaImageService
     /**
      * The font file name.
      */
-    private string $font;
+    private readonly string $font;
 
     /**
      * Constructor.

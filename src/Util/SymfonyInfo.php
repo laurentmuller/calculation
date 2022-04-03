@@ -54,7 +54,7 @@ final class SymfonyInfo
     /**
      * Constructor.
      */
-    public function __construct(private KernelInterface $kernel, private RouterInterface $router)
+    public function __construct(private readonly KernelInterface $kernel, private readonly RouterInterface $router)
     {
     }
 

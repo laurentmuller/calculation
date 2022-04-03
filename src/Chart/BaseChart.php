@@ -49,27 +49,27 @@ class BaseChart extends Highchart
     /**
      * The identifier (#id) of the div where to render the chart.
      */
-    public const CONTAINER = 'chartContainer';
+    final public const CONTAINER = 'chartContainer';
 
     /**
      * The column chart type.
      */
-    public const TYPE_COLUMN = 'column';
+    final public const TYPE_COLUMN = 'column';
 
     /**
      * The line chart type.
      */
-    public const TYPE_LINE = 'line';
+    final public const TYPE_LINE = 'line';
 
     /**
      * The pie chart type.
      */
-    public const TYPE_PIE = 'pie';
+    final public const TYPE_PIE = 'pie';
 
     /**
      * The spline chart type.
      */
-    public const TYPE_SP_LINE = 'spline';
+    final public const TYPE_SP_LINE = 'spline';
 
     /**
      * Constructor.

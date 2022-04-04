@@ -58,17 +58,17 @@ class PersistenceListener implements EventSubscriber
     /**
      * The debug mode.
      */
-    private bool $isDebug;
+    private readonly bool $isDebug;
 
     /**
      * The message title.
      */
-    private string $title;
+    private readonly string $title;
 
     /**
      * Constructor.
      */
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, private string $appName)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, private readonly string $appName)
     {
         $this->isDebug = $kernel->isDebug();
         $this->setTranslator($translator);

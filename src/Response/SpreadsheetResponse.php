@@ -31,7 +31,7 @@ class SpreadsheetResponse extends StreamedResponse implements IResponseInterface
     /**
      * The application Microsoft Excel (OpenXML) mime type.
      */
-    public const MIME_TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    final public const MIME_TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /**
      * Constructor.

@@ -29,7 +29,7 @@ class PhpIniReport extends AbstractReport
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private array $content, string $version)
+    public function __construct(AbstractController $controller, private readonly array $content, string $version)
     {
         parent::__construct($controller);
         if ($description = \php_ini_loaded_file()) {

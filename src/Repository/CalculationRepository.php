@@ -32,7 +32,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * The alias for the state entity.
      */
-    public const STATE_ALIAS = 's';
+    final public const STATE_ALIAS = 's';
 
     /**
      * Constructor.

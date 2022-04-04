@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Customer;
+use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
@@ -30,7 +31,7 @@ class CustomersReport extends AbstractArrayReport
     /**
      * The other group name.
      */
-    private string $other;
+    private readonly string $other;
 
     /**
      * Constructor.
@@ -39,9 +40,9 @@ class CustomersReport extends AbstractArrayReport
      * @param Customer[]         $entities   the customers to export
      * @param bool               $grouped    true if the customers are grouped by the first letter
      */
-    public function __construct(AbstractController $controller, array $entities, private bool $grouped = true)
+    public function __construct(AbstractController $controller, array $entities, private readonly bool $grouped = true)
     {
-        parent::__construct($controller, $entities, self::ORIENTATION_LANDSCAPE);
+        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
         $this->other = $this->trans('report.other');
     }
 

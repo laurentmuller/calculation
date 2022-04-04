@@ -39,7 +39,7 @@ trait PdfCellListenerTrait
      *
      * @see PdfCellListenerInterface::onDrawCellBorder()
      */
-    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, int|string $border): bool
+    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string|int $border): bool
     {
         return false;
     }

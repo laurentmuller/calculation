@@ -29,7 +29,7 @@ class UserCommentType extends AbstractType
     /**
      * Constructor.
      */
-    public function __construct(private AddressTransformer $transformer)
+    public function __construct(private readonly AddressTransformer $transformer)
     {
     }
 

@@ -38,7 +38,7 @@ class Theme implements \JsonSerializable, \Stringable
     /**
      * The style sheet path.
      */
-    private string $css;
+    private readonly string $css;
 
     /**
      * The dark style.
@@ -48,7 +48,7 @@ class Theme implements \JsonSerializable, \Stringable
     /**
      * The description.
      */
-    private string $description;
+    private readonly string $description;
 
     /**
      * The path exist.
@@ -58,7 +58,7 @@ class Theme implements \JsonSerializable, \Stringable
     /**
      * The name.
      */
-    private string $name;
+    private readonly string $name;
 
     /**
      * Constructor.

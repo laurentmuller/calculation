@@ -33,7 +33,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator, private CalculationService $service, private CalculationRepository $repository)
+    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator, private readonly CalculationService $service, private readonly CalculationRepository $repository)
     {
         parent::__construct($manager, $fakerService, $translator);
     }

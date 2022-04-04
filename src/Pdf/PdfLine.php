@@ -24,7 +24,7 @@ class PdfLine implements PdfDocumentUpdaterInterface, \Stringable
     /**
      * The default line width (0.2mm).
      */
-    public const DEFAULT_WIDTH = 0.2;
+    final public const DEFAULT_WIDTH = 0.2;
 
     /**
      * Constructor.

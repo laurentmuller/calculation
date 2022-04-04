@@ -58,12 +58,12 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     private const CACHE_TIMEOUT = 60 * 60;
 
-    private CacheItemPoolInterface $adapter;
+    private readonly CacheItemPoolInterface $adapter;
 
     /**
      * Constructor.
      */
-    public function __construct(private EntityManagerInterface $manager, KernelInterface $kernel, LoggerInterface $logger)
+    public function __construct(private readonly EntityManagerInterface $manager, KernelInterface $kernel, LoggerInterface $logger)
     {
         $this->adapter = AbstractAdapter::createSystemCache(self::CACHE_NAME_SPACE, self::CACHE_TIMEOUT, '', $kernel->getCacheDir(), $logger);
 

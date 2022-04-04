@@ -37,57 +37,57 @@ class PlainType extends AbstractType
     /**
      * The gregorian calendar type.
      */
-    public const CALENDAR_GREGORIAN = 'gregorian';
+    final public const CALENDAR_GREGORIAN = 'gregorian';
 
     /**
      * The traditional calendar type.
      */
-    public const CALENDAR_TRADITIONAL = 'traditional';
+    final public const CALENDAR_TRADITIONAL = 'traditional';
 
     /**
      * The full date or time format.
      */
-    public const FORMAT_FULL = \IntlDateFormatter::FULL;
+    final public const FORMAT_FULL = \IntlDateFormatter::FULL;
 
     /**
      * The long date or time format.
      */
-    public const FORMAT_LONG = \IntlDateFormatter::LONG;
+    final public const FORMAT_LONG = \IntlDateFormatter::LONG;
 
     /**
      * The medium date or time format.
      */
-    public const FORMAT_MEDIUM = \IntlDateFormatter::MEDIUM;
+    final public const FORMAT_MEDIUM = \IntlDateFormatter::MEDIUM;
 
     /**
      * The none date or time format.
      */
-    public const FORMAT_NONE = \IntlDateFormatter::NONE;
+    final public const FORMAT_NONE = \IntlDateFormatter::NONE;
 
     /**
      * The short date or time format.
      */
-    public const FORMAT_SHORT = \IntlDateFormatter::SHORT;
+    final public const FORMAT_SHORT = \IntlDateFormatter::SHORT;
 
     /**
      * The amount number pattern.
      */
-    public const NUMBER_AMOUNT = 'price';
+    final public const NUMBER_AMOUNT = 'price';
 
     /**
      * The identifier number pattern.
      */
-    public const NUMBER_IDENTIFIER = 'identifier';
+    final public const NUMBER_IDENTIFIER = 'identifier';
 
     /**
      * The integer number pattern.
      */
-    public const NUMBER_INTEGER = 'integer';
+    final public const NUMBER_INTEGER = 'integer';
 
     /**
      * The percent number pattern.
      */
-    public const NUMBER_PERCENT = 'percent';
+    final public const NUMBER_PERCENT = 'percent';
 
     /**
      * Constructor.

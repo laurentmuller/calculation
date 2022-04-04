@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfGroupTableBuilder;
@@ -52,7 +53,7 @@ class CalculationsReport extends AbstractArrayReport
      */
     public function __construct(AbstractController $controller, array $entities, protected bool $grouped = true)
     {
-        parent::__construct($controller, $entities, self::ORIENTATION_LANDSCAPE);
+        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
         $this->minMargin = $controller->getApplication()->getMinMargin();
     }
 

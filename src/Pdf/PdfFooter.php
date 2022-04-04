@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfMove;
 use App\Report\AbstractReport;
 use App\Util\FormatUtils;
 
@@ -101,7 +102,7 @@ class PdfFooter implements PdfConstantsInterface
      */
     private function outputText(string $text, float $cellWidth, string $align, string $link = ''): self
     {
-        $this->parent->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, $align, false, $link);
+        $this->parent->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, PdfMove::RIGHT, $align, false, $link);
 
         return $this;
     }

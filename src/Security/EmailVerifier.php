@@ -32,7 +32,7 @@ class EmailVerifier
     /**
      * Constructor.
      */
-    public function __construct(private VerifyEmailHelperInterface $helper, private MailerInterface $mailer, private EntityManagerInterface $manager)
+    public function __construct(private readonly VerifyEmailHelperInterface $helper, private readonly MailerInterface $mailer, private readonly EntityManagerInterface $manager)
     {
     }
 

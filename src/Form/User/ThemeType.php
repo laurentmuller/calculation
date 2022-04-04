@@ -31,7 +31,7 @@ class ThemeType extends AbstractHelperType
     /**
      * The background choices.
      */
-    public const BACKGROUND_CHOICES = [
+    final public const BACKGROUND_CHOICES = [
         'theme.background.dark' => 'bg-dark',
         'theme.background.light' => 'bg-light',
         'theme.background.white' => 'bg-white',
@@ -46,7 +46,7 @@ class ThemeType extends AbstractHelperType
     /**
      * The navigation bar choices.
      */
-    public const FOREGROUND_CHOICES = [
+    final public const FOREGROUND_CHOICES = [
         'theme.foreground.dark' => 'navbar-dark',
         'theme.foreground.light' => 'navbar-light',
     ];
@@ -54,7 +54,7 @@ class ThemeType extends AbstractHelperType
     /**
      * Constructor.
      */
-    public function __construct(private ThemeService $service, TranslatorInterface $translator)
+    public function __construct(private readonly ThemeService $service, TranslatorInterface $translator)
     {
         $this->setTranslator($translator);
     }

@@ -596,9 +596,9 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfDocument  $parent the parent document
      * @param int          $index  the column index
      * @param PdfRectangle $bounds the cell bounds
-     * @param int|string   $border the border style
+     * @param string|int   $border the border style
      */
-    protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, int|string $border): void
+    protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, string|int $border): void
     {
         // handle by listener?
         if ($this->listener && $this->listener->onDrawCellBorder($this, $index, $bounds, $border)) {

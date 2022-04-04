@@ -21,12 +21,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class ApplicationInfo
 {
-    private string $description;
-    private string $name;
-    private string $ownerCity;
-    private string $ownerName;
-    private string $ownerUrl;
-    private string $version;
+    private readonly string $description;
+    private readonly string $name;
+    private readonly string $ownerCity;
+    private readonly string $ownerName;
+    private readonly string $ownerUrl;
+    private readonly string $version;
 
     /**
      * Constructor.

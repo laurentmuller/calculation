@@ -87,17 +87,17 @@ class ResponseListener implements EventSubscriberInterface
     /**
      * The asset URL.
      */
-    private string $asset;
+    private readonly string $asset;
 
     /**
      * The reporting URL.
      */
-    private string $reportUrl;
+    private readonly string $reportUrl;
 
     /**
      * Constructor.
      */
-    public function __construct(RouterInterface $router, ParameterBagInterface $params, private NonceExtension $extension, private bool $isDebug)
+    public function __construct(RouterInterface $router, ParameterBagInterface $params, private readonly NonceExtension $extension, private readonly bool $isDebug)
     {
         /** @var string $asset */
         $asset = $params->get('asset_base');

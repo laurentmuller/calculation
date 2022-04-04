@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Category;
+use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Util\FormatUtils;
@@ -78,8 +79,8 @@ class CategoriesReport extends AbstractArrayReport
 
         $margins = $this->setCellMargin(0);
         $width = $this->GetPageWidth() / 2;
-        $this->Cell($width, self::LINE_HEIGHT, $txtGroup . ' - ' . $txtCount, self::BORDER_NONE, self::MOVE_TO_RIGHT);
-        $this->Cell(0, self::LINE_HEIGHT, $txtProduct . ' - ' . $txtTask, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT);
+        $this->Cell($width, self::LINE_HEIGHT, $txtGroup . ' - ' . $txtCount, self::BORDER_NONE, PdfMove::RIGHT);
+        $this->Cell(0, self::LINE_HEIGHT, $txtProduct . ' - ' . $txtTask, self::BORDER_NONE, PdfMove::NEW_LINE, self::ALIGN_RIGHT);
         $this->setCellMargin($margins);
 
         return true;

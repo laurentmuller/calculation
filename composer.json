@@ -122,8 +122,9 @@
 	},
 	"extra" : {
 		"symfony" : {
-			"allow-contrib" : false,
-			"require" : "5.4.*"
+			"allow-contrib": true,
+			"require": "5.4.*",
+			"docker": false
 		}
 	},
 	"autoload" : {
@@ -139,6 +140,10 @@
 	"scripts" : {
 		"bin" : "echo 'bin not installed'",
 		"post-install-cmd" : "@composer bin all install --ansi",
-		"post-update-cmd" : "@composer bin all update --ansi"
+		"post-update-cmd" : "@composer bin all update --ansi",
+		"auto-scripts": {
+			"cache:clear": "symfony-cmd",
+			"assets:install %PUBLIC_DIR%": "symfony-cmd"
+		}
 	}
 }

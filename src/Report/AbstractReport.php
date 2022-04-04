@@ -13,6 +13,10 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Enums\PdfDocumentOrientation;
+use App\Pdf\Enums\PdfDocumentSize;
+use App\Pdf\Enums\PdfDocumentUnit;
+use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfDocument;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
@@ -31,17 +35,16 @@ abstract class AbstractReport extends PdfDocument
     /*
      * The Twig extension to format values.
      */
-    private FormatExtension $extension;
+    private readonly FormatExtension $extension;
 
     /**
      * Constructor.
      *
-     * @param AbstractController $controller  the parent controller
-     * @param string             $orientation the page orientation. One of the ORIENTATION_XX constants.
-     * @param string             $unit        the measure unit. One of the UNIT_XX constants.
-     * @param mixed              $size        the document size. One of the SIZE_XX constants or an array containing the width and height of the document.
+     * @param PdfDocumentOrientation|string $orientation the page orientation
+     * @param PdfDocumentUnit|string        $unit        the measure unit
+     * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
      */
-    public function __construct(protected AbstractController $controller, string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, mixed $size = self::SIZE_A4)
+    public function __construct(protected AbstractController $controller, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
     {
         parent::__construct($orientation, $unit, $size);
 
@@ -115,7 +118,7 @@ abstract class AbstractReport extends PdfDocument
         $text = $this->translateCount($count);
 
         $margins = $this->setCellMargin(0);
-        $this->Cell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, $align);
+        $this->Cell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, PdfMove::NEW_LINE, $align);
         $this->setCellMargin($margins);
 
         return $count > 0;

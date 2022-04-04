@@ -15,6 +15,7 @@ namespace App\Report;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
 use App\Model\Role;
+use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfGroup;
@@ -114,7 +115,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
             // description
             PdfStyle::getDefaultStyle()->setFontItalic()->apply($this);
-            $this->Cell(0, self::LINE_HEIGHT, ' - ' . $description, self::BORDER_NONE, self::MOVE_TO_NEW_LINE);
+            $this->Cell(0, self::LINE_HEIGHT, ' - ' . $description, self::BORDER_NONE, PdfMove::NEW_LINE);
 
             return true;
         }

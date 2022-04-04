@@ -73,7 +73,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(private OpenWeatherService $service)
+    public function __construct(private readonly OpenWeatherService $service)
     {
     }
 

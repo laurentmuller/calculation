@@ -64,7 +64,7 @@ class PivotTableFactory
      *
      * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class
      */
-    public function __construct(private array $dataset, private ?string $title = null, ?string $aggregatorClass = null)
+    public function __construct(private readonly array $dataset, private ?string $title = null, ?string $aggregatorClass = null)
     {
         $aggregatorClass ??= SumAggregator::class;
         if (!\is_subclass_of($aggregatorClass, AbstractAggregator::class)) {

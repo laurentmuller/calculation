@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Model\CustomerInformation;
+use App\Pdf\Enums\PdfMove;
 
 /**
  * Class to output header in PDF documents.
@@ -211,7 +212,7 @@ class PdfHeader implements PdfConstantsInterface
     {
         $this->applySmallStyle();
         $text = $this->getAddress();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_NONE, PdfMove::RIGHT, self::ALIGN_LEFT);
     }
 
     private function outputDescription(float $width, bool $isAddress): void
@@ -219,7 +220,7 @@ class PdfHeader implements PdfConstantsInterface
         if (!empty($this->description)) {
             $this->applySmallStyle();
             $align = $isAddress ? self::ALIGN_CENTER : self::ALIGN_LEFT;
-            $move = $isAddress ? self::MOVE_TO_RIGHT : self::MOVE_TO_NEW_LINE;
+            $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
             $this->outputText($width, self::LINE_HEIGHT, $this->description, self::BORDER_NONE, $move, $align);
         }
     }
@@ -229,14 +230,14 @@ class PdfHeader implements PdfConstantsInterface
         $this->applySmallStyle();
         $text = $this->getEmail();
         $link = empty($text) ? '' : "mailto:$text";
-        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_BOTTOM, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT, $link);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_BOTTOM, PdfMove::NEW_LINE, self::ALIGN_RIGHT, $link);
     }
 
     private function outputFax(float $width): void
     {
         $this->applySmallStyle();
         $text = $this->getFax();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_NONE, PdfMove::NEW_LINE, self::ALIGN_RIGHT);
     }
 
     private function outputName(float $width, bool $isAddress): void
@@ -245,7 +246,7 @@ class PdfHeader implements PdfConstantsInterface
         $name = $this->getName();
         $align = $isAddress ? self::ALIGN_LEFT : self::ALIGN_RIGHT;
         $border = $isAddress ? self::BORDER_NONE : self::BORDER_BOTTOM;
-        $move = $isAddress ? self::MOVE_TO_RIGHT : self::MOVE_TO_NEW_LINE;
+        $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
         $this->outputText($width, self::LINE_HEIGHT, $name, $border, $move, $align, $this->getUrl() ?: '');
     }
 
@@ -253,10 +254,10 @@ class PdfHeader implements PdfConstantsInterface
     {
         $this->applySmallStyle();
         $text = $this->getPhone();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_NONE, PdfMove::NEW_LINE, self::ALIGN_RIGHT);
     }
 
-    private function outputText(float $width, float $height, string $text, int|string $border, int $move, string $align, string $link = ''): void
+    private function outputText(float $width, float $height, string $text, int|string $border, PdfMove $move, string $align, string $link = ''): void
     {
         $this->parent->Cell($width, $height, $text, $border, $move, $align, false, $link);
     }
@@ -267,14 +268,14 @@ class PdfHeader implements PdfConstantsInterface
         $title = $this->toEmpty($this->parent->getTitle());
         $align = $isAddress ? self::ALIGN_CENTER : self::ALIGN_LEFT;
         $border = $isAddress ? self::BORDER_NONE : self::BORDER_BOTTOM;
-        $this->outputText($width, self::LINE_HEIGHT, $title, $border, self::MOVE_TO_RIGHT, $align);
+        $this->outputText($width, self::LINE_HEIGHT, $title, $border, PdfMove::RIGHT, $align);
     }
 
     private function outputZipCity(float $width): void
     {
         $this->applySmallStyle();
         $text = $this->getZipCity();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_BOTTOM, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, self::BORDER_BOTTOM, PdfMove::RIGHT, self::ALIGN_LEFT);
     }
 
     private function toEmpty(?string $value): string

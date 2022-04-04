@@ -22,34 +22,32 @@ class HtmlOlChunk extends HtmlParentChunk
     /**
      * The list items will be numbered with lowercase letters.
      */
-    public const TYPE_LETTER_LOWER = 'a';
+    final public const TYPE_LETTER_LOWER = 'a';
 
     /**
      * The list items will be numbered with uppercase letters.
      */
-    public const TYPE_LETTER_UPPER = 'A';
+    final public const TYPE_LETTER_UPPER = 'A';
 
     /**
      * The list items will be numbered with numbers (default).
      */
-    public const TYPE_NUMBER = '1';
+    final public const TYPE_NUMBER = '1';
 
     /**
      * The list items will be numbered with lowercase roman numbers.
      */
-    public const TYPE_ROMAN_LOWER = 'i';
+    final public const TYPE_ROMAN_LOWER = 'i';
 
     /**
      * The list items will be numbered with uppercase roman numbers.
      */
-    public const TYPE_ROMAN_UPPER = 'I';
+    final public const TYPE_ROMAN_UPPER = 'I';
 
     /**
      * The start counting.
-     *
-     * @var int
      */
-    protected $start;
+    protected int $start;
 
     /**
      * The numbered type.

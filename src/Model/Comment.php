@@ -71,7 +71,7 @@ class Comment
      *
      * @param bool $mail true to send an e-mail, false to send a comment
      */
-    public function __construct(private bool $mail)
+    public function __construct(private readonly bool $mail)
     {
     }
 

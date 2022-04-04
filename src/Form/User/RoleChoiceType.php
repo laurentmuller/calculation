@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class RoleChoiceType extends AbstractChoiceType
 {
-    private bool $superAdmin;
+    private readonly bool $superAdmin;
 
     /**
      * Constructor.

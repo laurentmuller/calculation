@@ -28,22 +28,22 @@ class CustomerRepository extends AbstractRepository
     /**
      * The first name, last name and company field name.
      */
-    public const NAME_COMPANY_FIELD = 'nameAndCompany';
+    final public const NAME_COMPANY_FIELD = 'nameAndCompany';
 
     /**
      * The first name, last name and company fields.
      */
-    public const NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
+    final public const NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
 
     /**
      * The zip and city field name.
      */
-    public const ZIP_CITY_FIELD = 'zipCity';
+    final public const ZIP_CITY_FIELD = 'zipCity';
 
     /**
      * The zip code and city fields.
      */
-    public const ZIP_CITY_FIELDS = ['zipCode', 'city'];
+    final public const ZIP_CITY_FIELDS = ['zipCode', 'city'];
 
     /**
      * Constructor.

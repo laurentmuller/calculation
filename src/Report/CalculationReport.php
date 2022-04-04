@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -34,12 +35,12 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
 {
     use LoggerTrait;
 
-    private float $minMargin;
+    private readonly float $minMargin;
 
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private Calculation $calculation, private ?string $qrcode = null)
+    public function __construct(AbstractController $controller, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
     {
         parent::__construct($controller);
         $this->minMargin = $controller->getApplication()->getMinMargin();
@@ -92,7 +93,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         if ($calculation->isEmpty()) {
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
-            $this->Cell(0, 0, $message, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_CENTER);
+            $this->Cell(0, 0, $message, self::BORDER_NONE, PdfMove::NEW_LINE, self::ALIGN_CENTER);
             $this->renderQrCode();
 
             return true;

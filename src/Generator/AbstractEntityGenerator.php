@@ -41,7 +41,7 @@ abstract class AbstractEntityGenerator implements LoggerAwareInterface, Generato
     /**
      * Constructor.
      */
-    public function __construct(private EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator)
+    public function __construct(private readonly EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator)
     {
         $this->generator = $fakerService->getGenerator();
         $this->setTranslator($translator);

@@ -32,12 +32,12 @@ class TimestampableListener implements DisableListenerInterface
 {
     use DisableListenerTrait;
 
-    private string $emptyUser;
+    private readonly string $emptyUser;
 
     /**
      * Constructor.
      */
-    public function __construct(private Security $security, TranslatorInterface $translator)
+    public function __construct(private readonly Security $security, TranslatorInterface $translator)
     {
         $this->emptyUser = $translator->trans('common.empty_user');
     }

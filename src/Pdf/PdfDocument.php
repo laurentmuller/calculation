@@ -12,6 +12,13 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfDocumentLayout;
+use App\Pdf\Enums\PdfDocumentOrientation;
+use App\Pdf\Enums\PdfDocumentOutput;
+use App\Pdf\Enums\PdfDocumentSize;
+use App\Pdf\Enums\PdfDocumentUnit;
+use App\Pdf\Enums\PdfDocumentZoom;
+use App\Pdf\Enums\PdfMove;
 use App\Traits\MathTrait;
 use FPDF;
 
@@ -56,123 +63,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * The footer offset.
      */
-    public const FOOTER_OFFSET = -15;
-
-    /**
-     * Displays pages continuously.
-     */
-    public const LAYOUT_CONTINOUS = 'continuous';
-
-    /**
-     * Uses viewer default mode.
-     */
-    public const LAYOUT_DEFAULT = 'default';
-
-    /**
-     * Displays one page at once.
-     */
-    public const LAYOUT_SINGLE = 'single';
-
-    /**
-     * Displays two pages on two columns.
-     */
-    public const LAYOUT_TWO_PAGES = 'two';
-
-    /**
-     * The document orientation as landscape.
-     */
-    public const ORIENTATION_LANDSCAPE = 'L';
-
-    /**
-     * The document orientation as portrait.
-     */
-    public const ORIENTATION_PORTRAIT = 'P';
-
-    /**
-     * Send to the browser and force a file download with the given name parameter.
-     */
-    public const OUTPUT_DOWNLOAD = 'D';
-
-    /**
-     * Save to a local file with the given name parameter (may include a path).
-     */
-    public const OUTPUT_FILE = 'F';
-
-    /**
-     * Send the file inline to the browser (default).
-     * The PDF viewer is used if available.
-     */
-    public const OUTPUT_INLINE = 'I';
-
-    /**
-     * Return the document as a string.
-     */
-    public const OUTPUT_STRING = 'S';
-
-    /**
-     * The A3 document size.
-     */
-    public const SIZE_A3 = 'A3';
-
-    /**
-     * The A4 document size.
-     */
-    public const SIZE_A4 = 'A4';
-
-    /**
-     * The A5 document size.
-     */
-    public const SIZE_A5 = 'A5';
-
-    /**
-     * The Legal document size.
-     */
-    public const SIZE_LEGAL = 'Legal';
-
-    /**
-     * The Letter document size.
-     */
-    public const SIZE_LETTER = 'Letter';
-
-    /**
-     * The centimeter document unit.
-     */
-    public const UNIT_CENTIMETER = 'cm';
-
-    /**
-     * The inch document unit.
-     */
-    public const UNIT_INCH = 'in';
-
-    /**
-     * The millimeter document unit.
-     */
-    public const UNIT_MILLIMETER = 'mm';
-
-    /**
-     * The point document unit.
-     */
-    public const UNIT_POINT = 'pt';
-
-    /**
-     * Uses viewer default mode.
-     */
-    public const ZOOM_DEFAULT = 'default';
-
-    /**
-     * Displays the entire page on screen.
-     */
-    public const ZOOM_FULL_PAGE = 'fullpage';
-
-    /**
-     * Uses maximum width of window.
-     */
-    public const ZOOM_FULL_WIDTH = 'fullwidth';
-
-    /**
-     * Uses real size (equivalent to 100% zoom).
-     */
-    public const ZOOM_REAL = 'real';
+    final public const FOOTER_OFFSET = -15;
 
     /**
      * The footer.
@@ -192,13 +83,21 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Constructor.
      *
-     * @param string $orientation the page orientation. One of the ORIENTATION_XX contents.
-     * @param string $unit        the measure unit. One of the UNIT_XX contents.
-     * @param mixed  $size        the document size. One of the SIZE_XX contents or an array containing
-     *                            the width and height of the document.
+     * @param PdfDocumentOrientation|string $orientation the page orientation
+     * @param PdfDocumentUnit|string        $unit        the measure unit
+     * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
      */
-    public function __construct(string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, $size = self::SIZE_A4)
+    public function __construct(PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
     {
+        if ($orientation instanceof PdfDocumentOrientation) {
+            $orientation = $orientation->value;
+        }
+        if ($unit instanceof PdfDocumentUnit) {
+            $unit = $unit->value;
+        }
+        if ($size instanceof PdfDocumentSize) {
+            $size = $size->value;
+        }
         parent::__construct($orientation, $unit, $size);
 
         $this->header = new PdfHeader($this);
@@ -206,7 +105,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
 
         $this->AliasNbPages();
         $this->SetAutoPageBreak(true, $this->bMargin - self::LINE_HEIGHT);
-        $this->SetDisplayMode(self::ZOOM_FULL_PAGE, self::LAYOUT_SINGLE);
+        $this->SetDisplayMode();
     }
 
     /**
@@ -227,45 +126,48 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Prints a cell (rectangular area) with optional borders, background color and character string.
      *
-     * @param float      $w      the cell width. If 0, the cell extends up to the right margin.
-     * @param float      $h      the cell height
-     * @param string     $txt    the cell text
-     * @param int|string $border indicates if borders must be drawn around the cell. The value can be either:
-     *                           <ul>
-     *                           <li>A number:
-     *                           <ul>
-     *                           <li><b>0</b> : No border (default value).</li>
-     *                           <li><b>1</b> : Frame.</li>
-     *                           </ul>
-     *                           </li>
-     *                           <li>A string containing some or all of the following characters (in any order):
-     *                           <ul>
-     *                           <li>'<b>L</b>' : Left.</li>
-     *                           <li>'<b>T</b>' : Top.</li>
-     *                           <li>'<b>R</b>' : Right.</li>
-     *                           <li>'<b>B</b>' : Bottom.</li>
-     *                           </ul>
-     *                           </li>
-     *                           </ul>
-     * @param int        $ln     indicates where the current position should go after the call.
-     *                           Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after. The default value is <code>0</code>.
-     *                           Possible values are:
-     *                           <ul>
-     *                           <li><b>0</b>: To the right</li>
-     *                           <li><b>1</b>: To the beginning of the next line</li>
-     *                           <li><b>2</b>: Below</li>
-     *                           </ul>
-     * @param string     $align  the text alignment. The value can be:
-     *                           <ul>
-     *                           <li>'<b>L</b>' or en empty string: left align (default value).</li>
-     *                           <li>'<b>C</b>' : center.</li>
-     *                           <li>'<b>R</b>' : right align.</li>
-     *                           </ul>
-     * @param bool       $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
-     * @param string|int $link   a URL or an identifier returned by AddLink()
+     * @param float       $w      the cell width. If 0, the cell extends up to the right margin.
+     * @param float       $h      the cell height
+     * @param string      $txt    the cell text
+     * @param int|string  $border indicates if borders must be drawn around the cell. The value can be either:
+     *                            <ul>
+     *                            <li>A number:
+     *                            <ul>
+     *                            <li><b>0</b> : No border (default value).</li>
+     *                            <li><b>1</b> : Frame.</li>
+     *                            </ul>
+     *                            </li>
+     *                            <li>A string containing some or all of the following characters (in any order):
+     *                            <ul>
+     *                            <li>'<b>L</b>' : Left.</li>
+     *                            <li>'<b>T</b>' : Top.</li>
+     *                            <li>'<b>R</b>' : Right.</li>
+     *                            <li>'<b>B</b>' : Bottom.</li>
+     *                            </ul>
+     *                            </li>
+     *                            </ul>
+     * @param PdfMove|int $ln     indicates where the current position should go after the call.
+     *                            Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after. The default value is <code>0</code>.
+     *                            Possible values are:
+     *                            <ul>
+     *                            <li><b>0</b>: To the right</li>
+     *                            <li><b>1</b>: To the beginning of the next line</li>
+     *                            <li><b>2</b>: Below</li>
+     *                            </ul>
+     * @param string      $align  the text alignment. The value can be:
+     *                            <ul>
+     *                            <li>'<b>L</b>' or en empty string (''): left align (default value).</li>
+     *                            <li>'<b>C</b>' : center.</li>
+     *                            <li>'<b>R</b>' : right align.</li>
+     *                            </ul>
+     * @param bool        $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
+     * @param string|int  $link   a URL or an identifier returned by AddLink()
      */
-    public function Cell($w, $h = 0.0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = ''): void
+    public function Cell($w, $h = 0.0, $txt = '', $border = 0, $ln = PdfMove::RIGHT, $align = '', $fill = false, $link = ''): void
     {
+        if ($ln instanceof PdfMove) {
+            $ln = $ln->value;
+        }
         parent::Cell($w, $h, $this->cleanText($txt), $border, $ln, $align, $fill, $link);
     }
 
@@ -295,31 +197,11 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Gets the current orientation.
-     *
-     * @return string the current orientation. Is one of the ORIENTATION_XX constants.
-     */
-    public function getCurrentOrientation(): string
-    {
-        return $this->CurOrientation;
-    }
-
-    /**
      * Gets the current page.
      */
     public function getCurrentPage(): int
     {
         return $this->page;
-    }
-
-    /**
-     * Gets the current page size.
-     *
-     * @return float[] the current page size. Is one of the SIZE_XX constants.
-     */
-    public function getCurrentPageSize(): array
-    {
-        return $this->CurPageSize;
     }
 
     /**
@@ -330,16 +212,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     public function getCurrentRotation(): int
     {
         return $this->CurRotation;
-    }
-
-    /**
-     * Gets the default orientation.
-     *
-     * @return string the default orientation. Is one of the ORIENTATION_XX contents.
-     */
-    public function getDefaultOrientation(): string
-    {
-        return $this->DefOrientation;
     }
 
     /**
@@ -568,26 +440,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Returns if the current page orientation is Landscape.
-     *
-     * @return bool true if Landscape
-     */
-    public function isLandscape(): bool
-    {
-        return self::ORIENTATION_LANDSCAPE === $this->CurOrientation;
-    }
-
-    /**
-     * Returns if the current page orientation is Portrait.
-     *
-     * @return bool true if Portrait
-     */
-    public function isPortrait(): bool
-    {
-        return self::ORIENTATION_PORTRAIT === $this->CurOrientation;
-    }
-
-    /**
      * Returns if the given height would not cause an overflow (new page).
      *
      * @param float $height the desired height
@@ -638,6 +490,23 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
+     * Send the document to a given destination.
+     *
+     * @param PdfDocumentOutput|string $dest   the destination where to send the document
+     * @param string                   $name   the name of the file. It is ignored in case of destination PdfDocumentOutput::STRING.
+     * @param bool                     $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @return mixed the content if the output is 'S'.
+     */
+    public function Output($dest = '', $name = '', $isUTF8 = false): mixed
+    {
+        if ($dest instanceof PdfDocumentOutput) {
+            $dest = $dest->value;
+        }
+
+        return parent::Output($dest, $name, $isUTF8);
+    }
+
+    /**
      * Converts the pixels to millimeters with 72 dot per each (DPI).
      *
      * @param float $pixels the pixels to convert
@@ -665,7 +534,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
      * @param PdfRectangle $bounds the rectangle to output
-     * @param int|string   $style  the style of rendering. Possible values are:
+     * @param string|int   $style  the style of rendering. Possible values are:
      *                             <ul>
      *                             <li>'<b>D</b>' or an empty string (''): Draw. This is the default value.</li>
      *                             <li>'<b>F</b>': Fill</li>
@@ -674,7 +543,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      *                             <li><b>PdfConstantsInterface.BORDER_NONE</b>: Do nothing.</li>
      *                             </ul>
      */
-    public function rectangle(PdfRectangle $bounds, int|string $style = self::RECT_BORDER): self
+    public function rectangle(PdfRectangle $bounds, string|int $style = self::RECT_BORDER): self
     {
         if (self::BORDER_NONE !== $style) {
             if (self::BORDER_ALL === $style) {
@@ -710,6 +579,21 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
         $this->cMargin = \max(0, $margin);
 
         return $oldMargins;
+    }
+
+    /**
+     * @param PdfDocumentZoom|string   $zoom
+     * @param PdfDocumentLayout|string $layout
+     */
+    public function SetDisplayMode($zoom = PdfDocumentZoom::FULL_PAGE, $layout = PdfDocumentLayout::SINGLE): void
+    {
+        if ($zoom instanceof PdfDocumentZoom) {
+            $zoom = $zoom->value;
+        }
+        if ($layout instanceof PdfDocumentLayout) {
+            $layout = $layout->value;
+        }
+        parent::SetDisplayMode($zoom, $layout);
     }
 
     /**

@@ -73,7 +73,7 @@ class AkismetService extends AbstractHttpClientService
      */
     private const VALUE_VALID = 'valid';
 
-    private string $endpoint;
+    private readonly string $endpoint;
 
     /**
      * Constructor.
@@ -81,7 +81,7 @@ class AkismetService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, bool $isDebug, private RequestStack $stack, private Security $security, TranslatorInterface $translator)
+    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, bool $isDebug, private readonly RequestStack $stack, private readonly Security $security, TranslatorInterface $translator)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);

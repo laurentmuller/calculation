@@ -52,7 +52,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      * @param mixed              $key        the key
      * @param mixed              $value      the initial value
      */
-    public function __construct(protected AbstractAggregator $aggregator, private mixed $key = null, mixed $value = null)
+    public function __construct(protected AbstractAggregator $aggregator, private readonly mixed $key = null, mixed $value = null)
     {
         parent::__construct($aggregator, $value);
     }

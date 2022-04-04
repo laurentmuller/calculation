@@ -26,12 +26,12 @@ class ProductUpdateQuery
     /**
      * Update products with a fixed amount.
      */
-    public const UPDATE_FIXED = 'fixed';
+    final public const UPDATE_FIXED = 'fixed';
 
     /**
      * Update products with a percent.
      */
-    public const UPDATE_PERCENT = 'percent';
+    final public const UPDATE_PERCENT = 'percent';
 
     private bool $allProducts = true;
     private ?Category $category = null;

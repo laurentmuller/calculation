@@ -26,7 +26,7 @@ class CalendarService
     /**
      * The default calendar model class.
      */
-    public const DEFAULT_CALENDAR_MODEL = Calendar::class;
+    final public const DEFAULT_CALENDAR_MODEL = Calendar::class;
 
     /**
      * The calendar model class.

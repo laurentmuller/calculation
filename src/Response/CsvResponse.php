@@ -27,7 +27,7 @@ class CsvResponse extends StreamedResponse implements IResponseInterface
     /**
      * The CSV mime type.
      */
-    public const MIME_TYPE_CSV = 'text/csv';
+    final public const MIME_TYPE_CSV = 'text/csv';
 
     /**
      * Constructor.

@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Enums\PdfDocumentOrientation;
+use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -38,7 +40,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      */
     protected function __construct(AbstractController $controller, array $items, string $title, string $description)
     {
-        parent::__construct($controller, $items, self::ORIENTATION_LANDSCAPE);
+        parent::__construct($controller, $items, PdfDocumentOrientation::LANDSCAPE);
         $this->header->setDescription($this->trans($description));
         $this->setTitleTrans($title, [], true);
     }
@@ -97,7 +99,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
         $text = $this->transCount($parameters);
 
         $margins = $this->setCellMargin(0);
-        $this->Cell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE);
+        $this->Cell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, PdfMove::NEW_LINE);
         $this->setCellMargin($margins);
 
         return true;

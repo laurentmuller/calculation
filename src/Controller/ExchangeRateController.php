@@ -33,7 +33,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(private ExchangeRateService $service)
+    public function __construct(private readonly ExchangeRateService $service)
     {
     }
 

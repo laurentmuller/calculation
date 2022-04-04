@@ -135,20 +135,17 @@ trait PdfBorderTrait
     /**
      * Validate the given border.
      *
-     * @param mixed $border the border to validate
+     * @param string|int $border the border to validate
      *
      * @return string|int a valid border
      */
-    protected function validateBorder(mixed $border): string|int
+    protected function validateBorder(string|int $border): string|int
     {
         if (empty($border)) {
             return PdfConstantsInterface::BORDER_NONE;
         }
-        if (PdfConstantsInterface::BORDER_ALL === $border) {
-            return PdfConstantsInterface::BORDER_ALL;
-        }
-        if (PdfConstantsInterface::BORDER_INHERITED === $border) {
-            return PdfConstantsInterface::BORDER_INHERITED;
+        if (PdfConstantsInterface::BORDER_ALL === $border || PdfConstantsInterface::BORDER_INHERITED === $border) {
+            return $border;
         }
 
         $result = '';

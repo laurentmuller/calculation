@@ -29,22 +29,22 @@ class CategoryRepository extends AbstractRepository
     /**
      * The filter type to display all categories.
      */
-    public const FILTER_NONE = 0;
+    final public const FILTER_NONE = 0;
 
     /**
      * The filter type to display only categories that contain one or more products.
      */
-    public const FILTER_PRODUCTS = 1;
+    final public const FILTER_PRODUCTS = 1;
 
     /**
      * The filter type to display only categories that contain one or more tasks.
      */
-    public const FILTER_TASKS = 2;
+    final public const FILTER_TASKS = 2;
 
     /**
      * The alias for the group entity.
      */
-    public const GROUP_ALIAS = 'g';
+    final public const GROUP_ALIAS = 'g';
 
     /**
      * Constructor.

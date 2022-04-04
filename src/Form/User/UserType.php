@@ -33,7 +33,7 @@ class UserType extends AbstractEntityType
     /**
      * Constructor.
      */
-    public function __construct(private UserPasswordHasherInterface $hasher, private DateTimeFormatter $formatter)
+    public function __construct(private readonly UserPasswordHasherInterface $hasher, private readonly DateTimeFormatter $formatter)
     {
         parent::__construct(User::class);
     }

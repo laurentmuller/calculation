@@ -39,7 +39,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     /**
      * The calculation to render.
      */
-    private Calculation $calculation;
+    private readonly Calculation $calculation;
 
     /**
      * Constructor.

@@ -85,23 +85,6 @@ interface PdfConstantsInterface
     public const LINE_HEIGHT = 5;
 
     /**
-     * Move below of the printed cell.
-     */
-    public const MOVE_BELOW = 2;
-
-    /**
-     * Move at the beginning of the next line after the cell is printed.
-     * it is equivalent to the setting <b>MOVE_RIGHT</b> and calling the
-     * <code>PdfDocument->Ln()</code> method immediately afterwards.
-     */
-    public const MOVE_TO_NEW_LINE = 1;
-
-    /**
-     * Move to the right position of the printed cell.
-     */
-    public const MOVE_TO_RIGHT = 0;
-
-    /**
      * The new line separator.
      */
     public const NEW_LINE = "\n";

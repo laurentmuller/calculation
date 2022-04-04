@@ -24,67 +24,67 @@ class PdfFont implements PdfDocumentUpdaterInterface, \Stringable
     /**
      * The default font name (Arial).
      */
-    public const DEFAULT_NAME = self::NAME_ARIAL;
+    final public const DEFAULT_NAME = self::NAME_ARIAL;
 
     /**
      * The default font size (9pt).
      */
-    public const DEFAULT_SIZE = 9.0;
+    final public const DEFAULT_SIZE = 9.0;
 
     /**
      * The default font style (Regular).
      */
-    public const DEFAULT_STYLE = self::STYLE_REGULAR;
+    final public const DEFAULT_STYLE = self::STYLE_REGULAR;
 
     /**
      * The Arial font name (synonymous; sans serif).
      */
-    public const NAME_ARIAL = 'Arial';
+    final public const NAME_ARIAL = 'Arial';
 
     /**
      * The Courier font name (fixed-width).
      */
-    public const NAME_COURIER = 'Courier';
+    final public const NAME_COURIER = 'Courier';
 
     /**
      * The Helvetica font name (synonymous; sans serif).
      */
-    public const NAME_HELVETICA = 'Helvetica';
+    final public const NAME_HELVETICA = 'Helvetica';
 
     /**
      * The Symbol font name (symbolic).
      */
-    public const NAME_SYMBOL = 'Symbol';
+    final public const NAME_SYMBOL = 'Symbol';
 
     /**
      * The Times font name (serif).
      */
-    public const NAME_TIMES = 'Times';
+    final public const NAME_TIMES = 'Times';
 
     /**
      * The ZapfDingbats font name (symbolic).
      */
-    public const NAME_ZAPFDINGBATS = 'ZapfDingbats';
+    final public const NAME_ZAPFDINGBATS = 'ZapfDingbats';
 
     /**
      * The bold font style. Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
-    public const STYLE_BOLD = 'B';
+    final public const STYLE_BOLD = 'B';
 
     /**
      * The italic font style. Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
-    public const STYLE_ITALIC = 'I';
+    final public const STYLE_ITALIC = 'I';
 
     /**
      * The regular font style.
      */
-    public const STYLE_REGULAR = '';
+    final public const STYLE_REGULAR = '';
 
     /**
      * The underline font style.
      */
-    public const STYLE_UNDERLINE = 'U';
+    final public const STYLE_UNDERLINE = 'U';
 
     /**
      * The name.

@@ -230,7 +230,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface, \Stringa
         $value = \preg_replace('/[^0-9A-Fa-f]/', '', (string) $value);
 
         // parse depending of length
-        switch (\strlen($value)) {
+        switch (\strlen((string) $value)) {
             case 6: // FF8040
                 $color = \hexdec($value);
                 $r = 0xFF & ($color >> 0x10);

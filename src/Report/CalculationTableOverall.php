@@ -29,9 +29,9 @@ class CalculationTableOverall extends PdfTableBuilder
 {
     use TranslatorTrait;
 
-    private Calculation $calculation;
+    private readonly Calculation $calculation;
 
-    private float $minMargin;
+    private readonly float $minMargin;
 
     /**
      * Constructor.

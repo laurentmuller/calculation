@@ -26,3 +26,8 @@ symfony.lock
 ###> phpstorm ###
 /.idea
 ###< phpstorm ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

@@ -26,7 +26,7 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * The default path separator.
      */
-    public const PATH_SEPARATOR = \DIRECTORY_SEPARATOR;
+    final public const PATH_SEPARATOR = \DIRECTORY_SEPARATOR;
 
     /**
      * The cell data.

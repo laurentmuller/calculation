@@ -30,7 +30,7 @@ class MailService
 {
     use TranslatorTrait;
 
-    private string $homeUrl;
+    private readonly string $homeUrl;
     private ?MarkdownInterface $markdown = null;
 
     /**

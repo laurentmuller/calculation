@@ -54,7 +54,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, private CalculationService $service, private TaskRepository $taskRepository)
+    public function __construct(CalculationRepository $repository, private readonly CalculationService $service, private readonly TaskRepository $taskRepository)
     {
         parent::__construct($repository);
     }

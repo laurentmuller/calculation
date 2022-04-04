@@ -37,7 +37,7 @@ class PivotController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(private CalculationRepository $repository)
+    public function __construct(private readonly CalculationRepository $repository)
     {
     }
 

@@ -30,7 +30,7 @@ class LogoutListener implements EventSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, private string $appNameVersion)
+    public function __construct(TranslatorInterface $translator, private readonly string $appNameVersion)
     {
         $this->setTranslator($translator);
     }

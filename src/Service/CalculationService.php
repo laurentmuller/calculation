@@ -71,10 +71,10 @@ final class CalculationService
      * Constructor.
      */
     public function __construct(
-        private GlobalMarginRepository $globalRepository,
-        private GroupMarginRepository $marginRepository,
-        private GroupRepository $groupRepository,
-        private ApplicationService $service,
+        private readonly GlobalMarginRepository $globalRepository,
+        private readonly GroupMarginRepository $marginRepository,
+        private readonly GroupRepository $groupRepository,
+        private readonly ApplicationService $service,
         TranslatorInterface $translator
     ) {
         $this->setTranslator($translator);

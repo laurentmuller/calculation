@@ -37,7 +37,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
     /**
      * Constructor.
      */
-    public function __construct(private ImageResizer $resizer)
+    public function __construct(private readonly ImageResizer $resizer)
     {
     }
 

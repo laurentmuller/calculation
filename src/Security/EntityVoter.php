@@ -34,7 +34,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
     /**
      * The entities offset. These offsets are used to read/write rights.
      */
-    public const ENTITY_OFFSETS = [
+    final public const ENTITY_OFFSETS = [
         self::ENTITY_CALCULATION => 0,
         self::ENTITY_CALCULATION_STATE => 1,
         self::ENTITY_GROUP => 2,
@@ -49,12 +49,12 @@ class EntityVoter extends Voter implements EntityVoterInterface
     /**
      * The value returned when attribute mask or entity offset is not found.
      */
-    public const INVALID_VALUE = -1;
+    final public const INVALID_VALUE = -1;
 
     /**
      * The attributes bit masks. These attributes are used to read or write bit set permissions.
      */
-    public const MASK_ATTRIBUTES = [
+    final public const MASK_ATTRIBUTES = [
         self::ATTRIBUTE_ADD => 1,
         self::ATTRIBUTE_DELETE => 2,
         self::ATTRIBUTE_EDIT => 4,
@@ -71,7 +71,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
     /**
      * Constructor.
      */
-    public function __construct(private ApplicationService $service)
+    public function __construct(private readonly ApplicationService $service)
     {
     }
 

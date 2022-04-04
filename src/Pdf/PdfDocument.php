@@ -205,16 +205,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Gets the current rotation.
-     *
-     * @return int the current orientation (0, 90, 180 or 270 degrees) constants
-     */
-    public function getCurrentRotation(): int
-    {
-        return $this->CurRotation;
-    }
-
-    /**
      * Gets the default page size.
      *
      * @return float[] the current page size
@@ -495,7 +485,8 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * @param PdfDocumentOutput|string $dest   the destination where to send the document
      * @param string                   $name   the name of the file. It is ignored in case of destination PdfDocumentOutput::STRING.
      * @param bool                     $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
-     * @return mixed the content if the output is 'S'.
+     *
+     * @return mixed the content if the output is 'S'
      */
     public function Output($dest = '', $name = '', $isUTF8 = false): mixed
     {

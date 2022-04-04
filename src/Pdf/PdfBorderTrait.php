@@ -138,6 +138,7 @@ trait PdfBorderTrait
      * @param string|int $border the border to validate
      *
      * @return string|int a valid border
+     * @psalm-suppress RedundantCast
      */
     protected function validateBorder(string|int $border): string|int
     {
@@ -156,7 +157,7 @@ trait PdfBorderTrait
                 case PdfConstantsInterface::BORDER_RIGHT:
                 case PdfConstantsInterface::BORDER_TOP:
                 case PdfConstantsInterface::BORDER_BOTTOM:
-                    if (!\str_contains($result, $border[$i])) {
+                    if (!\str_contains((string) $result, $border[$i])) {
                         $result .= $border[$i];
                     }
                     break;

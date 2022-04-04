@@ -19,3 +19,13 @@ parameters:
 
     # PHP 7.4
     checkUninitializedProperties: true
+    ignoreErrors:
+        - '#QueryBuilder::where#'
+        - '#should return int<0, max>#'
+        - '#Utils::getRequestInputBag#'
+        -
+            message: '#type mapping mismatch#'
+            path: src/Entity/*
+        -
+            message: '#implements generic interface#'
+            path: src/Form/DataTransformer/*

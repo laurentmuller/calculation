@@ -38,8 +38,10 @@ class CategoryTransformer implements DataTransformerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param int|string|null $value
      */
-    public function reverseTransform($value): ?Category
+    public function reverseTransform(mixed $value): ?Category
     {
         if (null === $value) {
             return null;
@@ -64,7 +66,7 @@ class CategoryTransformer implements DataTransformerInterface
      *
      * @param Category|null $value
      */
-    public function transform($value): ?int
+    public function transform(mixed $value): ?int
     {
         if (null === $value) {
             return null;

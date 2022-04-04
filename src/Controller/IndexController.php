@@ -79,19 +79,16 @@ class IndexController extends AbstractController
 
     private function getCalculations(EntityManagerInterface $manager, int $maxResults): array
     {
-        // @phpstan-ignore-next-line
         return $manager->getRepository(Calculation::class)->getLastCalculations($maxResults);
     }
 
     private function getMonths(EntityManagerInterface $manager): array
     {
-        // @phpstan-ignore-next-line
         return $manager->getRepository(Calculation::class)->getByMonth();
     }
 
     private function getStates(EntityManagerInterface $manager): array
     {
-        // @phpstan-ignore-next-line
         $states = $manager->getRepository(CalculationState::class)->getListCountCalculations();
 
         // add overall entry

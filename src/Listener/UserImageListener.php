@@ -29,7 +29,7 @@ class UserImageListener implements ImageExtensionInterface
     /**
      * Constructor.
      */
-    public function __construct(private PropertyMappingFactory $factory)
+    public function __construct(private readonly PropertyMappingFactory $factory)
     {
     }
 
@@ -40,7 +40,7 @@ class UserImageListener implements ImageExtensionInterface
      */
     public function postPersist(LifecycleEventArgs $event): void
     {
-        $entity = $event->getEntity();
+        $entity = $event->getObject();
         if (!$entity instanceof User) {
             return;
         }

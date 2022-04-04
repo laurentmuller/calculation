@@ -15,25 +15,6 @@
         </ignoreFiles>
     </projectFiles>
 
-    <issueHandlers>
-        <UndefinedClass>
-            <errorLevel type="suppress">
-                <!-- These classes have been added in PHP 8.1 -->
-                <referencedClass name="UnitEnum"/>
-                <referencedClass name="BackedEnum"/>
-                <referencedClass name="ReflectionIntersectionType"/>
-            </errorLevel>
-        </UndefinedClass>
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress">
-                <!-- These classes have been added in PHP 8.1 -->
-                <referencedClass name="UnitEnum"/>
-                <referencedClass name="BackedEnum"/>
-                <referencedClass name="ReflectionIntersectionType"/>
-            </errorLevel>
-        </UndefinedDocblockClass>
-    </issueHandlers>
-
     <plugins>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin" />
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin" />

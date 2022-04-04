@@ -30,7 +30,7 @@ class StateChart extends BaseChart
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private CalculationStateRepository $repository, private UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private readonly CalculationStateRepository $repository, private readonly UrlGeneratorInterface $generator)
     {
         parent::__construct($application, $service, $translator);
     }

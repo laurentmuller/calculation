@@ -38,8 +38,10 @@ class GroupTransformer implements DataTransformerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param int|string|null $value
      */
-    public function reverseTransform($value): ?Group
+    public function reverseTransform(mixed $value): ?Group
     {
         if (null === $value) {
             return null;
@@ -64,7 +66,7 @@ class GroupTransformer implements DataTransformerInterface
      *
      * @param Group|null $value
      */
-    public function transform($value): ?int
+    public function transform(mixed $value): ?int
     {
         if (null === $value) {
             return null;

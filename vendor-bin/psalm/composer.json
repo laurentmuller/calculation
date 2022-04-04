@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "psalm/plugin-symfony": "^3.1",
         "vimeo/psalm": "^4.19",
         "weirdan/doctrine-psalm-plugin": "^2.2"

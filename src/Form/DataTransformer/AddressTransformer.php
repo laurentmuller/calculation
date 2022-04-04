@@ -25,10 +25,8 @@ class AddressTransformer implements DataTransformerInterface
 {
     /**
      * {@inheritDoc}
-     *
-     * @param mixed $value
      */
-    public function reverseTransform($value): ?Address
+    public function reverseTransform(mixed $value): ?Address
     {
         if (null === $value) {
             return null;
@@ -50,9 +48,9 @@ class AddressTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      *
-     * @param Address|null $value
+     * @return string|null
      */
-    public function transform($value): ?string
+    public function transform(mixed $value)
     {
         if (null === $value) {
             return null;

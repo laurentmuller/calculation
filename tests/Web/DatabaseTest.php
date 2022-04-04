@@ -142,7 +142,7 @@ class DatabaseTest extends KernelTestCase
         $user = $repository->findOneBy(['username' => $username]);
         $this->assertInstanceOf(User::class, $user);
 
-        $this->assertEquals($username, $user->getUsername());
+        $this->assertEquals($username, $user->getUserIdentifier());
         $this->assertTrue($user->hasRole($role));
     }
 }

@@ -186,7 +186,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The data directory.
      */
-    private string $dataDirectory;
+    private readonly string $dataDirectory;
 
     /**
      * Constructor.

@@ -26,12 +26,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class MonthChart extends BaseChart
 {
-    private string $url;
+    private readonly string $url;
 
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private CalculationRepository $repository, UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private readonly CalculationRepository $repository, UrlGeneratorInterface $generator)
     {
         parent::__construct($application, $service, $translator);
         $this->url = $generator->generate('calculation_table');

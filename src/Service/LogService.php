@@ -68,7 +68,7 @@ class LogService
     /**
      * The log file name.
      */
-    private string $fileName;
+    private readonly string $fileName;
 
     /**
      * Constructor.

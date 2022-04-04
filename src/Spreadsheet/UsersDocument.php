@@ -77,7 +77,7 @@ class UsersDocument extends AbstractArrayDocument
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 null,
-                $entity->getUsername(),
+                $entity->getUserIdentifier(),
                 $entity->getEmail(),
                 $this->translateRole($entity),
                 $entity->isEnabled(),

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -115,8 +116,8 @@ class CalculationTableOverall extends PdfTableBuilder
         $oldMargins = $this->parent->setCellMargin(0);
         if (null !== $this->translator) {
             $this->startRow()
-                ->add($calculation->getCreatedText($this->translator), 1, $style, self::ALIGN_LEFT)
-                ->add($calculation->getUpdatedText($this->translator), 4, $style, self::ALIGN_RIGHT)
+                ->add($calculation->getCreatedText($this->translator), 1, $style, PdfTextAlignment::LEFT)
+                ->add($calculation->getUpdatedText($this->translator), 4, $style, PdfTextAlignment::RIGHT)
                 ->endRow();
         }
         $this->parent->setCellMargin($oldMargins);

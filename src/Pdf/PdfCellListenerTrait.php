@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfTextAlignment;
+
 /**
  * Trait for class implementing the <code>PdfCellListenerInterface</code> interface.
  *
@@ -49,7 +51,7 @@ trait PdfCellListenerTrait
      *
      * @see PdfCellListenerInterface::onDrawCellText()
      */
-    public function onDrawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, string $align, float $height): bool
+    public function onDrawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool
     {
         return false;
     }

@@ -16,7 +16,6 @@ use App\Entity\CalculationState;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
@@ -63,7 +62,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
                 $doc = $builder->getParent();
                 $margin = $doc->getCellMargin();
                 $bounds->inflateXY(-3 * $margin, -$margin)
-                    ->setHeight(PdfConstantsInterface::LINE_HEIGHT - 2 * $margin);
+                    ->setHeight(self::LINE_HEIGHT - 2 * $margin);
                 $doc->rectangle($bounds, self::RECT_BOTH);
 
                 return true;

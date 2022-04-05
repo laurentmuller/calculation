@@ -115,11 +115,10 @@ class UsersReport extends AbstractArrayReport
      */
     private function getFieldName(User $user): ?string
     {
-        if (null !== $this->fieldName) {
-            /** @var \Vich\UploaderBundle\Mapping\PropertyMapping[] $mappings */
-            $mappings = $this->factory->fromObject($user);
-            if (!empty($mappings)) {
-                $this->fieldName = $mappings[0]->getFilePropertyName();
+        if (null === $this->fieldName) {
+            $mapping = $this->factory->fromFirstField($user);
+            if (null !== $mapping) {
+                $this->fieldName = $mapping->getFilePropertyName();
             }
         }
 

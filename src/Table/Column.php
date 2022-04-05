@@ -371,7 +371,8 @@ class Column implements SortModeInterface, \Stringable
     {
         $order = \strtolower($order);
         $this->order = match ($order) {
-            self::SORT_ASC, self::SORT_DESC => $order,
+            self::SORT_ASC,
+            self::SORT_DESC => $order,
             default => $this->order,
         };
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Enums\PdfMove;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Report\AbstractReport;
 use App\Util\FormatUtils;
 
@@ -56,9 +57,9 @@ class PdfFooter implements PdfConstantsInterface
         PdfStyle::getDefaultStyle()->setFontSize(8)->apply($this->parent);
 
         // pages (left) +  text and url (center) + date (right)
-        $this->outputText($this->getPage(), $cellWidth, self::ALIGN_LEFT)
-            ->outputText($this->text ?? '', $cellWidth, self::ALIGN_CENTER, $this->url ?? '')
-            ->outputText($this->getDate(), $cellWidth, self::ALIGN_RIGHT);
+        $this->outputText($this->getPage(), $cellWidth, PdfTextAlignment::LEFT)
+            ->outputText($this->text ?? '', $cellWidth, PdfTextAlignment::CENTER, $this->url ?? '')
+            ->outputText($this->getDate(), $cellWidth, PdfTextAlignment::RIGHT);
 
         // reset
         $this->parent->setCellMargin($margins);
@@ -100,7 +101,7 @@ class PdfFooter implements PdfConstantsInterface
     /**
      * Output the given text.
      */
-    private function outputText(string $text, float $cellWidth, string $align, string $link = ''): self
+    private function outputText(string $text, float $cellWidth, PdfTextAlignment $align, string $link = ''): self
     {
         $this->parent->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, PdfMove::RIGHT, $align, false, $link);
 

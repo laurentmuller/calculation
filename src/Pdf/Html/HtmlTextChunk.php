@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Report\HtmlReport;
 use App\Util\Utils;
 
@@ -120,9 +121,9 @@ class HtmlTextChunk extends AbstractHtmlChunk implements \Stringable
         if (null !== $parent && 1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {
             $align = $parent->getAlignment();
             switch ($align) {
-                case self::ALIGN_RIGHT:
-                case self::ALIGN_CENTER:
-                case self::ALIGN_JUSTIFIED:
+                case PdfTextAlignment::RIGHT:
+                case PdfTextAlignment::CENTER:
+                case PdfTextAlignment::JUSTIFIED:
                     $height = \max($report->getFontSize(), self::LINE_HEIGHT);
                     $report->MultiCell(0, $height, $text, 0, $align);
                     $report->SetY($report->GetY() - $report->getLastHeight());

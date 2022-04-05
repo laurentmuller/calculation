@@ -243,7 +243,8 @@ class ProductUpdateQuery
     public function setType(string $type): self
     {
         $this->type = match ($type) {
-            self::UPDATE_PERCENT, self::UPDATE_FIXED => $type,
+            self::UPDATE_PERCENT,
+            self::UPDATE_FIXED => $type,
             default => $this->type,
         };
 

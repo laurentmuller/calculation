@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfStyle;
@@ -246,7 +247,7 @@ class HelpReport extends AbstractReport
         $margin = $this->getLeftMargin();
         $this->SetLeftMargin($margin + 4);
         foreach ($constraints as $constraint) {
-            $this->MultiCell(0, self::LINE_HEIGHT, \strip_tags("- $constraint"), self::BORDER_NONE, self::ALIGN_LEFT);
+            $this->MultiCell(0, self::LINE_HEIGHT, \strip_tags("- $constraint"), self::BORDER_NONE, PdfTextAlignment::LEFT);
         }
         $this->SetLeftMargin($margin);
     }
@@ -261,7 +262,7 @@ class HelpReport extends AbstractReport
 
             return empty($carry) ? $str : $carry . ' ' . $str;
         }, '');
-        $this->MultiCell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::ALIGN_LEFT);
+        $this->MultiCell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, PdfTextAlignment::LEFT);
     }
 
     /**

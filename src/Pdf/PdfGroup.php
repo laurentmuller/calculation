@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Util\Utils;
 
 /**
@@ -23,15 +24,17 @@ use App\Util\Utils;
  */
 class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 {
-    use PdfAlignmentTrait;
     use PdfBorderTrait;
 
     /**
-     * The key.
-     *
-     * @var mixed
+     * The cell alignment.
      */
-    protected $key;
+    protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
+
+    /**
+     * The key.
+     */
+    protected mixed $key;
 
     /**
      * The style.
@@ -41,16 +44,16 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     /**
      * Constructor.
      *
-     * @param mixed|null    $key       the group key
-     * @param string        $alignment the group alignment
-     * @param int|string    $border    the group border
-     * @param PdfStyle|null $style     the group style or null for default style
+     * @param mixed|null       $key       the group key
+     * @param PdfTextAlignment $alignment the group alignment
+     * @param int|string       $border    the group border
+     * @param PdfStyle|null    $style     the group style or null for default style
      */
-    public function __construct(mixed $key = null, string $alignment = self::ALIGN_LEFT, int|string $border = self::BORDER_ALL, ?PdfStyle $style = null)
+    public function __construct(mixed $key = null, PdfTextAlignment $alignment = PdfTextAlignment::LEFT, int|string $border = self::BORDER_ALL, ?PdfStyle $style = null)
     {
         $this->setKey($key)
-            ->setAlignment($alignment)
             ->setBorder($border)
+            ->setAlignment($alignment)
             ->setStyle($style ?: PdfStyle::getCellStyle()->setFontBold());
     }
 
@@ -60,6 +63,14 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     public function apply(PdfDocument $doc): void
     {
         $this->style?->apply($doc);
+    }
+
+    /**
+     * Gets the group alignment.
+     */
+    public function getAlignment(): PdfTextAlignment
+    {
+        return $this->alignment;
     }
 
     /**
@@ -109,6 +120,16 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
         $parent->setBorder($this->border);
         $parent->singleLine($this->getName(), $this->getStyle(), $this->getAlignment());
         $parent->setBorder($oldBorder);
+    }
+
+    /**
+     * Sets the alignment.
+     */
+    public function setAlignment(PdfTextAlignment $alignment): self
+    {
+        $this->alignment = $alignment;
+
+        return $this;
     }
 
     /**

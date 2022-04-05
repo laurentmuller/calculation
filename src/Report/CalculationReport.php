@@ -15,6 +15,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Enums\PdfMove;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -93,7 +94,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         if ($calculation->isEmpty()) {
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
-            $this->Cell(0, 0, $message, self::BORDER_NONE, PdfMove::NEW_LINE, self::ALIGN_CENTER);
+            $this->Cell(0, 0, $message, self::BORDER_NONE, PdfMove::NEW_LINE, PdfTextAlignment::CENTER);
             $this->renderQrCode();
 
             return true;

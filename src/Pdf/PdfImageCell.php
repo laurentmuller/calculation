@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Interfaces\ImageExtensionInterface;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
 use App\Util\FileUtils;
 
@@ -53,12 +54,12 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Constructor.
      *
-     * @param string        $path      the full image path
-     * @param int           $cols      the cell columns span
-     * @param PdfStyle|null $style     the cell style
-     * @param string        $alignment the cell alignment
+     * @param string                $path      the full image path
+     * @param int                   $cols      the cell columns span
+     * @param PdfStyle|null         $style     the cell style
+     * @param PdfTextAlignment|null $alignment the cell alignment
      */
-    public function __construct(string $path, int $cols = 1, ?PdfStyle $style = null, string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
+    public function __construct(string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null)
     {
         if (!FileUtils::exists($path)) {
             throw new \InvalidArgumentException("The image '$path' does not exist.");
@@ -76,11 +77,11 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Draw this image.
      *
-     * @param PdfDocument  $parent    the parent document
-     * @param PdfRectangle $bounds    the target bounds
-     * @param string       $alignment the horizontal alignment
+     * @param PdfDocument      $parent    the parent document
+     * @param PdfRectangle     $bounds    the target bounds
+     * @param PdfTextAlignment $alignment the horizontal alignment
      */
-    public function drawImage(PdfDocument $parent, PdfRectangle $bounds, string $alignment): void
+    public function drawImage(PdfDocument $parent, PdfRectangle $bounds, PdfTextAlignment $alignment): void
     {
         // convert size
         $width = $parent->pixels2UserUnit($this->width);
@@ -91,11 +92,11 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
         $y = $bounds->y() + ($bounds->height() - $height) / 2;
 
         switch ($alignment) {
-            case PdfConstantsInterface::ALIGN_RIGHT:
+            case PdfTextAlignment::RIGHT:
                 $x += $bounds->width() - $width;
                 break;
-            case PdfConstantsInterface::ALIGN_CENTER:
-            case PdfConstantsInterface::ALIGN_JUSTIFIED:
+            case PdfTextAlignment::CENTER:
+            case PdfTextAlignment::JUSTIFIED:
                 $x += ($bounds->width() - $width) / 2;
                 break;
         }

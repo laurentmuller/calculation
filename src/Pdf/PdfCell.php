@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfTextAlignment;
+
 /**
  * Define a cell in a table.
  *
@@ -19,7 +21,10 @@ namespace App\Pdf;
  */
 class PdfCell
 {
-    use PdfAlignmentTrait;
+    /**
+     * The cell alignment.
+     */
+    protected ?PdfTextAlignment $alignment = null;
 
     /**
      * The bottom border style.
@@ -59,12 +64,12 @@ class PdfCell
     /**
      * Constructor.
      *
-     * @param string|null   $text      the cell text
-     * @param int           $cols      the cell columns span
-     * @param PdfStyle|null $style     the cell style
-     * @param string|null   $alignment the cell alignment
+     * @param string|null           $text      the cell text
+     * @param int                   $cols      the cell columns span
+     * @param PdfStyle|null         $style     the cell style
+     * @param PdfTextAlignment|null $alignment the cell alignment
      */
-    public function __construct(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
+    public function __construct(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null)
     {
         $this->setText($text)
             ->setCols($cols)
@@ -72,12 +77,8 @@ class PdfCell
             ->setAlignment($alignment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __clone()
     {
-        // deep clone
         if (null !== $this->borderBottom) {
             $this->borderBottom = clone $this->borderBottom;
         }
@@ -93,6 +94,14 @@ class PdfCell
         if (null !== $this->style) {
             $this->style = clone $this->style;
         }
+    }
+
+    /**
+     * Gets the cell alignment.
+     */
+    public function getAlignment(): ?PdfTextAlignment
+    {
+        return $this->alignment;
     }
 
     /**
@@ -160,6 +169,16 @@ class PdfCell
             || isset($this->borderBottom)
             || isset($this->borderLeft)
             || isset($this->borderRight);
+    }
+
+    /**
+     * Sets the cell alignment.
+     */
+    public function setAlignment(?PdfTextAlignment $alignment): self
+    {
+        $this->alignment = $alignment;
+
+        return $this;
     }
 
     /**

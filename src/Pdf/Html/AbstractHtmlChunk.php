@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
@@ -106,13 +107,13 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     /**
      * Gets the text alignment from this style or left, if none.
      */
-    public function getAlignment(): string
+    public function getAlignment(): PdfTextAlignment
     {
         if (null !== $this->style) {
-            return (string) $this->style->getAlignment();
+            return $this->style->getAlignment();
         }
 
-        return self::ALIGN_LEFT;
+        return PdfTextAlignment::LEFT;
     }
 
     /**
@@ -549,19 +550,19 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
             foreach ($classNames as $class) {
                 switch ($class) {
                     case 'text-left':
-                        $style->setAlignment(self::ALIGN_LEFT);
+                        $style->setAlignment(PdfTextAlignment::LEFT);
                         break;
 
                     case 'text-right':
-                        $style->setAlignment(self::ALIGN_RIGHT);
+                        $style->setAlignment(PdfTextAlignment::RIGHT);
                         break;
 
                     case 'text-center':
-                        $style->setAlignment(self::ALIGN_CENTER);
+                        $style->setAlignment(PdfTextAlignment::CENTER);
                         break;
 
                     case 'text-justify':
-                        $style->setAlignment(self::ALIGN_JUSTIFIED);
+                        $style->setAlignment(PdfTextAlignment::JUSTIFIED);
                         break;
 
                     case 'font-weight-bold':

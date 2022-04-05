@@ -22,17 +22,17 @@ class PivotField implements \JsonSerializable
     /**
      * Parse value as float.
      */
-    public const METHOD_FLOAT = 2;
+    final public const METHOD_FLOAT = 2;
 
     /**
      * Parse value as integer.
      */
-    public const METHOD_INTEGER = 1;
+    final public const METHOD_INTEGER = 1;
 
     /**
      * Parse value as string.
      */
-    public const METHOD_STRING = 0;
+    final public const METHOD_STRING = 0;
 
     /**
      * Constructor.
@@ -127,7 +127,9 @@ class PivotField implements \JsonSerializable
     public function setMethod(int $method): self
     {
         $this->method = match ($method) {
-            self::METHOD_FLOAT, self::METHOD_INTEGER, self::METHOD_STRING => $method,
+            self::METHOD_FLOAT,
+            self::METHOD_INTEGER,
+            self::METHOD_STRING => $method,
             default => $this->method,
         };
 

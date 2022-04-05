@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\PdfAlignmentTrait;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfStyle;
 use App\Util\Utils;
 
@@ -25,7 +25,10 @@ use App\Util\Utils;
  */
 class HtmlStyle extends PdfStyle implements \Stringable
 {
-    use PdfAlignmentTrait;
+    /**
+     * The alignment.
+     */
+    protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
 
     /**
      * The bottom margin.
@@ -67,6 +70,14 @@ class HtmlStyle extends PdfStyle implements \Stringable
         $this->font->bold($add);
 
         return $this;
+    }
+
+    /**
+     * Gets the alignment.
+     */
+    public function getAlignment(): PdfTextAlignment
+    {
+        return $this->alignment;
     }
 
     /**
@@ -131,8 +142,10 @@ class HtmlStyle extends PdfStyle implements \Stringable
     public function reset(): PdfStyle
     {
         parent::reset();
+        $this->resetMargins();
+        $this->setAlignment(PdfTextAlignment::LEFT);
 
-        return $this->resetMargins();
+        return $this;
     }
 
     /**
@@ -141,6 +154,16 @@ class HtmlStyle extends PdfStyle implements \Stringable
     public function resetMargins(): self
     {
         return $this->setMargins(0);
+    }
+
+    /**
+     * Sets the alignment.
+     */
+    public function setAlignment(PdfTextAlignment $alignment): self
+    {
+        $this->alignment = $alignment;
+
+        return $this;
     }
 
     /**

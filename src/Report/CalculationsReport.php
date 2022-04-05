@@ -15,8 +15,8 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Enums\PdfDocumentOrientation;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
@@ -95,7 +95,7 @@ class CalculationsReport extends AbstractArrayReport
         }
 
         $columns = $table->getColumnsCount() - 3;
-        $table->getColumns()[0]->setAlignment(PdfConstantsInterface::ALIGN_LEFT)
+        $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $columns)

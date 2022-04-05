@@ -17,6 +17,7 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfMove;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
@@ -99,12 +100,12 @@ abstract class AbstractReport extends PdfDocument
      * Renders a line with the given number of elements.
      *
      * @param \Countable|array|int $count      the number of elements, an array or a \Countable object
-     * @param string               $align      the text alignment
+     * @param PdfTextAlignment     $align      the text alignment
      * @param bool                 $resetStyle true to reset style before output the line
      *
-     * @return bool true if the number of elements is greather than 0
+     * @return bool true if the number of elements is greater than 0
      */
-    public function renderCount(\Countable|array|int $count, string $align = self::ALIGN_LEFT, bool $resetStyle = true): bool
+    public function renderCount(\Countable|array|int $count, PdfTextAlignment $align = PdfTextAlignment::LEFT, bool $resetStyle = true): bool
     {
         // reset
         if ($resetStyle) {

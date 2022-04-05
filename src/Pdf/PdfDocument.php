@@ -19,6 +19,7 @@ use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfDocumentZoom;
 use App\Pdf\Enums\PdfMove;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
 use FPDF;
 
@@ -126,47 +127,52 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Prints a cell (rectangular area) with optional borders, background color and character string.
      *
-     * @param float       $w      the cell width. If 0, the cell extends up to the right margin.
-     * @param float       $h      the cell height
-     * @param string      $txt    the cell text
-     * @param int|string  $border indicates if borders must be drawn around the cell. The value can be either:
-     *                            <ul>
-     *                            <li>A number:
-     *                            <ul>
-     *                            <li><b>0</b> : No border (default value).</li>
-     *                            <li><b>1</b> : Frame.</li>
-     *                            </ul>
-     *                            </li>
-     *                            <li>A string containing some or all of the following characters (in any order):
-     *                            <ul>
-     *                            <li>'<b>L</b>' : Left.</li>
-     *                            <li>'<b>T</b>' : Top.</li>
-     *                            <li>'<b>R</b>' : Right.</li>
-     *                            <li>'<b>B</b>' : Bottom.</li>
-     *                            </ul>
-     *                            </li>
-     *                            </ul>
-     * @param PdfMove|int $ln     indicates where the current position should go after the call.
-     *                            Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after. The default value is <code>0</code>.
-     *                            Possible values are:
-     *                            <ul>
-     *                            <li><b>0</b>: To the right</li>
-     *                            <li><b>1</b>: To the beginning of the next line</li>
-     *                            <li><b>2</b>: Below</li>
-     *                            </ul>
-     * @param string      $align  the text alignment. The value can be:
-     *                            <ul>
-     *                            <li>'<b>L</b>' or en empty string (''): left align (default value).</li>
-     *                            <li>'<b>C</b>' : center.</li>
-     *                            <li>'<b>R</b>' : right align.</li>
-     *                            </ul>
-     * @param bool        $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
-     * @param string|int  $link   a URL or an identifier returned by AddLink()
+     * @param float                   $w      the cell width. If 0, the cell extends up to the right margin.
+     * @param float                   $h      the cell height
+     * @param string                  $txt    the cell text
+     * @param int|string              $border indicates if borders must be drawn around the cell. The value can be either:
+     *                                        <ul>
+     *                                        <li>A number:
+     *                                        <ul>
+     *                                        <li><b>0</b> : No border (default value).</li>
+     *                                        <li><b>1</b> : Frame.</li>
+     *                                        </ul>
+     *                                        </li>
+     *                                        <li>A string containing some or all of the following characters (in any order):
+     *                                        <ul>
+     *                                        <li>'<b>L</b>' : Left.</li>
+     *                                        <li>'<b>T</b>' : Top.</li>
+     *                                        <li>'<b>R</b>' : Right.</li>
+     *                                        <li>'<b>B</b>' : Bottom.</li>
+     *                                        </ul>
+     *                                        </li>
+     *                                        </ul>
+     * @param PdfMove|int             $ln     indicates where the current position should go after the call.
+     *                                        Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after. The default value is <code>0</code>.
+     *                                        Possible values are:
+     *                                        <ul>
+     *                                        <li><b>0</b>: To the right</li>
+     *                                        <li><b>1</b>: To the beginning of the next line</li>
+     *                                        <li><b>2</b>: Below</li>
+     *                                        </ul>
+     * @param string|PdfTextAlignment $align  the text alignment. The value can be:
+     *                                        <ul>
+     *                                        <li>'<b>L</b>' or en empty string (''): left align (default value).</li>
+     *                                        <li>'<b>C</b>' : center.</li>
+     *                                        <li>'<b>R</b>' : right align.</li>
+     *                                        </ul>
+     * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
+     * @param string|int              $link   a URL or an identifier returned by AddLink()
      */
     public function Cell($w, $h = 0.0, $txt = '', $border = 0, $ln = PdfMove::RIGHT, $align = '', $fill = false, $link = ''): void
     {
         if ($ln instanceof PdfMove) {
             $ln = $ln->value;
+        }
+        if (PdfTextAlignment::JUSTIFIED === $align) {
+            $align = PdfTextAlignment::LEFT->value;
+        } elseif ($align instanceof PdfTextAlignment) {
+            $align = $align->value;
         }
         parent::Cell($w, $h, $this->cleanText($txt), $border, $ln, $align, $fill, $link);
     }
@@ -445,37 +451,40 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * This method allows printing text with line breaks. They can be automatic (as soon as the text reaches the right border of the cell) or explicit (via the \n character). As many cells as necessary are output, one below the other. Text can be aligned, centered or justified. The cell block can be framed and the background painted.
      *
-     * @param float      $w      the cell width. If 0, the cell extends up to the right margin.
-     * @param float      $h      the cell height
-     * @param string     $txt    the cell text
-     * @param int|string $border indicates if borders must be drawn around the cell. The value can be either:
-     *                           <ul>
-     *                           <li>A number:
-     *                           <ul>
-     *                           <li><b>0</b> : No border (default value).</li>
-     *                           <li><b>1</b> : Frame.</li>
-     *                           </ul>
-     *                           </li>
-     *                           <li>A string containing some or all of the following characters (in any order):
-     *                           <ul>
-     *                           <li>'<b>L</b>' : Left.</li>
-     *                           <li>'<b>T</b>' : Top.</li>
-     *                           <li>'<b>R</b>' : Right.</li>
-     *                           <li>'<b>B</b>' : Bottom.</li>
-     *                           </ul>
-     *                           </li>
-     *                           </ul>
-     * @param string     $align  the text alignment. The value can be:
-     *                           <ul>
-     *                           <li>'<b>L</b>' or an empty string: left align.</li>
-     *                           <li>'<b>C</b>' : center.</li>
-     *                           <li>'<b>R</b>' : right align.</li>
-     *                           <li>'<b>J</b>' : justification (default value).</li>
-     *                           </ul>
-     * @param bool       $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
+     * @param float                   $w      the cell width. If 0, the cell extends up to the right margin.
+     * @param float                   $h      the cell height
+     * @param string                  $txt    the cell text
+     * @param int|string              $border indicates if borders must be drawn around the cell. The value can be either:
+     *                                        <ul>
+     *                                        <li>A number:
+     *                                        <ul>
+     *                                        <li><b>0</b> : No border (default value).</li>
+     *                                        <li><b>1</b> : Frame.</li>
+     *                                        </ul>
+     *                                        </li>
+     *                                        <li>A string containing some or all of the following characters (in any order):
+     *                                        <ul>
+     *                                        <li>'<b>L</b>' : Left.</li>
+     *                                        <li>'<b>T</b>' : Top.</li>
+     *                                        <li>'<b>R</b>' : Right.</li>
+     *                                        <li>'<b>B</b>' : Bottom.</li>
+     *                                        </ul>
+     *                                        </li>
+     *                                        </ul>
+     * @param PdfTextAlignment|string $align  the text alignment. The value can be:
+     *                                        <ul>
+     *                                        <li>'<b>L</b>' or an empty string: left align.</li>
+     *                                        <li>'<b>C</b>' : center.</li>
+     *                                        <li>'<b>R</b>' : right align.</li>
+     *                                        <li>'<b>J</b>' : justification (default value).</li>
+     *                                        </ul>
+     * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
      */
     public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false): void
     {
+        if ($align instanceof PdfTextAlignment) {
+            $align = $align->value;
+        }
         parent::MultiCell($w, $h, $this->cleanText($txt), $border, $align, $fill);
     }
 
@@ -525,7 +534,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
      * @param PdfRectangle $bounds the rectangle to output
-     * @param string|int   $style  the style of rendering. Possible values are:
+     * @param string|int   $border the style of rendering. Possible values are:
      *                             <ul>
      *                             <li>'<b>D</b>' or an empty string (''): Draw. This is the default value.</li>
      *                             <li>'<b>F</b>': Fill</li>
@@ -534,13 +543,13 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      *                             <li><b>PdfConstantsInterface.BORDER_NONE</b>: Do nothing.</li>
      *                             </ul>
      */
-    public function rectangle(PdfRectangle $bounds, string|int $style = self::RECT_BORDER): self
+    public function rectangle(PdfRectangle $bounds, string|int $border = self::RECT_BORDER): self
     {
-        if (self::BORDER_NONE !== $style) {
-            if (self::BORDER_ALL === $style) {
-                $style = self::RECT_BORDER;
+        if (self::BORDER_NONE !== $border) {
+            if (self::BORDER_ALL === $border) {
+                $border = self::RECT_BORDER;
             }
-            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), (string) $style);
+            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), (string) $border);
         }
 
         return $this;

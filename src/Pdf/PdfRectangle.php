@@ -23,11 +23,6 @@ class PdfRectangle implements \Stringable
 {
     /**
      * Constructor.
-     *
-     * @param float $x      the x coordinate
-     * @param float $y      the y coordinate
-     * @param float $width  the width
-     * @param float $height the height
      */
     public function __construct(protected float $x, protected float $y, protected float $width, protected float $height)
     {

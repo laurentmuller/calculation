@@ -20,7 +20,6 @@ use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
-use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -147,11 +146,10 @@ class UsersDocument extends AbstractArrayDocument
      */
     private function getFieldName(User $user): ?string
     {
-        if (!$this->fieldName) {
-            /** @var PropertyMapping[] $mappings */
-            $mappings = $this->factory->fromObject($user);
-            if (!empty($mappings)) {
-                $this->fieldName = $mappings[0]->getFilePropertyName();
+        if (null === $this->fieldName) {
+            $mapping = $this->factory->fromFirstField($user);
+            if (null !== $mapping) {
+                $this->fieldName = $mapping->getFilePropertyName();
             }
         }
 

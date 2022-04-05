@@ -151,7 +151,8 @@ class CategoryRepository extends AbstractRepository
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
-            'group.id', 'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
+            'group.id',
+            'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
             default => parent::getSortField($field, $alias),
         };
     }

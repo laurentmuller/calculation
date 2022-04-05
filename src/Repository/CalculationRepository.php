@@ -693,7 +693,8 @@ class CalculationRepository extends AbstractRepository
     {
         return match ($field) {
             'overallMargin' => "IFELSE($alias.itemsTotal != 0, $alias.overallTotal / $alias.itemsTotal, 0)",
-            'state.id', 'state.code' => parent::getSortField('code', self::STATE_ALIAS),
+            'state.id',
+            'state.code' => parent::getSortField('code', self::STATE_ALIAS),
             'state.color' => parent::getSortField('color', self::STATE_ALIAS),
             default => parent::getSortField($field, $alias),
         };
@@ -737,7 +738,8 @@ class CalculationRepository extends AbstractRepository
         $direction = \strtoupper($direction);
 
         return match ($direction) {
-            Criteria::ASC, Criteria::DESC => $direction,
+            Criteria::ASC,
+            Criteria::DESC => $direction,
             default => $default,
         };
     }
@@ -752,7 +754,10 @@ class CalculationRepository extends AbstractRepository
     private function getOrder(string $column): string
     {
         return match ($column) {
-            'id', 'date', 'customer', 'description' => "e.$column",
+            'id',
+            'date',
+            'customer',
+            'description' => "e.$column",
             'state' => 's.code',
             default => 'e.id',
         };

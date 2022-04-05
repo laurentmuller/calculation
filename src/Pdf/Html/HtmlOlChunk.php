@@ -178,7 +178,10 @@ class HtmlOlChunk extends HtmlParentChunk
     public function setType(string $type): self
     {
         $this->type = match ($type) {
-            self::TYPE_LETTER_LOWER, self::TYPE_LETTER_UPPER, self::TYPE_ROMAN_LOWER, self::TYPE_ROMAN_UPPER => $type,
+            self::TYPE_LETTER_LOWER,
+            self::TYPE_LETTER_UPPER,
+            self::TYPE_ROMAN_LOWER,
+            self::TYPE_ROMAN_UPPER => $type,
             default => self::TYPE_NUMBER,
         };
 

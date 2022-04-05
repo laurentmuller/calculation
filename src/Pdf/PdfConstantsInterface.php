@@ -20,31 +20,6 @@ namespace App\Pdf;
 interface PdfConstantsInterface
 {
     /**
-     * Center alignment.
-     */
-    public const ALIGN_CENTER = 'C';
-
-    /**
-     * Inherited alignment.
-     */
-    public const ALIGN_INHERITED = '';
-
-    /**
-     * Justified alignment.
-     */
-    public const ALIGN_JUSTIFIED = 'J';
-
-    /**
-     * Left alignment.
-     */
-    public const ALIGN_LEFT = 'L';
-
-    /**
-     * Right alignment.
-     */
-    public const ALIGN_RIGHT = 'R';
-
-    /**
      * Draw a border on all four sides.
      */
     public const BORDER_ALL = 1;

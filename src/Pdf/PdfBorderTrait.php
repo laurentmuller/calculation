@@ -82,10 +82,31 @@ trait PdfBorderTrait
      *                           </ul>
      *                           </li>
      *                           </ul>
+     * @psalm-suppress RedundantCast
      */
     public function setBorder(int|string $border): self
     {
-        $this->border = $this->validateBorder($border);
+        if (empty($border)) {
+            $this->border = PdfConstantsInterface::BORDER_NONE;
+        } elseif (PdfConstantsInterface::BORDER_ALL === $border || PdfConstantsInterface::BORDER_INHERITED === $border) {
+            $this->border = $border;
+        } else {
+            $result = '';
+            $border = \strtoupper((string) $border);
+            for ($i = 0, $count = \strlen($border); $i < $count; ++$i) {
+                switch ($border[$i]) {
+                    case PdfConstantsInterface::BORDER_LEFT:
+                    case PdfConstantsInterface::BORDER_RIGHT:
+                    case PdfConstantsInterface::BORDER_TOP:
+                    case PdfConstantsInterface::BORDER_BOTTOM:
+                        if (!\str_contains((string) $result, $border[$i])) {
+                            $result .= $border[$i];
+                        }
+                        break;
+                }
+            }
+            $this->border = $result ?: PdfConstantsInterface::BORDER_NONE;
+        }
 
         return $this;
     }
@@ -130,40 +151,5 @@ trait PdfBorderTrait
         }
 
         return 'PdfBorder(' . \implode(' ', $result) . ')';
-    }
-
-    /**
-     * Validate the given border.
-     *
-     * @param string|int $border the border to validate
-     *
-     * @return string|int a valid border
-     * @psalm-suppress RedundantCast
-     */
-    protected function validateBorder(string|int $border): string|int
-    {
-        if (empty($border)) {
-            return PdfConstantsInterface::BORDER_NONE;
-        }
-        if (PdfConstantsInterface::BORDER_ALL === $border || PdfConstantsInterface::BORDER_INHERITED === $border) {
-            return $border;
-        }
-
-        $result = '';
-        $border = \strtoupper((string) $border);
-        for ($i = 0, $count = \strlen($border); $i < $count; ++$i) {
-            switch ($border[$i]) {
-                case PdfConstantsInterface::BORDER_LEFT:
-                case PdfConstantsInterface::BORDER_RIGHT:
-                case PdfConstantsInterface::BORDER_TOP:
-                case PdfConstantsInterface::BORDER_BOTTOM:
-                    if (!\str_contains((string) $result, $border[$i])) {
-                        $result .= $border[$i];
-                    }
-                    break;
-            }
-        }
-
-        return $result ?: PdfConstantsInterface::BORDER_NONE;
     }
 }

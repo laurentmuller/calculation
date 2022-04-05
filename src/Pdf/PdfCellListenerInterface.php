@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfTextAlignment;
+
 /**
  * Class implementing this interface deals with cell drawing functions.
  *
@@ -45,14 +47,14 @@ interface PdfCellListenerInterface
     /**
      * Called when the text must be drawn within the cell.
      *
-     * @param PdfTableBuilder $builder the table builder
-     * @param int             $index   the column index
-     * @param PdfRectangle    $bounds  the cell bounds
-     * @param string          $text    the cell text
-     * @param string          $align   the text alignment
-     * @param float           $height  the line height
+     * @param PdfTableBuilder  $builder the table builder
+     * @param int              $index   the column index
+     * @param PdfRectangle     $bounds  the cell bounds
+     * @param string           $text    the cell text
+     * @param PdfTextAlignment $align   the text alignment
+     * @param float            $height  the line height
      *
      * @return bool bool false to call the default behavior; true if listener handle the draw function
      */
-    public function onDrawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, string $align, float $height): bool;
+    public function onDrawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool;
 }

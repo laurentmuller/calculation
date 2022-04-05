@@ -29,12 +29,12 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     /**
      * The alias for the category entity.
      */
-    public const CATEGORY_ALIAS = 'c';
+    final public const CATEGORY_ALIAS = 'c';
 
     /**
      * The alias for the group entity.
      */
-    public const GROUP_ALIAS = CategoryRepository::GROUP_ALIAS;
+    final public const GROUP_ALIAS = CategoryRepository::GROUP_ALIAS;
 
     /**
      * Count the number of products or tasks for the given category.
@@ -85,8 +85,10 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
-            'group.id', 'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
-            'category.id', 'category.code' => parent::getSortField('code', self::CATEGORY_ALIAS),
+            'group.id',
+            'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
+            'category.id',
+            'category.code' => parent::getSortField('code', self::CATEGORY_ALIAS),
             default => parent::getSortField($field, $alias),
         };
     }

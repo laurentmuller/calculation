@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
 use App\Util\Utils;
 
@@ -25,8 +26,12 @@ use App\Util\Utils;
 class PdfTableBuilder implements PdfConstantsInterface
 {
     use MathTrait;
-    use PdfAlignmentTrait;
     use PdfBorderTrait;
+
+    /**
+     * The column alignment.
+     */
+    protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
 
     /**
      * The cells.
@@ -73,14 +78,16 @@ class PdfTableBuilder implements PdfConstantsInterface
     }
 
     /**
-     * Adds cell to the current row.
+     * Adds a cell to the current row.
      *
-     * @param string|null   $text      the text of the cell
-     * @param int           $cols      the number of columns to span
-     * @param PdfStyle|null $style     the cell style to use or null to use the default cell style
-     * @param string|null   $alignment the cell alignment
+     * @param string|null           $text      the text of the cell
+     * @param int                   $cols      the number of columns to span
+     * @param PdfStyle|null         $style     the cell style to use or null to use the default cell style
+     * @param PdfTextAlignment|null $alignment the cell alignment
+     *
+     * @return PdfTableBuilder
      */
-    public function add(?string $text, int $cols = 1, ?PdfStyle $style = null, ?string $alignment = self::ALIGN_INHERITED): self
+    public function add(?string $text, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): self
     {
         return $this->addCell(new PdfCell($text, $cols, $style, $alignment));
     }
@@ -220,7 +227,7 @@ class PdfTableBuilder implements PdfConstantsInterface
         $texts = [];
         /** @psalm-var PdfStyle[] $styles */
         $styles = [];
-        /** @psalm-var string[] $aligns */
+        /** @psalm-var PdfTextAlignment[] $aligns */
         $aligns = [];
         /** @psalm-var float[] $widths */
         $widths = [];
@@ -231,7 +238,7 @@ class PdfTableBuilder implements PdfConstantsInterface
         foreach ($cells as $cell) {
             $texts[] = $cell->getText() ?: '';
             $styles[] = $cell->getStyle() ?: $this->rowStyle ?: PdfStyle::getCellStyle();
-            $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment() ?: self::ALIGN_LEFT;
+            $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment() ?: PdfTextAlignment::LEFT;
 
             $width = 0.0;
             $fixed = $columns[$index]->isFixed();
@@ -465,17 +472,15 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Output a row with a single cell.
      *
-     * @param string|null   $text      the text of the cell
-     * @param PdfStyle|null $style     the row style to use or null to use the default cell style
-     * @param string|null   $alignment the cell alignment
-     *
-     * @return self this instance
+     * @param string|null           $text      the text of the cell
+     * @param PdfStyle|null         $style     the row style to use or null to use the default cell style
+     * @param PdfTextAlignment|null $alignment the cell alignment
      *
      * @throws \InvalidArgumentException if a row is already started
      *
      * @see PdfTableBuilder::add()
      */
-    public function singleLine(?string $text = null, ?PdfStyle $style = null, ?string $alignment = self::ALIGN_INHERITED): self
+    public function singleLine(?string $text = null, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): self
     {
         return $this->startRow()
             ->add($text, $this->getColumnsCount(), $style, $alignment)
@@ -515,16 +520,16 @@ class PdfTableBuilder implements PdfConstantsInterface
      * fill the cell (if applicable) and draw the text.
      * After this call, the current position is at the top/right of the cell.
      *
-     * @param PdfDocument $parent    the parent document
-     * @param int         $index     the column index
-     * @param float       $width     the cell width
-     * @param float       $height    the cell height
-     * @param string      $text      the cell text
-     * @param string      $alignment the cell alignment
-     * @param PdfStyle    $style     the cell style
-     * @param PdfCell     $cell      the cell
+     * @param PdfDocument      $parent    the parent document
+     * @param int              $index     the column index
+     * @param float            $width     the cell width
+     * @param float            $height    the cell height
+     * @param string           $text      the cell text
+     * @param PdfTextAlignment $alignment the cell alignment
+     * @param PdfStyle         $style     the cell style
+     * @param PdfCell          $cell      the cell
      */
-    protected function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, string $alignment, PdfStyle $style, PdfCell $cell): void
+    protected function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, PdfTextAlignment $alignment, PdfStyle $style, PdfCell $cell): void
     {
         // save the current position
         [$x, $y] = $parent->GetXY();
@@ -555,9 +560,9 @@ class PdfTableBuilder implements PdfConstantsInterface
             $cell->drawImage($parent, $rect, $alignment);
         } elseif (Utils::isString($text)) {
             // cell text
-            $lineheight = self::LINE_HEIGHT;
+            $line_height = self::LINE_HEIGHT;
             if (!$style->getFont()->isDefaultSize()) {
-                $lineheight = $parent->getFontSize() + 2 * $parent->getCellMargin();
+                $line_height = $parent->getFontSize() + 2 * $parent->getCellMargin();
             }
             $textBounds = clone $bounds;
             $indent = $style->getIndent();
@@ -565,7 +570,7 @@ class PdfTableBuilder implements PdfConstantsInterface
                 $parent->SetX($x + $indent);
                 $textBounds->indent($indent);
             }
-            $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $lineheight);
+            $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
         }
 
         // move the position to the top-right of the cell
@@ -634,14 +639,14 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Draws the cell text.
      *
-     * @param PdfDocument  $parent    the parent document
-     * @param int          $index     the column index
-     * @param PdfRectangle $bounds    the cell bounds
-     * @param string       $text      the cell text
-     * @param string       $alignment the text alignment
-     * @param float        $height    the line height
+     * @param PdfDocument      $parent    the parent document
+     * @param int              $index     the column index
+     * @param PdfRectangle     $bounds    the cell bounds
+     * @param string           $text      the cell text
+     * @param PdfTextAlignment $alignment the text alignment
+     * @param float            $height    the line height
      */
-    protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, string $alignment, float $height): void
+    protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
     {
         // handle by listener?
         if ($this->listener && $this->listener->onDrawCellText($this, $index, $bounds, $text, $alignment, $height)) {
@@ -655,26 +660,30 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Output a row.
      *
-     * @param PdfDocument $parent the parent document
-     * @param float       $height the row height
-     * @param string[]    $texts  the cells text
-     * @param float[]     $widths the cells width
-     * @param PdfStyle[]  $styles the cells style
-     * @param string[]    $aligns the cells alignment
-     * @param PdfCell[]   $cells  the cells
+     * @param PdfDocument        $parent the parent document
+     * @param float              $height the row height
+     * @param string[]           $texts  the cells text
+     * @param float[]            $widths the cells width
+     * @param PdfStyle[]         $styles the cells style
+     * @param PdfTextAlignment[] $aligns the cells alignment
+     * @param PdfCell[]          $cells  the cells
      */
     protected function drawRow(PdfDocument $parent, float $height, array $texts, array $widths, array $styles, array $aligns, array $cells): void
     {
         // horizontal alignment
         if (!$this->fullWidth) {
-            if (self::ALIGN_CENTER === $this->alignment) {
-                $w = \array_sum($widths);
-                $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2;
-                $parent->SetX($x);
-            } elseif (self::ALIGN_RIGHT === $this->alignment) {
-                $w = \array_sum($widths);
-                $x = $parent->GetPageWidth() - $parent->getRightMargin() - $w;
-                $parent->SetX($x);
+            switch ($this->alignment) {
+                case PdfTextAlignment::CENTER:
+                case PdfTextAlignment::JUSTIFIED:
+                    $w = \array_sum($widths);
+                    $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2;
+                    $parent->SetX($x);
+                    break;
+                case PdfTextAlignment::RIGHT:
+                    $w = \array_sum($widths);
+                    $x = $parent->GetPageWidth() - $parent->getRightMargin() - $w;
+                    $parent->SetX($x);
+                    break;
             }
         }
 

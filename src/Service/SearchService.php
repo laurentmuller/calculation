@@ -158,7 +158,8 @@ class SearchService
     {
         return match ($field) {
             'Calculation.id' => FormatUtils::formatId((int) $content),
-            'Calculation.overallTotal', 'Product.price' => FormatUtils::formatAmount((float) $content),
+            'Calculation.overallTotal',
+            'Product.price' => FormatUtils::formatAmount((float) $content),
             default => (string) $content
         };
     }

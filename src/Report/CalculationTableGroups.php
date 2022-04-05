@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -70,7 +71,7 @@ class CalculationTableGroups extends PdfTableBuilder
         $this->startHeaderRow()
             ->add($columns[0]->getText())
             ->add($columns[1]->getText())
-            ->add($this->trans('report.calculation.margins'), 2, null, self::ALIGN_CENTER)
+            ->add($this->trans('report.calculation.margins'), 2, null, PdfTextAlignment::CENTER)
             ->add($columns[4]->getText())
             ->endRow();
 

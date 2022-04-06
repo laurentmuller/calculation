@@ -16,6 +16,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
@@ -154,7 +155,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     private function checkLines(int $lines): bool
     {
         $this->inProgress = true;
-        $result = $this->checkNewPage($lines * self::LINE_HEIGHT);
+        $result = $this->checkNewPage($lines * PdfDocument::LINE_HEIGHT);
         $this->inProgress = false;
 
         return $result;

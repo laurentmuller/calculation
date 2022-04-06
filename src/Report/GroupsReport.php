@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Group;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -51,7 +52,7 @@ class GroupsReport extends AbstractArrayReport
         $table = $this->createTable();
 
         $last = \end($entities);
-        $emptyStyle = PdfStyle::getCellStyle()->setBorder('LR');
+        $emptyStyle = PdfStyle::getCellStyle()->setBorder(PdfBorder::LEFT . PdfBorder::RIGHT);
 
         foreach ($entities as $entity) {
             $this->outputGroup($table, $entity);

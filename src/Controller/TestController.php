@@ -185,8 +185,7 @@ class TestController extends AbstractController
 
         // create report
         $report = new HtmlReport($this);
-        $report->setDebug(false)
-            ->setContent($content)
+        $report->setContent($content)
             ->SetTitle($this->trans('test.html'), true);
 
         // render

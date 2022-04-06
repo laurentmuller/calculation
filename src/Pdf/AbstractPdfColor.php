@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface, \Stringable
+abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 {
     use MathTrait;
 
@@ -52,7 +52,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface, \Stringa
     /**
      * Constructor.
      *
-     * All values must be bewtween 0 to 255 inclusive.
+     * All values must be between 0 and 255 inclusive.
      *
      * @param int $red   the red component
      * @param int $green the green component
@@ -61,13 +61,6 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface, \Stringa
     final public function __construct(int $red = 0, int $green = 0, int $blue = 0)
     {
         $this->setRGB($red, $green, $blue);
-    }
-
-    public function __toString(): string
-    {
-        $name = Utils::getShortName($this);
-
-        return \sprintf('%s(%d, %d, %d)', $name, $this->red, $this->green, $this->blue);
     }
 
     /**
@@ -266,7 +259,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface, \Stringa
     /**
      * Sets the blue component.
      *
-     * @param int $blue the value to set. Must be bewtween 0 to 255 inclusive.
+     * @param int $blue the value to set. Must be between 0 and 255 inclusive.
      *
      * @return self this instance
      */

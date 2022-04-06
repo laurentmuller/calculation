@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\CalculationState;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
@@ -54,7 +55,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
     /**
      * {@inheritdoc}
      */
-    public function onDrawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
+    public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
     {
         // color column?
         if (3 === $index) {
@@ -63,7 +64,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
                 $margin = $doc->getCellMargin();
                 $bounds->inflateXY(-3 * $margin, -$margin)
                     ->setHeight(self::LINE_HEIGHT - 2 * $margin);
-                $doc->rectangle($bounds, self::RECT_BOTH);
+                $doc->rectangle($bounds, PdfBorder::both());
 
                 return true;
             }

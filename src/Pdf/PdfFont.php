@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Util\Utils;
-
 /**
  * Define a font style.
  *
  * @author Laurent Muller
  */
-class PdfFont implements PdfDocumentUpdaterInterface, \Stringable
+class PdfFont implements PdfDocumentUpdaterInterface
 {
     /**
      * The default font name (Arial).
@@ -113,17 +111,6 @@ class PdfFont implements PdfDocumentUpdaterInterface, \Stringable
         $this->setName($name)
             ->setStyle($style)
             ->setSize($size);
-    }
-
-    public function __toString(): string
-    {
-        $name = Utils::getShortName($this);
-        $style = $this->getTextStyle();
-        if (empty($style)) {
-            return \sprintf('%s(%s, %gpt)', $name, $this->name, $this->size);
-        }
-
-        return \sprintf('%s(%s, %gpt %s)', $name, $this->name, $this->size, $style);
     }
 
     /**
@@ -301,25 +288,5 @@ class PdfFont implements PdfDocumentUpdaterInterface, \Stringable
         }
 
         return $this->setStyle(self::STYLE_UNDERLINE);
-    }
-
-    /**
-     * Gets the textual representation of this style.
-     */
-    private function getTextStyle(): string
-    {
-        $result = [];
-        $style = $this->style;
-        if (false !== \stripos($style, self::STYLE_BOLD)) {
-            $result[] = 'Bold';
-        }
-        if (false !== \stripos($style, self::STYLE_ITALIC)) {
-            $result[] = 'Italic';
-        }
-        if (false !== \stripos($style, self::STYLE_UNDERLINE)) {
-            $result[] = 'Underline';
-        }
-
-        return \implode(' ', $result);
     }
 }

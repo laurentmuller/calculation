@@ -27,26 +27,6 @@ class PdfCell
     protected ?PdfTextAlignment $alignment = null;
 
     /**
-     * The bottom border style.
-     */
-    protected ?PdfCellBorder $borderBottom = null;
-
-    /**
-     * The left border style.
-     */
-    protected ?PdfCellBorder $borderLeft = null;
-
-    /**
-     * The right border style.
-     */
-    protected ?PdfCellBorder $borderRight = null;
-
-    /**
-     * The top border style.
-     */
-    protected ?PdfCellBorder $borderTop = null;
-
-    /**
      * The cell columns span.
      */
     protected int $cols = 1;
@@ -79,18 +59,6 @@ class PdfCell
 
     public function __clone()
     {
-        if (null !== $this->borderBottom) {
-            $this->borderBottom = clone $this->borderBottom;
-        }
-        if (null !== $this->borderLeft) {
-            $this->borderLeft = clone $this->borderLeft;
-        }
-        if (null !== $this->borderRight) {
-            $this->borderRight = clone $this->borderRight;
-        }
-        if (null !== $this->borderTop) {
-            $this->borderTop = clone $this->borderTop;
-        }
         if (null !== $this->style) {
             $this->style = clone $this->style;
         }
@@ -102,38 +70,6 @@ class PdfCell
     public function getAlignment(): ?PdfTextAlignment
     {
         return $this->alignment;
-    }
-
-    /**
-     * Gets the bottom border style.
-     */
-    public function getBorderBottom(): ?PdfCellBorder
-    {
-        return $this->borderBottom;
-    }
-
-    /**
-     * Gets the left border style.
-     */
-    public function getBorderLeft(): ?PdfCellBorder
-    {
-        return $this->borderLeft;
-    }
-
-    /**
-     * Gets the right border style.
-     */
-    public function getBorderRight(): ?PdfCellBorder
-    {
-        return $this->borderRight;
-    }
-
-    /**
-     * Gets the top border style.
-     */
-    public function getBorderTop(): ?PdfCellBorder
-    {
-        return $this->borderTop;
     }
 
     /**
@@ -161,62 +97,11 @@ class PdfCell
     }
 
     /**
-     * Returns if one or more border styles (top, bottom, left, right) are set.
-     */
-    public function isBorderStyle(): bool
-    {
-        return isset($this->borderTop)
-            || isset($this->borderBottom)
-            || isset($this->borderLeft)
-            || isset($this->borderRight);
-    }
-
-    /**
      * Sets the cell alignment.
      */
     public function setAlignment(?PdfTextAlignment $alignment): self
     {
         $this->alignment = $alignment;
-
-        return $this;
-    }
-
-    /**
-     * Sets the bottom border style.
-     */
-    public function setBorderBottom(?PdfCellBorder $borderBottom): self
-    {
-        $this->borderBottom = $borderBottom;
-
-        return $this;
-    }
-
-    /**
-     * Sets the left border style.
-     */
-    public function setBorderLeft(?PdfCellBorder $borderLeft): self
-    {
-        $this->borderLeft = $borderLeft;
-
-        return $this;
-    }
-
-    /**
-     * Sets the right border style.
-     */
-    public function setBorderRight(?PdfCellBorder $borderRight): self
-    {
-        $this->borderRight = $borderRight;
-
-        return $this;
-    }
-
-    /**
-     * Sets the top border style.
-     */
-    public function setBorderTop(?PdfCellBorder $borderTop): self
-    {
-        $this->borderTop = $borderTop;
 
         return $this;
     }

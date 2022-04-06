@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Util\Utils;
-
 /**
  * Define a drawing line.
  *
  * @author Laurent Muller
  */
-class PdfLine implements PdfDocumentUpdaterInterface, \Stringable
+class PdfLine implements PdfDocumentUpdaterInterface
 {
     /**
      * The default line width (0.2mm).
@@ -33,13 +31,6 @@ class PdfLine implements PdfDocumentUpdaterInterface, \Stringable
      */
     public function __construct(protected float $width = self::DEFAULT_WIDTH)
     {
-    }
-
-    public function __toString(): string
-    {
-        $name = Utils::getShortName($this);
-
-        return \sprintf('%s(%g)', $name, $this->width);
     }
 
     /**

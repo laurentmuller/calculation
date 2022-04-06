@@ -18,6 +18,7 @@ use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
@@ -119,7 +120,7 @@ abstract class AbstractReport extends PdfDocument
         $text = $this->translateCount($count);
 
         $margins = $this->setCellMargin(0);
-        $this->Cell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, PdfMove::NEW_LINE, $align);
+        $this->Cell(0, self::LINE_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE, $align);
         $this->setCellMargin($margins);
 
         return $count > 0;

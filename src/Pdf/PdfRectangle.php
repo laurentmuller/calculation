@@ -12,27 +12,18 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Util\Utils;
-
 /**
  * Represents a rectangle.
  *
  * @author Laurent Muller
  */
-class PdfRectangle implements \Stringable
+class PdfRectangle
 {
     /**
      * Constructor.
      */
     public function __construct(protected float $x, protected float $y, protected float $width, protected float $height)
     {
-    }
-
-    public function __toString(): string
-    {
-        $name = Utils::getShortName($this);
-
-        return \sprintf('%s(%g, %g, %g, %g)', $name, $this->x, $this->y, $this->width, $this->height);
     }
 
     /**

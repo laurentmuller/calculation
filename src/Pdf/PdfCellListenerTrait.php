@@ -29,9 +29,9 @@ trait PdfCellListenerTrait
     /**
      * {@inheritdoc}
      *
-     * @see PdfCellListenerInterface::onDrawCellBackground()
+     * @see PdfCellListenerInterface::drawCellBackground()
      */
-    public function onDrawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
+    public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
     {
         return false;
     }
@@ -39,9 +39,9 @@ trait PdfCellListenerTrait
     /**
      * {@inheritdoc}
      *
-     * @see PdfCellListenerInterface::onDrawCellBorder()
+     * @see PdfCellListenerInterface::drawCellBorder()
      */
-    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string|int $border): bool
+    public function drawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, PdfBorder $border): bool
     {
         return false;
     }
@@ -49,9 +49,9 @@ trait PdfCellListenerTrait
     /**
      * {@inheritdoc}
      *
-     * @see PdfCellListenerInterface::onDrawCellText()
+     * @see PdfCellListenerInterface::drawCellText()
      */
-    public function onDrawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool
+    public function drawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool
     {
         return false;
     }

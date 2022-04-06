@@ -15,6 +15,7 @@ namespace App\Report;
 use App\Entity\Category;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Util\FormatUtils;
@@ -78,10 +79,11 @@ class CategoriesReport extends AbstractArrayReport
         $txtProduct = $this->trans('counters.products', ['count' => $products]);
         $txtTask = $this->trans('counters.tasks', ['count' => $tasks]);
 
+        $border = PdfBorder::none();
         $margins = $this->setCellMargin(0);
         $width = $this->GetPageWidth() / 2;
-        $this->Cell($width, self::LINE_HEIGHT, $txtGroup . ' - ' . $txtCount, self::BORDER_NONE, PdfMove::RIGHT);
-        $this->Cell(0, self::LINE_HEIGHT, $txtProduct . ' - ' . $txtTask, self::BORDER_NONE, PdfMove::NEW_LINE, PdfTextAlignment::RIGHT);
+        $this->Cell($width, self::LINE_HEIGHT, $txtGroup . ' - ' . $txtCount, $border, PdfMove::RIGHT);
+        $this->Cell(0, self::LINE_HEIGHT, $txtProduct . ' - ' . $txtTask, $border, PdfMove::NEW_LINE, PdfTextAlignment::RIGHT);
         $this->setCellMargin($margins);
 
         return true;

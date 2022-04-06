@@ -16,6 +16,7 @@ use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -94,7 +95,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         if ($calculation->isEmpty()) {
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
-            $this->Cell(0, 0, $message, self::BORDER_NONE, PdfMove::NEW_LINE, PdfTextAlignment::CENTER);
+            $this->Cell(0, 0, $message, PdfBorder::none(), PdfMove::NEW_LINE, PdfTextAlignment::CENTER);
             $this->renderQrCode();
 
             return true;
@@ -191,10 +192,10 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
 
         $state = $calculation->getStateCode();
         $date = FormatUtils::formatDate($calculation->getDate());
-        $style = PdfStyle::getHeaderStyle()->setBorder('tbr');
+        $style = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
 
         $table = new PdfTableBuilder($this);
-        $table->setHeaderStyle(PdfStyle::getHeaderStyle()->setBorder('tbl'));
+        $table->setHeaderStyle(PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT));
         $table->addColumns($columns)
             ->startHeaderRow()
             ->add($calculation->getCustomer())

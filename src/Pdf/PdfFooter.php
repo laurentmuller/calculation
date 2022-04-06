@@ -22,7 +22,7 @@ use App\Util\FormatUtils;
  *
  * @author Laurent Muller
  */
-class PdfFooter implements PdfConstantsInterface
+class PdfFooter
 {
     /**
      * The footer text.
@@ -35,10 +35,16 @@ class PdfFooter implements PdfConstantsInterface
     protected ?string $url = null;
 
     /**
+     * the top border.
+     */
+    private readonly PdfBorder $border;
+
+    /**
      * Constructor.
      */
     public function __construct(protected PdfDocument $parent)
     {
+        $this->border = PdfBorder::top();
     }
 
     /**
@@ -103,7 +109,7 @@ class PdfFooter implements PdfConstantsInterface
      */
     private function outputText(string $text, float $cellWidth, PdfTextAlignment $align, string $link = ''): self
     {
-        $this->parent->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, PdfMove::RIGHT, $align, false, $link);
+        $this->parent->Cell($cellWidth, PdfDocument::LINE_HEIGHT, $text, $this->border, PdfMove::RIGHT, $align, false, $link);
 
         return $this;
     }

@@ -23,15 +23,19 @@ use App\Util\Utils;
  *
  * @see \App\Pdf\PdfColumn
  */
-class PdfTableBuilder implements PdfConstantsInterface
+class PdfTableBuilder
 {
     use MathTrait;
-    use PdfBorderTrait;
 
     /**
      * The column alignment.
      */
     protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
+
+    /**
+     * The border style.
+     */
+    protected PdfBorder $border;
 
     /**
      * The cells.
@@ -75,6 +79,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      */
     public function __construct(protected PdfDocument $parent, protected bool $fullWidth = true)
     {
+        $this->border = PdfBorder::all();
     }
 
     /**
@@ -96,12 +101,12 @@ class PdfTableBuilder implements PdfConstantsInterface
      * Adds the given cell to the list of cells.
      * Do nothing if the given cell is <code>null</code>.
      *
-     * @throws \InvalidArgumentException if no current row is started
+     * @throws \LogicException if no current row is started
      */
     public function addCell(?PdfCell $cell): self
     {
         if (!$this->isRowStarted()) {
-            throw new \InvalidArgumentException('No current row is started.');
+            throw new \LogicException('No current row is started.');
         }
         if (null !== $cell) {
             $this->cells[] = $cell;
@@ -115,7 +120,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @param PdfCell[] $cells the cells to add
      *
-     * @throws \InvalidArgumentException if no current row is started
+     * @throws \LogicException if no current row is started
      */
     public function addCells(array $cells): self
     {
@@ -179,13 +184,13 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @param bool $endRow true to ending the row after completed
      *
-     * @throws \InvalidArgumentException if a row is not started
+     * @throws \LogicException if no current row is started
      */
     public function completeRow(bool $endRow = true): self
     {
         // started?
         if (!$this->isRowStarted()) {
-            throw new \InvalidArgumentException('No row started.');
+            throw new \LogicException('No row started.');
         }
 
         // add remaining cells
@@ -218,21 +223,16 @@ class PdfTableBuilder implements PdfConstantsInterface
             throw new \OutOfRangeException('Invalid spanned cells.');
         }
 
+        $texts = [];
+        $styles = [];
+        $aligns = [];
+        $widths = [];
+        $fixeds = [];
+
         // copy
         $cells = $this->cells;
         $parent = $this->parent;
         $columns = $this->columns;
-
-        /** @psalm-var string[] $texts */
-        $texts = [];
-        /** @psalm-var PdfStyle[] $styles */
-        $styles = [];
-        /** @psalm-var PdfTextAlignment[] $aligns */
-        $aligns = [];
-        /** @psalm-var float[] $widths */
-        $widths = [];
-        /** @psalm-var float[] $fixeds */
-        $fixeds = [];
 
         $index = 0;
         foreach ($cells as $cell) {
@@ -297,6 +297,14 @@ class PdfTableBuilder implements PdfConstantsInterface
         $this->drawRow($parent, $height, $texts, $widths, $styles, $aligns, $cells);
 
         return $this;
+    }
+
+    /**
+     * Gets the border.
+     */
+    public function getBorder(): PdfBorder
+    {
+        return $this->border;
     }
 
     /**
@@ -412,15 +420,25 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfCell[]     $cells the cells to output
      * @param PdfStyle|null $style the row style or null for default cell style
      *
-     * @throws \InvalidArgumentException if a row is already started
-     * @throws \LengthException          if no cell is defined
-     * @throws \OutOfRangeException      if the number of spanned cells is not equal to the number of columns
+     * @throws \LogicException      if a row is already started
+     * @throws \LengthException     if no cell is defined
+     * @throws \OutOfRangeException if the number of spanned cells is not equal to the number of columns
      */
     public function row(array $cells, ?PdfStyle $style = null): self
     {
         return $this->startRow($style)
             ->addCells($cells)
             ->endRow();
+    }
+
+    /**
+     * Sets the border.
+     */
+    public function setBorder(PdfBorder|string|int $border): self
+    {
+        $this->border = \is_string($border) || \is_int($border) ? new PdfBorder($border) : $border;
+
+        return $this;
     }
 
     /**
@@ -476,7 +494,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfStyle|null         $style     the row style to use or null to use the default cell style
      * @param PdfTextAlignment|null $alignment the cell alignment
      *
-     * @throws \InvalidArgumentException if a row is already started
+     * @throws \LogicException if a row is already started
      *
      * @see PdfTableBuilder::add()
      */
@@ -493,7 +511,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @see PdfTableBuilder::getHeaderStyle()
      * @see PdfStyle::getHeaderStyle()
      *
-     * @throws \InvalidArgumentException if a row is already started
+     * @throws \LogicException if a row is already started
      */
     public function startHeaderRow(): self
     {
@@ -504,11 +522,13 @@ class PdfTableBuilder implements PdfConstantsInterface
      * Starts a new row.
      *
      * @param PdfStyle|null $style the row style to use or null to use the default cell style
+     *
+     * @throws \LogicException if the row is already started
      */
     public function startRow(?PdfStyle $style = null): self
     {
         if ($this->isRowStarted()) {
-            throw new \InvalidArgumentException('A row is already started.');
+            throw new \LogicException('A row is already started.');
         }
         $this->rowStyle = $style ?: PdfStyle::getCellStyle();
 
@@ -547,8 +567,8 @@ class PdfTableBuilder implements PdfConstantsInterface
         }
 
         // cell border
-        $border = $style->isBorderInherited() ? $this->border : $style->getBorder();
-        if (self::BORDER_NONE !== $border) {
+        $border = $style->getBorder()->isInherited() ? $this->border : $style->getBorder();
+        if ($border->isRectangleStyle()) {
             $this->drawCellBorder($parent, $index, clone $bounds, $border);
             $parent->SetXY($x, $y);
         }
@@ -560,7 +580,7 @@ class PdfTableBuilder implements PdfConstantsInterface
             $cell->drawImage($parent, $rect, $alignment);
         } elseif (Utils::isString($text)) {
             // cell text
-            $line_height = self::LINE_HEIGHT;
+            $line_height = PdfDocument::LINE_HEIGHT;
             if (!$style->getFont()->isDefaultSize()) {
                 $line_height = $parent->getFontSize() + 2 * $parent->getCellMargin();
             }
@@ -587,12 +607,12 @@ class PdfTableBuilder implements PdfConstantsInterface
     protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds): void
     {
         // handle by listener?
-        if ($this->listener && $this->listener->onDrawCellBackground($this, $index, $bounds)) {
+        if ($this->listener && $this->listener->drawCellBackground($this, $index, $bounds)) {
             return;
         }
 
         // default
-        $parent->rectangle($bounds, self::RECT_FILL);
+        $parent->rectangle($bounds, PdfBorder::fill());
     }
 
     /**
@@ -601,36 +621,34 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfDocument  $parent the parent document
      * @param int          $index  the column index
      * @param PdfRectangle $bounds the cell bounds
-     * @param string|int   $border the border style
+     * @param PdfBorder    $border the border style
      */
-    protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, string|int $border): void
+    protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
     {
         // handle by listener?
-        if ($this->listener && $this->listener->onDrawCellBorder($this, $index, $bounds, $border)) {
+        if ($this->listener && $this->listener->drawCellBorder($this, $index, $bounds, $border)) {
             return;
         }
 
         // get values
         $x = $bounds->x();
         $y = $bounds->y();
-
-        if (self::BORDER_ALL === $border) {
-            // draw all
-            $parent->rectangle($bounds, self::RECT_BORDER);
-        } elseif (\is_string($border)) {
+        if ($border->isRectangleStyle()) {
+            $parent->rectangle($bounds, $border);
+        } else {
             // draw each applicable border side
             $right = $bounds->right();
             $bottom = $bounds->bottom();
-            if (\str_contains($border, self::BORDER_LEFT)) {
+            if ($border->isLeft()) {
                 $parent->Line($x, $y, $x, $bottom);
             }
-            if (\str_contains($border, self::BORDER_RIGHT)) {
+            if ($border->isRight()) {
                 $parent->Line($right, $y, $right, $bottom);
             }
-            if (\str_contains($border, self::BORDER_TOP)) {
+            if ($border->isTop()) {
                 $parent->Line($x, $y, $right, $y);
             }
-            if (\str_contains($border, self::BORDER_BOTTOM)) {
+            if ($border->isBottom()) {
                 $parent->Line($x, $bottom, $right, $bottom);
             }
         }
@@ -649,12 +667,12 @@ class PdfTableBuilder implements PdfConstantsInterface
     protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
     {
         // handle by listener?
-        if ($this->listener && $this->listener->onDrawCellText($this, $index, $bounds, $text, $alignment, $height)) {
+        if ($this->listener && $this->listener->drawCellText($this, $index, $bounds, $text, $alignment, $height)) {
             return;
         }
 
         // default
-        $parent->MultiCell($bounds->width(), $height, $text, self::BORDER_NONE, $alignment);
+        $parent->MultiCell($bounds->width(), $height, $text, PdfBorder::none(), $alignment);
     }
 
     /**
@@ -706,8 +724,6 @@ class PdfTableBuilder implements PdfConstantsInterface
      * @param PdfCell     $cell  the cell
      *
      * @return float the cell height
-     *
-     * @see \App\Pdf\PdfTableBuilder::getRowHeight()
      */
     protected function getCellHeight(?string $text, float $width, PdfStyle $style, PdfCell $cell): float
     {
@@ -724,7 +740,7 @@ class PdfTableBuilder implements PdfConstantsInterface
         $width = \max(0, $width - $style->getIndent());
         $lines = $parent->getLinesCount($text, $width);
 
-        $height = self::LINE_HEIGHT;
+        $height = PdfDocument::LINE_HEIGHT;
         if (PdfFont::DEFAULT_SIZE !== $style->getFont()->getSize()) {
             $height = $parent->getFontSize() + 2 * $parent->getCellMargin();
         }
@@ -759,9 +775,8 @@ class PdfTableBuilder implements PdfConstantsInterface
     protected function getRowHeight(array $texts, array $widths, array $styles, array $cells): float
     {
         $height = 0;
-        $len = \count($texts);
-        for ($i = 0; $i < $len; ++$i) {
-            $height = \max($height, $this->getCellHeight($texts[$i], $widths[$i], $styles[$i], $cells[$i]));
+        foreach ($texts as $index => $text) {
+            $height = \max($height, $this->getCellHeight($text, $widths[$index], $styles[$index], $cells[$index]));
         }
 
         return $height;

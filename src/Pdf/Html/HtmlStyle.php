@@ -14,7 +14,6 @@ namespace App\Pdf\Html;
 
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfStyle;
-use App\Util\Utils;
 
 /**
  * The HTML style.
@@ -23,7 +22,7 @@ use App\Util\Utils;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class HtmlStyle extends PdfStyle implements \Stringable
+class HtmlStyle extends PdfStyle
 {
     /**
      * The alignment.
@@ -49,16 +48,6 @@ class HtmlStyle extends PdfStyle implements \Stringable
      * The top margin.
      */
     protected float $topMargin = 0;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString(): string
-    {
-        $shortName = Utils::getShortName($this);
-
-        return \sprintf('%s(%s, Margins(L:%g, R:%g, T:%g, B:%g))', $shortName, (string) $this->font, $this->leftMargin, $this->rightMargin, $this->topMargin, $this->bottomMargin);
-    }
 
     /**
      * Sets the font style to bold.

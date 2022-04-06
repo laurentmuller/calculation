@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Util\Utils;
-
 /**
  * This class describe a style that can be applied to a PDF document.
  *
@@ -21,9 +19,12 @@ use App\Util\Utils;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class PdfStyle implements PdfDocumentUpdaterInterface, \Stringable
+class PdfStyle implements PdfDocumentUpdaterInterface
 {
-    use PdfBorderTrait;
+    /**
+     * The border style.
+     */
+    protected PdfBorder $border;
 
     /**
      * The draw color.
@@ -72,15 +73,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface, \Stringable
         $this->drawColor = clone $this->drawColor;
         $this->fillColor = clone $this->fillColor;
         $this->textColor = clone $this->textColor;
+        $this->border = clone $this->border;
         $this->font = clone $this->font;
         $this->line = clone $this->line;
-    }
-
-    public function __toString(): string
-    {
-        $name = Utils::getShortName($this);
-
-        return \sprintf('%s(%s, %s, %s, %s, %s, %s)', $name, (string) $this->font, (string) $this->drawColor, (string) $this->fillColor, (string) $this->textColor, (string) $this->line, $this->getBorderText());
     }
 
     /**
@@ -128,6 +123,14 @@ class PdfStyle implements PdfDocumentUpdaterInterface, \Stringable
     {
         return self::getCellStyle()
             ->setFontBold();
+    }
+
+    /**
+     * Gets the border.
+     */
+    public function getBorder(): PdfBorder
+    {
+        return $this->border;
     }
 
     /**
@@ -248,7 +251,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface, \Stringable
     public static function getNoBorderStyle(): self
     {
         return self::getDefaultStyle()
-            ->setBorder(PdfConstantsInterface::BORDER_NONE);
+            ->setBorder(PdfBorder::NONE);
     }
 
     /**
@@ -284,9 +287,18 @@ class PdfStyle implements PdfDocumentUpdaterInterface, \Stringable
     public function reset(): self
     {
         return $this->resetLine()
+            ->resetBorder()
             ->resetColors()
             ->resetFont()
             ->resetIndent();
+    }
+
+    /**
+     * Sets border to default (none).
+     */
+    public function resetBorder(): self
+    {
+        return $this->setBorder(PdfBorder::ALL);
     }
 
     /**
@@ -326,6 +338,16 @@ class PdfStyle implements PdfDocumentUpdaterInterface, \Stringable
     public function resetLine(): self
     {
         return $this->setLine(PdfLine::default());
+    }
+
+    /**
+     * Sets the border.
+     */
+    public function setBorder(PdfBorder|string|int $border): self
+    {
+        $this->border = \is_string($border) || \is_int($border) ? new PdfBorder($border) : $border;
+
+        return $this;
     }
 
     /**

@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Util\Utils;
-
 /**
  * The HTML margins.
  *
  * @author Laurent Muller
  */
-class HtmlMargins implements \Stringable
+class HtmlMargins
 {
     /**
      * The bottom margin.
@@ -40,13 +38,6 @@ class HtmlMargins implements \Stringable
      * The top margin.
      */
     protected float $top = 0.0;
-
-    public function __toString(): string
-    {
-        $shortName = Utils::getShortName($this);
-
-        return \sprintf('%s(L:%0.2f, R:%0.2f, T:%0.2f, B:%0.2f))', $shortName, $this->left, $this->right, $this->top, $this->bottom);
-    }
 
     /**
      * Gets the default margins.

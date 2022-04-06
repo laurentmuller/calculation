@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Log;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
@@ -91,7 +92,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     /**
      * {@inheritdoc}
      */
-    public function onDrawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string|int $border): bool
+    public function drawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, PdfBorder $border): bool
     {
         // started?
         if (!$this->started) {
@@ -150,7 +151,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     /**
      * Draws the left border if applicable.
      */
-    private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, string|int $border): bool
+    private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, PdfBorder $border): bool
     {
         if ($level && $color = $this->getColor($level)) {
             // get values

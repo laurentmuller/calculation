@@ -13,7 +13,8 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Pdf\Enums\PdfTextAlignment;
-use App\Pdf\PdfConstantsInterface;
+use App\Pdf\PdfBorder;
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
@@ -25,7 +26,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstantsInterface, \Stringable
+abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 {
     /**
      * The class name.
@@ -60,19 +61,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
         // style
         $this->updateStyle();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString(): string
-    {
-        $shortName = Utils::getShortName($this);
-        if ($this->className) {
-            return \sprintf("%s(%s, '%s')", $shortName, $this->name, $this->className);
-        }
-
-        return \sprintf('%s(%s)', $shortName, $this->name);
     }
 
     /**
@@ -397,7 +385,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     protected function outputText(HtmlReport $report, string $text): void
     {
-        $height = \max($report->getFontSize(), self::LINE_HEIGHT);
+        $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
         $report->Write($height, $text);
     }
 
@@ -411,27 +399,27 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     {
         switch ($class) {
             case 'border':
-                $style->setBorder(self::BORDER_ALL);
+                $style->setBorder(PdfBorder::ALL);
                 break;
 
             case 'border-top':
-                $style->setBorder(self::BORDER_TOP);
+                $style->setBorder(PdfBorder::TOP);
                 break;
 
             case 'border-right':
-                $style->setBorder(self::BORDER_RIGHT);
+                $style->setBorder(PdfBorder::RIGHT);
                 break;
 
             case 'border-bottom':
-                $style->setBorder(self::BORDER_BOTTOM);
+                $style->setBorder(PdfBorder::BOTTOM);
                 break;
 
             case 'border-left':
-                $style->setBorder(self::BORDER_LEFT);
+                $style->setBorder(PdfBorder::LEFT);
                 break;
 
             case 'border-0':
-                $style->setBorder(self::BORDER_NONE);
+                $style->setBorder(PdfBorder::NONE);
                 break;
 
             case 'border-top-0':

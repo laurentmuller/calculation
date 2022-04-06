@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\PdfDocument;
 use App\Report\HtmlReport;
 use App\Util\Utils;
 
@@ -21,7 +22,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class HtmlTextChunk extends AbstractHtmlChunk implements \Stringable
+class HtmlTextChunk extends AbstractHtmlChunk
 {
     /**
      * The names of parents to use with multi-cell.
@@ -41,20 +42,6 @@ class HtmlTextChunk extends AbstractHtmlChunk implements \Stringable
      * The text.
      */
     protected ?string $text = null;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString(): string
-    {
-        if ($this->isEmpty()) {
-            return parent::__toString();
-        }
-
-        $shortName = Utils::getShortName($this);
-
-        return \sprintf('%s("%s")', $shortName, (string) $this->text);
-    }
 
     /**
      * Gets the text.
@@ -124,7 +111,7 @@ class HtmlTextChunk extends AbstractHtmlChunk implements \Stringable
                 case PdfTextAlignment::RIGHT:
                 case PdfTextAlignment::CENTER:
                 case PdfTextAlignment::JUSTIFIED:
-                    $height = \max($report->getFontSize(), self::LINE_HEIGHT);
+                    $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
                     $report->MultiCell(0, $height, $text, 0, $align);
                     $report->SetY($report->GetY() - $report->getLastHeight());
 

@@ -16,8 +16,6 @@ use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
-use App\Pdf\Html\AbstractHtmlChunk;
-use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
 
 /**
@@ -31,11 +29,6 @@ class HtmlReport extends AbstractReport
      * the HTML content.
      */
     private ?string $content = null;
-
-    /**
-     * The debug mode.
-     */
-    private bool $debug;
 
     /**
      * The left margin.
@@ -57,7 +50,6 @@ class HtmlReport extends AbstractReport
     public function __construct(AbstractController $controller, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
     {
         parent::__construct($controller, $orientation, $unit, $size);
-        $this->debug = false;
     }
 
     /**
@@ -81,16 +73,6 @@ class HtmlReport extends AbstractReport
     }
 
     /**
-     * Gets if the debug mode is enabled.
-     *
-     * @return bool true if enabled
-     */
-    public function isDebug(): bool
-    {
-        return $this->debug;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function render(): bool
@@ -98,11 +80,6 @@ class HtmlReport extends AbstractReport
         // parse
         $parser = new HtmlParser($this->content);
         if (null !== ($root = $parser->parse())) {
-            if ($this->debug) {
-                $this->AddPage();
-                $this->outputDebug($root);
-            }
-
             $this->AddPage();
             $root->output($this);
 
@@ -118,18 +95,6 @@ class HtmlReport extends AbstractReport
     public function setContent(string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Sets if the debug mode is enabled.
-     *
-     * @param bool $debug true if enabled
-     */
-    public function setDebug(bool $debug): self
-    {
-        $this->debug = $debug;
 
         return $this;
     }
@@ -206,20 +171,6 @@ class HtmlReport extends AbstractReport
         }
         if ($previousMargins[1] !== $this->rightMargin) {
             $this->rMargin = $previousMargins[1];
-        }
-    }
-
-    private function outputDebug(AbstractHtmlChunk $chunk, int $indent = 0): void
-    {
-        // current
-        $this->SetX($this->x + $indent);
-        $this->Cell(0, self::LINE_HEIGHT, $chunk->__toString(), 0, 1);
-
-        // children
-        if ($chunk instanceof HtmlParentChunk) {
-            foreach ($chunk->getChildren() as $child) {
-                $this->outputDebug($child, $indent + 4);
-            }
         }
     }
 }

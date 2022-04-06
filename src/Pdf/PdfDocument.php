@@ -57,7 +57,7 @@ use FPDF;
  * @method float GetPageWidth()  The width of current page in user unit.
  * @method float GetPageHeight() The height of current page in user unit.
  */
-class PdfDocument extends FPDF implements PdfConstantsInterface
+class PdfDocument extends FPDF
 {
     use MathTrait;
 
@@ -65,6 +65,15 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * The footer offset.
      */
     final public const FOOTER_OFFSET = -15;
+
+    /**
+     * The default line height.
+     */
+    final public const LINE_HEIGHT = 5;
+    /**
+     * The new line separator.
+     */
+    private const NEW_LINE = "\n";
 
     /**
      * The footer.
@@ -130,8 +139,9 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * @param float                   $w      the cell width. If 0, the cell extends up to the right margin.
      * @param float                   $h      the cell height
      * @param string                  $txt    the cell text
-     * @param int|string              $border indicates if borders must be drawn around the cell. The value can be either:
+     * @param PdfBorder|int|string    $border indicates if borders must be drawn around the cell. The value can be either:
      *                                        <ul>
+     *                                        <li>A Pdf border object.</li>
      *                                        <li>A number:
      *                                        <ul>
      *                                        <li><b>0</b> : No border (default value).</li>
@@ -168,6 +178,9 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     {
         if ($ln instanceof PdfMove) {
             $ln = $ln->value;
+        }
+        if ($border instanceof PdfBorder) {
+            $border = $border->getValue();
         }
         if (PdfTextAlignment::JUSTIFIED === $align) {
             $align = PdfTextAlignment::LEFT->value;
@@ -454,8 +467,9 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * @param float                   $w      the cell width. If 0, the cell extends up to the right margin.
      * @param float                   $h      the cell height
      * @param string                  $txt    the cell text
-     * @param int|string              $border indicates if borders must be drawn around the cell. The value can be either:
+     * @param PdfBorder|int|string    $border indicates if borders must be drawn around the cell. The value can be either:
      *                                        <ul>
+     *                                        <li>A Pdf border object.</li>
      *                                        <li>A number:
      *                                        <ul>
      *                                        <li><b>0</b> : No border (default value).</li>
@@ -482,6 +496,9 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      */
     public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false): void
     {
+        if ($border instanceof PdfBorder) {
+            $border = $border->getValue();
+        }
         if ($align instanceof PdfTextAlignment) {
             $align = $align->value;
         }
@@ -534,22 +551,15 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
      * @param PdfRectangle $bounds the rectangle to output
-     * @param string|int   $border the style of rendering. Possible values are:
-     *                             <ul>
-     *                             <li>'<b>D</b>' or an empty string (''): Draw. This is the default value.</li>
-     *                             <li>'<b>F</b>': Fill</li>
-     *                             <li>'<b>DF</b> or '<b>FD</b>': Draw and Fill.</li>
-     *                             <li><b>PdfConstantsInterface.BORDER_ALL</b>: Draw.</li>
-     *                             <li><b>PdfConstantsInterface.BORDER_NONE</b>: Do nothing.</li>
-     *                             </ul>
+     * @param PdfBorder    $border the style of rendering
+     *
+     * @see PdfBorder::isRectangleStyle()
+     * @see PdfBorder::getRectangleStyle()
      */
-    public function rectangle(PdfRectangle $bounds, string|int $border = self::RECT_BORDER): self
+    public function rectangle(PdfRectangle $bounds, PdfBorder $border): self
     {
-        if (self::BORDER_NONE !== $border) {
-            if (self::BORDER_ALL === $border) {
-                $border = self::RECT_BORDER;
-            }
-            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), (string) $border);
+        if ($border->isRectangleStyle()) {
+            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border->getRectangleStyle());
         }
 
         return $this;

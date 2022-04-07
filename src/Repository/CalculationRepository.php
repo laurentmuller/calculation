@@ -14,10 +14,12 @@ namespace App\Repository;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Repository for calculation entity.
@@ -603,12 +605,13 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the last calculations.
      *
-     * @param int $maxResults the maximum number of results to retrieve (the "limit")
+     * @param int                $maxResults the maximum number of results to retrieve (the "limit")
+     * @param UserInterface|null $user       if not null, returns only calculations that are created or modified by the given user
      *
      * @return Calculation[] the last calculations
      * @psalm-return list<Calculation>
      */
-    public function getLastCalculations(int $maxResults): array
+    public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
         // builder
         $builder = $this->createQueryBuilder('c')
@@ -616,6 +619,14 @@ class CalculationRepository extends AbstractRepository
             ->addOrderBy('c.date', Criteria::DESC)
             ->addOrderBy('c.id', Criteria::DESC)
             ->setMaxResults($maxResults);
+
+        // user?
+        if (null !== $user) {
+            $identifier = $user->getUserIdentifier();
+            $builder->where('c.createdBy = :identifier')
+                ->orWhere('c.updatedBy = :identifier')
+                ->setParameter('identifier', $identifier, Types::STRING);
+        }
 
         // execute
         return $builder->getQuery()->getResult();

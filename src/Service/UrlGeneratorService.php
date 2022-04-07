@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Controller\AbstractController;
+use App\Controller\IndexController;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractCategoryItemTable;
 use App\Table\CalculationTable;
@@ -42,6 +43,9 @@ class UrlGeneratorService
     private const PARAMETER_NAMES = [
         // global
         self::PARAM_CALLER,
+
+        // index page
+        IndexController::PARAM_RESTRICT,
 
         // bootstrap-table
         TableInterface::PARAM_ID,

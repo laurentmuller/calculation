@@ -38,7 +38,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity(fields={"username"}, message="username.already_used")
  * @Vich\Uploadable
  */
-class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface, \Serializable
+class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface
 {
     use RightsTrait;
     use RoleTrait;
@@ -125,6 +125,12 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     private bool $verified = false;
 
+    /**
+     * @return array{
+     *      id: int|null,
+     *      username: string|null,
+     *      password: string|null}
+     */
     public function __serialize(): array
     {
         return [
@@ -365,18 +371,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function serialize(): string
-    {
-        return \serialize([
-            $this->id,
-            $this->username,
-            $this->password,
-        ]);
-    }
-
-    /**
      * Sets the e-mail.
      */
     public function setEmail(string $email): self
@@ -473,18 +467,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->verified = $verified;
 
         return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function unserialize($data): void
-    {
-        [
-            $this->id,
-            $this->username,
-            $this->password,
-        ] = (array) \unserialize($data);
     }
 
     /**

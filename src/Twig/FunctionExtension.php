@@ -100,12 +100,7 @@ final class FunctionExtension extends AbstractExtension
         }
 
         // check if file is well contained in public/ directory (prevents ../ in paths)
-        if (0 !== \strncmp($this->webDir, $file, \strlen($this->webDir))) {
-            return false;
-        }
-
-        // ok
-        return true;
+        return 0 === \strncmp($this->webDir, $file, \strlen($this->webDir));
     }
 
     /**

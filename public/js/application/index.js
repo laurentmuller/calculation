@@ -14,18 +14,26 @@ $.fn.extend({
      */
     getContextMenuItems: function () {
         'use strict';
-
         const $elements = $(this).parents('tr:first').find('.dropdown-menu').children();
         return (new MenuBuilder()).fill($elements).getItems();
     }
 });
+
+function onRestrictChange($restrict) {
+    'use strict';
+    const newValue = $restrict.isChecked();
+    const oldValue = $restrict.data('value');
+    if (newValue !== oldValue) {
+        const url = $restrict.data('url') + '?restrict=' + (newValue ? '1' : '0');
+        window.location.assign(url);
+    }
+}
 
 /**
  * Ready function
  */
 (function ($) {
     'use strict';
-
     // remove selection
     const $table = $('#calculations');
     if ($table.length) {
@@ -52,25 +60,20 @@ $.fn.extend({
         };
         const selector = '#calculations tbody tr td:not(.d-print-none)';
         $table.initContextMenu(selector, show, hide);
-
-    } else {
-        // show selection
-        const $selection = $('.card-last.border-primary');
-        if ($selection.length) {
-            $selection.scrollInViewport().timeoutToggle('border-primary');
-        }
-
-        // enable tooltips
-        $('.card').tooltip({
-            selector: '.has-tooltip',
-            customClass: 'tooltip-danger overall-card'
-        });
     }
 
-    // enable tooltips
+    // enable tooltips for calculations by state or by month
     $('.card-body-tootlip').tooltip({
         selector: '.has-tooltip',
         customClass: 'tooltip-danger'
     });
+
+    // user restrict
+    const $restrict = $('#restrict');
+    if ($restrict.length) {
+        $restrict.on('input', function () {
+            $restrict.updateTimer(onRestrictChange, 450, $restrict);
+        });
+    }
 
 }(jQuery));

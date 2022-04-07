@@ -126,7 +126,7 @@
          *            bottomMargin - The bottom margin (default to 60).
          * @return {jQuery} The jQuery element for chaining.
          */
-        scrollInViewport: function (delay, bottomMargin) {
+        scrollInViewport: function (delay = 400, bottomMargin = 50) {
             const $this = $(this);
             try {
                 if ($this.length && !$this.isInViewport(bottomMargin)) {

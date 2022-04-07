@@ -22,7 +22,7 @@ use App\Util\FileUtils;
  *
  * @author Laurent Muller
  */
-class Theme implements \JsonSerializable, \Stringable
+class Theme
 {
     /**
      * The dark theme names.
@@ -43,7 +43,7 @@ class Theme implements \JsonSerializable, \Stringable
     /**
      * The dark style.
      */
-    private ?bool $dark = null;
+    private readonly bool $dark;
 
     /**
      * The description.
@@ -53,7 +53,7 @@ class Theme implements \JsonSerializable, \Stringable
     /**
      * The path exist.
      */
-    private ?bool $exist = null;
+    private readonly bool $exist;
 
     /**
      * The name.
@@ -71,14 +71,8 @@ class Theme implements \JsonSerializable, \Stringable
         $this->name = $source['name'];
         $this->description = $source['description'];
         $this->css = $source['css'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString(): string
-    {
-        return \sprintf("%s('%s')", $this->name, $this->css);
+        $this->exist = FileUtils::exists($this->css);
+        $this->dark = \in_array($this->name, self::DARK_THEMES, true);
     }
 
     /**
@@ -86,10 +80,6 @@ class Theme implements \JsonSerializable, \Stringable
      */
     public function exists(): bool
     {
-        if (null === $this->exist) {
-            $this->exist = FileUtils::exists($this->css);
-        }
-
         return $this->exist;
     }
 
@@ -122,10 +112,6 @@ class Theme implements \JsonSerializable, \Stringable
      */
     public function isDark(): bool
     {
-        if (null === $this->dark) {
-            $this->dark = \in_array($this->name, self::DARK_THEMES, true);
-        }
-
         return $this->dark;
     }
 
@@ -135,17 +121,5 @@ class Theme implements \JsonSerializable, \Stringable
     public function isDefault(): bool
     {
         return ThemeService::DEFAULT_NAME === $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'name' => $this->name,
-            'description' => $this->description,
-            'css' => $this->css,
-        ];
     }
 }

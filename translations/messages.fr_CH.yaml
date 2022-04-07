@@ -578,6 +578,8 @@ index:
     panel_last: Dernières calculations
     panel_month: Calculations par mois
     panel_month_title: Afficher les calculations pour ce mois
+    panel_month_user: Mes calculations
+    panel_month_user_help: Afficher uniquement les calculations que j'ai créés ou modifiées
     panel_state: Calculations par statut
     panel_state_title: Afficher les calculations pour ce statut
     panel_count: Catalogue
@@ -821,7 +823,7 @@ admin:
     rights:
         title: Droits d'accès
         success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec succès.
-color_picker:
+indecolor_picker:
     custom_text: Personnalisé
     advanced_text: Avancé...
 translator:

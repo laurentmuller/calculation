@@ -20,10 +20,13 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Traits\MathTrait;
+use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * The index controller for home page.
@@ -35,20 +38,31 @@ class IndexController extends AbstractController
     use MathTrait;
 
     /**
-     * Display the home page.
+     * The restriction query parameter.
+     */
+    final public const PARAM_RESTRICT = 'restrict';
+
+    /**
+     *  Display the home page.
      *
      * @Route("/", name="homepage")
      * @Breadcrumb({
      *     {"label" = "index.title"}
      * })
      */
-    public function invoke(EntityManagerInterface $manager): Response
+    public function invoke(Request $request, EntityManagerInterface $manager): Response
     {
         $application = $this->getApplication();
+        $restrict = $this->getRestrict($request);
+        $user = $restrict ? $this->getUser() : null;
+
         $parameters = [
             'min_margin' => $application->getMinMargin(),
-            'calculations' => $this->getCalculations($manager, $application->getPanelCalculation()),
+            'calculations' => $this->getCalculations($manager, $application->getPanelCalculation(), $user),
         ];
+        if ($restrict) {
+            $parameters[self::PARAM_RESTRICT] = 1;
+        }
         if ($application->isPanelState()) {
             $parameters['states'] = $this->getStates($manager);
         }
@@ -64,6 +78,11 @@ class IndexController extends AbstractController
             $parameters['state_count'] = $this->count($manager, CalculationState::class);
         }
 
+        // save
+        if ($request->hasSession()) {
+            $request->getSession()->set(self::PARAM_RESTRICT, $restrict);
+        }
+
         return $this->renderForm('index/index.html.twig', $parameters);
     }
 
@@ -77,14 +96,27 @@ class IndexController extends AbstractController
         return $manager->getRepository($className)->count([]);
     }
 
-    private function getCalculations(EntityManagerInterface $manager, int $maxResults): array
+    private function getCalculations(EntityManagerInterface $manager, int $maxResults, ?UserInterface $user): array
     {
-        return $manager->getRepository(Calculation::class)->getLastCalculations($maxResults);
+        return $manager->getRepository(Calculation::class)->getLastCalculations($maxResults, $user);
     }
 
     private function getMonths(EntityManagerInterface $manager): array
     {
         return $manager->getRepository(Calculation::class)->getByMonth();
+    }
+
+    private function getRestrict(Request $request): bool
+    {
+        $input = Utils::getRequestInputBag($request);
+        if ($input->has(self::PARAM_RESTRICT)) {
+            return $input->getBoolean(self::PARAM_RESTRICT);
+        }
+        if ($request->hasSession()) {
+            return (bool) $request->getSession()->get(self::PARAM_RESTRICT, false);
+        }
+
+        return false;
     }
 
     private function getStates(EntityManagerInterface $manager): array

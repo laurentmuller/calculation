@@ -2,12 +2,14 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
+{%- set restrict = restrict|default(0) -%}
 {%- set selection = app.request.get('id', 0) -%}
 {%- set caller = path(app.request.get('_route')) -%}
 
 {# actions #}
+{%- set is_app_dev = app_mode == 'dev' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
-{%- set add_path = is_granted(ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
+{%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
 {%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
 {%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
 {%- set state_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
@@ -17,7 +19,7 @@
 {%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page : show_page -%}
 {%- set row_link = not app.actionNone and (edit_page or show_page) -%}
-{%- set is_drop_down = add_path or show_page or edit_page or delete_page or state_page or single_page_pdf or single_page_excel -%}
+{%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -25,9 +27,11 @@
             <div class="col-auto mr-auto">
                 <h1 class="card-title">{{ icons.icon("calculator", "index.panel_last") }}</h1>
             </div>
-            {%- if add_path -%}
+            {%- if add_page -%}
             <div class="col-auto d-print-none">
-                <a href="{{ add_path }}" class="p-0">{{ 'calculation.add.title'|trans }}</a>
+                {%- set params = route_params(app.request)|merge({'caller': caller}) -%}
+                {%- set path = path(add_page, params) -%}
+                <a href="{{ path }}" class="p-0">{{ 'calculation.add.title'|trans }}</a>
             </div>
             {%- endif -%}
         </div>
@@ -75,6 +79,7 @@
                                         {%- if edit_page -%}
                                             {%- set path = path(edit_page, params) -%}
                                             {{ icons.dropdownItem(path, 'calculation.edit.title_short', 'pencil') }}
+                                        {%- endif -%}
                                         {%- if state_page -%}
                                             {%- set path = path(state_page, params) -%}
                                             {{ icons.dropdownItem(path, 'calculation.list.state_title', 'flag far') }}
@@ -83,25 +88,17 @@
                                             {%- set path = path(delete_page, params) -%}
                                             {{ icons.dropdownItem(path, 'calculation.delete.title', 'times') }}
                                         {%- endif -%}
-                                        {%- if add_path or clone_page -%}
-                                        {{ icons.dropdownSeparator }}
-                                        {%- endif -%}
-                                        {%- if add_path -%}
-                                            {{ icons.dropdownItem(add_path, 'calculation.add.title', 'file far') }}
-                                        {%- endif -%}
-                                        {%- endif -%}
-                                        {%- if clone_page -%}
+                                        {%- if add_page -%}
+                                            {{ icons.dropdownSeparator }}
+                                            {%- set path = path(add_page, params) -%}
+                                            {{ icons.dropdownItem(path, 'calculation.add.title', 'file far') }}
                                             {%- set path = path(clone_page, params) -%}
                                             {{ icons.dropdownItem(path, 'common.button_clone', 'copy far') }}
                                         {%- endif -%}
-                                        {%- if single_page_pdf or single_page_excel -%}
-                                        {{ icons.dropdownSeparator }}
-                                        {%- endif -%}
                                         {%- if single_page_pdf -%}
+                                            {{ icons.dropdownSeparator }}
                                             {%- set path = path(single_page_pdf, {'id': id}) -%}
                                             {{ icons.dropdownItemExternal(path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
-                                        {%- endif -%}
-                                        {%- if single_page_excel -%}
                                             {%- set path = path(single_page_excel, {'id': id}) -%}
                                             {{ icons.dropdownItemExternal(path, 'calculation.list.excel_single_title', 'file-excel far') }}
                                         {%- endif -%}
@@ -120,4 +117,14 @@
         </div>
         {%- endif -%}
     </div>
+    {% if app.user and is_app_dev %}
+    <div class="card-footer p-2">
+        <div class="text-sm-right">
+            <div class="form-control-sm custom-control custom-switch" title="{{ 'index.panel_month_user_help'|trans }}">
+                <input type="checkbox" class="custom-control-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
+                <label class="custom-control-label" for="restrict">{{ 'index.panel_month_user'|trans }}</label>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>

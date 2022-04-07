@@ -32,7 +32,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * The default entity alias used to create query builder (value = 'e') .
      */
-    public const DEFAULT_ALIAS = 'e';
+    final public const DEFAULT_ALIAS = 'e';
 
     /**
      * Add the given entity to the database.
@@ -228,7 +228,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @param string[] $fields  the fields to concat
      * @param string   $default the default value to use when a field is null
      *
-     * @return string the concatened fields
+     * @return string the concatenated fields
      */
     protected function concat(string $alias, array $fields, string $default = ''): string
     {

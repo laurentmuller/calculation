@@ -464,6 +464,8 @@ class TestController extends AbstractController
             'next' => $next->format('Y-m-d'),
             'count' => \count($calculations),
             'data' => $data,
+            'from' => $from,
+            'to' => $to,
         ];
 
         return $this->renderForm('test/timeline.html.twig', $parameters);

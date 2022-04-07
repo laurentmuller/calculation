@@ -27,7 +27,7 @@
             {{- total|integer }} {{ _self.sup_margin(margin, min_margin) -}}
         </h3>
         <p class="card-text">
-            {{- 'counters.calculations_lower'|trans({'%count%': count|integer}) -}}
+            {{- 'counters.calculations'|trans({'%count%': count|integer}) -}}
         </p>
     </div>
 </div>
@@ -53,7 +53,6 @@
             {% set parameters = state.id ? {'stateid': state.id} : {} %}
             {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters, state.margin, min_margin) }}
         {% endfor %}
-        {#{ _self.cardEntry(states_count, states_total, 'calculation.fields.total'|trans, false, list_path, [], states_margin, min_margin) }#}
     </div>
     {% else %}
     <div class="card-body p-2">

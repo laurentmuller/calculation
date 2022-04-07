@@ -445,8 +445,8 @@ $.fn.extend({
             return params;
         },
 
+
         onPreBody: function (data) {
-            // options
             const options = $table.getOptions();
 
             // update pages list and page button
@@ -516,7 +516,7 @@ $.fn.extend({
 
         // for debug purpose
         // onAll: function (name) {
-        // console.log(name, Array.from(arguments).slice(1));
+        //     console.log(name, Array.from(arguments).slice(1));
         // },
 
         onPageChange: function () {

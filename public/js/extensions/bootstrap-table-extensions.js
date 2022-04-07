@@ -9,7 +9,6 @@
  */
 function loadingTemplate(message) { // jshint ignore:line
     'use strict';
-    //return `<div class="alert alert-primary text-center w-75" role="alert"><i class="fa-solid fa-spinner"></i>&nbsp;${message}</div>`;
     return `<i class="fa-solid fa-spinner fa-spin"></i>&nbsp;${message}`;
 }
 
@@ -141,6 +140,15 @@ $.fn.extend({
                     const href = $element.closest('.page-item').hasClass('disabled') ? null : '#';
                     $element.attr('href', href).attr('title', $element.attr('aria-label')).removeAttr('aria-label');
                 });
+
+                // background
+                // const $loading = $('.fixed-table-loading');
+                // if ($this.isCustomView()) {
+                //     $loading.css('background-color', 'transparent');
+                // } else {
+                //     $loading.css('background-color', $('.body').css('background-color'));
+                // }
+                // console.log($loading.css('background-color'));
 
                 // set focus on selected page item (if any)
                 $this.selectPageItem();

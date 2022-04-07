@@ -19,8 +19,12 @@ ul.timeline:before {
 }
 
 ul.timeline>li {
-    margin: 20px 0;
     padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+ul.timeline>li:last-child {
+    margin-bottom: 0;
 }
 
 ul.timeline>li:before {

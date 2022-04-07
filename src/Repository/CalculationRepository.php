@@ -573,13 +573,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function getForWeek(int $year, int $week): array
     {
-        $today = new \DateTime('today');
-        $start = clone $today->setISODate($year, $week, 1);
-        $end = clone $today->setISODate($year, $week, 7);
-        if ($start < $end) {
-            return [];
-        }
-
         return $this->getCalendarBuilder($year)
             ->andWhere('WEEK(c.date, 3) = :week')
             ->setParameter('week', $week, Types::INTEGER)

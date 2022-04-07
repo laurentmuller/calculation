@@ -14,8 +14,10 @@ namespace App\Service;
 
 use App\Model\Theme;
 use App\Traits\CacheTrait;
+use App\Traits\LoggerTrait;
 use App\Util\FileUtils;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -27,6 +29,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ThemeService
 {
     use CacheTrait;
+    use LoggerTrait;
 
     /**
      * The default background class name for the navigation bar.
@@ -88,13 +91,17 @@ class ThemeService
      */
     private const THEME_DIRECTORY = 'themes/';
 
+    /*
+     * the default theme
+     */
     private static ?Theme $defaultTheme = null;
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly RequestStack $stack, CacheItemPoolInterface $adapter, private readonly string $projectDir, bool $isDebug)
+    public function __construct(private readonly RequestStack $stack, LoggerInterface $logger, CacheItemPoolInterface $adapter, private readonly string $projectDir, bool $isDebug)
     {
+        $this->setLogger($logger);
         if (!$isDebug) {
             $this->setAdapter($adapter);
         }
@@ -212,14 +219,18 @@ class ThemeService
             return $themes;
         }
 
-        // create themes
-        foreach ($entries as $entry) {
-            $theme = new Theme($entry);
-            $themes[$theme->getName()] = $theme;
-        }
+        try {
+            // create themes
+            foreach ($entries as $entry) {
+                $theme = new Theme($entry);
+                $themes[$theme->getName()] = $theme;
+            }
 
-        // cache themes
-        $this->setCacheValue(self::KEY_THEMES, $themes);
+            // cache themes
+            $this->setCacheValue(self::KEY_THEMES, $themes);
+        } catch (\Exception $e) {
+            $this->logException($e);
+        }
 
         return $themes;
     }

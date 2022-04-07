@@ -10,12 +10,15 @@
 .bootstrap-table .fixed-table-container .fixed-table-body .table {
     table-layout: fixed !important;
 }
+/*
 .bootstrap-table .fixed-table-container .fixed-table-body .table thead th {
     color: initial !important;
 }
+*/
 .bootstrap-table .fixed-table-container .fixed-table-body .table td {
     vertical-align: top !important;
 }
+
 /**
  * Card View
  */
@@ -34,7 +37,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-align: left;
-    /*max-width: 17rem;*/
 }
 
 /**
@@ -45,13 +47,14 @@
     background: var(--white) !important;
 }
 
+/*
 .bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading .loading-wrap .loading-text {
-    color: var(--dark) !important;
+ color: var(--dark) !important;
 }
-
 .bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading .loading-wrap .animation-dot {
-    background: var(--dark) !important;
+   background: var(--dark) !important;
 }
+*/
 
 /**
  * Use sort arrows from FontAwesome

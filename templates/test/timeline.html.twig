@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col">
             <div class="form-inline">
-                <h4>{{ icons.icon(title_icon, title) }}</h4>
+                <h4>{{ icons.icon(title_icon, title) }}</h4><br>
             </div>
         </div>
         <div class="col-auto pr-1">
@@ -67,7 +67,8 @@
         </div>
     </div>
 </form>
-<hr class="mb-0 mt-2">
+<p class="text-muted mb-0">{{ from|localedate('long') }} - {{ to|localedate('long') }}</p>
+<hr class="mt-0  mb-2">
 {% if data|length %}
     <div class="row">
         <div class="col">

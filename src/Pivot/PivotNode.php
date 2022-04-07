@@ -183,7 +183,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     }
 
     /**
-     * Recusively finds a child node for the given key.
+     * Recursively finds a child node for the given key.
      *
      * @param mixed $key the node key to search for
      *

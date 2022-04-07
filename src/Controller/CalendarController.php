@@ -108,6 +108,11 @@ class CalendarController extends AbstractController
         $next = $this->nextWeek($yearsWeeks, $year, $week);
         $currentWeek = $calendar->getWeek(Week::formatKey($year, $week));
 
+        $startDate = new \DateTime();
+        $startDate->setISODate($year, $week);
+        $endDate = clone $startDate;
+        $endDate = $endDate->add(new \DateInterval('P6D'));
+
         $parameters = [
             'calendar' => $calendar,
             'week' => $currentWeek,
@@ -115,6 +120,8 @@ class CalendarController extends AbstractController
             'today' => $today,
             'previous' => $previous,
             'next' => $next,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ];
 
         return $this->renderForm('calendar/calendar_week.html.twig', $parameters);

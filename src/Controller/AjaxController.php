@@ -29,6 +29,7 @@ use App\Table\AbstractTable;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
+use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -254,23 +255,7 @@ class AjaxController extends AbstractController
         }
 
         // error
-        $message = $this->trans('translator.languages_error');
-        if ($error = $service->getLastError()) {
-            // translate message
-            $id = $service->getDefaultIndexName() . '.' . (string) $error['code'];
-            if ($this->isTransDefined($id, 'translator')) {
-                $error['message'] = $this->trans($id, [], 'translator');
-            }
-
-            return $this->jsonFalse([
-                'message' => $message,
-                'exception' => $error,
-            ]);
-        }
-
-        return $this->jsonFalse([
-            'message' => $message,
-        ]);
+        return $this->handleTranslationError($service, 'translator.languages_error');
     }
 
     /**
@@ -509,23 +494,7 @@ class AjaxController extends AbstractController
             }
 
             // error
-            $message = $this->trans('translator.translate_error');
-            if ($error = $service->getLastError()) {
-                // translate message
-                $id = $service->getDefaultIndexName() . '.' . (string) $error['code'];
-                if ($this->isTransDefined($id, 'translator')) {
-                    $error['message'] = $this->trans($id, [], 'translator');
-                }
-
-                return $this->jsonFalse([
-                    'message' => $message,
-                    'exception' => $error,
-                ]);
-            }
-
-            return $this->jsonFalse([
-                'message' => $message,
-            ]);
+            return $this->handleTranslationError($service, 'translator.translate_error');
         } catch (\Exception $e) {
             return $this->jsonException($e, $this->trans('translator.translate_error'));
         }
@@ -666,5 +635,25 @@ class AjaxController extends AbstractController
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
+    }
+
+    private function handleTranslationError(TranslatorServiceInterface $service, string $message): JsonResponse
+    {
+        if ($error = $service->getLastError()) {
+            // translate message
+            $id = $service->getDefaultIndexName() . '.' . $error['code'];
+            if ($this->isTransDefined($id, 'translator')) {
+                $error['message'] = $this->trans($id, [], 'translator');
+            }
+
+            return $this->jsonFalse([
+                'message' => $this->trans($message),
+                'exception' => $error,
+            ]);
+        }
+
+        return $this->jsonFalse([
+            'message' => $this->trans($message),
+        ]);
     }
 }

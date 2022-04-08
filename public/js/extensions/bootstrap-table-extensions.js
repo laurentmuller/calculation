@@ -142,13 +142,7 @@ $.fn.extend({
                 });
 
                 // background
-                // const $loading = $('.fixed-table-loading');
-                // if ($this.isCustomView()) {
-                //     $loading.css('background-color', 'transparent');
-                // } else {
-                //     $loading.css('background-color', $('.body').css('background-color'));
-                // }
-                // console.log($loading.css('background-color'));
+                $this.updateLoadingBackground();
 
                 // set focus on selected page item (if any)
                 $this.selectPageItem();
@@ -164,7 +158,7 @@ $.fn.extend({
 
                     const params = $this.getParameters();
                     const selector = '.custom-view-actions:eq(%index%)';
-                    const callback = $.isFunction (options.onRenderCustomView) ? options.onRenderCustomView: false;
+                    const callback = $.isFunction(options.onRenderCustomView) ? options.onRenderCustomView : false;
 
                     $this.find('tbody tr .actions').each(function (index, element) {
                         // copy actions
@@ -224,16 +218,16 @@ $.fn.extend({
         });
 
         // handle page item click
-        $('.fixed-table-pagination').on('keydown mousedown', '.page-link', function(e) {
+        $('.fixed-table-pagination').on('keydown mousedown', '.page-link', function (e) {
             const $that = $(this);
             const isKeyEnter = e.type === 'keydown' && e.which === 13;
             const isActive = $that.parents('.page-item').hasClass('active');
-            const isMouseDown = e.type === 'mousedown' &&  e.button === 0 && !isActive;
+            const isMouseDown = e.type === 'mousedown' && e.button === 0 && !isActive;
             if (isKeyEnter || isMouseDown) {
                 const $parent = $that.parents('li');
                 if ($parent.hasClass('page-pre')) {
                     $this.data('focusPageItem', 'previous');
-                } else if ($parent .hasClass('page-next')) {
+                } else if ($parent.hasClass('page-next')) {
                     $this.data('focusPageItem', 'next');
                 } else {
                     $this.data('focusPageItem', 'active');
@@ -278,7 +272,7 @@ $.fn.extend({
         }
 
         // query parameters function?
-        if ($.isFunction (options.queryParams)) {
+        if ($.isFunction(options.queryParams)) {
             return $.extend(params, options.queryParams(params));
         }
         return params;
@@ -374,7 +368,7 @@ $.fn.extend({
      */
     getSelectionIndex: function () {
         'use strict';
-        const $row  = $(this).getSelection();
+        const $row = $(this).getSelection();
         return $row ? $row.index() : -1;
     },
 
@@ -419,7 +413,7 @@ $.fn.extend({
         const $this = $(this);
         const options = $this.getOptions();
         const params = $this.getParameters();
-        const callback = $.isFunction (options.onRenderAction) ? options.onRenderAction : false;
+        const callback = $.isFunction(options.onRenderAction) ? options.onRenderAction : false;
 
         $this.find('tbody tr .dropdown-item-path').each(function () {
             const $link = $(this);
@@ -433,7 +427,7 @@ $.fn.extend({
         });
 
         // actions row callback
-        if ($.isFunction (options.onUpdateHref)) {
+        if ($.isFunction(options.onUpdateHref)) {
             $this.find('tbody tr').each(function () {
                 const $paths = $(this).find('.dropdown-item-path');
                 if ($paths.length) {
@@ -449,7 +443,7 @@ $.fn.extend({
      *
      * @return {array} the visible columns.
      */
-    getVisibleCardViewColumns: function() {
+    getVisibleCardViewColumns: function () {
         'use strict';
         const columns = $(this).bootstrapTable('getVisibleColumns');
         return columns.filter((c) => c.cardVisible);
@@ -470,7 +464,7 @@ $.fn.extend({
 
         const $body = $this.find('tbody');
         const columns = $this.getVisibleCardViewColumns();
-        const callback = $.isFunction (options.onRenderCardView) ? options.onRenderCardView : false;
+        const callback = $.isFunction(options.onRenderCardView) ? options.onRenderCardView : false;
         const data = callback ? $this.getData() : null;
 
         $body.find('tr').each(function () {
@@ -582,27 +576,27 @@ $.fn.extend({
             return $this;
         }
         switch (mode) {
-        case 'custom':
-            if (!$this.isCustomView()) {
-                $this.toggleCustomView();
-            }
-            break;
-        case 'card':
-            if (!$this.isCardView()) {
-                $this.toggleView();
-            }
-            if ($this.isCustomView()) {
-                $this.toggleCustomView();
-            }
-            break;
-        default: // table
-            if ($this.isCardView()) {
-                $this.toggleView();
-            }
-            if ($this.isCustomView()) {
-                $this.toggleCustomView();
-            }
-            break;
+            case 'custom':
+                if (!$this.isCustomView()) {
+                    $this.toggleCustomView();
+                }
+                break;
+            case 'card':
+                if (!$this.isCardView()) {
+                    $this.toggleView();
+                }
+                if ($this.isCustomView()) {
+                    $this.toggleCustomView();
+                }
+                break;
+            default: // table
+                if ($this.isCardView()) {
+                    $this.toggleView();
+                }
+                if ($this.isCustomView()) {
+                    $this.toggleCustomView();
+                }
+                break;
         }
         return $this.saveParameters();
     },
@@ -612,7 +606,7 @@ $.fn.extend({
      *
      * @return {string} the display mode ('table', 'card' or 'custom').
      */
-    getDisplayMode : function () {
+    getDisplayMode: function () {
         'use strict';
         const $this = $(this);
         if ($this.isCustomView()) {
@@ -825,7 +819,7 @@ $.fn.extend({
                     return;
                 }
 
-                switch(e.keyCode) {
+                switch (e.keyCode) {
                     case 13:  // enter (edit action on selected row)
                         if ($this.editRow()) {
                             e.preventDefault();
@@ -931,7 +925,7 @@ $.fn.extend({
         const $view = $this.getCustomView();
         if ($view && $view.find('.no-records-found').length === 0) {
             $('<p/>', {
-                class:'no-records-found text-center border-top p-2 mb-1',
+                class: 'no-records-found text-center border-top p-2 mb-1',
                 text: $this.getOptions().formatNoMatches()
             }).appendTo($view);
         }
@@ -940,7 +934,7 @@ $.fn.extend({
     /**
      * Set focus on selected page item (if any).
      */
-    selectPageItem: function() {
+    selectPageItem: function () {
         'use strict';
         const $this = $(this);
         const page = $this.data('focusPageItem') || '';
@@ -966,5 +960,45 @@ $.fn.extend({
         }
         $this.removeData('focusPageItem');
         return $this;
+    },
+
+    /**
+     * Update the loading background color.
+     */
+    updateLoadingBackground: function () {
+        'use strict';
+        const $this = $(this);
+        let color = 'transparent';
+        const $loading = $('.fixed-table-loading');
+        if (!$this.isCustomView()) {
+            let $parent = $loading.parent();
+            while ($parent != null) {
+                color = $parent.css('background-color');
+                if (color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') {
+                    break;
+                }
+                $parent = $parent.parent();
+            }
+        }
+        color = $this.rgba2rgb(color);
+        $loading.css('background-color', color);
+
+        return $this;
+    },
+
+    /**
+     * Convert the given RGBA color, if applicable, to a RGB color
+     * by removing the alpha value.
+     */
+    rgba2rgb: function (color) {
+        const regex = /rgba\((?<colors>.*)\)/i;
+        const result = color.match(regex);
+        if (result !== null && result.length === 2) {
+            const colors = result[1].split(',', 3);
+            if (colors.length === 3) {
+                return 'rgb(' + colors.join(',') + ')';
+            }
+        }
+        return color;
     }
 });

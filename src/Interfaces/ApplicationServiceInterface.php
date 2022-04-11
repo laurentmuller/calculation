@@ -32,14 +32,39 @@ interface ApplicationServiceInterface
     public const DEFAULT_DISPLAY_MODE = TableInterface::VIEW_TABLE;
 
     /**
-     * The default display message icon (boolean).
-     */
-    public const DEFAULT_ICON = true;
-
-    /**
      * The default number of items displayed in the tables (integer).
      */
     public const DEFAULT_LIST_LENGTH = 15;
+
+    /**
+     * The default display message close button (boolean).
+     */
+    public const DEFAULT_MESSAGE_CLOSE = true;
+
+    /**
+     * The default display message icon (boolean).
+     */
+    public const DEFAULT_MESSAGE_ICON = true;
+
+    /**
+     * The default position of the flash bag messages (string).
+     */
+    public const DEFAULT_MESSAGE_POSITION = 'bottom-right';
+
+    /**
+     * The default display message sub-title (boolean).
+     */
+    public const DEFAULT_MESSAGE_SUB_TITLE = false;
+
+    /**
+     * The default timeout of the flash bag messages (integer).
+     */
+    public const DEFAULT_MESSAGE_TIMEOUT = 4000;
+
+    /**
+     * The default display message title (boolean).
+     */
+    public const DEFAULT_MESSAGE_TITLE = true;
 
     /**
      * The default minimum margin of a calculation (float).
@@ -50,11 +75,6 @@ interface ApplicationServiceInterface
      * The default number of displayed calculation in the home page (int).
      */
     public const DEFAULT_PANEL_CALCULATION = 10;
-
-    /**
-     * The default position of the flash bag messages (string).
-     */
-    public const DEFAULT_POSITION = 'bottom-right';
 
     /**
      * The default output customer address in PDF documents (boolean).
@@ -75,21 +95,6 @@ interface ApplicationServiceInterface
      * The default output qr-code (boolean).
      */
     public const DEFAULT_QR_CODE = false;
-
-    /**
-     * The default display message sub-title (boolean).
-     */
-    public const DEFAULT_SUB_TITLE = false;
-
-    /**
-     * The default timeout of the flash bag messages (integer).
-     */
-    public const DEFAULT_TIMEOUT = 4000;
-
-    /**
-     * The default display message title (boolean).
-     */
-    public const DEFAULT_TITLE = true;
 
     /**
      * The property name for the administrator role rights (string).
@@ -199,6 +204,11 @@ interface ApplicationServiceInterface
      * The property name for the number items displayed in the tables (integer).
      */
     public const P_LIST_LENGTH = 'list-length';
+
+    /**
+     * The property name for displaying close button (default = true) of the flash bag messages (boolean).
+     */
+    public const P_MESSAGE_CLOSE = 'message_close';
 
     /**
      * The property name for displaying icon (default = true) of the flash bag messages (boolean).

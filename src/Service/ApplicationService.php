@@ -317,7 +317,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getMessagePosition(): string
     {
-        return (string) $this->getPropertyString(self::P_MESSAGE_POSITION, self::DEFAULT_POSITION);
+        return (string) $this->getPropertyString(self::P_MESSAGE_POSITION, self::DEFAULT_MESSAGE_POSITION);
     }
 
     /**
@@ -325,7 +325,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getMessageTimeout(): int
     {
-        return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, self::DEFAULT_TIMEOUT);
+        return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, self::DEFAULT_MESSAGE_TIMEOUT);
     }
 
     /**
@@ -375,9 +375,10 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             self::P_DEFAULT_STATE => $this->getDefaultState(),
             self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
 
+            self::P_MESSAGE_ICON => $this->isMessageIcon(),
             self::P_MESSAGE_TITLE => $this->isMessageTitle(),
             self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
-            self::P_MESSAGE_ICON => $this->isMessageIcon(),
+            self::P_MESSAGE_CLOSE => $this->isMessageClose(),
             self::P_MESSAGE_PROGRESS => $this->isMessageProgress(),
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
@@ -581,9 +582,17 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     /**
      * Returns if the flash bag message icon is displayed (default: true).
      */
+    public function isMessageClose(): bool
+    {
+        return $this->isPropertyBoolean(self::P_MESSAGE_CLOSE, self::DEFAULT_MESSAGE_CLOSE);
+    }
+
+    /**
+     * Returns if the flash bag message icon is displayed (default: true).
+     */
     public function isMessageIcon(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_ICON);
+        return $this->isPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_MESSAGE_ICON);
     }
 
     /**
@@ -599,15 +608,15 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function isMessageSubTitle(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+        return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_MESSAGE_SUB_TITLE);
     }
 
     /**
-     * Returns if the flash bag message icon is displayed (default: true).
+     * Returns if the flash bag message title is displayed (default: true).
      */
     public function isMessageTitle(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_TITLE);
+        return $this->isPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_MESSAGE_TITLE);
     }
 
     /**

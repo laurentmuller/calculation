@@ -18,14 +18,10 @@
         /**
          * Display a toast.
          *
-         * @param {string}
-         *            type - The type.
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} type - The type.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         notify: function (type, message, title, options) {
@@ -36,6 +32,11 @@
             settings.type = this.checkType(type);
             settings.message = message;
             settings.title = title;
+            if (!settings.title && settings.displaySubtitle) {
+                settings.displaySubtitle = false;
+                settings.title = settings.subtitle;
+                settings.subtitle = null
+            }
 
             // create DOM
             const $container = this.getContainer(settings);
@@ -61,13 +62,6 @@
                 $container.append($toast);
             }
 
-            // update close style
-            if ($title && settings.closeButton) {
-                $title.find('.close').css({
-                    'color': $title.css('color')
-                });
-            }
-
             // update background color
             const background = $toast.css('background-color');
             if (background && background.startsWith('rgba')) {
@@ -86,12 +80,9 @@
         /**
          * Display a toast with info style.
          *
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         info: function (message, title, options) {
@@ -101,12 +92,9 @@
         /**
          * Display a toast with success style.
          *
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         success: function (message, title, options) {
@@ -116,12 +104,9 @@
         /**
          * Display a toast with warning style.
          *
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         warning: function (message, title, options) {
@@ -131,12 +116,9 @@
         /**
          * Display a toast with danger style.
          *
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         danger: function (message, title, options) {
@@ -146,12 +128,9 @@
         /**
          * Display a toast with primary style.
          *
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         primary: function (message, title, options) {
@@ -161,12 +140,9 @@
         /**
          * Display a toast with secondary style.
          *
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         secondary: function (message, title, options) {
@@ -176,12 +152,9 @@
         /**
          * Display a toast with dark style.
          *
-         * @param {string}
-         *            message - The message.
-         * @param {string}
-         *            title - The title.
-         * @param {Object}
-         *            options - The options.
+         * @param {string} message - The message.
+         * @param {string} title - The title.
+         * @param {Object} options - The options.
          * @returns {jQuery} this instance.
          */
         dark: function (message, title, options) {
@@ -241,15 +214,8 @@
             // the container identifier prefix
             containerId: 'div_toaster_',
 
-            // the sub-title
-            subtitle: null,
-            displaySubtitle: false,
-
             // the toasts width
             containerWidth: '350px',
-
-            // the toasts position
-            position: 'bottom-right',
 
             // the container margins
             marginTop: '20px',
@@ -261,8 +227,15 @@
             timeout: 4000,
 
             // the close button
-            closeButton: true,
-            closeText: 'Close',
+            displayClose: true,
+            closeTitle: 'Close',
+
+            // the subtitle
+            subtitle: null,
+            displaySubtitle: false,
+
+            // the toasts position
+            position: 'bottom-right',
 
             // the toast icon.
             // Possible values:
@@ -272,7 +245,7 @@
             icon: true,
 
             // display a progress bar at the bottom
-            progress: true,
+            displayProgress: true,
 
             // the progress bar height
             progressHeight: '1px',
@@ -294,8 +267,7 @@
         /**
          * Check the notification type.
          *
-         * @param {string}
-         *            type - The type to valdiate.
+         * @param {string} type - The type to validate.
          * @returns {string} A valid type.
          */
         checkType: function (type) {
@@ -317,8 +289,7 @@
         /**
          * Check the position type.
          *
-         * @param {string}
-         *            position - The position to valdiate.
+         * @param {string} position - The position to validate.
          * @returns {string} A valid position.
          */
         checkPosition: function (position) {
@@ -330,7 +301,6 @@
             case positions.CENTER_LEFT:
             case positions.CENTER_CENTER:
             case positions.CENTER_RIGHT:
-                return position;
             case positions.BOTTOM_LEFT:
             case positions.BOTTOM_CENTER:
             case positions.BOTTOM_RIGHT:
@@ -341,10 +311,9 @@
         },
 
         /**
-         * Returns if toast must be prepend or append to the list; depending of the position.
+         * Returns if toast must be prepended or appended to the list; depending on the position.
          *
-         * @param {Object}
-         *            options - The toast options.
+         * @param {Object} options - The toast options.
          * @returns {boolean} true to prepend, false to append.
          */
         isPrepend: function (options) {
@@ -363,10 +332,9 @@
         },
 
         /**
-         * Gets or creates the toasts container div.
+         * Gets or creates the toast container div.
          *
-         * @param {Object}
-         *            options - The toast options.
+         * @param {Object} options - The toast options.
          * @returns {jQuery} The toasts container.
          */
         getContainer: function (options) {
@@ -408,12 +376,11 @@
         /**
          * Creates the div title.
          *
-         * @param {Object}
-         *            options - The toast options.
+         * @param {Object} options - The toast options.
          * @returns {jQuery} The div title or null if no title.
          */
         createTitle: function (options) {
-            if (options.title || options.icon !== false || options.closeButton || options.subtitle && options.displaySubtitle) {
+            if (options.title || options.icon !== false || options.displayClose || options.subtitle && options.displaySubtitle) {
                 // header
                 const clazz = 'toast-header toast-header-' + options.type;
                 const $div = $('<div/>', {
@@ -453,8 +420,7 @@
         /**
          * Creates the icon title.
          *
-         * @param {Object}
-         *            options - The options.
+         * @param {Object} options - The options.
          * @returns {jQuery} The icon or null if no icon.
          */
         createIcon: function (options) {
@@ -463,6 +429,7 @@
             } else if ($.isString(options.icon)) {
                 return $(options.icon);
             }
+
 
             let clazz = 'mr-2 mt-1 fas fa-lg fa-';
             switch (options.type) {
@@ -483,6 +450,11 @@
                 break;
             }
 
+            // icon only ?
+            if (!options.title && !options.displayClose && !options.displaySubtitle) {
+                clazz += ' py-2';
+            }
+
             // create
             return $('<i/>', {
                 'class': clazz,
@@ -491,11 +463,10 @@
         },
 
         /**
-         * Creates the sub-title.
+         * Creates the subtitle.
          *
-         * @param {Object}
-         *            options - The toast options.
-         * @returns {jQuery} The sub-title or null if no sub-title defined.
+         * @param {Object} options - The toast options.
+         * @returns {jQuery} The subtitle or null if no subtitle defined.
          */
         createSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
@@ -510,23 +481,25 @@
         /**
          * Creates the close button.
          *
-         * @param {Object}
-         *            options - The toast options.
+         * @param {Object} options - The toast options.
          * @returns {jQuery} The close button or null if no button.
          */
         createCloseButton: function (options) {
-            if (options.closeButton) {
+            if (options.displayClose) {
                 const $span = $('<span />', {
                     'aria-hidden': 'true',
                     'html': '&times;'
                 });
-                const title = options.closeText || 'Close';
+                const title = options.closeTitle || 'Close';
                 const $button = $('<button/>', {
                     'class': 'close ml-2 mb-1',
                     'data-dismiss': 'toast',
                     'aria-label': title,
                     'title': title,
-                    'type': 'button'
+                    'type': 'button',
+                    'css': {
+                        'color': 'inherit'
+                    }
                 });
                 return $button.append($span);
             }
@@ -536,8 +509,7 @@
         /**
          * Creates the div message.
          *
-         * @param {Object}
-         *            options - The toast options.
+         * @param {Object} options - The toast options.
          * @returns {jQuery} The div message.
          */
         createMessage: function (options) {
@@ -550,8 +522,7 @@
         /**
          * Creates the div toast.
          *
-         * @param {Object}
-         *            options - The toast options.
+         * @param {Object} options - The toast options.
          * @returns {jQuery} The div toast.
          */
         createToast: function (options) {
@@ -572,12 +543,11 @@
         /**
          * Creates the progress bar.
          *
-         * @param {Object}
-         *            options - The toast options.
+         * @param {Object} options - The toast options.
          * @returns {jQuery} The progress bar or null if no progress.
          */
         createProgressBar: function(options) {
-            if (!options.progress) {
+            if (!options.displayProgress) {
                 return null;
             }
             const $bar =  $('<div/>', {
@@ -601,10 +571,8 @@
         /**
          * Show the toast.
          *
-         * @param {jQuery}
-         *            $toast - The toast to show.
-         * @param {Object}
-         *            options - The toast options.
+         * @param {jQuery} $toast - The toast to show.
+         * @param {Object} options - The toast options.
          * @return {Object} This instance.
          */
         showToast: function ($toast, options) {
@@ -613,7 +581,7 @@
                 delay: options.timeout,
                 autohide: options.autohide
             }).on('show.bs.toast', function() {
-                if (options.progress) {
+                if (options.displayProgress) {
                     const timeout = options.timeout;
                     const endTime = new Date().getTime() + timeout;
                     const $progress = $toast.find('.progress-bar');
@@ -622,7 +590,7 @@
                     }
                 }
             }).on('hide.bs.toast', function () {
-                if (options.progress) {
+                if (options.displayProgress) {
                     $toast.removeInterval();
                 }
             }).on('hidden.bs.toast', function () {
@@ -637,12 +605,9 @@
         /**
          * Update the progress bar.
          *
-         * @param {jQuery}
-         *            $progress - The progress bar to update.
-         * @param {Number}
-         *            endTime - The end time.
-         * @param {Number}
-         *            timeout - The time out.
+         * @param {jQuery} $progress - The progress bar to update.
+         * @param {Number} endTime - The end time.
+         * @param {Number} timeout - The time-out.
          */
         updateProgress: function($progress, endTime, timeout) {
             const time = new Date().getTime();

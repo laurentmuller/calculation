@@ -83,13 +83,13 @@
         <label class="horizontal-line">Options</label>
     </div>
 </div>
-<div class="form-row flex-column flex-md-row justify-content-md-around px-2">
+<div class="form-row flex-column flex-md-row justify-content-start px-2">
     {{ _self.checkbox('title', 'parameters.fields.message_title') }}
     {{ _self.checkbox('icon', 'parameters.fields.message_icon') }}
     {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', subtitle) }}
     {{ _self.checkbox('close', 'parameters.fields.message_close') }}
-    {{ _self.checkbox('progress', 'parameters.fields.message_progress') }}
     {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
+    {{ _self.checkbox('progress', 'parameters.fields.message_progress') }}
 </div>
 {% endblock %}
 

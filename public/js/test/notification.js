@@ -48,20 +48,19 @@ function random() {
     };
 
     $('.btn-notify').on('click', function () {
-        // type and title
-        const type = $(this).data('type');
-        const title = $('#title').isChecked() ? $(this).text() : null;
-
         // options
         options.icon = $('#icon').isChecked();
+        options.title = $('#title').isChecked();
         options.position = $('#position').val();
         options.timeout = $('#timeout').intVal();
-        options.closeButton = $('#close').isChecked();
-        options.progress = $('#progress').isChecked();
         options.autohide = $('#autohide').isChecked();
+        options.displayClose = $('#close').isChecked();
         options.displaySubtitle = $('#subtitle').isChecked();
+        options.displayProgress = $('#progress').isChecked();
 
         // notify
+        const type = $(this).data('type');
+        const title = options.title ? $(this).text() : null;
         notify(type, title, options);
 
         // update checkbox style

@@ -163,25 +163,35 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function addFlashbagSection(FormHelper $helper): void
     {
         $helper->field(self::P_MESSAGE_POSITION)
-            ->updateAttribute('data-default', self::DEFAULT_POSITION)
+            ->updateAttribute('data-default', self::DEFAULT_MESSAGE_POSITION)
             ->addChoiceType($this->getPositions());
         $helper->field(self::P_MESSAGE_TIMEOUT)
-            ->updateAttribute('data-default', self::DEFAULT_TIMEOUT)
+            ->updateAttribute('data-default', self::DEFAULT_MESSAGE_TIMEOUT)
             ->addChoiceType($this->getTimeouts());
+
         $helper->field(self::P_MESSAGE_TITLE)
-            ->updateAttribute('data-default', (int) self::DEFAULT_TITLE)
+            ->rowClass('custom-control-inline')
+            ->updateAttribute('data-default', (int) self::DEFAULT_MESSAGE_TITLE)
             ->notRequired()
             ->addCheckboxType();
         $helper->field(self::P_MESSAGE_SUB_TITLE)
-            ->updateAttribute('data-default', (int) self::DEFAULT_SUB_TITLE)
+            ->rowClass('custom-control-inline')
+            ->updateAttribute('data-default', (int) self::DEFAULT_MESSAGE_SUB_TITLE)
             ->notRequired()
             ->addCheckboxType();
         $helper->field(self::P_MESSAGE_PROGRESS)
+            ->rowClass('custom-control-inline')
             ->updateAttribute('data-default', (int) self::DEFAULT_PROGRESS)
             ->notRequired()
             ->addCheckboxType();
         $helper->field(self::P_MESSAGE_ICON)
-            ->updateAttribute('data-default', (int) self::DEFAULT_ICON)
+            ->rowClass('custom-control-inline')
+            ->updateAttribute('data-default', (int) self::DEFAULT_MESSAGE_ICON)
+            ->notRequired()
+            ->addCheckboxType();
+        $helper->field(self::P_MESSAGE_CLOSE)
+            ->rowClass('custom-control-inline')
+            ->updateAttribute('data-default', (int) self::DEFAULT_MESSAGE_CLOSE)
             ->notRequired()
             ->addCheckboxType();
     }

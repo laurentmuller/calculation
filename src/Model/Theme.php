@@ -22,7 +22,7 @@ use App\Util\FileUtils;
  *
  * @author Laurent Muller
  */
-class Theme
+class Theme implements \JsonSerializable
 {
     /**
      * The dark theme names.
@@ -121,5 +121,14 @@ class Theme
     public function isDefault(): bool
     {
         return ThemeService::DEFAULT_NAME === $this->name;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'css' => $this->css,
+        ];
     }
 }

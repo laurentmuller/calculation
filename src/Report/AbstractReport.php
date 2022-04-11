@@ -108,22 +108,15 @@ abstract class AbstractReport extends PdfDocument
      */
     public function renderCount(\Countable|array|int $count, PdfTextAlignment $align = PdfTextAlignment::LEFT, bool $resetStyle = true): bool
     {
-        // reset
         if ($resetStyle) {
             $this->resetStyle();
         }
-
-        // count and translate
-        if (\is_array($count) || $count instanceof \Countable) {
-            $count = \count($count);
-        }
         $text = $this->translateCount($count);
-
         $margins = $this->setCellMargin(0);
         $this->Cell(0, self::LINE_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE, $align);
         $this->setCellMargin($margins);
 
-        return $count > 0;
+        return (\is_countable($count) ? \count($count) : $count) > 0;
     }
 
     /**
@@ -143,12 +136,14 @@ abstract class AbstractReport extends PdfDocument
     /**
      * Gets the translated count label.
      *
-     * @param int $count the number of elements
-     *
-     * @return string the label
+     * @param \Countable|array|int $count the number of elements
      */
-    protected function translateCount(int $count): string
+    protected function translateCount(\Countable|array|int $count): string
     {
+        if (\is_countable($count)) {
+            $count = \count($count);
+        }
+
         return $this->trans('common.count', ['%count%' => FormatUtils::formatInt($count)]);
     }
 }

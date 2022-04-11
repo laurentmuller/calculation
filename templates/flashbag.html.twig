@@ -7,8 +7,21 @@
 {%- endmacro %}
 
 {# add all flashbag messages #}
-<div id=flashbags class="d-none" data-position="{{ app.messagePosition() }}" data-timeout="{{ app.messageTimeout }}" data-margin-top="85px" data-margin-bottom="45px" data-subtitle="{{ app_name_version }}" data-display-subtitle="{{ app.messageSubTitle|json_encode() }}" data-close-text="{{ 'common.button_close'|trans }}">
+{% apply spaceless %}
+<div id=flashbags class="d-none"
+     data-margin-top="85px"
+     data-margin-bottom="45px"
+     data-timeout="{{ app.messageTimeout }}"
+     data-position="{{ app.messagePosition() }}"
+     data-icon="{{ app.messageIcon|json_encode() }}"
+     data-title="{{ app.messageTitle|json_encode() }}"
+     data-subtitle="{{ app_name_version }}"
+     data-display-subtitle="{{ app.messageSubTitle|json_encode() }}"
+     data-close-title="{{ 'common.button_close'|trans }}"
+     data-display-close="{{ app.messageClose|json_encode() }}"
+     data-progress="{{ app.messageProgress|json_encode() }}">
 {%- for key, messages in app.flashes -%}
     {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
 {%- endfor -%}
 </div>
+{% endapply %}

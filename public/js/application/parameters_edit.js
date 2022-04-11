@@ -54,16 +54,18 @@ function displayNotification() {
             }
 
             // display
-            const displayIcon = $('#parameters_message_icon').isChecked();
+            const icon = $('#parameters_message_icon').isChecked();
+            const displayClose = $('#parameters_message_close').isChecked();
             const displaySubtitle = $('#parameters_message_sub_title').isChecked();
             const displayProgress = $('#parameters_message_progress').isChecked();
 
             // options
             const options = $.extend({}, $("#flashbags").data(), {
-                icon: displayIcon,
-                progress: displayProgress,
+                icon: icon,
                 timeout: timeout,
                 position: newPosition,
+                displayClose: displayClose,
+                displayProgress: displayProgress,
                 displaySubtitle: displaySubtitle,
             });
 

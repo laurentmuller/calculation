@@ -10,11 +10,11 @@ function showFlashbag() {
     // get first element (if any)
     const $element = $('.flashbag:first');
     if ($element.length) {
-        // get values
+        // options
+        const options = $("#flashbags").data();
+        const title = options.title ? $element.data('title') : null;
         const text = $element.text();
         const type = $element.data('type');
-        const title = $element.data('title');
-        const options = $("#flashbags").data();
 
         // remove
         $element.remove();

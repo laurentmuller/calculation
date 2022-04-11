@@ -5,6 +5,21 @@ downloadPNG: Exporter au format PNG
 downloadSVG: Exporter au format Vectoriel (SVG)
 drillUpText: Retour vers {series.name}
 exportButtonTitle: Exportation du graphique
+fields:
+  count: Calculations
+  date: Date
+  editable: Modifiable
+  margin: Marge
+  margin_amount: Marge (Fr.)
+  margin_percent: Marge (%)
+  month: Mois
+  net: Montant
+  percent: Pourcentage
+  state: Statut
+  sum: Montant Total
+  total: Total
+last_month:
+  period: Période
 loading: Chargement en cours...
 menu_graphics: Statistiques
 noData: Aucune donnée à afficher
@@ -15,23 +30,8 @@ rangeSelectorTo: au
 rangeSelectorZoom: Période
 resetZoom: Réinitialiser le zoom
 resetZoomTitle: Réinitialiser le zoom au niveau 1:1
-title_by_month: Calculations par mois
-title_by_state: Calculations par statut
 row_by_month: Afficher les calculations pour %name%
 row_by_state: Afficher les calculations pour le statut %name%
 row_show_all: Afficher toutes les calculations
-fields:
-    count: Calculations
-    date: Date
-    month: Mois
-    state: Statut
-    editable: Modifiable
-    sum: Montant Total
-    percent: Pourcentage
-    total: Total
-    net: Montant
-    margin: Marge
-    margin_percent: Marge (%)
-    margin_amount: Marge (Fr.)
-last_month:
-    period: Période
+title_by_month: Calculations par mois
+title_by_state: Calculations par statut

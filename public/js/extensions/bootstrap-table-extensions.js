@@ -1,10 +1,11 @@
 /**! compression tag for ftp-deployment */
 
+/* globals $  */
+
 /**
  * Gets the loading template.
  *
- * @param {string}
- *            message - the loading message.
+ * @param {string} message - the loading message.
  * @returns {string} the loading template.
  */
 function loadingTemplate(message) { // jshint ignore:line
@@ -24,8 +25,7 @@ $.fn.extend({
     /**
      * Update the selected row.
      *
-     * @param {jQuery}
-     *            $table - the parent table.
+     * @param {jQuery} $table - the parent table.
      * @return {boolean} this function returns always true.
      */
     updateRow: function ($table) {
@@ -68,10 +68,8 @@ $.fn.extend({
     /**
      * Update the href attribute of the action.
      *
-     * @param {Object}
-     *            row - the row data.
-     * @param {Object}
-     *            params - the query parameters.
+     * @param {Object} row - the row data.
+     * @param {Object} params - the query parameters.
      */
     updateLink: function (row, params) {
         'use strict';
@@ -96,8 +94,7 @@ $.fn.extend({
     /**
      * Initialize the table-boostrap.
      *
-     * @param {object}
-     *            options - the options to merge with default.
+     * @param {object} options - the options to merge with default.
      * @return {jQuery} this instance for chaining.
      */
     initBootstrapTable: function (options) {
@@ -145,7 +142,7 @@ $.fn.extend({
                 $this.updateLoadingBackground();
 
                 // set focus on selected page item (if any)
-                $this.selectPageItem();
+                // $this.selectPageItem();
             },
 
             onCustomViewPostBody: function (data) {
@@ -404,8 +401,7 @@ $.fn.extend({
     /**
      * Update the href attribute of the actions.
      *
-     * @param {array}
-     *            rows - the rendered data.
+     * @param {array} rows - the rendered data.
      * @return {jQuery} this instance for chaining.
      */
     updateHref: function (rows) {
@@ -509,8 +505,7 @@ $.fn.extend({
     /**
      * Refresh/reload the remote server data.
      *
-     * @param {object}
-     *            options - the refresh options.
+     * @param {object} options - the refresh options.
      * @return {jQuery} this instance for chaining.
      */
     refresh: function (options) {
@@ -521,8 +516,7 @@ $.fn.extend({
     /**
      * Reset the search text.
      *
-     * @param {string}
-     *            text - the optional search text.
+     * @param {string} text - the optional search text.
      * @return {jQuery} this instance for chaining.
      */
     resetSearch: function (text) {
@@ -533,8 +527,7 @@ $.fn.extend({
     /**
      * Refresh the table options.
      *
-     * @param {Object}
-     *            options - the options to refresh.
+     * @param {Object} options - the options to refresh.
      * @return {jQuery} this instance for chaining.
      */
     refreshOptions: function (options) {
@@ -565,8 +558,7 @@ $.fn.extend({
     /**
      * Toggles the display mode.
      *
-     * @param {string}
-     *            mode - the display mode to set ('table', 'card' or 'custom').
+     * @param {string} mode - the display mode to set ('table', 'card' or 'custom').
      * @return {jQuery} this instance for chaining.
      */
     setDisplayMode: function (mode) {
@@ -646,8 +638,7 @@ $.fn.extend({
     /**
      * Shows the previous page.
      *
-     * @param {boolean}
-     *            selectLast - true to select the last row.
+     * @param {boolean} selectLast - true to select the last row.
      * @return {boolean} true if the previous page is displayed.
      */
     showPreviousPage: function (selectLast) {
@@ -751,8 +742,7 @@ $.fn.extend({
     /**
      * Finds an action for the given selector
      *
-     * @param {string}
-     *            actionSelector - the action selector.
+     * @param {string} actionSelector - the action selector.
      * @return {JQuery} the action, if found; null otherwise.
      */
     findAction: function (actionSelector) {
@@ -987,8 +977,7 @@ $.fn.extend({
     },
 
     /**
-     * Convert the given RGBA color, if applicable, to a RGB color
-     * by removing the alpha value.
+     * Convert the given RGBA color, if applicable, to a RGB color by removing the alpha value.
      */
     rgba2rgb: function (color) {
         const regex = /rgba\((?<colors>.*)\)/i;

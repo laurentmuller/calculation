@@ -16,10 +16,15 @@
     <button id="categoryid" data-value="{{ categoryid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'task.fields.category'|trans }}" title="{{ 'task.list.category_help'|trans }}">
         <i class="fa-regular fa-folder"></i>&nbsp;{{- customData.category ? customData.category.code : 'task.fields.category'|trans -}}
     </button>
+    {% set group = '' %}
     <div class="dropdown-menu" aria-labelledby="categoryid">
-        {{ _self.output_dropdown('category', 0, categoryid, 'task.list.category_all_text'|trans) }}
+        {{ _self.output_dropdown('category', 0, categoryid, 'product.list.category_all_text'|trans) }}
         {% for category in customData.categories %}
-        {{ _self.output_dropdown('category', category.id, categoryid, category.code) }}
+            {% if group != category.group %}
+                {{ _self.output_dropdown_header(category.group) }}
+                {% set group = category.group %}
+            {% endif %}
+            {{ _self.output_dropdown('category', category.id, categoryid, category.code) }}
         {% endfor %}
     </div>
 </div>

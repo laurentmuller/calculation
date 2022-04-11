@@ -34,7 +34,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * The state parameter name (int).
      */
-    public const PARAM_STATE = 'stateid';
+    final public const PARAM_STATE = 'stateid';
 
     /**
      * Constructor.
@@ -69,12 +69,10 @@ class CalculationTable extends AbstractEntityTable
 
     /**
      * Gets calculation states.
-     *
-     * @psalm-return array<array{id: int, code: string, editable: bool, color: string, count: int, items: float, total: float, margin: float, marginAmount: float}>
      */
     protected function getCalculationStates(): array
     {
-        return $this->stateRepository->getListCountCalculations();
+        return $this->stateRepository->getDropDownStates();
     }
 
     /**

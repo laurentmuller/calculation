@@ -48,13 +48,20 @@ function displayNotification() {
             const timeout = $('#parameters_message_timeout').intVal();
 
             // title
-            const title = $('.card-title').text();
+            let title = $('.card-title').text();
+            if (!$('#parameters_message_title').isChecked()) {
+               title = null;
+            }
 
-            // display sub-title
-            const displaySubtitle = $('#parameters_message_sub_title').intVal();
+            // display
+            const displayIcon = $('#parameters_message_icon').isChecked();
+            const displaySubtitle = $('#parameters_message_sub_title').isChecked();
+            const displayProgress = $('#parameters_message_progress').isChecked();
 
             // options
             const options = $.extend({}, $("#flashbags").data(), {
+                icon: displayIcon,
+                progress: displayProgress,
                 timeout: timeout,
                 position: newPosition,
                 displaySubtitle: displaySubtitle,

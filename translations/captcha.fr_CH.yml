@@ -1,13 +1,13 @@
-label: Securité
-sentence: Quelle est la %index% %letter% du mot %word% ?
-letter: lettre
 consonant: consonne
-vowel: voyelle
-first: première
-second: deuxième
-third: troisième
-fourth: quatrième
-fifth: cinquième
-last: dernière
-required: Le charactère de contrôle est requis.
 error: Le charactère contrôle est incorrect.
+fifth: cinquième
+first: première
+fourth: quatrième
+label: Securité
+last: dernière
+letter: lettre
+required: Le charactère de contrôle est requis.
+second: deuxième
+sentence: Quelle est la %index% %letter% du mot %word% ?
+third: troisième
+vowel: voyelle

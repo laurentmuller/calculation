@@ -16,7 +16,7 @@ use App\Util\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for the {@link App\Util\FormatUtils} class.
+ * Unit test for the {@link FormatUtils} class.
  *
  * @author Laurent Muller
  */
@@ -84,65 +84,39 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
-    public function getDateTimes(): array
+    public function getDateTimes(): \Generator
     {
+        yield [$this->createDate(), '20.02.2022 12:59'];
+
+        yield [$this->createDate(), '12:59', \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT];
+
+        yield [$this->createDate(), '20.02.2022', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE];
+        yield [$this->createDate(), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT];
+        yield [$this->createDate(), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM];
+        yield [$this->createDate(), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG];
+
         if (\DIRECTORY_SEPARATOR === '\\') {
-            return [
-                [$this->createDate(), '20.02.2022 12:59'],
-                [$this->createDate(), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
-                [$this->createDate(), '20 févr. 2022, 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
-                [$this->createDate(), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
-
-                [$this->createDate(), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG],
-
-                [$this->createDate(), '20 févr. 2022, 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), '20 févr. 2022, 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
-
-                [$this->createDate(), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG],
-
-                [$this->createDate(), '20.02.2022', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE],
-                [$this->createDate(), '12:59', \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT],
-
-                [$this->createDate(), 'dimanche, 20 février 2022', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12:59', \IntlDateFormatter::FULL, \IntlDateFormatter::SHORT],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59', \IntlDateFormatter::FULL, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::FULL, \IntlDateFormatter::LONG],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL],
-
-                [null, null],
-                [self::TIME_STAMP, '20.02.2022 12:59'],
-            ];
+            yield [$this->createDate(), '20 févr. 2022, 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT];
+            yield [$this->createDate(), '20 févr. 2022, 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM];
+            yield [$this->createDate(), '20 févr. 2022, 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG];
         } else {
-            return [
-                [$this->createDate(), '20.02.2022 12:59'],
-                [$this->createDate(), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
-                [$this->createDate(), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
-                [$this->createDate(), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
-
-                [$this->createDate(), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG],
-
-                [$this->createDate(), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
-
-                [$this->createDate(), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG],
-
-                [$this->createDate(), '20.02.2022', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE],
-                [$this->createDate(), '12:59', \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT],
-
-                [$this->createDate(), 'dimanche, 20 février 2022', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12:59', \IntlDateFormatter::FULL, \IntlDateFormatter::SHORT],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59', \IntlDateFormatter::FULL, \IntlDateFormatter::MEDIUM],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::FULL, \IntlDateFormatter::LONG],
-                [$this->createDate(), 'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL],
-
-                [null, null],
-                [self::TIME_STAMP, '20.02.2022 12:59'],
-            ];
+            yield [$this->createDate(), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT];
+            yield [$this->createDate(), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM];
+            yield [$this->createDate(), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG];
         }
+
+        yield [$this->createDate(), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT];
+        yield [$this->createDate(), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM];
+        yield [$this->createDate(), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG];
+
+        yield [$this->createDate(), 'dimanche, 20 février 2022', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE];
+        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12:59', \IntlDateFormatter::FULL, \IntlDateFormatter::SHORT];
+        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59', \IntlDateFormatter::FULL, \IntlDateFormatter::MEDIUM];
+        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::FULL, \IntlDateFormatter::LONG];
+        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL];
+
+        yield [null, null];
+        yield [self::TIME_STAMP, '20.02.2022 12:59'];
     }
 
     public function getIds(): array
@@ -337,8 +311,8 @@ class FormatUtilsTest extends TestCase
         $this->assertEquals(\IntlDateFormatter::SHORT, FormatUtils::getTimeType());
     }
 
-    private function createDate(string $time = self::DATE_TIME, string $timezone = self::TIME_ZONE): \DateTime
+    private function createDate(): \DateTime
     {
-        return new \DateTime($time, new \DateTimeZone($timezone));
+        return new \DateTime(self::DATE_TIME, new \DateTimeZone(self::TIME_ZONE));
     }
 }

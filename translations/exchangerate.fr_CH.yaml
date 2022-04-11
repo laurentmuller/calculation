@@ -1,6 +1,6 @@
-unsupported-code: Le code de la devise du calculateur de change est invalide.
-malformed-request: La requête du calculateur de change contient une valeur invalide.
-invalid-key: La clé d'autentification du calculateur de change est invalide.
 inactive-account: Le compte d'accès du calculateur de change  n'est pas validé.
+invalid-key: La clé d'autentification du calculateur de change est invalide.
+malformed-request: La requête du calculateur de change contient une valeur invalide.
 quota-reached: Le nombre de demandes autorisées du calculateur de change a été atteint.
 unknown: Une erreur inconnue s'est produite lors de l'appel au calculateur de change.
+unsupported-code: Le code de la devise du calculateur de change est invalide.

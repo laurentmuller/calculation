@@ -14,6 +14,7 @@ namespace App\Form\Calculation;
 
 use App\Entity\Calculation;
 use App\Form\AbstractEntityType;
+use App\Form\CalculationState\CalculationStateListType;
 use App\Form\FormHelper;
 use App\Form\Type\PlainType;
 
@@ -62,6 +63,6 @@ class CalculationEditStateType extends AbstractEntityType
 
         $helper->field('state')
             ->label('calculation.state.newstate')
-            ->addCalculationStateListType();
+            ->add(CalculationStateListType::class);
     }
 }

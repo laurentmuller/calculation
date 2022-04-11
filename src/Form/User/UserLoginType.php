@@ -56,7 +56,7 @@ class UserLoginType extends AbstractUserCaptchaType
         $helper->field('password')
             ->autocomplete('current-password')
             ->maxLength(255)
-            ->addPassordType();
+            ->addPasswordType();
 
         parent::addFormFields($helper);
 

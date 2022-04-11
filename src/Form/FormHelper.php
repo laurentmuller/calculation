@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\CalculationState\CalculationStateListType;
-use App\Form\Category\CategoryListType;
 use App\Form\Type\FaxType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Form\Type\YesNoType;
-use App\Form\User\UserListType;
+use App\Util\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -144,26 +142,6 @@ class FormHelper
     {
         return $this->updateOption('widget', 'single_text')
             ->add(BirthdayType::class);
-    }
-
-    /**
-     * Add a calculation state list type to the builder and reset all values to default.
-     *
-     * This type display a drop-down list of CalculationState entities.
-     */
-    public function addCalculationStateListType(): self
-    {
-        return $this->add(CalculationStateListType::class);
-    }
-
-    /**
-     * Add a category list type to the builder and reset all values to default.
-     *
-     * This type display a drop-down list of Category entities.
-     */
-    public function addCategoryListType(): self
-    {
-        return $this->add(CategoryListType::class);
     }
 
     /**
@@ -317,7 +295,7 @@ class FormHelper
     /**
      * Add a password type to the builder and reset all values to default.
      */
-    public function addPassordType(): self
+    public function addPasswordType(): self
     {
         return $this->add(PasswordType::class);
     }
@@ -504,16 +482,6 @@ class FormHelper
     }
 
     /**
-     * Add a user list type to the builder and reset all values to default.
-     *
-     * This type display a drop-down list of user entities.
-     */
-    public function addUserListType(): self
-    {
-        return $this->add(UserListType::class);
-    }
-
-    /**
      * Adds a Vich image type and reset all values to default.
      */
     public function addVichImageType(): self
@@ -655,36 +623,6 @@ class FormHelper
     }
 
     /**
-     * Gets the currency symbol for the given locale.
-     *
-     * @param string|null $locale the locale to use or null to use the default locale
-     */
-    public function getCurrencySymbol(string $locale = null): string
-    {
-        if (null === $locale) {
-            $locale = \Locale::getDefault();
-        }
-        $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
-
-        return $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
-    }
-
-    /**
-     * Gets the percent symbol for the given locale.
-     *
-     * @param string|null $locale the locale to use or null to use the default locale
-     */
-    public function getPercentSymbol(string $locale = null): string
-    {
-        if (null === $locale) {
-            $locale = \Locale::getDefault();
-        }
-        $formatter = new \NumberFormatter($locale, \NumberFormatter::PERCENT);
-
-        return $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
-    }
-
-    /**
      * Sets the help property.
      *
      * @param string|null $help the help identifier to translate
@@ -791,7 +729,7 @@ class FormHelper
      */
     public function percent(bool $visible): self
     {
-        return $this->updateOption('symbol', $visible ? $this->getPercentSymbol() : false);
+        return $this->updateOption('symbol', $visible ? FormatUtils::getPercent() : false);
     }
 
     /**

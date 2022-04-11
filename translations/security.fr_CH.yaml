@@ -14,23 +14,19 @@ recaptcha:
     score-threshold-not-met: Le seuil de points reCAPTCHA n'est pas atteint. Essayez de recharger cette page.
     challenge-timeout: Le délai d'attente du défi reCAPTCHA est atteint. Essayez de recharger cette page.
     timeout-or-duplicate: Le délai d'attente reCAPTCHA est atteint ou la validation a été appelée deux fois. Essayez de recharger cette page.
-
 # captcha image
 captcha:
     invalid: Le code de contrôle est invalide.
     timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.
-
 # common
 Invalid credentials.: Le nom de l'utilisateur ou le mot de passe est invalide.
 Invalid CSRF token.: Le jeton de falsification de requête inter-sites (CSRF) est invalide.
 send_email_error: Il y a eu un problème lors de l'envoi du courrier électronique.
 error_unknown: Une erreur inconnue s'est produite lors de l'exécution de l'action.
-
 # registration
 registration_expired_signature: Le lien pour vérifier votre adresse électronique a expiré. Veuillez demander un nouveau lien.
 registration_invalid_signature: Le lien pour vérifier votre adresse électronique n'est pas valide. Veuillez demander un nouveau lien.
 registration_wrong_email_verify: Le lien pour vérifier votre adresse électronique semble être pour un compte ou un courriel différent. Veuillez demander un nouveau lien.
-
 # reset
 reset_expired_reset_password_token: Le lien dans votre adresse électronique est expiré. Veuillez essayer de réinitialiser votre mot de passe.
 reset_invalid_reset_password_token: Le lien de réinitialisation du mot de passe n'est pas valide. Veuillez essayer de réinitialiser votre mot de passe.

@@ -14,6 +14,7 @@ namespace App\Form\Calculation;
 
 use App\Entity\Calculation;
 use App\Form\AbstractEntityType;
+use App\Form\CalculationState\CalculationStateListType;
 use App\Form\FormHelper;
 
 /**
@@ -58,7 +59,7 @@ class CalculationType extends AbstractEntityType
             ->addPercentType(-100, 300);
 
         $helper->field('state')
-            ->addCalculationStateListType();
+            ->add(CalculationStateListType::class);
 
         // groupes
         $helper->field('groups')

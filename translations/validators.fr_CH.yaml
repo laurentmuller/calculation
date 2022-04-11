@@ -1,71 +1,71 @@
-margin:
-    minimum_overlap: La valeur minimale chevauche une marge existante.
-    minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.
-    maximum_overlap: La valeur maximale chevauche une marge existante.
-    maximum_greater_minimum: La valeur maximale doit être supérieure à la valeur minimale.
-group:
-    unique_code: Ce nom est déjà utilisé par un autre groupe.
-    id_not_found: Le groupe avec l'identifiant "%id%" n'existe pas.
-category:
-    unique_code: Ce nom est déjà utilisé par une autre catégorie.
-    id_not_found: La catégorie avec l'identifiant "%id%" n'existe pas.
-product:
-    unique_description: Cette description est déjà utilisée par autre article.
-customer:
-    unique_email: Cette adresse e-mail est déjà utilisée.
-    zip_code: Le code postal doit contenir 4 chiffres.
-    empty: Veuillez fournir au moins un nom ou un prénom ou une société.
-username:
-    not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
-    already_used: Le nom d'utilisateur est déjà utilisé.
-    blank: Entrez un nom d'utilisateur s'il vous plait.
-    short: Le nom d'utilisateur est trop court.
-    long: Le nom d'utilisateur est trop long.
-email:
-    already_used: L'adresse e-mail est déjà utilisée.
-    blank: Entrez une adresse e-mail s'il vous plait.
-    short: L'adresse e-mail est trop courte.
-    long: L'adresse e-mail est trop longue.
-    invalid: L'adresse e-mail est invalide.
-password:
-    mismatch: Les deux mots de passe ne sont pas identiques.
-    email: Le mot de passe ne peut être une adresse e-mail.
-    minstrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".
-    casediff: Le mot de passe doit contenir une majuscule et une minuscule.
-    letters: Le mot de passe doit contenir une lettre.
-    numbers: Le mot de passe doit contenir un chiffre.
-    specialchar: Le mot de passe doit contenir un caractère spécial.
-    pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
-new_password:
-    blank: Entrez un nouveau mot de passe s'il vous plait.
-    short: Le nouveau mot de passe est trop court.
-current_password:
-    invalid: Le mot de passe est invalide.
-state:
-    unique_code: Ce nom est déjà utilisé par un autre statut.
-property:
-    unique_name: Ce nom est déjà utilisé par une autre propriété.
-recaptcha:
-    missing-input-secret: Le paramètre secret est manquant.
-    invalid-input-secret: Le paramètre secret est invalide ou malformé.
-    missing-input-response: Le paramètre de réponse est manquant.
-    invalid-input-response: Le paramètre de réponse est invalide ou malformé.
-    bad-request: La demande est invalide ou malformée.
-    invalid-json: La réponse a un format JSON invalide.
-    connection-failed: Impossible de se connecter au service.
-    bad-response: Le service n'a pas retourné le code 200.
-    unknown-error: Une erreur inconnue s'est produite durant de la validation.
-    hostname-mismatch: Le nom d'hôte ne correspond pas.
-    action-mismatch: L'action ne correspond pas.
-    score-threshold-not-met: Le seuil de points n'est pas atteint.
-    challenge-timeout: Le délai d'attente du défi est atteint.
-    timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
-    required: Vous devez cocher la case "Je ne suis pas un robot".
 captcha:
-    invalid: Le code de contrôle est invalide.
-    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de génerer une nouvelle image.
-    generate: Impossible de générer une nouvelle image.
+  generate: Impossible de générer une nouvelle image.
+  invalid: Le code de contrôle est invalide.
+  timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de génerer une nouvelle image.
+category:
+  id_not_found: La catégorie avec l'identifiant "%id%" n'existe pas.
+  unique_code: Ce nom est déjà utilisé par une autre catégorie.
+current_password:
+  invalid: Le mot de passe est invalide.
+customer:
+  empty: Veuillez fournir au moins un nom ou un prénom ou une société.
+  unique_email: Cette adresse e-mail est déjà utilisée.
+  zip_code: Le code postal doit contenir 4 chiffres.
+email:
+  already_used: L'adresse e-mail est déjà utilisée.
+  blank: Entrez une adresse e-mail s'il vous plait.
+  invalid: L'adresse e-mail est invalide.
+  long: L'adresse e-mail est trop longue.
+  short: L'adresse e-mail est trop courte.
+group:
+  id_not_found: Le groupe avec l'identifiant "%id%" n'existe pas.
+  unique_code: Ce nom est déjà utilisé par un autre groupe.
+margin:
+  maximum_greater_minimum: La valeur maximale doit être supérieure à la valeur minimale.
+  maximum_overlap: La valeur maximale chevauche une marge existante.
+  minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.
+  minimum_overlap: La valeur minimale chevauche une marge existante.
+new_password:
+  blank: Entrez un nouveau mot de passe s'il vous plait.
+  short: Le nouveau mot de passe est trop court.
+password:
+  casediff: Le mot de passe doit contenir une majuscule et une minuscule.
+  email: Le mot de passe ne peut être une adresse e-mail.
+  letters: Le mot de passe doit contenir une lettre.
+  minstrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".
+  mismatch: Les deux mots de passe ne sont pas identiques.
+  numbers: Le mot de passe doit contenir un chiffre.
+  pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
+  specialchar: Le mot de passe doit contenir un caractère spécial.
+product:
+  unique_description: Cette description est déjà utilisée par autre article.
+property:
+  unique_name: Ce nom est déjà utilisé par une autre propriété.
+recaptcha:
+  action-mismatch: L'action ne correspond pas.
+  bad-request: La demande est invalide ou malformée.
+  bad-response: Le service n'a pas retourné le code 200.
+  challenge-timeout: Le délai d'attente du défi est atteint.
+  connection-failed: Impossible de se connecter au service.
+  hostname-mismatch: Le nom d'hôte ne correspond pas.
+  invalid-input-response: Le paramètre de réponse est invalide ou malformé.
+  invalid-input-secret: Le paramètre secret est invalide ou malformé.
+  invalid-json: La réponse a un format JSON invalide.
+  missing-input-response: Le paramètre de réponse est manquant.
+  missing-input-secret: Le paramètre secret est manquant.
+  required: Vous devez cocher la case "Je ne suis pas un robot".
+  score-threshold-not-met: Le seuil de points n'est pas atteint.
+  timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
+  unknown-error: Une erreur inconnue s'est produite durant de la validation.
+state:
+  unique_code: Ce nom est déjà utilisé par un autre statut.
 task:
-    unique_name: Ce nom est déjà utilisé par une autre tâche.
+  unique_name: Ce nom est déjà utilisé par une autre tâche.
 task_item:
-    unique_name: Ce nom est déjà utilisé par une autre opération.
+  unique_name: Ce nom est déjà utilisé par une autre opération.
+username:
+  already_used: Le nom d'utilisateur est déjà utilisé.
+  blank: Entrez un nom d'utilisateur s'il vous plait.
+  long: Le nom d'utilisateur est trop long.
+  not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
+  short: Le nom d'utilisateur est trop court.

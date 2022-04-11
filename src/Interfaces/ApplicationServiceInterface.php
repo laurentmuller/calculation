@@ -32,6 +32,11 @@ interface ApplicationServiceInterface
     public const DEFAULT_DISPLAY_MODE = TableInterface::VIEW_TABLE;
 
     /**
+     * The default display message icon (boolean).
+     */
+    public const DEFAULT_ICON = true;
+
+    /**
      * The default number of items displayed in the tables (integer).
      */
     public const DEFAULT_LIST_LENGTH = 15;
@@ -62,6 +67,11 @@ interface ApplicationServiceInterface
     public const DEFAULT_PRODUCT_EDIT = true;
 
     /**
+     * The default display progress bar (boolean).
+     */
+    public const DEFAULT_PROGRESS = true;
+
+    /**
      * The default output qr-code (boolean).
      */
     public const DEFAULT_QR_CODE = false;
@@ -75,6 +85,11 @@ interface ApplicationServiceInterface
      * The default timeout of the flash bag messages (integer).
      */
     public const DEFAULT_TIMEOUT = 4000;
+
+    /**
+     * The default display message title (boolean).
+     */
+    public const DEFAULT_TITLE = true;
 
     /**
      * The property name for the administrator role rights (string).
@@ -186,9 +201,19 @@ interface ApplicationServiceInterface
     public const P_LIST_LENGTH = 'list-length';
 
     /**
+     * The property name for displaying icon (default = true) of the flash bag messages (boolean).
+     */
+    public const P_MESSAGE_ICON = 'message_icon';
+
+    /**
      * The property name for the position (default = 'bottom-right') of the flash bag messages (string).
      */
     public const P_MESSAGE_POSITION = 'message_position';
+
+    /**
+     * The property name for displaying progress bar (default = true) of the flash bag messages (boolean).
+     */
+    public const P_MESSAGE_PROGRESS = 'message_progress';
 
     /**
      * The property name for displaying subtitle (default = true) of the flash bag messages (boolean).
@@ -199,6 +224,11 @@ interface ApplicationServiceInterface
      * The property name for the timeout (default = 4000 ms) of the flash bag messages in milliseconds (int).
      */
     public const P_MESSAGE_TIMEOUT = 'message_timeout';
+
+    /**
+     * The property name for displaying title (default = true) of the flash bag messages (boolean).
+     */
+    public const P_MESSAGE_TITLE = 'message_title';
 
     /**
      * The property name for the minimum margin (default = 300%), in percent, for a calculation (float).

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Form\Dialog;
 
 use App\Form\AbstractHelperType;
+use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
 
 /**
@@ -44,7 +45,7 @@ class EditItemDialogType extends AbstractHelperType
             ->addTextType();
 
         $helper->field('category')
-            ->addCategoryListType();
+            ->add(CategoryListType::class);
 
         $helper->field('price')
             ->addNumberType();

@@ -15,6 +15,11 @@
 </button>
 {%- endmacro %}
 
+{% macro output_dropdown_header(text, translate = false) -%}
+    {{ _self.item_separator() }}
+    <h6 class="dropdown-header">{{ (translate ? text|trans : text)|upper }}</h6>
+{%- endmacro %}
+
 {% macro item_path(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
 {{ icons.link(path, text, class, icon ~ ' fa-fw') }}

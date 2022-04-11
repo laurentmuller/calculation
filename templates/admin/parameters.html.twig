@@ -19,7 +19,7 @@
 {% endmacro %}
 
 {# customized fields #}
-{% block _parameters_message_sub_title_widget -%}
+{% block _parameters_message_timeout_widget -%}
 <div class="input-group">
     {{- block('choice_widget') -}}
     <div class="input-group-append d-print-none">
@@ -107,14 +107,26 @@
     <div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
         <div class="ml-2 mt-1">
             <div class="form-row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     {{ form_row(form.message_position) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     {{ form_row(form.message_timeout) }}
                 </div>
-                <div class="col-md-4">
+            </div>
+            <label class="horizontal-line">{{ 'parameters.group_options'|trans }}</label>
+            <div class="form-row">
+                <div class="col-md-2">
+                    {{ form_row(form.message_icon) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_row(form.message_title) }}
+                </div>
+                <div class="col-md-3">
                     {{ form_row(form.message_sub_title) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.message_progress) }}
                 </div>
             </div>
         </div>

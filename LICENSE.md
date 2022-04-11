@@ -48,8 +48,7 @@ lorsque vous utilisez notre application ainsi que les choix qui s'offrent à vou
 
 Nous utilisons vos données pour fournir et améliorer l'application. En utilisant l'application, vous consentez à la collecte et à
 l'utilisation d'informations conformément à la présente politique. Sauf définition contraire dans la présente politique de
-confidentialité, les termes utilisés dans la présente politique de confidentialité ont la même signification que dans notre
-[Accord de licence](#accord-de-licence).
+confidentialité, les termes utilisés dans la présente politique de confidentialité ont la même signification que dans notre Accord de licence ci-dessus.
 
 ## Définitions
 

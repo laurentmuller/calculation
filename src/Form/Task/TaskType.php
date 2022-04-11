@@ -14,6 +14,7 @@ namespace App\Form\Task;
 
 use App\Entity\Task;
 use App\Form\AbstractEntityType;
+use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
 
 /**
@@ -43,7 +44,7 @@ class TaskType extends AbstractEntityType
             ->addTextType();
 
         $helper->field('category')
-            ->addCategoryListType();
+            ->add(CategoryListType::class);
 
         $helper->field('unit')
             ->autocomplete('off')

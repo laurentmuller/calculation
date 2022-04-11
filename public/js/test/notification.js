@@ -5,12 +5,9 @@
 /**
  * Display a notification.
  *
- * @param {string}
- *            type - the message type.
- * @param {string}
- *            title - the message title.
- * @param {Object}
- *            options - the custom options.
+ * @param {string} type - the message type.
+ * @param {string} title - the message title.
+ * @param {Object} options - the custom options.
  */
 function notify(type, title, options) {
     'use strict';
@@ -19,10 +16,7 @@ function notify(type, title, options) {
     const url = $('#position').data('random');
     $.getJSON(url, function (response) {
         if (response.result) {
-            // message
             const message = '<p class="m-0 p-0">{0}</p>'.format(response.content);
-
-            // display
             Toaster[type](message, title, options);
         } else {
             Toaster.danger("Impossible d'afficher une notification.", $('.card-title').text(), options);
@@ -71,7 +65,7 @@ function random() {
         notify(type, title, options);
 
         // update checkbox style
-        const className = 'custom-control-input custom-control-' + type;
+        const className = 'custom-control-input control-option custom-control-' + type;
         $(":checkbox.custom-control-input").attr('class', className);
     });
 
@@ -86,6 +80,12 @@ function random() {
                 $this.val(value);
             }
         });
+        random();
+    });
+
+    // options
+    $('.control-option').on('click', function () {
+        //$(button).trigger('click').focus();
         random();
     });
 

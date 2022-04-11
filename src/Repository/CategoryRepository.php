@@ -67,43 +67,31 @@ class CategoryRepository extends AbstractRepository
     }
 
     /**
-     * Gets categories with the number of products.
+     * Gets categories used for the product table.
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
-     * @return array an array with the category and the number of products
+     * @return array an array with the categories
      */
-    public function getListCountProducts(): array
+    public function getDropDownProducts(): array
     {
-        $builder = $this->createQueryBuilder('c')
-            ->select('c.id')
-            ->addSelect('c.code')
-            ->addSelect('c.description')
-            ->addSelect('COUNT(p.id) as count')
-            ->innerJoin('c.products', 'p')
-            ->groupBy('c.id')
-            ->orderBy('c.code', Criteria::ASC);
+        $builder = $this->getDropDownQuery()
+            ->innerJoin('c.products', 'p');
 
         return $builder->getQuery()->getArrayResult();
     }
 
     /**
-     * Gets categories with the number of tasks.
+     * Gets categories used by the task table.
      *
      * <b>Note:</b> Only categories with at least one task are returned.
      *
-     * @return array an array with the category and the number of tasks
+     * @return array an array with the categories
      */
-    public function getListCountTasks(): array
+    public function getDropDownTasks(): array
     {
-        $builder = $this->createQueryBuilder('c')
-            ->select('c.id')
-            ->addSelect('c.code')
-            ->addSelect('c.description')
-            ->addSelect('COUNT(t.id) as count')
-            ->innerJoin('c.tasks', 't')
-            ->groupBy('c.id')
-            ->orderBy('c.code', Criteria::ASC);
+        $builder = $this->getDropDownQuery()
+            ->innerJoin('c.tasks', 't');
 
         return $builder->getQuery()->getArrayResult();
     }
@@ -118,19 +106,16 @@ class CategoryRepository extends AbstractRepository
     {
         $groupField = $this->getSortField('group.code', $alias);
         $codeField = $this->getSortField('code', $alias);
-
         $builder = $this->createQueryBuilder($alias)
             ->innerJoin("$alias.group", self::GROUP_ALIAS)
             ->orderBy($groupField, Criteria::ASC)
             ->addOrderBy($codeField, Criteria::ASC);
 
-        if (self::FILTER_PRODUCTS === $filterType) {
-            $builder->innerJoin("$alias.products", 'p');
-        } elseif (self::FILTER_TASKS === $filterType) {
-            $builder->innerJoin("$alias.tasks", 't');
-        }
-
-        return $builder;
+        return match ($filterType) {
+            self::FILTER_PRODUCTS => $builder->innerJoin("$alias.products", 'p'),
+            self::FILTER_TASKS => $builder->innerJoin("$alias.tasks", 't'),
+            default => $builder
+        };
     }
 
     /**
@@ -155,5 +140,19 @@ class CategoryRepository extends AbstractRepository
             'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    private function getDropDownQuery(): QueryBuilder
+    {
+        $group = self::GROUP_ALIAS . '.code';
+
+        return $this->createQueryBuilder('c')
+            ->select('c.id')
+            ->addSelect('c.code')
+            ->addSelect("$group AS group")
+            ->innerJoin('c.group', self::GROUP_ALIAS)
+            ->groupBy('c.id')
+            ->orderBy($group, Criteria::ASC)
+            ->addOrderBy('c.code', Criteria::ASC);
     }
 }

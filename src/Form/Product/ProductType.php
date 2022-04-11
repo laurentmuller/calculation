@@ -14,6 +14,7 @@ namespace App\Form\Product;
 
 use App\Entity\Product;
 use App\Form\AbstractEntityType;
+use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
 
 /**
@@ -52,7 +53,7 @@ class ProductType extends AbstractEntityType
             ->addNumberType();
 
         $helper->field('category')
-            ->addCategoryListType();
+            ->add(CategoryListType::class);
 
         $helper->field('supplier')
             ->autocomplete('off')

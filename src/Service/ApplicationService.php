@@ -375,9 +375,12 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             self::P_DEFAULT_STATE => $this->getDefaultState(),
             self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
 
+            self::P_MESSAGE_TITLE => $this->isMessageTitle(),
+            self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
+            self::P_MESSAGE_ICON => $this->isMessageIcon(),
+            self::P_MESSAGE_PROGRESS => $this->isMessageProgress(),
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
-            self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
 
             self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
             self::P_LAST_IMPORT => $this->getLastImport(),
@@ -576,11 +579,35 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Returns if the flash bag message icon is displayed (default: true).
+     */
+    public function isMessageIcon(): bool
+    {
+        return $this->isPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_ICON);
+    }
+
+    /**
+     * Returns if the flash bag message progress bar is displayed (default: true).
+     */
+    public function isMessageProgress(): bool
+    {
+        return $this->isPropertyBoolean(self::P_MESSAGE_PROGRESS, self::DEFAULT_PROGRESS);
+    }
+
+    /**
      * Returns if the flash bag message subtitle is displayed (default: true).
      */
     public function isMessageSubTitle(): bool
     {
         return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+    }
+
+    /**
+     * Returns if the flash bag message icon is displayed (default: true).
+     */
+    public function isMessageTitle(): bool
+    {
+        return $this->isPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_TITLE);
     }
 
     /**

@@ -17,10 +17,15 @@
     <button id="stateid" data-value="{{ stateid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
         <i class="fa-regular fa-flag"></i>&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
     </button>
+    {% set editable = false %}
     <div class="dropdown-menu" aria-labelledby="stateid">
-        {{ _self.output_dropdown('state', 0, stateid, 'datatable.all'|trans) }}
+        {{ _self.output_dropdown('state', 0, stateid, 'calculation.list.state_all_text'|trans) }}
         {% for state in customData.states %}
-        {{ _self.output_dropdown('state', state.id, stateid, state.code) }}
+            {% if editable != state.editable %}
+                {{ _self.output_dropdown_header((state.editable ?  'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true) }}
+                {% set editable = state.editable %}
+            {% endif %}
+            {{ _self.output_dropdown('state', state.id, stateid, state.code) }}
         {% endfor %}
     </div>
 </div>

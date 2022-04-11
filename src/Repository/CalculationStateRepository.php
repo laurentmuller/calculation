@@ -39,6 +39,27 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Gets states used for the calculation table.
+     *
+     * <b>Note:</b> Only states with at least one calculation are returned.
+     *
+     * @return array an array with the state and the number of calculations
+     */
+    public function getDropDownStates(): array
+    {
+        $builder = $this->createQueryBuilder('s')
+            ->select('s.id')
+            ->addSelect('s.code')
+            ->addSelect('s.editable')
+            ->innerJoin('s.calculations', 'c')
+            ->groupBy('s.id')
+            ->orderBy('s.editable', Criteria::DESC)
+            ->addOrderBy('s.code', Criteria::ASC);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
      * Gets the list of calculation states sorted by code.
      *
      * @return CalculationState[] the calculation states

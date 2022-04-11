@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Form\Admin;
 
+use App\Form\CalculationState\CalculationStateListType;
+use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
 use App\Form\Product\ProductListType;
 use App\Form\Type\MinStrengthType;
@@ -128,10 +130,10 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function addDefaultValueSection(FormHelper $helper): void
     {
         $helper->field(self::P_DEFAULT_STATE)
-            ->addCalculationStateListType();
+            ->add(CalculationStateListType::class);
 
         $helper->field(self::P_DEFAULT_CATEGORY)
-            ->addCategoryListType();
+            ->add(CategoryListType::class);
 
         $helper->field(self::P_MIN_MARGIN)
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
@@ -163,17 +165,25 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         $helper->field(self::P_MESSAGE_POSITION)
             ->updateAttribute('data-default', self::DEFAULT_POSITION)
             ->addChoiceType($this->getPositions());
-
         $helper->field(self::P_MESSAGE_TIMEOUT)
             ->updateAttribute('data-default', self::DEFAULT_TIMEOUT)
             ->addChoiceType($this->getTimeouts());
-
+        $helper->field(self::P_MESSAGE_TITLE)
+            ->updateAttribute('data-default', (int) self::DEFAULT_TITLE)
+            ->notRequired()
+            ->addCheckboxType();
         $helper->field(self::P_MESSAGE_SUB_TITLE)
             ->updateAttribute('data-default', (int) self::DEFAULT_SUB_TITLE)
-            ->addChoiceType([
-                'parameters.display.show' => true,
-                'parameters.display.hide' => false,
-            ]);
+            ->notRequired()
+            ->addCheckboxType();
+        $helper->field(self::P_MESSAGE_PROGRESS)
+            ->updateAttribute('data-default', (int) self::DEFAULT_PROGRESS)
+            ->notRequired()
+            ->addCheckboxType();
+        $helper->field(self::P_MESSAGE_ICON)
+            ->updateAttribute('data-default', (int) self::DEFAULT_ICON)
+            ->notRequired()
+            ->addCheckboxType();
     }
 
     private function addHomePageSection(FormHelper $helper): void

@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\Criteria;
 class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function count(): int
     {

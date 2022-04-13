@@ -22,7 +22,6 @@ use App\Entity\Task;
 use App\Traits\MathTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -46,9 +45,6 @@ class IndexController extends AbstractController
      *  Display the home page.
      *
      * @Route("/", name="homepage")
-     * @Breadcrumb({
-     *     {"label" = "index.title"}
-     * })
      */
     public function invoke(Request $request, EntityManagerInterface $manager): Response
     {

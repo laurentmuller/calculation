@@ -40,10 +40,11 @@ trait MathTrait
      * @param int   $precision the optional number of decimal digits to round to
      *
      * @return bool true if values are equals
+     * @pslam-param 1|2|3|4 $mode
      */
     protected function isFloatEquals(float $val1, float $val2, int $precision = 2): bool
     {
-        return \round($val1, $precision) === \round($val2, $precision);
+        return $this->round($val1, $precision) === $this->round($val2, $precision);
     }
 
     /**
@@ -53,6 +54,7 @@ trait MathTrait
      * @param int   $precision the optional number of decimal digits to round to
      *
      * @return bool true if the value is equal to zero
+     * @pslam-param 1|2|3|4 $mode
      */
     protected function isFloatZero(float $val, int $precision = 2): bool
     {

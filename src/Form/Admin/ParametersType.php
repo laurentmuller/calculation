@@ -145,12 +145,12 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     {
         $helper->field(self::P_DISPLAY_MODE)
             ->updateAttribute('data-default', self::DEFAULT_DISPLAY_MODE->value)
-            ->updateOption('choice_label', static fn (TableView $choice): string => 'parameters.tabular.' . $choice->value)
+            ->updateOption('choice_label', static fn (TableView $choice): string => "view.$choice->value")
             ->addEnumType(TableView::class);
 
         $helper->field(self::P_EDIT_ACTION)
             ->updateAttribute('data-default', self::DEFAULT_ACTION->value)
-            ->updateOption('choice_label', static fn (EntityAction $choice): string => 'parameters.editAction.' . $choice->value)
+            ->updateOption('choice_label', static fn (EntityAction $choice): string => "action.$choice->value")
             ->addEnumType(EntityAction::class);
     }
 

@@ -19,7 +19,7 @@ use Symfony\Component\Mime\Address;
 /**
  * Transformer for mime address.
  *
- * @author Laurent Muller
+ * @implements DataTransformerInterface<?Address, mixed>
  */
 class AddressTransformer implements DataTransformerInterface
 {

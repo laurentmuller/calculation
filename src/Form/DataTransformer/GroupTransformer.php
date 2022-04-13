@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Transformer to convert a group to an identifier.
  *
- * @author Laurent Muller
+ * @implements DataTransformerInterface<Group|null, int|null>
  */
 class GroupTransformer implements DataTransformerInterface
 {

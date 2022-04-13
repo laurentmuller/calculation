@@ -21,7 +21,6 @@ use App\Util\FileUtils;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,9 +32,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/log")
  * @IsGranted("ROLE_ADMIN")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  */
 class LogController extends AbstractController
 {
@@ -175,11 +171,6 @@ class LogController extends AbstractController
      * Show properties of a log entry.
      *
      * @Route("/show/{id}", name="log_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "log.title", "route" = "log_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.formattedDate"}
-     * })
      */
     public function show(Request $request, int $id, LogService $service): Response
     {
@@ -197,9 +188,6 @@ class LogController extends AbstractController
      * Render the table view.
      *
      * @Route("", name="log_table")
-     * @Breadcrumb({
-     *     {"label" = "log.title"}
-     * })
      */
     public function table(Request $request, LogTable $table): Response
     {

@@ -26,7 +26,6 @@ use App\Spreadsheet\CategoriesDocument;
 use App\Table\CategoryTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,9 +38,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/category")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<Category>
  */
 class CategoryController extends AbstractEntityController
@@ -58,10 +54,6 @@ class CategoryController extends AbstractEntityController
      * Add a category.
      *
      * @Route("/add", name="category_add")
-     * @Breadcrumb({
-     *     {"label" = "category.list.title", "route" = "category_table"},
-     *     {"label" = "category.add.title"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -72,10 +64,6 @@ class CategoryController extends AbstractEntityController
      * Clone (copy) a category.
      *
      * @Route("/clone/{id}", name="category_clone", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "category.list.title", "route" = "category_table"},
-     *     {"label" = "breadcrumb.clone"}
-     * })
      */
     public function clone(Request $request, Category $item): Response
     {
@@ -92,11 +80,6 @@ class CategoryController extends AbstractEntityController
      * Delete a category.
      *
      * @Route("/delete/{id}", name="category_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "category.list.title", "route" = "category_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
@@ -147,11 +130,6 @@ class CategoryController extends AbstractEntityController
      * Edit a category.
      *
      * @Route("/edit/{id}", name="category_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "category.list.title", "route" = "category_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, Category $item): Response
     {
@@ -202,11 +180,6 @@ class CategoryController extends AbstractEntityController
      * Show properties of a category.
      *
      * @Route("/show/{id}", name="category_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "category.list.title", "route" = "category_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function show(Category $item): Response
     {
@@ -217,9 +190,6 @@ class CategoryController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="category_table")
-     * @Breadcrumb({
-     *     {"label" = "category.list.title"}
-     * })
      */
     public function table(Request $request, CategoryTable $table): Response
     {

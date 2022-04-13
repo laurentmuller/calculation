@@ -18,7 +18,6 @@ use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
 use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,9 +29,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/duplicate")
  * @IsGranted("ROLE_ADMIN")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  */
 class CalculationDuplicateController extends AbstractController
 {
@@ -80,9 +76,6 @@ class CalculationDuplicateController extends AbstractController
      * Render the table view.
      *
      * @Route("", name="duplicate_table")
-     * @Breadcrumb({
-     *     {"label" = "duplicate.title"}
-     * })
      */
     public function table(Request $request, CalculationDuplicateTable $table): Response
     {

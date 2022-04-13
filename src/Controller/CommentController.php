@@ -18,7 +18,6 @@ use App\Model\Comment;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -39,10 +38,6 @@ class CommentController extends AbstractController
      *
      * @Route("/comment", name="user_comment")
      * @IsGranted("ROLE_USER")
-     * @Breadcrumb({
-     *     {"label" = "index.title", "route" = "homepage"},
-     *     {"label" = "user.comment.title" }
-     * })
      */
     public function invoke(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
     {

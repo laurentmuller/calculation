@@ -23,7 +23,6 @@ use App\Spreadsheet\GlobalMarginsDocument;
 use App\Table\GlobalMarginTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,9 +34,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/globalmargin")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<GlobalMargin>
  */
 class GlobalMarginController extends AbstractEntityController
@@ -54,10 +50,6 @@ class GlobalMarginController extends AbstractEntityController
      * Add a global margin.
      *
      * @Route("/add", name="globalmargin_add")
-     * @Breadcrumb({
-     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
-     *     {"label" = "globalmargin.add.title"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -68,11 +60,6 @@ class GlobalMarginController extends AbstractEntityController
      * Delete a global margin.
      *
      * @Route("/delete/{id}", name="globalmargin_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, GlobalMargin $item, LoggerInterface $logger): Response
     {
@@ -90,11 +77,6 @@ class GlobalMarginController extends AbstractEntityController
      * Edit a global margin.
      *
      * @Route("/edit/{id}", name="globalmargin_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, GlobalMargin $item): Response
     {
@@ -145,11 +127,6 @@ class GlobalMarginController extends AbstractEntityController
      * Show properties of a global margin.
      *
      * @Route("/show/{id}", name="globalmargin_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "globalmargin.list.title", "route" = "globalmargin_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function show(GlobalMargin $item): Response
     {
@@ -160,9 +137,6 @@ class GlobalMarginController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="globalmargin_table")
-     * @Breadcrumb({
-     *     {"label" = "globalmargin.list.title"}
-     * })
      */
     public function table(Request $request, GlobalMarginTable $table): Response
     {

@@ -20,6 +20,10 @@ about:
   symfony: Configuration Symfony
   title: A propos de
   version: Version %version%
+action:
+  edit: Modifier l'objet
+  none: Aucune action
+  show: Afficher l'objet
 admin:
   rights:
     success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec
@@ -308,7 +312,7 @@ common:
   value_true: Oui
   view_card: Vue détaillée
   view_custom: Vue mosaïque
-  view_table: Vue table
+  view_table: Vue tabulaire
   view_title: Affichage
 cookiebanner:
   accept: Accepter
@@ -760,10 +764,6 @@ parameters:
   display_parameters:
     hide: Masquer le groupe %name%
     show: Afficher le groupe %name%
-  editAction:
-    edit: Modifier l'objet
-    none: Aucune action
-    show: Afficher l'objet
   failure: Impossible d'afficher une notification.
   fields:
     customer_address: Adresse
@@ -838,10 +838,6 @@ parameters:
   placehoders:
     default_product: <Aucun article sélectionné>
   success: Les paramètres de l'application ont été mis à jour avec succès.
-  tabular:
-    card: Détaillée
-    custom: Mosaïque
-    table: Tabulaire
   title: Paramètres
 password:
   casediff: Une majuscule et une minuscule est obligatoire
@@ -1366,3 +1362,7 @@ user:
       sucess: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b>
         avec succès.
       title: Prendre l'identité de l'utilisateur
+view:
+  card: Vue détaillée
+  custom: Vue mosaïque
+  table: Vue tabulaire

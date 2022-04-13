@@ -16,7 +16,6 @@ use App\Form\User\ThemeType;
 use App\Service\ThemeService;
 use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,10 +35,6 @@ class ThemeController extends AbstractController
      *
      * @Route("/theme", name="user_theme")
      * @IsGranted("ROLE_USER")
-     * @Breadcrumb({
-     *     {"label" = "index.title", "route" = "homepage"},
-     *     {"label" = "theme.title"}
-     * })
      */
     public function invoke(Request $request, ThemeService $service): Response
     {

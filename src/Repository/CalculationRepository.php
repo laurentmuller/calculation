@@ -117,9 +117,11 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
 
         // main query
+        /** @var literal-string $where */
+        $where = "r.id in($dql)";
         $builder = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
-            ->where("r.id in($dql)");
+            ->where($where);
 
         // execute
         return (int) $builder->getQuery()->getSingleScalarResult();
@@ -143,9 +145,11 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
 
         // main query
+        /** @var literal-string $where */
+        $where = "r.id in($dql)";
         $builder = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
-            ->where("r.id in($dql)");
+            ->where($where);
 
         // execute
         return (int) $builder->getQuery()->getSingleScalarResult();

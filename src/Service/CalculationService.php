@@ -289,6 +289,7 @@ final class CalculationService
             $overallTotal += $group->getTotal();
             $itemsTotal += $group->getAmount();
         }
+        $overallTotal = $this->round($overallTotal);
 
         // 3. update global margin, net total and overall total
         $globalMargin = $this->round($this->getGlobalMargin($overallTotal));

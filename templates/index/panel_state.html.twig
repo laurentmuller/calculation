@@ -27,7 +27,7 @@
             {{- total|integer }} {{ _self.sup_margin(margin, min_margin) -}}
         </h3>
         <p class="card-text">
-            {{- 'counters.calculations'|trans({'%count%': count|integer}) -}}
+            {{- 'counters.calculations'|trans({'count': count}) -}}
         </p>
     </div>
 </div>
@@ -62,4 +62,3 @@
     </div>
     {% endif %}
 </div>
-

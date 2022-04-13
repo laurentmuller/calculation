@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Transformer to convert a category to an identifier.
  *
- * @author Laurent Muller
+ * @implements DataTransformerInterface<?Category, ?int>
  */
 class CategoryTransformer implements DataTransformerInterface
 {

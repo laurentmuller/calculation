@@ -4,7 +4,7 @@
 {# add a month option #}
 {% macro month(value, selected) -%}
 <option value="{{ value }}"{% if selected %} selected="selected"{% endif %}>
-    {{- 'counters.months'|trans({'%count%': value}, 'messages') -}}
+    {{- 'counters.months'|trans({'count': value}, 'messages') -}}
 </option>
 {%- endmacro %}
 

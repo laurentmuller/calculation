@@ -23,7 +23,6 @@ use App\Spreadsheet\CustomersDocument;
 use App\Table\CustomerTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,9 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/customer")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<Customer>
  */
 class CustomerController extends AbstractEntityController
@@ -56,10 +52,6 @@ class CustomerController extends AbstractEntityController
      * Add a customer.
      *
      * @Route("/add", name="customer_add")
-     * @Breadcrumb({
-     *     {"label" = "customer.list.title", "route" = "customer_table"},
-     *     {"label" = "breadcrumb.add"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -70,11 +62,6 @@ class CustomerController extends AbstractEntityController
      * Delete a customer.
      *
      * @Route("/delete/{id}", name="customer_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "customer.list.title", "route" = "customer_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
@@ -92,11 +79,6 @@ class CustomerController extends AbstractEntityController
      * Edit a customer.
      *
      * @Route("/edit/{id}", name="customer_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "customer.list.title", "route" = "customer_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, Customer $item): Response
     {
@@ -148,11 +130,6 @@ class CustomerController extends AbstractEntityController
      * Show properties of a customer.
      *
      * @Route("/show/{id}", name="customer_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "customer.list.title", "route" = "customer_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function show(Customer $item): Response
     {
@@ -163,9 +140,6 @@ class CustomerController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="customer_table")
-     * @Breadcrumb({
-     *     {"label" = "customer.list.title"}
-     * })
      */
     public function table(Request $request, CustomerTable $table): Response
     {

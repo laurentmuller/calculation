@@ -24,7 +24,6 @@ use App\Spreadsheet\GroupsDocument;
 use App\Table\GroupTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -37,9 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/group")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<Group>
  */
 class GroupController extends AbstractEntityController
@@ -56,10 +52,6 @@ class GroupController extends AbstractEntityController
      * Add a group.
      *
      * @Route("/add", name="group_add")
-     * @Breadcrumb({
-     *     {"label" = "group.list.title", "route" = "group_table"},
-     *     {"label" = "group.add.title"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -70,10 +62,6 @@ class GroupController extends AbstractEntityController
      * Clone (copy) a group.
      *
      * @Route("/clone/{id}", name="group_clone", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "group.list.title", "route" = "group_table"},
-     *     {"label" = "breadcrumb.clone"}
-     * })
      */
     public function clone(Request $request, Group $item): Response
     {
@@ -90,11 +78,6 @@ class GroupController extends AbstractEntityController
      * Delete a group.
      *
      * @Route("/delete/{id}", name="group_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "group.list.title", "route" = "group_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
@@ -140,11 +123,6 @@ class GroupController extends AbstractEntityController
      * Edit a group.
      *
      * @Route("/edit/{id}", name="group_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "group.list.title", "route" = "group_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, Group $item): Response
     {
@@ -195,12 +173,6 @@ class GroupController extends AbstractEntityController
      * Show properties of a group.
      *
      * @Route("/show/{id}", name="group_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "group.list.title", "route" = "group_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     *
-     * })
      */
     public function show(Group $item): Response
     {
@@ -211,9 +183,6 @@ class GroupController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="group_table")
-     * @Breadcrumb({
-     *     {"label" = "group.list.title"}
-     * })
      */
     public function table(Request $request, GroupTable $table): Response
     {

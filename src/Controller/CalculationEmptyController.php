@@ -18,7 +18,6 @@ use App\Spreadsheet\CalculationsEmptyDocument;
 use App\Table\CalculationEmptyTable;
 use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,9 +29,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/empty")
  * @IsGranted("ROLE_ADMIN")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage" }
- * })
  */
 class CalculationEmptyController extends AbstractController
 {
@@ -80,9 +76,6 @@ class CalculationEmptyController extends AbstractController
      * Render the table view.
      *
      * @Route("", name="empty_table")
-     * @Breadcrumb({
-     *     {"label" = "empty.title" }
-     * })
      */
     public function table(Request $request, CalculationEmptyTable $table): Response
     {

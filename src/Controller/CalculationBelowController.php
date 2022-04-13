@@ -20,7 +20,6 @@ use App\Table\CalculationBelowTable;
 use App\Traits\TableTrait;
 use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,9 +31,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/below")
  * @IsGranted("ROLE_ADMIN")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  */
 class CalculationBelowController extends AbstractController
 {
@@ -90,9 +86,6 @@ class CalculationBelowController extends AbstractController
      * Render the table view.
      *
      * @Route("", name="below_table")
-     * @Breadcrumb({
-     *     {"label" = "below.title"}
-     * })
      */
     public function table(Request $request, CalculationBelowTable $table): Response
     {

@@ -25,7 +25,6 @@ use App\Spreadsheet\TasksDocument;
 use App\Table\TaskTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -38,9 +37,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/task")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<Task>
  */
 class TaskController extends AbstractEntityController
@@ -57,10 +53,6 @@ class TaskController extends AbstractEntityController
      * Add a task.
      *
      * @Route("/add", name="task_add")
-     * @Breadcrumb({
-     *     {"label" = "task.list.title", "route" = "task_table"},
-     *     {"label" = "task.add.title"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -76,10 +68,6 @@ class TaskController extends AbstractEntityController
      * Edit a copy (cloned) task.
      *
      * @Route("/clone/{id}", name="task_clone", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "task.list.title", "route" = "task_table"},
-     *     {"label" = "breadcrumb.clone"}
-     * })
      */
     public function clone(Request $request, Task $item): Response
     {
@@ -96,10 +84,6 @@ class TaskController extends AbstractEntityController
      * Display the form to compute a task.
      *
      * @Route("/compute/{id}", name="task_compute", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "task.list.title", "route" = "task_table"},
-     *     {"label" = "taskcompute.title"}
-     * })
      */
     public function compute(Request $request, TaskService $service, TaskRepository $repository, Task $task = null): Response
     {
@@ -134,11 +118,6 @@ class TaskController extends AbstractEntityController
      * Delete a task.
      *
      * @Route("/delete/{id}", name="task_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "task.list.title", "route" = "task_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
@@ -156,11 +135,6 @@ class TaskController extends AbstractEntityController
      * Edit a task.
      *
      * @Route("/edit/{id}", name="task_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "task.list.title", "route" = "task_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, Task $item): Response
     {
@@ -211,11 +185,6 @@ class TaskController extends AbstractEntityController
      * Show properties of a task.
      *
      * @Route("/show/{id}", name="task_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "task.list.title", "route" = "task_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function show(Task $item): Response
     {
@@ -226,9 +195,6 @@ class TaskController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="task_table")
-     * @Breadcrumb({
-     *     {"label" = "task.list.title"}
-     * })
      */
     public function table(Request $request, TaskTable $table): Response
     {

@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,10 +28,6 @@ class SiteMapController extends AbstractController
      *
      * @Route("/sitemap", name="site_map")
      * @IsGranted("ROLE_USER")
-     * @Breadcrumb({
-     *     {"label" = "index.title", "route" = "homepage"},
-     *     {"label" = "index.menu_site_map"}
-     * })
      */
     public function invoke(): Response
     {

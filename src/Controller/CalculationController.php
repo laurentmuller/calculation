@@ -31,7 +31,6 @@ use App\Table\CalculationTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,9 +43,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @Route("/calculation")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<Calculation>
  */
 class CalculationController extends AbstractEntityController
@@ -63,10 +59,6 @@ class CalculationController extends AbstractEntityController
      * Add a new calculation.
      *
      * @Route("/add", name="calculation_add")
-     * @Breadcrumb({
-     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
-     *     {"label" = "calculation.add.title"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -95,10 +87,6 @@ class CalculationController extends AbstractEntityController
      * Edit a copy (cloned) calculation.
      *
      * @Route("/clone/{id}", name="calculation_clone", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
-     *     {"label" = "breadcrumb.clone"}
-     * })
      */
     public function clone(Request $request, Calculation $item): Response
     {
@@ -118,11 +106,6 @@ class CalculationController extends AbstractEntityController
      * Delete a calculation.
      *
      * @Route("/delete/{id}", name="calculation_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
@@ -142,11 +125,6 @@ class CalculationController extends AbstractEntityController
      * Edit a calculation.
      *
      * @Route("/edit/{id}", name="calculation_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, Calculation $item): Response
     {
@@ -226,11 +204,6 @@ class CalculationController extends AbstractEntityController
      * Show properties of a calculation.
      *
      * @Route("/show/{id}", name="calculation_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function show(Calculation $item): Response
     {
@@ -247,11 +220,6 @@ class CalculationController extends AbstractEntityController
      * Edit the state of a calculation.
      *
      * @Route("/state/{id}", name="calculation_state", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculation.list.title", "route" = "calculation_table"},
-     *     {"label" = "calculation.list.state_title"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
     {
@@ -285,9 +253,6 @@ class CalculationController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="calculation_table")
-     * @Breadcrumb({
-     *     {"label" = "calculation.list.title"}
-     * })
      */
     public function table(Request $request, CalculationTable $table): Response
     {

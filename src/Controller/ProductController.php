@@ -24,7 +24,6 @@ use App\Spreadsheet\ProductsDocument;
 use App\Table\ProductTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,9 +35,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/product")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<Product>
  */
 class ProductController extends AbstractEntityController
@@ -55,10 +51,6 @@ class ProductController extends AbstractEntityController
      * Add a product.
      *
      * @Route("/add", name="product_add")
-     * @Breadcrumb({
-     *     {"label" = "product.list.title", "route" = "product_table"},
-     *     {"label" = "product.add.title"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -74,10 +66,6 @@ class ProductController extends AbstractEntityController
      * Clone (copy) a product.
      *
      * @Route("/clone/{id}", name="product_clone", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "product.list.title", "route" = "product_table"},
-     *     {"label" = "breadcrumb.clone"}
-     * })
      */
     public function clone(Request $request, Product $item): Response
     {
@@ -94,11 +82,6 @@ class ProductController extends AbstractEntityController
      * Delete a product.
      *
      * @Route("/delete/{id}", name="product_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "product.list.title", "route" = "product_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
@@ -116,11 +99,6 @@ class ProductController extends AbstractEntityController
      * Edit a product.
      *
      * @Route("/edit/{id}", name="product_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "product.list.title", "route" = "product_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, Product $item): Response
     {
@@ -171,11 +149,6 @@ class ProductController extends AbstractEntityController
      * Show properties of a product.
      *
      * @Route("/show/{id}", name="product_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "product.list.title", "route" = "product_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function show(Product $item): Response
     {
@@ -186,9 +159,6 @@ class ProductController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="product_table")
-     * @Breadcrumb({
-     *     {"label" = "product.list.title" }
-     * })
      */
     public function table(Request $request, ProductTable $table): Response
     {

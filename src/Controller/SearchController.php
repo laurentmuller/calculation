@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Table\SearchTable;
 use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,9 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display the search page.
  *
  * @author Laurent Muller
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  */
 class SearchController extends AbstractController
 {
@@ -37,9 +33,6 @@ class SearchController extends AbstractController
      *
      * @Route("/search", name="search")
      * @IsGranted("ROLE_USER")
-     * @Breadcrumb({
-     *     {"label" = "search.title" }
-     * })
      */
     public function search(Request $request, SearchTable $table): Response
     {

@@ -36,6 +36,3 @@ twig:
     paths:
         '%kernel.project_dir%/public/css': css
         '%kernel.project_dir%/public/images': images
-
-slope_it_breadcrumb:
-    template: breadcrumb.html.twig

@@ -203,9 +203,9 @@
                 </button>
                 {# display mode #}
                 <div class="dropdown-menu dropdown-menu-checked dropdown-menu-right" aria-labelledby="button_other_actions">
-                {{ _self.button_view('common.view_table', 'table', 'table', params.view) }}
-                {{ _self.button_view('common.view_custom', 'grip-horizontal', 'custom', params.view) }}
-                {{ _self.button_view('common.view_card', 'list', 'card', params.view) }}
+                {{ _self.button_view('view.table', 'table', 'table', params.view) }}
+                {{ _self.button_view('view.custom', 'grip-horizontal', 'custom', params.view) }}
+                {{ _self.button_view('view.card', 'list', 'card', params.view) }}
                 {% if allow_global %}
                     {{ _self.item_separator() }}
                     {% block global_actions -%}{%- endblock %}

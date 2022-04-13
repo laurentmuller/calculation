@@ -25,7 +25,6 @@ use App\Spreadsheet\CalculationStatesDocument;
 use App\Table\CalculationStateTable;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,9 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/calculationstate")
  * @IsGranted("ROLE_USER")
- * @Breadcrumb({
- *     {"label" = "index.title", "route" = "homepage"}
- * })
  * @template-extends AbstractEntityController<CalculationState>
  */
 class CalculationStateController extends AbstractEntityController
@@ -56,10 +52,6 @@ class CalculationStateController extends AbstractEntityController
      * Add a new calculation state.
      *
      * @Route("/add", name="calculationstate_add")
-     * @Breadcrumb({
-     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
-     *     {"label" = "calculationstate.add.title"}
-     * })
      */
     public function add(Request $request): Response
     {
@@ -70,10 +62,6 @@ class CalculationStateController extends AbstractEntityController
      * Clone (copy) a calculation state.
      *
      * @Route("/clone/{id}", name="calculationstate_clone", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
-     *     {"label" = "breadcrumb.clone"}
-     * })
      */
     public function clone(Request $request, CalculationState $item): Response
     {
@@ -87,11 +75,6 @@ class CalculationStateController extends AbstractEntityController
      * Delete a calculation state.
      *
      * @Route("/delete/{id}", name="calculationstate_delete", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
-     *     {"label" = "breadcrumb.delete"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
@@ -130,11 +113,6 @@ class CalculationStateController extends AbstractEntityController
      * Edit a calculation state.
      *
      * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
-     *     {"label" = "breadcrumb.edit"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function edit(Request $request, CalculationState $item): Response
     {
@@ -185,11 +163,6 @@ class CalculationStateController extends AbstractEntityController
      * Show properties of a calculation state.
      *
      * @Route("/show/{id}", name="calculationstate_show", requirements={"id" = "\d+"})
-     * @Breadcrumb({
-     *     {"label" = "calculationstate.list.title", "route" = "calculationstate_table"},
-     *     {"label" = "breadcrumb.property"},
-     *     {"label" = "$item.display"}
-     * })
      */
     public function show(CalculationState $item): Response
     {
@@ -200,9 +173,6 @@ class CalculationStateController extends AbstractEntityController
      * Render the table view.
      *
      * @Route("", name="calculationstate_table")
-     * @Breadcrumb({
-     *     {"label" = "calculationstate.list.title"}
-     * })
      */
     public function table(Request $request, CalculationStateTable $table): Response
     {

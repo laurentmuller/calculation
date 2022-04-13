@@ -135,7 +135,7 @@
     'pagination': 'true',
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
-    'default-action': app.editAction,
+    'default-action': app.editAction.value,
     'defer-url': url(app.request.get('_route')),
     'save-url': url('ajax_save_table'),
     'caller': caller

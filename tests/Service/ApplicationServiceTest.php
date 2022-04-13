@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Entity\Calculation;
+use App\Enums\EntityAction;
+use App\Enums\TableView;
 use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -37,11 +39,10 @@ class ApplicationServiceTest extends KernelTestCase
     public function testActions(): void
     {
         $service = $this->getService();
-        $this->assertEquals('edit', $service->getEditAction());
+        $this->assertEquals(EntityAction::EDIT, $service->getEditAction());
         $this->assertTrue($service->isActionEdit());
         $this->assertFalse($service->isActionShow());
         $this->assertFalse($service->isActionNone());
-        $this->assertEquals('table', $service->getDisplayMode());
     }
 
     public function testAdminRole(): void
@@ -103,6 +104,12 @@ class ApplicationServiceTest extends KernelTestCase
         $service = $this->getService();
         $this->assertNull($service->getDefaultState());
         $this->assertEquals(0, $service->getDefaultStateId());
+    }
+
+    public function testDisplayMode(): void
+    {
+        $service = $this->getService();
+        $this->assertEquals(TableView::TABLE, $service->getDisplayMode());
     }
 
     public function testMessage(): void

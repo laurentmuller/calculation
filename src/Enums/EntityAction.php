@@ -10,17 +10,23 @@
 
 declare(strict_types=1);
 
-namespace App\Interfaces;
+namespace App\Enums;
 
 /**
- * Class implementing this interface provid function for download document.
- *
- * @author Laurent Muller
+ * Entity action enumeration.
  */
-interface IResponseInterface
+enum EntityAction: string
 {
-    /**
-     * Gets the mime type.
+    /*
+     * Edit the entity.
      */
-    public function getMimeType(): string;
+    case EDIT = 'edit';
+    /*
+     * No action.
+     */
+    case NONE = 'none';
+    /*
+     * Show the entity.
+     */
+    case SHOW = 'show';
 }

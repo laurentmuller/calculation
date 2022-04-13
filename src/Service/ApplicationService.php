@@ -17,22 +17,24 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Property;
-use App\Interfaces\ActionInterface;
+use App\Enums\EntityAction;
+use App\Enums\TableView;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\StrengthInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Security\EntityVoter;
+use App\Traits\CacheTrait;
 use App\Traits\LoggerTrait;
-use App\Util\Utils;
+use App\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\AppVariable;
-use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to manage application properties.
@@ -41,12 +43,12 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class ApplicationService extends AppVariable implements LoggerAwareInterface, ApplicationServiceInterface
 {
+    use CacheTrait {
+        clearCache as traitClearCache;
+        saveDeferredCacheValue as traitSaveDeferredCacheValue;
+    }
     use LoggerTrait;
-
-    /**
-     * The cache namespace.
-     */
-    private const CACHE_NAME_SPACE = 'ApplicationService';
+    use TranslatorTrait;
 
     /**
      * The cache saved key.
@@ -54,39 +56,32 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     private const CACHE_SAVED = 'cache_saved';
 
     /**
-     * The cache timeout (60 minutes).
-     */
-    private const CACHE_TIMEOUT = 60 * 60;
-
-    private readonly CacheItemPoolInterface $adapter;
-
-    /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, KernelInterface $kernel, LoggerInterface $logger)
+    public function __construct(private readonly EntityManagerInterface $manager, KernelInterface $kernel, CacheItemPoolInterface $applicationServiceCache, LoggerInterface $logger, TranslatorInterface $translator)
     {
-        $this->adapter = AbstractAdapter::createSystemCache(self::CACHE_NAME_SPACE, self::CACHE_TIMEOUT, '', $kernel->getCacheDir(), $logger);
-
         $this->setLogger($logger);
+        $this->setTranslator($translator);
+        $this->setAdapter($applicationServiceCache);
+
         $this->setDebug($kernel->isDebug());
         $this->setEnvironment($kernel->getEnvironment());
     }
 
     /**
      * Clear this cache.
-     *
-     * @return bool true if the cache was successfully cleared; false if there was an error
      */
     public function clearCache(): bool
     {
-        if ($this->adapter->clear()) {
-            $this->logInfo('Cleared the properties cache successfully.', $this->getLogContext());
+        if ($this->traitClearCache()) {
+            $this->logInfo($this->trans('application_service.clear_success'));
 
             return true;
-        }
-        $this->logWarning('Error while clearing properties cache.', $this->getLogContext());
+        } else {
+            $this->logWarning($this->trans('application_service.clear_error'));
 
-        return false;
+            return false;
+        }
     }
 
     /**
@@ -110,14 +105,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         $role->setRights($rights);
 
         return $role;
-    }
-
-    /**
-     * Gets this cache class short name.
-     */
-    public function getCacheClass(): string
-    {
-        return Utils::getShortName($this->adapter);
     }
 
     /**
@@ -281,27 +268,23 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets a value indicating table display mode.
+     * Gets the display mode for table.
      */
-    public function getDisplayMode(): string
+    public function getDisplayMode(): TableView
     {
-        return (string) $this->getPropertyString(self::P_DISPLAY_MODE, self::DEFAULT_DISPLAY_MODE);
+        $value = $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_DISPLAY_MODE->value);
+
+        return TableView::tryFrom((string) $value) ?? self::DEFAULT_DISPLAY_MODE;
     }
 
     /**
      * Gets the action to trigger within the entities.
-     * <p>
-     * Possible values are:
-     * <ul>
-     * <li>'<code>edit</code>': The entity is edited.</li>
-     * <li>'<code>show</code>': The entity is show.</li>
-     * <li>'<code>none</code>': No action is triggered.</li>
-     * </ul>
-     * </p>.
      */
-    public function getEditAction(): string
+    public function getEditAction(): EntityAction
     {
-        return (string) $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_ACTION);
+        $value = $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_ACTION->value);
+
+        return EntityAction::tryFrom((string) $value) ?? self::DEFAULT_ACTION;
     }
 
     /**
@@ -313,7 +296,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the position of the flashbag messages (default: 'bottom-right').
+     * Gets the position of the flash bag messages (default: 'bottom-right').
      */
     public function getMessagePosition(): string
     {
@@ -321,7 +304,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the timeout, in milliseconds, of the flashbag messages (default: 4000 ms).
+     * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
      */
     public function getMessageTimeout(): int
     {
@@ -404,7 +387,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
         ];
 
-        // exlude keys
+        // exclude keys
         if (!empty($excluded)) {
             return \array_diff_key($result, \array_flip($excluded));
         }
@@ -530,7 +513,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function isActionEdit(): bool
     {
-        return ActionInterface::ACTION_EDIT === $this->getEditAction();
+        return EntityAction::EDIT === $this->getEditAction();
     }
 
     /**
@@ -538,7 +521,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function isActionNone(): bool
     {
-        return ActionInterface::ACTION_NONE === $this->getEditAction();
+        return EntityAction::NONE === $this->getEditAction();
     }
 
     /**
@@ -546,7 +529,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function isActionShow(): bool
     {
-        return ActionInterface::ACTION_SHOW === $this->getEditAction();
+        return EntityAction::SHOW === $this->getEditAction();
     }
 
     /**
@@ -670,6 +653,17 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         return $this->isPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
     }
 
+    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
+    {
+        if (!$this->traitSaveDeferredCacheValue($key, $value)) {
+            $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
+
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Save the given properties to the database and to the cache.
      *
@@ -706,21 +700,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Check if cache is up-to-date and if not load data from repository.
-     */
-    private function getAdapter(): CacheItemPoolInterface
-    {
-        $item = $this->adapter->getItem(self::CACHE_SAVED);
-        if (!$item->isHit() || !(bool) ($item->get())) {
-            $this->logInfo('Loaded properties from database.', $this->getLogContext());
-
-            return $this->updateAdapter();
-        }
-
-        return $this->adapter;
-    }
-
-    /**
      * Gets an item value.
      *
      * @param string $name    the item name
@@ -730,25 +709,12 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     private function getItemValue(string $name, mixed $default)
     {
-        $item = $this->getAdapter()->getItem($name);
-        if ($item->isHit()) {
+        $item = $this->getCacheItem($name);
+        if (null !== $item && $item->isHit()) {
             return $item->get();
         }
 
         return $default;
-    }
-
-    /**
-     * Gets the log context.
-     *
-     * @psalm-return array<string, string>
-     */
-    private function getLogContext(): array
-    {
-        return [
-            'service' => Utils::getShortName($this),
-            'adapter' => Utils::getShortName($this->adapter),
-        ];
     }
 
     /**
@@ -765,31 +731,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Sets a cache item value to be persisted later.
-     *
-     * @param CacheItemPoolInterface $adapter the cache adapter
-     * @param string                 $key     the key for which to return the corresponding cache item
-     * @param mixed                  $value   the value to set
-     *
-     * @return bool false if the item could not be queued or if a commit was attempted and failed; true otherwise
-     */
-    private function saveDeferredItem(CacheItemPoolInterface $adapter, string $key, mixed $value): bool
-    {
-        $item = $adapter->getItem($key);
-        $item->expiresAfter(self::CACHE_TIMEOUT)
-            ->set($value);
-
-        if (!$adapter->saveDeferred($item)) {
-            $this->logWarning("Unable to deferred persist item '$key'.", $this->getLogContext());
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Update a property without flusing changes.
+     * Update a property without fusing changes.
      *
      * @param PropertyRepository $repository the property repository
      * @param string             $name       the property name
@@ -801,7 +743,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         $property = $repository->findOneByName($name);
         if (null === $property) {
             $property = Property::create($name);
-            $this->manager->persist($property);
+            $repository->add($property, false);
         }
 
         // set value
@@ -811,26 +753,18 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     /**
      * Update the content of the cache from the repository.
      */
-    private function updateAdapter(): CacheItemPoolInterface
+    private function updateAdapter(): void
     {
-        // clear
-        $adapter = $this->adapter;
-        if (!$adapter->clear()) {
-            $this->logWarning('Error while clearing properties cache.', $this->getLogContext());
-        }
-
-        // create items
+        $this->clearCache();
         $properties = $this->manager->getRepository(Property::class)->findAll();
         foreach ($properties as $property) {
-            $this->saveDeferredItem($adapter, $property->getName(), $property->getString());
+            $this->saveDeferredCacheValue($property->getName(), $property->getString());
         }
-        $this->saveDeferredItem($adapter, self::CACHE_SAVED, true);
-
-        // save
-        if (!$adapter->commit()) {
-            $this->logWarning('Unable to commit changes to the cache.', $this->getLogContext());
+        $this->saveDeferredCacheValue(self::CACHE_SAVED, true);
+        if ($this->commitDeferredValues()) {
+            $this->logInfo($this->trans('application_service.commit_success'));
+        } else {
+            $this->logWarning($this->trans('application_service.commit_error'));
         }
-
-        return $adapter;
     }
 }

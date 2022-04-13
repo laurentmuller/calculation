@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Interfaces\IResponseInterface;
+use App\Interfaces\MimeTypeInterface;
 use App\Twig\NonceExtension;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -197,7 +197,7 @@ class ResponseListener implements EventSubscriberInterface
         ];
 
         // response interface?
-        if ($response instanceof IResponseInterface) {
+        if ($response instanceof MimeTypeInterface) {
             $csp['object-src'] = self::CSP_SELF;
             $csp['plugin-types'] = $response->getMimeType();
         }

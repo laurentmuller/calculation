@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Enums\TableView;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
@@ -25,7 +26,6 @@ use App\Service\CaptchaImageService;
 use App\Service\FakerService;
 use App\Service\SwissPostService;
 use App\Service\TaskService;
-use App\Table\AbstractTable;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
@@ -305,12 +305,14 @@ class AjaxController extends AbstractController
      */
     public function saveTable(Request $request): JsonResponse
     {
-        $view = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-        $limit = AbstractTable::getDefaultPageSize($view);
+        $view = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
+        $enum = TableView::tryFrom($view) ?? TableView::TABLE;
+        $value = $enum->value;
+        $limit = $enum->getPageSize();
 
         $response = $this->json(true);
-        $this->setCookie($response, TableInterface::PARAM_VIEW, $view);
-        $this->setCookie($response, TableInterface::PARAM_LIMIT, $limit, $view);
+        $this->setCookie($response, TableInterface::PARAM_VIEW, $value);
+        $this->setCookie($response, TableInterface::PARAM_LIMIT, $limit, $value);
 
         return $response;
     }

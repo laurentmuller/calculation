@@ -217,6 +217,9 @@ class Property extends AbstractEntity
         if ($value instanceof AbstractEntity) {
             return $this->setInteger((int) $value->getId());
         }
+        if ($value instanceof \BackedEnum) {
+            return $this->setString((string) $value->value);
+        }
 
         return $this->setString((string) $value);
     }

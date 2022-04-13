@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Response;
 
-use App\Interfaces\IResponseInterface;
+use App\Interfaces\MimeTypeInterface;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Util\Response\ResponseUtils;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @see SpreadsheetDocument
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class SpreadsheetResponse extends StreamedResponse implements IResponseInterface
+class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
 {
     /**
      * The application Microsoft Excel (OpenXML) mime type.

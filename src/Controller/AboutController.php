@@ -135,7 +135,6 @@ class AboutController extends AbstractController
     public function phpContent(Request $request, PhpInfo $info): JsonResponse
     {
         $parameters = [
-            'cache' => $this->getCacheClass(),
             'phpInfo' => $info->asHtml(),
             'extensions' => $this->getLoadedExtensions(),
             'apache' => $this->getApacheVersion($request),
@@ -247,14 +246,6 @@ class AboutController extends AbstractController
         }
 
         return false;
-    }
-
-    /**
-     * Gets the cache adapter class.
-     */
-    private function getCacheClass(): string
-    {
-        return $this->getApplication()->getCacheClass();
     }
 
     /**

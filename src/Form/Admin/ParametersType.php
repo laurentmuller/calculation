@@ -12,15 +12,15 @@ declare(strict_types=1);
 
 namespace App\Form\Admin;
 
+use App\Enums\EntityAction;
+use App\Enums\TableView;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
 use App\Form\Product\ProductListType;
 use App\Form\Type\MinStrengthType;
-use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
-use App\Interfaces\TableInterface;
 use App\Service\ApplicationService;
 use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
@@ -144,20 +144,14 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function addDisplaySection(FormHelper $helper): void
     {
         $helper->field(self::P_DISPLAY_MODE)
-            ->updateAttribute('data-default', self::DEFAULT_DISPLAY_MODE)
-            ->addChoiceType([
-                'parameters.tabular.table' => TableInterface::VIEW_TABLE,
-                'parameters.tabular.custom' => TableInterface::VIEW_CUSTOM,
-                'parameters.tabular.card' => TableInterface::VIEW_CARD,
-            ]);
+            ->updateAttribute('data-default', self::DEFAULT_DISPLAY_MODE->value)
+            ->updateOption('choice_label', static fn (TableView $choice): string => 'parameters.tabular.' . $choice->value)
+            ->addEnumType(TableView::class);
 
         $helper->field(self::P_EDIT_ACTION)
-            ->updateAttribute('data-default', self::DEFAULT_ACTION)
-            ->addChoiceType([
-                'parameters.editAction.show' => ActionInterface::ACTION_SHOW,
-                'parameters.editAction.edit' => ActionInterface::ACTION_EDIT,
-                'parameters.editAction.none' => ActionInterface::ACTION_NONE,
-            ]);
+            ->updateAttribute('data-default', self::DEFAULT_ACTION->value)
+            ->updateOption('choice_label', static fn (EntityAction $choice): string => 'parameters.editAction.' . $choice->value)
+            ->addEnumType(EntityAction::class);
     }
 
     private function addFlashbagSection(FormHelper $helper): void
@@ -224,7 +218,6 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->updateAttribute('data-default', self::DEFAULT_PANEL_CALCULATION)
             ->help('parameters.helps.' . self::P_PANEL_CALCULATION)
             ->labelClass('radio-inline')
-            // ->notRequired()
             ->updateOptions([
                 'choice_translation_domain' => false,
                 'expanded' => true,

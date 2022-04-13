@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Response;
 
-use App\Interfaces\IResponseInterface;
+use App\Interfaces\MimeTypeInterface;
 use App\Util\Response\ResponseUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @author Laurent Muller
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class CsvResponse extends StreamedResponse implements IResponseInterface
+class CsvResponse extends StreamedResponse implements MimeTypeInterface
 {
     /**
      * The CSV mime type.

@@ -27,7 +27,9 @@ class NotificationEmail extends BaseNotificationEmail
 {
     use TranslatorTrait;
 
-    public function __construct(TranslatorInterface $translator = null, Headers $headers = null, AbstractPart $body = null)
+    private ?string $footerText = null;
+
+    public function __construct(?TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
     {
         parent::__construct($headers, $body);
         $this->htmlTemplate('emails/notification.html.twig');
@@ -36,9 +38,18 @@ class NotificationEmail extends BaseNotificationEmail
         }
     }
 
+    public function getContext(): array
+    {
+        if (null !== $this->footerText) {
+            return \array_merge([
+                'footer_text' => $this->footerText,
+            ], parent::getContext());
+        }
+
+        return parent::getContext();
+    }
+
     /**
-     * {@inheritDoc}
-     *
      * @psalm-suppress InternalMethod
      */
     public function getPreparedHeaders(): Headers
@@ -54,9 +65,7 @@ class NotificationEmail extends BaseNotificationEmail
      */
     public function setFooterText(string $footerText): self
     {
-        $context = $this->getContext();
-        $context['footer_text'] = $footerText;
-        $this->context($context);
+        $this->footerText = $footerText;
 
         return $this;
     }

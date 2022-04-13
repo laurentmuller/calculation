@@ -17,9 +17,9 @@ use App\Entity\User;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
 use App\Traits\TranslatorTrait;
+use Symfony\Bridge\Twig\Mime\NotificationEmail as NotificationEmailAlias;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
@@ -45,7 +45,7 @@ class MailService
     /**
      * Send a comment.
      *
-     * @throws TransportExceptionInterface if an exception occurs while sending the comment
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface if an exception occurs while sending the comment
      */
     public function sendComment(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmail::IMPORTANCE_LOW): void
     {
@@ -63,9 +63,9 @@ class MailService
     /**
      * Send a notification.
      *
-     * @throws TransportExceptionInterface if an exception occurs while sending the notification
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface if an exception occurs while sending the notification
      */
-    public function sendNotification(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmail::IMPORTANCE_LOW): void
+    public function sendNotification(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmailAlias::IMPORTANCE_LOW): void
     {
         $notification = new NotificationEmail($this->translator);
         $notification->from($fromEmail)

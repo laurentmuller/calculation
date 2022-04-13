@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
+use App\Enums\EntityAction;
+use App\Enums\TableView;
+
 /**
  * Application service constants and default values.
  *
@@ -22,14 +25,14 @@ namespace App\Interfaces;
 interface ApplicationServiceInterface
 {
     /**
-     * The default action to trigger (string).
+     * The default action to trigger.
      */
-    public const DEFAULT_ACTION = ActionInterface::ACTION_EDIT;
+    public const DEFAULT_ACTION = EntityAction::EDIT;
 
     /**
      * The default display mode (string).
      */
-    public const DEFAULT_DISPLAY_MODE = TableInterface::VIEW_TABLE;
+    public const DEFAULT_DISPLAY_MODE = TableView::TABLE;
 
     /**
      * The default number of items displayed in the tables (integer).
@@ -37,12 +40,12 @@ interface ApplicationServiceInterface
     public const DEFAULT_LIST_LENGTH = 15;
 
     /**
-     * The default display message close button (boolean).
+     * The default display flash bag message close button (boolean).
      */
     public const DEFAULT_MESSAGE_CLOSE = true;
 
     /**
-     * The default display message icon (boolean).
+     * The default display flash bag message icon (boolean).
      */
     public const DEFAULT_MESSAGE_ICON = true;
 
@@ -52,7 +55,7 @@ interface ApplicationServiceInterface
     public const DEFAULT_MESSAGE_POSITION = 'bottom-right';
 
     /**
-     * The default display message sub-title (boolean).
+     * The default display flash bag message sub-title (boolean).
      */
     public const DEFAULT_MESSAGE_SUB_TITLE = false;
 
@@ -62,7 +65,7 @@ interface ApplicationServiceInterface
     public const DEFAULT_MESSAGE_TIMEOUT = 4000;
 
     /**
-     * The default display message title (boolean).
+     * The default display flash bag message title (boolean).
      */
     public const DEFAULT_MESSAGE_TITLE = true;
 

@@ -25,21 +25,6 @@ interface TableInterface
     public const PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
 
     /**
-     * The default page size.
-     */
-    public const PAGE_SIZE = 20;
-
-    /**
-     * The default page size for the card view.
-     */
-    public const PAGE_SIZE_CARD = 5;
-
-    /**
-     * The default page size for the custom view.
-     */
-    public const PAGE_SIZE_CUSTOM = 15;
-
-    /**
      * The column's parameter name (array of columns).
      */
     public const PARAM_COLUMNS = 'columns';
@@ -103,19 +88,4 @@ interface TableInterface
      * The dispay view parameter name (string: 'table', 'custom' or 'card').
      */
     public const PARAM_VIEW = 'view';
-
-    /**
-     * The view name to show detailed values.
-     */
-    public const VIEW_CARD = 'card';
-
-    /**
-     * The view name to show values as cards.
-     */
-    public const VIEW_CUSTOM = 'custom';
-
-    /**
-     * The view name to show values within a table (default view).
-     */
-    public const VIEW_TABLE = 'table';
 }

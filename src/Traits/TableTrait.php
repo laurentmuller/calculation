@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Enums\TableView;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractTable;
@@ -41,9 +42,10 @@ trait TableTrait
 
         try {
             // update request parameters
-            $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+            $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
             if (\is_string($view)) {
-                $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
+                $enum = TableView::tryFrom($view) ?? TableView::TABLE;
+                $this->updateRequest($request, TableInterface::PARAM_LIMIT, $enum->getPageSize(), $enum->value);
             }
 
             // check empty
@@ -73,8 +75,8 @@ trait TableTrait
             }
 
             // save results
-            $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE, $query->view);
+            $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE->value);
+            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $query->view->value);
 
             return $response;
         } catch (\Throwable $e) {

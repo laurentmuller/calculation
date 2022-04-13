@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Response;
 
-use App\Interfaces\IResponseInterface;
+use App\Interfaces\MimeTypeInterface;
 use App\Pdf\Enums\PdfDocumentOutput;
 use App\Pdf\PdfDocument;
 use App\Util\Response\ResponseUtils;
@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @see PdfDocument
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class PdfResponse extends Response implements IResponseInterface
+class PdfResponse extends Response implements MimeTypeInterface
 {
     /**
      * The application PDF mime type.

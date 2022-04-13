@@ -13,24 +13,14 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Entity action constants.
+ * Class implementing this interface provide function for download document.
  *
  * @author Laurent Muller
  */
-interface ActionInterface
+interface MimeTypeInterface
 {
     /**
-     * Edit the entity.
+     * Gets the mime type.
      */
-    public const ACTION_EDIT = 'edit';
-
-    /**
-     * No action.
-     */
-    public const ACTION_NONE = 'none';
-
-    /**
-     * Show the entity.
-     */
-    public const ACTION_SHOW = 'show';
+    public function getMimeType(): string;
 }

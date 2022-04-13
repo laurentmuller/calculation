@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -223,6 +224,19 @@ class FormHelper
     public function addEmailType(): self
     {
         return $this->add(EmailType::class);
+    }
+
+    /**
+     * Add a enum type to the builder and reset all values to default.
+     *
+     * @param string $class the enumeration class
+     * @psalm-template T of \UnitEnum
+     * @psalm-param class-string<T> $class
+     */
+    public function addEnumType(string $class): self
+    {
+        return $this->updateOption('class', $class)
+            ->add(EnumType::class);
     }
 
     /**

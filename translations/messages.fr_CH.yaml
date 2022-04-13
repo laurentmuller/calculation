@@ -25,6 +25,13 @@ admin:
     success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec
       succès.
     title: Droits d'accès
+application_service:
+  clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
+  clear_success: Le cache des propriétés a été vidé avec succès.
+  commit_error: Impossible de valider les changements dans le cache des propriétés.
+  commit_success: La validation des changements dans le cache des propriétés a été
+    effectuer avec succès.
+  deferred_error: Impossible de différer la sauvegarde de la propriété '%key%'.
 below:
   count: 'Nombre de calculations : %calculations%'
   description: Calculations contenant une marge globale inférieure à %margin%.

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\AbstractEntity;
+use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Traits\MathTrait;
@@ -110,11 +111,12 @@ abstract class AbstractTable implements SortModeInterface
         $query->id = $this->getParamId($request);
         $query->callback = $request->isXmlHttpRequest();
         $query->search = (string) $this->getRequestValue($request, TableInterface::PARAM_SEARCH, '', false);
-        $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE, false);
+        $view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableView::TABLE->value, false);
+        $query->view = TableView::tryFrom($view) ?? TableView::TABLE;
 
         // limit, offset and page
-        $defaultSize = self::getDefaultPageSize($query->view);
-        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, $defaultSize, false, $query->view);
+        $defaultSize = $query->view->getPageSize();
+        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, $defaultSize, false, $query->view->value);
         $query->offset = (int) $this->getRequestValue($request, TableInterface::PARAM_OFFSET, 0, false);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
@@ -127,18 +129,6 @@ abstract class AbstractTable implements SortModeInterface
         $query->order = (string) $this->getRequestValue($request, TableInterface::PARAM_ORDER, $query->order);
 
         return $query;
-    }
-
-    /**
-     * Gets the default page size for the given view.
-     */
-    public static function getDefaultPageSize(string $view): int
-    {
-        return match ($view) {
-            TableInterface::VIEW_CARD => TableInterface::PAGE_SIZE_CARD,
-            TableInterface::VIEW_CUSTOM => TableInterface::PAGE_SIZE_CUSTOM,
-            default => TableInterface::PAGE_SIZE,
-        };
     }
 
     /**
@@ -372,7 +362,7 @@ abstract class AbstractTable implements SortModeInterface
             TableInterface::PARAM_SORT => $query->sort,
             TableInterface::PARAM_ORDER => $query->order,
             TableInterface::PARAM_OFFSET => $query->offset,
-            TableInterface::PARAM_VIEW => $query->view,
+            TableInterface::PARAM_VIEW => $query->view->value,
             TableInterface::PARAM_LIMIT => $limit,
         ], $results->params);
 

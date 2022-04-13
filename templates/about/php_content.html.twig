@@ -6,7 +6,6 @@
         <tbody>
             {{ tools.headerInfo('Configuration') }}
             {% if apache -%}{{ tools.rowInfo('Apache Version', apache) }}{%- endif %}
-            {{ tools.rowInfo('Cache Adapter', cache) }}
             {{ tools.rowInfo('Loaded Extensions', extensions) }}
         </tbody>
     </table>

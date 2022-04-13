@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
-use App\Interfaces\TableInterface;
 
 /**
  * Contains the data query parameters.
@@ -40,7 +40,7 @@ class DataQuery implements SortModeInterface
     /**
      * The maximum number of results to retrieve (the "limit").
      */
-    public int $limit = TableInterface::PAGE_SIZE;
+    public int $limit;
 
     /**
      * The position of the first result to retrieve (the "offset").
@@ -70,7 +70,16 @@ class DataQuery implements SortModeInterface
     /**
      * The view ('table', 'card' or 'custom').
      */
-    public string $view = TableInterface::VIEW_TABLE;
+    public TableView $view;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->view = TableView::TABLE;
+        $this->limit = $this->view->getPageSize();
+    }
 
     /**
      * Adds a custom data to this list of custom datas.
@@ -103,7 +112,7 @@ class DataQuery implements SortModeInterface
      */
     public function isViewCard(): bool
     {
-        return TableInterface::VIEW_CARD === $this->view;
+        return TableView::CARD === $this->view;
     }
 
     /**
@@ -111,7 +120,7 @@ class DataQuery implements SortModeInterface
      */
     public function isViewCustom(): bool
     {
-        return TableInterface::VIEW_CUSTOM === $this->view;
+        return TableView::CUSTOM === $this->view;
     }
 
     /**
@@ -119,6 +128,6 @@ class DataQuery implements SortModeInterface
      */
     public function isViewTable(): bool
     {
-        return TableInterface::VIEW_TABLE === $this->view;
+        return TableView::TABLE === $this->view;
     }
 }

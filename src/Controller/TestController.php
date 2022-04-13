@@ -54,6 +54,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -139,7 +140,7 @@ class TestController extends AbstractController
                     $this->successTrans('user.comment.success');
 
                     return $this->redirectToHomePage();
-                } catch (\Exception $e) {
+                } catch (TransportExceptionInterface $e) {
                     $message = $this->trans('user.comment.error');
                     $context = Utils::getExceptionContext($e);
                     $logger->error($message, $context);

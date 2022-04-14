@@ -51,6 +51,7 @@ class IndexController extends AbstractController
         $application = $this->getApplication();
         $restrict = $this->getRestrict($request);
         $user = $restrict ? $this->getUser() : null;
+        $application->updateCache();
 
         $parameters = [
             'min_margin' => $application->getMinMargin(),

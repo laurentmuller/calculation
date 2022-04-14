@@ -66,12 +66,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
         $this->setDebug($kernel->isDebug());
         $this->setEnvironment($kernel->getEnvironment());
-
-        // load if not cached
-        $saved = (bool) $this->getCacheValue(self::CACHE_SAVED, false);
-        if (!$saved) {
-            $this->updateAdapter();
-        }
     }
 
     /**
@@ -703,6 +697,16 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function setProperty(string $name, mixed $value): self
     {
         return $this->setProperties([$name => $value]);
+    }
+
+    /**
+     * Update the cache if needed.
+     */
+    public function updateCache(): void
+    {
+        if (!$this->getCacheValue(self::CACHE_SAVED, false)) {
+            $this->updateAdapter();
+        }
     }
 
     /**

@@ -773,8 +773,6 @@ parameters:
     customer_phone: Téléphone
     customer_url: Site internet
     customer_zip_city: NPA / Localité
-    date_format: Format des dates
-    decimal_separator: Séparateur de décimals
     default_category: Catégorie
     default_product: Article
     default_product_edit: Editer l'article lors de l'affichage de la nouvelle calculation
@@ -783,7 +781,6 @@ parameters:
     display_captcha: Code de contrôle
     display_mode: Mode d'affichage
     edit_action: Action
-    grouping_separator: Séparateur de milliers
     message_auto_close: Fermer automatiquement
     message_close: Fermer
     message_icon: Icône
@@ -799,17 +796,24 @@ parameters:
     qr_code: Code QR sur les calculations
     time_format: Format des heures
   group_customer: Client
+  group_customer_help: Données du client utilisées pour l'impression des documents.
   group_default: Valeurs par défaut
+  group_default_help: Valeurs par défaut utilisées pour la création de nouveaux éléments
+    et pour le calcul des marges.
   group_display: Affichage
+  group_display_help: Mode d'affichage et d'édition des élements.
   group_home: Page d'accueil
-  group_home_help: Les élements sélectionnés sont afficher sur la page d'accueil.
+  group_home_help: Elements affichés sur la page d'accueil.
   group_message: Messages
+  group_message_help: Messages affichés dans l'application.
   group_options: Options
-  group_password: Options du mot de passe
+  group_options_help: Autres options utilisées par l'application.
   group_product: Article par défaut
-  group_product_help: L'article sélectionné est ajouté automatiquement à chaque nouvelle
-    calculation.
+  group_product_help: Article à ajouter automatiquement lors de la création d'une
+    nouvelle calculation.
   group_security: Sécurité
+  group_security_help: Options de sécurité utilisées lors de la connection à l'application
+    et de la définition du mot de passe.
   helps:
     panel_calculation: Nombre de calculations à afficher.
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).

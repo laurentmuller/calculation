@@ -28,6 +28,7 @@ function displayNotification() {
     // get random text
     const url = $("form").data("random");
     $.getJSON(url, function (response) {
+        let title = $('.card-title').text();
         if (response.result) {
             // content
             const content = '<p class="m-0 p-0">' + response.content + '</p>';
@@ -48,7 +49,6 @@ function displayNotification() {
             const timeout = $('#parameters_message_timeout').intVal();
 
             // title
-            let title = $('.card-title').text();
             if (!$('#parameters_message_title').isChecked()) {
                title = null;
             }
@@ -76,12 +76,11 @@ function displayNotification() {
             Toaster.notify(type, content, title, options);
 
         } else {
-            const title = $('form').data('title');
             const message = $('form').data('failure');
             Toaster.danger(message, title, $("#flashbags").data());
         }
     }).fail(function () {
-        const title = $('form').data('title');
+        const title = $('.card-title').text();
         const message = $('form').data('failure');
         Toaster.danger(message, title, $("#flashbags").data());
     });

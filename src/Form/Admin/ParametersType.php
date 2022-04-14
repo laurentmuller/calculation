@@ -21,6 +21,7 @@ use App\Form\Product\ProductListType;
 use App\Form\Type\MinStrengthType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\StrengthInterface;
 use App\Service\ApplicationService;
 use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
@@ -253,7 +254,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
 
         $helper->field(self::P_MIN_STRENGTH)
             ->label('password.minstrength')
-            ->updateAttribute('data-default', -1)
+            ->updateAttribute('data-default', StrengthInterface::LEVEL_NONE)
             ->add(MinStrengthType::class);
 
         // password options

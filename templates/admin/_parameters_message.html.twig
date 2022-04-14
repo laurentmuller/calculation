@@ -1,0 +1,20 @@
+<div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
+    <div class="mt-1">
+        <small class="mb-2 form-text text-muted">{{ 'parameters.group_message_help'|trans }}</small>
+        <div class="form-row">
+            <div class="col-md-6">
+                {{ form_row(form.message_position) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.message_timeout) }}
+            </div>
+        </div>
+        <div class="form-row flex-column flex-md-row justify-content-start">
+            {{ form_row(form.message_icon) }}
+            {{ form_row(form.message_title) }}
+            {{ form_row(form.message_sub_title) }}
+            {{ form_row(form.message_close) }}
+            {{ form_row(form.message_progress) }}
+        </div>
+    </div>
+</div>

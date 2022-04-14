@@ -22,7 +22,7 @@
         {{ _self.output_dropdown('state', 0, stateid, 'calculation.list.state_all_text'|trans) }}
         {% for state in customData.states %}
             {% if editable != state.editable %}
-                {{ _self.output_dropdown_header((state.editable ?  'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true) }}
+                {{ _self.output_dropdown_header((state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true) }}
                 {% set editable = state.editable %}
             {% endif %}
             {{ _self.output_dropdown('state', state.id, stateid, state.code) }}

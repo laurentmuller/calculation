@@ -38,30 +38,30 @@ jobs:
         if: always() && steps.install.outcome == 'success'
         run: wget https://get.symfony.com/cli/installer -O - | bash
 
-      - name: Lint YAML files
+      - name: Lint YAML
         if: always() && steps.install.outcome == 'success'
         run: 'php bin/console lint:yaml translations config .github/workflows --parse-tags'
 
-      - name: Lint Twig templates
+      - name: Lint Twig
         if: always() && steps.install.outcome == 'success'
         run: 'php bin/console lint:twig --env=prod templates'
 
-      - name: Lint XLIFF translations
+      - name: Lint XLIFF
         if: always() && steps.install.outcome == 'success'
         run: 'php bin/console lint:xliff translations'
 
-      - name: Lint Parameters and Services
+      - name: Lint Container
         if: always() && steps.install.outcome == 'success'
         run: 'php bin/console lint:container'
 
-      - name: Lint Doctrine entities
+      - name: Schema validate
         if: always() && steps.install.outcome == 'success'
         run: 'php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction'
 
-      - name: Lint Composer config
+      - name: Composer validate
         if: always() && steps.install.outcome == 'success'
         run: composer validate --strict
 
-      - name: Check if any dependencies are compromised
+      - name: Check Security
         if: always() && steps.install.outcome == 'success'
         run: /home/runner/.symfony/bin/symfony check:security

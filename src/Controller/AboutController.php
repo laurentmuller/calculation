@@ -42,8 +42,7 @@ class AboutController extends AbstractController
      */
     public function about(): Response
     {
-        return $this->renderForm('about/about.html.twig', [
-            'customer' => $this->getApplication()->getCustomer(), ]);
+        return $this->renderForm('about/about.html.twig');
     }
 
     /**

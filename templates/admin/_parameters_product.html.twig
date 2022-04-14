@@ -1,0 +1,16 @@
+<div class="toggle-icon collapse" id="product" data-parent="#parent_accordion">
+    <div class="mt-1">
+        <small class="mb-2 form-text text-muted">{{ 'parameters.group_product_help'|trans }}</small>
+        <div class="form-row">
+            <div class="col-md-8">
+                {{ form_row(form.default_product) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.default_product_quantity) }}
+            </div>
+        </div>
+        <div class="form-row ml-0">
+            {{ form_row(form.default_product_edit) }}
+        </div>
+    </div>
+</div>

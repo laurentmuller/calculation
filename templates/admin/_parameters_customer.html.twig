@@ -1,0 +1,16 @@
+<div class="toggle-icon collapse show" id="customer" data-parent="#parent_accordion" aria-expanded="true">
+    <div class="mt-1">
+        <small class="mb-2 form-text text-muted">{{ 'parameters.group_customer_help'|trans }}</small>
+        {{ form_row(form.customer_name) }}
+        {{ form_row(form.customer_address) }}
+        {{ form_row(form.customer_zip_city) }}
+        <div class="form-row mt-1">
+            <div class="col-md-6">{{ form_row(form.customer_phone) }}</div>
+            <div class="col-md-6">{{ form_row(form.customer_fax) }}</div>
+        </div>
+        <div class="form-row mt-1">
+            <div class="col-md-6">{{ form_row(form.customer_email) }}</div>
+            <div class="col-md-6">{{ form_row(form.customer_url) }}</div>
+        </div>
+    </div>
+</div>

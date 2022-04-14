@@ -15,7 +15,7 @@
 </button>
 {%- endmacro %}
 
-{% macro output_dropdown_header(text, translate = false) -%}
+{% macro output_dropdown_header(text, translate=false) -%}
     {{ _self.item_separator() }}
     <h6 class="dropdown-header">{{ (translate ? text|trans : text)|upper }}</h6>
 {%- endmacro %}

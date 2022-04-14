@@ -66,6 +66,12 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
         $this->setDebug($kernel->isDebug());
         $this->setEnvironment($kernel->getEnvironment());
+
+        // load if not cached
+        $saved = (bool) $this->getCacheValue(self::CACHE_SAVED, false);
+        if (!$saved) {
+            $this->updateAdapter();
+        }
     }
 
     /**

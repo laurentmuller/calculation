@@ -44,7 +44,7 @@ jobs:
 
       - name: Lint Twig
         if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console lint:twig --env=prod templates'
+        run: 'php bin/console lint:twig --env=prod templates -v'
 
       - name: Lint XLIFF
         if: always() && steps.install.outcome == 'success'

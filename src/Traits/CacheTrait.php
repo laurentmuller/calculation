@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,17 +29,22 @@ trait CacheTrait
     protected ?CacheItemPoolInterface $adapter = null;
 
     /**
+     * The reserved characters.
+     *
+     * @var string[]|null
+     */
+    private static ?array $reservedCharacters = null;
+
+    /**
      * Remove all reserved characters that cannot be used in a key.
      */
     public function cleanKey(string $key): string
     {
-        /** @var string[]|null $reservedCharacters */
-        static $reservedCharacters;
-        if (!$reservedCharacters) {
-            $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
+        if (null === self::$reservedCharacters) {
+            self::$reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
         }
 
-        return \str_replace($reservedCharacters, '_', $key);
+        return \str_replace(self::$reservedCharacters, '_', $key);
     }
 
     /**
@@ -74,7 +79,7 @@ trait CacheTrait
     public function deleteCacheItems(array $keys): bool
     {
         if (null !== $this->adapter) {
-            $keys = \array_map(fn (string $key) => $this->cleanKey($key), $keys);
+            $keys = \array_map(fn (string $key): string => $this->cleanKey($key), $keys);
 
             return $this->adapter->deleteItems($keys);
         }
@@ -87,31 +92,7 @@ trait CacheTrait
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
-        if (null !== $this->adapter) {
-            return $this->adapter->getItem($this->cleanKey($key));
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns a traversable set of cache items.
-     *
-     * @param string[] $keys An indexed array of keys of items to retrieve
-     *
-     * @return array|iterable A traversable collection of Cache Items keyed by the cache keys of
-     *                        each item. A Cache item will be returned for each key, even if that
-     *                        key is not found.
-     */
-    public function getCacheItems(array $keys)
-    {
-        if (null !== $this->adapter) {
-            $keys = \array_map(fn (string $key) => $this->cleanKey($key), $keys);
-
-            return $this->adapter->getItems($keys);
-        }
-
-        return []; // @phpstan-ignore-line
+        return $this->adapter?->getItem($this->cleanKey($key));
     }
 
     /**

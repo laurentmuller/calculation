@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: PHPUnit with PHP 8.1
+    # name: PHPUnit with PHP 8.1
     runs-on: ubuntu-latest
 
     steps:

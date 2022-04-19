@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -75,7 +75,7 @@ final class FileUtils
      * Atomically dumps content into a file.
      *
      * @param \SplFileInfo|string $file    the file to write to
-     * @param string              $content the data to write into the file
+     * @param string|resource     $content the data to write into the file
      *
      * @return bool true on success, false on failure
      */

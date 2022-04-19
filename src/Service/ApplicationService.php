@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -717,7 +717,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @return mixed the value, if hit; the default value otherwise
      */
-    private function getItemValue(string $name, mixed $default)
+    private function getItemValue(string $name, mixed $default): mixed
     {
         $item = $this->getCacheItem($name);
         if (null !== $item && $item->isHit()) {

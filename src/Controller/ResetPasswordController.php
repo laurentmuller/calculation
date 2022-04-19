@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -184,7 +184,7 @@ class ResetPasswordController extends AbstractController
         try {
             $mailer->send($email);
             $this->setTokenObjectInSession($resetToken);
-        } catch (TransportException $e) {
+        } catch (TransportExceptionInterface $e) {
             $this->helper->removeResetRequest($resetToken->getToken());
             if ($request->hasSession()) {
                 $exception = $service->mapException($e);

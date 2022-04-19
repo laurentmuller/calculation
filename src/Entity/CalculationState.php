@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -114,8 +114,7 @@ class CalculationState extends AbstractEntity
     /**
      * Gets the calculations.
      *
-     * @return Calculation[]|Collection
-     * @psalm-return Collection<int, Calculation>
+     * @return Collection<int, Calculation>
      */
     public function getCalculations(): Collection
     {

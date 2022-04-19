@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -47,7 +47,7 @@ class MailService
      *
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface if an exception occurs while sending the comment
      */
-    public function sendComment(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmail::IMPORTANCE_LOW): void
+    public function sendComment(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmailAlias::IMPORTANCE_LOW): void
     {
         $importance = $this->trans("importance.full.$importance");
         $message = "<p style=\"font-weight: bold;\">$importance</p>$message";

@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -51,9 +51,6 @@ trait RightsTrait
      */
     protected ?array $rights = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): ?array
     {
         if ($this->nameExists($name)) {
@@ -63,17 +60,12 @@ trait RightsTrait
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __isset(string $name): bool
     {
         return $this->nameExists($name);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param int[]|null $value
      */
     public function __set(string $name, $value): void

@@ -45,14 +45,14 @@ security:
                 secure: false
 
     access_control:
-        - { path: ^/login,                 roles: PUBLIC_ACCESS  }
-        - { path: ^/resetting,             roles: PUBLIC_ACCESS  }
-        - { path: ^/reset-password,        roles: PUBLIC_ACCESS  }
-        # - { path: ^/register$,             roles: PUBLIC_ACCESS  }
-        - { path: ^/about/policy,          roles: PUBLIC_ACCESS  }
-        - { path: ^/about/licence,         roles: PUBLIC_ACCESS  }
-        - { path: ^/ajax/checkuser,        roles: PUBLIC_ACCESS  }
-        - { path: ^/ajax/captcha/image,    roles: PUBLIC_ACCESS  }
-        - { path: ^/ajax/captcha/validate, roles: PUBLIC_ACCESS  }
-        - { path: ^/admin/,                roles: ROLE_ADMIN }
-        - { path: ^/,                      roles: ROLE_USER }
+        - { path: ^/login,                 roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/resetting,             roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/reset-password,        roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        # - { path: ^/register$,             roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        - { path: ^/about/policy,          roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        - { path: ^/about/licence,         roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        - { path: ^/ajax/checkuser,        roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        - { path: ^/ajax/captcha/image,    roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        - { path: ^/ajax/captcha/validate, roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        - { path: ^/admin/,                roles: ROLE_ADMIN,    requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/,                      roles: ROLE_USER,     requires_channel: '%env(SECURE_SCHEME)%' }

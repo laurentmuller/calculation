@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -51,8 +51,8 @@ class ProfileChangePasswordType extends AbstractEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'constraints' => [
-                new Callback(function (User $user, ExecutionContextInterface $context): void {
-                    $this->validate($user, $context);
+                new Callback(function (User $_user, ExecutionContextInterface $context): void {
+                    $this->validate($context);
                 }),
             ],
         ]);
@@ -67,9 +67,38 @@ class ProfileChangePasswordType extends AbstractEntityType
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function addFormFields(FormHelper $helper): void
+    {
+        // current password
+        $helper->field('current_password')
+            ->label('user.password.current')
+            ->constraints(new NotBlank(), new UserPassword(['message' => 'current_password.invalid']))
+            ->notMapped()
+            ->autocomplete('current-password')
+            ->add(PasswordType::class);
+
+        // new password
+        $helper->field('plainPassword')
+            ->notMapped()
+            ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
+
+        // check password
+        $helper->field('checkPassword')
+            ->label('user.change_password.check_password')
+            ->notRequired()
+            ->notMapped()
+            ->addCheckboxType();
+
+        // username for ajax validation
+        $helper->field('username')->addHiddenType();
+    }
+
+    /**
      * Conditional validation depending on the check password checkbox.
      */
-    public function validate(User $user, ExecutionContextInterface $context): void
+    private function validate(ExecutionContextInterface $context): void
     {
         /** @var Form $root */
         $root = $context->getRoot();
@@ -92,34 +121,5 @@ class ProfileChangePasswordType extends AbstractEntityType
         if ($violations instanceof ConstraintViolationList && $violations->count() > 0) {
             $password->addError(new FormError((string) $violations));
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function addFormFields(FormHelper $helper): void
-    {
-        // current password
-        $helper->field('current_password')
-            ->label('user.password.current')
-            ->constraints(new NotBlank(), new UserPassword(['message' => 'current_password.invalid']))
-            ->notMapped()
-            ->autocomplete('current-password')
-            ->add(PasswordType::class);
-
-        // new password
-        $helper->field('plainPassword')
-            ->notMapped()
-            ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
-
-        // username for ajax validation
-        $helper->field('username')->addHiddenType();
-
-        // check password
-        $helper->field('checkPassword')
-            ->label('user.change_password.check_password')
-            ->notRequired()
-            ->notMapped()
-            ->addCheckboxType();
     }
 }

@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -132,9 +132,8 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      *
      * @param \Closure $p the predicate used for filtering
      *
-     * @return TaskItem[]|Collection the collection with the results of the filter operation
+     * @return Collection<int, TaskItem>
      * @psalm-param Closure(TaskItem=):bool $p
-     * @psalm-return Collection<int, TaskItem>
      */
     public function filter(\Closure $p): Collection
     {
@@ -150,8 +149,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
     }
 
     /**
-     * @return TaskItem[]|Collection
-     * @psalm-return Collection<int, TaskItem>
+     * @return Collection<int, TaskItem>
      */
     public function getItems(): Collection
     {

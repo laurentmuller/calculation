@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -142,9 +142,8 @@ class AkismetService extends AbstractHttpClientService
 
                 'comment_content' => $content,
                 'comment_type' => 'contact-form',
-                'comment_author' => $user->getUserIdentifier(), // 'viagra-test-123',
+                'comment_author' => $user->getUserIdentifier(),
                 'comment_author_email' => $user->getEmail(),
-                'comment_date_gmt' => (new \DateTime())->format(\DateTimeInterface::ISO8601),
 
                 'blog' => $request->getSchemeAndHttpHost(),
                 'blog_lang' => $request->getLocale(),

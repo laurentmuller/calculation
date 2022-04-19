@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ declare(strict_types=1);
 $comment = <<<COMMENT
     This file is part of the Calculation package.
 
-    (c) bibi.nu. <bibi@bibi.nu>
+    (c) bibi.nu <bibi@bibi.nu>
 
     For the full copyright and license information, please view the LICENSE
     file that was distributed with this source code.
@@ -23,7 +23,6 @@ $rules = [
     // --------------------------------------------------------------
     //  Rule sets
     // --------------------------------------------------------------
-
     '@Symfony' => true,
     '@Symfony:risky' => true,
     '@PHP80Migration' => true,
@@ -34,7 +33,6 @@ $rules = [
     // --------------------------------------------------------------
     //  Rules override
     // --------------------------------------------------------------
-
     'method_chaining_indentation' => true,
     'native_function_invocation' => ['include' => ['@internal', 'all']],
     'final_internal_class' => true,
@@ -60,5 +58,4 @@ $config = new PhpCsFixer\Config();
 return $config
     ->setRiskyAllowed(true)
     ->setFinder($finder)
-    ->setUsingCache(false)
     ->setRules($rules);

@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -130,8 +130,7 @@ class TaskService implements \JsonSerializable
     /**
      * Gets the selected task items.
      *
-     * @return Collection|TaskItem[]
-     * @psalm-return Collection<int, TaskItem>
+     * @return Collection<int, TaskItem>
      */
     public function getTaskItems(): Collection
     {
@@ -246,12 +245,9 @@ class TaskService implements \JsonSerializable
      */
     private function parseRequest(Request $request): array
     {
-        /** @var int[]|null $items */
+        /** @var int[] $items */
         $items = Utils::getRequestInputBag($request)->all('items');
-        if (\is_array($items)) {
-            return \array_map('intval', $items);
-        }
 
-        return [];
+        return \array_map('intval', $items);
     }
 }

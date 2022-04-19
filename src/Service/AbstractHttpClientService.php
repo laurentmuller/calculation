@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -172,13 +172,13 @@ abstract class AbstractHttpClientService
     /**
      * Gets the value from this cache for the given URL.
      *
-     * @param string         $url     The URL for which to return the corresponding value
-     * @param mixed|callable $default The default value to return or a callable function to get the default value.
-     *                                If the callable function returns a value, this value is saved to the cache.
+     * @param string $url     The URL for which to return the corresponding value
+     * @param mixed  $default The default value to return or a callable function to get the default value.
+     *                        If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
      */
-    protected function getUrlCacheValue(string $url, $default = null): mixed
+    protected function getUrlCacheValue(string $url, mixed $default = null): mixed
     {
         $key = $this->getUrlKey($url);
 

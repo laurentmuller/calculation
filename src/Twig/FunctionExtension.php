@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -171,7 +171,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Output a script source tag with a nonce value.
      *
-     * @param Environment $env         the Twig environnement
+     * @param Environment $env         the Twig environment
      * @param string      $path        a public path
      * @param array       $parameters  additional parameters
      * @param string|null $packageName the name of the asset package to use

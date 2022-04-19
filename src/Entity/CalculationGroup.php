@@ -2,7 +2,7 @@
 /*
  * This file is part of the Calculation package.
  *
- * (c) bibi.nu. <bibi@bibi.nu>
+ * (c) bibi.nu <bibi@bibi.nu>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -167,8 +167,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     /**
      * Get the calculation categories.
      *
-     * @return CalculationCategory[]|Collection
-     * @psalm-return Collection<int, CalculationCategory>
+     * @return Collection<int, CalculationCategory>
      */
     public function getCategories(): Collection
     {

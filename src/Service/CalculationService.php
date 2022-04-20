@@ -189,10 +189,8 @@ final class CalculationService
         // create groups
         $groups = [];
         foreach ($item_groups as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-            if (!$group = $this->getGroup($key)) {
+            // check
+            if (empty($value) || null === ($group = $this->getGroup($key))) {
                 continue;
             }
 

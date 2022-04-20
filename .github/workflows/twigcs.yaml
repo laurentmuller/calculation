@@ -32,7 +32,7 @@ jobs:
       - name: Download dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin friendsoftwig/twigcs install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-source
+          composer bin twigcs install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-source
 
       - name: Run Twigcs
         run: vendor/bin/twigcs --severity error --display blocking

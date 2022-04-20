@@ -141,7 +141,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @psalm-param array{
+     * @param array{
      *      id: int|null,
      *      username: string|null,
      *      password: string|null

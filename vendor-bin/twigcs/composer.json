@@ -1,0 +1,12 @@
+{
+    "require" : {
+        "php": "^8.1",
+        "friendsoftwig/twigcs": "dev-master"
+    },
+    "config" : {
+        "preferred-install" : {
+            "*" : "dist"
+       },
+       "sort-packages" : true
+    }
+}

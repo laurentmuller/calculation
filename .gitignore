@@ -8,15 +8,14 @@ symfony.lock
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> symfony/phpunit-bridge ###
+###> phpunit ###
 .phpunit
 .phpunit.result.cache
 /phpunit.xml
 /tests/Data/db_test.sqlite
-###< symfony/phpunit-bridge ###
+###< phpunit ###
 
 ###> application ###
-/deploy/
 /public/images/users/
 /public/js/vendor
 /resources/data/swiss.sqlite
@@ -27,7 +26,9 @@ symfony.lock
 /.idea
 ###< phpstorm ###
 
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
+###> deploy ###
+/env.ini
+/deploy.ini
+/deployment.phar
+/deploy/
+###< deploy ###

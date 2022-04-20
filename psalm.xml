@@ -3,7 +3,9 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         allowStringToStandInForClass="true"
+        findUnusedVariablesAndParams="true"
         findUnusedPsalmSuppress="true"
+        findUnusedCode="true"
         resolveFromConfigFile="true"
         phpVersion="8.1"
         errorLevel="1">

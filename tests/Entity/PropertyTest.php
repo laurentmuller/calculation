@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\Property;
 
 /**
- * Unit test for {@link App\Entity\Property} class.
+ * Unit test for {@link Property} class.
  *
  * @author Laurent Muller
  */

@@ -18,15 +18,15 @@ namespace App\Enums;
 enum TableView: string
 {
     /*
-     * The view name to show detailed values.
+     * Show detailed values.
      */
     case CARD = 'card';
     /*
-     * The view name to show values as cards.
+     * Show values as cards.
      */
     case CUSTOM = 'custom';
     /*
-     * The view name to show values within a table (default view).
+     * Show values within a table (default view).
      */
     case TABLE = 'table';
     /**
@@ -35,9 +35,9 @@ enum TableView: string
     public function getPageSize(): int
     {
         return match ($this) {
-            self::TABLE => 20,
             self::CARD => 5,
-            self::CUSTOM => 15
+            self::CUSTOM => 15,
+            self::TABLE => 20
         };
     }
 }

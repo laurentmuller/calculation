@@ -220,8 +220,8 @@ class CalculationsReport extends AbstractArrayReport
         $style = $this->getMarginStyle($c);
 
         $table->startRow()
-            ->add(FormatUtils::formatId((int) $c->getId()))
-            ->add(FormatUtils::formatDate($c->getDate()));
+            ->add($c->getFormattedId())
+            ->add($c->getFormattedDate());
 
         if (!$groupByState) {
             $table->add($c->getStateCode());

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Tests\ServiceTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,6 +23,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LogControllerTest extends AbstractControllerTest
 {
+    use ServiceTrait;
+
     /**
      * {@inheritDoc}
      */
@@ -29,8 +32,7 @@ class LogControllerTest extends AbstractControllerTest
     {
         parent::setUp();
 
-        /** @var LoggerInterface $logger */
-        $logger = static::getContainer()->get(LoggerInterface::class);
+        $logger = $this->getService(LoggerInterface::class);
         $logger->info('LogControllerTest: A message for testing purposes.');
     }
 

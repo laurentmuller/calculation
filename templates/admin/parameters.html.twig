@@ -1,67 +1,19 @@
-{# See http://symfony.com/doc/current/cookbook/form/form_customization.html#how-to-customize-an-individual-field #}
-{% extends 'cards/card_edit.html.twig' %}
-{% form_theme form with _self %}
-
-{# macros #}
-{% macro collapseLine(href, form, expanded=false) %}
-{%- set name = ('parameters.group_' ~ href)|trans -%}
-{%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
-{%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
-{%- set icon = expanded ? 'fa-caret-down' : 'fa-caret-left' -%}
-<div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
-    <a href="#{{ href }}" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">
-        {{- name -}}
-    </a>
-    <a href="#{{ href }}" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}">
-        <i class="fa-solid fa-fw fa-lg {{ icon }}"></i>
-    </a>
-</div>
-{% include 'admin/_parameters_' ~ href ~ '.html.twig' with {'form': form} %}
-{% endmacro %}
-
-{# customized fields #}
-{% block _parameters_message_timeout_widget -%}
-<div class="input-group">
-    {{- block('choice_widget') -}}
-    <div class="input-group-append d-print-none">
-        <button class="btn btn-notify btn-outline-secondary" type="button">{{ 'parameters.action_test'|trans }}</button>
-    </div>
-</div>
-{%- endblock %}
+{% extends 'parameters/_parameters.html.twig' %}
 
 {# parameters #}
-{%- set cancel_path = path('homepage') -%}
 {%- set title = 'parameters.title' -%}
 {%- set title_icon = 'cogs' -%}
 {%- set title_description = 'parameters.description' -%}
-{%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
-{%- set form_attr = form_attr|default({})|merge({'data-random': url('ajax_random_text'), 'data-failure': 'parameters.failure'|trans}) -%}
 
-{% block card_body -%}
-<div class="accordion" id="parent_accordion">
-    {{ _self.collapseLine('customer', form, true) }}
-    {{ _self.collapseLine('default', form) }}
-    {{ _self.collapseLine('product', form) }}
-    {{ _self.collapseLine('display', form) }}
-    {{ _self.collapseLine('message', form) }}
-    {% if super_admin %}
-        {{ _self.collapseLine('home', form) }}
-        {{ _self.collapseLine('options', form) }}
-        {{ _self.collapseLine('security', form) }}
-    {% endif %}
-</div>
-{%- endblock %}
-
-{% block actions_form -%}
-{{ parent() }}
-<button type="button" class="btn btn-form btn-default btn-outline-success">{{ 'theme.default'|trans }}</button>
-{%- endblock %}
-
-{% block javascripts %}
-{% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/application/parameters_edit.js') }}
-{% else %}
-{{ asset_js('js/parameters_edit.js') }}
+{% block sections -%}
+{{ _self.collapseLine('customer', form, true) }}
+{{ _self.collapseLine('default', form) }}
+{{ _self.collapseLine('product', form) }}
+{{ _self.collapseLine('display', form) }}
+{{ _self.collapseLine('message', form) }}
+{% if super_admin %}
+    {{ _self.collapseLine('home', form) }}
+    {{ _self.collapseLine('options', form) }}
+    {{ _self.collapseLine('security', form) }}
 {% endif %}
-{% endblock %}
+{%- endblock %}

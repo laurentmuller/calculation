@@ -568,7 +568,7 @@ class PdfTableBuilder
 
         // cell border
         $border = $style->getBorder()->isInherited() ? $this->border : $style->getBorder();
-        if ($border->isRectangleStyle()) {
+        if ($border->isDrawable()) {
             $this->drawCellBorder($parent, $index, clone $bounds, $border);
             $parent->SetXY($x, $y);
         }

@@ -45,7 +45,7 @@ trait FileTrait
      */
     protected function chmod(string $filename, int $mode, bool $recursive = true): void
     {
-        $this->getFilesystem()->chmod($filename, $mode, 0000, $recursive);
+        $this->getFilesystem()->chmod($filename, $mode, 0, $recursive);
     }
 
     /**

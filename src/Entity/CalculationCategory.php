@@ -96,8 +96,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
 
     /**
      * Add an item.
-     *
-     * @param CalculationItem $item the item to add
      */
     public function addItem(CalculationItem $item): self
     {
@@ -111,8 +109,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
 
     /**
      * Checks whether the given item is contained within this collection of items.
-     *
-     * @param CalculationItem $item the item to search for
      *
      * @return bool true if this collection contains the item, false otherwise
      */
@@ -223,8 +219,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
 
     /**
      * Remove an item.
-     *
-     * @param CalculationItem $item the item to remove
      */
     public function removeItem(CalculationItem $item): self
     {

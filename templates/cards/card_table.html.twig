@@ -51,7 +51,7 @@
 </button>
 {%- set active = (column.field == sort and 'desc' == order) ? ' active' : '' -%}
 <button type="button" class="dropdown-item dropdown-menu-sort{{ active }}" data-sort="{{ column.field }}" data-order="desc">
-    {{- icons.icon('fa-fw fa-sort-' ~ icon ~ '-down', 'list.sort_desscending_title', null, {'%name%': column.title|trans}) -}}
+    {{- icons.icon('fa-fw fa-sort-' ~ icon ~ '-down', 'list.sort_descending_title', null, {'%name%': column.title|trans}) -}}
 </button>
 {%- endmacro %}
 

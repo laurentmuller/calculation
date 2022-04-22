@@ -35,11 +35,6 @@ interface ApplicationServiceInterface
     public const DEFAULT_DISPLAY_MODE = TableView::TABLE;
 
     /**
-     * The default number of items displayed in the tables (integer).
-     */
-    public const DEFAULT_LIST_LENGTH = 15;
-
-    /**
      * The default display flash bag message close button (boolean).
      */
     public const DEFAULT_MESSAGE_CLOSE = true;
@@ -53,6 +48,11 @@ interface ApplicationServiceInterface
      * The default position of the flash bag messages (string).
      */
     public const DEFAULT_MESSAGE_POSITION = 'bottom-right';
+
+    /**
+     * The default display message progress bar (boolean).
+     */
+    public const DEFAULT_MESSAGE_PROGRESS = true;
 
     /**
      * The default display flash bag message sub-title (boolean).
@@ -88,11 +88,6 @@ interface ApplicationServiceInterface
      * The default product edit (bool).
      */
     public const DEFAULT_PRODUCT_EDIT = true;
-
-    /**
-     * The default display progress bar (boolean).
-     */
-    public const DEFAULT_PROGRESS = true;
 
     /**
      * The default output qr-code (boolean).
@@ -202,11 +197,6 @@ interface ApplicationServiceInterface
      * The property name for the last import of Swiss cities (date).
      */
     public const P_LAST_IMPORT = 'last_import';
-
-    /**
-     * The property name for the number items displayed in the tables (integer).
-     */
-    public const P_LIST_LENGTH = 'list-length';
 
     /**
      * The property name for displaying close button (default = true) of the flash bag messages (boolean).

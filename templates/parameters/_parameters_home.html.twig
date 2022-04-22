@@ -1,9 +1,9 @@
-<div class="toggle-icon collapse" id="home" data-parent="#parent_accordion">
+<div class="toggle-icon collapse{% if expanded %} show{% endif %}" id="home" data-parent="#parent_accordion">
     <div class="mt-1">
         <small class="mb-2 form-text text-muted">{{ 'parameters.group_home_help'|trans }}</small>
+        {{ form_row(form.panel_calculation) }}
         {{ form_row(form.panel_state) }}
         {{ form_row(form.panel_month) }}
         {{ form_row(form.panel_catalog) }}
-        {{ form_row(form.panel_calculation) }}
     </div>
 </div>

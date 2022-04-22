@@ -24,9 +24,10 @@ use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
-use App\Repository\PropertyRepository;
+use App\Repository\UserPropertyRepository;
 use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
+use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -37,6 +38,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class DatabaseTest extends KernelTestCase
 {
     use DatabaseTrait;
+    use ServiceTrait;
 
     /**
      * {@inheritdoc}
@@ -61,7 +63,7 @@ class DatabaseTest extends KernelTestCase
             [CalculationGroupRepository::class, 0],
             [CalculationItemRepository::class, 0],
             [GlobalMarginRepository::class, 0],
-            [PropertyRepository::class, 0],
+            [UserPropertyRepository::class, 0],
             [UserRepository::class, 4],
         ];
     }
@@ -112,7 +114,7 @@ class DatabaseTest extends KernelTestCase
          * @var AbstractRepository $repository
          * @psalm-var AbstractRepository<T> $repository
          */
-        $repository = static::getContainer()->get($className);
+        $repository = $this->getService($className);
         $this->assertNotNull($repository);
 
         $result = $repository->findAll();
@@ -134,8 +136,7 @@ class DatabaseTest extends KernelTestCase
      */
     public function testUser(string $username, string $role): void
     {
-        /** @var UserRepository $repository */
-        $repository = static::getContainer()->get(UserRepository::class);
+        $repository = $this->getService(UserRepository::class);
         $this->assertNotNull($repository);
 
         /** @var User $user */

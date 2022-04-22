@@ -19,6 +19,7 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Service\UserService;
 use App\Traits\MathTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,12 +47,13 @@ class IndexController extends AbstractController
      *
      * @Route("/", name="homepage")
      */
-    public function invoke(Request $request, EntityManagerInterface $manager): Response
+    public function invoke(Request $request, EntityManagerInterface $manager, UserService $service): Response
     {
         $application = $this->getApplication();
         $restrict = $this->getRestrict($request);
         $user = $restrict ? $this->getUser() : null;
         $application->updateCache();
+        $service->updateCache();
 
         $parameters = [
             'min_margin' => $application->getMinMargin(),

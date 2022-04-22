@@ -1,4 +1,5 @@
-<div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
+{%- set edit_action = form.edit_action is defined -%}
+<div class="toggle-icon collapse{% if expanded %} show{% endif %}" id="display" data-parent="#parent_accordion">
     <div class="mt-1">
         <small class="mb-2 form-text text-muted">{{ 'parameters.group_display_help'|trans }}</small>
         <div class="form-row">

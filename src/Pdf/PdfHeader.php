@@ -191,12 +191,15 @@ class PdfHeader
             // address + description + fax
             $cellWidth = $printableWidth / 3;
             $this->outputAddress($cellWidth);
+
+            // description
             $this->outputDescription($cellWidth, true);
         } else {
-            // address + fax
+            // address
             $cellWidth = $printableWidth / 2;
             $this->outputAddress($cellWidth);
         }
+        // fax
         $this->outputFax($cellWidth);
     }
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Enums;
 
 /**
- * THE PDF document zoom enumeration.
+ * The PDF document zoom enumeration.
  */
 enum PdfDocumentZoom:string
 {

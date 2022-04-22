@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
- * Unit test for {@link App\Security\EntityVoter} class.
+ * Unit test for {@link EntityVoter} class.
  *
  * @author Laurent Muller
  *
@@ -84,21 +84,18 @@ class EntityVoterTest extends TestCase
     public function testEntities(): void
     {
         $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
-        for ($i = 0; $i < \count($entities); ++$i) {
-            $expected = $i;
-            $name = $entities[$i];
-            $actual = $this->voter->getEntityOffset($name);
-            $this->assertEquals($expected, $actual);
+        foreach ($entities as $index => $entity) {
+            $actual = $this->voter->getEntityOffset($entity);
+            $this->assertEquals($index, $actual);
         }
     }
 
     public function testMaskAttributes(): void
     {
         $keys = \array_keys(EntityVoter::MASK_ATTRIBUTES);
-        for ($i = 0; $i < \count($keys); ++$i) {
-            $expected = 2 ** $i;
-            $name = $keys[$i];
-            $actual = $this->voter->getAttributeMask($name);
+        foreach ($keys as $index => $key) {
+            $expected = 2 ** $index;
+            $actual = $this->voter->getAttributeMask($key);
             $this->assertEquals($expected, $actual);
         }
     }

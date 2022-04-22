@@ -35,4 +35,4 @@ jobs:
           composer bin rector install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run Rector
-        run: vendor/bin/rector process src --dry-run
+        run: vendor/bin/rector process --dry-run

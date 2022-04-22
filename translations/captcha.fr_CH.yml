@@ -1,12 +1,12 @@
 consonant: consonne
-error: Le charactère contrôle est incorrect.
+error: Le caractère contrôle est incorrect.
 fifth: cinquième
 first: première
 fourth: quatrième
 label: Securité
 last: dernière
 letter: lettre
-required: Le charactère de contrôle est requis.
+required: Le caractère de contrôle est requis.
 second: deuxième
 sentence: Quelle est la %index% %letter% du mot %word% ?
 third: troisième

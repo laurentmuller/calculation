@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 
 /**
- * Unit test for {@link App\Entity\User} class.
+ * Unit test for {@link User} class.
  *
  * @author Laurent Muller
  */

@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Pdf\Enums\PdfImageType;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
@@ -22,7 +23,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Traits\LoggerTrait;
 use App\Util\FileUtils;
-use App\Util\FormatUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
 use Endroid\QrCode\Writer\PngWriter;
@@ -84,7 +84,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         if ($calculation->isNew()) {
             $this->setTitleTrans('calculation.add.title');
         } else {
-            $id = FormatUtils::formatId((int) $calculation->getId());
+            $id = $calculation->getFormattedId();
             $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
 
@@ -190,20 +190,18 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
             PdfColumn::right(null, 40, true),
         ];
 
-        $state = $calculation->getStateCode();
-        $date = FormatUtils::formatDate($calculation->getDate());
-        $style = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
+        $leftStyle = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT);
+        $rightStyle = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
 
         $table = new PdfTableBuilder($this);
-        $table->setHeaderStyle(PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT));
         $table->addColumns($columns)
             ->startHeaderRow()
-            ->add($calculation->getCustomer())
-            ->add($state, 1, $style)
+            ->add($calculation->getCustomer(), 1, $leftStyle)
+            ->add($calculation->getStateCode(), 1, $rightStyle)
             ->endRow()
             ->startHeaderRow()
-            ->add($calculation->getDescription())
-            ->add($date, 1, $style)
+            ->add($calculation->getDescription(), 1, $leftStyle)
+            ->add($calculation->getFormattedDate(), 1, $rightStyle)
             ->endRow();
 
         $this->Ln(3);
@@ -234,7 +232,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
                 $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1;
 
                 // render
-                $this->Image($path, $x, $y, $size, $size, 'png', $this->getQrCodeLink());
+                $this->Image($path, $x, $y, $size, $size, PdfImageType::PNG, $this->getQrCodeLink());
             } catch (\Exception $e) {
                 $this->logException($e, $this->trans('generate.error.failed'));
             }

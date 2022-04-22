@@ -86,7 +86,7 @@ class Password extends Constraint
     public bool $pwned = false;
 
     /**
-     *  Pawword comprise error message.
+     *  Password comprise error message.
      */
     public string $pwnedMessage = 'password.pwned';
 

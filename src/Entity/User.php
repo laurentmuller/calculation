@@ -16,6 +16,8 @@ use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
 use App\Traits\RoleTrait;
 use App\Util\FormatUtils;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -96,6 +98,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private ?string $password = null;
 
     /**
+     * The properties.
+     *
+     * @var Collection<int, UserProperty>
+     * @ORM\OneToMany(targetEntity=UserProperty::class, mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $properties;
+
+    /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private ?\DateTimeInterface $requestedAt = null;
@@ -126,6 +136,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private bool $verified = false;
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->properties = new ArrayCollection();
+    }
+
+    /**
      * @return array{
      *      id: int|null,
      *      username: string|null,
@@ -152,6 +170,31 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->id = $data['id'];
         $this->username = $data['username'];
         $this->password = $data['password'];
+    }
+
+    /**
+     * Add a property.
+     */
+    public function addProperty(UserProperty $property): self
+    {
+        if (!$this->contains($property)) {
+            $this->properties[] = $property;
+            $property->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Checks whether the given property is contained within this collection of properties.
+     *
+     * @param UserProperty $property the property to search for
+     *
+     * @return bool true if this collection contains the property, false otherwise
+     */
+    public function contains(UserProperty $property): bool
+    {
+        return $this->properties->contains($property);
     }
 
     /**
@@ -295,6 +338,16 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
+     * Get the properties.
+     *
+     * @return Collection<int, UserProperty>
+     */
+    public function getProperties(): Collection
+    {
+        return $this->properties;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @see ResetPasswordRequestInterface
@@ -368,6 +421,18 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function isVerified(): bool
     {
         return $this->verified;
+    }
+
+    /**
+     * Remove a property.
+     */
+    public function removeProperty(UserProperty $property): self
+    {
+        if ($this->properties->removeElement($property) && $property->getUser() === $this) {
+            $property->setUser(null);
+        }
+
+        return $this;
     }
 
     /**

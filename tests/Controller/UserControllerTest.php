@@ -28,7 +28,7 @@ class UserControllerTest extends AbstractControllerTest
             ['/user', self::ROLE_ADMIN],
             ['/user', self::ROLE_SUPER_ADMIN],
 
-            ['/user/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/user', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN],
             ['/user/add', self::ROLE_ADMIN],
             ['/user/add', self::ROLE_SUPER_ADMIN],
 
@@ -77,6 +77,10 @@ class UserControllerTest extends AbstractControllerTest
             ['/user/theme', self::ROLE_USER],
             ['/user/theme', self::ROLE_ADMIN],
             ['/user/theme', self::ROLE_SUPER_ADMIN],
+
+            ['/user/parameters', self::ROLE_USER],
+            ['/user/parameters', self::ROLE_ADMIN],
+            ['/user/parameters', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

@@ -18,6 +18,7 @@ use App\Pdf\Enums\PdfDocumentOutput;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfDocumentZoom;
+use App\Pdf\Enums\PdfImageType;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
@@ -440,6 +441,28 @@ class PdfDocument extends FPDF
         $this->y = $y + $afterSpace;
 
         return $this;
+    }
+
+    /**
+     * Puts an image.
+     *
+     * @param string              $file the path or the URL of the image
+     * @param float|null          $x    the abscissa of the upper-left corner. If not specified or equal to null, the current abscissa is used.
+     * @param float|null          $y    the ordinate of the upper-left corner. If not specified or equal to null, the current ordinate is used;
+     *                                  moreover, a page break is triggered first if necessary (in case automatic page breaking is enabled) and,
+     *                                  after the call, the current ordinate is moved to the bottom of the image.
+     * @param float               $w    the width of the image in the page
+     * @param float               $h    the height of the image in the page
+     * @param PdfImageType|string $type the image format. Possible values are (case insensitive): JPG, JPEG, PNG and GIF.
+     *                                  If not specified, the type is inferred from the file extension.
+     * @param string|int          $link the URL or an identifier returned by AddLink()
+     */
+    public function Image($file, $x = null, $y = null, $w = 0, $h = 0, $type = '', $link = ''): void
+    {
+        if ($type instanceof PdfImageType) {
+            $type = $type->value;
+        }
+        parent::Image($file, $x, $y, $w, $h, $type, $link);
     }
 
     /**

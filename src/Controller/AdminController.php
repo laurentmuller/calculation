@@ -163,7 +163,11 @@ class AdminController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
-            $application->setProperties($data);
+            $defaultProperties = $application->getDefaultValues();
+            foreach (ParametersType::PASSWORD_OPTIONS as $option) {
+                $defaultProperties[$option] = false;
+            }
+            $application->setProperties($data, $defaultProperties);
             $this->successTrans('parameters.success');
 
             return $this->redirectToHomePage();

@@ -188,6 +188,14 @@ class PdfBorder
     }
 
     /**
+     * Returns a value indicating if this value is valid to draw a rectangle.
+     */
+    public function isDrawable(): bool
+    {
+        return $this->isRectangleStyle() || self::NONE !== $this->value;
+    }
+
+    /**
      * Returns if fill is set.
      */
     public function isFill(): bool
@@ -220,7 +228,7 @@ class PdfBorder
     }
 
     /**
-     * Returns a value indicating if this value is valid to draw a rectangle.
+     * Returns a value indicating if this value is valid to draw or/and to fill a rectangle.
      *
      * @see PdfBorder::getRectangleStyle()
      * @see PdfDocument::rectangle()

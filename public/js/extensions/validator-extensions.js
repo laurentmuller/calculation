@@ -276,7 +276,10 @@
 
             // set focus to first editable field
             if (!found) {
-                const $input = $that.find(toFind).filter(selector);
+                let $input = $that.find(toFind).filter(selector);
+                if ($input.is(':radio') && !$input.isChecked()) {
+                    $input = $input.parents('.form-group').find(':radio:checked');
+                }
                 if ($input.length) {
                     $input.selectFocus();
                 }

@@ -73,9 +73,9 @@ class SwitchUserListener implements EventSubscriberInterface
 
         // get message
         if (self::EXIT_VALUE === $action) {
-            $id = 'user.switch.exit.sucess';
+            $id = 'user.switch.exit.success';
         } elseif (null !== $original) {
-            $id = 'user.switch.take.sucess';
+            $id = 'user.switch.take.success';
         } else {
             $id = 'user.switch.take.default';
         }

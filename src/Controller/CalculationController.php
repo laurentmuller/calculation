@@ -76,9 +76,9 @@ class CalculationController extends AbstractEntityController
         }
         if (null !== $product) {
             $item->addProduct($product, $quantity);
+            $this->service->updateTotal($item);
         }
-
-        $parameters = ['overall_below' => false];
+        $parameters = ['overall_below' => $this->isMarginBelow($item)];
 
         return $this->editEntity($request, $item, $parameters);
     }
@@ -210,7 +210,7 @@ class CalculationController extends AbstractEntityController
         $parameters = [
             'min_margin' => $this->getApplication()->getMinMargin(),
             'duplicate_items' => $item->hasDuplicateItems(),
-            'emty_items' => $item->hasEmptyItems(),
+            'empty_items' => $item->hasEmptyItems(),
         ];
 
         return $this->showEntity($item, $parameters);
@@ -275,7 +275,7 @@ class CalculationController extends AbstractEntityController
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
-        $parameters['emty_items'] = $item->hasEmptyItems();
+        $parameters['empty_items'] = $item->hasEmptyItems();
 
         // editable?
         if ($parameters['editable'] = $item->isEditable()) {

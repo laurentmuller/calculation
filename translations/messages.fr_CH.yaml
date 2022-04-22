@@ -75,7 +75,7 @@ calculation:
       search_unit: Erreur lors de la recherche des unités.
       update_total: Une erreur s'est produite lors de la mise à jour des totaux de
         la calculation.<br><br>Veuillez ne plus modifier cette calculation et cliquer
-        sur le boutton <b>Annuler</b>.
+        sur le bouton <b>Annuler</b>.
       user_margin: La marge utilisateur doit être valide.
     move_down: Déplacer vers le bas
     move_first: Déplacer à la première place
@@ -87,12 +87,12 @@ calculation:
       edit: Modifier le prix
       error: Le prix ne peut pas être vide.
       title: Cliquez pour modifier directement le prix
-      tootlip: Modification du prix
+      tooltip: Modification du prix
     quantity:
       edit: Modifier la quantité
       error: La quantité ne peut pas être vide.
       title: Cliquez pour modifier directement la quantité
-      tootlip: Modification de la quantité
+      tooltip: Modification de la quantité
     read_only: Calculation non-modifiable (Statut %name%).
     sort_item: Trier les groupes, les catégories et les articles
     success: La calculation Nº <b>%name%</b> a été mise à jour avec succès.
@@ -168,8 +168,7 @@ calculationstate:
     success: Le statut <b>%name%</b> a été créé avec succès.
     title: Nouveau statut
   delete:
-    failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans
-      %calculations%.
+    failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%'
     message: Êtes-vous sûr de vouloir supprimer le statut <b>%name%</b> ?
     success: Le statut <b>%name%</b> a été supprimé avec succès.
     title: Supprimer le statut
@@ -254,7 +253,7 @@ clear_cache:
   note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle
     : %size%).'
   submit: Vider
-  success: Le cache de l'application a été vidé avec succés.
+  success: Le cache de l'application a été vidé avec succès.
   title: Vider le cache
 common:
   actions: Actions
@@ -443,7 +442,7 @@ generate:
     entity: Objet à générer
     simulate: Simuler la génération des données
   help:
-    simulate: Simule la génération des données sans enregister les changements dans
+    simulate: Simule la génération des données sans enregistrer les changements dans
       la base de données.
   result_link: Afficher les données
   result_simulated: La mise à jour a été simulée. Aucune donnée n'a été ajoutée dans
@@ -611,7 +610,6 @@ index:
   menu_info: A propos de %app_name%
   menu_rights_admin: Droits d'accès de l'administrateur
   menu_rights_user: Droits d'accès de l'utilisateur
-  menu_sevice: Services
   menu_site_map: Plan du site
   menu_table: Tables
   menu_test: Tests
@@ -645,11 +643,11 @@ list:
   sort_ascending: Tri croissant
   sort_ascending_title: '%name% - Croissant'
   sort_default_title: Tri par défaut
-  sort_desscending: Tri décroissant
-  sort_desscending_title: '%name% - Décroissant'
+  sort_descending: Tri décroissant
+  sort_descending_title: '%name% - Décroissant'
   sort_title: Trier
 log:
-  channel_all: Tous les cannaux
+  channel_all: Tous les canaux
   delete:
     entries: Nombre d'entrées
     error: Impossible de supprimer le journal de l'application.
@@ -775,7 +773,7 @@ parameters:
     customer_zip_city: NPA / Localité
     default_category: Catégorie
     default_product: Article
-    default_product_edit: Editer l'article lors de l'affichage de la nouvelle calculation
+    default_product_edit: Éditer l'article lors de l'affichage de la nouvelle calculation
     default_product_quantity: Quantité
     default_state: Statut
     display_captcha: Code de contrôle
@@ -801,7 +799,7 @@ parameters:
   group_default_help: Valeurs par défaut utilisées pour la création de nouveaux éléments
     et pour le calcul des marges.
   group_display: Affichage
-  group_display_help: Mode d'affichage et d'édition des élements.
+  group_display_help: Mode d'affichage et d'édition des éléments.
   group_home: Page d'accueil
   group_home_help: Elements affichés sur la page d'accueil.
   group_message: Messages
@@ -827,9 +825,9 @@ parameters:
     bottom-center: En bas centré
     bottom-left: En bas à gauche
     bottom-right: En bas à droite
-    center-center: Au millieu centré
-    center-left: Au millieu à gauche
-    center-right: Au millieu à droite
+    center-center: Au milieu centré
+    center-left: Au milieu à gauche
+    center-right: Au milieu à droite
     top-center: En haut centré
     top-left: En haut à gauche
     top-right: En haut à droite
@@ -839,7 +837,7 @@ parameters:
     3: 3 secondes
     4: 4 secondes
     5: 5 secondes
-  placehoders:
+  placeholders:
     default_product: <Aucun article sélectionné>
   success: Les paramètres de l'application ont été mis à jour avec succès.
   title: Paramètres
@@ -940,7 +938,7 @@ product:
     round: Arrondir au 5 centimes
     round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
     simulate: Simuler la mise à jour
-    simulate_help: Simule une mise à jour sans enregister les changements dans la
+    simulate_help: Simule une mise à jour sans enregistrer les changements dans la
       base de données.
     title: Mise à jour des articles
     type: Type de mise à jour
@@ -1009,7 +1007,7 @@ schema:
     tooltip: Afficher les colonnes de la table %name%
   table:
     description: Liste des colonnes de la base de données.
-    empty: Aucune colonne n'est défine.
+    empty: Aucune colonne n'est définie.
     error: La table '%name%' n'existe pas ou est introuvable.
     fields:
       empty: Nulle
@@ -1233,7 +1231,7 @@ timeline:
 translator:
   auto_detect: Détecter la langue
   copy_error: Une erreur s'est produite lors de la copie du texte dans le presse-papiers.
-  copy_sucess: La traduction du texte a été copiée avec succès dans le presse-papiers.
+  copy_success: La traduction du texte a été copiée avec succès dans le presse-papiers.
   detect_error: Une erreur s'est produite lors de la détection du texte.
   detect_label: 'Langue détectée : %name%'
   from_label: Traduire de
@@ -1250,7 +1248,7 @@ translator:
   to_error: La langue de destination est absente ou vide.
   to_label: Vers
   translate_error: Une erreur s'est produite lors de la traduction du texte.
-  translate_sucess: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service
+  translate_success: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service
     <b>%service%</b> a été réalisée avec succès.
 update:
   description: Cet outil permet de mettre à jour les objets sélectionnés avec des
@@ -1354,16 +1352,20 @@ user:
     admin: Administrateur
     super_admin: Administrateur du site
     user: Utilisateur
+  parameters:
+    title: Préférences
+    description: Définition des préférences de l'application.
+    success: Les préférences de l'application ont été mises à jour avec succès.
   show:
     title: Propriétés de l'utilisateur
   switch:
     connected: <b>%original%</b>, vous êtes connecté en tant qu'utilisateur <b>%current%</b>.
     exit:
-      sucess: <b>%name%</b>, vous avez repris votre identité avec succès.
+      success: <b>%name%</b>, vous avez repris votre identité avec succès.
       title: Reprendre son identité
     take:
       default: Vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
-      sucess: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b>
+      success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b>
         avec succès.
       title: Prendre l'identité de l'utilisateur
 view:

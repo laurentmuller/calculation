@@ -19,6 +19,7 @@ use App\Repository\UserRepository;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
+use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -30,6 +31,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 {
     use DatabaseTrait;
+    use ServiceTrait;
 
     public const ID_ADMIN = 2;
     public const ID_DISABLE = 4;
@@ -57,8 +59,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         $userRight = EntityVoter::getRoleUser()->getRights();
         $adminRight = EntityVoter::getRoleAdmin()->getRights();
 
-        /** @var ApplicationService $application */
-        $application = static::getContainer()->get(ApplicationService::class);
+        $application = $this->getService(ApplicationService::class);
         $application->setProperties([
             ApplicationServiceInterface::P_USER_RIGHTS => $userRight,
             ApplicationServiceInterface::P_ADMIN_RIGHTS => $adminRight,
@@ -99,11 +100,9 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      */
     protected function loadUser(string $username, bool $verify = true): ?User
     {
-        /** @var UserRepository $repository */
-        $repository = static::getContainer()->get(UserRepository::class);
-        $this->assertNotNull($repository, 'The user respository is null.');
+        $repository = $this->getService(UserRepository::class);
 
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $repository->findByUsername($username);
 
         if ($verify) {

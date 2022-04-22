@@ -117,8 +117,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     /**
      * Checks whether the given category is contained within this collection of categories.
      *
-     * @param CalculationCategory $category the item to search for
-     *
      * @return bool true if this collection contains the category, false otherwise
      */
     public function contains(CalculationCategory $category): bool
@@ -252,8 +250,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
 
     /**
      * Remove a category.
-     *
-     * @param CalculationCategory $category the item to remove
      */
     public function removeCategory(CalculationCategory $category): self
     {

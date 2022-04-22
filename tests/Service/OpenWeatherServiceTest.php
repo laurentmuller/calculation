@@ -13,28 +13,28 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\OpenWeatherService;
+use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Unit test for {@link App\Service\OpenWeatherService} class.
+ * Unit test for {@link OpenWeatherService} class.
  *
  * @author Laurent Muller
  */
 class OpenWeatherServiceTest extends KernelTestCase
 {
-    public const CITY_INVALID = 0;
+    use ServiceTrait;
 
-    public const CITY_VALID = 2660718;
+    private const CITY_INVALID = 0;
+
+    private const CITY_VALID = 2660718;
 
     private ?OpenWeatherService $service = null;
 
     protected function setUp(): void
     {
         self::bootKernel();
-
-        /** @var OpenWeatherService $service */
-        $service = static::getContainer()->get(OpenWeatherService::class);
-        $this->service = $service;
+        $this->service = $this->getService(OpenWeatherService::class);
     }
 
     public function testCurrent(): void
@@ -139,7 +139,7 @@ class OpenWeatherServiceTest extends KernelTestCase
     private function validateSys(array $data): void
     {
         $this->assertIsString($data['country']);
-        $this->assertEquals(2, \strlen($data['country']));
+        $this->assertEquals(2, \strlen((string) $data['country']));
         $this->assertIsInt($data['sunrise']);
         $this->assertIsInt($data['sunset']);
     }

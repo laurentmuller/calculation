@@ -14,17 +14,19 @@ namespace App\Tests\Entity;
 
 use App\Entity\AbstractEntity;
 use App\Tests\DatabaseTrait;
+use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Unit test for {@link App\Entity\AbstractEntity} class.
+ * Unit test for {@link AbstractEntity} class.
  *
  * @author Laurent Muller
  */
 abstract class AbstractEntityValidatorTest extends KernelTestCase
 {
     use DatabaseTrait;
+    use ServiceTrait;
 
     protected ?ValidatorInterface $validator = null;
 
@@ -34,10 +36,7 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        /** @var ValidatorInterface $validator */
-        $validator = static::getContainer()->get(ValidatorInterface::class);
-        $this->validator = $validator;
+        $this->validator = $this->getService(ValidatorInterface::class);
     }
 
     protected function deleteEntity(AbstractEntity $object): void
@@ -60,7 +59,7 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
      * @param mixed $object   the value to validate
      * @param int   $expected the number of expected errors
      */
-    protected function validate($object, int $expected): void
+    protected function validate(mixed $object, int $expected): void
     {
         $result = $this->validator->validate($object);
         $this->assertEquals($expected, $result->count());

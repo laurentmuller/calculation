@@ -170,14 +170,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function clone(?CalculationState $state = null, ?string $description = null): self
     {
-        /** @var Calculation $copy */
         $copy = clone $this;
-
-        // copy default values
         if (null !== $state) {
             $copy->setState($state);
         }
-        if ($description) {
+        if (null !== $description) {
             return $copy->setDescription($description);
         }
 
@@ -287,7 +284,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getDisplay(): string
     {
-        return FormatUtils::formatId((int) $this->id);
+        return $this->getFormattedId();
     }
 
     /**
@@ -352,6 +349,22 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Get the formatted date.
+     */
+    public function getFormattedDate(): string
+    {
+        return (string) FormatUtils::formatDate($this->date);
+    }
+
+    /**
+     * Get the formatted identifier.
+     */
+    public function getFormattedId(): string
+    {
+        return FormatUtils::formatId((int) $this->id);
     }
 
     /**
@@ -747,8 +760,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Remove a group.
-     *
-     * @param CalculationGroup $group the group to remove
      */
     public function removeGroup(CalculationGroup $group): self
     {
@@ -924,8 +935,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return [
             $this->customer,
             $this->description,
-            FormatUtils::formatId((int) $this->id),
-            FormatUtils::formatDate($this->date),
+            $this->getFormattedId(),
+            $this->getFormattedDate(),
             $this->getStateCode(),
         ];
     }

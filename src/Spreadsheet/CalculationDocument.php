@@ -14,7 +14,6 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
-use App\Util\FormatUtils;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -64,7 +63,7 @@ class CalculationDocument extends AbstractDocument
         $calculation = $this->calculation;
 
         // title
-        $id = FormatUtils::formatId((int) $calculation->getId());
+        $id = $calculation->getFormattedId();
         $title = $this->trans('calculation.edit.title', ['%id%' => $id]);
         $this->start($title);
         $this->sheet = $this->getActiveSheet();
@@ -344,9 +343,10 @@ class CalculationDocument extends AbstractDocument
                     ->getRight()->setBorderStyle(Border::BORDER_NONE);
             }
 
-            // fit columns
-            foreach (\range('A', 'E') as $column) {
-                $this->sheet->getColumnDimension($column)->setAutoSize(true);
+            // column's width
+            $this->sheet->getColumnDimension('A')->setWidth(8.5, 'cm');
+            foreach (\range('B', 'E') as $column) {
+                $this->sheet->getColumnDimension($column)->setWidth(2.0, 'cm');
             }
 
             // page setup

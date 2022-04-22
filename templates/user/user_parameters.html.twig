@@ -1,0 +1,15 @@
+{% extends 'parameters/_parameters.html.twig' %}
+
+{# parameters #}
+{%- set title = 'user.parameters.title' -%}
+{%- set title_icon = 'user-gear' -%}
+{%- set title_description = 'user.parameters.description' -%}
+
+{% block sections -%}
+{{ _self.collapseLine('display', form, true) }}
+{{ _self.collapseLine('message', form) }}
+{% if super_admin %}
+    {{ _self.collapseLine('home', form) }}
+    {{ _self.collapseLine('options', form) }}
+{% endif %}
+{%- endblock %}

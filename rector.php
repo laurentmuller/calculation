@@ -17,8 +17,14 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    // bootstrap file
+    // bootstrap files
     $rectorConfig->bootstrapFiles([__DIR__ . '/vendor/autoload.php']);
+
+    // paths
+    $rectorConfig->paths([
+        'src',
+        'tests',
+    ]);
 
     // rules to skip
     $rectorConfig->skip([AnnotationToAttributeRector::class]);

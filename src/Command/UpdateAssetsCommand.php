@@ -371,7 +371,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $this->writeFile($targetFile, $content);
 
         // set read-only
-        $this->chmod($targetFile, 0644, false);
+        $this->chmod($targetFile, 0o644, false);
 
         return true;
     }

@@ -139,6 +139,14 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
     "verified"          tinyint(1)   DEFAULT '0'
 );
 
+CREATE TABLE IF NOT EXISTS "sy_UserProperty" (
+    "id"                integer PRIMARY KEY AUTOINCREMENT,
+    "user_id"           integer NOT NULL,
+    "name"              varchar(50)  NOT NULL,
+    "value"             varchar(255) NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES sy_User(id)
+);
+
 CREATE TABLE IF NOT EXISTS "sy_Task" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "category_id"       integer NOT NULL,

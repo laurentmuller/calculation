@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\AbstractProperty;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -38,8 +39,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to manage application properties.
- *
- * @author Laurent Muller
  */
 class ApplicationService extends AppVariable implements LoggerAwareInterface, ApplicationServiceInterface
 {
@@ -58,7 +57,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, KernelInterface $kernel, CacheItemPoolInterface $applicationServiceCache, LoggerInterface $logger, TranslatorInterface $translator)
+    public function __construct(private readonly EntityManagerInterface $manager, LoggerInterface $logger, TranslatorInterface $translator, CacheItemPoolInterface $applicationServiceCache, KernelInterface $kernel)
     {
         $this->setLogger($logger);
         $this->setTranslator($translator);
@@ -268,11 +267,48 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Gets the default values.
+     *
+     * @return array<string, mixed>
+     */
+    public function getDefaultValues(): array
+    {
+        return [
+            self::P_MIN_MARGIN => self::DEFAULT_MIN_MARGIN,
+
+            self::P_DISPLAY_MODE => self::DEFAULT_DISPLAY_MODE,
+            self::P_EDIT_ACTION => self::DEFAULT_ACTION,
+
+            self::P_MESSAGE_POSITION => self::DEFAULT_MESSAGE_POSITION,
+            self::P_MESSAGE_TIMEOUT => self::DEFAULT_MESSAGE_TIMEOUT,
+            self::P_MESSAGE_TITLE => self::DEFAULT_MESSAGE_TITLE,
+            self::P_MESSAGE_SUB_TITLE => self::DEFAULT_MESSAGE_SUB_TITLE,
+            self::P_MESSAGE_PROGRESS => self::DEFAULT_MESSAGE_PROGRESS,
+            self::P_MESSAGE_ICON => self::DEFAULT_MESSAGE_ICON,
+            self::P_MESSAGE_CLOSE => self::DEFAULT_MESSAGE_CLOSE,
+
+            self::P_PANEL_STATE => true,
+            self::P_PANEL_MONTH => true,
+            self::P_PANEL_CATALOG => true,
+            self::P_PANEL_CALCULATION => self::DEFAULT_PANEL_CALCULATION,
+
+            self::P_QR_CODE => self::DEFAULT_QR_CODE,
+            self::P_PRINT_ADDRESS => self::DEFAULT_PRINT_ADDRESS,
+
+            self::P_DEFAULT_PRODUCT_EDIT => true,
+            self::P_DEFAULT_PRODUCT_QUANTITY => 0,
+
+            self::P_MIN_STRENGTH => StrengthInterface::LEVEL_NONE,
+            self::P_DISPLAY_CAPTCHA => !$this->getDebug(),
+        ];
+    }
+
+    /**
      * Gets the display mode for table.
      */
     public function getDisplayMode(): TableView
     {
-        $value = $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_DISPLAY_MODE->value);
+        $value = $this->getPropertyString(self::P_DISPLAY_MODE, self::DEFAULT_DISPLAY_MODE->value);
 
         return TableView::tryFrom((string) $value) ?? self::DEFAULT_DISPLAY_MODE;
     }
@@ -339,6 +375,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * Gets all properties.
      *
      * @param string[] $excluded the property keys to exclude
+     *
+     * @return array<string, mixed>
      */
     public function getProperties(array $excluded = []): array
     {
@@ -428,7 +466,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     public function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
         $timestamp = $this->getPropertyInteger($name);
-        if (Property::FALSE_VALUE !== $timestamp) {
+        if (AbstractProperty::FALSE_VALUE !== $timestamp) {
             $date = \DateTime::createFromFormat('U', (string) $timestamp);
             if ($date instanceof \DateTime) {
                 return $date;
@@ -583,7 +621,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function isMessageProgress(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_PROGRESS, self::DEFAULT_PROGRESS);
+        return $this->isPropertyBoolean(self::P_MESSAGE_PROGRESS, self::DEFAULT_MESSAGE_PROGRESS);
     }
 
     /**
@@ -655,7 +693,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        if (!$this->traitSaveDeferredCacheValue($key, $value)) {
+        if (!$this->traitSaveDeferredCacheValue($key, $value, $time)) {
             $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
 
             return false;
@@ -667,21 +705,20 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     /**
      * Save the given properties to the database and to the cache.
      *
-     * @param array<string, mixed> $properties the properties to set
+     * @param array<string, mixed> $properties        the properties to set
+     * @param array<string, mixed> $defaultProperties the default properties
      */
-    public function setProperties(array $properties): self
+    public function setProperties(array $properties, ?array $defaultProperties = null): self
     {
         if (!empty($properties)) {
             $repository = $this->getRepository();
+            $defaultProperties ??= $this->getDefaultValues();
+
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
-                $this->saveProperty($repository, $key, $value);
+                $this->saveProperty($repository, $defaultProperties, $key, $value);
             }
-
-            // save changes
             $this->manager->flush();
-
-            // reload
             $this->updateAdapter();
         }
 
@@ -690,9 +727,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Sets a single property value.
-     *
-     * @param string $name  the property name
-     * @param mixed  $value the property value
      */
     public function setProperty(string $name, mixed $value): self
     {
@@ -740,23 +774,28 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         return $repository;
     }
 
-    /**
-     * Update a property without fusing changes.
-     *
-     * @param PropertyRepository $repository the property repository
-     * @param string             $name       the property name
-     * @param mixed              $value      the property value
-     */
-    private function saveProperty(PropertyRepository $repository, string $name, mixed $value): void
+    private function isDefaultValue(array $defaultProperties, string $name, mixed $value): bool
     {
-        // get or create property
+        return \array_key_exists($name, $defaultProperties) && $defaultProperties[$name] === $value;
+    }
+
+    /**
+     * Update a property without saving changes.
+     */
+    private function saveProperty(PropertyRepository $repository, array $defaultProperties, string $name, mixed $value): void
+    {
         $property = $repository->findOneByName($name);
+        if ($this->isDefaultValue($defaultProperties, $name, $value)) {
+            if (null !== $property) {
+                $repository->remove($property, false);
+            }
+
+            return;
+        }
         if (null === $property) {
-            $property = Property::create($name);
+            $property = new Property($name);
             $repository->add($property, false);
         }
-
-        // set value
         $property->setValue($value);
     }
 

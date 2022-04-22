@@ -16,6 +16,7 @@ use App\Entity\Group;
 use App\Form\DataTransformer\GroupTransformer;
 use App\Repository\GroupRepository;
 use App\Tests\DatabaseTrait;
+use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,6 +29,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class GroupTransformerTest extends KernelTestCase
 {
     use DatabaseTrait;
+    use ServiceTrait;
 
     private ?Group $group = null;
     private ?GroupTransformer $transformer = null;
@@ -146,20 +148,5 @@ class GroupTransformerTest extends KernelTestCase
         }
 
         return $this->group;
-    }
-
-    /**
-     * Gets the given service from container.
-     *
-     * @template T
-     * @psalm-param class-string<T> $classname
-     * @psalm-return T
-     */
-    protected function getService(string $classname)
-    {
-        /** @psalm-var T $service */
-        $service = static::getContainer()->get($classname);
-
-        return $service;
     }
 }

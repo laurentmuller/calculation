@@ -41,8 +41,8 @@ Bing:
     503000: Le service est temporairement indisponible. Veuillez réessayer. Si l'erreur persiste, signalez-la avec la date et l'heure de l'erreur, l'identificateur de demande de l'en-tête de réponse X-RequestId et l'identificateur de client de l'en-tête de demande X-ClientTraceId.
 Google:
     400: Le client a spécifié une plage non valide.
-    401: La requête n'a pas été authentifiée en raison d'un jeton d'autentification manquant, non valide ou ayant expiré.
-    403: Le client ne dispose pas d'une autorisation suffisante. Cela peut se produire lorsque le jeton autentification ne dispose pas des champs d'application appropriés, car le client n'a pas d'autorisation ou car l'API n'a pas été activée pour le projet du client.
+    401: La requête n'a pas été authentifiée en raison d'un jeton d'authentification manquant, non valide ou ayant expiré.
+    403: Le client ne dispose pas d'une autorisation suffisante. Cela peut se produire lorsque le jeton authentification ne dispose pas des champs d'application appropriés, car le client n'a pas d'autorisation ou car l'API n'a pas été activée pour le projet du client.
     404: Une ressource spécifiée est introuvable ou la requête est rejetée pour des raisons non divulguées, telles que l'ajout à une liste blanche.
     409: La ressource qu'un client a essayé de créer existe déjà.
     429: Le quota de ressources est dépassé ou la limite du débit est atteinte.

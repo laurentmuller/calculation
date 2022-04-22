@@ -27,24 +27,26 @@ use App\Repository\GroupRepository;
 use App\Service\ApplicationService;
 use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
+use App\Tests\ServiceTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for {@link App\Service\CalculationService} class.
+ * Unit test for {@link CalculationService} class.
  *
  * @author Laurent Muller
  */
 class CalculationServiceTest extends KernelTestCase
 {
     use DatabaseTrait;
+    use ServiceTrait;
 
-    public const MARGIN_PERCENT = 1.1;
-    public const MARGIN_USER = 0.1;
-    public const PRODUCT_PRICE = 100.0;
-    public const QUANTITY = 10.0;
+    private const MARGIN_PERCENT = 1.1;
+    private const MARGIN_USER = 0.1;
+    private const PRODUCT_PRICE = 100.0;
+    private const QUANTITY = 10.0;
 
     public function testService(): void
     {
@@ -122,27 +124,13 @@ class CalculationServiceTest extends KernelTestCase
         return new CalculationService($globalRepository, $marginRepository, $groupRepository, $service, $translator);
     }
 
-    /**
-     * @psalm-template T
-     * @psalm-param class-string<T> $classname
-     * @psalm-return T
-     */
-    protected function getService(string $classname)
-    {
-        /** @psalm-var T $service */
-        $service = static::getContainer()->get($classname);
-
-        return $service;
-    }
-
     protected function init(): Product
     {
         $manager = $this->getManager();
         $this->initGlobalMargins($manager);
         $category = $this->initCategories($manager);
-        $product = $this->initProducts($manager, $category);
 
-        return $product;
+        return $this->initProducts($manager, $category);
     }
 
     protected function initCategories(EntityManager $manager): Category

@@ -6,3 +6,7 @@ framework:
             application_service.cache:
                 adapter: cache.adapter.filesystem
                 default_lifetime: 3600
+            # used by the user service
+            user_service.cache:
+                adapter: cache.adapter.filesystem
+                default_lifetime: 3600

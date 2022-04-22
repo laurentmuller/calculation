@@ -100,8 +100,8 @@ class CalculationGenerator extends AbstractEntityGenerator
         // map
         $items = \array_map(static function (Calculation $c): array {
             return [
-                    'id' => FormatUtils::formatId((int) $c->getId()),
-                    'date' => FormatUtils::formatDate($c->getDate()),
+                    'id' => $c->getFormattedId(),
+                    'date' => $c->getFormattedDate(),
                     'state' => $c->getStateCode(),
                     'description' => $c->getDescription(),
                     'customer' => $c->getCustomer(),

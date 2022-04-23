@@ -25,19 +25,16 @@ trait ServiceTrait
      * @template T
      * @psalm-param class-string<T> $class
      *
-     * @return T|null
+     * @return T
      */
     protected function getService(string $class)
     {
         /** @var ContainerInterface $container */
         $container = static::getContainer();
-        if ($container->has($class)) {
-            /** @var T $service */
-            $service = $container->get($class);
 
-            return $service;
-        }
+        /** @var T $service */
+        $service = $container->get($class);
 
-        return null;
+        return $service;
     }
 }

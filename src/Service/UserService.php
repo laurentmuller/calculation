@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\UserProperty;
+use App\Enums\EntityAction;
 use App\Enums\TableView;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Repository\UserPropertyRepository;
@@ -71,10 +72,20 @@ class UserService implements ApplicationServiceInterface
     public function getDisplayMode(): TableView
     {
         $default = $this->service->getDisplayMode();
-
         $value = $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
 
         return TableView::tryFrom((string) $value) ?? self::DEFAULT_DISPLAY_MODE;
+    }
+
+    /**
+     * Gets the action to trigger within the entities.
+     */
+    public function getEditAction(): EntityAction
+    {
+        $default = $this->service->getEditAction();
+        $value = $this->getPropertyString(self::P_EDIT_ACTION, $default->value);
+
+        return EntityAction::tryFrom((string) $value) ?? $default;
     }
 
     /**
@@ -162,6 +173,30 @@ class UserService implements ApplicationServiceInterface
         }
 
         return $default;
+    }
+
+    /**
+     * Returns a value indicating if the default action is to edit the entity.
+     */
+    public function isActionEdit(): bool
+    {
+        return EntityAction::EDIT === $this->getEditAction();
+    }
+
+    /**
+     * Returns a value indicating if the default action is to do nothing.
+     */
+    public function isActionNone(): bool
+    {
+        return EntityAction::NONE === $this->getEditAction();
+    }
+
+    /**
+     * Returns a value indicating if the default action is to show the entity.
+     */
+    public function isActionShow(): bool
+    {
+        return EntityAction::SHOW === $this->getEditAction();
     }
 
     /**

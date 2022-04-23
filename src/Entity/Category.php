@@ -23,7 +23,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Laurent Muller
  *
- * @ORM\Table(name="sy_Category")
+ * @ORM\Table(name="sy_Category", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_category_code", columns={"code"})
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @UniqueEntity(fields="code", message="category.unique_code")
  */

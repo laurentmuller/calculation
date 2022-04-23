@@ -19,7 +19,7 @@
      data-display-subtitle="{{ app.messageSubTitle|json_encode() }}"
      data-close-title="{{ 'common.button_close'|trans }}"
      data-display-close="{{ app.messageClose|json_encode() }}"
-     data-progress="{{ app.messageProgress|json_encode() }}">
+     data-display-progress="{{ app.messageProgress|json_encode() }}">
     {%- for key, messages in app.flashes -%}
         {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
     {%- endfor -%}

@@ -21,7 +21,7 @@ use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Unit test for the {@link App\Service\ApplicationService} class.
+ * Unit test for the {@link ApplicationService} class.
  *
  * @author Laurent Muller
  */

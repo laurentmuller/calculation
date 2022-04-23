@@ -22,7 +22,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Laurent Muller
  *
- * @ORM\Table(name="sy_Product")
+ * @ORM\Table(name="sy_Product", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_product_description", columns={"description"})
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @UniqueEntity(fields="description", message="product.unique_description")
  */

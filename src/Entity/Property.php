@@ -18,9 +18,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Represents an application property.
  *
- * @author Laurent Muller
- *
- * @ORM\Table(name="sy_Property")
+ * @ORM\Table(name="sy_Property", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_property_name", columns={"name"})
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
  * @UniqueEntity(fields="name", message="property.unique_name")
  */

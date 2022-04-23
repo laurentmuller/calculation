@@ -24,7 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author Laurent Muller
  *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationStateRepository")
- * @ORM\Table(name="sy_CalculationState")
+ * @ORM\Table(name="sy_CalculationState", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_calculation_state_code", columns={"code"})
+ * })
  * @UniqueEntity(fields="code", message="state.unique_code")
  */
 class CalculationState extends AbstractEntity

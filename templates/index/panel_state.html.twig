@@ -12,22 +12,22 @@
 <sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
 {%- endmacro %}
 
-{% macro cardEntry(count, total, text, color, list_path, parameters=[], margin, min_margin) -%}
+{% macro cardEntry(state, list_path, parameters=[], min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-<div class="card index-child m-1 {% if color %} text-border{% endif %}"{% if color %} style="{{ properties.stateCss(color) }}"{% endif %}>
+<div class="card index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
     <div class="card-body card-body-tootlip p-2">
         <div class="card-title mb-1">
         {%- if list_path -%}
-            <a href="{{ path(list_path, parameters) }}" class="card-link" title="{{ 'index.panel_state_title'|trans }}">{{ text }}</a>
+            <a href="{{ path(list_path, parameters) }}" class="card-link" title="{{ 'index.panel_state_title'|trans }}">{{ state.code }}</a>
         {%- else -%}
-            <span>{{ text }}</span>
+            <span>{{ state.code }}</span>
         {%- endif -%}
         </div>
         <h3 class="font-weight-normal my-1">
-            {{- total|integer }} {{ _self.sup_margin(margin, min_margin) -}}
+            {{- state.total|integer }} {{ _self.sup_margin(state.margin, min_margin) -}}
         </h3>
         <p class="card-text">
-            {{- 'counters.calculations'|trans({'count': count}) -}}
+            {{- 'counters.calculations'|trans({'count': state.count}) -}}
         </p>
     </div>
 </div>
@@ -51,7 +51,7 @@
     <div class="card-body index-parent no-gutters p-2">
         {% for state in states %}
             {% set parameters = state.id ? {'stateid': state.id} : {} %}
-            {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters, state.margin, min_margin) }}
+            {{ _self.cardEntry(state, list_path, parameters, state.margin, min_margin) }}
         {% endfor %}
     </div>
     {% else %}

@@ -1,13 +1,13 @@
 {% import "macros/_icons.html.twig" as icons %}
 
-{% macro cardEntry(count, title, list_path, list_title, icon) -%}
+{% macro cardEntry(entity, count, list_path, icon) -%}
 <div class="card index-child m-1">
     <div class="card-body p-2">
         <div class="card-title mb-1">
             {%- if list_path -%}
-                {{- icons.link(path(list_path), title, 'card-link', icon, list_title) -}}
-            {% else %}
-                {{- title|trans -}}
+                {{- icons.link(path(list_path), entity ~ '.list.title', 'card-link', icon, 'index.panel_title_' ~ entity) -}}
+            {%- else -%}
+                {{- entity|trans -}}
             {%- endif -%}
         </div>
         <h3 class="font-weight-normal my-1">
@@ -32,11 +32,11 @@
         </h1>
     </div>
     <div class="card-body index-parent no-gutters p-2">
-        {{ _self.cardEntry(product_count, 'product.list.title', product_path, 'index.panel_title_product', 'file-alt far') }}
-        {{ _self.cardEntry(task_count, 'task.list.title', task_path, 'index.panel_title_task', 'tasks') }}
-        {{ _self.cardEntry(category_count, 'category.list.title', category_path, 'index.panel_title_category', 'folder far') }}
-        {{ _self.cardEntry(group_count, 'group.list.title', group_path, 'index.panel_title_group', 'code-branch') }}
-        {{ _self.cardEntry(state_count, 'calculationstate.list.title', state_path, 'index.panel_title_state', 'flag far') }}
-        {{ _self.cardEntry(margin_count, 'globalmargin.list.title', margin_path, 'index.panel_title_margin', 'percent') }}
+        {{ _self.cardEntry('product', product_count, product_path, 'file-alt far') }}
+        {{ _self.cardEntry('task', task_count, task_path, 'tasks') }}
+        {{ _self.cardEntry('category', category_count, category_path, 'folder far') }}
+        {{ _self.cardEntry('group', group_count, group_path, 'code-branch') }}
+        {{ _self.cardEntry('calculationstate', state_count, state_path, 'flag far') }}
+        {{ _self.cardEntry('globalmargin', margin_count, margin_path, 'percent') }}
     </div>
 </div>

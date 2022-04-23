@@ -58,7 +58,7 @@ class CalculationServiceTest extends KernelTestCase
             ->setUserMargin(self::MARGIN_USER);
 
         $manager = $this->getManager();
-        $service = $this->getCalculationService($manager);
+        $service = $this->getTestedService($manager);
         $service->updateTotal($calculation);
 
         $this->assertEquals(1, $calculation->getGroupsCount());
@@ -112,7 +112,7 @@ class CalculationServiceTest extends KernelTestCase
         echo \sprintf("\n%-15s: %s", $name, $value);
     }
 
-    protected function getCalculationService(EntityManager $manager): CalculationService
+    protected function getTestedService(EntityManager $manager): CalculationService
     {
         // get services
         $globalRepository = $this->getService(GlobalMarginRepository::class);

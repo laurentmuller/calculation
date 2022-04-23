@@ -20,6 +20,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
+use App\Service\UserService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TranslatorFlashMessageTrait;
@@ -49,7 +50,7 @@ abstract class AbstractController extends BaseController
     /**
      * The home route name.
      */
-    public const HOME_PAGE = 'homepage';
+    final public const HOME_PAGE = 'homepage';
 
     /**
      * The application service.
@@ -60,6 +61,11 @@ abstract class AbstractController extends BaseController
      * The URL generator service.
      */
     protected ?UrlGeneratorService $generatorService = null;
+
+    /**
+     * The user service.
+     */
+    protected ?UserService $userService = null;
 
     /**
      * Gets the address from (email and name) used to send email.
@@ -137,6 +143,7 @@ abstract class AbstractController extends BaseController
     public static function getSubscribedServices(): array
     {
         return \array_merge(parent::getSubscribedServices(), [
+            UserService::class,
             ApplicationService::class,
             TranslatorInterface::class,
             UrlGeneratorService::class,
@@ -195,6 +202,18 @@ abstract class AbstractController extends BaseController
         }
 
         return null;
+    }
+
+    /**
+     * Gets the user service.
+     */
+    public function getUserService(): UserService
+    {
+        if (!$this->userService instanceof UserService) {
+            $this->userService = $this->getService(UserService::class);
+        }
+
+        return $this->userService;
     }
 
     /**

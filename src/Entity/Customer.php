@@ -22,7 +22,9 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *
  * @author Laurent Muller
  *
- * @ORM\Table(name="sy_Customer")
+ * @ORM\Table(name="sy_Customer", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_customer_email", columns={"email"}),
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @UniqueEntity(fields="email", message="customer.unique_email")
  */

@@ -14,22 +14,24 @@
 <sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
 {%- endmacro %}
 
-{% macro cardEntry(count, total, date, margin, list_path, min_margin) -%}
+{% macro cardEntry(month, list_path, min_margin) -%}
 <div class="card index-child m-1">
     <div class="card-body card-body-tootlip p-2">
         <div class="card-title mb-1">
-        {%- set text = date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
+        {%- set text = month.date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
         {%- if list_path -%}
-            <a href="{{ path(list_path, {'search': date|localedate('none', null, null, 'MM.Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">{{ text }}</a>
+            <a href="{{ path(list_path, {'search': month.date|localedate('none', null, null, 'MM.Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">
+                {{ text }}
+            </a>
         {%- else -%}
             <span>{{ text }}</span>
         {%- endif -%}
         </div>
         <h3 class="font-weight-normal my-1">
-            {{- total|integer }} {{ _self.sup_margin(margin, min_margin) -}}
+            {{- month.total|integer }} {{ _self.sup_margin(month.margin, min_margin) -}}
         </h3>
         <p class="card-text">
-            {{- 'counters.calculations'|trans({'count': count}) -}}
+            {{- 'counters.calculations'|trans({'count': month.count}) -}}
         </p>
     </div>
 </div>
@@ -52,7 +54,7 @@
     {% if months|length %}
     <div class="card-body index-parent no-gutters p-2">
     {% for month in months %}
-        {{ _self.cardEntry(month.count, month.total, month.date, month.margin, list_path, min_margin) }}
+        {{ _self.cardEntry(month, list_path, min_margin) }}
     {% endfor %}
     </div>
     {% else %}

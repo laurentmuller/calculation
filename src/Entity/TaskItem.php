@@ -25,7 +25,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Laurent Muller
  *
- * @ORM\Table(name="sy_TaskItem")
+ * @ORM\Table(name="sy_TaskItem", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_task_item_task_name", columns={"task_id", "name"})
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\TaskItemRepository")
  * @UniqueEntity(fields={"task", "name"}, message="task_item.unique_name", errorPath="name")
  */

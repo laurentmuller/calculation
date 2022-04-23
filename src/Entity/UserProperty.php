@@ -19,7 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * User's property.
  *
- * @ORM\Table(name="sy_UserProperty")
+ * @ORM\Table(name="sy_UserProperty", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_user_property_user_name", columns={"user_id", "name"})
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\UserPropertyRepository")
  * @UniqueEntity(fields={"name", "user"}, message="property.unique_name")
  */

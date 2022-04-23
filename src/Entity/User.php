@@ -34,7 +34,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *
  * @author Laurent Muller
  *
- * @ORM\Table(name="sy_User")
+ * @ORM\Table(name="sy_User", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_user_email", columns={"email"}),
+ *     @ORM\UniqueConstraint(name="unique_user_username", columns={"username"})
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="email.already_used")
  * @UniqueEntity(fields={"username"}, message="username.already_used")

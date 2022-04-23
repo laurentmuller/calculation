@@ -620,14 +620,14 @@ index:
   panel_month: Calculations par mois
   panel_month_title: Afficher les calculations pour ce mois
   panel_month_user: Mes calculations
-  panel_month_user_help: Afficher uniquement les calculations que j'ai créés ou modifiées
+  panel_month_user_help: Afficher uniquement les calculations que j'ai créés ou modifiés
   panel_state: Calculations par statut
   panel_state_title: Afficher les calculations pour ce statut
   panel_title_category: Afficher la liste des catégories
   panel_title_group: Afficher la liste des groupes
-  panel_title_margin: Afficher la liste des marges globales
+  panel_title_globalmargin: Afficher la liste des marges globales
   panel_title_product: Afficher la liste des produits
-  panel_title_state: Afficher la liste des statuts
+  panel_title_calculationstate: Afficher la liste des statuts
   panel_title_task: Afficher la liste des tâches
   title: Accueil
   title_help: Afficher la page d'accueil

@@ -34,10 +34,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
      */
     public function formatItems(array $items): string
     {
-        $result = \array_map(
-            fn (array $item): string => \sprintf('%s (%d)', $item['description'], $item['count']),
-            $items
-        );
+        $result = \array_map(fn (array $item): string => \sprintf('%s (%d)', $item['description'], $item['count']), $items);
 
         return \implode('<br>', $result);
     }

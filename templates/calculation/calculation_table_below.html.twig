@@ -2,7 +2,7 @@
 
 {# parameters #}
 {%- set title = 'below.title' -%}
-{%- set title_icon = 'percent' -%}
+{%- set title_icon = ICON_GLOBALMARGIN -%}
 
 {% block header_actions -%}
 <small>{{ 'below.description'|trans({'%margin%': customData.min_margin|percent}) }}</small>

@@ -12,7 +12,7 @@
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
 {%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
-{%- set is_test = is_dev and is_remembered and app.user.username == 'Bibi' -%}
+{%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
 
 {# rights #}
 {%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
@@ -35,7 +35,7 @@
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
             {%- if is_granted_calculation -%}
-                {{- icons.navItem(path('calculation_table'), 'calculation.list.title', 'calculator') -}}
+                {{- icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) -}}
             {%- endif -%}
             {% include 'navigation/navigation_data.html.twig' %}
             {% include 'navigation/navigation_tools.html.twig' %}

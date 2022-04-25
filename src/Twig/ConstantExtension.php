@@ -53,6 +53,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         $values = [];
         $this->addConstants(CalculationService::class, $values);
         $this->addConstants(EntityVoterInterface::class, $values);
+        $this->addIcons($values);
 
         return $values;
     }
@@ -81,5 +82,19 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         foreach ($constants as $constant) {
             $values[$constant->getName()] = $constant->getValue();
         }
+    }
+
+    private function addIcons(array &$values): void
+    {
+        $values['ICON_CALCULATION'] = 'calculator';
+        $values['ICON_CALCULATIONSTATE'] = 'flag far';
+        $values['ICON_CATEGORY'] = 'folder far';
+        $values['ICON_CUSTOMER'] = 'address-card far';
+        $values['ICON_GLOBALMARGIN'] = 'percent';
+        $values['ICON_GROUP'] = 'code-branch';
+        $values['ICON_LOG'] = 'book';
+        $values['ICON_PRODUCT'] = 'file-alt far';
+        $values['ICON_TASK'] = 'tasks';
+        $values['ICON_USER'] = 'user far';
     }
 }

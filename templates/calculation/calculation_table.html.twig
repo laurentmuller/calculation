@@ -2,7 +2,7 @@
 
 {# parameters #}
 {%- set title = title|default('calculation.list.title') -%}
-{%- set title_icon = title_icon|default('calculator') -%}
+{%- set title_icon = title_icon|default(ICON_CALCULATION) -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
 
@@ -43,7 +43,7 @@
 
 {% block edit_actions -%}
 {{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', 'pencil', edit_class ~ ' btn-calculation-edit') }}
-{{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', 'flag far', 'btn-state') }}
+{{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', ICON_CALCULATIONSTATE, 'btn-state') }}
 {%- endblock %}
 
 {% block delete_actions -%}

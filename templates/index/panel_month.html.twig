@@ -4,11 +4,9 @@
 {% macro sup_margin(margin, min_margin) -%}
 {%- if margin < min_margin -%}
     {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
-    {%- set class_badge = 'badge-danger has-tooltip' -%}
     {%- set class_name = 'text-danger has-tooltip' -%}
 {% else %}
     {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
-    {%- set class_badge = 'badge-success' -%}
     {%- set class_name = '' -%}
 {%- endif -%}
 <sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
@@ -16,11 +14,12 @@
 
 {% macro cardEntry(month, list_path, min_margin) -%}
 <div class="card index-child m-1">
-    <div class="card-body card-body-tootlip p-2">
+    <div class="card-body card-body-tooltip p-2">
         <div class="card-title mb-1">
         {%- set text = month.date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
         {%- if list_path -%}
-            <a href="{{ path(list_path, {'search': month.date|localedate('none', null, null, 'MM.Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">
+            {%- set list_title = 'index.panel_month_title'|trans({'%month%': text}) -%}
+            <a href="{{ path(list_path, {'search': month.date|localedate('none', null, null, 'MM.Y')}) }}" class="card-link" title="{{ list_title }}">
                 {{ text }}
             </a>
         {%- else -%}

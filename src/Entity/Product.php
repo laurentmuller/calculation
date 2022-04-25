@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -111,20 +110,5 @@ class Product extends AbstractCategoryItemEntity
         $this->price = $this->round($price);
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->description,
-            $this->unit,
-            $this->supplier,
-            FormatUtils::formatAmount($this->price),
-            $this->getCategoryCode(),
-            $this->getGroupCode(),
-        ];
     }
 }

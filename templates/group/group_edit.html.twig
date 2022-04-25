@@ -4,7 +4,7 @@
 
 {# parameters #}
 {%- set title = new ? 'group.add.title' : 'group.edit.title' -%}
-{%- set title_icon = 'code-branch' -%}
+{%- set title_icon = ICON_GROUP -%}
 {%- set page_list = 'group_table' -%}
 {%- set margins_length = form.margins|length %}
 {%- set table_class = 'table table-borderless table-edit' ~ (margins_length == 0 ? ' d-none' : '') -%}

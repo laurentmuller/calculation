@@ -15,7 +15,6 @@ namespace App\Entity;
 use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
 use App\Traits\RoleTrait;
-use App\Util\FormatUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -545,17 +544,5 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->lastLogin = new \DateTimeImmutable();
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->email,
-            $this->username,
-            FormatUtils::formatDateTime($this->lastLogin),
-        ];
     }
 }

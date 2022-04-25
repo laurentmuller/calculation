@@ -8,26 +8,26 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="dataDropdown">
     {%- if is_granted_product -%}
-        {{- icons.dropdownItem(path('product_table'), 'product.list.title', 'file-alt far') -}}
+        {{- icons.dropdownItem(path('product_table'), 'product.list.title', ICON_PRODUCT) -}}
     {%- endif -%}
     {%- if is_granted_task -%}
-        {{- icons.dropdownItem(path('task_table'), 'task.list.title', 'tasks') -}}
+        {{- icons.dropdownItem(path('task_table'), 'task.list.title', ICON_TASK) -}}
     {%- endif -%}
     {%- if is_granted_category -%}
-        {{- icons.dropdownItem(path('category_table'), 'category.list.title', 'folder far') -}}
+        {{- icons.dropdownItem(path('category_table'), 'category.list.title', ICON_CATEGORY) -}}
     {%- endif -%}
     {%- if is_granted_group -%}
-        {{- icons.dropdownItem(path('group_table'), 'group.list.title', 'code-branch') -}}
+        {{- icons.dropdownItem(path('group_table'), 'group.list.title', ICON_GROUP) -}}
     {%- endif -%}
     {%- if is_granted_calculation_state -%}
-        {{- icons.dropdownItem(path('calculationstate_table'), 'calculationstate.list.title', 'flag far') -}}
+        {{- icons.dropdownItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATIONSTATE) -}}
     {%- endif -%}
     {%- if is_granted_global_margin -%}
-        {{- icons.dropdownItem(path('globalmargin_table'), 'globalmargin.list.title', 'percent') -}}
+        {{- icons.dropdownItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBALMARGIN) -}}
     {%- endif -%}
     {%- if is_granted_customer %}
         {%- if is_granted_data -%}{{- icons.dropdownSeparator -}}{% endif %}
-        {{- icons.dropdownItem(path('customer_table'), 'customer.list.title', 'address-card far') -}}
+        {{- icons.dropdownItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) -}}
     {%- endif -%}
     </div>
 </li>

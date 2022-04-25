@@ -37,7 +37,7 @@
 {%- set is_admin = is_granted('ROLE_ADMIN') -%}
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
-{%- set is_bibi = is_dev and is_remembered and app.user.username == 'Bibi' -%}
+{%- set is_bibi = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
 {%- set route_params = {'caller': path('site_map')} -%}
 
 {# rights #}
@@ -82,7 +82,7 @@
         <ul>
             {% if is_admin %}
             <li>{{ _self.link('admin_parameters', 'parameters.title', 'cogs') }}</li>
-            <li>{{ _self.link('user_table', 'user.list.title', 'user far') -}}</li>
+            <li>{{ _self.link('user_table', 'user.list.title', ICON_USER) -}}</li>
             {% endif %}
             {% if is_super_admin %}
             <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
@@ -100,7 +100,7 @@
             {% if is_list_calculation %}
             <li id="home">{{ _self.link('homepage', 'index.title', 'home') }}</li>
             <li>
-                <ul>{{ _self.link('calculation_table', 'calculation.list.title', 'calculator') }}
+                <ul>{{ _self.link('calculation_table', 'calculation.list.title', ICON_CALCULATION) }}
                     {% if is_add_calculation or is_export_calculation %}
                     <li>
                         <ul>
@@ -121,13 +121,13 @@
             <li>
                 <span class="rounded">{{- icons.icon('database', 'index.menu_data') -}}</span>
                 <ul>
-                    {{ _self.add_entity_entry('product', 'file-alt far', is_list_product, is_add_product, is_export_product, route_params) }}
-                    {{ _self.add_entity_entry('task', 'tasks', is_list_task, is_add_task, is_export_task, route_params) }}
-                    {{ _self.add_entity_entry('category', 'folder far', is_list_category, is_add_category, is_export_category, route_params) }}
-                    {{ _self.add_entity_entry('group', 'code-branch', is_list_group, is_add_group, is_export_group, route_params) }}
-                    {{ _self.add_entity_entry('calculationstate', 'flag far', is_list_state, is_add_state, is_export_state, route_params) }}
-                    {{ _self.add_entity_entry('globalmargin', 'percent', is_list_margin, is_add_margin, is_export_margin, route_params) }}
-                    {{ _self.add_entity_entry('customer', 'address-card far', is_list_customer, is_add_customer, is_export_customer, route_params) }}
+                    {{ _self.add_entity_entry('product', ICON_PRODUCT, is_list_product, is_add_product, is_export_product, route_params) }}
+                    {{ _self.add_entity_entry('task', ICON_TASK, is_list_task, is_add_task, is_export_task, route_params) }}
+                    {{ _self.add_entity_entry('category', ICON_CATEGORY, is_list_category, is_add_category, is_export_category, route_params) }}
+                    {{ _self.add_entity_entry('group', ICON_GROUP, is_list_group, is_add_group, is_export_group, route_params) }}
+                    {{ _self.add_entity_entry('calculationstate', ICON_CALCULATIONSTATE, is_list_state, is_add_state, is_export_state, route_params) }}
+                    {{ _self.add_entity_entry('globalmargin', ICON_GLOBALMARGIN, is_list_margin, is_add_margin, is_export_margin, route_params) }}
+                    {{ _self.add_entity_entry('customer', ICON_CUSTOMER, is_list_customer, is_add_customer, is_export_customer, route_params) }}
                 </ul>
             </li>
             {% endif %}
@@ -136,9 +136,9 @@
                 <ul>
                     <li>{{ _self.link('search', 'search.title', 'search') }}</li>
                     {% if is_admin %}
-                    <li>{{ _self.link('admin_product', 'product.update.title', 'file-alt far') }}</li>
+                    <li>{{ _self.link('admin_product', 'product.update.title', ICON_PRODUCT) }}</li>
                     {% endif %}
-                    <li>{{ _self.link('below_table', 'below.title', 'percent') }}</li>
+                    <li>{{ _self.link('below_table', 'below.title', ICON_GLOBALMARGIN) }}</li>
                     <li>{{ _self.link('duplicate_table', 'duplicate.title', 'copy far') }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
                     {% if is_list_task %}
@@ -151,7 +151,7 @@
                 <span>{{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}</span>
                 <ul>
                     <li>{{ _self.link('chart_by_month', 'title_by_month', 'calendar-alt far', 'chart') }}</li>
-                    <li>{{ _self.link('chart_by_state', 'title_by_state', 'flag far', 'chart') }}</li>
+                    <li>{{ _self.link('chart_by_state', 'title_by_state', ICON_CALCULATIONSTATE, 'chart') }}</li>
                     {% if is_bibi -%}
                     <li>{{ _self.link('calculation_pivot', 'pivot.title', 'table') }}</li>
                     {% endif %}

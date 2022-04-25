@@ -25,18 +25,18 @@
 {%- set margin_path = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) ? 'globalmargin_table' : false -%}
 {%- set state_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) ? 'calculationstate_table' : false -%}
 
-<div class="card">
+<div class="card mb-2">
     <div class="card-header">
         <h1 class="card-title">
             {{ icons.icon("database", "index.panel_count") }}
         </h1>
     </div>
     <div class="card-body index-parent no-gutters p-2">
-        {{ _self.cardEntry('product', product_count, product_path, 'file-alt far') }}
-        {{ _self.cardEntry('task', task_count, task_path, 'tasks') }}
-        {{ _self.cardEntry('category', category_count, category_path, 'folder far') }}
-        {{ _self.cardEntry('group', group_count, group_path, 'code-branch') }}
-        {{ _self.cardEntry('calculationstate', state_count, state_path, 'flag far') }}
-        {{ _self.cardEntry('globalmargin', margin_count, margin_path, 'percent') }}
+        {{ _self.cardEntry('product', product_count, product_path, ICON_PRODUCT) }}
+        {{ _self.cardEntry('task', task_count, task_path, ICON_TASK) }}
+        {{ _self.cardEntry('category', category_count, category_path, ICON_CATEGORY) }}
+        {{ _self.cardEntry('group', group_count, group_path, ICON_GROUP) }}
+        {{ _self.cardEntry('calculationstate', state_count, state_path, ICON_CALCULATIONSTATE) }}
+        {{ _self.cardEntry('globalmargin', margin_count, margin_path, ICON_GLOBALMARGIN) }}
     </div>
 </div>

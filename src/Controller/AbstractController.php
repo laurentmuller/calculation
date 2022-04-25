@@ -83,7 +83,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplication(): ApplicationService
     {
-        if (!$this->application instanceof ApplicationService) {
+        if (null === $this->application) {
             $this->application = $this->getService(ApplicationService::class);
         }
 
@@ -167,7 +167,7 @@ abstract class AbstractController extends BaseController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
-        if (!$this->generatorService instanceof UrlGeneratorService) {
+        if (null === $this->generatorService) {
             $this->generatorService = $this->getService(UrlGeneratorService::class);
         }
 
@@ -209,7 +209,7 @@ abstract class AbstractController extends BaseController
      */
     public function getUserService(): UserService
     {
-        if (!$this->userService instanceof UserService) {
+        if (null === $this->userService) {
             $this->userService = $this->getService(UserService::class);
         }
 

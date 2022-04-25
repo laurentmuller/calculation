@@ -210,15 +210,4 @@ class CalculationState extends AbstractEntity
 
         return $this;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->code,
-            $this->description,
-        ];
-    }
 }

@@ -928,20 +928,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->customer,
-            $this->description,
-            $this->getFormattedId(),
-            $this->getFormattedDate(),
-            $this->getStateCode(),
-        ];
-    }
-
-    /**
      * Gets the key for the given item.
      *
      * @param CalculationItem $item the item to get key for

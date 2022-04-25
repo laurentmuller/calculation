@@ -305,17 +305,6 @@ class Group extends AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->code,
-            $this->description,
-        ];
-    }
-
-    /**
      * Iteratively reduce these categories to a single value using the callback function.
      *
      * @psalm-param callable(int, Category): int $callback

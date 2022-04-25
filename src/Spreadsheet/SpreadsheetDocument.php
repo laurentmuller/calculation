@@ -39,17 +39,17 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * The default margins (10 millimeters).
      */
-    public const DEFAULT_MARGIN = 0.4;
+    final public const DEFAULT_MARGIN = 0.4;
 
     /**
      * The top margins when customer header is present (21 millimeters).
      */
-    public const HEADER_CUSTOMER_MARGIN = 0.83;
+    final public const HEADER_CUSTOMER_MARGIN = 0.83;
 
     /**
      * The top and bottom margins when header and/or footer is present (12 millimeters).
      */
-    public const HEADER_FOOTER_MARGIN = 0.47;
+    final public const HEADER_FOOTER_MARGIN = 0.47;
 
     /**
      * The date time format ('dd/mm/yyyy hh:mm').
@@ -221,8 +221,8 @@ class SpreadsheetDocument extends Spreadsheet
         $sheet = $this->getActiveSheet();
 
         $drawing = new Drawing();
-        $drawing->setResizeProportional(false)
-            ->setPath($path)
+        $drawing->setPath($path)
+            ->setResizeProportional(false)
             ->setCoordinates($coordinates)
             ->setWidth($width)
             ->setHeight($height)

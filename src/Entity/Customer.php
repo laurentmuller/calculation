@@ -359,22 +359,6 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->firstName,
-            $this->lastName,
-            $this->company,
-            $this->address,
-            $this->zipCode,
-            $this->city,
-            $this->email,
-        ];
-    }
-
-    /**
      * Join 2 elements with a string.
      * If both elements are empty, an empty string is returned;
      * if one of elements is empty, the other element is returned

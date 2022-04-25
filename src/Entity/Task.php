@@ -210,17 +210,4 @@ class Task extends AbstractCategoryItemEntity implements \Countable
 
         return $this;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->name,
-            $this->unit,
-            $this->getCategoryCode(),
-            $this->getGroupCode(),
-        ];
-    }
 }

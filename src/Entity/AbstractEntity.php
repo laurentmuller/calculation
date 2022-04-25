@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Traits\MathTrait;
-use App\Traits\SearchTrait;
 use App\Util\Utils;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,7 +26,6 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class AbstractEntity implements \Stringable
 {
     use MathTrait;
-    use SearchTrait;
 
     /**
      * The primary key identifier.
@@ -77,16 +75,6 @@ abstract class AbstractEntity implements \Stringable
     public function isNew(): bool
     {
         return empty($this->id);
-    }
-
-    /**
-     * Gets the terms to search in.
-     *
-     * @see AbstractEntity::match()
-     */
-    protected function getSearchTerms(): array
-    {
-        return [];
     }
 
     /**

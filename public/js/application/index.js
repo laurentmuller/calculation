@@ -40,7 +40,7 @@ function onRestrictChange($restrict) {
         // show selection
         const $row = $('#calculations tr.table-primary');
         if ($row.length) {
-            $row.scrollInViewport().timeoutToggle('table-primary');
+            $row.scrollInViewport().timeoutToggle('table-primary', null);
         }
 
         // enable tooltips
@@ -63,7 +63,7 @@ function onRestrictChange($restrict) {
     }
 
     // enable tooltips for calculations by state or by month
-    $('.card-body-tootlip').tooltip({
+    $('.card-body-tooltip').tooltip({
         selector: '.has-tooltip',
         customClass: 'tooltip-danger'
     });

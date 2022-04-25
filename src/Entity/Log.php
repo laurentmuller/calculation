@@ -210,16 +210,4 @@ class Log extends AbstractEntity
 
         return $this;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->channel,
-            $this->level,
-            $this->message,
-        ];
-    }
 }

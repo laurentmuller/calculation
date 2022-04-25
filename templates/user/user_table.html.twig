@@ -2,7 +2,7 @@
 
 {# parameters #}
 {%- set title = 'user.list.title' -%}
-{%- set title_icon = 'user far' -%}
+{%- set title_icon = ICON_USER -%}
 {%- set object_type = ENTITY_USER -%}
 {%- set attributes = attributes|default({})|merge({'user-id': app.user.id}) -%}
 
@@ -43,7 +43,7 @@
 {{- _self.item_path(path('user_rights', params), 'user.list.rights_title', 'unlock', 'btn-rights') }}
 {{- _self.item_path(path('user_message', params), 'user.message.title', 'envelope far', 'btn-user-message') }}
 {% endif %}
-{%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_SUPER_ADMIN') -%}
+{%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_ADMIN') -%}
     {{- _self.item_separator() }}
     {{- _self.item_path(path('homepage', {'_switch_user': 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
@@ -67,3 +67,8 @@
 {{ _self.property_row('user.fields.enabled', '%enabled%') }}
 {{ _self.property_row('user.fields.lastLogin', '%lastLogin%') }}
 {%- endblock %}
+
+{% block body %}
+{{ parent() }}
+{%- include 'user/user_switch.html.twig' -%}
+{% endblock %}

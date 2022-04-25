@@ -2,7 +2,7 @@
 
 {# parameters #}
 {%- set title = new ? 'customer.add.title' : 'customer.edit.title' -%}
-{%- set title_icon = 'address-card far' -%}
+{%- set title_icon = ICON_CUSTOMER -%}
 {%- set page_list = 'customer_table' -%}
 {%- set form_attr = form_attr|default({})|merge({
                      'data-title': title|trans,

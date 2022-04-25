@@ -15,10 +15,11 @@
 {% macro cardEntry(state, list_path, parameters=[], min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
 <div class="card index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
-    <div class="card-body card-body-tootlip p-2">
+    <div class="card-body card-body-tooltip p-2">
         <div class="card-title mb-1">
         {%- if list_path -%}
-            <a href="{{ path(list_path, parameters) }}" class="card-link" title="{{ 'index.panel_state_title'|trans }}">{{ state.code }}</a>
+            {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
+            <a href="{{ path(list_path, parameters) }}" class="card-link" title="{{ list_title }}">{{ state.code }}</a>
         {%- else -%}
             <span>{{ state.code }}</span>
         {%- endif -%}
@@ -51,7 +52,7 @@
     <div class="card-body index-parent no-gutters p-2">
         {% for state in states %}
             {% set parameters = state.id ? {'stateid': state.id} : {} %}
-            {{ _self.cardEntry(state, list_path, parameters, state.margin, min_margin) }}
+            {{ _self.cardEntry(state, list_path, parameters, min_margin) }}
         {% endfor %}
     </div>
     {% else %}

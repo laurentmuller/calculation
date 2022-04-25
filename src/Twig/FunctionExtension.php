@@ -63,7 +63,6 @@ final class FunctionExtension extends AbstractExtension
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator, private readonly UrlGeneratorService $generator)
     {
         $this->setTranslator($translator);
-
         $projectDir = $kernel->getProjectDir();
         $filename = FileUtils::buildPath($projectDir, 'composer.lock');
         $this->webDir = (string) \realpath(FileUtils::buildPath($projectDir, 'public'));
@@ -159,13 +158,12 @@ final class FunctionExtension extends AbstractExtension
      */
     public function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
-        $alternate = $this->getAlternateParameter($parameters);
         $url = $this->getAssetUrl($env, $path, $packageName);
         $version = $this->version;
         $nonce = $this->getNonce($env);
         $params = $this->reduceParameters($parameters);
 
-        return \sprintf('<link rel="stylesheet%s" href="%s?v=%d" nonce="%s"%s>', $alternate, $url, $version, $nonce, $params);
+        return \sprintf('<link rel="stylesheet" href="%s?v=%d" nonce="%s" %s>', $url, $version, $nonce, $params);
     }
 
     /**
@@ -183,7 +181,7 @@ final class FunctionExtension extends AbstractExtension
         $nonce = $this->getNonce($env);
         $params = $this->reduceParameters($parameters);
 
-        return \sprintf('<script src="%s?v=%d" nonce="%s"%s></script>', $url, $version, $nonce, $params);
+        return \sprintf('<script src="%s?v=%d" nonce="%s" %s></script>', $url, $version, $nonce, $params);
     }
 
     /**
@@ -285,21 +283,6 @@ final class FunctionExtension extends AbstractExtension
     public function routeParams(Request $request, int $id = 0): array
     {
         return $this->generator->routeParams($request, $id);
-    }
-
-    /**
-     * Gets the CSS alternate parameter value.
-     *
-     * @param array $parameters the parameters to search in and to update
-     *
-     * @return string the alternate parameter value
-     */
-    private function getAlternateParameter(array &$parameters): string
-    {
-        $alternate = isset($parameters['alternate']) && (bool) ($parameters['alternate']) ? ' alternate' : '';
-        unset($parameters['alternate']);
-
-        return $alternate;
     }
 
     /**

@@ -19,7 +19,6 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Service\UserService;
 use App\Traits\MathTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,7 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * The index controller for home page.
+ * Controller to display the home page.
  *
  * @author Laurent Muller
  */
@@ -43,12 +42,20 @@ class IndexController extends AbstractController
     final public const PARAM_RESTRICT = 'restrict';
 
     /**
+     * Constructor.
+     */
+    public function __construct(private readonly EntityManagerInterface $manager)
+    {
+    }
+
+    /**
      *  Display the home page.
      *
      * @Route("/", name="homepage")
      */
-    public function invoke(Request $request, EntityManagerInterface $manager, UserService $service): Response
+    public function invoke(Request $request): Response
     {
+        $service = $this->getUserService();
         $application = $this->getApplication();
         $restrict = $this->getRestrict($request);
         $user = $restrict ? $this->getUser() : null;
@@ -57,24 +64,24 @@ class IndexController extends AbstractController
 
         $parameters = [
             'min_margin' => $application->getMinMargin(),
-            'calculations' => $this->getCalculations($manager, $application->getPanelCalculation(), $user),
+            'calculations' => $this->getCalculations($application->getPanelCalculation(), $user),
         ];
         if ($restrict) {
             $parameters[self::PARAM_RESTRICT] = 1;
         }
         if ($application->isPanelState()) {
-            $parameters['states'] = $this->getStates($manager);
+            $parameters['states'] = $this->getStates();
         }
         if ($application->isPanelMonth()) {
-            $parameters['months'] = $this->getMonths($manager);
+            $parameters['months'] = $this->getMonths();
         }
         if ($application->isPanelCatalog()) {
-            $parameters['task_count'] = $this->count($manager, Task::class);
-            $parameters['group_count'] = $this->count($manager, Group::class);
-            $parameters['product_count'] = $this->count($manager, Product::class);
-            $parameters['category_count'] = $this->count($manager, Category::class);
-            $parameters['margin_count'] = $this->count($manager, GlobalMargin::class);
-            $parameters['state_count'] = $this->count($manager, CalculationState::class);
+            $parameters['task_count'] = $this->count(Task::class);
+            $parameters['group_count'] = $this->count(Group::class);
+            $parameters['product_count'] = $this->count(Product::class);
+            $parameters['category_count'] = $this->count(Category::class);
+            $parameters['margin_count'] = $this->count(GlobalMargin::class);
+            $parameters['state_count'] = $this->count(CalculationState::class);
         }
 
         // save
@@ -86,23 +93,22 @@ class IndexController extends AbstractController
     }
 
     /**
+     * @template T of \App\Entity\AbstractEntity
      * @psalm-param class-string<T> $className
-     * @psalm-template T
      */
-    private function count(EntityManagerInterface $manager, $className): int
+    private function count($className): int
     {
-        // @phpstan-ignore-next-line
-        return $manager->getRepository($className)->count([]);
+        return $this->manager->getRepository($className)->count([]);
     }
 
-    private function getCalculations(EntityManagerInterface $manager, int $maxResults, ?UserInterface $user): array
+    private function getCalculations(int $maxResults, ?UserInterface $user): array
     {
-        return $manager->getRepository(Calculation::class)->getLastCalculations($maxResults, $user);
+        return $this->manager->getRepository(Calculation::class)->getLastCalculations($maxResults, $user);
     }
 
-    private function getMonths(EntityManagerInterface $manager): array
+    private function getMonths(): array
     {
-        return $manager->getRepository(Calculation::class)->getByMonth();
+        return $this->manager->getRepository(Calculation::class)->getByMonth();
     }
 
     private function getRestrict(Request $request): bool
@@ -118,9 +124,9 @@ class IndexController extends AbstractController
         return false;
     }
 
-    private function getStates(EntityManagerInterface $manager): array
+    private function getStates(): array
     {
-        $states = $manager->getRepository(CalculationState::class)->getListCountCalculations();
+        $states = $this->manager->getRepository(CalculationState::class)->getListCountCalculations();
 
         // add overall entry
         $count = \array_sum(\array_column($states, 'count'));

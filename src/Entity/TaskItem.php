@@ -202,14 +202,4 @@ class TaskItem extends AbstractEntity implements \Countable
 
         return $this;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSearchTerms(): array
-    {
-        return [
-            $this->name,
-        ];
-    }
 }

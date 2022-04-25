@@ -7,18 +7,18 @@
     {% if editable %}
         <div class="row">
             <div class="col">
-                <h1 class="card-title">{{ icons.icon('file-alt far', 'calculation.edit.panel_items') }}</h1>
+                <h1 class="card-title">{{ icons.icon(ICON_PRODUCT, 'calculation.edit.panel_items') }}</h1>
             </div>
             <div class="col text-right d-print-none mb-0">
                 <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
                     {{ icons.link('#', null, 'btn btn-secondary btn-add-item', 'file far', 'calculation.edit.add_item') }}
-                    {{ icons.link('#', null, 'btn btn-secondary btn-add-task', 'tasks', 'calculation.edit.add_task') }}
+                    {{ icons.link('#', null, 'btn btn-secondary btn-add-task', ICON_TASK, 'calculation.edit.add_task') }}
                     {{ icons.link('#', null, 'btn btn-secondary btn-sort-items' ~ (item.sortable ? '' : ' disabled'), 'sort-alpha-up', 'calculation.edit.sort_item') }}
                 </div>
             </div>
         </div>
     {% else %}
-        <h1 class="card-title">{{ icons.icon('file-alt far', 'calculation.edit.panel_items') }}</h1>
+        <h1 class="card-title">{{ icons.icon(ICON_PRODUCT, 'calculation.edit.panel_items') }}</h1>
     {% endif %}
     </div>
     <div class="card-body p-2">

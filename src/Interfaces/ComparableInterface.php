@@ -23,9 +23,9 @@ interface ComparableInterface
     /**
      * Compare this object with an other object.
      *
-     * <code>$this <&nbsp;  $other</code> =>  returns less then 0<br>
+     * <code>$this <  $other</code> =>  returns less then 0<br>
      * <code>$this == $other</code> =>  returns 0<br>
-     * <code>$this >&nbsp;  $other</code> =>  returns greater then 0<br>
+     * <code>$this >  $other</code> =>  returns greater then 0<br>
      *
      * @param ComparableInterface $other the other object to compare to
      *

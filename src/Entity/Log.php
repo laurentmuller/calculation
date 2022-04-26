@@ -138,6 +138,18 @@ class Log extends AbstractEntity
     }
 
     /**
+     * Gets the user identifier.
+     */
+    public function getUser(): ?string
+    {
+        if (null !== $this->extra && isset($this->extra['user'])) {
+            return (string) $this->extra['user'];
+        }
+
+        return null;
+    }
+
+    /**
      * Sets the channel.
      */
     public function setChannel(string $channel): self
@@ -150,7 +162,7 @@ class Log extends AbstractEntity
     /**
      * Sets the context.
      */
-    public function setContext(?array $context): self
+    public function setContext(array $context): self
     {
         $this->context = $context;
 
@@ -170,7 +182,7 @@ class Log extends AbstractEntity
     /**
      * Sets the extra information.
      */
-    public function setExtra(?array $extra): self
+    public function setExtra(array $extra): self
     {
         $this->extra = $extra;
 

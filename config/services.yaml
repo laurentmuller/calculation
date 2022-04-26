@@ -100,6 +100,11 @@ services:
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
 
+    # add user identifier to extra data
+    App\Logger\UserRequestProcessor:
+        tags:
+            - { name: monolog.processor }
+
     # custom Twig AppVariable
     twig.app_variable:
         class: App\Service\ApplicationService

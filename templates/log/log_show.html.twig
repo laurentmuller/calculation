@@ -4,23 +4,35 @@
 {% import 'macros/_properties.html.twig' as properties %}
 
 {# macros #}
+{% macro format_var(value) -%}
+{{- value|var_export|replace({
+    '[': '<samp class="text-danger">[</samp>',
+    ']': '<samp class="text-danger">]</samp>',
+    '"': '<samp class="text-danger">"</samp>',
+    '\'': '<samp class="text-danger">\'</samp>',
+    '=>': '<samp class="text-danger">=></samp>',
+    ',': '<samp class="text-muted">,</samp>'
+})|raw -}}
+{%- endmacro %}
+
 {% macro formatArray(name, value) %}
-{% import 'log/_macro_log.html.twig' as tools %}
 {%- if value|length -%}
     <tr>
         <td class="w-25">{{ name|trans }}</td>
         <td class="w-75">
-            <pre class="text-break text-success white-space-pre-wrap mb-0">{{- tools.format_var(value) -}}</pre>
+            <pre class="text-break text-success white-space-pre-wrap mb-0">{{- _self.format_var(value) -}}</pre>
         </td>
     </tr>
 {%- endif -%}
 {% endmacro %}
+
 {% macro formatSql(name, value) %}
 <tr>
     <td class="w-25">{{ name|trans }}</td>
     <td class="w-75">{{ value|doctrine_format_sql(true) }}</td>
 </tr>
 {% endmacro %}
+
 {% macro level_class(level, background) -%}
 {% switch level -%}
 {%- case 'error' %}
@@ -79,5 +91,5 @@
 {% endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/log.css') }}
+{{ asset_css('css/logs_boostrap_table.css') }}
 {% endblock %}

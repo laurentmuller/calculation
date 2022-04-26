@@ -664,6 +664,7 @@ log:
     extra: Extra
     level: Niveau
     message: Message
+    user: Utilisateur
   level_all: Tous les niveaux
   list:
     channel_help: Afficher les entrées pour le canal sélectionné

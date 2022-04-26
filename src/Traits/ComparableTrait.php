@@ -26,9 +26,9 @@ trait ComparableTrait
     /**
      * Compare this instance with an other object.
      *
-     * <code>$this <&nbsp;  $other</code> =>  returns less then 0<br>
+     * <code>$this <  $other</code> =>  returns less than 0<br>
      * <code>$this == $other</code> =>  returns 0<br>
-     * <code>$this >&nbsp;  $other</code> =>  returns greater then 0<br>
+     * <code>$this >  $other</code> =>  returns greater than 0<br>
      *
      * @param ComparableInterface $other the other object to compare to
      *
@@ -51,11 +51,11 @@ trait ComparableTrait
     }
 
     /**
-     * Returns if this instance is greather than to the other object.
+     * Returns if this instance is greater than to the other object.
      *
      * @param ComparableInterface $other the other object to compare to
      *
-     * @return bool true if greather than
+     * @return bool true if greater than
      */
     public function isGreaterThan(ComparableInterface $other): bool
     {
@@ -63,11 +63,11 @@ trait ComparableTrait
     }
 
     /**
-     * Returns if this instance is greather than or equal to the other object.
+     * Returns if this instance is greater than or equal to the other object.
      *
      * @param ComparableInterface $other the other object to compare to
      *
-     * @return bool true if greather than or equal
+     * @return bool true if greater than or equal
      */
     public function isGreaterThanOrEqual(ComparableInterface $other): bool
     {

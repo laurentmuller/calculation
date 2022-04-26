@@ -33,12 +33,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for task entities.
  *
- * @author Laurent Muller
- *
- * @Route("/task")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<Task>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/task')]
 class TaskController extends AbstractEntityController
 {
     /**
@@ -51,9 +49,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Add a task.
-     *
-     * @Route("/add", name="task_add")
      */
+    #[Route(path: '/add', name: 'task_add')]
     public function add(Request $request): Response
     {
         $item = new Task();
@@ -66,9 +63,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Edit a copy (cloned) task.
-     *
-     * @Route("/clone/{id}", name="task_clone", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => '\d+'])]
     public function clone(Request $request, Task $item): Response
     {
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
@@ -82,9 +78,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Display the form to compute a task.
-     *
-     * @Route("/compute/{id}", name="task_compute", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/compute/{id}', name: 'task_compute', requirements: ['id' => '\d+'])]
     public function compute(Request $request, TaskService $service, TaskRepository $repository, Task $task = null): Response
     {
         // get tasks
@@ -92,19 +87,16 @@ class TaskController extends AbstractEntityController
         $tasks = $repository->getSortedBuilder(false)
             ->getQuery()
             ->getResult();
-
         // set task
         if (null === $task || $task->isEmpty()) {
             $task = $tasks[0];
         }
         $service->setTask($task, true)
             ->compute();
-
         $form = $this->createForm(TaskServiceType::class, $service);
         if ($this->handleRequestForm($request, $form)) {
             $service->compute($request);
         }
-
         $parameters = [
             'form' => $form,
             'tasks' => $tasks,
@@ -116,9 +108,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Delete a task.
-     *
-     * @Route("/delete/{id}", name="task_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -133,9 +124,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Edit a task.
-     *
-     * @Route("/edit/{id}", name="task_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, Task $item): Response
     {
         return $this->editEntity($request, $item);
@@ -144,10 +134,9 @@ class TaskController extends AbstractEntityController
     /**
      * Export the tasks to a Spreadsheet document.
      *
-     * @Route("/excel", name="task_excel")
-     *
      * @throws NotFoundHttpException if no category is found
      */
+    #[Route(path: '/excel', name: 'task_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('name');
@@ -155,7 +144,6 @@ class TaskController extends AbstractEntityController
             $message = $this->trans('task.list.empty');
             throw new NotFoundHttpException($message);
         }
-
         $doc = new TasksDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -164,10 +152,9 @@ class TaskController extends AbstractEntityController
     /**
      * Export the tasks to a PDF document.
      *
-     * @Route("/pdf", name="task_pdf")
-     *
      * @throws NotFoundHttpException if no category is found
      */
+    #[Route(path: '/pdf', name: 'task_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('name');
@@ -175,7 +162,6 @@ class TaskController extends AbstractEntityController
             $message = $this->trans('task.list.empty');
             throw new NotFoundHttpException($message);
         }
-
         $doc = new TasksReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
@@ -183,9 +169,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Show properties of a task.
-     *
-     * @Route("/show/{id}", name="task_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'task_show', requirements: ['id' => '\d+'])]
     public function show(Task $item): Response
     {
         return $this->showEntity($item);
@@ -193,9 +178,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="task_table")
      */
+    #[Route(path: '', name: 'task_table')]
     public function table(Request $request, TaskTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'task/task_table.html.twig');

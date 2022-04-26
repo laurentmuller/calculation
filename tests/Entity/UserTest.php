@@ -16,8 +16,6 @@ use App\Entity\User;
 
 /**
  * Unit test for {@link User} class.
- *
- * @author Laurent Muller
  */
 class UserTest extends AbstractEntityValidatorTest
 {

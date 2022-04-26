@@ -19,8 +19,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Unit test for {@link App\Util\Utils} class.
  *
- * @author Laurent Muller
- *
  * @see Utils
  */
 class UtilsTest extends TestCase

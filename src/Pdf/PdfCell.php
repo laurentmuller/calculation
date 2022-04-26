@@ -16,8 +16,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 
 /**
  * Define a cell in a table.
- *
- * @author Laurent Muller
  */
 class PdfCell
 {

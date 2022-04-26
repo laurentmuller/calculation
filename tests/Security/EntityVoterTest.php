@@ -25,8 +25,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 /**
  * Unit test for {@link EntityVoter} class.
  *
- * @author Laurent Muller
- *
  * @see EntityVoter
  */
 class EntityVoterTest extends TestCase

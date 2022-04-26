@@ -20,8 +20,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 /**
  * Unit test for {@link App\Entity\Group} class.
  *
- * @author Laurent Muller
- *
  * @see Category
  */
 class GroupMarginsTest extends ConstraintValidatorTestCase

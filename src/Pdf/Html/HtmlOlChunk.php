@@ -14,8 +14,6 @@ namespace App\Pdf\Html;
 
 /**
  * Specialized chunk for HTML ordered list (ol).
- *
- * @author Laurent Muller
  */
 class HtmlOlChunk extends HtmlParentChunk
 {

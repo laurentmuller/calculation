@@ -22,8 +22,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Global margin edit type.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractMarginType<GlobalMargin>
  */
 class GlobalMarginType extends AbstractMarginType

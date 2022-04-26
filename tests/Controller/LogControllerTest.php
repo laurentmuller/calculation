@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\LogController} class.
- *
- * @author Laurent Muller
  */
 class LogControllerTest extends AbstractControllerTest
 {

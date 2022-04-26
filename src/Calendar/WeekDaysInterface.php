@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Days of week constants.
- *
- * @author Laurent Muller
  */
 interface WeekDaysInterface
 {

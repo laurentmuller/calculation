@@ -19,8 +19,6 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 /**
  * Spreadsheet document for the list of calculation state.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\CalculationState>
  */
 class CalculationStatesDocument extends AbstractArrayDocument

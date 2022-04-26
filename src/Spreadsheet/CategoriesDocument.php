@@ -17,8 +17,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 /**
  * Spreadsheet document for the list of categories.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\Category>
  */
 class CategoriesDocument extends AbstractArrayDocument

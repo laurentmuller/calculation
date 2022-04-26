@@ -29,8 +29,6 @@ use App\Traits\RoleTranslatorTrait;
 /**
  * Report for the list of user rights.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<User>
  */
 class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface

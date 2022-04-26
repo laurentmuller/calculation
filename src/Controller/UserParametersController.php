@@ -21,15 +21,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display user's preferences.
- *
- * @Route("/user")
- * @IsGranted("ROLE_USER")
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/user')]
 class UserParametersController extends AbstractController
 {
-    /**
-     * @Route("/parameters", name="user_parameters")
-     */
+    #[Route(path: '/parameters', name: 'user_parameters')]
     public function invoke(Request $request, UserService $service): Response
     {
         // form

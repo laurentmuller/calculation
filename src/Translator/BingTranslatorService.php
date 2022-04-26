@@ -21,8 +21,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * Microsoft BingTranslatorService Text API 3.0.
  *
- * @author Laurent Muller
- *
  * @see https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview
  */
 class BingTranslatorService extends AbstractTranslatorService

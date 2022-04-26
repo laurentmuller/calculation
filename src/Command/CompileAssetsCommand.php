@@ -20,8 +20,6 @@ use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Command to combine and minify CSS and JS files.
- *
- * @author Laurent Muller
  */
 class CompileAssetsCommand extends AbstractAssetsCommand
 {

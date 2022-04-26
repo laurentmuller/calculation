@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\GroupController} class.
- *
- * @author Laurent Muller
  */
 class GroupControllerTest extends AbstractControllerTest
 {

@@ -19,8 +19,6 @@ use App\Util\FileUtils;
 
 /**
  * Specialized cell containing an image.
- *
- * @author Laurent Muller
  */
 class PdfImageCell extends PdfCell implements ImageExtensionInterface
 {

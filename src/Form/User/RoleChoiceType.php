@@ -19,8 +19,6 @@ use Symfony\Component\Security\Core\Security;
 
 /**
  * A single role choice type.
- *
- * @author Laurent Muller
  */
 class RoleChoiceType extends AbstractChoiceType
 {

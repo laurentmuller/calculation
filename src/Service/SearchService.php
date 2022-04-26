@@ -30,8 +30,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Service to search data in all entities.
- *
- * @author Laurent Muller
  */
 class SearchService
 {

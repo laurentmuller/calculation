@@ -14,8 +14,6 @@ namespace App\Pivot\Aggregator;
 
 /**
  * Aggregator to sum values.
- *
- * @author Laurent Muller
  */
 class SumAggregator extends AbstractAggregator
 {

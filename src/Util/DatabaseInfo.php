@@ -18,8 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Service to get database information.
- *
- * @author Laurent Muller
  */
 final class DatabaseInfo
 {

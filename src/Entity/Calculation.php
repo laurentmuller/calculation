@@ -23,8 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a calculation.
  *
- * @author Laurent Muller
- *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationRepository")
  * @ORM\Table(name="sy_Calculation")
  */
@@ -36,26 +34,26 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The customer name.
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(max=255)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     protected ?string $customer = null;
 
     /**
      * The date.
      *
      * @ORM\Column(type="date")
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     protected \DateTimeInterface $date;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(max=255)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     protected ?string $description = null;
 
     /**
@@ -66,15 +64,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     protected float $globalMargin = 0.0;
 
     /**
-     * The groups.
-     *
      * @ORM\OneToMany(targetEntity=CalculationGroup::class, mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"position" = "ASC"})
-     * @Assert\Valid
      *
-     * @var CalculationGroup[]|Collection
-     * @psalm-var Collection<int, CalculationGroup>
+     * @var Collection<int, CalculationGroup>
      */
+    #[Assert\Valid]
     protected Collection $groups;
 
     /**
@@ -96,8 +91,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      *
      * @ORM\ManyToOne(targetEntity=CalculationState::class, inversedBy="calculations")
      * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     protected ?CalculationState $state = null;
 
     /**

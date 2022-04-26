@@ -32,12 +32,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Controller for calculation state entities.
  *
- * @author Laurent Muller
- *
- * @Route("/calculationstate")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<CalculationState>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/calculationstate')]
 class CalculationStateController extends AbstractEntityController
 {
     /**
@@ -50,9 +48,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Add a new calculation state.
-     *
-     * @Route("/add", name="calculationstate_add")
      */
+    #[Route(path: '/add', name: 'calculationstate_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new CalculationState());
@@ -60,9 +57,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Clone (copy) a calculation state.
-     *
-     * @Route("/clone/{id}", name="calculationstate_clone", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => '\d+'])]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -73,9 +69,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Delete a calculation state.
-     *
-     * @Route("/delete/{id}", name="calculationstate_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
         // calculation?
@@ -98,7 +93,6 @@ class CalculationStateController extends AbstractEntityController
 
             return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
-
         $parameters = [
             'title' => 'calculationstate.delete.title',
             'message' => 'calculationstate.delete.message',
@@ -111,9 +105,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Edit a calculation state.
-     *
-     * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, CalculationState $item): Response
     {
         return $this->editEntity($request, $item);
@@ -122,10 +115,9 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Export the calculation states to a Spreadsheet document.
      *
-     * @Route("/excel", name="calculationstate_excel")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      */
+    #[Route(path: '/excel', name: 'calculationstate_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -133,7 +125,6 @@ class CalculationStateController extends AbstractEntityController
             $message = $this->trans('calculationstate.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new CalculationStatesDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -142,10 +133,9 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Export the calculation states to a PDF document.
      *
-     * @Route("/pdf", name="calculationstate_pdf")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      */
+    #[Route(path: '/pdf', name: 'calculationstate_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -153,7 +143,6 @@ class CalculationStateController extends AbstractEntityController
             $message = $this->trans('calculationstate.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new CalculationStatesReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
@@ -161,9 +150,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Show properties of a calculation state.
-     *
-     * @Route("/show/{id}", name="calculationstate_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => '\d+'])]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);
@@ -171,9 +159,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="calculationstate_table")
      */
+    #[Route(path: '', name: 'calculationstate_table')]
     public function table(Request $request, CalculationStateTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'calculationstate/calculationstate_table.html.twig');

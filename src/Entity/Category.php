@@ -21,31 +21,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a category of products and tasks.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_Category", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_category_code", columns={"code"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
- * @UniqueEntity(fields="code", message="category.unique_code")
  */
+#[UniqueEntity(fields: 'code', message: 'category.unique_code')]
 class Category extends AbstractEntity
 {
     /**
      * The unique code.
      *
      * @ORM\Column(type="string", length=30, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(max=30)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 30)]
     private ?string $code = null;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     private ?string $description = null;
 
     /**
@@ -57,22 +55,16 @@ class Category extends AbstractEntity
     private ?Group $group = null;
 
     /**
-     * The list of products that fall into this category.
-     *
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="category")
      *
-     * @var Product[]|Collection
-     * @psalm-var Collection<int, Product>
+     * @var Collection<int, Product>
      */
     private Collection $products;
 
     /**
-     * The list of tasks that fall into this category.
-     *
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="category")
      *
-     * @var Task[]|Collection
-     * @psalm-var Collection<int, Task>
+     * @var Collection<int, Task>
      */
     private Collection $tasks;
 

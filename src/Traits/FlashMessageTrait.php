@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Trait to add flash messages.
- *
- * @author Laurent Muller
  */
 trait FlashMessageTrait
 {

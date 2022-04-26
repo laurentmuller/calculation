@@ -17,8 +17,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 /**
  * Spreadsheet document for the list of products.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\Product>
  */
 class ProductsDocument extends AbstractArrayDocument

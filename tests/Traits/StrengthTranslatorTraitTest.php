@@ -18,8 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link App\Traits\StrengthTranslatorTrait} class.
- *
- * @author Laurent Muller
  */
 class StrengthTranslatorTraitTest extends TestCase
 {

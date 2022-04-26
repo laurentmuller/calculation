@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Define a cell border.
- *
- * @author Laurent Muller
  */
 class PdfBorder
 {

@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class implementing this interface generates entities.
- *
- * @author Laurent Muller
  */
 interface GeneratorInterface
 {

@@ -18,8 +18,6 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Password constraint.
  *
- * @author Laurent Muller
- *
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */

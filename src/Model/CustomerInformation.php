@@ -14,8 +14,6 @@ namespace App\Model;
 
 /**
  * Contains information about the customer.
- *
- * @author Laurent Muller
  */
 class CustomerInformation
 {

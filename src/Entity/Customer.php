@@ -20,51 +20,49 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Represents a customer.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_Customer", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_customer_email", columns={"email"}),
  * })
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
- * @UniqueEntity(fields="email", message="customer.unique_email")
  */
+#[UniqueEntity(fields: 'email', message: 'customer.unique_email')]
 class Customer extends AbstractEntity
 {
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     protected ?string $address = null;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Assert\Date
      */
+    #[Assert\Date]
     protected ?\DateTimeInterface $birthday = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     protected ?string $city = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     protected ?string $company = null;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
-     * @Assert\Length(max=100)
      */
+    #[Assert\Length(max: 100)]
     protected ?string $country = null;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
-     * @Assert\Email
-     * @Assert\Length(max=100)
      */
+    #[Assert\Email]
+    #[Assert\Length(max: 100)]
     protected ?string $email = null;
 
     /**
@@ -74,28 +72,28 @@ class Customer extends AbstractEntity
 
     /**
      * @ORM\Column(name="lastName", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     protected ?string $lastName = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
      */
+    #[Assert\Length(max: 50)]
     protected ?string $title = null;
 
     /**
      * @ORM\Column(name="webSite", type="string", length=100, nullable=true)
-     * @Assert\Url
-     * @Assert\Length(max=100)
      */
+    #[Assert\Url]
+    #[Assert\Length(max: 100)]
     protected ?string $webSite = null;
 
     /**
      * @ORM\Column(name="zipCode", type="string", length=10, nullable=true)
-     * @Assert\Regex(pattern="/^[1-9]\d{3}$/", message="customer.zip_code")
-     * @Assert\Length(max=10)
      */
+    #[Assert\Length(max: 10)]
+    #[Assert\Regex(pattern: '/^[1-9]\d{3}$/', message: 'customer.zip_code')]
     protected ?string $zipCode = null;
 
     /**
@@ -346,9 +344,7 @@ class Customer extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @Assert\Callback
-     */
+    #[Assert\Callback]
     public function validate(ExecutionContextInterface $context): void
     {
         // check values

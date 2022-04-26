@@ -17,8 +17,6 @@ use App\Util\Utils;
 
 /**
  * Define a RGB color.
- *
- * @author Laurent Muller
  */
 abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 {

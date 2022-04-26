@@ -18,8 +18,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 /**
  * Spreadsheet document for the list of tasks.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\Task>
  */
 class TasksDocument extends AbstractArrayDocument

@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\SchemaController} class.
- *
- * @author Laurent Muller
  */
 class SchemaControllerTest extends AbstractControllerTest
 {

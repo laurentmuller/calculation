@@ -22,8 +22,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to register a new user.
- *
- * @author Laurent Muller
  */
 class UserRegistrationType extends AbstractUserCaptchaType
 {

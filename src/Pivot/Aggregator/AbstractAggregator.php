@@ -17,8 +17,6 @@ use App\Util\Utils;
 /**
  * AbstractAggregator function.
  *
- * @author Laurent Muller
- *
  * @psalm-consistent-constructor
  */
 abstract class AbstractAggregator implements \JsonSerializable, \Stringable

@@ -17,8 +17,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Test for the {@link App\Form\AbstractEntityType} class.
- *
- * @author Laurent Muller
  */
 abstract class AbstractEntityTypeTestCase extends TypeTestCase
 {

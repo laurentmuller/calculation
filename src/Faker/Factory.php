@@ -14,8 +14,6 @@ namespace App\Faker;
 
 /**
  * Extends Factory with custom generator.
- *
- * @author Laurent Muller
  */
 class Factory extends \Faker\Factory
 {

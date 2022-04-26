@@ -21,8 +21,6 @@ use Twig\Extension\GlobalsInterface;
 
 /**
  * Twig extension to access application class constants.
- *
- * @author Laurent Muller
  */
 final class ConstantExtension extends AbstractExtension implements GlobalsInterface
 {

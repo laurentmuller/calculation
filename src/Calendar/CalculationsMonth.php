@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Extends the month class with an array of calculations.
- *
- * @author Laurent Muller
  */
 class CalculationsMonth extends Month implements \Countable
 {

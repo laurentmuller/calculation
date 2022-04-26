@@ -21,8 +21,6 @@ use App\Form\Type\PlainType;
 /**
  * Edit calculation state type.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<Calculation>
  */
 class CalculationEditStateType extends AbstractEntityType

@@ -15,8 +15,6 @@ namespace App\Pdf;
 /**
  * This class describe a style that can be applied to a PDF document.
  *
- * @author Laurent Muller
- *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class PdfStyle implements PdfDocumentUpdaterInterface

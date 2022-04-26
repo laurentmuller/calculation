@@ -16,8 +16,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 
 /**
  * Class implementing this interface deals with cell drawing functions.
- *
- * @author Laurent Muller
  */
 interface PdfCellListenerInterface
 {

@@ -17,8 +17,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 /**
  * Spreadsheet document for the list of customers.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\Customer>
  */
 class CustomersDocument extends AbstractArrayDocument

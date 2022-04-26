@@ -39,12 +39,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Controller for calculation entities.
  *
- * @author Laurent Muller
- *
- * @Route("/calculation")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<Calculation>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/calculation')]
 class CalculationController extends AbstractEntityController
 {
     /**
@@ -57,19 +55,16 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Add a new calculation.
-     *
-     * @Route("/add", name="calculation_add")
      */
+    #[Route(path: '/add', name: 'calculation_add')]
     public function add(Request $request): Response
     {
         $application = $this->getApplication();
         $state = $application->getDefaultState();
         $product = $application->getDefaultProduct();
         $quantity = $application->getDefaultQuantity();
-
         // create
         $item = new Calculation();
-
         // update
         if (null !== $state) {
             $item->setState($state);
@@ -85,9 +80,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit a copy (cloned) calculation.
-     *
-     * @Route("/clone/{id}", name="calculation_clone", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => '\d+'])]
     public function clone(Request $request, Calculation $item): Response
     {
         // clone
@@ -104,9 +98,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Delete a calculation.
-     *
-     * @Route("/delete/{id}", name="calculation_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         // parameters
@@ -116,16 +109,14 @@ class CalculationController extends AbstractEntityController
             'success' => 'calculation.delete.success',
             'failure' => 'calculation.delete.failure',
         ];
-
         // delete
         return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**
      * Edit a calculation.
-     *
-     * @Route("/edit/{id}", name="calculation_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, Calculation $item): Response
     {
         $parameters = ['overall_below' => $this->isMarginBelow($item)];
@@ -136,10 +127,9 @@ class CalculationController extends AbstractEntityController
     /**
      * Export the calculations to a Spreadsheet document.
      *
-     * @Route("/excel", name="calculation_excel")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      */
+    #[Route(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('id');
@@ -147,7 +137,6 @@ class CalculationController extends AbstractEntityController
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new CalculationsDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -155,9 +144,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export a single calculation to a Spreadsheet document.
-     *
-     * @Route("/excel/{id}", name="calculation_excel_id", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => '\d+'])]
     public function excelById(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
@@ -168,10 +156,9 @@ class CalculationController extends AbstractEntityController
     /**
      * Export calculations to a PDF document.
      *
-     * @Route("/pdf", name="calculation_pdf")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      */
+    #[Route(path: '/pdf', name: 'calculation_pdf')]
     public function pdf(Request $request): PdfResponse
     {
         $entities = $this->getEntities('id');
@@ -179,7 +166,6 @@ class CalculationController extends AbstractEntityController
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $grouped = $this->getRequestBoolean($request, 'grouped', true);
         $doc = new CalculationsReport($this, $entities, $grouped);
 
@@ -188,9 +174,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export a single calculation to a PDF document.
-     *
-     * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => '\d+'])]
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
         $qrcode = $this->getQrCode($generator, $calculation);
@@ -202,9 +187,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Show properties of a calculation.
-     *
-     * @Route("/show/{id}", name="calculation_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => '\d+'])]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -218,9 +202,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit the state of a calculation.
-     *
-     * @Route("/state/{id}", name="calculation_state", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => '\d+'])]
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
     {
         $oldState = $item->getState();
@@ -237,23 +220,20 @@ class CalculationController extends AbstractEntityController
 
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
-
         // parameters
         $parameters = [
             'form' => $form,
             'item' => $item,
         ];
         $this->updateQueryParameters($request, $parameters, (int) $item->getId());
-
         // display
         return $this->renderForm('calculation/calculation_state.html.twig', $parameters);
     }
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="calculation_table")
      */
+    #[Route(path: '', name: 'calculation_table')]
     public function table(Request $request, CalculationTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table.html.twig');

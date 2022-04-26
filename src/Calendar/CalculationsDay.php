@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Extends the day class with an array of calculations.
- *
- * @author Laurent Muller
  */
 class CalculationsDay extends Day implements \Countable
 {

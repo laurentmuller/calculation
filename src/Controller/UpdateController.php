@@ -29,17 +29,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Controller to update entities.
- *
- * @author Laurent Muller
- *
- * @Route("/update")
- * @IsGranted("ROLE_SUPER_ADMIN")
  */
+#[IsGranted('ROLE_SUPER_ADMIN')]
+#[Route(path: '/update')]
 class UpdateController extends AbstractController
 {
-    /**
-     * @Route("", name="update")
-     */
+    #[Route(path: '', name: 'update')]
     public function update(): Response
     {
         $type = UrlGeneratorInterface::ABSOLUTE_URL;
@@ -75,9 +70,8 @@ class UpdateController extends AbstractController
 
     /**
      * Update calculations with random customers.
-     *
-     * @Route("/calculation", name="update_calculation")
      */
+    #[Route(path: '/calculation', name: 'update_calculation')]
     public function updateCalculation(EntityManagerInterface $manager, FakerService $service, SuspendEventListenerService $listener): RedirectResponse
     {
         $styles = [0, 1, 2];
@@ -125,9 +119,8 @@ class UpdateController extends AbstractController
 
     /**
      * Update customers with random values.
-     *
-     * @Route("/customer", name="update_customer")
      */
+    #[Route(path: '/customer', name: 'update_customer')]
     public function updateCustomer(EntityManagerInterface $manager, FakerService $service, SuspendEventListenerService $listener): RedirectResponse
     {
         $styles = [0, 1, 2];

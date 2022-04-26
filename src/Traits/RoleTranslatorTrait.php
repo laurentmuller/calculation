@@ -16,8 +16,6 @@ use App\Interfaces\RoleInterface;
 
 /**
  * Trait to translate role.
- *
- * @author Laurent Muller
  */
 trait RoleTranslatorTrait
 {

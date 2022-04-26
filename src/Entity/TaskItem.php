@@ -23,14 +23,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents an item of a task.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_TaskItem", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_task_item_task_name", columns={"task_id", "name"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\TaskItemRepository")
- * @UniqueEntity(fields={"task", "name"}, message="task_item.unique_name", errorPath="name")
  */
+#[UniqueEntity(fields: ['task', 'name'], message: 'task_item.unique_name', errorPath: 'name')]
 class TaskItem extends AbstractEntity implements \Countable
 {
     use PositionTrait;
@@ -39,18 +37,17 @@ class TaskItem extends AbstractEntity implements \Countable
     /**
      * @ORM\OneToMany(targetEntity=TaskItemMargin::class, mappedBy="taskItem", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"minimum" = "ASC"})
-     * @Assert\Valid
      *
-     * @var TaskItemMargin[]|Collection
-     * @psalm-var Collection<int, TaskItemMargin>
+     * @var Collection<int, TaskItemMargin>
      */
+    #[Assert\Valid]
     private Collection $margins;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(max=255)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $name = null;
 
     /**

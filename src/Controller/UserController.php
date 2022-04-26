@@ -50,12 +50,10 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 /**
  * The controller for user entities.
  *
- * @author Laurent Muller
- *
- * @Route("/user")
- * @IsGranted("ROLE_ADMIN")
  * @template-extends AbstractEntityController<User>
  */
+#[IsGranted('ROLE_ADMIN')]
+#[Route(path: '/user')]
 class UserController extends AbstractEntityController
 {
     /**
@@ -68,9 +66,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Add a user.
-     *
-     * @Route("/add", name="user_add")
      */
+    #[Route(path: '/add', name: 'user_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new User());
@@ -78,9 +75,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Delete an user.
-     *
-     * @Route("/delete/{id}", name="user_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, User $item, LoggerInterface $logger): Response
     {
         // same?
@@ -103,9 +99,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Edit a user.
-     *
-     * @Route("/edit/{id}", name="user_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, User $item): Response
     {
         return $this->editEntity($request, $item);
@@ -114,10 +109,9 @@ class UserController extends AbstractEntityController
     /**
      * Export the customers to a Spreadsheet document.
      *
-     * @Route("/excel", name="user_excel")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
+    #[Route(path: '/excel', name: 'user_excel')]
     public function excel(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
@@ -133,9 +127,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Edit a user's image.
-     *
-     * @Route("/image/{id}", name="user_image", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/image/{id}', name: 'user_image', requirements: ['id' => '\d+'])]
     public function image(Request $request, User $item): Response
     {
         // form
@@ -164,9 +157,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Send an email from the current user to another user.
-     *
-     * @Route("/message/{id}", name="user_message", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => '\d+'])]
     public function message(Request $request, User $user, MailerInterface $mailer, LoggerInterface $logger): Response
     {
         // same user?
@@ -220,9 +212,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Change password for an existing user.
-     *
-     * @Route("/password/{id}", name="user_password", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => '\d+'])]
     public function password(Request $request, User $item, UserPasswordHasherInterface $hasher): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
@@ -256,10 +247,9 @@ class UserController extends AbstractEntityController
     /**
      * Export the users to a PDF document.
      *
-     * @Route("/pdf", name="user_pdf")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
+    #[Route(path: '/pdf', name: 'user_pdf')]
     public function pdf(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): PdfResponse
     {
         $entities = $this->getEntities('username');
@@ -275,9 +265,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Edit user access rights.
-     *
-     * @Route("/rights/{id}", name="user_rights", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => '\d+'])]
     public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy, EntityManagerInterface $manager): Response
     {
         // same user?
@@ -320,10 +309,9 @@ class UserController extends AbstractEntityController
     /**
      * Export the user access rights to a Spreadsheet document.
      *
-     * @Route("/rights/excel", name="user_rights_excel")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
+    #[Route(path: '/rights/excel', name: 'user_rights_excel')]
     public function rightsExcel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
@@ -340,10 +328,9 @@ class UserController extends AbstractEntityController
     /**
      * Export user access rights to a PDF document.
      *
-     * @Route("/rights/pdf", name="user_rights_pdf")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
+    #[Route(path: '/rights/pdf', name: 'user_rights_pdf')]
     public function rightsPdf(): PdfResponse
     {
         $users = $this->getEntities('username');
@@ -359,9 +346,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Show the properties of a user.
-     *
-     * @Route("/show/{id}", name="user_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'user_show', requirements: ['id' => '\d+'])]
     public function show(User $item): Response
     {
         return $this->showEntity($item);
@@ -369,9 +355,8 @@ class UserController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="user_table")
      */
+    #[Route(path: '', name: 'user_table')]
     public function table(Request $request, UserTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'user/user_table.html.twig');

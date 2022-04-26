@@ -21,8 +21,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Listener for the switch user event.
- *
- * @author Laurent Muller
  */
 class SwitchUserListener implements EventSubscriberInterface
 {

@@ -17,8 +17,6 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
  * Extends VichImageType to use within the FileInput plugin.
- *
- * @author Laurent Muller
  */
 class VichImageTypeExtension extends AbstractFileTypeExtension
 {

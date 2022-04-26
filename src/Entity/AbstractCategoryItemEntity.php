@@ -20,8 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * A protected $category variable must present.
  *
- * @author Laurent Muller
- *
  * @ORM\MappedSuperclass
  *
  * @property Category|null $category
@@ -32,15 +30,15 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      * The supplier.
      *
      * @ORM\Column(length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     protected ?string $supplier = null;
     /**
      * The unit.
      *
      * @ORM\Column(type="string", length=15, nullable=true)
-     * @Assert\Length(max=15)
      */
+    #[Assert\Length(max: 15)]
     protected ?string $unit = null;
 
     /**

@@ -18,8 +18,6 @@ use App\Form\FormHelper;
 
 /**
  * Type to edit a calculation item in a dialog.
- *
- * @author Laurent Muller
  */
 class EditItemDialogType extends AbstractHelperType
 {

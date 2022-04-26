@@ -17,8 +17,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Utility class for files.
- *
- * @author Laurent Muller
  */
 final class FileUtils
 {

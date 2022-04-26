@@ -17,8 +17,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Trait for translations.
- *
- * @author Laurent Muller
  */
 trait TranslatorTrait
 {

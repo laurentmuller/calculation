@@ -35,8 +35,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to update the price of products.
- *
- * @author Laurent Muller
  */
 class ProductUpdater implements LoggerAwareInterface
 {

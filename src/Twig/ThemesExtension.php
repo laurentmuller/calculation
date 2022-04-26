@@ -21,8 +21,6 @@ use Twig\TwigFunction;
 
 /**
  * Twig extension to validate theme files.
- *
- * @author Laurent Muller
  */
 final class ThemesExtension extends AbstractExtension
 {

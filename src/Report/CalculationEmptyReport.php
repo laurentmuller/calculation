@@ -17,8 +17,6 @@ use App\Traits\MathTrait;
 
 /**
  * Report for calculations with empty items.
- *
- * @author Laurent Muller
  */
 class CalculationEmptyReport extends AbstractCalculationItemsReport
 {

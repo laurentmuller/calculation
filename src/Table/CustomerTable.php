@@ -18,7 +18,6 @@ use App\Util\FileUtils;
 /**
  * The customers table.
  *
- * @author Laurent Muller
  * @template-extends AbstractEntityTable<\App\Entity\Customer>
  */
 class CustomerTable extends AbstractEntityTable

@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\AdminController} class.
- *
- * @author Laurent Muller
  */
 class AdminControllerTest extends AbstractControllerTest
 {

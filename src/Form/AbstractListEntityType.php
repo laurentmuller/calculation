@@ -20,7 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Abstract type to display a list of entities.
  *
- * @author Laurent Muller
  * @template T of AbstractEntity
  */
 abstract class AbstractListEntityType extends AbstractType

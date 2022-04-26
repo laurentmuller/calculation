@@ -14,8 +14,6 @@ namespace App\Util;
 
 /**
  * Utility class for default formats.
- *
- * @author Laurent Muller
  */
 final class FormatUtils
 {

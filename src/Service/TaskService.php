@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Service to compute task.
- *
- * @author Laurent Muller
  */
 class TaskService implements \JsonSerializable
 {

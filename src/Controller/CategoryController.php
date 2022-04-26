@@ -34,12 +34,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for category entities.
  *
- * @author Laurent Muller
- *
- * @Route("/category")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<Category>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/category')]
 class CategoryController extends AbstractEntityController
 {
     /**
@@ -52,9 +50,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Add a category.
-     *
-     * @Route("/add", name="category_add")
      */
+    #[Route(path: '/add', name: 'category_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Category());
@@ -62,9 +59,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Clone (copy) a category.
-     *
-     * @Route("/clone/{id}", name="category_clone", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => '\d+'])]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -78,16 +74,14 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Delete a category.
-     *
-     * @Route("/delete/{id}", name="category_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
         // external references?
         $tasks = $taskRepository->countCategoryReferences($item);
         $products = $productRepository->countCategoryReferences($item);
         $calculations = $categoryRepository->countCategoryReferences($item);
-
         if (0 !== $tasks || 0 !== $products || 0 !== $calculations) {
             $items = [];
             if (0 !== $calculations) {
@@ -115,7 +109,6 @@ class CategoryController extends AbstractEntityController
 
             return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
-
         $parameters = [
             'title' => 'category.delete.title',
             'message' => 'category.delete.message',
@@ -128,9 +121,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Edit a category.
-     *
-     * @Route("/edit/{id}", name="category_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
@@ -139,10 +131,9 @@ class CategoryController extends AbstractEntityController
     /**
      * Export the categories to a Spreadsheet document.
      *
-     * @Route("/excel", name="category_excel")
-     *
      * @throws NotFoundHttpException if no category is found
      */
+    #[Route(path: '/excel', name: 'category_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -150,7 +141,6 @@ class CategoryController extends AbstractEntityController
             $message = $this->trans('category.list.empty');
             throw new NotFoundHttpException($message);
         }
-
         $doc = new CategoriesDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -159,10 +149,9 @@ class CategoryController extends AbstractEntityController
     /**
      * Export the categories to a PDF document.
      *
-     * @Route("/pdf", name="category_pdf")
-     *
      * @throws NotFoundHttpException if no category is found
      */
+    #[Route(path: '/pdf', name: 'category_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -170,7 +159,6 @@ class CategoryController extends AbstractEntityController
             $message = $this->trans('category.list.empty');
             throw new NotFoundHttpException($message);
         }
-
         $doc = new CategoriesReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
@@ -178,9 +166,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Show properties of a category.
-     *
-     * @Route("/show/{id}", name="category_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'category_show', requirements: ['id' => '\d+'])]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);
@@ -188,9 +175,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="category_table")
      */
+    #[Route(path: '', name: 'category_table')]
     public function table(Request $request, CategoryTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'category/category_table.html.twig');

@@ -16,8 +16,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Class containing the header or footer content.
- *
- * @author Laurent Muller
  */
 class HeaderFooter
 {

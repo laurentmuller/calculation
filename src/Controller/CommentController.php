@@ -26,19 +26,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to send comments to the webmaster.
- *
- * @author Laurent Muller
- *
- * @Route("/user")
  */
+#[Route(path: '/user')]
 class CommentController extends AbstractController
 {
     /**
      * Send comment to the webmaster.
-     *
-     * @Route("/comment", name="user_comment")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/comment', name: 'user_comment')]
     public function invoke(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
     {
         /** @var User $from */
@@ -47,7 +43,6 @@ class CommentController extends AbstractController
         $comment->setSubject($this->getApplicationName())
             ->setFromAddress($from)
             ->setToAddress($this->getAddressFrom());
-
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
@@ -69,7 +64,6 @@ class CommentController extends AbstractController
                 ]);
             }
         }
-
         // render
         return $this->renderForm('user/user_comment.html.twig', [
             'form' => $form,

@@ -21,14 +21,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a calculation state.
  *
- * @author Laurent Muller
- *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationStateRepository")
  * @ORM\Table(name="sy_CalculationState", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_calculation_state_code", columns={"code"})
  * })
- * @UniqueEntity(fields="code", message="state.unique_code")
  */
+#[UniqueEntity(fields: 'code', message: 'state.unique_code')]
 class CalculationState extends AbstractEntity
 {
     /**
@@ -40,27 +38,27 @@ class CalculationState extends AbstractEntity
      * The code (unique).
      *
      * @ORM\Column(type="string", length=30, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(max=30)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 30)]
     protected ?string $code = null;
 
     /**
      * The color used in the user interface (UI).
      *
      * @ORM\Column(type="string", length=10, options={"default" = "#000000"})
-     * @Assert\CssColor
-     * @Assert\NotBlank
-     * @Assert\Length(max=10)
      */
+    #[Assert\CssColor]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 10)]
     protected string $color = self::DEFAULT_COLOR;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     protected ?string $description = null;
 
     /**
@@ -71,12 +69,9 @@ class CalculationState extends AbstractEntity
     protected bool $editable = true;
 
     /**
-     * The list of calculations that fall into this category.
-     *
      * @ORM\OneToMany(targetEntity=Calculation::class, mappedBy="state")
      *
-     * @var Calculation[]|Collection
-     * @psalm-var Collection<int, Calculation>
+     * @var Collection<int, Calculation>
      */
     private Collection $calculations;
 

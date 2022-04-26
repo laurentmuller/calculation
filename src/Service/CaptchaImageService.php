@@ -19,8 +19,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Service to generate and validate a captcha image.
- *
- * @author Laurent Muller
  */
 class CaptchaImageService
 {

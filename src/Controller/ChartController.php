@@ -21,21 +21,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The controller for charts.
- *
- * @author Laurent Muller
- *
- * @Route("/chart")
- * @IsGranted("ROLE_USER")
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/chart')]
 class ChartController extends AbstractController
 {
     use MathTrait;
 
     /**
      * Gets the calculations by month.
-     *
-     * @Route("/month/{count}", name="chart_by_month", requirements={"count" = "\d+" })
      */
+    #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => '\d+'])]
     public function month(MonthChart $chart, int $count = 6): Response
     {
         $data = $chart->generate($count);
@@ -45,9 +41,8 @@ class ChartController extends AbstractController
 
     /**
      * Gets the calculations by state.
-     *
-     * @Route("/state", name="chart_by_state")
      */
+    #[Route(path: '/state', name: 'chart_by_state')]
     public function state(StateChart $chart): Response
     {
         $data = $chart->generate();

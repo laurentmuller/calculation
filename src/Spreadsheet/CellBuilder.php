@@ -20,8 +20,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Builder to set a cell value and style.
- *
- * @author Laurent Muller
  */
 class CellBuilder
 {

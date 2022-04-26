@@ -26,8 +26,6 @@ use App\Util\FormatUtils;
 /**
  * Report for the list of calculation states.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<CalculationState>
  */
 class CalculationStatesReport extends AbstractArrayReport implements PdfCellListenerInterface

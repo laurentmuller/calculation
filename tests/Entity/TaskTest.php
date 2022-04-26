@@ -18,8 +18,6 @@ use App\Entity\Task;
 
 /**
  * Unit test for {@link App\Entity\Task} class.
- *
- * @author Laurent Muller
  */
 class TaskTest extends AbstractEntityValidatorTest
 {

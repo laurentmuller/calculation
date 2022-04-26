@@ -22,8 +22,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Chart to display calculations by state.
- *
- * @author Laurent Muller
  */
 class StateChart extends BaseChart
 {

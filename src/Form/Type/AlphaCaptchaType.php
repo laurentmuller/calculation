@@ -28,8 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to display an alpha captcha.
- *
- * @author Laurent Muller
  */
 class AlphaCaptchaType extends AbstractType
 {

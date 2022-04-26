@@ -16,8 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Trait to get or to set the position index of an entity in a collection.
- *
- * @author Laurent Muller
  */
 trait PositionTrait
 {

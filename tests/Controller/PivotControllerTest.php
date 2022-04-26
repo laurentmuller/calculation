@@ -21,8 +21,6 @@ use App\Entity\Product;
 
 /**
  * Unit test for {@link App\Controller\PivotController} class.
- *
- * @author Laurent Muller
  */
 class PivotControllerTest extends AbstractControllerTest
 {

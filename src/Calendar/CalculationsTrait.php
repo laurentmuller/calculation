@@ -16,8 +16,6 @@ use App\Entity\Calculation;
 
 /**
  * Trait to manage an array of calculations.
- *
- * @author Laurent Muller
  */
 trait CalculationsTrait
 {

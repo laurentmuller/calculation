@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for users and routes.
- *
- * @author Laurent Muller
  */
 class RoutesTest extends AbstractAuthenticateWebTestCase
 {

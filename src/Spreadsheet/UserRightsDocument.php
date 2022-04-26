@@ -25,8 +25,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 /**
  * Spreadsheet document for the list of user rights.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<User>
  */
 class UserRightsDocument extends AbstractArrayDocument

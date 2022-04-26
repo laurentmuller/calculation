@@ -21,8 +21,6 @@ use App\Util\FormatUtils;
 /**
  * Report for the list of products.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<\App\Entity\Product>
  */
 class ProductsReport extends AbstractArrayReport

@@ -19,8 +19,6 @@ use App\Util\FileUtils;
  * Represents a Bootstrap theme.
  *
  * @see https://bootswatch.com/
- *
- * @author Laurent Muller
  */
 class Theme implements \JsonSerializable
 {

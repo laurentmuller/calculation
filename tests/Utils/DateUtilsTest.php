@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Unit test for the {@link App\Util\DateUtils} class.
  *
- * @author Laurent Muller
- *
  * @see DateUtils
  */
 class DateUtilsTest extends TestCase

@@ -32,8 +32,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 /**
  * Controller to register a new user.
- *
- * @author Laurent Muller
  */
 class RegistrationController extends AbstractController
 {
@@ -48,9 +46,8 @@ class RegistrationController extends AbstractController
 
     /**
      * Display and process form to register a new user.
-     *
-     * @Route("/register", name="user_register")
      */
+    #[Route(path: '/register', name: 'user_register')]
     public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, EntityManagerInterface $manager, UserExceptionService $service): Response
     {
         $user = new User();
@@ -95,18 +92,15 @@ class RegistrationController extends AbstractController
 
     /**
      * Verify the user e-mail.
-     *
-     * @Route("/verify/email", name="verify_email")
      */
+    #[Route(path: '/verify/email', name: 'verify_email')]
     public function verifyUserEmail(Request $request, UserRepository $repository, UserExceptionService $service): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $id = $this->getRequestInt($request, 'id');
         if (0 === $id) {
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
-
         $user = $repository->find($id);
         if (!$user instanceof User) {
             return $this->redirectToRoute(self::REGISTER_ROUTE);

@@ -14,8 +14,6 @@ namespace App\Pivot\Field;
 
 /**
  * Pivot field that extract semester (1 or 2).
- *
- * @author Laurent Muller
  */
 class PivotSemesterField extends PivotDateField
 {

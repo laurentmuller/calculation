@@ -18,8 +18,6 @@ use App\Enums\TableView;
 /**
  * Application service constants and default values.
  *
- * @author Laurent Muller
- *
  * @see \App\Service\ApplicationService
  */
 interface ApplicationServiceInterface

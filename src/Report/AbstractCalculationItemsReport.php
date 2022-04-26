@@ -25,8 +25,6 @@ use App\Util\FormatUtils;
 /**
  * Report for calculations with invalid items.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<mixed>
  */
 abstract class AbstractCalculationItemsReport extends AbstractArrayReport

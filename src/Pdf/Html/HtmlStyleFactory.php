@@ -17,8 +17,6 @@ use App\Pdf\PdfTextColor;
 
 /**
  * Factory to create HtmlStyle depenging of the tag name.
- *
- * @author Laurent Muller
  */
 final class HtmlStyleFactory
 {

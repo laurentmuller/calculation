@@ -21,8 +21,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * User rights type.
- *
- * @author Laurent Muller
  */
 class UserRightsType extends RightsType
 {

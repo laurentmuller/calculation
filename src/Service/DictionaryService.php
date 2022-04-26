@@ -14,8 +14,6 @@ namespace App\Service;
 
 /**
  * Service to get random words.
- *
- * @author Laurent Muller
  */
 class DictionaryService
 {

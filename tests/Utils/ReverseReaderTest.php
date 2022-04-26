@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Unit test for the {@link App\Util\ReverseReader} class.
  *
- * @author Laurent Muller
- *
  * @see ReverseReader
  */
 class ReverseReaderTest extends TestCase

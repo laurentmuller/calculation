@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of products grouped by categories.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractListEntityType<Product>
  */
 class ProductListType extends AbstractListEntityType

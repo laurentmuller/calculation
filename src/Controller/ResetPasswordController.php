@@ -33,15 +33,11 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 /**
  * Controller to reset the user password.
- *
- * @author Laurent Muller
- *
- * @Route("/reset-password")
  */
+#[Route(path: '/reset-password')]
 class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
-
     private const CHECK_ROUTE = 'app_check_email';
     private const FORGET_ROUTE = 'app_forgot_password_request';
 
@@ -51,9 +47,8 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Confirmation page after a user has requested a password reset.
-     *
-     * @Route("/check-email", name="app_check_email")
      */
+    #[Route(path: '/check-email', name: 'app_check_email')]
     public function checkEmail(): Response
     {
         // Prevent users from directly accessing this page
@@ -69,9 +64,8 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Display and process form to request a password reset.
-     *
-     * @Route("", name="app_forgot_password_request")
      */
+    #[Route(path: '', name: 'app_forgot_password_request')]
     public function request(Request $request, MailerInterface $mailer, UserExceptionService $service, AuthenticationUtils $utils): Response
     {
         $form = $this->createForm(RequestChangePasswordType::class);
@@ -89,9 +83,8 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Validates and process the reset URL that the user clicked in their email.
-     *
-     * @Route("/reset/{token}", name="app_reset_password")
      */
+    #[Route(path: '/reset/{token}', name: 'app_reset_password')]
     public function reset(Request $request, UserPasswordHasherInterface $hasher, UserExceptionService $service, ?string $token = null): Response
     {
         if ($token) {
@@ -101,7 +94,6 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_reset_password');
         }
-
         $token = $this->getTokenFromSession();
         if (null === $token) {
             throw $this->createNotFoundException($this->trans('reset_not_found_password_token', [], 'security'));
@@ -118,7 +110,6 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute(self::FORGET_ROUTE);
         }
-
         // the token is valid; allow the user to change their password.
         $form = $this->createForm(ResetChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {

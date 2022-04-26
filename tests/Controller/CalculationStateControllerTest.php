@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\CalculationStateController} class.
- *
- * @author Laurent Muller
  */
 class CalculationStateControllerTest extends AbstractControllerTest
 {

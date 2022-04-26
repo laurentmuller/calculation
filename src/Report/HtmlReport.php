@@ -20,8 +20,6 @@ use App\Pdf\Html\HtmlParser;
 
 /**
  * Report to output HTML content.
- *
- * @author Laurent Muller
  */
 class HtmlReport extends AbstractReport
 {

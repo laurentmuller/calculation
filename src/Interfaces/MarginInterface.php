@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Margin range interface.
- *
- * @author Laurent Muller
  */
 interface MarginInterface
 {

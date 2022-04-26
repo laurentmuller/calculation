@@ -32,12 +32,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @see \App\Entity\Customer
  *
- * @author Laurent Muller
- *
- * @Route("/customer")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<Customer>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/customer')]
 class CustomerController extends AbstractEntityController
 {
     /**
@@ -50,9 +48,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Add a customer.
-     *
-     * @Route("/add", name="customer_add")
      */
+    #[Route(path: '/add', name: 'customer_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Customer());
@@ -60,9 +57,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Delete a customer.
-     *
-     * @Route("/delete/{id}", name="customer_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -77,9 +73,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Edit a customer.
-     *
-     * @Route("/edit/{id}", name="customer_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, Customer $item): Response
     {
         return $this->editEntity($request, $item);
@@ -88,10 +83,9 @@ class CustomerController extends AbstractEntityController
     /**
      * Export the customers to a Spreadsheet document.
      *
-     * @Route("/excel", name="customer_excel")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      */
+    #[Route(path: '/excel', name: 'customer_excel')]
     public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findAllByNameAndCompany();
@@ -99,7 +93,6 @@ class CustomerController extends AbstractEntityController
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new CustomersDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -108,10 +101,9 @@ class CustomerController extends AbstractEntityController
     /**
      * Export the customers to a PDF document.
      *
-     * @Route("/pdf", name="customer_pdf")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      */
+    #[Route(path: '/pdf', name: 'customer_pdf')]
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
         $entities = $repository->findAllByNameAndCompany();
@@ -119,7 +111,6 @@ class CustomerController extends AbstractEntityController
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $grouped = $this->getRequestBoolean($request, 'grouped', true);
         $report = new CustomersReport($this, $entities, $grouped);
 
@@ -128,9 +119,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Show properties of a customer.
-     *
-     * @Route("/show/{id}", name="customer_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'customer_show', requirements: ['id' => '\d+'])]
     public function show(Customer $item): Response
     {
         return $this->showEntity($item);
@@ -138,9 +128,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="customer_table")
      */
+    #[Route(path: '', name: 'customer_table')]
     public function table(Request $request, CustomerTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'customer/customer_table.html.twig');

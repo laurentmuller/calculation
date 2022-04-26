@@ -21,8 +21,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link App\Validator\PasswordValidator} class.
- *
- * @author Laurent Muller
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {

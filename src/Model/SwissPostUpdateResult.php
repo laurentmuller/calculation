@@ -14,8 +14,6 @@ namespace App\Model;
 
 /**
  * Contains result of updated states, cities and streets.
- *
- * @author Laurent Muller
  */
 class SwissPostUpdateResult
 {

@@ -21,8 +21,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Calculation category edit type.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<CalculationCategory>
  */
 class CalculationCategoryType extends AbstractEntityType

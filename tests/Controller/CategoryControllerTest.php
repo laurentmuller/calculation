@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\CategoryController} class.
- *
- * @author Laurent Muller
  */
 class CategoryControllerTest extends AbstractControllerTest
 {

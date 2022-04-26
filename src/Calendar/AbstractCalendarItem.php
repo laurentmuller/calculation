@@ -16,8 +16,6 @@ use App\Util\Utils;
 
 /**
  * Base class for calendar objects.
- *
- * @author Laurent Muller
  */
 abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
 {

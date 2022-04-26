@@ -22,8 +22,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a category of calculation group.
  *
- * @author Laurent Muller
- *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationCategoryRepository")
  * @ORM\Table(name="sy_CalculationCategory")
  */
@@ -50,9 +48,9 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
      * The code.
      *
      * @ORM\Column(type="string", length=30)
-     * @Assert\NotBlank
-     * @Assert\Length(max=30)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 30)]
     protected ?string $code = null;
 
     /**
@@ -64,15 +62,12 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
     protected ?CalculationGroup $group = null;
 
     /**
-     * The calculation items.
-     *
      * @ORM\OneToMany(targetEntity=CalculationItem::class, mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"position" = "ASC"})
-     * @Assert\Valid
      *
-     * @var CalculationItem[]|Collection
-     * @psalm-var Collection<int, CalculationItem>
+     * @var Collection<int, CalculationItem>
      */
+    #[Assert\Valid]
     protected Collection $items;
 
     /**

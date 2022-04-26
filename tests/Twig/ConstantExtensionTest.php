@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for Twig ConstantExtension.
- *
- * @author Laurent Muller
  */
 class ConstantExtensionTest extends KernelTestCase
 {

@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Factory to provide translator services.
  *
- * @author Laurent Muller
- *
  * @see TranslatorServiceInterface
  */
 class TranslatorFactory

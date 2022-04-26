@@ -14,8 +14,6 @@ namespace App\Pivot\Field;
 
 /**
  * Represents a pivot field.
- *
- * @author Laurent Muller
  */
 class PivotField implements \JsonSerializable
 {

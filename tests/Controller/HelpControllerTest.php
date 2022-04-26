@@ -14,8 +14,6 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link App\Controller\HelpController} class.
- *
- * @author Laurent Muller
  */
 class HelpControllerTest extends AbstractControllerTest
 {

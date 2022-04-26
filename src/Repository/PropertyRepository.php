@@ -19,8 +19,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for property entity.
  *
  * @template-extends AbstractRepository<Property>
- *
- * @author Laurent Muller
  */
 class PropertyRepository extends AbstractRepository
 {

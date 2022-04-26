@@ -16,8 +16,6 @@ use Doctrine\Common\Collections\Criteria;
 
 /**
  * Calculation table for duplicate items.
- *
- * @author Laurent Muller
  */
 class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {

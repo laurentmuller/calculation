@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Service to manage Bootstrap themes.
- *
- * @author Laurent Muller
  */
 class ThemeService
 {

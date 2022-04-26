@@ -36,18 +36,18 @@ abstract class AbstractProperty extends AbstractEntity
      * The property name.
      *
      * @ORM\Column(type="string", length=50)
-     * @Assert\Length(max=50)
-     * @Assert\NotBlank
      */
+    #[Assert\Length(max: 50)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     /**
      * The property value.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
-     * @Assert\NotBlank
      */
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private ?string $value = null;
 
     /**

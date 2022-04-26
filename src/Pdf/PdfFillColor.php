@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Color used color for filling operations (filled rectangles and cell backgrounds).
- *
- * @author Laurent Muller
  */
 class PdfFillColor extends AbstractPdfColor
 {

@@ -15,7 +15,6 @@ namespace App\Faker;
 /**
  * Faker provider to generate company names.
  *
- * @author Laurent Muller
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class CustomCompany extends \Faker\Provider\fr_CH\Company

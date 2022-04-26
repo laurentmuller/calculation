@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\GlobalMarginController} class.
- *
- * @author Laurent Muller
  */
 class GlobalMarginControllerTest extends AbstractControllerTest
 {

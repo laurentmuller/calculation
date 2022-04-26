@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of tasks.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractListEntityType<Task>
  */
 class TaskListType extends AbstractListEntityType

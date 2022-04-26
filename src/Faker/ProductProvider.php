@@ -18,8 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Product provider.
  *
- * @author Laurent Muller
- *
  * @template-extends EntityProvider<Product>
  * @psalm-suppress PropertyNotSetInConstructor
  */

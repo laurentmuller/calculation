@@ -18,8 +18,6 @@ use App\Util\Utils;
 /**
  * Represents a single day with a date.
  *
- * @author Laurent Muller
- *
  * @psalm-consistent-constructor
  */
 class Day extends AbstractCalendarItem implements WeekDaysInterface, \Stringable

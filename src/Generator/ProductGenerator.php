@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class to generate products.
- *
- * @author Laurent Muller
  */
 class ProductGenerator extends AbstractEntityGenerator
 {

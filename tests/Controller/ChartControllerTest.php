@@ -14,8 +14,6 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link App\Controller\ChartController} class.
- *
- * @author Laurent Muller
  */
 class ChartControllerTest extends AbstractControllerTest
 {

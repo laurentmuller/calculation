@@ -29,8 +29,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Type to change the profile of the current (logged) user.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<User>
  */
 class ProfileChangePasswordType extends AbstractEntityType

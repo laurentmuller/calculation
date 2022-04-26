@@ -16,8 +16,6 @@ use App\Entity\TaskItemMargin;
 
 /**
  * Unit test for {@link App\Entity\TaskItemMargin} class.
- *
- * @author Laurent Muller
  */
 class TaskItemMarginTest extends AbstractEntityValidatorTest
 {

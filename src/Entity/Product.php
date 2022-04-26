@@ -19,14 +19,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a product.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_Product", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_product_description", columns={"description"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- * @UniqueEntity(fields="description", message="product.unique_description")
  */
+#[UniqueEntity(fields: 'description', message: 'product.unique_description')]
 class Product extends AbstractCategoryItemEntity
 {
     /**
@@ -34,17 +32,17 @@ class Product extends AbstractCategoryItemEntity
      *
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
      * @ORM\JoinColumn(name="category_id", nullable=false)
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     protected ?Category $category = null;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(max=255)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $description = null;
 
     /**

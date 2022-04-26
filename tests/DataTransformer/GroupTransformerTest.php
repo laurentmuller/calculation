@@ -23,8 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test for the {@link App\Form\DataTransformer\GroupTransformer} class.
- *
- * @author Laurent Muller
  */
 class GroupTransformerTest extends KernelTestCase
 {

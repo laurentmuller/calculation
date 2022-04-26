@@ -16,8 +16,6 @@ use App\Pivot\Aggregator\AbstractAggregator;
 
 /**
  * Represents a data cell.
- *
- * @author Laurent Muller
  */
 class PivotCell extends AbstractPivotAggregator
 {

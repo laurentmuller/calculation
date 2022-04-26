@@ -16,8 +16,6 @@ use App\Util\Utils;
 
 /**
  * Class to parse HTML content.
- *
- * @author Laurent Muller
  */
 class HtmlParser
 {

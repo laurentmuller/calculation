@@ -25,8 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to generate entities.
- *
- * @author Laurent Muller
  */
 abstract class AbstractEntityGenerator implements LoggerAwareInterface, GeneratorInterface
 {

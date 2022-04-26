@@ -14,8 +14,6 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link App\Controller\CalendarController} class.
- *
- * @author Laurent Muller
  */
 class CalendarControllerTest extends AbstractControllerTest
 {

@@ -21,8 +21,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Type to send a comment.
- *
- * @author Laurent Muller
  */
 class UserCommentType extends AbstractType
 {

@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Define the sort orders.
- *
- * @author Laurent Muller
  */
 interface SortModeInterface
 {

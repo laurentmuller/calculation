@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Color used color for all drawing operations (lines, rectangles and cell borders).
- *
- * @author Laurent Muller
  */
 class PdfDrawColor extends AbstractPdfColor
 {

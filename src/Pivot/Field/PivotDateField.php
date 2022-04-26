@@ -14,30 +14,28 @@ namespace App\Pivot\Field;
 
 /**
  * Field for a date.
- *
- * @author Laurent Muller
  */
 class PivotDateField extends PivotField
 {
     /**
      * Numeric representation of a month, without leading zeros.
      */
-    public const PART_MONTH = 'n';
+    final public const PART_MONTH = 'n';
 
     /**
      * ISO-8601 week number of year, weeks starting on Monday.
      */
-    public const PART_WEEK = 'W';
+    final public const PART_WEEK = 'W';
 
     /**
      * ISO-8601 numeric representation of the day of the week. 1 (for Monday) through 7 (for Sunday).
      */
-    public const PART_WEEK_DAY = 'N';
+    final public const PART_WEEK_DAY = 'N';
 
     /**
      * A full numeric representation of a year, 4 digits.
      */
-    public const PART_YEAR = 'Y';
+    final public const PART_YEAR = 'Y';
 
     /**
      * Constructor.

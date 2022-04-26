@@ -40,8 +40,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Provides common features needed in controllers.
  *
  * @method ?User getUser() Gets the current user.
- *
- * @author Laurent Muller
  */
 abstract class AbstractController extends BaseController
 {

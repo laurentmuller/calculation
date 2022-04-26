@@ -31,17 +31,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * User.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_User", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_user_email", columns={"email"}),
  *     @ORM\UniqueConstraint(name="unique_user_username", columns={"username"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"email"}, message="email.already_used")
- * @UniqueEntity(fields={"username"}, message="username.already_used")
  * @Vich\Uploadable
  */
+#[UniqueEntity(fields: ['email'], message: 'email.already_used')]
+#[UniqueEntity(fields: ['username'], message: 'username.already_used')]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface
 {
     use RightsTrait;
@@ -49,10 +47,10 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\Length(max=180)
-     * @Assert\NotBlank
-     * @Assert\Email
      */
+    #[Assert\Length(max: 180)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     /**
@@ -67,24 +65,24 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
-     * @Assert\Length(max=100)
      */
+    #[Assert\Length(max: 100)]
     private ?string $hashedToken = null;
 
     /**
      * The image file. NB: This is not a mapped field of entity metadata, just a simple property.
      *
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
-     * @Assert\Image(maxSize="10485760")
      */
+    #[Assert\Image(maxSize: 10485760)]
     private ?File $imageFile = null;
 
     /**
      * The image file name.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     private ?string $imageName = null;
 
     /**
@@ -94,16 +92,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\NotBlank
      */
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private ?string $password = null;
 
     /**
-     * The properties.
+     * @ORM\OneToMany(targetEntity=UserProperty::class, mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      *
      * @var Collection<int, UserProperty>
-     * @ORM\OneToMany(targetEntity=UserProperty::class, mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private Collection $properties;
 
@@ -114,8 +111,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
-     * @Assert\Length(max=20)
      */
+    #[Assert\Length(max: 20)]
     private ?string $selector = null;
 
     /**
@@ -127,9 +124,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\Length(max=180)
-     * @Assert\NotBlank
      */
+    #[Assert\Length(max: 180)]
+    #[Assert\NotBlank]
     private ?string $username = null;
 
     /**

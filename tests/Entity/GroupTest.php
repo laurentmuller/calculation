@@ -17,8 +17,6 @@ use App\Entity\GroupMargin;
 
 /**
  * Unit test for {@link App\Entity\Group} class.
- *
- * @author Laurent Muller
  */
 class GroupTest extends AbstractEntityValidatorTest
 {

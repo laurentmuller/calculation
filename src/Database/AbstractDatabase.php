@@ -16,8 +16,6 @@ use App\Util\FileUtils;
 
 /**
  * Extended the SQLite3 database with transaction support.
- *
- * @author Laurent Muller
  */
 abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 {

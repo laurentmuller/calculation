@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Color used for drawing text operations.
- *
- * @author Laurent Muller
  */
 class PdfTextColor extends AbstractPdfColor
 {

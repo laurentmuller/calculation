@@ -23,8 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Type to display a list of calculation states.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractListEntityType<CalculationState>
  */
 class CalculationStateListType extends AbstractListEntityType

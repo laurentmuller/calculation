@@ -24,8 +24,6 @@ use App\Util\Utils;
 /**
  * Report for the list of categories.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<Category>
  */
 class CategoriesReport extends AbstractArrayReport

@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contains data results.
- *
- * @author Laurent Muller
  */
 class DataResults implements \JsonSerializable
 {

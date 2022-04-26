@@ -30,12 +30,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for global margins entities.
  *
- * @author Laurent Muller
- *
- * @Route("/globalmargin")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<GlobalMargin>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/globalmargin')]
 class GlobalMarginController extends AbstractEntityController
 {
     /**
@@ -48,9 +46,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Add a global margin.
-     *
-     * @Route("/add", name="globalmargin_add")
      */
+    #[Route(path: '/add', name: 'globalmargin_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new GlobalMargin());
@@ -58,9 +55,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Delete a global margin.
-     *
-     * @Route("/delete/{id}", name="globalmargin_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'globalmargin_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, GlobalMargin $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -75,9 +71,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Edit a global margin.
-     *
-     * @Route("/edit/{id}", name="globalmargin_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'globalmargin_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, GlobalMargin $item): Response
     {
         return $this->editEntity($request, $item);
@@ -86,10 +81,9 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Export the global margins to a Spreadsheet document.
      *
-     * @Route("/excel", name="globalmargin_excel")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      */
+    #[Route(path: '/excel', name: 'globalmargin_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('minimum');
@@ -97,7 +91,6 @@ class GlobalMarginController extends AbstractEntityController
             $message = $this->trans('globalmargin.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new GlobalMarginsDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -106,10 +99,9 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Export the global margins to a PDF document.
      *
-     * @Route("/pdf", name="globalmargin_pdf")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      */
+    #[Route(path: '/pdf', name: 'globalmargin_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('minimum');
@@ -117,7 +109,6 @@ class GlobalMarginController extends AbstractEntityController
             $message = $this->trans('globalmargin.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $report = new GlobalMarginsReport($this, $entities);
 
         return $this->renderPdfDocument($report);
@@ -125,9 +116,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Show properties of a global margin.
-     *
-     * @Route("/show/{id}", name="globalmargin_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => '\d+'])]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);
@@ -135,9 +125,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="globalmargin_table")
      */
+    #[Route(path: '', name: 'globalmargin_table')]
     public function table(Request $request, GlobalMarginTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig');

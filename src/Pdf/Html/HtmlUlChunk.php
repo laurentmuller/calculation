@@ -14,8 +14,6 @@ namespace App\Pdf\Html;
 
 /**
  * Specialized chunk for HTML unordered list (ul).
- *
- * @author Laurent Muller
  */
 class HtmlUlChunk extends HtmlParentChunk
 {

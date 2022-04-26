@@ -20,7 +20,6 @@ use Twig\Environment;
 /**
  * The groups table.
  *
- * @author Laurent Muller
  * @template-extends AbstractEntityTable<Group>
  */
 class GroupTable extends AbstractEntityTable

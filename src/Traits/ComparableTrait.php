@@ -17,8 +17,6 @@ use App\Interfaces\ComparableInterface;
 /**
  * Trait to implement the <code>ComparableInterface</code> interface.
  *
- * @author Laurent Muller
- *
  * @see ComparableInterface
  */
 trait ComparableTrait

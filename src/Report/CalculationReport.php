@@ -30,8 +30,6 @@ use Psr\Log\LoggerAwareInterface;
 
 /**
  * Report for a calculation.
- *
- * @author Laurent Muller
  */
 class CalculationReport extends AbstractReport implements LoggerAwareInterface
 {

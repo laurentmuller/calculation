@@ -24,8 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test for the {@link App\Form\DataTransformer\CategoryTransformer} class.
- *
- * @author Laurent Muller
  */
 class CategoryTransformerTest extends KernelTestCase
 {

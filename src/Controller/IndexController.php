@@ -29,8 +29,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Controller to display the home page.
- *
- * @author Laurent Muller
  */
 class IndexController extends AbstractController
 {
@@ -50,9 +48,8 @@ class IndexController extends AbstractController
 
     /**
      *  Display the home page.
-     *
-     * @Route("/", name="homepage")
      */
+    #[Route(path: '/', name: 'homepage')]
     public function invoke(Request $request): Response
     {
         $service = $this->getUserService();
@@ -61,7 +58,6 @@ class IndexController extends AbstractController
         $user = $restrict ? $this->getUser() : null;
         $application->updateCache();
         $service->updateCache();
-
         $parameters = [
             'min_margin' => $application->getMinMargin(),
             'calculations' => $this->getCalculations($application->getPanelCalculation(), $user),
@@ -83,7 +79,6 @@ class IndexController extends AbstractController
             $parameters['margin_count'] = $this->count(GlobalMargin::class);
             $parameters['state_count'] = $this->count(CalculationState::class);
         }
-
         // save
         if ($request->hasSession()) {
             $request->getSession()->set(self::PARAM_RESTRICT, $restrict);

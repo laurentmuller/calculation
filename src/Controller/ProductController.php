@@ -31,12 +31,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for product entities.
  *
- * @author Laurent Muller
- *
- * @Route("/product")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<Product>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/product')]
 class ProductController extends AbstractEntityController
 {
     /**
@@ -49,9 +47,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Add a product.
-     *
-     * @Route("/add", name="product_add")
      */
+    #[Route(path: '/add', name: 'product_add')]
     public function add(Request $request): Response
     {
         $item = new Product();
@@ -64,9 +61,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Clone (copy) a product.
-     *
-     * @Route("/clone/{id}", name="product_clone", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => '\d+'])]
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -80,9 +76,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Delete a product.
-     *
-     * @Route("/delete/{id}", name="product_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -97,9 +92,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Edit a product.
-     *
-     * @Route("/edit/{id}", name="product_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, Product $item): Response
     {
         return $this->editEntity($request, $item);
@@ -108,10 +102,9 @@ class ProductController extends AbstractEntityController
     /**
      * Export the products to a Spreadsheet document.
      *
-     * @Route("/excel", name="product_excel")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
+    #[Route(path: '/excel', name: 'product_excel')]
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findAllByGroup();
@@ -119,7 +112,6 @@ class ProductController extends AbstractEntityController
             $message = $this->trans('product.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new ProductsDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -128,10 +120,9 @@ class ProductController extends AbstractEntityController
     /**
      * Export the products to a PDF document.
      *
-     * @Route("/pdf", name="product_pdf")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
+    #[Route(path: '/pdf', name: 'product_pdf')]
     public function pdf(ProductRepository $repository): PdfResponse
     {
         $entities = $repository->findAllByGroup();
@@ -139,7 +130,6 @@ class ProductController extends AbstractEntityController
             $message = $this->trans('product.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new ProductsReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
@@ -147,9 +137,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Show properties of a product.
-     *
-     * @Route("/show/{id}", name="product_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'product_show', requirements: ['id' => '\d+'])]
     public function show(Product $item): Response
     {
         return $this->showEntity($item);
@@ -157,9 +146,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="product_table")
      */
+    #[Route(path: '', name: 'product_table')]
     public function table(Request $request, ProductTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'product/product_table.html.twig');

@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Trait to manage an array of days.
- *
- * @author Laurent Muller
  */
 trait DaysTrait
 {

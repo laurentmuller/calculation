@@ -17,8 +17,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 /**
  * Spreadsheet document for the list of groups.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\Group>
  */
 class GroupsDocument extends AbstractArrayDocument

@@ -23,8 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represent a comment (e-mail) to send.
- *
- * @author Laurent Muller
  */
 class Comment
 {
@@ -32,38 +30,33 @@ class Comment
      * The attachments.
      *
      * @var ?UploadedFile[]
-     *
-     * @Assert\Count(max=3)
-     * @Assert\All(@Assert\File(maxSize="10485760"))
      */
+    #[Assert\Count(max: 3)]
+    #[Assert\All(new Assert\File(maxSize: 10485760))]
     private ?array $attachments = null;
 
     /**
      * The from address.
-     *
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     private ?Address $fromAddress = null;
 
     /**
      * The message.
-     *
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     private ?string $message = null;
 
     /**
      * The subject.
-     *
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     private ?string $subject = null;
 
     /**
      * The to address.
-     *
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     private ?Address $toAddress = null;
 
     /**

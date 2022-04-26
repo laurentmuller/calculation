@@ -19,8 +19,6 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 /**
  * Strength constraint.
  *
- * @author Laurent Muller
- *
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */

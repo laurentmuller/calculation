@@ -30,8 +30,6 @@ use Twig\TwigFunction;
 
 /**
  * Twig extension for the application service.
- *
- * @author Laurent Muller
  */
 final class FunctionExtension extends AbstractExtension
 {

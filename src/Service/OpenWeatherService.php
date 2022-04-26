@@ -24,8 +24,6 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
 /**
  * Service to get weather from OpenWeatherMap.
  *
- * @author Laurent Muller
- *
  * @see https://openweathermap.org/api
  */
 class OpenWeatherService extends AbstractHttpClientService

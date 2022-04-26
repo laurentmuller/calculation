@@ -19,8 +19,6 @@ use Symfony\Component\Validator\Constraint;
  * Google reCaptcha constraint validator.
  *
  * @extends AbstractConstraintValidator<Recaptcha>
- *
- * @author Laurent Muller
  */
 class RecaptchaValidator extends AbstractConstraintValidator
 {

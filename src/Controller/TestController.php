@@ -62,21 +62,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for tests.
- *
- * @author Laurent Muller
- *
- * @Route("/test")
- * @IsGranted("ROLE_SUPER_ADMIN")
  */
+#[IsGranted('ROLE_SUPER_ADMIN')]
+#[Route(path: '/test')]
 class TestController extends AbstractController
 {
     use StrengthTranslatorTrait;
 
     /**
      * Show analog clock.
-     *
-     * @Route("/clock", name="test_clock")
      */
+    #[Route(path: '/clock', name: 'test_clock')]
     public function clock(Request $request): Response
     {
         $session = $request->getSession();
@@ -93,9 +89,8 @@ class TestController extends AbstractController
 
     /**
      * Test sending notification mail.
-     *
-     * @Route("/editor", name="test_editor")
      */
+    #[Route(path: '/editor', name: 'test_editor')]
     public function editor(Request $request, MailService $service, LoggerInterface $logger): Response
     {
         $data = [
@@ -160,9 +155,8 @@ class TestController extends AbstractController
 
     /**
      * Update calculations with random customers.
-     *
-     * @Route("/flex", name="test_flex")
      */
+    #[Route(path: '/flex', name: 'test_flex')]
     public function flex(CalculationStateRepository $repository): Response
     {
         $items = $repository->getSortedBuilder()
@@ -176,9 +170,8 @@ class TestController extends AbstractController
 
     /**
      * Export a HTML page to PDF.
-     *
-     * @Route("/html", name="test_html")
      */
+    #[Route(path: '/html', name: 'test_html')]
     public function html(): PdfResponse
     {
         // get content
@@ -193,9 +186,7 @@ class TestController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
-    /**
-     * @Route("/ipstack", name="test_ipstack")
-     */
+    #[Route(path: '/ipstack', name: 'test_ipstack')]
     public function ipStrack(Request $request, IpStackService $service): JsonResponse
     {
         $result = $service->getIpInfo($request);
@@ -212,9 +203,8 @@ class TestController extends AbstractController
 
     /**
      * Test notifications.
-     *
-     * @Route("/notifications", name="test_notifications")
      */
+    #[Route(path: '/notifications', name: 'test_notifications')]
     public function notifications(): Response
     {
         $application = $this->getApplication();
@@ -229,9 +219,8 @@ class TestController extends AbstractController
 
     /**
      * Test password validation.
-     *
-     * @Route("/password", name="test_password")
      */
+    #[Route(path: '/password', name: 'test_password')]
     public function password(Request $request, CaptchaImageService $service): Response
     {
         // options
@@ -323,9 +312,8 @@ class TestController extends AbstractController
 
     /**
      * Display the reCaptcha.
-     *
-     * @Route("/recaptcha", name="test_recaptcha")
      */
+    #[Route(path: '/recaptcha', name: 'test_recaptcha')]
     public function recaptcha(Request $request, TranslatorInterface $translator): Response
     {
         $data = [
@@ -404,9 +392,8 @@ class TestController extends AbstractController
 
     /**
      * Search zip codes, cities and streets from Switzerland.
-     *
-     * @Route("/swiss", name="test_swiss")
      */
+    #[Route(path: '/swiss', name: 'test_swiss')]
     public function swiss(Request $request, SwissPostService $service): Response
     {
         $all = $this->getRequestString($request, 'all');
@@ -441,9 +428,8 @@ class TestController extends AbstractController
 
     /**
      * Display calculations in a timeline.
-     *
-     * @Route("/timeline", name="test_timeline")
      */
+    #[Route(path: '/timeline', name: 'test_timeline')]
     public function timeline(Request $request, CalculationRepository $repository): Response
     {
         $interval = (string) $this->getRequestString($request, 'interval', 'P1W');
@@ -472,10 +458,9 @@ class TestController extends AbstractController
     }
 
     /**
-     * Test the PdfTocDocument.
-     *
-     * @Route("/toc", name="test_toc")
+     * Test the Pdf TOC document.
      */
+    #[Route(path: '/toc', name: 'test_toc')]
     public function tocDocument(): PdfResponse
     {
         $doc = new PdfTocDocument();
@@ -510,9 +495,8 @@ class TestController extends AbstractController
 
     /**
      * Show the translation page.
-     *
-     * @Route("/translate", name="test_translate")
      */
+    #[Route(path: '/translate', name: 'test_translate')]
     public function translate(TranslatorFactory $factory): Response
     {
         // get service
@@ -551,10 +535,8 @@ class TestController extends AbstractController
         return $this->renderForm('test/translate.html.twig', $parameters);
     }
 
-    /**
-     * @Route("/tree", name="test_tree")
-     */
-    public function treeView(Request $request, GroupRepository $repository, CategoryRepository $categories, CalculationStateRepository $states): Response
+    #[Route(path: '/tree', name: 'test_tree')]
+    public function tree(Request $request, GroupRepository $repository, CategoryRepository $categories, CalculationStateRepository $states): Response
     {
         // JSON?
         if ($request->isXmlHttpRequest()) {
@@ -603,9 +585,7 @@ class TestController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/union", name="test_union")
-     */
+    #[Route(path: '/union', name: 'test_union')]
     public function union(Request $request, SearchService $service): JsonResponse
     {
         $query = $this->getRequestString($request, 'query');
@@ -639,9 +619,7 @@ class TestController extends AbstractController
         return $this->json($data);
     }
 
-    /**
-     * @Route("/spam", name="test_spam")
-     */
+    #[Route(path: '/spam', name: 'test_spam')]
     public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
     {
         $generator = $fakerService->getGenerator();
@@ -657,9 +635,7 @@ class TestController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/verify", name="test_verify")
-     */
+    #[Route(path: '/verify', name: 'test_verify')]
     public function verifyAkismetKey(AkismetService $service): JsonResponse
     {
         if (!$service->verifyKey()) {

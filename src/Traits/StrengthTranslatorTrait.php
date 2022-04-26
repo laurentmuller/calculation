@@ -17,8 +17,6 @@ use App\Interfaces\StrengthInterface;
 
 /**
  * Trait to translate strength levels.
- *
- * @author Laurent Muller
  */
 trait StrengthTranslatorTrait
 {

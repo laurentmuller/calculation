@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * The PdfResponse represents an HTTP response within a PDF document.
  *
- * @author Laurent Muller
- *
  * @see PdfDocument
  * @psalm-suppress PropertyNotSetInConstructor
  */

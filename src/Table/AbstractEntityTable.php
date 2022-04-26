@@ -21,8 +21,6 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Abstract table for entities.
  *
- * @author Laurent Muller
- *
  * @template T of \App\Entity\AbstractEntity
  */
 abstract class AbstractEntityTable extends AbstractTable

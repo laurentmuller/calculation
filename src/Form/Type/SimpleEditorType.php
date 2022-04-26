@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * The Simple editor type.
- *
- * @author Laurent Muller
  */
 class SimpleEditorType extends AbstractType
 {

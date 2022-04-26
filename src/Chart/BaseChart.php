@@ -24,8 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * High chart with method shortcuts.
  *
- * @author Laurent Muller
- *
  * @method BaseChart style(array $styles) set the CSS style options.
  * @method BaseChart xAxis(array $xAxis)  set the x-axis options.
  * @method BaseChart yAxis(array $yAxis)  set the y-axis options.

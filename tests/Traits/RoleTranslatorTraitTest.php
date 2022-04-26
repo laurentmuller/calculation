@@ -20,8 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link App\Traits\RoleTranslatorTrait} class.
- *
- * @author Laurent Muller
  */
 class RoleTranslatorTraitTest extends TestCase
 {

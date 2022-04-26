@@ -14,8 +14,6 @@ namespace App\Pdf\Html;
 
 /**
  * Specialized chunk for HTML line break (br).
- *
- * @author Laurent Muller
  */
 class HtmlBrChunk extends AbstractHtmlChunk
 {

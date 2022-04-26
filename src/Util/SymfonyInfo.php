@@ -19,8 +19,6 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Utility class to get Symfony information.
  *
- * @author Laurent Muller
- *
  * @see https://github.com/symfony/symfony/blob/5.x/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  *

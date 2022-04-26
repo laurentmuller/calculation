@@ -21,8 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents an item of a calculation category.
  *
- * @author Laurent Muller
- *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationItemRepository")
  * @ORM\Table(name="sy_CalculationItem")
  */
@@ -43,9 +41,9 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      * The description.
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(max=255)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     protected ?string $description = null;
 
     /**
@@ -66,8 +64,8 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      * The unit.
      *
      * @ORM\Column(type="string", length=15, nullable=true)
-     * @Assert\Length(max=15)
      */
+    #[Assert\Length(max: 15)]
     protected ?string $unit = null;
 
     /**

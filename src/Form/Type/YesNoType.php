@@ -16,8 +16,6 @@ use App\Form\AbstractChoiceType;
 
 /**
  * A Yes/No (translated) choice type.
- *
- * @author Laurent Muller
  */
 class YesNoType extends AbstractChoiceType
 {

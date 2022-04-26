@@ -22,7 +22,6 @@ use Twig\Environment;
 /**
  * The calculation states table.
  *
- * @author Laurent Muller
  * @template-extends AbstractEntityTable<CalculationState>
  */
 class CalculationStateTable extends AbstractEntityTable

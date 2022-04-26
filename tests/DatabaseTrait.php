@@ -18,8 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Trait to manage database test.
- *
- * @author Laurent Muller
  */
 trait DatabaseTrait
 {

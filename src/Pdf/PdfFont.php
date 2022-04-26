@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Define a font style.
- *
- * @author Laurent Muller
  */
 class PdfFont implements PdfDocumentUpdaterInterface
 {

@@ -15,8 +15,6 @@ namespace App\Pdf\Html;
 /**
  * Bootstrap colors.
  *
- * @author Laurent Muller
- *
  * @version 4.4.1
  */
 class HtmlBootstrapColors

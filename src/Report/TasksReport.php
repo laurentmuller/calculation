@@ -24,8 +24,6 @@ use App\Util\FormatUtils;
 /**
  * Report for the list of tasks.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<Task>
  */
 class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterface

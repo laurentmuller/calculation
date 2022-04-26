@@ -18,8 +18,6 @@ use App\Util\Utils;
 /**
  * Represent a group in the grouping table.
  *
- * @author Laurent Muller
- *
  * @see \App\Pdf\PdfGroupTableBuilder
  */
 class PdfGroup implements PdfDocumentUpdaterInterface

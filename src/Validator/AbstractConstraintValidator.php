@@ -21,8 +21,6 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
  * Abstract constraint validator.
  *
  * @template T of Constraint
- *
- * @author Laurent Muller
  */
 abstract class AbstractConstraintValidator extends ConstraintValidator
 {

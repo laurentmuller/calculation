@@ -16,8 +16,6 @@ use App\Form\FormHelper;
 
 /**
  * Role rights type.
- *
- * @author Laurent Muller
  */
 class RoleRightsType extends RightsType
 {

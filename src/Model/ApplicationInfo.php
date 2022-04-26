@@ -16,8 +16,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * Contains application information.
- *
- * @author Laurent Muller
  */
 class ApplicationInfo
 {

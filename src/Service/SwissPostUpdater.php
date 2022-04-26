@@ -27,8 +27,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to import zip codes, cities and streets from Switzerland.
- *
- * @author Laurent Muller
  */
 class SwissPostUpdater
 {

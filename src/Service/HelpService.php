@@ -19,8 +19,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to provide help.
- *
- * @author Laurent Muller
  */
 class HelpService
 {

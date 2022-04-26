@@ -27,8 +27,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract report.
- *
- * @author Laurent Muller
  */
 abstract class AbstractReport extends PdfDocument
 {

@@ -25,8 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to check spams with the Akismet.
  *
- * @author Laurent Muller
- *
  * @see https://akismet.com/
  */
 class AkismetService extends AbstractHttpClientService

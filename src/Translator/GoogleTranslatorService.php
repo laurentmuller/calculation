@@ -19,8 +19,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * Google translator service v2.0.
  *
- * @author Laurent Muller
- *
  * @see https://cloud.google.com/translate/docs/translating-text
  */
 class GoogleTranslatorService extends AbstractTranslatorService

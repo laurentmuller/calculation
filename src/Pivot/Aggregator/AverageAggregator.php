@@ -16,8 +16,6 @@ use App\Traits\MathTrait;
 
 /**
  * Aggregator to get average of values.
- *
- * @author Laurent Muller
  */
 class AverageAggregator extends AbstractAggregator
 {

@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 
 /**
  * Utility class for response headers.
- *
- * @author Laurent Muller
  */
 class ResponseUtils
 {

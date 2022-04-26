@@ -29,8 +29,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 /**
  * Report for the list of users.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<User>
  * @psalm-suppress InternalMethod
  */

@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Trait to handle an abstract table.
- *
- * @author Laurent Muller
  */
 trait TableTrait
 {

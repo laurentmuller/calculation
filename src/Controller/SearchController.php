@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display the search page.
- *
- * @author Laurent Muller
  */
 class SearchController extends AbstractController
 {
@@ -30,10 +28,9 @@ class SearchController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @Route("/search", name="search")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search', name: 'search')]
     public function search(Request $request, SearchTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'index/search.html.twig');

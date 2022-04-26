@@ -18,8 +18,6 @@ use App\Util\Utils;
 
 /**
  * The pivot table.
- *
- * @author Laurent Muller
  */
 class PivotTable extends AbstractPivotAggregator
 {

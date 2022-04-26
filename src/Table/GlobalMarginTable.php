@@ -18,7 +18,6 @@ use App\Util\FileUtils;
 /**
  * The global margins table.
  *
- * @author Laurent Muller
  * @template-extends AbstractEntityTable<\App\Entity\GlobalMargin>
  */
 class GlobalMarginTable extends AbstractEntityTable

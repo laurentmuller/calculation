@@ -18,8 +18,6 @@ use App\Interfaces\DisableListenerInterface;
  * Service to enable or disable listeners. Only listeners implementing
  * the <code>DisableListenerInterface</code> interface are taken into account.
  *
- * @author Laurent Muller
- *
  * @see DisableListenerInterface
  */
 class SuspendEventListenerService

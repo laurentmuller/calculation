@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Unit test for {@link App\Controller\AboutController} class.
  * Asbtract unit test for controllers.
- *
- * @author Laurent Muller
  */
 abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 {

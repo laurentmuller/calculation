@@ -19,8 +19,6 @@ use App\Form\FormHelper;
 /**
  * Type to edit the user image.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<User>
  */
 class UserImageType extends AbstractEntityType

@@ -25,8 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to generate calculations.
- *
- * @author Laurent Muller
  */
 class CalculationGenerator extends AbstractEntityGenerator
 {

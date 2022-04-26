@@ -15,7 +15,6 @@ namespace App\Faker;
 /**
  * Faker provider to generate custom person.
  *
- * @author Laurent Muller
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class CustomPerson extends \Faker\Provider\fr_CH\Person

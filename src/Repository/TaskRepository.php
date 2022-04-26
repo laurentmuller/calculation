@@ -21,8 +21,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for task entity.
  *
  * @template-extends AbstractCategoryItemRepository<Task>
- *
- * @author Laurent Muller
  */
 class TaskRepository extends AbstractCategoryItemRepository
 {

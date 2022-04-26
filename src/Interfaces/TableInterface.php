@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Contains constants for Bootstrap tables.
- *
- * @author Laurent Muller
  */
 interface TableInterface
 {

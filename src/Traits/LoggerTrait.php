@@ -17,8 +17,6 @@ use Psr\Log\LoggerAwareTrait;
 
 /**
  * Trait to log messages within a LoggerInterface instance.
- *
- * @author Laurent Muller
  */
 trait LoggerTrait
 {

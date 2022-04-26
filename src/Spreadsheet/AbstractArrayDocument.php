@@ -17,8 +17,6 @@ use App\Controller\AbstractController;
 /**
  * Abstract Spreadsheet document to render an array of objects.
  *
- * @author Laurent Muller
- *
  * @template T
  */
 abstract class AbstractArrayDocument extends AbstractDocument

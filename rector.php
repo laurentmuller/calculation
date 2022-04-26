@@ -26,9 +26,6 @@ return static function (RectorConfig $rectorConfig): void {
         'tests',
     ]);
 
-    // rules to skip
-    $rectorConfig->skip([AnnotationToAttributeRector::class]);
-
     // rules to apply
     $rectorConfig->sets([
         SetList::PHP_81,

@@ -25,8 +25,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * The abstract table.
- *
- * @author Laurent Muller
  */
 abstract class AbstractTable implements SortModeInterface
 {

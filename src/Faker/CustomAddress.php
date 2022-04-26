@@ -15,7 +15,6 @@ namespace App\Faker;
 /**
  * Custom address.
  *
- * @author Laurent Muller
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class CustomAddress extends \Faker\Provider\fr_CH\Address

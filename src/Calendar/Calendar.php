@@ -19,8 +19,6 @@ use App\Util\Utils;
 /**
  * Represents a calendar for a specified year.
  *
- * @author Laurent Muller
- *
  * @psalm-consistent-constructor
  */
 class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDaysInterface, \Stringable

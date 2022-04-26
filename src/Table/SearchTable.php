@@ -26,8 +26,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The search table.
- *
- * @author Laurent Muller
  */
 class SearchTable extends AbstractTable
 {

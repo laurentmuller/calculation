@@ -26,8 +26,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @template-extends AbstractRepository<Calculation>
  * @psalm-suppress  MixedReturnTypeCoercion
- *
- * @author Laurent Muller
  */
 class CalculationRepository extends AbstractRepository
 {

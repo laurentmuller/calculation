@@ -21,8 +21,6 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @template T of \App\Entity\AbstractCategoryItemEntity
  * @template-extends AbstractRepository<T>
- *
- * @author Laurent Muller
  */
 abstract class AbstractCategoryItemRepository extends AbstractRepository
 {

@@ -16,8 +16,6 @@ use App\Util\DateUtils;
 
 /**
  * Creates an instance of calendar suitable for rendering in Twig template.
- *
- * @author Laurent Muller
  */
 class CalendarService
 {

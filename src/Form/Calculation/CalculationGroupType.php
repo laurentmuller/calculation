@@ -21,8 +21,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Calculation group edit type.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<CalculationGroup>
  */
 class CalculationGroupType extends AbstractEntityType

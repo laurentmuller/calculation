@@ -14,8 +14,6 @@ namespace App\Captcha;
 
 /**
  * Alpha captcha to validate a letter.
- *
- * @author Laurent Muller
  */
 class LetterCaptcha extends AbstractAlphaCaptcha
 {

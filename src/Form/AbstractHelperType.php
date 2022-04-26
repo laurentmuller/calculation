@@ -17,8 +17,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Abstract type to use within the form helper.
- *
- * @author Laurent Muller
  */
 abstract class AbstractHelperType extends AbstractType
 {

@@ -20,8 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to update Javascript and CSS dependencies.
- *
- * @author Laurent Muller
  */
 class UpdateAssetsCommand extends AbstractAssetsCommand
 {

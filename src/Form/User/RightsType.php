@@ -21,8 +21,6 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * The access rights type.
- *
- * @author Laurent Muller
  */
 class RightsType extends AbstractHelperType
 {

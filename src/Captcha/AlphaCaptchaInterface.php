@@ -14,8 +14,6 @@ namespace App\Captcha;
 
 /**
  * Class implementing this interface deals with question and answer validation.
- *
- * @author Laurent Muller
  */
 interface AlphaCaptchaInterface
 {

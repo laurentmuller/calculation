@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Class implementing this interface deals with enablement state.
- *
- * @author Laurent Muller
  */
 interface DisableListenerInterface
 {

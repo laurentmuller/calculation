@@ -18,8 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link App\Controller\AjaxController} class.
- *
- * @author Laurent Muller
  */
 class AjaxControllerTest extends AbstractAuthenticateWebTestCase
 {

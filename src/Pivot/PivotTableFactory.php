@@ -20,8 +20,6 @@ use Symfony\Component\Intl\Exception\UnexpectedTypeException;
 /**
  * Factory to create a pivot table.
  *
- * @author Laurent Muller
- *
  * @template T of AbstractAggregator
  */
 class PivotTableFactory

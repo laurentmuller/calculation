@@ -22,8 +22,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for group margin entity.
  *
  * @template-extends AbstractRepository<GroupMargin>
- *
- * @author Laurent Muller
  */
 class GroupMarginRepository extends AbstractRepository
 {

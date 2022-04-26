@@ -24,8 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to update calculation totals.
- *
- * @author Laurent Muller
  */
 final class CalculationService
 {

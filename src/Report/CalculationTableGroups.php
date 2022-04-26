@@ -22,8 +22,6 @@ use App\Util\FormatUtils;
 
 /**
  * Table to render the totals by group of a calculation.
- *
- * @author Laurent Muller
  */
 class CalculationTableGroups extends PdfTableBuilder
 {

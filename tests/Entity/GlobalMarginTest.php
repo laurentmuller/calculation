@@ -16,8 +16,6 @@ use App\Entity\GlobalMargin;
 
 /**
  * Unit test for {@link App\Entity\GlobalMargin} class.
- *
- * @author Laurent Muller
  */
 class GlobalMarginTest extends AbstractEntityValidatorTest
 {

@@ -19,7 +19,6 @@ use App\Util\FileUtils;
 /**
  * The products table.
  *
- * @author Laurent Muller
  * @template-extends AbstractCategoryItemTable<\App\Entity\Product>
  */
 class ProductTable extends AbstractCategoryItemTable

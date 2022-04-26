@@ -25,7 +25,6 @@ use Twig\Environment;
 /**
  * The categories table.
  *
- * @author Laurent Muller
  * @template-extends AbstractEntityTable<Category>
  */
 class CategoryTable extends AbstractEntityTable

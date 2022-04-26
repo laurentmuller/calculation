@@ -17,8 +17,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Trait to write output messages.
- *
- * @author Laurent Muller
  */
 trait LoggerTrait
 {

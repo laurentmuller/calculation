@@ -20,8 +20,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Unit test for {@link AbstractEntity} class.
- *
- * @author Laurent Muller
  */
 abstract class AbstractEntityValidatorTest extends KernelTestCase
 {

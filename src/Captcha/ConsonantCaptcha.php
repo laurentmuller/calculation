@@ -14,8 +14,6 @@ namespace App\Captcha;
 
 /**
  * Alpha captcha to validate a consonant.
- *
- * @author Laurent Muller
  */
 class ConsonantCaptcha extends AbstractAlphaCaptcha
 {

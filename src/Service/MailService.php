@@ -23,9 +23,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
-/**
- * @author Laurent Muller
- */
 class MailService
 {
     use TranslatorTrait;

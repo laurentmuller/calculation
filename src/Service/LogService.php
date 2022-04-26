@@ -23,8 +23,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Service to read and cache log file.
- *
- * @author Laurent Muller
  */
 class LogService
 {

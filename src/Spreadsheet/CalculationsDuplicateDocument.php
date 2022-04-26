@@ -16,8 +16,6 @@ use App\Controller\AbstractController;
 
 /**
  * Spreadsheet document for the list of calculations with duplicate items.
- *
- * @author Laurent Muller
  */
 class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
 {

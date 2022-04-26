@@ -22,12 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for the exchange rate service.
- *
- * @author Laurent Muller
- *
- * @Route("/exchange")
- * @IsGranted("ROLE_SUPER_ADMIN")
  */
+#[IsGranted('ROLE_SUPER_ADMIN')]
+#[Route(path: '/exchange')]
 class ExchangeRateController extends AbstractController
 {
     /**
@@ -39,9 +36,8 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Display the view.
-     *
-     * @Route("", name="exchange_display")
      */
+    #[Route(path: '', name: 'exchange_display')]
     public function display(): Response
     {
         return $this->renderForm('test/exchangerate.html.twig', [
@@ -52,9 +48,8 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the supported currency codes.
-     *
-     * @Route("/codes", name="exchange_codes")
      */
+    #[Route(path: '/codes', name: 'exchange_codes')]
     public function getCodes(): JsonResponse
     {
         $codes = $this->service->getSupportedCodes();
@@ -69,9 +64,8 @@ class ExchangeRateController extends AbstractController
      * Gets the exchange rates from the given currency code to all the other currencies supported.
      *
      * @param string $code the base currency code
-     *
-     * @Route("/latest/{code}", name="exchange_latest")
      */
+    #[Route(path: '/latest/{code}', name: 'exchange_latest')]
     public function getLatest(string $code): JsonResponse
     {
         $latest = $this->service->getLatest($code);
@@ -84,19 +78,16 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the exchange rate from the base curreny code to the target currency code.
-     *
-     * @Route("/rate", name="exchange_rate")
      */
+    #[Route(path: '/rate', name: 'exchange_rate')]
     public function getRate(Request $request): JsonResponse
     {
         $baseCode = (string) $this->getRequestString($request, 'baseCode', '');
         $targetCode = (string) $this->getRequestString($request, 'targetCode', '');
         $result = $this->service->getRateAndDates($baseCode, $targetCode);
-
         if ($lastError = $this->service->getLastError()) {
             return $this->json($lastError);
         }
-
         if (\is_array($result)) {
             return $this->jsonTrue([
                 'rate' => $result['rate'],

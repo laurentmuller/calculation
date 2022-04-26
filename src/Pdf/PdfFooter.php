@@ -19,8 +19,6 @@ use App\Util\FormatUtils;
 
 /**
  * Class to output footer in PDF documents.
- *
- * @author Laurent Muller
  */
 class PdfFooter
 {

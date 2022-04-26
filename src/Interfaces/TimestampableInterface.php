@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Class implementing this interface deals with the creation and update information.
- *
- * @author Laurent Muller
  */
 interface TimestampableInterface
 {

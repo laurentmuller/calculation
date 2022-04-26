@@ -17,8 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for convert integer to roman.
- *
- * @author Laurent Muller
  */
 class ToRomanTest extends TestCase
 {

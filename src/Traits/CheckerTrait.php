@@ -17,8 +17,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Trait to check grant actions.
- *
- * @author Laurent Muller
  */
 trait CheckerTrait
 {

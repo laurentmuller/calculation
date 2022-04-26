@@ -27,8 +27,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * This is useful for forms where certain field need to be shown but not editable.
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
- *
- * @author Laurent Muller
  */
 class PlainType extends AbstractType
 {

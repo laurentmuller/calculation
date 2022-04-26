@@ -19,8 +19,6 @@ use Doctrine\ORM\UnitOfWork;
 
 /**
  * Listener to update calculations when groups, categories or items are modified.
- *
- * @author Laurent Muller
  */
 final class CalculationListener extends TimestampableListener
 {

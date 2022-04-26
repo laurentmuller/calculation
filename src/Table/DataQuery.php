@@ -17,8 +17,6 @@ use App\Interfaces\SortModeInterface;
 
 /**
  * Contains the data query parameters.
- *
- * @author Laurent Muller
  */
 class DataQuery implements SortModeInterface
 {

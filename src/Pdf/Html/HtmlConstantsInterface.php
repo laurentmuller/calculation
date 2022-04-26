@@ -14,8 +14,6 @@ namespace App\Pdf\Html;
 
 /**
  * The HTML constants; mainly the tag names.
- *
- * @author Laurent Muller
  */
 interface HtmlConstantsInterface
 {

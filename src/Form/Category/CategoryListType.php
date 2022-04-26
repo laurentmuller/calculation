@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of categories grouped by groups.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractListEntityType<Category>
  */
 class CategoryListType extends AbstractListEntityType

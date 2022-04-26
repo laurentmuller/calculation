@@ -19,8 +19,6 @@ use App\Interfaces\ImageExtensionInterface;
  *
  * The underlying image resource and allocated colors are automatically destroyed as soon
  * as there are no other references to this instance.
- *
- * @author Laurent Muller
  */
 class ImageHandler implements ImageExtensionInterface
 {

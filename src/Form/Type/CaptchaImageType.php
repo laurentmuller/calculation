@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * A form type to display a captcha image.
- *
- * @author Laurent Muller
  */
 class CaptchaImageType extends AbstractType
 {

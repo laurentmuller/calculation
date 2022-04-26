@@ -22,8 +22,6 @@ use App\Pdf\PdfStyle;
 /**
  * Report for the list of customers.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<Customer>
  */
 class CustomersReport extends AbstractArrayReport

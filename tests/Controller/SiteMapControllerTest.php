@@ -14,8 +14,6 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link App\Controller\SiteMapController} class.
- *
- * @author Laurent Muller
  */
 class SiteMapControllerTest extends AbstractControllerTest
 {

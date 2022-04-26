@@ -17,8 +17,6 @@ use App\Util\Utils;
 
 /**
  * Class with an aggregator function.
- *
- * @author Laurent Muller
  */
 abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
 {

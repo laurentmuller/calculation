@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to display a list of groups.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractListEntityType<Group>
  */
 class GroupListType extends AbstractListEntityType

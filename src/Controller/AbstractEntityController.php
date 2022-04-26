@@ -31,8 +31,6 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Abstract controller for entities management.
  *
- * @author Laurent Muller
- *
  * @template T of AbstractEntity
  */
 abstract class AbstractEntityController extends AbstractController

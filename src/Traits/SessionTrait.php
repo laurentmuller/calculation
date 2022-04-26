@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Trait for session functions.
- *
- * @author Laurent Muller
  */
 trait SessionTrait
 {

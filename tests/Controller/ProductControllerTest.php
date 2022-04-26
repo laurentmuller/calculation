@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\ProductController} class.
- *
- * @author Laurent Muller
  */
 class ProductControllerTest extends AbstractControllerTest
 {

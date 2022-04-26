@@ -17,8 +17,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * The database test.
- *
- * @author Laurent Muller
  */
 class Database extends AbstractDatabase
 {

@@ -18,8 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Calculation state provider.
  *
- * @author Laurent Muller
- *
  * @template-extends EntityProvider<CalculationState>
  * @psalm-suppress PropertyNotSetInConstructor
  */

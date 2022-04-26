@@ -21,8 +21,6 @@ use Twig\Environment;
 
 /**
  * The calculation table for margin below.
- *
- * @author Laurent Muller
  */
 class CalculationBelowTable extends CalculationTable implements \Countable
 {

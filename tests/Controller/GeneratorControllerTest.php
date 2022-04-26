@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\GeneratorController} class.
- *
- * @author Laurent Muller
  */
 class GeneratorControllerTest extends AbstractControllerTest
 {

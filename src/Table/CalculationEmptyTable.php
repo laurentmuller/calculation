@@ -18,8 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Calculation table for empty items.
- *
- * @author Laurent Muller
  */
 class CalculationEmptyTable extends AbstractCalculationItemsTable
 {

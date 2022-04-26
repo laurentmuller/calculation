@@ -19,8 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Edition type to use within an entity class.
  *
- * @author Laurent Muller
- *
  * @template T of AbstractEntity
  */
 abstract class AbstractEntityType extends AbstractHelperType

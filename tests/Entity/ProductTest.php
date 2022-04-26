@@ -18,8 +18,6 @@ use App\Entity\Product;
 
 /**
  * Unit test for {@link App\Entity\Product} class.
- *
- * @author Laurent Muller
  */
 class ProductTest extends AbstractEntityValidatorTest
 {

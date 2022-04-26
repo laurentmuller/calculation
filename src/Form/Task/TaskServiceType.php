@@ -17,8 +17,6 @@ use App\Form\FormHelper;
 
 /**
  * Type to compute a task.
- *
- * @author Laurent Muller
  */
 class TaskServiceType extends AbstractHelperType
 {

@@ -27,8 +27,6 @@ use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
 
 /**
  * Listener to resize the profile image.
- *
- * @author Laurent Muller
  */
 class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 {

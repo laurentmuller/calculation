@@ -14,8 +14,6 @@ namespace App\Pivot\Aggregator;
 
 /**
  * Aggregator to count values.
- *
- * @author Laurent Muller
  */
 class CountAggregator extends AbstractAggregator
 {

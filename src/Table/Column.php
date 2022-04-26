@@ -22,8 +22,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * The table column.
- *
- * @author Laurent Muller
  */
 class Column implements SortModeInterface, \Stringable
 {

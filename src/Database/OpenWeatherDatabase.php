@@ -14,8 +14,6 @@ namespace App\Database;
 
 /**
  * Database to search cites for OpenWeatherMap.
- *
- * @author Laurent Muller
  */
 class OpenWeatherDatabase extends AbstractDatabase
 {

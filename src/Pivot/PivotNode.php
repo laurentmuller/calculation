@@ -18,8 +18,6 @@ use App\Util\Utils;
 
 /**
  * Represents a pivot node.
- *
- * @author Laurent Muller
  */
 class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeInterface, \Stringable
 {

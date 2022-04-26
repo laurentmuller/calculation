@@ -20,8 +20,6 @@ use Symfony\Component\String\UnicodeString;
 
 /**
  * Utility class for strings and sort.
- *
- * @author Laurent Muller
  */
 final class Utils
 {

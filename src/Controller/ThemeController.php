@@ -23,19 +23,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to select the website theme.
- *
- * @author Laurent Muller
- *
- * @Route("/user")
  */
+#[Route(path: '/user')]
 class ThemeController extends AbstractController
 {
     /**
      * Display the page to select the website theme.
-     *
-     * @Route("/theme", name="user_theme")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/theme', name: 'user_theme')]
     public function invoke(Request $request, ThemeService $service): Response
     {
         $data = [

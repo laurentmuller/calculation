@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Trait to manage cookies.
- *
- * @author Laurent Muller
  */
 trait CookieTrait
 {

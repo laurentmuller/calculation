@@ -15,7 +15,6 @@ namespace App\Faker;
 /**
  * Faker provider to generate custom phone numbers.
  *
- * @author Laurent Muller
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber

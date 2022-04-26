@@ -19,8 +19,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Trait to implement the Timestampable interface.
  *
- * @author Laurent Muller
- *
  * @see TimestampableInterface
  */
 trait TimestampableTrait

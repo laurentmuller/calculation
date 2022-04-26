@@ -46,8 +46,6 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
  * Helper class to add types to a form builder.
- *
- * @author Laurent Muller
  */
 class FormHelper
 {

@@ -27,22 +27,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The log controller.
- *
- * @author Laurent Muller
- *
- * @Route("/log")
- * @IsGranted("ROLE_ADMIN")
  */
+#[IsGranted('ROLE_ADMIN')]
+#[Route(path: '/log')]
 class LogController extends AbstractController
 {
     use TableTrait;
 
     /**
      * Logs a Content Security Policy report.
-     *
-     * @IsGranted("ROLE_USER")
-     * @Route("/csp", name="log_csp")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/csp', name: 'log_csp')]
     public function cspViolation(LoggerInterface $logger): Response
     {
         $content = (string) \file_get_contents('php://input');
@@ -59,16 +55,14 @@ class LogController extends AbstractController
             }
             $logger->error($title, $context);
         }
-
         // no content
         return new Response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
      * Delete the content of the log file (if any).
-     *
-     * @Route("/delete", name="log_delete")
      */
+    #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
         // get entries
@@ -77,7 +71,6 @@ class LogController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         // handle request
         $file = $service->getFileName();
         $form = $this->createForm();
@@ -103,7 +96,6 @@ class LogController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $parameters = [
             'form' => $form,
             'file' => $file,
@@ -111,16 +103,14 @@ class LogController extends AbstractController
             'entries' => FileUtils::getLinesCount($file),
             'route' => $this->getRequestString($request, 'route'),
         ];
-
         // display
         return $this->renderForm('log/log_delete.html.twig', $parameters);
     }
 
     /**
      * Export the logs to a Spreadsheet document.
-     *
-     * @Route("/excel", name="log_excel")
      */
+    #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
     {
         // get entries
@@ -129,7 +119,6 @@ class LogController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $doc = new LogsDocument($this, $entries);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -137,9 +126,8 @@ class LogController extends AbstractController
 
     /**
      * Export to PDF the content of the log file.
-     *
-     * @Route("/pdf", name="log_pdf")
      */
+    #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response
     {
         // get entries
@@ -148,7 +136,6 @@ class LogController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $doc = new LogReport($this, $entries);
 
         return $this->renderPdfDocument($doc);
@@ -156,9 +143,8 @@ class LogController extends AbstractController
 
     /**
      * Clear the log file cache.
-     *
-     * @Route("/refresh", name="log_refresh")
      */
+    #[Route(path: '/refresh', name: 'log_refresh')]
     public function refresh(Request $request, LogService $service): Response
     {
         $service->clearCache();
@@ -169,9 +155,8 @@ class LogController extends AbstractController
 
     /**
      * Show properties of a log entry.
-     *
-     * @Route("/show/{id}", name="log_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => '\d+'])]
     public function show(Request $request, int $id, LogService $service): Response
     {
         if (null === $item = $service->getLog($id)) {
@@ -186,9 +171,8 @@ class LogController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="log_table")
      */
+    #[Route(path: '', name: 'log_table')]
     public function table(Request $request, LogTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'log/log_table.html.twig');

@@ -33,8 +33,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Entity modifications listener.
- *
- * @author Laurent Muller
  */
 class PersistenceListener implements EventSubscriber
 {

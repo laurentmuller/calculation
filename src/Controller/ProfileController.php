@@ -23,18 +23,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for user profile.
- *
- * @author Laurent Muller
- *
- * @Route("/profile")
  */
+#[Route(path: '/profile')]
 class ProfileController extends AbstractController
 {
     /**
      * Change password of the current user (if any).
-     *
-     * @Route("/change-password", name="user_profile_change_password")
      */
+    #[Route(path: '/change-password', name: 'user_profile_change_password')]
     public function changePassword(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager): Response
     {
         // get user
@@ -44,7 +40,6 @@ class ProfileController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         // create and validate form
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
@@ -57,7 +52,6 @@ class ProfileController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         // display
         return $this->renderForm('profile/profile_change_password.html.twig', [
             'form' => $form,
@@ -66,9 +60,8 @@ class ProfileController extends AbstractController
 
     /**
      * Edit the profile of the current user (if any).
-     *
-     * @Route("/edit", name="user_profile_edit")
      */
+    #[Route(path: '/edit', name: 'user_profile_edit')]
     public function editProfil(Request $request, EntityManagerInterface $manager): Response
     {
         // get user
@@ -78,7 +71,6 @@ class ProfileController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         // create and validate form
         $form = $this->createForm(ProfileEditType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
@@ -87,7 +79,6 @@ class ProfileController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         // display
         return $this->renderForm('profile/profile_edit.html.twig', [
             'form' => $form,

@@ -31,8 +31,6 @@ use Doctrine\SqlFormatter\SqlFormatter;
 /**
  * Report for the log.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<Mixed>
  */
 class LogReport extends AbstractArrayReport implements PdfCellListenerInterface

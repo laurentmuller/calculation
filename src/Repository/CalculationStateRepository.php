@@ -23,8 +23,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @template-extends AbstractRepository<CalculationState>
  * @psalm-suppress  MixedReturnTypeCoercion
- *
- * @author Laurent Muller
  */
 class CalculationStateRepository extends AbstractRepository
 {

@@ -24,12 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display the database schema.
- *
- * @author Laurent Muller
- *
- * @Route("/schema")
- * @IsGranted("ROLE_SUPER_ADMIN")
  */
+#[IsGranted('ROLE_SUPER_ADMIN')]
+#[Route(path: '/schema')]
 class SchemaController extends AbstractController
 {
     /**
@@ -45,9 +42,7 @@ class SchemaController extends AbstractController
         $this->manager = $manager->getConnection()->createSchemaManager();
     }
 
-    /**
-     * @Route("", name="schema")
-     */
+    #[Route(path: '', name: 'schema')]
     public function index(): Response
     {
         return $this->renderForm('schema/index.html.twig', [
@@ -56,10 +51,9 @@ class SchemaController extends AbstractController
     }
 
     /**
-     * @Route("/{name}", name="schema_table")
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the table can not be found
      */
+    #[Route(path: '/{name}', name: 'schema_table')]
     public function table(string $name): Response
     {
         if (!$this->tableExist($name)) {

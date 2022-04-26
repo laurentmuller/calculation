@@ -17,8 +17,6 @@ use App\Traits\MathTrait;
 
 /**
  * Spreadsheet document for the list of calculations with empty items.
- *
- * @author Laurent Muller
  */
 class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
 {

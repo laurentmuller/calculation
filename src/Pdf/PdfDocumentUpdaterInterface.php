@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Class implementing this interface applies some changes to a <code>PdfDocument</code>.
- *
- * @author Laurent Muller
  */
 interface PdfDocumentUpdaterInterface
 {

@@ -17,8 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Represents a global margin.
  *
- * @author Laurent Muller
- *
  * @ORM\Entity(repositoryClass="App\Repository\GlobalMarginRepository")
  * @ORM\Table(name="sy_GlobalMargin")
  */

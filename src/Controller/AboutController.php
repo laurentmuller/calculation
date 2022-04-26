@@ -27,19 +27,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for application information.
- *
- * @author Laurent Muller
- *
- * @Route("/about")
  */
+#[Route(path: '/about')]
 class AboutController extends AbstractController
 {
     /**
      * Display information about the application.
-     *
-     * @Route("", name="about")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '', name: 'about')]
     public function about(): Response
     {
         return $this->renderForm('about/about.html.twig');
@@ -47,10 +43,9 @@ class AboutController extends AbstractController
 
     /**
      * Export the licence and policy pages to PDF.
-     *
-     * @Route("/pdf", name="about_pdf")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/pdf', name: 'about_pdf')]
     public function aboutPdf(string $appName): PdfResponse
     {
         $templateParameters = [
@@ -66,9 +61,8 @@ class AboutController extends AbstractController
 
     /**
      * Display the licence page.
-     *
-     * @Route("/licence ", name="about_licence")
      */
+    #[Route(path: '/licence ', name: 'about_licence')]
     public function licence(): Response
     {
         return $this->renderForm('about/licence.html.twig', [
@@ -78,10 +72,9 @@ class AboutController extends AbstractController
 
     /**
      * Render the licence information.
-     *
-     * @Route("/licence/content", name="about_licence_content")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/licence/content', name: 'about_licence_content')]
     public function licenceContent(): JsonResponse
     {
         $content = $this->renderView('about/licence_content.html.twig');
@@ -93,9 +86,8 @@ class AboutController extends AbstractController
 
     /**
      * Export the licence page to PDF.
-     *
-     * @Route("/licence/pdf", name="about_licence_pdf")
      */
+    #[Route(path: '/licence/pdf', name: 'about_licence_pdf')]
     public function licencePdf(): PdfResponse
     {
         $templateParameters = [
@@ -107,10 +99,9 @@ class AboutController extends AbstractController
 
     /**
      * Render the MySql information.
-     *
-     * @Route("/mysql/content", name="about_mysql_content")
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/mysql/content', name: 'about_mysql_content')]
     public function mysqlContent(DatabaseInfo $info): JsonResponse
     {
         $parameters = [
@@ -127,10 +118,9 @@ class AboutController extends AbstractController
 
     /**
      * Render the PHP information.
-     *
-     * @Route("/php/content", name="about_php_content")
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/php/content', name: 'about_php_content')]
     public function phpContent(Request $request, PhpInfo $info): JsonResponse
     {
         $parameters = [
@@ -147,10 +137,9 @@ class AboutController extends AbstractController
 
     /**
      * Exports the PHP information as PDF.
-     *
-     * @Route("/php/pdf", name="about_php_pdf")
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/php/pdf', name: 'about_php_pdf')]
     public function phpPdf(PhpInfo $info): Response
     {
         $content = $info->asArray();
@@ -162,9 +151,8 @@ class AboutController extends AbstractController
 
     /**
      * Display the policy page.
-     *
-     * @Route("/policy", name="about_policy")
      */
+    #[Route(path: '/policy', name: 'about_policy')]
     public function policy(): Response
     {
         return $this->renderForm('about/policy.html.twig', [
@@ -175,10 +163,9 @@ class AboutController extends AbstractController
 
     /**
      * Render the policy information.
-     *
-     * @Route("/policy/content", name="about_policy_content")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/policy/content', name: 'about_policy_content')]
     public function policyContent(): JsonResponse
     {
         $content = $this->renderView('about/policy_content.html.twig', [
@@ -191,9 +178,8 @@ class AboutController extends AbstractController
 
     /**
      * Export the policy to PDF.
-     *
-     * @Route("/policy/pdf", name="about_policy_pdf")
      */
+    #[Route(path: '/policy/pdf', name: 'about_policy_pdf')]
     public function policyPdf(): PdfResponse
     {
         $templateParameters = [
@@ -206,10 +192,9 @@ class AboutController extends AbstractController
 
     /**
      * Render Symfony information.
-     *
-     * @Route("/symfony/content", name="about_symfony_content")
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/symfony/content', name: 'about_symfony_content')]
     public function symfonyContent(SymfonyInfo $info): JsonResponse
     {
         $locale = \Locale::getDefault();

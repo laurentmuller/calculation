@@ -31,40 +31,32 @@ use Symfony\Component\Validator\Constraints\Length;
 /**
  * Controller for the OpenWeather API.
  *
- * @author Laurent Muller
- *
  * @see https://openweathermap.org/api
- *
- * @Route("/openweather")
- * @IsGranted("ROLE_USER")
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/openweather')]
 class OpenWeatherController extends AbstractController
 {
     /**
      * The city identifier key name.
      */
     private const KEY_CITY_ID = 'cityId';
-
     /**
      * The count key name.
      */
     private const KEY_COUNT = 'count';
-
     /**
      * The limit key name.
      */
     private const KEY_LIMIT = 'limit';
-
     /**
      * The query key name.
      */
     private const KEY_QUERY = 'query';
-
     /**
      * The units key name.
      */
     private const KEY_UNITS = 'units';
-
     /**
      * the prefix key for sessions.
      */
@@ -79,9 +71,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns current conditions data for a specific location.
-     *
-     * @Route("/api/current", name="openweather_api_current")
      */
+    #[Route(path: '/api/current', name: 'openweather_api_current')]
     public function apiCurrent(Request $request): JsonResponse
     {
         try {
@@ -100,9 +91,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 16 day / daily forecast conditions data for a specific location.
-     *
-     * @Route("/api/daily", name="openweather_api_daily")
      */
+    #[Route(path: '/api/daily', name: 'openweather_api_daily')]
     public function apiDaily(Request $request): JsonResponse
     {
         try {
@@ -122,9 +112,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 5 days / 3 hours forecast conditions data for a specific location.
-     *
-     * @Route("/api/forecast", name="openweather_api_forecast")
      */
+    #[Route(path: '/api/forecast', name: 'openweather_api_forecast')]
     public function apiForecast(Request $request): JsonResponse
     {
         try {
@@ -144,9 +133,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns all essential weather data for a specific location.
-     *
-     * @Route("/api/onecall", name="openweather_api_onecall")
      */
+    #[Route(path: '/api/onecall', name: 'openweather_api_onecall')]
     public function apiOnecall(Request $request): JsonResponse
     {
         try {
@@ -168,9 +156,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns an array of cities that match the query text.
-     *
-     * @Route("/api/search", name="openweather_api_search")
      */
+    #[Route(path: '/api/search', name: 'openweather_api_search')]
     public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
     {
         try {
@@ -209,19 +196,16 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns current conditions data for a specific location.
-     *
-     * @Route("/current", name="openweather_current")
      */
+    #[Route(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response
     {
         $cityId = $this->getRequestCityId($request);
         $units = $this->getRequestUnits($request);
         $count = $this->getRequestCount($request);
-
         $current = $this->service->current($cityId, $units);
         $forecast = $this->service->forecast($cityId, $count, $units);
         $daily = $this->service->daily($cityId, $count, $units);
-
         if (false !== $current) {
             $this->setSessionValues([
                 self::KEY_CITY_ID => $cityId,
@@ -242,15 +226,13 @@ class OpenWeatherController extends AbstractController
      * Import cities.
      *
      * Data can be downloaded from the <a href="http://bulk.openweathermap.org/sample/">sample directory</a>.
-     *
-     * @Route("/import", name="openweather_import")
-     * @IsGranted("ROLE_ADMIN")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/import', name: 'openweather_import')]
     public function import(Request $request, OpenWeatherService $service): Response
     {
         // create form
         $form = $this->createImportForm();
-
         // handle request
         if ($this->handleRequestForm($request, $form)) {
             $db = null;
@@ -338,7 +320,6 @@ class OpenWeatherController extends AbstractController
                 }
             }
         }
-
         // display form
         return $this->renderForm('openweather/import_file.html.twig', [
             'sample' => 'https://bulk.openweathermap.org/sample/',
@@ -349,9 +330,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the search city view.
-     *
-     * @Route("/search", name="openweather_search")
      */
+    #[Route(path: '/search', name: 'openweather_search')]
     public function search(Request $request): Response
     {
         // get session data
@@ -361,30 +341,24 @@ class OpenWeatherController extends AbstractController
             self::KEY_LIMIT => $this->getSessionLimit($request),
             self::KEY_COUNT => $this->getSessionCount($request),
         ];
-
         // create form
         $helper = $this->createFormHelper('openweather.search.', $data);
-
         $helper->field(self::KEY_QUERY)
             ->constraints(new Length(['min' => 2]))
             ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
             ->add(SearchType::class);
-
         $helper->field(self::KEY_UNITS)
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType([
                 OpenWeatherService::DEGREE_METRIC => OpenWeatherService::UNIT_METRIC,
                 OpenWeatherService::DEGREE_IMPERIAL => OpenWeatherService::UNIT_IMPERIAL,
             ]);
-
         $limits = [10, 15, 25, 50, 100];
         $helper->field(self::KEY_LIMIT)
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType(\array_combine($limits, $limits));
-
         $helper->field(self::KEY_COUNT)
             ->addHiddenType();
-
         // handle request
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
@@ -441,7 +415,6 @@ class OpenWeatherController extends AbstractController
                 'count' => $count,
             ]);
         }
-
         // display
         return $this->renderForm('openweather/search_city.html.twig', [
             'form' => $form,
@@ -451,9 +424,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
-     *
-     * @Route("/wather", name="openweather_weather")
      */
+    #[Route(path: '/wather', name: 'openweather_weather')]
     public function weather(Request $request): Response
     {
         $cityId = $this->getSessionCityId($request);

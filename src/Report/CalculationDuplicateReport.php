@@ -16,8 +16,6 @@ use App\Controller\AbstractController;
 
 /**
  * Report for calculations with duplicate items.
- *
- * @author Laurent Muller
  */
 class CalculationDuplicateReport extends AbstractCalculationItemsReport
 {

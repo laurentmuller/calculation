@@ -22,8 +22,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to get IP lookup.
  *
- * @author Laurent Muller
- *
  * @see https://ipstack.com/documentation
  */
 class IpStackService extends AbstractHttpClientService

@@ -19,8 +19,6 @@ use Vich\UploaderBundle\Util\Transliterator;
 
 /**
  * Default directory namer. The directory name is created with the simple class name.
- *
- * @author Laurent Muller
  */
 class EntityDirectoryNamer implements DirectoryNamerInterface
 {

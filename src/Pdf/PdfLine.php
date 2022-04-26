@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Define a drawing line.
- *
- * @author Laurent Muller
  */
 class PdfLine implements PdfDocumentUpdaterInterface
 {

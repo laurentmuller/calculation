@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Class implementing this interface provide function for download document.
- *
- * @author Laurent Muller
  */
 interface MimeTypeInterface
 {

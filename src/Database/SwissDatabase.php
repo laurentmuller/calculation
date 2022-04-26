@@ -14,8 +14,6 @@ namespace App\Database;
 
 /**
  * SQLite database for zip codes, cities and streets of Switzerland.
- *
- * @author Laurent Muller
  */
 class SwissDatabase extends AbstractDatabase
 {

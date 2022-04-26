@@ -24,8 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Listener to update timestampable entities.
  *
- * @author Laurent Muller
- *
  * @see TimestampableInterface
  */
 class TimestampableListener implements DisableListenerInterface

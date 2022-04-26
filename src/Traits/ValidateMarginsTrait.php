@@ -18,14 +18,10 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Trait to validate margins within a callback.
- *
- * @author Laurent Muller
  */
 trait ValidateMarginsTrait
 {
-    /**
-     * @Assert\Callback
-     */
+    #[Assert\Callback]
     public function validateMargins(ExecutionContextInterface $context): void
     {
         /** @var \Doctrine\Common\Collections\ArrayCollection<int, \App\Interfaces\MarginInterface> $margins */

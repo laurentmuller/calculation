@@ -20,8 +20,6 @@ use App\Util\FormatUtils;
 /**
  * Report for the list of global margins.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<GlobalMargin>
  */
 class GlobalMarginsReport extends AbstractArrayReport

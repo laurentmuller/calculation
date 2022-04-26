@@ -22,8 +22,6 @@ use App\Util\FormatUtils;
 /**
  * Report for the list of groups.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<Group>
  */
 class GroupsReport extends AbstractArrayReport

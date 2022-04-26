@@ -17,8 +17,6 @@ use App\Entity\Group;
 
 /**
  * Unit test for {@link App\Entity\Category} class.
- *
- * @author Laurent Muller
  */
 class CategoryTest extends AbstractEntityValidatorTest
 {

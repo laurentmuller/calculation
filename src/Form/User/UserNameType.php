@@ -17,8 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Username type.
- *
- * @author Laurent Muller
  */
 class UserNameType extends AbstractType
 {

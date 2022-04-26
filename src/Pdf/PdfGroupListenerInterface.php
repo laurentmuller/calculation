@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Class implementing this interface deals with group render.
- *
- * @author Laurent Muller
  */
 interface PdfGroupListenerInterface
 {

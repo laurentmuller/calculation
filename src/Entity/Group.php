@@ -22,26 +22,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a group of categories.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_Group", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_group_code", columns={"code"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
- * @UniqueEntity(fields="code", message="group.unique_code")
  */
+#[UniqueEntity(fields: 'code', message: 'group.unique_code')]
 class Group extends AbstractEntity
 {
     use ValidateMarginsTrait;
 
     /**
-     * The categories.
-     *
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"code" = "ASC"})
      *
-     * @var ArrayCollection<int, Category>
-     * @psalm-var Collection<int, Category>
+     * @var Collection<int, Category>
      */
     private Collection $categories;
 
@@ -49,29 +44,26 @@ class Group extends AbstractEntity
      * The unique code.
      *
      * @ORM\Column(type="string", length=30, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(max=30)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 30)]
     private ?string $code = null;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
+    #[Assert\Length(max: 255)]
     private ?string $description = null;
 
     /**
-     * The margins.
-     *
      * @ORM\OneToMany(targetEntity=GroupMargin::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"minimum" = "ASC"})
-     * @Assert\Valid
      *
-     * @var GroupMargin[]|Collection
-     * @psalm-var Collection<int, GroupMargin>
+     * @var Collection<int, GroupMargin>
      */
+    #[Assert\Valid]
     private Collection $margins;
 
     /**

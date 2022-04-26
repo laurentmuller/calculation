@@ -17,8 +17,6 @@ use App\Traits\MathTrait;
 
 /**
  * Represents a chunk container.
- *
- * @author Laurent Muller
  */
 class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 {

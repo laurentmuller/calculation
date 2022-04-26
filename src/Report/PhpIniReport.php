@@ -21,8 +21,6 @@ use App\Pdf\PdfTextColor;
 
 /**
  * Report for php.ini.
- *
- * @author Laurent Muller
  */
 class PhpIniReport extends AbstractReport
 {

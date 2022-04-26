@@ -24,8 +24,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 /**
  * User edit type.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<User>
  */
 class UserType extends AbstractEntityType

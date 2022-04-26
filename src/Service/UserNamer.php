@@ -20,8 +20,6 @@ use Vich\UploaderBundle\Naming\NamerInterface;
 
 /**
  * Namer for user images.
- *
- * @author Laurent Muller
  */
 class UserNamer implements NamerInterface, ImageExtensionInterface
 {

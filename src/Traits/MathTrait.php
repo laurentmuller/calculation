@@ -14,8 +14,6 @@ namespace App\Traits;
 
 /**
  * Trait for mathematical functions.
- *
- * @author Laurent Muller
  */
 trait MathTrait
 {

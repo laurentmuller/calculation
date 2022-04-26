@@ -29,18 +29,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display calendar.
- *
- * @author Laurent Muller
- *
- * @Route("/calendar")
- * @IsGranted("ROLE_USER")
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/calendar')]
 class CalendarController extends AbstractController
 {
     /**
      * Display a month of a calendar.
-     *
-     * @Route("/month/{year}/{month}", name="calendar_month", requirements={"year" = "\d+", "month" = "\d+"})
      *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
@@ -49,24 +44,22 @@ class CalendarController extends AbstractController
      * @param int|null              $month      the month to search for or <code>null</code> for the current
      *                                          month
      */
+    #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => '\d+', 'month' => '\d+'])]
     public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
     {
         // validate values
         $year = $this->validateYear($year);
         $month = $this->validateMonth($month);
-
         // generate
         $calendar = $this->generate($service, $year);
         $calculations = $repository->getForMonth($year, $month);
         $this->merge($calendar, $calculations);
-
         // months
         $yearsMonths = $repository->getCalendarYearsMonths();
         $today = $this->todayMonth($yearsMonths, $year, $month);
         $previous = $this->previousMonth($yearsMonths, $year, $month);
         $next = $this->nextMonth($yearsMonths, $year, $month);
         $currentMonth = $calendar->getMonth(Month::formatKey($year, $month));
-
         $parameters = [
             'calendar' => $calendar,
             'month' => $currentMonth,
@@ -82,8 +75,6 @@ class CalendarController extends AbstractController
     /**
      * Display a week of a calendar.
      *
-     * @Route("/week/{year}/{week}", name="calendar_week", requirements={"year" = "\d+", "week" = "\d+"})
-     *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
      * @param int|null              $year       the year to search for or <code>null</code> for the current
@@ -91,28 +82,25 @@ class CalendarController extends AbstractController
      * @param int|null              $week       the week to search for or <code>null</code> for the current
      *                                          week
      */
+    #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => '\d+', 'week' => '\d+'])]
     public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
     {
         // validate values
         $year = $this->validateYear($year);
         $week = $this->validateWeek($week);
-
         // generate
         $calendar = $this->generate($service, $year);
         $calculations = $repository->getForWeek($year, $week);
         $this->merge($calendar, $calculations);
-
         $yearsWeeks = $repository->getCalendarYearsWeeks();
         $today = $this->todayWeek($yearsWeeks, $year, $week);
         $previous = $this->previousWeek($yearsWeeks, $year, $week);
         $next = $this->nextWeek($yearsWeeks, $year, $week);
         $currentWeek = $calendar->getWeek(Week::formatKey($year, $week));
-
         $startDate = new \DateTime();
         $startDate->setISODate($year, $week);
         $endDate = clone $startDate;
         $endDate = $endDate->add(new \DateInterval('P6D'));
-
         $parameters = [
             'calendar' => $calendar,
             'week' => $currentWeek,
@@ -130,29 +118,25 @@ class CalendarController extends AbstractController
     /**
      * Display a calendar.
      *
-     * @Route("/year/{year}", name="calendar_year", requirements={"year" = "\d+" })
-     *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
      * @param int|null              $year       the year to search for or <code>null</code> for the current
      *                                          year
      */
+    #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => '\d+'])]
     public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
     {
         // validate year
         $year = $this->validateYear($year);
-
         // generate
         $calendar = $this->generate($service, $year);
         $calculations = $repository->getForYear($year);
         $this->merge($calendar, $calculations);
-
         // get previous and next years
         $years = $repository->getCalendarYears();
         $today = $this->todayYear($years, $year);
         $previous = $this->previousYear($years, $year);
         $next = $this->nextYear($years, $year);
-
         $parameters = [
             'calendar' => $calendar,
             'calculations' => $calculations,

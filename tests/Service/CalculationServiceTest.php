@@ -35,8 +35,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link CalculationService} class.
- *
- * @author Laurent Muller
  */
 class CalculationServiceTest extends KernelTestCase
 {

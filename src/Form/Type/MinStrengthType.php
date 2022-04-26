@@ -17,8 +17,6 @@ use App\Interfaces\StrengthInterface;
 
 /**
  * A form type to select a minimum password strength.
- *
- * @author Laurent Muller
  */
 class MinStrengthType extends AbstractChoiceType
 {

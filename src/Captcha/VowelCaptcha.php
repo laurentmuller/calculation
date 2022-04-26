@@ -14,8 +14,6 @@ namespace App\Captcha;
 
 /**
  * Alpha captcha to validate a vowel.
- *
- * @author Laurent Muller
  */
 class VowelCaptcha extends AbstractAlphaCaptcha
 {

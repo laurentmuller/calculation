@@ -19,8 +19,6 @@ use App\Util\Utils;
 /**
  * Class to build a table.
  *
- * @author Laurent Muller
- *
  * @see \App\Pdf\PdfColumn
  */
 class PdfTableBuilder

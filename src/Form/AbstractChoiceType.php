@@ -18,8 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * An abstract choice type. Subclass must override the <code>getChoices()</code> function.
- *
- * @author Laurent Muller
  */
 abstract class AbstractChoiceType extends AbstractType
 {

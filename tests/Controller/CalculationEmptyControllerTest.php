@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\CalculationEmptyController} class.
- *
- * @author Laurent Muller
  */
 class CalculationEmptyControllerTest extends AbstractControllerTest
 {

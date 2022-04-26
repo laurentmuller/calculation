@@ -19,8 +19,6 @@ use App\Form\Task\TaskListType;
 
 /**
  * Type to edit a calculation task in a dialog.
- *
- * @author Laurent Muller
  */
 class EditTaskDialogType extends AbstractHelperType
 {

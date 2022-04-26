@@ -14,8 +14,6 @@ namespace App\Util;
 
 /**
  * Class to get the file content, line by line; in the reverse order (last line first).
- *
- * @author Laurent Muller
  */
 class ReverseReader
 {

@@ -15,8 +15,6 @@ namespace App\Pdf;
 /**
  * Extends the document to output a Table of content (TOC).
  *
- * @author Laurent Muller
- *
  * @property array<int, string> $pages The array containing pages.
  */
 class PdfTocDocument extends PdfDocument

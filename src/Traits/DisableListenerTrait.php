@@ -15,8 +15,6 @@ namespace App\Traits;
 /**
  * Trait for class implementing the <code>DisableListenerInterface</code> interface.
  *
- * @author Laurent Muller
- *
  * @see DisableListenerInterface
  */
 trait DisableListenerTrait

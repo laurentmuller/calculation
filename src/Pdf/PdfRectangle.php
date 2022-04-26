@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Represents a rectangle.
- *
- * @author Laurent Muller
  */
 class PdfRectangle
 {

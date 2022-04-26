@@ -32,12 +32,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for group entities.
  *
- * @author Laurent Muller
- *
- * @Route("/group")
- * @IsGranted("ROLE_USER")
  * @template-extends AbstractEntityController<Group>
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/group')]
 class GroupController extends AbstractEntityController
 {
     /**
@@ -50,9 +48,8 @@ class GroupController extends AbstractEntityController
 
     /**
      * Add a group.
-     *
-     * @Route("/add", name="group_add")
      */
+    #[Route(path: '/add', name: 'group_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Group());
@@ -60,9 +57,8 @@ class GroupController extends AbstractEntityController
 
     /**
      * Clone (copy) a group.
-     *
-     * @Route("/clone/{id}", name="group_clone", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => '\d+'])]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -76,15 +72,13 @@ class GroupController extends AbstractEntityController
 
     /**
      * Delete a group.
-     *
-     * @Route("/delete/{id}", name="group_delete", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
         $categories = $item->countCategories();
         $calculations = $groupRepository->countGroupReferences($item);
-
         if (0 !== $categories || 0 !== $calculations) {
             $items = [];
             if (0 !== $categories) {
@@ -108,7 +102,6 @@ class GroupController extends AbstractEntityController
 
             return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
-
         $parameters = [
             'title' => 'group.delete.title',
             'message' => 'group.delete.message',
@@ -121,9 +114,8 @@ class GroupController extends AbstractEntityController
 
     /**
      * Edit a group.
-     *
-     * @Route("/edit/{id}", name="group_edit", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, Group $item): Response
     {
         return $this->editEntity($request, $item);
@@ -132,10 +124,9 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a Spreadsheet document.
      *
-     * @Route("/excel", name="group_excel")
-     *
      * @throws NotFoundHttpException if no group is found
      */
+    #[Route(path: '/excel', name: 'group_excel')]
     public function excel(): SpreadsheetResponse
     {
         $groups = $this->getEntities('code');
@@ -143,7 +134,6 @@ class GroupController extends AbstractEntityController
             $message = $this->trans('group.list.empty');
             throw new NotFoundHttpException($message);
         }
-
         $doc = new GroupsDocument($this, $groups);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -152,10 +142,9 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a PDF document.
      *
-     * @Route("/pdf", name="group_pdf")
-     *
      * @throws NotFoundHttpException if no group is found
      */
+    #[Route(path: '/pdf', name: 'group_pdf')]
     public function pdf(): PdfResponse
     {
         $groups = $this->getEntities('code');
@@ -163,7 +152,6 @@ class GroupController extends AbstractEntityController
             $message = $this->trans('group.list.empty');
             throw new NotFoundHttpException($message);
         }
-
         $doc = new GroupsReport($this, $groups);
 
         return $this->renderPdfDocument($doc);
@@ -171,9 +159,8 @@ class GroupController extends AbstractEntityController
 
     /**
      * Show properties of a group.
-     *
-     * @Route("/show/{id}", name="group_show", requirements={"id" = "\d+"})
      */
+    #[Route(path: '/show/{id}', name: 'group_show', requirements: ['id' => '\d+'])]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);
@@ -181,9 +168,8 @@ class GroupController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="group_table")
      */
+    #[Route(path: '', name: 'group_table')]
     public function table(Request $request, GroupTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'group/group_table.html.twig');

@@ -20,8 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Abstract margin used for global margins and group's margins.
  *
- * @author Laurent Muller
- *
  * @ORM\MappedSuperclass
  */
 abstract class AbstractMargin extends AbstractEntity implements MarginInterface
@@ -30,28 +28,28 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
      * The margin in percent (%) to use when an amount is within this range.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     * @Assert\Type(type="float")
-     * @Assert\GreaterThanOrEqual(0)
      */
+    #[Assert\Type(type: 'float')]
+    #[Assert\GreaterThanOrEqual(0)]
     protected float $margin = 0.0;
 
     /**
      * The maximum amount (exclusive) to apply within this margin.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     * @Assert\Type(type="float")
-     * @Assert\GreaterThanOrEqual(0)
-     * @Assert\GreaterThan(propertyPath="minimum", message="margin.maximum_greater_minimum")
      */
+    #[Assert\Type(type: 'float')]
+    #[Assert\GreaterThanOrEqual(0)]
+    #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     protected float $maximum = 0.0;
 
     /**
      * The minimum amount (inclusive) to apply within this margin.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     * @Assert\Type(type="float")
-     * @Assert\GreaterThanOrEqual(0)
      */
+    #[Assert\Type(type: 'float')]
+    #[Assert\GreaterThanOrEqual(0)]
     protected float $minimum = 0.0;
 
     /**

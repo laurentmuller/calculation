@@ -20,8 +20,6 @@ use App\Form\Group\GroupListType;
 /**
  * Category edit type.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<Category>
  */
 class CategoryType extends AbstractEntityType

@@ -14,8 +14,6 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link App\Controller\IndexController} class.
- *
- * @author Laurent Muller
  */
 class IndexControllerTest extends AbstractControllerTest
 {

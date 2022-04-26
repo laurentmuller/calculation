@@ -21,14 +21,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a task.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_Task", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="unique_task_name", columns={"name"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
- * @UniqueEntity(fields="name", message="task.unique_name")
  */
+#[UniqueEntity(fields: 'name', message: 'task.unique_name')]
 class Task extends AbstractCategoryItemEntity implements \Countable
 {
     /**
@@ -36,29 +34,26 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      *
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tasks")
      * @ORM\JoinColumn(name="category_id", nullable=false)
-     * @Assert\NotNull
      */
+    #[Assert\NotNull]
     protected ?Category $category = null;
 
     /**
-     * The task items.
-     *
      * @ORM\OneToMany(targetEntity=TaskItem::class, mappedBy="task", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"position" = "ASC"})
-     * @Assert\Valid
      *
-     * @var TaskItem[]|Collection
-     * @psalm-var Collection<int, TaskItem>
+     * @var Collection<int, TaskItem>
      */
+    #[Assert\Valid]
     private Collection $items;
 
     /**
      * The name.
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(max=255)
      */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $name = null;
 
     /**

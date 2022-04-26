@@ -26,8 +26,6 @@ use App\Util\FormatUtils;
 /**
  * Report for the list of calculations.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayReport<Calculation>
  */
 class CalculationsReport extends AbstractArrayReport

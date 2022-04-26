@@ -21,8 +21,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Chart to display calculations by month.
- *
- * @author Laurent Muller
  */
 class MonthChart extends BaseChart
 {

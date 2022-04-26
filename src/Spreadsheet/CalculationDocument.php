@@ -23,8 +23,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Spreadsheet document for a calculation.
- *
- * @author Laurent Muller
  */
 class CalculationDocument extends AbstractDocument
 {

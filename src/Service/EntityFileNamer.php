@@ -19,8 +19,6 @@ use Vich\UploaderBundle\Util\Transliterator;
 
 /**
  * Default file namer.
- *
- * @author Laurent Muller
  */
 class EntityFileNamer implements NamerInterface
 {

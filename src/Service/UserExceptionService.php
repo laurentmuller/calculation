@@ -25,8 +25,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 /**
  * Service to map registration and reset password exceptions.
- *
- * @author Laurent Muller
  */
 class UserExceptionService
 {

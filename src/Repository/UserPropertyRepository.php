@@ -20,8 +20,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for user's property entity.
  *
  * @template-extends AbstractRepository<UserProperty>
- *
- * @author Laurent Muller
  */
 class UserPropertyRepository extends AbstractRepository
 {

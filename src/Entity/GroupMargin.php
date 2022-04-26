@@ -17,8 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Represents a margin within a group.
  *
- * @author Laurent Muller
- *
  * @ORM\Entity(repositoryClass="App\Repository\GroupMarginRepository")
  * @ORM\Table(name="sy_GroupMargin")
  */

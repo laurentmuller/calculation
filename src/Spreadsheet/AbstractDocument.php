@@ -16,8 +16,6 @@ use App\Controller\AbstractController;
 
 /**
  * Abstract Spreadsheet document.
- *
- * @author Laurent Muller
  */
 abstract class AbstractDocument extends SpreadsheetDocument
 {

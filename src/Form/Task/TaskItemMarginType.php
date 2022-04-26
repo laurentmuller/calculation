@@ -19,8 +19,6 @@ use App\Form\FormHelper;
 /**
  * Task item margin edit type.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<TaskItemMargin>
  */
 class TaskItemMarginType extends AbstractEntityType

@@ -22,8 +22,6 @@ use Twig\TwigFilter;
 
 /**
  * Twig extension to format dates, numbers or boolean values.
- *
- * @author Laurent Muller
  */
 final class FormatExtension extends AbstractExtension
 {

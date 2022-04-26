@@ -23,8 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to resize images.
- *
- * @author Laurent Muller
  */
 class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
 {

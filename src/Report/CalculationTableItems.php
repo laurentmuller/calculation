@@ -25,8 +25,6 @@ use App\Util\FormatUtils;
 
 /**
  * Table to render the groups, categories and items of a calculation.
- *
- * @author Laurent Muller
  */
 class CalculationTableItems extends PdfGroupTableBuilder
 {

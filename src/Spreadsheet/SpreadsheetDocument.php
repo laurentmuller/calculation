@@ -29,8 +29,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends the Spreadsheet class with shortcuts to set properties, formats and values.
- *
- * @author Laurent Muller
  */
 class SpreadsheetDocument extends Spreadsheet
 {

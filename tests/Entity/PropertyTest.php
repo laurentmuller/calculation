@@ -16,8 +16,6 @@ use App\Entity\Property;
 
 /**
  * Unit test for {@link Property} class.
- *
- * @author Laurent Muller
  */
 class PropertyTest extends AbstractEntityValidatorTest
 {

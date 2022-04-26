@@ -16,8 +16,6 @@ use App\Entity\CalculationState;
 
 /**
  * Unit test for {@link App\Entity\CalculationState} class.
- *
- * @author Laurent Muller
  */
 class CalculationStateTest extends AbstractEntityValidatorTest
 {

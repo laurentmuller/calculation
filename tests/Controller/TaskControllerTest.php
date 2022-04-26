@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link App\Controller\TaskController} class.
- *
- * @author Laurent Muller
  */
 class TaskControllerTest extends AbstractControllerTest
 {

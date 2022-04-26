@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Entity voter constants.
- *
- * @author Laurent Muller
  */
 interface EntityVoterInterface
 {

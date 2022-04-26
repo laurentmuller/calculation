@@ -24,8 +24,6 @@ use App\Util\FileUtils;
 
 /**
  * Report for the help documentation.
- *
- * @author Laurent Muller
  */
 class HelpReport extends AbstractReport
 {

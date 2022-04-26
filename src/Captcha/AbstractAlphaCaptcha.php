@@ -18,8 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract implementation of the alpha captcha interface.
- *
- * @author Laurent Muller
  */
 abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
 {

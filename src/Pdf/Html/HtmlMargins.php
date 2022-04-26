@@ -14,8 +14,6 @@ namespace App\Pdf\Html;
 
 /**
  * The HTML margins.
- *
- * @author Laurent Muller
  */
 class HtmlMargins
 {

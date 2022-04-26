@@ -30,8 +30,6 @@ namespace App\Faker;
  * @method ?\App\Entity\User             user()                                                  Gets a random user.
  * @method int                           usersCount()                                            Gets the number of users.
  * @method ?string                       userName()                                              Gets a random username.
- *
- * @author Laurent Muller
  */
 class Generator extends \Faker\Generator
 {

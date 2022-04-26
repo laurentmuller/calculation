@@ -17,8 +17,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 /**
  * Define a column for a Pdf table.
  *
- * @author Laurent Muller
- *
  * @see \App\Pdf\PdfTable
  */
 class PdfColumn

@@ -20,8 +20,6 @@ use App\Pdf\Enums\PdfTextAlignment;
  * By default, do nothing and returns always <code>false</code>.
  * Class can override only the desired methods.
  *
- * @author Laurent Muller
- *
  * @see PdfCellListenerInterface
  */
 trait PdfCellListenerTrait

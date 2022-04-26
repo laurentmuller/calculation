@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Trait to check for model class name.
- *
- * @author Laurent Muller
  */
 trait ModelTrait
 {

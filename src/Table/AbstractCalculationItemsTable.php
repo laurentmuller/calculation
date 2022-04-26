@@ -19,8 +19,6 @@ use Doctrine\Common\Collections\Criteria;
 
 /**
  * Abstract Calculation table to display items.
- *
- * @author Laurent Muller
  */
 abstract class AbstractCalculationItemsTable extends AbstractTable implements \Countable
 {

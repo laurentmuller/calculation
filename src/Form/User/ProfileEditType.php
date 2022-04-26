@@ -22,8 +22,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 /**
  * Type to update the user profile.
  *
- * @author Laurent Muller
- *
  * @template-extends AbstractEntityType<User>
  */
 class ProfileEditType extends AbstractEntityType

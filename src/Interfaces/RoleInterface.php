@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Class implementing this interface deals with role names.
- *
- * @author Laurent Muller
  */
 interface RoleInterface
 {

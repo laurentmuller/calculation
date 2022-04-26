@@ -28,8 +28,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @property int[] $EntityUser             the rights for users.
  * @property int[] $EntityTask             the rights for tasks.
  * @property int[] $EntityLog              the rights for logs.
- *
- * @author Laurent Muller
  */
 trait RightsTrait
 {

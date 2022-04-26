@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * The application logs table.
- *
- * @author Laurent Muller
  */
 class LogTable extends AbstractTable implements \Countable
 {

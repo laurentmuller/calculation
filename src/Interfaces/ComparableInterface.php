@@ -15,8 +15,6 @@ namespace App\Interfaces;
 /**
  * Defines a generalized comparison method that a class implements
  * to order or sort its instances.
- *
- * @author Laurent Muller
  */
 interface ComparableInterface
 {

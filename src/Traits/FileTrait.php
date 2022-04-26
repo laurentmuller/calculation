@@ -17,8 +17,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Trait for files manipulation.
- *
- * @author Laurent Muller
  */
 trait FileTrait
 {

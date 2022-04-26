@@ -19,8 +19,6 @@ use App\Util\Utils;
 
 /**
  * Represents a text chunk.
- *
- * @author Laurent Muller
  */
 class HtmlTextChunk extends AbstractHtmlChunk
 {

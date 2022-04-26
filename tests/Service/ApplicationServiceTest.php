@@ -22,8 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for the {@link ApplicationService} class.
- *
- * @author Laurent Muller
  */
 class ApplicationServiceTest extends KernelTestCase
 {

@@ -18,8 +18,6 @@ use App\Util\FormatUtils;
 
 /**
  * Contains query parameters to update products.
- *
- * @author Laurent Muller
  */
 class ProductUpdateQuery
 {

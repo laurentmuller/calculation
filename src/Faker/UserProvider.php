@@ -18,8 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * User provider.
  *
- * @author Laurent Muller
- *
  * @template-extends EntityProvider<User>
  * @psalm-suppress PropertyNotSetInConstructor
  */

@@ -26,12 +26,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display the pivot table.
- *
- * @author Laurent Muller
- *
- * @Route("/pivot")
- * @IsGranted("ROLE_USER")
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/pivot')]
 class PivotController extends AbstractController
 {
     /**
@@ -43,9 +40,8 @@ class PivotController extends AbstractController
 
     /**
      * Show the pivot data table.
-     *
-     * @Route("", name="calculation_pivot")
      */
+    #[Route(path: '', name: 'calculation_pivot')]
     public function pivot(): Response
     {
         return $this->renderForm('calculation/calculation_pivot.html.twig', [
@@ -57,14 +53,12 @@ class PivotController extends AbstractController
 
     /**
      * Export pivot data to CSV.
-     *
-     * @Route("/csv", name="calculation_pivot_csv")
      */
+    #[Route(path: '/csv', name: 'calculation_pivot_csv')]
     public function pivotCsv(): CsvResponse
     {
         // load data
         $dataset = $this->getDataset();
-
         // callback
         $callback = function () use ($dataset): void {
             // data?
@@ -96,9 +90,8 @@ class PivotController extends AbstractController
 
     /**
      * Export pivot data to JSON.
-     *
-     * @Route("/json", name="calculation_pivot_json")
      */
+    #[Route(path: '/json', name: 'calculation_pivot_json')]
     public function pivotJson(): JsonResponse
     {
         $table = $this->getTable();

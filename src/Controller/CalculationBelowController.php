@@ -26,21 +26,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for calculations where margins are below the minimum.
- *
- * @author Laurent Muller
- *
- * @Route("/below")
- * @IsGranted("ROLE_ADMIN")
  */
+#[IsGranted('ROLE_ADMIN')]
+#[Route(path: '/below')]
 class CalculationBelowController extends AbstractController
 {
     use TableTrait;
 
     /**
      * Export the calculations to a Spreadsheet document.
-     *
-     * @Route("/excel", name="below_excel")
      */
+    #[Route(path: '/excel', name: 'below_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getApplication()->getMinMargin();
@@ -50,7 +46,6 @@ class CalculationBelowController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $doc = new CalculationsDocument($this, $items);
         $doc->setTitle('below.title');
 
@@ -59,9 +54,8 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Export calculations to a PDF document.
-     *
-     * @Route("/pdf", name="below_pdf")
      */
+    #[Route(path: '/pdf', name: 'below_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getApplication()->getMinMargin();
@@ -71,10 +65,8 @@ class CalculationBelowController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $percent = FormatUtils::formatPercent($minMargin);
         $description = $this->trans('below.description', ['%margin%' => $percent]);
-
         $doc = new CalculationsReport($this, $items);
         $doc->setTitleTrans('below.title');
         $doc->getHeader()->setDescription($description);
@@ -84,9 +76,8 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="below_table")
      */
+    #[Route(path: '', name: 'below_table')]
     public function table(Request $request, CalculationBelowTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table_below.html.twig');

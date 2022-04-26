@@ -19,8 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Repeat password type.
- *
- * @author Laurent Muller
  */
 class RepeatPasswordType extends AbstractType
 {

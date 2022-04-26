@@ -14,8 +14,6 @@ namespace App\Util;
 
 /**
  * Utility class to get PHP information.
- *
- * @author Laurent Muller
  */
 final class PhpInfo
 {

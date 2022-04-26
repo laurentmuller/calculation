@@ -18,8 +18,6 @@ use App\Pdf\PdfStyle;
 /**
  * The HTML style.
  *
- * @author Laurent Muller
- *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class HtmlStyle extends PdfStyle

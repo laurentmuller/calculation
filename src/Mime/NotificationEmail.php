@@ -20,8 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends NotificationEmail to use translated subjet.
- *
- * @author Laurent Muller
  */
 class NotificationEmail extends BaseNotificationEmail
 {

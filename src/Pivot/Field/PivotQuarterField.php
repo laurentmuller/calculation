@@ -14,8 +14,6 @@ namespace App\Pivot\Field;
 
 /**
  * Pivot field that extract quarter (1 or 4).
- *
- * @author Laurent Muller
  */
 class PivotQuarterField extends PivotDateField
 {

@@ -20,8 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Listener for the user logout event.
- *
- * @author Laurent Muller
  */
 class LogoutListener implements EventSubscriberInterface
 {

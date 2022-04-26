@@ -17,8 +17,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 /**
  * Spreadsheet document for the list of global margins.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\GlobalMargin>
  */
 class GlobalMarginsDocument extends AbstractArrayDocument

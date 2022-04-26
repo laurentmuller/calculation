@@ -23,8 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\UniqueConstraint(name="unique_user_property_user_name", columns={"user_id", "name"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\UserPropertyRepository")
- * @UniqueEntity(fields={"name", "user"}, message="property.unique_name")
  */
+#[UniqueEntity(fields: ['name', 'user'], message: 'property.unique_name')]
 class UserProperty extends AbstractProperty
 {
     /**
@@ -32,8 +32,8 @@ class UserProperty extends AbstractProperty
      *
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="properties")
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @Assert\NotBlank
      */
+    #[Assert\NotBlank]
     private ?User $user = null;
 
     /**

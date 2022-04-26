@@ -14,8 +14,6 @@ namespace App\Translator;
 
 /**
  * Service to detect and translate texts.
- *
- * @author Laurent Muller
  */
 interface TranslatorServiceInterface
 {

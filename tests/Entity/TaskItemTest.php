@@ -20,8 +20,6 @@ use App\Entity\TaskItemMargin;
 
 /**
  * Unit test for {@link App\Entity\TaskItem} class.
- *
- * @author Laurent Muller
  */
 class TaskItemTest extends AbstractEntityValidatorTest
 {

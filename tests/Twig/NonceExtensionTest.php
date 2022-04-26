@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for Twig NonceExtension.
- *
- * @author Laurent Muller
  */
 class NonceExtensionTest extends KernelTestCase
 {

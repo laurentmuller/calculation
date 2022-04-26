@@ -17,8 +17,6 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 /**
  * Application Kernel.
- *
- * @author Laurent Muller
  */
 class Kernel extends BaseKernel
 {

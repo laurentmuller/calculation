@@ -18,8 +18,6 @@ use App\Util\Utils;
 /**
  * Represents a month with a calendar and an array of days.
  *
- * @author Laurent Muller
- *
  * @psalm-consistent-constructor
  */
 class Month extends AbstractCalendarItem implements \Stringable

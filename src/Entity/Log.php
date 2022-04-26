@@ -17,8 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents an application log entry.
- *
- * @author Laurent Muller
  */
 class Log extends AbstractEntity
 {

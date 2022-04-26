@@ -21,8 +21,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Abstract command for assets.
- *
- * @author Laurent Muller
  */
 abstract class AbstractAssetsCommand extends Command
 {

@@ -19,8 +19,6 @@ use Symfony\Component\Mime\Address;
 
 /**
  * Test for the {@link App\Form\DataTransformer\AddressTransformer} class.
- *
- * @author Laurent Muller
  */
 class AddressTransformerTest extends TestCase
 {

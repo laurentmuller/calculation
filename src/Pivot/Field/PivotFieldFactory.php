@@ -14,8 +14,6 @@ namespace App\Pivot\Field;
 
 /**
  * Factory to create PivotField.
- *
- * @author Laurent Muller
  */
 class PivotFieldFactory
 {

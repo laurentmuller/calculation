@@ -24,21 +24,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display and export duplicate items in the calculations.
- *
- * @author Laurent Muller
- *
- * @Route("/duplicate")
- * @IsGranted("ROLE_ADMIN")
  */
+#[IsGranted('ROLE_ADMIN')]
+#[Route(path: '/duplicate')]
 class CalculationDuplicateController extends AbstractController
 {
     use TableTrait;
 
     /**
      * Export the duplicate items to a Spreadsheet document.
-     *
-     * @Route("/excel", name="duplicate_excel")
      */
+    #[Route(path: '/excel', name: 'duplicate_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         if ($this->isEmptyItems($repository)) {
@@ -46,7 +42,6 @@ class CalculationDuplicateController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $items = $this->getItems($repository);
         $doc = new CalculationsDuplicateDocument($this, $items);
 
@@ -55,9 +50,8 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Exports the duplicate items in the calculations.
-     *
-     * @Route("/pdf", name="duplicate_pdf")
      */
+    #[Route(path: '/pdf', name: 'duplicate_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         if ($this->isEmptyItems($repository)) {
@@ -65,7 +59,6 @@ class CalculationDuplicateController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $items = $this->getItems($repository);
         $doc = new CalculationDuplicateReport($this, $items);
 
@@ -74,9 +67,8 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="duplicate_table")
      */
+    #[Route(path: '', name: 'duplicate_table')]
     public function table(Request $request, CalculationDuplicateTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table_duplicate.html.twig');

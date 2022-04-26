@@ -19,8 +19,6 @@ use Faker\Provider\Base;
 /**
  * Entity provider.
  *
- * @author Laurent Muller
- *
  * @template T of \App\Entity\AbstractEntity
  * @psalm-suppress PropertyNotSetInConstructor
  */

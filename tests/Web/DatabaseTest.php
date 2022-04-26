@@ -32,8 +32,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for database.
- *
- * @author Laurent Muller
  */
 class DatabaseTest extends KernelTestCase
 {

@@ -15,8 +15,6 @@ namespace App\Util;
 /**
  * Utility class for dates.
  *
- * @author Laurent Muller
- *
  * @internal
  */
 final class DateUtils

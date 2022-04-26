@@ -23,8 +23,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 /**
  * Spreadsheet document for application logs.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<mixed>
  */
 class LogsDocument extends AbstractArrayDocument

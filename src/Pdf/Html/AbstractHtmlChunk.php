@@ -23,8 +23,6 @@ use App\Util\Utils;
 
 /**
  * Represents an HTML chunk.
- *
- * @author Laurent Muller
  */
 abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 {

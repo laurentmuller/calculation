@@ -27,8 +27,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Service to generate URL and parameters.
- *
- * @author Laurent Muller
  */
 class UrlGeneratorService
 {

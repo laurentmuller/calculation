@@ -20,8 +20,6 @@ use App\Pdf\Enums\PdfDocumentUnit;
 /**
  * Abstract report rendering an array of objects.
  *
- * @author Laurent Muller
- *
  * @template T
  */
 abstract class AbstractArrayReport extends AbstractReport

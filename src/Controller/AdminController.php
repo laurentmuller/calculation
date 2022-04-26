@@ -34,19 +34,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for administration tasks.
- *
- * @author Laurent Muller
- *
- * @Route("/admin")
  */
+#[Route(path: '/admin')]
 class AdminController extends AbstractController
 {
     /**
      * Clear the application cache.
-     *
-     * @Route("/clear", name="admin_clear")
-     * @IsGranted("ROLE_ADMIN")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/clear', name: 'admin_clear')]
     public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger, SymfonyInfo $info): Response
     {
         // handle request
@@ -93,7 +89,6 @@ class AdminController extends AbstractController
                 ]);
             }
         }
-
         // display
         return $this->renderForm('admin/clear_cache.html.twig', [
             'size' => $info->getCacheSize(),
@@ -103,19 +98,16 @@ class AdminController extends AbstractController
 
     /**
      * Import zip codes, cities and streets from Switzerland.
-     *
-     * @Route("/import", name="admin_import")
-     * @IsGranted("ROLE_ADMIN")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/import', name: 'admin_import')]
     public function import(Request $request, SwissPostUpdater $updater): Response
     {
         // clear cache
         $application = $this->getApplication();
         $application->clearCache();
-
         // create form
         $form = $updater->createForm();
-
         // handle request
         if ($this->handleRequestForm($request, $form)) {
             // import
@@ -130,7 +122,6 @@ class AdminController extends AbstractController
                 'results' => $results,
             ]);
         }
-
         // display
         return $this->renderForm('admin/import_file.html.twig', [
             'last_import' => $application->getLastImport(),
@@ -140,10 +131,9 @@ class AdminController extends AbstractController
 
     /**
      * Display the application parameters.
-     *
-     * @Route("/parameters", name="admin_parameters")
-     * @IsGranted("ROLE_ADMIN")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
     {
         // properties
@@ -152,12 +142,10 @@ class AdminController extends AbstractController
             ApplicationServiceInterface::P_UPDATE_PRODUCTS,
             ApplicationServiceInterface::P_LAST_IMPORT,
         ]);
-
         // password options
         foreach (ParametersType::PASSWORD_OPTIONS as $option) {
             $data[$option] = $application->isPropertyBoolean($option);
         }
-
         // form
         $form = $this->createForm(ParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
@@ -172,7 +160,6 @@ class AdminController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         // display
         return $this->renderForm('admin/parameters.html.twig', [
             'form' => $form,
@@ -181,10 +168,9 @@ class AdminController extends AbstractController
 
     /**
      * Edit rights for the administrator role ('ROLE_ADMIN').
-     *
-     * @Route("/rights/admin", name="admin_rights_admin")
-     * @IsGranted("ROLE_SUPER_ADMIN")
      */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/rights/admin', name: 'admin_rights_admin')]
     public function rightsAdmin(Request $request): Response
     {
         // get values
@@ -198,10 +184,9 @@ class AdminController extends AbstractController
 
     /**
      * Edit rights for the user role ('ROLE_USER').
-     *
-     * @Route("/rights/user", name="admin_rights_user")
-     * @IsGranted("ROLE_ADMIN")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request): Response
     {
         // get values
@@ -215,17 +200,15 @@ class AdminController extends AbstractController
 
     /**
      * Update product prices.
-     *
-     * @Route("/product", name="admin_product")
-     * @IsGranted("ROLE_ADMIN")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/product', name: 'admin_product')]
     public function updateProduct(Request $request, ProductUpdater $updater): Response
     {
         // create form
         $application = $this->getApplication();
         $query = $updater->createUpdateQuery();
         $form = $updater->createForm($query);
-
         // handle request
         if ($this->handleRequestForm($request, $form)) {
             // save query

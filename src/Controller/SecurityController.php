@@ -19,19 +19,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Controller for login user.
- *
- * @author Laurent Muller
  */
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/login", name="app_login")
-     */
+    #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $utils): Response
     {
         $username = $utils->getLastUsername();
         $error = $utils->getLastAuthenticationError();
-
         $form = $this->createForm(UserLoginType::class, [
             'username' => $username,
             'remember_me' => true,
@@ -43,9 +38,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
+    #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');

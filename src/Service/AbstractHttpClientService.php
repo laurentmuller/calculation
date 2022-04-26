@@ -23,8 +23,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Service using the HttpClient.
- *
- * @author Laurent Muller
  */
 abstract class AbstractHttpClientService
 {

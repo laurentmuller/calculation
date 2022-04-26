@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Common abstract table for products and tasks.
  *
- * @author Laurent Muller
- *
  * @template T of \App\Entity\AbstractCategoryItemEntity
  * @template-extends AbstractEntityTable<T>
  */

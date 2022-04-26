@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Calendar exception.
- *
- * @author Laurent Muller
  */
 class CalendarException extends \Exception
 {

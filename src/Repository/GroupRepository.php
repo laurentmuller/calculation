@@ -21,8 +21,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for group entity.
  *
  * @template-extends AbstractRepository<Group>
- *
- * @author Laurent Muller
  */
 class GroupRepository extends AbstractRepository
 {

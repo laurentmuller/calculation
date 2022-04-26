@@ -14,8 +14,6 @@ namespace App\Model;
 
 /**
  * Contains result of updated products.
- *
- * @author Laurent Muller
  */
 class ProductUpdateResult implements \Countable
 {

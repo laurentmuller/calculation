@@ -23,8 +23,6 @@ use App\Util\FormatUtils;
 
 /**
  * Table to render the overall totals of a calculation.
- *
- * @author Laurent Muller
  */
 class CalculationTableOverall extends PdfTableBuilder
 {

@@ -18,8 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for {@link OpenWeatherService} class.
- *
- * @author Laurent Muller
  */
 class OpenWeatherServiceTest extends KernelTestCase
 {

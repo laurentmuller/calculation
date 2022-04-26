@@ -18,8 +18,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 
 /**
  * Class to output header in PDF documents.
- *
- * @author Laurent Muller
  */
 class PdfHeader
 {

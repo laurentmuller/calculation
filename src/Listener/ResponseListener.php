@@ -24,8 +24,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Response subscriber to add content security policy (CSP).
- *
- * @author Laurent Muller
  */
 class ResponseListener implements EventSubscriberInterface
 {

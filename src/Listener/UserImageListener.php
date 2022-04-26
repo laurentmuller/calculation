@@ -21,8 +21,6 @@ use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 
 /**
  * Listener to update the profile image.
- *
- * @author Laurent Muller
  */
 class UserImageListener implements ImageExtensionInterface
 {

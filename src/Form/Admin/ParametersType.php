@@ -23,8 +23,6 @@ use Symfony\Component\Security\Core\Security;
 
 /**
  * Type for application parameters.
- *
- * @author Laurent Muller
  */
 class ParametersType extends AbstractParametersType
 {

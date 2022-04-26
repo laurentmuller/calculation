@@ -16,8 +16,6 @@ use App\Report\HtmlReport;
 
 /**
  * Special chunk to add a page break to report.
- *
- * @author Laurent Muller
  */
 class HtmlPageBreakChunk extends AbstractHtmlChunk
 {

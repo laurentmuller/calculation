@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Extends the week class with an array of calculations.
- *
- * @author Laurent Muller
  */
 class CalculationsWeek extends Week implements \Countable
 {

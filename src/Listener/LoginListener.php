@@ -23,8 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Listener for the user interactive login event.
- *
- * @author Laurent Muller
  */
 class LoginListener implements EventSubscriberInterface
 {

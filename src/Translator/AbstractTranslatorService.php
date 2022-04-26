@@ -19,8 +19,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Abstract translator service.
- *
- * @author Laurent Muller
  */
 abstract class AbstractTranslatorService extends AbstractHttpClientService implements TranslatorServiceInterface
 {

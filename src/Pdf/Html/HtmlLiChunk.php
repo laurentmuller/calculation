@@ -21,8 +21,6 @@ use App\Report\HtmlReport;
 
 /**
  * Specialized chunk for HTML list item (li).
- *
- * @author Laurent Muller
  */
 class HtmlLiChunk extends HtmlParentChunk
 {

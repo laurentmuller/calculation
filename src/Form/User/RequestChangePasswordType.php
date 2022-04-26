@@ -16,8 +16,6 @@ use App\Form\FormHelper;
 
 /**
  * Type to request change password of a user.
- *
- * @author Laurent Muller
  */
 class RequestChangePasswordType extends AbstractUserCaptchaType
 {

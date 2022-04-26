@@ -24,25 +24,19 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to generate entities.
- *
- * @author Laurent Muller
- *
- * @Route("/generate")
- * @IsGranted("ROLE_SUPER_ADMIN")
  */
+#[IsGranted('ROLE_SUPER_ADMIN')]
+#[Route(path: '/generate')]
 class GeneratorController extends AbstractController
 {
     private const KEY_COUNT = 'admin.generate.count';
     private const KEY_ENTITY = 'admin.generate.entity';
     private const KEY_SIMULATE = 'admin.generate.simulate';
-
     private const ROUTE_CALCULATION = 'generate_calculation';
     private const ROUTE_CUSTOMER = 'generate_customer';
     private const ROUTE_PRODUCT = 'generate_product';
 
-    /**
-     * @Route("", name="generate")
-     */
+    #[Route(path: '', name: 'generate')]
     public function generate(): Response
     {
         $data = [
@@ -51,26 +45,22 @@ class GeneratorController extends AbstractController
             'simulate' => $this->isSessionBool(self::KEY_SIMULATE, true),
         ];
         $helper = $this->createFormHelper('generate.fields.', $data);
-
         $helper->field('entity')
             ->updateOption('choice_attr', fn (string $_choice, string $key): array => ['data-key' => $key])->addChoiceType([
                 'customer.name' => $this->generateUrl(self::ROUTE_CUSTOMER),
                 'calculation.name' => $this->generateUrl(self::ROUTE_CALCULATION),
                 'product.name' => $this->generateUrl(self::ROUTE_PRODUCT),
             ]);
-
         $helper->field('count')
             ->updateAttributes([
                 'min' => 1, 'max' => 20,
                 'step' => 1,
             ])->addNumberType(0);
-
         $helper->field('simulate')
             ->help('generate.help.simulate')
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
-
         $helper->field('confirm')
             ->notMapped()
             ->updateAttributes([
@@ -85,9 +75,8 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more calculations with random data.
-     *
-     * @Route("/calculation", name="generate_calculation")
      */
+    #[Route(path: '/calculation', name: 'generate_calculation')]
     public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -95,9 +84,8 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more customers with random data.
-     *
-     * @Route("/customer", name="generate_customer")
      */
+    #[Route(path: '/customer', name: 'generate_customer')]
     public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -105,9 +93,8 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more products with random data.
-     *
-     * @Route("/product", name="generate_product")
      */
+    #[Route(path: '/product', name: 'generate_product')]
     public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);

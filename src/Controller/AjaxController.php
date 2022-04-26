@@ -41,11 +41,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
- *
- * @author Laurent Muller
- *
- * @Route("/ajax")
  */
+#[Route(path: '/ajax')]
 class AjaxController extends AbstractController
 {
     use CookieTrait;
@@ -53,10 +50,9 @@ class AjaxController extends AbstractController
 
     /**
      * Returns a new captcha image.
-     *
-     * @Route("/captcha/image", name="ajax_captcha_image")
-     * @IsGranted("PUBLIC_ACCESS")
      */
+    #[IsGranted('PUBLIC_ACCESS')]
+    #[Route(path: '/captcha/image', name: 'ajax_captcha_image')]
     public function captchaImage(CaptchaImageService $service): JsonResponse
     {
         if ($data = $service->generateImage(true)) {
@@ -72,10 +68,9 @@ class AjaxController extends AbstractController
 
     /**
      * Validate a captcha image.
-     *
-     * @Route("/captcha/validate", name="ajax_captcha_validate")
-     * @IsGranted("PUBLIC_ACCESS")
      */
+    #[IsGranted('PUBLIC_ACCESS')]
+    #[Route(path: '/captcha/validate', name: 'ajax_captcha_validate')]
     public function captchaValidate(Request $request, CaptchaImageService $service): JsonResponse
     {
         if (!$service->validateTimeout()) {
@@ -91,26 +86,22 @@ class AjaxController extends AbstractController
 
     /**
      * Check if the given reCaptcha response (if any) is valid.
-     *
-     * @Route("/checkrecaptcha", name="ajax_check_recaptcha")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/checkrecaptcha', name: 'ajax_check_recaptcha')]
     public function checkRecaptcha(Request $request): JsonResponse
     {
         // get values
         $remoteIp = $request->getClientIp();
         $response = (string) $this->getRequestString($request, 'g-recaptcha-response', $this->getRequestString($request, 'response'));
         $secret = $this->getStringParameter('recaptcha_secret');
-
         // verify
         $recaptcha = new ReCaptcha($secret);
         $result = $recaptcha->verify($response, $remoteIp);
-
         // ok?
         if ($result->isSuccess()) {
             return $this->json(true);
         }
-
         $translator = $this->getTranslator();
         $errorCodes = \array_map(fn (mixed $code): string => $translator->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
         if (empty($errorCodes)) {
@@ -123,10 +114,9 @@ class AjaxController extends AbstractController
 
     /**
      * Check if a username or e-mail exist.
-     *
-     * @Route("/checkuser", name="ajax_check_user")
-     * @IsGranted("PUBLIC_ACCESS")
      */
+    #[IsGranted('PUBLIC_ACCESS')]
+    #[Route(path: '/checkuser', name: 'ajax_check_user')]
     public function checkUser(Request $request, UserRepository $repository): JsonResponse
     {
         // find username
@@ -140,16 +130,14 @@ class AjaxController extends AbstractController
 
     /**
      * Check if a user e-mail already exists.
-     *
-     * @Route("/checkuseremail", name="ajax_check_user_email")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/checkuseremail', name: 'ajax_check_user_email')]
     public function checkUserEmail(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
         $id = $this->getRequestInt($request, 'id');
         $email = $this->getRequestString($request, 'email');
-
         // check
         $message = null;
         if (empty($email)) {
@@ -164,7 +152,6 @@ class AjaxController extends AbstractController
                 $message = 'email.already_used';
             }
         }
-
         if (null !== $message) {
             return $this->json($this->trans($message, [], 'validators'));
         }
@@ -174,16 +161,14 @@ class AjaxController extends AbstractController
 
     /**
      * Check if a username already exists.
-     *
-     * @Route("/checkusername", name="ajax_check_user_name")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/checkusername', name: 'ajax_check_user_name')]
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
         $id = $this->getRequestInt($request, 'id');
         $username = $this->getRequestString($request, 'username');
-
         // check
         $message = null;
         if (empty($username)) {
@@ -198,7 +183,6 @@ class AjaxController extends AbstractController
                 $message = 'username.already_used';
             }
         }
-
         if (null !== $message) {
             return $this->json($this->trans($message, [], 'validators'));
         }
@@ -208,28 +192,24 @@ class AjaxController extends AbstractController
 
     /**
      * Compute a task.
-     *
-     * @Route("/task", name="ajax_task")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/task', name: 'ajax_task')]
     public function computeTask(Request $request, TaskService $service, TaskRepository $repository): JsonResponse
     {
         // get values
         $id = $this->getRequestInt($request, 'id');
         $quantity = $this->getRequestFloat($request, 'quantity');
-
         $task = $repository->find($id);
         if (!$task instanceof Task) {
             return $this->jsonFalse([
                 'message' => $this->trans('taskcompute.error.task'),
             ]);
         }
-
         // update service and compute
         $service->setTask($task)
             ->setQuantity($quantity)
             ->compute($request);
-
         /** @psalm-var array $data */
         $data = \array_merge($service->jsonSerialize(), [
             'message' => $this->trans('taskcompute.success'),
@@ -240,10 +220,9 @@ class AjaxController extends AbstractController
 
     /**
      * Gets the list of translate languages.
-     *
-     * @Route("/languages", name="ajax_languages")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/languages', name: 'ajax_languages')]
     public function languages(Request $request, TranslatorFactory $factory): JsonResponse
     {
         $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
@@ -253,17 +232,15 @@ class AjaxController extends AbstractController
                 'languages' => $languages,
             ]);
         }
-
         // error
         return $this->handleTranslationError($service, 'translator.languages_error');
     }
 
     /**
      * Gets random text used to display notifications.
-     *
-     * @Route("/random/text", name="ajax_random_text")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/random/text', name: 'ajax_random_text')]
     public function randomText(Request $request, FakerService $service): JsonResponse
     {
         // get parameters
@@ -281,10 +258,9 @@ class AjaxController extends AbstractController
      * Sets a session attribute.
      *
      * The request must contains 'name' and 'value' parameters.
-     *
-     * @Route("/session/set", name="ajax_session_set")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/session/set', name: 'ajax_session_set')]
     public function saveSession(Request $request): JsonResponse
     {
         $result = false;
@@ -300,17 +276,15 @@ class AjaxController extends AbstractController
 
     /**
      * Save a table parameters.
-     *
-     * @Route("/save", name="ajax_save_table")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/save', name: 'ajax_save_table')]
     public function saveTable(Request $request): JsonResponse
     {
         $view = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
         $enum = TableView::tryFrom($view) ?? TableView::TABLE;
         $value = $enum->value;
         $limit = $enum->getPageSize();
-
         $response = $this->json(true);
         $this->setCookie($response, TableInterface::PARAM_VIEW, $value);
         $this->setCookie($response, TableInterface::PARAM_LIMIT, $limit, $value);
@@ -320,17 +294,15 @@ class AjaxController extends AbstractController
 
     /**
      * Search streets, zip codes or cities.
-     *
-     * @Route("/search/address", name="ajax_search_address")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search/address', name: 'ajax_search_address')]
     public function searchAddress(Request $request, SwissPostService $service): JsonResponse
     {
         $zip = $this->getRequestString($request, 'zip');
         $city = $this->getRequestString($request, 'city');
         $street = $this->getRequestString($request, 'street');
         $limit = $this->getRequestInt($request, 'limit', 25);
-
         if ($zip) {
             $rows = $service->findZip($zip, $limit);
         } elseif ($city) {
@@ -346,10 +318,9 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct calculation's customers in existing calculations.
-     *
-     * @Route("/search/customer", name="ajax_search_customer")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search/customer', name: 'ajax_search_customer')]
     public function searchCustomer(Request $request, CalculationRepository $repository): JsonResponse
     {
         return $this->getDistinctValues($request, $repository, 'customer');
@@ -365,10 +336,9 @@ class AjaxController extends AbstractController
      * <li><code>query</code>: the value to search.</li>
      * <li><code>limit</code>: the number of results to retrieve (default = 15).</li>
      * </ul>
-     *
-     * @Route("/search/distinct", name="ajax_search_distinct")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search/distinct', name: 'ajax_search_distinct')]
     public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
     {
         $className = 'App\\Entity\\' . \ucfirst((string) $this->getRequestString($request, 'entity', ''));
@@ -377,7 +347,6 @@ class AjaxController extends AbstractController
                 'values' => [],
             ]);
         }
-
         // field
         $field = $this->getRequestString($request, 'field');
         if (!Utils::isString($field)) {
@@ -398,10 +367,9 @@ class AjaxController extends AbstractController
 
     /**
      * Search products.
-     *
-     * @Route("/search/product", name="ajax_search_product")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search/product', name: 'ajax_search_product')]
     public function searchProduct(Request $request, ProductRepository $repository): JsonResponse
     {
         try {
@@ -425,10 +393,9 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct product and task suppliers.
-     *
-     * @Route("/search/supplier", name="ajax_search_supplier")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search/supplier', name: 'ajax_search_supplier')]
     public function searchSupplier(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
         return $this->getDistinctValuesForCategoryItem($request, $productRepository, $taskRepository, 'supplier');
@@ -436,10 +403,9 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct customer's titles.
-     *
-     * @Route("/search/title", name="ajax_search_title")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search/title', name: 'ajax_search_title')]
     public function searchTitle(Request $request, CustomerRepository $repository): JsonResponse
     {
         return $this->getDistinctValues($request, $repository, 'title');
@@ -447,10 +413,9 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct units from products and tasks.
-     *
-     * @Route("/search/unit", name="ajax_search_unit")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/search/unit', name: 'ajax_search_unit')]
     public function searchUnit(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
         return $this->getDistinctValuesForCategoryItem($request, $productRepository, $taskRepository, 'unit');
@@ -458,24 +423,21 @@ class AjaxController extends AbstractController
 
     /**
      * Translate a text.
-     *
-     * @Route("/translate", name="ajax_translate")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/translate', name: 'ajax_translate')]
     public function translate(Request $request, TranslatorFactory $factory): JsonResponse
     {
         // ajax call ?
         if (null !== ($response = $this->checkAjaxCall($request))) {
             return $response;
         }
-
         // get parameters
         $to = (string) $this->getRequestString($request, 'to', '');
         $from = $this->getRequestString($request, 'from');
         $text = (string) $this->getRequestString($request, 'text', '');
         $class = (string) $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
-
         // check parameters
         if (!Utils::isString($text)) {
             return $this->jsonFalse([
@@ -505,10 +467,9 @@ class AjaxController extends AbstractController
 
     /**
      * Update the calculation's totals.
-     *
-     * @Route("/update", name="ajax_update")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/update', name: 'ajax_update')]
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
         // ajax call ?

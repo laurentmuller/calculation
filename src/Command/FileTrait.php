@@ -19,8 +19,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Trait to deals with files.
- *
- * @author Laurent Muller
  */
 trait FileTrait
 {

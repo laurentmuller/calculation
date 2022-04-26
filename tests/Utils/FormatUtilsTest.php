@@ -17,8 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for the {@link FormatUtils} class.
- *
- * @author Laurent Muller
  */
 class FormatUtilsTest extends TestCase
 {

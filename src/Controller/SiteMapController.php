@@ -18,17 +18,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display the site map.
- *
- * @author Laurent Muller
  */
 class SiteMapController extends AbstractController
 {
     /**
      * Display the site map.
-     *
-     * @Route("/sitemap", name="site_map")
-     * @IsGranted("ROLE_USER")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/sitemap', name: 'site_map')]
     public function invoke(): Response
     {
         return $this->renderForm('sitemap/sitemap.html.twig');

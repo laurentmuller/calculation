@@ -22,8 +22,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Exchange rate service.
  *
- * @author Laurent Muller
- *
  * @see https://www.exchangerate-api.com/
  */
 class ExchangeRateService extends AbstractHttpClientService

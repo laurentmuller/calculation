@@ -17,8 +17,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 /**
  * Spreadsheet document for the list of calculations.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<\App\Entity\Calculation>
  */
 class CalculationsDocument extends AbstractArrayDocument

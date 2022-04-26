@@ -24,8 +24,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
  * Voter for entities.
- *
- * @author Laurent Muller
  */
 class EntityVoter extends Voter implements EntityVoterInterface
 {

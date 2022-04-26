@@ -19,7 +19,6 @@ use App\Util\FileUtils;
 /**
  * The tasks table.
  *
- * @author Laurent Muller
  * @template-extends AbstractCategoryItemTable<\App\Entity\Task>
  */
 class TaskTable extends AbstractCategoryItemTable

@@ -19,8 +19,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for task item margin entity.
  *
  * @template-extends AbstractRepository<TaskItemMargin>
- *
- * @author Laurent Muller
  */
 class TaskItemMarginRepository extends AbstractRepository
 {

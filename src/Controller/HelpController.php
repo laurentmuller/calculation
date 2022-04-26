@@ -22,26 +22,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display help.
- *
- * @author Laurent Muller
- *
- * @Route("/help")
- * @IsGranted("ROLE_USER")
  */
+#[IsGranted('ROLE_USER')]
+#[Route(path: '/help')]
 class HelpController extends AbstractController
 {
     /**
      * Display the help for a dialog.
-     *
-     * @Route("/dialog/{id}", name="help_dialog")
      */
+    #[Route(path: '/dialog/{id}', name: 'help_dialog')]
     public function dialog(string $id, HelpService $service): Response
     {
         $dialog = $service->findDialog($id);
         if (null === $dialog) {
             throw new NotFoundHttpException("Unable to find the resource for the dialog '$id'.");
         }
-
         $entity = isset($dialog['entity']) ? $service->findEntity((string) $dialog['entity']) : null;
 
         return $this->renderForm('help/help_dialog.html.twig', [
@@ -53,9 +48,8 @@ class HelpController extends AbstractController
 
     /**
      * Display the help for an entity.
-     *
-     * @Route("/entity/{id}", name="help_entity")
      */
+    #[Route(path: '/entity/{id}', name: 'help_entity')]
     public function entity(string $id, HelpService $service): Response
     {
         $entity = $service->findEntity($id);
@@ -71,9 +65,8 @@ class HelpController extends AbstractController
 
     /**
      * Display the help index.
-     *
-     * @Route("", name="help")
      */
+    #[Route(path: '', name: 'help')]
     public function index(HelpService $service): Response
     {
         return $this->renderForm('help/help_index.html.twig', [
@@ -84,9 +77,8 @@ class HelpController extends AbstractController
 
     /**
      * Export the help to a PDF document.
-     *
-     * @Route("/pdf", name="help_pdf")
      */
+    #[Route(path: '/pdf', name: 'help_pdf')]
     public function pdf(HelpService $service): PdfResponse
     {
         $doc = new HelpReport($this, $service);

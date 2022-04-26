@@ -15,8 +15,6 @@ namespace App\Form;
 /**
  * Abstract margin edit type.
  *
- * @author Laurent Muller
- *
  * @template T of \App\Entity\AbstractMargin
  * @template-extends AbstractEntityType<T>
  */

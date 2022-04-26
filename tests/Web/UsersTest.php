@@ -14,8 +14,6 @@ namespace App\Tests\Web;
 
 /**
  * Test class for users.
- *
- * @author Laurent Muller
  */
 class UsersTest extends AbstractAuthenticateWebTestCase
 {

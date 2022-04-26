@@ -20,8 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Base extension for FileType.
- *
- * @author Laurent Muller
  */
 abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 {

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /***
  * Unit test for {@link App\Traits\RightsTrait} class.
  *
- * @author Laurent Muller
+ *
  *
  * @see RightsTrait
  */

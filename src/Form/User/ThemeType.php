@@ -21,8 +21,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to select a theme.
- *
- * @author Laurent Muller
  */
 class ThemeType extends AbstractHelperType
 {

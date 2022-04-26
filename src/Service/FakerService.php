@@ -27,8 +27,6 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Service for the Faker bundle.
  *
- * @author Laurent Muller
- *
  * @see https://fakerphp.github.io/
  */
 class FakerService

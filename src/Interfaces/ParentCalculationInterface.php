@@ -16,8 +16,6 @@ use App\Entity\Calculation;
 
 /**
  * Class implementing this interface deals with a parent calculation.
- *
- * @author Laurent Muller
  */
 interface ParentCalculationInterface
 {

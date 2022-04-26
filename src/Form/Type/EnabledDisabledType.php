@@ -16,8 +16,6 @@ use App\Form\AbstractChoiceType;
 
 /**
  * An Enabled/Disabled (translated) choice type.
- *
- * @author Laurent Muller
  */
 class EnabledDisabledType extends AbstractChoiceType
 {

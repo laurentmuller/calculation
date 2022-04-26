@@ -19,8 +19,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a margin of a task item.
  *
- * @author Laurent Muller
- *
  * @ORM\Table(name="sy_TaskItemMargin")
  * @ORM\Entity(repositoryClass="App\Repository\TaskItemMarginRepository")
  */
@@ -30,19 +28,19 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
      * The maximum quantity (exclusive) to apply within this value.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     * @Assert\Type(type="float")
-     * @Assert\GreaterThanOrEqual(0)
-     * @Assert\GreaterThan(propertyPath="minimum", message="margin.maximum_greater_minimum")
      */
+    #[Assert\Type(type: 'float')]
+    #[Assert\GreaterThanOrEqual(0)]
+    #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     private float $maximum = 0.0;
 
     /**
      * The minimum quantity (inclusive) to apply within this value.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     * @Assert\Type(type="float")
-     * @Assert\GreaterThanOrEqual(0)
      */
+    #[Assert\Type(type: 'float')]
+    #[Assert\GreaterThanOrEqual(0)]
     private float $minimum = 0.0;
 
     /**
@@ -57,9 +55,9 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
      * The value to use when a quantity is within this range.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     * @Assert\Type(type="float")
-     * @Assert\GreaterThanOrEqual(0)
      */
+    #[Assert\Type(type: 'float')]
+    #[Assert\GreaterThanOrEqual(0)]
     private float $value = 0.0;
 
     /**

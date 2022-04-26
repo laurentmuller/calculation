@@ -27,8 +27,6 @@ use FPDF;
 /**
  * PDF document with default header and footer.
  *
- * @author Laurent Muller
- *
  * @property int     $page           The current page number.
  * @property float[] $DefPageSize    The default page size.
  * @property float[] $CurPageSize    The current page size.

@@ -14,8 +14,6 @@ namespace App\Traits;
 
 /**
  * A combination of the translator trait and the flash message trait to add translated flash messages.
- *
- * @author Laurent Muller
  */
 trait TranslatorFlashMessageTrait
 {

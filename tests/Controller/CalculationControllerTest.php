@@ -19,8 +19,6 @@ use App\Entity\Group;
 
 /**
  * Unit test for {@link App\Controller\CalculationController} class.
- *
- * @author Laurent Muller
  */
 class CalculationControllerTest extends AbstractControllerTest
 {

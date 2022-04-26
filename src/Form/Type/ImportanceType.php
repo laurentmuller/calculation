@@ -17,8 +17,6 @@ use Symfony\Bridge\Twig\Mime\NotificationEmail;
 
 /**
  * Importance type for email notifications.
- *
- * @author Laurent Muller
  */
 class ImportanceType extends AbstractChoiceType
 {

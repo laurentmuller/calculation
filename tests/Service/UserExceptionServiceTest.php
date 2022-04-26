@@ -25,8 +25,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 /**
  * Unit test for {@link App\Service\UserExceptionService} class.
- *
- * @author Laurent Muller
  */
 class UserExceptionServiceTest extends TestCase
 {

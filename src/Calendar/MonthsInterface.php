@@ -14,8 +14,6 @@ namespace App\Calendar;
 
 /**
  * Months of year constants.
- *
- * @author Laurent Muller
  */
 interface MonthsInterface
 {

@@ -22,8 +22,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for global margin entity.
  *
  * @template-extends AbstractRepository<GlobalMargin>
- *
- * @author Laurent Muller
  */
 class GlobalMarginRepository extends AbstractRepository
 {

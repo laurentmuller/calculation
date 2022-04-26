@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Extends the PDF table builder by adding a group row when headers and/or new pages are output.
- *
- * @author Laurent Muller
  */
 class PdfGroupTableBuilder extends PdfTableBuilder
 {

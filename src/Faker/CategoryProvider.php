@@ -18,8 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Category provider.
  *
- * @author Laurent Muller
- *
  * @template-extends EntityProvider<Category>
  * @psalm-suppress PropertyNotSetInConstructor
  */

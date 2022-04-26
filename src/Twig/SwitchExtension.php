@@ -17,8 +17,6 @@ use Twig\Extension\AbstractExtension;
 
 /**
  * Switch extension.
- *
- * @author Laurent Muller
  */
 final class SwitchExtension extends AbstractExtension
 {

@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Interface for strength password.
- *
- * @author Laurent Muller
  */
 interface StrengthInterface
 {

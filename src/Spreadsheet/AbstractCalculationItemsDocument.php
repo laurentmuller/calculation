@@ -19,8 +19,6 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 /**
  * Abstract Spreadsheet document for the list of calculations with invalid items.
  *
- * @author Laurent Muller
- *
  * @extends AbstractArrayDocument<array{
  *      id: int,
  *      date: \DateTimeInterface,

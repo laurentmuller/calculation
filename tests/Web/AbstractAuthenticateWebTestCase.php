@@ -25,8 +25,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * Abstract class for authenticate user.
- *
- * @author Laurent Muller
  */
 abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 {

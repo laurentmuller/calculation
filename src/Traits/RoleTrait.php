@@ -19,8 +19,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Trait to deal with a role name.
- *
- * @author Laurent Muller
  */
 trait RoleTrait
 {
@@ -28,8 +26,8 @@ trait RoleTrait
      * The role name.
      *
      * @ORM\Column(type="string", length=25, nullable=true)
-     * @Assert\Choice({RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN})
      */
+    #[Assert\Choice([RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
     protected ?string $role = null;
 
     /**

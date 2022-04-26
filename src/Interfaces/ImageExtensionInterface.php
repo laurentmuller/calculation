@@ -14,8 +14,6 @@ namespace App\Interfaces;
 
 /**
  * Images constants.
- *
- * @author Laurent Muller
  */
 interface ImageExtensionInterface
 {

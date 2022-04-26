@@ -17,8 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 
 /**
  * Fax type.
- *
- * @author Laurent Muller
  */
 class FaxType extends AbstractType
 {

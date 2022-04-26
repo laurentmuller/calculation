@@ -24,21 +24,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for calculations where items have the price or the quantity is equal to 0.
- *
- * @author Laurent Muller
- *
- * @Route("/empty")
- * @IsGranted("ROLE_ADMIN")
  */
+#[IsGranted('ROLE_ADMIN')]
+#[Route(path: '/empty')]
 class CalculationEmptyController extends AbstractController
 {
     use TableTrait;
 
     /**
      * Export the empty items to a Spreadsheet document.
-     *
-     * @Route("/excel", name="empty_excel")
      */
+    #[Route(path: '/excel', name: 'empty_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         if ($this->isEmptyItems($repository)) {
@@ -46,7 +42,6 @@ class CalculationEmptyController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $items = $this->getItems($repository);
         $doc = new CalculationsEmptyDocument($this, $items);
 
@@ -55,9 +50,8 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Export the calculations where items have the price or the quantity is equal to 0.
-     *
-     * @Route("/pdf", name="empty_pdf")
      */
+    #[Route(path: '/pdf', name: 'empty_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         if ($this->isEmptyItems($repository)) {
@@ -65,7 +59,6 @@ class CalculationEmptyController extends AbstractController
 
             return $this->redirectToHomePage();
         }
-
         $items = $this->getItems($repository);
         $doc = new CalculationEmptyReport($this, $items);
 
@@ -74,9 +67,8 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @Route("", name="empty_table")
      */
+    #[Route(path: '', name: 'empty_table')]
     public function table(Request $request, CalculationEmptyTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table_empty.html.twig');

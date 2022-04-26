@@ -16,8 +16,6 @@ use App\Database\SwissDatabase;
 
 /**
  * Service to search zip codes, cities and streets from Switzerland.
- *
- * @author Laurent Muller
  */
 class SwissPostService
 {

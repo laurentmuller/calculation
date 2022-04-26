@@ -18,8 +18,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Trait to save or load data from a cache.
- *
- * @author Laurent Muller
  */
 trait CacheTrait
 {

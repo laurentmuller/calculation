@@ -20,8 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Type to edit attribute rights (Edit, Add, Delete, etc...).
  *
- * @author Laurent Muller
- *
  * @see EntityVoter
  */
 class AttributeRightType extends AbstractChoiceType

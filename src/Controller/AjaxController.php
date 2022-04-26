@@ -38,7 +38,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
@@ -96,7 +95,7 @@ class AjaxController extends AbstractController
      * @Route("/checkrecaptcha", name="ajax_check_recaptcha")
      * @IsGranted("ROLE_USER")
      */
-    public function checkRecaptcha(Request $request, TranslatorInterface $translator): JsonResponse
+    public function checkRecaptcha(Request $request): JsonResponse
     {
         // get values
         $remoteIp = $request->getClientIp();
@@ -112,6 +111,7 @@ class AjaxController extends AbstractController
             return $this->json(true);
         }
 
+        $translator = $this->getTranslator();
         $errorCodes = \array_map(fn (mixed $code): string => $translator->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
         if (empty($errorCodes)) {
             $errorCodes[] = $translator->trans('recaptcha.unknown-error', [], 'validators');
@@ -302,6 +302,7 @@ class AjaxController extends AbstractController
      * Save a table parameters.
      *
      * @Route("/save", name="ajax_save_table")
+     * @IsGranted("ROLE_USER")
      */
     public function saveTable(Request $request): JsonResponse
     {
@@ -517,8 +518,7 @@ class AjaxController extends AbstractController
 
         try {
             // source
-            $input = Utils::getRequestInputBag($request);
-            $source = $input->all('calculation');
+            $source = Utils::getRequestInputBag($request)->all('calculation');
 
             // compute
             $parameters = $service->createGroupsFromData($source);

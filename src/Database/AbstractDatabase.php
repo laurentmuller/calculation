@@ -24,7 +24,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * The in-memory database file name.
      */
-    public const IN_MEMORY = ':memory:';
+    final public const IN_MEMORY = ':memory:';
 
     /**
      * The opened statements.
@@ -246,7 +246,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param int          $mode controls how the next row will be returned to the caller. This value
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      */
-    protected function executeAndfetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
+    protected function executeAndFetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {
         $rows = [];
         $result = $stmt->execute();
@@ -329,6 +329,6 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
         $stmt->bindParam(':limit', $limit, \SQLITE3_INTEGER);
 
         // execute
-        return $this->executeAndfetch($stmt, $mode);
+        return $this->executeAndFetch($stmt, $mode);
     }
 }

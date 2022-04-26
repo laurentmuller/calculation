@@ -349,7 +349,6 @@ class TestController extends AbstractController
         // render
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            // get values
             /** @psalm-var array $data */
             $data = $form->getData();
             $response = (string) $data['recaptcha'];

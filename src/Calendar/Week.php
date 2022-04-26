@@ -29,7 +29,7 @@ class Week extends AbstractCalendarItem
     /**
      * The date format used to generate this key.
      */
-    public const KEY_FORMAT = 'Y.W';
+    final public const KEY_FORMAT = 'Y.W';
 
     /**
      * Constructor.
@@ -140,6 +140,8 @@ class Week extends AbstractCalendarItem
 
     /**
      * {@inheritdoc}
+     *
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {

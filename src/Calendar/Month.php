@@ -29,7 +29,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     /**
      * The date format used to generate this key.
      */
-    public const KEY_FORMAT = 'Y.m';
+    final public const KEY_FORMAT = 'Y.m';
 
     /**
      * Constructor.
@@ -157,6 +157,8 @@ class Month extends AbstractCalendarItem implements \Stringable
 
     /**
      * {@inheritdoc}
+     *
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {

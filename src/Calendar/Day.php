@@ -27,7 +27,7 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface, \Stringable
     /**
      * The date format used to generate this key.
      */
-    public const KEY_FORMAT = 'Y.m.d';
+    final public const KEY_FORMAT = 'Y.m.d';
 
     /**
      * The date.
@@ -239,6 +239,8 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface, \Stringable
 
     /**
      * {@inheritdoc}
+     *
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {

@@ -149,7 +149,7 @@ class OpenWeatherDatabase extends AbstractDatabase
         $stmt->bindParam(':country', $country);
         $stmt->bindParam(':limit', $limit, \SQLITE3_INTEGER);
 
-        return $this->executeAndfetch($stmt);
+        return $this->executeAndFetch($stmt);
     }
 
     /**

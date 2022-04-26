@@ -10,6 +10,7 @@ parameters:
 
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php
+    - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php
 
     doctrine:
         repositoryClass: App\Repository\AbstractRepository
@@ -20,6 +21,8 @@ parameters:
     ignoreErrors:
         - '#Utils::getRequestInputBag#'
         - '#should return int<0, max>#'
+        - '#return type has no value type#'
+        - '#no value type specified#'
         -
             message: '#type mapping mismatch#'
             path: src/Entity/*

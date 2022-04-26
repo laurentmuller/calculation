@@ -319,7 +319,7 @@ abstract class AbstractController extends BaseController
     {
         $value = Utils::getRequestInputBag($request)->get($key, $default);
 
-        return \is_string($value) ? $value : null;
+        return \is_string($value) ? $value : $default;
     }
 
     /**

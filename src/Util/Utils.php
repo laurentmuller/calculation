@@ -354,8 +354,7 @@ final class Utils
             self::sortField($array, $field, $ascending);
         } elseif ($count > 1) {
             $accessor = self::getAccessor();
-            // @phpstan-ignore-next-line
-            \usort($array, function ($a, $b) use ($accessor, $fields): int {
+            \usort($array, function (mixed $a, mixed $b) use ($accessor, $fields): int {
                 $result = 0;
                 foreach ($fields as $field => $ascending) {
                     $result = self::compare($a, $b, $field, $accessor, $ascending);

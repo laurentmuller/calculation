@@ -81,7 +81,7 @@
 
         {%- set href = 'https://www.google.ch/maps/place/' ~ current.coord.lat ~ ',' ~ current.coord.lon -%}
         {%- set text = tools.value_no_sep(current.coord.lat, units_degree) ~ ' / ' ~ tools.value_no_sep(current.coord.lon, units_degree) -%}
-        {%- set raw = '<a href="' ~ href ~ '" target="_blank" rel="noopener noreferrer">' ~ text ~ '</a>' -%}
+        {%- set raw = '<a href="' ~ href ~ '" target="_blank" rel="noreferrer">' ~ text ~ '</a>' -%}
         {{ _self.row_text('openweather.fields.position', raw) }}
         {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
     </tbody>

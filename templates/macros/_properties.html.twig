@@ -23,7 +23,7 @@
     {%- set value = '<a href="mailto:{0}">{0}</a>'|replace({'{0}': value}) -%}
 {%- endif -%}
 {%- if name -%}
-    {{- _self.property(name, value, class) -}}    
+    {{- _self.property(name, value, class) -}}
 {%- else -%}
     {{- _self.line(value, class, colspan) -}}
 {%- endif -%}
@@ -34,7 +34,7 @@
 {%- set text = text|default(href) -%}
 {%- if href -%}
     {%- set href = '<a href="{0}">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}
-{%- endif -%}    
+{%- endif -%}
 {%- if name -%}
     {{- _self.property(name, href, class) -}}
 {%- else -%}
@@ -46,10 +46,10 @@
 {% macro externalLink(href, text, class, name=false, colspan=2) %}
 {%- set text = text|default(href) -%}
 {%- if href -%}
-    {%- set href = '<a href="{0}" target="_blank" rel="noopener noreferrer">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}    
+    {%- set href = '<a href="{0}" target="_blank" rel="noreferrer">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}
 {%- endif -%}
 {%- if name -%}
-    {{- _self.property(name, href, class) -}}    
+    {{- _self.property(name, href, class) -}}
 {%- else -%}
     {{- _self.line(href, class, colspan) -}}
 {%- endif -%}

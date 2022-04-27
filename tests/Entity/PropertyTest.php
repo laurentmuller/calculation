@@ -41,9 +41,7 @@ class PropertyTest extends AbstractEntityValidatorTest
     public function testInvalidBoth(): void
     {
         $object = new Property();
-
-        $result = $this->validator->validate($object);
-        $this->assertEquals(2, $result->count());
+        $this->validate($object, 2);
     }
 
     public function testInvalidName(): void

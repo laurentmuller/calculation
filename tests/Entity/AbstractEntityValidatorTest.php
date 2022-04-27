@@ -16,6 +16,7 @@ use App\Entity\AbstractEntity;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -57,9 +58,14 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
      * @param mixed $object   the value to validate
      * @param int   $expected the number of expected errors
      */
-    protected function validate(mixed $object, int $expected): void
+    protected function validate(mixed $object, int $expected): ConstraintViolationListInterface
     {
+        if (null === $this->validator) {
+            $this->markTestSkipped('The validator is null.');
+        }
         $result = $this->validator->validate($object);
         $this->assertEquals($expected, $result->count());
+
+        return $result;
     }
 }

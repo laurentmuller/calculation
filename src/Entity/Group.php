@@ -12,58 +12,58 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\GroupRepository;
 use App\Traits\ValidateMarginsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a group of categories.
- *
- * @ORM\Table(name="sy_Group", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_group_code", columns={"code"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  */
+#[ORM\Entity(repositoryClass: GroupRepository::class)]
+#[ORM\Table(name: 'sy_Group')]
+#[ORM\UniqueConstraint(name: 'unique_group_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
 class Group extends AbstractEntity
 {
     use ValidateMarginsTrait;
 
     /**
-     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"code" = "ASC"})
+     * The children categories.
      *
      * @var Collection<int, Category>
      */
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: Category::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['code' => Criteria::ASC])]
     private Collection $categories;
 
     /**
      * The unique code.
-     *
-     * @ORM\Column(type="string", length=30, unique=true)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
+    #[ORM\Column(type: 'string', length: 30, unique: true)]
     private ?string $code = null;
 
     /**
      * The description.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $description = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=GroupMargin::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"minimum" = "ASC"})
+     * The children margins.
      *
      * @var Collection<int, GroupMargin>
      */
     #[Assert\Valid]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupMargin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['minimum' => Criteria::ASC])]
     private Collection $margins;
 
     /**
@@ -108,9 +108,7 @@ class Group extends AbstractEntity
      */
     public function clone(?string $code = null): self
     {
-        /** @var Group $copy */
         $copy = clone $this;
-
         if ($code) {
             $copy->setCode($code);
         }

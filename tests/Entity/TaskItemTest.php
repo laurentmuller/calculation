@@ -19,7 +19,7 @@ use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 
 /**
- * Unit test for {@link App\Entity\TaskItem} class.
+ * Unit test for {@link TaskItem} class.
  */
 class TaskItemTest extends AbstractEntityValidatorTest
 {
@@ -48,7 +48,7 @@ class TaskItemTest extends AbstractEntityValidatorTest
     public function testFindMargin(): void
     {
         $item = new TaskItem();
-        $item->addMargin($this->createMargin(0, 100, 10));
+        $item->addMargin($this->createMargin(10));
         $this->assertNull($item->findMargin(-1));
         $this->assertNull($item->findMargin(101));
         $this->assertNotNull($item->findMargin(0));
@@ -57,7 +57,7 @@ class TaskItemTest extends AbstractEntityValidatorTest
     public function testFindValue(): void
     {
         $item = new TaskItem();
-        $item->addMargin($this->createMargin(0, 100, 0.1));
+        $item->addMargin($this->createMargin(0.1));
         $this->assertEqualsWithDelta(0.1, $item->findValue(50), 0.01);
         $this->assertEqualsWithDelta(0, $item->findValue(100), 0.01);
     }
@@ -111,11 +111,11 @@ class TaskItemTest extends AbstractEntityValidatorTest
         return $group;
     }
 
-    private function createMargin(float $minimum, float $maximum, float $value): TaskItemMargin
+    private function createMargin(float $value): TaskItemMargin
     {
         $margin = new TaskItemMargin();
-        $margin->setMinimum($minimum)
-            ->setMaximum($maximum)
+        $margin->setMinimum(0)
+            ->setMaximum(100)
             ->setValue($value);
 
         return $margin;

@@ -17,7 +17,7 @@ use App\Entity\Group;
 use App\Entity\Task;
 
 /**
- * Unit test for {@link App\Entity\Task} class.
+ * Unit test for {@link Task} class.
  */
 class TaskTest extends AbstractEntityValidatorTest
 {

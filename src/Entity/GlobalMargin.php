@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\GlobalMarginRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents a global margin.
- *
- * @ORM\Entity(repositoryClass="App\Repository\GlobalMarginRepository")
- * @ORM\Table(name="sy_GlobalMargin")
  */
+#[ORM\Entity(repositoryClass: GlobalMarginRepository::class)]
+#[ORM\Table(name: 'sy_GlobalMargin')]
 class GlobalMargin extends AbstractMargin
 {
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,81 +20,58 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Represents a customer.
- *
- * @ORM\Table(name="sy_Customer", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_customer_email", columns={"email"}),
- * })
- * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  */
+#[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ORM\Table(name: 'sy_Customer')]
+#[ORM\UniqueConstraint(name: 'unique_customer_email', columns: ['email'])]
 #[UniqueEntity(fields: 'email', message: 'customer.unique_email')]
 class Customer extends AbstractEntity
 {
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $address = null;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
     #[Assert\Date]
+    #[ORM\Column(type: 'date', nullable: true)]
     protected ?\DateTimeInterface $birthday = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $city = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $company = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
     #[Assert\Length(max: 100)]
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     protected ?string $country = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
     #[Assert\Email]
     #[Assert\Length(max: 100)]
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     protected ?string $email = null;
 
-    /**
-     * @ORM\Column(name="firstName", type="string", length=255, nullable=true)
-     */
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(name: 'firstName', type: 'string', length: 255, nullable: true)]
     protected ?string $firstName = null;
 
-    /**
-     * @ORM\Column(name="lastName", type="string", length=255, nullable=true)
-     */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(name: 'lastName', type: 'string', length: 255, nullable: true)]
     protected ?string $lastName = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
     #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     protected ?string $title = null;
 
-    /**
-     * @ORM\Column(name="webSite", type="string", length=100, nullable=true)
-     */
     #[Assert\Url]
     #[Assert\Length(max: 100)]
+    #[ORM\Column(name: 'webSite', type: 'string', length: 100, nullable: true)]
     protected ?string $webSite = null;
 
-    /**
-     * @ORM\Column(name="zipCode", type="string", length=10, nullable=true)
-     */
     #[Assert\Length(max: 10)]
     #[Assert\Regex(pattern: '/^[1-9]\d{3}$/', message: 'customer.zip_code')]
+    #[ORM\Column(name: 'zipCode', type: 'string', length: 10, nullable: true)]
     protected ?string $zipCode = null;
 
     /**

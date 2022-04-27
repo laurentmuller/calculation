@@ -13,93 +13,87 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\TimestampableInterface;
+use App\Repository\CalculationRepository;
 use App\Traits\TimestampableTrait;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a calculation.
- *
- * @ORM\Entity(repositoryClass="App\Repository\CalculationRepository")
- * @ORM\Table(name="sy_Calculation")
  */
+#[ORM\Entity(repositoryClass: CalculationRepository::class)]
+#[ORM\Table(name: 'sy_Calculation')]
 class Calculation extends AbstractEntity implements TimestampableInterface
 {
     use TimestampableTrait;
 
     /**
      * The customer name.
-     *
-     * @ORM\Column(type="string", length=255)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected ?string $customer = null;
 
     /**
      * The date.
-     *
-     * @ORM\Column(type="date")
      */
     #[Assert\NotNull]
+    #[ORM\Column(type: 'date')]
     protected \DateTimeInterface $date;
 
     /**
      * The description.
-     *
-     * @ORM\Column(type="string", length=255)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected ?string $description = null;
 
     /**
      * The global margin in percent (%).
-     *
-     * @ORM\Column(name="globalMargin", type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(name: 'globalMargin', type: 'float', scale: 2, options: ['default' => 0])]
     protected float $globalMargin = 0.0;
 
     /**
-     * @ORM\OneToMany(targetEntity=CalculationGroup::class, mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC"})
+     * The children groupes.
      *
      * @var Collection<int, CalculationGroup>
      */
     #[Assert\Valid]
+    #[ORM\OneToMany(mappedBy: 'calculation', targetEntity: CalculationGroup::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => Criteria::ASC])]
     protected Collection $groups;
 
     /**
      * The total of all items.
-     *
-     * @ORM\Column(name="itemsTotal", type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(name: 'itemsTotal', type: 'float', scale: 2, options: ['default' => 0])]
     protected float $itemsTotal = 0.0;
 
     /**
      * The overall total.
-     *
-     * @ORM\Column(name="overallTotal", type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(name: 'overallTotal', type: 'float', scale: 2, options: ['default' => 0])]
     protected float $overallTotal = 0.0;
 
     /**
      * The state.
-     *
-     * @ORM\ManyToOne(targetEntity=CalculationState::class, inversedBy="calculations")
-     * @ORM\JoinColumn(nullable=false)
      */
     #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: CalculationState::class, inversedBy: 'calculations')]
+    #[ORM\JoinColumn(name: 'state_id', nullable: false)]
     protected ?CalculationState $state = null;
 
     /**
      * The user margin in percent (%).
-     *
-     * @ORM\Column(name="userMargin", type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(name: 'userMargin', type: 'float', scale: 2, options: ['default' => 0])]
     protected float $userMargin = 0.0;
 
     /**
@@ -379,7 +373,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get groups.
+     * Get groupes.
      *
      * @return Collection<int, CalculationGroup>
      */

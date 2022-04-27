@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ParentCalculationInterface;
+use App\Repository\CalculationItemRepository;
 use App\Traits\MathTrait;
 use App\Traits\PositionTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,10 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents an item of a calculation category.
- *
- * @ORM\Entity(repositoryClass="App\Repository\CalculationItemRepository")
- * @ORM\Table(name="sy_CalculationItem")
  */
+#[ORM\Entity(repositoryClass: CalculationItemRepository::class)]
+#[ORM\Table(name: 'sy_CalculationItem')]
 class CalculationItem extends AbstractEntity implements ParentCalculationInterface
 {
     use MathTrait;
@@ -31,41 +31,37 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
 
     /**
      * The parent's category.
-     *
-     * @ORM\ManyToOne(targetEntity=CalculationCategory::class, inversedBy="items")
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
+    #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: CalculationCategory::class, inversedBy: 'items')]
+    #[ORM\JoinColumn(name: 'category_id', nullable: false, onDelete: 'cascade')]
     protected ?CalculationCategory $category = null;
 
     /**
      * The description.
-     *
-     * @ORM\Column(type="string", length=255)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected ?string $description = null;
 
     /**
      * The price.
-     *
-     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
     protected float $price = 0.0;
 
     /**
      * The quantity.
-     *
-     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
     protected float $quantity = 0.0;
 
     /**
      * The unit.
-     *
-     * @ORM\Column(type="string", length=15, nullable=true)
      */
     #[Assert\Length(max: 15)]
+    #[ORM\Column(type: 'string', length: 15, nullable: true)]
     protected ?string $unit = null;
 
     /**

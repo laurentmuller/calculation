@@ -66,7 +66,6 @@ final class DateUtils
         if (\is_string($interval)) {
             $interval = new \DateInterval($interval);
         }
-
         /** @var \DateTime $clone */
         $clone = (clone $date);
 
@@ -203,7 +202,6 @@ final class DateUtils
         if (\is_string($interval)) {
             $interval = new \DateInterval($interval);
         }
-
         /** @var \DateTime $clone */
         $clone = (clone $date);
 

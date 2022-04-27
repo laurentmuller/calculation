@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\CalculationState;
 
 /**
- * Unit test for {@link App\Entity\CalculationState} class.
+ * Unit test for {@link CalculationState} class.
  */
 class CalculationStateTest extends AbstractEntityValidatorTest
 {

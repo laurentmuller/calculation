@@ -18,27 +18,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Abstract entity with a category, a unit and a supplier.
  *
- * A protected $category variable must present.
- *
- * @ORM\MappedSuperclass
+ * Note: A protected $category variable must present.
  *
  * @property Category|null $category
  */
+#[ORM\MappedSuperclass]
 abstract class AbstractCategoryItemEntity extends AbstractEntity
 {
     /**
      * The supplier.
-     *
-     * @ORM\Column(length=255, nullable=true)
      */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $supplier = null;
+
     /**
      * The unit.
-     *
-     * @ORM\Column(type="string", length=15, nullable=true)
      */
     #[Assert\Length(max: 15)]
+    #[ORM\Column(type: 'string', length: 15, nullable: true)]
     protected ?string $unit = null;
 
     /**

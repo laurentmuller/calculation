@@ -16,7 +16,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 
 /**
- * Unit test for {@link App\Entity\Group} class.
+ * Unit test for {@link Group} class.
  */
 class GroupTest extends AbstractEntityValidatorTest
 {
@@ -27,10 +27,8 @@ class GroupTest extends AbstractEntityValidatorTest
 
         try {
             $this->saveEntity($first);
-
             $second = new Group();
             $second->setCode('code');
-
             $this->validate($second, 1);
         } finally {
             $this->deleteEntity($first);
@@ -40,7 +38,7 @@ class GroupTest extends AbstractEntityValidatorTest
     public function testFindMargin(): void
     {
         $group = new Group();
-        $group->addMargin($this->createMargin(0, 100, 0.1));
+        $group->addMargin($this->createMargin());
         $this->assertNotNull($group->findMargin(0));
         $this->assertNull($group->findMargin(100));
     }
@@ -48,14 +46,14 @@ class GroupTest extends AbstractEntityValidatorTest
     public function testFindPercent(): void
     {
         $group = new Group();
-        $group->addMargin($this->createMargin(0, 100, 0.1));
+        $group->addMargin($this->createMargin());
         $this->assertEqualsWithDelta(0.1, $group->findPercent(50), 0.01);
         $this->assertEqualsWithDelta(0, $group->findPercent(100), 0.01);
     }
 
     public function testGroupMargin(): void
     {
-        $margin = $this->createMargin(0, 100, 0.1);
+        $margin = $this->createMargin();
         $this->assertTrue($margin->contains(0));
         $this->assertFalse($margin->contains(100));
         $this->assertEqualsWithDelta(1.0, $margin->getMarginAmount(10), 0.1);
@@ -91,10 +89,10 @@ class GroupTest extends AbstractEntityValidatorTest
         $this->validate($object, 0);
     }
 
-    private function createMargin(float $minimum, float $maximum, float $margin): GroupMargin
+    private function createMargin(): GroupMargin
     {
         $cm = new GroupMargin();
-        $cm->setValues($minimum, $maximum, $margin);
+        $cm->setValues(0, 100, 0.1);
 
         return $cm;
     }

@@ -17,20 +17,20 @@ use App\Entity\Group;
 use App\Entity\Product;
 
 /**
- * Unit test for {@link App\Entity\Product} class.
+ * Unit test for {@link Product} class.
  */
 class ProductTest extends AbstractEntityValidatorTest
 {
     public function testDuplicate(): void
     {
-        $category = $this->getCategory();
-
+        $group = $this->getGroup();
+        $category = $this->getCategory($group);
         $first = new Product();
         $first->setDescription('My Product')
             ->setCategory($category);
 
         try {
-            $this->saveEntity($category->getGroup());
+            $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($first);
 
@@ -42,15 +42,14 @@ class ProductTest extends AbstractEntityValidatorTest
         } finally {
             $this->deleteEntity($first);
             $this->deleteEntity($category);
+            $this->deleteEntity($group);
         }
     }
 
     public function testInvalidBoth(): void
     {
         $product = new Product();
-
-        $result = $this->validator->validate($product);
-        $this->assertEquals(2, $result->count());
+        $this->validate($product, 2);
     }
 
     public function testInvalidCategory(): void
@@ -62,21 +61,25 @@ class ProductTest extends AbstractEntityValidatorTest
 
     public function testInvalidDescription(): void
     {
+        $group = $this->getGroup();
+        $category = $this->getCategory($group);
         $product = new Product();
-        $product->setCategory($this->getCategory());
+        $product->setCategory($category);
         $this->validate($product, 1);
     }
 
     public function testNotDuplicate(): void
     {
-        $category = $this->getCategory();
+        $group = $this->getGroup();
+        $category = $this->getCategory($group);
+        $category->setGroup($group);
 
         $first = new Product();
         $first->setDescription('My Product')
             ->setCategory($category);
 
         try {
-            $this->saveEntity($category->getGroup());
+            $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($first);
 
@@ -88,22 +91,25 @@ class ProductTest extends AbstractEntityValidatorTest
         } finally {
             $this->deleteEntity($first);
             $this->deleteEntity($category);
+            $this->deleteEntity($group);
         }
     }
 
     public function testValid(): void
     {
+        $group = $this->getGroup();
+        $category = $this->getCategory($group);
         $product = new Product();
-        $product->setDescription('My Product')
-            ->setCategory($this->getCategory());
+        $product->setDescription('product')
+            ->setCategory($category);
         $this->validate($product, 0);
     }
 
-    private function getCategory(): Category
+    private function getCategory(Group $group): Category
     {
         $category = new Category();
-        $category->setCode('mycategory')
-            ->setGroup($this->getGroup());
+        $category->setCode('category');
+        $category->setGroup($group);
 
         return $category;
     }
@@ -111,7 +117,7 @@ class ProductTest extends AbstractEntityValidatorTest
     private function getGroup(): Group
     {
         $group = new Group();
-        $group->setCode('mygroup');
+        $group->setCode('group');
 
         return $group;
     }

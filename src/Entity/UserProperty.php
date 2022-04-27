@@ -12,28 +12,26 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * User's property.
- *
- * @ORM\Table(name="sy_UserProperty", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_user_property_user_name", columns={"user_id", "name"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\UserPropertyRepository")
+ * A user's property.
  */
+#[ORM\Entity(repositoryClass: UserPropertyRepository::class)]
+#[ORM\Table(name: 'sy_UserProperty')]
+#[ORM\UniqueConstraint(name: 'unique_user_property_user_name', columns: ['user_id', 'name'])]
 #[UniqueEntity(fields: ['name', 'user'], message: 'property.unique_name')]
 class UserProperty extends AbstractProperty
 {
     /**
      * The parent's user.
-     *
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="properties")
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'properties')]
+    #[ORM\JoinColumn(name: 'user_id', nullable: false, onDelete: 'cascade')]
     private ?User $user = null;
 
     /**

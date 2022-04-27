@@ -13,68 +13,66 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ParentCalculationInterface;
+use App\Repository\CalculationGroupRepository;
 use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a group of a calculation.
- *
- * @ORM\Entity(repositoryClass="App\Repository\CalculationGroupRepository")
- * @ORM\Table(name="sy_CalculationGroup")
  */
+#[ORM\Entity(repositoryClass: CalculationGroupRepository::class)]
+#[ORM\Table(name: 'sy_CalculationGroup')]
 class CalculationGroup extends AbstractEntity implements \Countable, ParentCalculationInterface
 {
     use PositionTrait;
 
     /**
      * The total amount.
-     *
-     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
     protected float $amount = 0.0;
 
     /**
      * The parent's calculation.
-     *
-     * @ORM\ManyToOne(targetEntity=Calculation::class, inversedBy="groups")
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
+    #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: Calculation::class, inversedBy: 'groups')]
+    #[ORM\JoinColumn(name: 'calculation_id', nullable: false, onDelete: 'cascade')]
     protected ?Calculation $calculation = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=CalculationCategory::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC"})
+     * The categories.
      *
      * @var Collection<int, CalculationCategory>
      */
     #[Assert\Valid]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: CalculationCategory::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => Criteria::ASC])]
     protected Collection $categories;
 
     /**
      * The code.
-     *
-     * @ORM\Column(type="string", length=30)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
+    #[ORM\Column(type: 'string', length: 30)]
     protected ?string $code = null;
 
     /**
      * The parent's group.
-     *
-     * @ORM\ManyToOne(targetEntity=Group::class)
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Group::class)]
+    #[ORM\JoinColumn(name: 'group_id', nullable: false)]
     protected ?Group $group = null;
 
     /**
      * The margin in percent (%).
-     *
-     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
     protected float $margin = 0.0;
 
     /**

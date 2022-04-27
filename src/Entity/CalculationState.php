@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\CalculationStateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,12 +21,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a calculation state.
- *
- * @ORM\Entity(repositoryClass="App\Repository\CalculationStateRepository")
- * @ORM\Table(name="sy_CalculationState", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_calculation_state_code", columns={"code"})
- * })
  */
+#[ORM\Entity(repositoryClass: CalculationStateRepository::class)]
+#[ORM\Table(name: 'sy_CalculationState')]
+#[ORM\UniqueConstraint(name: 'unique_calculation_state_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'state.unique_code')]
 class CalculationState extends AbstractEntity
 {
@@ -36,43 +35,40 @@ class CalculationState extends AbstractEntity
 
     /**
      * The code (unique).
-     *
-     * @ORM\Column(type="string", length=30, unique=true)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
+    #[ORM\Column(type: 'string', length: 30, unique: true)]
     protected ?string $code = null;
 
     /**
      * The color used in the user interface (UI).
-     *
-     * @ORM\Column(type="string", length=10, options={"default" = "#000000"})
      */
     #[Assert\CssColor]
     #[Assert\NotBlank]
     #[Assert\Length(max: 10)]
+    #[ORM\Column(type: 'string', length: 10, options: ['default' => self::DEFAULT_COLOR])]
     protected string $color = self::DEFAULT_COLOR;
 
     /**
      * The description.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $description = null;
 
     /**
      * The editable state.
-     *
-     * @ORM\Column(type="boolean", options={"default" = true})
      */
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
     protected bool $editable = true;
 
     /**
-     * @ORM\OneToMany(targetEntity=Calculation::class, mappedBy="state")
+     * The calculations.
      *
      * @var Collection<int, Calculation>
      */
+    #[ORM\OneToMany(mappedBy: 'state', targetEntity: Calculation::class)]
     private Collection $calculations;
 
     /**
@@ -90,9 +86,7 @@ class CalculationState extends AbstractEntity
      */
     public function clone(?string $code = null): self
     {
-        /** @var CalculationState $copy */
         $copy = clone $this;
-
         if ($code) {
             $copy->setCode($code);
         }

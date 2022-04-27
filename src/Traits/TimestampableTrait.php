@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -25,30 +26,28 @@ trait TimestampableTrait
 {
     /**
      * The creation date.
-     *
-     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     protected ?\DateTimeInterface $createdAt = null;
 
     /**
      * The creation username.
-     *
-     * @ORM\Column(nullable=true)
      */
+    #[Assert\Length(max: 180)]
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     protected ?string $createdBy = null;
 
     /**
      * The updated date.
-     *
-     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
 
     /**
      * The updated username.
-     *
-     * @ORM\Column(nullable=true)
      */
+    #[Assert\Length(max: 180)]
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     protected ?string $updatedBy = null;
 
     /**

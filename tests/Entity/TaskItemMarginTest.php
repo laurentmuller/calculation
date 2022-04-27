@@ -12,10 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
+use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 
 /**
- * Unit test for {@link App\Entity\TaskItemMargin} class.
+ * Unit test for {@link TaskItemMargin} class.
  */
 class TaskItemMarginTest extends AbstractEntityValidatorTest
 {
@@ -65,7 +66,8 @@ class TaskItemMarginTest extends AbstractEntityValidatorTest
     private function getTaskItemMargin(float $minimum, float $maximum, float $value): TaskItemMargin
     {
         $entity = new TaskItemMargin();
-        $entity->setMinimum($minimum)
+        $entity->setTaskItem(new TaskItem())
+            ->setMinimum($minimum)
             ->setMaximum($maximum)
             ->setValue($value);
 

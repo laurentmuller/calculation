@@ -12,44 +12,40 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a product.
- *
- * @ORM\Table(name="sy_Product", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_product_description", columns={"description"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\Table(name: 'sy_Product')]
+#[ORM\UniqueConstraint(name: 'unique_product_description', columns: ['description'])]
 #[UniqueEntity(fields: 'description', message: 'product.unique_description')]
 class Product extends AbstractCategoryItemEntity
 {
     /**
      * The parent's category.
-     *
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
-     * @ORM\JoinColumn(name="category_id", nullable=false)
      */
     #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(name: 'category_id', nullable: false)]
     protected ?Category $category = null;
 
     /**
      * The description.
-     *
-     * @ORM\Column(type="string", length=255, unique=true)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $description = null;
 
     /**
      * The price.
-     *
-     * @ORM\Column(type="float", precision=2, options={"default" = 0})
      */
+    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
     private float $price = 0.0;
 
     /**
@@ -57,7 +53,6 @@ class Product extends AbstractCategoryItemEntity
      */
     public function clone(?string $description = null): self
     {
-        /** @var Product $copy */
         $copy = clone $this;
         if ($description) {
             $copy->setDescription($description);

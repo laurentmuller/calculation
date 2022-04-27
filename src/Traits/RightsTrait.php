@@ -35,18 +35,16 @@ trait RightsTrait
 
     /**
      * The overwritten rights flag.
-     *
-     * @ORM\Column(type="boolean", options={"default" = 0})
      */
+    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
     protected bool $overwrite = false;
 
     /**
      * The rights.
      *
-     * @ORM\Column(type="json", nullable=true)
-     *
      * @var ?int[]
      */
+    #[ORM\Column(type: 'json', nullable: true)]
     protected ?array $rights = null;
 
     public function __get(string $name): ?array

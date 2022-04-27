@@ -12,17 +12,16 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\PropertyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Represents an application property.
- *
- * @ORM\Table(name="sy_Property", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_property_name", columns={"name"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
  */
+#[ORM\Entity(repositoryClass: PropertyRepository::class)]
+#[ORM\Table(name: 'sy_Property')]
+#[ORM\UniqueConstraint(name: 'unique_property_name', columns: ['name'])]
 #[UniqueEntity(fields: 'name', message: 'property.unique_name')]
 class Property extends AbstractProperty
 {

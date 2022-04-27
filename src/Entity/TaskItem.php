@@ -12,22 +12,22 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\TaskItemRepository;
 use App\Traits\PositionTrait;
 use App\Traits\ValidateMarginsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents an item of a task.
- *
- * @ORM\Table(name="sy_TaskItem", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_task_item_task_name", columns={"task_id", "name"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\TaskItemRepository")
  */
+#[ORM\Entity(repositoryClass: TaskItemRepository::class)]
+#[ORM\Table(name: 'sy_TaskItem')]
+#[ORM\UniqueConstraint(name: 'unique_task_item_task_name', columns: ['task_id', 'name'])]
 #[UniqueEntity(fields: ['task', 'name'], message: 'task_item.unique_name', errorPath: 'name')]
 class TaskItem extends AbstractEntity implements \Countable
 {
@@ -35,25 +35,23 @@ class TaskItem extends AbstractEntity implements \Countable
     use ValidateMarginsTrait;
 
     /**
-     * @ORM\OneToMany(targetEntity=TaskItemMargin::class, mappedBy="taskItem", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"minimum" = "ASC"})
+     * The margins.
      *
      * @var Collection<int, TaskItemMargin>
      */
     #[Assert\Valid]
+    #[ORM\OneToMany(mappedBy: 'taskItem', targetEntity: TaskItemMargin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['minimum' => Criteria::ASC])]
     private Collection $margins;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Task::class, inversedBy="items")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'items')]
+    #[ORM\JoinColumn(name: 'task_id', nullable: false)]
     private ?Task $task = null;
 
     /**

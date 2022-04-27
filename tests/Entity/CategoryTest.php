@@ -16,7 +16,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 
 /**
- * Unit test for {@link App\Entity\Category} class.
+ * Unit test for {@link Category} class.
  */
 class CategoryTest extends AbstractEntityValidatorTest
 {
@@ -45,7 +45,10 @@ class CategoryTest extends AbstractEntityValidatorTest
 
     public function testInvalidCode(): void
     {
+        $group = new Group();
+        $group->setCode('group');
         $object = new Category();
+        $object->setGroup($group);
         $this->validate($object, 1);
     }
 
@@ -73,8 +76,11 @@ class CategoryTest extends AbstractEntityValidatorTest
 
     public function testValid(): void
     {
+        $group = new Group();
+        $group->setCode('group');
         $object = new Category();
         $object->setCode('code');
+        $object->setGroup($group);
         $this->validate($object, 0);
     }
 }

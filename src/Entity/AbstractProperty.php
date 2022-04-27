@@ -17,9 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represent an abstract property.
- *
- * @ORM\MappedSuperclass
  */
+#[ORM\MappedSuperclass]
 abstract class AbstractProperty extends AbstractEntity
 {
     /**
@@ -34,20 +33,18 @@ abstract class AbstractProperty extends AbstractEntity
 
     /**
      * The property name.
-     *
-     * @ORM\Column(type="string", length=50)
      */
-    #[Assert\Length(max: 50)]
     #[Assert\NotBlank]
-    private ?string $name = null;
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50)]
+    private ?string $name;
 
     /**
      * The property value.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $value = null;
 
     /**

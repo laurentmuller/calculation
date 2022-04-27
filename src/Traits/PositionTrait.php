@@ -21,9 +21,8 @@ trait PositionTrait
 {
     /**
      * The position index.
-     *
-     * @ORM\Column(type="integer", options={"default" = 0})
      */
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
     private int $position = 0;
 
     /**

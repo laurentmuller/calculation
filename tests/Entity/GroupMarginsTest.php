@@ -14,62 +14,48 @@ namespace App\Tests\Entity;
 
 use App\Entity\Group;
 use App\Entity\GroupMargin;
-use Symfony\Component\Validator\Constraints\NotNullValidator;
-use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
- * Unit test for {@link App\Entity\Group} class.
- *
- * @see Category
+ * Unit test for {@link GroupMargin} class.
  */
-class GroupMarginsTest extends ConstraintValidatorTestCase
+class GroupMarginsTest extends AbstractEntityValidatorTest
 {
     public function testInvalidMaximum(): void
     {
-        $group = new Group();
+        $group = $this->createGroup();
         $group->addMargin($this->createMargin(0, 100, 0.1));
         $group->addMargin($this->createMargin(100, 99, 0.2));
 
-        $context = $this->context;
-        $group->validateMargins($context);
-        $violations = $context->getViolations();
-        $this->assertEquals(1, $violations->count());
-
-        $violation = $violations->get(0);
-        $this->assertEquals('property.path.margins[1].maximum', $violation->getPropertyPath());
+        $results = $this->validate($group, 2);
+        $path = $results->get(0)->getPropertyPath();
+        $this->assertEquals('margins[1].maximum', $path);
     }
 
     public function testInvalidMinimum(): void
     {
-        $group = new Group();
+        $group = $this->createGroup();
         $group->addMargin($this->createMargin(0, 100, 0.1));
         $group->addMargin($this->createMargin(99, 200, 0.2));
 
-        $context = $this->context;
-        $group->validateMargins($context);
-        $violations = $context->getViolations();
-        $this->assertEquals(1, $violations->count());
-
-        $violation = $violations->get(0);
-        $this->assertEquals('property.path.margins[1].minimum', $violation->getPropertyPath());
+        $results = $this->validate($group, 1);
+        $path = $results->get(0)->getPropertyPath();
+        $this->assertEquals('margins[1].minimum', $path);
     }
 
     public function testValid(): void
     {
-        $group = new Group();
+        $group = $this->createGroup();
         $group->addMargin($this->createMargin(0, 100, 0.1));
         $group->addMargin($this->createMargin(100, 200, 0.2));
-
-        $context = $this->context;
-        $group->validateMargins($context);
-        $violations = $context->getViolations();
-        $this->assertEquals(0, $violations->count());
+        $this->validate($group, 0);
     }
 
-    protected function createValidator(): NotNullValidator
+    private function createGroup(): Group
     {
-        // not used
-        return new NotNullValidator();
+        $group = new Group();
+        $group->setCode('code');
+
+        return $group;
     }
 
     private function createMargin(float $minimum, float $maximum, float $margin): GroupMargin

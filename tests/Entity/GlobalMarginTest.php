@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\GlobalMargin;
 
 /**
- * Unit test for {@link App\Entity\GlobalMargin} class.
+ * Unit test for {@link GlobalMargin} class.
  */
 class GlobalMarginTest extends AbstractEntityValidatorTest
 {

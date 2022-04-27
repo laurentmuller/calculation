@@ -24,10 +24,10 @@ trait RoleTrait
 {
     /**
      * The role name.
-     *
-     * @ORM\Column(type="string", length=25, nullable=true)
      */
+    #[Assert\Length(max: 25)]
     #[Assert\Choice([RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
+    #[ORM\Column(type: 'string', length: 25, nullable: true)]
     protected ?string $role = null;
 
     /**

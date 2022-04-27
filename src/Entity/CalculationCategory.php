@@ -13,61 +13,60 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ParentCalculationInterface;
+use App\Repository\CalculationCategoryRepository;
 use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a category of calculation group.
- *
- * @ORM\Entity(repositoryClass="App\Repository\CalculationCategoryRepository")
- * @ORM\Table(name="sy_CalculationCategory")
  */
+#[ORM\Entity(repositoryClass: CalculationCategoryRepository::class)]
+#[ORM\Table(name: 'sy_CalculationCategory')]
 class CalculationCategory extends AbstractEntity implements \Countable, ParentCalculationInterface
 {
     use PositionTrait;
 
     /**
      * The total amount.
-     *
-     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      */
+    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
     protected float $amount = 0.0;
 
     /**
      * The parent's category.
-     *
-     * @ORM\ManyToOne(targetEntity=Category::class)
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(name: 'category_id', nullable: false)]
     protected ?Category $category = null;
 
     /**
      * The code.
-     *
-     * @ORM\Column(type="string", length=30)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
+    #[ORM\Column(type: 'string', length: 30)]
     protected ?string $code = null;
 
     /**
      * The parent's group.
-     *
-     * @ORM\ManyToOne(targetEntity=CalculationGroup::class, inversedBy="categories")
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
+    #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: CalculationGroup::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
     protected ?CalculationGroup $group = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=CalculationItem::class, mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC"})
+     * The items.
      *
      * @var Collection<int, CalculationItem>
      */
     #[Assert\Valid]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CalculationItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => Criteria::ASC])]
     protected Collection $items;
 
     /**

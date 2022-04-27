@@ -18,20 +18,18 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Base entity.
- *
- * @ORM\MappedSuperclass
  */
+#[ORM\MappedSuperclass]
 abstract class AbstractEntity implements \Stringable
 {
     use MathTrait;
 
     /**
      * The primary key identifier.
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     protected ?int $id = null;
 
     /**

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,52 +21,50 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a category of products and tasks.
- *
- * @ORM\Table(name="sy_Category", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_category_code", columns={"code"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ORM\Table(name: 'sy_Category')]
+#[ORM\UniqueConstraint(name: 'unique_category_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'category.unique_code')]
 class Category extends AbstractEntity
 {
     /**
      * The unique code.
-     *
-     * @ORM\Column(type="string", length=30, unique=true)
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
+    #[ORM\Column(type: 'string', length: 30, unique: true)]
     private ?string $code = null;
 
     /**
      * The description.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $description = null;
 
     /**
      * The parent group.
-     *
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="categories")
-     * @ORM\JoinColumn(name="group_id", nullable=false)
      */
+    #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(name: 'group_id', nullable: false)]
     private ?Group $group = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="category")
+     * The products that belong to this category.
      *
      * @var Collection<int, Product>
      */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
     private Collection $products;
 
     /**
-     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="category")
+     * The tasks that belong to this category.
      *
      * @var Collection<int, Task>
      */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class)]
     private Collection $tasks;
 
     /**
@@ -107,9 +106,7 @@ class Category extends AbstractEntity
      */
     public function clone(?string $code = null): self
     {
-        /** @var Category $copy */
         $copy = clone $this;
-
         if ($code) {
             $copy->setCode($code);
         }

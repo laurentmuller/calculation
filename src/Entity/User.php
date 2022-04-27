@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
+use App\Repository\UserRepository;
 use App\Traits\RightsTrait;
 use App\Traits\RoleTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -30,108 +31,82 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * User.
- *
- * @ORM\Table(name="sy_User", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_user_email", columns={"email"}),
- *     @ORM\UniqueConstraint(name="unique_user_username", columns={"username"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @Vich\Uploadable
  */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'sy_User')]
+#[ORM\UniqueConstraint(name: 'unique_user_email', columns: ['email'])]
+#[ORM\UniqueConstraint(name: 'unique_user_username', columns: ['username'])]
 #[UniqueEntity(fields: ['email'], message: 'email.already_used')]
 #[UniqueEntity(fields: ['username'], message: 'username.already_used')]
+#[Vich\Uploadable]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface
 {
     use RightsTrait;
     use RoleTrait;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    #[Assert\Length(max: 180)]
-    #[Assert\NotBlank]
     #[Assert\Email]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 180)]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $email = null;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default" = 1})
-     */
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $enabled = true;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeInterface $expiresAt = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
     #[Assert\Length(max: 100)]
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $hashedToken = null;
 
     /**
      * The image file. NB: This is not a mapped field of entity metadata, just a simple property.
-     *
-     * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      */
     #[Assert\Image(maxSize: 10485760)]
+    #[Vich\UploadableField(mapping: 'user_image', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 
     /**
      * The image file name.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
     #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $imageName = null;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeInterface $lastLogin = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $password = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserProperty::class, mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
-     *
      * @var Collection<int, UserProperty>
      */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProperty::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $properties;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeInterface $requestedAt = null;
 
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
     #[Assert\Length(max: 20)]
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $selector = null;
 
     /**
      * The last updated date.
-     *
-     * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    #[Assert\Length(max: 180)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 180)]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $username = null;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default" = 0})
-     */
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $verified = false;
 
     /**

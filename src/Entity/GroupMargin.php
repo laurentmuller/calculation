@@ -12,22 +12,23 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\GroupMarginRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a margin within a group.
- *
- * @ORM\Entity(repositoryClass="App\Repository\GroupMarginRepository")
- * @ORM\Table(name="sy_GroupMargin")
  */
+#[ORM\Entity(repositoryClass: GroupMarginRepository::class)]
+#[ORM\Table(name: 'sy_GroupMargin')]
 class GroupMargin extends AbstractMargin
 {
     /**
      * The parent's group.
-     *
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="margins")
-     * @ORM\JoinColumn(name="group_id", nullable=false)
      */
+    #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'margins')]
+    #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
     protected ?Group $group = null;
 
     /**

@@ -14,40 +14,33 @@ namespace App\Entity;
 
 use App\Service\LogService;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents an application log entry.
  */
 class Log extends AbstractEntity
 {
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50)]
     private ?string $channel = null;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
+    #[ORM\Column(type: 'array', nullable: true)]
     private ?array $context = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
+    #[ORM\Column(type: 'array', nullable: true)]
     private ?array $extra = null;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50)]
     private ?string $level = null;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private ?string $message = null;
 
     /**

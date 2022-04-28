@@ -42,8 +42,7 @@ class RegistrationController extends AbstractController
         private readonly EmailVerifier $verifier,
         private readonly UserRepository $repository,
         private readonly UserExceptionService $service
-    )
-    {
+    ) {
     }
 
     /**

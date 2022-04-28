@@ -50,8 +50,7 @@ class UserService implements ApplicationServiceInterface
         LoggerInterface $logger,
         TranslatorInterface $translator,
         CacheItemPoolInterface $userServiceCache
-    )
-    {
+    ) {
         $this->setLogger($logger);
         $this->setTranslator($translator);
         $this->setAdapter($userServiceCache);

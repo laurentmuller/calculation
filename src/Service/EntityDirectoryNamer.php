@@ -25,10 +25,8 @@ class EntityDirectoryNamer implements DirectoryNamerInterface
     /**
      * Constructor.
      */
-    public function __construct(
-        private readonly EntityManagerInterface $manager,
-        private readonly Transliterator $transliterator
-    ) {
+    public function __construct(private readonly EntityManagerInterface $manager, private readonly Transliterator $transliterator)
+    {
     }
 
     /**

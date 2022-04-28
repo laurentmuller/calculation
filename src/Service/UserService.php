@@ -43,7 +43,14 @@ class UserService implements ApplicationServiceInterface
      */
     private const CACHE_SAVED = 'cache_saved';
 
-    public function __construct(private readonly ApplicationService $service, private readonly UserPropertyRepository $repository, private readonly Security $security, LoggerInterface $logger, TranslatorInterface $translator, CacheItemPoolInterface $userServiceCache)
+    public function __construct(
+        private readonly ApplicationService $service,
+        private readonly UserPropertyRepository $repository,
+        private readonly Security $security,
+        LoggerInterface $logger,
+        TranslatorInterface $translator,
+        CacheItemPoolInterface $userServiceCache
+    )
     {
         $this->setLogger($logger);
         $this->setTranslator($translator);
@@ -397,13 +404,13 @@ class UserService implements ApplicationServiceInterface
     {
         $property = $this->repository->findByName($user, $name);
         if ($this->isDefaultValue($defaultProperties, $name, $value)) {
-            if (null !== $property) {
+            if ($property instanceof UserProperty) {
                 $this->repository->remove($property, false);
             }
 
             return;
         }
-        if (null === $property) {
+        if (!$property instanceof UserProperty) {
             $property = new UserProperty($name);
             $property->setUser($user);
             $this->repository->add($property, false);

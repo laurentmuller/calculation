@@ -62,6 +62,7 @@ class AboutController extends AbstractController
     /**
      * Display the licence page.
      */
+    #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/licence ', name: 'about_licence')]
     public function licence(): Response
     {
@@ -87,6 +88,7 @@ class AboutController extends AbstractController
     /**
      * Export the licence page to PDF.
      */
+    #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/licence/pdf', name: 'about_licence_pdf')]
     public function licencePdf(): PdfResponse
     {
@@ -152,6 +154,7 @@ class AboutController extends AbstractController
     /**
      * Display the policy page.
      */
+    #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/policy', name: 'about_policy')]
     public function policy(): Response
     {
@@ -179,6 +182,7 @@ class AboutController extends AbstractController
     /**
      * Export the policy to PDF.
      */
+    #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/policy/pdf', name: 'about_policy_pdf')]
     public function policyPdf(): PdfResponse
     {

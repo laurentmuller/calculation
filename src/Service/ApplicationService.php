@@ -57,7 +57,13 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, LoggerInterface $logger, TranslatorInterface $translator, CacheItemPoolInterface $applicationServiceCache, KernelInterface $kernel)
+    public function __construct(
+        private readonly EntityManagerInterface $manager,
+        LoggerInterface $logger,
+        TranslatorInterface $translator,
+        CacheItemPoolInterface $applicationServiceCache,
+        KernelInterface $kernel
+    )
     {
         $this->setLogger($logger);
         $this->setTranslator($translator);
@@ -786,13 +792,13 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     {
         $property = $repository->findOneByName($name);
         if ($this->isDefaultValue($defaultProperties, $name, $value)) {
-            if (null !== $property) {
+            if ($property instanceof Property) {
                 $repository->remove($property, false);
             }
 
             return;
         }
-        if (null === $property) {
+        if (!$property instanceof Property) {
             $property = new Property($name);
             $repository->add($property, false);
         }

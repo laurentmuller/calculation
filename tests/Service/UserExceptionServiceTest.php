@@ -24,7 +24,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 /**
- * Unit test for {@link App\Service\UserExceptionService} class.
+ * Unit test for {@link UserExceptionService} class.
  */
 class UserExceptionServiceTest extends TestCase
 {

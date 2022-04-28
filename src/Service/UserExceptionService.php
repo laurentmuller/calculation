@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -29,11 +31,22 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 class UserExceptionService
 {
     /**
-     * Creeates a custom user exception.
+     * Creates a custom user exception.
      */
-    public function createUserException(string $message, \Throwable $previous = null, array $parameters = [], int $code = 0): CustomUserMessageAuthenticationException
+    public function createException(string $message, \Throwable $previous = null, array $parameters = [], int $code = 0): CustomUserMessageAuthenticationException
     {
         return new CustomUserMessageAuthenticationException($message, $parameters, $code, $previous);
+    }
+
+    /**
+     * Handle an exception by set the authentication error to the session.
+     */
+    public function handleException(Request $request, \Throwable $e): void
+    {
+        if ($request->hasSession()) {
+            $exception = $this->mapException($e);
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
     }
 
     /**
@@ -43,40 +56,40 @@ class UserExceptionService
     {
         // register user
         if ($e instanceof ExpiredSignatureException) {
-            return $this->createUserException('registration_expired_signature', $e, $parameters, $code);
+            return $this->createException('registration_expired_signature', $e, $parameters, $code);
         }
         if ($e instanceof InvalidSignatureException) {
-            return $this->createUserException('registration_invalid_signature', $e, $parameters, $code);
+            return $this->createException('registration_invalid_signature', $e, $parameters, $code);
         }
         if ($e instanceof WrongEmailVerifyException) {
-            return $this->createUserException('registration_wrong_email_verify', $e, $parameters, $code);
+            return $this->createException('registration_wrong_email_verify', $e, $parameters, $code);
         }
         if ($e instanceof VerifyEmailExceptionInterface) {
-            return $this->createUserException($e->getReason(), $e, $parameters, $code);
+            return $this->createException($e->getReason(), $e, $parameters, $code);
         }
 
         // reset password
         if ($e instanceof ExpiredResetPasswordTokenException) {
-            return $this->createUserException('reset_expired_reset_password_token', $e, $parameters, $code);
+            return $this->createException('reset_expired_reset_password_token', $e, $parameters, $code);
         }
         if ($e instanceof InvalidResetPasswordTokenException) {
-            return $this->createUserException('reset_invalid_reset_password_token', $e, $parameters, $code);
+            return $this->createException('reset_invalid_reset_password_token', $e, $parameters, $code);
         }
         if ($e instanceof TooManyPasswordRequestsException) {
             $parameters['%availableAt%'] = $e->getAvailableAt()->format('H:i');
 
-            return $this->createUserException('reset_too_many_password_request', $e, $parameters, $code);
+            return $this->createException('reset_too_many_password_request', $e, $parameters, $code);
         }
         if ($e instanceof ResetPasswordExceptionInterface) {
-            return $this->createUserException($e->getReason(), $e, $parameters, $code);
+            return $this->createException($e->getReason(), $e, $parameters, $code);
         }
 
         // mailer
         if ($e instanceof TransportException) {
-            return $this->createUserException('send_email_error', $e, $parameters, $code);
+            return $this->createException('send_email_error', $e, $parameters, $code);
         }
 
         // default
-        return $this->createUserException('error_unknown', $e, $parameters, $code);
+        return $this->createException('error_unknown', $e, $parameters, $code);
     }
 }

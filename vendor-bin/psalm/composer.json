@@ -1,9 +1,9 @@
 {
     "require": {
         "php": "^8.1",
-        "psalm/plugin-symfony": "^3.1",
-        "vimeo/psalm": "^4.19",
-        "weirdan/doctrine-psalm-plugin": "^2.2"
+        "psalm/plugin-symfony": "^3.0",
+        "vimeo/psalm": "^4.0",
+        "weirdan/doctrine-psalm-plugin": "^2.0"
     },
 	"config": {
         "preferred-install": {

@@ -25,7 +25,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -38,17 +37,22 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
+
     private const CHECK_ROUTE = 'app_check_email';
     private const FORGET_ROUTE = 'app_forgot_password_request';
+    private const RESET_ROUTE = 'app_reset_password';
 
-    public function __construct(private readonly ResetPasswordHelperInterface $helper, private readonly UserRepository $repository)
-    {
+    public function __construct(
+        private readonly ResetPasswordHelperInterface $helper,
+        private readonly UserRepository $repository,
+        private readonly UserExceptionService $service
+    ) {
     }
 
     /**
      * Confirmation page after a user has requested a password reset.
      */
-    #[Route(path: '/check-email', name: 'app_check_email')]
+    #[Route(path: '/check-email', name: self::CHECK_ROUTE)]
     public function checkEmail(): Response
     {
         // Prevent users from directly accessing this page
@@ -65,14 +69,14 @@ class ResetPasswordController extends AbstractController
     /**
      * Display and process form to request a password reset.
      */
-    #[Route(path: '', name: 'app_forgot_password_request')]
-    public function request(Request $request, MailerInterface $mailer, UserExceptionService $service, AuthenticationUtils $utils): Response
+    #[Route(path: '', name: self::FORGET_ROUTE)]
+    public function request(Request $request, MailerInterface $mailer, AuthenticationUtils $utils): Response
     {
         $form = $this->createForm(RequestChangePasswordType::class);
         if ($this->handleRequestForm($request, $form)) {
             $usernameOrEmail = (string) $form->get('user')->getData();
 
-            return $this->sendEmail($request, $usernameOrEmail, $mailer, $service);
+            return $this->sendEmail($request, $usernameOrEmail, $mailer);
         }
 
         return $this->renderForm('reset_password/request.html.twig', [
@@ -84,15 +88,15 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    #[Route(path: '/reset/{token}', name: 'app_reset_password')]
-    public function reset(Request $request, UserPasswordHasherInterface $hasher, UserExceptionService $service, ?string $token = null): Response
+    #[Route(path: '/reset/{token}', name: self::RESET_ROUTE)]
+    public function reset(Request $request, UserPasswordHasherInterface $hasher, ?string $token = null): Response
     {
         if ($token) {
             // we store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
             $this->storeTokenInSession($token);
 
-            return $this->redirectToRoute('app_reset_password');
+            return $this->redirectToRoute(self::RESET_ROUTE);
         }
         $token = $this->getTokenFromSession();
         if (null === $token) {
@@ -103,10 +107,7 @@ class ResetPasswordController extends AbstractController
             /** @var User $user */
             $user = $this->helper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
-            if ($request->hasSession()) {
-                $exception = $service->mapException($e);
-                $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
-            }
+            $this->service->handleException($request, $e);
 
             return $this->redirectToRoute(self::FORGET_ROUTE);
         }
@@ -126,7 +127,7 @@ class ResetPasswordController extends AbstractController
             $this->cleanSessionAfterReset();
 
             // show message
-            $this->infoTrans('resetting.success', ['%username%' => (string) $user]);
+            $this->infoTrans('resetting.success', ['%username%' => $user->getUserIdentifier()]);
 
             // redirect
             return $this->redirectToHomePage();
@@ -140,7 +141,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Send email to the user for resetting the password.
      */
-    private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer, UserExceptionService $service): RedirectResponse
+    private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer): RedirectResponse
     {
         $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
 
@@ -152,11 +153,7 @@ class ResetPasswordController extends AbstractController
         try {
             $resetToken = $this->helper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
-            // add session error
-            if ($request->hasSession()) {
-                $exception = $service->mapException($e);
-                $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
-            }
+            $this->service->handleException($request, $e);
 
             return $this->redirectToRoute(self::FORGET_ROUTE);
         }
@@ -177,10 +174,7 @@ class ResetPasswordController extends AbstractController
             $this->setTokenObjectInSession($resetToken);
         } catch (TransportExceptionInterface $e) {
             $this->helper->removeResetRequest($resetToken->getToken());
-            if ($request->hasSession()) {
-                $exception = $service->mapException($e);
-                $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
-            }
+            $this->service->handleException($request, $e);
 
             return $this->redirectToRoute(self::FORGET_ROUTE);
         }

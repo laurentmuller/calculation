@@ -17,15 +17,13 @@ use App\Form\User\UserRegistrationType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\UserExceptionService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -40,28 +38,29 @@ class RegistrationController extends AbstractController
     private const REGISTER_ROUTE = 'user_register';
     private const VERIFY_ROUTE = 'verify_email';
 
-    public function __construct(private readonly EmailVerifier $verifier)
+    public function __construct(
+        private readonly EmailVerifier $verifier,
+        private readonly UserRepository $repository,
+        private readonly UserExceptionService $service
+    )
     {
     }
 
     /**
      * Display and process form to register a new user.
      */
-    #[Route(path: '/register', name: 'user_register')]
-    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, EntityManagerInterface $manager, UserExceptionService $service): Response
+    #[Route(path: '/register', name: self::REGISTER_ROUTE)]
+    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils): Response
     {
         $user = new User();
         $user->setPassword('fake');
         $form = $this->createForm(UserRegistrationType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
-            // encode password
+            // encode password and save user
             $plainPassword = (string) $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
-
-            // save user
-            $manager->persist($user);
-            $manager->flush();
+            $this->repository->add($user);
 
             // generate a signed url and email it to the user
             $email = (new TemplatedEmail())
@@ -74,11 +73,8 @@ class RegistrationController extends AbstractController
                 $this->verifier->sendEmailConfirmation(self::VERIFY_ROUTE, $user, $email);
 
                 return $this->redirectToHomePage();
-            } catch (TransportException $e) {
-                if ($request->hasSession()) {
-                    $exception = $service->mapException($e);
-                    $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
-                }
+            } catch (TransportExceptionInterface $e) {
+                $this->service->handleException($request, $e);
 
                 return $this->redirectToRoute(self::REGISTER_ROUTE);
             }
@@ -93,15 +89,15 @@ class RegistrationController extends AbstractController
     /**
      * Verify the user e-mail.
      */
-    #[Route(path: '/verify/email', name: 'verify_email')]
-    public function verifyUserEmail(Request $request, UserRepository $repository, UserExceptionService $service): RedirectResponse
+    #[Route(path: '/verify/email', name: self::VERIFY_ROUTE)]
+    public function verifyUserEmail(Request $request): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $id = $this->getRequestInt($request, 'id');
         if (0 === $id) {
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
-        $user = $repository->find($id);
+        $user = $this->repository->find($id);
         if (!$user instanceof User) {
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
@@ -109,10 +105,7 @@ class RegistrationController extends AbstractController
         try {
             $this->verifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $e) {
-            if ($request->hasSession()) {
-                $exception = $service->mapException($e);
-                $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
-            }
+            $this->service->handleException($request, $e);
 
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }

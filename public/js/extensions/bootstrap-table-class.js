@@ -100,7 +100,7 @@ BootstrapTable.prototype.init = function () {
 
             const params = that.getParameters();
             const selector = '.custom-view-actions:eq(%index%)';
-            const callback = $.isFunction (options.onRenderCustomView) ? options.onRenderCustomView: false;
+            const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView: false;
 
             that.$body.find('tr .actions').each(function (index, element) {
                 // copy actions
@@ -196,7 +196,7 @@ BootstrapTable.prototype.isEmpty = function () {
 /**
  * Gets the selected row.
  *
- * @return {jQuery} the selected row, if any; null otherwise.
+ * @return {JQuery} the selected row, if any; null otherwise.
  */
 BootstrapTable.prototype.getSelection = function () {
     'use strict';
@@ -307,7 +307,7 @@ BootstrapTable.prototype.highlight = function () {
 /**
  * Update the selected row.
  *
- * @param {jQuery}
+ * @param {JQuery}
  *            $row - the row to update.
  * @return {boolean} this function returns always true.
  */
@@ -479,7 +479,7 @@ BootstrapTable.prototype.getParameters = function () {
     }
 
     // query parameters function?
-    if ($.isFunction (options.queryParams)) {
+    if (typeof options.queryParams === 'function') {
         return $.extend(params, options.queryParams(params));
     }
     return params;
@@ -671,7 +671,7 @@ BootstrapTable.prototype.updateHref = function (rows) {
     const $table = this.$el;
     const options = this.options;
     const params = this.getParameters();
-    const callback = $.isFunction (options.onRenderAction) ? options.onRenderAction : false;
+    const callback = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
 
     this.$body.find('tr .dropdown-item-path').each(function () {
         const $link = $(this);
@@ -691,15 +691,6 @@ BootstrapTable.prototype.updateHref = function (rows) {
             $actions.addClass('btn-default');
         }
     });
-
-    // if ($.isFunction (options.onUpdateHref)) {
-    // this.$body.find('tr').each(function () {
-    // const $paths = $(this).find('.dropdown-item-path');
-    // if ($paths.length) {
-    // options.onUpdateHref($table, $paths);
-    // }
-    // });
-    // }
 
     return this;
 };
@@ -755,7 +746,7 @@ BootstrapTable.prototype.updateCardView = function () {
     const $body = this.$bdoy;
     const options = this.options;
     const columns = this.getCardViewColumns();
-    const callback = $.isFunction(options.onRenderCardView) ? options.onRenderCardView : false;
+    const callback = typeof options.onRenderCardView === 'function' ? options.onRenderCardView : false;
     const data = callback ? options.data : null;
 
     $body.find('tr').each(function () {

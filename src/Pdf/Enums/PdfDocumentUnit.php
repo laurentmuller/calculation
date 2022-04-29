@@ -15,7 +15,7 @@ namespace App\Pdf\Enums;
 /**
  * The PDF document unit enumeration.
  */
-enum PdfDocumentUnit:string
+enum PdfDocumentUnit: string
 {
     /*
      * The centimeter document unit.

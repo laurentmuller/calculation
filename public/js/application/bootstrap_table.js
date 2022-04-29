@@ -5,8 +5,7 @@
 /**
  * Formatter for the custom view.
  *
- * @param data
- *            the data (rows) to format.
+ * @param data the data (rows) to format.
  * @returns the custom view
  */
 function customViewFormatter(data) { // jshint ignore:line
@@ -49,8 +48,7 @@ function customViewFormatter(data) { // jshint ignore:line
 /**
  * Format the product unit in the custom view.
  *
- * @param {object}
- *            row - the record data.
+ * @param {object} row - the record data.
  * @returns {string} the formatted product unit.
  */
 function formatProductUnit(row) { // jshint ignore:line
@@ -64,8 +62,7 @@ function formatProductUnit(row) { // jshint ignore:line
 /**
  * Gets the class of the product price in the custom view.
  *
- * @param {object}
- *            row - the record data.
+ * @param {object} row - the record data.
  * @returns {string} the class.
  */
 function formatProductClass(row) { // jshint ignore:line
@@ -80,10 +77,8 @@ function formatProductClass(row) { // jshint ignore:line
 /**
  * Cell style for a border column (calculations, status or log).
  *
- * @param {number}
- *            _value - the field value.
- * @param {object}
- *            row - the record data.
+ * @param {number} _value - the field value.
+ * @param {object} row - the record data.
  * @returns {object} the cell style.
  */
 function styleBorderColor(_value, row) { // jshint ignore:line
@@ -101,8 +96,7 @@ function styleBorderColor(_value, row) { // jshint ignore:line
 /**
  * Cell class for the product price.
  *
- * @param {float}
- *            value - the product price.
+ * @param {float} value - the product price.
  * @returns {object} the cell classes.
  */
 function styleProductPrice(value) { // jshint ignore:line
@@ -121,10 +115,8 @@ function styleProductPrice(value) { // jshint ignore:line
 /**
  * Row classes for the text muted.
  *
- * @param {object}
- *            row - the record data.
- * @param {int}
- *            index - the row index.
+ * @param {object} row - the record data.
+ * @param {int} index - the row index.
  * @returns {object} the row classes.
  */
 function styleTextMuted(row, index) { // jshint ignore:line
@@ -143,10 +135,8 @@ function styleTextMuted(row, index) { // jshint ignore:line
 /**
  * Returns if the current row is rendered for the connected user
  *
- * @param $table
- *            {jQuery} the parent table.
- * @param row
- *            {object} the row data.
+ * @param $table {JQuery} the parent table.
+ * @param row {object} the row data.
  * @returns {boolean} true if connected user
  */
 function isConnectedUser($table, row) {
@@ -159,14 +149,10 @@ function isConnectedUser($table, row) {
 /**
  * Update the user action.
  *
- * @param $table
- *            {jQuery} the parent table.
- * @param row
- *            {object} the row data.
- * @param _$element
- *            {jQuery} the table row.
- * @param $action
- *            {jQuery} the action to update
+ * @param $table {JQuery} the parent table.
+ * @param row {object} the row data.
+ * @param _$element {JQuery} the table row.
+ * @param $action {JQuery} the action to update
  */
 function updateUserAction($table, row, _$element, $action) {
     'use strict';
@@ -178,14 +164,10 @@ function updateUserAction($table, row, _$element, $action) {
 /**
  * Update the switch user action.
  *
- * @param $table
- *            {jQuery} the parent table.
- * @param row
- *            {object} the row data.
- * @param _$element
- *            {jQuery} the table row.
- * @param $action
- *            {jQuery} the action to update
+ * @param $table {JQuery} the parent table.
+ * @param row {object} the row data.
+ * @param _$element {JQuery} the table row.
+ * @param $action {JQuery} the action to update
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
@@ -205,14 +187,10 @@ function updateUserSwitchAction($table, row, _$element, $action) {
 /**
  * Update the search action.
  *
- * @param $table
- *            {jQuery} the parent table.
- * @param row
- *            {object} the row data.
- * @param _$element
- *            {jQuery} the table row.
- * @param $action
- *            {jQuery} the action to update
+ * @param $table {JQuery} the parent table.
+ * @param row {object} the row data.
+ * @param _$element {JQuery} the table row.
+ * @param $action {JQuery} the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
@@ -239,14 +217,10 @@ function updateSearchAction($table, row, _$element, $action) {
 /**
  * Update the edit calculation action.
  *
- * @param _$table
- *            {jQuery} the parent table.
- * @param row
- *            {object} the row data.
- * @param $element
- *            {jQuery} the table row.
- * @param $action
- *            {jQuery} the action to update
+ * @param _$table {JQuery} the parent table.
+ * @param row {object} the row data.
+ * @param $element {JQuery} the table row.
+ * @param $action {JQuery} the action to update
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
@@ -265,14 +239,10 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
 /**
  * Update the export calculation action.
  *
- * @param _$table
- *            {jQuery} the parent table.
- * @param _row
- *            {object} the row data.
- * @param _$element
- *            {jQuery} the table row.
- * @param $action
- *            {jQuery} the action to update
+ * @param _$table {JQuery} the parent table.
+ * @param _row {object} the row data.
+ * @param _$element {JQuery} the table row.
+ * @param $action {JQuery} the action to update
  */
 function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
@@ -283,14 +253,10 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 /**
  * Update the task compute action.
  *
- * @param _$table
- *            {jQuery} the parent table.
- * @param row
- *            {object} the row data.
- * @param _$element
- *            {jQuery} the table row.
- * @param $action
- *            {jQuery} the action to update
+ * @param _$table {JQuery} the parent table.
+ * @param row {object} the row data.
+ * @param _$element {JQuery} the table row.
+ * @param $action {JQuery} the action to update
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
@@ -302,12 +268,10 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
 }
 
 /**
- * Formatter for the actions column.
+ * Formatter for the actions' column.
  *
- * @param {number}
- *            value - the field value (id).
- * @param {object}
- *            _row - the row record data.
+ * @param {number} value - the field value (id).
+ * @param {object} _row - the row record data.
  * @returns {string} the rendered cell.
  */
 function formatActions(value, _row) { // jshint ignore:line

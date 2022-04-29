@@ -40,6 +40,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): never
     {

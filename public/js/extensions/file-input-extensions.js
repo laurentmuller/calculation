@@ -21,11 +21,9 @@
 
 
         /**
-         * Intitialize a file input.
+         * Initialize a file input.
          *
-         * @param {function}
-         *            callback - the optional callback function to use after
-         *            change.
+         * @param {function} [callback] - the optional callback function to use after change.
          */
         initFileInput: function (callback) {
             return this.each(function () {
@@ -33,7 +31,7 @@
                 const isThumbnail = $that.parents('.form-group').findExists('.img-thumbnail');
                 $that.on('change', function () {
                     $that.valid();
-                    if ($.isFunction(callback)) {
+                    if (typeof callback === 'function') {
                         callback($that);
                     }
                     if (!isThumbnail) {

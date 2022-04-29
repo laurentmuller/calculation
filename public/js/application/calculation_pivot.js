@@ -6,13 +6,11 @@
 $.fn.extend({
 
     /**
-     * Toogle total cells class.
+     * Toggle total cells class.
      *
-     * @param {string}
-     *            oldClass the old class.
-     * @param {string}
-     *            newClass the new class.
-     * @return {jQuery} The jQuery element for chaining.
+     * @param {string} oldClass the old class.
+     * @param {string} newClass the new class.
+     * @return {JQuery} The jQuery element for chaining.
      */
     toggleCell(oldClass, newClass) {
         'use strict';
@@ -28,15 +26,12 @@ $.fn.extend({
 });
 
 /**
- * Toogle the cell highlight enablement.
+ * Toggle the cell highlight enablement.
  *
- * @param {jQuery}
- *            $source - The highlight checkbox.
- * @param {jQuery}
- *            $table - The table to update.
- * @param {boolean}
- *            save - true to save value to the session.
- * @return {jQuery} The jQuery source element for chaining.
+ * @param {JQuery} $source - The highlight checkbox.
+ * @param {JQuery} $table - The table to update.
+ * @param {boolean} save - true to save value to the session.
+ * @return {JQuery} The jQuery source element for chaining.
  */
 function toggleHighlight($source, $table, save) {
     'use strict';
@@ -83,15 +78,12 @@ function toggleHighlight($source, $table, save) {
 }
 
 /**
- * Toogle the popover enablement.
+ * Toggle the popover enablement.
  *
- * @param {jQuery}
- *            $source - The popover checkbox.
- * @param {jQuery}
- *            $selector - The popover elements.
- * @param {boolean}
- *            save - true to save value to the session.
- * @return {jQuery} The jQuery source element for chaining.
+ * @param {JQuery} $source - The popover checkbox.
+ * @param {JQuery} $selector - The popover elements.
+ * @param {boolean} save - true to save value to the session.
+ * @return {JQuery} The jQuery source element for chaining.
  */
 function togglePopover($source, $selector, save) {
     'use strict';

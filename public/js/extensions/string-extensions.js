@@ -22,25 +22,22 @@ String.prototype.clean = function () {
  * Returns the index of the first occurrence in this string, ignoring case, of
  * the specified value.
  *
- * @param {string}
- *            searchvalue - the value to search for.
- * @param {integer}
- *            fromIndex - the index at which to start the search (optional); the
+ * @param {string} value - the value to search for.
+ * @param {int} fromIndex - the index at which to start the search (optional); the
  *            default value is 0.
- * @return {integer} the index of the first occurrence of searchValue, or -1 if
+ * @return {int} the index of the first occurrence of searchValue, or -1 if
  *         not found.
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
-String.prototype.indexOfIgnoreCase = function (searchvalue, fromIndex) {
+String.prototype.indexOfIgnoreCase = function (value, fromIndex) {
     'use strict';
-    return this.toLowerCase().indexOf(searchvalue.toLowerCase(), fromIndex);
+    return this.toLowerCase().indexOf(value.toLowerCase(), fromIndex);
 };
 
 /**
  * Check if the given value is equal to this string, ignoring case.
  *
- * @param {string}
- *            value - the value to compare with.
+ * @param {string} value - the value to compare with.
  * @return {boolean} true if equal, ignoring case.
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
@@ -108,8 +105,8 @@ String.prototype.toBool = function () {
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.format = function () {
     'use strict';
-    var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
+    let formatted = this;
+    for (let i = 0; i < arguments.length; i++) {
         const pattern = '\\{' + i + '\\}';
         const flags = 'gi';
         const regexp = new RegExp(pattern, flags);
@@ -124,7 +121,7 @@ String.prototype.format = function () {
  *
  * @param {String}
  *            s - the string to compare to.
- * @return {boolean} true if match.
+ * @return {boolean} true if matched.
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.startsWithIgnoreCase = function (s) {

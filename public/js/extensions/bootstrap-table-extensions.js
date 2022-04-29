@@ -25,7 +25,7 @@ $.fn.extend({
     /**
      * Update the selected row.
      *
-     * @param {jQuery} $table - the parent table.
+     * @param {JQuery} $table - the parent table.
      * @return {boolean} this function returns always true.
      */
     updateRow: function ($table) {
@@ -95,7 +95,7 @@ $.fn.extend({
      * Initialize the table-boostrap.
      *
      * @param {object} options - the options to merge with default.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     initBootstrapTable: function (options) {
         'use strict';
@@ -155,7 +155,7 @@ $.fn.extend({
 
                     const params = $this.getParameters();
                     const selector = '.custom-view-actions:eq(%index%)';
-                    const callback = $.isFunction(options.onRenderCustomView) ? options.onRenderCustomView : false;
+                    const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
 
                     $this.find('tbody tr .actions').each(function (index, element) {
                         // copy actions
@@ -269,7 +269,7 @@ $.fn.extend({
         }
 
         // query parameters function?
-        if ($.isFunction(options.queryParams)) {
+        if (typeof options.queryParams === 'function') {
             return $.extend(params, options.queryParams(params));
         }
         return params;
@@ -349,7 +349,7 @@ $.fn.extend({
     /**
      * Gets the selected row.
      *
-     * @return {jQuery} the selected row, if any; null otherwise.
+     * @return {JQuery} the selected row, if any; null otherwise.
      */
     getSelection: function () {
         'use strict';
@@ -386,7 +386,7 @@ $.fn.extend({
     /**
      * Save parameters to the session.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     saveParameters: function () {
         'use strict';
@@ -402,14 +402,14 @@ $.fn.extend({
      * Update the href attribute of the actions.
      *
      * @param {array} rows - the rendered data.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     updateHref: function (rows) {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
         const params = $this.getParameters();
-        const callback = $.isFunction(options.onRenderAction) ? options.onRenderAction : false;
+        const callback = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
 
         $this.find('tbody tr .dropdown-item-path').each(function () {
             const $link = $(this);
@@ -423,7 +423,7 @@ $.fn.extend({
         });
 
         // actions row callback
-        if ($.isFunction(options.onUpdateHref)) {
+        if (typeof options.onUpdateHref === 'function') {
             $this.find('tbody tr').each(function () {
                 const $paths = $(this).find('.dropdown-item-path');
                 if ($paths.length) {
@@ -448,7 +448,7 @@ $.fn.extend({
     /**
      * Update this card view UI.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     updateCardView: function () {
         'use strict';
@@ -460,7 +460,7 @@ $.fn.extend({
 
         const $body = $this.find('tbody');
         const columns = $this.getVisibleCardViewColumns();
-        const callback = $.isFunction(options.onRenderCardView) ? options.onRenderCardView : false;
+        const callback = typeof options.onRenderCardView === 'function' ? options.onRenderCardView : false;
         const data = callback ? $this.getData() : null;
 
         $body.find('tr').each(function () {
@@ -506,7 +506,7 @@ $.fn.extend({
      * Refresh/reload the remote server data.
      *
      * @param {object} options - the refresh options.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     refresh: function (options) {
         'use strict';
@@ -517,7 +517,7 @@ $.fn.extend({
      * Reset the search text.
      *
      * @param {string} text - the optional search text.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     resetSearch: function (text) {
         'use strict';
@@ -528,7 +528,7 @@ $.fn.extend({
      * Refresh the table options.
      *
      * @param {Object} options - the options to refresh.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     refreshOptions: function (options) {
         'use strict';
@@ -538,7 +538,7 @@ $.fn.extend({
     /**
      * Toggle the card/table view.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     toggleView: function () {
         'use strict';
@@ -548,7 +548,7 @@ $.fn.extend({
     /**
      * Toggles the view between the table and the custom view.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     toggleCustomView: function () {
         'use strict';
@@ -559,7 +559,7 @@ $.fn.extend({
      * Toggles the display mode.
      *
      * @param {string} mode - the display mode to set ('table', 'card' or 'custom').
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     setDisplayMode: function (mode) {
         'use strict';
@@ -613,7 +613,7 @@ $.fn.extend({
     /**
      * Highlight matching text.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     highlight: function () {
         'use strict';
@@ -646,7 +646,7 @@ $.fn.extend({
         const $this = $(this);
         const options = $this.getOptions();
         if (options.pageNumber > 1) {
-            if (selectLast || false) {
+            if (selectLast) {
                 $this.one('post-body.bs.table', function () {
                     $this.selectLastRow();
                 });
@@ -795,7 +795,7 @@ $.fn.extend({
     /**
      * Enable the key handler.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     enableKeys: function () {
         'use strict';
@@ -865,7 +865,7 @@ $.fn.extend({
     /**
      * Disable the key handler.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     disableKeys: function () {
         'use strict';
@@ -962,7 +962,7 @@ $.fn.extend({
         const $loading = $('.fixed-table-loading');
         if (!$this.isCustomView()) {
             let $parent = $loading.parent();
-            while ($parent != null) {
+            while ($parent !== null) {
                 color = $parent.css('background-color');
                 if (color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') {
                     break;

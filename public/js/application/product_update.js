@@ -12,7 +12,7 @@ function getVisibleProducts() {
 }
 
 /**
- * Returns a value indicating if all products checkbox is checked.
+ * Returns a value indicating if all product checkboxes are checked.
  *
  * @returns {boolean} - true if checked.
  */
@@ -33,9 +33,9 @@ function validateProducts() {
 }
 
 /**
- * Check if products selection is requiered.
+ * Check if products selection is required.
  *
- * @returns {boolean} true if requiered; false if not.
+ * @returns {boolean} true if required; false if not.
  */
 function isProductsRequired() {
     'use strict';
@@ -48,15 +48,11 @@ function isProductsRequired() {
 /**
  * Compute the new product price.
  *
- * @param {number}
- *            oldPrice - the old price of the product.
- * @param {number}
- *            value - the value to update with.
- * @param {boolean}
- *            isPercent - true if the value is a percentage, false if is a fixed
+ * @param {number} oldPrice - the old price of the product.
+ * @param {number} value - the value to update with.
+ * @param {boolean} isPercent - true if the value is a percentage, false if is a fixed
  *            amount
- * @param {boolean}
- *            round - true to round new value up to 0.05
+ * @param {boolean} round - true to round new value up to 0.05
  * @returns {number} the new price or Number.NaN if not applicable.
  */
 function computePrice(oldPrice, value, isPercent, round) {

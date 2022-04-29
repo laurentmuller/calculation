@@ -22,7 +22,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         notify: function (type, message, title, options) {
             // merge options
@@ -83,7 +83,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         info: function (message, title, options) {
             return this.notify(this.NotificationTypes.INFO, message, title, options);
@@ -95,7 +95,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         success: function (message, title, options) {
             return this.notify(this.NotificationTypes.SUCCESS, message, title, options);
@@ -107,7 +107,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         warning: function (message, title, options) {
             return this.notify(this.NotificationTypes.WARNING, message, title, options);
@@ -119,7 +119,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         danger: function (message, title, options) {
             return this.notify(this.NotificationTypes.DANGER, message, title, options);
@@ -131,7 +131,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         primary: function (message, title, options) {
             return this.notify(this.NotificationTypes.PRIMARY, message, title, options);
@@ -143,7 +143,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         secondary: function (message, title, options) {
             return this.notify(this.NotificationTypes.SECONDARY, message, title, options);
@@ -155,7 +155,7 @@
          * @param {string} message - The message.
          * @param {string} title - The title.
          * @param {Object} options - The options.
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         dark: function (message, title, options) {
             return this.notify(this.NotificationTypes.DARK, message, title, options);
@@ -164,7 +164,7 @@
         /**
          * Remove this toasts DIV container.
          *
-         * @returns {jQuery} this instance.
+         * @returns {JQuery} this instance.
          */
         removeContainer: function () {
             if (this.containerId) {
@@ -335,7 +335,7 @@
          * Gets or creates the toast container div.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The toasts container.
+         * @returns {JQuery} The toasts container.
          */
         getContainer: function (options) {
             // check if div is already created
@@ -377,7 +377,7 @@
          * Creates the div title.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The div title or null if no title.
+         * @returns {JQuery} The div title or null if no title.
          */
         createTitle: function (options) {
             if (options.title || options.icon !== false || options.displayClose || options.subtitle && options.displaySubtitle) {
@@ -421,7 +421,7 @@
          * Creates the icon title.
          *
          * @param {Object} options - The options.
-         * @returns {jQuery} The icon or null if no icon.
+         * @returns {JQuery} The icon or null if no icon.
          */
         createIcon: function (options) {
             if (options.icon === false) {
@@ -466,7 +466,7 @@
          * Creates the subtitle.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The subtitle or null if no subtitle defined.
+         * @returns {JQuery} The subtitle or null if no subtitle defined.
          */
         createSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
@@ -482,7 +482,7 @@
          * Creates the close button.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The close button or null if no button.
+         * @returns {JQuery} The close button or null if no button.
          */
         createCloseButton: function (options) {
             if (options.displayClose) {
@@ -510,7 +510,7 @@
          * Creates the div message.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The div message.
+         * @returns {JQuery} The div message.
          */
         createMessage: function (options) {
             return $('<div/>', {
@@ -523,7 +523,7 @@
          * Creates the div toast.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The div toast.
+         * @returns {JQuery} The div toast.
          */
         createToast: function (options) {
             return $('<div/>', {
@@ -544,7 +544,7 @@
          * Creates the progress bar.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The progress bar or null if no progress.
+         * @returns {JQuery} The progress bar or null if no progress.
          */
         createProgressBar: function(options) {
             if (!options.displayProgress) {
@@ -571,7 +571,7 @@
         /**
          * Show the toast.
          *
-         * @param {jQuery} $toast - The toast to show.
+         * @param {JQuery} $toast - The toast to show.
          * @param {Object} options - The toast options.
          * @return {Object} This instance.
          */
@@ -605,7 +605,7 @@
         /**
          * Update the progress bar.
          *
-         * @param {jQuery} $progress - The progress bar to update.
+         * @param {JQuery} $progress - The progress bar to update.
          * @param {Number} endTime - The end time.
          * @param {Number} timeout - The time-out.
          */

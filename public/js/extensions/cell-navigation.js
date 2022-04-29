@@ -43,7 +43,7 @@ $.fn.extend({
 
             case arrow.up:
             case arrow.down:
-                var $moveToRow = null;
+                let $moveToRow = null;
                 const $row = $cell.closest('tr');
                 const pos = $cell[0].cellIndex;
                 if (e.which === arrow.down) {
@@ -51,7 +51,7 @@ $.fn.extend({
                 } else if (e.which === arrow.up) {
                     $moveToRow = $row.prev('tr');
                 }
-                if ($moveToRow.length) {
+                if ($moveToRow && $moveToRow.length) {
                     $moveTo = $($moveToRow[0].cells[pos]);
                 }
                 break;

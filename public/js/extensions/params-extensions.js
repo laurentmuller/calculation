@@ -7,7 +7,7 @@
  */
 
 /**
- * Returns the parameters length.
+ * Returns the number of parameters.
  *
  * @returns {int} the parameters length.
  */
@@ -29,10 +29,8 @@ URLSearchParams.prototype.toQuery = function () {
 /**
  * Returns the parameter value or the default value if none.
  *
- * @param {string}
- *            name -the parameter name.
- * @param {any}
- *            defaultValue - the default value if the parameter is not found.
+ * @param {string} name -the parameter name.
+ * @param {any} defaultValue - the default value if the parameter is not found.
  *
  * @returns {any} the parameter value, if found; the default value otherwise.
  */
@@ -47,10 +45,8 @@ URLSearchParams.prototype.getOrDefault = function (name, defaultValue) {
 /**
  * Returns the parameter value, as integer, or the default value if none.
  *
- * @param {string}
- *            name -the parameter name.
- * @param {int}
- *            defaultValue - the default value if the parameter is not found.
+ * @param {string} name -the parameter name.
+ * @param {int} defaultValue - the default value if the parameter is not found.
  *
  * @returns {int} the parameter value, if found; the default value otherwise.
  */

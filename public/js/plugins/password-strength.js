@@ -54,8 +54,8 @@
                 result = zxcvbn(text, inputs);
 
                 // output
-                if (options.debug && console) {
-                    console.log(result);
+                if (options.debug && window.console) {
+                    window.console.log(result);
                 }
             }
 

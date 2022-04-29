@@ -2,10 +2,9 @@
 
 /**
  * Finds a checkbox within the given parent.
- * 
- * @param {jQuery}
- *            $parent - the parent element to search in.
- * @returns {jQuery} the checkbox, if found; null otherwise.
+ *
+ * @param {JQuery} $parent - the parent element to search in.
+ * @returns {JQuery} the checkbox, if found; null otherwise.
  */
 function findCheckBox($parent) {
     'use strict';
@@ -18,8 +17,8 @@ function findCheckBox($parent) {
 
 /**
  * Gets all checkboxes of the edit table.
- * 
- * @returns {jQuery} the checkboxes.
+ *
+ * @returns {JQuery} the checkboxes.
  */
 function getAllCheckboxes() {
     'use strict';
@@ -29,12 +28,9 @@ function getAllCheckboxes() {
 
 /**
  * Updates the checkboxes.
- * 
- * @param {jQuery}
- *            $parent - the parent element to iterate over.
- * @param {function}
- *            callback - the callback function used to find the check box within
- *            the current element.
+ *
+ * @param {JQuery} $parent - the parent element to iterate over.
+ * @param {function} callback - the callback function used to find the checkbox within the current element.
  */
 function updateCheckBoxes($parent, callback) {
     'use strict';
@@ -65,9 +61,8 @@ function updateCheckBoxes($parent, callback) {
 
 /**
  * Handles the column header click event.
- * 
- * @param {jQuery}
- *            $element - the column header.
+ *
+ * @param {JQuery} $element - the column header.
  */
 function onColumnClick($element) {
     'use strict';
@@ -86,9 +81,8 @@ function onColumnClick($element) {
 
 /**
  * Handles the first cell row click event.
- * 
- * @param {jQuery}
- *            $element - the first cell of the row.
+ *
+ * @param {JQuery} $element - the first cell of the row.
  */
 function onRowClick($element) {
     'use strict';
@@ -101,10 +95,9 @@ function onRowClick($element) {
 }
 
 /**
- * Handles the overwrite click event.
- * 
- * @param {jQuery}
- *            $element - the overwrite checkbox.
+ * Handles overwrite click event.
+ *
+ * @param {JQuery} $element - the checkbox.
  */
 function onOverwriteClick($element) {
     'use strict';
@@ -116,9 +109,8 @@ function onOverwriteClick($element) {
 
 /**
  * Updates all checkbox values.
- * 
- * @param {boolean}
- *            checked - true if checked, false if unchecked.
+ *
+ * @param {boolean} checked - true if checked, false if unchecked.
  */
 function updateAllCheckboxes(checked) {
     'use strict';

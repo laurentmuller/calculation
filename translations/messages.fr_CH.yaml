@@ -1040,12 +1040,12 @@ security:
     password: Mot de passe
     remember_me: Se souvenir de moi
     submit: Connexion
-    success: Bienvenue <b>%username%</b>. Vous êtes maintenant connecté à l'application
-      <b>%appname%</b>.
+    success: Bienvenue <b>%username%</b>. Vous vous êtes connecté à l'application
+      <b>%appname%</b> avec succès.
     title: Connexion à l'application
     username: Nom d'utilisateur
   logout:
-    success: <b>%username%</b>, vous vous êtes bien déconnecté de l'application <b>%appname%</b>.
+    success: Vous vous êtes déconnecté de l'application <b>%appname%</b> avec succès.
 show:
   name: Nom
   value: Valeur

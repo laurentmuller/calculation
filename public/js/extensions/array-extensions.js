@@ -7,9 +7,8 @@
 /**
  * Returns a random element that is different from the given last index (if
  * any).
- * 
- * @param {integer}
- *            lastIndex - the last selected index, if any; null otherwise.
+ *
+ * @param {number} lastIndex - the last selected index, if any; null otherwise.
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.randomElement = function (lastIndex) {

@@ -15,7 +15,7 @@ namespace App\Pdf\Enums;
 /**
  * The PDF image type enumeration.
  */
-enum PdfImageType:string
+enum PdfImageType: string
 {
     case GIF = 'gif';
     case JPEG = 'jpeg';

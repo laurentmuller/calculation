@@ -15,7 +15,7 @@ namespace App\Pdf\Enums;
 /**
  * The PDF document size enumeration.
  */
-enum PdfDocumentSize:string
+enum PdfDocumentSize: string
 {
     /*
      * The A3 document size.

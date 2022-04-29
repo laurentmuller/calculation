@@ -3,11 +3,10 @@
 /* globals Toaster */
 
 /**
- * Fomats the given value.
+ * Formats the given value.
  *
- * @param number
- *            value - the value to format.
- * @returns string - the formatted value.
+ * @param {number}  value - the value to format.
+ * @returns {string} - the formatted value.
  */
 function formatValue(value) {
     'use strict';
@@ -25,10 +24,8 @@ function formatValue(value) {
 /**
  * Update the given input.
  *
- * @param string
- *            id - the input identifier.
- * @param number
- *            value - the value to set.
+ * @param {string} id - the input identifier.
+ * @param {number} value - the value to set.
  */
 function updateValue(id, value) {
     'use strict';
@@ -47,8 +44,7 @@ function resetValues() {
 /**
  * Display an error message.
  *
- * @param string
- *            message - the message to display.
+ * @param {string} message - the message to display.
  */
 function showError(message) {
     'use strict';
@@ -60,8 +56,7 @@ function showError(message) {
 /**
  * Send form to server and update UI.
  *
- * @param form
- *            form - the submitted form.
+ * @param form form - the submitted form.
  */
 function update(form) {
     'use strict';

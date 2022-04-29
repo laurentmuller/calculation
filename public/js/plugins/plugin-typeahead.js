@@ -19,7 +19,7 @@
 
             // Method overrides
             that.eventSupported = that.options.eventSupported || that.eventSupported;
-            that.grepper = that.options.grepper || that.grepper;
+            that.filter = that.options.filter || that.filter;
             that.highlighter = that.options.highlighter || that.highlighter;
             that.lookup = that.options.lookup || that.lookup;
             that.matcher = that.options.matcher || that.matcher;
@@ -60,40 +60,36 @@
         }
 
         eventSupported(eventName) {
-            let isSupported = eventName in this.$element;
-            if (!isSupported) {
+            let supported = eventName in this.$element;
+            if (!supported) {
                 this.$element.setAttribute(eventName, 'return;');
-                isSupported = $.type(this.$element[eventName]) === 'function';
+                supported = typeof this.$element[eventName] === 'function';
             }
-            return isSupported;
+            return supported;
         }
 
         isString(data) {
-            return $.type(data) === 'string';
+            return typeof data ==='string';
         }
 
         isObject(data) {
-            return $.type(data) === 'object';
+            return typeof data ==='object';
         }
 
         select() {
             const $selectedItem = this.$menu.find('.active');
             if ($selectedItem.length) {
-                var item = JSON.parse($selectedItem.data('value'));
-                var text = $selectedItem.text();
+                let item = JSON.parse($selectedItem.data('value'));
+                let text = $selectedItem.text();
                 if (this.valueField) {
                     text = item[this.valueField];
                 }
-                this.$element.val(text).change();
-                if ($.isFunction(this.onSelect)) {
+                this.$element.val(text).trigger('change');
+                if (typeof this.onSelect === 'function') {
                     this.onSelect(item);
                 }
             }
             return this.hide();
-        }
-
-        updater(item) {
-            return item;
         }
 
         show() {
@@ -157,14 +153,15 @@
                 this.ajax.xhr.abort();
             }
             const query = this.query;
-            const data = $.isFunction(this.ajax.preDispatch) ? this.ajax.preDispatch(query) : {
+            const data = typeof this.ajax.preDispatch === 'function' ? this.ajax.preDispatch(query) : {
                 query: query
             };
             this.ajax.xhr = $.getJSON({
                 data: data,
                 url: this.ajax.url,
                 success: $.proxy(this.ajaxSuccess, this),
-                error: $.proxy(this.ajaxError, this),
+                error: $.proxy(this.ajaxError, this)
+
             });
             this.ajax.timerId = null;
             return this;
@@ -174,23 +171,32 @@
             if (!this.ajax.xhr) {
                 return this;
             }
-            if ($.isFunction(this.ajax.preProcess)) {
+            if (typeof this.ajax.preProcess === 'function') {
                 data = this.ajax.preProcess(data);
             }
-            // save for selection retreival
+            // save for selection retrieval
             this.ajax.data = data;
 
             // manipulate objects
-            const items = this.grepper(this.ajax.data) || [];
-            if (!items.length) {
-                return this.hide();
+            const items = this.filter(this.ajax.data) || [];
+            if (items.length) {
+                this.ajax.xhr = null;
+                this.$menu.removeClass('py-0 bg-secondary text-white');
+                return this.render(items.slice(0, this.options.items)).show();
             }
-            this.ajax.xhr = null;
-            return this.render(items.slice(0, this.options.items)).show();
+            if (this.options.empty) {
+                const $item = $('<a/>', {
+                    class: 'dropdown-item disabled',
+                    text: this.options.empty
+                });
+                this.$menu.addClass('py-0').html($item);
+                return this.show();
+            }
+            return this.hide();
         }
 
         ajaxError(jqXHR, textStatus, errorThrown) {
-            if (textStatus !== 'abort' && $.isFunction(this.onError)) {
+            if (textStatus !== 'abort' && typeof this.onError === 'function') {
                 this.onError(jqXHR, textStatus, errorThrown);
             }
             return this;
@@ -201,7 +207,7 @@
             if (!this.query) {
                 return this.hide();
             }
-            const items = this.grepper(this.source);
+            const items = this.filter(this.source);
             if (!items || items.length === 0) {
                 return this.hide();
             }
@@ -214,22 +220,22 @@
 
         sorter(items) {
             if (!this.options.ajax) {
-                const beginswith = [];
-                const caseSensitive = [];
-                const caseInsensitive = [];
+                const begins_with = [];
+                const case_sensitive = [];
+                const case_insensitive = [];
                 let item = items.shift();
 
                 while (item !== null) {
                     if (!item.toLowerCase().indexOf(this.query.toLowerCase())) {
-                        beginswith.push(item);
+                        begins_with.push(item);
                     } else if (item.indexOf(this.query) !== -1) {
-                        caseSensitive.push(item);
+                        case_sensitive.push(item);
                     } else {
-                        caseInsensitive.push(item);
+                        case_insensitive.push(item);
                     }
                     item = items.shift();
                 }
-                return beginswith.concat(caseSensitive, caseInsensitive);
+                return begins_with.concat(case_sensitive, case_insensitive);
             } else {
                 return items;
             }
@@ -286,11 +292,11 @@
             // render categories, separators and items
             items = $(data).map(function (_index, item) {
                 // category
-                if ((item.__type__ || false) === 'category') {
+                if (item.__type__  === 'category') {
                     return $(that.options.header).text(item.name)[0];
                 }
                 // separator
-                if ((item.__type__ || false) === 'divider') {
+                if (item.__type__  === 'divider') {
                     return $(that.options.divider)[0];
                 }
                 // item
@@ -312,8 +318,8 @@
             return this;
         }
 
-        grepper(data) {
-            // filters relevent results
+        filter(data) {
+            // filters relevant results
             let items;
             let display;
             const that = this;
@@ -469,6 +475,7 @@
         listen() {
             // add element handlers
             const $element = this.$element;
+            // $element.focus.bind(this.focus());
             $element.on('focus', $.proxy(this.focus, this));
             $element.on('blur', $.proxy(this.blur, this));
             $element.on('keypress', $.proxy(this.keypress, this));
@@ -519,6 +526,7 @@
         valueField: 'id',
         displayField: 'name',
         separator: 'category',
+        empty: null,
 
         // UI
         selector: '.dropdown-item',

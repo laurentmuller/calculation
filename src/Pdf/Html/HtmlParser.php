@@ -102,7 +102,7 @@ class HtmlParser
     {
         $chunk = new HtmlOlChunk($name, $parent);
         $chunk->setClassName($class);
-        $chunk->setType((string) $this->getTypeAttribute($node));
+        $chunk->setType($this->getTypeAttribute($node));
         $chunk->setStart($this->getStartAttribute($node));
 
         return $chunk;
@@ -240,15 +240,18 @@ class HtmlParser
     }
 
     /**
-     * Gets the type attribute value for the given node.
+     * Gets the list type attribute value for the given node.
      *
      * @param \DOMNode $node the node to get type attribute for
      *
-     * @return string|null the type attribute, if found; number type ('1') otherwise
+     * @return HtmlListType the list type attribute, if found; number type ('1') otherwise
      */
-    private function getTypeAttribute(\DOMNode $node): ?string
+    private function getTypeAttribute(\DOMNode $node): HtmlListType
     {
-        return $this->getAttribute($node, 'type', HtmlOlChunk::TYPE_NUMBER);
+        $default = HtmlListType::NUMBER;
+        $value = (string) $this->getAttribute($node, 'type', $default->value);
+
+        return HtmlListType::tryFrom($value) ?? $default;
     }
 
     /**

@@ -26,8 +26,7 @@ const SearchHelper = {
     /**
      * Initialize the type ahead search customers.
      *
-     * @param {jQuery}
-     *            $form - the parent form.
+     * @param {JQuery} $form - the parent form.
      * @return {Typeahead} The type ahead instance.
      */
     initSearchCustomer: function ($form) {
@@ -42,8 +41,7 @@ const SearchHelper = {
     /**
      * Initialize the type ahead search products.
      *
-     * @param {jQuery}
-     *            $form - the parent form.
+     * @param {JQuery} $form - the parent form.
      *
      * @return {Typeahead} The type ahead instance.
      */
@@ -51,19 +49,21 @@ const SearchHelper = {
         'use strict';
 
         const $element = $('#item_search_input');
+        const $price = $('#item_price');
         return $element.initTypeahead({
             alignWidth: false,
             valueField: 'description',
             displayField: 'description',
             url: $form.data('search-product'),
             error: $form.data('error-product'),
+            empty: $form.data('item-empty'),
             onSelect: function (item) {
                 // copy values
                 $('#item_description').val(item.description);
                 $('#item_unit').val(item.unit);
                 $('#item_category').val(item.categoryId);
-                $('#item_price').floatVal(item.price);
-                $('#item_price').trigger('input');
+                $price.floatVal(item.price);
+                $price.trigger('input');
 
                 // clear
                 $element.val('');
@@ -72,7 +72,7 @@ const SearchHelper = {
                 if (item.price) {
                     $('#item_quantity').selectFocus();
                 } else {
-                    $('#item_price').selectFocus();
+                    $price.selectFocus();
                 }
             }
         });
@@ -81,8 +81,7 @@ const SearchHelper = {
     /**
      * Initialize the type ahead search product units.
      *
-     * @param {jQuery}
-     *            $form - the parent form.
+     * @param {JQuery} $form - the parent form.
      *
      * @return {Typeahead} The type ahead instance.
      */
@@ -114,8 +113,7 @@ const Application = {
     /**
      * Initialize the drag and drop.
      *
-     * @param {boolean}
-     *            destroy - true to destroy the existing sortable (if any).
+     * @param {boolean} destroy - true to destroy the existing sortable (if any).
      * @return {Application} This instance for chaining.
      */
     initDragDrop: function (destroy) {
@@ -328,9 +326,8 @@ const Application = {
     /**
      * Format a value with 2 fixed decimals and grouping separator.
      *
-     * @param {Number}
-     *            value - the value to format.
-     * @returns {string} - the formatted value.
+     * @param {Number} value - the value to format.
+     * @returns {string} the formatted value.
      */
     formatValue: function (value) {
         'use strict';
@@ -351,8 +348,7 @@ const Application = {
      * Parse the given value as float. If the parsed valus is NaN, 0 is
      * returned.
      *
-     * @param {string}
-     *            value - the value to parse.
+     * @param {string} value - the value to parse.
      * @returns {number} the parsed value.
      */
     parseFloat: function(value) {
@@ -367,9 +363,8 @@ const Application = {
     /**
      * Rounds the given value with 2 decimals.
      *
-     * @param {Number}
-     *            value - the value to roud.
-     * @returns {Number} - the rounded value.
+     * @param {Number} value - the value to roud.
+     * @returns {Number} the rounded value.
      */
     roundValue: function(value) {
         'use strict';
@@ -442,26 +437,6 @@ const Application = {
             });
         });
 
-        // if ($rows.length > 1) {
-        // disabled = false;
-        // }
-        // });
-
-        // if (disabled) {
-        // const $groups= this.getGroups();
-        // if ($groups.length > 1) {
-        // disabled = false;
-        // } else {
-        // $groups.each(function () {
-        // const $body = $(this).nextUntil('.group');
-        // if ($body.length > 1) {
-        // disabled = false;
-        // return false;
-        // }
-        // });
-        // }
-        // }
-
         // update global sort
         $('.btn-sort-items').toggleDisabled(disabled);
 
@@ -471,8 +446,7 @@ const Application = {
     /**
      * Update the totals.
      *
-     * @param {boolean}
-     *            adjust - true to adjust the user margin.
+     * @param {boolean} adjust - true to adjust the user margin.
      * @return {Application} This instance for chaining.
      */
     updateTotals: function (adjust) {
@@ -558,8 +532,7 @@ const Application = {
     /**
      * Disable edition.
      *
-     * @param {string}
-     *            message - the error message to display.
+     * @param {string} message - the error message to display.
      * @return {Application} This instance for chaining.
      */
     disable: function (message) {
@@ -596,7 +569,7 @@ const Application = {
     /**
      * Gets groups.
      *
-     * @returns {jQuery} - the groups.
+     * @returns {JQuery} the groups.
      */
     getGroups: function () {
         'use strict';
@@ -606,9 +579,8 @@ const Application = {
     /**
      * Gets the categories for the given group.
      *
-     * @param {jQuery}
-     *            $group - the group (thead) to search categories for.
-     * @returns {jQuery} - the categories.
+     * @param {JQuery} $group - the group (thead) to search categories for.
+     * @returns {JQuery} the categories.
      */
     getCategories: function ($group) {
         'use strict';
@@ -618,9 +590,8 @@ const Application = {
     /**
      * Gets the items for the given category.
      *
-     * @param {jQuery} -
-     *            $category - the category (th) to serach items for.
-     * @returns {jQuery} - the items.
+     * @param {JQuery} $category - the category (th) to search items for.
+     * @returns {JQuery} the items.
      */
     getItems: function ($category) {
         'use strict';
@@ -630,9 +601,8 @@ const Application = {
     /**
      * Finds or create the table head for the given group.
      *
-     * @param {Object}
-     *            group - the group data used to find row.
-     * @returns {jQuery} - the table head.
+     * @param {Object} group - the group data used to find row.
+     * @returns {JQuery} the table head.
      */
     findOrCreateGroup: function (group) {
         'use strict';
@@ -650,11 +620,9 @@ const Application = {
     /**
      * Find or create the table body for the given category.
      *
-     * @param {jQuery}
-     *            $group - the parent group (thead).
-     * @param {Object}
-     *            category - the category data used to update row.
-     * @returns {jQuery} - the table body.
+     * @param {JQuery} $group - the parent group (thead).
+     * @param {Object} category - the category data used to update row.
+     * @returns {JQuery} the table body.
      */
     findOrCreateCategory: function ($group, category) {
         'use strict';
@@ -670,10 +638,8 @@ const Application = {
     /**
      * Compare 2 strings with language sensitive.
      *
-     * @param {string}
-     *            string1 - the first string to compare.
-     * @param {string}
-     *            string2 - the second string to compare.
+     * @param {string} string1 - the first string to compare.
+     * @param {string} string2 - the second string to compare.
      * @return {int} a negative value if string1 comes before string2; a
      *         positive value if string1 comes after string2; 0 if they are
      *         considered equal.
@@ -691,9 +657,7 @@ const Application = {
     /**
      * Sort items of a category.
      *
-     * @param {jQuery}
-     *            $element - the caller element (button or tbody) used to find
-     *            the category.
+     * @param {JQuery} $element - the caller element (button or tbody) used to find the category.
      * @return {Application} This instance for chaining.
      */
     sortItems: function ($element) {
@@ -721,8 +685,7 @@ const Application = {
     /**
      * Sort categories by name.
      *
-     * @param {jQuery}
-     *            $element - the caller element (button, row or thead) used to
+     * @param {JQuery} $element - the caller element (button, row or thead) used to
      *            find the group and the categories.
      * @return {Application} This instance for chaining.
      */
@@ -794,9 +757,8 @@ const Application = {
     /**
      * Appends the given group to the table.
      *
-     * @param {Object}
-     *            group - the group data used to update row.
-     * @returns {jQuery} - the appended group.
+     * @param {Object} group - the group data used to update row.
+     * @returns {JQuery} the appended group.
      */
     appendGroup: function (group) {
         'use strict';
@@ -837,11 +799,9 @@ const Application = {
     /**
      * Appends the given category to the table.
      *
-     * @param {jQuery}
-     *            $group - the parent group (thead).
-     * @param {Object}
-     *            category - the category data used to update row.
-     * @returns {jQuery} - the appended category.
+     * @param {JQuery} $group - the parent group (thead).
+     * @param {Object} category - the category data used to update row.
+     * @returns {JQuery} the appended category.
      */
     appendCategory: function ($group, category) {
         'use strict';
@@ -886,8 +846,7 @@ const Application = {
     /**
      * Display the add item dialog.
      *
-     * @param {jQuery}
-     *            $source - the caller element (normally a button).
+     * @param {JQuery} $source - the caller element (normally a button).
      */
     showAddItemDialog: function ($source) {
         'use strict';
@@ -903,8 +862,7 @@ const Application = {
     /**
      * Display the add task dialog.
      *
-     * @param {jQuery}
-     *            $source - the caller element (normally a button).
+     * @param {JQuery} $source - the caller element (normally a button).
      */
     showAddTaskDialog: function ($source) {
         'use strict';
@@ -922,8 +880,7 @@ const Application = {
      * Display the edit item dialog. This function copy the element to the
      * dialog and display it.
      *
-     * @param {jQuery}
-     *            $source - the caller element (normally a button).
+     * @param {JQuery} $source - the caller element (normally a button).
      */
     showEditItemDialog: function ($source) {
         'use strict';
@@ -938,8 +895,7 @@ const Application = {
     /**
      * Remove a calculation group.
      *
-     * @param {jQuery}
-     *            $element - the caller element (normally a button).
+     * @param {JQuery} $element - the caller element (normally a button).
      * @return {Application} This instance for chaining.
      */
     removeGroup: function ($element) {
@@ -959,8 +915,7 @@ const Application = {
      * Remove a calculation category. If the parent group is empty after
      * deletion, then group is also deleted.
      *
-     * @param {jQuery}
-     *            $element - the caller element (normally a button).
+     * @param {JQuery} $element - the caller element (normally a button).
      * @return {Application} This instance for chaining.
      */
     removeCategory: function ($element) {
@@ -985,8 +940,7 @@ const Application = {
     /**
      * Remove a calculation item.
      *
-     * @param {jQuery}
-     *            $element - the caller element (button).
+     * @param {JQuery} $element - the caller element (button).
      * @return {Application} This instance for chaining.
      */
     removeItem: function ($element) {
@@ -1050,7 +1004,7 @@ const Application = {
         // get dialog values
         const $editingRow = dialog.getEditingRow();
         if (!$editingRow) {
-            return;
+            return this;
         }
         const group = dialog.getGroup();
         const category = dialog.getCategory();
@@ -1070,7 +1024,7 @@ const Application = {
         // change?
         if (oldGroupId === group.id && oldCategoryId === category.id && JSON.stringify(item) === JSON.stringify(oldItem)) {
             $editingRow.scrollInViewport().timeoutToggle('table-success');
-            return;
+            return this;
         }
 
         // same group and category?
@@ -1157,8 +1111,7 @@ const Application = {
     /**
      * Handles the row drag stop event.
      *
-     * @param {Event}
-     *            e - the source event.
+     * @param {Event} e - the source event.
      */
     onDragStop: function (e) {
         'use strict';
@@ -1239,8 +1192,7 @@ const Application = {
     /**
      * Edit the calculation item's price.
      *
-     * @param {jQuery}
-     *            $element - the caller element (button).
+     * @param {JQuery} $element - the caller element (button).
      * @return {Application} This instance for chaining.
      */
     editItemPrice: function($element) {
@@ -1255,8 +1207,7 @@ const Application = {
     /**
      * Edit the calculation item's quantity.
      *
-     * @param {jQuery}
-     *            $element - the caller element (button).
+     * @param {JQuery} $element - the caller element (button).
      * @return {Application} This instance for chaining.
      */
     editItemQuantity: function($element) {
@@ -1278,7 +1229,7 @@ $.fn.extend({
      * Gets the index, for a row, of the first item input. For example:
      * calculation_groups_4_items_12_total will return 12.
      *
-     * @returns {int} - the index, if found; -1 otherwise.
+     * @returns {int} the index, if found; -1 otherwise.
      */
     inputIndex() {
         'use strict';
@@ -1292,9 +1243,8 @@ $.fn.extend({
      * Finds an input element that have the name attribute within a given
      * substring.
      *
-     * @param {string}
-     *            name - the partial attribute name.
-     * @return {jQuery} - The input, if found; null otherwise.
+     * @param {string} name - the partial attribute name.
+     * @return {JQuery} - The input, if found; null otherwise.
      */
     findNamedInput: function (name) {
         'use strict';
@@ -1306,9 +1256,7 @@ $.fn.extend({
     /**
      * Fade out and remove the selected element.
      *
-     * @param {function}
-     *            callback - the optional function to call after the element is
-     *            removed.
+     * @param {function} callback - the optional function to call after the element is removed.
      */
     removeFadeOut: function (callback) {
         'use strict';
@@ -1318,7 +1266,7 @@ $.fn.extend({
         $this.each(function (i, element) {
             $(element).fadeOut(400, function () {
                 $(this).remove();
-                if (i === lastIndex && $.isFunction(callback)) {
+                if (i === lastIndex && typeof callback === 'function' ) {
                     callback();
                 }
             });
@@ -1328,11 +1276,9 @@ $.fn.extend({
     /**
      * Gets the template prototype from the current element.
      *
-     * @param {string}
-     *            pattern - the regex pattern used to replace the index.
-     * @param {string}
-     *            key - the data key used to retrieve and update the index.
-     * @returns {string} - the template.
+     * @param {string} pattern - the regex pattern used to replace the index.
+     * @param {string} key - the data key used to retrieve and update the index.
+     * @returns {string} the template.
      */
     getPrototype: function (pattern, key) {
         'use strict';
@@ -1376,9 +1322,8 @@ $.fn.extend({
     /**
      * Create a new row and appends to this current parent category (tbody).
      *
-     * @param {Object}
-     *            item - the item values used to update the row
-     * @returns {jQuery} - the created row.
+     * @param {Object} item - the item values used to update the row
+     * @returns {JQuery} the created row.
      */
     appendRow: function (item) {
         'use strict';
@@ -1396,9 +1341,8 @@ $.fn.extend({
     /**
      * Copy the values of the item to this row.
      *
-     * @param {Object}
-     *            item - the item to get values from.
-     * @returns {jQuery} - The updated row.
+     * @param {Object} item - the item to get values from.
+     * @returns {JQuery} The updated row.
      */
     updateRow: function (item) {
         'use strict';
@@ -1425,7 +1369,7 @@ $.fn.extend({
     /**
      * Update the total cell of this row.
      *
-     * @returns {jQuery} - The updated row.
+     * @returns {JQuery} The updated row.
      */
     updateTotal: function() {
         'use strict';
@@ -1439,7 +1383,7 @@ $.fn.extend({
     /**
      * Gets the parent group.
      *
-     * @returns {jQuery} - The parent group (thead).
+     * @returns {JQuery} The parent group (thead).
      */
     getParentGroup: function () {
         'use strict';
@@ -1449,7 +1393,7 @@ $.fn.extend({
     /**
      * Gets the parent category.
      *
-     * @returns {jQuery} - The parent category (tbody).
+     * @returns {JQuery} The parent category (tbody).
      */
     getParentCategory: function () {
         'use strict';
@@ -1459,7 +1403,7 @@ $.fn.extend({
     /**
      * Gets the parent row.
      *
-     * @returns {jQuery} - The parent row.
+     * @returns {JQuery} The parent row.
      */
     getParentRow: function () {
         'use strict';
@@ -1539,14 +1483,10 @@ const MoveHandler = {
     /**
      * Move a source group before or after the target group.
      *
-     * @param {jQuery}
-     *            $source - the group to move.
-     * @param {jQuery}
-     *            $target - the target group.
-     * @param {boolean}
-     *            up - true to move before the target (up); false to move after
-     *            (down).
-     * @return {jQuery} - the moved group.
+     * @param {JQuery} $source - the group to move.
+     * @param {JQuery} $target - the target group.
+     * @param {boolean} up - true to move before the target (up); false to move after (down).
+     * @return {JQuery} the moved group.
      */
     moveGroup: function ($source, $target, up) {
         'use strict';
@@ -1573,9 +1513,8 @@ const MoveHandler = {
     /**
      * Move a calculation group to the first position.
      *
-     * @param {jQuery}
-     *            $group - the group to move.
-     * @return {jQuery} - the moved group.
+     * @param {JQuery} $group - the group to move.
+     * @return {JQuery} - the moved group.
      */
     moveGroupFirst: function ($group) {
         'use strict';
@@ -1589,9 +1528,8 @@ const MoveHandler = {
     /**
      * Move a calculation group to the last position.
      *
-     * @param {jQuery}
-     *            $group - the group to move.
-     * @return {jQuery} - the moved group.
+     * @param {JQuery} $group - the group to move.
+     * @return {JQuery} - the moved group.
      */
     moveGroupLast: function ($group) {
         'use strict';
@@ -1605,9 +1543,8 @@ const MoveHandler = {
     /**
      * Move up a calculation group.
      *
-     * @param {jQuery}
-     *            $group - the group to move.
-     * @return {jQuery} - the moved group.
+     * @param {JQuery} $group - the group to move.
+     * @return {JQuery} - the moved group.
      */
     moveGroupUp: function ($group) {
         'use strict';
@@ -1623,9 +1560,8 @@ const MoveHandler = {
     /**
      * Move down a calculation group.
      *
-     * @param {jQuery}
-     *            $group - the group to move.
-     * @return {jQuery} - the moved group.
+     * @param {JQuery} $group - the group to move.
+     * @return {JQuery} - the moved group.
      */
     moveGroupDown: function ($group) {
         'use strict';
@@ -1639,14 +1575,10 @@ const MoveHandler = {
     /**
      * Move a source category before or after the target category.
      *
-     * @param {jQuery}
-     *            $source - the category to move.
-     * @param {jQuery}
-     *            $target - the target category.
-     * @param {boolean}
-     *            up - true to move before the target (up); false to move after
-     *            (down).
-     * @return {jQuery} - the moved category.
+     * @param {JQuery} $source - the category to move.
+     * @param {JQuery} $target - the target category.
+     * @param {boolean} up - true to move before the target (up); false to move after (down).
+     * @return {JQuery} - the moved category.
      */
     moveCategory: function ($source, $target, up) {
         'use strict';
@@ -1669,9 +1601,8 @@ const MoveHandler = {
     /**
      * Move a calculation category to the first position.
      *
-     * @param {jQuery}
-     *            $category - the category to move.
-     * @return {jQuery} - the moved category.
+     * @param {JQuery} $category - the category to move.
+     * @return {JQuery} the moved category.
      */
     moveCategoryFirst: function ($category) {
         'use strict';
@@ -1685,9 +1616,8 @@ const MoveHandler = {
     /**
      * Move a calculation category to the last position.
      *
-     * @param {jQuery}
-     *            $category - the category to move.
-     * @return {jQuery} - the moved category.
+     * @param {JQuery} $category - the category to move.
+     * @return {JQuery} the moved category.
      */
     moveCategoryLast: function ($category) {
         'use strict';
@@ -1701,9 +1631,8 @@ const MoveHandler = {
     /**
      * Move up a calculation category.
      *
-     * @param {jQuery}
-     *            $category - the category to move.
-     * @return {jQuery} - the moved category.
+     * @param {JQuery} $category - the category to move.
+     * @return {JQuery} - the moved category.
      */
     moveCategoryUp: function ($category) {
         'use strict';
@@ -1718,9 +1647,8 @@ const MoveHandler = {
     /**
      * Move down a calculation category.
      *
-     * @param {jQuery}
-     *            $category - the category to move.
-     * @return {jQuery} - the moved category.
+     * @param {JQuery} $category - the category to move.
+     * @return {JQuery} the moved category.
      */
     moveCategoryDown: function ($category) {
         'use strict';
@@ -1733,14 +1661,10 @@ const MoveHandler = {
     /**
      * Move a source item before or after the target item.
      *
-     * @param {jQuery}
-     *            $source - the item to move.
-     * @param {jQuery}
-     *            $target - the target item.
-     * @param {boolean}
-     *            up - true to move before the target (up); false to move after
-     *            (down).
-     * @return {jQuery} - the moved item.
+     * @param {JQuery} $source - the item to move.
+     * @param {JQuery} $target - the target item.
+     * @param {boolean} up - true to move before the target (up); false to move after (down).
+     * @return {JQuery} the moved item.
      */
     moveItem: function ($source, $target, up) {
         'use strict';
@@ -1763,9 +1687,8 @@ const MoveHandler = {
     /**
      * Move a calculation item to the first position.
      *
-     * @param {jQuery}
-     *            $row - the item to move.
-     * @return {jQuery} - the moved item.
+     * @param {JQuery} $item - the item to move.
+     * @return {JQuery} - the moved item.
      */
     moveItemFirst: function ($item) {
         'use strict';
@@ -1780,9 +1703,8 @@ const MoveHandler = {
     /**
      * Move a calculation item to the last position.
      *
-     * @param {jQuery}
-     *            $item - the item to move.
-     * @return {jQuery} - the moved item.
+     * @param {JQuery} $item - the item to move.
+     * @return {JQuery} - the moved item.
      */
     moveItemLast: function ($item) {
         'use strict';
@@ -1798,9 +1720,8 @@ const MoveHandler = {
     /**
      * Move up a calculation item.
      *
-     * @param {jQuery}
-     *            $item - the item to move.
-     * @return {jQuery} - the moved item.
+     * @param {JQuery} $item - the item to move.
+     * @return {JQuery} - the moved item.
      */
     moveItemUp: function ($item) {
         'use strict';
@@ -1815,9 +1736,8 @@ const MoveHandler = {
     /**
      * Move down a calculation item.
      *
-     * @param {jQuery}
-     *            $item - the item to move.
-     * @return {jQuery} - the moved item.
+     * @param {JQuery} $item - the item to move.
+     * @return {JQuery} - the moved item.
      */
     moveItemDown: function ($item) {
         'use strict';

@@ -16,8 +16,7 @@
         /**
          * Initialize a type ahead search.
          *
-         * @param {Object}
-         *            options - the options to override.
+         * @param {Object} options - the options to override.
          * @return {Typeahead} The type ahead instance.
          */
         initTypeahead: function (options) {
@@ -30,7 +29,7 @@
                 matcher: function () {
                     return true;
                 },
-                grepper: function (data) {
+                filter: function (data) {
                     return data;
                 },
                 onSelect: function () {

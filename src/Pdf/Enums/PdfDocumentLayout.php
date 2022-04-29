@@ -15,7 +15,7 @@ namespace App\Pdf\Enums;
 /**
  * The PDF display layout enumeration.
  */
-enum PdfDocumentLayout:string
+enum PdfDocumentLayout: string
 {
     /*
      * Displays pages continuously.

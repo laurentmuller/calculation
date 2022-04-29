@@ -15,7 +15,7 @@ namespace App\Pdf\Enums;
 /**
  * The PDF document zoom enumeration.
  */
-enum PdfDocumentZoom:string
+enum PdfDocumentZoom: string
 {
     /*
      * Uses viewer default mode.

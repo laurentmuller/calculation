@@ -101,7 +101,7 @@
      * Constructor
      */
     const Cookiebanner = class {
-        
+
         /**
          * Create the banner div.
          */
@@ -135,10 +135,9 @@
                     'target': settings.linkTarget
                 });
                 if (settings.linkToggleClass) {
-                    const toggle = function() {
-                        $link.toggleClass(settings.linkToggleClass);
-                    };
-                    $link.hover(toggle, toggle);
+                    $link.hover(function() {
+                        $(this).toggleClass(settings.linkToggleClass);
+                    });
                 }
                 $message.append($link);
             }
@@ -176,10 +175,10 @@
             // check cookie
             if (!Cookies.has(settings.cookieName)) {
                 // create banner
-                this.createBanner(settings);
+                const that = this;
+                that.createBanner(settings);
 
                 // bind event
-                const that = this;
                 $('#cookie-banner-close').on('click', function (e) {
                     e.preventDefault();
                     if (!Cookies.has(settings.cookieName)) {
@@ -215,7 +214,7 @@
         closeClass: 'text-white mx-2',
 
         linkTarget: '_blank',
-        linkUrl: 'http://aboutcookies.org',
+        linkUrl: 'https://www.aboutcookies.org/',
         linkRel: 'noopener noreferrer',
 
         fontSize: '0.8rem',
@@ -229,7 +228,7 @@
     if (!$.cookiebanner) {
         // find script
         const scripts = document.getElementsByTagName('script');
-        for (var i = 0, len = scripts.length; i < len; i++) {
+        for (let i = 0, len = scripts.length; i < len; i++) {
             if ('cookiebanner' === scripts[i].id) {
                 // initialize
                 const $script = $(scripts[i]);
@@ -243,4 +242,3 @@
     }
 
 }(jQuery));
-

@@ -16,10 +16,8 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Adds an item entry.
      *
-     * @param {jQuery}
-     *            $link - the element to add.
-     * @param {string}
-     *            icon - the item's icon.
+     * @param {JQuery} $link - the element to add.
+     * @param {string} [icon] - the item's icon.
      * @return {MenuBuilder} This instance for chaining.
      */
     addItem($link, icon) {
@@ -56,10 +54,8 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Adds a title. Do nothing if the last added item is already a title.
      *
-     * @param {string}
-     *            title - the item's title.
-     * @param {string}
-     *            tag - the item's tag.
+     * @param {string} title - the item's title.
+     * @param {string} tag - the item's tag.
      * @return {MenuBuilder} This instance for chaining.
      */
     addTitle(title, tag) {
@@ -112,8 +108,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Returns if the given key is a separator item.
      *
-     * @param {string}
-     *            key - the key to be tested.
+     * @param {string} key - the key to be tested.
      * @return {boolean} true if separator.
      */
     isSeparator(key) {
@@ -123,8 +118,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Returns if the given key is a title item.
      *
-     * @param {string}
-     *            key - the key to be tested.
+     * @param {string} key - the key to be tested.
      * @return {boolean} true if title.
      */
     isTitle(key) {
@@ -135,7 +129,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Gets the last key.
      *
-     * @return {string} the last key, if any; null otherwise.
+     * @return {?string} the last key, if any; null otherwise.
      */
     getLastKey() {
         const keys = Object.keys(this.items);
@@ -148,8 +142,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Fills the given elements.
      *
-     * @param {Jquery}
-     *            $elements the elements to add.
+     * @param {JQuery} $elements the elements to add.
      * @return {MenuBuilder} This instance for chaining.
      */
     fill($elements) {
@@ -173,7 +166,7 @@ $.fn.extend({
     /**
      * Finds an icon within in this element.
      *
-     * @returns {string} the icon class, if found, null otherwise.
+     * @returns {?string} the icon class, if found, null otherwise.
      */
     findIcon: function () {
         'use strict';
@@ -190,7 +183,7 @@ $.fn.extend({
     },
 
     /**
-     * Finds an text within in this element.
+     * Finds a text within in this element.
      *
      * @returns {string} the text, if found, null otherwise.
      */
@@ -214,13 +207,10 @@ $.fn.extend({
     /**
      * Initialize the context menu.
      *
-     * @param {string}
-     *            selector - the selector matching the elements to trigger on.
-     * @param {function}
-     *            fnShow - the function called when the context menu is shown.
-     * @param {function}
-     *            fnHide - the function called when the context menu is hidden.
-     * @return {jQuery} The jQuery element for chaining.
+     * @param {string}  selector - the selector matching the elements to trigger on.
+     * @param {function} fnShow - the function called when the context menu is shown.
+     * @param {function} fnHide - the function called when the context menu is hidden.
+     * @return {JQuery} The jQuery element for chaining.
      */
     initContextMenu: function (selector, fnShow, fnHide) {
         'use strict';

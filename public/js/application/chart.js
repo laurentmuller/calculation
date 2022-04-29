@@ -3,8 +3,7 @@
 /**
  * Handles the months input change.
  *
- * @param {jQuery}
- *            $months - the months element to get value from.
+ * @param {JQuery} $months - the months element to get value from.
  */
 function onMonthsChange($months) {
     'use strict';

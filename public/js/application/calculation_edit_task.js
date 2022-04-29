@@ -114,8 +114,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
     /**
      * Send data to server and update UI.
      *
-     * @param {Object}
-     *            data - the data to send.
+     * @param {Object} data - the data to send.
      * @return {EditTaskDialog} This instance for chaining.
      */
     _send(data) {
@@ -196,10 +195,8 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
     /**
      * Update a plain-text.
      *
-     * @param {string}
-     *            id - the plain-text identifier.
-     * @param {number}
-     *            value - the value.
+     * @param {string} id - the plain-text identifier.
+     * @param {number} value - the value.
      * @return {EditTaskDialog} This instance for chaining.
      */
     _updateValue(id, value) {

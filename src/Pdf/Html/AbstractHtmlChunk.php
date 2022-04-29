@@ -75,14 +75,10 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
     /**
      * Finds the parent for the given the tag names.
-     *
-     * @return HtmlParentChunk|null the parent, if found; <code>null</code> otherwise
      */
     public function findParent(string ...$names): ?HtmlParentChunk
     {
-        /** @var HtmlParentChunk $parent */
         $parent = $this->parent;
-        /** @psalm-param list<$names> $names */
         while (null !== $parent && !$parent->is(...$names)) {
             $parent = $parent->getParent();
         }
@@ -95,11 +91,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function getAlignment(): PdfTextAlignment
     {
-        if (null !== $this->style) {
-            return $this->style->getAlignment();
-        }
-
-        return PdfTextAlignment::LEFT;
+        return $this->style?->getAlignment() ?? PdfTextAlignment::LEFT;
     }
 
     /**
@@ -107,11 +99,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function getBottomMargin(): float
     {
-        if (null !== $this->style) {
-            return $this->style->getBottomMargin();
-        }
-
-        return 0;
+        return $this->style?->getBottomMargin() ?? 0;
     }
 
     /**
@@ -135,11 +123,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function getLeftMargin(): float
     {
-        if (null !== $this->style) {
-            return $this->style->getLeftMargin();
-        }
-
-        return 0;
+        return $this->style?->getLeftMargin() ?? 0;
     }
 
     /**
@@ -163,11 +147,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function getRightMargin(): float
     {
-        if (null !== $this->style) {
-            return $this->style->getRightMargin();
-        }
-
-        return 0;
+        return $this->style?->getRightMargin() ?? 0;
     }
 
     /**
@@ -183,11 +163,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function getTopMargin(): float
     {
-        if (null !== $this->style) {
-            return $this->style->getTopMargin();
-        }
-
-        return 0;
+        return $this->style?->getTopMargin() ?? 0;
     }
 
     /**
@@ -205,11 +181,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function index(): int
     {
-        if (null !== $this->parent) {
-            return $this->parent->indexOf($this);
-        }
-
-        return -1;
+        return $this->parent?->indexOf($this) ?? -1;
     }
 
     /**
@@ -219,7 +191,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function is(string ...$names): bool
     {
-        /** @psalm-param list<$names> $names */
         foreach ($names as $name) {
             if (0 === \strcasecmp($this->name, $name)) {
                 return true;
@@ -310,9 +281,9 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * </code>
      * </pre>.
      *
-     * @param HtmlReport   $report   the report to set and restore font
-     * @param PdfFont|null $font     the font to apply
-     * @param callable     $callback the callback to call after the font has been set. The report is passed as argument.
+     * @param HtmlReport                $report   the report to set and restore font
+     * @param PdfFont|null              $font     the font to apply
+     * @param callable(HtmlReport):void $callback the callback to call after the font has been set. The report is passed as argument.
      */
     protected function applyFont(HtmlReport $report, ?PdfFont $font, callable $callback): void
     {
@@ -336,10 +307,10 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * </code>
      * </pre>.
      *
-     * @param HtmlReport $report      the report to set and restore margins
-     * @param float      $leftMargin  the left margin to add
-     * @param float      $rightMargin the right margin to add
-     * @param callable   $callback    the callback to call after the margins has been set. The report is passed as argument.
+     * @param HtmlReport                $report      the report to set and restore margins
+     * @param float                     $leftMargin  the left margin to add
+     * @param float                     $rightMargin the right margin to add
+     * @param callable(HtmlReport):void $callback    the callback to call after the margins has been set. The report is passed as argument.
      */
     protected function applyMargins(HtmlReport $report, float $leftMargin, float $rightMargin, callable $callback): void
     {
@@ -436,7 +407,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     protected function parseMargins(HtmlStyle &$style, string $class): void
     {
-        $pattern = '/m[tblrxy]{0,1}-[012345]/';
+        $pattern = '/m[tblrxy]{?}-[012345]/';
         if (\preg_match($pattern, $class)) {
             $value = (float) $class[-1];
             switch ($class[1]) {

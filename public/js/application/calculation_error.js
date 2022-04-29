@@ -2,7 +2,7 @@
 
 /**
  * Returns this trimmed text content.
- * 
+ *
  * @returns {string} the trimmed text content.
  */
 $.fn.trimmedText = function () {
@@ -16,7 +16,7 @@ $.fn.trimmedText = function () {
 
 /**
  * Returns if this cell content is equal to 0.
- * 
+ *
  * @returns {boolean} true if empty.
  */
 $.fn.isEmptyValue = function () {
@@ -28,7 +28,7 @@ $.fn.isEmptyValue = function () {
 
 /**
  * Updates the rows and cells errors.
- * 
+ *
  * @returns {boolean} true if any error found.
  */
 function updateErrors() {
@@ -89,14 +89,15 @@ function updateErrors() {
     'use strict';
 
     // tooltip
-    if ($('.btn-adjust').length) {
-        $('.btn-adjust').tooltip();
+    const $button = $('.btn-adjust');
+    if ($button.length) {
+        $button.tooltip();
     }
     $('body').tooltip({
         selector: '.has-tooltip',
         customClass: 'tooltip-danger overall-cell'
     });
-    
+
 
     // errors
     if ($("#data-table-edit").length) {

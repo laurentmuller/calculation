@@ -41,7 +41,7 @@ function updateUI() {
  */
 function startDragItems() {
     'use strict';
-    const $items = $('#items');
+    const $items = $("#items");
 
     // destroy
     if ($items.data('sortable')) {
@@ -68,9 +68,8 @@ function startDragItems() {
 /**
  * Gets the maximum of the maximum column.
  *
- * @param {JQuery}
- *            table - the parent table.
- * @returns float - the maximum.
+ * @param {JQuery} $table - the parent table.
+ * @returns {number} - the maximum.
  */
 function getMaxValue($table) {
     'use strict';
@@ -85,9 +84,8 @@ function getMaxValue($table) {
 /**
  * Gets the minimum of the value column.
  *
- * @param {JQuery}
- *            table - the parent table.
- * @returns float - the minimum.
+ * @param {JQuery} $table - the parent table.
+ * @returns {number} - the minimum.
  */
 function getMinValue($table) {
     'use strict';
@@ -102,7 +100,7 @@ function getMinValue($table) {
 /**
  * Gets the next available item index used for the prototype.
  *
- * @returns int the next index.
+ * @returns {int} the next index.
  */
 function getNextItemIndex() {
     'use strict';
@@ -117,7 +115,7 @@ function getNextItemIndex() {
 /**
  * Gets the next available margin index used for the prototype.
  *
- * @returns int the next index.
+ * @returns {int} the next index.
  */
 function getNextMarginIndex() {
     'use strict';
@@ -132,7 +130,7 @@ function getNextMarginIndex() {
 /**
  * Gets the item prototype.
  *
- * @returns string the prototype.
+ * @returns {string} the prototype.
  */
 function getItemPrototype() {
     'use strict';
@@ -142,9 +140,8 @@ function getItemPrototype() {
 /**
  * Gets the margin prototype.
  *
- * @param {JQuery}
- *            table - the parent table.
- * @returns string the prototype.
+ * @param {JQuery} $table - the parent table.
+ * @returns {string} the prototype.
  */
 function getMarginPrototype($table) {
     'use strict';
@@ -154,7 +151,7 @@ function getMarginPrototype($table) {
 /**
  * Adds a new item.
  *
- * @return {jQuery} the newly created item for chaining.
+ * @return {JQuery} the newly created item for chaining.
  */
 function addItem() {
     'use strict';
@@ -188,8 +185,7 @@ function addItem() {
 /**
  * Remove an item.
  *
- * @param {jQuery}
- *            $caller - the caller (normally a button).
+ * @param {JQuery} $caller - the caller (normally a button).
  */
 function removeItem($caller) {
     'use strict';
@@ -204,9 +200,8 @@ function removeItem($caller) {
 /**
  * Move up an item.
  *
- * @param {jQuery}
- *            $caller - the caller (normally a button).
- * @return {jQuery} the item for chaining.
+ * @param {JQuery} $caller - the caller (normally a button).
+ * @return {JQuery} the item for chaining.
  */
 function moveUpItem($caller) {
     'use strict';
@@ -233,9 +228,8 @@ function moveUpItem($caller) {
 /**
  * Move down an item.
  *
- * @param {jQuery}
- *            $caller - the caller (normally a button).
- * @return {jQuery} the item for chaining.
+ * @param {JQuery} $caller - the caller (normally a button).
+ * @return {JQuery} the item for chaining.
  */
 function moveDownItem($caller) {
     'use strict';
@@ -262,8 +256,7 @@ function moveDownItem($caller) {
 /**
  * Adds a new margin.
  *
- * @param {jQuery}
- *            $caller - the caller (normally a button).
+ * @param {JQuery} $caller - the caller (normally a button).
  */
 function addMargin($caller) {
     'use strict';
@@ -280,7 +273,7 @@ function addMargin($caller) {
     const maximum = Math.max(minimum * 2, 1);
 
     // create and add margin
-    const index = getNextMarginIndex($table);
+    const index = getNextMarginIndex();
     const prototype = getMarginPrototype($table);
     const $row = $(prototype.replace(/__marginIndex__/g, index));
     $table.find('tbody').append($row);
@@ -297,8 +290,7 @@ function addMargin($caller) {
 /**
  * Remove a margin (row).
  *
- * @param {jQuery}
- *            $caller - the caller.
+ * @param {JQuery} $caller - the caller.
  */
 function removeMargin($caller) {
     'use strict';
@@ -312,8 +304,7 @@ function removeMargin($caller) {
 /**
  * Sort margins.
  *
- * @param {jQuery}
- *            $caller - the caller.
+ * @param {JQuery} $caller - the caller.
  */
 function sortMargins($caller) {
     'use strict';
@@ -384,7 +375,7 @@ function sortMargins($caller) {
         $(this).parents('.card').children('.collapse').collapse('show');
     });
 
-    // initalize search
+    // initialize search
     const $form = $("#edit-form");
     $("#task_unit").initTypeahead({
         url: $form.data("unit-search"),
@@ -398,7 +389,7 @@ function sortMargins($caller) {
     // start drag & drop
     startDragItems();
 
-    // initalize validation
+    // initialize validation
     $form.initValidator();
 
     // update UI

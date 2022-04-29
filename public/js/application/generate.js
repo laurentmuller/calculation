@@ -5,19 +5,16 @@
 /**
  * Creates rows for the given items.
  *
- * @param {array}
- *            items - the items to render.
- * @param {object}
- *            mapping - a map where keys are the item property and value is the cell class.
- * @param {string}
- *            header - the table headers to display.
- * @param {function}
- *            callback - an optional function to update the row.
+ * @param {array} items - the items to render.
+ * @param {object} mapping - a map where keys are the item property and value is the cell class.
+ * @param {string} header - the table headers to display.
+ * @param {function} [callback] - an optional function to update the row.
  */
 function createRows(items, mapping, header, callback) {
     'use strict';
 
     // build
+    const $result = $('#result');
     const entries = Object.entries(mapping);
     const $body = $('<tbody/>', {
         'id': 'result'
@@ -30,15 +27,15 @@ function createRows(items, mapping, header, callback) {
                  'class': className || ''
              }));
          }
-        if ($.isFunction(callback)) {
+        if (typeof callback === 'function') {
             callback(item, $row);
         }
         $body.append($row);
     });
-    $('#result').replaceWith($body);
+    $result.replaceWith($body);
 
     // update displayed headers
-    $('#result').parents('table').find('thead').each(function () {
+    $result.parents('table').find('thead').each(function () {
         const $this = $(this);
         $this.toggleClass('d-none', !$this.hasClass(header));
     });
@@ -47,8 +44,7 @@ function createRows(items, mapping, header, callback) {
 /**
  * Fill the table with the generated calculations
  *
- * @param {array}
- *            items - the calculations to render.
+ * @param {array} items - the calculations to render.
  */
 function renderCalculations(items) {
     'use strict';
@@ -71,8 +67,7 @@ function renderCalculations(items) {
 /**
  * Fill the table with the generated customers
  *
- * @param {array}
- *            items - the customers to render.
+ * @param {array} items - the customers to render.
  */
 function renderCustomers(items) {
     'use strict';
@@ -87,8 +82,7 @@ function renderCustomers(items) {
 /**
  * Fill the table with the generated products
  *
- * @param {array}
- *            items - the products to render.
+ * @param {array} items - the products to render.
  */
 function renderProducts(items) {
     'use strict';
@@ -103,7 +97,7 @@ function renderProducts(items) {
 }
 
 /**
- * Disable the submit and cancel buttons.
+ * Disable submit and cancel buttons.
  */
 function disableButtons() {
     'use strict';
@@ -115,7 +109,7 @@ function disableButtons() {
 }
 
 /**
- * Enable the submit and cancel buttons.
+ * Enable submit and cancel buttons.
  */
 function enableButtons() {
     'use strict';
@@ -131,10 +125,8 @@ function enableButtons() {
 /**
  * Notify a message.
  *
- * @param {string}
- *            type - the message type.
- * @param {string}
- *            message - the message to display.
+ * @param {string} type - the message type.
+ * @param {string} message - the message to display.
  */
 function notifyMessage(type, message) {
     'use strict';
@@ -155,6 +147,7 @@ function generate() {
         simulate: $('#form_simulate').isChecked()
     };
 
+    const $form = $('#edit-form');
     $.getJSON(url, data, function (response) {
         if (!response.result) {
             notifyMessage('danger', response.message || $('#edit-form').data('error'));
@@ -176,7 +169,7 @@ function generate() {
             renderProducts(response.items);
             break;
         default:
-            notifyMessage('warning', $('#edit-form').data('empty'));
+            notifyMessage('warning', $form.data('empty'));
             return;
         }
 
@@ -189,7 +182,7 @@ function generate() {
         enableButtons();
 
     }).fail(function () {
-        notifyMessage('danger', $('#edit-form').data('error'));
+        notifyMessage('danger', $form.data('error'));
     });
 }
 

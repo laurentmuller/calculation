@@ -41,8 +41,7 @@
         /**
          * Initialize the password strength.
          *
-         * @param {Object}
-         *            options - The optional options.
+         * @param {Object} options - The optional options.
          */
         initPasswordStrength: function (options) {
             return this.each(function () {

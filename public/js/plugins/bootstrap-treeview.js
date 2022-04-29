@@ -332,7 +332,7 @@
         /**
          * Toggle the visibility of the given group.
          *
-         * @param {jQuery}
+         * @param {JQuery}
          *            $group - the group to toggle.
          * @return {BoostrapTreeView} this instance for chaining.
          */
@@ -403,7 +403,7 @@
         /**
          * Select the given element.
          *
-         * @param {jQuery}
+         * @param {JQuery}
          *            $$selection - the item to select.
          * @return {BoostrapTreeView} this instance for chaining.
          */
@@ -419,7 +419,7 @@
         /**
          * Gets the selected item.
          *
-         * @return {jQuery} the selected item, if any; null otherwise.
+         * @return {JQuery} the selected item, if any; null otherwise.
          */
         getSelection() {
             const selectionClass = this.options.selectionClass;

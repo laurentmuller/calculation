@@ -15,7 +15,7 @@ namespace App\Pdf\Enums;
 /**
  * PDF move enumeration.
  */
-enum PdfMove:int
+enum PdfMove: int
 {
     /*
      * Move below of the printed cell.

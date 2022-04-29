@@ -8,8 +8,7 @@
         /**
          * Constructor.
          *
-         * @param {Application}
-         *            application - the parent application.
+         * @param {Application} application - the parent application.
          */
         constructor(application) {
             'use strict';
@@ -23,8 +22,7 @@
         /**
          * Display the add item dialog.
          *
-         * @param {jQuery}
-         *            $row - the selected row.
+         * @param {JQuery} $row - the selected row.
          * @return {EditDialog} This instance for chaining.
          */
         showAdd($row) {
@@ -49,8 +47,7 @@
         /**
          * Display the edit dialog.
          *
-         * @param {jQuery}
-         *            $row - the selected row.
+         * @param {JQuery} $row - the selected row.
          * @return {EditDialog} This instance for chaining.
          */
         showEdit($row) {
@@ -139,8 +136,7 @@
         /**
          * Initialize the modal dialog.
          *
-         * @param {jQuery}
-         *            $modal - the modal dialog.
+         * @param {JQuery} $modal - the modal dialog.
          *
          * @return {EditDialog} This instance for chaining.
          */
@@ -156,8 +152,7 @@
         /**
          * Initialize the dialog add.
          *
-         * @param {jQuery}
-         *            _$row - the selected row.
+         * @param {JQuery} _$row - the selected row.
          *
          * @return {EditDialog} This instance for chaining.
          */
@@ -169,8 +164,7 @@
         /**
          * Initialize the dialog edit.
          *
-         * @param {jQuery}
-         *            _$row - the selected row.
+         * @param {JQuery} _$row - the selected row.
          *
          * @return {EditDialog} This instance for chaining.
          */
@@ -219,8 +213,7 @@
         /**
          * Format a value with 2 fixed decimals and grouping separator.
          *
-         * @param {Number}
-         *            value - the value to format.
+         * @param {Number} value - the value to format.
          * @returns {string} - the formatted value.
          */
         _formatValue(value) {
@@ -231,8 +224,7 @@
         /**
          * Rounds the given value with 2 decimals.
          *
-         * @param {Number}
-         *            value - the value to roud.
+         * @param {Number} value - the value to round.
          * @returns {Number} - the rounded value.
          */
         _roundValue(value) {
@@ -243,8 +235,7 @@
         /**
          * Parse the given value as float.
          *
-         * @param {string}
-         *            value - the value to parse.
+         * @param {string} value - the value to parse.
          * @returns {number} the parsed value.
          */
         _parseFloat(value) {

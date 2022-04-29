@@ -154,7 +154,7 @@
             /**
              * Finds the container of the given element.
              *
-             * @param {jQuery}
+             * @param {JQuery}
              *            $element - the element to update.
              */
             $.validator.prototype.findElement = function ($element) {
@@ -290,8 +290,7 @@
         /**
          * Intitialize an input type color within the color-picker plugin.
          *
-         * @param {Object}
-         *            options - the options
+         * @param {Object} options - the options
          */
         initColorPicker: function (options) {
             return this.each(function () {
@@ -354,7 +353,7 @@
     }, $.validator.format('The password must have a minimum score of {0}.'));
 
     /*
-     * check if the value contains the user name
+     * check if the value contains the username
      */
     $.validator.addMethod('notUsername', function (value, element, param) {
         if (this.optional(element)) {
@@ -391,7 +390,7 @@
     }, 'The field must contain a lower case character.');
 
     /*
-     * check if contains a upper case character
+     * check if contains an upper case character
      */
     $.validator.addMethod('uppercase', function (value, element) {
         if (this.optional(element)) {
@@ -401,7 +400,7 @@
     }, 'The field must contain an upper case character.');
 
     /*
-     * check if contains a upper and lower case characters
+     * check if contains an upper and lower case characters
      */
     $.validator.addMethod('mixedcase', function (value, element, param) {
         if (this.optional(element)) {

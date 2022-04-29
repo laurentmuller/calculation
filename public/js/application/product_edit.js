@@ -6,7 +6,7 @@
 (function ($) {
     'use strict';
 
-    // initalize search
+    // initialize search
     const $form = $("#edit-form");
     $("#product_unit").initTypeahead({
         url: $form.data("unit-search"),
@@ -17,7 +17,7 @@
         error: $form.data("supplier-error")
     });
 
-    // initalize price
+    // initialize price
     $('#product_price').inputNumberFormat();
 
     // validation

@@ -379,7 +379,7 @@
         /**
          * Gets the selected color button.
          *
-         * @param {jQuery}
+         * @param {JQuery}
          *            $button - the clicked button element.
          * @returns {Object} the row and column index of the selected button.
          */
@@ -411,7 +411,7 @@
          *
          * @param {string}
          *            selector - the buttons selector.
-         * @returns {jQuery} the buttons, if found; null otherwise.
+         * @returns {JQuery} the buttons, if found; null otherwise.
          */
         findButton(selector) {
             const $button = this.$palette.find(selector);
@@ -424,7 +424,7 @@
          * @param {Object}
          *            selection - the selection to set (must contains a 'row'
          *            and a 'col' fields).
-         * @returns {jQuery} the button, if found; null otherwise.
+         * @returns {JQuery} the button, if found; null otherwise.
          */
         setSelection(selection) {
             const selector = '.color-row:eq(' + selection.row + ') .btn-color:eq(' + selection.col + ')';

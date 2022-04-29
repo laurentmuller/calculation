@@ -146,10 +146,7 @@
         }
 
         isFunction(value) {
-            if (typeof value === 'function') {
-                return value !== $.noop;
-            }
-            return false;
+            return typeof value === 'function' &&  value !== $.noop;
         }
     };
 

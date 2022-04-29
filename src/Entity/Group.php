@@ -297,7 +297,7 @@ class Group extends AbstractEntity
     /**
      * Iteratively reduce these categories to a single value using the callback function.
      *
-     * @psalm-param callable(int, Category): int $callback
+     * @param callable(int, Category): int $callback
      */
     private function reduceCategories(callable $callback): int
     {

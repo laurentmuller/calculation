@@ -18,7 +18,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 
 /**
- * Unit test for {@link App\Controller\CalculationController} class.
+ * Unit test for {@link CalculationController} class.
  */
 class CalculationControllerTest extends AbstractControllerTest
 {

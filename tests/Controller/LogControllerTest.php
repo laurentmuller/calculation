@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\LogController} class.
+ * Unit test for {@link LogController} class.
  */
 class LogControllerTest extends AbstractControllerTest
 {

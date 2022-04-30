@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for {@link App\Traits\StrengthTranslatorTrait} class.
+ * Unit test for {@link StrengthTranslatorTrait} class.
  */
 class StrengthTranslatorTraitTest extends TestCase
 {
@@ -42,19 +42,19 @@ class StrengthTranslatorTraitTest extends TestCase
      */
     public function testTranslateLevel(int $level, string $message): void
     {
-        $this->translator = $this->getTranslator();
-        $actual = $this->translateLevel($level);
         $expected = "password.strength_level.$message";
+        $this->translator = $this->getTranslator($expected);
+        $actual = $this->translateLevel($level);
         $this->assertEquals($actual, $expected);
     }
 
-    private function getTranslator(): TranslatorInterface
+    private function getTranslator(string $message): TranslatorInterface
     {
         $translator = $this->getMockBuilder(TranslatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $translator->method('trans')
-            ->willReturn($this->returnArgument(0));
+            ->willReturn($message);
 
         return $translator;
     }

@@ -4,11 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e5a72e9eca8c6e9961e2685c49823d5",
+    "content-hash": "74b35f3b1d6934d3000ba3db1961ad43",
     "packages": [
         {
             "name": "friendsoftwig/twigcs",
-            "version": "dev-master",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/friendsoftwig/twigcs.git",
@@ -29,7 +29,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^8.0 || ^9.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/twigcs"
             ],
@@ -52,7 +51,7 @@
             "description": "Checkstyle automation for Twig",
             "support": {
                 "issues": "https://github.com/friendsoftwig/twigcs/issues",
-                "source": "https://github.com/friendsoftwig/twigcs/tree/main"
+                "source": "https://github.com/friendsoftwig/twigcs/tree/v6.0.0"
             },
             "time": "2021-12-15T11:20:27+00:00"
         },
@@ -829,9 +828,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "friendsoftwig/twigcs": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

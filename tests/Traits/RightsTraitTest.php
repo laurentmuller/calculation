@@ -18,7 +18,7 @@ use App\Traits\RightsTrait;
 use PHPUnit\Framework\TestCase;
 
 /***
- * Unit test for {@link App\Traits\RightsTrait} class.
+ * Unit test for {@link RightsTrait} class.
  *
  *
  *

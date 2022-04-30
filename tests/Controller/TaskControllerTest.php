@@ -19,7 +19,7 @@ use App\Entity\TaskItem;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\TaskController} class.
+ * Unit test for {@link TaskController} class.
  */
 class TaskControllerTest extends AbstractControllerTest
 {

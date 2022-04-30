@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\IndexController} class.
+ * Unit test for {@link IndexController} class.
  */
 class IndexControllerTest extends AbstractControllerTest
 {

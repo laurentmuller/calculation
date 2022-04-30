@@ -16,7 +16,7 @@ use App\Traits\MathTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for {@link App\Traits\MathTrait} class.
+ * Unit test for {@link MathTrait} class.
  *
  * @see MathTrait
  */

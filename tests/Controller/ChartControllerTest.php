@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\ChartController} class.
+ * Unit test for {@link ChartController} class.
  */
 class ChartControllerTest extends AbstractControllerTest
 {

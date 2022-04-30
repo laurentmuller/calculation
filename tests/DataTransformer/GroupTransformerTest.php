@@ -22,7 +22,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Test for the {@link App\Form\DataTransformer\GroupTransformer} class.
+ * Test for the {@link GroupTransformer} class.
  */
 class GroupTransformerTest extends KernelTestCase
 {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\SiteMapController} class.
+ * Unit test for {@link SiteMapController} class.
  */
 class SiteMapControllerTest extends AbstractControllerTest
 {

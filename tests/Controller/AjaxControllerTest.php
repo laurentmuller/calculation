@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for {@link App\Controller\AjaxController} class.
+ * Unit test for {@link AjaxController} class.
  */
 class AjaxControllerTest extends AbstractAuthenticateWebTestCase
 {

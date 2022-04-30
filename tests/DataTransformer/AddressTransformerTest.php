@@ -18,7 +18,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
 
 /**
- * Test for the {@link App\Form\DataTransformer\AddressTransformer} class.
+ * Test for the {@link DataTransformer\AddressTransformer} class.
  */
 class AddressTransformerTest extends TestCase
 {

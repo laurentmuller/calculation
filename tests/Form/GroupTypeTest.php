@@ -17,7 +17,7 @@ use App\Form\Group\GroupType;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Test for the {@link App\Form\Group\GroupType} class.
+ * Test for the {@link GroupType} class.
  */
 class GroupTypeTest extends AbstractEntityTypeTestCase
 {

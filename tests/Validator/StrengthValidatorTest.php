@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for {@link App\Validator\StrengthValidator} class.
+ * Unit test for {@link StrengthValidator} class.
  */
 class StrengthValidatorTest extends ConstraintValidatorTestCase
 {

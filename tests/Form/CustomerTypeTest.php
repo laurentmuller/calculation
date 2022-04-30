@@ -16,7 +16,7 @@ use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
 
 /**
- * Test for the {@link App\Form\Customer\CustomerType} class.
+ * Test for the {@link CustomerType} class.
  */
 class CustomerTypeTest extends AbstractEntityTypeTestCase
 {

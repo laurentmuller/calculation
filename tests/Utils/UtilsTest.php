@@ -17,7 +17,7 @@ use App\Util\Utils;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for {@link App\Util\Utils} class.
+ * Unit test for {@link Utils} class.
  *
  * @see Utils
  */

@@ -16,7 +16,7 @@ use App\Util\ReverseReader;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for the {@link App\Util\ReverseReader} class.
+ * Unit test for the {@link ReverseReader} class.
  *
  * @see ReverseReader
  */

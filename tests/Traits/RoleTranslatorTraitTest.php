@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for {@link App\Traits\RoleTranslatorTrait} class.
+ * Unit test for {@link RoleTranslatorTrait} class.
  */
 class RoleTranslatorTraitTest extends TestCase
 {
@@ -43,21 +43,21 @@ class RoleTranslatorTraitTest extends TestCase
      *
      * @dataProvider getTranslateRoles
      */
-    public function testTranslateRole($role, string $message): void
+    public function testTranslateRole(RoleInterface|string $role, string $message): void
     {
-        $this->translator = $this->getTranslator();
-        $actual = $this->translateRole($role);
         $expected = "user.roles.$message";
+        $this->translator = $this->getTranslator($expected);
+        $actual = $this->translateRole($role);
         $this->assertEquals($actual, $expected);
     }
 
-    private function getTranslator(): TranslatorInterface
+    private function getTranslator(string $message): TranslatorInterface
     {
         $translator = $this->getMockBuilder(TranslatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $translator->method('trans')
-            ->willReturn($this->returnArgument(0));
+            ->willReturn($message);
 
         return $translator;
     }

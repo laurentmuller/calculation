@@ -19,7 +19,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\GeneratorController} class.
+ * Unit test for {@link GeneratorController} class.
  */
 class GeneratorControllerTest extends AbstractControllerTest
 {

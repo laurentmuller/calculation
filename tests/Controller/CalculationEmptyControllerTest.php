@@ -20,7 +20,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\CalculationEmptyController} class.
+ * Unit test for {@link CalculationEmptyController} class.
  */
 class CalculationEmptyControllerTest extends AbstractControllerTest
 {

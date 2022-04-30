@@ -23,7 +23,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Test for the {@link App\Form\DataTransformer\CategoryTransformer} class.
+ * Test for the {@link CategoryTransformer} class.
  */
 class CategoryTransformerTest extends KernelTestCase
 {

@@ -16,7 +16,7 @@ use App\Entity\Customer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\CustomerController} class.
+ * Unit test for {@link CustomerController} class.
  */
 class CustomerControllerTest extends AbstractControllerTest
 {

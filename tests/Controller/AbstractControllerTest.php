@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\AboutController} class.
+ * Unit test for {@link AboutController} class.
  * Asbtract unit test for controllers.
  */
 abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
@@ -26,7 +26,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
     /**
      * Gets the routes to test.
      *
-     * Each entry must contains an URL, an user name, an expected result and the request method.
+     * Each entry must contain a URL, a username, an expected result and the request method.
      *
      * @return array|\Generator
      *

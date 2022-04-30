@@ -20,7 +20,7 @@ use App\Entity\GroupMargin;
 use App\Entity\Product;
 
 /**
- * Unit test for {@link App\Controller\PivotController} class.
+ * Unit test for {@link PivotController} class.
  */
 class PivotControllerTest extends AbstractControllerTest
 {

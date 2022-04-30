@@ -1,7 +1,7 @@
 {
     "require" : {
         "php": "^8.1",
-        "friendsoftwig/twigcs": "dev-master"
+        "friendsoftwig/twigcs": "^6.0"
     },
     "config" : {
         "preferred-install" : {

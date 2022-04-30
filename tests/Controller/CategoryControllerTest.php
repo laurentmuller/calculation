@@ -17,7 +17,7 @@ use App\Entity\Group;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\CategoryController} class.
+ * Unit test for {@link CategoryController} class.
  */
 class CategoryControllerTest extends AbstractControllerTest
 {

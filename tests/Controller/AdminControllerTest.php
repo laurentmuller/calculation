@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\AdminController} class.
+ * Unit test for {@link AdminController} class.
  */
 class AdminControllerTest extends AbstractControllerTest
 {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\CalendarController} class.
+ * Unit test for {@link CalendarController} class.
  */
 class CalendarControllerTest extends AbstractControllerTest
 {

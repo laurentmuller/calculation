@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for {@link App\Validator\PasswordValidator} class.
+ * Unit test for {@link PasswordValidator} class.
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {

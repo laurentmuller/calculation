@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\SearchController} class.
+ * Unit test for {@link SearchController} class.
  */
 class SearchControllerTest extends AbstractControllerTest
 {

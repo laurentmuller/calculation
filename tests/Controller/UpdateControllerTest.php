@@ -20,7 +20,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\UpdateController} class.
+ * Unit test for {@link UpdateController} class.
  */
 class UpdateControllerTest extends AbstractControllerTest
 {

@@ -244,7 +244,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
      *
      * @see Voter
      */
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, mixed $subject): bool
     {
         // check attribute
         if (!\array_key_exists($attribute, self::MASK_ATTRIBUTES)) {
@@ -267,7 +267,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
      *
      * @see Voter
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         // check user
         $user = $token->getUser();

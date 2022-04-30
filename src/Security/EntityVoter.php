@@ -241,8 +241,6 @@ class EntityVoter extends Voter implements EntityVoterInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @see Voter
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -262,10 +260,6 @@ class EntityVoter extends Voter implements EntityVoterInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param mixed $subject
-     *
-     * @see Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {

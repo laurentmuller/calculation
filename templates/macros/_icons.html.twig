@@ -46,7 +46,7 @@
 {%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
 {%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
-<a href="{{ href }}" target="_blank" rel="noreferrer"{{ class|raw }}{{ title|raw }}{{ role|raw }}>
+<a href="{{ href }}" target="_blank" rel="noopener noreferrer"{{ class|raw }}{{ title|raw }}{{ role|raw }}>
     {{- _self.icon(icon, text, domain, parameters) -}}
 </a>
 {%- endmacro %}

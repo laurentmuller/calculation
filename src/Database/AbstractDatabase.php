@@ -132,7 +132,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * Compact the database.
      *
      * <b>NB:</b> Make sure that there is no transaction open when the command is executed. For more information
-     * see: <a href="https://www.sqlitetutorial.net/sqlite-vacuum/" target="_blank" rel="noreferrer">SQLite VACUUM</a>
+     * see: <a href="https://www.sqlitetutorial.net/sqlite-vacuum/" target="_blank">SQLite VACUUM</a>
      *
      * @return bool true if success
      */

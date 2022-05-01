@@ -1,7 +1,8 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title_icon = 'times' -%}
+{%- set title_icon = title_icon|default('times') -%}
+{%- set title = title|default('common.delete_title') -%}
 {%- set submit_text = submit_text|default('common.button_delete') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-danger') -%}
 {%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
@@ -11,7 +12,7 @@
 {% block card_header_class ' text-white bg-danger' %}
 
 {% block card_body -%}
-<p class="mb-0">{{ message|raw }}</p>
+<p class="mb-0">{{ message|default('common.delete_message'|trans)|raw }}</p>
 {%- endblock %}
 
 {% block javascripts -%}

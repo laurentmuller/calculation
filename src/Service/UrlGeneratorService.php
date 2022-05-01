@@ -23,6 +23,7 @@ use App\Table\SearchTable;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -76,7 +77,7 @@ class UrlGeneratorService
     /**
      * Generate the cancel URL.
      */
-    public function cancelUrl(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
+    public function cancelUrl(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         // build parameters
         $params = $this->routeParams($request, $id);
@@ -92,17 +93,17 @@ class UrlGeneratorService
         }
 
         // default route
-        return $this->generator->generate($defaultRoute, $params);
+        return $this->generator->generate($defaultRoute, $params, $referenceType);
     }
 
     /**
      * Generate the cancel URL and returns a redirect response.
      */
-    public function redirect(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): RedirectResponse
+    public function redirect(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $status = Response::HTTP_FOUND, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): RedirectResponse
     {
-        $url = $this->cancelUrl($request, $id, $defaultRoute);
+        $url = $this->cancelUrl($request, $id, $defaultRoute, $referenceType);
 
-        return new RedirectResponse($url);
+        return new RedirectResponse($url, $status);
     }
 
     /**

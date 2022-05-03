@@ -16,8 +16,10 @@ use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Traits\RightsTrait;
 use App\Traits\RoleTrait;
+use App\Util\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -27,7 +29,9 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
+use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
  * User.
@@ -47,17 +51,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[Assert\Email]
     #[Assert\NotBlank]
     #[Assert\Length(max: 180)]
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     private bool $enabled = true;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $expiresAt = null;
 
     #[Assert\Length(max: 100)]
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     private ?string $hashedToken = null;
 
     /**
@@ -71,15 +75,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * The image file name.
      */
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $imageName = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastLogin = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $password = null;
 
     /**
@@ -88,25 +92,25 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProperty::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $properties;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $requestedAt = null;
 
     #[Assert\Length(max: 20)]
-    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 20, nullable: true)]
     private ?string $selector = null;
 
     /**
      * The last updated date.
      */
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 180)]
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     private ?string $username = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     private bool $verified = false;
 
     /**
@@ -286,6 +290,25 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
+     * Gets the absolute image path, if any.
+     */
+    public function getImagePath(StorageInterface $storage): ?string
+    {
+        try {
+            if (null !== $this->imageName) {
+                $path = $storage->resolvePath($this, 'imageFile');
+                if (null !== $path && FileUtils::isFile($path)) {
+                    return $path;
+                }
+            }
+        } catch (MappingNotFoundException) {
+            // ignore
+        }
+
+        return null;
+    }
+
+    /**
      * Gets the date of the last login.
      */
     public function getLastLogin(): ?\DateTimeInterface
@@ -387,6 +410,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function isExpired(): bool
     {
         return null === $this->expiresAt || $this->expiresAt->getTimestamp() <= \time();
+    }
+
+    /**
+     * Returns a value indicating if the reset password was requested.
+     */
+    public function isResetPassword(): bool
+    {
+        return null !== $this->hashedToken;
     }
 
     /**

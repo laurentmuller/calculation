@@ -31,7 +31,7 @@ final class DatabaseInfo
     /**
      * Gets database variables.
      *
-     * @return array an array of variables with name as key and value
+     * @return array<string, string>
      */
     public function getConfiguration(): array
     {
@@ -40,15 +40,24 @@ final class DatabaseInfo
         try {
             $sql = 'SHOW VARIABLES';
             $result = $this->executeQuery($sql);
+            /** @psalm-var array<array{Variable_name:string, Value:string}> $entries */
             $entries = $result->fetchAllAssociative();
             $result->free();
 
             // convert
             foreach ($entries as $entry) {
-                if ('' !== $entry['Value']) {
-                    $key = (string) $entry['Variable_name'];
-                    $values[$key] = (string) $entry['Value'];
+                $value = $entry['Value'];
+                if ('' === $value) {
+                    continue;
                 }
+                $values[$entry['Variable_name']] = match ($value) {
+                    'ON', 'OFF',
+                    'YES', 'NO',
+                    'ENABLED', 'DISABLED',
+                    'AUTO',
+                    'AUTOMATIC' => Utils::capitalize($value),
+                    default => $value
+                };
             }
         } catch (\Exception) {
         }
@@ -59,19 +68,21 @@ final class DatabaseInfo
     /**
      * Gets the database information.
      *
-     * @psalm-suppress InternalMethod
+     * @return array<string, string>
      */
     public function getDatabase(): array
     {
         $result = [];
 
         try {
+            /** @psalm-suppress InternalMethod */
             $params = $this->getConnection()->getParams();
             foreach (['dbname', 'host', 'port', 'driver'] as $key) {
-                $result[$key] = $params[$key] ?? null;
+                $value = $params[$key] ?? null;
+                if (\is_string($value) || \is_int($value)) {
+                    $result[$key] = (string) $value;
+                }
             }
-
-            return \array_filter($result, fn (mixed $value): bool => Utils::isString($value));
         } catch (\Exception) {
         }
 

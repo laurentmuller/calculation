@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Service\LogService;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,24 +24,24 @@ class Log extends AbstractEntity
 {
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50)]
+    #[ORM\Column(type: Types::STRING, length: 50)]
     private ?string $channel = null;
 
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private ?array $context = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTimeInterface $createdAt;
 
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private ?array $extra = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50)]
+    #[ORM\Column(type: Types::STRING, length: 50)]
     private ?string $level = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $message = null;
 
     /**

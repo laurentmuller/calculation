@@ -17,11 +17,13 @@ use App\Chart\StateChart;
 use App\Traits\MathTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The controller for charts.
  */
+#[AsController]
 #[IsGranted('ROLE_USER')]
 #[Route(path: '/chart')]
 class ChartController extends AbstractController

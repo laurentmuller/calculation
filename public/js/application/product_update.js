@@ -50,8 +50,7 @@ function isProductsRequired() {
  *
  * @param {number} oldPrice - the old price of the product.
  * @param {number} value - the value to update with.
- * @param {boolean} isPercent - true if the value is a percentage, false if is a fixed
- *            amount
+ * @param {boolean} isPercent - true if the value is a percentage, false if is a fixed amount
  * @param {boolean} round - true to round new value up to 0.05
  * @returns {number} the new price or Number.NaN if not applicable.
  */

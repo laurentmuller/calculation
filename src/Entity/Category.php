@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,14 +34,14 @@ class Category extends AbstractEntity
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
-    #[ORM\Column(type: 'string', length: 30, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 30, unique: true)]
     private ?string $code = null;
 
     /**
      * The description.
      */
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $description = null;
 
     /**

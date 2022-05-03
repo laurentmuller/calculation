@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Repository\CalculationStateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -38,7 +39,7 @@ class CalculationState extends AbstractEntity
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
-    #[ORM\Column(type: 'string', length: 30, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 30, unique: true)]
     protected ?string $code = null;
 
     /**
@@ -47,20 +48,20 @@ class CalculationState extends AbstractEntity
     #[Assert\CssColor]
     #[Assert\NotBlank]
     #[Assert\Length(max: 10)]
-    #[ORM\Column(type: 'string', length: 10, options: ['default' => self::DEFAULT_COLOR])]
+    #[ORM\Column(type: Types::STRING, length: 10, options: ['default' => self::DEFAULT_COLOR])]
     protected string $color = self::DEFAULT_COLOR;
 
     /**
      * The description.
      */
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $description = null;
 
     /**
      * The editable state.
      */
-    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     protected bool $editable = true;
 
     /**

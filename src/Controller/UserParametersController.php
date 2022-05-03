@@ -17,11 +17,13 @@ use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display user's preferences.
  */
+#[AsController]
 #[IsGranted('ROLE_USER')]
 #[Route(path: '/user')]
 class UserParametersController extends AbstractController

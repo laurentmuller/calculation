@@ -25,8 +25,10 @@ class AddressTransformer implements DataTransformerInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @return Address|null
      */
-    public function reverseTransform(mixed $value): ?Address
+    public function reverseTransform(mixed $value)
     {
         if (null === $value) {
             return null;

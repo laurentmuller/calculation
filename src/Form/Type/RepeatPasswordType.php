@@ -54,7 +54,7 @@ class RepeatPasswordType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent(): string
+    public function getParent(): ?string
     {
         return RepeatedType::class;
     }

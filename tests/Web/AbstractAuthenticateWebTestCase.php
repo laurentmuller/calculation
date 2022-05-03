@@ -31,16 +31,16 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     use DatabaseTrait;
     use ServiceTrait;
 
-    public const ID_ADMIN = 2;
-    public const ID_DISABLE = 4;
-    public const ID_SUPER_ADMIN = 1;
-    public const ID_USER = 3;
+    final public const ID_ADMIN = 2;
+    final public const ID_DISABLE = 4;
+    final public const ID_SUPER_ADMIN = 1;
+    final public const ID_USER = 3;
 
-    public const ROLE_ADMIN = RoleInterface::ROLE_ADMIN;
-    public const ROLE_DISABLED = 'ROLE_DISABLED';
-    public const ROLE_FAKE = 'ROLE_FAKE';
-    public const ROLE_SUPER_ADMIN = RoleInterface::ROLE_SUPER_ADMIN;
-    public const ROLE_USER = RoleInterface::ROLE_USER;
+    final public const ROLE_ADMIN = RoleInterface::ROLE_ADMIN;
+    final public const ROLE_DISABLED = 'ROLE_DISABLED';
+    final public const ROLE_FAKE = 'ROLE_FAKE';
+    final public const ROLE_SUPER_ADMIN = RoleInterface::ROLE_SUPER_ADMIN;
+    final public const ROLE_USER = RoleInterface::ROLE_USER;
 
     protected ?KernelBrowser $client = null;
 

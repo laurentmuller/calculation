@@ -19,6 +19,7 @@ use App\Util\FormatUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,14 +37,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected ?string $customer = null;
 
     /**
      * The date.
      */
     #[Assert\NotNull]
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     protected \DateTimeInterface $date;
 
     /**
@@ -51,13 +52,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected ?string $description = null;
 
     /**
      * The global margin in percent (%).
      */
-    #[ORM\Column(name: 'globalMargin', type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'globalMargin', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     protected float $globalMargin = 0.0;
 
     /**
@@ -73,13 +74,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The total of all items.
      */
-    #[ORM\Column(name: 'itemsTotal', type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'itemsTotal', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     protected float $itemsTotal = 0.0;
 
     /**
      * The overall total.
      */
-    #[ORM\Column(name: 'overallTotal', type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'overallTotal', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     protected float $overallTotal = 0.0;
 
     /**
@@ -93,7 +94,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The user margin in percent (%).
      */
-    #[ORM\Column(name: 'userMargin', type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'userMargin', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     protected float $userMargin = 0.0;
 
     /**

@@ -146,7 +146,7 @@
          * 1500 ms.
          *
          * @param {string} className - The class name to toggle.
-         * @param {function} callback - The function to call after the class has been removed.
+         * @param {function} [callback] - The function to call after the class has been removed.
          * @return {JQuery} The jQuery element for chaining.
          */
         timeoutToggle: function (className, callback) {

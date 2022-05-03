@@ -9,7 +9,7 @@
     $.fn.extend({
         /**
          * Returns the label text of the input element.
-         * 
+         *
          * @return {jQuery|boolean} the label text, if found; false otherwise.
          */
         getLabelText: function () {
@@ -48,15 +48,11 @@
     $.extend($.validator, {
         /**
          * Format message within the label (if any).
-         * 
-         * @param {HTMLElement}
-         *            element - The element to search in.
-         * @param {string}
-         *            message - the message to use when label text is found.
-         * @param {string}
-         *            defaultMessage - the default message to use when label text is not found.
-         * @param {any}
-         *            params - the optional parameters to use for formatting the message.
+         *
+         * @param {HTMLElement} element - The element to search in.
+         * @param {string} message - the message to use when label text is found.
+         * @param {string} defaultMessage - the default message to use when label text is not found.
+         * @param {any} params - the optional parameters to use for formatting the message.
          * @return {string} the formatted message.
          */
         formatLabel: function (element, message, defaultMessage, params) {
@@ -82,9 +78,8 @@
 
         /**
          * Translate the given size.
-         * 
-         * @param {int}
-         *            size - the size, in bytes, to translate.
+         *
+         * @param {number} bytes - the size, in bytes, to translate.
          * @return {string} the translated size.
          */
         translateFileSize: function (bytes) {
@@ -253,7 +248,7 @@
         maxsize: function (bytes, element) {
             // find file name
             let fileName = false;
-            for (var i = 0; i < element.files.length; i++) {
+            for (let i = 0; i < element.files.length; i++) {
                 if (element.files[i].size > bytes) {
                     fileName = element.files[i].name;
                     break;

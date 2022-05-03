@@ -39,12 +39,12 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
-use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -52,6 +52,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *
  * @template-extends AbstractEntityController<User>
  */
+#[AsController]
 #[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/user')]
 class UserController extends AbstractEntityController
@@ -112,7 +113,7 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
     #[Route(path: '/excel', name: 'user_excel')]
-    public function excel(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): SpreadsheetResponse
+    public function excel(StorageInterface $storage, DateTimeFormatter $formatter): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
         if (empty($entities)) {
@@ -120,7 +121,7 @@ class UserController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersDocument($this, $entities, $factory, $storage, $formatter);
+        $doc = new UsersDocument($this, $entities, $storage, $formatter);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -250,7 +251,7 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
     #[Route(path: '/pdf', name: 'user_pdf')]
-    public function pdf(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): PdfResponse
+    public function pdf(StorageInterface $storage, DateTimeFormatter $formatter): PdfResponse
     {
         $entities = $this->getEntities('username');
         if (empty($entities)) {
@@ -258,9 +259,27 @@ class UserController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersReport($this, $entities, $factory, $storage, $formatter);
+        $doc = new UsersReport($this, $entities, $storage, $formatter);
 
         return $this->renderPdfDocument($doc);
+    }
+
+    /**
+     * Clear the request reset password.
+     */
+    #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => '\d+'])]
+    public function resetPasswordRequest(Request $request, User $item): Response
+    {
+        if ($item->isResetPassword()) {
+            /** @psalm-var UserRepository $repository */
+            $repository = $this->repository;
+            $repository->removeResetPasswordRequest($item);
+            $this->successTrans('user.reset.success', ['%name%' => $item->getUserIdentifier()]);
+        } else {
+            $this->warningTrans('user.reset.error', ['%name%' => $item->getUserIdentifier()]);
+        }
+
+        return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
     }
 
     /**

@@ -7,8 +7,3 @@ vich_uploader:
             namer: App\Service\UserNamer
             uri_prefix: /images/users
             upload_destination: '%kernel.project_dir%/public/images/users'
-        entity:
-            namer: App\Service\EntityFileNamer
-            directory_namer: App\Service\EntityDirectoryNamer
-            uri_prefix: /images/uploads
-            upload_destination: '%kernel.project_dir%/public/images/uploads'

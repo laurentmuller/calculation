@@ -236,8 +236,7 @@
         /**
          * Handles the custom button click event.
          *
-         * @param {Event}
-         *            e - the event.
+         * @param {Event} e - the event.
          */
         onCustomButtonClick(e) {
             e.preventDefault();
@@ -248,8 +247,7 @@
         /**
          * Handles the color button click event.
          *
-         * @param {Event}
-         *            e - the event.
+         * @param {Event} e - the event.
          */
         onColorButtonClick(e) {
             e.preventDefault();
@@ -265,8 +263,7 @@
         /**
          * Handles the color button key down event.
          *
-         * @param {Event}
-         *            e - the event.
+         * @param {Event} e - the event.
          */
         onColorButtonKeyDown(e) {
             const cols = this.cols;
@@ -379,8 +376,7 @@
         /**
          * Gets the selected color button.
          *
-         * @param {JQuery}
-         *            $button - the clicked button element.
+         * @param {JQuery} $button - the clicked button element.
          * @returns {Object} the row and column index of the selected button.
          */
         getSelection($button) {
@@ -409,8 +405,7 @@
         /**
          * Finds color buttons for the given selector.
          *
-         * @param {string}
-         *            selector - the buttons selector.
+         * @param {string} selector - the button selector.
          * @returns {JQuery} the buttons, if found; null otherwise.
          */
         findButton(selector) {
@@ -421,9 +416,7 @@
         /**
          * Sets the selected (focus) color button.
          *
-         * @param {Object}
-         *            selection - the selection to set (must contains a 'row'
-         *            and a 'col' fields).
+         * @param {Object} selection - the selection to set (must contain a 'row' and a 'col' fields).
          * @returns {JQuery} the button, if found; null otherwise.
          */
         setSelection(selection) {
@@ -438,10 +431,8 @@
         /**
          * Find the name for the given hexadecimal color.
          *
-         * @param {string}
-         *            color - the hexadecimal color to search for.
-         * @returns {string} the color name, if found; the custom text
-         *          otherwise.
+         * @param {string} color - the hexadecimal color to search for.
+         * @returns {string} the color name, if found; the custom text otherwise.
          */
         getColorName(color) {
             color = color || '';
@@ -459,8 +450,7 @@
         /**
          * Find the hexadecimal color for the given name.
          *
-         * @param {string}
-         *            name - the color name to search for.
+         * @param {string} name - the color name to search for.
          * @returns {string} the hexadecimal color, if found; the first color
          *          otherwise.
          */

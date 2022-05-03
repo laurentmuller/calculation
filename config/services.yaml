@@ -58,17 +58,8 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Faker,Migrations,Pdf,Report,Tests,Traits,Kernel.php}'
 
-    # controllers are imported separately
-    App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
-
     # make public to use with vich_uploader
     App\Service\UserNamer:
-        public: true
-    App\Service\EntityFileNamer:
-        public: true
-    App\Service\EntityDirectoryNamer:
         public: true
 
     # validators
@@ -90,11 +81,6 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\TimestampableInterface'}
 
-    # used to update user image
-    App\Listener\UserImageListener:
-        tags:
-            - { name: doctrine.event_listener, event: postPersist, lazy: true, entity: 'App\Entity\User'}
-
     # custom line formatter for monolog
     monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter
@@ -114,27 +100,6 @@ services:
             - [setDebug, ["%kernel.debug%"]]
             - [setTokenStorage, ['@security.token_storage']]
             - [setRequestStack, ['@request_stack']]
-
-
-    _instanceof:
-        App\Captcha\AlphaCaptchaInterface:
-            tags: ['alpha_captcha']
-        App\Translator\TranslatorServiceInterface:
-            tags: ['translators_service']
-        App\Interfaces\DisableListenerInterface:
-            tags: ['disable_listener']
-
-    App\Form\Type\AlphaCaptchaType:
-        arguments:
-            $captchas: !tagged_iterator alpha_captcha
-
-    App\Translator\TranslatorFactory:
-        arguments:
-            $translators: !tagged_iterator translators_service
-
-    App\Service\SuspendEventListenerService:
-        arguments:
-            $listeners: !tagged_iterator disable_listener
 
     App\Service\MailService:
         calls:

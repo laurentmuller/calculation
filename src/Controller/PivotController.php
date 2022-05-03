@@ -22,11 +22,13 @@ use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display the pivot table.
  */
+#[AsController]
 #[IsGranted('ROLE_USER')]
 #[Route(path: '/pivot')]
 class PivotController extends AbstractController

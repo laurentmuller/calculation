@@ -21,11 +21,12 @@ function updateUI() {
         $table.next('.empty-margins').toggleClass('d-none', rows !== 0);
         $table.parents('.item').find('.btn-sort-margin').toggleDisabled(rows < 2);
     });
-    $('.empty-items').toggleClass('d-none', $('#items .item').length !== 0);
+    const $items = $('#items .item');
+    $('.empty-items').toggleClass('d-none', $items.length !== 0);
 
     // update actions, rules and positions
     let position = 0;
-    $('#items .item').each(function (_index, item) {
+    $items.each(function (_index, item) {
         const $item = $(item);
         $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
         $item.find('.btn-down-item').toggleDisabled($item.is(':last-of-type'));
@@ -100,7 +101,7 @@ function getMinValue($table) {
 /**
  * Gets the next available item index used for the prototype.
  *
- * @returns {int} the next index.
+ * @returns {number} the next index.
  */
 function getNextItemIndex() {
     'use strict';
@@ -162,7 +163,8 @@ function addItem() {
     const $item = $(prototype.replace(/__itemIndex__/g, index));
 
     // append
-    $('#items').append($item);
+    const $items = $('#items');
+    $items.append($item);
 
     // update UI
     updateUI();
@@ -171,10 +173,10 @@ function addItem() {
     $item.find('input[name$="[name]"]:last').selectFocus().scrollInViewport();
 
     // hide others
-    $('#items').find('.collapse:not(:last)').collapse('hide');
+    $items.find('.collapse:not(:last)').collapse('hide');
 
     // expand
-    $('#items').find('.collapse:last').addClass('show');
+    $items.find('.collapse:last').addClass('show');
 
     // drag and drop
     startDragItems();

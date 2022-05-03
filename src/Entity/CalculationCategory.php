@@ -18,6 +18,7 @@ use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,7 +34,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
     /**
      * The total amount.
      */
-    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     protected float $amount = 0.0;
 
     /**
@@ -48,7 +49,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
-    #[ORM\Column(type: 'string', length: 30)]
+    #[ORM\Column(type: Types::STRING, length: 30)]
     protected ?string $code = null;
 
     /**

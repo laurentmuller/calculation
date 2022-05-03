@@ -22,11 +22,13 @@ use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for calculations where margins are below the minimum.
  */
+#[AsController]
 #[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/below')]
 class CalculationBelowController extends AbstractController

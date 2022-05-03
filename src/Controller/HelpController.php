@@ -17,12 +17,14 @@ use App\Response\PdfResponse;
 use App\Service\HelpService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display help.
  */
+#[AsController]
 #[IsGranted('ROLE_USER')]
 #[Route(path: '/help')]
 class HelpController extends AbstractController

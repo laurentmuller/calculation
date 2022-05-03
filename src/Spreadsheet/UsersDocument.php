@@ -20,7 +20,6 @@ use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
-use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -33,14 +32,12 @@ class UsersDocument extends AbstractArrayDocument
 {
     use RoleTranslatorTrait;
 
-    private ?string $fieldName = null;
-
     /**
      * Constructor.
      *
      * @param User[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, private readonly PropertyMappingFactory $factory, private readonly StorageInterface $storage, private readonly DateTimeFormatter $formatter)
+    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage, private readonly DateTimeFormatter $formatter)
     {
         parent::__construct($controller, $entities);
     }
@@ -136,25 +133,6 @@ class UsersDocument extends AbstractArrayDocument
     }
 
     /**
-     * Gets the configured file property name used to resolve path.
-     *
-     * @param User $user the user to get field name
-     *
-     * @return string|null the configured file property name or null if none
-     */
-    private function getFieldName(User $user): ?string
-    {
-        if (null === $this->fieldName) {
-            $mapping = $this->factory->fromFirstField($user);
-            if (null !== $mapping) {
-                $this->fieldName = $mapping->getFilePropertyName();
-            }
-        }
-
-        return $this->fieldName;
-    }
-
-    /**
      * Gets the user's image full path.
      *
      * @param User $user the user to get image path for
@@ -163,13 +141,11 @@ class UsersDocument extends AbstractArrayDocument
      */
     private function getImagePath(User $user): ?string
     {
-        if ($fieldName = $this->getFieldName($user)) {
-            $path = $this->storage->resolvePath($user, $fieldName);
-            if ($path) {
-                $path = \str_replace('192', '032', $path);
-                if (FileUtils::isFile($path)) {
-                    return $path;
-                }
+        $path = $user->getImagePath($this->storage);
+        if (null !== $path) {
+            $path = \str_replace('192', '032', $path);
+            if (FileUtils::isFile($path)) {
+                return $path;
             }
         }
 

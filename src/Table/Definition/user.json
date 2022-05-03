@@ -53,5 +53,9 @@
         "field": "enabled",
         "alias": "textMuted",
         "visible": false
+    },
+    {
+        "field": "resetPassword",
+        "visible": false
     }
 ]

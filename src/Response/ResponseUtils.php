@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Util\Response;
+namespace App\Response;
 
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\HeaderUtils;

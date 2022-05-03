@@ -20,11 +20,13 @@ use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for calculations where items have the price or the quantity is equal to 0.
  */
+#[AsController]
 #[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/empty')]
 class CalculationEmptyController extends AbstractController

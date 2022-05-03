@@ -15,6 +15,7 @@ namespace App\Form\Type;
 use App\Captcha\AlphaCaptchaInterface;
 use App\Traits\SessionTrait;
 use App\Util\Utils;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,7 +49,7 @@ class AlphaCaptchaType extends AbstractType
      *
      * @param iterable<AlphaCaptchaInterface> $captchas
      */
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, iterable $captchas)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, #[TaggedIterator('alpha_captcha')] iterable $captchas)
     {
         $this->setRequestStack($requestStack);
         $this->dataError = $translator->trans('required', [], 'captcha');

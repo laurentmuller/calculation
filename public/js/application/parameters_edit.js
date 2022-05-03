@@ -106,9 +106,7 @@ function displayUrl($url) {
 function displayEmail($email) {
     'use strict';
     if ($email.valid() && $email.val().trim()) {
-        const email = 'mailto:' + $email.val().trim();
-        // eslint-disable-next-line
-        window.location.href = email;
+        window.location.href = 'mailto:' + $email.val().trim();
     } else {
         $email.focus();
     }

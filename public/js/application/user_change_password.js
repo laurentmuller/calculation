@@ -12,7 +12,8 @@
     });
 
     // initialize validator
-    const message = $("#edit-form").data("equal_to");
+    const $form = $("#edit-form");
+    const message = $form.data("equal_to");
     const options = {
         rules: {
             "plainPassword[first]": {
@@ -30,5 +31,5 @@
             }
         }
     };
-    $("#edit-form").initValidator(options);
+    $form.initValidator(options);
 }(jQuery));

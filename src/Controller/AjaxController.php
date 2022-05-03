@@ -37,11 +37,13 @@ use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
  */
+#[AsController]
 #[Route(path: '/ajax')]
 class AjaxController extends AbstractController
 {

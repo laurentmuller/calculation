@@ -3,7 +3,6 @@
 <div class="phpversion">
     <table id="data-table-mysql" class="table table-hover table-sm mb-0">
         <tbody>
-        {# version #}
         <tr class="h">
             <td colspan="2">
                 <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer">
@@ -12,13 +11,10 @@
                 </a>
             </td>
         </tr>
-        {# database #}
         {{ tools.headerInfo('Database') }}
         {% for key, value in database %}
             {{ tools.rowInfo(key, value) }}
         {% endfor %}
-
-        {# configuration #}
         {{ tools.headerInfo('Configuration') }}
          {% for key, value in configuration %}
             {{ tools.rowInfo(key, value) }}

@@ -1,6 +1,17 @@
 /**! compression tag for ftp-deployment */
 
-/* globals $  */
+/**
+ * @typedef {Object} Options
+ * @property {string} searchText - the search text.
+ * @property {number} totalPages - the total number of pages.
+ * @property {string} rowClass - the row class.
+ * @property {string} rowSelector - the row selector.
+ * @property {string} customSelector - the custom selector.
+ * @property {string} saveUrl - the URL to save state.
+ * @property {boolean} cardView - true if display card view is allowed
+ * @property {number} pageNumber - the current page number.
+ * @property {number} totalPages - the total number of pages.
+ */
 
 /**
  * Gets the loading template.
@@ -14,7 +25,7 @@ function loadingTemplate(message) { // jshint ignore:line
 }
 
 /**
- * jQuery extension for Bootstrap tables, rows and cells.
+ * jQuery's extension for Bootstrap tables, rows and cells.
  */
 $.fn.extend({
 
@@ -31,6 +42,9 @@ $.fn.extend({
     updateRow: function ($table) {
         'use strict';
         const $row = $(this);
+        /**
+         * @type {Options} options
+         */
         const options = $table.getOptions();
 
         // already selected?
@@ -160,7 +174,7 @@ $.fn.extend({
                     $this.find('tbody tr .actions').each(function (index, element) {
                         // copy actions
                         const $rowActions = $(element).children();
-                        const $cardActions = $view.find(selector.replace('%index%', index));
+                        const $cardActions = $view.find(selector.replace('%index%', '' + index));
                         $rowActions.appendTo($cardActions);
 
                         if (callback) {
@@ -238,7 +252,7 @@ $.fn.extend({
     /**
      * Gets the boostrap-table option.
      *
-     * @return {Object} the options.
+     * @return {Options} options the options.
      */
     getOptions: function () {
         'use strict';
@@ -516,7 +530,7 @@ $.fn.extend({
     /**
      * Reset the search text.
      *
-     * @param {string} text - the optional search text.
+     * @param {string} [text] - the optional search text.
      * @return {JQuery} this instance for chaining.
      */
     resetSearch: function (text) {
@@ -977,9 +991,10 @@ $.fn.extend({
     },
 
     /**
-     * Convert the given RGBA color, if applicable, to a RGB color by removing the alpha value.
+     * Convert the given RGBA color, if applicable, to an RGB color by removing the alpha value.
      */
     rgba2rgb: function (color) {
+        'use strict';
         const regex = /rgba\((?<colors>.*)\)/i;
         const result = color.match(regex);
         if (result !== null && result.length === 2) {

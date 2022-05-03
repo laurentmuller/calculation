@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Response;
 
 use App\Interfaces\MimeTypeInterface;
-use App\Util\Response\ResponseUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**

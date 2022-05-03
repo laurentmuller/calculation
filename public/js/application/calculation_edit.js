@@ -14,7 +14,6 @@ const SearchHelper = {
      */
     init: function () {
         'use strict';
-
         const $form = $('#edit-form');
         this.initSearchCustomer($form);
         this.initSearchProduct($form);
@@ -107,7 +106,10 @@ const Application = {
      */
     init: function () {
         'use strict';
-        return this.initDragDrop(false).initMenus();
+        this.initDragDrop(false);
+        this.updateButtons();
+        this.initMenus();
+        return this;
     },
 
     /**
@@ -372,7 +374,7 @@ const Application = {
     },
 
     /**
-     * Update the buttons, the total and initialize the drag-drop.
+     * Update the positions, the buttons, the total and initialize the drag-drop.
      *
      * @return {Application} This instance for chaining.
      */
@@ -380,7 +382,7 @@ const Application = {
         'use strict';
         this.updatePositions();
         this.updateButtons();
-        this.updateTotals();
+        this.updateTotals(false);
         this.initDragDrop(true);
         return this;
     },
@@ -398,7 +400,8 @@ const Application = {
         let hideDown;
         let disabled = true;
 
-        // groups
+        // groupes
+        let lastGroup = null;
         const $groups = that.getGroups();
         $groups.each(function (indexGroup, group) {
             const $group = $(group);
@@ -410,7 +413,15 @@ const Application = {
             $group.find('.btn-last-group').toggleClass('d-none', hideDown);
             $group.find('.btn-first-group').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
 
+            // sortable?
+            const newGroup = $group.find('th:first').text();
+            if (disabled && lastGroup && that.compareStrings(lastGroup, newGroup) > 0) {
+                disabled = false;
+            }
+            lastGroup = newGroup;
+
             // categories
+            let lastCategory = null;
             const $categories = that.getCategories($group);
             $categories.each(function (indexCategory, category) {
                 const $category = $(category);
@@ -422,7 +433,15 @@ const Application = {
                 $category.find('.btn-last-category').toggleClass('d-none', hideDown);
                 $category.find('.btn-first-category').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
 
+                // sortable?
+                const newCategory = $category.find('th:first').text();
+                if (disabled && lastCategory && that.compareStrings(lastCategory, newCategory) > 0) {
+                    disabled = false;
+                }
+                lastCategory = newCategory;
+
                 // items
+                let lastItem = null;
                 const $items = that.getItems($category);
                 $items.each(function (indexItem, item) {
                     const $item = $(item);
@@ -433,12 +452,19 @@ const Application = {
                     $item.find('.btn-down-item').toggleClass('d-none', hideDown);
                     $item.find('.btn-last-item').toggleClass('d-none', hideDown);
                     $item.find('.btn-first-item').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
+
+                    // sortable?
+                    const newItem = $item.find('td:first').text();
+                    if (disabled && lastItem && that.compareStrings(lastItem, newItem) > 0) {
+                        disabled = false;
+                    }
+                    lastItem = newItem;
                 });
             });
         });
 
         // update global sort
-        $('.btn-sort-items').toggleDisabled(disabled);
+        $('.btn-sort-items').toggleDisabled(true);
 
         return this;
     },
@@ -453,25 +479,27 @@ const Application = {
         'use strict';
 
         const that = this;
+        const $form = $('#edit-form');
+        const $userMarginRow = $('#user-margin-row');
 
         // show or hide empty items
         $('#empty-items').toggleClass('d-none', $('#data-table-edit tbody').length !== 0);
 
         // validate user margin
         if (!$('#calculation_userMargin').valid()) {
-            if ($('#user-margin-row').length === 0) {
+            if ($userMarginRow.length === 0) {
                 const $tr = $('<tr/>', {
                     'id': 'user-margin-row'
                 });
                 const $td = $('<td>', {
                     'class': 'text-muted',
-                    'text': $('#edit-form').data('error-margin')
+                    'text': $form.data('error-margin')
                 });
                 $tr.append($td);
                 $('#totals-table tbody:first tr').remove();
                 $('#totals-table tbody:first').append($tr);
             } else {
-                $('#user-margin-row').removeClass('d-none');
+                $userMarginRow.removeClass('d-none');
             }
             $('.btn-adjust').toggleDisabled(true).addClass('cursor-default');
             return that;
@@ -485,7 +513,7 @@ const Application = {
 
         // parameters
         adjust = adjust || false;
-        let data = $('#edit-form').serializeArray();
+        let data = $form.serializeArray();
         if (adjust) {
             data.push({
                 name: 'adjust',
@@ -494,7 +522,7 @@ const Application = {
         }
 
         // call
-        const url = $('#edit-form').data('update');
+        const url = $form.data('update');
         that.jqXHR = $.post(url, data, function (response) {
             // error?
             if (!response.result) {
@@ -553,8 +581,9 @@ const Application = {
         sortable('#data-table-edit tbody', 'destroy');
 
         // display error message
-        const title = $('#edit-form').data('title');
-        message = message || $('#edit-form').data('error-update');
+        const $form = $('#edit-form');
+        const title = $form.data('title');
+        message = message || $form.data('error-update');
         const options = $.extend({}, $('#flashbags').data(), {
             onHide: function () {
                 const html = message.replace('<br><br>', ' ');
@@ -655,7 +684,7 @@ const Application = {
     },
 
     /**
-     * Sort items of a category.
+     * Sort items by description.
      *
      * @param {JQuery} $element - the caller element (button or tbody) used to find the category.
      * @return {Application} This instance for chaining.
@@ -679,11 +708,11 @@ const Application = {
         }).appendTo($tbody);
 
         // update UI
-        return that.updateButtons().updatePositions().initDragDrop(true);
+        return that.updatePositions().updateButtons().initDragDrop(true);
     },
 
     /**
-     * Sort categories by name.
+     * Sort categories by code.
      *
      * @param {JQuery} $element - the caller element (button, row or thead) used to
      *            find the group and the categories.
@@ -713,7 +742,7 @@ const Application = {
     },
 
     /**
-     * Sort groups by name.
+     * Sort groups by code.
      *
      * @return {Application} This instance for chaining.
      */
@@ -744,7 +773,8 @@ const Application = {
         'use strict';
 
         const that = this;
-        that.sortGroups($(this));
+
+        that.sortGroups();
         that.getGroups().each(function () {
             that.sortCategories($(this));
         });
@@ -1146,7 +1176,7 @@ const Application = {
             // Moved to a new position
             // -----------------------------
             $row.timeoutToggle('table-success');
-            that.updateButtons().updatePositions();
+            that.updatePositions().updateButtons();
         } else {
             // -----------------------------
             // No change
@@ -1165,7 +1195,7 @@ const Application = {
         'use strict';
         const that = this;
 
-        // groups
+        // groupes
         const $groups = that.getGroups();
         $groups.each(function (indexGroup, group) {
             const $group = $(group);
@@ -1187,6 +1217,17 @@ const Application = {
         });
 
         return that;
+    },
+
+    /**
+     * Hide all drop-down menus.
+     *
+     * @return {Application} This instance for chaining.
+     */
+    hideMenus: function () {
+        'use strict';
+        $('.dropdown-menu.show').removeClass('show');
+        return this;
     },
 
     /**
@@ -1298,7 +1339,7 @@ $.fn.extend({
     },
 
     /**
-     * Gets item values from the this row.
+     * Gets item values from this row.
      *
      * @returns {Object} the item data.
      */
@@ -1433,8 +1474,9 @@ const MoveHandler = {
     init: function () {
         'use strict';
         const that = this;
-        // groups
-        $('#data-table-edit').on('click', '.btn-first-group', function (e) {
+        const $dataTableEdit = $('#data-table-edit');
+        // groupes
+        $dataTableEdit.on('click', '.btn-first-group', function (e) {
             e.preventDefault();
             that.moveGroupFirst($(this).getParentGroup());
         }).on('click', '.btn-up-group', function (e) {
@@ -1450,7 +1492,7 @@ const MoveHandler = {
 
 
         // categories
-        $('#data-table-edit').on('click', '.btn-first-category', function (e) {
+        $dataTableEdit.on('click', '.btn-first-category', function (e) {
             e.preventDefault();
             that.moveCategoryFirst($(this).getParentCategory());
         }).on('click', '.btn-up-category', function (e) {
@@ -1465,7 +1507,7 @@ const MoveHandler = {
         });
 
         // items
-        $('#data-table-edit').on('click', '.btn-first-item', function (e) {
+        $dataTableEdit.on('click', '.btn-first-item', function (e) {
             e.preventDefault();
             that.moveItemFirst($(this).getParentRow());
         }).on('click', '.btn-up-item', function (e) {
@@ -1490,6 +1532,9 @@ const MoveHandler = {
      */
     moveGroup: function ($source, $target, up) {
         'use strict';
+        // hide menus
+        Application.hideMenus();
+
         // check
         if ($source && $target && $source !== $target) {
             // save source tbody
@@ -1505,7 +1550,7 @@ const MoveHandler = {
 
             // update
             $source.scrollInViewport().find('tr:first').timeoutToggle('table-success');
-            Application.updateButtons().updatePositions();
+            Application.updatePositions().updateButtons();
         }
         return $source;
     },
@@ -1582,6 +1627,9 @@ const MoveHandler = {
      */
     moveCategory: function ($source, $target, up) {
         'use strict';
+        // hide menus
+        Application.hideMenus();
+
         // check
         if ($source && $target && $source !== $target) {
             // move
@@ -1593,7 +1641,7 @@ const MoveHandler = {
 
             // update
             $source.scrollInViewport().find('tr:first').timeoutToggle('table-success');
-            Application.updateButtons().updatePositions();
+            Application.updatePositions().updateButtons();
         }
         return $source;
     },
@@ -1668,6 +1716,9 @@ const MoveHandler = {
      */
     moveItem: function ($source, $target, up) {
         'use strict';
+        // hide menus
+        Application.hideMenus();
+
         // check
         if ($source && $target && $source !== $target) {
             // move
@@ -1679,7 +1730,7 @@ const MoveHandler = {
 
             // update
             $source.scrollInViewport().timeoutToggle('table-success');
-            Application.updateButtons().updatePositions();
+            Application.updatePositions().updateButtons();
         }
         return $source;
     },
@@ -1767,18 +1818,19 @@ const MoveHandler = {
     Application.init();
 
     // context menu
+    const $tableEdit = $('.table-edit');
     const selector = '.table-edit th:not(.d-print-none),.table-edit td:not(.d-print-none,:has(:input))';
     const show = function () {
-        $('.dropdown-menu.show').removeClass('show');
+        Application.hideMenus();
         $(this).parents('tr').addClass('table-primary');
     };
     const hide = function () {
         $(this).parents('tr').removeClass('table-primary');
     };
-    $('.table-edit').initContextMenu(selector, show, hide);
+    $tableEdit.initContextMenu(selector, show, hide);
 
     // edit in place (price and quantity)
-    $('.table-edit').on('click', 'td.text-editable', function() {
+    $tableEdit.on('click', 'td.text-editable', function() {
         const $cell = $(this);
         $cell.celledit({
             'inputClass': 'form-control form-control-sm text-right my-n1 mx-0',
@@ -1793,8 +1845,8 @@ const MoveHandler = {
                 return Application.formatValue(value);
             },
             'onStartEdit': function () {
+                Application.hideMenus();
                 $cell.removeClass('empty-cell');
-                $('.dropdown-menu.show').removeClass('show');
             },
             'onEndEdit': function (oldValue, newValue) {
                 const $row = $cell.parents('tr');
@@ -1814,15 +1866,16 @@ const MoveHandler = {
     const $margin = $('#calculation_userMargin');
     $margin.on('input propertychange', function () {
         $margin.updateTimer(function () {
-            Application.updateTotals();
+            Application.updateTotals(false);
         }, 250);
     });
 
     // main form validation
-    $('#edit-form').initValidator();
+    const $form = $('#edit-form');
+    $form.initValidator();
 
     // edit the default product if new calculation
-    const edit = $('#edit-form').data('edit') || false;
+    const edit = $form.data('edit') || false;
     const $button = $('#data-table-edit .dropdown-item.btn-edit-item');
     if (edit && $button.length === 1) {
         Application.showEditItemDialog($button);

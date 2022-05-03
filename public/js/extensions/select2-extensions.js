@@ -7,7 +7,10 @@
     'use strict';
 
     /**
-     * Update selection on key press
+     * Update selection on key press.
+     *
+     * @param {JQuery} $select - the drop-down list.
+     * @param {KeyboardEvent} e - the source event.
      */
     const select2KeyPress = function ($select, e) {
         // special key?
@@ -15,10 +18,10 @@
             return;
         }
 
+        let newIndex = -1;
         const oldIndex = $select.getSelectedOption().index();
         const options = $select.children('option:enabled');
         const lastIndex = options.length - 1;
-        let newIndex = -1;
 
         switch (e.which) {
         case 33:
@@ -78,7 +81,7 @@
     };
 
     /**
-     * -------------- Functions extensions --------------
+     * -------------- jQuery functions extensions --------------
      */
     $.fn.extend({
         /**
@@ -132,8 +135,11 @@
                     }
                 }).css('width', '');
 
-                const select2 = $select.data('select2');
                 if (!multiple) {
+                    $select.on('select2:keypress', function (e) {
+                       window.console.log(e);
+                    });
+                    const select2 = $select.data('select2');
                     select2.on('keypress', function (e) {
                         if (!select2.isOpen()) {
                             select2KeyPress($select, e);
@@ -141,6 +147,6 @@
                     });
                 }
             });
-        }
+        },
     });
 }(jQuery));

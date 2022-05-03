@@ -13,6 +13,8 @@
 
         /**
          * Initialize captcha.
+         *
+         * @return {jQuery} the caller for chaining.
          */
         initCaptcha() {
             return this.each(function () {
@@ -34,6 +36,8 @@
 
         /**
          * Gets password strength score or -1 if not found.
+         *
+         * @return {number}
          */
         findPasswordScore: function () {
             const $that = $(this);
@@ -46,6 +50,8 @@
 
         /**
          * Finds the reCaptcha frame within the current element.
+         *
+         * @return {jQuery} the frame.
          */
         findReCaptcha: function () {
             const $element = $(this);
@@ -54,6 +60,8 @@
 
         /**
          * Finds the color-picker drop-down
+         *
+         * @return {jQuery}.
          */
         findColorPicker() {
             const $element = $(this);
@@ -63,6 +71,8 @@
 
         /**
          * Remove validation class and error
+         *
+         * @return {jQuery} the caller for chaining.
          */
         removeValidation: function () {
             return this.each(function () {
@@ -75,6 +85,7 @@
         /**
          * Initialize default validator options.
          *
+         * @param {Object} [options] - the options
          * @returns the validator.
          */
         initValidator: function (options) {
@@ -154,11 +165,10 @@
             /**
              * Finds the container of the given element.
              *
-             * @param {JQuery}
-             *            $element - the element to update.
+             * @param {JQuery} $element - the element to update.
              */
             $.validator.prototype.findElement = function ($element) {
-                let $toUpdate = null;
+                let $toUpdate = false;
                 if (simpleeditor && !$toUpdate) {
                     $toUpdate = $element.findSimpleEditor();
                 }
@@ -288,9 +298,9 @@
         },
 
         /**
-         * Intitialize an input type color within the color-picker plugin.
+         * Initialize an input type color within the color-picker plugin.
          *
-         * @param {Object} options - the options
+         * @param {Object} [options] - the options
          */
         initColorPicker: function (options) {
             return this.each(function () {
@@ -314,6 +324,8 @@
 
         /**
          * Reset the form content and the validator (if any).
+         *
+         * @return {jQuery} the caller for chaining.
          */
         resetValidator: function () {
             const $that = $(this);
@@ -328,12 +340,15 @@
 
         /**
          * Show a spinner when form is submitted.
+         *
+         * @return {jQuery} the caller for chaining.
          */
         showSpinner: function() {
             const $this = $(this);
             const spinner = '<span class="spinner-border spinner-border-sm"></span>';
             $this.find(':submit').toggleDisabled(true).html(spinner);
             $this.find('.btn-cancel').toggleDisabled(true);
+            return  $this;
         }
     });
 

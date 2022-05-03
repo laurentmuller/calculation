@@ -14,7 +14,6 @@ namespace App\Response;
 
 use App\Interfaces\MimeTypeInterface;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Util\Response\ResponseUtils;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 

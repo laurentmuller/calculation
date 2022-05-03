@@ -95,7 +95,6 @@
             this.$input.attr('name', this.name);
 
             const file = files[0];
-
             if (this.$preview.length > 0 && (!$.isUndefined(file.type) ? file.type.match(/^image\/(gif|png|bmp|jpeg|svg\+xml)$/) : file.name.match(/\.(gif|png|bmp|jpe?g|svg)$/i)) && !$.isUndefined(FileReader)) {
                 const Fileinput = this;
                 const reader = new FileReader();
@@ -105,7 +104,9 @@
                 reader.onload = function (event) {
                     let $img = preview.find('img');
                     if (!$img || !$img.length) {
-                        $img = $('<img>');
+                        $img = $('<img />', {
+                            alt: file.name
+                        });
                     }
                     $img[0].src = event.target.result;
                     files[0].result = event.target.result;
@@ -125,7 +126,7 @@
 
                     preview.html($img);
                     if (Fileinput.options.exif) {
-                        // Fix image tranformation if this is possible
+                        // Fix image transformation if this is possible
                         Fileinput.setImageTransform($img, file);
                     }
                     element.addClass('fileinput-exists').removeClass('fileinput-new');

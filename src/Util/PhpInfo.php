@@ -106,6 +106,9 @@ final class PhpInfo
         // replace version
         $info = \str_replace('PHP Version', 'Version', $info);
 
+        // no value
+        $info = \str_replace('<i>no value</i>', '<i class="text-muted">No value</i>', $info);
+
         // update table class
         $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 

@@ -18,7 +18,7 @@
         init() {
             // build regex
             const options = this.options;
-            var pattern = '^[0-9]+';
+            let pattern = '^[0-9]+';
             if (options.decimal) {
                 pattern += '[' + options.separatorAuthorized.join('') + ']?[0-9]{0,' + options.decimal + '}';
             }

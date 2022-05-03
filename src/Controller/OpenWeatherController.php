@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\File;
@@ -33,6 +34,7 @@ use Symfony\Component\Validator\Constraints\Length;
  *
  * @see https://openweathermap.org/api
  */
+#[AsController]
 #[IsGranted('ROLE_USER')]
 #[Route(path: '/openweather')]
 class OpenWeatherController extends AbstractController

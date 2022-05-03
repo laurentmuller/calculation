@@ -8,13 +8,14 @@ function applyTheme() {
 
     // get values
     const $form = $('#edit-form');
-    const theme = $('#theme').val();
+    const $theme = $('#theme');
+    const theme = $theme.val();
     const background = $('#background').val();
 
     // need update?
     if (theme && background && (theme !== $form.data('theme') || background !== $form.data('background'))) {
         // get theme option
-        const $option = $('#theme').getSelectedOption();
+        const $option = $theme.getSelectedOption();
         const title = $option.text();
         const description = $option.data('description');
         const href = $form.data('asset') + $option.data('css');

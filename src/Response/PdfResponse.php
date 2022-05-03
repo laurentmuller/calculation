@@ -15,7 +15,6 @@ namespace App\Response;
 use App\Interfaces\MimeTypeInterface;
 use App\Pdf\Enums\PdfDocumentOutput;
 use App\Pdf\PdfDocument;
-use App\Util\Response\ResponseUtils;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

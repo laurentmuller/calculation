@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Report\HtmlReport;
+use App\Report\MySqlReport;
 use App\Report\PhpIniReport;
 use App\Response\PdfResponse;
 use App\Util\DatabaseInfo;
@@ -22,12 +23,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for application information.
  */
+#[AsController]
 #[Route(path: '/about')]
 class AboutController extends AbstractController
 {
@@ -119,6 +122,18 @@ class AboutController extends AbstractController
     }
 
     /**
+     * Exports the MySql information as PDF.
+     */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/mysql/pdf', name: 'about_mysql_pdf')]
+    public function mysqlPdf(DatabaseInfo $info): PdfResponse
+    {
+        $report = new MySqlReport($this, $info);
+
+        return $this->renderPdfDocument($report);
+    }
+
+    /**
      * Render the PHP information.
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
@@ -142,7 +157,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/php/pdf', name: 'about_php_pdf')]
-    public function phpPdf(PhpInfo $info): Response
+    public function phpPdf(PhpInfo $info): PdfResponse
     {
         $content = $info->asArray();
         $version = $info->getVersion();

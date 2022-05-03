@@ -11,7 +11,7 @@
     {{ form_widget(item.description) -}}
     {{ form_widget(item.position) -}}
     {% if editable %}
-    <td class="text-description text-cell pl-3"><a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a></td>
+    <td class="text-description text-cell pl-4"><a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a></td>
     <td class="text-unit">{{ item.unit.vars.value }}</td>
     <td class="text-editable text-currency rowlink-skip" title="{{ 'calculation.edit.price.title'|trans }}" data-target="#{{ item.price.vars.id }}" data-tooltip-edit="{{ 'calculation.edit.price.tooltip'|trans }}" data-tooltip-error="{{ 'calculation.edit.price.error'|trans }}">
         {{- item.price.vars.value|amount -}}

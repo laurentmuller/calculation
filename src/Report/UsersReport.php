@@ -21,9 +21,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Traits\RoleTranslatorTrait;
-use App\Util\FileUtils;
 use Knp\Bundle\TimeBundle\DateTimeFormatter;
-use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -36,14 +34,12 @@ class UsersReport extends AbstractArrayReport
 {
     use RoleTranslatorTrait;
 
-    private ?string $fieldName = null;
-
     /**
      * Constructor.
      *
      * @param User[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, private readonly PropertyMappingFactory $factory, private readonly StorageInterface $storage, private readonly DateTimeFormatter $formatter)
+    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage, private readonly DateTimeFormatter $formatter)
     {
         parent::__construct($controller, $entities);
     }
@@ -109,27 +105,12 @@ class UsersReport extends AbstractArrayReport
     }
 
     /**
-     * Gets the configured file property name used to resolve path.
-     */
-    private function getFieldName(User $user): ?string
-    {
-        if (null === $this->fieldName) {
-            $mapping = $this->factory->fromFirstField($user);
-            if (null !== $mapping) {
-                $this->fieldName = $mapping->getFilePropertyName();
-            }
-        }
-
-        return $this->fieldName;
-    }
-
-    /**
      * Gets the image cell for the given user.
      */
     private function getImageCell(User $user): PdfCell
     {
-        $path = $this->getImagePath($user);
-        if (empty($path)) {
+        $path = $user->getImagePath($this->storage);
+        if (null === $path) {
             return new PdfCell();
         }
 
@@ -145,20 +126,5 @@ class UsersReport extends AbstractArrayReport
         }
 
         return $cell;
-    }
-
-    /**
-     * Gets the user's image full path.
-     */
-    private function getImagePath(User $user): ?string
-    {
-        if ($fieldName = $this->getFieldName($user)) {
-            $path = $this->storage->resolvePath($user, $fieldName);
-            if ($path && FileUtils::isFile($path)) {
-                return $path;
-            }
-        }
-
-        return null;
     }
 }

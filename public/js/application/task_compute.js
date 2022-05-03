@@ -62,15 +62,16 @@ function update(form) {
     'use strict';
 
     // get items
+    const $itemsEmpty = $('.task-items-empty');
     const items = $('#table-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
         return Number.parseInt($(this).attr('value'), 10);
     }).get();
     if (items.length === 0) {
-        $('.task-items-empty').removeClass('d-none');
+        $itemsEmpty.removeClass('d-none');
         resetValues();
         return;
     }
-    $('.task-items-empty').addClass('d-none');
+    $itemsEmpty.addClass('d-none');
 
     // get data
     const $form = $(form);

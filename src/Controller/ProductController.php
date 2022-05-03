@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,6 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @template-extends AbstractEntityController<Product>
  */
+#[AsController]
 #[IsGranted('ROLE_USER')]
 #[Route(path: '/product')]
 class ProductController extends AbstractEntityController

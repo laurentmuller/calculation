@@ -18,11 +18,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for the exchange rate service.
  */
+#[AsController]
 #[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/exchange')]
 class ExchangeRateController extends AbstractController

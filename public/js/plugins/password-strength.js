@@ -14,7 +14,7 @@
     const PasswordStrength = class {
 
         /**
-         * Constrcutor.
+         * Constructor.
          */
         constructor(element, options) {
             const that = this;
@@ -154,13 +154,13 @@
                 return that.$progress;
             }
 
-            // get container
+            // get the container
             const $container = that.getContainer(options);
             if (!$container) {
                 return null;
             }
 
-            // get progress container
+            // get the progress container
             const $progressContainer = $container.findExists(options.progressContainer) || options.progressContainer;
             if (!($progressContainer && $progressContainer.length === 1)) {
                 return null;
@@ -194,13 +194,13 @@
                 return that.$label;
             }
 
-            // get container
+            // get the container
             const $container = that.getContainer(options);
             if (!$container) {
                 return null;
             }
 
-            // get label container
+            // get the label container
             const $labelContainer = $container.findExists(options.labelContainer) || options.labelContainer;
             if (!($labelContainer && $labelContainer.length === 1)) {
                 return null;
@@ -250,10 +250,10 @@
         // container
         container: null,
 
-        // progress container
+        // the progress container
         progressContainer: null,
 
-        // label container
+        // the label container
         labelContainer: null,
 
         // score change callback function

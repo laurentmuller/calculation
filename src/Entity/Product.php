@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -39,13 +40,13 @@ class Product extends AbstractCategoryItemEntity
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     private ?string $description = null;
 
     /**
      * The price.
      */
-    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     private float $price = 0.0;
 
     /**

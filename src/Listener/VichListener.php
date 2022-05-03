@@ -27,6 +27,8 @@ use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
 
 /**
  * Listener to resize the profile image.
+ *
+ * @psalm-suppress InternalMethod
  */
 class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 {
@@ -60,7 +62,6 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $user = $event->getObject();
         $mapping = $event->getMapping();
 
-        /** @psalm-suppress InternalMethod */
         $file = $mapping->getFile($user);
         if (!$file instanceof File || !$file->isReadable()) {
             return;
@@ -87,8 +88,6 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 
     /**
      * Remove the small and medium image if applicable.
-     *
-     * @psalm-suppress InternalMethod
      */
     public function onPreRemove(Event $event): void
     {
@@ -97,7 +96,6 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $mapping = $event->getMapping();
 
         // directory
-        /** @psalm-suppress InternalMethod */
         $path = $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR;
 
         // get file extension
@@ -116,8 +114,6 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 
     /**
      * Rename and resize the image if applicable.
-     *
-     * @psalm-suppress InternalMethod
      */
     public function onPreUpload(Event $event): void
     {
@@ -160,9 +156,6 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         return empty($extension) ? self::EXTENSION_PNG : \strtolower($extension);
     }
 
-    /**
-     * @psalm-suppress InternalMethod
-     */
     private function rename(PropertyMapping &$mapping, User $user, File $file): File
     {
         $name = UserNamer::getBaseName($user, self::SIZE_DEFAULT, $file->getExtension());

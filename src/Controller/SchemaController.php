@@ -20,11 +20,13 @@ use Doctrine\DBAL\Schema\Table;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display the database schema.
  */
+#[AsController]
 #[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/schema')]
 class SchemaController extends AbstractController

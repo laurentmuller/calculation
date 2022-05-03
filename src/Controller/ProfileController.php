@@ -18,12 +18,14 @@ use App\Form\User\ProfileEditType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller for user profile.
  */
+#[AsController]
 #[Route(path: '/profile')]
 class ProfileController extends AbstractController
 {

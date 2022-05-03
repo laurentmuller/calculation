@@ -7,10 +7,11 @@
     'use strict';
 
     $('#form_simulate').on('input', function () {
+        const $confirm = $('#form_confirm');
         if ($(this).isChecked()) {
-            $('#form_confirm').toggleDisabled(true).removeValidation();
+            $confirm.toggleDisabled(true).removeValidation();
         } else {
-            $('#form_confirm').toggleDisabled(false);
+            $confirm.toggleDisabled(false);
         }
     });
 

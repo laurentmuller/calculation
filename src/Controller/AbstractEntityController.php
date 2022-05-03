@@ -50,7 +50,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Constructor.
      *
-     * @psalm-param AbstractRepository<T> $repository
+     * @param AbstractRepository<T> $repository
      */
     public function __construct(protected AbstractRepository $repository)
     {

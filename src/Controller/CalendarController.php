@@ -24,12 +24,14 @@ use App\Repository\CalculationRepository;
 use App\Util\DateUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display calendar.
  */
+#[AsController]
 #[IsGranted('ROLE_USER')]
 #[Route(path: '/calendar')]
 class CalendarController extends AbstractController

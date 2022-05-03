@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Traits\SessionTrait;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -45,7 +46,7 @@ class TranslatorFactory
      *
      * @param iterable<TranslatorServiceInterface> $translators
      */
-    public function __construct(RequestStack $requestStack, iterable $translators)
+    public function __construct(RequestStack $requestStack, #[TaggedIterator('translators_service')] iterable $translators)
     {
         $this->setRequestStack($requestStack);
         $this->translators = $translators instanceof \Traversable ? \iterator_to_array($translators) : $translators;

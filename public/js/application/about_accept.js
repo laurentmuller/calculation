@@ -9,8 +9,7 @@
     if ($close.length && $.cookiebanner) {
         $('.btn-accept').on('click', function () {
             // simulate the close button click
-            $close.click();
-
+            $close.trigger('click');
             // goto home page
             const target = $(this).data('target');
             if (target) {

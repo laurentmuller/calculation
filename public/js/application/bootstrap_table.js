@@ -67,7 +67,7 @@ function formatProductUnit(row) { // jshint ignore:line
  */
 function formatProductClass(row) { // jshint ignore:line
     'use strict';
-    const price = Number.parseFloat(row.price, 10);
+    const price = Number.parseFloat(row.price);
     if (!Number.isNaN(price) && price === 0) {
         return ' text-danger';
     }
@@ -96,12 +96,12 @@ function styleBorderColor(_value, row) { // jshint ignore:line
 /**
  * Cell class for the product price.
  *
- * @param {float} value - the product price.
+ * @param {string} value - the product price.
  * @returns {object} the cell classes.
  */
 function styleProductPrice(value) { // jshint ignore:line
     'use strict';
-    const price = Number.parseFloat(value, 10);
+    const price = Number.parseFloat(value);
     if (!Number.isNaN(price) && price === 0) {
         return {
             css: {
@@ -115,7 +115,8 @@ function styleProductPrice(value) { // jshint ignore:line
 /**
  * Row classes for the text muted.
  *
- * @param {object} row - the record data.
+ * @param {Object} row - the record data.
+ * @param {string} row.textMuted - the text muted value
  * @param {int} index - the row index.
  * @returns {object} the row classes.
  */
@@ -135,8 +136,8 @@ function styleTextMuted(row, index) { // jshint ignore:line
 /**
  * Returns if the current row is rendered for the connected user
  *
- * @param $table {JQuery} the parent table.
- * @param row {object} the row data.
+ * @param {JQuery} $table - the parent table.
+ * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
 function isConnectedUser($table, row) {
@@ -149,10 +150,10 @@ function isConnectedUser($table, row) {
 /**
  * Update the user action.
  *
- * @param $table {JQuery} the parent table.
- * @param row {object} the row data.
- * @param _$element {JQuery} the table row.
- * @param $action {JQuery} the action to update
+ * @param {JQuery} $table - the parent table.
+ * @param {Object} row - the row data.
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateUserAction($table, row, _$element, $action) {
     'use strict';
@@ -164,10 +165,10 @@ function updateUserAction($table, row, _$element, $action) {
 /**
  * Update the switch user action.
  *
- * @param $table {JQuery} the parent table.
- * @param row {object} the row data.
- * @param _$element {JQuery} the table row.
- * @param $action {JQuery} the action to update
+ * @param {JQuery} $table - the parent table.
+ * @param {Object} row - the row data.
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
@@ -185,12 +186,33 @@ function updateUserSwitchAction($table, row, _$element, $action) {
 }
 
 /**
+ * Update the reset request password user action.
+ *
+ * @param {JQuery} $table - the parent table.
+ * @param {Object} row - the row data.
+ * @param {string} row.resetPassword - the reset password value
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
+ */
+function updateUserResetAction($table, row, _$element, $action) {
+    'use strict';
+    const value = Number.parseInt(row.resetPassword, 10);
+    if (Number.isNaN(value) || value === 0) {
+        $action.prev('.dropdown-divider').remove();
+        $action.remove();
+    }
+}
+
+/**
  * Update the search action.
  *
- * @param $table {JQuery} the parent table.
- * @param row {object} the row data.
- * @param _$element {JQuery} the table row.
- * @param $action {JQuery} the action to update
+ * @param {JQuery} $table - the parent table.
+ * @param {Object} row - the row data.
+ * @param {boolean} row.showgranted - the show granted.
+ * @param {boolean} row.editgranted - the edit granted.
+ * @param {boolean} row.deletegranted - the delete granted.
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
@@ -217,10 +239,10 @@ function updateSearchAction($table, row, _$element, $action) {
 /**
  * Update the edit calculation action.
  *
- * @param _$table {JQuery} the parent table.
- * @param row {object} the row data.
- * @param $element {JQuery} the table row.
- * @param $action {JQuery} the action to update
+ * @param {JQuery} _$table - the parent table.
+ * @param {Object} row - the row data.
+ * @param {JQuery} $element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
@@ -239,10 +261,10 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
 /**
  * Update the export calculation action.
  *
- * @param _$table {JQuery} the parent table.
- * @param _row {object} the row data.
- * @param _$element {JQuery} the table row.
- * @param $action {JQuery} the action to update
+ * @param {JQuery} _$table - the parent table.
+ * @param {Object} _row - the row data.
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
@@ -253,10 +275,10 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 /**
  * Update the task compute action.
  *
- * @param _$table {JQuery} the parent table.
- * @param row {object} the row data.
- * @param _$element {JQuery} the table row.
- * @param $action {JQuery} the action to update
+ * @param {JQuery} _$table - the parent table.
+ * @param {Object} row - the row data.
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
@@ -411,6 +433,9 @@ $.fn.extend({
 
 
         onPreBody: function (data) {
+            /**
+             * @type {{pageList: any, totalRows: number, pageSize: string, sortName: string, sortOrder: string}} options
+             */
             const options = $table.getOptions();
 
             // update pages list and page button
@@ -537,6 +562,8 @@ $.fn.extend({
                 updateUserSwitchAction($table, row, $element, $action);
             } else if ($action.is('.btn-user-message, .btn-user-delete')) {
                 updateUserAction($table, row, $element, $action);
+            } else if ($action.is('.btn-user-reset')) {
+                updateUserResetAction($table, row, $element, $action);
             } else if ($action.is('.btn-calculation-edit')) {
                 updateCalculationEditAction($table, row, $element, $action);
             } else if ($action.is('.btn-calculation-pdf')) {

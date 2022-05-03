@@ -25,8 +25,9 @@
     }
 
     // options
-    const urlName = $('#edit-form').data('check-name');
-    const urlEmail = $('#edit-form').data('check-email');
+    const $form = $("#edit-form");
+    const urlName = $form.data('check-name');
+    const urlEmail = $form.data('check-email');
     let options = {
         fileInput: true,
         rules: {
@@ -60,7 +61,8 @@
     };
 
     // new user?
-    if ($('#user_plainPassword_first').length) {
+    const $userPlainPasswordFirst = $('#user_plainPassword_first');
+    if ($userPlainPasswordFirst.length) {
         // update options
         const message = $('#edit-form').data('equal_to');
         options = $.extend(true, options, {
@@ -82,11 +84,11 @@
         });
 
         // initialize password strength meter
-        $('#user_plainPassword_first').initPasswordStrength({
+        $userPlainPasswordFirst.initPasswordStrength({
             userField: '#user_username'
         });
     }
 
     // initialize validator
-    $('#edit-form').initValidator(options);
+    $form.initValidator(options);
 }(jQuery));

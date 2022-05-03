@@ -24,12 +24,14 @@ use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Controller to display the home page.
  */
+#[AsController]
 class IndexController extends AbstractController
 {
     use MathTrait;

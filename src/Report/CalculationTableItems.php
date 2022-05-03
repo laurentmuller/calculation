@@ -84,7 +84,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
 
             foreach ($group->getCategories() as $category) {
                 $this->checkLines(2);
-                $groupStyle->setIndent(self::INDENT);
+                $groupStyle->setIndent(self::INDENT / 2);
                 $this->setGroupKey($category->getCode());
 
                 foreach ($category->getItems() as $item) {

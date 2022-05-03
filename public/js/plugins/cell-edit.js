@@ -217,8 +217,8 @@
         'tooltipEditClass': 'tooltip-secondary', // the edit tooltip class
         'tooltipErrorClass': 'tooltip-danger', // the error tooltip class
 
-        'autoEdit': false, // the start edit on create
-        'autoDispose': false, // the destroy on end edit or on cancel
+        'autoEdit': false, // start edit on create
+        'autoDispose': false, // destroy on end edit or on cancel
 
         'parser': null, // the function to parser value
         'formatter': null, // the function to format value

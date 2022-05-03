@@ -24,8 +24,9 @@
     $('#imageFile_file').initFileInput(callback);
 
     // options
-    const urlName = $('#edit-form').data('check-name');
-    const urlEmail = $('#edit-form').data('check-email');
+    const $form = $("#edit-form");
+    const urlName = $form.data('check-name');
+    const urlEmail = $form.data('check-email');
     const options = {
         rules: {
             'username': {

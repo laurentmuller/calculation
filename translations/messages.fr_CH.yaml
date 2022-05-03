@@ -13,6 +13,7 @@ about:
   licence_short: Licence
   loading: Recherche des informations...
   mysql: Configuration MySQL
+  mysql_pdf: MySql Info
   php: Configuration PHP
   php_pdf: PHP Info
   policy: Politique de confidentialité
@@ -1336,6 +1337,10 @@ user:
     label: Mot de passe
     new: Nouveau mot de passe
     new_confirmation: Répéter le nouveau mot de passe
+  reset:
+    title: Supprimer la demande de mot de passe.
+    error: Aucune demande de suppression du mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
+    success: La demande de suppression du mot de passe pour l'utilisateur <b>%name%</b> a été supprimée avec succès.
   rights:
     all_title: Tous les droits
     col_title: Activer ou désactiver tous les droits d'accès pour cette action

@@ -205,8 +205,7 @@
         /**
          * Handle item and state icon click.
          *
-         * @param {Event}
-         *            e - the source event.
+         * @param {Event} e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          */
         click(e) {
@@ -231,8 +230,7 @@
         /**
          * Handle the item double-click.
          *
-         * @param {Event}
-         *            e - the source event.
+         * @param {Event} e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          */
         doubleclick(e) {
@@ -245,8 +243,7 @@
         /**
          * Handle item key down event
          *
-         * @param {Event}
-         *            e - the source event.
+         * @param {Event} e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          */
         keydown(e) {
@@ -332,8 +329,7 @@
         /**
          * Toggle the visibility of the given group.
          *
-         * @param {JQuery}
-         *            $group - the group to toggle.
+         * @param {JQuery} $group - the group to toggle.
          * @return {BoostrapTreeView} this instance for chaining.
          */
         toggleGroup($group) {
@@ -403,8 +399,7 @@
         /**
          * Select the given element.
          *
-         * @param {JQuery}
-         *            $$selection - the item to select.
+         * @param {JQuery} $selection - the item to select.
          * @return {BoostrapTreeView} this instance for chaining.
          */
         setSelection($selection) {
@@ -447,8 +442,7 @@
         /**
          * Trigger the given event.
          *
-         * @param {Event}
-         *            e - the event to trigger.
+         * @param {Event} e - the event to trigger.
          * @return true if the event is not prevented; false otherwise.
          */
         trigger(e) {
@@ -539,8 +533,7 @@
         /**
          * Expand to the given level.
          *
-         * @param {int}
-         *            level - the level.
+         * @param {number} level - the level.
          * @return {BoostrapTreeView} this instance for chaining.
          */
         expandToLevel(level) {

@@ -52,6 +52,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -63,6 +64,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Controller for tests.
  */
+#[AsController]
 #[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/test')]
 class TestController extends AbstractController

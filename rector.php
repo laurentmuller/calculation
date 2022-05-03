@@ -30,8 +30,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([
         SetList::PHP_81,
         SetList::CODE_QUALITY,
-        SymfonySetList::SYMFONY_54,
+        SymfonySetList::SYMFONY_60,
         SymfonySetList::SYMFONY_CODE_QUALITY,
+        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
 };

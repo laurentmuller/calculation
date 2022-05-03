@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Controller to send comments to the webmaster.
  */
+#[AsController]
 #[Route(path: '/user')]
 class CommentController extends AbstractController
 {

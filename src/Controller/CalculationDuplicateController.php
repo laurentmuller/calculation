@@ -20,11 +20,13 @@ use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller to display and export duplicate items in the calculations.
  */
+#[AsController]
 #[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/duplicate')]
 class CalculationDuplicateController extends AbstractController

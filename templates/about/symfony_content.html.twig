@@ -44,7 +44,6 @@
     </table>
 
     <div class="accordion" id="symfonyAccordion">
-        {# bundles #}
         {% if info.bundles|length %}
         <table id="data-table-bundles" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Bundles', 'bundles', info.bundles|length) }}
@@ -56,7 +55,6 @@
         </table>
         {% endif %}
 
-        {# rumtime packages #}
         {% if runtime_packages|length %}
         <table id="data-table-runtime-packages" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtime_packages|length, 2) }}
@@ -68,7 +66,6 @@
         </table>
         {% endif %}
 
-        {# debug packages #}
         {% if debug_packages|length %}
         <table id="data-table-development-packages" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Debug Packages', 'development-packages', debug_packages|length, 2) }}
@@ -80,7 +77,6 @@
         </table>
         {% endif %}
 
-        {# runtime routes #}
         {% if runtime_routes|length %}
             <table id="data-table-routes" class="table table-hover table-sm mb-0">
                 {{ tools.headerLinkInfo('Routes', 'application-routes', runtime_routes|length) }}
@@ -92,7 +88,6 @@
             </table>
         {% endif %}
 
-        {# debug routes #}
         {% if debug_routes|length %}
             <table id="data-table-routes-dev" class="table table-hover table-sm mb-0">
                 {{ tools.headerLinkInfo('Debug Routes', 'symfony-routes', debug_routes|length) }}

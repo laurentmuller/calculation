@@ -22,6 +22,7 @@ use Faker\Provider\Person;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +31,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Controller to update entities.
  */
+#[AsController]
 #[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/update')]
 class UpdateController extends AbstractController

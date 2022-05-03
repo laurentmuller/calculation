@@ -12,9 +12,12 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+
 /**
  * Service to detect and translate texts.
  */
+#[Autoconfigure(tags: ['translators_service'])]
 interface TranslatorServiceInterface
 {
     /**

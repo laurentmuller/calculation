@@ -10,7 +10,8 @@
     $('#captcha').initCaptcha();
 
     // initialize validator
-    const url = $('#edit-form').data('check-user');
+    const $form = $("#edit-form");
+    const url = $form.data('check-user');
     const options = {
         rules: {
             'user': {
@@ -25,5 +26,5 @@
             }
         }
     };
-    $('#edit-form').initValidator(options);
+    $form.initValidator(options);
 }(jQuery));

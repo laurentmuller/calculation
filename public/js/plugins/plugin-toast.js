@@ -35,7 +35,7 @@
             if (!settings.title && settings.displaySubtitle) {
                 settings.displaySubtitle = false;
                 settings.title = settings.subtitle;
-                settings.subtitle = null
+                settings.subtitle = null;
             }
 
             // create DOM

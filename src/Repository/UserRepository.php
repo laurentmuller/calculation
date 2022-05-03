@@ -18,6 +18,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\Repository\ResetPasswordRequestRepositoryTrait;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepositoryInterface;
@@ -27,7 +29,7 @@ use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepository
  *
  * @template-extends AbstractRepository<User>
  */
-class UserRepository extends AbstractRepository implements ResetPasswordRequestRepositoryInterface
+class UserRepository extends AbstractRepository implements ResetPasswordRequestRepositoryInterface, PasswordUpgraderInterface
 {
     use ResetPasswordRequestRepositoryTrait;
 
@@ -49,7 +51,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     public function createResetPasswordRequest(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken): ResetPasswordRequestInterface
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', \get_debug_type($user)));
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         return $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
@@ -151,13 +153,27 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {
         if (!$resetPasswordRequest instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', \get_debug_type($resetPasswordRequest)));
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $resetPasswordRequest::class));
         }
 
         $resetPasswordRequest->eraseResetPasswordRequest();
+        $this->flush();
+    }
 
-        /** @psalm-var \Doctrine\ORM\EntityManagerInterface  $manager */
-        $manager = $this->_em;
-        $manager->flush();
+    /**
+     * {@inheritdoc}
+     *
+     * @see PasswordUpgraderInterface
+     *
+     * @throws UnsupportedUserException
+     */
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
+        }
+
+        $user->setPassword($newHashedPassword);
+        $this->flush();
     }
 }

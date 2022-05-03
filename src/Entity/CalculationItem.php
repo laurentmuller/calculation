@@ -16,6 +16,7 @@ use App\Interfaces\ParentCalculationInterface;
 use App\Repository\CalculationItemRepository;
 use App\Traits\MathTrait;
 use App\Traits\PositionTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -42,26 +43,26 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected ?string $description = null;
 
     /**
      * The price.
      */
-    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     protected float $price = 0.0;
 
     /**
      * The quantity.
      */
-    #[ORM\Column(type: 'float', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
     protected float $quantity = 0.0;
 
     /**
      * The unit.
      */
     #[Assert\Length(max: 15)]
-    #[ORM\Column(type: 'string', length: 15, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 15, nullable: true)]
     protected ?string $unit = null;
 
     /**

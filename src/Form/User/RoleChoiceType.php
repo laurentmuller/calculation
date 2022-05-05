@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
-use App\Entity\User;
 use App\Form\AbstractChoiceType;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\Security\Core\Security;
@@ -30,7 +29,7 @@ class RoleChoiceType extends AbstractChoiceType
     public function __construct(Security $security)
     {
         $user = $security->getUser();
-        $this->superAdmin = $user instanceof User && $user->isSuperAdmin();
+        $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
     }
 
     /**

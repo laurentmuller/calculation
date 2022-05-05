@@ -22,26 +22,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 class PdfColumn
 {
     /**
-     * The column alignment.
-     */
-    protected ?PdfTextAlignment $alignment = null;
-
-    /**
-     * The fixed width.
-     */
-    protected bool $fixed = false;
-
-    /**
-     * The column's text.
-     */
-    protected ?string $text = null;
-
-    /**
-     * The column's width.
-     */
-    protected float $width = 0.0;
-
-    /**
      * Constructor.
      *
      * @param string|null           $text      the column text
@@ -50,12 +30,8 @@ class PdfColumn
      * @param bool                  $fixed     true if the column width is fixed. This property is used only if the
      *                                         parent's table use all the document width.
      */
-    public function __construct(?string $text, float $width, ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT, bool $fixed = false)
+    public function __construct(protected ?string $text, protected float $width = 0.0, protected ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT, protected bool $fixed = false)
     {
-        $this->setText($text)
-            ->setWidth($width)
-            ->setAlignment($alignment)
-            ->setFixed($fixed);
     }
 
     /**

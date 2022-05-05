@@ -69,7 +69,7 @@ class CalculationTableGroups extends PdfTableBuilder
         $this->startHeaderRow()
             ->add($columns[0]->getText())
             ->add($columns[1]->getText())
-            ->add($this->trans('report.calculation.margins'), 2, null, PdfTextAlignment::CENTER)
+            ->add(text: $this->trans('report.calculation.margins'), cols: 2, alignment: PdfTextAlignment::CENTER)
             ->add($columns[4]->getText())
             ->endRow();
 
@@ -87,9 +87,9 @@ class CalculationTableGroups extends PdfTableBuilder
         // groups total
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.marginTotal'))
-            ->add(FormatUtils::formatAmount($calculation->getGroupsAmount()), 1, $style)
-            ->add(FormatUtils::formatPercent($calculation->getGroupsMargin()), 1, $style)
-            ->add(FormatUtils::formatAmount($calculation->getGroupsMarginAmount()), 1, $style)
+            ->add(text: FormatUtils::formatAmount($calculation->getGroupsAmount()), style: $style)
+            ->add(text: FormatUtils::formatPercent($calculation->getGroupsMargin()), style: $style)
+            ->add(text: FormatUtils::formatAmount($calculation->getGroupsMarginAmount()), style: $style)
             ->add(FormatUtils::formatAmount($calculation->getGroupsTotal()))
             ->endRow();
     }

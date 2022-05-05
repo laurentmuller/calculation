@@ -464,7 +464,7 @@ const Application = {
         });
 
         // update global sort
-        $('.btn-sort-items').toggleDisabled(true);
+        $('.btn-sort-items').toggleDisabled(disabled);
 
         return this;
     },
@@ -550,7 +550,7 @@ const Application = {
 
         }).fail(function (_jqXHR, textStatus) {
             if (textStatus !== 'abort') {
-                return that.disable(null);
+                return that.disable();
             }
         });
 
@@ -560,7 +560,7 @@ const Application = {
     /**
      * Disable edition.
      *
-     * @param {string} message - the error message to display.
+     * @param {string} [message] - the error message to display.
      * @return {Application} This instance for chaining.
      */
     disable: function (message) {
@@ -755,10 +755,26 @@ const Application = {
             return that;
         }
 
-        $groups.sort(function (a, b) {
-            const textA = $('th:first', a).text();
-            const textB = $('th:first', b).text();
+        // attach
+        let map = new Map();
+        $groups.each(function() {
+            const $group = $(this);
+            const $bodies = $group.nextUntil('.group');
+            map.set($group, $bodies);
+        });
+
+        // sort
+        map = new Map([...map].sort(function (a, b) {
+            const textA = $('th:first', a[0]).text();
+            const textB = $('th:first', b[0]).text();
             return that.compareStrings(textA, textB);
+        }));
+
+        // replace
+        const $table = $('#data-table-edit');
+        map.forEach(function(value, key) {
+            key.appendTo($table);
+            value.appendTo($table);
         });
 
         return that;
@@ -1317,7 +1333,7 @@ $.fn.extend({
     /**
      * Gets the template prototype from the current element.
      *
-     * @param {string} pattern - the regex pattern used to replace the index.
+     * @param {RegExp} pattern - the regex pattern used to replace the index.
      * @param {string} key - the data key used to retrieve and update the index.
      * @returns {string} the template.
      */

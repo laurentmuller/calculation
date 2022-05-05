@@ -23,19 +23,9 @@ use App\Util\Utils;
 class PdfGroup implements PdfDocumentUpdaterInterface
 {
     /**
-     * The cell alignment.
-     */
-    protected PdfTextAlignment $alignment;
-
-    /**
      * The border style.
      */
     protected PdfBorder $border;
-
-    /**
-     * The key.
-     */
-    protected mixed $key;
 
     /**
      * The style.
@@ -50,10 +40,8 @@ class PdfGroup implements PdfDocumentUpdaterInterface
      * @param PdfBorder|null   $border    the group border or null to use default
      * @param PdfStyle|null    $style     the group style or null to use default
      */
-    public function __construct(mixed $key = null, PdfTextAlignment $alignment = PdfTextAlignment::LEFT, ?PdfBorder $border = null, ?PdfStyle $style = null)
+    public function __construct(protected mixed $key = null, protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT, ?PdfBorder $border = null, ?PdfStyle $style = null)
     {
-        $this->key = $key;
-        $this->alignment = $alignment;
         $this->border = $border ?: PdfBorder::all();
         $this->style = $style ?: PdfStyle::getCellStyle()->setFontBold();
     }

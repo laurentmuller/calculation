@@ -83,7 +83,7 @@ class UsersReport extends AbstractArrayReport
                 ->add($entity->getUserIdentifier())
                 ->add($entity->getEmail())
                 ->add($role)
-                ->add($text, 1, $style)
+                ->add(text: $text, style: $style)
                 ->add($this->formatLastLogin($entity->getLastLogin()))
                 ->endRow();
         }

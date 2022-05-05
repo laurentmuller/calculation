@@ -20,10 +20,10 @@ parameters:
 
     ignoreErrors:
         - '#Utils::getRequestInputBag#'
-        - '#should return int<0, max>#'
-        - '#return type has no value type#'
         - '#no value type specified#'
-        - '#repositoryClass of attribute#'
+        -
+            message: '#repositoryClass of attribute#'
+            path: src/Entity/*
         -
             message: '#type mapping mismatch#'
             path: src/Entity/*

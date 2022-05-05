@@ -14,7 +14,6 @@ namespace App\Repository;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -71,18 +70,18 @@ class CalculationRepository extends AbstractRepository
      * @param float $minMargin the minimum margin
      *
      * @return int the number of calculations
+     * @psalm-return  int<0, max>
      */
     public function countBelowItems(float $minMargin): int
     {
         // create
         $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)');
-
-        // filter
         $builder = $this->addBelowFilter($builder, $minMargin);
+        /** @var int<0, max> $count */
+        $count = (int) $builder->getQuery()->getSingleScalarResult();
 
-        // execute
-        return (int) $builder->getQuery()->getSingleScalarResult();
+        return $count;
     }
 
     /**
@@ -100,6 +99,7 @@ class CalculationRepository extends AbstractRepository
      * Count the number of calculations with duplicate items. Items are duplicate if the descriptions are equal.
      *
      * @return int the number of calculations
+     * @psalm-return  int<0, max>
      */
     public function countDuplicateItems(): int
     {
@@ -121,14 +121,17 @@ class CalculationRepository extends AbstractRepository
             ->select('COUNT(r.id)')
             ->where($where);
 
-        // execute
-        return (int) $builder->getQuery()->getSingleScalarResult();
+        /** @var int<0, max> $count */
+        $count = (int) $builder->getQuery()->getSingleScalarResult();
+
+        return $count;
     }
 
     /**
      * Count the number of calculations with empty items. Items are empty if the price or the quantity is equal to 0.
      *
      * @return int the number of calculations
+     * @psalm-return  int<0, max>
      */
     public function countEmptyItems(): int
     {
@@ -149,8 +152,10 @@ class CalculationRepository extends AbstractRepository
             ->select('COUNT(r.id)')
             ->where($where);
 
-        // execute
-        return (int) $builder->getQuery()->getSingleScalarResult();
+        /** @var int<0, max> $count */
+        $count = (int) $builder->getQuery()->getSingleScalarResult();
+
+        return $count;
     }
 
     /**
@@ -732,25 +737,6 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets the sort direction.
-     *
-     * @param string $direction the direction to validate
-     * @param string $default   the default direction
-     *
-     * @return string the sort direction
-     */
-    private function getDirection(string $direction, string $default): string
-    {
-        $direction = \strtoupper($direction);
-
-        return match ($direction) {
-            Criteria::ASC,
-            Criteria::DESC => $direction,
-            default => $default,
-        };
-    }
-
-    /**
      * Gets the full order column name.
      *
      * @param string $column the order column to validate
@@ -779,7 +765,6 @@ class CalculationRepository extends AbstractRepository
     private function updateOrder(QueryBuilder $builder, string $orderColumn, string $orderDirection): void
     {
         $orderColumn = $this->getOrder($orderColumn);
-        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
         $builder->orderBy($orderColumn, $orderDirection);
     }
 

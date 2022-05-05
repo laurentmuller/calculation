@@ -49,6 +49,7 @@ services:
         autoconfigure: true
         bind:
             string $appName: '%app_name%'
+            string $appMode: '%app_mode%'
             string $appNameVersion: '%app_name% v%app_version%'
             string $projectDir: '%kernel.project_dir%'
             bool $isDebug: '%kernel.debug%'

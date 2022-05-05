@@ -53,7 +53,7 @@ class ProductsReport extends AbstractArrayReport
             // product
             $table->startRow()
                 ->add($entity->getDescription())
-                ->add(FormatUtils::formatAmount($entity->getPrice()), 1, $style)
+                ->add(text: FormatUtils::formatAmount($entity->getPrice()), style: $style)
                 ->add($entity->getUnit())
                 ->add($entity->getSupplier())
                 ->endRow();

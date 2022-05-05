@@ -19,6 +19,7 @@ about:
   policy: Politique de confidentialité
   policy_short: Confidentialité
   symfony: Configuration Symfony
+  symfony_pdf: Symfony Info
   title: A propos de
   version: Version %version%
 action:

@@ -26,6 +26,8 @@ class PhpIniReport extends AbstractReport
 {
     /**
      * Constructor.
+     *
+     * @param array<string, array<string, mixed>> $content
      */
     public function __construct(AbstractController $controller, private readonly array $content, string $version)
     {
@@ -61,7 +63,6 @@ class PhpIniReport extends AbstractReport
             ->addColumn(PdfColumn::left('Master Value', 30))
             ->outputHeaders();
 
-        /** @var array<string, mixed> $value */
         foreach ($content as $key => $value) {
             $table->setGroupKey($key);
             $this->outputEntries($table, $value);
@@ -115,8 +116,8 @@ class PhpIniReport extends AbstractReport
                 $master = $this->convert(\end($entry));
                 $table->startRow()
                     ->add($this->convert($key))
-                    ->add($local, 1, $this->getCellStyle($local))
-                    ->add($master, 1, $this->getCellStyle($master))
+                    ->add(text: $local, style: $this->getCellStyle($local))
+                    ->add(text: $master, style: $this->getCellStyle($master))
                     ->endRow();
             } else {
                 $value = $this->convert($entry);

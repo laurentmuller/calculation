@@ -83,16 +83,6 @@ class PdfFont implements PdfDocumentUpdaterInterface
     final public const STYLE_UNDERLINE = 'U';
 
     /**
-     * The name.
-     */
-    protected string $name = self::DEFAULT_NAME;
-
-    /**
-     * The size.
-     */
-    protected float $size = self::DEFAULT_SIZE;
-
-    /**
      * The style.
      */
     protected string $style = self::DEFAULT_STYLE;
@@ -104,11 +94,9 @@ class PdfFont implements PdfDocumentUpdaterInterface
      * @param float  $size  the size
      * @param string $style the style
      */
-    public function __construct(string $name = self::DEFAULT_NAME, float $size = self::DEFAULT_SIZE, string $style = self::DEFAULT_STYLE)
+    public function __construct(protected string $name = self::DEFAULT_NAME, protected float $size = self::DEFAULT_SIZE, string $style = self::DEFAULT_STYLE)
     {
-        $this->setName($name)
-            ->setStyle($style)
-            ->setSize($size);
+        $this->setStyle($style);
     }
 
     /**

@@ -38,7 +38,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
      * Checks the given route.
      *
      * @param string $url      the URL to be tested
-     * @param string $username the user name to login
+     * @param string $username the username to log in
      * @param int    $expected the expected result
      * @param string $method   the request method
      *
@@ -59,8 +59,6 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 
     /**
      * Adds an entity to the database.
-     *
-     * @param AbstractEntity $entity the entity to add
      */
     protected function addEntity(?AbstractEntity $entity): void
     {
@@ -75,7 +73,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
      * Checks the given route.
      *
      * @param string $url      the URL to be tested
-     * @param string $username the user name to login or empty('') if none
+     * @param string $username the username to log in or empty('') if none
      * @param int    $expected the expected result
      * @param string $method   the request method
      */
@@ -104,8 +102,6 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 
     /**
      * Delete an entity from the database.
-     *
-     * @param AbstractEntity $entity the entity to delete
      *
      * @return mixed this function returns always null
      */

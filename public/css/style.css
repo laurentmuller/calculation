@@ -134,10 +134,7 @@ a.btn-list {
  * exception table
  */
 .table-exception td {
-    -ms-word-break: break-word;
     word-break: break-word;
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
     hyphens: auto;
 }
 .table-exception th.property,
@@ -225,7 +222,7 @@ span.state-color {
 
 /*
  * Card flex
- */
+
 .card-flex {
     min-width: 270px;
 }
@@ -255,10 +252,11 @@ span.state-color {
         max-width: 32.55%;
     }
 }
+ */
 
 /*
  * last calculations in home page
- */
+
 .card-last td {
     padding-top: 0;
     padding-bottom: 0;
@@ -282,6 +280,7 @@ span.state-color {
         flex: 1 0 calc(33.33333333333333% - 30px);
     }
 }
+*/
 
 /*
  * states and months cards in home page

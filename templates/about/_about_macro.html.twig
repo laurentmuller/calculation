@@ -43,14 +43,22 @@
 </tr>
 {%- endmacro %}
 
-{% macro aboutCard(id) -%}
+{% macro aboutCard(id, pdf_route=false) -%}
+{% import 'macros/_icons.html.twig' as icons %}
 {%- set route = path('about_' ~ id ~ '_content') -%}
 {%- set title = ('about.' ~ id)|trans -%}
 <div class="card">
     <div class="card-header" id="{{ id }}-header">
-        <a data-toggle="collapse" role="button" href="#{{ id }}" class="card-link" aria-expanded="false" aria-controls="{{ id }}">
-           {{- title -}}
-        </a>
+        <div class="row no-gutters">
+            <div class="mr-auto">
+                <a data-toggle="collapse" role="button" href="#{{ id }}" class="card-link" aria-expanded="false" aria-controls="{{ id }}">
+                    {{- title -}}
+                </a>
+            </div>
+            <div class="text-right d-print-none">
+                {{ icons.linkExternal(path(pdf_route), null, null, 'file-pdf far', 'common.button_pdf') }}
+            </div>
+        </div>
     </div>
     <div id="{{ id }}" class="card-body collapse" aria-labelledby="{{ id }}-header" aria-expanded="false" data-parent="#accordionAbout" data-url="{{ route }}">
         <div class="alert mb-0" role="alert">

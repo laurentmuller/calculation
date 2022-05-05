@@ -20,39 +20,21 @@ use App\Pdf\Enums\PdfTextAlignment;
 class PdfCell
 {
     /**
-     * The cell alignment.
-     */
-    protected ?PdfTextAlignment $alignment = null;
-
-    /**
-     * The cell columns span.
-     */
-    protected int $cols = 1;
-
-    /**
-     * The cell style.
-     */
-    protected ?PdfStyle $style = null;
-
-    /**
-     * The cell text.
-     */
-    protected ?string $text = null;
-
-    /**
      * Constructor.
      *
      * @param string|null           $text      the cell text
      * @param int                   $cols      the cell columns span
      * @param PdfStyle|null         $style     the cell style
      * @param PdfTextAlignment|null $alignment the cell alignment
+     * @param string|null           $link      the cell link
      */
-    public function __construct(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null)
+    public function __construct(protected ?string $text = null, protected int $cols = 1, protected ?PdfStyle $style = null, protected ?PdfTextAlignment $alignment = null, protected ?string $link = null)
     {
         $this->setText($text)
             ->setCols($cols)
             ->setStyle($style)
-            ->setAlignment($alignment);
+            ->setAlignment($alignment)
+            ->setLink($link);
     }
 
     public function __clone()
@@ -76,6 +58,14 @@ class PdfCell
     public function getCols(): int
     {
         return $this->cols;
+    }
+
+    /**
+     * Gets the link.
+     */
+    public function getLink(): ?string
+    {
+        return $this->link;
     }
 
     /**
@@ -110,6 +100,16 @@ class PdfCell
     public function setCols(int $cols): self
     {
         $this->cols = \max(1, $cols);
+
+        return $this;
+    }
+
+    /**
+     * Sets the link.
+     */
+    public function setLink(?string $link): self
+    {
+        $this->link = $link;
 
         return $this;
     }

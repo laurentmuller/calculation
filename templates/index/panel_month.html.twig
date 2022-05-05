@@ -51,7 +51,7 @@
         </div>
     </div>
     {% if months|length %}
-    <div class="card-body index-parent no-gutters p-2">
+    <div class="card-body index-parent no-gutters p-1">
     {% for month in months %}
         {{ _self.cardEntry(month, list_path, min_margin) }}
     {% endfor %}

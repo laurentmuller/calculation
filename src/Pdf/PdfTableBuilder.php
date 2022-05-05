@@ -87,12 +87,11 @@ class PdfTableBuilder
      * @param int                   $cols      the number of columns to span
      * @param PdfStyle|null         $style     the cell style to use or null to use the default cell style
      * @param PdfTextAlignment|null $alignment the cell alignment
-     *
-     * @return PdfTableBuilder
+     * @param string|null           $link      the link of the cell
      */
-    public function add(?string $text, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): self
+    public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, ?string $link = null): static
     {
-        return $this->addCell(new PdfCell($text, $cols, $style, $alignment));
+        return $this->addCell(new PdfCell($text, $cols, $style, $alignment, $link));
     }
 
     /**
@@ -101,7 +100,7 @@ class PdfTableBuilder
      *
      * @throws \LogicException if no current row is started
      */
-    public function addCell(?PdfCell $cell): self
+    public function addCell(?PdfCell $cell): static
     {
         if (!$this->isRowStarted()) {
             throw new \LogicException('No current row is started.');
@@ -120,7 +119,7 @@ class PdfTableBuilder
      *
      * @throws \LogicException if no current row is started
      */
-    public function addCells(array $cells): self
+    public function addCells(array $cells): static
     {
         foreach ($cells as $cell) {
             $this->addCell($cell);
@@ -132,7 +131,7 @@ class PdfTableBuilder
     /**
      * Adds the given column to the list of columns.
      */
-    public function addColumn(?PdfColumn $column): self
+    public function addColumn(?PdfColumn $column): static
     {
         if (null !== $column) {
             $this->columns[] = $column;
@@ -146,7 +145,7 @@ class PdfTableBuilder
      *
      * @param PdfColumn[] $columns the columns to add
      */
-    public function addColumns(array $columns): self
+    public function addColumns(array $columns): static
     {
         foreach ($columns as $column) {
             $this->addColumn($column);
@@ -184,7 +183,7 @@ class PdfTableBuilder
      *
      * @throws \LogicException if no current row is started
      */
-    public function completeRow(bool $endRow = true): self
+    public function completeRow(bool $endRow = true): static
     {
         // started?
         if (!$this->isRowStarted()) {
@@ -211,7 +210,7 @@ class PdfTableBuilder
      * @throws \LengthException     if no cell is defined
      * @throws \OutOfRangeException if the number of spanned cells is not equal to the number of columns
      */
-    public function endRow(): self
+    public function endRow(): static
     {
         // check
         if (empty($this->cells)) {
@@ -221,10 +220,15 @@ class PdfTableBuilder
             throw new \OutOfRangeException('Invalid spanned cells.');
         }
 
+        /** @psalm-var string[] $texts */
         $texts = [];
+        /** @psalm-var PdfStyle[] $styles */
         $styles = [];
+        /** @psalm-var PdfTextAlignment[] $aligns */
         $aligns = [];
+        /** @psalm-var float[] $widths */
         $widths = [];
+        /** @psalm-var bool[] $fixeds */
         $fixeds = [];
 
         // copy
@@ -260,8 +264,8 @@ class PdfTableBuilder
                 $widths[0] = $parent->getPrintableWidth();
             } else {
                 // get fixed and resizable widths
-                $fixedWidth = 0;
-                $resizableWidth = 0;
+                $fixedWidth = 0.0;
+                $resizableWidth = 0.0;
                 for ($i = 0; $i < $count; ++$i) {
                     if ($fixeds[$i]) {
                         $fixedWidth += $widths[$i];
@@ -398,7 +402,7 @@ class PdfTableBuilder
      *
      * @throws \LengthException if no column is defined
      */
-    public function outputHeaders(): self
+    public function outputHeaders(): static
     {
         if (empty($this->columns)) {
             throw new \LengthException('No column is defined.');
@@ -422,7 +426,7 @@ class PdfTableBuilder
      * @throws \LengthException     if no cell is defined
      * @throws \OutOfRangeException if the number of spanned cells is not equal to the number of columns
      */
-    public function row(array $cells, ?PdfStyle $style = null): self
+    public function row(array $cells, ?PdfStyle $style = null): static
     {
         return $this->startRow($style)
             ->addCells($cells)
@@ -432,7 +436,7 @@ class PdfTableBuilder
     /**
      * Sets the border.
      */
-    public function setBorder(PdfBorder|string|int $border): self
+    public function setBorder(PdfBorder|string|int $border): static
     {
         $this->border = \is_string($border) || \is_int($border) ? new PdfBorder($border) : $border;
 
@@ -444,7 +448,7 @@ class PdfTableBuilder
      *
      * @param bool $fullWidth true if the table take all the printable width
      */
-    public function setFullWidth(bool $fullWidth): self
+    public function setFullWidth(bool $fullWidth): static
     {
         $this->fullWidth = $fullWidth;
 
@@ -466,7 +470,7 @@ class PdfTableBuilder
     /**
      * Sets the cell listener.
      */
-    public function setListener(?PdfCellListenerInterface $listener): self
+    public function setListener(?PdfCellListenerInterface $listener): static
     {
         $this->listener = $listener;
 
@@ -478,7 +482,7 @@ class PdfTableBuilder
      *
      * @param bool $repeatHeader true to print the header on each new pages
      */
-    public function setRepeatHeader(bool $repeatHeader): self
+    public function setRepeatHeader(bool $repeatHeader): static
     {
         $this->repeatHeader = $repeatHeader;
 
@@ -496,7 +500,7 @@ class PdfTableBuilder
      *
      * @see PdfTableBuilder::add()
      */
-    public function singleLine(?string $text = null, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): self
+    public function singleLine(?string $text = null, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): static
     {
         return $this->startRow()
             ->add($text, $this->getColumnsCount(), $style, $alignment)
@@ -511,7 +515,7 @@ class PdfTableBuilder
      *
      * @throws \LogicException if a row is already started
      */
-    public function startHeaderRow(): self
+    public function startHeaderRow(): static
     {
         return $this->startRow($this->getHeaderStyle());
     }
@@ -523,7 +527,7 @@ class PdfTableBuilder
      *
      * @throws \LogicException if the row is already started
      */
-    public function startRow(?PdfStyle $style = null): self
+    public function startRow(?PdfStyle $style = null): static
     {
         if ($this->isRowStarted()) {
             throw new \LogicException('A row is already started.');
@@ -571,16 +575,18 @@ class PdfTableBuilder
             $parent->SetXY($x, $y);
         }
 
+        // cell content
+        $margins = $parent->getCellMargin();
         if ($cell instanceof PdfImageCell) {
-            // special case for image cell
-            $rect = clone $bounds;
-            $rect->inflate(-$parent->getCellMargin());
-            $cell->drawImage($parent, $rect, $alignment);
+            // cell image
+            $imageBounds = clone $bounds;
+            $imageBounds->inflate(-$margins);
+            $cell->drawImage($parent, $imageBounds, $alignment);
         } elseif (Utils::isString($text)) {
             // cell text
             $line_height = PdfDocument::LINE_HEIGHT;
             if (!$style->getFont()->isDefaultSize()) {
-                $line_height = $parent->getFontSize() + 2 * $parent->getCellMargin();
+                $line_height = $parent->getFontSize() + 2 * $margins;
             }
             $textBounds = clone $bounds;
             $indent = $style->getIndent();
@@ -589,6 +595,16 @@ class PdfTableBuilder
                 $textBounds->indent($indent);
             }
             $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
+
+            // cell link
+            if ($link = $cell->getLink()) {
+                $linkBounds = clone $textBounds;
+                $linkBounds->inflate(-$margins);
+                $linkWidth = $parent->GetStringWidth($text);
+                $linkHeight = $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2 * $margins;
+                $linkBounds->setWidth($linkWidth)->setHeight($linkHeight);
+                $this->drawCellLink($parent, $linkBounds, $link);
+            }
         }
 
         // move the position to the top-right of the cell
@@ -650,6 +666,18 @@ class PdfTableBuilder
                 $parent->Line($x, $bottom, $right, $bottom);
             }
         }
+    }
+
+    /**
+     * Draws the cell link.
+     *
+     * @param PdfDocument  $parent the parent document
+     * @param PdfRectangle $bounds the link bounds
+     * @param string       $link   the link URL
+     */
+    protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string $link): void
+    {
+        $parent->Link($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $link);
     }
 
     /**

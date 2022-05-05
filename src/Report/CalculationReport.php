@@ -194,12 +194,12 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         $table = new PdfTableBuilder($this);
         $table->addColumns($columns)
             ->startHeaderRow()
-            ->add($calculation->getCustomer(), 1, $leftStyle)
-            ->add($calculation->getStateCode(), 1, $rightStyle)
+            ->add(text: $calculation->getCustomer(), style: $leftStyle)
+            ->add(text: $calculation->getStateCode(), style: $rightStyle)
             ->endRow()
             ->startHeaderRow()
-            ->add($calculation->getDescription(), 1, $leftStyle)
-            ->add($calculation->getFormattedDate(), 1, $rightStyle)
+            ->add(text: $calculation->getDescription(), style: $leftStyle)
+            ->add(text: $calculation->getFormattedDate(), style: $rightStyle)
             ->endRow();
 
         $this->Ln(3);

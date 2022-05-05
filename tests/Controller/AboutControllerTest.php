@@ -48,13 +48,17 @@ class AboutControllerTest extends AbstractControllerTest
             ['/about/mysql/content', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
             ['/about/mysql/content', self::ROLE_SUPER_ADMIN],
 
+            ['/about/mysql/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/about/mysql/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/mysql/pdf', self::ROLE_SUPER_ADMIN],
+
             ['/about/php/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/about/php/content', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
             ['/about/php/content', self::ROLE_SUPER_ADMIN],
 
-            // To be checked why array is empty
-            // ['/about/php/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            // ['/about/php/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/php/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/about/php/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            // to do: checked why array is empty
             // ['/about/php/pdf', self::ROLE_SUPER_ADMIN],
 
             ['/about/policy', ''],
@@ -74,6 +78,10 @@ class AboutControllerTest extends AbstractControllerTest
             ['/about/symfony/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/about/symfony/content', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
             ['/about/symfony/content', self::ROLE_SUPER_ADMIN],
+
+            ['/about/symfony/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/about/symfony/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/symfony/pdf', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

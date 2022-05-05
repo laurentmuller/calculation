@@ -129,7 +129,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     {
         $text = FormatUtils::formatAmount($amount);
         $style = empty($amount) ? $errorStyle : null;
-        $this->add($text, 1, $style);
+        $this->add(text: $text, style: $style);
 
         return $this;
     }
@@ -145,7 +145,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     protected function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
     {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
-        $this->add($item->getDescription(), 1, $style);
+        $this->add(text: $item->getDescription(), style: $style);
 
         return $this;
     }

@@ -59,9 +59,11 @@ class PdfRectangle
     /**
      * Sets the left indent. Do nothing if the indent is smaller than or equal to 0.
      *
-     * @param int $indent the indent
+     * @param float $indent the indent
+     *
+     * @return PdfRectangle
      */
-    public function indent(int $indent): self
+    public function indent(float $indent): self
     {
         if ($indent > 0) {
             $this->x += $indent;

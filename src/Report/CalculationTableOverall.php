@@ -101,7 +101,7 @@ class CalculationTableOverall extends PdfTableBuilder
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.overallTotal'))
             ->add(FormatUtils::formatAmount($totalItems))
-            ->add(FormatUtils::formatPercent($calculation->getOverallMargin()), 1, $style)
+            ->add(text: FormatUtils::formatPercent($calculation->getOverallMargin()), style: $style)
             ->add(FormatUtils::formatAmount($calculation->getOverallMarginAmount()))
             ->add(FormatUtils::formatAmount($calculation->getOverallTotal()))
             ->endRow();

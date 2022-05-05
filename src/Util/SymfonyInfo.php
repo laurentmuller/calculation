@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Util;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Version;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -36,17 +37,21 @@ final class SymfonyInfo
         'version',
         'description',
         'homepage',
-        // 'type',
-        // 'keywords',
-        // 'authors',
-        // 'license',
-        // 'source',
-        // 'bin',
-        // 'autoload',
-        // 'time'
     ];
 
+    /**
+     * @var null|array{
+     *     runtime?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>,
+     *     debug?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>
+     * }
+     */
     private ?array $packages = null;
+    /**
+     * @var null|array{
+     *     runtime?: array<string, array{name: string, path: string, debug: bool}>,
+     *     debug?: array<string, array{name: string, path: string, debug: bool}>
+     * }
+     */
     private ?array $routes = null;
 
     /**
@@ -58,6 +63,8 @@ final class SymfonyInfo
 
     /**
      * Gets bundles information.
+     *
+     * @return array<string, array{name: string, namespace: string, path: string}>
      */
     public function getBundles(): array
     {
@@ -191,6 +198,11 @@ final class SymfonyInfo
 
     /**
      * Gets packages information.
+     *
+     * @return array{
+     *     runtime?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>,
+     *     debug?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>
+     * }
      */
     public function getPackages(): array
     {
@@ -232,6 +244,11 @@ final class SymfonyInfo
 
     /**
      * Gets all routes.
+     *
+     * @return array{
+     *     runtime?: array<string, array{name: string, path: string, debug: bool}>,
+     *     debug?: array<string, array{name: string, path: string, debug: bool}>
+     * }
      */
     public function getRoutes(): array
     {
@@ -244,8 +261,10 @@ final class SymfonyInfo
                     'path' => $route->getPath(),
                 ];
                 if (\str_starts_with($name, '_')) {
+                    $item['debug'] = true;
                     $result['debug'][$name] = $item;
                 } else {
+                    $item['debug'] = false;
                     $result['runtime'][$name] = $item;
                 }
             }
@@ -371,24 +390,27 @@ final class SymfonyInfo
      *
      * @param array $packages the packages to process
      * @param bool  $dev      true if packages are required only for development mode
+     *
+     * @return array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>
      */
     private function processPackages(array $packages, bool $dev): array
     {
+        /**
+         * @psalm-var array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}> $result
+         */
         $result = [];
-        /** @psalm-var array $entry */
+
+        /** @psalm-var array{name: string, version: string, description: string|null, homepage: string|null} $entry */
         foreach ($packages as $entry) {
-            $package = [];
-            $package['dev'] = $dev;
+            $package = ['dev' => $dev];
             foreach (self::PACKAGE_PROPERTIES as $key) {
-                $value = (string) ($entry[$key] ?? '');
+                $value = $entry[$key] ?? '';
                 switch ($key) {
                 case 'version':
                     $value = \ltrim($value, 'v');
                     break;
                 case 'description':
-                    if (!Utils::endwith($value, '.')) {
-                        $value .= '.';
-                    }
+                    $value = \rtrim($value, '.') . '.';
                     break;
                 }
                 $package[$key] = $value;
@@ -399,6 +421,7 @@ final class SymfonyInfo
         // sort
         \ksort($result);
 
+        // @phpstan-ignore-next-line
         return $result;
     }
 }

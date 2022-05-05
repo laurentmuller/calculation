@@ -1,4 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
 {% trans_default_domain 'chart' %}
 
 {# macros #}
@@ -14,8 +15,6 @@
 {%- set title_domain = 'chart' -%}
 {%- set title_icon = title_icon|default('area-chart') -%}
 
-{% block card_footer_class ' d-none' %}
-
 {% block card_body %}
 <div class="row">
     <div class="col chart" id="{{ constant('App\\Chart\\Basechart::CONTAINER') }}"></div>
@@ -24,6 +23,10 @@
 {% block data %}{% endblock %}
 </div>
 {% endblock %}
+
+{% block card_footer -%}
+{{ icons.homepage() }}
+{%- endblock %}
 
 {% block stylesheets %}
 {{ asset_css('css/chart.css') }}

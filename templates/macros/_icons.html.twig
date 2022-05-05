@@ -119,8 +119,8 @@
 {{- _self.link(href, text, class) -}}
 {%- endmacro %}
 
-{% macro button_pdf(href, parameters=[]) -%}
-{{- _self.linkExternal(path(href, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', 'file-pdf far') -}}
+{% macro button_pdf(route, parameters=[]) -%}
+{{- _self.linkExternal(path(route, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', 'file-pdf far') -}}
 {%- endmacro %}
 
 {% macro copyright_link() -%}

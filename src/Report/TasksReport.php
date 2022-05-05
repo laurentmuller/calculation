@@ -37,7 +37,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $task = $group->getKey();
         $category = \sprintf('%s / %s', (string) $task->getGroupCode(), (string) $task->getCategoryCode());
         $parent->startRow()
-            ->add($task->getName(), 1, $group->getStyle())
+            ->add(text: $task->getName(), style: $group->getStyle())
             ->add($category)
             ->add($task->getUnit());
         if ($task->isEmpty()) {
@@ -89,7 +89,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
 
                 if ($item->isEmpty()) {
                     $table->startRow()
-                        ->add($item->getName(), 1, $itemStyle)
+                        ->add(text: $item->getName(), style: $itemStyle)
                         ->add('')
                         ->add('')
                         ->add($this->trans('taskitem.edit.empty_items'), 3)
@@ -99,7 +99,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                     foreach ($item->getMargins() as $margin) {
                         $table->startRow();
                         if (0 === $index++) {
-                            $table->add($item->getName(), 1, $itemStyle);
+                            $table->add(text: $item->getName(), style: $itemStyle);
                         } else {
                             $table->add(null);
                         }
@@ -108,7 +108,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                             ->add(null)
                             ->add(FormatUtils::formatAmount($margin->getMinimum()))
                             ->add(FormatUtils::formatAmount($margin->getMaximum()))
-                            ->add(FormatUtils::formatAmount($margin->getValue()), 1, $style)
+                            ->add(text: FormatUtils::formatAmount($margin->getValue()), style: $style)
                             ->endRow();
                     }
                 }

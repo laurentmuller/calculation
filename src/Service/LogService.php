@@ -178,7 +178,7 @@ class LogService
      * Gets the log channel.
      *
      * @param string $value      the source
-     * @param bool   $capitalize true to capitlize the channel
+     * @param bool   $capitalize true to capitalize the channel
      *
      * @return string the channel
      */
@@ -235,7 +235,7 @@ class LogService
      * Gets the log level.
      *
      * @param string $value      the source
-     * @param bool   $capitalize true to capitlize the level
+     * @param bool   $capitalize true to capitalize the level
      *
      * @return string the level
      */
@@ -350,7 +350,7 @@ class LogService
      * Increment by one the given array.
      *
      * @param array<string, int> $array the array to update
-     * @param string             $key   the array's key to incremente
+     * @param string             $key   the array's key to increment
      */
     private function increment(array &$array, string $key): void
     {

@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Report\HtmlReport;
 use App\Report\MySqlReport;
 use App\Report\PhpIniReport;
+use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
 use App\Util\DatabaseInfo;
 use App\Util\PhpInfo;
@@ -34,6 +35,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/about')]
 class AboutController extends AbstractController
 {
+    /**
+     * Constructor.
+     *
+     * @param string $appMode the application mode
+     */
+    public function __construct(private readonly string $appMode)
+    {
+    }
+
     /**
      * Display information about the application.
      */
@@ -216,17 +226,28 @@ class AboutController extends AbstractController
     #[Route(path: '/symfony/content', name: 'about_symfony_content')]
     public function symfonyContent(SymfonyInfo $info): JsonResponse
     {
-        $locale = \Locale::getDefault();
-        $localeName = Locales::getName($locale, 'en');
         $parameters = [
             'info' => $info,
-            'locale' => $localeName . ' - ' . $locale,
+            'locale' => $this->getLocaleName(),
         ];
         $content = $this->renderView('about/symfony_content.html.twig', $parameters);
 
         return $this->jsonTrue([
             'content' => $content,
         ]);
+    }
+
+    /**
+     * Exports the Symfony information as PDF.
+     */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/symfony/pdf', name: 'about_symfony_pdf')]
+    public function symfonyPdf(SymfonyInfo $info): PdfResponse
+    {
+        $locale = $this->getLocaleName();
+        $report = new SymfonyReport($this, $info, $locale, $this->appMode);
+
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -262,6 +283,14 @@ class AboutController extends AbstractController
         \sort($extensions);
 
         return \implode(', ', $extensions);
+    }
+
+    private function getLocaleName(): string
+    {
+        $locale = \Locale::getDefault();
+        $name = Locales::getName($locale, 'en');
+
+        return "$name - $locale";
     }
 
     private function outputReport(string $template, array $templateParameters, ?string $title = null, array $titleParameters = []): PdfResponse

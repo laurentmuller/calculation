@@ -339,7 +339,7 @@ class SearchService
     {
         $name = Utils::getShortName($class);
         $content = $content ?: "e.$field";
-        /** @var literal-string $where */
+        /** @psalm-var literal-string $where */
         $where = "$content LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()

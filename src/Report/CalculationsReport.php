@@ -98,7 +98,7 @@ class CalculationsReport extends AbstractArrayReport
         $table->startHeaderRow()
             ->add($text, $columns)
             ->add(FormatUtils::formatAmount($items))
-            ->add(FormatUtils::formatPercent($margins), 1, $style)
+            ->add(text: FormatUtils::formatPercent($margins), style: $style)
             ->add(FormatUtils::formatAmount($overall))
             ->endRow();
 
@@ -228,7 +228,7 @@ class CalculationsReport extends AbstractArrayReport
         $table->add($c->getCustomer())
             ->add($c->getDescription())
             ->add(FormatUtils::formatAmount($c->getItemsTotal()))
-            ->add(FormatUtils::formatPercent($c->getOverallMargin()), 1, $style)
+            ->add(text: FormatUtils::formatPercent($c->getOverallMargin()), style: $style)
             ->add(FormatUtils::formatAmount($c->getOverallTotal()))
             ->endRow();
     }

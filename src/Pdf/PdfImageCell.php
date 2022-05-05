@@ -40,11 +40,6 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     protected int $originalWidth;
 
     /**
-     * The full image path.
-     */
-    protected string $path;
-
-    /**
      * The image width.
      */
     protected int $width;
@@ -56,18 +51,18 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
      * @param int                   $cols      the cell columns span
      * @param PdfStyle|null         $style     the cell style
      * @param PdfTextAlignment|null $alignment the cell alignment
+     * @param string|null           $link      the cell link
      */
-    public function __construct(string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null)
+    public function __construct(protected string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, ?string $link = null)
     {
         if (!FileUtils::exists($path)) {
             throw new \InvalidArgumentException("The image '$path' does not exist.");
         }
 
-        parent::__construct(null, $cols, $style, $alignment);
+        parent::__construct(null, $cols, $style, $alignment, $link);
 
-        /** @psalm-var int[] $size */
+        /** @psalm-var array{0: int, 1: int} $size */
         $size = \getimagesize($path);
-        $this->path = $path;
         $this->width = $this->originalWidth = $size[0];
         $this->height = $this->originalHeight = $size[1];
     }
@@ -86,21 +81,16 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
         $height = $parent->pixels2UserUnit($this->height);
 
         // get default position
-        $x = $bounds->x();
         $y = $bounds->y() + ($bounds->height() - $height) / 2;
-
-        switch ($alignment) {
-            case PdfTextAlignment::RIGHT:
-                $x += $bounds->width() - $width;
-                break;
-            case PdfTextAlignment::CENTER:
-            case PdfTextAlignment::JUSTIFIED:
-                $x += ($bounds->width() - $width) / 2;
-                break;
-        }
+        $x = match ($alignment) {
+            PdfTextAlignment::RIGHT => $bounds->right() - $width,
+            PdfTextAlignment::CENTER,
+            PdfTextAlignment::JUSTIFIED => $bounds->x() + ($bounds->width() - $width) / 2,
+            default => $bounds->x(),
+        };
 
         // draw
-        $parent->Image($this->path, $x, $y, $width, $height);
+        $parent->Image($this->path, $x, $y, $width, $height, $this->link ?? '');
     }
 
     /**
@@ -130,7 +120,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Gets the original image width and height.
      *
-     * @return array an array with 2 elements. Index 0 and 1 contains respectively the original width and the original height.
+     * @return array{0: int, 1: int} an array with 2 elements. Index 0 and 1 contains respectively the original width and the original height.
      */
     public function getOriginalSize(): array
     {
@@ -164,7 +154,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Gets the current image size.
      *
-     * @return array an array with 2 elements. Index 0 and 1 contains respectively the width and the height.
+     * @return array{0: int, 1: int} an array with 2 elements. Index 0 and 1 contains respectively the width and the height.
      */
     public function getSize(): array
     {

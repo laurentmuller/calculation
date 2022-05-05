@@ -31,6 +31,8 @@ final class PhpInfo
      *                  together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
      *                  together with the bitwise or operator.
+     *
+     * @return array<string, array<string, mixed>>
      */
     public function asArray(int $what = \INFO_ALL): array
     {

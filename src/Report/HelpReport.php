@@ -604,7 +604,7 @@ class HelpReport extends AbstractReport
         $style = PdfStyle::getCellStyle()->setIndent($indent);
         foreach ($menus as $menu) {
             $table->startRow()
-                ->add($this->splitTrans($menu['id']), 1, $style)
+                ->add(text: $this->splitTrans($menu['id']), style: $style)
                 ->add($menu['description'])
                 ->endRow();
 

@@ -201,9 +201,10 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputRights(PdfGroupTableBuilder $builder, string $title, array $rights): self
     {
-        $builder->startRow()->add($this->trans($title), 1, $this->titleStyle);
+        $builder->startRow()
+            ->add(text: $this->trans($title), style: $this->titleStyle);
         foreach (self::ATTRIBUTES as $attribute) {
-            $builder->add($this->getRightText($rights, $attribute), 1, $this->rightStyle);
+            $builder->add(text: $this->getRightText($rights, $attribute), style: $this->rightStyle);
         }
         $builder->endRow();
 

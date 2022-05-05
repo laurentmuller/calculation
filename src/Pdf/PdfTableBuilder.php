@@ -220,15 +220,10 @@ class PdfTableBuilder
             throw new \OutOfRangeException('Invalid spanned cells.');
         }
 
-        /** @psalm-var string[] $texts */
         $texts = [];
-        /** @psalm-var PdfStyle[] $styles */
         $styles = [];
-        /** @psalm-var PdfTextAlignment[] $aligns */
         $aligns = [];
-        /** @psalm-var float[] $widths */
         $widths = [];
-        /** @psalm-var bool[] $fixeds */
         $fixeds = [];
 
         // copy

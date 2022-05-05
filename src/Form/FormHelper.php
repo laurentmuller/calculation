@@ -225,7 +225,7 @@ class FormHelper
     }
 
     /**
-     * Add a enum type to the builder and reset all values to default.
+     * Add an enum type to the builder and reset all values to default.
      *
      * @param string $class the enumeration class
      * @psalm-template T of \UnitEnum

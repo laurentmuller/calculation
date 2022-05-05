@@ -357,16 +357,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * {@inheritdoc}
      *
-     * @see UserInterface
-     */
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestInterface
      */
     public function getUser(): object
@@ -385,9 +375,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @see UserInterface
+     * Gets username.
      */
     public function getUsername(): string
     {

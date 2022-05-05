@@ -102,22 +102,6 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     }
 
     /**
-     * Gets the original image height.
-     */
-    public function getOriginalHeight(): int
-    {
-        return $this->originalHeight;
-    }
-
-    /**
-     * Gets the original image ratio (the original width divided by the original height).
-     */
-    public function getOriginalRatio(): float
-    {
-        return $this->safeDivide($this->originalWidth, $this->originalHeight, 1);
-    }
-
-    /**
      * Gets the original image width and height.
      *
      * @return array{0: int, 1: int} an array with 2 elements. Index 0 and 1 contains respectively the original width and the original height.
@@ -128,27 +112,11 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     }
 
     /**
-     * Gets the original image width.
-     */
-    public function getOriginalWidth(): int
-    {
-        return $this->originalWidth;
-    }
-
-    /**
      * Gets the image path.
      */
     public function getPath(): string
     {
         return $this->path;
-    }
-
-    /**
-     * Gets the current image ratio (the current width divided by the current height).
-     */
-    public function getRatio(): float
-    {
-        return $this->safeDivide($this->width, $this->height, 1);
     }
 
     /**
@@ -186,7 +154,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
             return $this;
         }
 
-        $ratio = $this->getOriginalRatio();
+        $ratio = $this->safeDivide($this->originalWidth, $this->originalHeight, 1);
         if ($height > 0) {
             $width = $height * $ratio;
         } elseif ($width > 0) {

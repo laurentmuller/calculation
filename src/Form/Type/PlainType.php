@@ -102,7 +102,7 @@ class PlainType extends AbstractType
     {
         parent::buildView($view, $form, $options);
 
-        /** @var mixed $data */
+        /** @psalm-var mixed $data */
         $data = $form->getViewData();
         $view->vars = \array_replace(
             $view->vars,

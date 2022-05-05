@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
-use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
@@ -101,7 +100,7 @@ class ProfileChangePasswordType extends AbstractEntityType
         /** @var Form $root */
         $root = $context->getRoot();
 
-        // not checked so continue.
+        // not checked so skip
         /** @var bool|mixed $checkPassword */
         $checkPassword = $root->get('checkPassword')->getData();
         if (\is_bool($checkPassword) && !$checkPassword) {
@@ -116,7 +115,7 @@ class ProfileChangePasswordType extends AbstractEntityType
         ]);
 
         // if compromised assign the error to the password field
-        if ($violations instanceof ConstraintViolationList && $violations->count() > 0) {
+        if ($violations->count() > 0 && \method_exists($violations, '__toString')) {
             $password->addError(new FormError((string) $violations));
         }
     }

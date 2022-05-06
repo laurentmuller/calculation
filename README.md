@@ -1,6 +1,6 @@
 ![Icon](public/images/icons/android-icon-36x36.png) Calculation
 -----------
-Programme de calculs basé sur l'environnement de développement Symfony 5.x.
+Programme de calculs basé sur l'environnement de développement Symfony 6.x.
 
 ![Screenshot](public/help/images/home.png)
 

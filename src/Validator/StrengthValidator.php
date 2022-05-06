@@ -47,27 +47,17 @@ class StrengthValidator extends AbstractConstraintValidator
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
-        $minstrength = $constraint->minstrength;
-        if (StrengthInterface::LEVEL_NONE === $minstrength) {
+        $minimum = $constraint->min_strength;
+        if (StrengthInterface::LEVEL_NONE === $minimum) {
             return;
         }
 
-        $zx = new Zxcvbn();
+        $service = new Zxcvbn();
         $userInputs = $this->getUserInputs($constraint);
-        $strength = $zx->passwordStrength($value, $userInputs);
-        $score = (int) $strength['score'];
-        if ($score < $minstrength) {
-            $strength_min = $this->translateLevel($constraint->minstrength);
-            $strength_current = $this->translateLevel($score);
-            $parameters = [
-                '{{strength_min}}' => $strength_min,
-                '{{strength_current}}' => $strength_current,
-            ];
-
-            $this->context->buildViolation($constraint->minstrengthMessage)
-                ->setParameters($parameters)
-                ->setInvalidValue($value)
-                ->addViolation();
+        $result = $service->passwordStrength($value, $userInputs);
+        $score = (int) $result['score'];
+        if ($score < $minimum) {
+            $this->addStrengthViolation($this->context, $minimum, $score);
         }
     }
 

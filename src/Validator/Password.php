@@ -31,12 +31,12 @@ class Password extends Constraint
     /**
      * Checks if the password contains upper and lower characters.
      */
-    public bool $casediff = false;
+    public bool $case_diff = false;
 
     /**
      * Case diff error message.
      */
-    public string $casediffMessage = 'password.casediff';
+    public string $case_diff_message = 'password.case_diff';
 
     /**
      * Checks if the password is an e-mail.
@@ -46,7 +46,7 @@ class Password extends Constraint
     /**
      * Email error message.
      */
-    public string $emailMessage = 'password.email';
+    public string $email_message = 'password.email';
 
     /**
      * Checks if the password contains letters.
@@ -56,17 +56,17 @@ class Password extends Constraint
     /**
      * Letters error message.
      */
-    public string $lettersMessage = 'password.letters';
+    public string $letters_message = 'password.letters';
 
     /**
      * Checks the password strength (value from 0 to 4 or -1 to disable).
      */
-    public int $minstrength = StrengthInterface::LEVEL_NONE;
+    public int $min_strength = StrengthInterface::LEVEL_NONE;
 
     /**
      * Strength error message.
      */
-    public string $minstrengthMessage = 'password.minstrength';
+    public string $min_strength_message = 'password.min_strength';
 
     /**
      * Checks if the password contains numbers.
@@ -76,7 +76,7 @@ class Password extends Constraint
     /**
      * Numbers error message.
      */
-    public string $numbersMessage = 'password.numbers';
+    public string $numbers_message = 'password.numbers';
 
     /**
      * Checks if the password is compromised.
@@ -86,15 +86,15 @@ class Password extends Constraint
     /**
      *  Password comprise error message.
      */
-    public string $pwnedMessage = 'password.pwned';
+    public string $pwned_message = 'password.pwned';
 
     /**
      * Checks if the password contains special characters.
      */
-    public bool $specialchar = false;
+    public bool $special_char = false;
 
     /**
      * Special char error message.
      */
-    public string $specialcharMessage = 'password.specialchar';
+    public string $special_char_message = 'password.special_char';
 }

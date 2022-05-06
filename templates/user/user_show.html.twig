@@ -32,8 +32,8 @@
 <tr>
     <td class="w-25">{{ 'user.fields.imageFile'|trans }}</td>
     <td class="w-75">
-        <img class="img-thumbnail avatar-lg" alt="{{ 'user.fields.imageFile'|trans }}" src="{{ asset(image) }}?{{ 'now'|date('c') }}"  width="{{ image_width(image) }}" height="{{ image_height(image) }}">
-       </td>
+        <img class="img-thumbnail avatar-lg" alt="{{ 'user.fields.imageFile'|trans }}" src="{{ asset(image) }}?{{ 'now'|date('c') }}" width="{{ image_width(image) }}" height="{{ image_height(image) }}">
+    </td>
 </tr>
 {%- endif -%}
 {% endblock %}

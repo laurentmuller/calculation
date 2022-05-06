@@ -32,8 +32,8 @@ class ParametersType extends AbstractParametersType
     final public const PASSWORD_OPTIONS = [
         'letters',
         'numbers',
-        'specialchar',
-        'casediff',
+        'special_char',
+        'case_diff',
         'email',
         'pwned',
     ];
@@ -139,7 +139,7 @@ class ParametersType extends AbstractParametersType
             ]);
 
         $helper->field(self::P_MIN_STRENGTH)
-            ->label('password.minstrength')
+            ->label('password.min_strength')
             ->updateAttribute('data-default', $this->getDefaultValue(self::P_MIN_STRENGTH))
             ->add(MinStrengthType::class);
 

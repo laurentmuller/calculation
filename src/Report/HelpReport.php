@@ -529,7 +529,7 @@ class HelpReport extends AbstractReport
         $size = \getimagesize($file);
         $width = $this->pixels2UserUnit($size[0]);
         $width = \min($width, $this->getPrintableWidth());
-        $this->Image($file, null, null, $width);
+        $this->Image(file: $file, w: $width);
     }
 
     private function outputLine(): void

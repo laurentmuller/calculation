@@ -27,25 +27,25 @@ class Strength extends Constraint
     /**
      * The password strength (Value from 0 to 4 or -1 to disable).
      */
-    public int $minstrength;
+    public int $min_strength;
 
     /**
      * The password strength error message.
      */
-    public string $minstrengthMessage = 'password.minstrength';
+    public string $min_strength_message = 'password.min_strength';
 
     /**
      * Constructor.
      *
-     * @throws InvalidArgumentException if the minstrength value is not between -1 and 4 (inclusive)
+     * @throws InvalidArgumentException if the minimum strength value is not between -1 and 4 (inclusive)
      */
-    public function __construct(int $minstrength, public ?string $userNamePath = null, public ?string $emailPath = null)
+    public function __construct(int $min_strength, public ?string $userNamePath = null, public ?string $emailPath = null)
     {
-        if (!\in_array($minstrength, StrengthInterface::ALLOWED_LEVELS, true)) {
+        if (!\in_array($min_strength, StrengthInterface::ALLOWED_LEVELS, true)) {
             $values = \implode(', ', StrengthInterface::ALLOWED_LEVELS);
-            throw new InvalidArgumentException(\sprintf('The minstrength parameter "%s" for "%s" is invalid. Allowed values: [%s].', $minstrength, static::class, $values));
+            throw new InvalidArgumentException(\sprintf('The minimum strength parameter "%s" for "%s" is invalid. Allowed values: [%s].', $min_strength, static::class, $values));
         }
-        $this->minstrength = $minstrength;
+        $this->min_strength = $min_strength;
     }
 
     /**
@@ -53,6 +53,6 @@ class Strength extends Constraint
      */
     public function getDefaultOption(): ?string
     {
-        return 'minstrength';
+        return 'min_strength';
     }
 }

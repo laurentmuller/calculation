@@ -239,7 +239,7 @@ interface ApplicationServiceInterface
     /**
      * The property name for the minimum password strength (int).
      */
-    public const P_MIN_STRENGTH = 'minstrength';
+    public const P_MIN_STRENGTH = 'min_strength';
 
     /**
      * The property name for the number of displayed calculation in the home page (int).

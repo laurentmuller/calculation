@@ -48,12 +48,11 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
 
         if ($violation) {
             $parameters = [
-                '{{strength_min}}' => self::EMPTY_MESSAGE,
-                '{{strength_current}}' => self::EMPTY_MESSAGE,
+                '%minimum%' => self::EMPTY_MESSAGE,
+                '%current%' => self::EMPTY_MESSAGE,
             ];
-            $this->buildViolation('password.minstrength')
+            $this->buildViolation('password.min_strength')
                 ->setParameters($parameters)
-                ->setInvalidValue($value)
                 ->assertRaised();
         } else {
             $this->assertNoViolation();
@@ -63,10 +62,10 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     /**
      * @dataProvider getStrengthInvalids
      */
-    public function testStrengthInvalid(int $minstrength): void
+    public function testStrengthInvalid(int $min_strength): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new Strength($minstrength);
+        new Strength($min_strength);
     }
 
     /**

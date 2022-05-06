@@ -36,8 +36,6 @@ interface StrengthInterface
 
     /**
      * The no validation level.
-     *
-     * @var int
      */
     public const LEVEL_NONE = -1;
 
@@ -47,7 +45,7 @@ interface StrengthInterface
     public const LEVEL_STRONG = 3;
 
     /**
-     * The very stong level.
+     * The very strong level.
      */
     public const LEVEL_VERY_STRONG = 4;
 

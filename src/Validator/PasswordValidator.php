@@ -109,7 +109,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkCaseDiff(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->casediff, '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value, $constraint->casediffMessage);
+        return $this->validateRegex($constraint->case_diff, '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value, $constraint->case_diff_message);
     }
 
     /**
@@ -123,7 +123,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkEmail(Password $constraint, string $value): bool
     {
         if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
-            return $this->addViolation($constraint->emailMessage, $value);
+            return $this->addViolation($constraint->email_message, $value);
         }
 
         return false;
@@ -139,7 +139,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkLetters(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->letters, '/\pL/u', $value, $constraint->lettersMessage);
+        return $this->validateRegex($constraint->letters, '/\pL/u', $value, $constraint->letters_message);
     }
 
     /**
@@ -152,7 +152,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkNumber(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->numbers, '/\pN/u', $value, $constraint->numbersMessage);
+        return $this->validateRegex($constraint->numbers, '/\pN/u', $value, $constraint->numbers_message);
     }
 
     /**
@@ -170,7 +170,7 @@ class PasswordValidator extends AbstractConstraintValidator
                 '{{count}}' => FormatUtils::formatInt($count),
             ];
 
-            return $this->addViolation($constraint->pwnedMessage, $value, $parameters);
+            return $this->addViolation($constraint->pwned_message, $value, $parameters);
         }
 
         return false;
@@ -186,7 +186,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkSpecialChar(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->specialchar, '/[^p{Ll}\p{Lu}\pL\pN]/u', $value, $constraint->specialcharMessage);
+        return $this->validateRegex($constraint->special_char, '/[^p{Ll}\p{Lu}\pL\pN]/u', $value, $constraint->special_char_message);
     }
 
     /**
@@ -199,19 +199,15 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkStrength(Password $constraint, string $value): bool
     {
-        if (StrengthInterface::LEVEL_NONE !== $constraint->minstrength) {
-            $zxcvbn = new Zxcvbn();
-            $strength = $zxcvbn->passwordStrength($value);
-            $score = (int) $strength['score'];
-            if ($score < $constraint->minstrength) {
-                $strength_min = $this->translateLevel($constraint->minstrength);
-                $strength_current = $this->translateLevel($score);
-                $parameters = [
-                    '{{strength_min}}' => $strength_min,
-                    '{{strength_current}}' => $strength_current,
-                ];
+        if (StrengthInterface::LEVEL_NONE !== $constraint->min_strength) {
+            $service = new Zxcvbn();
+            $result = $service->passwordStrength($value);
+            $score = (int) $result['score'];
+            $minimum = $constraint->min_strength;
+            if ($score < $minimum) {
+                $this->addStrengthViolation($this->context, $minimum, $score);
 
-                return $this->addViolation($constraint->minstrengthMessage, $value, $parameters);
+                return true;
             }
         }
 

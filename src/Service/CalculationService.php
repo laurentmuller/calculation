@@ -152,7 +152,7 @@ final class CalculationService
         $global_margin = $calculation->getGlobalMargin();
         $groups = $calculation->getGroups()->toArray();
 
-        return $this->computeGroups($groups, $mapper, $user_margin, $global_margin);
+        return $this->computeGroups($groups, $user_margin, $mapper, $global_margin);
     }
 
     /**
@@ -229,7 +229,7 @@ final class CalculationService
         }
 
         $user_margin = (float) $source['userMargin'] / 100.0;
-        $groups = $this->computeGroups($groups, null, $user_margin);
+        $groups = $this->computeGroups(groups: $groups, user_margin: $user_margin);
         $last_group = \end($groups);
         $overall_total = (float) $last_group['total'];
         $overall_margin = (float) $last_group['margin'];
@@ -330,13 +330,13 @@ final class CalculationService
      * Creates calculation's total groups.
      *
      * @param array         $groups        the calculation groups
-     * @param callable|null $callback      the function to create a group lines
      * @param float         $user_margin   the user margin
+     * @param callable|null $callback      the function to create a group lines
      * @param float|null    $global_margin the global margin or null to compute new global margin
      *
      * @return non-empty-array<array> the total groups
      */
-    private function computeGroups(array $groups, ?callable $callback, float $user_margin, ?float $global_margin = null): array
+    private function computeGroups(array $groups, float $user_margin, ?callable $callback = null, ?float $global_margin = null): array
     {
         // create group rows
         /**

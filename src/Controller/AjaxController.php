@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Enums\TableView;
+use App\Interfaces\StrengthInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
@@ -28,9 +29,11 @@ use App\Service\SwissPostService;
 use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
+use App\Traits\StrengthTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
+use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
@@ -39,6 +42,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
@@ -49,6 +53,7 @@ class AjaxController extends AbstractController
 {
     use CookieTrait;
     use MathTrait;
+    use StrengthTranslatorTrait;
 
     /**
      * Returns a new captcha image.
@@ -236,6 +241,68 @@ class AjaxController extends AbstractController
         }
         // error
         return $this->handleTranslationError($service, 'translator.languages_error');
+    }
+
+    /**
+     * Validate a strength password.
+     */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/password', name: 'ajax_password')]
+    public function password(Request $request): JsonResponse
+    {
+        $inputBag = Utils::getRequestInputBag($request);
+        if (!$password = $inputBag->get('password')) {
+            return $this->jsonFalse([
+                'message' => 'No password is defined.',
+            ]);
+        }
+        $minimum = (int) $inputBag->get('strength', -1);
+        if (!\in_array($minimum, StrengthInterface::ALLOWED_LEVELS, true)) {
+            $values = \implode(', ', StrengthInterface::ALLOWED_LEVELS);
+            $message = \sprintf('The minimum strength parameter %d is invalid. Allowed values: [%s].', $minimum, $values);
+
+            return $this->jsonFalse(
+                [
+                    'minimum' => $minimum,
+                    'message' => $message,
+                ]
+            );
+        }
+        if (StrengthInterface::LEVEL_NONE === $minimum) {
+            return $this->jsonFalse([
+                'minimum' => $minimum,
+                'minimum_text' => $this->translateLevel($minimum),
+                'message' => 'The strength level is disabled.',
+            ]);
+        }
+
+        $inputs = [];
+        if ($userField = $inputBag->get('user')) {
+            $inputs[] = $userField;
+        }
+        if ($emailField = $inputBag->get('email')) {
+            $inputs[] = $emailField;
+        }
+
+        $service = new Zxcvbn();
+        $result = $service->passwordStrength((string) $password, $inputs);
+        $score = (int) $result['score'];
+        if ($score < $minimum) {
+            return $this->jsonFalse([
+                'score' => $score,
+                'score_text' => $this->translateLevel($score),
+                'minimum' => $minimum,
+                'minimum_text' => $this->translateLevel($minimum),
+                'message' => $this->translateStrength($minimum, $score),
+            ]);
+        }
+
+        return $this->jsonTrue([
+            'score' => $score,
+            'score_text' => $this->translateLevel($score),
+            'minimum' => $minimum,
+            'minimum_text' => $this->translateLevel($minimum),
+        ]);
     }
 
     /**

@@ -305,7 +305,7 @@ class CaptchaImageService
         // save
         \ob_start();
         $image->toPng();
-        $buffer = (string) \ob_get_clean();
+        $buffer = (string) \ob_get_contents();
         \ob_end_clean();
 
         // encode

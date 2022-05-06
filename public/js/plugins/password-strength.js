@@ -92,10 +92,10 @@
             that.verdict = verdict;
 
             // raise events
-            if (updateUI && $.isFunction(options.onUpdateUI)) {
+            if (updateUI && typeof options.onUpdateUI === 'function') {
                 options.onUpdateUI(verdict);
             }
-            if ($.isFunction(options.onScore)) {
+            if (typeof options.onScore === 'function') {
                 options.onScore(verdict);
             }
         }
@@ -116,7 +116,7 @@
             // get text
             const score = result.score;
             const key = options.verdictKeys[score];
-            const text = $.isFunction(options.translate) ? options.translate(key) : key;
+            const text = typeof options.translate === 'function' ? options.translate(key) : key;
 
             return {
                 score: score,
@@ -238,7 +238,7 @@
     // Default options
     // -----------------------------
     PasswordStrength.DEFAULTS = {
-        // true to debug zxcvbn result
+        // true to debug result
         debug: false,
 
         // user field selector

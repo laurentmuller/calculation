@@ -82,7 +82,7 @@
             this.$input.on('input', this.inputProxy);
             this.$input.on('keydown', this.keydownProxy);
 
-            if ($.isFunction(options.onStartEdit)) {
+            if (typeof options.onStartEdit === 'function') {
                 options.onStartEdit();
             }
             this.$input.select().focus();
@@ -151,7 +151,7 @@
             }
 
             // notify
-            if ($.isFunction(options.onEndEdit)) {
+            if (typeof options.onEndEdit === 'function') {
                 this.value = newValue;
                 options.onEndEdit(oldValue, newValue);
             }
@@ -177,7 +177,7 @@
             this.$element.html(this.html || '');
             this.$element.removeClass(options.cellClass);
             this.$element.parents('tr').removeClass(options.rowClass);
-            if (notify && $.isFunction(options.onCancelEdit)) {
+            if (notify && typeof options.onCancelEdit === 'function') {
                 options.onCancelEdit();
             }
             if (notify && options.autoDispose) {
@@ -187,14 +187,14 @@
         }
 
         _parse(value) {
-            if ($.isFunction(this.options.parser)) {
+            if (typeof this.options.parser === 'function') {
                 return this.options.parser(value);
             }
             return value;
         }
 
         _format(value) {
-            if ($.isFunction(this.options.formatter)) {
+            if (typeof this.options.formatter === 'function') {
                 return this.options.formatter(value);
             }
             return value;

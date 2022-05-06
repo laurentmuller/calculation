@@ -238,13 +238,13 @@ class TestController extends AbstractController
             foreach ($options as $option) {
                 $constraint->{$option} = (bool) ($data[$option] ?? false);
             }
-            $constraint->minstrength = (int) ($data['minstrength'] ?? StrengthInterface::LEVEL_NONE);
+            $constraint->min_strength = (int) ($data['min_strength'] ?? StrengthInterface::LEVEL_NONE);
         };
 
         // default values
         $data = [
             'input' => 'aB123456#*/82568A',
-            'minstrength' => StrengthInterface::LEVEL_MEDIUM,
+            'min_strength' => StrengthInterface::LEVEL_MEDIUM,
         ];
         foreach ($options as $option) {
             $data[$option] = true;
@@ -266,7 +266,7 @@ class TestController extends AbstractController
                 ->addCheckboxType();
         }
 
-        $helper->field('minstrength')
+        $helper->field('min_strength')
             ->add(MinStrengthType::class);
 
         $helper->field('captcha')
@@ -294,12 +294,12 @@ class TestController extends AbstractController
             }
 
             // minimum strength
-            $minstrength = (int) $data['minstrength'];
-            if (StrengthInterface::LEVEL_NONE !== $minstrength) {
+            $min_strength = (int) $data['min_strength'];
+            if (StrengthInterface::LEVEL_NONE !== $min_strength) {
                 $message .= '<li>';
-                $message .= $this->trans('password.minstrength');
+                $message .= $this->trans('password.min_strength');
                 $message .= ' : ';
-                $message .= $this->translateLevel($minstrength);
+                $message .= $this->translateLevel($min_strength);
                 $message .= '</li>';
             }
 

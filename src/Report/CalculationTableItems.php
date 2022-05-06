@@ -93,7 +93,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
                     $this->add($item->getUnit());
                     $this->addAmount($item->getPrice(), $errorStyle)
                         ->addAmount($item->getQuantity(), $errorStyle)
-                        ->addAmount($item->getTotal(), null)
+                        ->addAmount($item->getTotal())
                         ->endRow();
                 }
             }
@@ -125,7 +125,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
      * @param float         $amount     the amount to output
      * @param PdfStyle|null $errorStyle the error style to use when amount is equal to 0
      */
-    protected function addAmount(float $amount, ?PdfStyle $errorStyle): self
+    protected function addAmount(float $amount, ?PdfStyle $errorStyle = null): self
     {
         $text = FormatUtils::formatAmount($amount);
         $style = empty($amount) ? $errorStyle : null;

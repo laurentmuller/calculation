@@ -29,24 +29,24 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     public function getConstraints(): array
     {
         return [
-            ['casediff'],
+            ['case_diff'],
             ['email'],
             ['letters'],
             ['numbers'],
-            ['specialchar'],
+            ['special_char'],
             ['pwned'],
-            ['minstrength', StrengthInterface::LEVEL_VERY_STRONG],
+            ['min_strength', StrengthInterface::LEVEL_VERY_STRONG],
         ];
     }
 
     public function getInvalids(): array
     {
         return [
-            ['abc', ['casediff' => true], 'password.casediff'],
+            ['abc', ['case_diff' => true], 'password.case_diff'],
             ['myemail@website.com', ['email' => true], 'password.email'],
             ['123', ['letters' => true], 'password.letters'],
             ['abc', ['numbers' => true], 'password.numbers'],
-            ['123', ['specialchar' => true], 'password.specialchar'],
+            ['123', ['special_char' => true], 'password.special_char'],
             ['@@@', ['letters' => true, 'numbers' => true], 'password.letters'],
         ];
     }
@@ -69,17 +69,17 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     public function getValids(): array
     {
         return [
-            ['ABCabc', ['casediff' => true]],
+            ['ABCabc', ['case_diff' => true]],
             ['test', ['email' => true]],
-            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_VERY_WEEK]],
-            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_WEEK]],
-            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_MEDIUM]],
-            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_STRONG]],
-            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_VERY_STRONG]],
+            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_VERY_WEEK]],
+            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_WEEK]],
+            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_MEDIUM]],
+            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_STRONG]],
+            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_VERY_STRONG]],
             ['abc', ['letters' => true]],
             ['123', ['numbers' => true]],
             ['123*9-*55sA', ['pwned' => true]],
-            ['123@', ['specialchar' => true]],
+            ['123@', ['special_char' => true]],
         ];
     }
 
@@ -146,18 +146,17 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
      */
     public function testStrength(string $value, int $minstrength, bool $violation = true): void
     {
-        $options = ['minstrength' => $minstrength];
+        $options = ['min_strength' => $minstrength];
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
 
         if ($violation) {
             $parameters = [
-                '{{strength_min}}' => self::EMPTY_MESSAGE,
-                '{{strength_current}}' => self::EMPTY_MESSAGE,
+                '%minimum%' => self::EMPTY_MESSAGE,
+                '%current%' => self::EMPTY_MESSAGE,
             ];
-            $this->buildViolation('password.minstrength')
+            $this->buildViolation('password.min_strength')
                 ->setParameters($parameters)
-                ->setInvalidValue($value)
                 ->assertRaised();
         } else {
             $this->assertNoViolation();
@@ -194,13 +193,13 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     {
         $options = \array_merge([
             'all' => false,
-            'casediff' => false,
+            'case_diff' => false,
             'email' => false,
             'letters' => false,
-            'minstrength' => StrengthInterface::LEVEL_NONE,
+            'min_strength' => StrengthInterface::LEVEL_NONE,
             'numbers' => false,
             'pwned' => false,
-            'specialchar' => false,
+            'special_char' => false,
         ], $options);
 
         return new Password($options);

@@ -846,14 +846,14 @@ parameters:
   success: Les paramètres de l'application ont été mis à jour avec succès.
   title: Paramètres
 password:
-  casediff: Une majuscule et une minuscule est obligatoire
+  case_diff: Une majuscule et une minuscule est obligatoire
   email: Le mot de passe ne doit pas être une adresse e-mail
   input: Mot de passe
   letters: Une lettre est obligatoire
-  minstrength: Force minimum
+  min_strength: Force minimum
   numbers: Un chiffre est obligatoire
   pwned: Le mot de passe ne doit pas être compromis
-  specialchar: Un caractère spécial est obligatoire
+  special_char: Un caractère spécial est obligatoire
   strength_level:
     medium: Moyenne
     none: Aucune

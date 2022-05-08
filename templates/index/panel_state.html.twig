@@ -1,17 +1,7 @@
 {% import "macros/_icons.html.twig" as icons %}
+{% import 'index/_macros.html.twig' as macros %}
 
 {# macros #}
-{% macro sup_margin(margin, min_margin) -%}
-{%- if margin < min_margin -%}
-    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
-    {%- set class_name = 'text-danger has-tooltip' -%}
-{% else %}
-    {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
-    {%- set class_name = '' -%}
-{%- endif -%}
-<sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
-{%- endmacro %}
-
 {% macro cardEntry(state, list_path, parameters=[], min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
 <div class="card index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
@@ -25,9 +15,9 @@
         {%- endif -%}
         </div>
         <h3 class="font-weight-normal my-1">
-            {{- state.total|integer }} {{ _self.sup_margin(state.margin, min_margin) -}}
+            <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros.margin(state.margin, min_margin) -}}
         </h3>
-        <p class="card-text">
+        <p class="card-text" title="{{ 'index.panel_title_count'|trans }}">
             {{- 'counters.calculations'|trans({'count': state.count}) -}}
         </p>
     </div>
@@ -36,6 +26,7 @@
 
 {# parameters #}
 {%- set list_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) ? 'calculation_table' : false -%}
+{%- set is_states = states|length -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -44,11 +35,13 @@
                 <h1 class="card-title">{{ icons.icon("flag far", "index.panel_state") }}</h1>
             </div>
             <div class="col-auto d-print-none">
-                {{ icons.link(path('chart_by_state'), null, null, 'chart-pie', 'index.menu_chart_title') }}
+                {%- if is_states -%}
+                    {{- icons.link(path('chart_by_state'), null, null, 'chart-pie', 'index.menu_chart_title') -}}
+                {%- endif -%}
             </div>
         </div>
     </div>
-    {% if states|length %}
+    {% if is_states %}
     <div class="card-body index-parent no-gutters p-1">
         {% for state in states %}
             {% set parameters = state.id ? {'stateid': state.id} : {} %}
@@ -56,10 +49,6 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="card-body p-2">
-        <div class="alert alert-warning m-1 text-center" role="alert">
-            {{- 'calculation.list.empty'|trans -}}
-        </div>
-    </div>
+        {{ macros.empty() }}
     {% endif %}
 </div>

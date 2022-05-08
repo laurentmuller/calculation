@@ -322,9 +322,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
 
         $output = \str_replace("\r\n", "\n", (string) $output);
         $output = \trim($output);
-
-        // @phpstan-ignore-next-line
-        $result = 0 === \proc_close($process);
+        $result = 0 === \proc_close($process); // @phpstan-ignore-line
 
         return [
             $result,

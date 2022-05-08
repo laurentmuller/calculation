@@ -121,8 +121,7 @@ trait TableTrait
         $value = $input->get($key);
         if (null === $value) {
             $name = $this->getCookieName($key, $prefix);
-            // @phpstan-ignore-next-line
-            $value = $request->cookies->get($name, $default);
+            $value = $request->cookies->get($name, $default); // @phpstan-ignore-line
             if (null !== $value) {
                 $input->set($key, $value);
             }

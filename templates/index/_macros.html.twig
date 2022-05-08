@@ -1,0 +1,19 @@
+{# macros #}
+{% macro margin(margin, min_margin) -%}
+{%- if margin < min_margin -%}
+    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
+    {%- set class_name = 'text-danger has-tooltip' -%}
+{% else %}
+    {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
+    {%- set class_name = '' -%}
+{%- endif -%}
+<sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
+{%- endmacro %}
+
+{% macro empty() %}
+<div class="card-body p-2">
+    <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">
+        {{- 'calculation.list.empty'|trans -}}
+    </div>
+</div>
+{% endmacro %}

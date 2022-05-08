@@ -87,9 +87,7 @@ class MonthChart extends BaseChart
             ],
         ]);
 
-        // @phpstan-ignore-next-line
-        $this->tooltip->useHTML(true)
-            ->formatter($formatter);
+        $this->tooltip->useHTML(true)->formatter($formatter);  // @phpstan-ignore-line
 
         // data
         $data = [];

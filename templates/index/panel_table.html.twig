@@ -1,5 +1,6 @@
 {% import 'macros/_properties.html.twig' as properties %}
 {% import 'macros/_icons.html.twig' as icons %}
+{% import 'index/_macros.html.twig' as macros %}
 
 {# parameters #}
 {%- set restrict = restrict|default(0) -%}
@@ -20,6 +21,7 @@
 {%- set default_page = app.actionEdit ? edit_page : show_page -%}
 {%- set row_link = not app.actionNone and (edit_page or show_page) -%}
 {%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
+{%- set is_calculations = calculations|length -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -36,8 +38,8 @@
             {%- endif -%}
         </div>
     </div>
-    <div class="card-body p-2">
-        {% if calculations|length %}
+    <div class="card-body {% if is_calculations %}p-2{% else %}no-gutters p-1{% endif %}">
+        {% if is_calculations %}
         <div class="table-responsive">
             <table id="calculations" class="table table-hover table-sm m-0">
                 <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
@@ -112,12 +114,10 @@
             </table>
         </div>
         {%- else -%}
-        <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">
-            {{ 'calculation.list.empty'|trans }}
-        </div>
+            {{ macros.empty() }}
         {%- endif -%}
     </div>
-    {% if app.user and is_app_dev %}
+    {% if is_calculations and app.user and is_app_dev %}
     <div class="card-footer p-2">
         <div class="text-sm-right">
             <div class="form-control-sm custom-control custom-switch" title="{{ 'index.panel_month_user_help'|trans }}">

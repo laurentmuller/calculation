@@ -258,8 +258,7 @@ abstract class AbstractTable implements SortModeInterface
 
         // find in cookies
         $cookieName = '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
-        // @phpstan-ignore-next-line
-        $cookieValue = $request->cookies->get($cookieName, $default);
+        $cookieValue = $request->cookies->get($cookieName, $default); // @phpstan-ignore-line
 
         // find in request
         $value = Utils::getRequestInputBag($request)->get($name, $cookieValue);

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Version;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -324,7 +323,7 @@ final class SymfonyInfo
     }
 
     /**
-     * Returns if the 'Zend OPcache' extension is loaded and enabled.
+     * Returns if the 'Zend OP cache' extension is loaded and enabled.
      */
     public function isZendCacheLoaded(): bool
     {
@@ -340,7 +339,7 @@ final class SymfonyInfo
      */
     private function formatDays(string $date): string
     {
-        $datetime = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
+        $datetime = \DateTime::createFromFormat('d/m/Y', "01/$date");
         if ($datetime instanceof \DateTime) {
             return (new \DateTime())->diff($datetime->modify('last day of this month 23:59:59'))->format('%R%a days');
         }
@@ -421,7 +420,6 @@ final class SymfonyInfo
         // sort
         \ksort($result);
 
-        // @phpstan-ignore-next-line
-        return $result;
+        return $result; // @phpstan-ignore-line
     }
 }

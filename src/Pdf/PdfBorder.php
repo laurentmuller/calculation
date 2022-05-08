@@ -283,16 +283,15 @@ class PdfBorder
      */
     public function setValue(int|string $value): self
     {
-        if (empty($value)) {
-            $this->value = self::NONE;
-        } elseif (self::ALL === $value || self::INHERITED === $value || self::BOTH === $value || self::FILL === $value || self::BORDER === $value) {
-            $this->value = $value;
-        } else {
-            $value = \strtoupper((string) $value);
-            $result = (string) \preg_replace('/[^LRTB]/', '', $value);
-            $result = \count_chars($result, 3);
-            $this->value = empty($result) ? self::NONE : $result; // @phpstan-ignore-line
-        }
+        $this->value = match ($value) {
+            self::ALL,
+            self::NONE,
+            self::BORDER,
+            self::BOTH,
+            self::INHERITED,
+            self::FILL => $value,
+            default => $this->parseBorders((string) $value),
+        };
 
         return $this;
     }
@@ -303,5 +302,23 @@ class PdfBorder
     public static function top(): self
     {
         return new self((self::TOP));
+    }
+
+    private function parseBorders(string $value): string|int
+    {
+        $values = [];
+        $allowed = ['B', 'L', 'R', 'T'];
+        $chars = \str_split(\strtoupper($value));
+        foreach ($chars as $char) {
+            if (\in_array($char, $allowed, true) && !\in_array($char, $values, true)) {
+                $values[] = $char;
+            }
+        }
+        if (empty($values)) {
+            return self::NONE;
+        }
+        \sort($values);
+
+        return \implode('', $values);
     }
 }

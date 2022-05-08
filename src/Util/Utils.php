@@ -252,13 +252,10 @@ final class Utils
      *
      * @return string the short name or null if the variable is null
      *
-     * @throws \ReflectionException if the class to reflect does not exist
-     *
-     * @psalm-suppress ArgumentTypeCoercion
+     * @psalm-param object|class-string $var
      */
     public static function getShortName(object|string $var): string
     {
-        // @phpstan-ignore-next-line
         return (new \ReflectionClass($var))->getShortName();
     }
 

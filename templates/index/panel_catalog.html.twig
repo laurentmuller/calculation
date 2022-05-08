@@ -11,7 +11,7 @@
             {%- endif -%}
         </div>
         <h3 class="font-weight-normal my-1">
-            {{- count|integer -}}
+            <span title="{{ ('index.panel_count_' ~ entity)|trans }}">{{- count|integer -}}</span>
         </h3>
     </div>
 </div>

@@ -65,15 +65,11 @@ class StateChart extends BaseChart
             ->series($this->getSeries($data));
 
         $this->colors = $this->getColors($states);
-        // @phpstan-ignore-next-line
-        $this->plotOptions->pie($this->getPie());
-        // @phpstan-ignore-next-line
-        $this->legend->itemStyle($style)->itemHoverStyle($style);
+        $this->plotOptions->pie($this->getPie()); // @phpstan-ignore-line
+        $this->legend->itemStyle($style)->itemHoverStyle($style); // @phpstan-ignore-line
 
-        // @phpstan-ignore-next-line
-        $this->tooltip->headerFormat('');
-        // @phpstan-ignore-next-line
-        $this->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>');
+        $this->tooltip->headerFormat(''); // @phpstan-ignore-line
+        $this->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>'); // @phpstan-ignore-line
 
         return [
                 'chart' => $this,

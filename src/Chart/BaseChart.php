@@ -24,9 +24,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * High chart with method shortcuts.
  *
- * @method BaseChart style(array $styles) set the CSS style options.
- * @method BaseChart xAxis(array $xAxis)  set the x-axis options.
- * @method BaseChart yAxis(array $yAxis)  set the y-axis options.
+ * @method BaseChart style(array $styles) set the CSS style.
+ * @method BaseChart xAxis(array $xAxis)  set the x-axis.
+ * @method BaseChart yAxis(array $yAxis)  set the y-axis.
  *
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x-axis.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y-axis.
@@ -36,8 +36,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $tooltip     the tooltip.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $plotOptions the plot options.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $lang        the language.
- * @property array                                       $colors      the colors.
- * @property array                                       $series      the series.
+ * @property \Ob\HighchartsBundle\Highcharts\ChartOption $title       the language.
  */
 class BaseChart extends Highchart
 {
@@ -69,13 +68,16 @@ class BaseChart extends Highchart
      */
     final public const TYPE_SP_LINE = 'spline';
 
+    private readonly bool $darkTheme;
+
     /**
      * Constructor.
      */
-    public function __construct(protected ApplicationService $application, protected ThemeService $service, TranslatorInterface $translator)
+    public function __construct(protected ApplicationService $application, ThemeService $service, TranslatorInterface $translator)
     {
         parent::__construct();
         $this->setTranslator($translator);
+        $this->darkTheme = $service->isDarkTheme();
 
         $this->hideCredits()
             ->initLangOptions()
@@ -89,7 +91,7 @@ class BaseChart extends Highchart
      */
     public function getForeground(): string
     {
-        return $this->service->isDarkTheme() ? 'white' : 'black';
+        return $this->darkTheme ? 'white' : 'black';
     }
 
     /**
@@ -99,8 +101,7 @@ class BaseChart extends Highchart
      */
     public function hideCredits(): self
     {
-        // @phpstan-ignore-next-line
-        $this->credits->enabled(false);
+        $this->credits->enabled(false); // @phpstan-ignore-line
 
         return $this;
     }
@@ -110,8 +111,7 @@ class BaseChart extends Highchart
      */
     public function hideLegend(): self
     {
-        // @phpstan-ignore-next-line
-        $this->legend->enabled(false);
+        $this->legend->enabled(false); // @phpstan-ignore-line
 
         return $this;
     }
@@ -129,8 +129,7 @@ class BaseChart extends Highchart
      */
     public function setBackground(string $color): self
     {
-        // @phpstan-ignore-next-line
-        $this->chart->backgroundColor($color);
+        $this->chart->backgroundColor($color); // @phpstan-ignore-line
 
         return $this;
     }
@@ -150,8 +149,7 @@ class BaseChart extends Highchart
      */
     public function setRenderTo(string $id): self
     {
-        // @phpstan-ignore-next-line
-        $this->chart->renderTo($id);
+        $this->chart->renderTo($id); // @phpstan-ignore-line
 
         return $this;
     }
@@ -160,11 +158,10 @@ class BaseChart extends Highchart
      * Sets the chart title.
      *
      * @param string|null $title the title to set or null to hide
-     * @psalm-suppress MixedMethodCall
      */
     public function setTitle(?string $title): self
     {
-        $this->title->text($title);
+        $this->title->text($title); // @phpstan-ignore-line
 
         return $this;
     }
@@ -177,8 +174,7 @@ class BaseChart extends Highchart
      */
     public function setType(string $type): self
     {
-        // @phpstan-ignore-next-line
-        $this->chart->type($type);
+        $this->chart->type($type); // @phpstan-ignore-line
 
         return $this;
     }
@@ -190,8 +186,7 @@ class BaseChart extends Highchart
      */
     public function setXAxisCategories(mixed $categories): self
     {
-        // @phpstan-ignore-next-line
-        $this->xAxis->categories($categories);
+        $this->xAxis->categories($categories); // @phpstan-ignore-line
 
         return $this;
     }
@@ -203,10 +198,7 @@ class BaseChart extends Highchart
      */
     public function setXAxisTitle(?string $title): self
     {
-        // @phpstan-ignore-next-line
-        $this->xAxis->title([
-            'text' => $title,
-        ]);
+        $this->xAxis->title(['text' => $title]); // @phpstan-ignore-line
 
         return $this;
     }
@@ -218,10 +210,7 @@ class BaseChart extends Highchart
      */
     public function setYAxisTitle(?string $title): self
     {
-        // @phpstan-ignore-next-line
-        $this->yAxis->title([
-            'text' => $title,
-        ]);
+        $this->yAxis->title(['text' => $title]); // @phpstan-ignore-line
 
         return $this;
     }

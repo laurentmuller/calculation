@@ -311,6 +311,7 @@ class SearchService
      *
      * @param string   $class  the entity class
      * @param string[] $fields the entity fields to search in
+     * @psalm-param class-string $class
      */
     private function createEntityQueries(string $class, array $fields): self
     {
@@ -334,6 +335,7 @@ class SearchService
      * @param string      $class   the entity class
      * @param string      $field   the field name
      * @param string|null $content the field content to search in or null to use the field name
+     * @psalm-param class-string $class
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
@@ -412,6 +414,8 @@ class SearchService
      * @param string $class the entity class
      *
      * @return string the entity name
+     *
+     * @psalm-param class-string|trait-string $class
      */
     private function getEntityName(string $class): string
     {
@@ -425,6 +429,7 @@ class SearchService
      * @param string $field the field
      *
      * @return string the key
+     * @psalm-param class-string $class
      */
     private function getKey(string $class, string $field): string
     {

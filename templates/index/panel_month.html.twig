@@ -1,17 +1,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
+{% import 'index/_macros.html.twig' as macros %}
 
 {# macros #}
-{% macro sup_margin(margin, min_margin) -%}
-{%- if margin < min_margin -%}
-    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
-    {%- set class_name = 'text-danger has-tooltip' -%}
-{% else %}
-    {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
-    {%- set class_name = '' -%}
-{%- endif -%}
-<sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
-{%- endmacro %}
-
 {% macro cardEntry(month, list_path, min_margin) -%}
 <div class="card index-child m-1">
     <div class="card-body card-body-tooltip p-2">
@@ -27,9 +17,9 @@
         {%- endif -%}
         </div>
         <h3 class="font-weight-normal my-1">
-            {{- month.total|integer }} {{ _self.sup_margin(month.margin, min_margin) -}}
+            <span title="{{ 'index.panel_title_total'|trans }}">{{- month.total|integer }}</span> {{ macros.margin(month.margin, min_margin) -}}
         </h3>
-        <p class="card-text">
+        <p class="card-text" title="{{ 'index.panel_title_count'|trans }}">
             {{- 'counters.calculations'|trans({'count': month.count}) -}}
         </p>
     </div>
@@ -38,6 +28,7 @@
 
 {# parameters #}
 {%- set list_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) ? 'calculation_table' : false -%}
+{%- set is_months = months|length -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -46,21 +37,19 @@
                 <h1 class="card-title">{{ icons.icon('calendar-alt far', 'index.panel_month') }}</h1>
             </div>
             <div class="col-auto d-print-none">
-                {{ icons.link(path('chart_by_month', {'count': 6}), null, null, 'chart-column', 'index.menu_chart_title') }}
+                {%- if is_months -%}
+                    {{- icons.link(path('chart_by_month', {'count': 6}), null, null, 'chart-column', 'index.menu_chart_title') -}}
+                {%- endif -%}
             </div>
         </div>
     </div>
-    {% if months|length %}
+    {% if is_months %}
     <div class="card-body index-parent no-gutters p-1">
     {% for month in months %}
         {{ _self.cardEntry(month, list_path, min_margin) }}
     {% endfor %}
     </div>
     {% else %}
-    <div class="card-body p-2">
-        <div class="alert alert-warning m-1 text-center" role="alert">
-            {{- 'calculation.list.empty'|trans -}}
-        </div>
-    </div>
+        {{ macros.empty() }}
     {% endif %}
 </div>

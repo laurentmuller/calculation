@@ -77,9 +77,14 @@ final class DatabaseInfo
         try {
             /** @psalm-suppress InternalMethod */
             $params = $this->getConnection()->getParams();
-            foreach (['dbname', 'host', 'port', 'driver'] as $key) {
+            foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
                 $value = $params[$key] ?? null;
                 if (\is_string($value) || \is_int($value)) {
+                    $key = match ($key) {
+                        'dbname' => 'Name',
+                        'serverVersion' => 'Version',
+                        default => \ucfirst($key)
+                    };
                     $result[$key] = (string) $value;
                 }
             }
@@ -99,7 +104,6 @@ final class DatabaseInfo
             $result = $this->executeQuery($sql);
             $entries = $result->fetchAssociative();
             $result->free();
-
             if (false !== $entries) {
                 return (string) $entries['Value'];
             }

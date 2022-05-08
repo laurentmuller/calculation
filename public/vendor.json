@@ -103,7 +103,7 @@
         },
         {
             "name": "clipboard.js",
-            "version": "2.0.10",
+            "version": "2.0.11",
             "target": "clipboard",
             "files": [
                 "clipboard.js"

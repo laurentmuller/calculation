@@ -188,10 +188,10 @@ calculationstate:
     calculation_title: Afficher les calculations de ce statut
     editable: Modifiable
     empty: Aucun statut défini.
-    excel_title: Exporter la liste des status
+    excel_title: Exporter la liste des statuts
     not_editable: Non-Modifiable
-    pdf_title: Télécharger la liste des status
-    title: Status
+    pdf_title: Télécharger la liste des statuts
+    title: Statuts
   name: Statut
   show:
     title: Propriétés du statut
@@ -626,12 +626,20 @@ index:
   panel_state: Calculations par statut
   panel_state_title: Afficher les calculations pour le statut %code%
   panel_state_title_all: Afficher toutes les calculations
+  panel_title_total: Montant total des calculations
+  panel_title_count: Nombre de calculations
   panel_title_category: Afficher la liste des catégories
+  panel_count_category: Nombre de catégories dans le catalogue
   panel_title_group: Afficher la liste des groupes
+  panel_count_group: Nombre de groupes dans le catalogue
   panel_title_globalmargin: Afficher la liste des marges globales
-  panel_title_product: Afficher la liste des produits
+  panel_count_globalmargin: Nombre de marges globales dans le catalogue
+  panel_title_product: Afficher la liste des articles
+  panel_count_product: Nombre d'articles dans le catalogue
   panel_title_calculationstate: Afficher la liste des statuts
+  panel_count_calculationstate: Nombre de statuts dans le catalogue
   panel_title_task: Afficher la liste des tâches
+  panel_count_task: Nombre de tâches dans le catalogue
   title: Accueil
   title_help: Afficher la page d'accueil
   toggle_navigation: Basculer la navigation

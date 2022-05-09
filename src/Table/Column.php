@@ -15,8 +15,6 @@ namespace App\Table;
 use App\Entity\AbstractEntity;
 use App\Interfaces\SortModeInterface;
 use App\Util\FileUtils;
-use Symfony\Component\PropertyAccess\Exception\AccessException;
-use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -28,7 +26,7 @@ class Column implements SortModeInterface, \Stringable
     /**
      * The property name of the field formatter.
      */
-    final public const FIELD_FORMATTER = 'fieldFormatter';
+    private const FIELD_FORMATTER = 'fieldFormatter';
 
     /**
      * The field alias name.
@@ -68,7 +66,8 @@ class Column implements SortModeInterface, \Stringable
     /**
      * The field formatter (server side).
      *
-     * @var callable|string|null
+     * @var string|callable|null
+     * @psalm-var string|callable(mixed, AbstractEntity|array): string|null
      */
     private $fieldFormatter = null;
 
@@ -128,7 +127,7 @@ class Column implements SortModeInterface, \Stringable
     public static function fromJson(AbstractTable $parent, string $path): array
     {
         // decode
-        /** @var array $definitions */
+        /** @var array<array<string, string|bool>> $definitions */
         $definitions = FileUtils::decodeJson($path);
 
         // definitions?
@@ -142,7 +141,6 @@ class Column implements SortModeInterface, \Stringable
         // map
         return \array_map(function (array $definition) use ($parent, $accessor): self {
             $column = new self();
-            /** @var mixed $value */
             foreach ($definition as $key => $value) {
                 // special case for the field formatter
                 if (self::FIELD_FORMATTER === $key) {
@@ -150,10 +148,9 @@ class Column implements SortModeInterface, \Stringable
                 }
 
                 try {
-                    $accessor->setValue($column, (string) $key, $value);
-                } catch (AccessException|UnexpectedTypeException $e) {
-                    $message = "Cannot set the property '$key'.";
-                    throw new \InvalidArgumentException($message, 0, $e);
+                    $accessor->setValue($column, $key, $value);
+                } catch (\Exception $e) {
+                    throw new \InvalidArgumentException(\sprintf("Cannot set the property '%s'.", $key), 0, $e);
                 }
             }
 
@@ -221,7 +218,7 @@ class Column implements SortModeInterface, \Stringable
         return $this->field;
     }
 
-    public function getFieldFormatter(): callable|string|null
+    public function getFieldFormatter(): string|callable|null
     {
         return $this->fieldFormatter;
     }
@@ -345,7 +342,10 @@ class Column implements SortModeInterface, \Stringable
         return $this->updateProperty();
     }
 
-    public function setFieldFormatter(callable|string|null $fieldFormatter): self
+    /**
+     * @psalm-param string|callable(mixed, AbstractEntity|array): string|null $fieldFormatter
+     */
+    public function setFieldFormatter(string|callable|null $fieldFormatter): self
     {
         $this->fieldFormatter = $fieldFormatter;
 
@@ -423,7 +423,7 @@ class Column implements SortModeInterface, \Stringable
     private function formatValue(AbstractEntity|array $objectOrArray, mixed $value): string
     {
         if (\is_callable($this->fieldFormatter)) {
-            return (string) \call_user_func($this->fieldFormatter, $value, $objectOrArray);
+            return \call_user_func($this->fieldFormatter, $value, $objectOrArray);
         }
 
         if (\is_bool($value)) {

@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class Customer extends AbstractEntity
 {
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     protected ?string $address = null;
 
     #[Assert\Date]
@@ -37,42 +37,42 @@ class Customer extends AbstractEntity
     protected ?\DateTimeInterface $birthday = null;
 
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     protected ?string $city = null;
 
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     protected ?string $company = null;
 
     #[Assert\Length(max: 100)]
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     protected ?string $country = null;
 
     #[Assert\Email]
     #[Assert\Length(max: 100)]
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     protected ?string $email = null;
 
     #[Assert\Length(max: 255)]
-    #[ORM\Column(name: 'firstName', type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(name: 'firstName', nullable: true)]
     protected ?string $firstName = null;
 
     #[Assert\Length(max: 255)]
-    #[ORM\Column(name: 'lastName', type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(name: 'lastName', nullable: true)]
     protected ?string $lastName = null;
 
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     protected ?string $title = null;
 
     #[Assert\Url]
     #[Assert\Length(max: 100)]
-    #[ORM\Column(name: 'webSite', type: Types::STRING, length: 100, nullable: true)]
+    #[ORM\Column(name: 'webSite', length: 100, nullable: true)]
     protected ?string $webSite = null;
 
     #[Assert\Length(max: 10)]
     #[Assert\Regex(pattern: '/^[1-9]\d{3}$/', message: 'customer.zip_code')]
-    #[ORM\Column(name: 'zipCode', type: Types::STRING, length: 10, nullable: true)]
+    #[ORM\Column(name: 'zipCode', length: 10, nullable: true)]
     protected ?string $zipCode = null;
 
     /**

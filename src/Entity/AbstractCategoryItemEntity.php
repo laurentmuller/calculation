@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,14 +29,14 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      * The supplier.
      */
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     protected ?string $supplier = null;
 
     /**
      * The unit.
      */
     #[Assert\Length(max: 15)]
-    #[ORM\Column(type: Types::STRING, length: 15, nullable: true)]
+    #[ORM\Column(length: 15, nullable: true)]
     protected ?string $unit = null;
 
     /**

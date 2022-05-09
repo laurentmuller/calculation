@@ -42,7 +42,7 @@ class PdfResponse extends Response implements MimeTypeInterface
     {
         $name = empty($name) ? 'document.pdf' : \basename($name);
         $headers = ResponseUtils::buildHeaders($name, self::MIME_TYPE_PDF, $inline);
-        $content = (string) $doc->Output(PdfDocumentOutput::STRING);
+        $content = $doc->Output(PdfDocumentOutput::STRING);
         parent::__construct($content, self::HTTP_OK, $headers);
     }
 

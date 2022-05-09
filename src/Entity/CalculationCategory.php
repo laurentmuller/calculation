@@ -18,7 +18,6 @@ use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,13 +33,13 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
     /**
      * The total amount.
      */
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     protected float $amount = 0.0;
 
     /**
      * The parent's category.
      */
-    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
     protected ?Category $category = null;
 
@@ -49,14 +48,14 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
-    #[ORM\Column(type: Types::STRING, length: 30)]
+    #[ORM\Column(length: 30)]
     protected ?string $code = null;
 
     /**
      * The parent's group.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: CalculationGroup::class, inversedBy: 'categories')]
+    #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
     protected ?CalculationGroup $group = null;
 

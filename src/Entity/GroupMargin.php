@@ -27,7 +27,7 @@ class GroupMargin extends AbstractMargin
      * The parent's group.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'margins')]
+    #[ORM\ManyToOne(inversedBy: 'margins')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
     protected ?Group $group = null;
 

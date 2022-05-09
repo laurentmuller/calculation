@@ -38,9 +38,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
     private bool $started = false;
 
     /**
-     * @param string $orientation
-     * @param mixed  $size
-     * @param int    $rotation
+     * {@inheritdoc}
      */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {

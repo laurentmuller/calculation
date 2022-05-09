@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\MarginInterface;
 use App\Repository\TaskItemMarginRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,21 +29,21 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
      */
     #[Assert\GreaterThanOrEqual(0)]
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     private float $maximum = 0.0;
 
     /**
      * The minimum quantity (inclusive) to apply within this value.
      */
     #[Assert\GreaterThanOrEqual(0)]
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     private float $minimum = 0.0;
 
     /**
      * The parent task item.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: TaskItem::class, inversedBy: 'margins')]
+    #[ORM\ManyToOne(inversedBy: 'margins')]
     #[ORM\JoinColumn(name: 'task_item_id', nullable: false)]
     private ?TaskItem $taskItem = null;
 
@@ -52,7 +51,7 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
      * The value to use when a quantity is within this range.
      */
     #[Assert\GreaterThanOrEqual(0)]
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     private float $value = 0.0;
 
     /**

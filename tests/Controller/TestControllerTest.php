@@ -31,7 +31,6 @@ class TestControllerTest extends AbstractControllerTest
         'recaptcha',
         'swiss',
         'timeline',
-        'toc',
         'translate',
         'tree',
         'union',

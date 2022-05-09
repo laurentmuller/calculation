@@ -37,7 +37,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column()]
     protected ?string $customer = null;
 
     /**
@@ -52,13 +52,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column()]
     protected ?string $description = null;
 
     /**
      * The global margin in percent (%).
      */
-    #[ORM\Column(name: 'globalMargin', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'globalMargin', scale: 2, options: ['default' => 0])]
     protected float $globalMargin = 0.0;
 
     /**
@@ -74,27 +74,27 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The total of all items.
      */
-    #[ORM\Column(name: 'itemsTotal', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'itemsTotal', scale: 2, options: ['default' => 0])]
     protected float $itemsTotal = 0.0;
 
     /**
      * The overall total.
      */
-    #[ORM\Column(name: 'overallTotal', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'overallTotal', scale: 2, options: ['default' => 0])]
     protected float $overallTotal = 0.0;
 
     /**
      * The state.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: CalculationState::class, inversedBy: 'calculations')]
+    #[ORM\ManyToOne(inversedBy: 'calculations')]
     #[ORM\JoinColumn(name: 'state_id', nullable: false)]
     protected ?CalculationState $state = null;
 
     /**
      * The user margin in percent (%).
      */
-    #[ORM\Column(name: 'userMargin', type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(name: 'userMargin', scale: 2, options: ['default' => 0])]
     protected float $userMargin = 0.0;
 
     /**

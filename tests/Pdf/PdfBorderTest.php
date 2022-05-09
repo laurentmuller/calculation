@@ -41,11 +41,11 @@ class PdfBorderTest extends TestCase
             [-2, PdfBorder::NONE],
 
             ['LR', 'LR'],
-            ['RL', 'LR'],
-            ['LRTB', 'BLRT'],
-            ['RTBL', 'BLRT'],
-
-            ['TR', 'RT'],
+            ['TB', 'TB'],
+            ['LR', 'LR'],
+            ['TR', 'TR'],
+            ['LRTB', PdfBorder::ALL],
+            ['RTBL', PdfBorder::ALL],
         ];
     }
 

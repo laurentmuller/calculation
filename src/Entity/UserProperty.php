@@ -30,7 +30,7 @@ class UserProperty extends AbstractProperty
      * The parent's user.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'properties')]
+    #[ORM\ManyToOne(inversedBy: 'properties')]
     #[ORM\JoinColumn(name: 'user_id', nullable: false, onDelete: 'cascade')]
     private ?User $user = null;
 

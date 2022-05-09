@@ -16,7 +16,6 @@ use App\Interfaces\ParentCalculationInterface;
 use App\Repository\CalculationItemRepository;
 use App\Traits\MathTrait;
 use App\Traits\PositionTrait;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,7 +33,7 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      * The parent's category.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: CalculationCategory::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false, onDelete: 'cascade')]
     protected ?CalculationCategory $category = null;
 
@@ -43,26 +42,26 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column()]
     protected ?string $description = null;
 
     /**
      * The price.
      */
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     protected float $price = 0.0;
 
     /**
      * The quantity.
      */
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     protected float $quantity = 0.0;
 
     /**
      * The unit.
      */
     #[Assert\Length(max: 15)]
-    #[ORM\Column(type: Types::STRING, length: 15, nullable: true)]
+    #[ORM\Column(length: 15, nullable: true)]
     protected ?string $unit = null;
 
     /**

@@ -21,7 +21,6 @@ use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\StrengthInterface;
-use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -457,42 +456,6 @@ class TestController extends AbstractController
         ];
 
         return $this->renderForm('test/timeline.html.twig', $parameters);
-    }
-
-    /**
-     * Test the Pdf TOC document.
-     */
-    #[Route(path: '/toc', name: 'test_toc')]
-    public function tocDocument(): PdfResponse
-    {
-        $doc = new PdfTocDocument();
-
-        $doc->AddPage();
-        $doc->Cell(0, 5, 'Cover', 0, 1, 'C');
-
-        $doc->AddPage();
-        $doc->tocStart();
-        $doc->Cell(0, 5, 'TOC1', 0, 1, 'L');
-        $doc->tocAddEntry('TOC1');
-        $doc->Cell(0, 5, 'TOC1.1', 0, 1, 'L');
-        $doc->tocAddEntry('TOC1.1', 1);
-
-        $doc->AddPage();
-        $doc->Cell(0, 5, 'TOC2', 0, 1, 'L');
-        $doc->tocAddEntry('TOC2');
-
-        $doc->AddPage();
-        for ($i = 3; $i <= 25; ++$i) {
-            if (0 === $i % 10) {
-                $doc->AddPage();
-            }
-            $doc->Cell(0, 5, 'TOC' . $i, 0, 1, 'L');
-            $doc->tocAddEntry('TOC' . $i);
-        }
-        $doc->tocStop();
-        $doc->tocOutput(2);
-
-        return $this->renderPdfDocument($doc);
     }
 
     /**

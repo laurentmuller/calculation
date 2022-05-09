@@ -24,21 +24,21 @@ class Log extends AbstractEntity
 {
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: Types::STRING, length: 50)]
+    #[ORM\Column(length: 50)]
     private ?string $channel = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?array $context = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private \DateTimeInterface $createdAt;
+    #[ORM\Column()]
+    private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?array $extra = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: Types::STRING, length: 50)]
+    #[ORM\Column(length: 50)]
     private ?string $level = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -49,7 +49,7 @@ class Log extends AbstractEntity
      */
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     /**
@@ -164,7 +164,7 @@ class Log extends AbstractEntity
     /**
      * Sets creation date.
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 

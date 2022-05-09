@@ -363,13 +363,13 @@ class LogService
      *
      * @param string $value the source
      *
-     * @return \DateTimeInterface|null a new DateTime instance or null on failure
+     * @return \DateTimeImmutable|null a new DateTime instance or null on failure
      */
-    private function parseDate(string $value): ?\DateTimeInterface
+    private function parseDate(string $value): ?\DateTimeImmutable
     {
-        $date = \DateTime::createFromFormat(self::DATE_FORMAT, $value);
+        $date = \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
 
-        return $date instanceof \DateTime ? $date : null;
+        return $date instanceof \DateTimeImmutable ? $date : null;
     }
 
     /**

@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,7 +30,7 @@ class Product extends AbstractCategoryItemEntity
      * The parent's category.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
+    #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
     protected ?Category $category = null;
 
@@ -40,13 +39,13 @@ class Product extends AbstractCategoryItemEntity
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    #[ORM\Column(unique: true)]
     private ?string $description = null;
 
     /**
      * The price.
      */
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     private float $price = 0.0;
 
     /**

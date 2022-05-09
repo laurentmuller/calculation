@@ -19,7 +19,6 @@ use App\Traits\RoleTrait;
 use App\Util\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -51,17 +50,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[Assert\Email]
     #[Assert\NotBlank]
     #[Assert\Length(max: 180)]
-    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    #[ORM\Column(options: ['default' => true])]
     private bool $enabled = true;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $expiresAt = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $expiresAt = null;
 
     #[Assert\Length(max: 100)]
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $hashedToken = null;
 
     /**
@@ -75,15 +74,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * The image file name.
      */
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $lastLogin = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastLogin = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column()]
     private ?string $password = null;
 
     /**
@@ -92,25 +91,25 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProperty::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $properties;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $requestedAt = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $requestedAt = null;
 
     #[Assert\Length(max: 20)]
-    #[ORM\Column(type: Types::STRING, length: 20, nullable: true)]
+    #[ORM\Column(length: 20, nullable: true)]
     private ?string $selector = null;
 
     /**
      * The last updated date.
      */
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 180)]
-    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
-    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    #[ORM\Column(options: ['default' => false])]
     private bool $verified = false;
 
     /**
@@ -464,7 +463,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     {
         $this->imageFile = $imageFile;
         if ($update) {
-            $this->updatedAt = new \DateTime();
+            $this->updatedAt = new \DateTimeImmutable();
         }
 
         return $this;
@@ -493,11 +492,11 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * Sets the reset password request values.
      *
-     * @param \DateTimeInterface $expiresAt   the expiration date
+     * @param \DateTimeImmutable $expiresAt   the expiration date
      * @param string             $selector    a non-hashed random string used to fetch a request from persistence
      * @param string             $hashedToken the hashed token used to verify a reset request
      */
-    public function setResetPasswordRequest(\DateTimeInterface $expiresAt, string $selector, string $hashedToken): self
+    public function setResetPasswordRequest(\DateTimeImmutable $expiresAt, string $selector, string $hashedToken): self
     {
         $this->requestedAt = new \DateTimeImmutable();
         $this->expiresAt = $expiresAt;

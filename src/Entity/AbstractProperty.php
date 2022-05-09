@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -37,7 +36,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: Types::STRING, length: 50)]
+    #[ORM\Column(length: 50)]
     private ?string $name;
 
     /**
@@ -45,7 +44,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?string $value = null;
 
     /**

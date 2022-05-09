@@ -307,7 +307,7 @@ class PdfBorder
     private function parseBorders(string $value): string|int
     {
         $values = [];
-        $allowed = ['B', 'L', 'R', 'T'];
+        $allowed = [self::TOP, self::LEFT, self::BOTTOM, self::RIGHT];
         $chars = \str_split(\strtoupper($value));
         foreach ($chars as $char) {
             if (\in_array($char, $allowed, true) && !\in_array($char, $values, true)) {
@@ -317,7 +317,10 @@ class PdfBorder
         if (empty($values)) {
             return self::NONE;
         }
-        \sort($values);
+
+        if (\count($values) === \count($allowed)) {
+            return self::ALL;
+        }
 
         return \implode('', $values);
     }

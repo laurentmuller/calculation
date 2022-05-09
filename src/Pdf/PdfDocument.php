@@ -118,6 +118,25 @@ class PdfDocument extends FPDF
     }
 
     /**
+     * Adds a new page to the document.
+     *
+     * @param PdfDocumentOrientation|string $orientation the page orientation or an empty string ('') to use the current orientation
+     * @param PdfDocumentSize|int[]|string  $size        the page size or an empty string ('') to use the current size
+     * @param int                           $rotation    the angle by which to rotate the page or 0 to use the current orientation.
+     *                                                   It must be a multiple of 90; positive values mean clockwise rotation.
+     */
+    public function AddPage($orientation = '', $size = '', $rotation = 0): void
+    {
+        if ($orientation instanceof PdfDocumentOrientation) {
+            $orientation = $orientation->value;
+        }
+        if ($size instanceof PdfDocumentSize) {
+            $size = $size->value;
+        }
+        parent::AddPage($orientation, $size, $rotation);
+    }
+
+    /**
      * Apply the given font.
      *
      * @param PdfFont $font the font to apply
@@ -195,8 +214,7 @@ class PdfDocument extends FPDF
     }
 
     /**
-     * Gets the left and right cell margins.
-     * The default value is 1 mm.
+     * Gets the cell margin. The default value is 1 mm.
      */
     public function getCellMargin(): float
     {
@@ -523,23 +541,24 @@ class PdfDocument extends FPDF
     /**
      * Send the document to a given destination.
      *
-     * @param PdfDocumentOutput|string $dest   the destination where to send the document
-     * @param string                   $name   the name of the file. It is ignored in case of destination PdfDocumentOutput::STRING.
+     * @param PdfDocumentOutput|string $dest   the destination where to send the document or an empty
+     *                                         string ('') to send the file inline to the browser
+     * @param string                   $name   the name of the file. It is ignored in case of string destination.
      * @param bool                     $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
      *
-     * @return mixed the content if the output is 'S'
+     * @return string the content if the output is string
      */
-    public function Output($dest = '', $name = '', $isUTF8 = false): mixed
+    public function Output($dest = '', $name = '', $isUTF8 = false): string
     {
         if ($dest instanceof PdfDocumentOutput) {
             $dest = $dest->value;
         }
 
-        return parent::Output($dest, $name, $isUTF8);
+        return (string) parent::Output($dest, $name, $isUTF8);
     }
 
     /**
-     * Converts the pixels to millimeters with 72 dot per each (DPI).
+     * Converts the given pixels to millimeters using 72 dot per each (DPI).
      *
      * @param float $pixels the pixels to convert
      *
@@ -551,7 +570,7 @@ class PdfDocument extends FPDF
     }
 
     /**
-     * Converts the pixels to user unit.
+     * Converts the given pixels to user unit using 72 dot per each (DPI).
      *
      * @param float $pixels the pixels to convert
      *
@@ -565,16 +584,39 @@ class PdfDocument extends FPDF
     /**
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
+     * @param float            $x     the abscissa of upper-left corner
+     * @param float            $y     the ordinate of upper-left corner
+     * @param float            $w     the width
+     * @param float            $h     the height
+     * @param PdfBorder|string $style the style of rendering. Possible values are:
+     *                                <ul>
+     *                                <li>'<b>D</b>' or empty string: draw. This is the default value.</li>
+     *                                <li>'<b>F</b>' : fill.</li>
+     *                                <li>'<b>DF</b>' : draw and fill.</li>
+     *                                </ul>
+     */
+    public function Rect($x, $y, $w, $h, $style = ''): void
+    {
+        if ($style instanceof PdfBorder) {
+            $style = $style->getRectangleStyle();
+        }
+        parent::Rect($x, $y, $w, $h, $style);
+    }
+
+    /**
+     * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
+     *
      * @param PdfRectangle $bounds the rectangle to output
      * @param PdfBorder    $border the style of rendering
      *
      * @see PdfBorder::isRectangleStyle()
      * @see PdfBorder::getRectangleStyle()
+     * @see PdfDocument::Rect()
      */
     public function rectangle(PdfRectangle $bounds, PdfBorder $border): self
     {
         if ($border->isRectangleStyle()) {
-            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border->getRectangleStyle());
+            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border);
         }
 
         return $this;

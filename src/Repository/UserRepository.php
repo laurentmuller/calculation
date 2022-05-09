@@ -53,6 +53,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
         if (!$user instanceof User) {
             throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
         }
+        $expiresAt = \DateTimeImmutable::createFromInterface($expiresAt);
 
         return $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
     }

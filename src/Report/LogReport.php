@@ -75,9 +75,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     private ?bool $started = null;
 
     /**
-     * @param string $orientation
-     * @param mixed  $size
-     * @param int    $rotation
+     * {@inheritdoc}
      */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {

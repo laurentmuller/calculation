@@ -18,7 +18,6 @@ use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,14 +33,14 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     /**
      * The total amount.
      */
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     protected float $amount = 0.0;
 
     /**
      * The parent's calculation.
      */
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: Calculation::class, inversedBy: 'groups')]
+    #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(name: 'calculation_id', nullable: false, onDelete: 'cascade')]
     protected ?Calculation $calculation = null;
 
@@ -60,20 +59,20 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 30)]
-    #[ORM\Column(type: Types::STRING, length: 30)]
+    #[ORM\Column(length: 30)]
     protected ?string $code = null;
 
     /**
      * The parent's group.
      */
-    #[ORM\ManyToOne(targetEntity: Group::class)]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]
     protected ?Group $group = null;
 
     /**
      * The margin in percent (%).
      */
-    #[ORM\Column(type: Types::FLOAT, scale: 2, options: ['default' => 0])]
+    #[ORM\Column(scale: 2, options: ['default' => 0])]
     protected float $margin = 0.0;
 
     /**

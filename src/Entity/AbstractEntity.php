@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Traits\MathTrait;
 use App\Util\Utils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,7 +29,7 @@ abstract class AbstractEntity implements \Stringable
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Column]
     protected ?int $id = null;
 
     /**

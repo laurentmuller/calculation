@@ -22,8 +22,5 @@ parameters:
         - '#Utils::getRequestInputBag#'
         - '#no value type specified#'
         -
-            message: '#repositoryClass of attribute#'
-            path: src/Entity/*
-        -
             message: '#type mapping mismatch#'
             path: src/Entity/*

@@ -31,7 +31,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     /**
      * {@inheritdoc}
      */
-    public function onOutputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
+    public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
     {
         /** @var Task $task */
         $task = $group->getKey();

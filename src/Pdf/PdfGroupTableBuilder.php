@@ -20,7 +20,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * The group.
      */
-    protected ?PdfGroup $group = null;
+    protected PdfGroup $group;
 
     /*
      * The output the group before header.
@@ -75,7 +75,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Gets the group.
      */
-    public function getGroup(): ?PdfGroup
+    public function getGroup(): PdfGroup
     {
         return $this->group;
     }
@@ -93,7 +93,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function getGroupStyle(): ?PdfStyle
     {
-        return $this->group?->getStyle();
+        return $this->group->getStyle();
     }
 
     /**
@@ -105,13 +105,13 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     }
 
     /**
-     * Output the group (if any).
+     * Output the group.
      */
     public function outputGroup(): static
     {
-        if ($this->group && $this->group->isKey() && !$this->inProgress) {
+        if ($this->group->isKey() && !$this->inProgress) {
             $this->inProgress = true;
-            if (!$this->groupListener instanceof PdfGroupListenerInterface || !$this->groupListener->onOutputGroup($this, $this->group)) {
+            if (!$this->groupListener instanceof PdfGroupListenerInterface || !$this->groupListener->outputGroup($this, $this->group)) {
                 $this->group->output($this);
             }
             $this->inProgress = false;
@@ -160,7 +160,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function setGroupKey(mixed $key, bool $output = true): static
     {
-        if ($this->group && $this->group->getKey() !== $key) {
+        if ($this->group->getKey() !== $key) {
             $this->group->setKey($key);
             if ($output) {
                 return $this->outputGroup();
@@ -185,7 +185,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function setGroupStyle(?PdfStyle $style): static
     {
-        $this->group?->setStyle($style);
+        $this->group->setStyle($style);
 
         return $this;
     }

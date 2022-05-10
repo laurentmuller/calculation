@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
 use App\Util\Utils;
@@ -597,7 +598,7 @@ class PdfTableBuilder
                 $linkBounds->inflate(-$margins);
                 $linkWidth = $parent->GetStringWidth($text);
                 $linkHeight = $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2 * $margins;
-                $linkBounds->setWidth($linkWidth)->setHeight($linkHeight);
+                $linkBounds->setSize($linkWidth, $linkHeight);
                 $this->drawCellLink($parent, $linkBounds, $link);
             }
         }
@@ -621,7 +622,7 @@ class PdfTableBuilder
         }
 
         // default
-        $parent->rectangle($bounds, PdfBorder::fill());
+        $parent->rectangle($bounds, PdfRectangleStyle::FILL);
     }
 
     /**

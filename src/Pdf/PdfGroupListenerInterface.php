@@ -25,5 +25,5 @@ interface PdfGroupListenerInterface
      *
      * @return bool true if the listener handle the output; false to use the default output
      */
-    public function onOutputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool;
+    public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool;
 }

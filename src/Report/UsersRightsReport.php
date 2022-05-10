@@ -79,7 +79,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * {@inheritdoc}
      */
-    public function onOutputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
+    public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
     {
         /** @var Role|User|null $key */
         $key = $group->getKey();

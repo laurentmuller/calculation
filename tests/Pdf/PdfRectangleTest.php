@@ -113,6 +113,13 @@ class PdfRectangleTest extends TestCase
         $this->validate($r, 10, 10, 30, 20);
     }
 
+    public function testSetSize(): void
+    {
+        $r = new PdfRectangle(0, 0, 20, 20);
+        $r->setSize(10, 10);
+        $this->validate($r, 0, 0, 10, 10);
+    }
+
     public function testUnion(): void
     {
         $r1 = new PdfRectangle(0, 0, 20, 20);

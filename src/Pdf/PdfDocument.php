@@ -20,6 +20,7 @@ use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfDocumentZoom;
 use App\Pdf\Enums\PdfImageType;
 use App\Pdf\Enums\PdfMove;
+use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
 use FPDF;
@@ -584,40 +585,51 @@ class PdfDocument extends FPDF
     /**
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
-     * @param float            $x     the abscissa of upper-left corner
-     * @param float            $y     the ordinate of upper-left corner
-     * @param float            $w     the width
-     * @param float            $h     the height
-     * @param PdfBorder|string $style the style of rendering. Possible values are:
-     *                                <ul>
-     *                                <li>'<b>D</b>' or empty string: draw. This is the default value.</li>
-     *                                <li>'<b>F</b>' : fill.</li>
-     *                                <li>'<b>DF</b>' : draw and fill.</li>
-     *                                </ul>
+     * @param float                              $x     the abscissa of upper-left corner
+     * @param float                              $y     the ordinate of upper-left corner
+     * @param float                              $w     the width
+     * @param float                              $h     the height
+     * @param PdfBorder|PdfRectangleStyle|string $style the style of rendering. Possible values are:
+     *                                                  <ul>
+     *                                                  <li>'<b>D</b>' or empty string: draw. This is the default value.</li>
+     *                                                  <li>'<b>F</b>' : fill.</li>
+     *                                                  <li>'<b>DF</b>' : draw and fill.</li>
+     *                                                  </ul>
      */
     public function Rect($x, $y, $w, $h, $style = ''): void
     {
         if ($style instanceof PdfBorder) {
+            if (!$style->isRectangleStyle()) {
+                return;
+            }
             $style = $style->getRectangleStyle();
         }
+
+        if ($style instanceof PdfRectangleStyle) {
+            if (!$style->isApplicable()) {
+                return;
+            }
+            $style = $style->value;
+        }
+
         parent::Rect($x, $y, $w, $h, $style);
     }
 
     /**
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
-     * @param PdfRectangle $bounds the rectangle to output
-     * @param PdfBorder    $border the style of rendering
+     * @param PdfRectangle                $bounds the rectangle to output
+     * @param PdfBorder|PdfRectangleStyle $border the style of rendering
+     *
+     * @return PdfDocument
      *
      * @see PdfBorder::isRectangleStyle()
      * @see PdfBorder::getRectangleStyle()
      * @see PdfDocument::Rect()
      */
-    public function rectangle(PdfRectangle $bounds, PdfBorder $border): self
+    public function rectangle(PdfRectangle $bounds, PdfBorder|PdfRectangleStyle $border): self
     {
-        if ($border->isRectangleStyle()) {
-            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border);
-        }
+        $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border);
 
         return $this;
     }

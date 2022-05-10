@@ -194,9 +194,9 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @param string|null $value a hexadecimal string
      *
-     * @return int[]|bool the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
+     * @return int[]|false the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
      */
-    public static function parse(?string $value): array|bool
+    public static function parse(?string $value): array|false
     {
         // string?
         if (!Utils::isString($value)) {

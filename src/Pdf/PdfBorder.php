@@ -125,6 +125,7 @@ class PdfBorder
      *
      * @see PdfBorder::isRectangleStyle()
      * @see PdfDocument::rectangle()
+     * @see PdfDocument::Rect()
      */
     public function getRectangleStyle(): string
     {
@@ -230,6 +231,7 @@ class PdfBorder
      *
      * @see PdfBorder::getRectangleStyle()
      * @see PdfDocument::rectangle()
+     * @see PdfDocument::Rect()
      */
     public function isRectangleStyle(): bool
     {

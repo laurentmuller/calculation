@@ -18,6 +18,7 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -37,11 +38,17 @@ class SchemaController extends AbstractController
     private readonly AbstractSchemaManager $manager;
 
     /**
+     * @var array<string, ClassMetadataInfo>
+     */
+    private readonly array $metaDatas;
+
+    /**
      * Constructor.
      */
     public function __construct(EntityManagerInterface $manager)
     {
         $this->manager = $manager->getConnection()->createSchemaManager();
+        $this->metaDatas = $this->filterMetaDatas($manager);
     }
 
     #[Route(path: '', name: 'schema')]
@@ -65,7 +72,31 @@ class SchemaController extends AbstractController
         return $this->renderForm('schema/table.html.twig', [
             'name' => $name,
             'columns' => $this->getColumns($name),
+            'associations' => $this->getAssociations($name),
         ]);
+    }
+
+    private function countAssociationNames(string $name): int
+    {
+        $metaData = $this->getTableMetaData($name);
+
+        return $metaData instanceof ClassMetadataInfo ? \count($metaData->getAssociationNames()) : 0;
+    }
+
+    /**
+     * @return array<string, ClassMetadataInfo>
+     */
+    private function filterMetaDatas(EntityManagerInterface $manager): array
+    {
+        $result = [];
+        $metaDatas = $manager->getMetadataFactory()->getAllMetadata();
+        foreach ($metaDatas as $data) {
+            if (!$data->isMappedSuperclass && !$data->isEmbeddedClass) {
+                $result[\strtolower($data->table['name'])] = $data;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -81,6 +112,37 @@ class SchemaController extends AbstractController
         }
 
         return null;
+    }
+
+    /**
+     * @return array<array{name: string, table: string, inverseSide: bool}>
+     */
+    private function getAssociations(string $name): array
+    {
+        $metaData = $this->getTableMetaData($name);
+        if (!$metaData instanceof ClassMetadataInfo) {
+            return [];
+        }
+        $associationNames = $metaData->getAssociationNames();
+        if (empty($associationNames)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($associationNames as $associationName) {
+            $targetClass = $metaData->getAssociationTargetClass($associationName);
+            $inverseSide = $metaData->isAssociationInverseSide($associationName);
+            $targetData = $this->getTargetMetaData($targetClass);
+            if ($targetData instanceof ClassMetadataInfo) {
+                $result[] = [
+                    'name' => $associationName,
+                    'table' => $targetData->table['name'],
+                    'inverseSide' => $inverseSide,
+                    ];
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -140,25 +202,44 @@ class SchemaController extends AbstractController
         return [];
     }
 
+    private function getTableMetaData(string $name): ?ClassMetadataInfo
+    {
+        return $this->metaDatas[\strtolower($name)] ?? null;
+    }
+
     /**
      * Gets the tables.
      *
      * @return array<array{
      *      name: string,
-     *      count: int}>
+     *      columns: int,
+     *      associations: int}>
      */
     private function getTables(): array
     {
         $tables = $this->getManager()->listTables();
-
         \usort($tables, fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
 
-        return \array_map(static function (Table $table): array {
+        return \array_map(function (Table $table): array {
+            $name = $table->getName();
+
             return [
-                'name' => $table->getName(),
-                'count' => \count($table->getColumns()),
+                'name' => $name,
+                'columns' => \count($table->getColumns()),
+                'associations' => $this->countAssociationNames($name),
              ];
         }, $tables);
+    }
+
+    private function getTargetMetaData(string $name): ?ClassMetadataInfo
+    {
+        foreach ($this->metaDatas as $metaData) {
+            if ($metaData->getName() === $name) {
+                return $metaData;
+            }
+        }
+
+        return null;
     }
 
     /**

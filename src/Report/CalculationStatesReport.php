@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\CalculationState;
-use App\Pdf\PdfBorder;
+use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
@@ -58,7 +58,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
                 $margin = $doc->getCellMargin();
                 $bounds->inflateXY(-3 * $margin, -$margin)
                     ->setHeight(self::LINE_HEIGHT - 2 * $margin);
-                $doc->rectangle($bounds, PdfBorder::both());
+                $doc->rectangle($bounds, PdfRectangleStyle::BOTH);
 
                 return true;
             }

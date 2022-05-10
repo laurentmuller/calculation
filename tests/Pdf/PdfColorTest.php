@@ -43,7 +43,6 @@ class PdfColorTest extends TestCase
         yield ['FFF', 255, 255, 255];
         yield ['FFFFFF', 255, 255, 255];
         yield ['#FFFFFF', 255, 255, 255];
-
         yield [[255, 255, 255], 255, 255, 255];
     }
 
@@ -69,6 +68,7 @@ class PdfColorTest extends TestCase
     }
 
     /**
+     * @param int[]|string $rgb
      * @dataProvider getCreateColors
      */
     public function testCreate(array|string $rgb, int $red, int $green, int $blue): void
@@ -78,6 +78,7 @@ class PdfColorTest extends TestCase
     }
 
     /**
+     * @param int[]|string $rgb
      * @dataProvider getCreateColorsInvalid
      */
     public function testCreateInvalid(array|string $rgb): void
@@ -138,8 +139,9 @@ class PdfColorTest extends TestCase
         $this->validateColor($color, $red, $green, $blue);
     }
 
-    private function validateColor(AbstractPdfColor $color, int $red, int $green, int $blue): void
+    private function validateColor(?AbstractPdfColor $color, int $red, int $green, int $blue): void
     {
+        $this->assertNotNull($color);
         $this->assertEquals($red, $color->getRed());
         $this->assertEquals($green, $color->getGreen());
         $this->assertEquals($blue, $color->getBlue());

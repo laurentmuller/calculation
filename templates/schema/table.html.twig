@@ -9,6 +9,7 @@
 
 {% block card_body -%}
 {% if columns|length %}
+<p class="mb-0 font-weight-bold">{{ 'schema.table.columns'|trans }}</p>
 <div class="table-responsive">
     <table class="table table-hover table-list table-sm">
         <thead>
@@ -29,7 +30,7 @@
                     {% if foreign_table -%} {{ icons.link(path('schema_table', {'name': foreign_table}), null, null, 'link', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
                 </td>
                 <td class="text-date-time">{{ column.type }}</td>
-                <td class="text-currency">{{ column.length > 0 ? column.length|integer : '&nbsp;' }}</a></td>
+                <td class="text-currency">{{ column.length ? column.length|integer : '&nbsp;' }}</a></td>
                 <td class="text-boolean">{{ column.nullable|boolean }}</td>
             </tr>
         {% endfor %}
@@ -37,7 +38,27 @@
     </table>
 </div>
 {% else %}
-<div class="alert alert-warning text-center" role="alert">{{ 'schema.table.empty'|trans }}</div>
+    <div class="alert alert-warning text-center" role="alert">{{ 'schema.table.empty'|trans }}</div>
+{% endif %}
+
+{% if associations|length %}
+<p class="mb-0 font-weight-bold">{{ 'schema.table.associations'|trans }}</p>
+<div class="table-responsive">
+    <table class="table table-hover table-list table-sm">
+        <tr>
+            <th class="w-50">{{ 'schema.table.fields.name'|trans }}</th>
+            <th class="w-50">{{ 'schema.table.fields.table'|trans }}</th>
+            <th class="text-boolean">{{ 'schema.table.fields.inverse_side'|trans }}</th>
+        </tr>
+        {% for association in associations %}
+            <tr>
+                <td>{{ association.name }}</td>
+                <td><a href="{{ association.table }}" title="{{ 'schema.index.tooltip'|trans({'%name%': association.table}) }}">{{ association.table }}</a></td>
+                <td>{{ association.inverseSide|boolean }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endif %}
 {%- endblock %}
 

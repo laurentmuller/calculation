@@ -183,6 +183,14 @@ class PdfRectangle
     }
 
     /**
+     * Sets the size.
+     */
+    public function setSize(float $width, float $height): self
+    {
+        return $this->setWidth($width)->setHeight($height);
+    }
+
+    /**
      * Sets the width.
      *
      * @return self this instance

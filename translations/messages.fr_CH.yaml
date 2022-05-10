@@ -1017,15 +1017,20 @@ schema:
       name: Nom
     title: Tables
     tooltip: Afficher les colonnes de la table %name%
+
   table:
     description: Liste des colonnes de la base de données.
     empty: Aucune colonne n'est définie.
     error: La table '%name%' n'existe pas ou est introuvable.
+    columns: Colonnes
+    associations: Associations
     fields:
       empty: Nulle
       length: Longueur
       name: Nom
       type: Type
+      table: Table
+      inverse_side: Inverser
     index_unique: Valeur unique
     primary_key: Clé primaire
     title: Colonnes de la table %name%

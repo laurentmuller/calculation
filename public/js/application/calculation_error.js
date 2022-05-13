@@ -22,8 +22,7 @@ $.fn.trimmedText = function () {
 $.fn.isEmptyValue = function () {
     'use strict';
     const text = $(this).trimmedText();
-    const value = parseFloat(text);
-    return isNaN(value) || value === 0;
+    return $.parseFloat(text) === 0;
 };
 
 /**

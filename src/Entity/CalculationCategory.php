@@ -39,7 +39,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
     /**
      * The parent's category.
      */
-    #[ORM\ManyToOne()]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
     protected ?Category $category = null;
 

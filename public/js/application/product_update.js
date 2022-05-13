@@ -39,10 +39,7 @@ function validateProducts() {
  */
 function isProductsRequired() {
     'use strict';
-    if (isAllProducts() || getVisibleProducts().filter(':checked').length > 0) {
-        return false;
-    }
-    return true;
+    return !(isAllProducts() || getVisibleProducts().filter(':checked').length > 0);
 }
 
 /**
@@ -70,24 +67,20 @@ function updatePrices() {
     const round = $('#form_round').isChecked();
     const isPercent = $('#form_type_percent').isChecked();
     if (isPercent) {
-        value = Number.parseFloat($('#form_percent').val());
+        value = $.parseFloat($('#form_percent').val());
     } else {
-        value = Number.parseFloat($('#form_fixed').val());
+        value = $.parseFloat($('#form_fixed').val());
     }
     const result = !Number.isNaN(value);
-    const formatter = new Intl.NumberFormat('de-CH', {
-        'minimumFractionDigits': 2,
-        'maximumFractionDigits': 2
-    });
 
     getVisibleProducts().each(function () {
         let text = '-.--';
         const $this = $(this);
         if (result) {
-            const oldPrice = Number.parseFloat($this.attr('price'));
+            const oldPrice = $.parseFloat($this.attr('price'));
             const newPrice = computePrice(oldPrice, value, isPercent, round);
             if (!Number.isNaN(newPrice)) {
-                text = formatter.format(newPrice);
+                text = $.formatFloat(newPrice);
             }
         }
         $this.closest('tr').find('td:eq(2)').text(text);

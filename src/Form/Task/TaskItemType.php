@@ -38,6 +38,7 @@ class TaskItemType extends AbstractEntityType
     {
         $helper->field('name')
             ->widgetClass('unique-name')
+            ->labelClass('label-name')
             ->maxLength(255)
             ->addTextType();
 

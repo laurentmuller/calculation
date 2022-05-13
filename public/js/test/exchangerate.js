@@ -59,7 +59,7 @@ function compute() {
             const $baseOption = $('#baseCode').getSelectedOption();
             const baseCode = $baseOption.data('name');
             const baseDigits = $baseOption.data('digits');
-            const baseText = parseFloat(1).toFixed(baseDigits) + ' ' + baseCode;
+            const baseText = $.parseFloat(1).toFixed(baseDigits) + ' ' + baseCode;
 
             const $targetOption = $('#targetCode').getSelectedOption();
             const targetCode = $targetOption.data('name');

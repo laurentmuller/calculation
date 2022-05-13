@@ -251,7 +251,7 @@ abstract class AbstractController extends BaseController
      * @psalm-suppress ArgumentTypeCoercion
      * @psalm-suppress OverriddenMethodAccess
      */
-    protected function createForm(string $type = FormType::class, $data = null, array $options = []): FormInterface
+    protected function createForm(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface
     {
         return parent::createForm($type, $data, $options);
     }

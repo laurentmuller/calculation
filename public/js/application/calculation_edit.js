@@ -121,13 +121,14 @@ const Application = {
     initDragDrop: function (destroy) {
         'use strict';
 
+        const that = this;
         if (destroy) {
             const $existing = $('#data-table-edit tbody.sortable');
 
             // remove handlers
-            if (this.dragStartProxy) {
-                $existing.off('sortstart', this.dragStartProxy)
-                    .off('sortupdate', this.dragStopProxy);
+            if (that.dragStartProxy) {
+                $existing.off('sortstart', that.dragStartProxy)
+                    .off('sortupdate', that.dragStopProxy);
             }
 
             // destroy
@@ -135,9 +136,13 @@ const Application = {
         }
 
         // create handlers
-        if (!this.dragStartProxy) {
-            this.dragStartProxy = $.proxy(this.onDragStart, this);
-            this.dragStopProxy = $.proxy(this.onDragStop, this);
+        if (!that.dragStartProxy) {
+            that.dragStartProxy = function () {
+                that.onDragStart();
+            };
+            that.dragStopProxy = function (e) {
+                that.onDragStop(e);
+            };
         }
 
         // create sortable
@@ -151,11 +156,11 @@ const Application = {
 
         // update bodies
         $bodies.addClass('sortable')
-            .on('sortstart', this.dragStartProxy)
-            .on('sortupdate', this.dragStopProxy)
+            .on('sortstart', that.dragStartProxy)
+            .on('sortupdate', that.dragStopProxy)
             .find('tr').removeAttr('role');
 
-        return this;
+        return that;
     },
 
     /**
@@ -323,54 +328,6 @@ const Application = {
         });
 
         return that;
-    },
-
-    /**
-     * Format a value with 2 fixed decimals and grouping separator.
-     *
-     * @param {Number} value - the value to format.
-     * @returns {string} the formatted value.
-     */
-    formatValue: function (value) {
-        'use strict';
-        // format created?
-        if (!this.formatter) {
-            this.formatter = new Intl.NumberFormat('de-CH', {
-                'minimumFractionDigits': 2,
-                'maximumFractionDigits': 2
-            });
-        }
-
-        // parse and format
-        value = this.parseFloat(value);
-        return this.formatter.format(value);
-    },
-
-    /**
-     * Parse the given value as float. If the parsed valus is NaN, 0 is
-     * returned.
-     *
-     * @param {string} value - the value to parse.
-     * @returns {number} the parsed value.
-     */
-    parseFloat: function(value) {
-        'use strict';
-        let parsedValue = Number.parseFloat(value);
-        if (Number.isNaN(parsedValue)) {
-            parsedValue = Number.parseFloat(0);
-        }
-        return parsedValue;
-    },
-
-    /**
-     * Rounds the given value with 2 decimals.
-     *
-     * @param {Number} value - the value to roud.
-     * @returns {Number} the rounded value.
-     */
-    roundValue: function(value) {
-        'use strict';
-        return Math.round((value + Number.EPSILON) * 100) / 100;
     },
 
     /**
@@ -1365,7 +1322,7 @@ $.fn.extend({
         const $row = $(this);
         const price = $row.findNamedInput('price').floatVal();
         const quantity = $row.findNamedInput('quantity').floatVal();
-        const total = Application.roundValue(price * quantity);
+        const total = $.roundValue(price * quantity);
 
         return {
             description: $row.findNamedInput('description').val(),
@@ -1416,9 +1373,9 @@ $.fn.extend({
         // update cells
         $row.find('td:eq(0) .btn-edit-item').text(item.description);
         $row.find('td:eq(1)').text(item.unit);
-        $row.find('td:eq(2)').text(Application.formatValue(item.price));
-        $row.find('td:eq(3)').text(Application.formatValue(item.quantity));
-        $row.find('td:eq(4)').text(Application.formatValue(item.total));
+        $row.find('td:eq(2)').text($.formatFloat(item.price));
+        $row.find('td:eq(3)').text($.formatFloat(item.quantity));
+        $row.find('td:eq(4)').text($.formatFloat(item.total));
 
         return $row;
     },
@@ -1433,7 +1390,7 @@ $.fn.extend({
 
         const $row = $(this);
         const item = $row.getRowItem();
-        $row.find('td:eq(4)').text(Application.formatValue(item.total));
+        $row.find('td:eq(4)').text($.formatFloat(item.total));
         return $row;
     },
 
@@ -1855,10 +1812,10 @@ const MoveHandler = {
             'required': true,
             'type': 'number',
             'parser': function (value) {
-                return Application.parseFloat(value);
+                return $.parseFloat(value);
             },
             'formatter': function (value) {
-                return Application.formatValue(value);
+                return $.formatFloat(value);
             },
             'onStartEdit': function () {
                 Application.hideMenus();

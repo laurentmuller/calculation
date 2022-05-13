@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\AbstractEntity;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Util\Utils;
@@ -104,7 +105,7 @@ abstract class AbstractEntityTable extends AbstractTable
         // count all
         $results->totalNotFiltered = $results->filtered = $this->count();
 
-        // search
+        // add search clause
         $this->search($query, $builder);
 
         // count filtered
@@ -112,15 +113,22 @@ abstract class AbstractEntityTable extends AbstractTable
             $results->filtered = $this->countFiltered($builder);
         }
 
-        // sort
+        // add order by clause
         $this->orderBy($query, $builder);
 
-        // limit
+        // add offset and limit
         $this->limit($query, $builder);
 
-        // get result and map entities
-        /** @var array<\App\Entity\AbstractEntity> $entities */
+        // get result
+        /** @var AbstractEntity[] $entities */
         $entities = $builder->getQuery()->getResult();
+
+        // add selection
+        if (0 !== $query->id) {
+            $entities = $this->addSelection($entities, $query->id, $query->limit);
+        }
+
+        // map entities
         $results->rows = $this->mapEntities($entities);
 
         return $results;
@@ -205,6 +213,46 @@ abstract class AbstractEntityTable extends AbstractTable
                     ->setParameter(TableInterface::PARAM_SEARCH, "%$search%");
             }
         }
+    }
+
+    /**
+     * Add the missing selected entity (if applicable).
+     *
+     * @param AbstractEntity[] $entities
+     * @param int              $id       the entity identifier to add
+     * @param int              $limit    the number of entities to return
+     *
+     * @return AbstractEntity[]
+     */
+    private function addSelection(array $entities, int $id, int $limit): array
+    {
+        //  identifier?
+        if (0 === $id) {
+            return $entities;
+        }
+
+        // find in existing entities
+        foreach ($entities as $entity) {
+            if ($id === $entity->getId()) {
+                return $entities;
+            }
+        }
+
+        // get entity
+        $entity = $this->repository->find($id);
+        if (!$entity instanceof AbstractEntity) {
+            return $entities;
+        }
+
+        // add to the first position
+        \array_unshift($entities, $entity);
+
+        // ensure size
+        if (\count($entities) > $limit) {
+            \array_pop($entities);
+        }
+
+        return $entities;
     }
 
     /**

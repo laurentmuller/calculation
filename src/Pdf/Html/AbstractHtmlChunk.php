@@ -364,7 +364,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * @param HtmlStyle $style the style to update
      * @param string    $class the border class name
      */
-    protected function parseBorders(HtmlStyle &$style, string $class): void
+    protected function parseBorders(HtmlStyle $style, string $class): void
     {
         switch ($class) {
             case 'border':
@@ -405,7 +405,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * @param HtmlStyle $style the style to update
      * @param string    $class the margins class name
      */
-    protected function parseMargins(HtmlStyle &$style, string $class): void
+    protected function parseMargins(HtmlStyle $style, string $class): void
     {
         $pattern = '/m[tblrxy]{?}-[012345]/';
         if (\preg_match($pattern, $class)) {

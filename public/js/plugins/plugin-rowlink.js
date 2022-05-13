@@ -33,11 +33,14 @@
         // public functions
         // -----------------------------
         constructor(element, options) {
-            this.$element = $(element);
-            this.options = $.extend({}, Rowlink.DEFAULTS, options);
-            this.proxy = $.proxy(this.click, this);
-            this.enabled = false;
-            this.enable();
+            const that = this;
+            that.$element = $(element);
+            that.options = $.extend({}, Rowlink.DEFAULTS, options);
+            that.proxy = function (e) {
+                that.click(e);
+            };
+            that.enabled = false;
+            that.enable();
         }
 
         enable() {

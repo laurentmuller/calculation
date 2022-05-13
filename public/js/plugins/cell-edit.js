@@ -22,11 +22,20 @@
                 this.$target = null;
             }
 
-            this.clickProxy = $.proxy(this._click, this);
-            this.blurProxy = $.proxy(this._blur, this);
-            this.inputProxy = $.proxy(this._input, this);
-            this.keydownProxy = $.proxy(this._keydown, this);
-
+            // proxies
+            const that = this;
+            this.clickProxy = function (e) {
+                that._click(e);
+            };
+            this.blurProxy = function (e) {
+                that._blur(e);
+            };
+            this.inputProxy = function () {
+                that._input();
+            };
+            this.keydownProxy = function (e) {
+                that._keydown(e);
+            };
             this.$element.on('click', this.clickProxy);
             if (this.options.autoEdit) {
                 this.$element.trigger('click');
@@ -45,9 +54,7 @@
         // private functions
         // -----------------------------
         _click(e) {
-            if (e) {
-                e.stopPropagation();
-            }
+            e.stopPropagation();
             if (this.$input && this.$input.is(':focus')) {
                 return this;
             }

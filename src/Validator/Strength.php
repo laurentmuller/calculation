@@ -41,6 +41,7 @@ class Strength extends Constraint
      */
     public function __construct(int $min_strength, public ?string $userNamePath = null, public ?string $emailPath = null)
     {
+        parent::__construct();
         if (!\in_array($min_strength, StrengthInterface::ALLOWED_LEVELS, true)) {
             $values = \implode(', ', StrengthInterface::ALLOWED_LEVELS);
             throw new InvalidArgumentException(\sprintf('The minimum strength parameter "%s" for "%s" is invalid. Allowed values: [%s].', $min_strength, static::class, $values));

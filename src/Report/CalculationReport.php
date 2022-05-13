@@ -62,9 +62,6 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         return $this->minMargin;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function Header(): void
     {
         parent::Header();

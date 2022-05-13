@@ -30,7 +30,7 @@ class Log extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]

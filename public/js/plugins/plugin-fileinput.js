@@ -4,19 +4,15 @@
  * Ready function
  */
 (function ($) {
-
     'use strict';
-
-    const isIE = window.navigator.appName === 'Microsoft Internet Explorer';
-
     // ------------------------------------
-    // Fileinput public class definition
+    // FileInput public class definition
     // ------------------------------------
-    const Fileinput = class {
+    const FileInput = class {
 
         constructor(element, options) {
             this.$element = $(element);
-            this.options = $.extend({}, Fileinput.DEFAULTS, options);
+            this.options = $.extend({}, FileInput.DEFAULTS, options);
 
             this.$input = this.$element.find(':file');
             if (this.$input.length === 0) {
@@ -44,10 +40,19 @@
         }
 
         listen() {
-            this.$input.on('change.bs.fileinput', $.proxy(this.change, this));
-            $(this.$input[0].form).on('reset.bs.fileinput', $.proxy(this.reset, this));
-            this.$element.find('[data-trigger="fileinput"]').on('click.bs.fileinput', $.proxy(this.trigger, this));
-            this.$element.find('[data-dismiss="fileinput"]').on('click.bs.fileinput', $.proxy(this.clear, this));
+            const that = this;
+            that.$input.on('change.bs.fileinput', function (e) {
+                that.change(e);
+            });
+            $(that.$input[0].form).on('reset.bs.fileinput', function () {
+                that.reset();
+            });
+            that.$element.find('[data-trigger="fileinput"]').on('click.bs.fileinput', function (e) {
+                that.trigger(e);
+            });
+            that.$element.find('[data-dismiss="fileinput"]').on('click.bs.fileinput', function () {
+                that.clear();
+            });
         }
 
         verifySizes(files) {
@@ -55,7 +60,7 @@
                 return true;
             }
 
-            const max = parseFloat(this.options.maxSize);
+            const max = $.parseFloat(this.options.maxSize);
             if (isNaN(max) || max !== this.options.maxSize) {
                 return true;
             }
@@ -78,14 +83,14 @@
             e.stopPropagation();
             const files = $.isUndefined(e.target.files) ? e.target && e.target.value ? [{name: e.target.value.replace(/^.+\\/, '')}] : [] : e.target.files;
             if (files.length === 0) {
-                this.clear();
+                this.clear(e);
                 this.$element.trigger('clear.bs.fileinput');
                 return;
             }
 
             if (!this.verifySizes(files)) {
                 this.$element.trigger('max_size.bs.fileinput');
-                this.clear();
+                this.clear(e);
                 this.$element.trigger('clear.bs.fileinput');
                 return;
             }
@@ -96,7 +101,7 @@
 
             const file = files[0];
             if (this.$preview.length > 0 && (!$.isUndefined(file.type) ? file.type.match(/^image\/(gif|png|bmp|jpeg|svg\+xml)$/) : file.name.match(/\.(gif|png|bmp|jpe?g|svg)$/i)) && !$.isUndefined(FileReader)) {
-                const Fileinput = this;
+                const that = this;
                 const reader = new FileReader();
                 const preview = this.$preview;
                 const element = this.$element;
@@ -125,9 +130,9 @@
                     }
 
                     preview.html($img);
-                    if (Fileinput.options.exif) {
+                    if (that.options.exif) {
                         // Fix image transformation if this is possible
-                        Fileinput.setImageTransform($img, file);
+                        that.setImageTransform($img, file);
                     }
                     element.addClass('fileinput-exists').removeClass('fileinput-new');
                     element.trigger('change.bs.fileinput', files);
@@ -152,13 +157,13 @@
         }
 
         setImageTransform($img, file) {
-            const Fileinput = this;
+            const that = this;
             const reader = new FileReader();
             reader.onload = function () {
                 const view = new DataView(reader.result);
-                const exif = Fileinput.getImageExif (view);
+                const exif = that.getImageExif (view);
                 if (exif) {
-                    Fileinput.resetOrientation($img, exif);
+                    that.resetOrientation($img, exif);
                 }
             };
 
@@ -264,17 +269,7 @@
            if (this.options.clearName) {
                this.$input.attr('name', '');
            }
-
-           // ie8+ doesn't support changing the value of input with type=file
-            // so clone instead
-           if (isIE) {
-               const inputClone = this.$input.clone(true);
-               this.$input.after(inputClone);
-               this.$input.remove();
-               this.$input = inputClone;
-           } else {
-               this.$input.val('');
-           }
+           this.$input.val('');
 
            this.$preview.html('');
            this.$element.find('.fileinput-filename').text(this.placeholder);
@@ -311,7 +306,7 @@
     // -----------------------------
     // Default options
     // -----------------------------
-    Fileinput.DEFAULTS = {
+    FileInput.DEFAULTS = {
         clearName: true
     };
 
@@ -327,11 +322,11 @@
             let data = $this.data('bs.fileinput');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('bs.fileinput', data = new Fileinput(this, settings));
+                $this.data('bs.fileinput', data = new FileInput(this, settings));
             }
         });
     };
-    $.fn.fileinput.Constructor = Fileinput;
+    $.fn.fileinput.Constructor = FileInput;
 
     // ------------------------------------
     // FileInput no conflict

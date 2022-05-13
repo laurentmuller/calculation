@@ -26,8 +26,8 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.custom-control-label').text();
-            const price = that._parseFloat($row.find('.task_value').data('value'));
-            const total = that._roundValue(price * quantity);
+            const price = $.parseFloat($row.find('.task_value').data('value'));
+            const total = $.roundValue(price * quantity);
             const description = task + ' - ' + text;
             return {
                 description: description,
@@ -42,7 +42,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
     /**
      * Initialize.
      *
-     * @return {EditTaskDialog} This instance for chaining.
+     * @return {EditDialog} This instance for chaining.
      */
     _init() {
         'use strict';
@@ -62,16 +62,20 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
         that._initDialog(that.$modal);
 
         // handle input events
-        const taskProxy = $.proxy(that._onTaskChanged, that);
+        that.taskProxy = function() {
+            that._onTaskChanged();
+        };
+        that.updateProxy = function() {
+            that._update();
+        };
         that.$task.on('input', function () {
-            $(this).updateTimer(taskProxy, 250);
+            $(this).updateTimer(that.taskProxy, 250);
         });
-        const updateProxy = $.proxy(that._update, that);
         that.$quantity.on('input', function () {
-            $(this).updateTimer(updateProxy, 250);
+            $(this).updateTimer(that.updateProxy, 250);
         });
         $('.item-input').on('change', function () {
-            $(this).updateTimer(updateProxy, 250);
+            $(this).updateTimer(that.updateProxy, 250);
         });
 
         // init validator
@@ -172,7 +176,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
         // get data
         const data = {
             'id': that.$task.intVal(),
-            'quantity': that._roundValue(that.$quantity.floatVal()),
+            'quantity': $.roundValue(that.$quantity.floatVal()),
             'items': items
         };
 
@@ -202,7 +206,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
     _updateValue(id, value) {
         'use strict';
         const $item = $('#' + id);
-        $item.data('value', value).text(this._formatValue(value));
+        $item.data('value', value).text($.formatFloat(value));
         return this;
     }
 
@@ -213,7 +217,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
      */
     _resetValues() {
         'use strict';
-        const value = this._formatValue(0);
+        const value = $.formatFloat(0);
         this.$form.find('.form-control-plaintext').text(value);
         return this;
     }
@@ -235,8 +239,6 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
 
     /**
      * Handles the dialog visible event.
-     *
-     * @return {EditTaskDialog} This instance for chaining.
      */
     _onDialogVisible() {
         'use strict';
@@ -260,7 +262,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
     _onTaskChanged() {
         'use strict';
 
-        // toogle rows visibility
+        // toggle rows visibility
         const id = this.$task.intVal();
         const selector = '[task-id="' + id + '"]';
         $('.task-item-row' + selector).removeClass('d-none');

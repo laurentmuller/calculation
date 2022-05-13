@@ -65,7 +65,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     /**
      * The parent's group.
      */
-    #[ORM\ManyToOne()]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]
     protected ?Group $group = null;
 

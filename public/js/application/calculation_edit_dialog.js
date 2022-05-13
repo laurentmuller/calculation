@@ -2,6 +2,10 @@
 
     /**
      * Abstract edit dialog handler.
+     *
+     * @property {JQuery} $form
+     * @property {JQuery} $modal
+     * @property {JQuery} $category
      */
     class EditDialog {
 
@@ -141,11 +145,17 @@
          * @return {EditDialog} This instance for chaining.
          */
         _initDialog($modal) {
-            // handle dialog events
             const that = this;
-            $modal.on('show.bs.modal', $.proxy(that._onDialogShow, that));
-            $modal.on('shown.bs.modal', $.proxy(that._onDialogVisible, that));
-            $modal.on('hide.bs.modal', $.proxy(that._onDialogHide, that));
+            $modal.on('show.bs.modal', function () {
+                that._onDialogShow();
+            });
+            $modal.on('shown.bs.modal', function () {
+                that._onDialogVisible();
+            });
+            $modal.on('hide.bs.modal', function () {
+                that._onDialogHide();
+            });
+
             return that;
         }
 
@@ -208,38 +218,5 @@
             'use strict';
             $('tr.table-primary').removeClass('table-primary');
             return this;
-        }
-
-        /**
-         * Format a value with 2 fixed decimals and grouping separator.
-         *
-         * @param {Number} value - the value to format.
-         * @returns {string} - the formatted value.
-         */
-        _formatValue(value) {
-            'use strict';
-            return this.application.formatValue(value);
-        }
-
-        /**
-         * Rounds the given value with 2 decimals.
-         *
-         * @param {Number} value - the value to round.
-         * @returns {Number} - the rounded value.
-         */
-        _roundValue(value) {
-            'use strict';
-            return this.application.roundValue(value);
-        }
-
-        /**
-         * Parse the given value as float.
-         *
-         * @param {string} value - the value to parse.
-         * @returns {number} the parsed value.
-         */
-        _parseFloat(value) {
-            'use strict';
-            return this.application.roundValue(value);
         }
     }

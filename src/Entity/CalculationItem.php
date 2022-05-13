@@ -42,7 +42,7 @@ class CalculationItem extends AbstractEntity implements ParentCalculationInterfa
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column()]
+    #[ORM\Column]
     protected ?string $description = null;
 
     /**

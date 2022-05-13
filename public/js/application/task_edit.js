@@ -57,7 +57,8 @@ function startDragItems() {
         const placeholderClass = 'border border-primary' + (isRadius ? ' rounded' : '');
         sortable($items, {
             items: '.item',
-            handle: '.stretched-link',
+            //handle: '.stretched-link',
+            handle: '.card-header-item',
             forcePlaceholderSize: true,
             placeholderClass: placeholderClass
         });
@@ -310,7 +311,6 @@ function removeMargin($caller) {
  */
 function sortMargins($caller) {
     'use strict';
-
     const $table = $caller.parents('.item').find('.table-edit');
     if ($table.length === 0) {
         return;
@@ -332,6 +332,28 @@ function sortMargins($caller) {
             return 0;
         }
     }).appendTo($body);
+}
+
+// function updateLabels() {
+//     'use strict';
+//     $('.label-title').each(function () {
+//         const $this = $(this);
+//         const $group = $this.parents('.form-group');
+//         const $input = $group.find('.unique-name:first');
+//         const $label = $group.find('.label-text:first');
+//         const value = $input.val() || $('form').data('category');
+//         $label.text($input.val());
+//     });
+// }
+
+function updateToggle($caller, show) {
+    'use strict';
+    // const $link = $(this).parents('.item').find('.stretched-link');
+    const $form = $('#edit-form');
+    const $link = $caller.parents('.item').find('.btn-toggle');
+    const title = show ? $form.data('show') : $form.data('hide');
+    $link.attr('title', title);
+    $link.find('i').toggleClass('fa-caret-down fa-caret-right');
 }
 
 /**
@@ -366,15 +388,13 @@ function sortMargins($caller) {
         e.preventDefault();
         sortMargins($(this));
     }).on('show.bs.collapse', '.collapse', function () {
-        const $link = $(this).parents('.item').find('.stretched-link');
-        $link.attr('title', $('#edit-form').data('hide'));
-        $link.find('i').toggleClass('fa-caret-down fa-caret-right');
+        updateToggle($(this), false);
     }).on('hide.bs.collapse', '.collapse', function () {
-        const $link = $(this).parents('.item').find('.stretched-link');
-        $link.attr('title', $('#edit-form').data('show'));
-        $link.find('i').toggleClass('fa-caret-down fa-caret-right');
+        updateToggle($(this), true);
     }).on('focus', '.unique-name', function () {
         $(this).parents('.card').children('.collapse').collapse('show');
+    // }).on('blur', 'input.unique-name', function () {
+    //     updateLabels();
     });
 
     // initialize search
@@ -396,4 +416,8 @@ function sortMargins($caller) {
 
     // update UI
     updateUI();
+
+    // update labels
+    // updateLabels();
+
 }(jQuery));

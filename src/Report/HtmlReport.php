@@ -50,9 +50,6 @@ class HtmlReport extends AbstractReport
         parent::__construct($controller, $orientation, $unit, $size);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function Footer(): void
     {
         $previousMargins = $this->applyDefaultMargins();
@@ -60,9 +57,6 @@ class HtmlReport extends AbstractReport
         $this->applyPreviousMargins($previousMargins);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function Header(): void
     {
         $previousMargins = $this->applyDefaultMargins();

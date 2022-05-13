@@ -82,7 +82,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column()]
+    #[ORM\Column]
     private ?string $password = null;
 
     /**
@@ -98,9 +98,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $selector = null;
 
-    /**
-     * The last updated date.
-     */
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
@@ -136,11 +133,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @param array{
-     *      id: int|null,
-     *      username: string|null,
-     *      password: string|null
-     *     } $data
+     * @param array{id: int|null, username: string|null, password: string|null} $data
      */
     public function __unserialize(array $data): void
     {

@@ -67,8 +67,8 @@ function formatProductUnit(row) { // jshint ignore:line
  */
 function formatProductClass(row) { // jshint ignore:line
     'use strict';
-    const price = Number.parseFloat(row.price);
-    if (!Number.isNaN(price) && price === 0) {
+    const price = $.parseFloat(row.price);
+    if (price === 0) {
         return ' text-danger';
     }
     return '';
@@ -101,8 +101,8 @@ function styleBorderColor(_value, row) { // jshint ignore:line
  */
 function styleProductPrice(value) { // jshint ignore:line
     'use strict';
-    const price = Number.parseFloat(value);
-    if (!Number.isNaN(price) && price === 0) {
+    const price = $.parseFloat(value);
+    if (price === 0) {
         return {
             css: {
                 color: 'var(--danger)'
@@ -208,19 +208,21 @@ function updateUserResetAction($table, row, _$element, $action) {
  *
  * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {boolean} row.showgranted - the show granted.
- * @param {boolean} row.editgranted - the edit granted.
- * @param {boolean} row.deletegranted - the delete granted.
+ * @param {number} row.id - the row identifier.
+ * @param {number} row.type - the entity type.
+ * @param {boolean} row.allowShow - the show granted.
+ * @param {boolean} row.allowEdit - the  edit granted.
+ * @param {boolean} row.allowDelete - the deleted granted.
  * @param {JQuery} _$element - the table row.
  * @param {JQuery} $action - the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
-    if ($action.is('.btn-show') && !row.showgranted) {
+    if ($action.is('.btn-show') && !row.allowShow) {
         $action.remove();
-    } else if ($action.is('.btn-edit') && !row.editgranted) {
+    } else if ($action.is('.btn-edit') && !row.allowEdit) {
         $action.remove();
-    } else if ($action.is('.btn-delete') && !row.deletegranted) {
+    } else if ($action.is('.btn-delete') && !row.allowDelete) {
         $action.remove();
     } else {
         const id = row.id;

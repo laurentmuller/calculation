@@ -37,7 +37,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column()]
+    #[ORM\Column]
     protected ?string $customer = null;
 
     /**
@@ -52,7 +52,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column()]
+    #[ORM\Column]
     protected ?string $description = null;
 
     /**

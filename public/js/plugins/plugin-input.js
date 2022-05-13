@@ -17,30 +17,38 @@
 
         init() {
             // build regex
-            const options = this.options;
+            const that = this;
+            const options = that.options;
             let pattern = '^[0-9]+';
             if (options.decimal) {
                 pattern += '[' + options.separatorAuthorized.join('') + ']?[0-9]{0,' + options.decimal + '}';
             }
             pattern += '$';
-            this.regex = new RegExp(pattern);
+            that.regex = new RegExp(pattern);
 
             // add handlers
+            that.keyPressProxy = function (e) {
+                that.keypress(e);
+            };
+            that.updateProxy = function () {
+                that.update();
+            };
             const $element = this.$element;
-            $element.on('keypress', $.proxy(this.keypress, this));
-            $element.on('blur', $.proxy(this.update, this));
-            $element.on('change', $.proxy(this.update, this));
+            $element.on('keypress', that.keyPressProxy);
+            $element.on('blur', that.updateProxy);
+            $element.on('change', that.updateProxy);
 
             // format
-            this.update();
+            that.update();
         }
 
         destroy() {
             // remove handlers and data
+            const that = this;
             const $element = this.$element;
-            $element.off('keypress', $.proxy(this.keypress, this));
-            $element.off('blur', $.proxy(this.update, this));
-            $element.off('change', $.proxy(this.update, this));
+            $element.off('keypress',that.keyPressProxy);
+            $element.off('blur', that.updateProxy);
+            $element.off('change', that.updateProxy);
             $element.removeData('inputNumberFormat');
         }
 
@@ -60,7 +68,6 @@
                 if (decimals > 0) {
                     value += '0'.repeat(decimals);
                 }
-
             } else if (options.decimal === 0) {
                 const index = value.indexOf(options.separator);
                 if (index !== -1) {
@@ -83,8 +90,8 @@
 
             const $element = this.$element;
             const value = $element.val();
-            const beginVal = value.substr(0, e.target.selectionStart);
-            const endVal = value.substr(e.target.selectionEnd, value.length - 1);
+            const beginVal = value.substring(0, e.target.selectionStart);
+            const endVal = value.substring(e.target.selectionEnd, value.length - 1);
             const newValue = beginVal + e.key + endVal;
             if (!newValue.match(this.regex)) {
                 e.stopPropagation();

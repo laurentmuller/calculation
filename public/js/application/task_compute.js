@@ -3,25 +3,6 @@
 /* globals Toaster */
 
 /**
- * Formats the given value.
- *
- * @param {number}  value - the value to format.
- * @returns {string} - the formatted value.
- */
-function formatValue(value) {
-    'use strict';
-
-    const $form = $('#edit-form');
-    if (!$form.formatter) {
-        $form.formatter = new Intl.NumberFormat('de-CH', {
-            'minimumFractionDigits': 2,
-            'maximumFractionDigits': 2
-        });
-    }
-    return $form.formatter.format(value);
-}
-
-/**
  * Update the given input.
  *
  * @param {string} id - the input identifier.
@@ -29,7 +10,7 @@ function formatValue(value) {
  */
 function updateValue(id, value) {
     'use strict';
-    $('#' + id).text(formatValue(value));
+    $('#' + id).text($.formatFloat(value));
 }
 
 /**
@@ -37,7 +18,7 @@ function updateValue(id, value) {
  */
 function resetValues() {
     'use strict';
-    const value = formatValue(0);
+    const value = $.formatFloat(0);
     $('#edit-form .form-control-plaintext').text(value);
 }
 
@@ -90,6 +71,9 @@ function update(form) {
 
     // send
     $form.jqXHR = $.post(url, data, function (response) {
+        /**
+         * @var {*} response
+         */
         if (response.result) {
             // update
             response.results.forEach(function (item) {

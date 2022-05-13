@@ -27,32 +27,41 @@
         // public functions
         // -----------------------------
         constructor(element, options) {
-            this.$element = $(element);
-            this.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
-            this.tableIndex = this.indexTable();
-            this.enabled = false;
+            const that = this;
+            that.$element = $(element);
+            that.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
+            that.tableIndex = this.indexTable();
+            that.enabled = false;
+            that.mouseEnterProxy = function (e) {
+                that.mouseenter(e);
+            };
+            that.mouseLeaveProxy = function () {
+                that.mouseleave();
+            };
 
-            // bind events
-            const enabled = this.isUndefined(this.options.enabled) ? true : this.options.enabled;
+            // update enablement
+            const enabled = that.isUndefined(that.options.enabled) ? true : that.options.enabled;
             if (enabled) {
-                this.enable();
+                that.enable();
             }
         }
 
         enable() {
-            if (!this.enabled) {
-                const selector = this.options.cellSelector;
-                this.$element.on('mouseenter', selector, $.proxy(this.mouseenter, this));
-                this.$element.on('mouseleave', selector, $.proxy(this.mouseleave, this));
+            const that = this;
+            if (!that.enabled) {
+                const selector = that.options.cellSelector;
+                this.$element.on('mouseenter', selector, that.mouseEnterProxy);
+                this.$element.on('mouseleave', selector, that.mouseLeaveProxy);
                 this.enabled = true;
             }
         }
 
         disable() {
-            if (this.enabled) {
-                const selector = this.options.cellSelector;
-                this.$element.off('mouseenter', selector, $.proxy(this.mouseenter, this));
-                this.$element.off('mouseleave', selector, $.proxy(this.mouseleave, this));
+            const that = this;
+            if (that.enabled) {
+                const selector = that.options.cellSelector;
+                this.$element.off('mouseenter', selector, that.mouseEnterProxy);
+                this.$element.off('mouseleave', selector, that.mouseLeaveProxy);
                 this.enabled = false;
             }
         }

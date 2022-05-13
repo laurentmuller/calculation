@@ -81,6 +81,61 @@
                 window.isBorderRadius = border && border !== '0px';
             }
             return window.isBorderRadius;
+        },
+
+        /**
+         * Parse the given value as float. If the parsed valus is NaN, 0 is
+         * returned.
+         *
+         * @param {string} value - the value to parse.
+         * @returns {number} the parsed value.
+         */
+        parseFloat: function(value) {
+            let parsedValue = Number.parseFloat(value);
+            if (Number.isNaN(parsedValue)) {
+                parsedValue = Number.parseFloat(0);
+            }
+            return parsedValue;
+        },
+
+        /**
+         * Rounds the given value with 2 decimals.
+         *
+         * @param {Number} value - the value to round.
+         * @returns {Number} the rounded value.
+         */
+        roundValue: function(value) {
+            return Math.round((value + Number.EPSILON) * 100) / 100;
+        },
+
+        /**
+         * Format a value with 0 decimal and grouping separator.
+         *
+         * @param {Number} value - the value to format.
+         * @returns {string} the formatted value.
+         */
+        formatInt: function(value) {
+            if (typeof $.integerFormatter === 'undefined') {
+                $.integerFormatter = new Intl.NumberFormat('de-CH', { maximumFractionDigits: 0 });
+            }
+            return $.integerFormatter.format(value);
+        },
+
+        /**
+         * Parse and format a value with 2 decimals and grouping separator.
+         *
+         * @param {Number} value - the value to format.
+         * @returns {string} the formatted value.
+         */
+        formatFloat: function(value) {
+            if (typeof $.floatFormatter === 'undefined') {
+                $.floatFormatter = new Intl.NumberFormat('de-CH', {
+                    'minimumFractionDigits': 2,
+                    'maximumFractionDigits': 2
+                });
+            }
+            value = $.parseFloat(value);
+            return $.floatFormatter.format(value);
         }
     });
 

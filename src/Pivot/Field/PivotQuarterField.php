@@ -41,7 +41,7 @@ class PivotQuarterField extends PivotDateField
     /**
      * Gets the callback used to format a quarter.
      *
-     * @return callable(int): string|null
+     * @pslam-return callable(int): string|null
      */
     public function getFormatter(): ?callable
     {

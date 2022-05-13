@@ -46,7 +46,7 @@ class TaskItem extends AbstractEntity implements \Countable
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column()]
+    #[ORM\Column]
     private ?string $name = null;
 
     #[Assert\NotNull]

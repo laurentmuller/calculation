@@ -32,9 +32,15 @@
 
             that.tree = [];
             that.nodes = [];
-            that.clickProxy = $.proxy(that.click, that);
-            that.doubleclickProxy = $.proxy(that.doubleclick, that);
-            that.keydownProxy = $.proxy(that.keydown, that);
+            that.clickProxy = function (e) {
+                that.click(e) ;
+            };
+            that.doubleClickProxy = function (e) {
+                that.doubleclick(e);
+            };
+            that.keyDownProxy = function (e) {
+                that.keydown(e);
+            };
             that.toggling = false;
 
             // retrieve Json Data.
@@ -82,8 +88,8 @@
             }
 
             $element.on('click', '.list-group-item, .state-icon', that.clickProxy);
-            $element.on('dblclick', '.list-group-item', that.doubleclickProxy);
-            $element.on('keydown', '.list-group-item', that.keydownProxy);
+            $element.on('dblclick', '.list-group-item', that.doubleClickProxy);
+            $element.on('keydown', '.list-group-item', that.keyDownProxy);
 
             return that;
         }
@@ -470,8 +476,8 @@
          */
         removeProxies() {
             this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
-            this.$element.off('dblclick', '.list-group-item', this.doubleclickProxy);
-            this.$element.off('keydown', '.list-group-item', this.keydownProxy);
+            this.$element.off('dblclick', '.list-group-item', this.doubleClickProxy);
+            this.$element.off('keydown', '.list-group-item', this.keyDownProxy);
         }
 
         /**

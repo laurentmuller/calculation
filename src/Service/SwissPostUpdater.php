@@ -440,7 +440,7 @@ class SwissPostUpdater
         if ($this->validateLength($data, 1)) {
             $validity = \DateTime::createFromFormat(self::DATE_PATTERN, (string) $data[1]);
             if ($validity instanceof \DateTime) {
-                $validity = $validity->setTime(0, 0, 0, 0);
+                $validity = $validity->setTime(0, 0);
             }
         }
 

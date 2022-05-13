@@ -50,10 +50,8 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
 
     /**
      * {@inheritdoc}
-     *
-     * @param mixed $value
      */
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!\is_a($constraint, $this->className)) {
             throw new UnexpectedTypeException($constraint, $this->className);

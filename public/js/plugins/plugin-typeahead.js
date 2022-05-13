@@ -50,6 +50,17 @@
                 if (!that.ajax.url) {
                     that.ajax = null;
                 }
+                if (that.ajax) {
+                    that.ajaxExecuteProxy = function () {
+                        that.ajaxExecute();
+                    };
+                    that.ajaxSuccessProxy = function (data) {
+                        that.ajaxSuccess(data);
+                    };
+                    that.ajaxErrorProxy = function (jqXHR, textStatus, errorThrown) {
+                        that.ajaxError(jqXHR, textStatus, errorThrown);
+                    };
+                }
                 that.query = '';
             } else {
                 that.source = that.options.source;
@@ -143,7 +154,7 @@
             }
 
             // query is good to send, set a timer
-            this.ajax.timerId = setTimeout($.proxy(this.ajaxExecute, this), this.ajax.timeout);
+            this.ajax.timerId = setTimeout(this.ajaxExecuteProxy, this.ajax.timeout);
             return this;
         }
 
@@ -157,11 +168,10 @@
                 query: query
             };
             this.ajax.xhr = $.getJSON({
-                data: data,
+                success: this.ajaxSuccessProxy,
+                error: this.ajaxErrorProxy,
                 url: this.ajax.url,
-                success: $.proxy(this.ajaxSuccess, this),
-                error: $.proxy(this.ajaxError, this)
-
+                data: data
             });
             this.ajax.timerId = null;
             return this;
@@ -256,32 +266,32 @@
             const that = this;
 
             let display;
-            let separatorKey;
+            let newSeparator;
             let oldSeparator = null;
             const separator = that.options.separator;
-            const isStrSeparator = that.isString(separator);
-            const isStrDisplayField = that.isString(that.displayField);
+            const isStringSeparator = that.isString(separator);
+            const isStringDisplay = that.isString(that.displayField);
 
             // run over items and add separators and categories if applicable
             $.each(items, function (key, value) {
                 // get separators
-                separatorKey = isStrSeparator ? value[separator] : separator(value);
+                newSeparator = isStringSeparator ? value[separator] : separator(value);
                 if (key > 0) {
-                    oldSeparator = isStrSeparator ? items[key - 1][separator] : separator(items[key - 1]);
+                    oldSeparator = isStringSeparator ? items[key - 1][separator] : separator(items[key - 1]);
                 }
 
                 // inject separator
-                if (key > 0 && separatorKey !== oldSeparator) {
+                if (key > 0 && newSeparator !== oldSeparator) {
                     data.push({
                         __type__: 'divider'
                     });
                 }
 
                 // inject category
-                if (separatorKey && (key === 0 || separatorKey !== oldSeparator)) {
+                if (newSeparator && (key === 0 || newSeparator !== oldSeparator)) {
                     data.push({
                         __type__: 'category',
-                        name: separatorKey
+                        name: newSeparator
                     });
                 }
 
@@ -301,7 +311,7 @@
                 }
                 // item
                 if (that.isObject(item)) {
-                    display = isStrDisplayField ? item[that.displayField] : that.displayField(item);
+                    display = isStringDisplay ? item[that.displayField] : that.displayField(item);
                 } else {
                     display = item;
                 }
@@ -323,12 +333,12 @@
             let items;
             let display;
             const that = this;
-            const isStrDisplayField = that.isString(that.displayField);
+            const isStringDisplay = that.isString(that.displayField);
 
-            if (isStrDisplayField && data && data.length) {
+            if (isStringDisplay && data && data.length) {
                 if (data[0].hasOwnProperty(that.displayField)) {
                     items = $.grep(data, function (item) {
-                        display = isStrDisplayField ? item[that.displayField] : that.displayField(item);
+                        display = isStringDisplay ? item[that.displayField] : that.displayField(item);
                         return that.matcher(display);
                     });
                 } else if (that.isString(data[0])) {
@@ -473,42 +483,67 @@
         }
 
         listen() {
+            const that = this;
             // add element handlers
-            const $element = this.$element;
-            // $element.focus.bind(this.focus());
-            $element.on('focus', $.proxy(this.focus, this));
-            $element.on('blur', $.proxy(this.blur, this));
-            $element.on('keypress', $.proxy(this.keypress, this));
-            $element.on('keyup', $.proxy(this.keyup, this));
-            if (this.eventSupported('keydown')) {
-                $element.on('keydown', $.proxy(this.keydown, this));
+            const $element = that.$element;
+            that.focusProxy = function () {
+                that.focus();
+            };
+            that.blurProxy = function () {
+                that.blur();
+            };
+            that.keyPressProxy = function (e) {
+                that.keypress(e);
+            };
+            that.keyUpProxy = function (e) {
+                that.keyup(e);
+            };
+            $element.on('focus', that.focusProxy);
+            $element.on('blur', that.blurProxy);
+            $element.on('keypress', that.keyPressProxy);
+            $element.on('keyup', that.keyUpProxy);
+            if (that.eventSupported('keydown')) {
+                that.keyDownProxy = function (e) {
+                    that.keydown(e);
+                };
+                $element.on('keydown', that.keyPressProxy);
             }
 
             // add menu handlers
-            const $menu = this.$menu;
-            const selector = this.options.selector;
-            $menu.on('click', $.proxy(this.click, this));
-            $menu.on('mouseenter', selector, $.proxy(this.mouseenter, this));
-            $menu.on('mouseleave', selector, $.proxy(this.mouseleave, this));
+            const $menu = that.$menu;
+            const selector = that.options.selector;
+            that.clickProxy = function (e) {
+                that.click(e);
+            };
+            that.mouseEnterProxy = function (e) {
+                that.mouseenter(e);
+            };
+            that.mouseLeaveProxy = function () {
+                that.mouseleave();
+            };
+            $menu.on('click', that.clickProxy);
+            $menu.on('mouseenter', selector, that.mouseEnterProxy);
+            $menu.on('mouseleave', selector, that.mouseLeaveProxy);
         }
 
         destroy() {
             // remove element handlers
+            const that = this;
             const $element = this.$element;
-            $element.off('focus', $.proxy(this.focus, this));
-            $element.off('blur', $.proxy(this.blur, this));
-            $element.off('keypress', $.proxy(this.keypress, this));
-            $element.off('keyup', $.proxy(this.keyup, this));
+            $element.off('focus', that.focusProxy);
+            $element.off('blur', that.blurProxy);
+            $element.off('keypress', that.keyPressProxy);
+            $element.off('keyup', that.keyUpProxy);
             if (this.eventSupported('keydown')) {
-                $element.off('keydown', $.proxy(this.keydown, this));
+                $element.off('keydown', that.keyDownProxy);
             }
 
             // remove menu handlers
             const $menu = this.$menu;
             const selector = this.options.selector;
-            $menu.off('click', $.proxy(this.click, this));
-            $menu.off('mouseenter', selector, $.proxy(this.mouseenter, this));
-            $menu.off('mouseleave', selector, $.proxy(this.mouseleave, this));
+            $menu.off('click', that.clickProxy);
+            $menu.off('mouseenter', selector, that.mouseEnterProxy);
+            $menu.off('mouseleave', selector, that.mouseLeaveProxy);
 
             // remove data
             $element.removeData('typeahead');

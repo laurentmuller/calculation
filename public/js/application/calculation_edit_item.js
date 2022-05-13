@@ -20,7 +20,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
         const that = this;
         const price = that.$price.floatVal();
         const quantity = that.$quantity.floatVal();
-        const total = that._roundValue(price * quantity);
+        const total = $.roundValue(price * quantity);
         const description = that.$description.val();
         const unit = that.$unit.val();
         return {
@@ -37,7 +37,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
      *
      * @param {JQuery} $row - the selected row.
      *
-     * @return {EditItemDialog} This instance for chaining.
+     * @return {EditDialog} This instance for chaining.
      */
     _initAdd($row) {
         'use strict';
@@ -53,7 +53,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
         // set values
         this.$price.floatVal(1);
         this.$quantity.floatVal(1);
-        this.$total.text(this._formatValue(1));
+        this.$total.text($.formatFloat(1));
 
         return super._initAdd($row);
     }
@@ -63,7 +63,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
      *
      * @param {JQuery} $row - the selected row.
      *
-     * @return {EditItemDialog} This instance for chaining.
+     * @return {EditDialog} This instance for chaining.
      */
     _initEdit($row) {
         'use strict';
@@ -74,7 +74,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
         this.$category.val($row.parent().findNamedInput('category').val());
         this.$price.floatVal($row.findNamedInput('price').floatVal());
         this.$quantity.floatVal($row.findNamedInput('quantity').floatVal());
-        this.$total.text(this._formatValue($row.findNamedInput('total').floatVal()));
+        this.$total.text($.formatFloat($row.findNamedInput('total').floatVal()));
 
         return super._initEdit($row);
     }
@@ -82,7 +82,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
     /**
      * Initialize.
      *
-     * @return {EditItemDialog} This instance for chaining.
+     * @return {EditDialog} This instance for chaining.
      */
     _init() {
         'use strict';
@@ -106,12 +106,17 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
         that._initDialog(that.$modal);
 
         // handle input events
-        const updateProxy = $.proxy(that._updateTotal, that);
-        that.$price.on('input', updateProxy);
-        that.$quantity.on('input', updateProxy);
+        that.updateProxy = function() {
+            that._updateTotal();
+        };
+        that.$price.on('input', that.updateProxy);
+        that.$quantity.on('input', that.updateProxy);
 
         // handle delete button
-        that.$deleteButton.on('click', $.proxy(that._onDelete, that));
+        that.deleteProxy = function() {
+            that._onDelete();
+        };
+        that.$deleteButton.on('click', that.deleteProxy);
 
         // init validator
         const options = {
@@ -134,7 +139,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
     _updateTotal() {
         'use strict';
         const item = this.getItem();
-        this.$total.text(this._formatValue(item.total));
+        this.$total.text($.formatFloat(item.total));
     }
 
     /**
@@ -154,7 +159,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
     /**
      * Handles the dialog show event.
      *
-     * @return {EditItemDialog} This instance for chaining.
+     * @return {EditDialog} This instance for chaining.
      */
     _onDialogShow() {
         'use strict';
@@ -171,7 +176,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
     /**
      * Handles the dialog visible event.
      *
-     * @return {EditItemDialog} This instance for chaining.
+     * @return {EditDialog} This instance for chaining.
      */
     _onDialogVisible() {
         'use strict';

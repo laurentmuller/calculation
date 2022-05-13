@@ -42,7 +42,7 @@
     });
 
     $.validator.addMethod("notEqualToZero", function (value, element) {
-        return this.optional(element) || Number.parseFloat(value) !== 0;
+        return this.optional(element) || $.parseFloat(value) !== 0;
     });
 
     $.extend($.validator, {

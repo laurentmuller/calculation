@@ -63,17 +63,17 @@ class SearchService
     /**
      * The delete granted column name.
      */
-    final public const COLUMN_GRANTED_DELETE = 'deletegranted';
+    final public const COLUMN_GRANTED_DELETE = 'allowDelete';
 
     /**
      * The edit granted column name.
      */
-    final public const COLUMN_GRANTED_EDIT = 'editgranted';
+    final public const COLUMN_GRANTED_EDIT = 'allowEdit';
 
     /**
      * The show granted column name.
      */
-    final public const COLUMN_GRANTED_SHOW = 'showgranted';
+    final public const COLUMN_GRANTED_SHOW = 'allowShow';
 
     /**
      * The identifier column name.

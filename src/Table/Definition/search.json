@@ -36,15 +36,15 @@
         "visible": false
     },
     {
-        "field": "showgranted",
+        "field": "allowShow",
         "visible": false
     },
     {
-        "field": "editgranted",
+        "field": "allowEdit",
         "visible": false
     },
     {
-        "field": "deletegranted",
+        "field": "allowDelete",
         "visible": false
     }
 ]

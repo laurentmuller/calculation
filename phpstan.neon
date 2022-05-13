@@ -13,7 +13,7 @@ parameters:
     - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php
 
     doctrine:
-        repositoryClass: App\Repository\AbstractRepository
+       ormRepositoryClass: App\Repository\AbstractRepository
 
     # Level 6
     checkMissingIterableValueType: false

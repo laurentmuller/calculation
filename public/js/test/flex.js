@@ -31,7 +31,7 @@ function getDecimal() {
     const formatter = getNumberFormat(2);
     const parts = formatter.formatToParts('1000');
     const item = parts.find(item => item.type === 'decimal'); // eslint-disable-line
-    return item ? item.value : '.'; 
+    return item ? item.value : '.';
 }
 
 
@@ -43,7 +43,7 @@ function parse($input) {
     const group = getGroup();
     const decimal = getDecimal();
     const value = $input.val().replace(group, '').replace(decimal, '.');
-    return parseFloat(value);
+    return $.parseFloat(value);
 }
 
 /**
@@ -51,7 +51,7 @@ function parse($input) {
  */
 (function ($) {
     'use strict';
-    
+
     const options = {
         onCreateInput: function (e, $input) {
             const index = $input.parents('td').index();
@@ -64,9 +64,9 @@ function parse($input) {
             case 3: // calculations
                 $input.val(parse($input)).inputNumberFormat();
                 break;
-            }            
+            }
         },
-        
+
         onSave: function (e, $input) {
             // text?
             let text = $input.val().trim();
@@ -74,7 +74,7 @@ function parse($input) {
                 e.preventDefault();
                 return;
             }
-            
+
             // format
             const numberFormat = $input.data("inputNumberFormat");
             if (numberFormat) {
@@ -84,11 +84,11 @@ function parse($input) {
                 text = formatter.format(text);
             }
             $input.val(text);
-            
+
             // ok
             $input.parents('td').timeoutToggle('table-success');
         },
-        
+
         onRemoveInput: function (e, $input) {
             const numberFormat = $input.data("inputNumberFormat");
             if (numberFormat) {
@@ -96,7 +96,7 @@ function parse($input) {
             }
         },
     };
-    
+
     $('#editable').tableEditor(options);
 
 }(jQuery));

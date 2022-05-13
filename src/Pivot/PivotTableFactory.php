@@ -105,41 +105,11 @@ class PivotTableFactory
             // value
             $value = $dataField?->getValue($row);
 
-            // find or create columns
-            $currentCol = $table->getColumn();
-            foreach ($columnFields as $field) {
-                $key = $field->getValue($row);
-                if (null === ($child = $currentCol->find($key))) {
-                    $aggregator = $this->createAggregator();
-                    $title = (string) $field->getDisplayValue($key);
-                    $currentCol = $currentCol
-                        ->add($aggregator, $key)
-                        ->setTitle($title);
-                } else {
-                    $currentCol = $child;
-                }
-            }
+            // find or create columns and update value
+            $currentCol = $this->setNodeValue($columnFields, $row, $table->getColumn(), $value);
 
-            // update
-            $currentCol->addValue($value);
-
-            // find or create rows
-            $currentRow = $table->getRow();
-            foreach ($rowFields as $field) {
-                $key = $field->getValue($row);
-                if (null === ($child = $currentRow->find($key))) {
-                    $aggregator = $this->createAggregator();
-                    $title = (string) $field->getDisplayValue($key);
-                    $currentRow = $currentRow
-                        ->add($aggregator, $key)
-                        ->setTitle($title);
-                } else {
-                    $currentRow = $child;
-                }
-            }
-
-            // update
-            $currentRow->addValue($value);
+            // find or create rows and update value
+            $currentRow = $this->setNodeValue($rowFields, $row, $table->getRow(), $value);
 
             // update or create cell
             if (null !== ($cell = $table->findCellByNode($currentCol, $currentRow))) {
@@ -403,5 +373,31 @@ class PivotTableFactory
         $class = $this->aggregatorClass;
 
         return new $class($value);
+    }
+
+    /**
+     * Find or create node and update value.
+     *
+     * @param PivotField[] $fields
+     */
+    private function setNodeValue(array $fields, array $row, PivotNode $node, mixed $value): PivotNode
+    {
+        foreach ($fields as $field) {
+            $key = $field->getValue($row);
+            if (null === ($child = $node->find($key))) {
+                $aggregator = $this->createAggregator();
+                $title = (string) $field->getDisplayValue($key);
+                $node = $node
+                    ->add($aggregator, $key)
+                    ->setTitle($title);
+            } else {
+                $node = $child;
+            }
+        }
+
+        // update
+        $node->addValue($value);
+
+        return $node;
     }
 }

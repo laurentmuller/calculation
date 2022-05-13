@@ -10,7 +10,6 @@
      * Table editor.
      */
     const TableEditor = class {
-
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, TableEditor.DEFAULTS, options);
@@ -21,17 +20,26 @@
 
         init() {
             // proxies
-            this.clickProxy = $.proxy(this.click, this);
-            this.keydownProxy = $.proxy(this.keydown, this);
-            this.inputProxy = $.proxy(this.input, this);
-            this.blurProxy = $.proxy(this.blur, this);
+            const that = this;
+            that.clickProxy = function (e) {
+                that.click(e);
+            };
+            that.keydownProxy = function (e) {
+                that.keydown(e);
+            };
+            that.inputProxy = function (e) {
+                that.input(e);
+            };
+            that.blurProxy = function (e) {
+                that.blur(e);
+            };
 
             // add handlers
             const options = this.options;
-            this.$element.on('click', options.dotCellClass, this.clickProxy);
-            this.$element.on('keydown', options.dotInputClass, this.keydownProxy);
-            this.$element.on('input', options.dotInputClass, this.inputProxy);
-            this.$element.on('blur', options.dotInputClass, this.blurProxy);
+            that.$element.on('click', options.dotCellClass, that.clickProxy);
+            that.$element.on('keydown', options.dotInputClass, that.keydownProxy);
+            that.$element.on('input', options.dotInputClass, that.inputProxy);
+            that.$element.on('blur', options.dotInputClass, that.blurProxy);
         }
 
         destroy() {
@@ -164,7 +172,7 @@
 
     // TableEditor plugin definition
     const oldTableEditor = $.fn.tableEditor;
-    $.fn.tableEditor = function (options) { // jslint ignore:line
+    $.fn.tableEditor = function (options) {
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('tableEditor');

@@ -69,8 +69,6 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * The total title.
-     *
-     * @var string
      */
     private ?string $totalTitle = null;
 

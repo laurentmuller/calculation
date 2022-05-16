@@ -47,7 +47,7 @@ class ProductUpdater implements LoggerAwareInterface
     private const KEY_FIXED = 'product.update.fixed';
     private const KEY_PERCENT = 'product.update.percent';
     private const KEY_ROUND = 'product.update.round';
-    private const KEY_SIMULATE = 'product.update.simulated';
+    private const KEY_SIMULATE = 'product.update.simulate';
     private const KEY_TYPE = 'product.update.type';
 
     /**
@@ -108,22 +108,13 @@ class ProductUpdater implements LoggerAwareInterface
             ->addMoneyType();
 
         $helper->field('round')
-            ->notRequired()
             ->help('product.update.round_help')
             ->helpClass('ml-4')
-            ->addCheckboxType();
-
-        $helper->field('simulate')
-            ->help('product.update.simulate_help')
-            ->helpClass('ml-4')
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field('confirm')
-            ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
-            ->updateAttribute('disabled', $query->isSimulate() ? 'disabled' : null)
-            ->notMapped()
-            ->addCheckboxType();
+        $helper->addCheckboxSimulate()
+            ->addCheckboxConfirm($this->translator, $query->isSimulate());
 
         $helper->field('type')
             ->addHiddenType();

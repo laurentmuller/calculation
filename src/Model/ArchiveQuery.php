@@ -24,8 +24,9 @@ class ArchiveQuery
 
     public function __construct()
     {
-        $dt = new \DateInterval('P3M');
-        $this->date = (new \DateTime())->sub($dt);
+        $date = new \DateTime();
+        $interval = new \DateInterval('P6M');
+        $this->date = $date->sub($interval);
     }
 
     public function getDate(): \DateTimeInterface
@@ -75,7 +76,7 @@ class ArchiveQuery
         return $this;
     }
 
-    public function setTarget(CalculationState $target): self
+    public function setTarget(?CalculationState $target): self
     {
         $this->target = $target;
 

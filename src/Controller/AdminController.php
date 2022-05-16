@@ -20,7 +20,9 @@ use App\Model\Role;
 use App\Security\EntityVoter;
 use App\Service\ArchiveService;
 use App\Service\ProductUpdater;
+use App\Service\SuspendEventListenerService;
 use App\Service\SwissPostUpdater;
+use App\Traits\RoleTranslatorTrait;
 use App\Util\SymfonyInfo;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
@@ -41,21 +43,32 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/admin')]
 class AdminController extends AbstractController
 {
+    use RoleTranslatorTrait;
+
     /**
      * Archive calculations.
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/archive', name: 'admin_archive')]
-    public function archive(Request $request, ArchiveService $service): Response
+    public function archive(Request $request, ArchiveService $service, SuspendEventListenerService $listener): Response
     {
         $query = $service->createQuery();
         $form = $service->createForm($query);
         if ($this->handleRequestForm($request, $form)) {
-            $result = $service->processQuery($query);
+            try {
+                // save
+                $service->saveQuery($query);
 
-            return $this->renderForm('admin/archive_result.html.twig', [
-                'result' => $result,
-            ]);
+                // update
+                $listener->disableListeners();
+                $result = $service->processQuery($query);
+
+                return $this->renderForm('admin/archive_result.html.twig', [
+                    'result' => $result,
+                ]);
+            } finally {
+                $listener->enableListeners();
+            }
         }
 
         return $this->renderForm('admin/archive_query.html.twig', [
@@ -270,13 +283,9 @@ class AdminController extends AbstractController
      */
     private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
     {
-        // name
-        $pos = (int) \strpos($roleName, '_');
-        $name = 'user.roles.' . \strtolower(\substr($roleName, $pos + 1));
-
         // role
         $role = new Role($roleName);
-        $role->setName($this->trans($name))
+        $role->setName($this->translateRole($roleName))
             ->setRights($rights);
 
         // form

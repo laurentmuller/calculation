@@ -315,6 +315,12 @@ common:
   view_custom: Vue mosaïque
   view_table: Vue tabulaire
   view_title: Affichage
+  simulate:
+    label: Simuler la mise à jour
+    help: Simule une mise à jour sans enregistrer les changements dans la base de données.
+    confirm: Confirmer la mise à jour des données
+    error: Vous devez cochez le message de confirmation.
+    message: La mise à jour a été simulée. Aucun changement n'a été effectué dans la base de données.
 cookiebanner:
   accept: Accepter
   close: J'accepte
@@ -435,20 +441,12 @@ footer:
 generate:
   description: Cet outil permet de générer des données aléatoires.
   error:
-    confirm: Vous devez cochez le message de confirmation.
     empty: Aucune donnée n'a été générée.
     failed: Une erreur s'est produite lors de la génération des données.
   fields:
-    confirm: Confirmer la génération des données
     count: Nombre
     entity: Objet à générer
-    simulate: Simuler la génération des données
-  help:
-    simulate: Simule la génération des données sans enregistrer les changements dans
-      la base de données.
   result_link: Afficher les données
-  result_simulated: La mise à jour a été simulée. Aucune donnée n'a été ajoutée dans
-    la base de données.
   result_text: Données générées
   submit_text: Générer
   title: Générateur de données
@@ -928,8 +926,6 @@ product:
     new_price: Nouveau prix
     new_update: Nouvelle mise à jour
     old_price: Ancien prix
-    simulated: La mise à jour a été simulée. Aucun article n'a été modifié dans la
-      base de données.
     updated: Articles mises à jour
     value: Valeur
   show:
@@ -939,7 +935,6 @@ product:
     check_all: Sélectionner tous les articles
     check_none: Supprimer la sélection des articles
     check_reverse: Inverser la sélection des articles
-    confirm: Confirmer la mise à jour des données
     description: Cette page vous permet de mettre à jour le prix des articles.
     fixed: Montant fixe
     fixed_help: 'Example : 50.00 + 12.00 = 62.00'
@@ -949,9 +944,6 @@ product:
     products_error: Un ou plusieurs articles doivent être sélectionnés.
     round: Arrondir au 5 centimes
     round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
-    simulate: Simuler la mise à jour
-    simulate_help: Simule une mise à jour sans enregistrer les changements dans la
-      base de données.
     title: Mise à jour des articles
     type: Type de mise à jour
 profile:
@@ -1270,10 +1262,7 @@ translator:
 update:
   description: Cet outil permet de mettre à jour les objets sélectionnés avec des
     données aléatoires.
-  error:
-    confirm: Vous devez cochez le message de confirmation.
   fields:
-    confirm: Confirmer la mise à jour des données
     entity: Objet à mettre à jour
   help:
     calculation: Remplace le nom du client, la description et le statut.
@@ -1400,6 +1389,7 @@ archive:
   result:
     new_archive: Nouvel archivage
     description: Résultat de l'archivage des calculations.
+    empty: Aucune calculation ne correspond aux critères de mise à jour.
     date: 'Date limite : %date%'
     total: Total
     new_state: 'Nouveau statut : %state%'

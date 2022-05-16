@@ -18,7 +18,7 @@ use App\Entity\CalculationState;
 class ArchiveResult
 {
     /**
-     * @var array<string, array<int, Calculation>>
+     * @var array<string, array<Calculation>>
      */
     private array $results = [];
 
@@ -40,7 +40,7 @@ class ArchiveResult
     }
 
     /**
-     * @return array<string, array<int, Calculation>>
+     * @return array<string, array<Calculation>>
      */
     public function getResults(): array
     {
@@ -55,6 +55,11 @@ class ArchiveResult
     public function isSimulate(): bool
     {
         return $this->simulate;
+    }
+
+    public function isValid(): bool
+    {
+        return !empty($this->results);
     }
 
     public function total(): int

@@ -42,6 +42,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
@@ -141,6 +142,36 @@ class FormHelper
     {
         return $this->updateOption('widget', 'single_text')
             ->add(BirthdayType::class);
+    }
+
+    /**
+     * Add a checkbox input to confirm an operation.
+     *
+     * @param bool $disabled true if the checkbox must be disabled
+     */
+    public function addCheckboxConfirm(?TranslatorInterface $translator, bool $disabled): self
+    {
+        return $this->field('confirm')
+            ->label('common.simulate.confirm')
+            ->updateAttributes([
+                'data-error' => $translator?->trans('common.simulate.error'),
+                'disabled' => $disabled ? 'disabled' : null,
+            ])
+            ->notMapped()
+            ->addCheckboxType();
+    }
+
+    /**
+     * Add a checkbox input to simulate an operation.
+     */
+    public function addCheckboxSimulate(): self
+    {
+        return $this->field('simulate')
+            ->label('common.simulate.label')
+            ->help('common.simulate.help')
+            ->helpClass('ml-4')
+            ->notRequired()
+            ->addCheckboxType();
     }
 
     /**

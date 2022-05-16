@@ -10,11 +10,11 @@
         {% if is_admin %}
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) -}}
+        {{- icons.dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') -}}
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('below_table'), 'below.title', ICON_GLOBALMARGIN) -}}
         {{- icons.dropdownItem(path('duplicate_table'), 'duplicate.title', 'copy far') -}}
         {{- icons.dropdownItem(path('empty_table'), 'empty.title', 'file-code far') -}}
-        {{- icons.dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') -}}
         {%- if is_granted_task -%}
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('task_compute', {'id': 0, 'caller': path('homepage')}), 'taskcompute.title', 'keyboard') -}}

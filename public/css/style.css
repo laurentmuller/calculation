@@ -150,7 +150,6 @@ a.btn-list {
 .table-exception td samp {
     font-size: 14px;
 }
-
 .table tbody+tbody {
     border-top-style: none;
 }
@@ -185,6 +184,14 @@ span.state-color {
  */
 .table-bordered thead td,
 .table-bordered thead th {
+    border-bottom-width: inherit;
+}
+
+/*
+ * No bottom width for header in table
+ */
+.table-no-bottom thead td,
+.table-no-bottom thead th {
     border-bottom-width: inherit;
 }
 

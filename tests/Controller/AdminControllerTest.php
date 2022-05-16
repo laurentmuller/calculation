@@ -22,6 +22,10 @@ class AdminControllerTest extends AbstractControllerTest
     public function getRoutes(): array
     {
         return [
+            ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/admin/archive', self::ROLE_ADMIN],
+            ['/admin/archive', self::ROLE_SUPER_ADMIN],
+
             ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/admin/clear', self::ROLE_ADMIN],
             ['/admin/clear', self::ROLE_SUPER_ADMIN],

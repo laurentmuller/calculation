@@ -8,6 +8,9 @@ framework:
         cookie_path: '%cookie_path%'
         storage_factory_id: session.storage.factory.native
 
+    # edition
+    ide: phpstorm
+
     # errors
     php_errors:
         log: true

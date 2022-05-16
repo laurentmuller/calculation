@@ -7,38 +7,47 @@
 {%- set cancel_path = path('homepage') -%}
 
 {% block card_body %}
-<div class="row mb-4">
-    <div class="col-md-6 font-weight-bold">
-        {{ 'archive.result.date'|trans({'%date%': result.date|localedate}) }}
+<div class="row mb-1">
+    <div class="col-md-6">
+        {{ 'archive.result.date'|trans({'%date%': result.date|localedate('full')}) }}
     </div>
-    <div class="col-md-6 font-weight-bold text-md-right">
+    <div class="col-md-6 text-md-right">
         {{ 'archive.result.new_state'|trans({'%state%': result.target.code}) }}
     </div>
 </div>
-<table class="table table-sm">
-    <thead>
+{% if result.valid %}
+<div class="table-responsive">
+    <table class="table table-no-bottom table-sm mb-0">
+        <thead>
         <tr>
             <th>{{ 'archive.result.old_state'|trans }}</th>
             <th class="text-right">{{ 'archive.result.calculations'|trans }}</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for key, calculations in result.results %}
-        <tr>
-            <td>{{ key }}</td>
-            <td class="text-right">{{ calculations|length|integer }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-    <tfoot>
+        </thead>
+        <tbody>
+        {% for key, calculations in result.results %}
+            <tr>
+                <td>{{ key }}</td>
+                <td class="text-right">{{ calculations|length|integer }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
         <tr>
             <th>{{ 'archive.result.total'|trans }}</th>
             <th class="text-right">{{ result.total }}</th>
         </tr>
-    </tfoot>
-</table>
+        </tfoot>
+    </table>
+</div>
 {% if result.simulate %}
-    <p class="mb-0 text-right text-muted small">{{ 'product.result.simulated'|trans }}</p>
+    <hr class="mt-0"/>
+    <p class="mb-0 text-right text-muted small">{{ 'common.simulate.message'|trans }}</p>
+{% endif %}
+{% else %}
+    <div class="alert alert-warning text-center mt-4 mb-0" role="alert">
+        {{- 'archive.result.empty'|trans -}}
+    </div>
 {% endif %}
 {% endblock %}
 

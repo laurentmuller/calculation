@@ -60,10 +60,7 @@ class UpdateController extends AbstractController
             ->help('update.help.customer')
             ->addChoiceType($choices);
 
-        $helper->field('confirm')
-            ->notMapped()
-            ->updateAttribute('data-error', $this->trans('update.error.confirm'))
-            ->addCheckboxType();
+        $helper->addCheckboxConfirm($this->translator, false);
 
         return $this->renderForm('admin/update.html.twig', [
             'form' => $helper->createForm(),

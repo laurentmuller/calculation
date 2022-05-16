@@ -34,6 +34,7 @@ class GeneratorController extends AbstractController
     private const KEY_COUNT = 'admin.generate.count';
     private const KEY_ENTITY = 'admin.generate.entity';
     private const KEY_SIMULATE = 'admin.generate.simulate';
+
     private const ROUTE_CALCULATION = 'generate_calculation';
     private const ROUTE_CUSTOMER = 'generate_customer';
     private const ROUTE_PRODUCT = 'generate_product';
@@ -58,17 +59,9 @@ class GeneratorController extends AbstractController
                 'min' => 1, 'max' => 20,
                 'step' => 1,
             ])->addNumberType(0);
-        $helper->field('simulate')
-            ->help('generate.help.simulate')
-            ->helpClass('ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
-        $helper->field('confirm')
-            ->notMapped()
-            ->updateAttributes([
-                'data-error' => $this->trans('generate.error.confirm'),
-                'disabled' => $data['simulate'] ? 'disabled' : null,
-            ])->addCheckboxType();
+
+        $helper->addCheckboxSimulate()
+            ->addCheckboxConfirm($this->translator, $data['simulate']);
 
         return $this->renderForm('admin/generate.html.twig', [
             'form' => $helper->createForm(),

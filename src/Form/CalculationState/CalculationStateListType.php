@@ -17,7 +17,6 @@ use App\Form\AbstractListEntityType;
 use App\Repository\CalculationStateRepository;
 use App\Traits\TranslatorTrait;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -42,29 +41,20 @@ class CalculationStateListType extends AbstractListEntityType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        if ($options['use_group_by'] ?? true) {
-            $options['group_by'] = function (CalculationState $entity): string {
-                $id = $entity->isEditable() ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable';
-
-                return $this->trans($id);
-            };
-        }
-        parent::buildForm($builder, $options);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-        $resolver->setDefined('use_group_by')
-            ->setAllowedTypes('use_group_by', 'bool')
-            ->setDefaults([
+        $resolver->setDefaults([
             'choice_label' => 'code',
-            'query_builder' => fn (CalculationStateRepository $repository): QueryBuilder => $repository->getQueryBuilderByEditable(),
+            'group_by' => fn (CalculationState $entity): string => $this->translateEditable($entity),
+            'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getQueryBuilderByEditable(),
         ]);
+    }
+
+    private function translateEditable(CalculationState $entity): string
+    {
+        $id = $entity->isEditable() ? 'editable' : 'not_editable';
+
+        return $this->trans("calculationstate.list.$id");
     }
 }

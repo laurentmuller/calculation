@@ -57,6 +57,15 @@ class CalculationStateRepository extends AbstractRepository
         return $builder->getQuery()->getArrayResult();
     }
 
+    public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @var literal-string $where */
+        $where = "$alias.editable = 1";
+
+        return $this->getSortedBuilder($alias)
+            ->where($where);
+    }
+
     /**
      * Gets the list of calculation states sorted by code.
      *
@@ -154,6 +163,15 @@ class CalculationStateRepository extends AbstractRepository
         }
 
         return $results;
+    }
+
+    public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @var literal-string $where */
+        $where = "$alias.editable = 0";
+
+        return $this->getSortedBuilder($alias)
+            ->where($where);
     }
 
     /**

@@ -1,0 +1,48 @@
+{% extends 'cards/card_base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{%- set title = 'archive.title' -%}
+{%- set title_icon = 'calendar-xmark far' -%}
+{%- set title_description = 'archive.result.description' -%}
+{%- set cancel_path = path('homepage') -%}
+
+{% block card_body %}
+<div class="row mb-4">
+    <div class="col-md-6 font-weight-bold">
+        {{ 'archive.result.date'|trans({'%date%': result.date|localedate}) }}
+    </div>
+    <div class="col-md-6 font-weight-bold text-md-right">
+        {{ 'archive.result.new_state'|trans({'%state%': result.target.code}) }}
+    </div>
+</div>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>{{ 'archive.result.old_state'|trans }}</th>
+            <th class="text-right">{{ 'archive.result.calculations'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for key, calculations in result.results %}
+        <tr>
+            <td>{{ key }}</td>
+            <td class="text-right">{{ calculations|length|integer }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>{{ 'archive.result.total'|trans }}</th>
+            <th class="text-right">{{ result.total }}</th>
+        </tr>
+    </tfoot>
+</table>
+{% if result.simulate %}
+    <p class="mb-0 text-right text-muted small">{{ 'product.result.simulated'|trans }}</p>
+{% endif %}
+{% endblock %}
+
+{% block card_footer %}
+{{ icons.homepage() }}
+{{ icons.link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-outline-secondary', null) -}}
+{% endblock %}

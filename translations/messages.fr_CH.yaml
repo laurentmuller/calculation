@@ -1393,3 +1393,19 @@ view:
   card: Vue détaillée
   custom: Vue mosaïque
   table: Vue tabulaire
+archive:
+  title: Archiver des calculations
+  edit:
+    description: Cette page vous permet d'archiver des calculations en modifiant leur statut.
+  result:
+    new_archive: Nouvel archivage
+    description: Résultat de l'archivage des calculations.
+    date: 'Date limite : %date%'
+    total: Total
+    new_state: 'Nouveau statut : %state%'
+    old_state: Anciens statut
+    calculations: Calculations
+  fields:
+    date: Date limite
+    target: Nouveau statut
+    sources: Anciens status

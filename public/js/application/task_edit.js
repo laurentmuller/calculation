@@ -110,7 +110,6 @@ function getNextItemIndex() {
     const $items = $('#items');
     const index = $items.data('item-index');
     $items.data('item-index', index + 1);
-
     return index;
 }
 
@@ -125,29 +124,7 @@ function getNextMarginIndex() {
     const $items = $('#items');
     const index = $items.data('margin-index');
     $items.data('margin-index', index + 1);
-
     return index;
-}
-
-/**
- * Gets the item prototype.
- *
- * @returns {string} the prototype.
- */
-function getItemPrototype() {
-    'use strict';
-    return $('#items').data('prototype');
-}
-
-/**
- * Gets the margin prototype.
- *
- * @param {JQuery} $table - the parent table.
- * @returns {string} the prototype.
- */
-function getMarginPrototype($table) {
-    'use strict';
-    return $table.data('prototype');
 }
 
 /**
@@ -159,12 +136,12 @@ function addItem() {
     'use strict';
 
     // create item
+    const $items = $('#items');
     const index = getNextItemIndex();
-    const prototype = getItemPrototype();
+    const prototype = $items.data('prototype');
     const $item = $(prototype.replace(/__itemIndex__/g, index));
 
     // append
-    const $items = $('#items');
     $items.append($item);
 
     // update UI
@@ -277,7 +254,7 @@ function addMargin($caller) {
 
     // create and add margin
     const index = getNextMarginIndex();
-    const prototype = getMarginPrototype($table);
+    const prototype = $table.data('prototype');
     const $row = $(prototype.replace(/__marginIndex__/g, index));
     $table.find('tbody').append($row);
 
@@ -334,18 +311,6 @@ function sortMargins($caller) {
     }).appendTo($body);
 }
 
-// function updateLabels() {
-//     'use strict';
-//     $('.label-title').each(function () {
-//         const $this = $(this);
-//         const $group = $this.parents('.form-group');
-//         const $input = $group.find('.unique-name:first');
-//         const $label = $group.find('.label-text:first');
-//         const value = $input.val() || $('form').data('category');
-//         $label.text($input.val());
-//     });
-// }
-
 function updateToggle($caller, show) {
     'use strict';
     // const $link = $(this).parents('.item').find('.stretched-link');
@@ -393,8 +358,6 @@ function updateToggle($caller, show) {
         updateToggle($(this), true);
     }).on('focus', '.unique-name', function () {
         $(this).parents('.card').children('.collapse').collapse('show');
-    // }).on('blur', 'input.unique-name', function () {
-    //     updateLabels();
     });
 
     // initialize search
@@ -416,8 +379,4 @@ function updateToggle($caller, show) {
 
     // update UI
     updateUI();
-
-    // update labels
-    // updateLabels();
-
 }(jQuery));

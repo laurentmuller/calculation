@@ -18,6 +18,7 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Security\EntityVoter;
+use App\Service\ArchiveService;
 use App\Service\ProductUpdater;
 use App\Service\SwissPostUpdater;
 use App\Util\SymfonyInfo;
@@ -40,6 +41,28 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/admin')]
 class AdminController extends AbstractController
 {
+    /**
+     * Archive calculations.
+     */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/archive', name: 'admin_archive')]
+    public function archive(Request $request, ArchiveService $service): Response
+    {
+        $query = $service->createQuery();
+        $form = $service->createForm($query);
+        if ($this->handleRequestForm($request, $form)) {
+            $result = $service->processQuery($query);
+
+            return $this->renderForm('admin/archive_result.html.twig', [
+                'result' => $result,
+            ]);
+        }
+
+        return $this->renderForm('admin/archive_query.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
     /**
      * Clear the application cache.
      */

@@ -1,0 +1,27 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title = 'archive.title' -%}
+{%- set title_icon = 'calendar-xmark far' -%}
+{%- set title_description = 'archive.edit.description' -%}
+{%- set cancel_path = path('homepage') -%}
+
+{% block card_body %}
+<div class="row">
+    <div class="col">
+        {{ form_row(form.date) }}
+    </div>
+    <div class="col">
+        {{ form_row(form.sources) }}
+    </div>
+</div>
+    {{ form_row(form.target) }}
+<hr>
+{{ form_row(form.simulate) }}
+{{ form_row(form.confirm) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ asset_js('js/application/archive.js') }}
+{% endblock %}

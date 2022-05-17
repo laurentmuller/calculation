@@ -249,10 +249,10 @@
     $.fn.cellhighlight = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('cellhighlight');
+            const data = $this.data('cellhighlight');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('cellhighlight', data = new CellHighlight(this, settings));
+                $this.data('cellhighlight', new CellHighlight(this, settings));
             }
         });
     };

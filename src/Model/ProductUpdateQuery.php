@@ -17,7 +17,7 @@ use App\Entity\Product;
 use App\Util\FormatUtils;
 
 /**
- * Contains query parameters to update products.
+ * Contains parameters to update products.
  */
 class ProductUpdateQuery
 {

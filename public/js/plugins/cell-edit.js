@@ -22,6 +22,14 @@
                 this.$target = null;
             }
 
+            // check functions
+            this.options.onStartEdit = this._checkFunction(this.options.onStartEdit);
+            this.options.onCancelEdit = this._checkFunction(this.options.onCancelEdit);
+            this.options.onEndEdit = this._checkFunction(this.options.onEndEdit);
+
+            this.options.parser = this._checkFunction(this.options.parser);
+            this.options.formatter = this._checkFunction(this.options.formatter);
+
             // proxies
             const that = this;
             this.clickProxy = function (e) {
@@ -89,7 +97,7 @@
             this.$input.on('input', this.inputProxy);
             this.$input.on('keydown', this.keydownProxy);
 
-            if (typeof options.onStartEdit === 'function') {
+            if (options.onStartEdit) {
                 options.onStartEdit();
             }
             this.$input.select().focus();
@@ -158,7 +166,7 @@
             }
 
             // notify
-            if (typeof options.onEndEdit === 'function') {
+            if (options.onEndEdit) {
                 this.value = newValue;
                 options.onEndEdit(oldValue, newValue);
             }
@@ -184,7 +192,7 @@
             this.$element.html(this.html || '');
             this.$element.removeClass(options.cellClass);
             this.$element.parents('tr').removeClass(options.rowClass);
-            if (notify && typeof options.onCancelEdit === 'function') {
+            if (notify && options.onCancelEdit) {
                 options.onCancelEdit();
             }
             if (notify && options.autoDispose) {
@@ -194,17 +202,21 @@
         }
 
         _parse(value) {
-            if (typeof this.options.parser === 'function') {
+            if (this.options.parser) {
                 return this.options.parser(value);
             }
             return value;
         }
 
         _format(value) {
-            if (typeof this.options.formatter === 'function') {
+            if (this.options.formatter) {
                 return this.options.formatter(value);
             }
             return value;
+        }
+
+        _checkFunction(value) {
+            return typeof value === 'function' ? value : false;
         }
     };
 
@@ -242,10 +254,10 @@
     $.fn.celledit = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('cell-edit');
+            const data = $this.data('cell-edit');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('cell-edit', data = new CellEdit(this, settings));
+                $this.data('cell-edit', new CellEdit(this, settings));
             }
         });
     };

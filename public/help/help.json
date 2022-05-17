@@ -526,16 +526,16 @@
 						"dialog": "search.title"
 					},
 					{
-						"id": "calculation.update.title",
-						"icon": "calculator",
-						"description": "Page pour mettre à jour les calculations.",
-						"dialog": "calculation.update.title"
-					},
-					{
 						"id": "product.update.title",
 						"icon": "file-alt far",
 						"description": "Page pour mettre à jour le prix des articles.",
 						"dialog": "product.update.title"
+					},
+					{
+						"id": "archive.title",
+						"icon": "file-alt far",
+						"description": "Page pour archiver des calculations.",
+						"dialog": "archive.title"
 					},
 					{
 						"id": "below.title",
@@ -738,57 +738,6 @@
 			]
 		},
 		{
-			"id": "calculation.update.title",
-			"image": "calculation/calculation_update.png",
-			"icon": "calculator",
-			"entity": "calculation",
-			"description": "Cette page permet de mettre jour les calculations.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Met à jour les calculations et affiche les résultats de la mise à jour."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Retourne à la page principale de l'application.",
-					"dialog": "index.title"
-				}
-			],
-			"links": [
-				{
-					"id": "calculation.result.description",
-					"type": "dialog"
-				}
-			]
-		},
-		{
-			"id": "calculation.result.description",
-			"name": "calculation.result.description",
-			"image": "calculation/calculation_result.png",
-			"icon": "calculator",
-			"entity": "calculation",
-			"description": "Cette page affiche le résultat de la mise à jour des calculations.",
-			"editActions": [
-				{
-					"id": "index.title",
-					"icon": "home",
-					"description": "Retourne à la page principale de l'application.",
-					"dialog": "index.title"
-				},
-				{
-					"id": "calculation.update.title",
-					"label": "calculation.result.new_update",
-					"description": "Retourne à la page de mise à jour des calculations."
-				}
-			],
-			"links": [
-				{
-					"id": "calculation.update.title",
-					"type": "dialog"
-				}
-			]
-		},
-		{
 			"id": "product.list.title",
 			"entity": "product",
 			"image": "product/product_list.png",
@@ -959,6 +908,42 @@
 			"links": [
 				{
 					"id": "product.update.title",
+					"type": "dialog"
+				}
+			]
+		},
+		{
+			"id": "archive.title",
+			"image": "calculation/calculation_archive_query.png",
+			"icon": "calendar-xmark far",
+			"entity": "calculation",
+			"description": "Cette page vous permet d'archiver des calculations en modifiant leur statut.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Met à jour le statut des calculations et affiche les résultats de la mise à jour."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Retourne à la page principale de l'application.",
+					"dialog": "index.title"
+				}
+			],
+			"links": [
+				{
+					"id": "archive.result.description",
+					"type": "dialog"
+				}
+			]
+		},
+		{
+			"id": "archive.result.description",
+			"image": "calculation/calculation_archive_result.png",
+			"icon": "calendar-xmark far",
+			"description": "Cette page affiche le résultat de l'archivage des calculations.",
+			"links": [
+				{
+					"id": "archive.title",
 					"type": "dialog"
 				}
 			]

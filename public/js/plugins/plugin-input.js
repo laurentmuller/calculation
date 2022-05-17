@@ -44,11 +44,10 @@
 
         destroy() {
             // remove handlers and data
-            const that = this;
             const $element = this.$element;
-            $element.off('keypress',that.keyPressProxy);
-            $element.off('blur', that.updateProxy);
-            $element.off('change', that.updateProxy);
+            $element.off('keypress',this.keyPressProxy);
+            $element.off('blur', this.updateProxy);
+            $element.off('change', this.updateProxy);
             $element.removeData('inputNumberFormat');
         }
 
@@ -96,7 +95,6 @@
             if (!newValue.match(this.regex)) {
                 e.stopPropagation();
                 e.preventDefault();
-                return;
             }
         }
 
@@ -122,10 +120,10 @@
     $.fn.inputNumberFormat = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('inputNumberFormat');
+            const data = $this.data('inputNumberFormat');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('inputNumberFormat', data = new InputNumberFormat(this, settings));
+                $this.data('inputNumberFormat', new InputNumberFormat(this, settings));
             }
         });
     };

@@ -286,10 +286,10 @@
     $.fn.passwordstrength = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('passwordstrength');
+            const data = $this.data('passwordstrength');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('passwordstrength', data = new PasswordStrength(this, settings));
+                $this.data('passwordstrength', new PasswordStrength(this, settings));
             }
         });
     };

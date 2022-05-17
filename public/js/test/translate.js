@@ -5,10 +5,8 @@
 /**
  * Display a notification.
  *
- * @param {string}
- *            type - the notification type.
- * @param {string}
- *            message - the notification message.
+ * @param {string} type - the notification type.
+ * @param {string} message - the notification message.
  */
 function notify(type, message) {
     'use strict';
@@ -20,8 +18,7 @@ function notify(type, message) {
 /**
  * Handle the error response.
  *
- * @param {Object}
- *            response - the Ajax call response.
+ * @param {Object} response - the Ajax call response.
  */
 function handleError(response) {
     'use strict';
@@ -34,10 +31,9 @@ function handleError(response) {
 }
 
 /**
- * Transalte.
+ * Translate.
  *
- * @param form
- *            form - the submitted form.
+ * @param form form - the submitted form.
  */
 function translate(form) {
     'use strict';
@@ -52,12 +48,12 @@ function translate(form) {
     $buttonCopy.toggleDisabled(true);
 
     // build parameters
-    $('#text').val($('#text').val().trim());
-
+    const $text = $('#text');
+    $text.val($text.val().trim());
     const data = {
         'from': $('#from').val(),
         'to': $('#to').val(),
-        'text': $('#text').val(),
+        'text': $text.val(),
         'service': $('#service').val()
     };
 
@@ -126,10 +122,12 @@ function onCopyError(e) {
 function handleExchange() {
     'use strict';
     // exchange from and to language.
-    const from = $('#from').val();
+    const $from = $('#from');
+    const $to = $('#to');
+    const from = $from.val();
     if (from) {
-        $('#from').val($('#to').val()).trigger('change');
-        $('#to').val(from).trigger('change');
+        $from.val($to.val()).trigger('change');
+        $to.val(from).trigger('change');
     }
 }
 

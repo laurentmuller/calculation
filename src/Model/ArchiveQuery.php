@@ -14,6 +14,9 @@ namespace App\Model;
 
 use App\Entity\CalculationState;
 
+/**
+ * Contains parameters to archive calculations.
+ */
 class ArchiveQuery
 {
     private \DateTimeInterface $date;

@@ -44,7 +44,7 @@ function random() {
     // default options
     const options = $('#flashbags').data();
     options.onHide = function (settings) {
-        console.log(settings);
+        window.console.log(settings);
     };
 
     $('.btn-notify').on('click', function () {

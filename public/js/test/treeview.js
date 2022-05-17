@@ -3,9 +3,8 @@
 /**
  * Format the country entry.
  *
- * @param {Object}
- *            country - the country data.
- * @returns the formated country.
+ * @param {Object} country - the country data.
+ * @returns the formatted country.
  */
 function formatCountry(country) {
     'use strict';
@@ -155,13 +154,13 @@ function formatCategorySelection(category) {
     });
 
     $tree.on('collapseall', function (e) {
-        console.log('Collapse All', e.items);
+        window.console.log('Collapse All', e.items);
     }).on('expandall', function (e) {
-        console.log('Expand All', e.items);
+        window.console.log('Expand All', e.items);
     }).on('expandtolevel', function (e) {
-        console.log('Expand to Level', e.level, e.items);
+        window.console.log('Expand to Level', e.level, e.items);
     }).on('togglegroup', function (e) {
-        console.log('Toggle Group', 'expanding:' + e.expanding, e.item);
+        window.console.log('Toggle Group', 'expanding:' + e.expanding, e.item);
     });
 
     // countries

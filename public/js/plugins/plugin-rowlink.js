@@ -99,10 +99,10 @@
     $.fn.rowlink = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('bs.rowlink');
+            const data = $this.data('bs.rowlink');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('bs.rowlink', data = new Rowlink(this, settings));
+                $this.data('bs.rowlink', new Rowlink(this, settings));
             }
         });
     };

@@ -319,10 +319,10 @@
     $.fn.fileinput = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('bs.fileinput');
+            const data = $this.data('bs.fileinput');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('bs.fileinput', data = new FileInput(this, settings));
+                $this.data('bs.fileinput', new FileInput(this, settings));
             }
         });
     };

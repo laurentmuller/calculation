@@ -611,10 +611,10 @@
     $.fn.boostrapTreeView = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('boostrapTreeView');
+            const data = $this.data('boostrapTreeView');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('boostrapTreeView', data = new BoostrapTreeView(this, settings));
+                $this.data('boostrapTreeView', new BoostrapTreeView(this, settings));
             }
         });
     };

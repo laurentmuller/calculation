@@ -204,10 +204,9 @@ function generate() {
         }
     });
 
-    const options = {
+    $('#edit-form').simulate().initValidator({
         submitHandler: function () {
             generate();
         }
-    };
-    $('#edit-form').initValidator(options);
+    });
 }(jQuery));

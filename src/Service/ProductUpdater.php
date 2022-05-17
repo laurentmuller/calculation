@@ -53,10 +53,14 @@ class ProductUpdater implements LoggerAwareInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, private readonly FormFactoryInterface $factory, RequestStack $requestStack, TranslatorInterface $translator)
-    {
-        $this->setRequestStack($requestStack);
+    public function __construct(
+        private readonly EntityManagerInterface $manager,
+        private readonly FormFactoryInterface $factory,
+        TranslatorInterface $translator,
+        RequestStack $requestStack
+    ) {
         $this->setTranslator($translator);
+        $this->setRequestStack($requestStack);
     }
 
     /**

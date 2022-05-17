@@ -53,7 +53,7 @@ class FormHelper
     /**
      * The attributes.
      *
-     * @psalm-var array<string, mixed>
+     * @var array<string, mixed>
      */
     private array $attributes = [];
 
@@ -65,14 +65,14 @@ class FormHelper
     /**
      * The help attributes.
      *
-     * @psalm-var array<string, mixed>
+     * @var array<string, mixed>
      */
     private array $helpAttributes = [];
 
     /**
      * The label attributes.
      *
-     * @psalm-var array<string, mixed>
+     * @var array<string, mixed>
      */
     private array $labelAttributes = [];
 
@@ -84,14 +84,14 @@ class FormHelper
     /**
      * The options.
      *
-     * @psalm-var array<string, mixed>
+     * @var array<string, mixed>
      */
     private array $options = [];
 
     /**
      * The row attributes.
      *
-     * @psalm-var array<string, mixed>
+     * @var array<string, mixed>
      */
     private array $rowAttributes = [];
 
@@ -844,9 +844,8 @@ class FormHelper
     /**
      * Update attributes.
      *
-     * @param array $attributes the attribute's name and value
-     * @param bool  $force      true to put the option, even if the value is null
-     * @psalm-param array<string, mixed> $attributes
+     * @param array<string, mixed> $attributes the attribute's name and value
+     * @param bool                 $force      true to put the option, even if the value is null
      */
     public function updateAttributes(array $attributes, bool $force = false): self
     {
@@ -935,9 +934,8 @@ class FormHelper
     /**
      * Add one or more classes.
      *
-     * @param array  $array the array attributes where to find and update existing classes
-     * @param string $name  one or more space-separated classes to add
-     * @psalm-param array<string, mixed> $array
+     * @param array<string, mixed> $array the array attributes where to find and update existing classes
+     * @param string               $name  one or more space-separated classes to add
      */
     private function addClasses(array &$array, string $name): self
     {
@@ -957,12 +955,11 @@ class FormHelper
     /**
      * Update an entry in the given array.
      *
-     * @param array  $array the array to update
-     * @param string $name  the entry name
-     * @param mixed  $value the entry value
-     * @param bool   $force true to put the entry, even if the value is null
+     * @param array<string, mixed> $array the array to update
+     * @param string               $name  the entry name
+     * @param mixed                $value the entry value
+     * @param bool                 $force true to put the entry, even if the value is null
      *
-     * @psalm-param array<string, mixed> $array
      * @psalm-suppress MixedAssignment
      */
     private function updateEntry(array &$array, string $name, mixed $value, bool $force): self

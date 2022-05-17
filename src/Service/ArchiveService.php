@@ -53,8 +53,8 @@ class ArchiveService
         TranslatorInterface $translator,
         RequestStack $requestStack
     ) {
-        $this->setRequestStack($requestStack);
         $this->setTranslator($translator);
+        $this->setRequestStack($requestStack);
     }
 
     /**
@@ -74,7 +74,7 @@ class ArchiveService
             ->updateOptions([
                 'multiple' => true,
                 'expanded' => true,
-                'group_by' => self::asNull(),
+                'group_by' => fn () => null,
                 'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
             ])
             ->labelClass('switch-custom')
@@ -83,7 +83,7 @@ class ArchiveService
 
         $helper->field('target')
             ->updateOptions([
-                'group_by' => self::asNull(),
+                'group_by' => fn () => null,
                 'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getNotEditableQueryBuilder(),
             ])
             ->add(CalculationStateListType::class);
@@ -116,7 +116,10 @@ class ArchiveService
         $date = $query->getDate();
         $target = $query->getTarget();
         $simulate = $query->isSimulate();
-        $result = new ArchiveResult($date, $target, $simulate);
+        $result = new ArchiveResult();
+        $result->setDate($date)
+            ->setTarget($target)
+            ->setSimulate($simulate);
 
         $calculations = $this->getCalculations($date, $query->getSources());
         foreach ($calculations as $calculation) {
@@ -144,16 +147,6 @@ class ArchiveService
             self::KEY_TARGET => $query->getTarget()?->getId(),
             self::KEY_SIMULATE => $query->isSimulate(),
         ]);
-    }
-
-    /**
-     * Callback function used to skip grouping calculation states. This function return always null.
-     *
-     * @psalm-return null
-     */
-    private static function asNull()
-    {
-        return null;
     }
 
     /**

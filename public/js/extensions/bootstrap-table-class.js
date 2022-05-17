@@ -232,8 +232,7 @@ BootstrapTable.prototype.getCustomView = function () {
 /**
  * Sets the display mode.
  *
- * @param {string}
- *            mode - the display mode to set ('table', 'card' or 'custom').
+ * @param {string} mode - the display mode to set ('table', 'card' or 'custom').
  * @return {BootstrapTable} this instance for chaining.
  */
 BootstrapTable.prototype.setDisplayMode = function (mode) {
@@ -307,8 +306,7 @@ BootstrapTable.prototype.highlight = function () {
 /**
  * Update the selected row.
  *
- * @param {JQuery}
- *            $row - the row to update.
+ * @param {JQuery} $row - the row to update.
  * @return {boolean} this function returns always true.
  */
 BootstrapTable.prototype.updateRow = function ($row) {
@@ -538,8 +536,7 @@ BootstrapTable.prototype.showCustomViewMessage = function () {
 /**
  * Finds an action for the given selector
  *
- * @param {string}
- *            actionSelector - the action selector.
+ * @param {string} actionSelector - the action selector.
  * @return {JQuery} the action, if found; null otherwise.
  */
 BootstrapTable.prototype.findAction = function (actionSelector) {
@@ -698,12 +695,9 @@ BootstrapTable.prototype.updateHref = function (rows) {
 /**
  * Update the href attribute of the given link (action).
  *
- * @param {JQuery}
- *            $link - the link to update.
- * @param {Object}
- *            row - the row data.
- * @param {Object}
- *            params - the query parameters.
+ * @param {JQuery} $link - the link to update.
+ * @param {Object} row - the row data.
+ * @param {Object} params - the query parameters.
  */
 BootstrapTable.prototype.updateLink = function ($link, row, params) {
     'use strict';

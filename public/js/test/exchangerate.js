@@ -5,10 +5,8 @@
 /**
  * Show an error message
  *
- * @param {JQuery}
- *            $form - the edit form.
- * @param {string}
- *            message- the message to display or null to use default.
+ * @param {JQuery} $form - the edit form.
+ * @param {string} message- the message to display or null to use default.
  */
 function showError($form, message) {
     'use strict';
@@ -20,10 +18,8 @@ function showError($form, message) {
 /**
  * Update the text of the given element.
  *
- * @param {JQuery}
- *            $element - the element to update.
- * @param {String}
- *            date - the new date.
+ * @param {JQuery} $element - the element to update.
+ * @param {String} date - the new date.
  * @returns {JQuery} the element for chaining.
  */
 function updateDate($element, date) {
@@ -82,8 +78,7 @@ function compute() {
 /**
  * Format the currency entry.
  *
- * @param {Object}
- *            currency - the currency data.
+ * @param {Object} currency - the currency data.
  * @returns the formated currency.
  */
 function formatCurrency(currency) {

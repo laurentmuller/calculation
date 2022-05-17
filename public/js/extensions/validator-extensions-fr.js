@@ -10,7 +10,7 @@
         /**
          * Returns the label text of the input element.
          *
-         * @return {jQuery|boolean} the label text, if found; false otherwise.
+         * @return {string|boolean} the label text, if found; false otherwise.
          */
         getLabelText: function () {
             const $element = $(this);

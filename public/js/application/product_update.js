@@ -100,7 +100,7 @@ function updatePrices() {
     const $category = $('#form_category');
 
     // validation
-    $('#edit-form').initValidator({
+    $('#edit-form').simulate().initValidator({
         rules: {
             'form[percent]': {
                 notEqualToZero: true
@@ -140,14 +140,6 @@ function updatePrices() {
     });
 
     $('#form_percent, #form_fixed, #form_round').on('input', updatePrices);
-
-    $('#form_simulate').on('input', function () {
-        if ($(this).isChecked()) {
-            $('#form_confirm').toggleDisabled(true).removeValidation();
-        } else {
-            $('#form_confirm').toggleDisabled(false);
-        }
-    });
 
     $category.on('input', function () {
         const id = $(this).val();

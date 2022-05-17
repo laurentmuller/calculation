@@ -15,16 +15,18 @@ namespace App\Model;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 
+/**
+ * Contains result of archive calculations.
+ */
 class ArchiveResult
 {
+    private ?\DateTimeInterface $date = null;
     /**
      * @var array<string, array<Calculation>>
      */
     private array $results = [];
-
-    public function __construct(private readonly \DateTimeInterface $date, private readonly ?CalculationState $target, private readonly bool $simulate)
-    {
-    }
+    private bool $simulate = true;
+    private ?CalculationState $target = null;
 
     public function addCalculation(CalculationState $state, Calculation $calculation): self
     {
@@ -34,7 +36,7 @@ class ArchiveResult
         return $this;
     }
 
-    public function getDate(): \DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }
@@ -44,6 +46,8 @@ class ArchiveResult
      */
     public function getResults(): array
     {
+        \ksort($this->results, \SORT_LOCALE_STRING);
+
         return $this->results;
     }
 
@@ -60,6 +64,27 @@ class ArchiveResult
     public function isValid(): bool
     {
         return !empty($this->results);
+    }
+
+    public function setDate(?\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function setSimulate(bool $simulate): self
+    {
+        $this->simulate = $simulate;
+
+        return $this;
+    }
+
+    public function setTarget(?CalculationState $target): self
+    {
+        $this->target = $target;
+
+        return $this;
     }
 
     public function total(): int

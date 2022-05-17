@@ -3,10 +3,8 @@
 /**
  * Gets the CSS transform for the given value.
  *
- * @param {number}
- *            value - the current value used to transform.
- * @param {number}
- *            maximum - the maximum allowed value.
+ * @param {number} value - the current value used to transform.
+ * @param {number} maximum - the maximum allowed value.
  * @returns {string} the CSS transform to apply.
  */
 function getTimeTransform(value, maximum) {
@@ -18,10 +16,8 @@ function getTimeTransform(value, maximum) {
 /**
  * Update UI.
  *
- * @param {DateTimeFormat}
- *            dateFormat - the format used for the date.
- * @param {DateTimeFormat}
- *            timeFormat - the format used for the time.
+ * @param {DateTimeFormat} dateFormat - the format used for the date.
+ * @param {DateTimeFormat} timeFormat - the format used for the time.
  */
 function updateTime(dateFormat, timeFormat) {
     'use strict';

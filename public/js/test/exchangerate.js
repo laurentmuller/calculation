@@ -6,7 +6,7 @@
  * Show an error message
  *
  * @param {JQuery} $form - the edit form.
- * @param {string} message- the message to display or null to use default.
+ * @param {string} [message]- the message to display or null to use default.
  */
 function showError($form, message) {
     'use strict';
@@ -145,7 +145,7 @@ function swapCodes() {
         }
     };
     $('#edit-form').initValidator(options);
-    $('#amount').select().focus();
+    $('#amount').trigger('select').trigger('focus');
     compute();
 
 }(jQuery));

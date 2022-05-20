@@ -19,6 +19,8 @@ function notify(type, message) {
  * Handle the error response.
  *
  * @param {Object} response - the Ajax call response.
+ * @param {string} response.message - the response message.
+ * @param {Object} response.exception - the response exception.
  */
 function handleError(response) {
     'use strict';
@@ -214,7 +216,8 @@ function handleService() {
 (function ($) {
     'use strict';
     // initialize select
-    $('#from, #to').initSelect2();
+    const $fromTo = $('#from, #to');
+    $fromTo.initSelect2();
 
     // clipboard
     if (ClipboardJS.isSupported()) {
@@ -233,11 +236,11 @@ function handleService() {
     $('.btn-exchange').on('click', function () {
         handleExchange();
     });
-    $('#from, #to').on('input', function () {
+    $fromTo.on('input', function () {
         handleSelection();
     });
     $('#text, #result').on('focus', function () {
-        $(this).select();
+        $(this).trigger('select');
     });
     $('#service').on('input', function () {
         handleService();
@@ -258,5 +261,5 @@ function handleService() {
         }
     };
     $('#edit-form').initValidator(options);
-    $('#text').focus();
+    $('#text').trigger('focus');
 }(jQuery));

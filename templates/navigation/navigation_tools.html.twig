@@ -17,7 +17,7 @@
         {{- icons.dropdownItem(path('empty_table'), 'empty.title', 'file-code far') -}}
         {%- if is_granted_task -%}
         {{- icons.dropdownSeparator -}}
-        {{- icons.dropdownItem(path('task_compute', {'id': 0, 'caller': path('homepage')}), 'taskcompute.title', 'keyboard') -}}
+        {{- icons.dropdownItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') -}}
         {% endif -%}
         {% endif -%}
     </div>

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\MarginInterface;
+use App\Types\FixedFloatType;
 use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,7 +28,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
      * The margin in percent (%) to use when an amount is within this range.
      */
     #[Assert\GreaterThanOrEqual(0)]
-    #[ORM\Column(scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $margin = 0.0;
 
     /**
@@ -35,14 +36,14 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
      */
     #[Assert\GreaterThanOrEqual(0)]
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
-    #[ORM\Column(scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $maximum = 0.0;
 
     /**
      * The minimum amount (inclusive) to apply within this margin.
      */
     #[Assert\GreaterThanOrEqual(0)]
-    #[ORM\Column(scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $minimum = 0.0;
 
     /**

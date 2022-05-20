@@ -157,7 +157,7 @@ function updatePrices() {
     $('#form_products tbody').on('mousedown', 'td', function (e) {
         const $target = $(e.target);
         if (e.which === 1 && !$target.is(':checkbox') && !$target.is('label') && !isAllProducts()) {
-            $(this).closest('tr').find(':checkbox').toggleChecked().focus();
+            $(this).closest('tr').find(':checkbox').toggleChecked().trigger('focus');
             validateProducts();
         }
     });

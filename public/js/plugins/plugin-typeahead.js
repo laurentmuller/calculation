@@ -465,7 +465,7 @@
         click(e) {
             e.stopPropagation();
             e.preventDefault();
-            this.$element.focus();
+            this.$element.trigger('focus');
             this.select();
         }
 

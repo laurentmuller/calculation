@@ -29,7 +29,7 @@
             return this.each(function () {
                 const $that = $(this);
                 const isThumbnail = $that.parents('.form-group').findExists('.img-thumbnail');
-                $that.on('change', function () {
+                $that.on('input', function () {
                     $that.valid();
                     if (typeof callback === 'function') {
                         callback($that);
@@ -56,7 +56,7 @@
 
                     // focus when select file
                     $group.find('.fileinput-filename,.fileinput-exists').on('click', function () {
-                        $that.focus();
+                        $that.trigger('focus');
                     });
                 }
             });

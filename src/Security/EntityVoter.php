@@ -218,15 +218,15 @@ class EntityVoter extends Voter implements EntityVoterInterface
         ];
 
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->{self::ENTITY_CALCULATION} = self::MASK_ATTRIBUTES;
-        $role->{self::ENTITY_CALCULATION_STATE} = $default;
-        $role->{self::ENTITY_GROUP} = $default;
-        $role->{self::ENTITY_CATEGORY} = $default;
-        $role->{self::ENTITY_CUSTOMER} = $default;
-        $role->{self::ENTITY_PRODUCT} = $default;
-        $role->{self::ENTITY_GLOBAL_MARGIN} = $default;
-        $role->{self::ENTITY_TASK} = $default;
-        $role->{self::ENTITY_USER} = [];
+        $role->EntityCalculation = self::MASK_ATTRIBUTES;
+        $role->EntityCalculationState = $default;
+        $role->EntityGroup = $default;
+        $role->EntityCategory = $default;
+        $role->EntityCustomer = $default;
+        $role->EntityProduct = $default;
+        $role->EntityGlobalMargin = $default;
+        $role->EntityTask = $default;
+        $role->EntityUser = [];
 
         return $role;
     }

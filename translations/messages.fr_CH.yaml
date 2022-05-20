@@ -1008,10 +1008,9 @@ schema:
       count: Colonnes
       name: Nom
     title: Tables
-    tooltip: Afficher les colonnes de la table %name%
-
+    tooltip: Afficher la définition de la table %name%
   table:
-    description: Liste des colonnes de la base de données.
+    description: Liste des colonnes et des associations de la base de données.
     empty: Aucune colonne n'est définie.
     error: La table '%name%' n'existe pas ou est introuvable.
     columns: Colonnes
@@ -1025,7 +1024,7 @@ schema:
       inverse_side: Inverser
     index_unique: Valeur unique
     primary_key: Clé primaire
-    title: Colonnes de la table %name%
+    title: Table %name%
 search:
   clear: Effacer les critères de recherche
   empty: Aucun objet correspondant.

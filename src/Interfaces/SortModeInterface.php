@@ -20,15 +20,15 @@ interface SortModeInterface
     /**
      * The ascending sort order.
      */
-    public const SORT_ASC = 'asc';
+    final public const SORT_ASC = 'asc';
 
     /**
      * The descending sort order.
      */
-    public const SORT_DESC = 'desc';
+    final public const SORT_DESC = 'desc';
 
     /**
      * The none sort order.
      */
-    public const SORT_NONE = 'none';
+    final public const SORT_NONE = 'none';
 }

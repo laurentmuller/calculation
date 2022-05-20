@@ -20,80 +20,80 @@ interface EntityVoterInterface
     /**
      * The add attribute name.
      */
-    public const ATTRIBUTE_ADD = 'add';
+    final public const ATTRIBUTE_ADD = 'add';
 
     /**
      * The delete attribute name.
      */
-    public const ATTRIBUTE_DELETE = 'delete';
+    final public const ATTRIBUTE_DELETE = 'delete';
 
     /**
      * The edit attribute name.
      */
-    public const ATTRIBUTE_EDIT = 'edit';
+    final public const ATTRIBUTE_EDIT = 'edit';
 
     /**
      * The export attribute name.
      */
-    public const ATTRIBUTE_EXPORT = 'export';
+    final public const ATTRIBUTE_EXPORT = 'export';
 
     /**
      * The list attribute name.
      */
-    public const ATTRIBUTE_LIST = 'list';
+    final public const ATTRIBUTE_LIST = 'list';
 
     /**
      * The show attribute name.
      */
-    public const ATTRIBUTE_SHOW = 'show';
+    final public const ATTRIBUTE_SHOW = 'show';
 
     /**
      * The calculation rights.
      */
-    public const ENTITY_CALCULATION = 'EntityCalculation';
+    final public const ENTITY_CALCULATION = 'EntityCalculation';
 
     /**
      * The calculation state rights.
      */
-    public const ENTITY_CALCULATION_STATE = 'EntityCalculationState';
+    final public const ENTITY_CALCULATION_STATE = 'EntityCalculationState';
 
     /**
      * The category rights.
      */
-    public const ENTITY_CATEGORY = 'EntityCategory';
+    final public const ENTITY_CATEGORY = 'EntityCategory';
 
     /**
      * The customer rights.
      */
-    public const ENTITY_CUSTOMER = 'EntityCustomer';
+    final public const ENTITY_CUSTOMER = 'EntityCustomer';
 
     /**
      * The global margin rights.
      */
-    public const ENTITY_GLOBAL_MARGIN = 'EntityGlobalMargin';
+    final public const ENTITY_GLOBAL_MARGIN = 'EntityGlobalMargin';
 
     /**
      * The group rights.
      */
-    public const ENTITY_GROUP = 'EntityGroup';
+    final public const ENTITY_GROUP = 'EntityGroup';
 
     /**
      * The log rights.
      */
-    public const ENTITY_LOG = 'EntityLog';
+    final public const ENTITY_LOG = 'EntityLog';
 
     /**
      * The product rights.
      */
-    public const ENTITY_PRODUCT = 'EntityProduct';
+    final public const ENTITY_PRODUCT = 'EntityProduct';
 
     /**
      * The task rights.
      */
-    public const ENTITY_TASK = 'EntityTask';
+    final public const ENTITY_TASK = 'EntityTask';
 
     /**
      * The user rights.
      */
-    public const ENTITY_USER = 'EntityUser';
+    final public const ENTITY_USER = 'EntityUser';
 }

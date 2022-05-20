@@ -630,7 +630,7 @@ $.fn.extend({
             } else if (isQueryParams) {
                 $table.refresh();
             }
-            $('input.search-input').focus();
+            $('input.search-input').trigger('focus');//.focus();
         });
     }
 
@@ -648,7 +648,7 @@ $.fn.extend({
     $viewButtons.on('click', function () {
         $viewButtons.removeClass('dropdown-item-checked');
         const view = $(this).addClass('dropdown-item-checked').getDataValue();
-        $('#button_other_actions').focus();
+        $('#button_other_actions').trigger('focus');//focus();
         $table.setDisplayMode(view);
     });
 
@@ -665,7 +665,7 @@ $.fn.extend({
          }
     });
     $('.btn-group-sort').on('shown.bs.dropdown', function () {
-        $(this).find('.dropdown-menu-sort.active').focus();
+        $(this).find('.dropdown-menu-sort.active').trigger('focus');//.focus();
     });
 
     // handle keys enablement
@@ -704,6 +704,6 @@ $.fn.extend({
 
     // focus
     if ($table.isEmpty()) {
-        $('input.search-input').focus();
+        $('input.search-input').trigger('focus');
     }
 }(jQuery));

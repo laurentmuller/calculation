@@ -34,7 +34,7 @@
         $.get(url, function (response) {
             if (response.result) {
                 $('.captcha-image').attr('src', response.data);
-                $captcha.val('').focus();
+                $captcha.val('').trigger('focus');
             }
         });
     });

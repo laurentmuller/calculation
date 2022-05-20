@@ -79,7 +79,7 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * Display the form to compute a task.
+     * Compute a task.
      */
     #[Route(path: '/compute/{id}', name: 'task_compute', requirements: ['id' => '\d+'])]
     public function compute(Request $request, TaskService $service, TaskRepository $repository, Task $task = null): Response
@@ -89,13 +89,17 @@ class TaskController extends AbstractEntityController
         $tasks = $repository->getSortedBuilder(false)
             ->getQuery()
             ->getResult();
+
         // set task
         if (null === $task || $task->isEmpty()) {
             $task = $tasks[0];
+        } else {
+            $tasks = [$task];
         }
         $service->setTask($task, true)
             ->compute();
-        $form = $this->createForm(TaskServiceType::class, $service);
+
+        $form = $this->createForm(TaskServiceType::class, $service, ['simple_widget' => 1 === \count($tasks)]);
         if ($this->handleRequestForm($request, $form)) {
             $service->compute($request);
         }
@@ -134,7 +138,7 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * Export the tasks to a Spreadsheet document.
+     * Export tasks to a Spreadsheet document.
      *
      * @throws NotFoundHttpException if no category is found
      */
@@ -152,7 +156,7 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * Export the tasks to a PDF document.
+     * Export tasks to a PDF document.
      *
      * @throws NotFoundHttpException if no category is found
      */

@@ -77,15 +77,15 @@
 {# plain text #}
 {% block plain_widget -%}
 {% apply spaceless %}
-{%- if expanded is defined and expanded -%}
-    {%- set class = (attr.class|default('') ~ ' form-control-plaintext text-muted border rounded px-2')|trim -%}
+{% if expanded %}
+    {% set class = (attr.class|default('') ~ ' form-control-plaintext text-muted border rounded px-2')|trim %}
     <div class="{{ class }}">
-        <span>{{ value|default('&nbsp;')|raw }}</span>
+        <span>{{ display_value|default('&nbsp;')|raw }}</span>
     </div>
-{%- else -%}
-    <span>{{ value|default('&nbsp;')|raw }}</span>
-{%- endif -%}
-{%- if hidden_input is defined and hidden_input -%}{{- block('hidden_widget') -}}{%- endif -%}
+{% else %}
+    <span>{{ display_value|default('&nbsp;')|raw }}</span>
+{% endif %}
+{% if hidden_input %}{{ block('hidden_widget') }}{% endif %}
 {% endapply %}
 {%- endblock %}
 
@@ -158,8 +158,8 @@
     {%- set thumbnail_src = thumbnail_src|default(false) -%}
     {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
     {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-    <div class="fileinput {{ thumbnail_src ? 'fileinput-exists' : 'fileinput-new' }}" data-provides="fileinput">
-        <div class="fileinput-preview img-thumbnail" data-trigger="fileinput">
+    <div class="text-center fileinput {{ thumbnail_src ? 'fileinput-exists' : 'fileinput-new' }}" data-provider="fileinput">
+        <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" data-default="{{ empty_image }}">
         {% if thumbnail_src or empty_image -%}
             <img alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}" src="{{ thumbnail_src|default(empty_image) }}">
         {%- endif %}
@@ -176,7 +176,7 @@
     </div>
 {%- else -%}
     {%- set placeholder = attr.placeholder is defined ? (translation_domain is same as(false) ? attr.placeholder : attr.placeholder|trans({}, translation_domain)) : false -%}
-    <div class="fileinput fileinput-new input-group rounded border" data-provides="fileinput">
+    <div class="fileinput fileinput-new input-group rounded border" data-provider="fileinput">
         <div class="form-control" data-trigger="fileinput">
             <span class="fileinput-filename">{%- if placeholder -%}{{ placeholder }}{%- endif -%}</span>
         </div>
@@ -197,10 +197,10 @@
 {# vich_image #}
 {% block vich_image_widget -%}
 {# file #}
-{%- set uri = asset_exists(image_uri) ? image_uri : false -%}
-{%- set src = uri ? asset(uri) ~ '?' ~ 'now'|date('c') : false -%}
 {%- set alt = 'user.image.title' -%}
 {%- set empty_image = asset('/images/avatar.png') -%}
+{%- set uri = asset_exists(image_uri) ? image_uri : false -%}
+{%- set src = uri ? asset(uri) ~ '?' ~ 'now'|date('c') : false -%}
 {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt, empty_image: empty_image}) -}}
 {# delete #}
 {% if form.delete is defined -%}
@@ -237,6 +237,7 @@
     </div>
     {% endif %}
 </div>
+
 {%- endblock %}
 
 {# simple editor #}

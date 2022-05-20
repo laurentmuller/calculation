@@ -59,7 +59,7 @@ function initSearchToolbar() {
             width: 0
         }, function () {
             $form.hide();
-            $button.show().focus();
+            $button.show().trigger('focus');
         });
     };
 
@@ -68,7 +68,7 @@ function initSearchToolbar() {
         $form.show().animate({
             width: 200
         }, function () {
-            $search.focus();
+            $search.trigger('focus');
         });
     });
 

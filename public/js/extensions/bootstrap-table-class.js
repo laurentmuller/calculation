@@ -658,8 +658,7 @@ BootstrapTable.prototype.saveParameters = function () {
 /**
  * Update the href attribute of the actions.
  *
- * @param {array}
- *            rows - the rendered data.
+ * @param {array} rows - the rendered data.
  * @return {BootstrapTable} this instance for chaining.
  */
 BootstrapTable.prototype.updateHref = function (rows) {

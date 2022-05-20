@@ -36,7 +36,7 @@ trait RightsTrait
     /**
      * The overwritten rights flag.
      */
-    #[ORM\Column(type: 'boolean', options: ['default' => 0])]
+    #[ORM\Column(options: ['default' => false])]
     protected bool $overwrite = false;
 
     /**

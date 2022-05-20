@@ -211,7 +211,7 @@ const Application = {
         // draggable edit dialog
         $('.modal .modal-header').on('mousedown', function (e) {
             // left button?
-            if (e.which !== 1) {
+            if (e.button !== 0) {
                 return;
             }
 
@@ -250,7 +250,7 @@ const Application = {
                 $draggable.toggleClass(className);
                 $close.toggleClass(className);
                 if ($focused.length) {
-                    $focused.focus();
+                    $focused.trigger('focus');
                 }
             });
 

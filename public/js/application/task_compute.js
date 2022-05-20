@@ -19,7 +19,7 @@ function updateValue(id, value) {
 function resetValues() {
     'use strict';
     const value = $.formatFloat(0);
-    $('#edit-form .form-control-plaintext').text(value);
+    $('#edit-form .form-control-plaintext:not(.skip-reset)').text(value);
 }
 
 /**
@@ -98,7 +98,7 @@ function onInputChanged() {
     'use strict';
 
     // submit
-    $("#edit-form").submit();
+    $("#edit-form").trigger('submit');
 }
 
 /**
@@ -120,7 +120,7 @@ function onTaskChanged() {
 
     // submit
     if (!empty) {
-        $("#edit-form").submit();
+        $("#edit-form").trigger('submit');
     }
 }
 
@@ -134,6 +134,7 @@ function onTaskChanged() {
     $('#task').on('input', function () {
         $(this).updateTimer(onTaskChanged, 250);
     });
+
     $('#quantity').on('input', function () {
         $(this).updateTimer(onInputChanged, 250);
     }).inputNumberFormat();

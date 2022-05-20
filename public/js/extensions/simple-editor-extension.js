@@ -31,7 +31,7 @@
             if ($editor) {
                 const $content = $editor.find('.simple-editor-content');
                 if ($content.length) {
-                    $content.focus();
+                    $content.trigger('focus');
                     return true;
                 }
             }
@@ -101,9 +101,9 @@
                     if (exec) {
                         $button.on('click', function () {
                             if (queryCommandEnabled(exec)) {
-                                return $content.focus() && execCommand(exec, data.parameter || null);
+                                return $content.trigger('focus') && execCommand(exec, data.parameter || null);
                             }
-                            return $content.focus();
+                            return $content.trigger('focus');
                         });
                     } else if (!$button.hasClass('dropdown-toggle')) {
                         $button.toggleDisabled(true);

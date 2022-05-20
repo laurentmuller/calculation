@@ -412,7 +412,7 @@
             const selectionClass = this.options.selectionClass;
             if ($selection && $selection.length) {
                 this.$element.find('.list-group-item').removeClass(selectionClass);
-                $selection.addClass(selectionClass).focus();
+                $selection.addClass(selectionClass).trigger('focus');
             }
             return this;
         }
@@ -438,9 +438,9 @@
         focus() {
             const $selection = this.getSelection();
             if ($selection) {
-                $selection.focus();
+                $selection.trigger('focus');
             } else {
-                this.$element.focus();
+                this.$element.trigger('focus');
             }
             return this;
         }

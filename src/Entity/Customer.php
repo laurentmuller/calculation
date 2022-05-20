@@ -54,11 +54,11 @@ class Customer extends AbstractEntity
     protected ?string $email = null;
 
     #[Assert\Length(max: 255)]
-    #[ORM\Column(name: 'firstName', nullable: true)]
+    #[ORM\Column(nullable: true)]
     protected ?string $firstName = null;
 
     #[Assert\Length(max: 255)]
-    #[ORM\Column(name: 'lastName', nullable: true)]
+    #[ORM\Column(nullable: true)]
     protected ?string $lastName = null;
 
     #[Assert\Length(max: 50)]
@@ -67,12 +67,12 @@ class Customer extends AbstractEntity
 
     #[Assert\Url]
     #[Assert\Length(max: 100)]
-    #[ORM\Column(name: 'webSite', length: 100, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     protected ?string $webSite = null;
 
     #[Assert\Length(max: 10)]
     #[Assert\Regex(pattern: '/^[1-9]\d{3}$/', message: 'customer.zip_code')]
-    #[ORM\Column(name: 'zipCode', length: 10, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     protected ?string $zipCode = null;
 
     /**

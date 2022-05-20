@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
@@ -28,19 +27,18 @@
 {# parameters #}
 {%- set title = 'taskcompute.title' -%}
 {%- set title_icon = 'keyboard' -%}
-{%- set submit_text = 'taskcompute.button_ok' -%}
-{%- set cancel_text = 'common.button_close' -%}
 {%- set form_attr = form_attr|default({})|merge({'action': path('ajax_task'), 'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
+{%- set submit_text = 'taskcompute.button_ok' -%}
 {%- set service = form.vars.value -%}
 {%- set selection = service.task.id -%}
 {%- set items_count = service.task.count -%}
 
 {% block card_body %}
 <div class="form-row">
-    <div class="col-9">
+    <div class="col-md-8">
         {{ form_row(form.task) }}
     </div>
-    <div class="col-3">
+    <div class="col-md-4">
         {{ form_row(form.quantity) }}
     </div>
 </div>
@@ -79,11 +77,19 @@
 {% endblock %}
 
 {% block actions_form -%}
-{{ icons.button_cancel(cancel_path, cancel_text) }}
+{% if app.request.get('caller')|default == '/' %}
+{{ icons.homepage() }}
+{% else %}
+{{ icons.button_cancel(cancel_path, 'common.button_close') }}
+{% endif %}
 {% endblock %}
 
 {% block javascripts %}
+{% if app.debug %}
 {{ parent() }}
 {{ asset_js('js/plugins/plugin-input.js') }}
 {{ asset_js('js/application/task_compute.js') }}
+{% else %}
+{{ asset_js('js/task_compute.js') }}
+{% endif %}
 {% endblock %}

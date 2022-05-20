@@ -117,7 +117,7 @@ function enableButtons() {
     const $submit = $form.find(':submit');
     $submit.toggleDisabled(false);
     if ($submit.data('focused')) {
-        $submit.focus();
+        $submit.trigger('focus');
     }
     $form.find('.btn-cancel').toggleDisabled(false);
 }

@@ -181,7 +181,7 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
     _onDialogVisible() {
         'use strict';
         if (this.$price.attr('readonly')) {
-            this.$cancelButton.focus();
+            this.$cancelButton.trigger('focus');
         } else if (this.$editingRow) {
             if (this.$price.isEmptyValue()) {
                 this.$price.selectFocus();

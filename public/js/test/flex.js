@@ -17,7 +17,7 @@ function getNumberFormat(decimal) {
 function getGroup() {
     'use strict';
     const formatter = getNumberFormat(2);
-    const parts = formatter.formatToParts('1000');
+    const parts = formatter.formatToParts(1000);
     const item = parts.find(item => item.type === 'group'); // eslint-disable-line
     return item ? item.value : '';
 }
@@ -29,7 +29,7 @@ function getGroup() {
 function getDecimal() {
     'use strict';
     const formatter = getNumberFormat(2);
-    const parts = formatter.formatToParts('1000');
+    const parts = formatter.formatToParts(1000);
     const item = parts.find(item => item.type === 'decimal'); // eslint-disable-line
     return item ? item.value : '.';
 }
@@ -79,9 +79,9 @@ function parse($input) {
             const numberFormat = $input.data("inputNumberFormat");
             if (numberFormat) {
                 numberFormat.update();
-                const decimal =numberFormat.options.decimal;
+                const decimal = numberFormat.options.decimal;
                 const formatter = getNumberFormat(decimal);
-                text = formatter.format(text);
+                text = formatter.format(parseFloat(text));
             }
             $input.val(text);
 

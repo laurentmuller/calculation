@@ -27,7 +27,7 @@
                     $.get(url, function (response) {
                         if (response.result) {
                             $image.attr('src', response.data);
-                            $that.val('').focus();
+                            $that.val('').trigger('focus');
                         }
                     });
                 });

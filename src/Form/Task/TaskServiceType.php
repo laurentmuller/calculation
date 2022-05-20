@@ -12,14 +12,41 @@ declare(strict_types=1);
 
 namespace App\Form\Task;
 
+use App\Entity\Task;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
+use App\Form\Type\PlainType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Type to compute a task.
  */
 class TaskServiceType extends AbstractHelperType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        parent::buildView($view, $form, $options);
+        if ($options['simple_widget']) {
+            $form->remove('task')
+                ->add('task', PlainType::class, $this->getPlainTypeOptions());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        parent::configureOptions($resolver);
+        $resolver->setDefault('simple_widget', false)
+            ->setAllowedTypes('simple_widget', 'bool');
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,5 +73,17 @@ class TaskServiceType extends AbstractHelperType
     protected function getLabelPrefix(): string
     {
         return 'taskcompute.fields.';
+    }
+
+    private function getPlainTypeOptions(): array
+    {
+        return [
+            'expanded' => true,
+            'hidden_input' => true,
+            'attr' => ['class' => 'skip-reset'],
+            'label' => 'taskcompute.fields.task',
+            'transformer' => fn (Task $task): ?int => $task->getId(),
+            'display_transformer' => fn (Task $task): ?string => $task->getName(),
+        ];
     }
 }

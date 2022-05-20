@@ -224,7 +224,7 @@
             // find button
             const $button = this.findButton('.btn-color[data-value="' + value + '"]:first');
             if ($button) {
-                $button.focus();
+                $button.trigger('focus');
             } else {
                 this.setSelection({
                     col: 0,
@@ -358,7 +358,7 @@
          * Sets focus to the dropdown toggle.
          */
         setFocus() {
-            this.$dropdownToggle.focus();
+            this.$dropdownToggle.trigger('focus');
         }
 
         /**
@@ -423,7 +423,7 @@
             const selector = '.color-row:eq(' + selection.row + ') .btn-color:eq(' + selection.col + ')';
             const $button = this.findButton(selector);
             if ($button) {
-                return $button.focus();
+                return $button.trigger('focus');
             }
             return null;
         }

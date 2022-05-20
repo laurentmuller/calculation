@@ -246,10 +246,10 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
             if (this.$quantity.isEmptyValue()) {
                 this.$quantity.selectFocus();
             } else {
-                this.$task.focus();
+                this.$task.trigger('focus');
             }
         } else {
-            this.$task.focus();
+            this.$task.trigger('focus');
         }
         return super._onDialogVisible();
     }

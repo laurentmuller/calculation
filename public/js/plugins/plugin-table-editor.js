@@ -90,7 +90,7 @@
             }
 
             // show
-            $input.select().focus();
+            $input.trigger('select').trigger('focus');
         }
 
         keydown(e) {

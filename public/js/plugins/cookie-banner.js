@@ -135,7 +135,7 @@
                     'target': settings.linkTarget
                 });
                 if (settings.linkToggleClass) {
-                    $link.hover(function() {
+                    $link.on('hover', function() {
                         $(this).toggleClass(settings.linkToggleClass);
                     });
                 }

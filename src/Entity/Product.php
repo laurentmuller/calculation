@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use App\Types\FixedFloatType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,7 +46,7 @@ class Product extends AbstractCategoryItemEntity
     /**
      * The price.
      */
-    #[ORM\Column(scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     private float $price = 0.0;
 
     /**

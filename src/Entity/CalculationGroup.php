@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Interfaces\ParentCalculationInterface;
 use App\Repository\CalculationGroupRepository;
 use App\Traits\PositionTrait;
+use App\Types\FixedFloatType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -33,7 +34,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     /**
      * The total amount.
      */
-    #[ORM\Column(scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $amount = 0.0;
 
     /**
@@ -72,7 +73,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     /**
      * The margin in percent (%).
      */
-    #[ORM\Column(scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $margin = 0.0;
 
     /**

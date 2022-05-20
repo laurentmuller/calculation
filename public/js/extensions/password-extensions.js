@@ -27,7 +27,7 @@
                         }
                     }).on('mouseup mouseout', function () {
                         if ($element.prop('type') === 'text') {
-                            $element.prop('type', 'password').focus();
+                            $element.prop('type', 'password').trigger('focus');
                             $icon.toggleClass('fa-eye-slash fa-eye');
                         }
                     });

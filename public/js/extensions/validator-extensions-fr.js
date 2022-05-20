@@ -52,7 +52,7 @@
          * @param {HTMLElement} element - The element to search in.
          * @param {string} message - the message to use when label text is found.
          * @param {string} defaultMessage - the default message to use when label text is not found.
-         * @param {any} params - the optional parameters to use for formatting the message.
+         * @param {any} [params] - the optional parameters to use for formatting the message.
          * @return {string} the formatted message.
          */
         formatLabel: function (element, message, defaultMessage, params) {

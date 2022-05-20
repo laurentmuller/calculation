@@ -33,7 +33,7 @@
             triggerLength: 1
         },
         onSelect: function () {
-            $title.select();
+            $title.trigger('select');
         }
     }));
 
@@ -68,7 +68,7 @@
         },
         onSelect: function (item) {
             $city.val(item.city);
-            $zip.select();
+            $zip.trigger('select');
         },
     }));
 
@@ -85,7 +85,7 @@
         },
         onSelect: function (item) {
             $zip.val(item.zip);
-            $city.select();
+            $city.trigger('select');
         },
     }));
 

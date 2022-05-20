@@ -87,7 +87,7 @@
         /**
          * Initialize a select with select2 plugin.
          *
-         * @param {object} options - The select2 options.
+         * @param {object} [options] - The select2 options.
          */
         initSelect2: function (options) {
             const borderRadius = $.isBorderRadius();

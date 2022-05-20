@@ -20,70 +20,70 @@ interface TableInterface
     /**
      * The allowed page sizes.
      */
-    public const PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
+    final public const PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
 
     /**
      * The column's parameter name (array of columns).
      */
-    public const PARAM_COLUMNS = 'columns';
+    final public const PARAM_COLUMNS = 'columns';
 
     /**
      * The identifier parameter name (int).
      */
-    public const PARAM_ID = 'id';
+    final public const PARAM_ID = 'id';
 
     /**
      * The limit parameter name (int).
      */
-    public const PARAM_LIMIT = 'limit';
+    final public const PARAM_LIMIT = 'limit';
 
     /**
      * The offset parameter name (int).
      */
-    public const PARAM_OFFSET = 'offset';
+    final public const PARAM_OFFSET = 'offset';
 
     /**
      * The order parameter name (string).
      */
-    public const PARAM_ORDER = 'order';
+    final public const PARAM_ORDER = 'order';
 
     /**
      * The page parameter name (int).
      */
-    public const PARAM_PAGE = 'page';
+    final public const PARAM_PAGE = 'page';
 
     /**
      * The page list parameter name (array of integers).
      */
-    public const PARAM_PAGE_LIST = 'pageList';
+    final public const PARAM_PAGE_LIST = 'pageList';
 
     /**
      * The row's parameter name (array).
      */
-    public const PARAM_ROWS = 'rows';
+    final public const PARAM_ROWS = 'rows';
 
     /**
      * The search parameter name (string).
      */
-    public const PARAM_SEARCH = 'search';
+    final public const PARAM_SEARCH = 'search';
 
     /**
      * The sort parameter name (string).
      */
-    public const PARAM_SORT = 'sort';
+    final public const PARAM_SORT = 'sort';
 
     /**
      * The total parameter name (int).
      */
-    public const PARAM_TOTAL = 'total';
+    final public const PARAM_TOTAL = 'total';
 
     /**
      * The total not filtered parameter name (int).
      */
-    public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
+    final public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**
      * The dispay view parameter name (string: 'table', 'custom' or 'card').
      */
-    public const PARAM_VIEW = 'view';
+    final public const PARAM_VIEW = 'view';
 }

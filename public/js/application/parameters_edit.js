@@ -138,7 +138,7 @@ function displayEmail($email) {
         $prev.find('a').attr('title', $prev.data('show'));
     }).on('shown.bs.collapse', function () {
         if ($(this).find('.is-invalid').length === 0) {
-            $(this).find(':input:first').focus();
+            $(this).find(':input:first').trigger('focus');
         }
     });
 

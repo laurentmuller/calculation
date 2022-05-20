@@ -100,7 +100,7 @@
             if (options.onStartEdit) {
                 options.onStartEdit();
             }
-            this.$input.select().focus();
+            this.$input.trigger('select').trigger('focus');
             if (title) {
                 this.$input.tooltip('show');
             }

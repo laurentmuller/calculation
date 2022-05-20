@@ -104,12 +104,16 @@ class PlainType extends AbstractType
 
         /** @psalm-var mixed $data */
         $data = $form->getViewData();
+        $value = $this->getDataValue($data, $options);
+        $display_value = $this->getDisplayValue($data, $options) ?? $value;
+
         $view->vars = \array_replace(
             $view->vars,
             [
+                'value' => $value,
+                'display_value' => $display_value,
                 'expanded' => $options['expanded'],
                 'hidden_input' => $options['hidden_input'],
-                'value' => $this->transformValue($data, $options),
             ]
         );
     }
@@ -120,30 +124,21 @@ class PlainType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-
         $this->configureDefaults($resolver);
-        $this->configureDate($resolver);
         $this->configureNumber($resolver);
-
-        $resolver->setAllowedTypes('empty_value', [
-            'null',
-            'string',
-            'callable',
-        ]);
-
-        $resolver->setAllowedTypes('separator', [
-            'null',
-            'string',
-        ]);
-
-        $resolver->setAllowedTypes('transformer', [
-            'null',
-            'callable',
-        ]);
+        $this->configureDate($resolver);
     }
 
     private function configureDate(OptionsResolver $resolver): void
     {
+        $resolver->setDefaults([
+            'date_format' => null,
+            'time_format' => null,
+            'date_pattern' => null,
+            'time_zone' => null,
+            'calendar' => null,
+        ]);
+
         $resolver->setAllowedTypes('date_format', [
             'null',
             'int',
@@ -168,6 +163,16 @@ class PlainType extends AbstractType
             self::FORMAT_NONE,
         ]);
 
+        $resolver->setAllowedTypes('date_pattern', [
+            'null',
+            'string',
+        ]);
+
+        $resolver->setAllowedTypes('time_zone', [
+            'null',
+            'string',
+        ]);
+
         $resolver->setAllowedTypes('calendar', [
             'null',
             'string',
@@ -175,11 +180,6 @@ class PlainType extends AbstractType
             null,
             self::CALENDAR_GREGORIAN,
             self::CALENDAR_TRADITIONAL,
-        ]);
-
-        $resolver->setAllowedTypes('date_pattern', [
-            'null',
-            'string',
         ]);
     }
 
@@ -190,25 +190,51 @@ class PlainType extends AbstractType
             'read_only' => true,
             'disabled' => true,
             'required' => false,
-            'date_format' => null,
-            'time_format' => null,
-            'date_pattern' => null,
-            'time_zone' => null,
-            'calendar' => null,
-            'number_pattern' => null,
-            'percent_sign' => true,
-            'percent_decimals' => 2,
-            'percent_rounding_mode' => \NumberFormatter::ROUND_HALFEVEN,
+            'expanded' => false,
             'empty_value' => null,
             'compound' => false,
-            'expanded' => false,
             'separator' => ', ',
             'transformer' => null,
+            'display_transformer' => null,
+        ]);
+
+        $resolver->setAllowedTypes('hidden_input', 'bool')
+            ->setAllowedTypes('read_only', 'bool')
+            ->setAllowedTypes('disabled', 'bool')
+            ->setAllowedTypes('required', 'bool')
+            ->setAllowedTypes('expanded', 'bool');
+
+        $resolver->setAllowedTypes('empty_value', [
+            'null',
+            'string',
+            'callable',
+        ]);
+
+        $resolver->setAllowedTypes('separator', [
+            'null',
+            'string',
+        ]);
+
+        $resolver->setAllowedTypes('transformer', [
+            'null',
+            'callable',
+        ]);
+
+        $resolver->setAllowedTypes('display_transformer', [
+            'null',
+            'callable',
         ]);
     }
 
     private function configureNumber(OptionsResolver $resolver): void
     {
+        $resolver->setDefaults([
+            'number_pattern' => null,
+            'percent_sign' => true,
+            'percent_decimals' => 2,
+            'percent_rounding_mode' => \NumberFormatter::ROUND_HALFEVEN,
+        ]);
+
         $resolver->setAllowedTypes('number_pattern', [
             'null',
             'string',
@@ -300,6 +326,87 @@ class PlainType extends AbstractType
     }
 
     /**
+     * Transform the given value as string.
+     *
+     * @param mixed $value   the value to transform
+     * @param array $options the options
+     *
+     * @throws TransformationFailedException if the value can not be mapped to a string
+     */
+    private function getDataValue(mixed $value, array $options): string
+    {
+        // transformer?
+        /** @var callable|null $callback */
+        $callback = $options['transformer'] ?? null;
+        if (\is_callable($callback)) {
+            /** @var mixed $value */
+            $value = \call_user_func($callback, $value);
+        }
+
+        // boolean?
+        if (true === $value) {
+            return $this->trans('common.value_true');
+        }
+        if (false === $value) {
+            return $this->trans('common.value_false');
+        }
+
+        // value?
+        if (null === $value || '' === $value) {
+            /** @var callable|null $callback */
+            $callback = $options['empty_value'] ?? null;
+            if (\is_callable($callback)) {
+                return (string) \call_user_func($callback, $value);
+            }
+
+            return (string) $this->getOptionString($options, 'empty_value', 'common.value_null', true);
+        }
+
+        // array?
+        if (\is_array($value)) {
+            $callback = fn (mixed $item): string => $this->getDataValue($item, $options);
+            $values = \array_map($callback, $value);
+            $separator = $this->getOptionString($options, 'separator', ', ');
+
+            return \implode((string) $separator, $values);
+        }
+
+        // entity?
+        if ($value instanceof AbstractEntity) {
+            return $value->getDisplay();
+        }
+
+        // date?
+        if ($value instanceof \DateTimeInterface) {
+            return $this->formatDate($value, $options);
+        }
+
+        // numeric?
+        if (\is_numeric($value)) {
+            return $this->formatNumber($value, $options);
+        }
+
+        // to string?
+        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
+            return (string) $value;
+        }
+
+        // error
+        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \get_debug_type($value)));
+    }
+
+    private function getDisplayValue(mixed $value, array $options): ?string
+    {
+        /** @var callable|null $callback */
+        $callback = $options['display_transformer'] ?? null;
+        if (\is_callable($callback)) {
+            return (string) \call_user_func($callback, $value);
+        }
+
+        return null;
+    }
+
+    /**
      * Gets the boolean value from the array options.
      *
      * @param array  $options      the array options
@@ -350,75 +457,5 @@ class PlainType extends AbstractType
         $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
 
         return $translate ? $this->trans((string) $value) : $value;
-    }
-
-    /**
-     * Transform the given value as string.
-     *
-     * @param mixed $value   the value to transform
-     * @param array $options the options
-     *
-     * @throws TransformationFailedException if the value can not be mapped to a string
-     */
-    private function transformValue(mixed $value, array $options): string
-    {
-        // transformer?
-        /** @var callable|null $callback */
-        $callback = $options['transformer'] ?? null;
-        if (\is_callable($callback)) {
-            /** @var mixed $value */
-            $value = \call_user_func($callback, $value);
-        }
-
-        // boolean?
-        if (true === $value) {
-            return $this->trans('common.value_true');
-        }
-        if (false === $value) {
-            return $this->trans('common.value_false');
-        }
-
-        // value?
-        if (null === $value || '' === $value) {
-            /** @var callable|null $callback */
-            $callback = $options['empty_value'] ?? null;
-            if (\is_callable($callback)) {
-                return (string) \call_user_func($callback, $value);
-            }
-
-            return (string) $this->getOptionString($options, 'empty_value', 'common.value_null', true);
-        }
-
-        // array?
-        if (\is_array($value)) {
-            $callback = fn (mixed $item): string => $this->transformValue($item, $options);
-            $values = \array_map($callback, $value);
-            $separator = $this->getOptionString($options, 'separator', ', ');
-
-            return \implode((string) $separator, $values);
-        }
-
-        // entity?
-        if ($value instanceof AbstractEntity) {
-            return $value->getDisplay();
-        }
-
-        // date?
-        if ($value instanceof \DateTimeInterface) {
-            return $this->formatDate($value, $options);
-        }
-
-        // numeric?
-        if (\is_numeric($value)) {
-            return $this->formatNumber($value, $options);
-        }
-
-        // to string?
-        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
-            return (string) $value;
-        }
-
-        // error
-        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \get_debug_type($value)));
     }
 }

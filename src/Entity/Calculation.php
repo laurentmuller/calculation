@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationRepository;
 use App\Traits\TimestampableTrait;
+use App\Types\FixedFloatType;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -58,7 +59,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The global margin in percent (%).
      */
-    #[ORM\Column(name: 'globalMargin', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $globalMargin = 0.0;
 
     /**
@@ -74,13 +75,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The total of all items.
      */
-    #[ORM\Column(name: 'itemsTotal', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $itemsTotal = 0.0;
 
     /**
      * The overall total.
      */
-    #[ORM\Column(name: 'overallTotal', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $overallTotal = 0.0;
 
     /**
@@ -94,7 +95,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The user margin in percent (%).
      */
-    #[ORM\Column(name: 'userMargin', scale: 2, options: ['default' => 0])]
+    #[ORM\Column(type: FixedFloatType::NAME)]
     protected float $userMargin = 0.0;
 
     /**

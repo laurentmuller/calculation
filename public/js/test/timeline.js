@@ -6,7 +6,7 @@
 (function ($) {
     'use strict';
 
-    $('#date').focus();
+    $('#date').trigger('focus');
 
     const updateCursor = function () {
         $('*').css('cursor', 'wait');
@@ -20,7 +20,7 @@
     $('#interval, #date').on('input', function () {
         $(this).updateTimer(function () {
             updateCursor();
-            $('form#search').submit();
+            $('form#search').trigger('submit');
         }, 500);
     });
 }(jQuery));

@@ -93,7 +93,7 @@ class SearchService
     /**
      * The column names and types.
      *
-     * @var string[]
+     * @var array<string,string>
      */
     private const COLUMNS = [
         self::COLUMN_ID => 'integer',
@@ -165,7 +165,7 @@ class SearchService
     /**
      * Gets the entities class and name.
      *
-     * @return string[]
+     * @return array<string, string>
      */
     public function getEntities(): array
     {
@@ -415,7 +415,7 @@ class SearchService
      *
      * @return string the entity name
      *
-     * @psalm-param class-string|trait-string $class
+     * @psalm-param class-string $class
      */
     private function getEntityName(string $class): string
     {
@@ -500,14 +500,10 @@ class SearchService
     }
 
     /**
-     * Returns if the given subject can be listed and displayed.
-     *
-     * @param string $class the subject (entity name)
-     *
-     * @return bool true if the subject can be listed and displayed
+     * Returns if the given subject (entity class name) can be listed and displayed.
      */
-    private function isGrantedSearch(string $class): bool
+    private function isGrantedSearch(string $subject): bool
     {
-        return $this->isGrantedList($class) && $this->isGrantedShow($class);
+        return $this->isGrantedList($subject) && $this->isGrantedShow($subject);
     }
 }

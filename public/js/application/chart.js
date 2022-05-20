@@ -33,6 +33,6 @@ function onMonthsChange($months) {
     if ($months.length) {
         $months.on('input', function () {
             $months.updateTimer(onMonthsChange, 250, $months);
-        }).focus();
+        }).trigger('focus');
     }
 }(jQuery));

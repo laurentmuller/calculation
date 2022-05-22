@@ -112,6 +112,14 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
+     * Gets the last archive calculation.
+     */
+    public function getArchiveCalculation(): ?\DateTimeInterface
+    {
+        return $this->getPropertyDate(self::P_ARCHIVE_CALCULATION);
+    }
+
+    /**
      * Gets the customer information.
      */
     public function getCustomer(): CustomerInformation
@@ -409,6 +417,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
 
+            self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
             self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
             self::P_LAST_IMPORT => $this->getLastImport(),
 

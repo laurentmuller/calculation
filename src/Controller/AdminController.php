@@ -52,8 +52,11 @@ class AdminController extends AbstractController
     #[Route(path: '/archive', name: 'admin_archive')]
     public function archive(Request $request, ArchiveService $service, SuspendEventListenerService $listener): Response
     {
+        $application = $this->getApplication();
         $query = $service->createQuery();
         $form = $service->createForm($query);
+
+        // handle request
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // save
@@ -62,6 +65,11 @@ class AdminController extends AbstractController
                 // update
                 $listener->disableListeners();
                 $result = $service->processQuery($query);
+
+                // update last date
+                if (!$query->isSimulate() && $result->isValid()) {
+                    $application->setProperty(ApplicationServiceInterface::P_ARCHIVE_CALCULATION, new \DateTime());
+                }
 
                 return $this->renderForm('admin/archive_result.html.twig', [
                     'result' => $result,
@@ -72,6 +80,7 @@ class AdminController extends AbstractController
         }
 
         return $this->renderForm('admin/archive_query.html.twig', [
+            'last_update' => $application->getArchiveCalculation(),
             'form' => $form,
         ]);
     }
@@ -177,6 +186,7 @@ class AdminController extends AbstractController
         // properties
         $application = $this->getApplication();
         $data = $application->getProperties([
+            ApplicationServiceInterface::P_ARCHIVE_CALCULATION,
             ApplicationServiceInterface::P_UPDATE_PRODUCTS,
             ApplicationServiceInterface::P_LAST_IMPORT,
         ]);
@@ -247,6 +257,7 @@ class AdminController extends AbstractController
         $application = $this->getApplication();
         $query = $updater->createUpdateQuery();
         $form = $updater->createForm($query);
+
         // handle request
         if ($this->handleRequestForm($request, $form)) {
             // save query

@@ -161,6 +161,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
             // result
             $this->writeVerbose("Installed $countPlugins plugins and $countFiles files to the directory '$target'.");
+        } catch (\Exception $e) {
+            $this->writeError($e->getMessage());
+
+            return Command::FAILURE;
         } finally {
             // remove temp directory
             $this->remove($targetTemp);

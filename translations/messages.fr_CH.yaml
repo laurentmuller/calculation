@@ -1385,6 +1385,7 @@ archive:
   title: Archiver des calculations
   edit:
     description: Cette page vous permet d'archiver des calculations en modifiant leur statut.
+    last_update: 'Dernier archivage : %date%'
   result:
     new_archive: Nouvel archivage
     description: Résultat de l'archivage des calculations.

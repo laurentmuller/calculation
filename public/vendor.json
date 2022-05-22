@@ -48,7 +48,7 @@
         },
         {
             "name": "jquery-validate",
-            "version": "1.19.3",
+            "version": "1.19.4",
             "files": [
                 "jquery.validate.js",
                 "additional-methods.js",

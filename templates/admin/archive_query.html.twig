@@ -19,6 +19,12 @@
 <hr>
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
+{{ form_rest(form) }}
+{% if last_update is defined and last_update %}
+    {%- set date = last_update|localedatetime('long', 'short') -%}
+    <hr class="my-2">
+    <p class="mb-0 text-right text-muted small">{{ 'archive.edit.last_update'|trans({'%date%': date}) }}</p>
+{% endif %}
 {% endblock %}
 
 {% block javascripts %}

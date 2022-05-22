@@ -65,9 +65,16 @@ class ArchiveService
         // create helper
         $builder = $this->factory->createBuilder(FormType::class, $query);
         $helper = new FormHelper($builder, 'archive.fields.');
+        $sources = $this->getSources(false);
+
+        // https://localcoder.org/symfony-form-validation-constraint-expression#solution_3
 
         // add fields
         $helper->field('date')
+            ->updateAttributes([
+                'min' => $this->getDateMinConstraint($sources),
+                'max' => $this->getDateMaxConstraint($sources),
+            ])
             ->addDateType();
 
         $helper->field('sources')
@@ -235,6 +242,16 @@ class ArchiveService
     /**
      * @param CalculationState[] $sources
      */
+    private function getDateMaxConstraint(array $sources): ?string
+    {
+        $date = $this->getDateMax($sources);
+
+        return $date?->sub(new \DateInterval('P1M'))?->format('Y-m-d');
+    }
+
+    /**
+     * @param CalculationState[] $sources
+     */
     private function getDateMin(array $sources): ?\DateTime
     {
         $builder = $this->createQueryBuilder($sources)
@@ -250,6 +267,16 @@ class ArchiveService
         }
 
         return null;
+    }
+
+    /**
+     * @param CalculationState[] $sources
+     */
+    private function getDateMinConstraint(array $sources): ?string
+    {
+        $date = $this->getDateMin($sources);
+
+        return $date?->format('Y-m-d');
     }
 
     /**

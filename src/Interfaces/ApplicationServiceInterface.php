@@ -98,6 +98,11 @@ interface ApplicationServiceInterface
     final public const P_ADMIN_RIGHTS = 'admin_rights';
 
     /**
+     * The property name for the last calculations archive (date).
+     */
+    final public const P_ARCHIVE_CALCULATION = 'archive_calculation';
+
+    /**
      * The property name for the customer address (string).
      */
     final public const P_CUSTOMER_ADDRESS = 'customer_address';

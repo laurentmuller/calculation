@@ -67,8 +67,22 @@
                 params = [params];
             }
 
+            // check for date
+            const $element = $(element);
+            if ($element.attr('type') === 'date') {
+                const regex = /^\d{4}-\d{2}-\d{2}$/;
+                params = params.map(function(param) {
+                    if (param.match(regex)) {
+                        // let options = {year: "numeric", month: "long", day: "numeric"};
+                        // return new Date(param).toLocaleDateString(undefined, options);
+                        return new Date(param).toLocaleDateString();
+                    }
+                    return param;
+                });
+            }
+
             // get text
-            const text = $(element).getLabelText();
+            const text = $element.getLabelText();
             if (text) {
                 params.unshift(text);
                 return $.validator.format(message, params);

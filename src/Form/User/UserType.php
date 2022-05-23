@@ -107,7 +107,7 @@ class UserType extends AbstractEntityType
             ->add(EnabledDisabledType::class);
 
         $helper->field('lastLogin')
-            ->updateOption('transformer', fn (\DateTimeInterface|string $lastLogin): ?string => $this->formatLastLogin($lastLogin))
+            ->updateOption('value_transformer', fn (\DateTimeInterface|string $lastLogin): ?string => $this->formatLastLogin($lastLogin))
             ->updateOption('empty_value', 'common.value_none')
             ->addPlainType(true);
 

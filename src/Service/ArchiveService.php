@@ -292,12 +292,12 @@ class ArchiveService
     /**
      * @return CalculationState[]
      */
-    private function getSources(bool $filter): array
+    private function getSources(bool $useSession): array
     {
         /** @var CalculationState[] $sources */
         $sources = $this->stateRepository->getEditableQueryBuilder()->getQuery()->getResult();
 
-        if ($filter) {
+        if ($useSession) {
             /** @var int[] $ids */
             $ids = $this->getSessionValue(self::KEY_SOURCES, []);
             if (!empty($ids)) {

@@ -35,12 +35,12 @@ class PlainType extends AbstractType
     /**
      * The gregorian calendar type.
      */
-    final public const CALENDAR_GREGORIAN = 'gregorian';
+    final public const CALENDAR_GREGORIAN = \IntlDateFormatter::GREGORIAN;
 
     /**
      * The traditional calendar type.
      */
-    final public const CALENDAR_TRADITIONAL = 'traditional';
+    final public const CALENDAR_TRADITIONAL = \IntlDateFormatter::TRADITIONAL;
 
     /**
      * The full date or time format.
@@ -175,7 +175,7 @@ class PlainType extends AbstractType
 
         $resolver->setAllowedTypes('calendar', [
             'null',
-            'string',
+            'int',
         ])->setAllowedValues('calendar', [
             null,
             self::CALENDAR_GREGORIAN,
@@ -194,7 +194,7 @@ class PlainType extends AbstractType
             'empty_value' => null,
             'compound' => false,
             'separator' => ', ',
-            'transformer' => null,
+            'value_transformer' => null,
             'display_transformer' => null,
         ]);
 
@@ -215,7 +215,7 @@ class PlainType extends AbstractType
             'string',
         ]);
 
-        $resolver->setAllowedTypes('transformer', [
+        $resolver->setAllowedTypes('value_transformer', [
             'null',
             'callable',
         ]);
@@ -268,13 +268,13 @@ class PlainType extends AbstractType
      */
     private function formatDate(\DateTimeInterface|int|null $value, array $options): string
     {
-        $calendar = $this->getCalendarFormat($options);
         $timezone = $this->getOptionString($options, 'time_zone');
         $pattern = $this->getOptionString($options, 'date_pattern');
-        $datetype = $this->getOptionInt($options, 'date_format', FormatUtils::getDateType());
-        $timetype = $this->getOptionInt($options, 'time_format', FormatUtils::getTimeType());
+        $calendar = $this->getOptionInt($options, 'calendar', self::CALENDAR_GREGORIAN);
+        $date_type = $this->getOptionInt($options, 'date_format', FormatUtils::getDateType());
+        $time_type = $this->getOptionInt($options, 'time_format', FormatUtils::getTimeType());
 
-        return (string) FormatUtils::formatDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
+        return (string) FormatUtils::formatDateTime($value, $date_type, $time_type, $timezone, $calendar, $pattern);
     }
 
     /**
@@ -308,24 +308,6 @@ class PlainType extends AbstractType
     }
 
     /**
-     * Gets the calendar format.
-     *
-     * @param array $options the options
-     *
-     * @return int the calendar format:
-     *             <ul>
-     *             <li><code>IntlDateFormatter::GREGORIAN</code></li>
-     *             <li><code>IntlDateFormatter::TRADITIONAL</code></li>
-     *             </ul>
-     */
-    private function getCalendarFormat(array $options): int
-    {
-        $calendar = $this->getOptionString($options, 'calendar', self::CALENDAR_GREGORIAN);
-
-        return self::CALENDAR_GREGORIAN === $calendar ? \IntlDateFormatter::GREGORIAN : \IntlDateFormatter::TRADITIONAL;
-    }
-
-    /**
      * Transform the given value as string.
      *
      * @param mixed $value   the value to transform
@@ -337,7 +319,7 @@ class PlainType extends AbstractType
     {
         // transformer?
         /** @var callable|null $callback */
-        $callback = $options['transformer'] ?? null;
+        $callback = $options['value_transformer'] ?? null;
         if (\is_callable($callback)) {
             /** @var mixed $value */
             $value = \call_user_func($callback, $value);

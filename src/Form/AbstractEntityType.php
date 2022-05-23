@@ -17,7 +17,7 @@ use App\Util\Utils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Edition type to use within an entity class.
+ * Edition type to use within an {@link AbstractEntity} class.
  *
  * @template T of AbstractEntity
  */

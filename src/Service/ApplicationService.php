@@ -61,12 +61,12 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         private readonly EntityManagerInterface $manager,
         LoggerInterface $logger,
         TranslatorInterface $translator,
-        CacheItemPoolInterface $applicationServiceCache,
+        CacheItemPoolInterface $applicationCache,
         KernelInterface $kernel
     ) {
         $this->setLogger($logger);
         $this->setTranslator($translator);
-        $this->setAdapter($applicationServiceCache);
+        $this->setAdapter($applicationCache);
 
         $this->setDebug($kernel->isDebug());
         $this->setEnvironment($kernel->getEnvironment());

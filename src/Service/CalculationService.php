@@ -371,14 +371,14 @@ final class CalculationService
         ];
 
         // global margin row
-        $global_margin_percent = $global_margin ?: $this->getGlobalMargin($total_net);
-        $global_margin_amount = $this->round($total_net * ($global_margin_percent - 1));
-        $total_net += $global_margin_amount;
+        $global_margin ??= $this->getGlobalMargin($total_net);
+        $global_amount = $this->round($total_net * ($global_margin - 1));
+        $total_net += $global_amount;
         $result[] = [
             'id' => self::ROW_GLOBAL_MARGIN,
             'description' => $this->trans('calculation.fields.globalMargin'),
-            'margin' => $global_margin_percent,
-            'total' => $global_margin_amount,
+            'margin' => $global_margin,
+            'total' => $global_amount,
         ];
 
         // total net row
@@ -389,16 +389,16 @@ final class CalculationService
         ];
 
         // user margin row
-        $user_margin_amount = $this->round($total_net * $user_margin);
+        $user_amount = $this->round($total_net * $user_margin);
         $result[] = [
             'id' => self::ROW_USER_MARGIN,
             'description' => $this->trans('calculation.fields.userMargin'),
             'margin' => $user_margin,
-            'total' => $user_margin_amount,
+            'total' => $user_amount,
         ];
 
         // overall total row
-        $overall_total = $total_net + $user_margin_amount;
+        $overall_total = $total_net + $user_amount;
         $overall_amount = $overall_total - $groups_amount;
         $overall_margin = $this->safeDivide($overall_amount, $groups_amount);
         $overall_margin = 1.0 + \floor($overall_margin * 100) / 100;

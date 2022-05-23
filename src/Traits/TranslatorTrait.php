@@ -61,14 +61,10 @@ trait TranslatorTrait
      * @param string|null $domain     the domain for the message or null to use the default
      * @param string|null $locale     the locale or null to use the default
      *
-     * @return string the translated string
+     * @return string the translated string or the message id if this translator is not defined
      */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        if ($this->translator instanceof TranslatorInterface) {
-            return $this->translator->trans($id, $parameters, $domain, $locale);
-        }
-
-        return $id;
+        return $this->translator?->trans($id, $parameters, $domain, $locale) ?? $id;
     }
 }

@@ -49,11 +49,11 @@ class UserService implements ApplicationServiceInterface
         private readonly Security $security,
         LoggerInterface $logger,
         TranslatorInterface $translator,
-        CacheItemPoolInterface $userServiceCache
+        CacheItemPoolInterface $userCache
     ) {
         $this->setLogger($logger);
         $this->setTranslator($translator);
-        $this->setAdapter($userServiceCache);
+        $this->setAdapter($userCache);
     }
 
     /**

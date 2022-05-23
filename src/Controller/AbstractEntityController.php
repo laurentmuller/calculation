@@ -250,6 +250,7 @@ abstract class AbstractEntityController extends AbstractController
      * @psalm-return T[]
      *
      * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-param literal-string $alias
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {

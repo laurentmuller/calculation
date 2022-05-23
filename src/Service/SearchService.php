@@ -341,15 +341,19 @@ class SearchService
     {
         $name = Utils::getShortName($class);
         $content = $content ?: "e.$field";
+
         /** @psalm-var literal-string $where */
         $where = "$content LIKE :" . self::SEARCH_PARAM;
+
+        /** @psalm-var literal-string $from */
+        $from = $class;
 
         return $this->manager->createQueryBuilder()
             ->select('e.id')
             ->addSelect("'$name'")
             ->addSelect("'$field'")
             ->addSelect($content)
-            ->from($class, 'e')
+            ->from($from, 'e')
             ->where($where);
     }
 

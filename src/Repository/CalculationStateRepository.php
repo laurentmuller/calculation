@@ -57,6 +57,9 @@ class CalculationStateRepository extends AbstractRepository
         return $builder->getQuery()->getArrayResult();
     }
 
+    /**
+     * @psalm-param literal-string $alias
+     */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         /** @var literal-string $where */
@@ -165,6 +168,9 @@ class CalculationStateRepository extends AbstractRepository
         return $results;
     }
 
+    /**
+     * @psalm-param literal-string $alias
+     */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         /** @var literal-string $where */
@@ -178,6 +184,7 @@ class CalculationStateRepository extends AbstractRepository
      * Gets the query builder for the list of states sorted by the editable and the code fields.
      *
      * @param string $alias the default entity alias
+     * @psalm-param literal-string $alias
      */
     public function getQueryBuilderByEditable(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -193,6 +200,7 @@ class CalculationStateRepository extends AbstractRepository
      * Gets the query builder for the list of states sorted by code.
      *
      * @param string $alias the default entity alias
+     * @psalm-param literal-string $alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

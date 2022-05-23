@@ -39,6 +39,7 @@ class TaskRepository extends AbstractCategoryItemRepository
      *
      * @param bool   $all   true to return all, false to return only tasks that contains at least one operation with one margin
      * @param string $alias the default entity alias
+     * @psalm-param literal-string $alias
      */
     public function getSortedBuilder(bool $all = true, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

@@ -32,10 +32,12 @@
 </table>
 {% if result.valid %}
     {% if query.simulate %}
-        <p class="mb-0 text-right text-muted small">{{ 'product.result.simulated'|trans }}</p>
+        <p class="mb-0 text-right text-muted small">{{ 'common.simulate.message'|trans }}</p>
     {% endif %}
 {% else %}
-    <div class="alert alert-warning mb-0" role="alert">{{ 'product.result.empty'|trans }}</div>
+    <div class="alert alert-warning mb-0" role="alert">
+        {{- 'product.result.empty'|trans -}}
+    </div>
 {% endif %}
 {# dialog #}
 {% if result.valid %}
@@ -75,7 +77,7 @@
                         <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
                     </div>
                     <div class="col-9 text-right">
-                        <p class="small mb-0{% if not query.simulate %} d-none{% endif %}">{{ 'product.result.simulated'|trans }}</p>
+                        <p class="small mb-0{% if not query.simulate %} d-none{% endif %}">{{ 'common.simulate.message'|trans }}</p>
                     </div>
                 </div>
             </div>

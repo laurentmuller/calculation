@@ -252,7 +252,8 @@ class FormHelper
      */
     public function addEmailType(): self
     {
-        return $this->add(EmailType::class);
+        return $this->updateAttribute('inputmode', 'email')
+            ->add(EmailType::class);
     }
 
     /**
@@ -316,7 +317,8 @@ class FormHelper
      */
     public function addMoneyType(): self
     {
-        return $this->updateOption('currency', 'CHF')
+        return $this->updateAttribute('inputmode', 'decimal')
+            ->updateOption('currency', 'CHF')
             ->updateOption('html5', true)
             ->widgetClass('text-right')
             ->add(MoneyType::class);
@@ -329,9 +331,12 @@ class FormHelper
      */
     public function addNumberType(int $scale = 2): self
     {
+        $input_mode = $scale > 0 ? 'decimal' : 'numeric';
+
         return $this->widgetClass('text-right')
-            ->updateOption('html5', true)
+            ->updateAttribute('inputmode', $input_mode)
             ->updateAttribute('scale', $scale)
+            ->updateOption('html5', true)
             ->add(NumberType::class);
     }
 
@@ -353,7 +358,9 @@ class FormHelper
     public function addPercentType(int $min = \PHP_INT_MIN, int $max = \PHP_INT_MAX, float $step = 1.0): self
     {
         $this->widgetClass('text-right')
-            ->updateOptions(['html5' => true, 'rounding_mode' => \NumberFormatter::ROUND_HALFUP])
+            ->updateAttribute('inputmode', 'decimal')
+            ->updateOption('rounding_mode', \NumberFormatter::ROUND_HALFUP)
+            ->updateOption('html5', true)
             ->autocomplete('off');
 
         if (\PHP_INT_MIN !== $min) {
@@ -490,7 +497,8 @@ class FormHelper
      */
     public function addTelType(string $pattern = null): self
     {
-        return $this->updateAttribute('pattern', $pattern)
+        return $this->updateAttribute('inputmode', 'tel')
+            ->updateAttribute('pattern', $pattern)
             ->add(TelType::class);
     }
 
@@ -519,9 +527,9 @@ class FormHelper
      */
     public function addUrlType(?string $default_protocol = 'https'): self
     {
-        $this->updateOption('default_protocol', $default_protocol, true);
-
-        return $this->add(UrlType::class);
+        return $this->updateOption('default_protocol', $default_protocol, true)
+            ->updateAttribute('inputmode', 'url')
+            ->add(UrlType::class);
     }
 
     /**

@@ -55,11 +55,12 @@ final class Utils
      * @param mixed    $initial  the optional initial value. It will be used at the beginning of the process, or as a final result in case the array is empty
      *
      * @return mixed the resulting value
-     * @psalm-suppress MixedArrayOffset
+     *
+     * @psalm-param callable(mixed, mixed, mixed): mixed $callback
      */
     public static function arrayReduceKey(array $array, callable $callback, mixed $initial = null): mixed
     {
-        return \array_reduce(\array_keys($array), fn (mixed $carry, mixed $key): mixed => $callback($carry, $key, $array[$key]), $initial);
+        return \array_reduce(\array_keys($array), fn (mixed $carry, string|int $key): mixed => $callback($carry, $key, $array[$key]), $initial);
     }
 
     /**

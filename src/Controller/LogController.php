@@ -24,6 +24,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -41,7 +44,7 @@ class LogController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/csp', name: 'log_csp')]
-    public function cspViolation(LoggerInterface $logger): Response
+    public function cspViolation(LoggerInterface $logger, MailerInterface $mailer): Response
     {
         $content = (string) \file_get_contents('php://input');
         /** @psalm-var bool|array{csp-report: string[]} $data */
@@ -56,7 +59,19 @@ class LogController extends AbstractController
                 $title .= ': ' . $context['source-file'];
             }
             $logger->error($title, $context);
+
+            try {
+                $text = (string) \json_encode($context, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
+                $email = (new Email())
+                    ->subject($title)
+                    ->text($text);
+                $mailer->send($email);
+            } catch (TransportExceptionInterface $e) {
+                $context = Utils::getExceptionContext($e);
+                $logger->error($e->getMessage(), $context);
+            }
         }
+
         // no content
         return new Response('', Response::HTTP_NO_CONTENT);
     }

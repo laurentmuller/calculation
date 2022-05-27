@@ -1,13 +1,13 @@
-consonant: consonne
-error: Le caractère contrôle est incorrect.
-fifth: cinquième
-first: première
-fourth: quatrième
 label: Securité
-last: dernière
-letter: lettre
-required: Le caractère de contrôle est requis.
-second: deuxième
 sentence: Quelle est la %index% %letter% du mot %word% ?
-third: troisième
+consonant: consonne
+letter: lettre
 vowel: voyelle
+first: première
+second: deuxième
+third: troisième
+fourth: quatrième
+fifth: cinquième
+last: dernière
+error: Le caractère contrôle est incorrect.
+required: Le caractère de contrôle est requis.

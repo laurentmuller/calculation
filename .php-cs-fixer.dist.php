@@ -10,6 +10,9 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
 $comment = <<<COMMENT
     This file is part of the Calculation package.
 
@@ -50,11 +53,11 @@ $rules = [
     'doctrine_annotation_array_assignment' => ['operator' => '='],
 ];
 
-$finder = PhpCsFixer\Finder::create()
+$finder = Finder::create()
     ->in(\realpath(__DIR__ . '/src'))
     ->in(\realpath(__DIR__ . '/tests'));
 
-$config = new PhpCsFixer\Config();
+$config = new Config();
 
 return $config
     ->setRiskyAllowed(true)

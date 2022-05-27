@@ -6,7 +6,7 @@
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
 {# head #}
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{{ app_description }}">
 <meta name="theme-color" content="Peru">
@@ -19,7 +19,7 @@
 <meta property="og:description" content="{{ app_description }}">
 <meta property="og:type" content="website" />
 <title>{{ page_title }}</title>
-<link rel="manifest" href="{{ asset('site.webmanifest', 'local') }}">
+<link rel="manifest" type="application/manifest+json" href="{{ asset('site.webmanifest', 'local') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/icons/favicon-16x16.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/icons/favicon-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/icons/favicon-96x96.png') }}">

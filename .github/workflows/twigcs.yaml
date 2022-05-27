@@ -36,3 +36,6 @@ jobs:
 
       - name: Run Twigcs
         run: vendor/bin/twigcs --severity error --display blocking templates
+
+      - name: Run Twigcs Configuration
+        run: vendor/bin/twigcs --config .twig_cs.dist.php

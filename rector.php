@@ -11,8 +11,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 
@@ -30,6 +29,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([
         SetList::PHP_81,
         SetList::CODE_QUALITY,
+        PHPUnitSetList::PHPUNIT_90,
         SymfonySetList::SYMFONY_60,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,

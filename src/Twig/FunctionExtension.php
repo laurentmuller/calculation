@@ -148,11 +148,6 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Output a link style sheet tag with a nonce value.
-     *
-     * @param Environment $env         the Twig environnement
-     * @param string      $path        a public path
-     * @param array       $parameters  additional parameters
-     * @param string|null $packageName the name of the asset package to use
      */
     public function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -160,17 +155,13 @@ final class FunctionExtension extends AbstractExtension
         $version = $this->version;
         $nonce = $this->getNonce($env);
         $params = $this->reduceParameters($parameters);
+        $href = \sprintf('%s?%d', $url, $version);
 
-        return \sprintf('<link rel="stylesheet" href="%s?v=%d" nonce="%s" %s>', $url, $version, $nonce, $params);
+        return "<link rel=\"stylesheet\" href=\"$href\" nonce=\"$nonce\" $params>";
     }
 
     /**
      * Output a script source tag with a nonce value.
-     *
-     * @param Environment $env         the Twig environment
-     * @param string      $path        a public path
-     * @param array       $parameters  additional parameters
-     * @param string|null $packageName the name of the asset package to use
      */
     public function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -178,8 +169,9 @@ final class FunctionExtension extends AbstractExtension
         $version = $this->version;
         $nonce = $this->getNonce($env);
         $params = $this->reduceParameters($parameters);
+        $src = \sprintf('%s?%d', $url, $version);
 
-        return \sprintf('<script src="%s?v=%d" nonce="%s" %s></script>', $url, $version, $nonce, $params);
+        return "<script src=\"$src\" nonce=\"$nonce\" $params></script>";
     }
 
     /**
@@ -331,15 +323,11 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Reduce parameters with a key/value tags.
-     *
-     * @param array $parameters the parameters to process
-     *
-     * @return string the reduced parameters
      */
     private function reduceParameters(array $parameters): string
     {
         if (!empty($parameters)) {
-            $callback = fn (string $carry, string $key, mixed $value): string => $carry . ' ' . $key . '="' . \htmlspecialchars((string) $value) . '"';
+            $callback = static fn (string $carry, string $key): string => $carry . ' ' . $key . '="' . \htmlspecialchars((string) $parameters[$key]) . '"';
 
             return (string) Utils::arrayReduceKey($parameters, $callback, '');
         }

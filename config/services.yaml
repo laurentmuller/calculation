@@ -23,7 +23,6 @@ parameters:
 
     # cookies
     cookie_path: '%env(string:COOKIE_PATH)%'
-    cookie_secure: '%env(bool:COOKIE_SECURE)%'
 
     # keys
     openweather_key: '%env(string:OPENWEATHER_KEY)%'
@@ -105,3 +104,7 @@ services:
     App\Service\MailService:
         calls:
             - setMarkdown: ['@twig.markdown.default']
+
+    App\Listener\ResponseListener:
+        arguments:
+            $file: '%kernel.project_dir%/resources/data/csp.json'

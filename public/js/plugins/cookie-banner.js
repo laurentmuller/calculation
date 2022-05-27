@@ -197,7 +197,7 @@
         cookieName: 'POLICY-ACCEPTED',
         cookiePath: '/',
         cookieDomain: null,
-        cookieSecure: false,
+        cookieSecure: 'true',
         cookieExpire: Infinity,
         cookieSamesite: 'lax',
 

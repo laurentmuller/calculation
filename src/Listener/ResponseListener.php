@@ -14,6 +14,7 @@ namespace App\Listener;
 
 use App\Interfaces\MimeTypeInterface;
 use App\Twig\NonceExtension;
+use App\Util\FileUtils;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,14 +25,11 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Response subscriber to add content security policy (CSP).
+ *
+ * For CSP violation see https://mathiasbynens.be/notes/csp-reports.
  */
 class ResponseListener implements EventSubscriberInterface
 {
-    /**
-     * The CSP data directive.
-     */
-    private const CSP_DATA = 'data:';
-
     /**
      * The CSP none directive.
      */
@@ -47,61 +45,23 @@ class ResponseListener implements EventSubscriberInterface
      */
     private const CSP_UNSAFE_INLINE = "'unsafe-inline'";
 
-    /**
-     * The currency flag image url.
+    /*
+     * The CSP directives.
+     *
+     * @var array<string, string[]>
      */
-    private const CURRENCY_FLAG_URL = 'https://wise.com';
-
-    /**
-     * The Google API font url.
-     */
-    private const GOOGLE_FONT_API_URL = 'https://fonts.googleapis.com';
-
-    /**
-     * The Google GStatic font url.
-     */
-    private const GOOGLE_FONT_STATIC_URL = 'https://fonts.gstatic.com';
-
-    /**
-     * The Google frame url.
-     */
-    private const GOOGLE_FRAME_URL = 'https://www.google.com';
-
-    /**
-     * The iconify icons url.
-     */
-    private const ICONIFY_URL = 'https://api.iconify.design';
-
-    /**
-     * The Open weather image url.
-     */
-    private const OPEN_WEATHER_URL = 'https://openweathermap.org';
-
-    /**
-     * The Robohash image url (used for user avatar).
-     */
-    private const ROBOHASH_URL = 'https://robohash.org';
-
-    /**
-     * The asset URL.
-     */
-    private readonly string $asset;
-
-    /**
-     * The reporting URL.
-     */
-    private readonly string $reportUrl;
+    private readonly array $csp;
 
     /**
      * Constructor.
      */
-    public function __construct(RouterInterface $router, ParameterBagInterface $params, private readonly NonceExtension $extension, private readonly bool $isDebug)
+    public function __construct(ParameterBagInterface $params, RouterInterface $router, NonceExtension $extension, string $file, private readonly bool $isDebug)
     {
         /** @var string $asset */
         $asset = $params->get('asset_base');
-
-        $this->reportUrl = $router->generate('log_csp');
-        $this->asset = $asset;
+        $nonce = "'nonce-" . $extension->getNonce() . "'";
+        $report = $router->generate('log_csp');
+        $this->csp = $this->loadCSP($file, $asset, $nonce, $report);
     }
 
     /**
@@ -124,131 +84,121 @@ class ResponseListener implements EventSubscriberInterface
             return;
         }
 
-        // get values
-        $request = $event->getRequest();
-        $response = $event->getResponse();
-        $headers = $response->headers;
-
         // development firewall ?
+        $request = $event->getRequest();
         if ($this->isDebug && $this->isDevFirewall($request)) {
             return;
         }
 
         // CSP
-        if (!$this->isEdgeBrowser($request)) {
-            $csp = $this->getCSP($response);
+        $response = $event->getResponse();
+        $headers = $response->headers;
+        if (!$this->isEdgeBrowser($request) && '' !== $csp = $this->getCSP($response)) {
             $headers->set('Content-Security-Policy', $csp);
             $headers->set('X-Content-Security-Policy', $csp);
             $headers->set('X-WebKit-CSP', $csp);
         }
 
-        // see: Dareboost
-        $headers->set('X-FRAME-OPTIONS', 'SAMEORIGIN');
+        // see: https://www.dareboost.com
+        $headers->set('X-FRAME-OPTIONS', 'sameorigin');
         $headers->set('X-XSS-Protection', '1; mode=block');
         $headers->set('X-Content-Type-Options', 'nosniff');
 
         // see: https://securityheaders.com/
         // see: https://github.com/aidantwoods/SecureHeaders
         $headers->set('referrer-policy', 'same-origin');
-        $headers->set('x-permitted-cross-domain-policies', 'none');
+        $headers->set('x-permitted-cross-domain-policies', self::CSP_NONE);
     }
 
     /**
      * Build the content security policy.
-     *
-     * @param Response $response the current response object
-     *
-     * @return string the CSP directives
      */
     private function getCSP(Response $response): string
     {
-        // get values
-        $asset = $this->asset;
-        $nonce = $this->getNonce();
+        /** @var array<string, string[]> $csp */
+        $csp = $this->csp;
+        if (empty($csp)) {
+            return '';
+        }
 
-        $csp = [
-            // none
-            'base-uri' => self::CSP_NONE,
-            'media-src' => self::CSP_NONE,
-            'object-src' => self::CSP_NONE,
-
-            // self
-            'default-src' => self::CSP_SELF,
-            'form-action' => self::CSP_SELF,
-            'manifest-src' => self::CSP_SELF,
-            'frame-ancestors' => self::CSP_SELF,
-
-            // nonce + asset
-            'script-src' => [$nonce],
-            'script-src-elem' => [$nonce, $asset, self::CSP_UNSAFE_INLINE, self::ICONIFY_URL],
-
-            // self + asset
-            'connect-src' => [self::CSP_SELF, $asset],
-            'frame-src' => [self::CSP_SELF, self::GOOGLE_FRAME_URL],
-            'font-src' => [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset],
-            'style-src' => [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset],
-            'style-src-elem' => [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset],
-            'img-src' => [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, self::CURRENCY_FLAG_URL, $asset],
-
-            // reporting. see: https://mathiasbynens.be/notes/csp-reports
-            'report-uri' => $this->reportUrl,
-        ];
-
-        // response interface?
+        // mime type?
         if ($response instanceof MimeTypeInterface) {
-            $csp['object-src'] = self::CSP_SELF;
-            $csp['plugin-types'] = $response->getMimeType();
+            $csp['object-src'] = [self::CSP_SELF];
+            $csp['plugin-types'] = [$response->getMimeType()];
         }
 
-        // build
-        $result = '';
-        foreach ($csp as $key => $entries) {
-            $value = \implode(' ', (array) $entries);
-            $result .= "$key $value;";
-        }
+        $keys = \array_keys($csp);
 
-        return $result;
+        return \array_reduce($keys, fn (string $carry, string $key): string => $carry . $key . ' ' . \implode(' ', $csp[$key]) . ';', '');
     }
 
     /**
-     * Gets the CSP nonce directive.
-     */
-    private function getNonce(): string
-    {
-        $nonce = $this->extension->getNonce();
-
-        return "'nonce-$nonce'";
-    }
-
-    /**
-     * Returns if the current firewall is the developement.
-     *
-     * @param Request $request the current request object
-     *
-     * @return bool true if developement firewall
+     * Returns if the current firewall is the development.
      */
     private function isDevFirewall(Request $request): bool
     {
         /** @psalm-var mixed $context */
         $context = $request->attributes->get('_firewall_context');
-        if (\is_string($context)) {
-            return false !== \stripos($context, 'dev');
-        }
 
-        return false;
+        return \is_string($context) && false !== \stripos($context, 'dev');
     }
 
     /**
      * Returns if the browser is Edge.
-     *
-     * @param Request $request the current request object
-     *
-     * @return bool true if the browser is Edge
      */
     private function isEdgeBrowser(Request $request): bool
     {
         $agent = $request->headers->get('user-agent');
 
         return null !== $agent && false !== \stripos($agent, 'edge');
+    }
+
+    /**
+     * Load the CSP definition.
+     *
+     * @return array<string, string[]>
+     */
+    private function loadCSP(string $file, string $asset, string $nonce, string $report): array
+    {
+        if (!FileUtils::exists($file)) {
+            return [];
+        }
+        if (false === $content = \file_get_contents($file)) {
+            return [];
+        }
+
+        /** @var array<string, string|string[]> $csp */
+        $csp = \json_decode($content, true);
+        if (\JSON_ERROR_NONE !== \json_last_error() || empty($csp)) {
+            return [];
+        }
+
+        // convert each entry to array
+        $csp = \array_map(static fn (string|array $value): array => (array) $value, $csp);
+
+        // replace
+        $search = [
+            'none',
+            'self',
+            'unsafe-inline',
+            '%asset%',
+            '%nonce%',
+            '%report%',
+        ];
+        $replace = [
+            self::CSP_NONE,
+            self::CSP_SELF,
+            self::CSP_UNSAFE_INLINE,
+            $asset,
+            $nonce,
+            $report,
+        ];
+
+        /**
+         * @psalm-var array<string, string[]> $result
+         */
+        $result = \array_map(fn (array $values): array => \str_replace($search, $replace, $values), $csp);
+
+        return $result;
     }
 }

@@ -41,8 +41,10 @@ security:
                 signature_properties: [email, password]
                 remember_me_parameter: remember_me
                 secret: '%app_secret%'
-                path:   '%cookie_path%'
-                secure: false
+                path: '%cookie_path%'
+                lifetime: 2592000
+                samesite: 'lax'
+                secure: true
 
     access_control:
         - { path: ^/login,                 roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }

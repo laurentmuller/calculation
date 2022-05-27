@@ -146,10 +146,7 @@
                 'class': settings.closeClass,
                 'text': settings.closeMessage,
                 'title': settings.closeTitle,
-                'href': '#',
-                'css': {
-                    // 'visibility': visibility
-                }
+                'href': '#'
             });
             $banner.append($message, $close);
 

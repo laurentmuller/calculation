@@ -127,6 +127,9 @@ AddDefaultCharset utf-8
     <FilesMatch ".(js|css|xml|gz|html|json)$">
         Header append Vary: Accept-Encoding
     </FilesMatch>
+
+    # cookies
+    Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure
 </IfModule>
 
 <ifmodule mod_headers.c="">

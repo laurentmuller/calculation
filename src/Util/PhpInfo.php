@@ -130,13 +130,7 @@ final class PhpInfo
         $content = (string) \ob_get_contents();
         \ob_end_clean();
 
-        return $this->removeKeys($content, [
-            '_KEY',
-            'MAILER_DSN',
-            'DATABASE_URL',
-            'DATABASE_EDIT',
-            'PASSWORD',
-        ]);
+        return $this->removeSensitiveKeys($content);
     }
 
     /**
@@ -173,11 +167,16 @@ final class PhpInfo
         }
     }
 
-    /**
-     * @param string[] $keys
-     */
-    private function removeKeys(string $content, array $keys): string
+    private function removeSensitiveKeys(string $content): string
     {
+        $keys = [
+            '_KEY',
+            'MAILER_DSN',
+            'DATABASE_URL',
+            'DATABASE_EDIT',
+            'PASSWORD',
+        ];
+
         foreach ($keys as $key) {
             $content = (string) \preg_replace("/<tr>.*$key.*<\/tr>/m", '', $content);
         }

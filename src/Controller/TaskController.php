@@ -66,7 +66,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a copy (cloned) task.
      */
-    #[Route(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => '\d+'])]
+    #[Route(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Task $item): Response
     {
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
@@ -81,7 +81,7 @@ class TaskController extends AbstractEntityController
     /**
      * Compute a task.
      */
-    #[Route(path: '/compute/{id}', name: 'task_compute', requirements: ['id' => '\d+'])]
+    #[Route(path: '/compute/{id}', name: 'task_compute', requirements: ['id' => self::DIGITS])]
     public function compute(Request $request, TaskService $service, TaskRepository $repository, Task $task = null): Response
     {
         // get tasks
@@ -115,7 +115,7 @@ class TaskController extends AbstractEntityController
     /**
      * Delete a task.
      */
-    #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -131,7 +131,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a task.
      */
-    #[Route(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Task $item): Response
     {
         return $this->editEntity($request, $item);
@@ -176,7 +176,7 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      */
-    #[Route(path: '/show/{id}', name: 'task_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'task_show', requirements: ['id' => self::DIGITS])]
     public function show(Task $item): Response
     {
         return $this->showEntity($item);

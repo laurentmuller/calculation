@@ -64,7 +64,7 @@ class ProductController extends AbstractEntityController
     /**
      * Clone (copy) a product.
      */
-    #[Route(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => '\d+'])]
+    #[Route(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -79,7 +79,7 @@ class ProductController extends AbstractEntityController
     /**
      * Delete a product.
      */
-    #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -95,7 +95,7 @@ class ProductController extends AbstractEntityController
     /**
      * Edit a product.
      */
-    #[Route(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Product $item): Response
     {
         return $this->editEntity($request, $item);
@@ -140,7 +140,7 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      */
-    #[Route(path: '/show/{id}', name: 'product_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'product_show', requirements: ['id' => self::DIGITS])]
     public function show(Product $item): Response
     {
         return $this->showEntity($item);

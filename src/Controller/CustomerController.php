@@ -60,7 +60,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Delete a customer.
      */
-    #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -76,7 +76,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Edit a customer.
      */
-    #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Customer $item): Response
     {
         return $this->editEntity($request, $item);
@@ -122,7 +122,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      */
-    #[Route(path: '/show/{id}', name: 'customer_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'customer_show', requirements: ['id' => self::DIGITS])]
     public function show(Customer $item): Response
     {
         return $this->showEntity($item);

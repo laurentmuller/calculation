@@ -46,7 +46,7 @@ class CalendarController extends AbstractController
      * @param int|null              $month      the month to search for or <code>null</code> for the current
      *                                          month
      */
-    #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => '\d+', 'month' => '\d+'])]
+    #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => self::DIGITS, 'month' => self::DIGITS])]
     public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
     {
         // validate values
@@ -84,7 +84,7 @@ class CalendarController extends AbstractController
      * @param int|null              $week       the week to search for or <code>null</code> for the current
      *                                          week
      */
-    #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => '\d+', 'week' => '\d+'])]
+    #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => self::DIGITS, 'week' => self::DIGITS])]
     public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
     {
         // validate values
@@ -125,7 +125,7 @@ class CalendarController extends AbstractController
      * @param int|null              $year       the year to search for or <code>null</code> for the current
      *                                          year
      */
-    #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => '\d+'])]
+    #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => self::DIGITS])]
     public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
     {
         // validate year

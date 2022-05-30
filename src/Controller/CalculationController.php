@@ -83,7 +83,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a copy (cloned) calculation.
      */
-    #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => '\d+'])]
+    #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Calculation $item): Response
     {
         // clone
@@ -101,7 +101,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      */
-    #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         // parameters
@@ -118,7 +118,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a calculation.
      */
-    #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Calculation $item): Response
     {
         $parameters = ['overall_below' => $this->isMarginBelow($item)];
@@ -147,7 +147,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a Spreadsheet document.
      */
-    #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => '\d+'])]
+    #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => self::DIGITS])]
     public function excelById(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
@@ -177,7 +177,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a PDF document.
      */
-    #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => '\d+'])]
+    #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => self::DIGITS])]
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
         $qrcode = $this->getQrCode($generator, $calculation);
@@ -190,7 +190,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      */
-    #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => self::DIGITS])]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -205,7 +205,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      */
-    #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => '\d+'])]
+    #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => self::DIGITS])]
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
     {
         $oldState = $item->getState();

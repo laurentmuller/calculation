@@ -46,6 +46,11 @@ abstract class AbstractController extends BaseController
     use TranslatorFlashMessageTrait;
 
     /**
+     * Integer requirement for route parameter.
+     */
+    final public const DIGITS = '\d+';
+
+    /**
      * The home route name.
      */
     final public const HOME_PAGE = 'homepage';
@@ -188,11 +193,9 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the connected username.
-     *
-     * @return string|null the username or null if not connected
+     * Gets the connected user identifier.
      */
-    public function getUserName(): ?string
+    public function getUserIdentifier(): ?string
     {
         $user = $this->getUser();
         if ($user instanceof User) {

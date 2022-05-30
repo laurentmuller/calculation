@@ -60,7 +60,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Clone (copy) a calculation state.
      */
-    #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => '\d+'])]
+    #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -72,7 +72,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Delete a calculation state.
      */
-    #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
         // calculation?
@@ -108,7 +108,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Edit a calculation state.
      */
-    #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, CalculationState $item): Response
     {
         return $this->editEntity($request, $item);
@@ -153,7 +153,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      */
-    #[Route(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => self::DIGITS])]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);

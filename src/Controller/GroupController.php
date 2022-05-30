@@ -60,7 +60,7 @@ class GroupController extends AbstractEntityController
     /**
      * Clone (copy) a group.
      */
-    #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => '\d+'])]
+    #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -75,7 +75,7 @@ class GroupController extends AbstractEntityController
     /**
      * Delete a group.
      */
-    #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -117,7 +117,7 @@ class GroupController extends AbstractEntityController
     /**
      * Edit a group.
      */
-    #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Group $item): Response
     {
         return $this->editEntity($request, $item);
@@ -162,7 +162,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[Route(path: '/show/{id}', name: 'group_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'group_show', requirements: ['id' => self::DIGITS])]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);

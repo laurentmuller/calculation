@@ -321,6 +321,7 @@ class LogService
         if (!$item instanceof CacheItemInterface || !$item->isHit()) {
             return false;
         }
+
         /** @psalm-var array<int, Log> $logs */
         $logs = $item->get();
         $entries[self::KEY_LOGS] = $logs;
@@ -330,6 +331,7 @@ class LogService
         if (!$item instanceof CacheItemInterface || !$item->isHit()) {
             return false;
         }
+
         /** @psalm-var array<string, int> $levels */
         $levels = $item->get();
         $entries[self::KEY_LEVELS] = $levels;
@@ -339,6 +341,7 @@ class LogService
         if (!$item instanceof CacheItemInterface || !$item->isHit()) {
             return false;
         }
+
         /** @psalm-var array<string, int> $channels */
         $channels = $item->get();
         $entries[self::KEY_CHANNELS] = $channels;

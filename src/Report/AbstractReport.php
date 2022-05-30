@@ -56,7 +56,7 @@ abstract class AbstractReport extends PdfDocument
 
         // meta-data
         $this->SetCreator($appName);
-        if (null !== $userName = $controller->getUserName()) {
+        if (null !== $userName = $controller->getUserIdentifier()) {
             $this->SetAuthor($userName);
         }
 

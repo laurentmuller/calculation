@@ -33,7 +33,7 @@ class ChartController extends AbstractController
     /**
      * Gets the calculations by month.
      */
-    #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => '\d+'])]
+    #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => self::DIGITS])]
     public function month(MonthChart $chart, int $count = 6): Response
     {
         $data = $chart->generate($count);

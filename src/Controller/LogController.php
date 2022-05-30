@@ -173,7 +173,7 @@ class LogController extends AbstractController
     /**
      * Show properties of a log entry.
      */
-    #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => self::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response
     {
         if (null === $item = $service->getLog($id)) {

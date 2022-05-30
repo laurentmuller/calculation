@@ -157,7 +157,7 @@ class PhpIniDocument extends AbstractDocument
             $this->mergeCells(1, 3, $row);
             $style = $this->getActiveSheet()->getStyle("A$row");
             $style->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color('FFC000'));
+                ->setStartColor(new Color('F2F2F2'));
             $style->getFont()->setBold(true);
             $this->key = $group;
 

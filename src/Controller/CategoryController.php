@@ -62,7 +62,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Clone (copy) a category.
      */
-    #[Route(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => '\d+'])]
+    #[Route(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -77,7 +77,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Delete a category.
      */
-    #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -124,7 +124,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Edit a category.
      */
-    #[Route(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
@@ -169,7 +169,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      */
-    #[Route(path: '/show/{id}', name: 'category_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'category_show', requirements: ['id' => self::DIGITS])]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);

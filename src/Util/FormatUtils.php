@@ -43,7 +43,7 @@ final class FormatUtils
     {
         $value = self::checkNegativeZero($number);
 
-        return self::getNumberFormatter(\NumberFormatter::DECIMAL, 2)->format($value);
+        return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 2)->format($value);
     }
 
     /**
@@ -104,7 +104,7 @@ final class FormatUtils
     {
         $value = self::checkNegativeZero($number);
 
-        return self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format($value);
+        return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format($value);
     }
 
     /**
@@ -131,7 +131,7 @@ final class FormatUtils
         }
         $value = self::checkNegativeZero($number);
 
-        return $formatter->format($value);
+        return (string) $formatter->format($value);
     }
 
     /**

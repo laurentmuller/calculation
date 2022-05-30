@@ -170,7 +170,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $customer = $controller->getApplication()->getCustomer();
         $application = $controller->getApplicationName();
-        $username = $controller->getUserName();
+        $username = $controller->getUserIdentifier();
         $title = $this->trans($title);
 
         $this->setHeaderFooter($title, $customer)

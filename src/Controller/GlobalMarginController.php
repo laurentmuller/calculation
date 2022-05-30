@@ -58,7 +58,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Delete a global margin.
      */
-    #[Route(path: '/delete/{id}', name: 'globalmargin_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'globalmargin_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, GlobalMargin $item, LoggerInterface $logger): Response
     {
         $parameters = [
@@ -74,7 +74,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Edit a global margin.
      */
-    #[Route(path: '/edit/{id}', name: 'globalmargin_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'globalmargin_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, GlobalMargin $item): Response
     {
         return $this->editEntity($request, $item);
@@ -119,7 +119,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      */
-    #[Route(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => self::DIGITS])]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);

@@ -77,7 +77,7 @@ class UserController extends AbstractEntityController
     /**
      * Delete an user.
      */
-    #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => '\d+'])]
+    #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, User $item, LoggerInterface $logger): Response
     {
         // same?
@@ -101,7 +101,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit a user.
      */
-    #[Route(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => '\d+'])]
+    #[Route(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, User $item): Response
     {
         return $this->editEntity($request, $item);
@@ -129,7 +129,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit a user's image.
      */
-    #[Route(path: '/image/{id}', name: 'user_image', requirements: ['id' => '\d+'])]
+    #[Route(path: '/image/{id}', name: 'user_image', requirements: ['id' => self::DIGITS])]
     public function image(Request $request, User $item): Response
     {
         // form
@@ -159,7 +159,7 @@ class UserController extends AbstractEntityController
     /**
      * Send an email from the current user to another user.
      */
-    #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => '\d+'])]
+    #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => self::DIGITS])]
     public function message(Request $request, User $user, MailerInterface $mailer, LoggerInterface $logger): Response
     {
         // same user?
@@ -214,7 +214,7 @@ class UserController extends AbstractEntityController
     /**
      * Change password for an existing user.
      */
-    #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => '\d+'])]
+    #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => self::DIGITS])]
     public function password(Request $request, User $item, UserPasswordHasherInterface $hasher): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
@@ -267,7 +267,7 @@ class UserController extends AbstractEntityController
     /**
      * Clear the request reset password.
      */
-    #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => '\d+'])]
+    #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => self::DIGITS])]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
         if ($item->isResetPassword()) {
@@ -285,7 +285,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit user access rights.
      */
-    #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => '\d+'])]
+    #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => self::DIGITS])]
     public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy, EntityManagerInterface $manager): Response
     {
         // same user?
@@ -366,7 +366,7 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      */
-    #[Route(path: '/show/{id}', name: 'user_show', requirements: ['id' => '\d+'])]
+    #[Route(path: '/show/{id}', name: 'user_show', requirements: ['id' => self::DIGITS])]
     public function show(User $item): Response
     {
         return $this->showEntity($item);

@@ -41,9 +41,9 @@
 {{ tools.aboutCard('licence', 'about_licence_pdf') }}
 {{ tools.aboutCard('policy', 'about_policy_pdf') }}
 {% if super_admin %}
-    {{ tools.aboutCard('symfony', super_admin ? 'about_symfony_pdf' : false) }}
-    {{ tools.aboutCard('php', super_admin ? 'about_php_pdf' : false) }}
-    {{ tools.aboutCard('mysql', super_admin ? 'about_mysql_pdf' : false) }}
+    {{ tools.aboutCard('symfony', 'about_symfony_pdf', 'about_symfony_excel') }}
+    {{ tools.aboutCard('php', 'about_php_pdf', 'about_php_excel') }}
+    {{ tools.aboutCard('mysql', 'about_mysql_pdf', 'about_mysql_excel') }}
 {% endif %}
 </div>
 <div class="row no-gutters mt-2 pb-3 d-print-none">

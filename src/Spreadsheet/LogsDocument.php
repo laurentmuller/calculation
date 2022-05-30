@@ -60,9 +60,7 @@ class LogsDocument extends AbstractArrayDocument
 
         // formats
         $this->setFormat(1, 'dd/mm/yyyy hh:mm:ss')
-            ->setColumnWidth(4, 120)
-            ->setAutoSize(4, false)
-            ->setWrapText(4);
+            ->setColumnWidth(4, 120, true);
 
         // rows
         $row = 2;

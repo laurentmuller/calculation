@@ -33,6 +33,8 @@ abstract class AbstractDocument extends SpreadsheetDocument
      * Render this document.
      *
      * @return bool true if rendered successfully; false otherwise
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
     abstract public function render(): bool;
 

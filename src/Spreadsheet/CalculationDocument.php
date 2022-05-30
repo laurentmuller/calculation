@@ -234,20 +234,6 @@ class CalculationDocument extends AbstractDocument
     }
 
     /**
-     * Merge cells.
-     *
-     * @param int $startColumn the index of the first column (A = 1)
-     * @param int $endColumn   the index of the last column
-     * @param int $row         the row index (1 = First row)
-     */
-    private function mergeCells(int $startColumn, int $endColumn, int $row): self
-    {
-        $this->sheet?->mergeCellsByColumnAndRow($startColumn, $row, $endColumn, $row);
-
-        return $this;
-    }
-
-    /**
      * Set a cell value with the amount format.
      *
      * @param int   $column the column index (A = 1)

@@ -19,6 +19,9 @@ use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Util\SymfonyInfo;
 
+/**
+ * Report containing Symfony configuration.
+ */
 class SymfonyReport extends AbstractReport
 {
     /**

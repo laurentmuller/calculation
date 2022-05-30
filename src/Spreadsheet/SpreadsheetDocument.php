@@ -109,6 +109,27 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
+     * Create worksheet, set title and add it to this workbook. The created sheet is activated.
+     *
+     * @param ?string $title      the title of the worksheet
+     * @param ?int    $sheetIndex the  index where worksheet should go (0,1,..., or null for last)
+     *
+     * @return Worksheet the newly created worksheet
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     */
+    public function createSheetAndTitle(string $title = null, int $sheetIndex = null): Worksheet
+    {
+        $sheet = parent::createSheet($sheetIndex);
+        if (null !== $title) {
+            $sheet->setTitle(self::checkSheetTitle($title));
+        }
+        $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
+
+        return $sheet;
+    }
+
+    /**
      * Gets the page setup of the active sheet.
      */
     public function getPageSetup(): PageSetup
@@ -168,6 +189,23 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
+     * Set merge on a cell range by using cell coordinates.
+     *
+     * @param int  $startColumn the index of the first column (A = 1)
+     * @param int  $endColumn   the index of the last column
+     * @param int  $startRow    the index of first row (1 = First row)
+     * @param ?int $endRow      the index of the last cell or null to use the start row
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     */
+    public function mergeCells(int $startColumn, int $endColumn, int $startRow, ?int $endRow = null): static
+    {
+        $this->getActiveSheet()->mergeCells([$startColumn, $startRow, $endColumn, $endRow ?? $startRow]);
+
+        return $this;
+    }
+
+    /**
      * Sets the title of the active sheet.
      */
     public function setActiveTitle(string $title): self
@@ -213,6 +251,8 @@ class SpreadsheetDocument extends Spreadsheet
      * @param string $coordinates the coordinates (eg: 'A1')
      * @param int    $width       the image width
      * @param int    $height      the image height
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
     public function setCellImage(string $path, string $coordinates, int $width, int $height): self
     {
@@ -250,6 +290,8 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int    $rowIndex    the row index (1 = First row)
      * @param int    $width       the image width
      * @param int    $height      the image height
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
     public function setCellImageByColumnAndRow(string $path, int $columnIndex, int $rowIndex, int $width, int $height): self
     {
@@ -299,16 +341,19 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set the width for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
-     * @param int $width       the width to set
+     * @param int  $columnIndex the column index (A = 1)
+     * @param int  $width       the width to set
+     * @param bool $wrapText    true to wrap text
+     *
+     * @see SpreadsheetDocument::setWrapText()
      */
-    public function setColumnWidth(int $columnIndex, int $width): self
+    public function setColumnWidth(int $columnIndex, int $width, bool $wrapText = false): self
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
         $sheet->getColumnDimension($name)->setWidth($width);
 
-        return $this;
+        return $wrapText ? $this->setWrapText($columnIndex) : $this;
     }
 
     /**
@@ -521,7 +566,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the headers of the active sheet with bold style and freezed first row.
+     * Sets the headers of the active sheet with bold style and frozen first row.
      *
      * @param array $headers     the headers where key is the text to translate and value is the
      *                           horizontal alignment or if is an array, the horizontal and the vertical
@@ -529,6 +574,8 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int   $columnIndex the starting column index (A = 1)
      * @param int   $rowIndex    the row index (1 = First row)
      * @psalm-param array<string, string|string[]> $headers
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
     public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): self
     {
@@ -628,7 +675,8 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the paper size for the active sheet.
      *
-     * @param int $size the paper size that must be one of PageSetup::PAPERSIZE_*
+     * @param int $size the paper size that must be one of PageSetup paper size constant
+     * @psalm-param PageSetup::PAPERSIZE_* $size
      */
     public function setPageSize(int $size): self
     {
@@ -756,7 +804,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Set wrap text for the given column.
+     * Set wrap text for the given column. The auto-size is automatically disabled.
      *
      * @param int $columnIndex the column index (A = 1)
      */
@@ -764,6 +812,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
+        $sheet->getColumnDimension($name)->setAutoSize(false);
         $sheet->getStyle($name)->getAlignment()->setWrapText(true);
 
         return $this;

@@ -17,6 +17,10 @@ use App\Report\MySqlReport;
 use App\Report\PhpIniReport;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
+use App\Response\SpreadsheetResponse;
+use App\Spreadsheet\MySqlDocument;
+use App\Spreadsheet\PhpIniDocument;
+use App\Spreadsheet\SymfonyDocument;
 use App\Util\DatabaseInfo;
 use App\Util\PhpInfo;
 use App\Util\SymfonyInfo;
@@ -132,6 +136,18 @@ class AboutController extends AbstractController
     }
 
     /**
+     * Exports the MySql information as Excel.
+     */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/mysql/excel', name: 'about_mysql_excel')]
+    public function mysqlExcel(DatabaseInfo $info): SpreadsheetResponse
+    {
+        $doc = new MySqlDocument($this, $info);
+
+        return $this->renderSpreadsheetDocument($doc);
+    }
+
+    /**
      * Exports the MySql information as PDF.
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
@@ -160,6 +176,20 @@ class AboutController extends AbstractController
         return $this->jsonTrue([
             'content' => $content,
         ]);
+    }
+
+    /**
+     * Exports the PHP information as PDF.
+     */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/php/excel', name: 'about_php_excel')]
+    public function phpExcel(PhpInfo $info): SpreadsheetResponse
+    {
+        $content = $info->asArray();
+        $version = $info->getVersion();
+        $doc = new PhpIniDocument($this, $content, $version);
+
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**
@@ -235,6 +265,19 @@ class AboutController extends AbstractController
         return $this->jsonTrue([
             'content' => $content,
         ]);
+    }
+
+    /**
+     * Exports the Symfony information as Excel.
+     */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/symfony/excel', name: 'about_symfony_excel')]
+    public function symfonyExcel(SymfonyInfo $info): SpreadsheetResponse
+    {
+        $locale = $this->getLocaleName();
+        $doc = new SymfonyDocument($this, $info, $locale, $this->appMode);
+
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

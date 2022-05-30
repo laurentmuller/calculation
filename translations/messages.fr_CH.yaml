@@ -270,6 +270,7 @@ common:
   button_copy: Copier
   button_delete: Supprimer
   button_edit: Modifier
+  button_export: Exporter
   button_excel_list: Exporter la liste
   button_flex: Mode mosaïque
   button_import: Importer

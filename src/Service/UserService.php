@@ -74,6 +74,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Gets the display mode for table.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDisplayMode(): TableView
     {
@@ -85,6 +87,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Gets the action to trigger within the entities.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEditAction(): EntityAction
     {
@@ -96,6 +100,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Gets the position of the flash bag messages (default: 'bottom-right').
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessagePosition(): string
     {
@@ -106,6 +112,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageTimeout(): int
     {
@@ -116,6 +124,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns a value indicating number of displayed calculation in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPanelCalculation(): int
     {
@@ -126,6 +136,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Gets all properties.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getProperties(): array
     {
@@ -158,6 +170,8 @@ class UserService implements ApplicationServiceInterface
      *
      * @param string $name    the property name to search for
      * @param int    $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPropertyInteger(string $name, int $default = 0): int
     {
@@ -169,6 +183,8 @@ class UserService implements ApplicationServiceInterface
      *
      * @param string      $name    the property name to search for
      * @param string|null $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPropertyString(string $name, ?string $default = null): ?string
     {
@@ -183,6 +199,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns a value indicating if the default action is to edit the entity.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionEdit(): bool
     {
@@ -191,6 +209,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns a value indicating if the default action is to do nothing.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionNone(): bool
     {
@@ -199,6 +219,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns a value indicating if the default action is to show the entity.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionShow(): bool
     {
@@ -207,6 +229,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns if the flash bag message icon is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageClose(): bool
     {
@@ -217,6 +241,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns if the flash bag message icon is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageIcon(): bool
     {
@@ -227,6 +253,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns if the flash bag message progress bar is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageProgress(): bool
     {
@@ -237,6 +265,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns if the flash bag message subtitle is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageSubTitle(): bool
     {
@@ -247,6 +277,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns if the flash bag message title is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageTitle(): bool
     {
@@ -257,6 +289,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns a value indicating if the catalog panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelCatalog(): bool
     {
@@ -267,6 +301,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns a value indicating if the month panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelMonth(): bool
     {
@@ -277,6 +313,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Returns a value indicating if the state panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelState(): bool
     {
@@ -287,6 +325,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Gets a value indicating if the customer address is output within the PDF documents.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPrintAddress(): bool
     {
@@ -300,6 +340,8 @@ class UserService implements ApplicationServiceInterface
      *
      * @param string $name    the property name to search for
      * @param bool   $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPropertyBoolean(string $name, bool $default = false): bool
     {
@@ -308,6 +350,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isQrCode(): bool
     {
@@ -331,6 +375,8 @@ class UserService implements ApplicationServiceInterface
      * Save the given properties to the database and to the cache.
      *
      * @param array<string, mixed> $properties the properties to set
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function setProperties(array $properties): self
     {
@@ -350,6 +396,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Sets a single property value.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function setProperty(string $name, mixed $value): self
     {
@@ -358,6 +406,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Update the cache if needed.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function updateCache(): void
     {
@@ -373,6 +423,8 @@ class UserService implements ApplicationServiceInterface
      * @param mixed  $default the default value if the item is not found
      *
      * @return mixed the value, if hit; the default value otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getItemValue(string $name, mixed $default): mixed
     {
@@ -419,6 +471,8 @@ class UserService implements ApplicationServiceInterface
 
     /**
      * Update the content of the cache from the repository.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function updateAdapter(): void
     {

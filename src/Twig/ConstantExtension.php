@@ -20,7 +20,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
 /**
- * Twig extension to access application class constants.
+ * Twig extension to access global class and icon constants.
  */
 final class ConstantExtension extends AbstractExtension implements GlobalsInterface
 {
@@ -42,57 +42,56 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     }
 
     /**
-     * The callback function used to create constants.
-     *
-     * @return array the constants
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function callback(): array
-    {
-        $values = [];
-        $this->addConstants(CalculationService::class, $values);
-        $this->addConstants(EntityVoterInterface::class, $values);
-        $this->addIcons($values);
-
-        return $values;
-    }
-
     public function getGlobals(): array
     {
         return (array) $this->getCacheValue(self::CACHE_KEY, fn (): array => $this->callback());
     }
 
     /**
-     * Adds the public constants of the given class name.
-     *
-     * @param string $className the class name to get constants for
-     * @param array  $values    the array to update
-     *
-     * @template T
-     * @psalm-param class-string<T> $className
+     * @throws \ReflectionException
      */
-    private function addConstants(string $className, array &$values): void
+    private function callback(): array
     {
-        $reflection = new \ReflectionClass($className);
-
-        /** @var \ReflectionClassConstant[] $constants */
-        $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $constant) => $constant->isPublic());
-
-        foreach ($constants as $constant) {
-            $values[$constant->getName()] = $constant->getValue();
-        }
+        return \array_merge(
+            $this->getConstants(EntityVoterInterface::class),
+            $this->getConstants(CalculationService::class),
+            $this->getIcons()
+        );
     }
 
-    private function addIcons(array &$values): void
+    /**
+     * @psalm-template T
+     * @psalm-param class-string<T> $className
+     *
+     * @throws \ReflectionException
+     */
+    private function getConstants(string $className): array
     {
-        $values['ICON_CALCULATION'] = 'calculator';
-        $values['ICON_CALCULATIONSTATE'] = 'flag far';
-        $values['ICON_CATEGORY'] = 'folder far';
-        $values['ICON_CUSTOMER'] = 'address-card far';
-        $values['ICON_GLOBALMARGIN'] = 'percent';
-        $values['ICON_GROUP'] = 'code-branch';
-        $values['ICON_LOG'] = 'book';
-        $values['ICON_PRODUCT'] = 'file-alt far';
-        $values['ICON_TASK'] = 'tasks';
-        $values['ICON_USER'] = 'user far';
+        $reflection = new \ReflectionClass($className);
+        $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $c) => $c->isPublic());
+
+        return \array_reduce($constants, static function (array $carry, \ReflectionClassConstant $c): array {
+            $carry[$c->getName()] = $c->getValue();
+
+            return $carry;
+        }, []);
+    }
+
+    private function getIcons(): array
+    {
+        return [
+            'ICON_CALCULATION' => 'calculator',
+            'ICON_CALCULATION_STATE' => 'flag far',
+            'ICON_CATEGORY' => 'folder far',
+            'ICON_CUSTOMER' => 'address-card far',
+            'ICON_GLOBAL_MARGIN' => 'percent',
+            'ICON_GROUP' => 'code-branch',
+            'ICON_LOG' => 'book',
+            'ICON_PRODUCT' => 'file-alt far',
+            'ICON_TASK' => 'tasks',
+            'ICON_USER' => 'user far',
+        ];
     }
 }

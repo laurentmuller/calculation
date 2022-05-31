@@ -92,6 +92,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * Gets the administrator role rights.
      *
      * @return int[] the rights
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getAdminRights(): array
     {
@@ -100,6 +102,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the administrator role.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getAdminRole(): Role
     {
@@ -113,6 +117,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the last archive calculation.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getArchiveCalculation(): ?\DateTimeInterface
     {
@@ -121,6 +127,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer information.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomer(): CustomerInformation
     {
@@ -139,6 +147,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer address.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerAddress(): ?string
     {
@@ -147,6 +157,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer e-mail.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerEmail(): ?string
     {
@@ -155,6 +167,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer fax number.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerFax(): ?string
     {
@@ -163,6 +177,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer name.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerName(): ?string
     {
@@ -171,6 +187,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer phone number.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerPhone(): ?string
     {
@@ -179,6 +197,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer website (URL).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerUrl(): ?string
     {
@@ -187,6 +207,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the customer zip code and city.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerZipCity(): ?string
     {
@@ -195,6 +217,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default category.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultCategory(): ?Category
     {
@@ -213,6 +237,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default category identifier.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultCategoryId(): int
     {
@@ -221,6 +247,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultProduct(): ?Product
     {
@@ -239,6 +267,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product identifier.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultProductId(): int
     {
@@ -247,6 +277,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product quantity.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultQuantity(): float
     {
@@ -255,6 +287,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default calculation state.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultState(): ?CalculationState
     {
@@ -273,6 +307,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default calculation state identifier.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultStateId(): int
     {
@@ -318,6 +354,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the display mode for table.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDisplayMode(): TableView
     {
@@ -328,6 +366,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the action to trigger within the entities.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEditAction(): EntityAction
     {
@@ -338,6 +378,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the last import of Swiss cities.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLastImport(): ?\DateTimeInterface
     {
@@ -346,6 +388,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the position of the flash bag messages (default: 'bottom-right').
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessagePosition(): string
     {
@@ -354,6 +398,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageTimeout(): int
     {
@@ -362,6 +408,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the minimum margin, in percent, for a calculation (default: 3.0 = 300%).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMinMargin(): float
     {
@@ -370,6 +418,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the minimum password strength.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMinStrength(): int
     {
@@ -378,6 +428,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating number of displayed calculation in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPanelCalculation(): int
     {
@@ -390,6 +442,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * @param string[] $excluded the property keys to exclude
      *
      * @return array<string, mixed>
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getProperties(array $excluded = []): array
     {
@@ -452,6 +506,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param array  $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPropertyArray(string $name, array $default): array
     {
@@ -476,6 +532,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string                  $name    the property name to search for
      * @param \DateTimeInterface|null $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
@@ -495,6 +553,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param float  $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPropertyFloat(string $name, float $default = 0.0): float
     {
@@ -506,6 +566,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param int    $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPropertyInteger(string $name, int $default = 0): int
     {
@@ -517,6 +579,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string      $name    the property name to search for
      * @param string|null $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPropertyString(string $name, ?string $default = null): ?string
     {
@@ -531,6 +595,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the last products update.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getUpdateProducts(): ?\DateTimeInterface
     {
@@ -541,6 +607,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * Gets the user role rights.
      *
      * @return int[] the rights
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getUserRights(): array
     {
@@ -549,6 +617,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the user role.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getUserRole(): Role
     {
@@ -562,6 +632,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the default action is to edit the entity.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionEdit(): bool
     {
@@ -570,6 +642,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the default action is to do nothing.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionNone(): bool
     {
@@ -578,6 +652,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the default action is to show the entity.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionShow(): bool
     {
@@ -586,6 +662,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets the default product edit on new calculation.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isDefaultEdit(): bool
     {
@@ -594,6 +672,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets a value indicating the image captcha is displayed when login.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isDisplayCaptcha(): bool
     {
@@ -604,6 +684,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * Returns if the given value is below the minimum margin.
      *
      * @param float|Calculation $value the calculation or the margin to be tested
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMarginBelow(float|Calculation $value): bool
     {
@@ -616,6 +698,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns if the flash bag message icon is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageClose(): bool
     {
@@ -624,6 +708,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns if the flash bag message icon is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageIcon(): bool
     {
@@ -632,6 +718,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns if the flash bag message progress bar is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageProgress(): bool
     {
@@ -640,6 +728,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns if the flash bag message subtitle is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageSubTitle(): bool
     {
@@ -648,6 +738,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns if the flash bag message title is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageTitle(): bool
     {
@@ -656,6 +748,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the catalog panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelCatalog(): bool
     {
@@ -664,6 +758,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the month panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelMonth(): bool
     {
@@ -672,6 +768,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Returns a value indicating if the state panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelState(): bool
     {
@@ -680,6 +778,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets a value indicating if the customer address is output within the PDF documents.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPrintAddress(): bool
     {
@@ -691,6 +791,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param string $name    the property name to search for
      * @param bool   $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPropertyBoolean(string $name, bool $default = false): bool
     {
@@ -699,6 +801,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isQrCode(): bool
     {
@@ -721,6 +825,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @param array<string, mixed> $properties        the properties to set
      * @param array<string, mixed> $defaultProperties the default properties
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function setProperties(array $properties, ?array $defaultProperties = null): self
     {
@@ -741,6 +847,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Sets a single property value.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function setProperty(string $name, mixed $value): self
     {
@@ -749,6 +857,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Update the cache if needed.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function updateCache(): void
     {
@@ -764,6 +874,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      * @param mixed  $default the default value if the item is not found
      *
      * @return mixed the value, if hit; the default value otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getItemValue(string $name, mixed $default): mixed
     {
@@ -815,6 +927,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Update the content of the cache from the repository.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function updateAdapter(): void
     {

@@ -386,8 +386,8 @@ class TestController extends AbstractController
         }
 
         return $this->renderForm('test/recaptcha.html.twig', [
-            'form' => $form,
             'recaptcha_action' => $action,
+            'form' => $form,
         ]);
     }
 

@@ -540,8 +540,6 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      * Create and add a week.
      *
      * @param int $number the week number (1 - 53)
-     *
-     * @throws CalendarException if the number is not between 1 and 53 inclusive
      */
     private function createWeek(int $number): Week
     {

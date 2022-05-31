@@ -15,7 +15,6 @@ namespace App\Service;
 use App\Traits\CacheTrait;
 use App\Util\Utils;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -175,6 +174,8 @@ abstract class AbstractHttpClientService
      *                        If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getUrlCacheValue(string $url, mixed $default = null): mixed
     {
@@ -203,7 +204,7 @@ abstract class AbstractHttpClientService
      *
      * @return ResponseInterface the response
      *
-     * @throws TransportException when an unsupported option is passed
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface when an unsupported option is passed
      */
     protected function request(string $method, string $url, array $options = []): ResponseInterface
     {
@@ -218,7 +219,7 @@ abstract class AbstractHttpClientService
      *
      * @return ResponseInterface the response
      *
-     * @throws TransportException when an unsupported option is passed
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface when an unsupported option is passed
      */
     protected function requestGet(string $url, array $options = []): ResponseInterface
     {
@@ -233,7 +234,7 @@ abstract class AbstractHttpClientService
      *
      * @return ResponseInterface the response
      *
-     * @throws TransportException when an unsupported option is passed
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface when an unsupported option is passed
      */
     protected function requestPost(string $url, array $options = []): ResponseInterface
     {
@@ -277,6 +278,8 @@ abstract class AbstractHttpClientService
      * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): self
     {

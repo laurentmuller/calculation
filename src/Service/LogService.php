@@ -79,6 +79,8 @@ class LogService
 
     /**
      * Clear the cached values.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function clearCache(): self
     {
@@ -208,6 +210,8 @@ class LogService
      *      array<int, Log>,
      *      levels: array<string, int>,
      *      channels: array<string, int>}|false
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEntries(): array|false
     {
@@ -255,6 +259,8 @@ class LogService
      * @param int $id the log identifier to find
      *
      * @return Log|null the log, if found; null otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLog(int $id): ?Log
     {
@@ -297,6 +303,8 @@ class LogService
      *      logs: array<int, Log>,
      *      levels: array<string, int>,
      *      channels: array<string, int>}|false
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getCachedValues(): array|false
     {
@@ -507,6 +515,8 @@ class LogService
      *      logs: array<int, Log>,
      *      levels: array<string, int>,
      *      channels: array<string, int>} the entries parameter
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function setCachedValues(array $entries): array
     {

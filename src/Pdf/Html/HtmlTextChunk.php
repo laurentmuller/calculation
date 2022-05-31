@@ -114,6 +114,8 @@ class HtmlTextChunk extends AbstractHtmlChunk
                     $report->SetY($report->GetY() - $report->getLastHeight());
 
                     return;
+                default:
+                    break;
             }
         }
 

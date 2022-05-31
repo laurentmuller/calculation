@@ -69,6 +69,8 @@ class HelpService
      * @param string $id the dialog identifier to search for
      *
      * @return array|null the dialog, if found; null otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findDialog(string $id): ?array
     {
@@ -81,6 +83,8 @@ class HelpService
      * @param string $id the entity identifier to search for
      *
      * @return array|null the entity, if found; null otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findEntity(string $id): ?array
     {
@@ -93,6 +97,8 @@ class HelpService
      * @param array $dialog the dialog to get the entity to search for
      *
      * @return array|null the entity, if found; null otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findEntityByDialog(array $dialog): ?array
     {
@@ -122,6 +128,8 @@ class HelpService
      *      globalActions: null|array,
      *      forbidden: null|array,
      *      details: string[]|null}>
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDialogs(): ?array
     {
@@ -157,6 +165,8 @@ class HelpService
      *      actions: array|null,
      *      fields: array|null,
      *      required: bool|null}>
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEntities(): ?array
     {
@@ -185,6 +195,8 @@ class HelpService
 
     /**
      * Gets the full help content.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getHelp(): array
     {
@@ -233,6 +245,8 @@ class HelpService
      * Gets the main (root) menu.
      *
      * @return array|null the main menu, if found; null otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMainMenu(): ?array
     {
@@ -249,6 +263,8 @@ class HelpService
      *      description:
      *      string,
      *      menus: array|null}>
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMainMenus(): ?array
     {
@@ -263,6 +279,9 @@ class HelpService
         return $menus;
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     private function findById(string $path, string $id): ?array
     {
         if ($entries = $this->findEntries($path)) {
@@ -277,6 +296,9 @@ class HelpService
         return null;
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     private function findEntries(string ...$paths): ?array
     {
         $entries = $this->getHelp();

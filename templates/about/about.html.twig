@@ -19,10 +19,8 @@
         <tbody>
             <tr class="h">
                 <td colspan="2">
-                    <p>
-                        <img alt="Application" width="64" height="64" class="rounded-lg" src="{{ asset('images/icons/android-icon-72x72.png') }}">
-                        <h1 class="p">{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
-                    </p>
+                    <img alt="{{ 'about.app_name'|trans }}" width="64" height="64" class="rounded-lg" src="{{ asset('images/icons/android-icon-72x72.png') }}">
+                    <h1>{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
                 </td>
             </tr>
             {{ tools.rowInfo('about.app_name'|trans, app_name) }}

@@ -12,8 +12,9 @@ grecaptcha.ready(function () {
     $('.grecaptcha-badge').css('bottom', '30px');
 
     // execute
-    const key = $('[recaptcha-site]').attr('recaptcha-site');
-    const action = $('[recaptcha-action]').attr('recaptcha-action');
+    const $form = $('#edit-form');
+    const key = $form.data('key');
+    const action = $form.attr('action');
     grecaptcha.execute(key, {
         action: action
     }).then(function (token) {

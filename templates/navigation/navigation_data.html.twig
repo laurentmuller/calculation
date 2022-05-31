@@ -20,10 +20,10 @@
         {{- icons.dropdownItem(path('group_table'), 'group.list.title', ICON_GROUP) -}}
     {%- endif -%}
     {%- if is_granted_calculation_state -%}
-        {{- icons.dropdownItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATIONSTATE) -}}
+        {{- icons.dropdownItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATION_STATE) -}}
     {%- endif -%}
     {%- if is_granted_global_margin -%}
-        {{- icons.dropdownItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBALMARGIN) -}}
+        {{- icons.dropdownItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) -}}
     {%- endif -%}
     {%- if is_granted_customer %}
         {%- if is_granted_data -%}{{- icons.dropdownSeparator -}}{% endif %}

@@ -214,17 +214,15 @@ class Comment
     /**
      * Adds the given uploaded file as attachment to the given email.
      */
-    private function addAttachment(Email $email, ?UploadedFile $file): Email
+    private function addAttachment(Email $email, ?UploadedFile $file): void
     {
         if (null !== $file && $file->isValid()) {
             $path = $file->getPathname();
             $name = $file->getClientOriginalName();
             $type = $file->getClientMimeType();
 
-            return $email->attachFromPath($path, $name, $type);
+            $email->attachFromPath($path, $name, $type);
         }
-
-        return $email;
     }
 
     /**

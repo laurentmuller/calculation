@@ -29,7 +29,7 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /**
- * Twig extension for the application service.
+ * Twig extension for the application.
  */
 final class FunctionExtension extends AbstractExtension
 {
@@ -152,26 +152,33 @@ final class FunctionExtension extends AbstractExtension
     public function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $url = $this->getAssetUrl($env, $path, $packageName);
-        $version = $this->version;
-        $nonce = $this->getNonce($env);
-        $params = $this->reduceParameters($parameters);
-        $href = \sprintf('%s?%d', $url, $version);
 
-        return "<link rel=\"stylesheet\" href=\"$href\" nonce=\"$nonce\" $params>";
+        // merge and reduce parameters
+        $parameters += [
+            'rel' => 'stylesheet',
+            'nonce' => $this->getNonce($env),
+            'href' => \sprintf('%s?%d', $url, $this->version),
+        ];
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<link$attributes>";
     }
 
     /**
-     * Output a script source tag with a nonce value.
+     * Output a java script source tag with a nonce value.
      */
     public function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $url = $this->getAssetUrl($env, $path, $packageName);
-        $version = $this->version;
-        $nonce = $this->getNonce($env);
-        $params = $this->reduceParameters($parameters);
-        $src = \sprintf('%s?%d', $url, $version);
 
-        return "<script src=\"$src\" nonce=\"$nonce\" $params></script>";
+        // merge and reduce parameters
+        $parameters += [
+            'nonce' => $this->getNonce($env),
+            'src' => \sprintf('%s?%d', $url, $this->version),
+        ];
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<script$attributes></script>";
     }
 
     /**

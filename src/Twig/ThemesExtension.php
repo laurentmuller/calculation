@@ -20,7 +20,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * Twig extension to validate theme files.
+ * Twig extension for UI themes.
  */
 final class ThemesExtension extends AbstractExtension
 {

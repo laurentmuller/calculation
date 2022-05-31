@@ -42,6 +42,7 @@ class SymfonyDocument extends AbstractDocument
             $title .= ' ' . $version;
         }
         $this->start($title);
+        $this->setActiveTitle('Configuration', $this->controller);
 
         // info
         $this->outputInfo($info);
@@ -86,10 +87,12 @@ class SymfonyDocument extends AbstractDocument
 
     /**
      * @param array<array{name: string, path: string}> $bundles
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an error occurs
      */
     private function outputBundles(array $bundles): void
     {
-        $this->createSheetAndTitle('Bundles');
+        $this->createSheetAndTitle($this->controller, 'Bundles');
 
         $row = 1;
         $this->setHeaderValues([
@@ -103,9 +106,12 @@ class SymfonyDocument extends AbstractDocument
 
         $this->setAutoSize(1)
             ->setAutoSize(2)
-            ->setSelectedCell('A2');
+            ->finish();
     }
 
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an error occurs
+     */
     private function outputGroup(int $row, string $group): self
     {
         $this->setRowValues($row, [$group]);
@@ -115,10 +121,13 @@ class SymfonyDocument extends AbstractDocument
         return $this;
     }
 
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     */
     private function outputInfo(SymfonyInfo $info): void
     {
         $app = $this->controller->getApplication();
-        $this->setActiveTitle('Symfony');
+        $this->setActiveTitle('Symfony', $this->controller);
 
         $row = 1;
         $this->setHeaderValues([
@@ -146,15 +155,17 @@ class SymfonyDocument extends AbstractDocument
 
         $this->setAutoSize(1)
             ->setAutoSize(2)
-            ->setSelectedCell('A2');
+            ->finish();
     }
 
     /**
      * @param array<array{name: string, version: string, description: string|null, homepage: string|null}> $packages
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
     private function outputPackages(string $title, array $packages): void
     {
-        $this->createSheetAndTitle($title);
+        $this->createSheetAndTitle($this->controller, $title);
 
         $row = 1;
         $this->setHeaderValues([
@@ -167,18 +178,25 @@ class SymfonyDocument extends AbstractDocument
             $this->outputRow($row++, $package['name'], $package['version'], $package['description'] ?? '');
         }
 
+        $this->getActiveSheet()
+            ->getStyle('A')
+            ->getAlignment()
+            ->setVertical(Alignment::VERTICAL_TOP);
+
         $this->setAutoSize(1)
             ->setAutoSize(2)
             ->setColumnWidth(3, 70, true)
-            ->setSelectedCell('A2');
+            ->finish();
     }
 
     /**
      * @param array<array{name: string, path: string}> $routes
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
     private function outputRoutes(string $title, array $routes): void
     {
-        $this->createSheetAndTitle($title);
+        $this->createSheetAndTitle($this->controller, $title);
 
         $row = 1;
         $this->setHeaderValues([
@@ -192,7 +210,7 @@ class SymfonyDocument extends AbstractDocument
 
         $this->setAutoSize(1)
             ->setAutoSize(2)
-            ->setSelectedCell('A2');
+            ->finish();
     }
 
     private function outputRow(int $row, string ...$values): self

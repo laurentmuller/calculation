@@ -63,6 +63,8 @@ trait CacheTrait
 
     /**
      * Removes the item from the cache pool.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function deleteCacheItem(string $key): bool
     {
@@ -73,6 +75,8 @@ trait CacheTrait
      * Removes multiple items from the cache pool.
      *
      * @param string[] $keys An array of keys that should be removed from the pool
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function deleteCacheItems(array $keys): bool
     {
@@ -87,6 +91,8 @@ trait CacheTrait
 
     /**
      * Gets the cache item for the given key.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
@@ -101,6 +107,8 @@ trait CacheTrait
      *                        If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCacheValue(string $key, mixed $default = null): mixed
     {
@@ -133,6 +141,8 @@ trait CacheTrait
      * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
@@ -165,6 +175,8 @@ trait CacheTrait
      * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): self
     {

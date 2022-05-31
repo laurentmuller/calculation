@@ -43,7 +43,7 @@
 
 {% block edit_actions -%}
 {{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', 'pencil', edit_class ~ ' btn-calculation-edit') }}
-{{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', ICON_CALCULATIONSTATE, 'btn-state') }}
+{{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', ICON_CALCULATION_STATE, 'btn-state') }}
 {%- endblock %}
 
 {% block delete_actions -%}

@@ -39,19 +39,7 @@ class VowelCaptcha extends AbstractAlphaCaptcha
      */
     protected function getAnswer(string $word, int $letterIndex): string
     {
-        if (0 > $letterIndex) {
-            $letterIndex = \abs($letterIndex) - 1;
-            $word = \strrev($word);
-        }
-
-        $answer = null;
-
-        for ($i = $letterIndex; $i >= 0; --$i) {
-            $answer = $word[\strcspn($word, self::VOWEL)];
-            $word = \preg_replace('/' . $answer . '/', '_', $word, 1);
-        }
-
-        return (string) $answer;
+        return $this->findAnswer($word, $letterIndex, self::VOWEL);
     }
 
     /**

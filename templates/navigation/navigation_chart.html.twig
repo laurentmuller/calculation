@@ -7,7 +7,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="chartDropdown">
         {{- icons.dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') -}}
-        {{- icons.dropdownItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATIONSTATE, 'chart') -}}
+        {{- icons.dropdownItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') -}}
         {% if is_test -%}
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('calculation_pivot'), 'pivot.title', 'table') -}}

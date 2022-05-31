@@ -94,7 +94,7 @@ class HelpReport extends AbstractReport
         $this->setTitleTrans('help.title');
 
         // content
-        $newPage = $this->outputMainMenus($mainMenus, true);
+        $newPage = $this->outputMainMenus($mainMenus);
         $newPage = $this->outputDialogs($dialogs, $newPage);
         $this->outputEntities($entities, $newPage);
 
@@ -421,10 +421,10 @@ class HelpReport extends AbstractReport
      *      fields: array|null,
      *      required: bool|null}> $entities
      */
-    private function outputEntities(array $entities, bool $newPage): bool
+    private function outputEntities(array $entities, bool $newPage): void
     {
         if (empty($entities)) {
-            return false;
+            return;
         }
 
         if ($newPage) {
@@ -442,8 +442,6 @@ class HelpReport extends AbstractReport
             $newPage = true;
             $this->outputEntity($entity);
         }
-
-        return true;
     }
 
     /**
@@ -545,13 +543,10 @@ class HelpReport extends AbstractReport
      *      description: string,
      *      menus: array|null}> $menus
      */
-    private function outputMainMenus(array $menus, bool $newPage): bool
+    private function outputMainMenus(array $menus): bool
     {
         if (!empty($menus)) {
-            if ($newPage) {
-                $this->AddPage();
-            }
-
+            $this->AddPage();
             $this->outputTitle('help.main_menu', 12);
             $this->outputLine();
 

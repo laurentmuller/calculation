@@ -724,6 +724,8 @@ class PdfTableBuilder
                     $x = $parent->GetPageWidth() - $parent->getRightMargin() - $w;
                     $parent->SetX($x);
                     break;
+                default:
+                    break;
             }
         }
 

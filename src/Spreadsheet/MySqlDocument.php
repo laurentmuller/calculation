@@ -49,44 +49,40 @@ class MySqlDocument extends AbstractDocument
         }
         $this->start($title);
 
+        $this->setHeaderValues([
+            'Name' => Alignment::HORIZONTAL_LEFT,
+            'Value' => Alignment::HORIZONTAL_LEFT,
+        ]);
+
+        $row = 2;
         if (!empty($database)) {
-            $this->outputArray($database, 'Database', false);
+            $row = $this->outputArray($row, $database);
         }
-
         if (!empty($configuration)) {
-            $this->outputArray($configuration, 'Configuration', !empty($database));
+            $this->outputArray($row, $configuration);
         }
 
-        $this->setActiveSheetIndex(0);
+        $this->getActiveSheet()
+            ->getStyle('A:B')
+            ->getAlignment()
+            ->setVertical(Alignment::VERTICAL_TOP);
+
+        $this->setAutoSize(1)
+            ->setColumnWidth(2, 50, true)
+            ->finish();
 
         return true;
     }
 
     /**
      * @param array<string, string> $values
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    private function outputArray(array $values, string $title, bool $create): void
+    private function outputArray(int $row, array $values): int
     {
-        if ($create) {
-            $this->createSheetAndTitle($title);
-        } else {
-            $this->setActiveTitle($title);
-        }
-
-        $row = 1;
-        $this->setHeaderValues([
-            'Name' => Alignment::HORIZONTAL_LEFT,
-            'Value' => Alignment::HORIZONTAL_LEFT,
-        ], 1, $row++);
-
         foreach ($values as $key => $value) {
             $this->setRowValues($row++, [$key, $value]);
         }
 
-        $this->setAutoSize(1)
-            ->setColumnWidth(2, 50, true)
-            ->setSelectedCell('A2');
+        return $row;
     }
 }

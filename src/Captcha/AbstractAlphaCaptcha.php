@@ -54,6 +54,26 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
     }
 
     /**
+     * Finds an answer within the given source.
+     *
+     * @param string $source the source string to search in
+     */
+    protected function findAnswer(string $word, int $letterIndex, string $source): string
+    {
+        if (0 > $letterIndex) {
+            $letterIndex = \abs($letterIndex) - 1;
+            $word = \strrev($word);
+        }
+        $answer = null;
+        for ($i = $letterIndex; $i >= 0; --$i) {
+            $answer = $word[\strcspn($word, $source)];
+            $word = \preg_replace('/' . $answer . '/', '_', $word, 1);
+        }
+
+        return (string) $answer;
+    }
+
+    /**
      * Gets the answer for the given word and letter index.
      */
     abstract protected function getAnswer(string $word, int $letterIndex): string;

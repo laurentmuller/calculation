@@ -233,7 +233,12 @@ final class Utils
     }
 
     /**
-     * Gets the request input bag, depending on the request method.
+     * Gets the request input bag. This function merge the attributes,
+     * the request and the query parameters.
+     *
+     * @param Request $request the request to get values from
+     *
+     * @return InputBag<bool|float|int|string>
      */
     public static function getRequestInputBag(Request $request): InputBag
     {

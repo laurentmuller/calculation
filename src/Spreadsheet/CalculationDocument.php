@@ -209,7 +209,7 @@ class CalculationDocument extends AbstractDocument
      *
      * @param int $row the row to fill (1 = First row)
      */
-    private function fillBackground(int $row): self
+    private function fillBackground(int $row): void
     {
         if (null !== $this->sheet) {
             /** @psalm-var string $coordinate */
@@ -218,8 +218,6 @@ class CalculationDocument extends AbstractDocument
                 ->getFill()->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()->setARGB(self::COLOR_BACKGROUND);
         }
-
-        return $this;
     }
 
     /**
@@ -310,6 +308,8 @@ class CalculationDocument extends AbstractDocument
      * @param int[] $emptyRows the empty rows indexes
      *
      * @return bool this function return always true
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
     private function renderEnd(int $lastRow, array $emptyRows): bool
     {
@@ -354,9 +354,9 @@ class CalculationDocument extends AbstractDocument
      *
      * @param int $row the row index (1 = First row)
      */
-    private function renderHeaders(int $row): self
+    private function renderHeaders(int $row): void
     {
-        return $this->renderBold(1, $row, $this->trans('calculationitem.fields.description'))
+        $this->renderBold(1, $row, $this->trans('calculationitem.fields.description'))
             ->renderBold(2, $row, $this->trans('calculationitem.fields.unit'))
             ->renderBold(3, $row, $this->trans('calculationitem.fields.price'), 0, Alignment::HORIZONTAL_RIGHT)
             ->renderBold(4, $row, $this->trans('calculationitem.fields.quantity'), 0, Alignment::HORIZONTAL_RIGHT)

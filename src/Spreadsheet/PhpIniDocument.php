@@ -16,6 +16,7 @@ use App\Controller\AbstractController;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
@@ -50,16 +51,16 @@ class PhpIniDocument extends AbstractDocument
             $title .= ' ' . $this->version;
         }
         $this->start($title);
-        $this->setActiveTitle('Configuration');
+        $this->setActiveTitle('Configuration', $this->controller);
 
-        $row = 1;
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
         $this->setHeaderValues([
             'Directive' => Alignment::HORIZONTAL_LEFT,
             'Local Value' => Alignment::HORIZONTAL_LEFT,
             'Master Value' => Alignment::HORIZONTAL_LEFT,
-        ], 1, $row++);
+        ]);
 
+        $row = 2;
         foreach ($content as $key => $value) {
             if ($this->outputGroup($row, $key)) {
                 ++$row;
@@ -67,11 +68,16 @@ class PhpIniDocument extends AbstractDocument
             $row = $this->outputEntries($row, $value);
         }
 
+        $this->getActiveSheet()
+            ->getStyle('A')
+            ->getAlignment()
+            ->setVertical(Alignment::VERTICAL_TOP);
+
         $this->setWrapText(2)
             ->setAutoSize(1)
             ->setColumnWidth(2, 50)
             ->setColumnWidth(3, 50, true)
-            ->setSelectedCell('A2');
+            ->finish();
 
         $this->getPageSetup()
             ->setFitToWidth(1)
@@ -123,6 +129,8 @@ class PhpIniDocument extends AbstractDocument
     {
         $this->sortEntries($entries);
         $sheet = $this->getActiveSheet();
+        $sheet->getPageSetup()
+            ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
 
         /** @var mixed $entry */
         foreach ($entries as $key => $entry) {
@@ -157,7 +165,8 @@ class PhpIniDocument extends AbstractDocument
             $this->mergeCells(1, 3, $row);
             $style = $this->getActiveSheet()->getStyle("A$row");
             $style->getFill()->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color('F2F2F2'));
+                ->getStartColor()->setARGB('F5F5F5');
+
             $style->getFont()->setBold(true);
             $this->key = $group;
 

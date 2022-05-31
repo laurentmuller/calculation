@@ -125,8 +125,8 @@
                     {{ _self.add_entity_entry('task', ICON_TASK, is_list_task, is_add_task, is_export_task, route_params) }}
                     {{ _self.add_entity_entry('category', ICON_CATEGORY, is_list_category, is_add_category, is_export_category, route_params) }}
                     {{ _self.add_entity_entry('group', ICON_GROUP, is_list_group, is_add_group, is_export_group, route_params) }}
-                    {{ _self.add_entity_entry('calculationstate', ICON_CALCULATIONSTATE, is_list_state, is_add_state, is_export_state, route_params) }}
-                    {{ _self.add_entity_entry('globalmargin', ICON_GLOBALMARGIN, is_list_margin, is_add_margin, is_export_margin, route_params) }}
+                    {{ _self.add_entity_entry('calculationstate', ICON_CALCULATION_STATE, is_list_state, is_add_state, is_export_state, route_params) }}
+                    {{ _self.add_entity_entry('globalmargin', ICON_GLOBAL_MARGIN, is_list_margin, is_add_margin, is_export_margin, route_params) }}
                     {{ _self.add_entity_entry('customer', ICON_CUSTOMER, is_list_customer, is_add_customer, is_export_customer, route_params) }}
                 </ul>
             </li>
@@ -139,7 +139,7 @@
                     <li>{{ _self.link('admin_product', 'product.update.title', ICON_PRODUCT) }}</li>
                     <li>{{ _self.link('admin_archive', 'archive.title', 'calendar-xmark far') }}</li>
                     {% endif %}
-                    <li>{{ _self.link('below_table', 'below.title', ICON_GLOBALMARGIN) }}</li>
+                    <li>{{ _self.link('below_table', 'below.title', ICON_GLOBAL_MARGIN) }}</li>
                     <li>{{ _self.link('duplicate_table', 'duplicate.title', 'copy far') }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
                     {% if is_list_task %}
@@ -152,7 +152,7 @@
                 <span>{{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}</span>
                 <ul>
                     <li>{{ _self.link('chart_by_month', 'title_by_month', 'calendar-alt far', 'chart') }}</li>
-                    <li>{{ _self.link('chart_by_state', 'title_by_state', ICON_CALCULATIONSTATE, 'chart') }}</li>
+                    <li>{{ _self.link('chart_by_state', 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}</li>
                     {% if is_bibi -%}
                     <li>{{ _self.link('calculation_pivot', 'pivot.title', 'table') }}</li>
                     {% endif %}

@@ -4,14 +4,14 @@
 {%- endmacro %}
 
 {% macro headerLinkInfo(name, target, count, colspan=1) -%}
-<tbody>
+<tr>
     <th class="h font-weight-normal" colspan="{{ colspan }}">
         <a data-toggle="collapse" href="#{{ target }}" class="card-link ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
     </th>
     <th class="h font-weight-normal text-right">
         <span class="badge badge-pill badge-secondary">{{ count|integer }}</span>
     </th>
-</tbody>
+</tr>
 {%- endmacro %}
 
 {% macro rowInfo(name, value, name_class='', value_class='') -%}
@@ -43,7 +43,7 @@
 </tr>
 {%- endmacro %}
 
-{% macro aboutCard(id, pdf_route=false, excel_route=false) -%}
+{% macro aboutCard(id, pdf_route, excel_route=false) -%}
 {% import 'macros/_icons.html.twig' as icons %}
 {%- set route = path('about_' ~ id ~ '_content') -%}
 {%- set title = ('about.' ~ id)|trans -%}
@@ -56,9 +56,7 @@
                 </a>
             </div>
             <div class="text-right d-print-none">
-                {% if pdf_route %}
-                    {{ icons.linkExternal(path(pdf_route), null, null, 'file-pdf far', 'common.button_pdf') }}
-                {% endif %}
+                {{ icons.linkExternal(path(pdf_route), null, null, 'file-pdf far', 'common.button_pdf') }}
                 {% if excel_route %}
                     {{ icons.linkExternal(path(excel_route), null, null, 'file-excel far', 'common.button_export') }}
                 {% endif %}

@@ -118,14 +118,16 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function createSheetAndTitle(string $title = null, int $sheetIndex = null): Worksheet
+    public function createSheetAndTitle(AbstractController $controller, string $title = null, int $sheetIndex = null): Worksheet
     {
-        $sheet = parent::createSheet($sheetIndex)
-            ->setPrintGridlines(true);
+        $sheet = parent::createSheet($sheetIndex);
         if (null !== $title) {
             $sheet->setTitle(self::checkSheetTitle($title));
         }
         $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
+        $customer = $controller->getApplication()->getCustomer();
+        $this->setHeaderFooter($title, $customer)
+            ->setPrintGridlines(true);
 
         return $sheet;
     }
@@ -207,11 +209,17 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the title of the active sheet.
+     * Sets the title of the active sheet. If the controller is not null,
+     * the header and footer are also updated.
      */
-    public function setActiveTitle(string $title): self
+    public function setActiveTitle(string $title, ?AbstractController $controller = null): self
     {
-        $this->getActiveSheet()->setTitle(self::checkSheetTitle($title));
+        $title = self::checkSheetTitle($title);
+        $this->getActiveSheet()->setTitle($title);
+        if (null !== $controller) {
+            $customer = $controller->getApplication()->getCustomer();
+            $this->setHeaderFooter($title, $customer);
+        }
 
         return $this;
     }
@@ -222,7 +230,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int  $columnIndex the column index (A = 1)
      * @param bool $autoSize    true to auto-sizing; false if not
      */
-    public function setAutoSize(int $columnIndex, bool $autoSize = true): self
+    public function setAutoSize(int $columnIndex, bool $autoSize = true): static
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
@@ -348,7 +356,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @see SpreadsheetDocument::setWrapText()
      */
-    public function setColumnWidth(int $columnIndex, int $width, bool $wrapText = false): self
+    public function setColumnWidth(int $columnIndex, int $width, bool $wrapText = false): static
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
@@ -541,27 +549,25 @@ class SpreadsheetDocument extends Spreadsheet
 
         $header = new HeaderFooter(true, 9);
         if ($customer->isPrintAddress()) {
-            $header->addLeft($customer->getName() ?? '', true);
-            $header->addLeft($customer->getAddress() ?? '');
-            $header->addLeft($customer->getZipCity() ?? '');
-
-            $header->addCenter($title ?? '', true);
-
-            $header->addRight($customer->getTranslatedPhone($this));
-            $header->addRight($customer->getTranslatedFax($this));
-            $header->addRight($customer->getEmail() ?? '');
+            $header->addLeft($customer->getName() ?? '', true)
+                ->addLeft($customer->getAddress() ?? '')
+                ->addLeft($customer->getZipCity() ?? '')
+                ->addCenter($title ?? '', true)
+                ->addRight($customer->getTranslatedPhone($this))
+                ->addRight($customer->getTranslatedFax($this))
+                ->addRight($customer->getEmail() ?? '');
             $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
         } else {
-            $header->addLeft($title ?? '', true);
-            $header->addRight($customer->getName() ?? '', true);
+            $header->addLeft($title ?? '', true)
+                ->addRight($customer->getName() ?? '', true);
             $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
         }
         $header->apply($sheet);
 
         $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
         $footer = new HeaderFooter(false, 9);
-        $footer->addPages()->addDateTime();
-        $footer->apply($sheet);
+        $footer->addPages()->addDateTime()
+            ->apply($sheet);
 
         return $this;
     }
@@ -729,7 +735,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param string $coordinates the cell coordinate (i.e. 'A1')
      */
-    public function setSelectedCell(string $coordinates): self
+    public function setSelectedCell(string $coordinates): static
     {
         $this->getActiveSheet()->setSelectedCell($coordinates);
 
@@ -809,7 +815,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setWrapText(int $columnIndex): self
+    public function setWrapText(int $columnIndex): static
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);

@@ -19,7 +19,6 @@ parameters:
     checkMissingIterableValueType: false
 
     ignoreErrors:
-        - '#Utils::getRequestInputBag#'
         - '#no value type specified#'
         -
             message: '#type mapping mismatch#'

@@ -43,7 +43,7 @@ abstract class AbstractDocument extends SpreadsheetDocument
      *
      * @param string $selection the cell to select
      */
-    protected function finish(string $selection = 'A2'): self
+    protected function finish(string $selection = 'A2'): static
     {
         $this->setSelectedCell($selection);
 

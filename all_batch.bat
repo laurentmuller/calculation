@@ -1,5 +1,11 @@
 @ECHO OFF
-ECHO -------------------------------------- START BATCH %time% ---------------------------      && ^
+ECHO -------------------------------------- START BATCH %time% -------------------------------- && ^
+ECHO -------------------------------------- LINT ---------------------------------------------- && ^
+php bin/console lint:yaml translations config                                                   && ^
+php bin/console lint:twig --env=prod templates                                                  && ^
+php bin/console lint:xliff translations                                                         && ^
+php bin/console lint:container                                                                  && ^
+php bin/console doctrine:schema:validate --skip-sync --no-interaction                           && ^
 ECHO -------------------------------------- PHP-CS-FIXER -------------------------------------- && ^
 .\vendor-bin\php-cs-fixer\vendor\bin\php-cs-fixer.bat fix --diff --dry-run --quiet              && ^
 ECHO -------------------------------------- PHP-PSALM ----------------------------------------- && ^

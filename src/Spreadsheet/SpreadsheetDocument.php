@@ -120,7 +120,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function createSheetAndTitle(string $title = null, int $sheetIndex = null): Worksheet
     {
-        $sheet = parent::createSheet($sheetIndex);
+        $sheet = parent::createSheet($sheetIndex)
+            ->setPrintGridlines(true);
         if (null !== $title) {
             $sheet->setTitle(self::checkSheetTitle($title));
         }

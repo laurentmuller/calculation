@@ -3,16 +3,16 @@
 {% macro cardEntry(entity, count, list_path, icon) -%}
 <div class="card index-child m-1">
     <div class="card-body p-2">
-        <div class="card-title mb-1">
+        <div class="card-text">
             {%- if list_path -%}
                 {{- icons.link(path(list_path), entity ~ '.list.title', 'card-link', icon, 'index.panel_title_' ~ entity) -}}
             {%- else -%}
                 {{- entity|trans -}}
             {%- endif -%}
         </div>
-        <h3 class="font-weight-normal my-1">
+        <div class="h3 font-weight-normal my-1">
             <span title="{{ ('index.panel_count_' ~ entity)|trans }}">{{- count|integer -}}</span>
-        </h3>
+        </div>
     </div>
 </div>
 {%- endmacro %}

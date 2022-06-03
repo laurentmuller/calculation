@@ -2,3 +2,31 @@
 @import '../js/vendor/contextmenu/jquery.contextMenu.css';
 
 /**! compression tag for ftp-deployment */
+
+@media (min-width: 1200px) {
+    .col-xl-4 {
+        -ms-flex: initial;
+        flex: initial;
+        max-width: initial;
+        width: 100%;
+    }
+    .col-xl-8 {
+        -ms-flex: initial;
+        flex: initial;
+        max-width: initial;
+        width: 100%;
+    }
+}
+
+@media (min-width: 1400px) {
+    .col-xl-4 {
+        -ms-flex: 0 0 33.333333%;
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    .col-xl-8 {
+        -ms-flex: 0 0 66.666667%;
+        flex: 0 0 66.666667%;
+        max-width: 66.666667%;
+    }
+}

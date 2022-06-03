@@ -265,7 +265,7 @@
 
 {% block javascripts -%}
 {% if app.debug %}
-{{ parent() }}
+{{ parent() -}}
 {{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
 {{ asset_js('js/vendor/bootstrap-table/bootstrap-table.js') }}
 {{ asset_js('js/vendor/bootstrap-table/bootstrap-table-defer-url.js') }}

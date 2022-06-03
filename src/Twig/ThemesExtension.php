@@ -48,11 +48,23 @@ final class ThemesExtension extends AbstractExtension
     }
 
     /**
+     * Gets the current theme.
+     *
+     * @param Request|null $request the request
+     *
+     * @return Theme the current theme, if any; the default theme otherwise
+     */
+    private function getCurrentTheme(?Request $request = null): Theme
+    {
+        return $this->service->getCurrentTheme($request);
+    }
+
+    /**
      * Gets the theme background.
      *
      * @param Request $request the request
      */
-    public function getThemeBackground(Request $request): string
+    private function getThemeBackground(Request $request): string
     {
         // get background
         $background = $this->service->getThemeBackground($request);
@@ -74,7 +86,7 @@ final class ThemesExtension extends AbstractExtension
      *
      * @param Request $request the request
      */
-    public function getThemeCss(Request $request): string
+    private function getThemeCss(Request $request): string
     {
         // get CSS
         $theme = $this->getCurrentTheme($request);
@@ -90,7 +102,7 @@ final class ThemesExtension extends AbstractExtension
      *
      * @param Request $request the request
      */
-    public function getThemeName(Request $request): string
+    private function getThemeName(Request $request): string
     {
         return $this->getCurrentTheme($request)->getName();
     }
@@ -100,7 +112,7 @@ final class ThemesExtension extends AbstractExtension
      *
      * @param Request $request the request
      */
-    public function isDarkTheme(Request $request): bool
+    private function isDarkTheme(Request $request): bool
     {
         return $this->service->isDarkTheme($request);
     }
@@ -110,20 +122,8 @@ final class ThemesExtension extends AbstractExtension
      *
      * @param Request $request the request
      */
-    public function isDefaultTheme(Request $request): bool
+    private function isDefaultTheme(Request $request): bool
     {
         return $this->getCurrentTheme($request)->isDefault();
-    }
-
-    /**
-     * Gets the current theme.
-     *
-     * @param Request|null $request the request
-     *
-     * @return Theme the current theme, if any; the default theme otherwise
-     */
-    private function getCurrentTheme(?Request $request = null): Theme
-    {
-        return $this->service->getCurrentTheme($request);
     }
 }

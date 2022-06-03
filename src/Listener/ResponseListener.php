@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Response subscriber to add content security policy (CSP).
@@ -55,12 +55,12 @@ class ResponseListener implements EventSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(ParameterBagInterface $params, RouterInterface $router, NonceExtension $extension, string $file, private readonly bool $isDebug)
+    public function __construct(ParameterBagInterface $params, UrlGeneratorInterface $router, NonceExtension $extension, string $file, private readonly bool $isDebug)
     {
         /** @var string $asset */
         $asset = $params->get('asset_base');
         $nonce = "'nonce-" . $extension->getNonce() . "'";
-        $report = $router->generate('log_csp');
+        $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $this->csp = $this->loadCSP($file, $asset, $nonce, $report);
     }
 

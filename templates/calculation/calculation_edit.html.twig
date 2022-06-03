@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 {% form_theme form _self %}
-
 {# customize the user margin field to display a tooltip #}
 {% block _calculation_userMargin_widget -%}
     {%- set type = type|default('number') -%}
@@ -20,7 +19,6 @@
         </div>
     </div>
 {%- endblock %}
-
 {# parameters #}
 {%- set title = new ? 'calculation.add.title' : 'calculation.edit.title' -%}
 {%- set title_parameters = new ? {} : {'%id%': item.id|identifier} -%}
@@ -40,7 +38,6 @@
         'data-error-margin': 'calculation.edit.error.user_margin'|trans,
         'data-item-empty': 'calculation.edit.empty_items'|trans}) -%}
 {%- endif -%}
-
 {# cancel path #}
 {%- set list_path = 'calculation_table' -%}
 {%- set cancel_path = cancel_url(app.request, item.id|default(0), list_path) -%}
@@ -65,16 +62,15 @@
     {%- include 'dialog/edit_item_dialog.html.twig' with {'form': item_dialog} only %}
     {%- include 'dialog/edit_task_dialog.html.twig' with {'form': task_dialog, 'tasks': tasks} only %}
 {%- endif %}
-
 {%- endblock %}
 
 {% block stylesheets %}
 {{ asset_css('css/calculation.css') }}
-{%- endblock -%}
+{% endblock %}
 
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
+{{ parent() -}}
 {{ asset_js('js/application/calculation_error.js') }}
 {% if editable %}
 {{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}

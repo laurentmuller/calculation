@@ -36,14 +36,13 @@
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/icons/apple-icon-180x180.png') }}">
 {# stylesheets #}
 {{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
-{% block stylesheets -%}
+{% block stylesheets %}
 {{ asset_css('css/style.css') }}
 {% endblock %}
-{#  {{ asset_js('js/vendor/iconify/iconify.js') }} #}
 </head>
 <body>
 {# navigation #}
-{% block navigation -%}{%- include 'navigation/navigation.html.twig' %}{%- endblock %}
+{%- block navigation -%}{%- include 'navigation/navigation.html.twig' %}{%- endblock %}
 {# container #}
 <div role="main" class="{% block container_class 'container' %}">
     {% block body -%}{%- endblock %}
@@ -55,7 +54,7 @@
 {# footer #}
 {% block footer -%}{% include 'footer.html.twig' %}{%- endblock %}
 {# java scripts #}
-<noscript>{{ 'common.no_script_support'|trans }}</noscript>
+{# java scripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ asset_js('js/vendor/jquery/jquery.js') }}
@@ -70,5 +69,6 @@
 {{ asset_js('js/core_common.js') }}
 {% endif %}
 {% endblock %}
+<noscript>{{ 'common.no_script_support'|trans }}</noscript>
 </body>
 </html>

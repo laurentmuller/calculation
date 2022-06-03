@@ -19,7 +19,7 @@ use Symfony\Component\Mime\Part\AbstractPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends NotificationEmail to use translated subjet.
+ * Extends NotificationEmail to use translated subject.
  */
 class NotificationEmail extends BaseNotificationEmail
 {
@@ -30,18 +30,16 @@ class NotificationEmail extends BaseNotificationEmail
     public function __construct(?TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
     {
         parent::__construct($headers, $body);
-        $this->htmlTemplate('emails/notification.html.twig');
         if (null !== $translator) {
             $this->setTranslator($translator);
         }
+        $this->htmlTemplate('emails/notification.html.twig');
     }
 
     public function getContext(): array
     {
         if (null !== $this->footerText) {
-            return \array_merge([
-                'footer_text' => $this->footerText,
-            ], parent::getContext());
+            return \array_merge(parent::getContext(), ['footer_text' => $this->footerText]);
         }
 
         return parent::getContext();

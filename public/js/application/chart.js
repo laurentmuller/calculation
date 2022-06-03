@@ -21,13 +21,11 @@ function onMonthsChange($months) {
  */
 (function ($) {
     'use strict';
-
     // tooltip
     $('#data').tooltip({
         selector: '.has-tooltip',
         customClass: 'tooltip-danger overall-datatable'
     });
-
     // handle months change
     const $months = $('#months');
     if ($months.length) {

@@ -58,7 +58,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for tests.
@@ -315,7 +314,7 @@ class TestController extends AbstractController
      * Display the reCaptcha.
      */
     #[Route(path: '/recaptcha', name: 'test_recaptcha')]
-    public function recaptcha(Request $request, TranslatorInterface $translator): Response
+    public function recaptcha(Request $request, bool $isDebug): Response
     {
         $data = [
             'subject' => 'My subject',
@@ -328,10 +327,8 @@ class TestController extends AbstractController
 
         $helper->field('subject')
             ->addTextType();
-
         $helper->field('message')
             ->addTextType();
-
         $helper->field('recaptcha')
             ->addHiddenType();
 
@@ -341,52 +338,56 @@ class TestController extends AbstractController
             /** @psalm-var array $data */
             $data = $form->getData();
             $response = (string) $data['recaptcha'];
-            $hostname = (string) $request->server->get('HTTP_HOST');
+            $hostname = (string) $request->server->get('SERVER_NAME');
+            $remoteIp = (string) $request->server->get('REMOTE_ADDR');
             $secret = $this->getStringParameter('google_recaptcha_secret_key');
+            $expectedHostName = $isDebug ? $remoteIp : $hostname;
 
             // verify
             $recaptcha = new ReCaptcha($secret);
-            $recaptcha->setExpectedAction($action)
-                ->setExpectedHostname($hostname)
+            $recaptcha->setExpectedHostname($expectedHostName)
+                ->setExpectedAction($action)
                 ->setChallengeTimeout(60)
                 ->setScoreThreshold(0.5);
-            $result = $recaptcha->verify($response);
+            $result = $recaptcha->verify($response, $remoteIp);
 
             // OK?
             if ($result->isSuccess()) {
                 /** @psalm-var array<string, mixed> $values */
                 $values = $result->toArray();
-                $html = '<table class="table table-sm table-borderless alert-heading">';
+                $html = '<table class="table table-borderless table-sm mb-0">';
 
                 /** @psalm-var string[]|string|null $value */
                 foreach ($values as $key => $value) {
-                    if (null !== $value) {
-                        if (\is_array($value)) {
-                            $value = \implode('<br>', $value);
-                        } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
-                            $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
-                        }
-                        $html .= "<tr><td>$key<td><td>:</td><td>$value</td></tr>";
+                    if (empty($value)) {
+                        continue;
                     }
+                    if (\is_array($value)) {
+                        $value = \implode('<br>', $value);
+                    } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
+                        $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
+                    }
+                    $html .= "<tr><td>$key</td><td>:</td><td>$value</td></tr>";
                 }
                 $html .= '</table>';
-                $this->success('reCAPTCHA|' . $html);
+                $this->success($html);
 
                 return $this->redirectToHomePage();
             }
 
-            $errorCodes = \array_map(fn (mixed $code): string => $translator->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
+            // add errors
+            $errorCodes = \array_map(fn (mixed $code): string => $this->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
             if (empty($errorCodes)) {
-                $errorCodes[] = $translator->trans('recaptcha.unknown-error', [], 'validators');
+                $errorCodes[] = $this->trans('recaptcha.unknown-error', [], 'validators');
             }
-
             foreach ($errorCodes as $code) {
                 $form->addError(new FormError($code));
             }
         }
 
         return $this->renderForm('test/recaptcha.html.twig', [
-            'recaptcha_action' => $action,
+            'google_recaptcha_site_key' => $this->getStringParameter('google_recaptcha_site_key'),
+            'google_recaptcha_action' => $action,
             'form' => $form,
         ]);
     }

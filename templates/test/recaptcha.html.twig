@@ -6,8 +6,8 @@
 {%- set cancel_path = path('homepage') -%}
 {%- set submit_params = {'disabled': 'disabled'} -%}
 {%- set form_attr = form_attr|default({})|merge({
-        'data-key': google_recaptcha_site_key,
-        'data-action': recaptcha_action
+    'data-action': google_recaptcha_action,
+    'data-key': google_recaptcha_site_key
 }) -%}
 
 {% block card_body %}
@@ -19,6 +19,6 @@
 
 {% block javascripts -%}
 {{ parent() }}
-<script src="https://www.google.com/recaptcha/api.js?render={{ google_recaptcha_site_key }}"></script>
+<script src="https://www.google.com/recaptcha/api.js?render={{ google_recaptcha_site_key }}" nonce="{{ csp_nonce() }}"></script>
 {{ asset_js('js/test/recaptcha.js') }}
 {%- endblock %}

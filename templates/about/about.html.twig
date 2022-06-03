@@ -58,10 +58,10 @@
 {% endblock %}
 
 {% block javascripts %}
-{% if app.debug %}
+{%- if app.debug -%}
 {{ parent() }}
 {{ asset_js('js/application/about.js') }}
-{% else %}
+{%- else -%}
 {{ asset_js('js/about.js') }}
-{% endif %}
+{%- endif -%}
 {% endblock %}

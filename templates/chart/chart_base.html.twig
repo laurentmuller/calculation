@@ -22,10 +22,12 @@
 <div class="row" id="data">
 {% block data %}{% endblock %}
 </div>
+
 {% endblock %}
 
 {% block card_footer -%}
 {{ icons.homepage() }}
+
 {%- endblock %}
 
 {% block stylesheets %}
@@ -34,12 +36,15 @@
 
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
+{{ parent() -}}
 {{ asset_js('js/vendor/highcharts/highcharts.js') }}
+{{ asset_js('js/vendor/highcharts/accessibility.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}
 {{ asset_js('js/application/chart.js') }}
 {% else %}
 {{ asset_js('js/chart.js') }}
 {% endif %}
-<script nonce="{{ csp_nonce() }}">{{ chart(chart) }}</script>
+<script nonce="{{ csp_nonce() }}">
+    {{ chart(chart) }}
+</script>
 {% endblock %}

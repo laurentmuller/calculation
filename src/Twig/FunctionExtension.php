@@ -68,120 +68,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Checks if the given asset path exists.
-     *
-     * @param string|null $path the path to be verified
-     *
-     * @return bool true if exists
-     */
-    public function assetExists(?string $path): bool
-    {
-        // path?
-        if (empty($path)) {
-            return false;
-        }
-
-        // web directory?
-        if (empty($this->webDir)) {
-            return false;
-        }
-
-        // real path?
-        if (!$file = \realpath($this->webDir . $path)) {
-            return false;
-        }
-
-        // file exist?
-        if (!FileUtils::isFile($file)) {
-            return false;
-        }
-
-        // check if file is well contained in public/ directory (prevents ../ in paths)
-        return 0 === \strncmp($this->webDir, $file, \strlen($this->webDir));
-    }
-
-    /**
-     * Returns the given asset path, if existing; the default path otherwise.
-     *
-     * @param string|null $path    the path to be verified
-     * @param string|null $default the default path
-     *
-     * @return string|null the path, if existing, the default path otherwise
-     */
-    public function assetIf(?string $path = null, ?string $default = null): ?string
-    {
-        if ($this->assetExists($path)) {
-            return $path;
-        }
-        if ($this->assetExists($default)) {
-            return $default;
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the cancel URL.
-     *
-     * @param Request $request      the request
-     * @param int     $id           the entity identifier
-     * @param string  $defaultRoute the default route to use
-     *
-     * @return string the cancel URL
-     */
-    public function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
-    {
-        return $this->generator->cancelUrl($request, $id, $defaultRoute);
-    }
-
-    /**
-     * Checks the existence of file or directory.
-     *
-     * @param string|null $filename the path to the file or directory
-     *
-     * @return bool true if the file or directory exists, false otherwise
-     */
-    public function fileExists(?string $filename): bool
-    {
-        return $filename && FileUtils::exists($filename);
-    }
-
-    /**
-     * Output a link style sheet tag with a nonce value.
-     */
-    public function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
-    {
-        $url = $this->getAssetUrl($env, $path, $packageName);
-
-        // merge and reduce parameters
-        $parameters += [
-            'rel' => 'stylesheet',
-            'nonce' => $this->getNonce($env),
-            'href' => \sprintf('%s?%d', $url, $this->version),
-        ];
-        $attributes = $this->reduceParameters($parameters);
-
-        return "<link$attributes>";
-    }
-
-    /**
-     * Output a java script source tag with a nonce value.
-     */
-    public function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
-    {
-        $url = $this->getAssetUrl($env, $path, $packageName);
-
-        // merge and reduce parameters
-        $parameters += [
-            'nonce' => $this->getNonce($env),
-            'src' => \sprintf('%s?%d', $url, $this->version),
-        ];
-        $attributes = $this->reduceParameters($parameters);
-
-        return "<script$attributes></script>";
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getFilters(): array
@@ -226,60 +112,113 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets the image height.
+     * Checks if the given asset path exists.
      *
-     * @param string $path an existing image path relative to the public directory
+     * @param string|null $path the path to be verified
+     *
+     * @return bool true if exists
      */
-    public function getImageHeight(string $path): int
+    private function assetExists(?string $path): bool
     {
-        $fullPath = (string) \realpath($this->webDir . $path);
-        $size = (array) \getimagesize($fullPath);
+        // path?
+        if (empty($path)) {
+            return false;
+        }
 
-        return (int) $size[1];
+        // web directory?
+        if (empty($this->webDir)) {
+            return false;
+        }
+
+        // real path?
+        if (!$file = \realpath($this->webDir . $path)) {
+            return false;
+        }
+
+        // file exist?
+        if (!FileUtils::isFile($file)) {
+            return false;
+        }
+
+        // check if file is well contained in public/ directory (prevents ../ in paths)
+        return 0 === \strncmp($this->webDir, $file, \strlen($this->webDir));
     }
 
     /**
-     * Gets the image width.
+     * Returns the given asset path, if existing; the default path otherwise.
      *
-     * @param string $path an existing image path relative to the public directory
+     * @param string|null $path    the path to be verified
+     * @param string|null $default the default path
+     *
+     * @return string|null the path, if existing, the default path otherwise
      */
-    public function getImageWidth(string $path): int
+    private function assetIf(?string $path = null, ?string $default = null): ?string
     {
-        $fullPath = (string) \realpath($this->webDir . $path);
-        $size = (array) \getimagesize($fullPath);
+        if ($this->assetExists($path)) {
+            return $path;
+        }
+        if ($this->assetExists($default)) {
+            return $default;
+        }
 
-        return (int) $size[0];
+        return null;
     }
 
     /**
-     * This filter replaces duplicated spaces and/or linebreaks with single space.
+     * Gets the cancel URL.
      *
-     * It also removes whitespace from the beginning and at the end of the string.
+     * @param Request $request      the request
+     * @param int     $id           the entity identifier
+     * @param string  $defaultRoute the default route to use
      *
-     * @param string $value the value to clean
-     *
-     * @return string the cleaned value
+     * @return string the cancel URL
      */
-    public function normalizeWhitespace(string $value): string
+    private function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
-        // attributes
-        $value = (string) \preg_replace('/\s+=\s+/u', '=', $value);
-
-        // space and new lines
-        $value = (string) \preg_replace('/\s+/u', ' ', $value);
-
-        return \trim($value);
+        return $this->generator->cancelUrl($request, $id, $defaultRoute);
     }
 
     /**
-     * Gets the route parameters.
+     * Checks the existence of file or directory.
      *
-     * @param Request $request the request
-     * @param int     $id      the entity identifier
+     * @param string|null $filename the path to the file or directory
+     *
+     * @return bool true if the file or directory exists, false otherwise
      */
-    public function routeParams(Request $request, int $id = 0): array
+    private function fileExists(?string $filename): bool
     {
-        return $this->generator->routeParams($request, $id);
+        return null !== $filename && FileUtils::exists($filename);
+    }
+
+    /**
+     * Output a link style sheet tag with a nonce value.
+     */
+    private function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    {
+        $url = $this->getAssetUrl($env, $path, $packageName);
+        $parameters = \array_merge([
+            'rel' => 'stylesheet',
+            'href' => \sprintf('%s?%d', $url, $this->version),
+            'nonce' => $this->getNonce($env),
+        ], $parameters);
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<link$attributes>";
+    }
+
+    /**
+     * Output a java script source tag with a nonce value.
+     */
+    private function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    {
+        $url = $this->getAssetUrl($env, $path, $packageName);
+        $parameters = \array_merge([
+            'src' => \sprintf('%s?%d', $url, $this->version),
+            'nonce' => $this->getNonce($env),
+        ], $parameters);
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<script$attributes></script>";
     }
 
     /**
@@ -314,6 +253,32 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * Gets the image height.
+     *
+     * @param string $path an existing image path relative to the public directory
+     */
+    private function getImageHeight(string $path): int
+    {
+        $fullPath = (string) \realpath($this->webDir . $path);
+        $size = (array) \getimagesize($fullPath);
+
+        return (int) $size[1];
+    }
+
+    /**
+     * Gets the image width.
+     *
+     * @param string $path an existing image path relative to the public directory
+     */
+    private function getImageWidth(string $path): int
+    {
+        $fullPath = (string) \realpath($this->webDir . $path);
+        $size = (array) \getimagesize($fullPath);
+
+        return (int) $size[0];
+    }
+
+    /**
      * Generates a random nonce parameter.
      *
      * @param Environment $env the Twig environnement
@@ -329,6 +294,26 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * This filter replaces duplicated spaces and/or linebreaks with single space.
+     *
+     * It also removes whitespace from the beginning and at the end of the string.
+     *
+     * @param string $value the value to clean
+     *
+     * @return string the cleaned value
+     */
+    private function normalizeWhitespace(string $value): string
+    {
+        // attributes
+        $value = (string) \preg_replace('/\s+=\s+/u', '=', $value);
+
+        // space and new lines
+        $value = (string) \preg_replace('/\s+/u', ' ', $value);
+
+        return \trim($value);
+    }
+
+    /**
      * Reduce parameters with a key/value tags.
      */
     private function reduceParameters(array $parameters): string
@@ -340,5 +325,16 @@ final class FunctionExtension extends AbstractExtension
         }
 
         return '';
+    }
+
+    /**
+     * Gets the route parameters.
+     *
+     * @param Request $request the request
+     * @param int     $id      the entity identifier
+     */
+    private function routeParams(Request $request, int $id = 0): array
+    {
+        return $this->generator->routeParams($request, $id);
     }
 }

@@ -65,6 +65,17 @@
             ]
         },
         {
+            "name": "highcharts",
+            "version": "10.1.0",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/modules/{file}",
+            "target": "highcharts",
+            "files": [
+                "accessibility.js",
+                "accessibility.js.map"
+            ]
+        },
+        {
             "name": "html5sortable",
             "version": "0.13.3",
             "files": [

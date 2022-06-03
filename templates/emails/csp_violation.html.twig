@@ -1,0 +1,37 @@
+{% extends 'emails/notification.html.twig' %}
+
+{% macro output_policy(value) -%}
+{% for key, entries in value %}
+    <tr>
+        <td>{{ key }}</td>
+        <td>{{ entries|nl2br }}</td>
+    </tr>
+{%- endfor %}
+{% endmacro %}
+
+{% block content %}
+<container>
+    <row>
+        <columns>
+            {{ 'notification.csp_description'|trans({'%name%': app_name}) }}
+        </columns>
+    </row>
+</container>
+<container>
+    <table id="csp">
+        {% for key, value in context %}
+            {% if 'original-policy' == key %}
+                <tr>
+                    <td colspan="2"><u>{{ key }}</u></td>
+                </tr>
+                {{ _self.output_policy(value) }}
+            {% else %}
+                <tr>
+                    <td><u>{{ key }}</u></td>
+                    <td>{{- value -}}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</container>
+{% endblock %}

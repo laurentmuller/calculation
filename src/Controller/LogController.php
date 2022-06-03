@@ -24,9 +24,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -40,44 +37,9 @@ class LogController extends AbstractController
     use TableTrait;
 
     /**
-     * Logs a Content Security Policy report.
-     */
-    #[IsGranted('ROLE_USER')]
-    #[Route(path: '/csp', name: 'log_csp')]
-    public function cspViolation(LoggerInterface $logger, MailerInterface $mailer): Response
-    {
-        $content = (string) \file_get_contents('php://input');
-        /** @psalm-var bool|array{csp-report: string[]} $data */
-        $data = \json_decode($content, true);
-        if (\is_array($data)) {
-            $title = 'CSP Violation';
-            $csp_report = $data['csp-report'];
-            $context = \array_filter($csp_report, 'strlen');
-            if (isset($context['document-uri'])) {
-                $title .= ': ' . $context['document-uri'];
-            } elseif (isset($context['source-file'])) {
-                $title .= ': ' . $context['source-file'];
-            }
-            $logger->error($title, $context);
-
-            try {
-                $text = (string) \json_encode($context, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
-                $email = (new Email())
-                    ->subject($title)
-                    ->text($text);
-                $mailer->send($email);
-            } catch (TransportExceptionInterface $e) {
-                $context = Utils::getExceptionContext($e);
-                $logger->error($e->getMessage(), $context);
-            }
-        }
-
-        // no content
-        return new Response('', Response::HTTP_NO_CONTENT);
-    }
-
-    /**
      * Delete the content of the log file (if any).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
@@ -126,6 +88,8 @@ class LogController extends AbstractController
 
     /**
      * Export the logs to a Spreadsheet document.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
@@ -143,6 +107,8 @@ class LogController extends AbstractController
 
     /**
      * Export to PDF the content of the log file.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response
@@ -160,6 +126,8 @@ class LogController extends AbstractController
 
     /**
      * Clear the log file cache.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/refresh', name: 'log_refresh')]
     public function refresh(Request $request, LogService $service): Response
@@ -172,6 +140,8 @@ class LogController extends AbstractController
 
     /**
      * Show properties of a log entry.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => self::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response

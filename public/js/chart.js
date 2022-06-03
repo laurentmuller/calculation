@@ -9,6 +9,7 @@
  * Vendor Files
  */
 <!--#include file="vendor/highcharts/highcharts.js" -->
+<!--#include file="vendor/highcharts/accessibility.js" -->
 
 /**
  * Plugin Files

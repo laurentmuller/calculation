@@ -1,8 +1,6 @@
 {# Navigation toolbar #}
-
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set is_env_dev = app_mode == 'dev' -%}
 {%- set is_env_prod = app_mode == 'prod' -%}
@@ -13,7 +11,6 @@
 {%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
 {%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
-
 {# rights #}
 {%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
@@ -23,7 +20,6 @@
 {%- set is_granted_calculation_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
 {%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
-
 {# navigation #}
 <nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
     <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
@@ -34,10 +30,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
-            {%- if is_granted_calculation -%}
-                {{- icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) -}}
-            {%- endif -%}
-            {% include 'navigation/navigation_data.html.twig' %}
+            {% if is_granted_calculation -%}
+                {{ icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
+            {% endif %}
+            {%- include 'navigation/navigation_data.html.twig' %}
             {% include 'navigation/navigation_tools.html.twig' %}
             {% include 'navigation/navigation_chart.html.twig' %}
             {% include 'navigation/navigation_test.html.twig' %}

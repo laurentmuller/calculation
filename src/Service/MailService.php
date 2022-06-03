@@ -70,7 +70,7 @@ class MailService
             ->importance($importance)
             ->subject($this->trans('user.comment.title'))
             ->markdown($this->convert($message))
-            ->setFooterText($this->appNameVersion)
+            ->setFooterText($this->getFooter())
             ->action($this->trans('index.title'), $this->homeUrl);
 
         $this->mailer->send($notification);
@@ -93,5 +93,14 @@ class MailService
         }
 
         return \strip_tags($message);
+    }
+
+    private function getFooter(): string
+    {
+        if (null !== $this->translator) {
+            return $this->trans('notification.footer', ['%name%' => $this->appNameVersion]);
+        }
+
+        return $this->appNameVersion;
     }
 }

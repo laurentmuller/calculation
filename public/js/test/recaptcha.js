@@ -14,7 +14,7 @@ grecaptcha.ready(function () {
     // execute
     const $form = $('#edit-form');
     const key = $form.data('key');
-    const action = $form.attr('action');
+    const action = $form.data('action');
     grecaptcha.execute(key, {
         action: action
     }).then(function (token) {

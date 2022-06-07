@@ -57,7 +57,7 @@ class SearchTable extends AbstractTable
     public function __construct(private readonly SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
     {
         $this->setChecker($checker);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

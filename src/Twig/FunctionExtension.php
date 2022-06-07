@@ -60,7 +60,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator, private readonly UrlGeneratorService $generator)
     {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $projectDir = $kernel->getProjectDir();
         $filename = FileUtils::buildPath($projectDir, 'composer.lock');
         $this->webDir = (string) \realpath(FileUtils::buildPath($projectDir, 'public'));

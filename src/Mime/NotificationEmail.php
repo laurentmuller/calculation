@@ -27,31 +27,32 @@ class NotificationEmail extends BaseNotificationEmail
 
     private ?string $footerText = null;
 
-    public function __construct(?TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
+    public function __construct(TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
     {
         parent::__construct($headers, $body);
-        if (null !== $translator) {
-            $this->setTranslator($translator);
-        }
+        $this->translator = $translator;
         $this->htmlTemplate('emails/notification.html.twig');
     }
 
     public function getContext(): array
     {
-        if (null !== $this->footerText) {
-            return \array_merge(parent::getContext(), ['footer_text' => $this->footerText]);
+        $context = parent::getContext();
+        if (!empty($this->footerText)) {
+            return \array_merge($context, ['footer_text' => $this->footerText]);
         }
 
-        return parent::getContext();
+        return $context;
     }
 
-    /**
-     * @psalm-suppress InternalMethod
-     */
     public function getPreparedHeaders(): Headers
     {
         $headers = parent::getPreparedHeaders();
-        $headers->setHeaderBody('Text', 'Subject', $this->translateSubject());
+        $subject = $headers->get('Subject');
+        if (null !== $subject) {
+            $subject->setBody($this->translateSubject());
+        } else {
+            $headers->addTextHeader('Subject', $this->translateSubject());
+        }
 
         return $headers;
     }

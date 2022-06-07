@@ -82,7 +82,7 @@ class SpreadsheetDocument extends Spreadsheet
     public function __construct(TranslatorInterface $translator)
     {
         parent::__construct();
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $this->setPageSize(PageSetup::PAPERSIZE_A4);
     }
 

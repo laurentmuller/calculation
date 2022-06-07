@@ -33,7 +33,7 @@ class GroupTransformer implements DataTransformerInterface
      */
     public function __construct(private readonly GroupRepository $repository, TranslatorInterface $translator)
     {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

@@ -47,10 +47,8 @@ abstract class AbstractReport extends PdfDocument
     public function __construct(protected AbstractController $controller, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
     {
         parent::__construct($orientation, $unit, $size);
-
-        $this->translator = $controller->getTranslator();
+        $this->translator = $this->controller->getTranslator();
         $this->extension = new FormatExtension($this->translator);
-
         $application = $controller->getApplication();
         $appName = $controller->getApplicationName();
 

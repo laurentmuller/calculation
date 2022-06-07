@@ -41,14 +41,6 @@ trait SessionTrait
     }
 
     /**
-     * Sets the session.
-     */
-    public function setSession(SessionInterface $session): void
-    {
-        $this->session = $session;
-    }
-
-    /**
      * Gets the session.
      *
      * @return SessionInterface|null the session, if found; null otherwise

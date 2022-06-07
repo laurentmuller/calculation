@@ -23,7 +23,7 @@ trait TranslatorTrait
     /**
      * The translator instance.
      */
-    protected ?TranslatorInterface $translator = null;
+    protected TranslatorInterface $translator;
 
     /**
      * Checks if a message has a translation (it does not take into account the fallback mechanism).
@@ -46,14 +46,6 @@ trait TranslatorTrait
     }
 
     /**
-     * Sets the translator.
-     */
-    public function setTranslator(TranslatorInterface $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
      * Translates the given message.
      *
      * @param string      $id         the message id (may also be an object that can be cast to string)
@@ -65,6 +57,6 @@ trait TranslatorTrait
      */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        return $this->translator?->trans($id, $parameters, $domain, $locale) ?? $id;
+        return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 }

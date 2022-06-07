@@ -33,7 +33,7 @@ class LoginListener implements EventSubscriberInterface
      */
     public function __construct(private readonly EntityManagerInterface $manager, TranslatorInterface $translator, private readonly string $appNameVersion)
     {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

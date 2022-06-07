@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for application information.
@@ -44,8 +45,9 @@ class AboutController extends AbstractController
      *
      * @param string $appMode the application mode
      */
-    public function __construct(private readonly string $appMode)
+    public function __construct(TranslatorInterface $translator, private readonly string $appMode)
     {
+        parent::__construct($translator);
     }
 
     /**

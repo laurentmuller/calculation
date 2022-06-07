@@ -77,7 +77,7 @@ class SwissPostUpdater
         $this->dataDirectory = $service->getDataDirectory();
         $this->databaseName = $service->getDatabaseName();
         $this->results = new SwissPostUpdateResult();
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

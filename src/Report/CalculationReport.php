@@ -39,6 +39,8 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
 
     /**
      * Constructor.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(AbstractController $controller, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
     {

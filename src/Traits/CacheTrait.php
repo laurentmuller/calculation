@@ -50,7 +50,7 @@ trait CacheTrait
      */
     public function clearCache(): bool
     {
-        return null !== $this->adapter && $this->adapter->clear();
+        return $this->adapter?->clear() ?? false;
     }
 
     /**
@@ -58,7 +58,7 @@ trait CacheTrait
      */
     public function commitDeferredValues(): bool
     {
-        return null !== $this->adapter && $this->adapter->commit();
+        return $this->adapter?->commit() ?? false;
     }
 
     /**
@@ -68,7 +68,7 @@ trait CacheTrait
      */
     public function deleteCacheItem(string $key): bool
     {
-        return null !== $this->adapter && $this->adapter->deleteItem($this->cleanKey($key));
+        return $this->adapter?->deleteItem($this->cleanKey($key)) ?? false;
     }
 
     /**
@@ -80,13 +80,9 @@ trait CacheTrait
      */
     public function deleteCacheItems(array $keys): bool
     {
-        if (null !== $this->adapter) {
-            $keys = \array_map(fn (string $key): string => $this->cleanKey($key), $keys);
+        $keys = \array_map(fn (string $key): string => $this->cleanKey($key), $keys);
 
-            return $this->adapter->deleteItems($keys);
-        }
-
-        return false;
+        return $this->adapter?->deleteItems($keys) ?? false;
     }
 
     /**
@@ -112,9 +108,7 @@ trait CacheTrait
      */
     public function getCacheValue(string $key, mixed $default = null): mixed
     {
-        // clean key
         $key = $this->cleanKey($key);
-
         if (($item = $this->getCacheItem($key)) && $item->isHit()) {
             return $item->get();
         }

@@ -35,7 +35,7 @@ class CalculationStateListType extends AbstractListEntityType
     public function __construct(TranslatorInterface $translator)
     {
         parent::__construct(CalculationState::class);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

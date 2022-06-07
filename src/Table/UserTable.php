@@ -36,7 +36,7 @@ class UserTable extends AbstractEntityTable
     public function __construct(UserRepository $repository, TranslatorInterface $translator, private readonly Environment $twig, private readonly DateTimeFormatter $formatter)
     {
         parent::__construct($repository);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

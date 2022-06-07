@@ -33,7 +33,7 @@ class CategoryTransformer implements DataTransformerInterface
      */
     public function __construct(private readonly CategoryRepository $repository, TranslatorInterface $translator)
     {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

@@ -65,7 +65,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         KernelInterface $kernel
     ) {
         $this->setLogger($logger);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $this->setAdapter($applicationCache);
 
         $this->setDebug($kernel->isDebug());

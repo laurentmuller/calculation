@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for calculation state entities.
@@ -43,9 +44,9 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(CalculationStateRepository $repository)
+    public function __construct(TranslatorInterface $translator, CalculationStateRepository $repository)
     {
-        parent::__construct($repository);
+        parent::__construct($translator, $repository);
     }
 
     /**

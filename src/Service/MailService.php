@@ -36,7 +36,7 @@ class MailService
     public function __construct(TranslatorInterface $translator, private readonly MailerInterface $mailer, UrlGeneratorInterface $generator, private readonly string $appNameVersion)
     {
         $this->homeUrl = $generator->generate(AbstractController::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**
@@ -97,10 +97,6 @@ class MailService
 
     private function getFooter(): string
     {
-        if (null !== $this->translator) {
-            return $this->trans('notification.footer', ['%name%' => $this->appNameVersion]);
-        }
-
-        return $this->appNameVersion;
+        return $this->trans('notification.footer', ['%name%' => $this->appNameVersion]);
     }
 }

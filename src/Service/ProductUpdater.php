@@ -59,7 +59,7 @@ class ProductUpdater implements LoggerAwareInterface
         TranslatorInterface $translator,
         RequestStack $requestStack
     ) {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $this->setRequestStack($requestStack);
     }
 

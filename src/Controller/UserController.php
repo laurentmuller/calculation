@@ -45,6 +45,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -60,9 +61,9 @@ class UserController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(UserRepository $repository)
+    public function __construct(TranslatorInterface $translator, UserRepository $repository)
     {
-        parent::__construct($repository);
+        parent::__construct($translator, $repository);
     }
 
     /**

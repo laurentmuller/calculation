@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for calculation entities.
@@ -50,9 +51,9 @@ class CalculationController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, private readonly CalculationService $service, private readonly TaskRepository $taskRepository)
+    public function __construct(TranslatorInterface $translator, CalculationRepository $repository, private readonly CalculationService $service, private readonly TaskRepository $taskRepository)
     {
-        parent::__construct($repository);
+        parent::__construct($translator, $repository);
     }
 
     /**

@@ -27,6 +27,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract controller for entities management.
@@ -52,8 +53,9 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @param AbstractRepository<T> $repository
      */
-    public function __construct(protected AbstractRepository $repository)
+    public function __construct(TranslatorInterface $translator, protected AbstractRepository $repository)
     {
+        parent::__construct($translator);
         $this->className = $repository->getClassName();
         $this->lowerName = \strtolower(Utils::getShortName($this->className));
     }

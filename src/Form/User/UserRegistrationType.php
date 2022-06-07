@@ -33,7 +33,7 @@ class UserRegistrationType extends AbstractUserCaptchaType
     public function __construct(CaptchaImageService $service, ApplicationService $application, TranslatorInterface $translator)
     {
         parent::__construct($service, $application);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

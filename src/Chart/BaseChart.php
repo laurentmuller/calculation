@@ -78,7 +78,7 @@ class BaseChart extends Highchart
     public function __construct(protected ApplicationService $application, ThemeService $service, TranslatorInterface $translator)
     {
         parent::__construct();
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $this->darkTheme = $service->isDarkTheme();
 
         $this->hideCredits()

@@ -85,7 +85,7 @@ class AkismetService extends AbstractHttpClientService
         $key = $params->get(self::PARAM_KEY);
         parent::__construct($adapter, $isDebug, $key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

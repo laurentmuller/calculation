@@ -136,3 +136,18 @@
 .thead-light th.text-border {
     border-left-color: #e9ecef !important;
 }
+
+.f-100 {
+    width: 100px;
+}
+
+.f-200 {
+    width: 200px;
+}
+
+.f-300 {
+    width: 200px;
+}
+.f-400 {
+    width: 400px;
+}

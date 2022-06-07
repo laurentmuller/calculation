@@ -203,6 +203,8 @@ class TestController extends AbstractController
 
     /**
      * Test notifications.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/notifications', name: 'test_notifications')]
     public function notifications(): Response

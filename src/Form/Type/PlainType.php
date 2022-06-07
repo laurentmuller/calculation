@@ -92,7 +92,7 @@ class PlainType extends AbstractType
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

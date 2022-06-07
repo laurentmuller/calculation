@@ -52,7 +52,7 @@ class UserService implements ApplicationServiceInterface
         CacheItemPoolInterface $userCache
     ) {
         $this->setLogger($logger);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $this->setAdapter($userCache);
     }
 

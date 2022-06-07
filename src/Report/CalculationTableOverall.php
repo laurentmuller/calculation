@@ -38,7 +38,7 @@ class CalculationTableOverall extends PdfTableBuilder
     public function __construct(CalculationReport $parent)
     {
         parent::__construct($parent);
-        $this->setTranslator($parent->getTranslator());
+        $this->translator = $parent->getTranslator();
         $this->calculation = $parent->getCalculation();
         $this->minMargin = $parent->getMinMargin();
     }
@@ -97,7 +97,7 @@ class CalculationTableOverall extends PdfTableBuilder
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
 
-        // overall margin and amouts
+        // overall margin and amount
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.overallTotal'))
             ->add(FormatUtils::formatAmount($totalItems))
@@ -112,12 +112,10 @@ class CalculationTableOverall extends PdfTableBuilder
             ->setFontItalic()
             ->setFontSize(7);
         $oldMargins = $this->parent->setCellMargin(0);
-        if (null !== $this->translator) {
-            $this->startRow()
-                ->add($calculation->getCreatedText($this->translator), 1, $style, PdfTextAlignment::LEFT)
-                ->add($calculation->getUpdatedText($this->translator), 4, $style, PdfTextAlignment::RIGHT)
-                ->endRow();
-        }
+        $this->startRow()
+            ->add($calculation->getCreatedText($this->translator), 1, $style, PdfTextAlignment::LEFT)
+            ->add($calculation->getUpdatedText($this->translator), 4, $style, PdfTextAlignment::RIGHT)
+            ->endRow();
         $this->parent->setCellMargin($oldMargins);
     }
 

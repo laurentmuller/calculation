@@ -69,7 +69,7 @@ class PersistenceListener implements EventSubscriber
     public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, private readonly string $appName)
     {
         $this->isDebug = $kernel->isDebug();
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $this->setRequestStack($requestStack);
         $id = \sprintf('environment.%s', $kernel->getEnvironment());
         $this->title = $this->trans($id);

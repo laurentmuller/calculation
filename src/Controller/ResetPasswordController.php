@@ -27,6 +27,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
@@ -45,10 +46,12 @@ class ResetPasswordController extends AbstractController
     private const RESET_ROUTE = 'app_reset_password';
 
     public function __construct(
+        TranslatorInterface $translator,
         private readonly ResetPasswordHelperInterface $helper,
         private readonly UserRepository $repository,
         private readonly UserExceptionService $service
     ) {
+        parent::__construct($translator);
     }
 
     /**

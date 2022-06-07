@@ -13,7 +13,7 @@
     {
         "field": "description",
         "title": "group.fields.description",
-        "class": "w-auto text-cell"
+        "class": "f-400 mw-100 text-cell"
     },
     {
         "field": "margins",

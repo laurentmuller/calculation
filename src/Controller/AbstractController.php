@@ -25,7 +25,6 @@ use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TranslatorFlashMessageTrait;
 use App\Util\Utils;
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
@@ -69,6 +68,14 @@ abstract class AbstractController extends BaseController
      * The user service.
      */
     protected ?UserService $userService = null;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * Gets the address from (email and name) used to send email.
@@ -158,10 +165,6 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if (null === $this->translator) {
-            $this->translator = $this->getService(TranslatorInterface::class);
-        }
-
         return $this->translator;
     }
 
@@ -231,19 +234,6 @@ abstract class AbstractController extends BaseController
     public function redirectToHomePage(): RedirectResponse
     {
         return $this->redirectToRoute(self::HOME_PAGE);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container): ?ContainerInterface
-    {
-        $previous = parent::setContainer($container);
-        if (null === $this->translator) {
-            $this->setTranslator($this->getService(TranslatorInterface::class));
-        }
-
-        return $previous;
     }
 
     /**
@@ -333,9 +323,6 @@ abstract class AbstractController extends BaseController
      * @template T
      * @psalm-param class-string<T> $id
      * @psalm-return T
-     *
-     * @throws \Psr\Container\NotFoundExceptionInterface  no entry was found for the identifier
-     * @throws \Psr\Container\ContainerExceptionInterface error while retrieving the entry
      */
     protected function getService(string $id): mixed
     {
@@ -445,6 +432,7 @@ abstract class AbstractController extends BaseController
      * @param string              $name   the name of the Spreadsheet file or null to use default ('document.xlsx')
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
     {

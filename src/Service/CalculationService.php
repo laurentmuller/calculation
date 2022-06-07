@@ -75,7 +75,7 @@ final class CalculationService
         private readonly ApplicationService $service,
         TranslatorInterface $translator
     ) {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

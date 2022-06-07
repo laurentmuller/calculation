@@ -34,7 +34,7 @@ class PasswordValidator extends AbstractConstraintValidator
     public function __construct(TranslatorInterface $translator)
     {
         parent::__construct(Password::class);
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

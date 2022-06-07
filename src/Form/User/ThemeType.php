@@ -54,7 +54,7 @@ class ThemeType extends AbstractHelperType
      */
     public function __construct(private readonly ThemeService $service, TranslatorInterface $translator)
     {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
     }
 
     /**

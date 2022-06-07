@@ -58,7 +58,7 @@ class HelpService
         if (!$isDebug) {
             $this->setAdapter($adapter);
         }
-        $this->setTranslator($translator);
+        $this->translator = $translator;
         $this->file = $projectDir . self::FILE_PATH;
         $this->imagePath = $projectDir . self::IMAGE_PATH;
     }

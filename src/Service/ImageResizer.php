@@ -43,7 +43,7 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->setTranslator($translator);
+        $this->translator = $translator;
 
         try {
             $this->imagine = new Imagine();

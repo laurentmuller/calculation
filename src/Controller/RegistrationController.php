@@ -27,6 +27,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 /**
@@ -41,10 +42,12 @@ class RegistrationController extends AbstractController
     private const VERIFY_ROUTE = 'verify_email';
 
     public function __construct(
+        TranslatorInterface $translator,
         private readonly EmailVerifier $verifier,
         private readonly UserRepository $repository,
         private readonly UserExceptionService $service
     ) {
+        parent::__construct($translator);
     }
 
     /**

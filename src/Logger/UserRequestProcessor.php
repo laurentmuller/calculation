@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Logger;
 
+use Monolog\LogRecord;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -26,13 +27,10 @@ class UserRequestProcessor
     {
     }
 
-    /**
-     * @param array{extra: array} $record
-     */
-    public function __invoke(array $record): array
+    public function __invoke(LogRecord $record): LogRecord
     {
         if (null !== $user = $this->security->getUser()) {
-            $record['extra']['user'] = $user->getUserIdentifier();
+            $record->extra['user'] = $user->getUserIdentifier();
         }
 
         return $record;

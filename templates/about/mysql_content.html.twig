@@ -1,4 +1,5 @@
 {% import 'about/_about_macro.html.twig' as tools %}
+{%- set color = theme_dark(app.request) ? 'white' : 'black' -%}
 
 <div class="phpversion">
     <table id="data-table-mysql" class="table table-hover table-sm mb-0">
@@ -6,7 +7,7 @@
         <tr class="h">
             <td colspan="2">
                 <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer">
-                    <img alt="MySQL" width="165" height="95" src="{{ asset('images/mysql.png') }}">
+                   <i class="icon-mysql icon-about" style="color:{{ color }};"></i>
                    <h1 class="p text-body">{{ 'about.version'|trans({'%version%': version}) }}</h1>
                 </a>
             </td>

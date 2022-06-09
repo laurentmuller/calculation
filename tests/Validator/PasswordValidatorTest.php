@@ -21,6 +21,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link PasswordValidator} class.
+ *
+ * @extends ConstraintValidatorTestCase<PasswordValidator>
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
@@ -39,7 +41,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function getInvalids(): array
+    public function getInvalidValues(): array
     {
         return [
             ['abc', ['case_diff' => true], 'password.case_diff'],
@@ -51,7 +53,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function getPwneds(): array
+    public function getPasswords(): array
     {
         return [
             ['123456', true],
@@ -66,10 +68,10 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    public function getValids(): array
+    public function getValidValues(): array
     {
         return [
-            ['ABCabc', ['case_diff' => true]],
+            ['ABC abc', ['case_diff' => true]],
             ['test', ['email' => true]],
             ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_VERY_WEEK]],
             ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_WEEK]],
@@ -84,11 +86,11 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @param mixed $value
+     * @param mixed|bool $value
      *
      * @dataProvider getConstraints
      */
-    public function testEmptyStringIsValid(string $constraint, $value = true): void
+    public function testEmptyStringIsValid(string $constraint, mixed $value = true): void
     {
         $constraint = $this->createPassword([$constraint => $value]);
         $this->validator->validate('', $constraint);
@@ -98,9 +100,9 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     /**
      * @param mixed $value the value to be tested
      *
-     * @dataProvider getInvalids
+     * @dataProvider getInvalidValues
      */
-    public function testInvalid($value, array $options, string $message, array $parameters = []): void
+    public function testInvalid(mixed $value, array $options, string $message, array $parameters = []): void
     {
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
@@ -111,11 +113,11 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @param mixed $value
+     * @param mixed|bool $value
      *
      * @dataProvider getConstraints
      */
-    public function testNullIsValid(string $constraint, $value = true): void
+    public function testNullIsValid(string $constraint, mixed $value = true): void
     {
         $constraint = $this->createPassword([$constraint => $value]);
         $this->validator->validate(null, $constraint);
@@ -123,7 +125,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @dataProvider getPwneds
+     * @dataProvider getPasswords
      */
     public function testPwned(string $value, bool $violation = true): void
     {
@@ -144,9 +146,9 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     /**
      * @dataProvider getStrengths
      */
-    public function testStrength(string $value, int $minstrength, bool $violation = true): void
+    public function testStrength(string $value, int $min_strength, bool $violation = true): void
     {
-        $options = ['min_strength' => $minstrength];
+        $options = ['min_strength' => $min_strength];
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
 
@@ -166,18 +168,15 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     /**
      * @param mixed $value the value to be tested
      *
-     * @dataProvider getValids
+     * @dataProvider getValidValues
      */
-    public function testValid($value, array $options): void
+    public function testValid(mixed $value, array $options): void
     {
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
         $this->assertNoViolation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function createValidator(): PasswordValidator
     {
         $translator = $this->getMockBuilder(TranslatorInterface::class)

@@ -16,7 +16,7 @@ use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Form\Type\EnabledDisabledType;
-use Knp\Bundle\TimeBundle\DateTimeFormatter;
+use App\Util\FormatUtils;
 use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,21 +31,9 @@ class UserType extends AbstractEntityType
     /**
      * Constructor.
      */
-    public function __construct(private readonly UserPasswordHasherInterface $hasher, private readonly DateTimeFormatter $formatter)
+    public function __construct(private readonly UserPasswordHasherInterface $hasher)
     {
         parent::__construct(User::class);
-    }
-
-    /**
-     * Format the last login date.
-     */
-    public function formatLastLogin(\DateTimeInterface|string $lastLogin): ?string
-    {
-        if ($lastLogin instanceof \DateTimeInterface) {
-            return $this->formatter->formatDiff($lastLogin, new \DateTime());
-        }
-
-        return null;
     }
 
     /**
@@ -122,5 +110,17 @@ class UserType extends AbstractEntityType
         $helper->addSubmitListener(function (SubmitEvent $event): void {
             $this->onSubmit($event);
         });
+    }
+
+    /**
+     * Format the last login date.
+     */
+    private function formatLastLogin(\DateTimeInterface|string $lastLogin): ?string
+    {
+        if ($lastLogin instanceof \DateTimeInterface) {
+            return FormatUtils::formatDateTime($lastLogin);
+        }
+
+        return null;
     }
 }

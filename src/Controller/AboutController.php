@@ -170,6 +170,7 @@ class AboutController extends AbstractController
     {
         $parameters = [
             'phpInfo' => $info->asHtml(),
+            'version' => $info->getVersion(),
             'extensions' => $this->getLoadedExtensions(),
             'apache' => $this->getApacheVersion($request),
         ];

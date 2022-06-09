@@ -20,6 +20,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link StrengthValidator} class.
+ *
+ * @extends ConstraintValidatorTestCase<StrengthValidator>
  */
 class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
@@ -41,9 +43,9 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     /**
      * @dataProvider getStrengths
      */
-    public function testStrength(string $value, int $minstrength, bool $violation = true): void
+    public function testStrength(string $value, int $min_strength, bool $violation = true): void
     {
-        $constraint = new Strength($minstrength);
+        $constraint = new Strength($min_strength);
         $this->validator->validate($value, $constraint);
 
         if ($violation) {
@@ -68,9 +70,6 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         new Strength($min_strength);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function createValidator(): StrengthValidator
     {
         $translator = $this->getMockBuilder(TranslatorInterface::class)

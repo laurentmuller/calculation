@@ -12,40 +12,40 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
+use App\Controller\AbstractController;
 use App\Entity\Log;
 use App\Service\LogService;
 use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 /**
  * Spreadsheet document for application logs.
- *
- * @extends AbstractArrayDocument<mixed>
  */
-class LogsDocument extends AbstractArrayDocument
+class LogsDocument extends AbstractDocument
 {
+    private ?SqlFormatter $formatter = null;
+
     /**
-     * {@inheritdoc}
+     * Constructor.
+     *
+     * @param array{
+     *      file: string,
+     *      logs: array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>} $entries
      */
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): self
+    public function __construct(AbstractController $controller, private readonly array $entries)
     {
-        parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
-
-        if (4 === $columnIndex && $rowIndex > 1) {
-            $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
-                ->getFont()->setName('Courier New')->setSize(9);
-        }
-
-        return $this;
+        parent::__construct($controller);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doRender(array $entities): bool
+    public function render(): bool
     {
         // initialize
         $this->start('log.title');
@@ -56,28 +56,65 @@ class LogsDocument extends AbstractArrayDocument
             'log.fields.channel' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'log.fields.level' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'log.fields.message' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
+            'log.fields.user' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
         ]);
 
         // formats
         $this->setFormat(1, 'dd/mm/yyyy hh:mm:ss')
             ->setColumnWidth(4, 120, true);
 
-        // rows
-        $row = 2;
         /** @var Log[] $logs */
-        $logs = $entities['logs'];
+        $logs = $this->entries['logs'];
+        LogService::sortLogs($logs);
+
+        $row = 2;
         foreach ($logs as $log) {
-            $this->setRowValues($row++, [
+            $this->setRowValues($row, [
                 $log->getCreatedAt(),
-                LogService::getChannel((string) $log->getChannel(), true),
-                LogService::getLevel((string) $log->getLevel(), true),
-                $this->getMessage($log),
+                $this->capitalize($log->getChannel()),
+                $this->capitalize($log->getLevel()),
+                $this->formatMessage($log),
+                $log->getUser(),
             ]);
+            $this->setBorderStyle($row, $log->getLevel());
+            ++$row;
         }
+
+        // style for message
+        --$row;
+        $this->getActiveSheet()
+            ->getStyle("D2:D$row")
+            ->getFont()
+            ->setName('Courier New')
+            ->setSize(9);
 
         $this->finish();
 
         return true;
+    }
+
+    private function capitalize(?string $channel): ?string
+    {
+        return null !== $channel ? Utils::capitalize($channel) : null;
+    }
+
+    /**
+     * Gets the message for the given log.
+     */
+    private function formatMessage(Log $log): string
+    {
+        $message = (string) $log->getMessage();
+        if ('doctrine' === $log->getChannel()) {
+            $message = $this->formatSql($message);
+        }
+        if (!empty($log->getContext())) {
+            $message .= "\nContext:\n" . (string) Utils::exportVar($log->getContext());
+        }
+        if (!empty($log->getExtra())) {
+            $message .= "\nExtra:\n" . (string) Utils::exportVar($log->getExtra());
+        }
+
+        return $message;
     }
 
     /**
@@ -85,28 +122,33 @@ class LogsDocument extends AbstractArrayDocument
      */
     private function formatSql(string $sql): string
     {
-        /** @var SqlFormatter|null $formatter */
-        static $formatter;
-        if (null === $formatter) {
-            $formatter = new SqlFormatter(new NullHighlighter());
+        if (null === $this->formatter) {
+            $this->formatter = new SqlFormatter(new NullHighlighter());
         }
 
-        return $formatter->format($sql);
+        return $this->formatter->format($sql);
     }
 
     /**
-     * Gets the message for the given log.
+     * Sets the border style depending on the log level.
      */
-    private function getMessage(Log $log): string
+    private function setBorderStyle(int $row, ?string $level): void
     {
-        $message = 'doctrine' === $log->getChannel() ? $this->formatSql((string) $log->getMessage()) : (string) $log->getMessage();
-        if (!empty($log->getContext())) {
-            $message .= "\n" . (string) Utils::exportVar((array) $log->getContext());
-        }
-        if (!empty($log->getExtra())) {
-            $message .= "\n" . (string) Utils::exportVar($log->getExtra());
-        }
+        $rgb = match ($level) {
+            'warning' => 'ffc107',
+            'error', 'critical', 'alert', 'emergency' => 'dc3545',
+            'debug' => '007bff',
+            'info', 'notice' => '17a2b8',
+            default => null,
+        };
 
-        return $message;
+        if (null !== $rgb) {
+            $this->getActiveSheet()
+                ->getStyle("A$row")
+                ->getBorders()
+                ->getLeft()
+                ->setBorderStyle(Border::BORDER_THICK)
+                ->getColor()->setARGB($rgb);
+        }
     }
 }

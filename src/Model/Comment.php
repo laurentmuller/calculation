@@ -13,16 +13,13 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\User;
-use SimpleHtmlToText\Parser;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represent a comment (e-mail) to send.
+ * Represent a comment to send.
  */
 class Comment
 {
@@ -40,6 +37,12 @@ class Comment
      */
     #[Assert\NotNull]
     private ?Address $fromAddress = null;
+
+    /*
+     * The importance.
+     */
+    #[Assert\NotNull]
+    private string $importance = NotificationEmail::IMPORTANCE_LOW;
 
     /**
      * The message.
@@ -86,6 +89,11 @@ class Comment
         return $this->fromAddress;
     }
 
+    public function getImportance(): string
+    {
+        return $this->importance;
+    }
+
     /**
      * Gets the message.
      */
@@ -121,33 +129,6 @@ class Comment
     }
 
     /**
-     * Sends this message using the given mailer.
-     *
-     * @throws TransportExceptionInterface if the email can not be sent
-     */
-    public function send(MailerInterface $mailer): void
-    {
-        $email = new Email();
-        if (null !== $this->fromAddress) {
-            $email->addFrom($this->fromAddress);
-        }
-        if (null !== $this->toAddress) {
-            $email->addTo($this->toAddress);
-        }
-        $email->subject((string) $this->subject)
-            ->text($this->getTextMessage())
-            ->html($this->getHtmlMessage());
-
-        // add attachments
-        foreach ($this->getAttachments() as $attachment) {
-            $this->addAttachment($email, $attachment);
-        }
-
-        // send
-        $mailer->send($email);
-    }
-
-    /**
      * Sets the file attachments.
      *
      * @param UploadedFile[] $attachments
@@ -171,6 +152,13 @@ class Comment
         } else {
             $this->fromAddress = Address::create($fromAddress);
         }
+
+        return $this;
+    }
+
+    public function setImportance(string $importance): self
+    {
+        $this->importance = $importance;
 
         return $this;
     }
@@ -209,42 +197,5 @@ class Comment
         }
 
         return $this;
-    }
-
-    /**
-     * Adds the given uploaded file as attachment to the given email.
-     */
-    private function addAttachment(Email $email, ?UploadedFile $file): void
-    {
-        if (null !== $file && $file->isValid()) {
-            $path = $file->getPathname();
-            $name = $file->getClientOriginalName();
-            $type = $file->getClientMimeType();
-
-            $email->attachFromPath($path, $name, $type);
-        }
-    }
-
-    /**
-     * Remove empty lines for the given message.
-     */
-    private function getHtmlMessage(): string
-    {
-        /** @var string[] $lines */
-        $lines = (array) \preg_split('/\r\n|\r|\n/', (string) $this->message);
-        $result = \array_filter($lines, static fn (string $line): bool => !empty($line) && 0 !== \strcasecmp('<p>&nbsp;</p>', $line));
-
-        return \implode('', $result);
-    }
-
-    /**
-     * Convert the given message as plain text.
-     */
-    private function getTextMessage(): string
-    {
-        $parser = new Parser();
-        $message = $this->message;
-
-        return $parser->parseString($message);
     }
 }

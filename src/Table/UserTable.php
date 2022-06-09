@@ -16,8 +16,8 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
+use App\Util\FormatUtils;
 use App\Util\Utils;
-use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -33,7 +33,7 @@ class UserTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(UserRepository $repository, TranslatorInterface $translator, private readonly Environment $twig, private readonly DateTimeFormatter $formatter)
+    public function __construct(UserRepository $repository, TranslatorInterface $translator, private readonly Environment $twig)
     {
         parent::__construct($repository);
         $this->translator = $translator;
@@ -67,7 +67,7 @@ class UserTable extends AbstractEntityTable
     public function formatLastLogin(?\DateTimeInterface $date): string
     {
         if ($date instanceof \DateTimeInterface) {
-            return $this->formatter->formatDiff($date, new \DateTime());
+            return (string) FormatUtils::formatDateTime($date);
         }
 
         return $this->trans('common.value_none');

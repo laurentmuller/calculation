@@ -12,17 +12,21 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDrawColor;
+use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Service\LogService;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
@@ -30,10 +34,8 @@ use Doctrine\SqlFormatter\SqlFormatter;
 
 /**
  * Report for the log.
- *
- * @extends AbstractArrayReport<Mixed>
  */
-class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
+class LogReport extends AbstractReport implements PdfCellListenerInterface
 {
     use PdfCellListenerTrait;
 
@@ -75,6 +77,20 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     private ?bool $started = null;
 
     /**
+     * Constructor.
+     *
+     * @param array{
+     *      file: string,
+     *      logs: array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>} $entries
+     */
+    public function __construct(AbstractController $controller, private readonly array $entries)
+    {
+        parent::__construct($controller);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
@@ -109,37 +125,46 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     /**
      * {@inheritdoc}
      */
-    protected function doRender(array $entities): bool
+    public function render(): bool
     {
         // title
         $this->setTitleTrans('log.title');
 
-        // file
-        $file = $this->trans('log.list.file', [
-            '%file%' => $entities['file'],
+        // description
+        $description = $this->trans('log.list.file', [
+            '%file%' => $this->entries['file'],
         ]);
-        $this->header->setDescription($file);
+        $this->header->setDescription($description);
 
         // new page
         $this->AddPage();
 
-        /** @var Log[] $logs */
-        $logs = $entities['logs'];
+        // logs?
+        $logs = $this->entries['logs'];
         if (empty($logs)) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.list.empty'));
 
             return true;
         }
 
-        /** @var array<string, int> $levels */
-        $levels = $entities['levels'];
-        /** @var array<string, int> $channels */
-        $channels = $entities['channels'];
-        $cards = \array_merge($levels, $channels);
-        $this->outputCards($cards);
+        // channels and levels
+        $this->outputCards('log.fields.channel', $this->entries['channels']);
+        $this->outputCards('log.fields.level', $this->entries['levels']);
 
-        // lines
+        // logs
         return $this->outputLogs($logs);
+    }
+
+    private function capitalize(?string $channel): ?string
+    {
+        return null !== $channel ? Utils::capitalize($channel) : null;
+    }
+
+    private function cellTitle(string $title): void
+    {
+        PdfFont::default()->bold()->apply($this);
+        $this->Cell(0, self::LINE_HEIGHT, $this->trans($title), 0, PdfMove::BELOW);
+        $this->resetStyle();
     }
 
     /**
@@ -172,12 +197,32 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
         return false;
     }
 
+    private function formatDate(?\DateTimeInterface $date): ?string
+    {
+        return FormatUtils::formatDateTime($date, null, \IntlDateFormatter::MEDIUM);
+    }
+
+    /**
+     * Gets the message for the given log.
+     */
+    private function formatMessage(Log $log): string
+    {
+        $message = (string) $log->getMessage();
+        if ('doctrine' === $log->getChannel()) {
+            $message = $this->formatSql($message);
+        }
+        if (!empty($log->getContext())) {
+            $message .= "\nContext:\n" . (string) Utils::exportVar((array) $log->getContext());
+        }
+        if (!empty($log->getExtra())) {
+            $message .= "\nExtra:\n" . (string) Utils::exportVar((array) $log->getExtra());
+        }
+
+        return $message;
+    }
+
     /**
      * Format the given Sql query.
-     *
-     * @param string $sql the query to format
-     *
-     * @return string the formatted query
      */
     private function formatSql(string $sql): string
     {
@@ -189,11 +234,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     }
 
     /**
-     * Gets the border draw color for the given level.
-     *
-     * @param string $level the level
-     *
-     * @return PdfDrawColor|null the color or null if none
+     * Gets the border color for the given level.
      */
     private function getColor(string $level): ?PdfDrawColor
     {
@@ -211,28 +252,18 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     }
 
     /**
-     * Gets the message for the given log.
-     */
-    private function getMessage(Log $log): string
-    {
-        $message = 'doctrine' === $log->getChannel() ? $this->formatSql((string) $log->getMessage()) : (string) $log->getMessage();
-        if (!empty($log->getContext())) {
-            $message .= "\n" . (string) Utils::exportVar((array) $log->getContext());
-        }
-        if (!empty($log->getExtra())) {
-            $message .= "\n" . (string) Utils::exportVar((array) $log->getExtra());
-        }
-
-        return $message;
-    }
-
-    /**
      * Output header cards.
      *
      * @param array<string, int> $cards the cards to output
      */
-    private function outputCards(array $cards): void
+    private function outputCards(string $title, array $cards): void
     {
+        // title
+        $this->cellTitle($title);
+
+        // total
+        $cards['total'] = \array_sum($cards);
+
         $this->started = true;
         $this->drawCards = true;
 
@@ -248,7 +279,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
         foreach ($cards as $key => $value) {
             $columns[] = PdfColumn::center($key, 25);
             $valCells[] = new PdfCell(FormatUtils::formatInt($value));
-            $textCells[] = new PdfCell(Utils::capitalize($key));
+            $textCells[] = new PdfCell($this->capitalize($key));
 
             // add separator if not last
             if ($index-- > 0) {
@@ -278,22 +309,26 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     private function outputLogs(array $logs): bool
     {
         $this->drawCards = false;
+        $this->cellTitle('log.name');
+
+        // sort
+        LogService::sortLogs($logs);
 
         $table = new PdfTableBuilder($this);
         $table->setListener($this)
             ->addColumn(PdfColumn::left($this->trans('log.fields.createdAt'), 45))
-            ->addColumn(PdfColumn::left($this->trans('log.fields.level'), 30))
             ->addColumn(PdfColumn::left($this->trans('log.fields.channel'), 30))
+            ->addColumn(PdfColumn::left($this->trans('log.fields.level'), 30))
             ->addColumn(PdfColumn::left($this->trans('log.fields.message'), 150))
             ->outputHeaders();
 
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
             $table->startRow()
-                ->add(FormatUtils::formatDateTime($log->getCreatedAt(), null, \IntlDateFormatter::MEDIUM))
-                ->add(Utils::capitalize((string) $log->getLevel()))
-                ->add(Utils::capitalize((string) $log->getChannel()))
-                ->add($this->getMessage($log))
+                ->add($this->formatDate($log->getCreatedAt()))
+                ->add($this->capitalize($log->getChannel()))
+                ->add($this->capitalize($log->getLevel()))
+                ->add($this->formatMessage($log))
                 ->endRow();
         }
 

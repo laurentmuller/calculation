@@ -1,4 +1,5 @@
 @import 'style.css';
+@import '../js/vendor/font-mfizz/font-mfizz.css';
 
 /**! compression tag for ftp-deployment */
 
@@ -45,4 +46,9 @@
         color: inherit;
         text-decoration: none;
     }
+}
+
+.icon-about {
+    font-size:5em;
+    line-height: 1em;
 }

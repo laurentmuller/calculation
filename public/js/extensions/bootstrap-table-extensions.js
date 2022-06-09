@@ -197,8 +197,14 @@ $.fn.extend({
                 $this.saveParameters();
             },
 
-            // save parameters
+
+            onSearch: function (searchText) {
+                // update data
+                $this.data('search-text', searchText);
+            },
+
             onToggle: function () {
+                // save parameters
                 $this.saveParameters();
             }
         };
@@ -207,6 +213,10 @@ $.fn.extend({
         // initialize
         $this.bootstrapTable(settings);
         $this.enableKeys().highlight();
+
+        // save search text
+        // const searchText = $this.getOptions().searchText || '';
+        // $this.data('searchText', searchText);
 
         // select row on right click
         $this.find('tbody').on('mousedown', 'tr', function (e) {
@@ -268,7 +278,7 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
-        let params = {
+        const params = {
             'caller': options.caller,
             'sort': options.sortName,
             'order': options.sortOrder,
@@ -277,9 +287,10 @@ $.fn.extend({
             'view': $this.getDisplayMode()
         };
 
-        // add search
-        if (('' + options.searchText).length) {
-            params.search = options.searchText;
+        // add search if applicable
+        const search = $this.getSearchText();
+        if (search.length) {
+            params.search = search;
         }
 
         // query parameters function?
@@ -296,7 +307,7 @@ $.fn.extend({
      */
     getSearchText: function () {
         'use strict';
-        return '' + $(this).getOptions().searchText;
+        return String($(this).data('search-text'));
     },
 
     /**

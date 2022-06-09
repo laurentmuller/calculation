@@ -6,19 +6,21 @@
 {% set title_icon = 'tv' %}
 
 {% block card_body %}
-<table class="table table-hover table-sm table-list mb-0">
-    {% block property_header %}
-    <thead>
-        <tr>
-            <th class="w-25">{{ 'show.name'|trans }}</th>
-            <th class="w-75">{{ 'show.value'|trans }}</th>
-        </tr>
-    </thead>
-    {% endblock %}
-    <tbody>
-        {% block property_body %}{% endblock %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-hover table-sm table-list mb-0">
+        {% block property_header %}
+        <thead>
+            <tr>
+                <th class="w-25">{{ 'show.name'|trans }}</th>
+                <th class="w-75">{{ 'show.value'|trans }}</th>
+            </tr>
+        </thead>
+        {% endblock %}
+        <tbody>
+            {% block property_body %}{% endblock %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 
 {% block card_footer -%}

@@ -28,20 +28,19 @@ use App\Repository\UserRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Security\EntityVoter;
+use App\Service\MailerService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\UserTable;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -112,9 +111,10 @@ class UserController extends AbstractEntityController
      * Export the customers to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'user_excel')]
-    public function excel(StorageInterface $storage, DateTimeFormatter $formatter): SpreadsheetResponse
+    public function excel(StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
         if (empty($entities)) {
@@ -122,7 +122,7 @@ class UserController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersDocument($this, $entities, $storage, $formatter);
+        $doc = new UsersDocument($this, $entities, $storage);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -161,7 +161,7 @@ class UserController extends AbstractEntityController
      * Send an email from the current user to another user.
      */
     #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => self::DIGITS])]
-    public function message(Request $request, User $user, MailerInterface $mailer, LoggerInterface $logger): Response
+    public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
     {
         // same user?
         if ($this->isConnectedUser($user)) {
@@ -182,11 +182,9 @@ class UserController extends AbstractEntityController
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {
-                // send
-                $comment->send($mailer);
+                $service->sendComment($comment);
                 $this->successTrans('user.message.success', ['%name%' => $user->getDisplay()]);
 
-                // list
                 return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
             } catch (TransportExceptionInterface $e) {
                 $message = $this->trans('user.message.error');
@@ -252,7 +250,7 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
     #[Route(path: '/pdf', name: 'user_pdf')]
-    public function pdf(StorageInterface $storage, DateTimeFormatter $formatter): PdfResponse
+    public function pdf(StorageInterface $storage): PdfResponse
     {
         $entities = $this->getEntities('username');
         if (empty($entities)) {
@@ -260,7 +258,7 @@ class UserController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersReport($this, $entities, $storage, $formatter);
+        $doc = new UsersReport($this, $entities, $storage);
 
         return $this->renderPdfDocument($doc);
     }
@@ -330,6 +328,7 @@ class UserController extends AbstractEntityController
      * Export the user access rights to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/rights/excel', name: 'user_rights_excel')]
     public function rightsExcel(): SpreadsheetResponse

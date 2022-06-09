@@ -1,6 +1,11 @@
 {% import 'about/_about_macro.html.twig' as tools %}
+{%- set color = theme_dark(app.request) ? 'white' : 'black' -%}
 
 <div class="phpversion">
+    <a href="https://www.php.net/" target="_blank" rel="noopener noreferrer">
+        <i class="icon-php-alt icon-about" style="color:{{ color }};"></i>
+        <h1 class="p text-body">{{ 'about.version'|trans({'%version%': version}) }}</h1>
+    </a>
     {{ phpInfo|raw }}
     <table id="data-table-extra" class="table table-hover table-sm mb-0">
         <tbody>

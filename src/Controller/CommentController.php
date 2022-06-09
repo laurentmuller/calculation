@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Model\Comment;
+use App\Service\MailerService;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -22,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,7 +37,7 @@ class CommentController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/comment', name: 'user_comment')]
-    public function invoke(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
+    public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
         /** @var User $from */
         $from = $this->getUser() ?? $this->getAddressFrom();
@@ -45,12 +45,13 @@ class CommentController extends AbstractController
         $comment->setSubject($this->getApplicationName())
             ->setFromAddress($from)
             ->setToAddress($this->getAddressFrom());
+
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // send
-                $comment->send($mailer);
+                $service->sendComment($comment);
                 $this->successTrans('user.comment.success');
 
                 // home page

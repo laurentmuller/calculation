@@ -32,7 +32,7 @@ function customViewFormatter(data) { // jshint ignore:line
         while ((match = regex.exec(html)) !== null) {
             let value = '';
             const callback = match[1];
-            if (typeof window[callback] !== 'undefined' ) {
+            if (typeof window[callback] !== 'undefined') {
                 value = window[callback](row) || '&#160;';
             }
             html = html.replaceAll(match[0], value);
@@ -443,7 +443,7 @@ $.fn.extend({
             // update pages list and page button
             if ($pageButton.length) {
                 let pageList = options.pageList;
-                for(let i = 0; i < pageList.length; i++) {
+                for (let i = 0; i < pageList.length; i++) {
                     if (pageList[i] >= options.totalRows) {
                         pageList = pageList.splice(0, i + 1);
                         break;
@@ -537,8 +537,8 @@ $.fn.extend({
             const $link = $item.find('a.item-link');
             const $button = $item.find('a.btn-default');
             if ($link.length && $button.length) {
-                 $link.attr('href', $button.attr('href'));
-                 $link.attr('title', $button.text());
+                $link.attr('href', $button.attr('href'));
+                $link.attr('title', $button.text());
             }
         },
 
@@ -600,7 +600,7 @@ $.fn.extend({
     const $addButton = $('.add-link');
     if ($addButton.length) {
         $table.on('update-row.bs.table', function () {
-            const $source =  $table.findAction('.btn-add');
+            const $source = $table.findAction('.btn-add');
             if ($source) {
                 $addButton.attr('href', $source.attr('href'));
             }
@@ -659,10 +659,10 @@ $.fn.extend({
         const sortOrder = $this.data('order');
         const data = $table.getBootstrapTable();
         if (data && data.options.sortName !== sortName || data.options.sortOrder !== sortOrder) {
-             data.options.sortName = sortName;
-             data.options.sortOrder = sortOrder;
-             $table.refresh();
-         }
+            data.options.sortName = sortName;
+            data.options.sortOrder = sortOrder;
+            $table.refresh();
+        }
     });
     $('.btn-group-sort').on('shown.bs.dropdown', function () {
         $(this).find('.dropdown-menu-sort.active').trigger('focus');//.focus();
@@ -677,7 +677,7 @@ $.fn.extend({
     });
 
     // initialize context menu
-    const ctxSelector =  'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
+    const ctxSelector = 'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
     const show = function () {
         $('.dropdown-menu.show').removeClass('show');
         return true;
@@ -691,6 +691,14 @@ $.fn.extend({
             selector: $table.data('danger-tooltip-selector')
         });
     }
+
+    // initialize log levels drop-down
+    $('.dropdown-level').each(function () {
+        const $level = $(this);
+        $('<i />', {
+            class: 'fa-solid fa-square-full border mr-1 ' + $level.data('value')
+        }).prependTo($level);
+    });
 
     // update UI
     $('.fixed-table-pagination').appendTo('.card-footer');
@@ -706,4 +714,5 @@ $.fn.extend({
     if ($table.isEmpty()) {
         $('input.search-input').trigger('focus');
     }
+
 }(jQuery));

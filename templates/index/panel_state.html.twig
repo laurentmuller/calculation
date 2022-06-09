@@ -9,7 +9,7 @@
         <div class="card-text mb-0">
             {%- if list_path -%}
                 {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-                <a href="{{ path(list_path, parameters) }}" class="card-link" title="{{ list_title }}">{{ state.code }}</a>
+                <a href="{{ path(list_path, parameters) }}" class="card-link stretched-link" title="{{ list_title }}">{{ state.code }}</a>
             {%- else -%}
                 <span>{{ state.code }}</span>
             {%- endif -%}

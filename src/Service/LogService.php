@@ -107,36 +107,7 @@ class LogService
     public static function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
     {
         if (null !== $value && '' !== $value) {
-            $filter = static function (Log $log) use ($value, $skipChannel, $skipLevel): bool {
-                if (!$skipChannel && $log->getChannel()) {
-                    $channel = self::getChannel((string) $log->getChannel());
-                    if (Utils::contains($channel, $value, true)) {
-                        return true;
-                    }
-                }
-
-                if (!$skipLevel && $log->getLevel()) {
-                    $level = self::getLevel((string) $log->getLevel());
-                    if (Utils::contains($level, $value, true)) {
-                        return true;
-                    }
-                }
-
-                if (null !== $createdAt = $log->getCreatedAt()) {
-                    $date = self::getCreatedAt($createdAt);
-                    if (Utils::contains($date, $value, true)) {
-                        return true;
-                    }
-                }
-
-                if (null !== $log->getMessage()) {
-                    return Utils::contains((string) $log->getMessage(), $value, true);
-                }
-
-                return false;
-            };
-
-            return \array_filter($logs, $filter);
+            return (new LogFilter($value, $skipChannel, $skipLevel))->filter($logs);
         }
 
         return $logs;
@@ -152,8 +123,8 @@ class LogService
      */
     public static function filterChannel(array $logs, ?string $value): array
     {
-        if (Utils::isString($value)) {
-            return \array_filter($logs, fn (Log $log): bool => 0 === \strcasecmp((string) $value, (string) $log->getChannel()));
+        if (null !== $value && '' !== $value) {
+            return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, (string) $log->getChannel()));
         }
 
         return $logs;
@@ -169,8 +140,8 @@ class LogService
      */
     public static function filterLevel(array $logs, ?string $value): array
     {
-        if (Utils::isString($value)) {
-            return \array_filter($logs, fn (Log $log): bool => 0 === \strcasecmp((string) $value, (string) $log->getLevel()));
+        if (null !== $value && '' !== $value) {
+            return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, (string) $log->getLevel()));
         }
 
         return $logs;
@@ -179,7 +150,7 @@ class LogService
     /**
      * Gets the log channel.
      *
-     * @param string $value      the source
+     * @param string $value      the source channel
      * @param bool   $capitalize true to capitalize the channel
      *
      * @return string the channel
@@ -187,11 +158,8 @@ class LogService
     public static function getChannel(string $value, bool $capitalize = false): string
     {
         $value = self::APP_CHANNEL === $value ? 'application' : \strtolower($value);
-        if ($capitalize) {
-            return Utils::capitalize($value);
-        }
 
-        return $value;
+        return $capitalize ? Utils::capitalize($value) : $value;
     }
 
     /**
@@ -206,8 +174,8 @@ class LogService
      * Gets the entries.
      *
      * @psalm-return array{
-     *      file: string, logs:
-     *      array<int, Log>,
+     *      file: string,
+     *      logs: array<int, Log>,
      *      levels: array<string, int>,
      *      channels: array<string, int>}|false
      *
@@ -219,7 +187,7 @@ class LogService
             return $entries;
         }
 
-        $entries = $this->readFile();
+        $entries = $this->parseFile();
         if (\is_array($entries)) {
             return $this->setCachedValues($entries);
         }
@@ -238,7 +206,7 @@ class LogService
     /**
      * Gets the log level.
      *
-     * @param string $value      the source
+     * @param string $value      the source level
      * @param bool   $capitalize true to capitalize the level
      *
      * @return string the level
@@ -246,11 +214,8 @@ class LogService
     public static function getLevel(string $value, bool $capitalize = false): string
     {
         $value = \strtolower($value);
-        if ($capitalize) {
-            return Utils::capitalize($value);
-        }
 
-        return $value;
+        return $capitalize ? Utils::capitalize($value) : $value;
     }
 
     /**
@@ -280,6 +245,16 @@ class LogService
     public function isFileValid(): bool
     {
         return FileUtils::exists($this->fileName) && 0 !== \filesize($this->fileName);
+    }
+
+    /**
+     * Sort the given logs by the created date descending.
+     *
+     * @param Log[] $logs
+     */
+    public static function sortLogs(array &$logs): void
+    {
+        \usort($logs, static fn (Log $a, Log $b): int => $b->getCreatedAt() <=> $a->getCreatedAt());
     }
 
     /**
@@ -370,6 +345,16 @@ class LogService
     }
 
     /**
+     * Load the content of the file as array.
+     *
+     * @psalm-return string[]|false
+     */
+    private function loadFile(): array|false
+    {
+        return \file($this->fileName, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
+    }
+
+    /**
      * Gets the log date.
      *
      * @param string $value the source
@@ -381,6 +366,88 @@ class LogService
         $date = \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
 
         return $date instanceof \DateTimeImmutable ? $date : null;
+    }
+
+    /**
+     * Gets all lines of the log file.
+     *
+     * @return array|bool an array with the file, the logs, the levels and the channels; <code>false</code> if an error occurs or if the file is empty
+     *
+     * @psalm-return array{
+     *      file: string,
+     *      logs: array<int, Log>,
+     *      levels: array<string, int>,
+     *      channels: array<string, int>}|false
+     */
+    private function parseFile(): array|false
+    {
+        // check file
+        if (!$this->isFileValid()) {
+            return false;
+        }
+
+        try {
+            // load content
+            if (false === $lines = $this->loadFile()) {
+                return false;
+            }
+
+            $id = 1;
+            /** @psalm-var array<int, Log> $logs */
+            $logs = [];
+            /** @psalm-var array<string, int> $levels */
+            $levels = [];
+            /** @psalm-var array<string, int> $channels */
+            $channels = [];
+
+            // read line by line
+            foreach ($lines as $line) {
+                $values = \explode(self::VALUES_SEP, $line);
+                if (6 !== \count($values)) {
+                    continue;
+                }
+                if (null === ($date = self::parseDate($values[0]))) {
+                    continue;
+                }
+
+                $channel = self::getChannel($values[1]);
+                $level = self::getLevel($values[2]);
+
+                // add
+                $log = new Log();
+                $log->setId($id)
+                    ->setCreatedAt($date)
+                    ->setChannel($channel)
+                    ->setLevel($level)
+                    ->setMessage($this->parseMessage($values[3]))
+                    ->setContext($this->parseJson($values[4]))
+                    ->setExtra($this->parseJson($values[5]));
+                $logs[$id++] = $log;
+
+                // update
+                $this->increment($levels, $level);
+                $this->increment($channels, $channel);
+            }
+        } catch (\Exception) {
+            return false;
+        }
+
+        // logs?
+        if (!empty($logs)) {
+            // sort
+            \ksort($levels, \SORT_LOCALE_STRING);
+            \ksort($channels, \SORT_LOCALE_STRING);
+
+            // result
+            return [
+                self::KEY_FILE => $this->fileName,
+                self::KEY_LOGS => $logs,
+                self::KEY_LEVELS => $levels,
+                self::KEY_CHANNELS => $channels,
+            ];
+        }
+
+        return false;
     }
 
     /**
@@ -411,94 +478,6 @@ class LogService
     private function parseMessage(string $value): string
     {
         return \trim($value);
-    }
-
-    /**
-     * Gets all lines of the log file.
-     *
-     * @return array|bool an array with the file, logs, the levels and the channels; <code>false</code> if an error occurs or if the file is empty
-     *
-     * @psalm-return array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>}|false
-     */
-    private function readFile(): array|false
-    {
-        // check file
-        if (!$this->isFileValid()) {
-            return false;
-        }
-
-        $handle = false;
-
-        try {
-            // open
-            if (false === $handle = \fopen($this->fileName, 'r')) {
-                return false;
-            }
-
-            $id = 1;
-            /** @psalm-var array<int, Log> $logs */
-            $logs = [];
-            /** @psalm-var array<string, int> $levels */
-            $levels = [];
-            /** @psalm-var array<string, int> $channels */
-            $channels = [];
-
-            // read line by line
-            while (false !== ($line = \fgets($handle))) {
-                $values = \explode(self::VALUES_SEP, $line);
-                if (6 !== \count($values)) {
-                    continue;
-                }
-                if (null === ($date = self::parseDate($values[0]))) {
-                    continue;
-                }
-
-                $channel = self::getChannel($values[1]);
-                $level = self::getLevel($values[2]);
-
-                // add
-                $log = new Log();
-                $log->setId($id)
-                    ->setCreatedAt($date)
-                    ->setChannel($channel)
-                    ->setLevel($level)
-                    ->setMessage($this->parseMessage($values[3]))
-                    ->setContext($this->parseJson($values[4]))
-                    ->setExtra($this->parseJson($values[5]));
-                $logs[$id++] = $log;
-
-                // update
-                $this->increment($levels, $level);
-                $this->increment($channels, $channel);
-            }
-        } catch (\Exception) {
-            return false;
-        } finally {
-            if (\is_resource($handle)) {
-                \fclose($handle);
-            }
-        }
-
-        // logs?
-        if (!empty($logs)) {
-            // sort
-            \ksort($levels, \SORT_LOCALE_STRING);
-            \ksort($channels, \SORT_LOCALE_STRING);
-
-            // result
-            return [
-                self::KEY_FILE => $this->fileName,
-                self::KEY_LOGS => $logs,
-                self::KEY_LEVELS => $levels,
-                self::KEY_CHANNELS => $channels,
-            ];
-        }
-
-        return false;
     }
 
     /**

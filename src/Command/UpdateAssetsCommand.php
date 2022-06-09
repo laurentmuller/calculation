@@ -14,6 +14,7 @@ namespace App\Command;
 
 use App\Model\Theme;
 use App\Service\ThemeService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command to update Javascript and CSS dependencies.
  */
+#[AsCommand(name: 'app:update-assets')]
 class UpdateAssetsCommand extends AbstractAssetsCommand
 {
     /**
@@ -43,14 +45,6 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * The vendor configuration file name.
      */
     private const VENDOR_FILE_NAME = 'vendor.json';
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct('app:update-assets');
-    }
 
     /**
      * {@inheritdoc}

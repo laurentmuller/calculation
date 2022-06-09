@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,6 +22,7 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * Command to combine and minify CSS and JS files.
  */
+#[AsCommand(name: 'app:compile-assets')]
 class CompileAssetsCommand extends AbstractAssetsCommand
 {
     /**
@@ -47,14 +49,6 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * Path to UglifyJS binary.
      */
     private ?string $uglifyJsBinary = 'uglifyjs';
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct('app:compile-assets');
-    }
 
     /**
      * {@inheritdoc}

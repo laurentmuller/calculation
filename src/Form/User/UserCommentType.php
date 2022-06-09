@@ -14,6 +14,7 @@ namespace App\Form\User;
 
 use App\Form\DataTransformer\AddressTransformer;
 use App\Form\FormHelper;
+use App\Form\Type\ImportanceType;
 use App\Form\Type\SimpleEditorType;
 use App\Model\Comment;
 use Symfony\Component\Form\AbstractType;
@@ -57,6 +58,10 @@ class UserCommentType extends AbstractType
         $helper->field('message')
             ->minLength(10)
             ->add(SimpleEditorType::class);
+
+        $helper->field('importance')
+            ->label('importance.name')
+            ->add(ImportanceType::class);
 
         $helper->field('attachments')
             ->updateOptions([

@@ -50,6 +50,8 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function count(): int
     {
@@ -58,10 +60,7 @@ class LogTable extends AbstractTable implements \Countable
             return 0;
         }
 
-        /** @var array $logs */
-        $logs = $entries[LogService::KEY_LOGS];
-
-        return \count($logs);
+        return \count($entries[LogService::KEY_LOGS]);
     }
 
     /**
@@ -149,6 +148,8 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function handleQuery(DataQuery $query): DataResults
     {

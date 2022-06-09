@@ -32,8 +32,6 @@
     {
         "field": "user",
         "title": "log.fields.user",
-        "sortable": false,
-        "searchable": false,
         "class": "user"
     },
     {

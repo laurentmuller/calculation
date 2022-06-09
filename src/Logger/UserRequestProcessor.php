@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Logger;
 
 use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * Request processor to add user identifier to extra data.
+ * Log record processor to add user identifier to extra data.
  */
-class UserRequestProcessor
+class UserRequestProcessor implements ProcessorInterface
 {
     /**
      * Constructor.

@@ -21,7 +21,7 @@
 {{- properties.property('group.fields.margins', item.countMargins|integer) }}
 {% endif -%}
 {%- if item.hasCategories -%}
-{% set categories = item.categories|sort((a, b) => a.code <=> b.code)|map(p => p.code)|join(', ') %}
+{% set categories = item.categories|sort((a, b) => a.code <=> b.code)|map(p => p.code)|join('<br>') %}
 {{- properties.property('group.fields.categories', categories) }}
 {% endif -%}
 {% endblock %}
@@ -29,25 +29,27 @@
 {% block card_body %}
 {{ parent() }}
 {%- if item.hasMargins -%}
- <table class="table table-sm table-list">
-     <thead>
-         <tr>
-             <th>{{ 'group.fields.margins'|trans }}</th>
-            <th class="text-right">{{ 'groupmargin.fields.minimum'|trans }}</th>
-            <th class="text-right">{{ 'groupmargin.fields.maximum'|trans }}</th>
-            <th class="text-right">{{ 'groupmargin.fields.margin'|trans }}</th>
-         </tr>
-    </thead>
-    <tbody>
-    {% for margin in item.margins -%}
-        <tr>
-            <td>&nbsp;</td>
-            <td class="text-right">{{ margin.minimum|amount }}</td>
-            <td class="text-right">{{ margin.maximum|amount }}</td>
-            <td class="text-right">{{ margin.margin|percent }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
- </table>
+<div class="table-responsive">
+     <table class="table table-sm table-list">
+         <thead>
+             <tr>
+                 <th>{{ 'group.fields.margins'|trans }}</th>
+                <th class="text-right">{{ 'groupmargin.fields.minimum'|trans }}</th>
+                <th class="text-right">{{ 'groupmargin.fields.maximum'|trans }}</th>
+                <th class="text-right">{{ 'groupmargin.fields.margin'|trans }}</th>
+             </tr>
+        </thead>
+        <tbody>
+        {% for margin in item.margins -%}
+            <tr>
+                <td>&nbsp;</td>
+                <td class="text-right">{{ margin.minimum|amount }}</td>
+                <td class="text-right">{{ margin.maximum|amount }}</td>
+                <td class="text-right">{{ margin.margin|percent }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+     </table>
+</div>
 {%- endif -%}
 {% endblock %}

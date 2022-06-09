@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
-use Knp\Bundle\TimeBundle\DateTimeFormatter;
+use App\Util\FormatUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
@@ -37,13 +37,15 @@ class UsersDocument extends AbstractArrayDocument
      *
      * @param User[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage, private readonly DateTimeFormatter $formatter)
+    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
     {
         parent::__construct($controller, $entities);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {
@@ -102,10 +104,16 @@ class UsersDocument extends AbstractArrayDocument
     private function createConditional(string $value, string $color): Conditional
     {
         $conditional = new Conditional();
-        $conditional->setConditionType(Conditional::CONDITION_CELLIS)
+        $style = $conditional->setConditionType(Conditional::CONDITION_CELLIS)
             ->setOperatorType(Conditional::OPERATOR_EQUAL)
             ->addCondition($value)
-            ->getStyle()->getFont()->getColor()->setARGB($color);
+            ->getStyle();
+        $style->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_LEFT)
+            ->setVertical(Alignment::VERTICAL_TOP);
+        $style->getFont()
+            ->getColor()
+            ->setARGB($color);
 
         return $conditional;
     }
@@ -126,7 +134,7 @@ class UsersDocument extends AbstractArrayDocument
     private function formatLastLogin(?\DateTimeInterface $date): string
     {
         if ($date instanceof \DateTimeInterface) {
-            return $this->formatter->formatDiff($date, new \DateTime());
+            return (string) FormatUtils::formatDateTime($date);
         }
 
         return $this->trans('common.value_none');

@@ -41,23 +41,47 @@ td.user {
     white-space: nowrap;
 }
 
-td.debug {
+.dropdown-level i {
+    color: var(--light);
+}
+
+.dropdown-level i.debug {
+    color: var(--secondary);
+}
+
+.dropdown-level i.info,
+.dropdown-level i.notice {
+    color: var(--info);
+}
+
+.dropdown-level i.warning {
+    color: var(--warning);
+}
+
+.dropdown-level i.error,
+.dropdown-level i.critical,
+.dropdown-level i.alert,
+.dropdown-level i.emergency {
+    color: var(--danger);
+}
+
+.text-border.debug {
     border-left-color: var(--secondary) !important;
 }
 
-td.info,
-td.notice {
+.text-border.info,
+.text-border.notice {
     border-left-color: var(--info) !important;
 }
 
-td.warning {
+.text-border.warning {
     border-left-color: var(--warning) !important;
 }
 
-td.error,
-td.critical,
-td.alert,
-td.emergency {
+.text-border.error,
+.text-border.critical,
+.text-border.alert,
+.text-border.emergency {
     border-left-color: var(--danger) !important;
 }
 /**

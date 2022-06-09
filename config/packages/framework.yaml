@@ -1,6 +1,7 @@
 framework:
     # global
     secret: '%app_secret%'
+    http_method_override: true
 
     # session
     session:

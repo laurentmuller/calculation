@@ -35,7 +35,7 @@
         "title": "category.fields.tasks",
         "sortable": false,
         "searchable": false,
-        "class": "text-currency rowlink-skip",
+        "class": "text-currency",
         "fieldFormatter": "formatTasks"
     },
     {

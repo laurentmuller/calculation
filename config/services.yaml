@@ -52,6 +52,7 @@ services:
             string $appNameVersion: '%app_name% v%app_version%'
             string $projectDir: '%kernel.project_dir%'
             bool $isDebug: '%kernel.debug%'
+            Twig\Extra\Markdown\MarkdownInterface $markdown: '@twig.markdown.default'
 
     # make classes in src/ available to be used as services
     App\:
@@ -86,11 +87,6 @@ services:
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
 
-    # add user identifier to extra data
-    App\Logger\UserRequestProcessor:
-        tags:
-            - { name: monolog.processor }
-
     # custom Twig AppVariable
     twig.app_variable:
         class: App\Service\ApplicationService
@@ -100,10 +96,6 @@ services:
             - [setDebug, ["%kernel.debug%"]]
             - [setTokenStorage, ['@security.token_storage']]
             - [setRequestStack, ['@request_stack']]
-
-    App\Service\MailService:
-        calls:
-            - setMarkdown: ['@twig.markdown.default']
 
     App\Listener\ResponseListener:
         arguments:

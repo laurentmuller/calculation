@@ -32,7 +32,7 @@ use App\Service\AkismetService;
 use App\Service\CaptchaImageService;
 use App\Service\FakerService;
 use App\Service\IpStackService;
-use App\Service\MailService;
+use App\Service\MailerService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Traits\StrengthTranslatorTrait;
@@ -91,12 +91,11 @@ class TestController extends AbstractController
      * Test sending notification mail.
      */
     #[Route(path: '/editor', name: 'test_editor')]
-    public function editor(Request $request, MailService $service, LoggerInterface $logger): Response
+    public function editor(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
         $data = [
             'email' => $this->getUserEmail(),
             'importance' => NotificationEmailAlias::IMPORTANCE_MEDIUM,
-            'notification' => $this->isSessionBool('editor_notification', true),
         ];
 
         $helper = $this->createFormHelper('user.fields.', $data);
@@ -108,10 +107,6 @@ class TestController extends AbstractController
         $helper->field('message')
             ->updateAttribute('minlength', 10)
             ->add(SimpleEditorType::class);
-        $helper->field('notification')
-            ->label('test.use_notification')
-            ->notRequired()
-            ->addCheckboxType();
 
         // handle request
         $form = $helper->createForm();
@@ -123,15 +118,9 @@ class TestController extends AbstractController
                 $message = (string) $data['message'];
                 $email = (string) $data['email'];
                 $importance = (string) $data['importance'];
-                $notification = (bool) $data['notification'];
-                $this->setSessionValue('editor_notification', $notification);
 
                 try {
-                    if ($notification) {
-                        $service->sendNotification($email, $user, $message, $importance);
-                    } else {
-                        $service->sendComment($email, $user, $message, $importance);
-                    }
+                    $service->sendNotification($email, $user, $message, $importance);
                     $this->successTrans('user.comment.success');
 
                     return $this->redirectToHomePage();

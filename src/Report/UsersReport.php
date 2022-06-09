@@ -21,7 +21,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Traits\RoleTranslatorTrait;
-use Knp\Bundle\TimeBundle\DateTimeFormatter;
+use App\Util\FormatUtils;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -39,7 +39,7 @@ class UsersReport extends AbstractArrayReport
      *
      * @param User[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage, private readonly DateTimeFormatter $formatter)
+    public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
     {
         parent::__construct($controller, $entities);
     }
@@ -98,7 +98,7 @@ class UsersReport extends AbstractArrayReport
     private function formatLastLogin(?\DateTimeInterface $date): string
     {
         if ($date instanceof \DateTimeInterface) {
-            return $this->formatter->formatDiff($date, new \DateTime());
+            return (string) FormatUtils::formatDateTime($date);
         }
 
         return $this->trans('common.value_none');

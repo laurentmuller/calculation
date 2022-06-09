@@ -11,3 +11,4 @@ doctrine:
                 round: DoctrineExtensions\Query\Sqlite\Round
             string_functions:
                 ifelse: DoctrineExtensions\Query\Sqlite\IfElse
+                ifnull: DoctrineExtensions\Query\Sqlite\IfNull

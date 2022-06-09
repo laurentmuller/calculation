@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title_icon = 'envelope far' -%}
 {%- set title = isMail ? 'user.message.title' : 'user.comment.title' -%}
@@ -12,9 +11,10 @@
 {% else %}
     {{ form_row(form.fromAddress) }}
 {% endif %}
-{{ form_row(form.subject) }}
+    {{ form_row(form.subject) }}
 {{ form_row(form.message) }}
-{{ form_row(form.attachments) }}
+    {{ form_row(form.importance) }}
+    {{ form_row(form.attachments) }}
 {% endblock %}
 
 {% block stylesheets %}

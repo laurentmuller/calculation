@@ -1,7 +1,7 @@
 {
 	"name" : "bibi/calculation",
 	"type" : "project",
-	"description" : "Implementation of the calculation with Symfony 5.4.",
+	"description" : "Implementation of the calculation with Symfony 6.x",
 	"keywords" : [
 		"symfony",
 		"calculation"
@@ -44,7 +44,6 @@
 		"fakerphp/faker": "^1.14",
 		"google/recaptcha": "^1.2",
 		"imagine/imagine": "^1.2",
-		"knplabs/knp-time-bundle": "^1.17",
 		"phpoffice/phpspreadsheet": "^1.16",
 		"robquistnl/simplehtmltotext": "^1.1",
 		"sensio/framework-extra-bundle": "^6.1",

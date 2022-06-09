@@ -206,7 +206,7 @@ class Column implements SortModeInterface, \Stringable
     public function getClass(): string
     {
         $class = (string) $this->class;
-        if ($this->visible && !\str_contains($class, 'rowlink-skip')) {
+        if ($this->isSortable() && !\str_contains($class, 'rowlink-skip')) {
             return \trim($class . ' user-select-none cursor-pointer');
         }
 

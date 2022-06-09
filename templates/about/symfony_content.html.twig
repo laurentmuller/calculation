@@ -5,6 +5,7 @@
 {%- set debug_packages = info.packages.debug|default([]) -%}
 {%- set runtime_routes = info.routes.runtime|default([]) -%}
 {%- set debug_routes = info.routes.debug|default([]) -%}
+{%- set color = theme_dark(app.request) ? 'white' : 'black' -%}
 
 <div class="phpversion">
     <table id="data-table-symfony" class="table table-hover table-sm mb-0">
@@ -12,7 +13,7 @@
             <tr class="h">
                 <td colspan="2">
                     <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer">
-                        <img alt="Symfony" width="66" height="66" src="{{ asset('images/symfony.png') }}">
+                        <i class="icon-symfony icon-about" style="color:{{ color }};"></i>
                         <h1 class="p text-body">{{ 'about.version'|trans({'%version%': info.version}) }}</h1>
                     </a>
                 </td>

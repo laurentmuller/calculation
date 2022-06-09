@@ -126,6 +126,17 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
 
     /**
      * {@inheritdoc}
+     */
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
+    {
+        return match ($field) {
+            'role' => "SUBSTRING(IFNULL($alias.$field, 'ROLE_USER'), 5)",
+            default => parent::getSortField($field, $alias),
+        };
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @see ResetPasswordRequestRepositoryInterface
      */

@@ -11,28 +11,28 @@
 {%- endblock %}
 
 {% block global_actions -%}
-{{- _self.item_external(path('user_pdf'), 'user.list.pdf_title', 'file-pdf far') }}
-{{- _self.item_external(path('user_excel'), 'user.list.excel_title', 'file-excel far') }}
+{{- _self.item_external(path('user_pdf'), 'user.list.pdf_title', ICON_PDF) }}
+{{- _self.item_external(path('user_excel'), 'user.list.excel_title', ICON_EXCEL) }}
 {{- _self.item_separator() }}
-{{- _self.item_external(path('user_rights_pdf'), 'user.list.rights_export', 'file-pdf far') }}
-{{- _self.item_external(path('user_rights_excel'), 'user.list.rights_excel', 'file-excel far') }}
+{{- _self.item_external(path('user_rights_pdf'), 'user.list.rights_export', ICON_PDF) }}
+{{- _self.item_external(path('user_rights_excel'), 'user.list.rights_excel', ICON_EXCEL) }}
 {%- endblock %}
 
 {% block show_actions -%}
-{{- _self.item_path(path('user_show', params), 'user.show.title', 'tv', show_class) }}
+{{- _self.item_path(path('user_show', params), 'user.show.title', ICON_SHOW, show_class) }}
 {%- endblock %}
 
 {% block edit_actions -%}
-{{- _self.item_path(path('user_edit', params), 'user.edit.title', 'pencil', edit_class) }}
+{{- _self.item_path(path('user_edit', params), 'user.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
 
 {% block delete_actions -%}
-{{- _self.item_path(path('user_delete', params), 'user.delete.title', 'times', 'btn-delete btn-user-delete') }}
+{{- _self.item_path(path('user_delete', params), 'user.delete.title', ICON_DELETE, 'btn-delete btn-user-delete') }}
 {%- endblock %}
 
 {% block add_actions -%}
 {{- _self.item_separator() }}
-{{- _self.item_path(path('user_add', params), 'user.add.title', 'file far', 'btn-add') }}
+{{- _self.item_path(path('user_add', params), 'user.add.title', ICON_ADD, 'btn-add') }}
 {%- endblock %}
 
 {% block other_actions -%}

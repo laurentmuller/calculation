@@ -141,21 +141,13 @@ class MonthChart extends BaseChart
      */
     private function getAllowedMonths(): array
     {
-        $values = [4, 6, 12, 18, 24];
+        $step = 6;
         $maxMonths = $this->repository->countDistinctMonths();
-
-        if (\end($values) <= $maxMonths) {
-            return $values;
+        if ($maxMonths % $step > 0) {
+            $maxMonths += $step;
         }
 
-        foreach ($values as $index => $value) {
-            if ($value >= $maxMonths) {
-                return \array_slice($values, 0, $index + 1);
-            }
-        }
-
-        // must never been here!
-        return $values;
+        return \range($step, $maxMonths, $step);
     }
 
     private function getClickExpression(): Expr

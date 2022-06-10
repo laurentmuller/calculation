@@ -1,12 +1,11 @@
 {% extends 'cards/card_base.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{% set title_icon = 'tv' %}
+{% set title_icon = ICON_SHOW %}
 
 {% block card_body %}
-<div class="table-responsive">
+<div class="{% block table_responsive_class %}table-responsive{% endblock %}">
     <table class="table table-hover table-sm table-list mb-0">
         {% block property_header %}
         <thead>

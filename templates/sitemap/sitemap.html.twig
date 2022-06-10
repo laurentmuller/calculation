@@ -18,11 +18,11 @@
     {% if is_add or is_export %}
     <ul>
         {% if is_add %}
-        <li>{{ _self.link(prefix ~ '_add', prefix ~ '.add.title', 'file far', null, parameters) }}</li>
+        <li>{{ _self.link(prefix ~ '_add', prefix ~ '.add.title', ICON_ADD, null, parameters) }}</li>
         {% endif %}
         {% if is_export %}
-        <li>{{ _self.linkExternal(prefix ~ '_pdf', prefix ~ '.list.pdf_title', 'file-pdf far') }}</li>
-        <li>{{ _self.linkExternal(prefix ~ '_excel', prefix ~ '.list.excel_title', 'file-excel far') }}</li>
+        <li>{{ _self.linkExternal(prefix ~ '_pdf', prefix ~ '.list.pdf_title', ICON_PDF) }}</li>
+        <li>{{ _self.linkExternal(prefix ~ '_excel', prefix ~ '.list.excel_title', ICON_EXCEL) }}</li>
         {% endif %}
     </ul>
     {% endif %}
@@ -87,7 +87,7 @@
             {% if is_super_admin %}
             <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
             {% endif %}
-            <li>{{ _self.link('user_profile_edit', 'profile.edit.title', 'pencil') }}</li>
+            <li>{{ _self.link('user_profile_edit', 'profile.edit.title', ICON_EDIT) }}</li>
             {% if is_remembered %}
             <li>{{ _self.link('app_logout', 'index.logout', 'sign-out-alt') }}</li>
             {% else %}
@@ -105,11 +105,11 @@
                     <li>
                         <ul>
                             {% if is_add_calculation %}
-                            <li>{{ _self.link('calculation_add', 'calculation.add.title', 'file far', null, route_params) }}</li>
+                            <li>{{ _self.link('calculation_add', 'calculation.add.title', ICON_ADD, null, route_params) }}</li>
                             {% endif %}
                             {% if is_export_calculation %}
-                            <li>{{ _self.linkExternal('calculation_pdf', 'calculation.list.pdf_title', 'file-pdf far') }}</li>
-                            <li>{{ _self.linkExternal('calculation_excel', 'calculation.list.excel_title', 'file-excel far') }}</li>
+                            <li>{{ _self.linkExternal('calculation_pdf', 'calculation.list.pdf_title', ICON_PDF) }}</li>
+                            <li>{{ _self.linkExternal('calculation_excel', 'calculation.list.excel_title', ICON_EXCEL) }}</li>
                             {% endif %}
                         </ul>
                     </li>
@@ -140,7 +140,7 @@
                     <li>{{ _self.link('admin_archive', 'archive.title', 'calendar-xmark far') }}</li>
                     {% endif %}
                     <li>{{ _self.link('below_table', 'below.title', ICON_GLOBAL_MARGIN) }}</li>
-                    <li>{{ _self.link('duplicate_table', 'duplicate.title', 'copy far') }}</li>
+                    <li>{{ _self.link('duplicate_table', 'duplicate.title', ICON_COPY) }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
                     {% if is_list_task %}
                     <li>{{ _self.link('task_compute', 'taskcompute.title', 'keyboard', null, route_params|merge({'id': 0})) }}</li>

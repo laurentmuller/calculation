@@ -9,8 +9,8 @@
 {%- endblock %}
 
 {% block global_actions -%}
-{{- _self.item_external(path('below_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
-{{- _self.item_external(path('below_excel'), 'calculation.list.excel_title', 'file-excel far') }}
+{{- _self.item_external(path('below_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
+{{- _self.item_external(path('below_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
 
 {% block add_actions -%}

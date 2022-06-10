@@ -82,6 +82,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private function getIcons(): array
     {
         return [
+            // entity
             'ICON_CALCULATION' => 'calculator',
             'ICON_CALCULATION_STATE' => 'flag far',
             'ICON_CATEGORY' => 'folder far',
@@ -92,6 +93,15 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
             'ICON_PRODUCT' => 'file-alt far',
             'ICON_TASK' => 'tasks',
             'ICON_USER' => 'user far',
+            // action
+            'ICON_SHOW' => 'tv',
+            'ICON_ADD' => 'file far',
+            'ICON_EDIT' => 'pencil',
+            'ICON_DELETE' => 'times',
+            'ICON_COPY' => 'copy far',
+            // export
+            'ICON_PDF' => 'file-pdf far',
+            'ICON_EXCEL' => 'file-excel far',
         ];
     }
 }

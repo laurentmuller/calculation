@@ -120,7 +120,7 @@
 {%- endmacro %}
 
 {% macro button_pdf(route, parameters=[]) -%}
-{{- _self.linkExternal(path(route, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', 'file-pdf far') -}}
+{{- _self.linkExternal(path(route, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', ICON_PDF) -}}
 {%- endmacro %}
 
 {% macro copyright_link() -%}

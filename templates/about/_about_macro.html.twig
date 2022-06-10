@@ -50,15 +50,15 @@
 <div class="card">
     <div class="card-header" id="{{ id }}-header">
         <div class="row no-gutters">
-            <div class="mr-auto">
-                <a data-toggle="collapse" role="button" href="#{{ id }}" class="card-link" aria-expanded="false" aria-controls="{{ id }}">
+            <div class="col mr-auto" style="transform: rotate(0);">
+                <a data-toggle="collapse" role="button" href="#{{ id }}" class="card-link stretched-link" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
                     {{- title -}}
                 </a>
             </div>
-            <div class="text-right d-print-none">
-                {{ icons.linkExternal(path(pdf_route), null, null, 'file-pdf far', 'common.button_pdf') }}
+            <div class="col text-right d-print-none">
+                {{ icons.linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_pdf') }}
                 {% if excel_route %}
-                    {{ icons.linkExternal(path(excel_route), null, null, 'file-excel far', 'common.button_export') }}
+                    {{ icons.linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export') }}
                 {% endif %}
             </div>
         </div>

@@ -14,7 +14,7 @@
 
 {% block card_body %}
 {# application #}
-<div id="configuration" class="phpversion" data-error="{{ 'about.error'|trans }}">
+<div id="configuration" class="phpversion" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}" data-error="{{ 'about.error'|trans }}">
     <table id="data-table-application" class="table table-hover table-sm mb-0">
         <tbody>
             <tr class="h">
@@ -39,7 +39,7 @@
 {{ tools.aboutCard('licence', 'about_licence_pdf') }}
 {{ tools.aboutCard('policy', 'about_policy_pdf') }}
 {% if super_admin %}
-    {{ tools.aboutCard('symfony', 'about_symfony_pdf', 'about_symfony_excel', 'icon-symfony') }}
+    {{ tools.aboutCard('symfony', 'about_symfony_pdf', 'about_symfony_excel') }}
     {{ tools.aboutCard('php', 'about_php_pdf', 'about_php_excel') }}
     {{ tools.aboutCard('mysql', 'about_mysql_pdf', 'about_mysql_excel') }}
 {% endif %}

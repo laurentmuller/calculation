@@ -1,12 +1,11 @@
 {% extends 'cards/card_show.html.twig' %}
-
-{# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
 
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'group.show.title' -%}
-{%- set params = route_params(app.request, id) %}
+{%- set params = route_params(app.request, id) -%}
+{%- set has_margins = item.hasMargins -%}
 
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
@@ -17,27 +16,27 @@
 {% block property_body %}
 {{ properties.property('group.fields.code', item.code) }}
 {{ properties.property('group.fields.description', item.description) }}
-{%- if not item.hasMargins -%}
+{%- if not has_margins -%}
 {{- properties.property('group.fields.margins', item.countMargins|integer) }}
 {% endif -%}
 {%- if item.hasCategories -%}
-{% set categories = item.categories|sort((a, b) => a.code <=> b.code)|map(p => p.code)|join('<br>') %}
+{%- set categories = item.categories|map(p => p.code)|sort((a, b) => a <=> b)|join(', ') -%}
 {{- properties.property('group.fields.categories', categories) }}
 {% endif -%}
 {% endblock %}
 
 {% block card_body %}
 {{ parent() }}
-{%- if item.hasMargins -%}
-<div class="table-responsive">
-     <table class="table table-sm table-list">
-         <thead>
-             <tr>
-                 <th>{{ 'group.fields.margins'|trans }}</th>
-                <th class="text-right">{{ 'groupmargin.fields.minimum'|trans }}</th>
-                <th class="text-right">{{ 'groupmargin.fields.maximum'|trans }}</th>
-                <th class="text-right">{{ 'groupmargin.fields.margin'|trans }}</th>
-             </tr>
+{%- if has_margins -%}
+<div class="{{ block('table_responsive_class') }}">
+    <table class="table table-sm table-hover table-list">
+        <thead>
+            <tr>
+                <th class="font-weight-normal">{{ 'group.fields.margins'|trans }}</th>
+                <th class="font-weight-normal text-right">{{ 'groupmargin.fields.minimum'|trans }}</th>
+                <th class="font-weight-normal text-right">{{ 'groupmargin.fields.maximum'|trans }}</th>
+                <th class="font-weight-normal text-right">{{ 'groupmargin.fields.margin'|trans }}</th>
+            </tr>
         </thead>
         <tbody>
         {% for margin in item.margins -%}
@@ -49,7 +48,7 @@
             </tr>
         {% endfor %}
         </tbody>
-     </table>
+    </table>
 </div>
 {%- endif -%}
 {% endblock %}

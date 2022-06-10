@@ -1,9 +1,9 @@
 {# create a property row #}
 {% macro property(name, value, class) %}
 {%- set value = value|default('&nbsp;') -%}
-{%- set class = ('w-70 text-truncate ' ~ class|default(''))|trim -%}
+{%- set class = ('w-70 ' ~ class|default(''))|trim -%}
 <tr>
-    <td class="w-30 text-nowrap">{{ name|trans }}</td>
+    <td class="w-30">{{ name|trans }}</td>
     <td class="{{ class }}">{{ value|raw }}</td>
 </tr>
 {% endmacro %}

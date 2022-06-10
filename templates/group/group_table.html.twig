@@ -10,26 +10,26 @@
 {%- endblock %}
 
 {% block global_actions -%}
-{{- _self.item_external(path('group_pdf'), 'group.list.pdf_title', 'file-pdf far') }}
-{{- _self.item_external(path('group_excel'), 'group.list.excel_title', 'file-excel far') }}
+{{- _self.item_external(path('group_pdf'), 'group.list.pdf_title', ICON_PDF) }}
+{{- _self.item_external(path('group_excel'), 'group.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
 
 {% block show_actions -%}
-{{- _self.item_path(path('group_show', params), 'group.show.title', 'tv', show_class) }}
+{{- _self.item_path(path('group_show', params), 'group.show.title', ICON_SHOW, show_class) }}
 {%- endblock %}
 
 {% block edit_actions -%}
-{{- _self.item_path(path('group_edit', params), 'group.edit.title', 'pencil', edit_class) }}
+{{- _self.item_path(path('group_edit', params), 'group.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
 
 {% block delete_actions -%}
-{{- _self.item_path(path('group_delete', params), 'group.delete.title', 'times', 'btn-delete') }}
+{{- _self.item_path(path('group_delete', params), 'group.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}
 
 {% block add_actions -%}
 {{- _self.item_separator() }}
-{{- _self.item_path(path('group_add', params), 'group.add.title', 'file far', 'btn-add') }}
-{{- _self.item_path(path('group_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
+{{- _self.item_path(path('group_add', params), 'group.add.title', ICON_ADD, 'btn-add') }}
+{{- _self.item_path(path('group_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock %}
 
 {% block custom_view_header -%}

@@ -1,7 +1,7 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title_icon = title_icon|default('times') -%}
+{%- set title_icon = title_icon|default(ICON_DELETE) -%}
 {%- set title = title|default('common.delete_title') -%}
 {%- set submit_text = submit_text|default('common.button_delete') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-danger') -%}

@@ -17,7 +17,7 @@
                 {%- set menu_id = 'dropdownMenuGroup_' ~ group.vars.id -%}
                 {{ icons.dropdownEllipsis(menu_id) }}
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_group', 'times', 'btn-delete-group') }}
+                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_group', ICON_DELETE, 'btn-delete-group') }}
                     {{ icons.dropdownSeparator() }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-add-item') }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}

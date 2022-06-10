@@ -2,7 +2,7 @@
 
 {# parameters #}
 {%- set title = 'duplicate.title' -%}
-{%- set title_icon = 'copy far' -%}
+{%- set title_icon = ICON_COPY -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 
 {% block card_header -%}
@@ -15,26 +15,26 @@
 {%- endblock %}
 
 {% block global_actions -%}
-{{- _self.item_external(path('duplicate_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
-{{- _self.item_external(path('duplicate_excel'), 'calculation.list.excel_title', 'file-excel far') }}
+{{- _self.item_external(path('duplicate_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
+{{- _self.item_external(path('duplicate_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
 
 {% block show_actions -%}
-{{- _self.item_path(path('calculation_show', params), 'calculation.show.title', 'tv', show_class) }}
+{{- _self.item_path(path('calculation_show', params), 'calculation.show.title', ICON_SHOW, show_class) }}
 {%- endblock %}
 
 {% block edit_actions -%}
-{{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', 'pencil', edit_class) }}
+{{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', ICON_EDIT, edit_class) }}
 {%- endblock %}
 
 {% block delete_actions -%}
-{{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', 'times', 'btn-delete') }}
+{{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}
 
 {% block other_actions -%}
 {% if allow_export %}
 {{- _self.item_separator() }}
-{{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', 'file-pdf far', 'btn-calculation-pdf') }}
+{{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', ICON_PDF, 'btn-calculation-pdf') }}
 {% endif %}
 {%- endblock %}
 

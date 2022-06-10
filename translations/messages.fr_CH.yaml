@@ -22,6 +22,8 @@ about:
   symfony_pdf: Symfony Info
   title: A propos de
   version: Version %version%
+  expand: Afficher le contenu
+  collapse: Masquer le contenu
 action:
   edit: Modifier l'objet
   none: Aucune action

@@ -17,7 +17,7 @@
                 {%- set menu_id = 'dropdownMenuCategory_' ~ category.vars.id -%}
                 {{ icons.dropdownEllipsis(menu_id) }}
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_category', 'times', 'btn-delete-category') }}
+                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_category', ICON_DELETE, 'btn-delete-category') }}
                     {{ icons.dropdownSeparator() }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-add-item') }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}

@@ -986,7 +986,7 @@ resetting:
 
     Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable (spam) ou <a href="%request%">essayer à nouveau</a>.
 
-    <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que dans %tokenLifetime%.
+    <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que dans %token_life_time%.
   link: Mot de passe oublié ?
   not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été
     trouvé dans l'URL ou dans la session.
@@ -1276,8 +1276,7 @@ user:
     success: L'utilisateur <b>%name%</b> a été créé avec succès.
     title: Nouvel utilisateur
   change_password:
-    change_success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec
-      succès.
+    change_success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.
     check_password: Tester si le mot de passe est compromis
     title: Modifier le mot de passe
   comment:
@@ -1317,6 +1316,7 @@ user:
     success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec
       succès.
     title: Image du profil
+    action: Modifier l'image du profil
   list:
     add_title: Créer un nouvel utilisateur
     empty: Aucun utilisateur défini.
@@ -1360,6 +1360,7 @@ user:
     table_title: Objets / Actions
     title: Droits d'accès
     toggle_title: Inverser les droits
+    action: Modifier les droits d'accès
   roles:
     admin: Administrateur
     super_admin: Administrateur du site

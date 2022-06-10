@@ -485,9 +485,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * Sets the reset password request values.
      *
-     * @param \DateTimeImmutable $expiresAt   the expiration date
-     * @param string             $selector    a non-hashed random string used to fetch a request from persistence
-     * @param string             $hashedToken the hashed token used to verify a reset request
+     * @param string $selector    a non-hashed random string used to fetch a request from persistence
+     * @param string $hashedToken the hashed token used to verify a reset request
      */
     public function setResetPasswordRequest(\DateTimeImmutable $expiresAt, string $selector, string $hashedToken): self
     {

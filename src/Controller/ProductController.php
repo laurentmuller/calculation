@@ -106,6 +106,7 @@ class ProductController extends AbstractEntityController
      * Export the products to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'product_excel')]
     public function excel(ProductRepository $repository): SpreadsheetResponse

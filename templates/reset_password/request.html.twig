@@ -1,8 +1,4 @@
-{% extends 'cards/card_edit.html.twig' %}
-
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% extends 'cards/card_edit_center.html.twig' %}
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
 {%- set title_description = 'resetting.request.description' -%}
@@ -11,46 +7,12 @@
 {%- set cancel_path = false -%}
 {%- set form_attr = form_attr|default({})|merge({'data-check-user': url('ajax_check_user')}) -%}
 
-{# class styles #}
-{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
-
-{% block card_header %}
-{{ parent() }}
-{% if error|default(false) %}<small class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</small>{% endif %}
-{% endblock %}
-
-{% block card_footer -%}
-{{ parent() }}
-<hr class="mb-2">
-<div class="row">
-    <div class="col-md-6">
-        <small>{{ app_name_version }}</small>
-    </div>
-    <div class="col-md-6 text-md-right">
-        <small>{{ icons.copyright_link() }}</small>
-    </div>
-</div>
-{% endblock %}
-
 {% block actions_form %}
 {{ parent() }}
-{{ icons.link(path('app_login'), 'security.link', 'btn btn-form btn-link') }}
-{% endblock %}
-
-{# hide navigation and footer #}
-{% block navigation %}{% endblock %}
-{% block footer %}{% endblock %}
-
-{% block stylesheets -%}
-{{ asset_css('css/center.css') }}
+<a href="{{ path('app_login') }}" class="ml-md-2">{{ 'security.login.submit'|trans }}</a>
 {% endblock %}
 
 {% block javascripts -%}
-{#
-{% if recaptcha_used ?? false and recaptcha_site ?? false %}
-{{ asset_js('https://www.google.com/recaptcha/api.js?render=' ~ recaptcha_site, {'recaptcha-site': recaptcha_site, 'recaptcha-action': 'login'}) }}
-{%- endif %}
-#}
 {% if app.debug %}
 {{ parent() }}
 {{ asset_js('js/extensions/password-extensions.js') }}

@@ -119,6 +119,7 @@ class CalculationStateController extends AbstractEntityController
      * Export the calculation states to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'calculationstate_excel')]
     public function excel(): SpreadsheetResponse

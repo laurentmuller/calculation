@@ -35,6 +35,8 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Export the empty items to a Spreadsheet document.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'empty_excel')]
     public function excel(CalculationRepository $repository): Response

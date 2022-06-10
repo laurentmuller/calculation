@@ -48,7 +48,6 @@ security:
 
     access_control:
         - { path: ^/login,                 roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
-        - { path: ^/resetting,             roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
         - { path: ^/reset-password,        roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
         # - { path: ^/register$,             roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
         - { path: ^/about/policy,          roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }

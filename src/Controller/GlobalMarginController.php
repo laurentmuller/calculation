@@ -85,6 +85,7 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'globalmargin_excel')]
     public function excel(): SpreadsheetResponse

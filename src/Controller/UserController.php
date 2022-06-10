@@ -43,7 +43,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -78,10 +80,10 @@ class UserController extends AbstractEntityController
      * Delete an user.
      */
     #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => self::DIGITS])]
-    public function delete(Request $request, User $item, LoggerInterface $logger): Response
+    public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         // same?
-        if ($this->isConnectedUser($item)) {
+        if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
             $this->warningTrans('user.delete.connected');
 
             // redirect
@@ -416,15 +418,27 @@ class UserController extends AbstractEntityController
 
     /**
      * Returns if the given user is the same as the logged-in user.
-     *
-     * @param User $user the user to verify
-     *
-     * @return bool true if the same
      */
     private function isConnectedUser(User $user): bool
     {
         $connectedUser = $this->getUser();
 
         return $connectedUser instanceof User && $connectedUser->getId() === $user->getId();
+    }
+
+    /**
+     * Returns if the given user is the same as the original user.
+     */
+    private function isOriginalUser(User $user, Security $security): bool
+    {
+        $token = $security->getToken();
+        if ($token instanceof SwitchUserToken) {
+            $originalUser = $token->getOriginalToken()->getUser();
+
+            return $originalUser instanceof User &&
+                $originalUser->getId() === $user->getId();
+        }
+
+        return false;
     }
 }

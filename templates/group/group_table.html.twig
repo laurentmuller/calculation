@@ -27,7 +27,6 @@
 {%- endblock %}
 
 {% block add_actions -%}
-{{- _self.item_separator() }}
 {{- _self.item_path(path('group_add', params), 'group.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('group_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock %}

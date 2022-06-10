@@ -17,6 +17,7 @@ use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
 use App\Repository\UserRepository;
 use App\Service\UserExceptionService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,12 +31,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 /**
  * Controller to reset the user password.
  */
 #[AsController]
+#[IsGranted('PUBLIC_ACCESS')]
 #[Route(path: '/reset-password')]
 class ResetPasswordController extends AbstractController
 {
@@ -61,13 +64,14 @@ class ResetPasswordController extends AbstractController
     public function checkEmail(): Response
     {
         // Prevent users from directly accessing this page
-        // Generates a fake token if the user does not exist or someone hit this page directly.
+        // Generates a fake token if the user does not exist or
+        // someone hit this page directly.
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             $resetToken = $this->helper->generateFakeResetToken();
         }
 
         return $this->renderForm('reset_password/check_email.html.twig', [
-            'resetToken' => $resetToken,
+            'token_life_time' => $this->getTokenLifeTime($resetToken),
         ]);
     }
 
@@ -143,6 +147,15 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
+    private function getTokenLifeTime(ResetPasswordToken $resetToken): string
+    {
+        return $this->trans(
+            $resetToken->getExpirationMessageKey(),
+            $resetToken->getExpirationMessageData(),
+            'ResetPasswordBundle'
+        );
+    }
+
     /**
      * Send email to the user for resetting the password.
      */
@@ -171,7 +184,8 @@ class ResetPasswordController extends AbstractController
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'username' => $user->getUserIdentifier(),
-                'resetToken' => $resetToken,
+                'life_time' => $this->getTokenLifeTime($resetToken),
+                'token' => $resetToken->getToken(),
             ]);
 
         try {

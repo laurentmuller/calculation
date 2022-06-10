@@ -13,11 +13,16 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\User;
+use App\Interfaces\RoleInterface;
+use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -33,7 +38,7 @@ class UserTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(UserRepository $repository, TranslatorInterface $translator, private readonly Environment $twig)
+    public function __construct(UserRepository $repository, TranslatorInterface $translator, private readonly Environment $twig, private readonly Security $security)
     {
         parent::__construct($repository);
         $this->translator = $translator;
@@ -82,6 +87,23 @@ class UserTable extends AbstractEntityTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        $query = parent::createDefaultQueryBuilder($alias);
+
+        $user = $this->security->getUser();
+        if ($user instanceof User && !$user->isSuperAdmin()) {
+            $role = RoleInterface::ROLE_SUPER_ADMIN;
+            $criteria = "$alias.role <> '$role' or $alias.role IS NULL";
+            $query->andWhere($criteria);
+        }
+
+        return $query;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getColumnDefinitions(): string
@@ -105,6 +127,20 @@ class UserTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
+            $results->addAttribute('original-user-id', $this->getOriginalUserId());
         }
+    }
+
+    private function getOriginalUserId(): int
+    {
+        $token = $this->security->getToken();
+        if ($token instanceof SwitchUserToken) {
+            $user = $token->getOriginalToken()->getUser();
+            if ($user instanceof User) {
+                return (int) $user->getId();
+            }
+        }
+
+        return 0;
     }
 }

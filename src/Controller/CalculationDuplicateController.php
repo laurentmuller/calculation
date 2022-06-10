@@ -35,6 +35,8 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Export the duplicate items to a Spreadsheet document.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'duplicate_excel')]
     public function excel(CalculationRepository $repository): Response

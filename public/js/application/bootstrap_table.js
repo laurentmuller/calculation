@@ -148,16 +148,47 @@ function isConnectedUser($table, row) {
 }
 
 /**
- * Update the user action.
+ * Returns if the current row is rendered for the original connected user
+ *
+ * @param {JQuery} $table - the parent table.
+ * @param {Object} row - the row data.
+ * @returns {boolean} true if connected user
+ */
+function isOrignalUser($table, row) {
+    'use strict';
+    const currentId = Number.parseInt(row.id, 10);
+    const originalId = Number.parseInt($table.data('original-user-id'), 10);
+    return Number.isNaN(currentId) || Number.isNaN(originalId) || currentId === originalId;
+}
+
+/**
+ * Update the user message action.
  *
  * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {JQuery} _$element - the table row.
  * @param {JQuery} $action - the action to update
  */
-function updateUserAction($table, row, _$element, $action) {
+function updateUserMessageAction($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row)) {
+        $action.prev('.dropdown-divider').remove();
+        $action.remove();
+    }
+}
+
+/**
+ * Update the user delete action.
+ *
+ * @param {JQuery} $table - the parent table.
+ * @param {Object} row - the row data.
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
+ */
+function updateUserDeleteAction($table, row, _$element, $action) {
+    'use strict';
+    if (isConnectedUser($table, row) || isOrignalUser($table, row)) {
+        $action.prev('.dropdown-divider').remove();
         $action.remove();
     }
 }
@@ -562,8 +593,10 @@ $.fn.extend({
         onRenderAction: function ($table, row, $element, $action) {
             if ($action.is('.btn-user-switch')) {
                 updateUserSwitchAction($table, row, $element, $action);
-            } else if ($action.is('.btn-user-message, .btn-user-delete')) {
-                updateUserAction($table, row, $element, $action);
+            } else if ($action.is('.btn-user-message')) {
+                updateUserMessageAction($table, row, $element, $action);
+            } else if ($action.is('.btn-user-delete')) {
+                updateUserDeleteAction($table, row, $element, $action);
             } else if ($action.is('.btn-user-reset')) {
                 updateUserResetAction($table, row, $element, $action);
             } else if ($action.is('.btn-calculation-edit')) {

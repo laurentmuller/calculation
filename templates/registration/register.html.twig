@@ -1,6 +1,4 @@
-{% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% extends 'cards/card_edit_center.html.twig' %}
 {# parameters #}
 {%- set title = "registration.register.title" -%}
 {%- set title_icon = 'user-plus' -%}
@@ -8,40 +6,9 @@
 {%- set cancel_path = false -%}
 {%- set form_attr = form_attr|default({})|merge({'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 
-{# class styles #}
-{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
-
-{# hide navigation and footer #}
-{% block navigation %}{% endblock %}
-{% block footer %}{% endblock %}
-
-{% block card_header %}
-{{ parent() }}
-{% if error|default(false) %}
-    <em class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</em>
-{% endif %}
-{% endblock %}
-
-{% block card_footer -%}
-{{ parent() }}
-<hr class="mb-2">
-<div class="row">
-    <div class="col-md-6">
-        <small>{{ app_name_version }}</small>
-    </div>
-    <div class="col-md-6 text-md-right">
-        <small>{{ icons.copyright_link() }}</small>
-    </div>
-</div>
-{% endblock %}
-
 {% block actions_form %}
 {{ parent() }}
-{{ icons.link(path('app_login'), 'security.link', 'btn btn-form btn-link') }}
-{% endblock %}
-
-{% block stylesheets -%}
-{{ asset_css('css/center.css') }}
+<a href="{{ path('app_login') }}" class="ml-md-2">{{ 'security.link'|trans }}</a>
 {% endblock %}
 
 {% block javascripts -%}

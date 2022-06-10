@@ -44,7 +44,6 @@
 {%- endblock %}
 
 {% block add_actions -%}
-{{- _self.item_separator() }}
 {{- _self.item_path(path('category_add', params), 'category.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('category_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock %}

@@ -53,7 +53,6 @@
 {%- endblock %}
 
 {% block add_actions -%}
-{{- _self.item_separator() }}
 {{- _self.item_path(path('product_add', params), 'product.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('product_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock %}

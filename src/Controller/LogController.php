@@ -90,6 +90,7 @@ class LogController extends AbstractController
      * Export the logs to a Spreadsheet document.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response

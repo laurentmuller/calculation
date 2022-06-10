@@ -1,6 +1,4 @@
 {% extends 'cards/card_base.html.twig' %}
-
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
@@ -11,8 +9,7 @@
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
 
 {% block card_body -%}
-{%- set token_life_time = resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') -%}
-<p class="mb-0">{{ 'resetting.check_email'|trans({'%tokenLifetime%': token_life_time, '%request%': path('app_forgot_password_request')})|raw|nl2br }}</p>
+<p class="mb-0">{{ 'resetting.check_email'|trans({'%token_life_time%': token_life_time, '%request%': path('app_forgot_password_request')})|raw|nl2br }}</p>
 {%- endblock %}
 
 {% block card_footer -%}

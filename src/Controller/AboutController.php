@@ -139,6 +139,8 @@ class AboutController extends AbstractController
 
     /**
      * Exports the MySql information as Excel.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/mysql/excel', name: 'about_mysql_excel')]
@@ -183,6 +185,8 @@ class AboutController extends AbstractController
 
     /**
      * Exports the PHP information as PDF.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/php/excel', name: 'about_php_excel')]
@@ -272,6 +276,8 @@ class AboutController extends AbstractController
 
     /**
      * Exports the Symfony information as Excel.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/symfony/excel', name: 'about_symfony_excel')]

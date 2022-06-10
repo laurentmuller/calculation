@@ -134,7 +134,8 @@ class CategoryController extends AbstractEntityController
     /**
      * Export the categories to a Spreadsheet document.
      *
-     * @throws NotFoundHttpException if no category is found
+     * @throws NotFoundHttpException               if no category is found
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'category_excel')]
     public function excel(): SpreadsheetResponse

@@ -37,6 +37,8 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Export the calculations to a Spreadsheet document.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'below_excel')]
     public function excel(CalculationRepository $repository): Response

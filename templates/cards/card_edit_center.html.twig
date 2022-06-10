@@ -1,0 +1,31 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+{# hide navigation and footer #}
+{% block navigation %}{% endblock %}
+{% block footer %}{% endblock %}
+{# class styles #}
+{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
+{# header #}
+{% block card_header -%}
+{{ parent() }}
+{%- if error|default(false) -%}
+    <p class="small text-danger mb-0">
+        {{- error.messageKey|trans(error.messageData, 'security') -}}
+    </p>
+{%- endif -%}
+{%- endblock %}
+{# footer #}
+{% block card_footer -%}
+{{ parent() }}
+<hr class="mb-2">
+<div class="row">
+    <div class="col-md-6">
+        <small>{{ app_name_version }}</small>
+    </div>
+    <div class="col-md-6 text-md-right">
+        <small>{{ icons.copyright_link() }}</small>
+    </div>
+</div>
+{% endblock %}
+{# stylesheets #}
+{% block stylesheets -%}{{ asset_css('css/center.css') }}{% endblock %}

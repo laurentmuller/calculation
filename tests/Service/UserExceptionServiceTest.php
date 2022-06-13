@@ -14,8 +14,12 @@ namespace App\Tests\Service;
 
 use App\Service\UserExceptionService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\TooManyPasswordRequestsException;
@@ -28,6 +32,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
  */
 class UserExceptionServiceTest extends TestCase
 {
+    private ?Request $request = null;
     private ?UserExceptionService $service = null;
 
     /**
@@ -36,30 +41,14 @@ class UserExceptionServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->service = new UserExceptionService();
+
+        $storage = new MockArraySessionStorage();
+        $session = new Session($storage);
+        $this->request = new Request();
+        $this->request->setSession($session);
     }
 
     public function getExceptions(): array
-    {
-        return [
-            // register user
-            [new ExpiredSignatureException()],
-            [new InvalidSignatureException()],
-            [new WrongEmailVerifyException()],
-
-            // reset password
-            [new ExpiredResetPasswordTokenException()],
-            [new InvalidResetPasswordTokenException()],
-            [new TooManyPasswordRequestsException(new \DateTime('2000-01-01')), 1],
-
-            // mailer
-            [new TransportException()],
-
-            // other
-            [new \Exception()],
-        ];
-    }
-
-    public function getExceptionWithMessages(): array
     {
         return [
             // register user
@@ -70,7 +59,7 @@ class UserExceptionServiceTest extends TestCase
             // reset password
             [new ExpiredResetPasswordTokenException(), 'reset_expired_reset_password_token'],
             [new InvalidResetPasswordTokenException(), 'reset_invalid_reset_password_token'],
-            [new TooManyPasswordRequestsException(new \DateTime('2000-01-01')), 'reset_too_many_password_request'],
+            [new TooManyPasswordRequestsException(new \DateTime('2000-01-01')), 'reset_too_many_password_request', 1],
 
             // mailer
             [new TransportException(), 'send_email_error'],
@@ -83,59 +72,24 @@ class UserExceptionServiceTest extends TestCase
     /**
      *  @dataProvider getExceptions
      */
-    public function testCode(\Throwable $e): void
+    public function testException(\Throwable $e, string $message, int $messageData = 0): void
     {
         $result = $this->mapException($e);
         $this->assertEquals(0, $result->getCode());
-    }
-
-    /**
-     *  @dataProvider getExceptions
-     */
-    public function testInstancePrevious(\Throwable $e): void
-    {
-        $result = $this->mapException($e);
-        $this->assertInstanceOf($e::class, $result->getPrevious());
-    }
-
-    /**
-     *  @dataProvider getExceptions
-     */
-    public function testInstanceResult(\Throwable $e): void
-    {
-        $result = $this->mapException($e);
-        $this->assertInstanceOf(CustomUserMessageAuthenticationException::class, $result);
-    }
-
-    /**
-     *  @dataProvider getExceptionWithMessages
-     */
-    public function testMessage(\Throwable $e, string $message): void
-    {
-        $result = $this->mapException($e);
         $this->assertEquals($message, $result->getMessage());
-    }
-
-    /**
-     *  @dataProvider getExceptions
-     */
-    public function testMessageData(\Throwable $e, int $count = 0): void
-    {
-        $result = $this->mapException($e);
-        $this->assertCount($count, $result->getMessageData());
-    }
-
-    /**
-     *  @dataProvider getExceptionWithMessages
-     */
-    public function testMessageKey(\Throwable $e, string $message): void
-    {
-        $result = $this->mapException($e);
         $this->assertEquals($message, $result->getMessageKey());
+        $this->assertCount($messageData, $result->getMessageData());
+        $this->assertInstanceOf($e::class, $result->getPrevious());
     }
 
     private function mapException(\Throwable $e): CustomUserMessageAuthenticationException
     {
-        return $this->service->mapException($e);
+        $this->assertNotNull($this->request);
+        $this->assertNotNull($this->service);
+        $this->service->handleException($this->request, $e);
+        $result = $this->request->getSession()->get(Security::AUTHENTICATION_ERROR);
+        $this->assertInstanceOf(CustomUserMessageAuthenticationException::class, $result);
+
+        return $result;
     }
 }

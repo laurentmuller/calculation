@@ -9,7 +9,7 @@
 
 {% block actions_form %}
 {{ parent() }}
-<a href="{{ path('app_login') }}" class="ml-md-2">{{ 'security.login.submit'|trans }}</a>
+<a href="{{ path('app_login') }}" class="ml-md-2" title="{{ 'security.login.description'|trans }}">{{ 'security.login.submit'|trans }}</a>
 {% endblock %}
 
 {% block javascripts -%}

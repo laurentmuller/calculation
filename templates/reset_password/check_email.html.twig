@@ -1,34 +1,31 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
 {%- set title_icon = 'eraser' -%}
-
-{# class styles #}
-{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
-
-{% block card_body -%}
-<p class="mb-0">{{ 'resetting.check_email'|trans({'%token_life_time%': token_life_time, '%request%': path('app_forgot_password_request')})|raw|nl2br }}</p>
-{%- endblock %}
-
-{% block card_footer -%}
-{{ icons.link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary') }}
-<hr class="mb-2">
-<div class="row">
-    <div class="col-md-6">
-        <small>{{ app_name_version }}</small>
-    </div>
-    <div class="col-md-6 text-md-right">
-        <small>{{ icons.copyright_link() }}</small>
-    </div>
-</div>
-{%- endblock %}
-
 {# hide navigation and footer #}
 {% block navigation %}{% endblock %}
 {% block footer %}{% endblock %}
-
+{# class styles #}
+{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
+{# body #}
+{% block card_body -%}
+<p>
+    Un e-mail vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
+</p>
+<p>
+    Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable (spam) ou <a href="{{ path('app_forgot_password_request') }}">essayer à nouveau</a>.
+</p>
+<p class="mb-0">
+    <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que dans {{ token_life_time }}.
+</p>
+{%- endblock %}
+{# footer #}
+{% block card_footer -%}
+{{ icons.link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary') }}
+{{ icons.footer_center() }}
+{%- endblock %}
+{# stylesheets #}
 {% block stylesheets -%}
 {{ asset_css('css/center.css') }}
 {% endblock %}

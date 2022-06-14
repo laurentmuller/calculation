@@ -90,7 +90,6 @@ class RegistrationController extends AbstractController
     #[Route(path: '/verify', name: self::ROUTE_VERIFY)]
     public function verify(Request $request): RedirectResponse
     {
-        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->findUser($request);
         if (!$user instanceof User) {
             return $this->redirectToRoute(self::ROUTE_REGISTER);

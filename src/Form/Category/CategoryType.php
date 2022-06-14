@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\Category;
 
+use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
@@ -43,7 +44,7 @@ class CategoryType extends AbstractEntityType
 
         $helper->field('description')
             ->notRequired()
-            ->maxLength(255)
+            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
             ->addTextareaType();
 
         $helper->field('group')

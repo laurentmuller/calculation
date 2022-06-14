@@ -45,7 +45,7 @@ class TaskItem extends AbstractEntity implements \Countable
     private Collection $margins;
 
     #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
     private ?string $name = null;
 

@@ -42,7 +42,7 @@ abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
     /**
      * Adds the given value to this value.
      */
-    public function addValue(mixed $value): self
+    public function addValue(mixed $value): static
     {
         $this->aggregator->add($value);
 

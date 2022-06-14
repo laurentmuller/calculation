@@ -11,18 +11,22 @@
 {# body #}
 {% block card_body -%}
 <p>
-    Un e-mail vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
+    Un courrier électronique vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
 </p>
 <p>
     Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable (spam) ou <a href="{{ path('app_forgot_password_request') }}">essayer à nouveau</a>.
 </p>
-<p class="mb-0">
-    <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que dans {{ token_life_time }}.
+<p class="mb-1">
+    <b>Remarque :</b>
 </p>
+<ul class="mb-0">
+    <li>La demande de changement du nouveau mot de passe expire dans {{ expires_life_time }} (à {{ expires_date|localetime('short') }}).</li>
+    <li>Vous ne pouvez demander un nouveau mot de passe que dans {{ throttle_life_time }} (à {{ throttle_date|localetime('short') }}).</li>
+</ul>
 {%- endblock %}
 {# footer #}
 {% block card_footer -%}
-{{ icons.link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary') }}
+{{ icons.link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary', null, 'security.login.description') }}
 {{ icons.footer_center() }}
 {%- endblock %}
 {# stylesheets #}

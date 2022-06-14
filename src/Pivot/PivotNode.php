@@ -98,7 +98,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     /**
      * {@inheritdoc}
      */
-    public function addValue(mixed $value): self
+    public function addValue(mixed $value): static
     {
         parent::addValue($value);
 
@@ -566,7 +566,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      *
      * <b>NB:</b> This method is called recursively for the parents (if any).
      */
-    private function update(): self
+    private function update(): static
     {
         if (!$this->isEmpty()) {
             $this->aggregator->init();

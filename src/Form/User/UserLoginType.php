@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Entity\AbstractEntity;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
@@ -24,6 +25,8 @@ class UserLoginType extends AbstractUserCaptchaType
 {
     /**
      * Constructor.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(CaptchaImageService $service, ApplicationService $application)
     {
@@ -53,7 +56,7 @@ class UserLoginType extends AbstractUserCaptchaType
 
         $helper->field('password')
             ->autocomplete('current-password')
-            ->maxLength(255)
+            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
             ->addPasswordType();
 
         parent::addFormFields($helper);

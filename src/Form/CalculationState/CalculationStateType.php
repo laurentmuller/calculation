@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\CalculationState;
 
+use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
@@ -41,7 +42,7 @@ class CalculationStateType extends AbstractEntityType
             ->addTextType();
 
         $helper->field('description')
-            ->maxLength(255)
+            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextareaType();
 

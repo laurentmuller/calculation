@@ -43,7 +43,7 @@ abstract class AbstractProperty extends AbstractEntity
      * The property value.
      */
     #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     private ?string $value = null;
 
@@ -132,7 +132,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value as an array. Internally the array is encoded as JSON string.
      */
-    public function setArray(?array $value): self
+    public function setArray(?array $value): static
     {
         return $this->setString(empty($value) ? null : (string) \json_encode($value));
     }
@@ -140,7 +140,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value as boolean.
      */
-    public function setBoolean(bool $value): self
+    public function setBoolean(bool $value): static
     {
         return $this->setInteger($value ? self::TRUE_VALUE : self::FALSE_VALUE);
     }
@@ -148,7 +148,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value as date.
      */
-    public function setDate(?\DateTimeInterface $value): self
+    public function setDate(?\DateTimeInterface $value): static
     {
         return $this->setInteger(null !== $value ? $value->getTimestamp() : self::FALSE_VALUE);
     }
@@ -156,7 +156,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value as integer.
      */
-    public function setInteger(int $value): self
+    public function setInteger(int $value): static
     {
         return $this->setString((string) $value);
     }
@@ -164,7 +164,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property name.
      */
-    public function setName(string $name): self
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -174,7 +174,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value as string.
      */
-    public function setString(?string $value): self
+    public function setString(?string $value): static
     {
         $this->value = $value;
 
@@ -186,7 +186,7 @@ abstract class AbstractProperty extends AbstractEntity
      *
      * @param mixed $value the value to set. This function try first to convert the value to an appropriate type (bool, int, etc...).
      */
-    public function setValue(mixed $value): self
+    public function setValue(mixed $value): static
     {
         if (\is_bool($value)) {
             return $this->setBoolean($value);

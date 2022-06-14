@@ -52,7 +52,7 @@ class Group extends AbstractEntity
     /**
      * The description.
      */
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     private ?string $description = null;
 

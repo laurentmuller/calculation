@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\Customer;
 
+use App\Entity\AbstractEntity;
 use App\Entity\Customer;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
@@ -56,13 +57,13 @@ class CustomerType extends AbstractEntityType
 
         $helper->field('company')
             ->widgetClass('customer-group')
-            ->maxLength(255)
+            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextType();
 
         $helper->field('address')
             ->autocomplete('disabled')
-            ->maxLength(255)
+            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextareaType();
 
@@ -74,7 +75,7 @@ class CustomerType extends AbstractEntityType
 
         $helper->field('city')
             ->autocomplete('disabled')
-            ->maxLength(255)
+            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextType();
 

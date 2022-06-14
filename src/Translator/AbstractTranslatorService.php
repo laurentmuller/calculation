@@ -25,7 +25,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * The field not found status code.
      */
-    protected const ERROR_NOT_FOUND = 199;
+    final protected const ERROR_NOT_FOUND = 199;
 
     /**
      * The property accessor.

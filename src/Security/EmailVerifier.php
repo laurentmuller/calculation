@@ -13,11 +13,13 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Entity\User;
+use App\Mime\RegistrationEmail;
+use App\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -27,11 +29,18 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
  */
 class EmailVerifier
 {
+    use TranslatorTrait;
+
     /**
      * Constructor.
      */
-    public function __construct(private readonly VerifyEmailHelperInterface $helper, private readonly MailerInterface $mailer, private readonly EntityManagerInterface $manager)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        private readonly VerifyEmailHelperInterface $helper,
+        private readonly MailerInterface $mailer,
+        private readonly EntityManagerInterface $manager
+    ) {
+        $this->translator = $translator;
     }
 
     /**
@@ -39,9 +48,9 @@ class EmailVerifier
      *
      * @throws VerifyEmailExceptionInterface
      */
-    public function handleEmailConfirmation(Request $request, User $user): void
+    public function handleEmail(Request $request, User $user): void
     {
-        $this->validateEmailConfirmation($request, $user);
+        $this->validateEmail($request, $user);
         $user->setVerified(true);
         $this->manager->persist($user);
         $this->manager->flush();
@@ -52,17 +61,16 @@ class EmailVerifier
      *
      * @throws TransportExceptionInterface
      */
-    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
+    public function sendEmail(string $routeName, User $user, RegistrationEmail $email): void
     {
-        $signature = $this->generateSignature($verifyEmailRouteName, $user);
+        $signature = $this->generateSignature($routeName, $user);
+        $email->action($this->trans('registration.action'), $signature->getSignedUrl());
 
-        $context = [
-            'username' => $user->getUserIdentifier(),
-            'signedUrl' => $signature->getSignedUrl(),
-            'expiresAtMessageKey' => $signature->getExpirationMessageKey(),
-            'expiresAtMessageData' => $signature->getExpirationMessageData(),
-        ];
-        $email->context(\array_merge($email->getContext(), $context));
+        $context = $email->getContext();
+        $context['username'] = $user->getUserIdentifier();
+        $context['expires_date'] = $signature->getExpiresAt();
+        $context['expires_life_time'] = $this->getExpiresLifeTime($signature);
+        $email->context($context);
 
         $this->mailer->send($email);
     }
@@ -79,17 +87,25 @@ class EmailVerifier
         return $this->helper->generateSignature($routeName, $userId, $userEmail, $parameters);
     }
 
+    private function getExpiresLifeTime(VerifyEmailSignatureComponents $signature): string
+    {
+        return $this->trans(
+            $signature->getExpirationMessageKey(),
+            $signature->getExpirationMessageData(),
+            'VerifyEmailBundle'
+        );
+    }
+
     /**
      * Validate email confirmation.
      *
      * @throws VerifyEmailExceptionInterface
      */
-    private function validateEmailConfirmation(Request $request, User $user): void
+    private function validateEmail(Request $request, User $user): void
     {
         $signedUrl = $request->getUri();
         $userId = (string) $user->getId();
         $userEmail = (string) $user->getEmail();
-
         $this->helper->validateEmailConfirmation($signedUrl, $userId, $userEmail);
     }
 }

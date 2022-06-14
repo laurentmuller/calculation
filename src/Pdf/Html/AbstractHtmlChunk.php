@@ -66,7 +66,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      *
      * @param HtmlReport $report the report to update
      */
-    public function applyStyle(HtmlReport $report): self
+    public function applyStyle(HtmlReport $report): static
     {
         $this->style?->apply($report);
 
@@ -226,7 +226,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Sets the class name.
      */
-    public function setClassName(?string $className): self
+    public function setClassName(?string $className): static
     {
         // clear
         $this->className = null;
@@ -253,7 +253,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Sets the CSS style.
      */
-    public function setCss(?string $css): self
+    public function setCss(?string $css): static
     {
         $this->css = $css;
 
@@ -263,7 +263,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Sets the style.
      */
-    public function setStyle(?HtmlStyle $style): self
+    public function setStyle(?HtmlStyle $style): static
     {
         $this->style = $style;
 
@@ -439,7 +439,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Sets the parent.
      */
-    protected function setParent(?HtmlParentChunk $parent): self
+    protected function setParent(?HtmlParentChunk $parent): static
     {
         $this->parent = $parent;
 
@@ -449,7 +449,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Update this style, depending on the CSS.
      */
-    protected function updateCss(): self
+    protected function updateCss(): static
     {
         if ($this->css) {
             $matches = [];
@@ -492,7 +492,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Update this style, depending on the tag name and class.
      */
-    protected function updateStyle(): self
+    protected function updateStyle(): static
     {
         // create style by tag name
         $style = HtmlStyleFactory::create($this->name);

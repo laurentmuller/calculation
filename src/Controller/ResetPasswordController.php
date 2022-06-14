@@ -15,10 +15,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
+use App\Mime\ResetPasswordEmail;
 use App\Repository\UserRepository;
 use App\Service\UserExceptionService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +27,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
@@ -47,6 +48,8 @@ class ResetPasswordController extends AbstractController
     private const ROUTE_CHECK = 'app_check_email';
     private const ROUTE_FORGET = 'app_forgot_password_request';
     private const ROUTE_RESET = 'app_reset_password';
+    private const THROTTLE_MINUTES = 5;
+    private const THROTTLE_OFFSET = 'PT3300S';
 
     /**
      * Constructor.
@@ -74,7 +77,10 @@ class ResetPasswordController extends AbstractController
         }
 
         return $this->renderForm('reset_password/check_email.html.twig', [
-            'token_life_time' => $this->getTokenLifeTime($resetToken),
+            'expires_date' => $resetToken->getExpiresAt(),
+            'expires_life_time' => $this->getExpiresLifeTime($resetToken),
+            'throttle_date' => $this->getThrottleAt($resetToken),
+            'throttle_life_time' => $this->getThrottleLifeTime(),
         ]);
     }
 
@@ -151,7 +157,27 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function getTokenLifeTime(ResetPasswordToken $resetToken): string
+    private function createEmail(User $user, ResetPasswordToken $resetToken): ResetPasswordEmail
+    {
+        $email = new ResetPasswordEmail($this->translator);
+        $email->to($user->getAddress())
+            ->from($this->getAddressFrom())
+            ->setFooterText($this->getFooterText())
+            ->subject($this->trans('resetting.request.title'))
+            ->action($this->trans('resetting.request.submit'), $this->getResetAction($resetToken))
+            ->context([
+                'token' => $resetToken->getToken(),
+                'username' => $user->getUserIdentifier(),
+                'expires_date' => $resetToken->getExpiresAt(),
+                'expires_life_time' => $this->getExpiresLifeTime($resetToken),
+                'throttle_date' => $this->getThrottleAt($resetToken),
+                'throttle_life_time' => $this->getThrottleLifeTime(),
+            ]);
+
+        return $email;
+    }
+
+    private function getExpiresLifeTime(ResetPasswordToken $resetToken): string
     {
         return $this->trans(
             $resetToken->getExpirationMessageKey(),
@@ -160,14 +186,36 @@ class ResetPasswordController extends AbstractController
         );
     }
 
+    private function getFooterText(): string
+    {
+        return $this->trans('notification.footer', ['%name%' => $this->getApplicationName()]);
+    }
+
+    private function getResetAction(ResetPasswordToken $resetToken): string
+    {
+        return $this->generateUrl(self::ROUTE_RESET, ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    private function getThrottleAt(ResetPasswordToken $resetToken): \DateTimeInterface
+    {
+        /** @var \DateTime|\DateTimeImmutable $expireAt */
+        $expireAt = clone $resetToken->getExpiresAt();
+
+        return $expireAt->sub(new \DateInterval(self::THROTTLE_OFFSET));
+    }
+
+    private function getThrottleLifeTime(): string
+    {
+        return $this->trans('%count% minute|%count% minutes', ['%count%' => self::THROTTLE_MINUTES], 'ResetPasswordBundle');
+    }
+
     /**
      * Send email to the user for resetting the password.
      */
     private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer): RedirectResponse
     {
-        $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
-
         // do not reveal whether a user account was found or not.
+        $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
         if (!$user instanceof User) {
             return $this->redirectToRoute(self::ROUTE_CHECK);
         }
@@ -180,20 +228,9 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute(self::ROUTE_FORGET);
         }
 
-        $subject = $this->trans('resetting.request.title');
-        $email = (new TemplatedEmail())
-            ->from($this->getAddressFrom())
-            ->to($user->getAddress())
-            ->subject($subject)
-            ->htmlTemplate('reset_password/email.html.twig')
-            ->context([
-                'token' => $resetToken->getToken(),
-                'username' => $user->getUserIdentifier(),
-                'life_time' => $this->getTokenLifeTime($resetToken),
-            ]);
-
         try {
-            $mailer->send($email);
+            $notification = $this->createEmail($user, $resetToken);
+            $mailer->send($notification);
             $this->setTokenObjectInSession($resetToken);
         } catch (TransportExceptionInterface $e) {
             $this->helper->removeResetRequest($resetToken->getToken());

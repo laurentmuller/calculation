@@ -56,7 +56,7 @@ abstract class AbstractDocument extends SpreadsheetDocument
      * @param string $title     the spreadsheet title to translate
      * @param bool   $landscape true to set landscape orientation, false for default (portrait)
      */
-    protected function start(string $title, bool $landscape = false): self
+    protected function start(string $title, bool $landscape = false): static
     {
         $this->initialize($this->controller, $title, $landscape);
 

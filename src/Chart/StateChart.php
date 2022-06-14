@@ -27,6 +27,8 @@ class StateChart extends BaseChart
 {
     /**
      * Constructor.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private readonly CalculationStateRepository $repository, private readonly UrlGeneratorInterface $generator)
     {
@@ -35,6 +37,8 @@ class StateChart extends BaseChart
 
     /**
      * Generate the chart data.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function generate(): array
     {

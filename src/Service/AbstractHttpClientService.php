@@ -30,27 +30,27 @@ abstract class AbstractHttpClientService
     /**
      * The base URI parameter name.
      */
-    protected const BASE_URI = 'base_uri';
+    final protected const BASE_URI = 'base_uri';
 
     /**
      * The body parameter name.
      */
-    protected const BODY = 'body';
+    final protected const BODY = 'body';
 
     /**
      * The header's parameter name.
      */
-    protected const HEADERS = 'headers';
+    final protected const HEADERS = 'headers';
 
     /**
      * The Json parameter name.
      */
-    protected const JSON = 'json';
+    final protected const JSON = 'json';
 
     /**
      * The query parameter name.
      */
-    protected const QUERY = 'query';
+    final protected const QUERY = 'query';
 
     /**
      * The HTTP client.
@@ -132,7 +132,7 @@ abstract class AbstractHttpClientService
     /**
      * Clear the last error.
      */
-    protected function clearLastError(): self
+    protected function clearLastError(): static
     {
         $this->lastError = null;
 
@@ -281,7 +281,7 @@ abstract class AbstractHttpClientService
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): self
+    protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): static
     {
         $key = $this->getUrlKey($url);
 

@@ -73,7 +73,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * The image file name.
      */
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
 
@@ -81,7 +81,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private ?\DateTimeImmutable $lastLogin = null;
 
     #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
     private ?string $password = null;
 

@@ -28,7 +28,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
     /**
      * The supplier.
      */
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $supplier = null;
 
@@ -102,7 +102,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      *
      * @psalm-suppress UndefinedThisPropertyAssignment
      */
-    public function setCategory(?Category $category): self
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
 
@@ -112,7 +112,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
     /**
      * Sets the supplier.
      */
-    public function setSupplier(?string $supplier): self
+    public function setSupplier(?string $supplier): static
     {
         $this->supplier = $this->trim($supplier);
 
@@ -122,7 +122,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
     /**
      * Set unit.
      */
-    public function setUnit(?string $unit): self
+    public function setUnit(?string $unit): static
     {
         $this->unit = $this->trim($unit);
 

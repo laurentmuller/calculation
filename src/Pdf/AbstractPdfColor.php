@@ -25,12 +25,12 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * The maximum value allowed for a component (inclusive).
      */
-    protected const MAX_VALUE = 255;
+    final protected const MAX_VALUE = 255;
 
     /**
      * The minimum value allowed for a component (inclusive).
      */
-    protected const MIN_VALUE = 0;
+    final protected const MIN_VALUE = 0;
 
     /**
      * The blue component.
@@ -242,10 +242,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Sets the blue component.
      *
      * @param int $blue the value to set. Must be between 0 and 255 inclusive.
-     *
-     * @return self this instance
      */
-    public function setBlue(int $blue): self
+    public function setBlue(int $blue): static
     {
         $this->blue = self::checkColor($blue);
 
@@ -256,10 +254,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Sets the green component.
      *
      * @param int $green the value to set. Must be between 0 and 255 inclusive.
-     *
-     * @return self this instance
      */
-    public function setGreen(int $green): self
+    public function setGreen(int $green): static
     {
         $this->green = self::checkColor($green);
 
@@ -270,10 +266,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Sets the red component.
      *
      * @param int $red the value to set. Must be between 0 and 255 inclusive.
-     *
-     * @return self this instance
      */
-    public function setRed(int $red): self
+    public function setRed(int $red): static
     {
         $this->red = self::checkColor($red);
 
@@ -288,7 +282,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * @param int $green the green component
      * @param int $blue  the blue component
      */
-    public function setRGB(int $red, int $green, int $blue): self
+    public function setRGB(int $red, int $green, int $blue): static
     {
         return $this->setRed($red)
             ->setGreen($green)

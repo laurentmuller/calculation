@@ -53,7 +53,7 @@ class CalculationState extends AbstractEntity
     /**
      * The description.
      */
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $description = null;
 

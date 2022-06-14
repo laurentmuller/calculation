@@ -46,7 +46,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      *
      * @param AbstractHtmlChunk $child the child to add
      */
-    public function add(AbstractHtmlChunk $child): self
+    public function add(AbstractHtmlChunk $child): static
     {
         if (!\in_array($child, $this->children, true)) {
             $child->setParent($this);
@@ -189,7 +189,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      *
      * @param AbstractHtmlChunk $child the child to remove
      */
-    public function remove(AbstractHtmlChunk $child): self
+    public function remove(AbstractHtmlChunk $child): static
     {
         if (\in_array($child, $this->children, true)) {
             $child->setParent(null);

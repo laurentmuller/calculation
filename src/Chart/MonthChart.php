@@ -28,6 +28,8 @@ class MonthChart extends BaseChart
 
     /**
      * Constructor.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private readonly CalculationRepository $repository, UrlGeneratorInterface $generator)
     {
@@ -39,6 +41,8 @@ class MonthChart extends BaseChart
      * Generate the chart data.
      *
      * @param int $months the number of months to display
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function generate(int $months): array
     {

@@ -28,7 +28,7 @@ trait FlashMessageTrait
      * @param FlashType|string $type    the message type
      * @param string           $message the message content
      */
-    protected function addFlashMessage(FlashType|string $type, string $message): self
+    protected function addFlashMessage(FlashType|string $type, string $message): static
     {
         $session = $this->getSession();
         if ($session instanceof Session) {
@@ -47,7 +47,7 @@ trait FlashMessageTrait
      *
      * @param string $message The message to add
      */
-    protected function error(string $message): self
+    protected function error(string $message): static
     {
         return $this->addFlashMessage(FlashType::DANGER, $message);
     }
@@ -58,7 +58,7 @@ trait FlashMessageTrait
      *
      * @param string $message the message to add
      */
-    protected function info(string $message): self
+    protected function info(string $message): static
     {
         return $this->addFlashMessage(FlashType::INFO, $message);
     }
@@ -69,7 +69,7 @@ trait FlashMessageTrait
      *
      * @param string $message the message to add
      */
-    protected function success(string $message): self
+    protected function success(string $message): static
     {
         return $this->addFlashMessage(FlashType::SUCCESS, $message);
     }
@@ -80,7 +80,7 @@ trait FlashMessageTrait
      *
      * @param string $message the message to add
      */
-    protected function warning(string $message): self
+    protected function warning(string $message): static
     {
         return $this->addFlashMessage(FlashType::WARNING, $message);
     }

@@ -86,11 +86,11 @@ class MailerService
 
     private function createNotification(): NotificationEmail
     {
-        $notification = new NotificationEmail($this->translator);
-        $notification->setFooterText($this->getFooterText())
+        $email = new NotificationEmail($this->translator);
+        $email->setFooterText($this->getFooterText())
             ->action($this->trans('index.title'), $this->getHomeUrl());
 
-        return $notification;
+        return $email;
     }
 
     private function getFooterText(): string

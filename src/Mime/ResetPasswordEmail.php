@@ -17,13 +17,14 @@ use Symfony\Component\Mime\Part\AbstractPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Notification email for CSP violation.
+ * Notification email to reset password.
  */
-class CspViolationEmail extends NotificationEmail
+class ResetPasswordEmail extends NotificationEmail
 {
     public function __construct(TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
     {
         parent::__construct($translator, $headers, $body);
-        $this->htmlTemplate('notification/csp_violation.html.twig');
+        $this->htmlTemplate('notification/reset_password.html.twig');
+        $this->importance(self::IMPORTANCE_HIGH);
     }
 }

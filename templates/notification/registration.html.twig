@@ -1,0 +1,47 @@
+{% extends 'notification/notification.html.twig' %}
+{# content #}
+{% block content %}
+<container>
+    <row>
+        <columns>
+            Bonjour <b>{{ username }}</b>,
+        </columns>
+    </row>
+</container>
+<container>
+    <row>
+        <columns>
+            Merci de vous être connecté à notre application. Nous sommes très heureux de vous compter parmi nous.
+        </columns>
+    </row>
+</container>
+<container>
+    <row>
+        <columns>
+            Veuillez confirmer votre adresse électronique en cliquant sur le bouton ci-dessous.
+        </columns>
+    </row>
+</container>
+<container>
+    <row>
+        <columns>
+            Si vous avez des questions ou si vous rencontrez des problèmes, n'hésitez-pas à contacter l'<a href="mailto:{{ mailer_user_email }}?subject={{ app_name_version }}">administrateur du site</a>.
+        </columns>
+    </row>
+</container>
+<container>
+    <row>
+        <columns>
+            <b>Remarque :</b> Ce lien expirera dans {{ expires_life_time }} (à {{ expires_date|localetime('short') }}).
+        </columns>
+    </row>
+</container>
+<container>
+    <row>
+        <columns>
+            Cordialement,<br>
+            L'équipe de {{ app_name }}
+        </columns>
+    </row>
+</container>
+{% endblock %}

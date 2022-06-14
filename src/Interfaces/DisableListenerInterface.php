@@ -32,5 +32,5 @@ interface DisableListenerInterface
      *
      * @param bool $enabled true to enable; false to disable
      */
-    public function setEnabled(bool $enabled): self;
+    public function setEnabled(bool $enabled): static;
 }

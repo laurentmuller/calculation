@@ -22,7 +22,7 @@ class CountAggregator extends AbstractAggregator
     /**
      * {@inheritdoc}
      */
-    public function add($value): AbstractAggregator
+    public function add($value): static
     {
         if ($value instanceof self) {
             $this->result += $value->result;
@@ -44,7 +44,7 @@ class CountAggregator extends AbstractAggregator
     /**
      * {@inheritdoc}
      */
-    public function init(): AbstractAggregator
+    public function init(): static
     {
         $this->result = 0;
 

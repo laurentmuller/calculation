@@ -48,7 +48,7 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
      *
      * @param mixed $value the value to add
      */
-    abstract public function add(mixed $value): self;
+    abstract public function add(mixed $value): static;
 
     /**
      * Gets the formatted result.
@@ -66,7 +66,7 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
     /**
      * Initialize.
      */
-    abstract public function init(): self;
+    abstract public function init(): static;
 
     /**
      * {@inheritdoc}

@@ -36,7 +36,7 @@ trait PositionTrait
     /**
      * Sets the position index in the collection.
      */
-    public function setPosition(int $position): self
+    public function setPosition(int $position): static
     {
         $this->position = $position;
 

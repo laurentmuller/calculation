@@ -115,8 +115,8 @@ class TestController extends AbstractController
             if ($user instanceof User) {
                 /** @psalm-var array $data */
                 $data = $form->getData();
-                $message = (string) $data['message'];
                 $email = (string) $data['email'];
+                $message = (string) $data['message'];
                 $importance = (string) $data['importance'];
 
                 try {

@@ -14,10 +14,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\User\UserRegistrationType;
+use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\UserExceptionService;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -34,12 +34,11 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
  * Controller to register a new user.
  */
 #[AsController]
+#[Route(path: '/register')]
 class RegistrationController extends AbstractController
 {
-    use TargetPathTrait;
-
-    private const REGISTER_ROUTE = 'user_register';
-    private const VERIFY_ROUTE = 'verify_email';
+    private const ROUTE_REGISTER = 'user_register';
+    private const ROUTE_VERIFY = 'user_verify';
 
     public function __construct(
         TranslatorInterface $translator,
@@ -53,7 +52,7 @@ class RegistrationController extends AbstractController
     /**
      * Display and process form to register a new user.
      */
-    #[Route(path: '/register', name: self::REGISTER_ROUTE)]
+    #[Route(path: '', name: self::ROUTE_REGISTER)]
     public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils): Response
     {
         $user = new User();
@@ -66,21 +65,16 @@ class RegistrationController extends AbstractController
             $user->setPassword($encodedPassword);
             $this->repository->add($user);
 
-            // generate a signed url and email it to the user
-            $email = (new TemplatedEmail())
-                ->from($this->getAddressFrom())
-                ->to((string) $user->getEmail())
-                ->subject($this->trans('registration.subject'))
-                ->htmlTemplate('registration/email.html.twig');
-
             try {
-                $this->verifier->sendEmailConfirmation(self::VERIFY_ROUTE, $user, $email);
+                // generate a signed url and send email
+                $email = $this->createEmail($user);
+                $this->verifier->sendEmail(self::ROUTE_VERIFY, $user, $email);
 
                 return $this->redirectToHomePage();
             } catch (TransportExceptionInterface $e) {
                 $this->service->handleException($request, $e);
 
-                return $this->redirectToRoute(self::REGISTER_ROUTE);
+                return $this->redirectToRoute(self::ROUTE_REGISTER);
             }
         }
 
@@ -93,28 +87,50 @@ class RegistrationController extends AbstractController
     /**
      * Verify the user e-mail.
      */
-    #[Route(path: '/verify/email', name: self::VERIFY_ROUTE)]
-    public function verifyUserEmail(Request $request): RedirectResponse
+    #[Route(path: '/verify', name: self::ROUTE_VERIFY)]
+    public function verify(Request $request): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $id = $this->getRequestInt($request, 'id');
-        if (0 === $id) {
-            return $this->redirectToRoute(self::REGISTER_ROUTE);
-        }
-        $user = $this->repository->find($id);
+        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->findUser($request);
         if (!$user instanceof User) {
-            return $this->redirectToRoute(self::REGISTER_ROUTE);
+            return $this->redirectToRoute(self::ROUTE_REGISTER);
         }
 
         try {
-            $this->verifier->handleEmailConfirmation($request, $user);
+            $this->verifier->handleEmail($request, $user);
         } catch (VerifyEmailExceptionInterface $e) {
             $this->service->handleException($request, $e);
 
-            return $this->redirectToRoute(self::REGISTER_ROUTE);
+            return $this->redirectToRoute(self::ROUTE_REGISTER);
         }
         $this->successTrans('registration.confirmed', ['%username%' => $user->getUserIdentifier()]);
 
         return $this->redirectToHomePage();
+    }
+
+    private function createEmail(User $user): RegistrationEmail
+    {
+        $email = new RegistrationEmail($this->translator);
+        $email->subject($this->trans('registration.subject'))
+            ->from($this->getAddressFrom())
+            ->to((string) $user->getEmail())
+            ->setFooterText($this->getFooterText())
+            ->importance(NotificationEmail::IMPORTANCE_MEDIUM);
+
+        return $email;
+    }
+
+    private function findUser(Request $request): ?User
+    {
+        if (0 !== $id = $this->getRequestInt($request, 'id')) {
+            return $this->repository->find($id);
+        }
+
+        return null;
+    }
+
+    private function getFooterText(): string
+    {
+        return $this->trans('notification.footer', ['%name%' => $this->getApplicationName()]);
     }
 }

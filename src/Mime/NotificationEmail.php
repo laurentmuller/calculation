@@ -19,7 +19,7 @@ use Symfony\Component\Mime\Part\AbstractPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends NotificationEmail to use translated subject.
+ * Extends the NotificationEmail class with translated subject and custom footer.
  */
 class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
 {
@@ -31,7 +31,7 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
     {
         parent::__construct($headers, $body);
         $this->translator = $translator;
-        $this->htmlTemplate('emails/notification.html.twig');
+        $this->htmlTemplate('notification/notification.html.twig');
     }
 
     /**
@@ -54,7 +54,7 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
     {
         $context = parent::getContext();
         if (!empty($this->footerText)) {
-            return \array_merge($context, ['footer_text' => $this->footerText]);
+            $context['footer_text'] = $this->footerText;
         }
 
         return $context;
@@ -76,7 +76,7 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
     /**
      * Sets the footer text.
      */
-    public function setFooterText(string $footerText): self
+    public function setFooterText(string $footerText): static
     {
         $this->footerText = $footerText;
 

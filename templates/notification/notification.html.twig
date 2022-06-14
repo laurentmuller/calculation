@@ -1,10 +1,10 @@
 {% extends '@email/default/notification/body.html.twig' %}
-
+{# style #}
 {% block style %}
 {{ parent() }}
 {{ source("@css/email.css") }}
 {% endblock %}
-
+{# lead #}
 {% block lead %}
 <container>
     <row>
@@ -20,7 +20,7 @@
     </row>
 </container>
 {% endblock %}
-
+{# exception #}
 {% block exception %}
 {% if exception %}
     <spacer size="16"></spacer>

@@ -43,6 +43,8 @@ abstract class AbstractReport extends PdfDocument
      * @param PdfDocumentOrientation|string $orientation the page orientation
      * @param PdfDocumentUnit|string        $unit        the measure unit
      * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(protected AbstractController $controller, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
     {
@@ -121,7 +123,7 @@ abstract class AbstractReport extends PdfDocument
      * @param string $id     the title id (may also be an object that can be cast to string)
      * @param bool   $isUTF8 true to encode to UTF-8
      */
-    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, ?string $domain = null, ?string $locale = null): self
+    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, ?string $domain = null, ?string $locale = null): static
     {
         $title = $this->trans($id, $parameters, $domain, $locale);
         $this->SetTitle($title, $isUTF8);

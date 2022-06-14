@@ -94,7 +94,7 @@ trait RightsTrait
     /**
      * Sets a value indicating if this rights overwrite the default rights.
      */
-    public function setOverwrite(bool $overwrite): self
+    public function setOverwrite(bool $overwrite): static
     {
         $this->overwrite = $overwrite;
 
@@ -106,7 +106,7 @@ trait RightsTrait
      *
      * @psalm-param int[]|null $rights
      */
-    public function setRights(?array $rights): self
+    public function setRights(?array $rights): static
     {
         $this->rights = empty($rights) || 0 === \array_sum($rights) ? null : $rights;
 
@@ -154,7 +154,7 @@ trait RightsTrait
      * @param string $entity the entity name
      * @param int[]  $rights the rights to set
      */
-    private function setEntityRights(string $entity, array $rights): self
+    private function setEntityRights(string $entity, array $rights): static
     {
         // get offset
         $offset = EntityVoter::getEntityOffset($entity);

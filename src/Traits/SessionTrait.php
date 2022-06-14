@@ -213,7 +213,7 @@ trait SessionTrait
      * @param string $key   the attribute name
      * @param mixed  $value the attribute value or null to remove
      */
-    protected function setSessionValue(string $key, mixed $value): self
+    protected function setSessionValue(string $key, mixed $value): static
     {
         if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
@@ -232,7 +232,7 @@ trait SessionTrait
      *
      * @param array<string, mixed> $attributes the keys and values to save
      */
-    protected function setSessionValues(array $attributes): self
+    protected function setSessionValues(array $attributes): static
     {
         /** @psalm-var mixed $value */
         foreach ($attributes as $key => $value) {

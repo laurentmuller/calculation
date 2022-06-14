@@ -8,7 +8,8 @@
 
 {% block actions_form %}
 {{ parent() }}
-<a href="{{ path('app_login') }}" class="ml-md-2">{{ 'security.link'|trans }}</a>
+<a href="{{ path('app_login') }}" class="ml-md-2" title="{{ 'security.login.description'|trans }}">{{ 'security.login.submit'|trans }}</a>
+<a href="{{ path('app_forgot_password_request') }}" class="ml-md-2" title="{{ 'resetting.request.description'|trans }}">{{ 'resetting.link'|trans }}</a>
 {% endblock %}
 
 {% block javascripts -%}

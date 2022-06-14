@@ -105,7 +105,7 @@ trait TimestampableTrait
     /**
      * Sets the creation date.
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -115,7 +115,7 @@ trait TimestampableTrait
     /**
      * Sets the creation username.
      */
-    public function setCreatedBy(string $createdBy): self
+    public function setCreatedBy(string $createdBy): static
     {
         $this->createdBy = $createdBy;
 
@@ -125,7 +125,7 @@ trait TimestampableTrait
     /**
      * Sets the updated date and username.
      */
-    public function setUpdated(\DateTimeInterface $updatedAt, string $updatedBy): self
+    public function setUpdated(\DateTimeInterface $updatedAt, string $updatedBy): static
     {
         return $this->setUpdatedAt($updatedAt)->setUpdatedBy($updatedBy);
     }
@@ -133,7 +133,7 @@ trait TimestampableTrait
     /**
      * Sets the updated date.
      */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -143,7 +143,7 @@ trait TimestampableTrait
     /**
      * Sets the updated username.
      */
-    public function setUpdatedBy(string $updatedBy): self
+    public function setUpdatedBy(string $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
 

@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[UniqueEntity(fields: 'email', message: 'customer.unique_email')]
 class Customer extends AbstractEntity
 {
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $address = null;
 
@@ -36,11 +36,11 @@ class Customer extends AbstractEntity
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $birthday = null;
 
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $city = null;
 
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $company = null;
 
@@ -53,11 +53,11 @@ class Customer extends AbstractEntity
     #[ORM\Column(length: 100, nullable: true)]
     protected ?string $email = null;
 
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $firstName = null;
 
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
     protected ?string $lastName = null;
 

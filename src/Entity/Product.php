@@ -39,7 +39,7 @@ class Product extends AbstractCategoryItemEntity
      * The description.
      */
     #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(unique: true)]
     private ?string $description = null;
 

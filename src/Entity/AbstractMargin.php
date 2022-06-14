@@ -97,7 +97,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /**
      * Set margin in percent.
      */
-    public function setMargin(float $margin): self
+    public function setMargin(float $margin): static
     {
         $this->margin = $this->round($margin);
 
@@ -107,7 +107,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /**
      * Set maximum.
      */
-    public function setMaximum(float $maximum): self
+    public function setMaximum(float $maximum): static
     {
         $this->maximum = $this->round($maximum);
 
@@ -117,7 +117,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /**
      * Set minimum.
      */
-    public function setMinimum(float $minimum): self
+    public function setMinimum(float $minimum): static
     {
         $this->minimum = $this->round($minimum);
 
@@ -127,7 +127,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /**
      * Set values.
      */
-    public function setValues(float $minimum, float $maximum, float $margin): self
+    public function setValues(float $minimum, float $maximum, float $margin): static
     {
         return $this->setMinimum($minimum)
             ->setMaximum($maximum)

@@ -16,8 +16,6 @@ use App\Entity\Log;
 
 /**
  * SQLite database for logs.
- *
- * @see App\Entity\Log
  */
 class LogDatabase extends AbstractDatabase
 {

@@ -28,7 +28,7 @@ class AverageAggregator extends AbstractAggregator
     /**
      * {@inheritdoc}
      */
-    public function add($value): AbstractAggregator
+    public function add($value): static
     {
         if ($value instanceof self) {
             $this->sum += $value->sum;
@@ -60,7 +60,7 @@ class AverageAggregator extends AbstractAggregator
     /**
      * {@inheritdoc}
      */
-    public function init(): AbstractAggregator
+    public function init(): static
     {
         $this->sum = 0;
         $this->count = 0;

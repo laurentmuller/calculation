@@ -968,6 +968,7 @@ registration:
     submit: Créer
     title: Créer un compte
   subject: Création d'un compte
+  action: Confirmer
 report:
   calculation:
     amount: Montant

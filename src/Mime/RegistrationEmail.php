@@ -17,13 +17,13 @@ use Symfony\Component\Mime\Part\AbstractPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Notification email for CSP violation.
+ * Notification email to confirm user registration.
  */
-class CspViolationEmail extends NotificationEmail
+class RegistrationEmail extends NotificationEmail
 {
     public function __construct(TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
     {
         parent::__construct($translator, $headers, $body);
-        $this->htmlTemplate('notification/csp_violation.html.twig');
+        $this->htmlTemplate('notification/registration.html.twig');
     }
 }

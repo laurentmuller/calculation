@@ -29,6 +29,8 @@ class UserRegistrationType extends AbstractUserCaptchaType
 
     /**
      * Constructor.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(CaptchaImageService $service, ApplicationService $application, TranslatorInterface $translator)
     {

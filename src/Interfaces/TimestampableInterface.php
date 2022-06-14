@@ -40,20 +40,20 @@ interface TimestampableInterface
     /**
      * Sets the creation date.
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self;
+    public function setCreatedAt(\DateTimeInterface $createdAt): static;
 
     /**
      * Sets the creation username.
      */
-    public function setCreatedBy(string $createdBy): self;
+    public function setCreatedBy(string $createdBy): static;
 
     /**
      * Sets the updated date.
      */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self;
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static;
 
     /**
      * Sets the updated username.
      */
-    public function setUpdatedBy(string $updatedBy): self;
+    public function setUpdatedBy(string $updatedBy): static;
 }

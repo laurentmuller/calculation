@@ -46,7 +46,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      *                               does not exist, the database is opened with the
      *                               <code>SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE</code> flags.
      * @param string $encryption_key An optional encryption key used when encrypting and decrypting an SQLite database. If the
-     *                               SQLite encryption module is not installed, this parameter will have no effect.
+     *                               SQLite's encryption module is not installed, this parameter will have no effect.
      */
     public function __construct(protected string $filename, bool $readonly = false, string $encryption_key = '')
     {

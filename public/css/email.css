@@ -2,6 +2,10 @@ body {
     background: #fff;
 }
 
+table.container {
+    width: 720px;
+}
+
 .wrapper.secondary {
     background: #fff;
 }

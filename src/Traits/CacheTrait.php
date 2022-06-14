@@ -172,7 +172,7 @@ trait CacheTrait
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): self
+    public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): static
     {
         $key = $this->cleanKey($key);
         if (null === $value) {

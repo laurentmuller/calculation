@@ -223,6 +223,14 @@ class SearchService
         return $this->getArrayResult((string) $search, $entity, $extra);
     }
 
+    private function addQuery(string $key, QueryBuilder $builder): void
+    {
+        $sql = $builder->getQuery()->getSQL();
+        if (\is_string($sql)) {
+            $this->queries[$key] = $sql;
+        }
+    }
+
     /**
      * Create the SQL query for the calculation dates.
      */
@@ -234,10 +242,8 @@ class SearchService
             foreach ($fields as $field) {
                 $content = "date_format(e.$field, '%d.%m.%Y')";
                 $key = $this->getKey($class, $field);
-                $sql = (string) $this->createQueryBuilder($class, $field, $content)
-                    ->getQuery()
-                    ->getSQL();
-                $this->queries[$key] = $sql;
+                $builder = $this->createQueryBuilder($class, $field, $content);
+                $this->addQuery($key, $builder);
             }
         }
 
@@ -254,11 +260,9 @@ class SearchService
             $field = 'group';
             $content = 'g.code';
             $key = $this->getKey($class, $field);
-            $sql = (string) $this->createQueryBuilder($class, $field, $content)
-                ->join('e.groups', 'g')
-                ->getQuery()
-                ->getSQL();
-            $this->queries[$key] = $sql;
+            $builder = $this->createQueryBuilder($class, $field, $content)
+                ->join('e.groups', 'g');
+            $this->addQuery($key, $builder);
         }
 
         return $this;
@@ -274,13 +278,11 @@ class SearchService
             $field = 'item';
             $content = 'i.description';
             $key = $this->getKey($class, $field);
-            $sql = (string) $this->createQueryBuilder($class, $field, $content)
+            $builder = $this->createQueryBuilder($class, $field, $content)
                 ->join('e.groups', 'g')
                 ->join('g.categories', 'c')
-                ->join('c.items', 'i')
-                ->getQuery()
-                ->getSQL();
-            $this->queries[$key] = $sql;
+                ->join('c.items', 'i');
+            $this->addQuery($key, $builder);
         }
 
         return $this;
@@ -296,11 +298,9 @@ class SearchService
             $field = 'state';
             $content = 's.code';
             $key = $this->getKey($class, $field);
-            $sql = (string) $this->createQueryBuilder($class, $field, $content)
-                ->join('e.state', 's')
-                ->getQuery()
-                ->getSQL();
-            $this->queries[$key] = $sql;
+            $builder = $this->createQueryBuilder($class, $field, $content)
+                ->join('e.state', 's');
+            $this->addQuery($key, $builder);
         }
 
         return $this;
@@ -319,10 +319,8 @@ class SearchService
         if ($this->isGrantedSearch($class)) {
             foreach ($fields as $field) {
                 $key = $this->getKey($class, $field);
-                $sql = (string) $this->createQueryBuilder($class, $field)
-                    ->getQuery()
-                    ->getSQL();
-                $this->queries[$key] = $sql;
+                $builder = $this->createQueryBuilder($class, $field);
+                $this->addQuery($key, $builder);
             }
         }
 

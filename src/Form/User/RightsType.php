@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Enums\EntityName;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
-use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -27,7 +27,7 @@ class RightsType extends AbstractHelperType
     /**
      * Constructor.
      */
-    public function __construct(protected RoleHierarchyInterface $roleHierarchy, protected bool $isDebug)
+    public function __construct(protected readonly RoleHierarchyInterface $roleHierarchy, protected readonly bool $isDebug)
     {
     }
 
@@ -36,16 +36,14 @@ class RightsType extends AbstractHelperType
      */
     public function onPreSetData(FormEvent $event): void
     {
-        /** @var mixed $data */
-        $data = $event->getData();
-        if ($data instanceof RoleInterface) {
-            $roles = $this->roleHierarchy->getReachableRoleNames([$data->getRole()]);
-        } else {
-            $roles = [];
+        if (!$this->hasRole($event->getData(), RoleInterface::ROLE_SUPER_ADMIN)) {
+            $event->getForm()->remove(EntityName::LOG->value);
         }
-
-        if (!\in_array(RoleInterface::ROLE_ADMIN, $roles, true)) {
-            $event->getForm()->remove(EntityVoterInterface::ENTITY_USER);
+        if (!$this->hasRole($event->getData(), RoleInterface::ROLE_ADMIN)) {
+            $event->getForm()->remove(EntityName::USER->value);
+        }
+        if (!$this->isDebug) {
+            $event->getForm()->remove(EntityName::CUSTOMER->value);
         }
     }
 
@@ -59,33 +57,30 @@ class RightsType extends AbstractHelperType
             $this->onPreSetData($event);
         });
 
-        $this->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION, 'calculation.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_PRODUCT, 'product.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_TASK, 'task.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_GROUP, 'group.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_CATEGORY, 'category.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION_STATE, 'calculationstate.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_GLOBAL_MARGIN, 'globalmargin.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_USER, 'user.list.title');
-
-        if ($this->isDebug) {
-            $this->addRightType($helper, EntityVoterInterface::ENTITY_CUSTOMER, 'customer.list.title');
+        $entities = EntityName::sorted();
+        foreach ($entities as $entity) {
+            $this->addRightType($helper, $entity);
         }
     }
 
     /**
      * Adds an attribute rights type.
-     *
-     * @param FormHelper $helper the form helper
-     * @param string     $field  the field name
-     * @param string     $label  the field label
      */
-    protected function addRightType(FormHelper $helper, string $field, string $label): self
+    private function addRightType(FormHelper $helper, EntityName $entity): void
     {
-        $helper->field($field)
-            ->label($label)
+        $helper->field($entity->value)
+            ->label($entity->getReadable())
             ->add(AttributeRightType::class);
+    }
 
-        return $this;
+    private function hasRole(mixed $data, string $role): bool
+    {
+        if ($data instanceof RoleInterface) {
+            $roles = $this->roleHierarchy->getReachableRoleNames([$data->getRole()]);
+
+            return \in_array($role, $roles, true);
+        }
+
+        return false;
     }
 }

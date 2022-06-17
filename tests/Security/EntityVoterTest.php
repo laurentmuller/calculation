@@ -14,7 +14,8 @@ namespace App\Tests\Security;
 
 use App\Entity\Calculation;
 use App\Entity\User;
-use App\Interfaces\EntityVoterInterface;
+use App\Enums\EntityName;
+use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
@@ -24,8 +25,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * Unit test for {@link EntityVoter} class.
- *
- * @see EntityVoter
  */
 class EntityVoterTest extends TestCase
 {
@@ -51,7 +50,7 @@ class EntityVoterTest extends TestCase
     public function testAbstainSubject(): void
     {
         $user = $this->getDefaultUser();
-        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
+        $attribute = 'ADD';
         $subject = static::class;
         $expected = VoterInterface::ACCESS_ABSTAIN;
         $this->checkVote($user, $subject, $attribute, $expected);
@@ -64,7 +63,7 @@ class EntityVoterTest extends TestCase
             ->setRights($role->getRights())
             ->setOverwrite(true);
 
-        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
+        $attribute = 'ADD';
         $subject = User::class;
         $expected = VoterInterface::ACCESS_GRANTED;
         $this->checkVote($user, $subject, $attribute, $expected);
@@ -73,7 +72,7 @@ class EntityVoterTest extends TestCase
     public function testDisable(): void
     {
         $user = $this->getDisableUser();
-        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
+        $attribute = 'ADD';
         $subject = Calculation::class;
         $expected = VoterInterface::ACCESS_DENIED;
         $this->checkVote($user, $subject, $attribute, $expected);
@@ -81,8 +80,9 @@ class EntityVoterTest extends TestCase
 
     public function testEntities(): void
     {
-        $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
+        $entities = \array_values(EntityName::constants());
         foreach ($entities as $index => $entity) {
+            $this->assertNotNull($this->voter);
             $actual = $this->voter->getEntityOffset($entity);
             $this->assertEquals($index, $actual);
         }
@@ -90,10 +90,11 @@ class EntityVoterTest extends TestCase
 
     public function testMaskAttributes(): void
     {
-        $keys = \array_keys(EntityVoter::MASK_ATTRIBUTES);
+        $keys = \array_values(EntityPermission::constants());
         foreach ($keys as $index => $key) {
             $expected = 2 ** $index;
-            $actual = $this->voter->getAttributeMask($key);
+            $this->assertNotNull($this->voter);
+            $actual = $this->voter->getPermissionValue($key);
             $this->assertEquals($expected, $actual);
         }
     }
@@ -101,26 +102,16 @@ class EntityVoterTest extends TestCase
     public function testSuperAdmin(): void
     {
         $user = $this->getSuperAdminUser();
-        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
+        $attribute = 'ADD';
         $subject = Calculation::class;
         $expected = VoterInterface::ACCESS_GRANTED;
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
-    protected function echo(string $name, string $value, bool $newLine = false): void
-    {
-        $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
-        \printf($format, \htmlspecialchars($name), $value);
-    }
-
-    /**
-     * @param mixed $subject
-     * @param mixed $attribute
-     * @param mixed $expected
-     */
-    private function checkVote(User $user, $subject, $attribute, $expected): void
+    private function checkVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void
     {
         $token = $this->getUserToken($user);
+        $this->assertNotNull($this->voter);
         $result = $this->voter->vote($token, $subject, [$attribute]);
         $this->assertEquals($expected, $result);
     }

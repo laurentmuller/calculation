@@ -1,0 +1,50 @@
+{
+	"base-uri": "none",
+	"media-src": "none",
+	"object-src": "none",
+	"default-src": "self",
+	"form-action": "self",
+	"manifest-src": "self",
+	"frame-ancestors": "self",
+	"script-src": "%nonce%",
+	"script-src-elem": [
+		"%nonce%",
+		"%asset%",
+		"unsafe-inline",
+		"https://www.google.com",
+		"https://api.iconify.design"
+	],
+	"connect-src": [
+		"self",
+		"%asset%"
+	],
+	"frame-src": [
+		"self",
+		"https://www.google.com"
+	],
+	"font-src": [
+		"self",
+		"%asset%",
+		"https://fonts.gstatic.com"
+	],
+	"style-src": [
+		"self",
+		"%asset%",
+		"unsafe-inline",
+		"https://fonts.googleapis.com"
+	],
+	"style-src-elem": [
+		"self",
+		"%asset%",
+		"unsafe-inline",
+		"https://fonts.googleapis.com"
+	],
+	"img-src": [
+		"self",
+		"data:",
+		"%asset%",
+		"https://wise.com",
+		"https://robohash.org",
+		"https://openweathermap.org"
+	]
+}

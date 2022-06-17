@@ -12,22 +12,34 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\SortableEnumInterface;
+use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\ReadableEnumInterface;
+use Elao\Enum\ReadableEnumTrait;
+
 /**
  * Table view enumeration.
+ *
+ * @implements SortableEnumInterface<TableView>
  */
-enum TableView: string
+enum TableView: string implements ReadableEnumInterface, SortableEnumInterface
 {
+    use ReadableEnumTrait;
+
     /*
      * Show detailed values.
      */
+    #[EnumCase('view.card')]
     case CARD = 'card';
     /*
      * Show values as cards.
      */
+    #[EnumCase('view.custom')]
     case CUSTOM = 'custom';
     /*
      * Show values within a table (default view).
      */
+    #[EnumCase('view.table')]
     case TABLE = 'table';
     /**
      * Gets the default page size.
@@ -39,5 +51,17 @@ enum TableView: string
             self::CUSTOM => 15,
             self::TABLE => 20
         };
+    }
+
+    /**
+     * @return TableView[]
+     */
+    public static function sorted(): array
+    {
+        return [
+            TableView::TABLE,
+            TableView::CUSTOM,
+            TableView::CARD,
+       ];
     }
 }

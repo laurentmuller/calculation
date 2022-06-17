@@ -12,17 +12,15 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
-use App\Form\AbstractChoiceType;
-use App\Interfaces\EntityVoterInterface;
-use App\Security\EntityVoter;
+use App\Enums\EntityPermission;
+use Elao\Enum\Bridge\Symfony\Form\Type\FlagBagType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to edit attribute rights (Edit, Add, Delete, etc...).
- *
- * @see EntityVoter
+ * Type to edit entity permissions.
  */
-class AttributeRightType extends AbstractChoiceType
+class AttributeRightType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -30,27 +28,18 @@ class AttributeRightType extends AbstractChoiceType
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-
         $resolver->setDefaults([
             'expanded' => true,
             'multiple' => true,
             'required' => false,
             'choice_label' => false,
+            'class' => EntityPermission::class,
+            'choices' => EntityPermission::sorted(),
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getChoices(): array
+    public function getParent(): ?string
     {
-        return [
-            'rights.list' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_LIST),
-            'rights.show' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_SHOW),
-            'rights.add' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_ADD),
-            'rights.edit' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_EDIT),
-            'rights.delete' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_DELETE),
-            'rights.export' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_EXPORT),
-        ];
+        return FlagBagType::class;
     }
 }

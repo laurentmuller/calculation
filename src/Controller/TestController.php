@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\Calculation;
 use App\Entity\User;
+use App\Enums\Importance;
 use App\Form\Admin\ParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
@@ -45,7 +46,6 @@ use App\Validator\Password;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bridge\Twig\Mime\NotificationEmail as NotificationEmailAlias;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -95,7 +95,7 @@ class TestController extends AbstractController
     {
         $data = [
             'email' => $this->getUserEmail(),
-            'importance' => NotificationEmailAlias::IMPORTANCE_MEDIUM,
+            'importance' => Importance::MEDIUM,
         ];
 
         $helper = $this->createFormHelper('user.fields.', $data);
@@ -113,11 +113,12 @@ class TestController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             $user = $this->getUser();
             if ($user instanceof User) {
-                /** @psalm-var array $data */
+                /** @var array $data */
                 $data = $form->getData();
                 $email = (string) $data['email'];
                 $message = (string) $data['message'];
-                $importance = (string) $data['importance'];
+                /** @var Importance $importance */
+                $importance = $data['importance'];
 
                 try {
                     $service->sendNotification($email, $user, $message, $importance);

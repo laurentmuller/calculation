@@ -109,4 +109,4 @@ services:
 
     App\Listener\ResponseListener:
         arguments:
-            $file: '%kernel.project_dir%/resources/data/csp.json'
+            $file: '%kernel.project_dir%/resources/data/csp.%kernel.environment%.json'

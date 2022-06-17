@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\AbstractEntity;
-use App\Interfaces\EntityVoterInterface;
+use App\Enums\EntityPermission;
 use App\Pdf\PdfDocument;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
@@ -64,14 +64,12 @@ abstract class AbstractEntityController extends AbstractController
      * Throws an exception unless the given attribute is granted against
      * the current authentication token and this entity class name.
      *
-     * @param string $attribute the attribute to check permission for
-     *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
-    protected function checkPermission(string $attribute): void
+    protected function checkPermission(EntityPermission $permission): void
     {
         $subject = EntityVoter::getEntityName($this->className);
-        $this->denyAccessUnlessGranted($attribute, $subject);
+        $this->denyAccessUnlessGranted($permission, $subject);
     }
 
     /**
@@ -92,7 +90,7 @@ abstract class AbstractEntityController extends AbstractController
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
         // check permission
-        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_DELETE);
+        $this->checkPermission(EntityPermission::DELETE);
 
         // save display
         $display = $item->getDisplay();
@@ -171,8 +169,8 @@ abstract class AbstractEntityController extends AbstractController
     {
         // check permission
         $isNew = $item->isNew();
-        $attribute = $isNew ? EntityVoterInterface::ATTRIBUTE_ADD : EntityVoterInterface::ATTRIBUTE_EDIT;
-        $this->checkPermission($attribute);
+        $permission = $isNew ? EntityPermission::ADD : EntityPermission::EDIT;
+        $this->checkPermission($permission);
 
         // form
         $type = $this->getEditFormType();
@@ -286,7 +284,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
-        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_EXPORT);
+        $this->checkPermission(EntityPermission::EXPORT);
 
         return parent::renderPdfDocument($doc, $inline, $name);
     }
@@ -298,7 +296,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
     {
-        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_EXPORT);
+        $this->checkPermission(EntityPermission::EXPORT);
 
         return parent::renderSpreadsheetDocument($doc, $inline, $name);
     }
@@ -332,7 +330,7 @@ abstract class AbstractEntityController extends AbstractController
     protected function showEntity(AbstractEntity $item, array $parameters = []): Response
     {
         // check permission
-        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_SHOW);
+        $this->checkPermission(EntityPermission::SHOW);
 
         // add item parameter
         $parameters['item'] = $item;

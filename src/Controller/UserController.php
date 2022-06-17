@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\AbstractEntity;
 use App\Entity\User;
+use App\Enums\EntityPermission;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
 use App\Form\User\UserImageType;
@@ -314,16 +315,14 @@ class UserController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        // parameters
-        $parameters = [
+        // show form
+        return $this->renderForm('user/user_rights.html.twig', [
             'item' => $item,
             'form' => $form,
-            'default' => EntityVoter::getRole($item),
             'params' => ['id' => $item->getId()],
-        ];
-
-        // show form
-        return $this->renderForm('user/user_rights.html.twig', $parameters);
+            'default' => EntityVoter::getRole($item),
+            'permissions' => EntityPermission::sorted(),
+        ]);
     }
 
     /**

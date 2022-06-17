@@ -536,11 +536,6 @@ $.fn.extend({
             $('.dropdown-menu-sort[data-sort="' + options.sortName + '"][data-order="' + options.sortOrder + '"]').addClass('active');
         },
 
-        // for debug purpose
-        // onAll: function (name) {
-        //     console.log(name, Array.from(arguments).slice(1));
-        // },
-
         onPageChange: function () {
             // hide
             if ($table.isCustomView()) {
@@ -625,8 +620,53 @@ $.fn.extend({
                 const message = $table.data('errorMessage');
                 Toaster.danger(message, title, $('#flashbags').data());
             }
-        }
+        },
+
+        onFinishBody: function ($tableFooter) {
+            // update actions buttons
+            const $table = $tableFooter.parents('table');
+            $table.find('td.actions').each(function () {
+                const $cell = $(this);
+                const $actions = $cell.find('.dropdown-menu').children();
+                if ($actions.length === 0) {
+                    $cell.find('button[data-toggle="dropdown"]').toggleDisabled(true);
+                }
+            });
+        },
+
+        // for debug purpose
+        // onAll: function (name) {
+        //     window.console.log(name, Array.from(arguments).slice(1));
+        // },
     };
+
+    $table.on('endPostBody', function () {
+        // update action buttons
+        const title = $table.data('no-action-title');
+        $table.find('td.actions button[data-toggle="dropdown"]').each(function () {
+            const $button = $(this);
+            if ($button.siblings('.dropdown-menu').children().length === 0) {
+                $button.attr('title', title).toggleDisabled(true);
+            }
+        });
+
+        //     const $button = $(this);
+        //     const $menu = $button.next('.dropdown-menu:first');
+        //     if ($menu.children() === 0) {
+        //         $menu.attr('title', title).toggleDisabled(true);
+        //     }
+        // });
+
+        // $table.find('td.actions').each(function () {
+        //     const $cell = $(this);
+        //     const $actions = $cell.find('.dropdown-menu').children();
+        //     if ($actions.length === 0) {
+        //         $cell.find('button[data-toggle="dropdown"]')
+        //             .attr('title', title).toggleDisabled(true);
+        //     }
+        // });
+    });
+
     $table.initBootstrapTable(options);
 
     // update add button

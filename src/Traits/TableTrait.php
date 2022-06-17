@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Enums\EntityPermission;
 use App\Enums\TableView;
-use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractTable;
 use App\Table\DataResults;
@@ -35,7 +35,7 @@ trait TableTrait
     {
         // check permission
         if ($subject = $table->getEntityClassName()) {
-            $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $subject);
+            $this->denyAccessUnlessGranted(EntityPermission::LIST, $subject);
         }
 
         try {

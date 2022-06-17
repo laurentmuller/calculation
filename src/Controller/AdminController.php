@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\EntityPermission;
 use App\Form\Admin\ParametersType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
@@ -47,6 +48,8 @@ class AdminController extends AbstractController
 
     /**
      * Archive calculations.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/archive', name: 'admin_archive')]
@@ -145,6 +148,8 @@ class AdminController extends AbstractController
 
     /**
      * Import zip codes, cities and streets from Switzerland.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/import', name: 'admin_import')]
@@ -178,6 +183,8 @@ class AdminController extends AbstractController
 
     /**
      * Display the application parameters.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/parameters', name: 'admin_parameters')]
@@ -216,12 +223,13 @@ class AdminController extends AbstractController
 
     /**
      * Edit rights for the administrator role ('ROLE_ADMIN').
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/rights/admin', name: 'admin_rights_admin')]
     public function rightsAdmin(Request $request): Response
     {
-        // get values
         $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
         $default = EntityVoter::getRoleAdmin();
@@ -232,12 +240,13 @@ class AdminController extends AbstractController
 
     /**
      * Edit rights for the user role ('ROLE_USER').
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request): Response
     {
-        // get values
         $roleName = RoleInterface::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
         $default = EntityVoter::getRoleUser();
@@ -248,6 +257,8 @@ class AdminController extends AbstractController
 
     /**
      * Update product prices.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/product', name: 'admin_product')]
@@ -291,18 +302,25 @@ class AdminController extends AbstractController
      * @param int[]   $rights   the role rights
      * @param Role    $default  the role with default rights
      * @param string  $property the property name to update
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
     {
-        // role
+        // create role
         $role = new Role($roleName);
         $role->setName($this->translateRole($roleName))
             ->setRights($rights);
 
-        // form
+        // create and handle form
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
-            $this->getApplication()->setProperty($property, $role->getRights());
+            $application = $this->getApplication();
+            if ($role->getRights() === $default->getRights()) {
+                $application->removeProperty($property);
+            } else {
+                $application->setProperty($property, $role->getRights());
+            }
             $this->successTrans('admin.rights.success', ['%name%' => $role->getName()]);
 
             return $this->redirectToHomePage();
@@ -312,6 +330,7 @@ class AdminController extends AbstractController
         return $this->renderForm('admin/role_rights.html.twig', [
             'form' => $form,
             'default' => $default,
+            'permissions' => EntityPermission::sorted(),
         ]);
     }
 }

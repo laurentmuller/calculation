@@ -16,7 +16,7 @@
 
     // initialize validator
     $("form").initValidator({
-        simpleeditor: true,
+        simpleEditor: true,
         fileInput: true,
         focus: false
     });

@@ -94,11 +94,11 @@
             const inline = options.inline;
             const recaptcha = options.recaptcha;
             const fileInput = options.fileInput;
-            const colorpicker = options.colorpicker;
-            const simpleeditor = options.simpleeditor;
+            const colorPicker = options.colorPicker;
+            const simpleEditor = options.simpleEditor;
 
             // override elementValue function
-            if (simpleeditor) {
+            if (simpleEditor) {
                 $.validator.prototype.elementValue = (function (parent) {
                     return function (element) {
                         if ($(element).findSimpleEditor()) {
@@ -123,8 +123,8 @@
                             $collapse.collapse('show');
                         }
 
-                        // simpleeditor
-                        if (simpleeditor) {
+                        // simple editor
+                        if (simpleEditor) {
                             if ($elements.focusSimpleEditor()) {
                                 return;
                             }
@@ -141,10 +141,10 @@
                         }
 
                         // color-picker
-                        if (colorpicker) {
-                            const $colorpicker = $elements.findColorPicker();
-                            if ($colorpicker) {
-                                $colorpicker.focus();
+                        if (colorPicker) {
+                            const $colorPicker = $elements.findColorPicker();
+                            if ($colorPicker) {
+                                $colorPicker.focus();
                                 return;
                             }
                         }
@@ -169,7 +169,7 @@
              */
             $.validator.prototype.findElement = function ($element) {
                 let $toUpdate = false;
-                if (simpleeditor && !$toUpdate) {
+                if (simpleEditor && !$toUpdate) {
                     $toUpdate = $element.findSimpleEditor();
                 }
                 if (recaptcha && !$toUpdate) {
@@ -178,7 +178,7 @@
                 if (fileInput && !$toUpdate) {
                     $toUpdate = $element.findFileInput();
                 }
-                if (colorpicker && !$toUpdate) {
+                if (colorPicker && !$toUpdate) {
                     $toUpdate = $element.findColorPicker();
                 }
                 return $toUpdate;
@@ -306,17 +306,17 @@
             return this.each(function () {
                 const $that = $(this);
                 $that.colorpicker(options);
-                const $colorpicker = $that.findColorPicker();
-                if ($colorpicker) {
+                const $colorPicker = $that.findColorPicker();
+                if ($colorPicker) {
                     // update class
-                    $colorpicker.on('focus', function () {
+                    $colorPicker.on('focus', function () {
                         if ($that.hasClass('is-invalid')) {
-                            $colorpicker.addClass('field-invalid');
+                            $colorPicker.addClass('field-invalid');
                         } else {
-                            $colorpicker.addClass('field-valid');
+                            $colorPicker.addClass('field-valid');
                         }
                     }).on('blur', function () {
-                        $colorpicker.removeClass('field-valid field-invalid');
+                        $colorPicker.removeClass('field-valid field-invalid');
                     });
                 }
             });

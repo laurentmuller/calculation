@@ -19,7 +19,7 @@
 
 {% block card_body %}
 {{ form_row(form.name) }}
-{{ rights.table(form, default) }}
+{{ rights.table(form, default, permissions) }}
 {% endblock %}
 
 {% block javascripts -%}

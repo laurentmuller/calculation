@@ -12,21 +12,44 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\SortableEnumInterface;
+use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\ReadableEnumInterface;
+use Elao\Enum\ReadableEnumTrait;
+
 /**
  * Entity action enumeration.
+ *
+ *  @implements SortableEnumInterface<EntityAction>
  */
-enum EntityAction: string
+enum EntityAction: string implements ReadableEnumInterface, SortableEnumInterface
 {
+    use ReadableEnumTrait;
+
     /*
      * Edit the entity.
      */
+    #[EnumCase('action.edit')]
     case EDIT = 'edit';
     /*
      * No action.
      */
+    #[EnumCase('action.none')]
     case NONE = 'none';
     /*
      * Show the entity.
      */
+    #[EnumCase('action.show')]
     case SHOW = 'show';
+    /**
+     * @return EntityAction[]
+     */
+    public static function sorted(): array
+    {
+        return [
+            EntityAction::EDIT,
+            EntityAction::SHOW,
+            EntityAction::NONE,
+        ];
+    }
 }

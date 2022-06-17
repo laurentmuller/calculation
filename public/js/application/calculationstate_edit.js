@@ -11,6 +11,6 @@
 
     // validation
     $("form").initValidator({
-        colorpicker: true
+        colorPicker: true
     });
 }(jQuery));

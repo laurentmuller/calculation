@@ -16,17 +16,16 @@ use App\Twig\ConstantExtension;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Unit test for Twig ConstantExtension.
+ * Unit test for Twig {@link ConstantExtension}.
  */
 class ConstantExtensionTest extends KernelTestCase
 {
-    /**
-     * @var ConstantExtension
-     */
-    private $extension;
+    private ?ConstantExtension $extension;
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Exception
      */
     protected function setUp(): void
     {
@@ -52,12 +51,12 @@ class ConstantExtensionTest extends KernelTestCase
     public function getEntityVoterConstants(): array
     {
         return [
-            ['ATTRIBUTE_ADD', 'add'],
-            ['ATTRIBUTE_DELETE', 'delete'],
-            ['ATTRIBUTE_EDIT', 'edit'],
-            ['ATTRIBUTE_EXPORT', 'export'],
-            ['ATTRIBUTE_LIST', 'list'],
-            ['ATTRIBUTE_SHOW', 'show'],
+            ['ATTRIBUTE_ADD', 'ADD'],
+            ['ATTRIBUTE_DELETE', 'DELETE'],
+            ['ATTRIBUTE_EDIT', 'EDIT'],
+            ['ATTRIBUTE_EXPORT', 'EXPORT'],
+            ['ATTRIBUTE_LIST', 'LIST'],
+            ['ATTRIBUTE_SHOW', 'SHOW'],
 
             ['ENTITY_CALCULATION', 'EntityCalculation'],
             ['ENTITY_CALCULATION_STATE', 'EntityCalculationState'],
@@ -74,6 +73,8 @@ class ConstantExtensionTest extends KernelTestCase
 
     /**
      * @dataProvider getCalculationServiceConstants
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testCalculationService(string $key, int $value): void
     {
@@ -85,6 +86,8 @@ class ConstantExtensionTest extends KernelTestCase
 
     /**
      * @dataProvider getEntityVoterConstants
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testEntityVoter(string $key, string $value): void
     {

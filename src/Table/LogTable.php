@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
-use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\SortModeInterface;
 use App\Service\LogService;
 use App\Util\FileUtils;
@@ -119,7 +118,7 @@ class LogTable extends AbstractTable implements \Countable
      */
     public function getEntityClassName(): ?string
     {
-        return EntityVoterInterface::ENTITY_LOG;
+        return Log::class;
     }
 
     /**

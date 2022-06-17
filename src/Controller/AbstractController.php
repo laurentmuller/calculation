@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enums\EntityPermission;
 use App\Form\FormHelper;
 use App\Pdf\PdfDocument;
 use App\Report\AbstractReport;
@@ -261,6 +262,17 @@ abstract class AbstractController extends BaseController
         $builder = $this->createFormBuilder($data, $options);
 
         return new FormHelper($builder, $labelPrefix);
+    }
+
+    /**
+     * {inheritDoc}.
+     */
+    protected function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null, string $message = 'Access Denied.'): void
+    {
+        if ($attribute instanceof EntityPermission) {
+            $attribute = $attribute->name;
+        }
+        parent::denyAccessUnlessGranted($attribute, $subject, $message);
     }
 
     /**

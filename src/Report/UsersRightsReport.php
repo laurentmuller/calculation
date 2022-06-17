@@ -13,7 +13,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\User;
-use App\Interfaces\EntityVoterInterface;
+use App\Enums\EntityName;
+use App\Enums\EntityPermission;
 use App\Model\Role;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfBorder;
@@ -24,7 +25,9 @@ use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Security\EntityVoter;
+use App\Service\ApplicationService;
 use App\Traits\RoleTranslatorTrait;
+use Elao\Enum\FlagBag;
 
 /**
  * Report for the list of user rights.
@@ -36,35 +39,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     use RoleTranslatorTrait;
 
     /**
-     * The attribute names.
-     */
-    private const ATTRIBUTES = [
-        EntityVoterInterface::ATTRIBUTE_LIST,
-        EntityVoterInterface::ATTRIBUTE_SHOW,
-        EntityVoterInterface::ATTRIBUTE_ADD,
-        EntityVoterInterface::ATTRIBUTE_EDIT,
-        EntityVoterInterface::ATTRIBUTE_DELETE,
-        EntityVoterInterface::ATTRIBUTE_EXPORT,
-    ];
-    /**
      * The ASCII bullet character.
      */
     private const BULLET_ASCII = 183;
-
-    /**
-     * The title and entities.
-     */
-    private const RIGHTS = [
-        'calculation.name' => EntityVoterInterface::ENTITY_CALCULATION,
-        'product.name' => EntityVoterInterface::ENTITY_PRODUCT,
-        'task.name' => EntityVoterInterface::ENTITY_TASK,
-        'category.name' => EntityVoterInterface::ENTITY_CATEGORY,
-        'group.name' => EntityVoterInterface::ENTITY_GROUP,
-        'calculationstate.name' => EntityVoterInterface::ENTITY_CALCULATION_STATE,
-        'globalmargin.name' => EntityVoterInterface::ENTITY_GLOBAL_MARGIN,
-        'customer.name' => EntityVoterInterface::ENTITY_CUSTOMER,
-        'user.name' => EntityVoterInterface::ENTITY_USER,
-    ];
 
     /**
      * The right cell style.
@@ -126,6 +103,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      * {@inheritdoc}
      *
      * @param User[] $entities
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function doRender(array $entities): bool
     {
@@ -169,42 +148,42 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
         $builder->setGroupStyle($style)
             ->setGroupListener($this)
-            ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50))
-            ->addColumn(PdfColumn::center($this->trans('rights.list'), 25, true))
-            ->addColumn(PdfColumn::center($this->trans('rights.show'), 25, true))
-            ->addColumn(PdfColumn::center($this->trans('rights.add'), 25, true))
-            ->addColumn(PdfColumn::center($this->trans('rights.edit'), 25, true))
-            ->addColumn(PdfColumn::center($this->trans('rights.delete'), 25, true))
-            ->addColumn(PdfColumn::center($this->trans('rights.export'), 25, true))
-            ->outputHeaders();
+            ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50));
+        $permissions = EntityPermission::sorted();
+        foreach ($permissions as $permission) {
+            $builder->addColumn(PdfColumn::center($this->trans($permission->getReadable()), 25, true));
+        }
+        $builder->outputHeaders();
 
         return $builder;
+    }
+
+    private function getApplication(): ApplicationService
+    {
+        return $this->controller->getApplication();
     }
 
     /**
      * Gets the cell text for the given rights and attribute.
      *
-     * @param array  $rights    the user rights
-     * @param string $attribute the attribute name to verify
+     * @param FlagBag<EntityPermission>|null $rights
      */
-    private function getRightText(array $rights, string $attribute): ?string
+    private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
     {
-        return isset($rights[$attribute]) ? \chr(self::BULLET_ASCII) : null;
+        return null !== $rights && $rights->hasFlags($permission) ? \chr(self::BULLET_ASCII) : null;
     }
 
     /**
      * Output rights.
      *
-     * @param PdfGroupTableBuilder $builder the table builder
-     * @param string               $title   the row title
-     * @param array                $rights  the rights
+     * @param FlagBag<EntityPermission>|null $rights
      */
-    private function outputRights(PdfGroupTableBuilder $builder, string $title, array $rights): self
+    private function outputRights(PdfGroupTableBuilder $builder, string $title, ?FlagBag $rights): self
     {
         $builder->startRow()
             ->add(text: $this->trans($title), style: $this->titleStyle);
-        foreach (self::ATTRIBUTES as $attribute) {
-            $builder->add(text: $this->getRightText($rights, $attribute), style: $this->rightStyle);
+        foreach (EntityPermission::sorted() as $permission) {
+            $builder->add(text: $this->getRightText($rights, $permission), style: $this->rightStyle);
         }
         $builder->endRow();
 
@@ -213,19 +192,17 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     /**
      * Output rights for a role.
-     *
-     * @param PdfGroupTableBuilder $builder the buider to output to
-     * @param Role                 $role    the role to output
      */
-    private function outputRole(PdfGroupTableBuilder $builder, Role $role): void
+    private function outputRole(PdfGroupTableBuilder $builder, Role|User $role): void
     {
         // allow outputting user entity rights
-        $outputUsers = $role->isAdmin() || $role->isSuperAdmin();
+        $outputUsers = $role->isAdmin();
 
         // check new page
-        $lines = \count(self::RIGHTS);
-        if ($outputUsers) {
-            ++$lines;
+        $entities = EntityName::sorted();
+        $lines = \count($entities) - 1;
+        if (!$outputUsers) {
+            --$lines;
         }
         if (!$this->isPrintable($lines * self::LINE_HEIGHT)) {
             $this->AddPage();
@@ -235,9 +212,15 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $builder->setGroupKey($role);
 
         // rights
-        foreach (self::RIGHTS as $key => $value) {
-            if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                $this->outputRights($builder, $key, (array) $role->{$value});
+        foreach ($entities as $entity) {
+            if (EntityName::LOG === $entity) {
+                continue;
+            }
+            if ($outputUsers || EntityName::USER !== $entity) {
+                $value = $entity->value;
+                /** @psalm-var FlagBag<EntityPermission>|null $rights */
+                $rights = $role->{$value};
+                $this->outputRights($builder, $entity->getReadable(), $rights);
             }
         }
     }
@@ -245,14 +228,15 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output default rights for the administrator role.
      *
-     * @param PdfGroupTableBuilder $builder the buider to output to
+     * @param PdfGroupTableBuilder $builder the builder to output to
      *
      * @return int this function returns always 1
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function outputRoleAdmin(PdfGroupTableBuilder $builder): int
     {
-        $service = $this->controller->getApplication();
-        $this->outputRole($builder, $service->getAdminRole());
+        $this->outputRole($builder, $this->getApplication()->getAdminRole());
 
         return 1;
     }
@@ -260,14 +244,15 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output default rights for the user role.
      *
-     * @param PdfGroupTableBuilder $builder the buider to output to
+     * @param PdfGroupTableBuilder $builder the builder to output to
      *
      * @return int this function returns always 1
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function outputRoleUser(PdfGroupTableBuilder $builder): int
     {
-        $service = $this->controller->getApplication();
-        $this->outputRole($builder, $service->getUserRole());
+        $this->outputRole($builder, $this->getApplication()->getUserRole());
 
         return 1;
     }
@@ -276,7 +261,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      * Output rights for users.
      *
      * @param User[]               $users   the users
-     * @param PdfGroupTableBuilder $builder the buider to output to
+     * @param PdfGroupTableBuilder $builder the builder to output to
      *
      * @return int the number of users
      */
@@ -289,33 +274,13 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
         // render
         foreach ($users as $user) {
-            // allow outputting user entity rights
-            $outputUsers = $user->isAdmin() || $user->isSuperAdmin();
-
-            // keep together
-            $lines = \count(self::RIGHTS);
-            if ($outputUsers) {
-                ++$lines;
-            }
-            if (!$this->isPrintable($lines * self::LINE_HEIGHT)) {
-                $this->AddPage();
-            }
-
-            // group
-            $builder->setGroupKey($user);
-
             // update rights
             if (!$user->isOverwrite()) {
                 $rights = EntityVoter::getRole($user)->getRights();
                 $user->setRights($rights);
             }
 
-            // output rights
-            foreach (self::RIGHTS as $key => $value) {
-                if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                    $this->outputRights($builder, $key, (array) $user->{$value});
-                }
-            }
+            $this->outputRole($builder, $user);
         }
 
         return \count($users);

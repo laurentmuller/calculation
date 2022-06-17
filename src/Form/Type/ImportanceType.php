@@ -12,24 +12,28 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Form\AbstractChoiceType;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use App\Enums\Importance;
+use Elao\Enum\Bridge\Symfony\Form\Type\EnumType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Importance type for email notifications.
+ * Importance type for notification email.
  */
-class ImportanceType extends AbstractChoiceType
+class ImportanceType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
-    protected function getChoices(): array
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        return [
-            'importance.low' => NotificationEmail::IMPORTANCE_LOW,
-            'importance.medium' => NotificationEmail::IMPORTANCE_MEDIUM,
-            'importance.high' => NotificationEmail::IMPORTANCE_HIGH,
-            'importance.urgent' => NotificationEmail::IMPORTANCE_URGENT,
-        ];
+        parent::configureOptions($resolver);
+        $resolver->setDefault('class', Importance::class)
+            ->setDefault('choice', Importance::sorted());
+    }
+
+    public function getParent(): ?string
+    {
+        return EnumType::class;
     }
 }

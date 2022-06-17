@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
-use App\Traits\RightsTrait;
 use App\Traits\RoleTrait;
 use App\Util\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -44,7 +43,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[Vich\Uploadable]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface
 {
-    use RightsTrait;
     use RoleTrait;
 
     #[Assert\Email]

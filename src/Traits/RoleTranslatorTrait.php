@@ -29,8 +29,8 @@ trait RoleTranslatorTrait
         if ($role instanceof RoleInterface) {
             $role = $role->getRole();
         }
-        $role = \strtolower(\str_replace('ROLE_', 'user.roles.', $role));
+        $id = \strtolower(\str_ireplace('role_', 'user.roles.', $role));
 
-        return $this->trans($role);
+        return $this->trans($id);
     }
 }

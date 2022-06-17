@@ -809,6 +809,23 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         return $this->isPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
     }
 
+    /**
+     * Remove the give property.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function removeProperty(string $name): self
+    {
+        $repository = $this->getRepository();
+        $property = $repository->findOneByName($name);
+        if (null !== $property) {
+            $repository->remove($property);
+            $this->updateAdapter();
+        }
+
+        return $this;
+    }
+
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         if (!$this->traitSaveDeferredCacheValue($key, $value, $time)) {

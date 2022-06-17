@@ -52,12 +52,10 @@ abstract class AbstractParametersType extends AbstractType implements Applicatio
     {
         $helper->field(self::P_DISPLAY_MODE)
             ->updateAttribute('data-default', $this->getDefaultValue(self::P_DISPLAY_MODE))
-            ->updateOption('choice_label', static fn (TableView $choice): string => "view.$choice->value")
             ->addEnumType(TableView::class);
 
         $helper->field(self::P_EDIT_ACTION)
             ->updateAttribute('data-default', $this->getDefaultValue(self::P_EDIT_ACTION))
-            ->updateOption('choice_label', static fn (EntityAction $choice): string => "action.$choice->value")
             ->addEnumType(EntityAction::class);
     }
 

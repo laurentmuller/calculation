@@ -11,7 +11,7 @@
         <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ data.vars.label_format|trans }}</button>
     </td>
     {% for entry in data %}
-        {%- set checked = entry.vars.value in default -%}
+        {%- set checked = default.hasBits(entry.vars.value) -%}
         {%- set attr = {'data-default': checked|json_encode} -%}
         {%- if not overwrite -%}
             {%- set attr = attr|merge({'disabled': 'disabled', 'checked': checked}) -%}
@@ -21,19 +21,16 @@
 </tr>
 {%- endmacro %}
 
-{% macro table(form, default, overwrite=true) %}
+{% macro table(form, default, permissions, overwrite=true) %}
 {% import 'macros/_icons.html.twig' as icons %}
 <div class="table-responsive">
     <table class="table table-bordered table-list" id="table-edit">
         <thead>
            <tr class="text-center">
-                <th class="text-left text-nowrap font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
-                {{ _self.header('rights.list', overwrite) }}
-                {{ _self.header('rights.show', overwrite) }}
-                {{ _self.header('rights.add', overwrite) }}
-                {{ _self.header('rights.edit', overwrite) }}
-                {{ _self.header('rights.delete', overwrite) }}
-                {{ _self.header('rights.export', overwrite) }}
+               <th class="text-left text-nowrap font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
+               {% for permission in permissions %}
+                   {{ _self.header(permission.readable, overwrite) }}
+               {% endfor %}
            </tr>
         </thead>
         <tbody>
@@ -49,6 +46,9 @@
             {%- endif -%}
             {%- if form.EntityUser|default(false) -%}
                 {{ _self.row(form.EntityUser, default.EntityUser, overwrite) }}
+            {%- endif -%}
+            {%- if form.EntityLog|default(false) -%}
+                {{ _self.row(form.EntityLog, default.EntityLog, overwrite) }}
             {%- endif -%}
         </tbody>
     </table>

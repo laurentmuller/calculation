@@ -14,10 +14,10 @@ namespace App\Service;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
 use App\Traits\TranslatorTrait;
-use Symfony\Bridge\Twig\Mime\NotificationEmail as NotificationEmailAlias;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -43,17 +43,15 @@ class MailerService
     public function sendComment(Comment $comment): void
     {
         $notification = $this->createNotification();
-        $notification->importance($comment->getImportance())
-            ->subject((string) $comment->getSubject())
+        $notification->subject((string) $comment->getSubject())
+            ->importance($comment->getImportanceValue())
             ->markdown($this->convert((string) $comment->getMessage()))
             ->action($this->trans('index.title'), $this->getHomeUrl());
 
-        $address = $comment->getFromAddress();
-        if (null !== $address) {
+        if (null !== $address = $comment->getFromAddress()) {
             $notification->from($address);
         }
-        $address = $comment->getToAddress();
-        if (null !== $address) {
+        if (null !== $address = $comment->getToAddress()) {
             $notification->to($address);
         }
         foreach ($comment->getAttachments() as $attachment) {
@@ -67,14 +65,14 @@ class MailerService
      *
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface if an exception occurs while sending the notification
      */
-    public function sendNotification(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmailAlias::IMPORTANCE_LOW): void
+    public function sendNotification(string $fromEmail, User $toUser, string $message, Importance $importance = Importance::LOW): void
     {
         $notification = $this->createNotification()
             ->from($fromEmail)
             ->to($toUser->getAddress())
             ->subject($this->trans('user.comment.title'))
             ->markdown($this->convert($message))
-            ->importance($importance);
+            ->importance($importance->value);
 
         $this->mailer->send($notification);
     }

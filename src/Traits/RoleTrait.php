@@ -18,10 +18,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Trait to deal with a role name.
+ * Trait to deal with a role name and rights.
  */
 trait RoleTrait
 {
+    use RightsTrait;
+
     /**
      * The role name.
      */
@@ -69,7 +71,7 @@ trait RoleTrait
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole(RoleInterface::ROLE_ADMIN);
+        return $this->isSuperAdmin() || $this->hasRole(RoleInterface::ROLE_ADMIN);
     }
 
     /**

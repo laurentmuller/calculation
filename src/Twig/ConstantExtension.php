@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Interfaces\EntityVoterInterface;
+use App\Enums\EntityName;
+use App\Enums\EntityPermission;
 use App\Service\CalculationService;
 use App\Traits\CacheTrait;
 use Psr\Cache\CacheItemPoolInterface;
@@ -55,7 +56,8 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private function callback(): array
     {
         return \array_merge(
-            $this->getConstants(EntityVoterInterface::class),
+            EntityName::constants(),
+            EntityPermission::constants(),
             $this->getConstants(CalculationService::class),
             $this->getIcons()
         );

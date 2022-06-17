@@ -16,7 +16,11 @@ use App\Form\Type\FaxType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Form\Type\YesNoType;
+use App\Interfaces\SortableEnumInterface;
 use App\Util\FormatUtils;
+use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
+use Elao\Enum\Bridge\Symfony\Form\Type\FlagBagType;
+use Elao\Enum\ReadableEnumInterface;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -265,8 +269,15 @@ class FormHelper
      */
     public function addEnumType(string $class): self
     {
-        return $this->updateOption('class', $class)
-            ->add(EnumType::class);
+        $this->updateOption('class', $class);
+        if (\is_a($class, SortableEnumInterface::class, true)) {
+            $this->updateOption('choices', $class::sorted());
+        }
+        if (\is_a($class, ReadableEnumInterface::class, true)) {
+            return $this->add(ElaoEnumType::class);
+        }
+
+        return $this->add(EnumType::class);
     }
 
     /**
@@ -302,6 +313,15 @@ class FormHelper
     public function addFileType(): self
     {
         return $this->add(FileType::class);
+    }
+
+    /**
+     * Add an flag bag enum type to the builder and reset all values to default.
+     */
+    public function addFlagBagType(string $class): self
+    {
+        return $this->updateOption('class', $class)
+            ->add(FlagBagType::class);
     }
 
     /**

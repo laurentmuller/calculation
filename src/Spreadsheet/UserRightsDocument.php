@@ -13,11 +13,13 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Entity\User;
-use App\Interfaces\EntityVoterInterface;
+use App\Enums\EntityName;
+use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Security\EntityVoter;
 use App\Traits\RoleTranslatorTrait;
+use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -31,35 +33,7 @@ class UserRightsDocument extends AbstractArrayDocument
 {
     use RoleTranslatorTrait;
 
-    /**
-     * The attribute names.
-     */
-    private const ATTRIBUTES = [
-        EntityVoterInterface::ATTRIBUTE_LIST,
-        EntityVoterInterface::ATTRIBUTE_SHOW,
-        EntityVoterInterface::ATTRIBUTE_ADD,
-        EntityVoterInterface::ATTRIBUTE_EDIT,
-        EntityVoterInterface::ATTRIBUTE_DELETE,
-        EntityVoterInterface::ATTRIBUTE_EXPORT,
-    ];
-
-    /**
-     * The title and entities.
-     */
-    private const RIGHTS = [
-        'calculation.name' => EntityVoterInterface::ENTITY_CALCULATION,
-        'product.name' => EntityVoterInterface::ENTITY_PRODUCT,
-        'task.name' => EntityVoterInterface::ENTITY_TASK,
-        'category.name' => EntityVoterInterface::ENTITY_CATEGORY,
-        'group.name' => EntityVoterInterface::ENTITY_GROUP,
-        'calculationstate.name' => EntityVoterInterface::ENTITY_CALCULATION_STATE,
-        'globalmargin.name' => EntityVoterInterface::ENTITY_GLOBAL_MARGIN,
-        'customer.name' => EntityVoterInterface::ENTITY_CUSTOMER,
-        'user.name' => EntityVoterInterface::ENTITY_USER,
-    ];
-
     private ?bool $writeName = null;
-
     private ?bool $writeRights = null;
 
     /**
@@ -96,6 +70,9 @@ class UserRightsDocument extends AbstractArrayDocument
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function doRender(array $entities): bool
     {
@@ -105,9 +82,10 @@ class UserRightsDocument extends AbstractArrayDocument
         $this->start('user.rights.title');
 
         // headers
+        $permissions = EntityPermission::sorted();
         $headers = ['user.rights.table_title' => Alignment::HORIZONTAL_GENERAL];
-        foreach (self::ATTRIBUTES as $attribute) {
-            $headers["rights.$attribute"] = Alignment::HORIZONTAL_CENTER;
+        foreach ($permissions as $permission) {
+            $headers[$permission->getReadable()] = Alignment::HORIZONTAL_CENTER;
         }
         $this->setHeaderValues($headers);
 
@@ -161,49 +139,50 @@ class UserRightsDocument extends AbstractArrayDocument
     /**
      * Gets the cell text for the given rights and attribute.
      *
-     * @param array  $rights    the user rights
-     * @param string $attribute the attribute name to verify
+     * @param FlagBag<EntityPermission>|null $rights
      */
-    private function getRightText(array $rights, string $attribute): ?string
+    private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
     {
-        return isset($rights[$attribute]) ? 'x' : null;
+        return null !== $rights && $rights->hasFlags($permission) ? 'x' : null;
     }
 
     /**
      * Output the rights.
      *
-     * @param string $title  the row title
-     * @param array  $rights the rights
-     * @param int    $row    the row index
+     * @param FlagBag<EntityPermission>|null $rights
      */
-    private function outputRights(string $title, array $rights, int $row): void
+    private function outputRights(string $title, ?FlagBag $rights, int $row): void
     {
         $values = [$this->trans($title)];
-        foreach (self::ATTRIBUTES as $attribute) {
-            $values[] = $this->getRightText($rights, $attribute);
+        foreach (EntityPermission::sorted() as $permission) {
+            $values[] = $this->getRightText($rights, $permission);
         }
         $this->setRowValues($row, $values);
     }
 
     /**
      * Output the rights for the given role.
-     *
-     * @param Role $role the role to output
-     * @param int  $row  the current row
      */
-    private function outputRole(Role $role, int &$row): void
+    private function outputRole(Role|User $role, int &$row): void
     {
         // allow output user entity rights
-        $outputUsers = $role->isAdmin() || $role->isSuperAdmin();
+        $outputUsers = $role->isAdmin();
 
         $this->writeName = true;
         $this->setRowValues($row++, [$this->getEntityName($role)]);
         $this->writeName = false;
 
         $this->writeRights = true;
-        foreach (self::RIGHTS as $key => $value) {
-            if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                $this->outputRights($key, (array) $role->{$value}, $row++);
+        $entities = EntityName::sorted();
+        foreach ($entities as $entity) {
+            if (EntityName::LOG === $entity) {
+                continue;
+            }
+            if ($outputUsers || EntityName::USER !== $entity) {
+                $value = $entity->value;
+                /** @psalm-var FlagBag<EntityPermission>|null $rights */
+                $rights = $role->{$value};
+                $this->outputRights($entity->getReadable(), $rights, $row++);
             }
         }
         $this->writeRights = false;
@@ -217,22 +196,10 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     private function outputUser(User $user, int &$row): void
     {
-        $this->writeName = true;
-        $this->setRowValues($row++, [$this->getEntityName($user)]);
-        $this->writeName = false;
-
-        $outputUsers = $user->isAdmin() || $user->isSuperAdmin();
         if (!$user->isOverwrite()) {
             $rights = EntityVoter::getRole($user)->getRights();
             $user->setRights($rights);
         }
-
-        $this->writeRights = true;
-        foreach (self::RIGHTS as $key => $value) {
-            if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
-                $this->outputRights($key, (array) $user->{$value}, $row++);
-            }
-        }
-        $this->writeRights = false;
+        $this->outputRole($user, $row);
     }
 }

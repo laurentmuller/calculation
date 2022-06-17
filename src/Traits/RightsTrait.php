@@ -12,22 +12,25 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Enums\EntityName;
+use App\Enums\EntityPermission;
 use App\Security\EntityVoter;
 use Doctrine\ORM\Mapping as ORM;
+use Elao\Enum\FlagBag;
 
 /**
  * Trait to set or get access rights.
  *
- * @property int[] $EntityCalculation      the rights for calculations.
- * @property int[] $EntityCalculationState the rights for calculation state.
- * @property int[] $EntityGroup            the rights for groups.
- * @property int[] $EntityCategory         the rights for categories.
- * @property int[] $EntityCustomer         the rights for customers.
- * @property int[] $EntityGlobalMargin     the rights for global margins.
- * @property int[] $EntityProduct          the rights for products.
- * @property int[] $EntityUser             the rights for users.
- * @property int[] $EntityTask             the rights for tasks.
- * @property int[] $EntityLog              the rights for logs.
+ * @property ?FlagBag $EntityCalculation      the rights for calculations.
+ * @property ?FlagBag $EntityCalculationState the rights for calculation state.
+ * @property ?FlagBag $EntityGroup            the rights for groups.
+ * @property ?FlagBag $EntityCategory         the rights for categories.
+ * @property ?FlagBag $EntityCustomer         the rights for customers.
+ * @property ?FlagBag $EntityGlobalMargin     the rights for global margins.
+ * @property ?FlagBag $EntityProduct          the rights for products.
+ * @property ?FlagBag $EntityUser             the rights for users.
+ * @property ?FlagBag $EntityTask             the rights for tasks.
+ * @property ?FlagBag $EntityLog              the rights for logs.
  */
 trait RightsTrait
 {
@@ -47,9 +50,14 @@ trait RightsTrait
     #[ORM\Column(type: 'json', nullable: true)]
     protected ?array $rights = null;
 
-    public function __get(string $name): ?array
+    /**
+     * @param string $name the property name
+     *
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function __get(string $name): ?FlagBag
     {
-        if ($this->nameExists($name)) {
+        if ($this->entityExists($name)) {
             return $this->getEntityRights($name);
         }
 
@@ -58,15 +66,15 @@ trait RightsTrait
 
     public function __isset(string $name): bool
     {
-        return $this->nameExists($name);
+        return $this->entityExists($name);
     }
 
     /**
-     * @psalm-param int[]|null $value
+     * @psalm-param string|FlagBag<EntityPermission> $value
      */
-    public function __set(string $name, $value): void
+    public function __set(string $name, mixed $value): void
     {
-        if ($this->nameExists($name) && \is_array($value)) {
+        if ($this->entityExists($name) && $value instanceof FlagBag) {
             $this->setEntityRights($name, $value);
         }
     }
@@ -114,55 +122,41 @@ trait RightsTrait
     }
 
     /**
-     * Gets the rights for the given entity name.
-     *
-     * @return int[] the rights
+     * Returns if the given entity name exists.
      */
-    private function getEntityRights(string $entity): array
+    private function entityExists(string $name): bool
     {
-        // get offset
-        $offset = EntityVoter::getEntityOffset($entity);
-        if (EntityVoter::INVALID_VALUE === $offset) {
-            return [];
-        }
-
-        // get value
-        $value = $this->getRights()[$offset];
-        if (0 === $value) {
-            return [];
-        }
-
-        // filter
-        return \array_filter(EntityVoter::MASK_ATTRIBUTES, fn (int $attribute): bool => $this->isBitSet($value, $attribute));
+        return null !== EntityName::tryFromMixed($name);
     }
 
     /**
-     * Returns if the given property name exists.
+     * Gets the rights for the given entity name.
      *
-     * @param string $name the property name to be tested
-     *
-     * @return bool true if exists; false otherwise
+     * @return FlagBag<EntityPermission>|null
      */
-    private function nameExists(string $name): bool
+    private function getEntityRights(string $entity): ?FlagBag
     {
-        return \array_key_exists($name, EntityVoter::ENTITY_OFFSETS);
+        $offset = EntityVoter::getEntityOffset($entity);
+        if (EntityVoter::INVALID_VALUE === $offset) {
+            return null;
+        }
+        $rights = $this->getRights();
+        $value = $rights[$offset] ?? 0;
+
+        return new FlagBag(EntityPermission::class, $value);
     }
 
     /**
      * Sets the rights for the given entity.
      *
-     * @param string $entity the entity name
-     * @param int[]  $rights the rights to set
+     * @param FlagBag<EntityPermission> $rights
      */
-    private function setEntityRights(string $entity, array $rights): static
+    private function setEntityRights(string $entity, FlagBag $rights): static
     {
-        // get offset
         $offset = EntityVoter::getEntityOffset($entity);
         if (EntityVoter::INVALID_VALUE !== $offset) {
-            // update
-            $value = \array_sum($rights);
             $newRights = $this->getRights();
-            $newRights[$offset] = $value;
+            $newRights[$offset] = $rights->getValue();
 
             return $this->setRights($newRights);
         }

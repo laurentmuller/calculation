@@ -157,6 +157,9 @@ $.fn.extend({
 
                 // set focus on selected page item (if any)
                 // $this.selectPageItem();
+
+                // trigger event
+                $this.trigger('endPostBody', content);
             },
 
             onCustomViewPostBody: function (data) {

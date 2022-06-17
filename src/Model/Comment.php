@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\User;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use App\Enums\Importance;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,7 +42,7 @@ class Comment
      * The importance.
      */
     #[Assert\NotNull]
-    private string $importance = NotificationEmail::IMPORTANCE_LOW;
+    private Importance $importance = Importance::LOW;
 
     /**
      * The message.
@@ -65,7 +65,7 @@ class Comment
     /**
      * Constructor.
      *
-     * @param bool $mail true to send an e-mail, false to send a comment
+     * @param bool $mail true to send an email, false to send a comment
      */
     public function __construct(private readonly bool $mail)
     {
@@ -89,9 +89,14 @@ class Comment
         return $this->fromAddress;
     }
 
-    public function getImportance(): string
+    public function getImportance(): Importance
     {
         return $this->importance;
+    }
+
+    public function getImportanceValue(): string
+    {
+        return $this->importance->value;
     }
 
     /**
@@ -119,9 +124,9 @@ class Comment
     }
 
     /**
-     * Returns if this is an e-mail or a comment.
+     * Returns if this is an email or a comment.
      *
-     * @return bool True if e-mail, false if comment
+     * @return bool True if email, false if comment
      */
     public function isMail(): bool
     {
@@ -156,7 +161,7 @@ class Comment
         return $this;
     }
 
-    public function setImportance(string $importance): self
+    public function setImportance(Importance $importance): self
     {
         $this->importance = $importance;
 

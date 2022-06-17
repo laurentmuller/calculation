@@ -10,7 +10,7 @@
         focus: true
     });
     $("#edit-form").initValidator({
-        simpleeditor: true,
+        simpleEditor: true,
         focus: false
     });
 

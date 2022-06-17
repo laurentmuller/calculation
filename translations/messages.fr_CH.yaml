@@ -373,6 +373,7 @@ datatable:
   elements: éléments
   search: Rechercher
   show: Afficher
+  no_action: Aucune action disponible
 duplicate:
   count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
   description: Calculations contenant le même article plus d'une fois.
@@ -597,7 +598,7 @@ importance:
   medium: Moyenne
   name: Importance
   urgent: Urgente
-indecolor_picker:
+color_picker:
   advanced_text: Avancé...
   custom_text: Personnalisé
 index:
@@ -1352,7 +1353,7 @@ user:
     row_title: Activer ou désactiver tous les droits d'accès pour cet objet
     success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour
       avec succès.
-    table_title: Objets / Actions
+    table_title: Objet / Action
     title: Droits d'accès
     toggle_title: Inverser les droits
     action: Modifier les droits d'accès

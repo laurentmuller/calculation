@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Interfaces\EntityVoterInterface;
+use App\Enums\EntityPermission;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -43,8 +43,11 @@ trait CheckerTrait
     /**
      * Returns if the given action for the given subject (entity name) is granted.
      */
-    protected function isGranted(string $action, string $subject): bool
+    protected function isGranted(string|EntityPermission $action, string $subject): bool
     {
+        if ($action instanceof EntityPermission) {
+            $action = $action->value;
+        }
         $key = "$action.$subject";
         if (!isset($this->rights[$key])) {
             if (null !== $this->checker) {
@@ -62,7 +65,7 @@ trait CheckerTrait
      */
     protected function isGrantedAdd(string $subject): bool
     {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_ADD, $subject);
+        return $this->isGranted(EntityPermission::ADD, $subject);
     }
 
     /**
@@ -70,7 +73,7 @@ trait CheckerTrait
      */
     protected function isGrantedDelete(string $subject): bool
     {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $subject);
+        return $this->isGranted(EntityPermission::DELETE, $subject);
     }
 
     /**
@@ -78,7 +81,7 @@ trait CheckerTrait
      */
     protected function isGrantedEdit(string $subject): bool
     {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_EDIT, $subject);
+        return $this->isGranted(EntityPermission::EDIT, $subject);
     }
 
     /**
@@ -86,7 +89,7 @@ trait CheckerTrait
      */
     protected function isGrantedExport(string $subject): bool
     {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_EXPORT, $subject);
+        return $this->isGranted(EntityPermission::EXPORT, $subject);
     }
 
     /**
@@ -94,7 +97,7 @@ trait CheckerTrait
      */
     protected function isGrantedList(string $subject): bool
     {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_LIST, $subject);
+        return $this->isGranted(EntityPermission::LIST, $subject);
     }
 
     /**
@@ -102,6 +105,6 @@ trait CheckerTrait
      */
     protected function isGrantedShow(string $subject): bool
     {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_SHOW, $subject);
+        return $this->isGranted(EntityPermission::SHOW, $subject);
     }
 }

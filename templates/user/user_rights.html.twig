@@ -30,7 +30,7 @@
         {{ form_row(form.enabled) }}
     </div>
 </div>
-{{ rights.table(form, default, overwrite) }}
+{{ rights.table(form, default, permissions, overwrite) }}
 {{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}, attr: {'data-default': default.overwrite|json_encode}}) }}
 {% endblock %}
 

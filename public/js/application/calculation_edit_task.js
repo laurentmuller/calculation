@@ -125,6 +125,14 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
         'use strict';
         const that = this;
         const url = that.$form.data('url');
+        /**
+         * @param {Object} response
+         * @param {boolean} response.result
+         * @param {string} response.message
+         * @param {string} response.unit
+         * @param {number} response.categoryId
+         * @param {number} response.overall
+         */
         that.jqXHR = $.post(url, data, function (response) {
             if (response.result) {
                 // update

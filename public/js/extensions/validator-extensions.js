@@ -86,6 +86,11 @@
          * Initialize default validator options.
          *
          * @param {Object} [options] - the options
+         * @param {boolean} options.inline
+         * @param {boolean} options.recaptcha
+         * @param {boolean} options.fileInput
+         * @param {boolean} options.colorPicker
+         * @param {boolean} options.simpleEditor
          * @returns the validator.
          */
         initValidator: function (options) {

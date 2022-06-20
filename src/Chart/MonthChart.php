@@ -66,12 +66,6 @@ class MonthChart extends BaseChart
         $yAxis = $this->getYaxis($color);
         $xAxis = $this->getXAxis($color, $dates);
 
-        // tooltip formatter
-        $formatter = $this->getFormatterExpression();
-
-        // click event
-        $click = $this->getClickExpression();
-
         // update
         $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
@@ -86,12 +80,14 @@ class MonthChart extends BaseChart
             'cursor' => 'pointer',
             'point' => [
                 'events' => [
-                    'click' => $click,
+                    'click' => $this->getClickExpression(),
                 ],
             ],
         ]);
 
-        $this->tooltip->useHTML(true)->formatter($formatter);  // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->tooltip->formatter($this->getFormatterExpression())
+            ->useHTML(true);
 
         // data
         $data = [];
@@ -204,6 +200,7 @@ class MonthChart extends BaseChart
     {
         $function = <<<EOF
             function () {
+                window.console.log(this);
                 var date = Highcharts.dateFormat("%B %Y", this.x);
                 var name = this.series.name;
                 var yValue = Highcharts.numberFormat(this.y, 0);
@@ -338,10 +335,17 @@ class MonthChart extends BaseChart
 
     private function getYaxis(string $color): array
     {
+        $function = <<<JS
+            function() {
+               return Highcharts.numberFormat(this.value, 0);
+            }
+            JS;
+        $formatter = new Expr($function);
+
         return [
             [
                 'labels' => [
-                    'formatter' => new Expr('function () { return Highcharts.numberFormat(this.value, 0) }'),
+                    'formatter' => $formatter,
                     'style' => [
                         'color' => $color,
                         'fontSize' => '12px',

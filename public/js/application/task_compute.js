@@ -72,7 +72,10 @@ function update(form) {
     // send
     $form.jqXHR = $.post(url, data, function (response) {
         /**
-         * @var {*} response
+         * @param {Object} response
+         * @param {boolean} response.result
+         * @param {string} response.message
+         * @param {number} response.overall
          */
         if (response.result) {
             // update

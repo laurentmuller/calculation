@@ -27,7 +27,6 @@
 
 {% block card_footer -%}
 {{ icons.homepage() }}
-
 {%- endblock %}
 
 {% block stylesheets %}
@@ -45,6 +44,6 @@
 {{ asset_js('js/chart.js') }}
 {% endif %}
 <script nonce="{{ csp_nonce() }}">
-    {{ chart(chart) }}
+    {{- chart(chart) -}}
 </script>
 {% endblock %}

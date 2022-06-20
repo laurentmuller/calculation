@@ -442,12 +442,11 @@ $.fn.extend({
  */
 (function ($) {
     'use strict';
-
     const $table = $('#table-edit');
-    const $sortButton = $('#button_sort');
-    const $viewButtons = $('.dropdown-menu-view');
     const $pageButton = $('#button_page');
+    const $sortButton = $('#button_sort');
     const $clearButton = $('#clear_search');
+    const $viewButtons = $('.dropdown-menu-view');
     const $searchMinimum = $('#search_minimum');
     const $inputs = $('.dropdown-toggle.dropdown-input');
 
@@ -464,13 +463,11 @@ $.fn.extend({
             return params;
         },
 
-
         onPreBody: function (data) {
             /**
              * @type {{pageList: any, totalRows: number, pageSize: string, sortName: string, sortOrder: string}} options
              */
             const options = $table.getOptions();
-
             // update pages list and page button
             if ($pageButton.length) {
                 let pageList = options.pageList;
@@ -622,50 +619,11 @@ $.fn.extend({
             }
         },
 
-        onFinishBody: function ($tableFooter) {
-            // update actions buttons
-            const $table = $tableFooter.parents('table');
-            $table.find('td.actions').each(function () {
-                const $cell = $(this);
-                const $actions = $cell.find('.dropdown-menu').children();
-                if ($actions.length === 0) {
-                    $cell.find('button[data-toggle="dropdown"]').toggleDisabled(true);
-                }
-            });
-        },
-
         // for debug purpose
         // onAll: function (name) {
         //     window.console.log(name, Array.from(arguments).slice(1));
         // },
     };
-
-    $table.on('endPostBody', function () {
-        // update action buttons
-        const title = $table.data('no-action-title');
-        $table.find('td.actions button[data-toggle="dropdown"]').each(function () {
-            const $button = $(this);
-            if ($button.siblings('.dropdown-menu').children().length === 0) {
-                $button.attr('title', title).toggleDisabled(true);
-            }
-        });
-
-        //     const $button = $(this);
-        //     const $menu = $button.next('.dropdown-menu:first');
-        //     if ($menu.children() === 0) {
-        //         $menu.attr('title', title).toggleDisabled(true);
-        //     }
-        // });
-
-        // $table.find('td.actions').each(function () {
-        //     const $cell = $(this);
-        //     const $actions = $cell.find('.dropdown-menu').children();
-        //     if ($actions.length === 0) {
-        //         $cell.find('button[data-toggle="dropdown"]')
-        //             .attr('title', title).toggleDisabled(true);
-        //     }
-        // });
-    });
 
     $table.initBootstrapTable(options);
 
@@ -703,7 +661,7 @@ $.fn.extend({
             } else if (isQueryParams) {
                 $table.refresh();
             }
-            $('input.search-input').trigger('focus');//.focus();
+            $('input.search-input').trigger('focus');
         });
     }
 
@@ -758,10 +716,11 @@ $.fn.extend({
     $table.parents('.bootstrap-table').initContextMenu(ctxSelector, show);
 
     // initialize danger tooltips
-    if ($table.data('danger-tooltip-selector')) {
+    const tooltipSelector = $table.data('danger-tooltip-selector');
+    if (tooltipSelector) {
         $table.parents('.bootstrap-table').tooltip({
             customClass: 'tooltip-danger',
-            selector: $table.data('danger-tooltip-selector')
+            selector: tooltipSelector
         });
     }
 
@@ -787,5 +746,4 @@ $.fn.extend({
     if ($table.isEmpty()) {
         $('input.search-input').trigger('focus');
     }
-
 }(jQuery));

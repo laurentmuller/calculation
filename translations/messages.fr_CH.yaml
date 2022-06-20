@@ -243,6 +243,7 @@ category:
     add_title: Créer une nouvelle catégorie
     empty: Aucune catégorie définie.
     excel_title: Exporter la liste des catégories
+    group_all_text: Tous les groupes
     group_help: Afficher les catégories pour le groupe sélectionné
     pdf_title: Télécharger la liste des catégories
     product_title: Afficher les articles de cette catégorie
@@ -373,6 +374,8 @@ datatable:
   elements: éléments
   search: Rechercher
   show: Afficher
+  page_title: 'Afficher une page : 1 à %totalPages%'
+  page_error: 'La page doit être une valeur comprise entre 1 et %totalPages%'
   no_action: Aucune action disponible
 duplicate:
   count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
@@ -403,7 +406,7 @@ error_page:
     trace: Trace
   link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a>
     du site pour signaler cette erreur.
-  proprety: Propriété
+  property: Propriété
   title: Erreur %status_code%
   value: Valeur
 errors:
@@ -745,7 +748,7 @@ openweather:
     title: Importer les localités
   result:
     cities: Localités
-    description: Résultats de l'importation
+    description: Résultats de l'importation.
     errors: Erreurs
     failure: Une erreur s'est produite lors de l'importation des localités.
     objects: Objets
@@ -1025,6 +1028,7 @@ schema:
     primary_key: Clé primaire
     title: Table %name%
 search:
+  title: Rechercher
   clear: Effacer les critères de recherche
   empty: Aucun objet correspondant.
   entity_help: Afficher les résultats pour l'objet sélectionné
@@ -1036,19 +1040,18 @@ search:
   minimum: Saisir 2 caractères au minimum.
   placeholder: Tapez un texte à rechercher
   search: Lancer la recherche
-  title: Rechercher
 security:
   link: Déjà un compte ?
   login:
-    description: Connectez-vous avec votre nom d'utilisateur et votre mot de passe
-    error: Le nom de l'utilisateur ou le mot de passe est invalide.
+    title: Connexion à l'application
+    description: Connectez-vous avec votre nom d'utilisateur et votre mot de passe.
+    username: Nom d'utilisateur
     password: Mot de passe
     remember_me: Se souvenir de moi
     submit: Connexion
     success: Bienvenue <b>%username%</b>. Vous vous êtes connecté à l'application
       <b>%appname%</b> avec succès.
-    title: Connexion à l'application
-    username: Nom d'utilisateur
+    error: Le nom de l'utilisateur ou le mot de passe est invalide.
   logout:
     success: Vous vous êtes déconnecté de l'application <b>%appname%</b> avec succès.
 show:

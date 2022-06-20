@@ -36,7 +36,8 @@
     });
 
     // update link title on toggle
-    $('.card-body.collapse').on('shown.bs.collapse', function () {
+    const $collapse = $('.card-body.collapse');
+    $collapse.on('shown.bs.collapse', function () {
         const $link = $(this).parents('.card').find('.stretched-link');
         $link.attr('title', $configuration.data('collapse'));
     }).on('hidden.bs.collapse', function () {
@@ -45,7 +46,7 @@
     });
 
     // load content on first show
-    $('.card-body.collapse').one('show.bs.collapse', function () {
+    $collapse.one('show.bs.collapse', function () {
         $(this).loadContent();
     });
 

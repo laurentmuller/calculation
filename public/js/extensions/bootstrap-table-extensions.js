@@ -42,9 +42,7 @@ $.fn.extend({
     updateRow: function ($table) {
         'use strict';
         const $row = $(this);
-        /**
-         * @type {Options} options
-         */
+        /** @type {Options} options */
         const options = $table.getOptions();
 
         // already selected?
@@ -158,8 +156,64 @@ $.fn.extend({
                 // set focus on selected page item (if any)
                 // $this.selectPageItem();
 
-                // trigger event
-                $this.trigger('endPostBody', content);
+                // update action buttons
+                const title = $this.data('no-action-title');
+                $this.find('td.actions button[data-toggle="dropdown"]').each(function () {
+                    const $button = $(this);
+                    if ($button.siblings('.dropdown-menu').children().length === 0) {
+                        $button.attr('title', title).toggleDisabled(true);
+                    }
+                });
+
+                // add goto page input
+                const options = $this.getOptions();
+                const totalPages = options.totalPages;
+                const successivelySize = options.paginationSuccessivelySize + 2;
+                if (isData && totalPages > successivelySize) {
+                    const pageNumber = options.pageNumber;
+                    const title = $this.data('goto-page-title').replace('%totalPages%', totalPages);
+                    const error = $this.data('goto-page-error').replace('%totalPages%', totalPages);
+
+                    const $input = $('<input />', {
+                        'type': 'number',
+                        'title': title,
+                        'class': 'form-control text-center mr-1',
+                        'min': 1,
+                        'max': totalPages,
+                        'value': pageNumber,
+                        'css': {
+                            width: '4rem'
+                        }
+                    }).on('keydown', function (e) {
+                        if (e.which === 13) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const page = $input.intVal();
+                            if (page > 0) {
+                                $this.data('select-page', true);
+                                if (!$this.selectPage(page)) {
+                                    $this.removeData('select-page');
+                                    $input.trigger('select');
+                                }
+                            }
+                        }
+                    }).on('focus', function () {
+                        $input.trigger('select');
+                    }).on('input', function () {
+                        const page = $input.intVal();
+                        const isInvalid = page < 1 || page > totalPages;
+                        const newTitle = isInvalid ? error : title;
+                        $input.toggleClass('is-invalid', isInvalid)
+                            .attr('title', newTitle);
+                    });
+                    $input.prependTo('ul.pagination');
+
+                    // set focus
+                    if ($this.data('select-page')) {
+                        $this.removeData('select-page');
+                        $input.trigger('select').trigger('focus');
+                    }
+                }
             },
 
             onCustomViewPostBody: function (data) {
@@ -216,10 +270,6 @@ $.fn.extend({
         // initialize
         $this.bootstrapTable(settings);
         $this.enableKeys().highlight();
-
-        // save search text
-        // const searchText = $this.getOptions().searchText || '';
-        // $this.data('searchText', searchText);
 
         // select row on right click
         $this.find('tbody').on('mousedown', 'tr', function (e) {
@@ -465,7 +515,7 @@ $.fn.extend({
     /**
      * Gets the visible columns of the card view.
      *
-     * @return {array} the visible columns.
+     * @return {Array.<{cardClass: String}>} the visible columns.
      */
     getVisibleCardViewColumns: function () {
         'use strict';
@@ -701,6 +751,24 @@ $.fn.extend({
         return false;
     },
 
+
+    /**
+     * Select the given page. Do nothing if the page is out of allowed values.
+     *
+     * @param {number} page - the page to select.
+     *
+     * @return {boolean} true if the page is displayed.
+     */
+    selectPage: function (page) {
+        'use strict';
+        const $this = $(this);
+        const options = $this.getOptions();
+        if (page >= 1 && page <= options.totalPages && page !== options.pageNumber) {
+            $this.bootstrapTable('selectPage', page);
+            return true;
+        }
+        return false;
+    },
     /**
      * Select the first row.
      *

@@ -56,6 +56,13 @@ const SearchHelper = {
             url: $form.data('search-product'),
             error: $form.data('error-product'),
             empty: $form.data('item-empty'),
+            /**
+             * @param {Object} item
+             * @param {string} item.description
+             * @param {string} item.unit
+             * @param {int} item.categoryId
+             * @param {number} item.price
+             */
             onSelect: function (item) {
                 // copy values
                 $('#item_description').val(item.description);
@@ -480,6 +487,14 @@ const Application = {
 
         // call
         const url = $form.data('update');
+        /**
+         * @param {Object} response
+         * @param {boolean} response.result
+         * @param {string} response.message
+         * @param {string} response.body
+         * @param {number} response.user_margin
+         * @param {boolean} response.overall_below
+         */
         that.jqXHR = $.post(url, data, function (response) {
             // error?
             if (!response.result) {

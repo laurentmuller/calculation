@@ -18,6 +18,7 @@ use App\Traits\MathTrait;
 use App\Traits\TranslatorTrait;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
+use Laminas\Json\Expr;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -86,6 +87,22 @@ class BaseChart extends Highchart
             ->setRenderTo(self::CONTAINER)
             ->setBackground('transparent')
             ->setFontFamily('var(--font-family-sans-serif)');
+    }
+
+    /**
+     * Add a chart event handler.
+     *
+     * @param string $eventName the chart event name
+     * @param Expr   $handler   the event handler
+     */
+    public function addChartEventListener(string $eventName, Expr $handler): static
+    {
+        /** @psalm-var \stdClass $events */
+        $events = $this->chart->events ?? new \stdClass();
+        $events->$eventName = $handler;
+        $this->chart->events($events); // @phpstan-ignore-line
+
+        return $this;
     }
 
     /**

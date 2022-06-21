@@ -6,39 +6,32 @@
  * Creates rows for the given items.
  *
  * @param {array} items - the items to render.
- * @param {object} mapping - a map where keys are the item property and value is the cell class.
- * @param {string} header - the table headers to display.
+ * @param {object} mapping - a map where keys are the item property and value is the optional cell class.
  * @param {function} [callback] - an optional function to update the row.
  */
-function createRows(items, mapping, header, callback) {
+function createRows(items, mapping, callback) {
     'use strict';
-
-    // build
-    const $result = $('#result');
+    const $body = $('<tbody/>');
     const entries = Object.entries(mapping);
-    const $body = $('<tbody/>', {
-        'id': 'result'
-    });
-    items.forEach(function (item) {
-         const $row = $('<tr/>');
-         for (const [key, className] of entries) {
-             $row.append($('<td/>', {
-                 'html': item[key],
-                 'class': className || ''
-             }));
-         }
-        if (typeof callback === 'function') {
+    const isCallback = typeof callback === 'function';
+    items.forEach(function (item, index) {
+        const $row = $('<tr/>');
+        for (const [key, className] of entries) {
+            $row.append($('<td/>', {
+                'html': item[key],
+                'class': className || ''
+            }));
+        }
+        if (isCallback) {
             callback(item, $row);
+        }
+        if (index === 0) {
+            // remove top border
+            $row.find('td').addClass('border-top-0');
         }
         $body.append($row);
     });
-    $result.replaceWith($body);
-
-    // update displayed headers
-    $result.parents('table').find('thead').each(function () {
-        const $this = $(this);
-        $this.toggleClass('d-none', !$this.hasClass(header));
-    });
+    $('#table-result tbody').replaceWith($body);
 }
 
 /**
@@ -52,8 +45,8 @@ function renderCalculations(items) {
         'id': 'text-id text-border',
         'date': 'text-date',
         'state': 'text-state',
-        'customer': '',
-        'description': '',
+        'customer': null,
+        'description': null,
         'margin': 'text-percent',
         'total': 'text-currency'
     };
@@ -61,7 +54,7 @@ function renderCalculations(items) {
         const $cell = $row.find('td:first');
         $cell[0].style.setProperty('border-left-color', item.color, 'important');
     };
-    createRows(items, mapping, 'calculation', callback);
+    createRows(items, mapping, callback);
 }
 
 /**
@@ -76,7 +69,7 @@ function renderCustomers(items) {
         'address': 'w-25',
         'zipCity': 'w-25'
     };
-    createRows(items, mapping, 'customer');
+    createRows(items, mapping);
 }
 
 /**
@@ -93,7 +86,7 @@ function renderProducts(items) {
         'price': 'text-currency',
         'unit': 'text-unit'
     };
-    createRows(items, mapping, 'product');
+    createRows(items, mapping);
 }
 
 /**
@@ -139,14 +132,12 @@ function notifyMessage(type, message) {
  */
 function generate() {
     'use strict';
-
     disableButtons();
     const url = $('#form_entity').val();
     const data = {
         count: $('#form_count').intVal(),
         simulate: $('#form_simulate').isChecked()
     };
-
     const $form = $('#edit-form');
     $.getJSON(url, data, function (response) {
         if (!response.result) {
@@ -156,31 +147,28 @@ function generate() {
             notifyMessage('warning', $('#edit-form').data('empty'));
             return;
         }
-
         const key = $('#form_entity').getSelectedOption().data('key');
         switch (key) {
-        case 'calculation.name':
-            renderCalculations(response.items);
-            break;
-        case 'customer.name':
-            renderCustomers(response.items);
-            break;
-        case 'product.name':
-            renderProducts(response.items);
-            break;
-        default:
-            notifyMessage('warning', $form.data('empty'));
-            return;
+            case 'calculation':
+                renderCalculations(response.items);
+                break;
+            case 'customer':
+                renderCustomers(response.items);
+                break;
+            case 'product':
+                renderProducts(response.items);
+                break;
+            default:
+                notifyMessage('warning', $form.data('empty'));
+                return;
         }
 
         $('#simulated').toggleClass('d-none', !response.simulate);
         $('#message').text(response.message);
         $('#message-result').slideDown();
-
     }).always(function () {
         $('#form_confirm').setChecked(false);
         enableButtons();
-
     }).fail(function () {
         notifyMessage('danger', $form.data('error'));
     });
@@ -191,19 +179,9 @@ function generate() {
  */
 (function ($) {
     'use strict';
-
     $('#modal-result').on('hide.bs.modal', function () {
         $('#overflow').scrollTop(0);
     });
-
-    $('#form_simulate').on('input', function () {
-        if ($(this).isChecked()) {
-            $('#form_confirm').toggleDisabled(true).removeValidation();
-        } else {
-            $('#form_confirm').toggleDisabled(false);
-        }
-    });
-
     $('#edit-form').simulate().initValidator({
         submitHandler: function () {
             generate();

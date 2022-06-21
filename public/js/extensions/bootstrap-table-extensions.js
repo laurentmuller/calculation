@@ -166,52 +166,53 @@ $.fn.extend({
                 });
 
                 // add goto page input
-                const options = $this.getOptions();
-                const totalPages = options.totalPages;
-                const successivelySize = options.paginationSuccessivelySize + 2;
-                if (isData && totalPages > successivelySize) {
-                    const pageNumber = options.pageNumber;
-                    const title = $this.data('goto-page-title').replace('%totalPages%', totalPages);
-                    const error = $this.data('goto-page-error').replace('%totalPages%', totalPages);
-
-                    const $input = $('<input />', {
-                        'type': 'number',
-                        'title': title,
-                        'class': 'form-control text-center mr-1',
-                        'min': 1,
-                        'max': totalPages,
-                        'value': pageNumber,
-                        'css': {
-                            width: '4rem'
-                        }
-                    }).on('keydown', function (e) {
-                        if (e.which === 13) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            const page = $input.intVal();
-                            if (page > 0) {
-                                $this.data('select-page', true);
-                                if (!$this.selectPage(page)) {
-                                    $this.removeData('select-page');
-                                    $input.trigger('select');
+                if ($this.data('goto-page-display')) {
+                    const options = $this.getOptions();
+                    const totalPages = options.totalPages;
+                    const successivelySize = options.paginationSuccessivelySize + 2;
+                    if (isData && totalPages > successivelySize) {
+                        const pageNumber = options.pageNumber;
+                        const title = $this.data('goto-page-title').replace('%totalPages%', totalPages);
+                        const error = $this.data('goto-page-error').replace('%totalPages%', totalPages);
+                        const $input = $('<input />', {
+                            'type': 'number',
+                            'title': title,
+                            'class': 'form-control form-control-sm text-center mr-1',
+                            'min': 1,
+                            'max': totalPages,
+                            'value': pageNumber,
+                            'css': {
+                                width: '3rem'
+                            }
+                        }).on('keydown', function (e) {
+                            if (e.which === 13) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const page = $input.intVal();
+                                if (page > 0) {
+                                    $this.data('select-page', true);
+                                    if (!$this.selectPage(page)) {
+                                        $this.removeData('select-page');
+                                        $input.trigger('select');
+                                    }
                                 }
                             }
-                        }
-                    }).on('focus', function () {
-                        $input.trigger('select');
-                    }).on('input', function () {
-                        const page = $input.intVal();
-                        const isInvalid = page < 1 || page > totalPages;
-                        const newTitle = isInvalid ? error : title;
-                        $input.toggleClass('is-invalid', isInvalid)
-                            .attr('title', newTitle);
-                    });
-                    $input.prependTo('ul.pagination');
+                        }).on('focus', function () {
+                            $input.trigger('select');
+                        }).on('input', function () {
+                            const page = $input.intVal();
+                            const isInvalid = page < 1 || page > totalPages;
+                            const newTitle = isInvalid ? error : title;
+                            $input.toggleClass('is-invalid', isInvalid)
+                                .attr('title', newTitle);
+                        });
+                        $input.prependTo('ul.pagination');
 
-                    // set focus
-                    if ($this.data('select-page')) {
-                        $this.removeData('select-page');
-                        $input.trigger('select').trigger('focus');
+                        // set focus
+                        if ($this.data('select-page')) {
+                            $this.removeData('select-page');
+                            $input.trigger('select').trigger('focus');
+                        }
                     }
                 }
             },

@@ -453,7 +453,7 @@ generate:
   fields:
     count: Nombre
     entity: Objet à générer
-  result_link: Afficher les données
+  result_link: Afficher les données générées
   result_text: Données générées
   submit_text: Générer
   title: Générateur de données

@@ -1,6 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'generate.title' -%}
 {%- set title_icon = 'random' -%}
@@ -10,7 +9,7 @@
     'data-empty': 'generate.error.empty'|trans,
     'data-error': 'generate.error.failed'|trans
 }) -%}
-
+{# body #}
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-8">
@@ -24,13 +23,13 @@
 {{ form_row(form.confirm) }}
 {# results message #}
 <div id="message-result" class="alert alert-primary mb-0" style="display: none;">
-    <div class="row">
-        <div class="col-md-8">
+    <div class="row position-relative">
+        <div class="col-auto mr-auto">
             <p id="message" class="mb-0">{{ 'generate.error.empty'|trans }}</p>
         </div>
-        <div class="col-md-4 text-md-right">
-             <a href="#" class="alert-link" data-toggle="modal" data-target="#modal-result">
-                {{- 'generate.result_link'|trans -}}
+        <div class="col-auto text-right position-static">
+            <a href="#" class="alert-link stretched-link" data-toggle="modal" data-target="#modal-result" title="{{ 'generate.result_link'|trans }}">
+                <i class="fa-fw fa-solid fa-eye"></i>
             </a>
         </div>
     </div>
@@ -45,44 +44,17 @@
             <div class="modal-body">
                 <label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
                 <div id="overflow" class="overflow-auto table-fixed-header border">
-                    <table class="table table-fixed-header table-sm">
-                        <thead class="d-none calculation thead-light">
-                            <tr>
-                                <th class="text-id text-border" style="border-left-color: #e9ecef !important;">{{ 'calculation.fields.id'|trans }}</th>
-                                <th class="text-date">{{ 'calculation.fields.date'|trans }}</th>
-                                <th class="text-state">{{ 'calculation.fields.state'|trans }}</th>
-                                <th>{{ 'calculation.fields.customer'|trans }}</th>
-                                <th>{{ 'calculation.fields.description'|trans }}</th>
-                                <th class="text-percent">{{ 'calculation.fields.margin'|trans }}</th>
-                                <th class="text-currency">{{ 'calculation.fields.total'|trans }}</th>
-                            </tr>
-                        </thead>
-                        <thead class="d-none product thead-light">
-                            <tr>
-                                <th class="w-50">{{ 'product.fields.description'|trans }}</th>
-                                <th class="text-group">{{ 'product.fields.group'|trans }}</th>
-                                <th class="text-category">{{ 'product.fields.category'|trans }}</th>
-                                <th class="text-currency">{{ 'product.fields.price'|trans }}</th>
-                                <th class="text-unit">{{ 'product.fields.unit'|trans }}</th>
-                            </tr>
-                        </thead>
-                        <thead class="d-none customer thead-light">
-                            <tr>
-                                <th class="w-50">{{ 'customer.fields.nameAndCompany'|trans }}</th>
-                                <th class="w-25">{{ 'customer.fields.address'|trans }}</th>
-                                <th class="w-25">{{ 'customer.fields.zipCity'|trans }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="result"></tbody>
+                    <table  id="table-result" class="table table-hover table-fixed-header table-sm">
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
                 <div class="row no-gutters w-100">
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
                     </div>
-                    <div class="col-9 text-right">
+                    <div class="col-md-9 text-md-right">
                         <p id="simulated" class="small mb-0 d-none">{{ 'common.simulate.message'|trans }}</p>
                     </div>
                 </div>
@@ -91,7 +63,7 @@
     </div>
 </div>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-simulate.js') }}

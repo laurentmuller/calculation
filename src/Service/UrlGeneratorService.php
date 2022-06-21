@@ -79,11 +79,12 @@ class UrlGeneratorService
      */
     public function cancelUrl(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
-        // build parameters
+        // get parameters
         $params = $this->routeParams($request, $id);
 
         // caller?
         if (null !== $caller = $this->getCaller($params)) {
+            unset($params[self::PARAM_CALLER]);
             if (!empty($params)) {
                 $caller .= \str_contains($caller, '?') ? '&' : '?';
                 $caller .= \http_build_query($params);
@@ -108,6 +109,8 @@ class UrlGeneratorService
 
     /**
      * Gets the request parameters.
+     *
+     * @psalm-return array<string, string|int|float|bool>
      */
     public function routeParams(Request $request, ?int $id = 0): array
     {
@@ -131,15 +134,14 @@ class UrlGeneratorService
 
     /**
      * Gets the caller parameter.
+     *
+     * @param array<string, string|int|float|bool> $params
      */
-    private function getCaller(array &$params): ?string
+    private function getCaller(array $params): ?string
     {
         /** @var string|null $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
         if (!empty($caller)) {
-            unset($params[self::PARAM_CALLER]);
-
-            // root?
             return ('/' === $caller) ? $caller : \rtrim($caller, '/');
         }
 

@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for {@link Utils} class.
- *
- * @see Utils
  */
 class UtilsTest extends TestCase
 {
@@ -87,7 +85,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getEndwith(): array
+    public function getEndWith(): array
     {
         return [
             ['fake', '', false, false],
@@ -130,7 +128,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getStartwith(): array
+    public function getStartWith(): array
     {
         return [
             ['fake', '', false, false],
@@ -186,12 +184,6 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function testAccessor(): void
-    {
-        $accessor = Utils::getAccessor();
-        $this->assertNotNull($accessor);
-    }
-
     /**
      * @dataProvider getAscii
      */
@@ -223,30 +215,31 @@ class UtilsTest extends TestCase
     /**
      * @dataProvider getContains
      */
-    public function testContains(string $haystack, string $needle, bool $ignorecase, bool $expected): void
+    public function testContains(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
-        $actual = Utils::contains($haystack, $needle, $ignorecase);
+        $actual = Utils::contains($haystack, $needle, $ignore_case);
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     * @dataProvider getEndwith
+     * @dataProvider getEndWith
      */
-    public function testEndwith(string $haystack, string $needle, bool $ignorecase, bool $expected): void
+    public function testEndWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
-        $actual = Utils::endwith($haystack, $needle, $ignorecase);
+        $actual = Utils::endWith($haystack, $needle, $ignore_case);
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testExceptionContext(): void
     {
         $code = 200;
         $message = 'My message';
         $e = new \Exception($message, $code);
-
         $result = Utils::getExceptionContext($e);
 
-        $this->assertIsArray($result);
         $this->assertArrayHasKey('message', $result);
         $this->assertArrayHasKey('code', $result);
         $this->assertArrayHasKey('file', $result);
@@ -260,11 +253,8 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getExportVar
-     *
-     * @param mixed $var
-     * @param mixed $expected
      */
-    public function testExportVar($var, $expected): void
+    public function testExportVar(mixed $var, mixed $expected): void
     {
         $actual = Utils::exportVar($var);
         $this->assertEquals($expected, $actual);
@@ -274,9 +264,8 @@ class UtilsTest extends TestCase
      * @dataProvider getShortName
      *
      * @param mixed $var
-     * @param mixed $expected
      */
-    public function testGetShortName($var, $expected, bool $exception = false): void
+    public function testGetShortName($var, mixed $expected, bool $exception = false): void
     {
         if (null === $var) {
             $this->expectException(\TypeError::class);
@@ -289,15 +278,21 @@ class UtilsTest extends TestCase
 
     public function testGroupByArrays(): void
     {
+        /**
+         * @var array<array{id: int, value: string}> $array
+         */
         $array = [
             ['id' => 1, 'value' => '1'],
             ['id' => 2, 'value' => '2'],
             ['id' => 2, 'value' => '3'],
         ];
         $key = 'id';
+
+        /**
+         * @var array<int, array> $result
+         */
         $result = Utils::groupBy($array, $key);
 
-        $this->assertIsArray($result);
         $this->assertArrayHasKey(1, $result);
         $this->assertArrayHasKey(2, $result);
         $this->assertCount(1, $result[1]);
@@ -306,15 +301,21 @@ class UtilsTest extends TestCase
 
     public function testGroupByCallable(): void
     {
+        /**
+         * @var array<array{id: int, value: string}> $array
+         */
         $array = [
             ['id' => 1, 'value' => '1'],
             ['id' => 2, 'value' => '2'],
             ['id' => 2, 'value' => '3'],
         ];
-        $key = fn (array $value) => $value['id'];
+        $key = fn (array $value): int => (int) $value['id'];
+
+        /**
+         * @var array<int, array> $result
+         */
         $result = Utils::groupBy($array, $key);
 
-        $this->assertIsArray($result);
         $this->assertArrayHasKey(1, $result);
         $this->assertArrayHasKey(2, $result);
         $this->assertCount(1, $result[1]);
@@ -323,6 +324,9 @@ class UtilsTest extends TestCase
 
     public function testGroupByMultiple(): void
     {
+        /**
+         * @var array<array{id0: int, id1: string, value: string}> $array
+         */
         $array = [
             ['id0' => 1, 'id1' => '1', 'value' => '1'],
             ['id0' => 1, 'id1' => '1', 'value' => '2'],
@@ -332,9 +336,11 @@ class UtilsTest extends TestCase
             ['id0' => 2, 'id1' => '1', 'value' => '2'],
             ['id0' => 2, 'id1' => '2', 'value' => '2'],
         ];
-        $result = Utils::groupBy($array, 'id0', 'id1');
 
-        $this->assertIsArray($result);
+        /**
+         * @var array<int, array<int, array>> $result
+         */
+        $result = Utils::groupBy($array, 'id0', 'id1');
 
         // first level
         $this->assertArrayHasKey(1, $result);
@@ -365,9 +371,11 @@ class UtilsTest extends TestCase
             $this->createData(2, '3'),
         ];
         $key = 'value';
+        /**
+         * @var array<int, array> $result
+         */
         $result = Utils::groupBy($array, $key);
 
-        $this->assertIsArray($result);
         $this->assertArrayHasKey(1, $result);
         $this->assertArrayHasKey(2, $result);
         $this->assertCount(1, $result[1]);
@@ -384,20 +392,18 @@ class UtilsTest extends TestCase
     }
 
     /**
-     * @dataProvider getStartwith
+     * @dataProvider getStartWith
      */
-    public function testStartwith(string $haystack, string $needle, bool $ignorecase, bool $expected): void
+    public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
-        $actual = Utils::startwith($haystack, $needle, $ignorecase);
+        $actual = Utils::startWith($haystack, $needle, $ignore_case);
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider getToFloat
-     *
-     * @param mixed $var
      */
-    public function testToFloat($var, float $expected, bool $equal): void
+    public function testToFloat(mixed $var, float $expected, bool $equal): void
     {
         $actual = Utils::toFloat($var);
         if ($equal) {
@@ -409,10 +415,8 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getToInt
-     *
-     * @param mixed $var
      */
-    public function testToInt($var, int $expected, bool $equal): void
+    public function testToInt(mixed $var, int $expected, bool $equal): void
     {
         $actual = Utils::toInt($var);
         if ($equal) {
@@ -424,10 +428,8 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getToString
-     *
-     * @param mixed $var
      */
-    public function testToString($var, string $expected, bool $equal): void
+    public function testToString(mixed $var, string $expected, bool $equal): void
     {
         $actual = Utils::toString($var);
         if ($equal) {

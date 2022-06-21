@@ -18,7 +18,6 @@
         }
 
         destroy() {
-            // remove handlers and data
             const $element = this.$element;
             if (this.inputProxy) {
                 this.$simulate.off('input', this.inputProxy);

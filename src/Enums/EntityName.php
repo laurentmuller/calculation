@@ -125,8 +125,6 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     }
 
     /**
-     * Note: the LOG entity name is skipped.
-     *
      * @return EntityName[]
      */
     public static function sorted(): array
@@ -162,7 +160,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
         if (false !== ($pos = \strrpos($name, '\\'))) {
             $name = \substr($name, $pos + 1);
         }
-        if (!Utils::startwith($name, self::ENTITY_PREFIX)) {
+        if (!Utils::startWith($name, self::ENTITY_PREFIX)) {
             $name = self::ENTITY_PREFIX . $name;
         }
 

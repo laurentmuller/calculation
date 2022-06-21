@@ -122,15 +122,15 @@ final class Utils
      *
      * <b>NB:</b> If the needle is empty, this function return false.
      *
-     * @param string $haystack   the string to search in
-     * @param string $needle     the string to search for
-     * @param bool   $ignorecase true for case-insensitive; false for case-sensitive
+     * @param string $haystack    the string to search in
+     * @param string $needle      the string to search for
+     * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
      *
      * @return bool true if substring is contained within a string
      */
-    public static function contains(string $haystack, string $needle, bool $ignorecase = false): bool
+    public static function contains(string $haystack, string $needle, bool $ignore_case = false): bool
     {
-        return self::getString($haystack, $ignorecase)->containsAny($needle);
+        return self::getString($haystack, $ignore_case)->containsAny($needle);
     }
 
     /**
@@ -138,15 +138,15 @@ final class Utils
      *
      * <b>NB:</b> If the needle is empty, this function return false.
      *
-     * @param string $haystack   the string to search in
-     * @param string $needle     the string to search for
-     * @param bool   $ignorecase true for case-insensitive; false for case-sensitive
+     * @param string $haystack    the string to search in
+     * @param string $needle      the string to search for
+     * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
      *
      * @return bool true if ends with substring
      */
-    public static function endwith(string $haystack, string $needle, bool $ignorecase = false): bool
+    public static function endWith(string $haystack, string $needle, bool $ignore_case = false): bool
     {
-        return self::getString($haystack, $ignorecase)->endsWith($needle);
+        return self::getString($haystack, $ignore_case)->endsWith($needle);
     }
 
     /**
@@ -219,6 +219,8 @@ final class Utils
      * @param \Throwable $e the exception to get the context for
      *
      * @return array an array with the message, class, code, file, line and trace properties
+     *
+     * @throws \ReflectionException
      */
     public static function getExceptionContext(\Throwable $e): array
     {
@@ -259,6 +261,8 @@ final class Utils
      * @return string the short name or null if the variable is null
      *
      * @psalm-param object|class-string $var
+     *
+     * @throws \ReflectionException
      */
     public static function getShortName(object|string $var): string
     {
@@ -376,15 +380,15 @@ final class Utils
      *
      * <b>NB:</b> If the needle is empty, this function return false.
      *
-     * @param string $haystack   the string to search in
-     * @param string $needle     the string to search for
-     * @param bool   $ignorecase true for case-insensitive; false for case-sensitive
+     * @param string $haystack    the string to search in
+     * @param string $needle      the string to search for
+     * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
      *
      * @return bool true if starts with substring
      */
-    public static function startwith(string $haystack, string $needle, bool $ignorecase = false): bool
+    public static function startWith(string $haystack, string $needle, bool $ignore_case = false): bool
     {
-        return self::getString($haystack, $ignorecase)->startsWith($needle);
+        return self::getString($haystack, $ignore_case)->startsWith($needle);
     }
 
     /**
@@ -426,15 +430,15 @@ final class Utils
     /**
      * Creates a unicode string.
      *
-     * @param string $string     the string content
-     * @param bool   $ignorecase true to ignore case considerations
+     * @param string $string      the string content
+     * @param bool   $ignore_case true to ignore case considerations
      *
      * @return UnicodeString the unicode string
      */
-    private static function getString(string $string, bool $ignorecase): UnicodeString
+    private static function getString(string $string, bool $ignore_case): UnicodeString
     {
         $string = new UnicodeString($string);
-        if ($ignorecase) {
+        if ($ignore_case) {
             return $string->ignoreCase();
         }
 

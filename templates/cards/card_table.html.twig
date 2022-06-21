@@ -136,11 +136,13 @@
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
     'no-action-title': 'datatable.no_action'|trans,
+    'goto-page-display': app.debug|json_encode,
     'goto-page-title': 'datatable.page_title'|trans,
     'goto-page-error': 'datatable.page_error'|trans,
     'default-action': app.editAction.value,
     'defer-url': url(app.request.get('_route')),
     'save-url': url('ajax_save_table'),
+
     'caller': caller
 }) -%}
 

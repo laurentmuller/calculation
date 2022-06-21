@@ -733,9 +733,9 @@ $.fn.extend({
     });
 
     // update UI
-    $('.fixed-table-pagination').appendTo('.card-footer');
-    $('.fixed-table-toolbar').appendTo('.col-search');
+    $('.fixed-table-pagination').addClass('pagination-sm small').appendTo('.card-footer');
     $('.fixed-table-toolbar input.search-input').attr('type', 'text').addClass('form-control-sm').prependTo('.input-group-search');
+    $('.fixed-table-toolbar').appendTo('.col-search');
     $('.fixed-table-toolbar .search').remove();
     $('.btn-group-search').appendTo('.fixed-table-toolbar');
     if ($searchMinimum.length) {

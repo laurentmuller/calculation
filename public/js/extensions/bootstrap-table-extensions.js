@@ -166,54 +166,8 @@ $.fn.extend({
                 });
 
                 // add goto page input
-                if ($this.data('goto-page-display')) {
-                    const options = $this.getOptions();
-                    const totalPages = options.totalPages;
-                    const successivelySize = options.paginationSuccessivelySize + 2;
-                    if (isData && totalPages > successivelySize) {
-                        const pageNumber = options.pageNumber;
-                        const title = $this.data('goto-page-title').replace('%totalPages%', totalPages);
-                        const error = $this.data('goto-page-error').replace('%totalPages%', totalPages);
-                        const $input = $('<input />', {
-                            'type': 'number',
-                            'title': title,
-                            'class': 'form-control form-control-sm text-center mr-1',
-                            'min': 1,
-                            'max': totalPages,
-                            'value': pageNumber,
-                            'css': {
-                                width: '3rem'
-                            }
-                        }).on('keydown', function (e) {
-                            if (e.which === 13) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                const page = $input.intVal();
-                                if (page > 0) {
-                                    $this.data('select-page', true);
-                                    if (!$this.selectPage(page)) {
-                                        $this.removeData('select-page');
-                                        $input.trigger('select');
-                                    }
-                                }
-                            }
-                        }).on('focus', function () {
-                            $input.trigger('select');
-                        }).on('input', function () {
-                            const page = $input.intVal();
-                            const isInvalid = page < 1 || page > totalPages;
-                            const newTitle = isInvalid ? error : title;
-                            $input.toggleClass('is-invalid', isInvalid)
-                                .attr('title', newTitle);
-                        });
-                        $input.prependTo('ul.pagination');
-
-                        // set focus
-                        if ($this.data('select-page')) {
-                            $this.removeData('select-page');
-                            $input.trigger('select').trigger('focus');
-                        }
-                    }
+                if (isData && $this.data('goto-page-display')) {
+                    $this.addGotoPage();
                 }
             },
 
@@ -1078,14 +1032,99 @@ $.fn.extend({
      */
     rgba2rgb: function (color) {
         'use strict';
-        const regex = /rgba\((?<colors>.*)\)/i;
+        const regex = /rgba\((.*)\)/i;
         const result = color.match(regex);
         if (result !== null && result.length === 2) {
             const colors = result[1].split(',', 3);
             if (colors.length === 3) {
-                return 'rgb(' + colors.join(',') + ')';
+                const newColor = colors.map(color => {
+                    return color.trim();
+                }).join(',');
+                return 'rgb(' + newColor + ')';
             }
         }
         return color;
+    },
+
+    /**
+     * Update the goto page input.
+     */
+    updateGotoPage: function (options) {
+        'use strict';
+        const $gotoPage = $('#goto-page');
+        if ($gotoPage.length === 0) {
+            return;
+        }
+        const totalPages = options.totalPages;
+        const successivelySize = options.paginationSuccessivelySize + 2;
+        if (totalPages > successivelySize) {
+            $gotoPage.val(options.pageNumber)
+                .attr('max', options.totalPages)
+                .show();
+        } else {
+            $gotoPage.hide();
+        }
+    },
+
+    /**
+     * Add the goto page input.
+     */
+    addGotoPage: function () {
+        'use strict';
+        // already created?
+        if ($('#goto-page').length !== 0) {
+            return;
+        }
+
+        const $this = $(this);
+        const options = $this.getOptions();
+        const iconSize = options.iconSize || '';
+        const $input = $('<input />', {
+            'id': 'goto-page',
+            'type': 'number',
+            'title': $this.data('goto-page-title'),
+            'class': 'form-control form-control-' + iconSize + ' text-center float-right ml-1',
+            'min': 1,
+            'max': options.totalPages,
+            'value': options.pageNumber,
+            'css': {
+                width: '3rem'
+            }
+        }).on('keyup', function (e) {
+            const maxPage = Number.parseInt($input.attr('max'), 10);
+            switch (e.which) {
+                case 38: // arrow up
+                case 40: // arrow down
+                    $input.select();
+                    break;
+                case 13: // enter
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const page = $input.intVal();
+                    if (page >= 1 && page <= maxPage) {
+                        $this.selectPage(page);
+                        $input.select();
+                    }
+                    break;
+                default:
+                    const value = $input.intVal();
+                    if (value < 1) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $input.val(1).select();
+                    } else if (value > maxPage) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $input.val(maxPage).select();
+                    }
+                    break;
+            }
+        }).on('focus', function () {
+            $input.select();
+        });
+        $input.appendTo('.card-footer');
+
+        // update
+        $this.updateGotoPage(options);
     }
 });

@@ -465,9 +465,10 @@ $.fn.extend({
 
         onPreBody: function (data) {
             /**
-             * @type {{pageList: any, totalRows: number, pageSize: string, sortName: string, sortOrder: string}} options
+             * @type {{pageList: number[], totalRows: number, pageSize: string, sortName: string, sortOrder: string}} options
              */
             const options = $table.getOptions();
+
             // update pages list and page button
             if ($pageButton.length) {
                 let pageList = options.pageList;
@@ -496,6 +497,9 @@ $.fn.extend({
                     $('.dropdown-menu-page').append($links);
                     $pageButton.toggleDisabled(false);
                 }
+
+                // update goto page input
+                $table.updateGotoPage(options);
             }
 
             // update clear search button
@@ -733,7 +737,8 @@ $.fn.extend({
     });
 
     // update UI
-    $('.fixed-table-pagination').addClass('pagination-sm small').appendTo('.card-footer');
+    //.addClass('pagination-sm small')
+    $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
     $('.fixed-table-toolbar input.search-input').attr('type', 'text').addClass('form-control-sm').prependTo('.input-group-search');
     $('.fixed-table-toolbar').appendTo('.col-search');
     $('.fixed-table-toolbar .search').remove();

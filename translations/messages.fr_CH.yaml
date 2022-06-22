@@ -374,8 +374,7 @@ datatable:
   elements: éléments
   search: Rechercher
   show: Afficher
-  page_title: 'Afficher une page : 1 à %totalPages%'
-  page_error: 'La page doit être une valeur comprise entre 1 et %totalPages%'
+  page_title: Afficher la page
   no_action: Aucune action disponible
 duplicate:
   count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'

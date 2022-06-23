@@ -27,28 +27,42 @@ use Symfony\Component\Routing\RouterInterface;
 final class SymfonyInfo
 {
     /**
-     * The properties to get for a package.
-     *
-     * @var string[]
+     * The array key for debug packages and routes.
      */
+    final public const KEY_DEBUG = 'debug';
+
+    /**
+     * The array key for runtime packages and routes.
+     */
+    final public const KEY_RUNTIME = 'runtime';
+
+    private const PACKAGE_FILE_NAME = '/vendor/composer/installed.json';
+
     private const PACKAGE_PROPERTIES = [
         'name',
         'version',
+        'version_normalized',
         'description',
         'homepage',
     ];
 
     /**
+     * @var array<string, array{name: string, namespace: string, path: string}>|null
+     */
+    private ?array $bundles = null;
+
+    /**
      * @var null|array{
-     *     runtime?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>,
-     *     debug?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>
+     *     runtime?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>,
+     *     debug?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>
      * }
      */
     private ?array $packages = null;
+
     /**
      * @var null|array{
-     *     runtime?: array<string, array{name: string, path: string, debug: bool}>,
-     *     debug?: array<string, array{name: string, path: string, debug: bool}>
+     *     runtime?: array<string, array{name: string, path: string}>,
+     *     debug?: array<string, array{name: string, path: string}>
      * }
      */
     private ?array $routes = null;
@@ -67,20 +81,22 @@ final class SymfonyInfo
      */
     public function getBundles(): array
     {
-        $bundles = [];
-        $rootDir = \realpath($this->kernel->getProjectDir()) . \DIRECTORY_SEPARATOR;
-        foreach ($this->kernel->getBundles() as $key => $bundleObject) {
-            $bundles[$key] = [
-                'name' => $key,
-                'namespace' => $bundleObject->getNamespace(),
-                'path' => \str_replace($rootDir, '', $bundleObject->getPath()),
-            ];
+        if (null === $this->bundles) {
+            $this->bundles = [];
+            $rootDir = \realpath($this->kernel->getProjectDir()) . \DIRECTORY_SEPARATOR;
+            foreach ($this->kernel->getBundles() as $key => $bundleObject) {
+                $this->bundles[$key] = [
+                    'name' => $key,
+                    'namespace' => $bundleObject->getNamespace(),
+                    'path' => \str_replace($rootDir, '', $bundleObject->getPath()),
+                ];
+            }
+            if (!empty($this->bundles)) {
+                \ksort($this->bundles);
+            }
         }
 
-        // sort
-        \ksort($bundles);
-
-        return $bundles;
+        return $this->bundles;
     }
 
     /**
@@ -199,30 +215,27 @@ final class SymfonyInfo
      * Gets packages information.
      *
      * @return array{
-     *     runtime?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>,
-     *     debug?: array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>
+     *     runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
+     *     debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
      * }
      */
     public function getPackages(): array
     {
         if (null === $this->packages) {
             $result = [];
-            $path = $this->kernel->getProjectDir() . '/composer.lock';
+            $path = $this->kernel->getProjectDir() . self::PACKAGE_FILE_NAME;
             if (FileUtils::exists($path)) {
                 try {
-                    // parse
                     /** @var array $content */
                     $content = FileUtils::decodeJson($path);
 
-                    // runtime packages
-                    $result = [
-                        'runtime' => $this->processPackages((array) $content['packages'], false),
-                    ];
+                    /** @var string[] $devPackageNames */
+                    $devPackageNames = $content['dev-package-names'] ?? [];
 
-                    // development packages
-                    if ($this->isDebug()) {
-                        $result['debug'] = $this->processPackages((array) $content['packages-dev'], true);
-                    }
+                    /** @var array<string, array{name: string, version: string, description?: string, homepage?: string}> $packages */
+                    $packages = (array) $content['packages'];
+
+                    $result = $this->processPackages($packages, $devPackageNames);
                 } catch (\InvalidArgumentException) {
                     // ignore
                 }
@@ -245,8 +258,8 @@ final class SymfonyInfo
      * Gets all routes.
      *
      * @return array{
-     *     runtime?: array<string, array{name: string, path: string, debug: bool}>,
-     *     debug?: array<string, array{name: string, path: string, debug: bool}>
+     *     runtime?: array<string, array{name: string, path: string}>,
+     *     debug?: array<string, array{name: string, path: string}>
      * }
      */
     public function getRoutes(): array
@@ -255,25 +268,17 @@ final class SymfonyInfo
             $result = [];
             $routes = $this->router->getRouteCollection()->all();
             foreach ($routes as $name => $route) {
-                $item = [
+                $key = $this->isDebugRoute($name) ? self::KEY_DEBUG : self::KEY_RUNTIME;
+                $result[$key][$name] = [
                     'name' => $name,
                     'path' => $route->getPath(),
                 ];
-                if (\str_starts_with($name, '_')) {
-                    $item['debug'] = true;
-                    $result['debug'][$name] = $item;
-                } else {
-                    $item['debug'] = false;
-                    $result['runtime'][$name] = $item;
-                }
             }
-
-            // sort
-            if (!empty($result['runtime'])) {
-                \ksort($result['runtime']);
+            if (!empty($result[self::KEY_RUNTIME])) {
+                \ksort($result[self::KEY_RUNTIME]);
             }
-            if (!empty($result['debug'])) {
-                \ksort($result['debug']);
+            if (!empty($result[self::KEY_DEBUG])) {
+                \ksort($result[self::KEY_DEBUG]);
             }
 
             $this->routes = $result;
@@ -384,41 +389,42 @@ final class SymfonyInfo
         return $path;
     }
 
-    /**
-     * Process the given packages.
-     *
-     * @param array $packages the packages to process
-     * @param bool  $dev      true if packages are required only for development mode
-     *
-     * @return array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}>
-     */
-    private function processPackages(array $packages, bool $dev): array
+    private function isDebugRoute(string $name): bool
     {
-        /**
-         * @psalm-var array<string, array{name: string, version: string, description: string|null, homepage: string|null, dev: bool}> $result
-         */
+        return \str_starts_with($name, '_');
+    }
+
+    /**
+     * @param array<string, array{name: string, version: string, description?: string, homepage?: string}> $packages
+     * @param string[]                                                                                     $devPackageNames
+     *
+     * @return  array{
+     *          runtime?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>,
+     *          debug?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>
+     *          }
+     */
+    private function processPackages(array $packages, array $devPackageNames): array
+    {
         $result = [];
-
-        /** @psalm-var array{name: string, version: string, description: string|null, homepage: string|null} $entry */
-        foreach ($packages as $entry) {
-            $package = ['dev' => $dev];
+        foreach ($packages as $package) {
+            $name = $package['name'];
+            $entry = ['name' => $name];
+            $type = \in_array($name, $devPackageNames, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             foreach (self::PACKAGE_PROPERTIES as $key) {
-                $value = $entry[$key] ?? '';
-                switch ($key) {
-                case 'version':
-                    $value = \ltrim($value, 'v');
-                    break;
-                case 'description':
-                    $value = \rtrim($value, '.') . '.';
-                    break;
+                $value = $package[$key] ?? '';
+                if ('description' === $key && '' !== $value && !\str_ends_with($value, '.')) {
+                    $value .= '.';
                 }
-                $package[$key] = $value;
+                $entry[$key] = $value;
             }
-            $result[$package['name']] = $package;
+            $result[$type][$name] = $entry;
         }
-
-        // sort
-        \ksort($result);
+        if (!empty($result[self::KEY_RUNTIME])) {
+            \ksort($result[self::KEY_RUNTIME]);
+        }
+        if (!empty($result[self::KEY_DEBUG])) {
+            \ksort($result[self::KEY_DEBUG]);
+        }
 
         return $result; // @phpstan-ignore-line
     }

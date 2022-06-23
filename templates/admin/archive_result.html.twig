@@ -1,11 +1,13 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
+{% import 'macros/_properties.html.twig' as properties %}
+{# parameters #}
 {%- set title = 'archive.title' -%}
 {%- set title_icon = 'calendar-xmark far' -%}
 {%- set title_description = 'archive.result.description' -%}
 {%- set cancel_path = path('homepage') -%}
-
+{%- set results = result.results -%}
+{# body #}
 {% block card_body %}
 <div class="row mb-1">
     <div class="col-md-6">
@@ -16,41 +18,100 @@
     </div>
 </div>
 {% if result.valid %}
-<div class="table-responsive">
-    <table class="table table-no-bottom table-sm mb-0">
-        <thead>
-        <tr>
-            <th>{{ 'archive.result.old_state'|trans }}</th>
-            <th class="text-right">{{ 'archive.result.calculations'|trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for key, calculations in result.results %}
+    {# results #}
+    <div class="table-responsive position-relative">
+        <table class="table table-no-bottom table-sm mb-0">
+            <thead>
             <tr>
-                <td>{{ key }}</td>
-                <td class="text-right">{{ calculations|length|integer }}</td>
+                <th>{{ 'archive.result.old_state'|trans }}</th>
+                <th class="text-right">{{ 'archive.result.calculations'|trans }}</th>
             </tr>
-        {% endfor %}
-        </tbody>
-        <tfoot>
-        <tr>
-            <th>{{ 'archive.result.total'|trans }}</th>
-            <th class="text-right">{{ result.total }}</th>
-        </tr>
-        </tfoot>
-    </table>
-</div>
-{% if result.simulate %}
-    <hr class="mt-0"/>
-    <p class="mb-0 text-right text-muted small">{{ 'common.simulate.message'|trans }}</p>
-{% endif %}
+            </thead>
+            <tbody>
+            {% for key, value in results %}
+                <tr>
+                    <td class="text-border" style="{{ properties.stateCss(value.state.color) }}">{{ key }}</td>
+                    <td class="text-right">{{ value.calculations|length|integer }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th class="text-border">{{ 'archive.result.total'|trans }}</th>
+                <th class="text-right">
+                    <a href="#" class="stretched-link" title="{{ 'archive.result.show'|trans }}" data-toggle="modal" data-target="#modal-result">{{ result.total|integer }}</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    {% if result.simulate %}
+        <hr class="mt-0"/>
+        <p class="mb-0 text-right text-muted small">{{ 'common.simulate.message'|trans }}</p>
+    {% endif %}
+    {# results dialog #}
+    <div class="modal fade" id="modal-result" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ title|trans }}</h5>{{ icons.button_close_modal }}
+                </div>
+                <div class="modal-body">
+                    <label class="font-weight-bold">{{ 'archive.result.calculations'|trans }}</label>
+                    <div id="overflow" class="overflow-auto table-fixed-header border">
+                        <table id="table-result" class="table table-hover table-sm mb-0">
+                            <tbody>
+                            {%- set border = ' border-top-0' -%}
+                            {% for key, value in results %}
+                                {%- set style = properties.stateCss(value.state.color) -%}
+                                <tr class="thead-light">
+                                    <th class="text-border{{ border }}" colspan="4" style="{{ style }}">{{ key }}</th>
+                                    <th class="text-currency{{ border }}"colspan="2" >{{ 'counters.calculations'|trans({'count': value.calculations|length}) }}</th>
+                                </tr>
+                                {% for calculation in value.calculations %}
+                                <tr>
+                                    <td class="text-id text-border" style="{{ style }}">{{ calculation.id|identifier }}</td>
+                                    <td class="text-date">{{ calculation.date|localedate }}</td>
+                                    <td>{{ calculation.customer }}</td>
+                                    <td>{{ calculation.description }}</td>
+                                    <td class="text-percent">{{ calculation.overallMargin|percent }}</td>
+                                    <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
+                                </tr>
+                                {% endfor %}
+                                {%- set border = '' %}
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr class="thead-light">
+                                    <th class="text-border" colspan="4">{{ 'archive.result.total'|trans }}</th>
+                                    <th class="text-right" colspan="2">{{ 'counters.calculations'|trans({'count': result.total}) }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row no-gutters w-100">
+                        <div class="col-md-3">
+                            {{ icons.button_close_modal(false) }}
+                        </div>
+                        {% if result.simulate %}
+                        <div class="col-md-9 text-md-right">
+                            <p class="small mb-0">{{ 'common.simulate.message'|trans }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% else %}
     <div class="alert alert-warning text-center mt-4 mb-0" role="alert">
         {{- 'archive.result.empty'|trans -}}
     </div>
 {% endif %}
 {% endblock %}
-
+{# footer #}
 {% block card_footer %}
 {{ icons.homepage() }}
 {{ icons.link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-outline-secondary', null) -}}

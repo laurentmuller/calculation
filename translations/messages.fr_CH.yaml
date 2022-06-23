@@ -1388,6 +1388,7 @@ archive:
   edit:
     description: Cette page vous permet d'archiver des calculations en modifiant leur statut.
     last_update: 'Dernier archivage : %date%'
+    submit: Archiver
   result:
     new_archive: Nouvel archivage
     description: Résultat de l'archivage des calculations.
@@ -1397,6 +1398,7 @@ archive:
     new_state: 'Nouveau statut : %state%'
     old_state: Anciens statut
     calculations: Calculations
+    show: Afficher les calculations modifiées
   fields:
     date: Date limite
     target: Nouveau statut

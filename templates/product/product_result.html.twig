@@ -74,7 +74,7 @@
             <div class="modal-footer">
                 <div class="row no-gutters w-100">
                     <div class="col-3">
-                        <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
+                        {{ icons.button_close_modal(false) }}
                     </div>
                     <div class="col-9 text-right">
                         <p class="small mb-0{% if not query.simulate %} d-none{% endif %}">{{ 'common.simulate.message'|trans }}</p>

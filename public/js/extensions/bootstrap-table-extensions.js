@@ -1122,6 +1122,7 @@ $.fn.extend({
         }).on('focus', function () {
             $input.select();
         });
+
         $input.appendTo('.card-footer');
 
         // update

@@ -1,11 +1,11 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title = 'archive.title' -%}
 {%- set title_icon = 'calendar-xmark far' -%}
 {%- set title_description = 'archive.edit.description' -%}
 {%- set cancel_path = path('homepage') -%}
-
+{%- set submit_text = 'archive.edit.submit' -%}
+{# body #}
 {% block card_body %}
 <div class="row">
     <div class="col">
@@ -26,7 +26,7 @@
     <p class="mb-0 text-right text-muted small">{{ 'archive.edit.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

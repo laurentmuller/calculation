@@ -140,10 +140,17 @@
 {% if route_name %}{{ _self.link(path(route_name, parameters), '', 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
 {%- endmacro %}
 
-{% macro button_close_modal() -%}
-<button type="button" class="close" data-dismiss="modal" aria-label="{{ 'common.button_close'|trans }}" title="{{ 'common.button_close'|trans }}" >
-    <span aria-hidden="true">&times;</span>
-</button>
+{% macro button_close_modal(for_header=true) -%}
+{% set text = 'common.button_close'|trans %}
+{% if for_header %}
+    <button type="button" class="close" data-dismiss="modal" aria-label="{{ text }}" title="{{ text }}" >
+        <span aria-hidden="true">&times;</span>
+    </button>
+{% else %}
+    <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">
+        {{- text -}}
+    </button>
+{% endif %}
 {%- endmacro %}
 
 {% macro footer_center() -%}

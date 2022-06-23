@@ -1,6 +1,6 @@
 @ECHO OFF
 ECHO -------------------------------------- START BATCH %time% -------------------------------- && ^
-ECHO -------------------------------------- LINT ---------------------------------------------- && ^
+ECHO -------------------------------------- Symfony ------------------------------------------- && ^
 php bin/console lint:yaml translations config                                                   && ^
 php bin/console lint:twig --env=prod templates                                                  && ^
 php bin/console lint:xliff translations                                                         && ^

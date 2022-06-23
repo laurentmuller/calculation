@@ -1,67 +1,64 @@
 {% extends 'cards/card_base.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set submit_text = submit_text|default('common.button_ok') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-primary') -%}
 {%- set submit_params = submit_params|default({}) -%}
 {%- set form_attr = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
-
 {%- if cancel_path is not defined -%}
-{%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
+    {%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
 {%- endif -%}
-
+{# container #}
 {% block start_card_container %}
-{{ parent() -}}
-{% block start_form %}
-{{ form_start(form, {'attr': form_attr}) }}
+    {{ parent() -}}
+    {% block start_form %}
+        {{ form_start(form, {'attr': form_attr}) }}
+    {% endblock %}
 {% endblock %}
-{% endblock %}
-
+{# header #}
 {% block card_header %}
-{{ parent() -}}
-{{ form_errors(form) }}
+    {{ parent() -}}
+    {{ form_errors(form) }}
 {%- endblock %}
-
+{# body #}
 {% block card_body %}
-{{ form_rest(form) }}
+    {{ form_rest(form) }}
 {% endblock %}
-
+{# footer #}
 {% block card_footer -%}
-{%- set show_required = show_required is defined ? show_required : true -%}
-<div class="row no-gutters">
-    <div class="col{% if show_required %}-md-9{% endif %}">
-    {% block actions_form -%}
-        {{ icons.button_submit(submit_text, submit_class, submit_params) }}
-        {% if cancel_path|default(false) -%}
-            {{ icons.button_cancel(cancel_path, cancel_text) }}
+    {%- set show_required = show_required is defined ? show_required : true -%}
+    <div class="row no-gutters">
+        <div class="col{% if show_required %}-md-9{% endif %}">
+            {% block actions_form -%}
+                {{ icons.button_submit(submit_text, submit_class, submit_params) }}
+                {% if cancel_path|default(false) -%}
+                    {{ icons.button_cancel(cancel_path, cancel_text) }}
+                {%- endif %}
+            {%- endblock %}
+        </div>
+        {% if show_required -%}
+            <div class="col-md-3 text-md-right mt-1">
+                {% block required_form -%}<small>{{ 'common.required'|trans|raw }}</small>{%- endblock %}
+            </div>
         {%- endif %}
-    {%- endblock %}
     </div>
-    {% if show_required -%}
-    <div class="col-md-3 text-md-right mt-1">
-        {% block required_form -%}<small>{{ 'common.required'|trans|raw }}</small>{%- endblock %}
-    </div>
-    {%- endif %}
-</div>
 {%- endblock %}
-
+{# end container #}
 {% block end_card_container -%}
-{% block end_form -%}{{ form_end(form) }}{%- endblock %}
-{{ parent() }}
+    {% block end_form -%}{{ form_end(form) }}{%- endblock %}
+    {{ parent() }}
 {%- endblock %}
-
+{# javascript #}
 {% block javascripts -%}
-{% if app.debug %}
-{{ parent() -}}
-{{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
-{{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
-{{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
-{{ asset_js('js/extensions/validator-extensions.js') }}
-{{ asset_js('js/extensions/validator-extensions-fr.js') -}}
-{% else %}
-{{ asset_js('js/core_edit.js') }}
-{% endif %}
+    {% if app.debug %}
+        {{ parent() -}}
+        {{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
+        {{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
+        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
+        {{ asset_js('js/extensions/validator-extensions.js') }}
+        {{ asset_js('js/extensions/validator-extensions-fr.js') -}}
+    {% else %}
+        {{ asset_js('js/core_edit.js') }}
+    {% endif %}
 {%- endblock %}

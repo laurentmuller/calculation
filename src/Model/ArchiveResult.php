@@ -21,17 +21,24 @@ use App\Entity\CalculationState;
 class ArchiveResult
 {
     private ?\DateTimeInterface $date = null;
-    /**
-     * @var array<string, array<Calculation>>
-     */
+    /** @var array<string, array{state: CalculationState, calculations: array<Calculation>}> */
     private array $results = [];
     private bool $simulate = true;
     private ?CalculationState $target = null;
+    private int $total = 0;
 
+    /**
+     * Adds the given calculation to the results.
+     *
+     * @param CalculationState $state       the old calculation state
+     * @param Calculation      $calculation the updated calculation
+     */
     public function addCalculation(CalculationState $state, Calculation $calculation): self
     {
         $key = (string) $state->getCode();
-        $this->results[$key][] = $calculation;
+        $this->results[$key]['state'] = $state;
+        $this->results[$key]['calculations'][] = $calculation;
+        ++$this->total;
 
         return $this;
     }
@@ -42,7 +49,7 @@ class ArchiveResult
     }
 
     /**
-     * @return array<string, array<Calculation>>
+     * @return array<string, array{state: CalculationState, calculations: array<Calculation>}>
      */
     public function getResults(): array
     {
@@ -63,7 +70,15 @@ class ArchiveResult
 
     public function isValid(): bool
     {
-        return !empty($this->results);
+        return $this->total > 0;
+    }
+
+    public function reset(): self
+    {
+        $this->results = [];
+        $this->total = 0;
+
+        return $this;
     }
 
     public function setDate(?\DateTimeInterface $date): self
@@ -89,6 +104,6 @@ class ArchiveResult
 
     public function total(): int
     {
-        return \array_reduce($this->results, fn (int $carry, array $calculations): int => $carry + \count($calculations), 0);
+        return $this->total;
     }
 }

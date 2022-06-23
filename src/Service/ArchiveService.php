@@ -67,8 +67,6 @@ class ArchiveService
         $helper = new FormHelper($builder, 'archive.fields.');
         $sources = $this->getSources(false);
 
-        // https://localcoder.org/symfony-form-validation-constraint-expression#solution_3
-
         // add fields
         $helper->field('date')
             ->updateAttributes([

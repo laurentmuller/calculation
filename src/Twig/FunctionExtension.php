@@ -191,14 +191,14 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a link style sheet tag with a nonce value.
+     * Output a link style sheet tag with a version and a nonce value.
      */
     private function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $url = $this->getAssetUrl($env, $path, $packageName);
         $parameters = \array_merge([
             'rel' => 'stylesheet',
-            'href' => \sprintf('%s?%d', $url, $this->version),
+            'href' => \sprintf('%s?version=%d', $url, $this->version),
             'nonce' => $this->getNonce($env),
         ], $parameters);
         $attributes = $this->reduceParameters($parameters);
@@ -207,13 +207,13 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a java script source tag with a nonce value.
+     * Output a javascript source tag with a version and a nonce value.
      */
     private function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $url = $this->getAssetUrl($env, $path, $packageName);
         $parameters = \array_merge([
-            'src' => \sprintf('%s?%d', $url, $this->version),
+            'src' => \sprintf('%s?version=%d', $url, $this->version),
             'nonce' => $this->getNonce($env),
         ], $parameters);
         $attributes = $this->reduceParameters($parameters);

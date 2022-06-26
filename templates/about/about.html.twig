@@ -1,17 +1,16 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'about/_about_macro.html.twig' as tools %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'info-circle' -%}
 {%- set title_parameters = {'%app_name%': app_name} -%}
 {%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
-
+{# class #}
 {% block card_class ' mb-2' %}
 {% block card_container_class '' %}
 {% block card_footer_class ' d-none' %}
-
+{# card body #}
 {% block card_body %}
 {# application #}
 <div id="configuration" class="phpversion" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}" data-error="{{ 'about.error'|trans }}">
@@ -32,7 +31,7 @@
     </table>
 </div>
 {% endblock %}
-
+{# body #}
 {% block body %}
 {{ parent() }}
 <div class="accordion" id="accordionAbout">
@@ -46,22 +45,22 @@
 </div>
 <div class="row no-gutters mt-2 pb-3 d-print-none">
     <div class="col">
-    {{ icons.homepage() }}
-    {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
-    {{ icons.button_pdf('about_pdf') }}
+        {{ icons.homepage() }}
+        {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
+        {{ icons.button_pdf('about_pdf') }}
     </div>
 </div>
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/phpinfo.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {%- if app.debug -%}
-{{ parent() }}
-{{ asset_js('js/application/about.js') }}
+    {{ parent() }}
+    {{ asset_js('js/application/about.js') }}
 {%- else -%}
-{{ asset_js('js/about.js') }}
+    {{ asset_js('js/about.js') }}
 {%- endif -%}
 {% endblock %}

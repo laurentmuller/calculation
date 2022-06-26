@@ -374,8 +374,10 @@ datatable:
   elements: éléments
   search: Rechercher
   show: Afficher
-  page_title: Afficher la page
   no_action: Aucune action disponible
+  dialog_page: Page %page% / %pages%
+  dialog_title: Sélectionner une page
+  dialog_message: 'Veuillez indiquer le numéro de page que vous désirez afficher :'
 duplicate:
   count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
   description: Calculations contenant le même article plus d'une fois.

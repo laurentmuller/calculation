@@ -7,20 +7,20 @@
     'use strict';
 
     $.fn.bootstrapTable.locales['fr-CH'] = {
-        formatCopyRows: function() {
+        formatCopyRows: function () {
             return 'Copier les lignes';
         },
         formatPrint: function formatPrint() {
             return 'Imprimer';
         },
-        formatLoadingMessage: function() {
+        formatLoadingMessage: function () {
             return 'Chargement en cours';
         },
-        formatRecordsPerPage: function(pageNumber) {
+        formatRecordsPerPage: function (pageNumber) {
             pageNumber = $.formatInt(pageNumber);
             return "".concat(pageNumber, " entrées par page");
         },
-        formatShowingRows: function(pageFrom, pageTo, totalRows, totalNotFiltered) {
+        formatShowingRows: function (pageFrom, pageTo, totalRows, totalNotFiltered) {
             pageFrom = $.formatInt(pageFrom);
             pageTo = $.formatInt(pageTo);
             totalRows = $.formatInt(totalRows);
@@ -30,84 +30,84 @@
             }
             return `Entrée ${pageFrom} - ${pageTo} / ${totalRows}`;
         },
-        formatSRPaginationPreText: function() {
+        formatSRPaginationPreText: function () {
             return 'Afficher la page précédente';
         },
-        formatSRPaginationPageText: function(page) {
+        formatSRPaginationPageText: function (page) {
             page = $.formatInt(page);
             return `Afficher la page ${page}`;
         },
         formatSRPaginationNextText: function () {
             return 'Afficher la page suivante';
         },
-        formatDetailPagination: function(totalRows) {
+        formatDetailPagination: function (totalRows) {
             totalRows = $.formatInt(totalRows);
             return `Afficher ${totalRows} entrées`;
         },
-        formatClearSearch: function() {
+        formatClearSearch: function () {
             return 'Effacer les critères de recherche';
         },
         formatSearch: function formatSearch() {
             return 'Rechercher';
         },
-        formatNoMatches: function() {
+        formatNoMatches: function () {
             return 'Aucune entrée ne correspond à la recherche.';
         },
-        formatPaginationSwitch: function() {
+        formatPaginationSwitch: function () {
             return 'Cacher/Afficher la pagination';
         },
-        formatPaginationSwitchDown: function() {
+        formatPaginationSwitchDown: function () {
             return 'Afficher la pagination';
         },
-        formatPaginationSwitchUp: function() {
+        formatPaginationSwitchUp: function () {
             return 'Cacher la pagination';
         },
-        formatRefresh: function() {
+        formatRefresh: function () {
             return 'Rafraichir';
         },
-        formatToggle: function() {
+        formatToggle: function () {
             return 'Basculer';
         },
-        formatToggleOn: function() {
+        formatToggleOn: function () {
             return 'Afficher la vue détaillée';
         },
-        formatToggleOff: function() {
+        formatToggleOff: function () {
             return 'Afficher la vue tabulaire';
         },
-        formatColumns: function() {
+        formatColumns: function () {
             return 'Colonnes';
         },
-        formatColumnsToggleAll: function() {
+        formatColumnsToggleAll: function () {
             return 'Tout basculer';
         },
-        formatFullscreen: function() {
+        formatFullscreen: function () {
             return 'Plein écran';
         },
-        formatAllRows: function() {
+        formatAllRows: function () {
             return 'Tout';
         },
-        formatAutoRefresh: function() {
+        formatAutoRefresh: function () {
             return 'Rafraîchissement automatique';
         },
-        formatExport: function() {
+        formatExport: function () {
             return 'Exporter les données';
         },
-        formatJumpTo: function() {
+        formatJumpTo: function () {
             return 'Aller à';
         },
-        formatAdvancedSearch: function() {
+        formatAdvancedSearch: function () {
             return 'Recherche avancée';
         },
-        formatAdvancedCloseButton: function() {
+        formatAdvancedCloseButton: function () {
             return 'Fermer';
         },
-        formatFilterControlSwitch: function() {
+        formatFilterControlSwitch: function () {
             return 'Cacher/Afficher les controls';
         },
-        formatFilterControlSwitchHide: function() {
+        formatFilterControlSwitchHide: function () {
             return 'Cacher les controls';
         },
-        formatFilterControlSwitchShow: function() {
+        formatFilterControlSwitchShow: function () {
             return 'Afficher les controls';
         }
     };

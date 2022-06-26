@@ -499,7 +499,7 @@ $.fn.extend({
                 }
 
                 // update goto page input
-                $table.updateGotoPage(options);
+                // $table.updateGotoPage(options);
             }
 
             // update clear search button
@@ -529,7 +529,7 @@ $.fn.extend({
 
             // update search minimum
             if ($searchMinimum.length) {
-                $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
+                $searchMinimum.toggleClass('d-none', $table.isSearchText());
             }
 
             // update sort
@@ -737,14 +737,13 @@ $.fn.extend({
     });
 
     // update UI
-    //.addClass('pagination-sm small')
     $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
     $('.fixed-table-toolbar input.search-input').attr('type', 'text').addClass('form-control-sm').prependTo('.input-group-search');
     $('.fixed-table-toolbar').appendTo('.col-search');
     $('.fixed-table-toolbar .search').remove();
     $('.btn-group-search').appendTo('.fixed-table-toolbar');
     if ($searchMinimum.length) {
-        $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
+        $searchMinimum.toggleClass('d-none', $table.isSearchText());
     }
 
     // focus

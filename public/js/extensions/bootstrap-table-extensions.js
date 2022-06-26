@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * @typedef {Object} Options
+ * @typedef {Object} Options - the table options
  * @property {string} searchText - the search text.
  * @property {number} totalPages - the total number of pages.
  * @property {string} rowClass - the row class.
@@ -36,7 +36,7 @@ $.fn.extend({
     /**
      * Update the selected row.
      *
-     * @param {JQuery} $table - the parent table.
+     * @param {jQuery} $table - the parent table.
      * @return {boolean} this function returns always true.
      */
     updateRow: function ($table) {
@@ -145,16 +145,22 @@ $.fn.extend({
 
                 // update pagination links
                 $('.fixed-table-pagination .page-link').each(function (_index, element) {
-                    const $element = $(element);
-                    const href = $element.closest('.page-item').hasClass('disabled') ? null : '#';
-                    $element.attr('href', href).attr('title', $element.attr('aria-label')).removeAttr('aria-label');
+                    const $link = $(element);
+                    const $item = $link.closest('.page-item');
+                    const isModal = $item.hasClass('disabled') || $item.hasClass('active');
+                    const title = isModal ? $this.data('dialog_title') : $link.attr('aria-label');
+                    $link.attr('href', '#').attr('title', title).attr('aria-label', title);
+                    if (isModal) {
+                        $item.removeClass('disabled');
+                        $link.on('click', function () {
+                            $('#modal-page').data('source', $link)
+                                .modal('show');
+                        });
+                    }
                 });
 
-                // background
+                // update background
                 $this.updateLoadingBackground();
-
-                // set focus on selected page item (if any)
-                // $this.selectPageItem();
 
                 // update action buttons
                 const title = $this.data('no-action-title');
@@ -165,10 +171,8 @@ $.fn.extend({
                     }
                 });
 
-                // add goto page input
-                if (isData && $this.data('goto-page-display')) {
-                    $this.addGotoPage();
-                }
+                // initialize the page dialog
+                $this.initPageDialog();
             },
 
             onCustomViewPostBody: function (data) {
@@ -263,6 +267,10 @@ $.fn.extend({
                 }
             }
         });
+        // search focus
+        $('input.search-input').on('focus', function () {
+            $(this).trigger('select');
+        });
 
         return $this;
     },
@@ -319,9 +327,9 @@ $.fn.extend({
     },
 
     /**
-     * Return if a search text is present.
+     * Return if a search text is not empty.
      *
-     * @return {boolean} true if a search text is present.
+     * @return {boolean} true if a search text is not empty.
      */
     isSearchText: function () {
         'use strict';
@@ -711,14 +719,15 @@ $.fn.extend({
      * Select the given page. Do nothing if the page is out of allowed values.
      *
      * @param {number} page - the page to select.
+     * @param {boolean} [force] - true to load the page, even if it is the page currently displayed
      *
      * @return {boolean} true if the page is displayed.
      */
-    selectPage: function (page) {
+    selectPage: function (page, force) {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
-        if (page >= 1 && page <= options.totalPages && page !== options.pageNumber) {
+        if (page >= 1 && page <= options.totalPages && (page !== options.pageNumber || force)) {
             $this.bootstrapTable('selectPage', page);
             return true;
         }
@@ -859,7 +868,6 @@ $.fn.extend({
                 if ((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                     return;
                 }
-
                 switch (e.keyCode) {
                     case 13:  // enter (edit action on selected row)
                         if ($this.editRow()) {
@@ -1047,85 +1055,65 @@ $.fn.extend({
     },
 
     /**
-     * Update the goto page input.
+     * Format the pages range.
+     *
+     * @param {Options} [options] the options to get pages from.
+     * @param {number} [pageNumber] the optional current page.
+     * @return {string} the formatted pages.
      */
-    updateGotoPage: function (options) {
+    formatPages: function (options, pageNumber) {
         'use strict';
-        const $gotoPage = $('#goto-page');
-        if ($gotoPage.length === 0) {
-            return;
-        }
-        const totalPages = options.totalPages;
-        const successivelySize = options.paginationSuccessivelySize + 2;
-        if (totalPages > successivelySize) {
-            $gotoPage.val(options.pageNumber)
-                .attr('max', options.totalPages)
-                .show();
-        } else {
-            $gotoPage.hide();
-        }
+        const $this = $(this);
+        options = options || $this.getOptions();
+        pageNumber = pageNumber || options.pageNumber;
+        const text = $('#modal-page').data('page');
+        return text.replace('%page%', pageNumber)
+            .replace('%pages%', options.totalPages);
     },
 
     /**
-     * Add the goto page input.
+     * Initialize the select page dialog.
      */
-    addGotoPage: function () {
+    initPageDialog: function () {
         'use strict';
-        // already created?
-        if ($('#goto-page').length !== 0) {
+        const $dialog = $('#modal-page');
+        if ($dialog.data('initialized')) {
             return;
         }
+        $dialog.data('initialized', true);
 
         const $this = $(this);
-        const options = $this.getOptions();
-        const iconSize = options.iconSize || '';
-        const $input = $('<input />', {
-            'id': 'goto-page',
-            'type': 'number',
-            'title': $this.data('goto-page-title'),
-            'class': 'form-control form-control-' + iconSize + ' text-center float-right ml-1',
-            'min': 1,
-            'max': options.totalPages,
-            'value': options.pageNumber,
-            'css': {
-                width: '3rem'
+        const $range = $('#page-range');
+        const $label = $('#page-label');
+        const $button = $('#page-button');
+        $dialog.on('keydown', function (e) {
+            if (e.which === 13) {
+                e.stopPropagation();
+                $button.trigger('click');
             }
-        }).on('keyup', function (e) {
-            const maxPage = Number.parseInt($input.attr('max'), 10);
-            switch (e.which) {
-                case 38: // arrow up
-                case 40: // arrow down
-                    $input.select();
-                    break;
-                case 13: // enter
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const page = $input.intVal();
-                    if (page >= 1 && page <= maxPage) {
-                        $this.selectPage(page);
-                        $input.select();
-                    }
-                    break;
-                default:
-                    const value = $input.intVal();
-                    if (value < 1) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        $input.val(1).select();
-                    } else if (value > maxPage) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        $input.val(maxPage).select();
-                    }
-                    break;
+        }).on('show.bs.modal', function (e) {
+            const options = $this.getOptions();
+            const text = $this.formatPages(options);
+            $('#page-range').val(options.pageNumber)
+                .attr('max', options.totalPages)
+                .data('options', options)
+                .trigger('input');
+        }).on('shown.bs.modal', function () {
+            $range.trigger('focus');
+        }).on('hidden.bs.modal', function () {
+            const $source = $('#modal-page').data('source');
+            if ($source) {
+                $('#modal-page').removeData('source');
+                $source.trigger('focus');
             }
-        }).on('focus', function () {
-            $input.select();
         });
-
-        $input.appendTo('.card-footer');
-
-        // update
-        $this.updateGotoPage(options);
+        $range.on('input', function () {
+            const title = $this.formatPages($range.data('options'), $range.intVal());
+            $label.text(title);
+        });
+        $button.on('click', function () {
+            $dialog.modal('hide');
+            $this.selectPage($range.intVal(), true);
+        });
     }
 });

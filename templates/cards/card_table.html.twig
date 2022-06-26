@@ -136,19 +136,16 @@
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
     'no-action-title': 'datatable.no_action'|trans,
-    'goto-page-title': 'datatable.page_title'|trans,
-    'goto-page-display': (app_mode == 'dev')|json_encode,
+    'dialog_title': 'datatable.dialog_title'|trans,
     'default-action': app.editAction.value,
     'defer-url': url(app.request.get('_route')),
     'save-url': url('ajax_save_table'),
     'icon-size': 'sm',
     'caller': caller
 }) -%}
-
 {# classes #}
 {% block card_container_class '' %}
 {% block card_body_class ' px-3 pt-0 pb-2' %}
-
 {# header #}
 {% block card_header -%}
 <div class="row">
@@ -156,7 +153,6 @@
     <div class="col-md-8 d-print-none text-md-right">{% block header_actions -%}{%- endblock %}</div>
 </div>
 {%- endblock %}
-
 {# body #}
 {% block card_body -%}
 {# toolbar #}
@@ -270,12 +266,33 @@
         </div>
     </div>
 </div>
+{# page dialog #}
+<div class="modal fade" id="modal-page" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1" data-page="{{ 'datatable.dialog_page'|trans }}">
+    <div class="modal-dialog modal-lg ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'datatable.dialog_title'|trans }}</h5>{{ icons.button_close_modal() }}
+            </div>
+            <div class="modal-body">
+                <label id="dialog-page-title">{{ 'datatable.dialog_message'|trans }}</label>
+                <div class="form-row align-items-center">
+                    <input id="page-range" type="range" class="col custom-range" min="1" max="100" step="1" value="1">
+                    <label id="page-label" for="page-range" class="col-auto mb-1 small">&nbsp;</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="page-button" class="btn btn-form btn-primary" role="button" style="">{{ 'common.button_ok'|trans }}</button>
+                {{ icons.button_close_modal(false) }}
+            </div>
+        </div>
+    </div>
+</div>
 {%- endblock -%}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/bootstrap-table.css') }}
 {%- endblock -%}
-
+{# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() -}}

@@ -39,13 +39,13 @@
 
 {% block other_actions -%}
 {% if allow_edit %}
-    {{- _self.item_separator() }}
+    {% if allow_edit or allow_delete or allow_add or allow_show %}{{- _self.item_separator() }}{% endif %}
     {{- _self.item_path(path('user_message', params), 'user.message.title', 'envelope far', 'btn-user-message') }}
     {{- _self.item_separator() }}
     {{- _self.item_path(path('user_reset', params), 'user.reset.title', 'eraser', 'btn-user-reset') }}
 {% endif %}
 {%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_ADMIN') -%}
-    {{- _self.item_separator() }}
+    {% if allow_edit or allow_delete or allow_add or allow_show %}{{- _self.item_separator() }}{% endif %}
     {{- _self.item_path(path('homepage', {'_switch_user': 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
 {%- endblock %}

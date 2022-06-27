@@ -3,9 +3,9 @@
     /**
      * Abstract edit dialog handler.
      *
-     * @property {JQuery} $form
-     * @property {JQuery} $modal
-     * @property {JQuery} $category
+     * @property {jQuery} $form
+     * @property {jQuery} $modal
+     * @property {jQuery} $category
      */
     class EditDialog {
 
@@ -26,7 +26,7 @@
         /**
          * Display the add item dialog.
          *
-         * @param {JQuery} $row - the selected row.
+         * @param {jQuery} $row - the selected row.
          * @return {EditDialog} This instance for chaining.
          */
         showAdd($row) {
@@ -51,7 +51,7 @@
         /**
          * Display the edit dialog.
          *
-         * @param {JQuery} $row - the selected row.
+         * @param {jQuery} $row - the selected row.
          * @return {EditDialog} This instance for chaining.
          */
         showEdit($row) {
@@ -120,7 +120,7 @@
         /**
          * Gets the editing row.
          *
-         * @return {JQuery} the row or null if none.
+         * @return {jQuery} the row or null if none.
          */
         getEditingRow() {
             'use strict';
@@ -140,7 +140,7 @@
         /**
          * Initialize the modal dialog.
          *
-         * @param {JQuery} $modal - the modal dialog.
+         * @param {jQuery} $modal - the modal dialog.
          *
          * @return {EditDialog} This instance for chaining.
          */
@@ -162,7 +162,7 @@
         /**
          * Initialize the dialog add.
          *
-         * @param {JQuery} _$row - the selected row.
+         * @param {jQuery} _$row - the selected row.
          *
          * @return {EditDialog} This instance for chaining.
          */
@@ -174,7 +174,7 @@
         /**
          * Initialize the dialog edit.
          *
-         * @param {JQuery} _$row - the selected row.
+         * @param {jQuery} _$row - the selected row.
          *
          * @return {EditDialog} This instance for chaining.
          */

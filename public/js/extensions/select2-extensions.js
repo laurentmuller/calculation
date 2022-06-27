@@ -9,7 +9,7 @@
     /**
      * Update selection on key press.
      *
-     * @param {JQuery} $select - the drop-down list.
+     * @param {jQuery} $select - the drop-down list.
      * @param {KeyboardEvent} e - the source event.
      */
     const select2KeyPress = function ($select, e) {

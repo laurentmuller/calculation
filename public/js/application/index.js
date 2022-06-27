@@ -15,7 +15,10 @@ $.fn.extend({
     getContextMenuItems: function () {
         'use strict';
         const $elements = $(this).parents('tr:first').find('.dropdown-menu').children();
-        return (new MenuBuilder()).fill($elements).getItems();
+        const builder = new MenuBuilder({
+            classSelector: 'btn-default'
+        });
+        return builder.fill($elements).getItems();
     }
 });
 

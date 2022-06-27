@@ -171,7 +171,7 @@
          *
          * @param {int} delay - The scroll animation delay in milliseconds (default to 400).
          * @param {number} bottomMargin - The bottom margin (default to 60).
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         scrollInViewport: function (delay = 400, bottomMargin = 50) {
             const $this = $(this);
@@ -202,7 +202,7 @@
          *
          * @param {string} className - The class name to toggle.
          * @param {function} [callback] - The function to call after the class has been removed.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         timeoutToggle: function (className, callback) {
             const $this = $(this);
@@ -221,7 +221,7 @@
          * Sets the given attribute class name to the element.
          *
          * @param {string} className - The class name to set.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         setClass: function (className) {
             return $(this).each(function () {
@@ -235,7 +235,7 @@
          *
          * @param {function} callback - The callback function that will be executed after the timer expires.
          * @param {int} timeout - The number of milliseconds to wait before executing the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         createTimer: function (callback, timeout) {
             let id;
@@ -255,7 +255,7 @@
         /**
          * Clear the timer (if any) of the element.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         removeTimer: function () {
             return $(this).each(function () {
@@ -274,7 +274,7 @@
          *
          * @param {function} _callback - The callback function that will be executed after the timer expires.
          * @param {int} _timeout - The number of milliseconds to wait before executing the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         updateTimer: function (_callback, _timeout) {// jshint ignore:line
             $(this).removeTimer();
@@ -287,7 +287,7 @@
          *
          * @param {function} callback - The callback function that will be executed.
          * @param {int} timeout - The intervals (in milliseconds) on how often to execute the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         createInterval: function (callback, timeout) {
             let id;
@@ -307,7 +307,7 @@
         /**
          * Clear the timer interval (if any) of the element.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         removeInterval: function () {
             return $(this).each(function () {
@@ -327,7 +327,7 @@
          *
          * @param {function} _callback - The callback function that will be executed.
          * @param {int} _timeout - The intervals (in milliseconds) on how often to execute the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         updateInterval: function (_callback, _timeout) { // jshint ignore:line
             $(this).removeInterval();
@@ -389,7 +389,7 @@
          * Sets the checkbox checked value.
          *
          * @param {boolean} checked - the checked value to set.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         setChecked: function (checked) {
             return $(this).each(function () {
@@ -400,7 +400,7 @@
         /**
          * Toggle the checkbox checked value
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         toggleChecked: function () {
             return $(this).each(function () {
@@ -455,7 +455,7 @@
         /**
          * Select content and set focus.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         selectFocus: function () {
             $(this).focus().select();
@@ -465,7 +465,7 @@
         /**
          * Select the first option in the list.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         selectFirstOption: function () {
             const value = $(this).find(':first').val();
@@ -487,7 +487,7 @@
          *
          * @param {string} selector - a string containing a selector expression to
          *            match elements against.
-         * @return {JQuery} the selected element or null if matching element's length is equal to 0.
+         * @return {jQuery} the selected element or null if matching element's length is equal to 0.
          */
         findExists: function (selector) {
             const $elements = $(this).find(selector);
@@ -497,7 +497,7 @@
         /**
          * Remove all 'data' attributes.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         removeDataAttributes: function () {
             return $(this).each(function () {
@@ -511,7 +511,7 @@
         /**
          * Remove duplicate classes.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         removeDuplicateClasses: function () {
             return this.each(function (_index, element) {

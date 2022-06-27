@@ -3,14 +3,31 @@
 /**
  * @typedef {Object} Options - the table options
  * @property {string} searchText - the search text.
+ * @property {number} pageNumber - the current page number.
  * @property {number} totalPages - the total number of pages.
  * @property {string} rowClass - the row class.
  * @property {string} rowSelector - the row selector.
  * @property {string} customSelector - the custom selector.
  * @property {string} saveUrl - the URL to save state.
- * @property {boolean} cardView - true if display card view is allowed
- * @property {number} pageNumber - the current page number.
- * @property {number} totalPages - the total number of pages.
+ * @property {boolean} cardView - true if displaying card view is allowed
+ *
+ * @typedef {Object} Parameters - the query parameters.
+ * @property {number} id - the item identifier.
+ * @property {string} caller - the page caller.
+ * @property {string} sort - the sorted field.
+ * @property {string} order - the sort order.
+ * @property {number} offset - the page offset.
+ * @property {number} limit - the page size.
+ * @property {string} view - the display mode ('table', 'card' or 'custom').
+ * @property {string} searchText - the search text.
+ *
+ * @typedef {jQuery} jQueryTable - the bootstrap table.
+ * @property {Options} getOptions - the options.
+ * @property {boolean} isCardView - true if card view is displayed.
+ * @property {boolean} isCustomView - true if custom view is displayed.
+ * @property {jQuery} getCustomView - get the custom view.
+ * @property {jQueryTable} enableKeys - enable the key handler.
+ * @property {jQueryTable} disableKeys - disable the key handler.
  */
 
 /**
@@ -36,13 +53,12 @@ $.fn.extend({
     /**
      * Update the selected row.
      *
-     * @param {jQuery} $table - the parent table.
+     * @param {jQueryTable} $table - the bootstrap table.
      * @return {boolean} this function returns always true.
      */
     updateRow: function ($table) {
         'use strict';
         const $row = $(this);
-        /** @type {Options} options */
         const options = $table.getOptions();
 
         // already selected?
@@ -81,7 +97,7 @@ $.fn.extend({
      * Update the href attribute of the action.
      *
      * @param {Object} row - the row data.
-     * @param {Object} params - the query parameters.
+     * @param {Parameters} params - the query parameters.
      */
     updateLink: function (row, params) {
         'use strict';
@@ -107,10 +123,11 @@ $.fn.extend({
      * Initialize the table-boostrap.
      *
      * @param {object} options - the options to merge with default.
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     initBootstrapTable: function (options) {
         'use strict';
+        /** @var jQueryTable $this */
         const $this = $(this);
 
         // settings
@@ -288,7 +305,7 @@ $.fn.extend({
     /**
      * Gets the boostrap-table parameters.
      *
-     * @return {Object} the parameters.
+     * @return {Parameters} the parameters.
      */
     getParameters: function () {
         'use strict';
@@ -390,7 +407,7 @@ $.fn.extend({
     /**
      * Gets the selected row.
      *
-     * @return {JQuery} the selected row, if any; null otherwise.
+     * @return {jQuery} the selected row, if any; null otherwise.
      */
     getSelection: function () {
         'use strict';
@@ -413,13 +430,14 @@ $.fn.extend({
     /**
      * Gets the custom view container.
      *
-     * @return {JQuery} the custom view container, if displayed, null otherwise.
+     * @return {jQuery} the custom view container, if displayed, null otherwise.
      */
     getCustomView: function () {
         'use strict';
         const $this = $(this);
         if ($this.isCustomView()) {
-            return $this.parents('.bootstrap-table').find('.fixed-table-custom-view');
+            const $parent = $this.parents('.bootstrap-table');
+            return $parent.find('.fixed-table-custom-view');
         }
         return null;
     },
@@ -427,7 +445,7 @@ $.fn.extend({
     /**
      * Save parameters to the session.
      *
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     saveParameters: function () {
         'use strict';
@@ -443,35 +461,37 @@ $.fn.extend({
      * Update the href attribute of the actions.
      *
      * @param {array} rows - the rendered data.
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     updateHref: function (rows) {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
         const params = $this.getParameters();
-        const callback = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
+        const onUpdateHref = typeof options.onUpdateHref === 'function' ? options.onUpdateHref : false;
+        const onRenderAction = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
 
-        $this.find('tbody tr .dropdown-item-path').each(function () {
-            const $link = $(this);
-            const $row = $link.parents('tr');
+        // run over rows
+        $this.find('tbody tr').each(function () {
+            const $row = $(this);
             const row = rows[$row.index()];
-            $link.updateLink(row, params);
-            if (callback) {
-                callback($this, row, $row, $link);
+            const $paths = $(this).find('.dropdown-item-path');
+            if ($paths.length) {
+                $paths.each(function () {
+                    // update link
+                    const $link = $(this);
+                    $link.updateLink(row, params);
+                    if (onRenderAction) {
+                        onRenderAction($this, row, $row, $link);
+                    }
+                });
+                // update row
+                if (onUpdateHref) {
+                    onUpdateHref($this, $paths);
+                }
             }
-
         });
 
-        // actions row callback
-        if (typeof options.onUpdateHref === 'function') {
-            $this.find('tbody tr').each(function () {
-                const $paths = $(this).find('.dropdown-item-path');
-                if ($paths.length) {
-                    options.onUpdateHref($this, $paths);
-                }
-            });
-        }
         return $this;
     },
 
@@ -489,7 +509,7 @@ $.fn.extend({
     /**
      * Update this card view UI.
      *
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     updateCardView: function () {
         'use strict';
@@ -546,8 +566,8 @@ $.fn.extend({
     /**
      * Refresh/reload the remote server data.
      *
-     * @param {object} options - the refresh options.
-     * @return {JQuery} this instance for chaining.
+     * @param {object} [options] - the refresh options.
+     * @return {jQuery} this instance for chaining.
      */
     refresh: function (options) {
         'use strict';
@@ -558,7 +578,7 @@ $.fn.extend({
      * Reset the search text.
      *
      * @param {string} [text] - the optional search text.
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     resetSearch: function (text) {
         'use strict';
@@ -568,8 +588,8 @@ $.fn.extend({
     /**
      * Refresh the table options.
      *
-     * @param {Object} options - the options to refresh.
-     * @return {JQuery} this instance for chaining.
+     * @param {Object} [options] - the options to refresh.
+     * @return {jQuery} this instance for chaining.
      */
     refreshOptions: function (options) {
         'use strict';
@@ -579,7 +599,7 @@ $.fn.extend({
     /**
      * Toggle the card/table view.
      *
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     toggleView: function () {
         'use strict';
@@ -589,7 +609,7 @@ $.fn.extend({
     /**
      * Toggles the view between the table and the custom view.
      *
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     toggleCustomView: function () {
         'use strict';
@@ -600,7 +620,7 @@ $.fn.extend({
      * Toggles the display mode.
      *
      * @param {string} mode - the display mode to set ('table', 'card' or 'custom').
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     setDisplayMode: function (mode) {
         'use strict';
@@ -654,7 +674,7 @@ $.fn.extend({
     /**
      * Highlight matching text.
      *
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     highlight: function () {
         'use strict';
@@ -766,7 +786,7 @@ $.fn.extend({
     },
 
     /**
-     * Select the previous row.
+     * Select the previous row. If no row is available, the previous page is displayed.
      *
      * @return {boolean} true if the previous row is selected.
      */
@@ -783,7 +803,7 @@ $.fn.extend({
     },
 
     /**
-     * Select the next row.
+     * Select the next row. If no row is available, the next page is displayed.
      *
      * @return {boolean} true if the next row is selected.
      */
@@ -803,7 +823,7 @@ $.fn.extend({
      * Finds an action for the given selector
      *
      * @param {string} actionSelector - the action selector.
-     * @return {JQuery} the action, if found; null otherwise.
+     * @return {jQuery} the action, if found; null otherwise.
      */
     findAction: function (actionSelector) {
         'use strict';
@@ -855,7 +875,7 @@ $.fn.extend({
     /**
      * Enable the key handler.
      *
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     enableKeys: function () {
         'use strict';
@@ -924,7 +944,7 @@ $.fn.extend({
     /**
      * Disable the key handler.
      *
-     * @return {JQuery} this instance for chaining.
+     * @return {jQuery} this instance for chaining.
      */
     disableKeys: function () {
         'use strict';
@@ -948,7 +968,7 @@ $.fn.extend({
         let url = '';
         for (const [key, value] of Object.entries(params)) {
             url += url.match('[?]') ? '&' : '?';
-            url += key + '=' + encodeURIComponent(value);
+            url += key + '=' + encodeURIComponent(String(value));
         }
         window.history.pushState({}, '', url);
         return $this;
@@ -1064,6 +1084,7 @@ $.fn.extend({
     formatPages: function (options, pageNumber) {
         'use strict';
         const $this = $(this);
+        /** @type {Options} options */
         options = options || $this.getOptions();
         pageNumber = pageNumber || options.pageNumber;
         const text = $('#modal-page').data('page');
@@ -1087,11 +1108,12 @@ $.fn.extend({
         const $label = $('#page-label');
         const $button = $('#page-button');
         $dialog.on('keydown', function (e) {
-            if (e.which === 13) {
+            if (e.which === 13) { // enter
+                e.preventDefault();
                 e.stopPropagation();
                 $button.trigger('click');
             }
-        }).on('show.bs.modal', function (e) {
+        }).on('show.bs.modal', function () {
             const options = $this.getOptions();
             $('#page-range').val(options.pageNumber)
                 .attr('max', options.totalPages)
@@ -1100,9 +1122,9 @@ $.fn.extend({
         }).on('shown.bs.modal', function () {
             $range.trigger('focus');
         }).on('hidden.bs.modal', function () {
-            const $source = $('#modal-page').data('source');
+            const $source = $dialog.data('source');
             if ($source) {
-                $('#modal-page').removeData('source');
+                $dialog.removeData('source');
                 $source.trigger('focus');
             }
         });

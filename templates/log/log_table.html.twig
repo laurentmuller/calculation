@@ -6,6 +6,9 @@
 {%- set channel = customData.channel|default('') -%}
 {%- set level = customData.level|default('') -%}
 {%- set object_type = ENTITY_LOG -%}
+{%- set allow_add = false -%}
+{%- set allow_edit = false -%}
+{%- set allow_delete = false -%}
 
 {% block header_actions %}
 <small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>

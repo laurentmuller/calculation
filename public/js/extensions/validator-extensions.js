@@ -170,7 +170,7 @@
             /**
              * Finds the container of the given element.
              *
-             * @param {JQuery} $element - the element to update.
+             * @param {jQuery} $element - the element to update.
              */
             $.validator.prototype.findElement = function ($element) {
                 let $toUpdate = false;

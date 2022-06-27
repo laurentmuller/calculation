@@ -3,7 +3,7 @@
 /**
  * Gets the visible product's checkboxes.
  *
- * @returns {JQuery} - the checkboxes.
+ * @returns {jQuery} - the checkboxes.
  */
 function getVisibleProducts() {
     'use strict';

@@ -4,6 +4,7 @@
 {%- set title = 'duplicate.title' -%}
 {%- set title_icon = ICON_COPY -%}
 {%- set object_type = ENTITY_CALCULATION -%}
+{%- set allow_add = false -%}
 
 {% block card_header -%}
 {{ parent() }}
@@ -19,10 +20,6 @@
 {{- _self.item_external(path('duplicate_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
 
-{% block show_actions -%}
-{{- _self.item_path(path('calculation_show', params), 'calculation.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
-
 {% block edit_actions -%}
 {{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', ICON_EDIT, edit_class) }}
 {%- endblock %}
@@ -31,10 +28,15 @@
 {{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}
 
+{% block show_actions -%}
+{{- _self.item_path(path('calculation_show', params), 'calculation.show.title', ICON_SHOW, show_class) }}
+{%- endblock %}
+
 {% block other_actions -%}
 {% if allow_export %}
-{{- _self.item_separator() }}
-{{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', ICON_PDF, 'btn-calculation-pdf') }}
+    {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+    {{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', ICON_PDF, 'btn-calculation-pdf') }}
+    {{- _self.item_path_external(path('calculation_excel_id', params), 'calculation.list.excel_single_title', ICON_EXCEL, 'btn-calculation-excel') }}
 {% endif %}
 {%- endblock %}
 

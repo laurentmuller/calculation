@@ -641,3 +641,13 @@ table.table-fixed-header .thead-light th {
         min-width: 100%;
     }
 }
+
+/**
+ * bold font for default action
+ */
+.dropdown-menu .btn-default {
+    font-weight: bold !important;
+}
+.context-menu-item.btn-default {
+    font-weight: bold !important;
+}

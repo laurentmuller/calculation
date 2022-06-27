@@ -7,32 +7,35 @@ const MenuBuilder = class { /* exported MenuBuilder */
 
     /**
      * Constructor.
+     * @param {Object} [options] the context menu options.
      */
-    constructor() {
-        this.items = {};
+    constructor(options) {
         this.index = 0;
+        this.items = {};
+        this.options = $.extend(true, {}, options);
     }
 
     /**
      * Adds an item entry.
      *
-     * @param {JQuery} $link - the element to add.
-     * @param {string} [icon] - the item's icon.
+     * @param {jQuery} $link - the element to add.
      * @return {MenuBuilder} This instance for chaining.
      */
-    addItem($link, icon) {
+    addItem($link) {
         const key = 'entry_' + this.index++;
-        const newIcon = icon || $link.findIcon();
+        const selector = this.options.classSelector || false;
+        const className = (selector && $link.hasClass(selector)) ? selector : '';
         this.items[key] = {
             link: $link,
-            name: $link.findText(),
-            icon: newIcon ? 'fal ' + newIcon : null
+            isHtmlName: true,
+            name: $link.html(),
+            className: className
         };
         return this;
     }
 
     /**
-     * Adds a separator. Do nothing if the last added item is already a
+     * Adds a separator. Do nothing if the last item is already a
      * separator.
      *
      * @return {MenuBuilder} This instance for chaining.
@@ -42,7 +45,6 @@ const MenuBuilder = class { /* exported MenuBuilder */
         if (this.isSeparator(this.getLastKey())) {
             return this;
         }
-
         // add
         const key = 'separator_' + this.index++;
         this.items[key] = {
@@ -52,14 +54,14 @@ const MenuBuilder = class { /* exported MenuBuilder */
     }
 
     /**
-     * Adds a title. Do nothing if the last added item is already a title.
+     * Adds a title. Do nothing if the last item is already a title.
      *
      * @param {string} title - the item's title.
-     * @param {string} tag - the item's tag.
+     * @param {string} [tag] - the item's tag or h6 if none.
      * @return {MenuBuilder} This instance for chaining.
      */
     addTitle(title, tag) {
-        // last is already a title?
+        // already a title?
         if (this.isTitle(this.getLastKey())) {
             return this;
         }
@@ -67,7 +69,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
         // properties
         tag = tag || 'h6';
         const key = 'title_' + this.index++;
-        const html = '<tag class="context-menu-header">title</tag>'.replace(/tag/g, tag).replace(/title/g, title);
+        const html = `<${tag} class="context-menu-header">${title}</${tag}>`;
 
         // add
         this.items[key] = {
@@ -108,7 +110,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Returns if the given key is a separator item.
      *
-     * @param {string} key - the key to be tested.
+     * @param {string} [key] - the key to be tested.
      * @return {boolean} true if separator.
      */
     isSeparator(key) {
@@ -118,7 +120,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Returns if the given key is a title item.
      *
-     * @param {string} key - the key to be tested.
+     * @param {string} [key] - the key to be tested.
      * @return {boolean} true if title.
      */
     isTitle(key) {
@@ -142,7 +144,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Fills the given elements.
      *
-     * @param {JQuery} $elements the elements to add.
+     * @param {jQuery} $elements the elements to add.
      * @return {MenuBuilder} This instance for chaining.
      */
     fill($elements) {
@@ -151,7 +153,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
             const $this = $(this);
             if ($this.hasClass('dropdown-divider')) {
                 that.addSeparator();
-            } else if ($this.isSelectable()) { // .dropdown-item
+            } else if ($this.isSelectable()) {
                 that.addItem($this);
             }
         });
@@ -163,36 +165,6 @@ const MenuBuilder = class { /* exported MenuBuilder */
  * -------------- jQuery extensions --------------
  */
 $.fn.extend({
-    /**
-     * Finds an icon within in this element.
-     *
-     * @returns {?string} the icon class, if found, null otherwise.
-     */
-    findIcon: function () {
-        'use strict';
-        const $this = $(this);
-        const icon = $this.data('icon');
-        if (icon) {
-            return icon;
-        }
-        const $child = $this.find('i');
-        if ($child.length) {
-            return $child.attr('class');
-        }
-        return null;
-    },
-
-    /**
-     * Finds a text within in this element.
-     *
-     * @returns {string} the text, if found, null otherwise.
-     */
-    findText: function () {
-        'use strict';
-        const $this = $(this);
-        return $this.text().trim() || $this.attr('title') || $this.data('text') || null;
-    },
-
     /**
      * Returns if this element is selectable.
      *
@@ -208,45 +180,51 @@ $.fn.extend({
      * Initialize the context menu.
      *
      * @param {string}  selector - the selector matching the elements to trigger on.
-     * @param {function} fnShow - the function called when the context menu is shown.
-     * @param {function} fnHide - the function called when the context menu is hidden.
-     * @return {JQuery} The jQuery element for chaining.
+     * @param {function} [fnShow] - the function called when the context menu is shown.
+     * @param {function} [fnHide] - the function called when the context menu is hidden.
+     * @param {Object} [options] - the context menu options to override.
+     * @return {jQuery} The jQuery element for chaining.
      */
-    initContextMenu: function (selector, fnShow, fnHide) {
+    initContextMenu: function (selector, fnShow, fnHide, options) {
         'use strict';
-        // build callback
-        const build = function ($element) {
-            // get items
-            const items = $element.getContextMenuItems();
-            if ($.isEmptyObject(items)) {
-                return false;
-            }
+        return this.each(function () {
+            //const $this = $(this);
+            // build callback
+            const build = function ($element) {
+                // get items
+                const items = $element.getContextMenuItems();
+                if ($.isEmptyObject(items)) {
+                    return false;
+                }
 
-            return {
-                zIndex: 1000,
-                autoHide: true,
-                callback: function (key, options, e) {
-                    const item = options.items[key];
-                    if (item.link) {
-                        e.stopPropagation();
-                        item.link.get(0).click();
-                        return true;
+                // default options
+                const settings = {
+                    items: items,
+                    zIndex: 1000,
+                    autoHide: true,
+                    callback: function (key, options, e) {
+                        const item = options.items[key];
+                        if (item && item.link && item.link.length) {
+                            e.stopPropagation();
+                            item.link.get(0).click();
+                            return true;
+                        }
+                        return false;
+                    },
+                    events: {
+                        show: fnShow || $.noop,
+                        hide: fnHide || $.noop
                     }
-                },
-                events: {
-                    show: fnShow || $.noop,
-                    hide: fnHide || $.noop
-                },
-                items: items
+                };
+
+                return $.extend(true, settings, options);
             };
-        };
 
-        // create
-        $.contextMenu({
-            build: build,
-            selector: selector
+            // create
+            $.contextMenu({
+                build: build,
+                selector: selector
+            });
         });
-
-        return $(this);
     }
 });

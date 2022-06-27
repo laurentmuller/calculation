@@ -14,10 +14,6 @@
 {{- _self.item_external(path('customer_excel'), 'customer.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
 
-{% block show_actions -%}
-{{- _self.item_path(path('customer_show', params), 'customer.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
-
 {% block edit_actions -%}
 {{- _self.item_path(path('customer_edit', params), 'customer.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
@@ -28,6 +24,10 @@
 
 {% block add_actions -%}
 {{- _self.item_path(path('customer_add', params), 'customer.add.title', ICON_ADD, 'btn-add') }}
+{%- endblock %}
+
+{% block show_actions -%}
+{{- _self.item_path(path('customer_show', params), 'customer.show.title', ICON_SHOW, show_class) }}
 {%- endblock %}
 
 {% block custom_view_header -%}

@@ -36,10 +36,6 @@
 {{- _self.item_external(path('task_excel'), 'task.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
 
-{% block show_actions -%}
-{{- _self.item_path(path('task_show', params), 'task.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
-
 {% block edit_actions -%}
 {{- _self.item_path(path('task_edit', params), 'task.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
@@ -53,10 +49,14 @@
 {{- _self.item_path(path('task_clone', params), 'common.button_clone', ICON_COPY, 'btn-task-clone') }}
 {%- endblock %}
 
+{% block show_actions -%}
+{{- _self.item_path(path('task_show', params), 'task.show.title', ICON_SHOW, show_class) }}
+{%- endblock %}
+
 {% block other_actions -%}
 {% if allow_show %}
-{{- _self.item_separator() }}
-{{- _self.item_path(path('task_compute', params), 'taskcompute.title', 'keyboard', 'btn-task-compute') }}
+    {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+    {{- _self.item_path(path('task_compute', params), 'taskcompute.title', 'keyboard', 'btn-task-compute') }}
 {% endif %}
 {%- endblock %}
 

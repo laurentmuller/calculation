@@ -50,6 +50,16 @@
 {{- _self.item_path(path('category_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock %}
 
+{% block other_actions -%}
+{% if is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) %}
+    {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+    {{- _self.item_path(path('product_table', {'categoryid': 'id'}), 'category.list.product_title', ICON_PRODUCT, 'btn-show-product') }}
+{% endif %}
+{% if is_granted(ATTRIBUTE_LIST, ENTITY_TASK) %}
+    {{- _self.item_path(path('task_table', {'categoryid': 'id'}), 'category.list.task_title', ICON_TASK, 'btn-show-task') }}
+{% endif %}
+{%- endblock %}
+
 {% block custom_view_header -%}
 {%- if row_edit -%}
     <a href="{{ path('category_edit', params) }}" class="item-link text-body" title="{{ 'category.edit.title'|trans }}">%code%</a>

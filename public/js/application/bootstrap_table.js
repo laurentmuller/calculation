@@ -136,7 +136,7 @@ function styleTextMuted(row, index) { // jshint ignore:line
 /**
  * Returns if the current row is rendered for the connected user
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -150,7 +150,7 @@ function isConnectedUser($table, row) {
 /**
  * Returns if the current row is rendered for the original connected user
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -164,10 +164,10 @@ function isOrignalUser($table, row) {
 /**
  * Update the user message action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserMessageAction($table, row, _$element, $action) {
     'use strict';
@@ -180,10 +180,10 @@ function updateUserMessageAction($table, row, _$element, $action) {
 /**
  * Update the user delete action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserDeleteAction($table, row, _$element, $action) {
     'use strict';
@@ -196,10 +196,10 @@ function updateUserDeleteAction($table, row, _$element, $action) {
 /**
  * Update the switch user action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
@@ -219,11 +219,11 @@ function updateUserSwitchAction($table, row, _$element, $action) {
 /**
  * Update the reset request password user action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {string} row.resetPassword - the reset password value
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserResetAction($table, row, _$element, $action) {
     'use strict';
@@ -237,15 +237,15 @@ function updateUserResetAction($table, row, _$element, $action) {
 /**
  * Update the search action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {number} row.id - the row identifier.
  * @param {number} row.type - the entity type.
  * @param {boolean} row.allowShow - the show granted.
  * @param {boolean} row.allowEdit - the  edit granted.
  * @param {boolean} row.allowDelete - the deleted granted.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
@@ -272,10 +272,10 @@ function updateSearchAction($table, row, _$element, $action) {
 /**
  * Update the edit calculation action.
  *
- * @param {JQuery} _$table - the parent table.
+ * @param {jQuery} _$table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} $element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} $element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
@@ -294,10 +294,10 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
 /**
  * Update the export calculation action.
  *
- * @param {JQuery} _$table - the parent table.
+ * @param {jQuery} _$table - the parent table.
  * @param {Object} _row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
@@ -308,10 +308,10 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 /**
  * Update the task compute action.
  *
- * @param {JQuery} _$table - the parent table.
+ * @param {jQuery} _$table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
@@ -320,6 +320,27 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
         $action.prev('.dropdown-divider').remove();
         $action.remove();
     }
+}
+
+/**
+ * Update the show entity action.
+ *
+ * @param {Object} row - the row data.
+ * @param {jQuery} $action - the action to update
+ * @param {string} propertyName -  the property name to get from row.
+ */
+function updateShowEntityAction(row, $action, propertyName) {
+    'use strict';
+    if (row.hasOwnProperty(propertyName)) {
+        const value = row[propertyName];
+        const href = $(value).attr('href');
+        if (href) {
+            $action.attr('href', href);
+            return;
+        }
+    }
+    // $action.prev('.dropdown-divider').remove();
+    $action.remove();
 }
 
 /**
@@ -432,7 +453,9 @@ $.fn.extend({
             $parent = $this.parents('tr');
         }
         const $elements = $parent.find('.dropdown-menu').children();
-        const builder = new MenuBuilder();
+        const builder = new MenuBuilder({
+            classSelector: 'btn-default'
+        });
         return builder.fill($elements).getItems();
     }
 });
@@ -605,12 +628,41 @@ $.fn.extend({
                 updateSearchAction($table, row, $element, $action);
             } else if ($action.is('.btn-task-compute')) {
                 updateTaskComputeAction($table, row, $element, $action);
+            } else if ($action.is('.btn-show-category')) {
+                updateShowEntityAction(row, $action, 'categories');
+            } else if ($action.is('.btn-show-product')) {
+                updateShowEntityAction(row, $action, 'products');
+            } else if ($action.is('.btn-show-task')) {
+                updateShowEntityAction(row, $action, 'tasks');
+            } else if ($action.is('.btn-show-calculation')) {
+                updateShowEntityAction(row, $action, 'calculations');
             }
         },
 
         onUpdateHref: function (_$table, $actions) {
             if ($actions.length === 1) {
                 $actions.addClass('btn-default');
+            } else {
+                let was_separator = false;
+                const $children = $actions.parent().children();
+                const $first = $children.first();
+                if ($first.is('.dropdown-divider')) {
+                    $first.remove();
+                }
+                const $last = $children.last();
+                if ($last.is('.dropdown-divider')) {
+                    $last.remove();
+                }
+                $children.each(function () {
+                    const $item = $(this);
+                    const is_separator = $item.is('.dropdown-divider');
+                    if (was_separator && is_separator) {
+                        $item.remove();
+                        was_separator = false;
+                    } else {
+                        was_separator = is_separator;
+                    }
+                });
             }
         },
 

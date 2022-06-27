@@ -40,10 +40,6 @@
 {%- endif %}
 {%- endblock %}
 
-{% block show_actions -%}
-{{- _self.item_path(path('product_show', params), 'product.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
-
 {% block edit_actions -%}
 {{- _self.item_path(path('product_edit', params), 'product.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
@@ -55,6 +51,10 @@
 {% block add_actions -%}
 {{- _self.item_path(path('product_add', params), 'product.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('product_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
+{%- endblock %}
+
+{% block show_actions -%}
+{{- _self.item_path(path('product_show', params), 'product.show.title', ICON_SHOW, show_class) }}
 {%- endblock %}
 
 {% block custom_view_header -%}

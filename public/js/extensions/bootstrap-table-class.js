@@ -196,7 +196,7 @@ BootstrapTable.prototype.isEmpty = function () {
 /**
  * Gets the selected row.
  *
- * @return {JQuery} the selected row, if any; null otherwise.
+ * @return {jQuery} the selected row, if any; null otherwise.
  */
 BootstrapTable.prototype.getSelection = function () {
     'use strict';
@@ -218,7 +218,7 @@ BootstrapTable.prototype.getSelectionIndex = function () {
 /**
  * Gets the custom view container.
  *
- * @return {JQuery} the custom view container, if displayed, null otherwise.
+ * @return {jQuery} the custom view container, if displayed, null otherwise.
  */
 BootstrapTable.prototype.getCustomView = function () {
     'use strict';
@@ -306,7 +306,7 @@ BootstrapTable.prototype.highlight = function () {
 /**
  * Update the selected row.
  *
- * @param {JQuery} $row - the row to update.
+ * @param {jQuery} $row - the row to update.
  * @return {boolean} this function returns always true.
  */
 BootstrapTable.prototype.updateRow = function ($row) {
@@ -537,7 +537,7 @@ BootstrapTable.prototype.showCustomViewMessage = function () {
  * Finds an action for the given selector
  *
  * @param {string} actionSelector - the action selector.
- * @return {JQuery} the action, if found; null otherwise.
+ * @return {jQuery} the action, if found; null otherwise.
  */
 BootstrapTable.prototype.findAction = function (actionSelector) {
     'use strict';
@@ -694,7 +694,7 @@ BootstrapTable.prototype.updateHref = function (rows) {
 /**
  * Update the href attribute of the given link (action).
  *
- * @param {JQuery} $link - the link to update.
+ * @param {jQuery} $link - the link to update.
  * @param {Object} row - the row data.
  * @param {Object} params - the query parameters.
  */

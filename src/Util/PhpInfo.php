@@ -106,7 +106,7 @@ final class PhpInfo
         $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/is', '<p>$2</p>', $info);
 
         // no value
-        $info = \str_replace('<i>no value</i>', '<i class="text-muted">No value</i>', $info);
+        $info = \str_ireplace('<i>no value</i>', '<i class="text-muted">No value</i>', $info);
 
         // update table class
         $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
@@ -130,7 +130,7 @@ final class PhpInfo
         $content = (string) \ob_get_contents();
         \ob_end_clean();
 
-        return $this->removeSensitiveKeys($content);
+        return $this->updateContent($content);
     }
 
     /**
@@ -160,14 +160,12 @@ final class PhpInfo
             $decimals = \strlen($value) - $pos - 1;
 
             return \round((float) $value, $decimals);
-        } elseif ('no value' === $value) {
-            return 'No value';
         } else {
             return \str_replace('\\', '/', (string) $var);
         }
     }
 
-    private function removeSensitiveKeys(string $content): string
+    private function updateContent(string $content): string
     {
         $keys = [
             '_KEY',
@@ -181,6 +179,10 @@ final class PhpInfo
             $content = (string) \preg_replace("/<tr>.*$key.*<\/tr>/m", '', $content);
         }
 
-        return $content;
+        return \str_replace(
+            ['yes', 'enabled', 'disabled', 'none', 'no value', '🖹', '✔ ', '✘ '],
+            ['Yes', 'Enabled', 'Disabled', 'None', 'No value', '', '', ''],
+            $content
+        );
     }
 }

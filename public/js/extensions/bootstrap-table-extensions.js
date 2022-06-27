@@ -1093,7 +1093,6 @@ $.fn.extend({
             }
         }).on('show.bs.modal', function (e) {
             const options = $this.getOptions();
-            const text = $this.formatPages(options);
             $('#page-range').val(options.pageNumber)
                 .attr('max', options.totalPages)
                 .data('options', options)
@@ -1109,6 +1108,7 @@ $.fn.extend({
         });
         $range.on('input', function () {
             const title = $this.formatPages($range.data('options'), $range.intVal());
+            $range.attr('title', title);
             $label.text(title);
         });
         $button.on('click', function () {

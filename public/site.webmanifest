@@ -5,8 +5,8 @@
     "description": "Programme de calculation",
     "display": "fullscreen",
     "orientation": "landscape",
-    "theme_color": "Peru",
-    "background_color": "Peru",
+    "theme_color": "#212529",
+    "background_color": "#212529",
     "start_url": ".",
     "icons": [
         {

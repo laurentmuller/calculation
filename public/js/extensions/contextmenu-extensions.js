@@ -88,13 +88,12 @@ const MenuBuilder = class { /* exported MenuBuilder */
      * @return {Object} The items.
      */
     getItems() {
-        // remove first and last separator (if any)
-        let key;
-        while (null !== (key = this.getFirstKey()) && this.isSeparator(key)) {
-            delete this.items[key];
+        // remove first and last separators (if any)
+        while (this.isSeparator(this.getFirstKey())) {
+            delete this.items[this.getFirstKey()];
         }
-        while (null !== (key = this.getLastKey()) && this.isSeparator(key)) {
-            delete this.items[key];
+        while (this.isSeparator(this.getLastKey())) {
+            delete this.items[this.getLastKey()];
         }
         return this.items;
     }

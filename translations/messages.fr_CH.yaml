@@ -662,7 +662,8 @@ list:
   sort_default_title: Tri par défaut
   sort_descending: Tri décroissant
   sort_descending_title: '%name% - Décroissant'
-  sort_title: Trier
+  sort_title: Trier les données
+  sort_column: Colonne
 log:
   channel_all: Tous les canaux
   delete:

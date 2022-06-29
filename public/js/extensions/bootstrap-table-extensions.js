@@ -158,20 +158,20 @@ $.fn.extend({
                     $this.updateCardView().highlight().updateHref(content);
                 }
                 $this.updateHistory().toggleClass('table-hover', isData);
-                $this.toggleClass('table-hover', isData);
 
                 // update pagination links
+                let foundPages = false;
                 $('.fixed-table-pagination .page-link').each(function (_index, element) {
                     const $link = $(element);
                     const $item = $link.closest('.page-item');
-                    const isModal = $item.hasClass('disabled') || $item.hasClass('active');
+                    const isModal = $item.hasClass('disabled');// || $item.hasClass('active');
                     const title = isModal ? $this.data('dialog_title') : $link.attr('aria-label');
                     $link.attr('href', '#').attr('title', title).attr('aria-label', title);
                     if (isModal) {
+                        foundPages = true;
                         $item.removeClass('disabled');
                         $link.on('click', function () {
-                            $('#modal-page').data('source', $link)
-                                .modal('show');
+                            $('#modal-page').data('source', $link).modal('show');
                         });
                     }
                 });
@@ -189,8 +189,12 @@ $.fn.extend({
                 });
 
                 // initialize dialogs
-                $this.initPageDialog();
-                $this.initSortDialog();
+                if (foundPages) {
+                    $this.initPageDialog();
+                }
+                if ($this.data('sortable')) {
+                    $this.initSortDialog();
+                }
             },
 
             onCustomViewPostBody: function (data) {
@@ -398,7 +402,7 @@ $.fn.extend({
     /**
      * Gets the bootstrap table.
      *
-     * @return {object} the bootstrap table.
+     * @return {Object} the bootstrap table.
      */
     getBootstrapTable: function () {
         'use strict';
@@ -753,6 +757,25 @@ $.fn.extend({
             return true;
         }
         return false;
+    },
+
+    /**
+     * Sort the data.
+     *
+     * @param {string} sortName - the sort field.
+     * @param {string} sortOrder - the sort order ('asc' or 'desc').
+     *
+     * @return {jQuery} this instance for chaining.
+     */
+    sort: function (sortName, sortOrder) {
+        'use strict';
+        const data = this.getBootstrapTable();
+        if (data && data.options.sortName !== sortName || data.options.sortOrder !== sortOrder) {
+            data.options.sortName = sortName;
+            data.options.sortOrder = sortOrder;
+            this.refresh();
+        }
+        return this;
     },
     /**
      * Select the first row.
@@ -1115,6 +1138,7 @@ $.fn.extend({
                 $button.trigger('click');
             }
         }).on('show.bs.modal', function () {
+            $this.disableKeys();
             const options = $this.getOptions();
             $('#page-range').val(options.pageNumber)
                 .attr('max', options.totalPages)
@@ -1122,6 +1146,8 @@ $.fn.extend({
                 .trigger('input');
         }).on('shown.bs.modal', function () {
             $range.trigger('focus');
+        }).on('hide.bs.modal', function () {
+            $this.enableKeys();
         }).on('hidden.bs.modal', function () {
             const $source = $dialog.data('source');
             if ($source) {
@@ -1154,6 +1180,8 @@ $.fn.extend({
         const $this = $(this);
         const $sortName = $('#sort-name');
         const $button = $('#sort-button');
+        const $default = $('#sort-default-button');
+
         $dialog.on('keydown', function (e) {
             if (e.which === 13) { // enter
                 e.preventDefault();
@@ -1161,21 +1189,40 @@ $.fn.extend({
                 $button.trigger('click');
             }
         }).on('show.bs.modal', function () {
+            $this.disableKeys();
             const options = $this.getOptions();
             $sortName.val(options.sortName);
             $('#sort-order-' + options.sortOrder).setChecked(true);
         }).on('shown.bs.modal', function () {
             $sortName.trigger('focus');
+        }).on('hide.bs.modal', function () {
+            $this.enableKeys();
+        });
+        $sortName.on('input', function () {
+            // update default order
+            const sortOrder = $sortName.getSelectedOption().data('sort');
+            if (sortOrder) {
+                $('#sort-order-' + sortOrder).setChecked(true);
+            }
+        });
+        $default.on('click', function () {
+            // select default order
+            const $option = $('#sort-name [data-default="true"]');
+            if ($option.length) {
+                const sortName = $option.val();
+                const sortOrder = $option.data('sort');
+                if (sortName && sortOrder) {
+                    $sortName.val(sortName);
+                    $('#sort-order-' + sortOrder).setChecked(true);
+                    $button.trigger('click');
+                }
+            }
         });
         $button.on('click', function () {
             $dialog.modal('hide');
             const sortName = $sortName.val();
             const sortOrder = $('[name="sort-order"]:checked').val();
-            window.console.log(sortName, sortOrder);
-            // $this.refreshOptions({
-            //     sortName: field,
-            //     sortOrder: order
-            // });
+            $this.sort(sortName, sortOrder);
         });
     }
 });

@@ -20,6 +20,7 @@ parameters:
     checkMissingIterableValueType: false
 
     ignoreErrors:
+        - '#Trait is used zero times#'
         - '#no value type specified#'
         -
             message: '#type mapping mismatch#'

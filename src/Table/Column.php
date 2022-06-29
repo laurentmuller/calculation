@@ -224,7 +224,7 @@ class Column implements SortModeInterface, \Stringable
     }
 
     /**
-     * Gets the sorting order.
+     * Gets the default sorting order.
      *
      * @see SortModeInterface::SORT_ASC
      * @see SortModeInterface::SORT_DESC
@@ -358,7 +358,7 @@ class Column implements SortModeInterface, \Stringable
     }
 
     /**
-     * Sets the sorting order.
+     * Sets the default sorting order.
      *
      * @see SortModeInterface::SORT_ASC
      * @see SortModeInterface::SORT_DESC

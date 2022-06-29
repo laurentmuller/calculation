@@ -555,28 +555,27 @@
          * @return {jQuery} - the element for chaining.
          */
         removeSeparators: function () {
+            const selector = '.dropdown-divider';
             return this.each(function () {
                 const $this = $(this);
                 if ($this.is('.dropdown-menu')) {
-                    const $children = $this.children();
-                    //remove firsts
-                    while ($this.children().first().is('.dropdown-divider')) {
+                    // remove firsts
+                    while ($this.children().first().is(selector)) {
                         $this.children().first().remove();
                     }
                     // remove lasts
-                    while ($this.children().last().is('.dropdown-divider')) {
+                    while ($this.children().last().is(selector)) {
                         $this.children().last().remove();
                     }
-                    //check for 2 separators
-                    let wasSeparator = false;
+                    // remove 2 consecutive separators
+                    let previewSeparator = false;
                     $this.children().each(function (index, element) {
                         const $item = $(element);
-                        const isSeparator = $item.is('.dropdown-divider');
-                        if (wasSeparator && isSeparator) {
+                        const isSeparator = $item.is(selector);
+                        if (previewSeparator && isSeparator) {
                             $item.remove();
-                            wasSeparator = false;
                         } else {
-                            wasSeparator = isSeparator;
+                            previewSeparator = isSeparator;
                         }
                     });
                 }

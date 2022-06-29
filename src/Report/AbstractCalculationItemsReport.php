@@ -36,6 +36,9 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      * @param array              $items       the items to render
      * @param string             $title       the title to translate
      * @param string             $description the description to translate
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function __construct(AbstractController $controller, array $items, string $title, string $description)
     {

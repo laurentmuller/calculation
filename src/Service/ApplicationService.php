@@ -19,6 +19,7 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Property;
 use App\Enums\EntityAction;
+use App\Enums\MessagePosition;
 use App\Enums\TableView;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\StrengthInterface;
@@ -358,9 +359,10 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getDisplayMode(): TableView
     {
-        $value = $this->getPropertyString(self::P_DISPLAY_MODE, self::DEFAULT_DISPLAY_MODE->value);
+        $default = self::DEFAULT_DISPLAY_MODE;
+        $value = (string) $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
 
-        return TableView::tryFrom((string) $value) ?? self::DEFAULT_DISPLAY_MODE;
+        return TableView::tryFrom($value) ?? $default;
     }
 
     /**
@@ -370,9 +372,10 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     public function getEditAction(): EntityAction
     {
-        $value = $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_ACTION->value);
+        $default = self::DEFAULT_ACTION;
+        $value = (string) $this->getPropertyString(self::P_EDIT_ACTION, $default->value);
 
-        return EntityAction::tryFrom((string) $value) ?? self::DEFAULT_ACTION;
+        return EntityAction::tryFrom($value) ?? $default;
     }
 
     /**
@@ -390,9 +393,12 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getMessagePosition(): string
+    public function getMessagePosition(): MessagePosition
     {
-        return (string) $this->getPropertyString(self::P_MESSAGE_POSITION, self::DEFAULT_MESSAGE_POSITION);
+        $default = self::DEFAULT_MESSAGE_POSITION;
+        $value = (string) $this->getPropertyString(self::P_MESSAGE_POSITION, $default->value);
+
+        return MessagePosition::tryFrom($value) ?? $default;
     }
 
     /**
@@ -575,9 +581,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
 
     /**
      * Gets a string property.
-     *
-     * @param string      $name    the property name to search for
-     * @param string|null $default the default value if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */

@@ -45,6 +45,8 @@ class SchemaController extends AbstractController
 
     /**
      * Constructor.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function __construct(TranslatorInterface $translator, EntityManagerInterface $manager)
     {
@@ -53,6 +55,9 @@ class SchemaController extends AbstractController
         $this->metaDatas = $this->filterMetaDatas($manager);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     #[Route(path: '', name: 'schema')]
     public function index(): Response
     {
@@ -63,6 +68,7 @@ class SchemaController extends AbstractController
 
     /**
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the table can not be found
+     * @throws \Doctrine\DBAL\Exception
      */
     #[Route(path: '/{name}', name: 'schema_table')]
     public function table(string $name): Response
@@ -158,6 +164,8 @@ class SchemaController extends AbstractController
      *      length: int,
      *      nullable: bool,
      *      foreignTableName: null|string}>
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getColumns(string $name): array
     {
@@ -194,6 +202,8 @@ class SchemaController extends AbstractController
 
     /**
      * @return string[]
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getPrimaryKeys(Table $table): array
     {
@@ -216,6 +226,8 @@ class SchemaController extends AbstractController
      *      name: string,
      *      columns: int,
      *      associations: int}>
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getTables(): array
     {
@@ -258,6 +270,9 @@ class SchemaController extends AbstractController
         return false;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     private function tableExist(string $name): bool
     {
         return $this->getManager()->tablesExist([$name]);

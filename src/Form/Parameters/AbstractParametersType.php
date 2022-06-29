@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Form\Parameters;
 
 use App\Enums\EntityAction;
+use App\Enums\MessagePosition;
 use App\Enums\TableView;
 use App\Form\FormHelper;
 use App\Interfaces\ApplicationServiceInterface;
@@ -98,11 +99,10 @@ abstract class AbstractParametersType extends AbstractType implements Applicatio
     {
         $helper->field(self::P_MESSAGE_POSITION)
             ->updateAttribute('data-default', $this->getDefaultValue(self::P_MESSAGE_POSITION))
-            ->addChoiceType($this->getPositions());
+            ->addEnumType(MessagePosition::class);
         $helper->field(self::P_MESSAGE_TIMEOUT)
             ->updateAttribute('data-default', $this->getDefaultValue(self::P_MESSAGE_TIMEOUT))
             ->addChoiceType($this->getTimeouts());
-
         $helper->field(self::P_MESSAGE_TITLE)
             ->rowClass('custom-control-inline')
             ->updateAttribute('data-default', $this->getDefaultValue(self::P_MESSAGE_TITLE))
@@ -175,33 +175,6 @@ abstract class AbstractParametersType extends AbstractType implements Applicatio
         $values = [5, 10, 15, 20, 25];
 
         return \array_combine($values, $values);
-    }
-
-    /**
-     * Gets the message position choices.
-     */
-    private function getPositions(): array
-    {
-        $entries = [
-            'top-left',
-            'top-center',
-            'top-right',
-
-            'center-left',
-            'center-center',
-            'center-right',
-
-            'bottom-left',
-            'bottom-center',
-            'bottom-right',
-        ];
-
-        $result = [];
-        foreach ($entries as $entry) {
-            $result['parameters.message_position.' . $entry] = $entry;
-        }
-
-        return $result;
     }
 
     /**

@@ -90,7 +90,7 @@
          * @param {string} value - the value to parse.
          * @returns {number} the parsed value.
          */
-        parseFloat: function(value) {
+        parseFloat: function (value) {
             let parsedValue = Number.parseFloat(value);
             if (Number.isNaN(parsedValue)) {
                 parsedValue = Number.parseFloat(0);
@@ -104,7 +104,7 @@
          * @param {Number} value - the value to round.
          * @returns {Number} the rounded value.
          */
-        roundValue: function(value) {
+        roundValue: function (value) {
             return Math.round((value + Number.EPSILON) * 100) / 100;
         },
 
@@ -114,9 +114,9 @@
          * @param {Number} value - the value to format.
          * @returns {string} the formatted value.
          */
-        formatInt: function(value) {
+        formatInt: function (value) {
             if (typeof $.integerFormatter === 'undefined') {
-                $.integerFormatter = new Intl.NumberFormat('de-CH', { maximumFractionDigits: 0 });
+                $.integerFormatter = new Intl.NumberFormat('de-CH', {maximumFractionDigits: 0});
             }
             return $.integerFormatter.format(value);
         },
@@ -127,7 +127,7 @@
          * @param {Number} value - the value to format.
          * @returns {string} the formatted value.
          */
-        formatFloat: function(value) {
+        formatFloat: function (value) {
             if (typeof $.floatFormatter === 'undefined') {
                 $.floatFormatter = new Intl.NumberFormat('de-CH', {
                     'minimumFractionDigits': 2,
@@ -547,6 +547,40 @@
         hasAttr: function (name) {
             const attr = $(this).attr(name);
             return typeof attr !== "undefined" && attr !== false && attr !== null;
+        },
+
+        /**
+         * Drop first, last and all 2 consecutive separators in a drop-down menu.
+         *
+         * @return {jQuery} - the element for chaining.
+         */
+        removeSeparators: function () {
+            return this.each(function () {
+                const $this = $(this);
+                if ($this.is('.dropdown-menu')) {
+                    const $children = $this.children();
+                    //remove firsts
+                    while ($this.children().first().is('.dropdown-divider')) {
+                        $this.children().first().remove();
+                    }
+                    // remove lasts
+                    while ($this.children().last().is('.dropdown-divider')) {
+                        $this.children().last().remove();
+                    }
+                    //check for 2 separators
+                    let wasSeparator = false;
+                    $this.children().each(function (index, element) {
+                        const $item = $(element);
+                        const isSeparator = $item.is('.dropdown-divider');
+                        if (wasSeparator && isSeparator) {
+                            $item.remove();
+                            wasSeparator = false;
+                        } else {
+                            wasSeparator = isSeparator;
+                        }
+                    });
+                }
+            });
         }
     });
 

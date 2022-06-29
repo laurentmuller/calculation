@@ -31,6 +31,9 @@ class SymfonyDocument extends AbstractDocument
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {
@@ -88,7 +91,9 @@ class SymfonyDocument extends AbstractDocument
     /**
      * @param array<array{name: string, path: string}> $bundles
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an error occurs
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputBundles(array $bundles): void
     {
@@ -122,7 +127,9 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function outputInfo(SymfonyInfo $info): void
     {
@@ -159,9 +166,11 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @param array<array{name: string, version: string, description: string|null, homepage: string|null}> $packages
+     * @param array<string, array{name: string, version: string, description: string, homepage: string}> $packages
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputPackages(string $title, array $packages): void
     {
@@ -175,7 +184,12 @@ class SymfonyDocument extends AbstractDocument
         ], 1, $row++);
 
         foreach ($packages as $package) {
-            $this->outputRow($row++, $package['name'], $package['version'], $package['description'] ?? '');
+            $this->outputRow(
+                $row++,
+                $package['name'],
+                $package['version'],
+                $package['description']
+            );
         }
 
         $this->getActiveSheet()
@@ -192,7 +206,9 @@ class SymfonyDocument extends AbstractDocument
     /**
      * @param array<array{name: string, path: string}> $routes
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputRoutes(string $title, array $routes): void
     {

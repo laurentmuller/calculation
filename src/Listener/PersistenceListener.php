@@ -93,6 +93,8 @@ class PersistenceListener implements EventSubscriber
 
     /**
      * Handles the post persist event.
+     *
+     * @throws \ReflectionException
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
@@ -105,6 +107,8 @@ class PersistenceListener implements EventSubscriber
 
     /**
      * Handles the post remove event.
+     *
+     * @throws \ReflectionException
      */
     public function postRemove(LifecycleEventArgs $args): void
     {
@@ -117,6 +121,8 @@ class PersistenceListener implements EventSubscriber
 
     /**
      * Handles the post update event.
+     *
+     * @throws \ReflectionException
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
@@ -161,6 +167,8 @@ class PersistenceListener implements EventSubscriber
      * @param string         $suffix the message suffix
      *
      * @return string the message identifier to translate
+     *
+     * @throws \ReflectionException
      */
     private function getId(AbstractEntity $entity, string $suffix): string
     {

@@ -41,10 +41,11 @@ const MenuBuilder = class { /* exported MenuBuilder */
      * @return {MenuBuilder} This instance for chaining.
      */
     addSeparator() {
-        // last is already a separator?
-        if (this.isSeparator(this.getLastKey())) {
+        // empty or last is already a separator?
+        if (this.isEmpty() || this.isSeparator(this.getLastKey())) {
             return this;
         }
+
         // add
         const key = 'separator_' + this.index++;
         this.items[key] = {
@@ -69,12 +70,11 @@ const MenuBuilder = class { /* exported MenuBuilder */
         // properties
         tag = tag || 'h6';
         const key = 'title_' + this.index++;
-        const html = `<${tag} class="context-menu-header">${title}</${tag}>`;
+        const html = `<${tag} class="dropdown-header p-0">${title}</${tag}>`;
 
         // add
         this.items[key] = {
             type: 'html',
-            title: title,
             icon: function (_options, $element) {
                 $element.html(html);
             }
@@ -88,12 +88,14 @@ const MenuBuilder = class { /* exported MenuBuilder */
      * @return {Object} The items.
      */
     getItems() {
-        // remove last separator (if any)
-        const key = this.getLastKey();
-        if (this.isSeparator(key)) {
+        // remove first and last separator (if any)
+        let key;
+        while (null !== (key = this.getFirstKey()) && this.isSeparator(key)) {
             delete this.items[key];
         }
-
+        while (null !== (key = this.getLastKey()) && this.isSeparator(key)) {
+            delete this.items[key];
+        }
         return this.items;
     }
 
@@ -127,6 +129,18 @@ const MenuBuilder = class { /* exported MenuBuilder */
         return key && key.startsWith('title_');
     }
 
+    /**
+     * Gets the first key.
+     *
+     * @return {?string} the last key, if any; null otherwise.
+     */
+    getFirstKey() {
+        const keys = Object.keys(this.items);
+        if (keys.length) {
+            return keys[0];
+        }
+        return null;
+    }
 
     /**
      * Gets the last key.
@@ -150,11 +164,13 @@ const MenuBuilder = class { /* exported MenuBuilder */
     fill($elements) {
         const that = this;
         $elements.each(function () {
-            const $this = $(this);
-            if ($this.hasClass('dropdown-divider')) {
+            const $item = $(this);
+            if ($item.hasClass('dropdown-divider')) {
                 that.addSeparator();
-            } else if ($this.isSelectable()) {
-                that.addItem($this);
+            } else if ($item.hasClass('dropdown-header')) {
+                that.addTitle($item.text(), $item.prop("tagName"));
+            } else if ($item.isSelectable()) {
+                that.addItem($item);
             }
         });
         return that;

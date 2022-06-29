@@ -89,7 +89,11 @@ trait RoleTrait
      */
     public function setRole(?string $role): static
     {
-        $this->role = RoleInterface::ROLE_USER === $role ? null : $role;
+        if (null === $role || 0 === \strcasecmp(RoleInterface::ROLE_USER, $role)) {
+            $this->role = null;
+        } else {
+            $this->role = $role;
+        }
 
         return $this;
     }

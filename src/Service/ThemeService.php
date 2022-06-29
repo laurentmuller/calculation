@@ -113,6 +113,7 @@ class ThemeService
      * @return Theme the theme, if found, the default theme (Boostrap) if not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function findTheme(?string $css): Theme
     {
@@ -136,6 +137,7 @@ class ThemeService
      * @return Theme the current theme, if any; the default theme otherwise
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function getCurrentTheme(?Request $request = null): Theme
     {
@@ -192,6 +194,7 @@ class ThemeService
      * @return Theme[]
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function getThemes(): array
     {
@@ -255,6 +258,7 @@ class ThemeService
      * @return bool true if dark; false otherwise
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function isDarkTheme(?Request $request = null): bool
     {

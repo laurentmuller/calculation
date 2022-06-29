@@ -345,6 +345,10 @@ class AboutController extends AbstractController
         return "$name - $locale";
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function outputReport(string $template, array $templateParameters, ?string $title = null, array $titleParameters = []): PdfResponse
     {
         // get content

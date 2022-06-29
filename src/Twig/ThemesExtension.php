@@ -53,6 +53,8 @@ final class ThemesExtension extends AbstractExtension
      * @param Request|null $request the request
      *
      * @return Theme the current theme, if any; the default theme otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getCurrentTheme(?Request $request = null): Theme
     {
@@ -85,6 +87,8 @@ final class ThemesExtension extends AbstractExtension
      * Gets the theme CSS.
      *
      * @param Request $request the request
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getThemeCss(Request $request): string
     {
@@ -101,6 +105,8 @@ final class ThemesExtension extends AbstractExtension
      * Gets the theme name.
      *
      * @param Request $request the request
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getThemeName(Request $request): string
     {
@@ -111,6 +117,8 @@ final class ThemesExtension extends AbstractExtension
      * Returns if the selected theme is dark.
      *
      * @param Request $request the request
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function isDarkTheme(Request $request): bool
     {
@@ -121,6 +129,8 @@ final class ThemesExtension extends AbstractExtension
      * Returns if the selected theme is the default theme (Boostrap).
      *
      * @param Request $request the request
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function isDefaultTheme(Request $request): bool
     {

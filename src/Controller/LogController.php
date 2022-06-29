@@ -40,6 +40,7 @@ class LogController extends AbstractController
      * Delete the content of the log file (if any).
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
@@ -159,6 +160,8 @@ class LogController extends AbstractController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'log_table')]
     public function table(Request $request, LogTable $table): Response

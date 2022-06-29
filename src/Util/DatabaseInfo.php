@@ -21,6 +21,14 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 final class DatabaseInfo
 {
+    /** @var array<string, string>|null */
+    private ?array $configuration = null;
+
+    /** @var array<string, string>|null */
+    private ?array $database = null;
+
+    private ?string $version = null;
+
     /**
      * Constructor.
      */
@@ -35,34 +43,38 @@ final class DatabaseInfo
      */
     public function getConfiguration(): array
     {
-        $values = [];
+        if (null === $this->configuration) {
+            $this->configuration = [];
 
-        try {
-            $sql = 'SHOW VARIABLES';
-            $result = $this->executeQuery($sql);
-            /** @psalm-var array<array{Variable_name:string, Value:string}> $entries */
-            $entries = $result->fetchAllAssociative();
-            $result->free();
+            try {
+                $sql = 'SHOW VARIABLES';
+                $result = $this->executeQuery($sql);
+                /** @psalm-var array<array{Variable_name:string, Value:string}> $entries */
+                $entries = $result->fetchAllAssociative();
+                $result->free();
 
-            // convert
-            foreach ($entries as $entry) {
-                $value = $entry['Value'];
-                if ('' === $value) {
-                    continue;
+                // convert
+                foreach ($entries as $entry) {
+                    $value = $entry['Value'];
+                    if ('' === $value) {
+                        continue;
+                    }
+                    $key = $entry['Variable_name'];
+                    $this->configuration[$key] = match ($value) {
+                        'ON', 'OFF',
+                        'YES', 'NO',
+                        'ENABLED', 'DISABLED',
+                        'AUTO',
+                        'AUTOMATIC' => Utils::capitalize($value),
+                        default => $value
+                    };
                 }
-                $values[$entry['Variable_name']] = match ($value) {
-                    'ON', 'OFF',
-                    'YES', 'NO',
-                    'ENABLED', 'DISABLED',
-                    'AUTO',
-                    'AUTOMATIC' => Utils::capitalize($value),
-                    default => $value
-                };
+            } catch (\Exception) {
+                // ignore
             }
-        } catch (\Exception) {
         }
 
-        return $values;
+        return $this->configuration;
     }
 
     /**
@@ -72,26 +84,29 @@ final class DatabaseInfo
      */
     public function getDatabase(): array
     {
-        $result = [];
+        if (null === $this->database) {
+            $this->database = [];
 
-        try {
-            /** @psalm-suppress InternalMethod */
-            $params = $this->getConnection()->getParams();
-            foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
-                $value = $params[$key] ?? null;
-                if (\is_string($value) || \is_int($value)) {
-                    $key = match ($key) {
-                        'dbname' => 'Name',
-                        'serverVersion' => 'Version',
-                        default => \ucfirst($key)
-                    };
-                    $result[$key] = (string) $value;
+            try {
+                /** @psalm-suppress InternalMethod */
+                $params = $this->getConnection()->getParams();
+                foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
+                    $value = $params[$key] ?? null;
+                    if (\is_string($value) || \is_int($value)) {
+                        $key = match ($key) {
+                            'dbname' => 'Name',
+                            'serverVersion' => 'Version',
+                            default => \ucfirst($key)
+                        };
+                        $this->database[$key] = (string) $value;
+                    }
                 }
+            } catch (\Exception) {
+                // ignore
             }
-        } catch (\Exception) {
         }
 
-        return $result;
+        return $this->database;
     }
 
     /**
@@ -99,18 +114,23 @@ final class DatabaseInfo
      */
     public function getVersion(): string
     {
-        try {
-            $sql = 'SHOW VARIABLES LIKE "version"';
-            $result = $this->executeQuery($sql);
-            $entries = $result->fetchAssociative();
-            $result->free();
-            if (false !== $entries) {
-                return (string) $entries['Value'];
+        if (null === $this->version) {
+            $this->version = 'Unknown';
+
+            try {
+                $sql = 'SHOW VARIABLES LIKE "version"';
+                $result = $this->executeQuery($sql);
+                $entries = $result->fetchAssociative();
+                $result->free();
+                if (false !== $entries) {
+                    $this->version = (string) $entries['Value'];
+                }
+            } catch (\Exception) {
+                // ignore
             }
-        } catch (\Exception) {
         }
 
-        return 'Unknown';
+        return $this->version;
     }
 
     /**

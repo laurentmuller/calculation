@@ -56,6 +56,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \ReflectionException
      */
     protected function doExecute(InputInterface $input, OutputInterface $output): int
     {
@@ -174,6 +178,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @param string $name    the plugin name
      * @param string $version the actual version
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
      */
     private function checkApiCdnjsLastVersion(string $name, string $version): void
     {
@@ -188,6 +196,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @param string $name    the plugin name
      * @param string $version the actual version
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
      */
     private function checkJsDelivrLastVersion(string $name, string $version): void
     {
@@ -202,6 +214,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param string   $name    the plugin name
      * @param string   $version the actual version
      * @param string[] $paths   the paths to the version
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
      */
     private function checkVersion(string $url, string $name, string $version, array $paths): void
     {
@@ -240,9 +256,13 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @return bool true if success
      *
-     * @psalm-param array<string, string>  $prefixes
-     * @psalm-param array<string, string>  $suffixes
-     * @psalm-param array<string, string>  $renames
+     * @psalm-param array<string, string> $prefixes
+     * @psalm-param array<string, string> $suffixes
+     * @psalm-param array<string, string> $renames
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \ReflectionException
      */
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -327,9 +347,11 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @return bool true if success
      *
-     * @psalm-param array<string, string>  $prefixes
-     * @psalm-param array<string, string>  $suffixes
-     * @psalm-param array<string, string>  $renames
+     * @psalm-param array<string, string> $prefixes
+     * @psalm-param array<string, string> $suffixes
+     * @psalm-param array<string, string> $renames
+     *
+     * @throws \ReflectionException
      */
     private function dumpFile(string $content, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -429,6 +451,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param string    $name          the entry name to search for
      *
      * @return array the array, maybe empty if not found
+     *
+     * @throws \ReflectionException
      */
     private function getConfigArray(\stdClass $configuration, string $name): array
     {
@@ -499,9 +523,13 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      *
      * @return int the number of downloaded themes
      *
-     * @psalm-param array<string, string>  $prefixes
-     * @psalm-param array<string, string>  $suffixes
-     * @psalm-param array<string, string>  $renames
+     * @psalm-param array<string, string> $prefixes
+     * @psalm-param array<string, string> $suffixes
+     * @psalm-param array<string, string> $renames
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
      */
     private function installBootswatch(\stdClass $configuration, string $targetDir, array $prefixes = [], array $suffixes = [], array $renames = []): int
     {
@@ -561,6 +589,11 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         return $count;
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     */
     private function loadConfiguration(string $publicDir): ?\stdClass
     {
         // check file

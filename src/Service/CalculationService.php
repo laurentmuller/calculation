@@ -161,6 +161,8 @@ final class CalculationService
      * @param array $source the form data as array
      *
      * @return array an array with the computed values used to render the total view
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function createGroupsFromData(array $source): array
     {
@@ -247,6 +249,8 @@ final class CalculationService
 
     /**
      * Gets the minimum margin, in percent, for a calculation.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMinMargin(): float
     {
@@ -335,6 +339,8 @@ final class CalculationService
      * @param float|null    $global_margin the global margin or null to compute new global margin
      *
      * @return non-empty-array<array> the total groups
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function computeGroups(array $groups, float $user_margin, ?callable $callback = null, ?float $global_margin = null): array
     {

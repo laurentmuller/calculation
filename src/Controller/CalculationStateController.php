@@ -120,6 +120,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     #[Route(path: '/excel', name: 'calculationstate_excel')]
     public function excel(): SpreadsheetResponse
@@ -138,6 +139,8 @@ class CalculationStateController extends AbstractEntityController
      * Export the calculation states to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
+     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/pdf', name: 'calculationstate_pdf')]
     public function pdf(): PdfResponse
@@ -163,6 +166,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'calculationstate_table')]
     public function table(Request $request, CalculationStateTable $table): Response
@@ -172,6 +177,9 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {

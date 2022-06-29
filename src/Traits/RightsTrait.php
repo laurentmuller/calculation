@@ -21,16 +21,16 @@ use Elao\Enum\FlagBag;
 /**
  * Trait to set or get access rights.
  *
- * @property ?FlagBag $EntityCalculation      the rights for calculations.
- * @property ?FlagBag $EntityCalculationState the rights for calculation state.
- * @property ?FlagBag $EntityGroup            the rights for groups.
- * @property ?FlagBag $EntityCategory         the rights for categories.
- * @property ?FlagBag $EntityCustomer         the rights for customers.
- * @property ?FlagBag $EntityGlobalMargin     the rights for global margins.
- * @property ?FlagBag $EntityProduct          the rights for products.
- * @property ?FlagBag $EntityUser             the rights for users.
- * @property ?FlagBag $EntityTask             the rights for tasks.
- * @property ?FlagBag $EntityLog              the rights for logs.
+ * @property ?FlagBag<EntityPermission> $EntityCalculation      the rights for calculations.
+ * @property ?FlagBag<EntityPermission> $EntityCalculationState the rights for calculation state.
+ * @property ?FlagBag<EntityPermission> $EntityGroup            the rights for groups.
+ * @property ?FlagBag<EntityPermission> $EntityCategory         the rights for categories.
+ * @property ?FlagBag<EntityPermission> $EntityCustomer         the rights for customers.
+ * @property ?FlagBag<EntityPermission> $EntityGlobalMargin     the rights for global margins.
+ * @property ?FlagBag<EntityPermission> $EntityProduct          the rights for products.
+ * @property ?FlagBag<EntityPermission> $EntityUser             the rights for users.
+ * @property ?FlagBag<EntityPermission> $EntityTask             the rights for tasks.
+ * @property ?FlagBag<EntityPermission> $EntityLog              the rights for logs.
  */
 trait RightsTrait
 {
@@ -70,7 +70,7 @@ trait RightsTrait
     }
 
     /**
-     * @psalm-param string|FlagBag<EntityPermission> $value
+     * @psalm-param string|FlagBag<\BackedEnum> $value
      */
     public function __set(string $name, mixed $value): void
     {
@@ -149,7 +149,7 @@ trait RightsTrait
     /**
      * Sets the rights for the given entity.
      *
-     * @param FlagBag<EntityPermission> $rights
+     * @psalm-param FlagBag<\BackedEnum> $rights
      */
     private function setEntityRights(string $entity, FlagBag $rights): static
     {

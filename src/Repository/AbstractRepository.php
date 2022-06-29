@@ -106,6 +106,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     /**
      * Gets the next identifier.
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getNextId(): int
     {
@@ -139,8 +142,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @param array<Criteria|string> $criterias    the filter criteria (the where clause)
      * @param string                 $alias        the entity alias
      *
+     * @throws Query\QueryException
+     *
      * @see AbstractRepository::createDefaultQueryBuilder()
      * @psalm-param literal-string $alias
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     public function getSearchQuery(array $sortedFields = [], array $criterias = [], string $alias = self::DEFAULT_ALIAS): Query
     {

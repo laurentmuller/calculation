@@ -66,6 +66,8 @@ trait LoggerTrait
 
     /**
      * Logs the given exception as an error message.
+     *
+     * @throws \ReflectionException
      */
     public function logException(\Exception $e, ?string $message = null): void
     {

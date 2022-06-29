@@ -325,7 +325,7 @@ common:
     confirm: Confirmer la mise à jour des données
     error: Vous devez cochez le message de confirmation.
     message: La mise à jour a été simulée. Aucun changement n'a été effectué dans la base de données.
-cookiebanner:
+cookie_banner:
   accept: Accepter
   close: J'accepte
   close_title: Accepter la politique de confidentialité
@@ -1196,7 +1196,7 @@ taskitemmargin:
   name: Marge
 test:
   drag_drop: Drag & drop
-  editor: Editeur Simple
+  editor: Éditer un message simple
   html: Exportation HTML
   minify: Minify
   notification: Notifications

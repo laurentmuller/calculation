@@ -44,6 +44,8 @@ trait SessionTrait
      * Gets the session.
      *
      * @return SessionInterface|null the session, if found; null otherwise
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function getSession(): ?SessionInterface
     {
@@ -66,6 +68,8 @@ trait SessionTrait
      * @param float|null $default the default value if not found
      *
      * @return float|null the session value, if found; the default value otherwise
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function getSessionFloat(string $key, ?float $default): ?float
     {
@@ -79,6 +83,8 @@ trait SessionTrait
      * @param int|null $default the default value if not found
      *
      * @return int|null the session value, if found; the default value otherwise
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function getSessionInt(string $key, ?int $default): ?int
     {
@@ -105,6 +111,8 @@ trait SessionTrait
      * @param string|null $default the default value if not found
      *
      * @return string|null the session value, if found; the default value otherwise
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function getSessionString(string $key, ?string $default = null): ?string
     {
@@ -118,6 +126,8 @@ trait SessionTrait
      * @param mixed  $default the default value if not found
      *
      * @return mixed the session value, if found; the default value otherwise
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function getSessionValue(string $key, mixed $default = null): mixed
     {
@@ -136,6 +146,8 @@ trait SessionTrait
      * @param string $key the attribute name
      *
      * @return bool true if the attribute is defined, false otherwise
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function hasSessionValue(string $key): bool
     {
@@ -155,6 +167,8 @@ trait SessionTrait
      * @param bool   $default the default value if not found
      *
      * @return bool the session value, if found; the default value otherwise
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function isSessionBool(string $key, bool $default = false): bool
     {
@@ -167,6 +181,8 @@ trait SessionTrait
      * @param string $key the attribute name
      *
      * @return mixed the removed value or null when attribute does not exist
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function removeSessionValue(string $key): mixed
     {
@@ -185,6 +201,8 @@ trait SessionTrait
      * @param string[] $keys the attribute names to remove
      *
      * @return array the removed values
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function removeSessionValues(array $keys): array
     {
@@ -212,6 +230,8 @@ trait SessionTrait
      *
      * @param string $key   the attribute name
      * @param mixed  $value the attribute value or null to remove
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function setSessionValue(string $key, mixed $value): static
     {
@@ -231,6 +251,8 @@ trait SessionTrait
      * Sets session attributes.
      *
      * @param array<string, mixed> $attributes the keys and values to save
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function setSessionValues(array $attributes): static
     {

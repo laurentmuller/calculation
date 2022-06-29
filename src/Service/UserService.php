@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Enums\EntityAction;
+use App\Enums\MessagePosition;
 use App\Enums\TableView;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Repository\UserPropertyRepository;
@@ -103,11 +104,12 @@ class UserService implements ApplicationServiceInterface
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getMessagePosition(): string
+    public function getMessagePosition(): MessagePosition
     {
         $default = $this->service->getMessagePosition();
+        $value = (string) $this->getPropertyString(self::P_MESSAGE_POSITION, $default->value);
 
-        return (string) $this->getPropertyString(self::P_MESSAGE_POSITION, $default);
+        return MessagePosition::tryFrom($value) ?? $default;
     }
 
     /**

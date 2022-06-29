@@ -49,12 +49,15 @@ class EntityProvider extends Base
      * Constructor.
      *
      * @psalm-param class-string<T> $className the entity class name.
-     * @psalm-suppress PropertyTypeCoercion
      */
     public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
     {
         parent::__construct($generator);
-        $this->repository = $manager->getRepository($className);
+
+        /** @psalm-var AbstractRepository<T> $repository */
+        $repository = $manager->getRepository($className);
+
+        $this->repository = $repository;
     }
 
     /**

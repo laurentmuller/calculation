@@ -33,6 +33,9 @@ abstract class AbstractArrayReport extends AbstractReport
      * @param PdfDocumentUnit|string        $unit        the measure unit
      * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
      * @psalm-param T[] $entities
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, protected array $entities, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
     {

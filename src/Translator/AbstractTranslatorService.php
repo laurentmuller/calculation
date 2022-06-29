@@ -43,6 +43,9 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param string|null $tag the BCP 47 language tag to search for
      *
      * @return string|null the display name, if found; null otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function findLanguage(?string $tag): ?string
     {
@@ -63,6 +66,9 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function getLanguages(): array|false
     {
@@ -95,6 +101,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     /**
      * Gets the cache key used to save or retrieve languages.
+     *
+     * @throws \ReflectionException
      */
     protected function getCacheKey(): string
     {
@@ -113,6 +121,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param bool   $error true to create an error if the property is not found
      *
      * @return mixed the property value, if found; false if fail
+     *
+     * @throws \ReflectionException
      */
     protected function getProperty(array $data, string $name, bool $error = true): mixed
     {
@@ -147,6 +157,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param bool   $error true to create an error if the property is not found
      *
      * @return array|false a none empty array, if found; false if fail
+     *
+     * @throws \ReflectionException
      */
     protected function getPropertyArray(array $data, string $name, bool $error = true): array|false
     {
@@ -171,6 +183,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param bool   $error true to create an error if the property is not found
      *
      * @return bool true if variable is an array and is not empty
+     *
+     * @throws \ReflectionException
      */
     protected function isValidArray(mixed $var, string $name, bool $error = true): bool
     {

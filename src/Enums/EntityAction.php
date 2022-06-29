@@ -20,7 +20,7 @@ use Elao\Enum\ReadableEnumTrait;
 /**
  * Entity action enumeration.
  *
- *  @implements SortableEnumInterface<EntityAction>
+ * @implements SortableEnumInterface<EntityAction>
  */
 enum EntityAction: string implements ReadableEnumInterface, SortableEnumInterface
 {
@@ -41,6 +41,14 @@ enum EntityAction: string implements ReadableEnumInterface, SortableEnumInterfac
      */
     #[EnumCase('action.show')]
     case SHOW = 'show';
+    /**
+     * Returns if the given value is equal to this value.
+     */
+    public function match(string $value): bool
+    {
+        return $this->value === $value;
+    }
+
     /**
      * @return EntityAction[]
      */

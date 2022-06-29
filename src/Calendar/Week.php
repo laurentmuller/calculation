@@ -49,6 +49,8 @@ class Week extends AbstractCalendarItem
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
      */
     public function __toString(): string
     {

@@ -207,6 +207,8 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units  the units to use
      *
      * @return array|false the current conditions if success; false on error
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function current(int $cityId, string $units = self::UNIT_METRIC): array|false
     {
@@ -229,6 +231,8 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units  the units to use
      *
      * @return array|false the current conditions if success; false on error
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function daily(int $cityId, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
@@ -315,8 +319,6 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|bool the conditions for the given cities if success; false on error
      *
-     * @throws \InvalidArgumentException if the number of city identifiers is greater than 20
-     *
      * @psalm-return array<array{
      *      cnt: int,
      *      units: array,
@@ -393,6 +395,8 @@ class OpenWeatherService extends AbstractHttpClientService
      *      country: string,
      *      latitude: float,
      *      longitude: float}>|false
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array|false
     {
@@ -468,6 +472,8 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * Checks if the response contains an error.
+     *
+     * @throws \ReflectionException
      */
     private function checkErrorCode(array $result): bool
     {
@@ -506,6 +512,10 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param array  $query an associative array of query string values to add to the request
      *
      * @return array|false the JSON response on success, false on failure
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \ReflectionException
      */
     private function get(string $uri, array $query = []): array|false
     {

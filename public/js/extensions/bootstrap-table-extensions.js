@@ -188,8 +188,9 @@ $.fn.extend({
                     }
                 });
 
-                // initialize the page dialog
+                // initialize dialogs
                 $this.initPageDialog();
+                $this.initSortDialog();
             },
 
             onCustomViewPostBody: function (data) {
@@ -1136,6 +1137,45 @@ $.fn.extend({
         $button.on('click', function () {
             $dialog.modal('hide');
             $this.selectPage($range.intVal(), true);
+        });
+    },
+
+    /**
+     * Initialize the sort dialog.
+     */
+    initSortDialog: function () {
+        'use strict';
+        const $dialog = $('#modal-sort');
+        if ($dialog.data('initialized')) {
+            return;
+        }
+        $dialog.data('initialized', true);
+
+        const $this = $(this);
+        const $sortName = $('#sort-name');
+        const $button = $('#sort-button');
+        $dialog.on('keydown', function (e) {
+            if (e.which === 13) { // enter
+                e.preventDefault();
+                e.stopPropagation();
+                $button.trigger('click');
+            }
+        }).on('show.bs.modal', function () {
+            const options = $this.getOptions();
+            $sortName.val(options.sortName);
+            $('#sort-order-' + options.sortOrder).setChecked(true);
+        }).on('shown.bs.modal', function () {
+            $sortName.trigger('focus');
+        });
+        $button.on('click', function () {
+            $dialog.modal('hide');
+            const sortName = $sortName.val();
+            const sortOrder = $('[name="sort-order"]:checked').val();
+            window.console.log(sortName, sortOrder);
+            // $this.refreshOptions({
+            //     sortName: field,
+            //     sortOrder: order
+            // });
         });
     }
 });

@@ -50,6 +50,8 @@ class CalculationController extends AbstractEntityController
 {
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, CalculationRepository $repository, private readonly CalculationService $service, private readonly TaskRepository $taskRepository)
     {
@@ -58,6 +60,9 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Add a new calculation.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/add', name: 'calculation_add')]
     public function add(Request $request): Response
@@ -132,6 +137,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     #[Route(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
@@ -163,6 +169,7 @@ class CalculationController extends AbstractEntityController
      * Export calculations to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     #[Route(path: '/pdf', name: 'calculation_pdf')]
     public function pdf(Request $request): PdfResponse
@@ -249,6 +256,8 @@ class CalculationController extends AbstractEntityController
      * {@inheritdoc}
      *
      * @param Calculation $item
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
@@ -323,6 +332,9 @@ class CalculationController extends AbstractEntityController
      * @param Calculation $calculation the calculation to verify
      *
      * @return bool true if margin is below
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function isMarginBelow(Calculation $calculation): bool
     {

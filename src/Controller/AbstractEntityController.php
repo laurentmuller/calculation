@@ -51,7 +51,10 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Constructor.
      *
-     * @param AbstractRepository<T> $repository
+     * @param TranslatorInterface   $translator the translator
+     * @param AbstractRepository<T> $repository the repository
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, protected AbstractRepository $repository)
     {
@@ -86,6 +89,9 @@ abstract class AbstractEntityController extends AbstractController
      *                                    <li><code>failure</code> : the message to display on failure.</li>
      *                                    </ul>
      * @psalm-param T $item
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
@@ -164,6 +170,8 @@ abstract class AbstractEntityController extends AbstractController
      *                                   <li><code>route</code> : the route to display on success (optional).</li>
      *                                   </ul>
      * @psalm-param T $item
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
@@ -214,18 +222,6 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Gets sorted distinct and not null values of the given column.
-     *
-     * @param string      $field  the column name to get values for
-     * @param string|null $search a value to search within the column
-     * @param int         $limit  the maximum number of results to retrieve or -1 for all
-     */
-    protected function getDistinctValues(string $field, ?string $search = null, int $limit = -1): array
-    {
-        return $this->repository->getDistinctValues($field, $search, $limit);
-    }
-
-    /**
      * Gets the form type (class name) used to edit an entity.
      */
     abstract protected function getEditFormType(): string;
@@ -251,6 +247,8 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @psalm-suppress MixedReturnTypeCoercion
      * @psalm-param literal-string $alias
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
@@ -267,14 +265,6 @@ abstract class AbstractEntityController extends AbstractController
     protected function getShowTemplate(): string
     {
         return \sprintf('%1$s/%1$s_show.html.twig', $this->lowerName);
-    }
-
-    /**
-     * Gets the Twig template (path) name used to display entities as table.
-     */
-    protected function getTableTemplate(): string
-    {
-        return \sprintf('%1$s/%1$s_table.html.twig', $this->lowerName);
     }
 
     /**

@@ -50,7 +50,6 @@
                     {%- set class_primary = id == selection ? 'table-primary' : '' -%}
                     {%- set class_muted = calculation.editable ? '' : 'text-muted' -%}
                     {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}
-                    {%- set is_separator = false -%}
                     <tr{% if class_name %} class="{{ class_name }}"{% endif %}>
                         <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
                         {%- if row_link and default_page -%}
@@ -75,46 +74,39 @@
                                 <div class="dropdown dropleft text-right">
                                     {{ icons.dropdownEllipsis(menu_id) }}
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
-                                        {%- if edit_page -%}
-                                            {%- set path = path(edit_page, params) -%}
-                                            {{ icons.dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, 'btn-default') }}
-                                            {%- set is_separator = true -%}
-                                        {%- endif -%}
-                                        {%- if state_page -%}
-                                            {%- set path = path(state_page, params) -%}
-                                            {{ icons.dropdownItem(path, 'calculation.list.state_title', ICON_CALCULATION_STATE) }}
-                                            {%- set is_separator = true -%}
-                                        {%- endif -%}
-                                        {%- if delete_page -%}
-                                            {%- if is_separator -%}{{ icons.dropdownSeparator }}{% endif %}
-                                            {%- set path = path(delete_page, params) -%}
-                                            {{ icons.dropdownItem(path, 'calculation.delete.title', ICON_DELETE) }}
-                                            {%- set is_separator = true -%}
-                                        {%- endif -%}
-                                        {%- if add_page -%}
-                                            {%- if is_separator -%}{{ icons.dropdownSeparator }}{% endif %}
-                                            {%- set path = path(add_page, params) -%}
-                                            {{ icons.dropdownItem(path, 'calculation.add.title', ICON_ADD) }}
-                                            {%- set path = path(clone_page, params) -%}
-                                            {{ icons.dropdownItem(path, 'common.button_clone', ICON_COPY) }}
-                                            {%- set is_separator = true -%}
-                                        {%- endif -%}
-
-                                        {%- if show_page -%}
-                                            {%- if is_separator -%}{{ icons.dropdownSeparator }}{% endif %}
-                                            {%- set path = path(show_page, params) -%}
-                                            {{ icons.dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
-                                            {%- set is_separator = true -%}
-                                        {%- endif -%}
-
-                                        {%- if single_page_pdf -%}
-                                            {%- if is_separator -%}{{ icons.dropdownSeparator }}{% endif %}
-                                            {%- set path = path(single_page_pdf, {'id': id}) -%}
-                                            {{ icons.dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
-                                            {%- set path = path(single_page_excel, {'id': id}) -%}
-                                            {{ icons.dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
-                                            {%- set is_separator = true -%}
-                                        {%- endif -%}
+                                    {%- if edit_page -%}
+                                        {{- icons.dropdownSeparator() }}
+                                        {%- set path = path(edit_page, params) -%}
+                                        {{ icons.dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, 'btn-default') }}
+                                    {%- endif -%}
+                                    {%- if state_page -%}
+                                        {%- set path = path(state_page, params) -%}
+                                        {{ icons.dropdownItem(path, 'calculation.list.state_title', ICON_CALCULATION_STATE) }}
+                                    {%- endif -%}
+                                    {%- if delete_page -%}
+                                        {{- icons.dropdownSeparator() }}
+                                        {%- set path = path(delete_page, params) -%}
+                                        {{ icons.dropdownItem(path, 'calculation.delete.title', ICON_DELETE) }}
+                                    {%- endif -%}
+                                    {%- if add_page -%}
+                                        {{- icons.dropdownSeparator() }}
+                                        {%- set path = path(add_page, params) -%}
+                                        {{ icons.dropdownItem(path, 'calculation.add.title', ICON_ADD) }}
+                                        {%- set path = path(clone_page, params) -%}
+                                        {{ icons.dropdownItem(path, 'common.button_clone', ICON_COPY) }}
+                                    {%- endif -%}
+                                    {%- if show_page -%}
+                                        {{- icons.dropdownSeparator() }}
+                                        {%- set path = path(show_page, params) -%}
+                                        {{ icons.dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
+                                    {%- endif -%}
+                                    {%- if single_page_pdf -%}
+                                        {{- icons.dropdownSeparator() }}
+                                        {%- set path = path(single_page_pdf, {'id': id}) -%}
+                                        {{ icons.dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
+                                        {%- set path = path(single_page_excel, {'id': id}) -%}
+                                        {{ icons.dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
+                                    {%- endif -%}
                                     </div>
                                 </div>
                             </td>

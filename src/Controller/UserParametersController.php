@@ -28,6 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/user')]
 class UserParametersController extends AbstractController
 {
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     #[Route(path: '/parameters', name: 'user_parameters')]
     public function invoke(Request $request, UserService $service): Response
     {

@@ -42,6 +42,8 @@ class ProductController extends AbstractEntityController
 {
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, ProductRepository $repository)
     {
@@ -50,6 +52,9 @@ class ProductController extends AbstractEntityController
 
     /**
      * Add a product.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/add', name: 'product_add')]
     public function add(Request $request): Response
@@ -64,6 +69,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Clone (copy) a product.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Product $item): Response
@@ -79,6 +86,9 @@ class ProductController extends AbstractEntityController
 
     /**
      * Delete a product.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
@@ -95,6 +105,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Edit a product.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Product $item): Response
@@ -125,6 +137,8 @@ class ProductController extends AbstractEntityController
      * Export the products to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'product_pdf')]
     public function pdf(ProductRepository $repository): PdfResponse
@@ -150,6 +164,8 @@ class ProductController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'product_table')]
     public function table(Request $request, ProductTable $table): Response
@@ -159,6 +175,9 @@ class ProductController extends AbstractEntityController
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {

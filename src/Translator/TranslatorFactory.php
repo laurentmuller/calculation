@@ -89,7 +89,7 @@ class TranslatorFactory
      *
      * @return TranslatorServiceInterface the translator service
      *
-     * @throws ServiceNotFoundException if the service can not be found
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getService(string $class): TranslatorServiceInterface
     {
@@ -106,6 +106,8 @@ class TranslatorFactory
      * Gets the last used translator service from the session.
      *
      * @return TranslatorServiceInterface the translator service or the default (Bing) if not found
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getSessionService(): TranslatorServiceInterface
     {

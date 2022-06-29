@@ -41,7 +41,6 @@ final class SymfonyInfo
     private const PACKAGE_PROPERTIES = [
         'name',
         'version',
-        'version_normalized',
         'description',
         'homepage',
     ];
@@ -53,8 +52,8 @@ final class SymfonyInfo
 
     /**
      * @var null|array{
-     *     runtime?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>,
-     *     debug?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>
+     *     runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
+     *     debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
      * }
      */
     private ?array $packages = null;
@@ -226,15 +225,15 @@ final class SymfonyInfo
             $path = $this->kernel->getProjectDir() . self::PACKAGE_FILE_NAME;
             if (FileUtils::exists($path)) {
                 try {
-                    /** @var array $content */
+                    /**
+                     * @var array{
+                     *     'dev-package-names': string[]|null,
+                     *     packages: array<string, array{name: string, version: string, description?: string, homepage?: string}>
+                     * } $content
+                     */
                     $content = FileUtils::decodeJson($path);
-
-                    /** @var string[] $devPackageNames */
+                    $packages = $content['packages'];
                     $devPackageNames = $content['dev-package-names'] ?? [];
-
-                    /** @var array<string, array{name: string, version: string, description?: string, homepage?: string}> $packages */
-                    $packages = (array) $content['packages'];
-
                     $result = $this->processPackages($packages, $devPackageNames);
                 } catch (\InvalidArgumentException) {
                     // ignore
@@ -399,8 +398,8 @@ final class SymfonyInfo
      * @param string[]                                                                                     $devPackageNames
      *
      * @return  array{
-     *          runtime?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>,
-     *          debug?: array<string, array{name: string, version: string, version_normalized: string, description: string, homepage: string}>
+     *          runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
+     *          debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
      *          }
      */
     private function processPackages(array $packages, array $devPackageNames): array
@@ -412,8 +411,15 @@ final class SymfonyInfo
             $type = \in_array($name, $devPackageNames, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             foreach (self::PACKAGE_PROPERTIES as $key) {
                 $value = $package[$key] ?? '';
-                if ('description' === $key && '' !== $value && !\str_ends_with($value, '.')) {
-                    $value .= '.';
+                switch ($key) {
+                    case 'description':
+                        if ('' !== $value && !\str_ends_with($value, '.')) {
+                            $value .= '.';
+                        }
+                        break;
+                    case 'version':
+                        $value = \ltrim($value, 'v');
+                        break;
                 }
                 $entry[$key] = $value;
             }

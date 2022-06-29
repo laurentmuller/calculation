@@ -1,4 +1,4 @@
-inactive-account: Le compte d'accès du calculateur de change  n'est pas validé.
+inactive-account: Le compte d'accès du calculateur de change n'est pas validé.
 invalid-key: La clé d'authentification du calculateur de change est invalide.
 malformed-request: La requête du calculateur de change contient une valeur invalide.
 quota-reached: Le nombre de demandes autorisées du calculateur de change a été atteint.

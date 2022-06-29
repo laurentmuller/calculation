@@ -91,6 +91,8 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the application service.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getApplication(): ApplicationService
     {
@@ -139,6 +141,8 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the request stack.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getRequestStack(): RequestStack
     {
@@ -171,6 +175,8 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the URL generator service.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
@@ -211,6 +217,8 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the user service.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getUserService(): UserService
     {
@@ -335,6 +343,8 @@ abstract class AbstractController extends BaseController
      * @template T
      * @psalm-param class-string<T> $id
      * @psalm-return T
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function getService(string $id): mixed
     {
@@ -380,6 +390,8 @@ abstract class AbstractController extends BaseController
      *
      * @param \Exception  $e       the exception to serialize
      * @param string|null $message the optional error message
+     *
+     * @throws \ReflectionException
      */
     protected function jsonException(\Exception $e, ?string $message = null): JsonResponse
     {

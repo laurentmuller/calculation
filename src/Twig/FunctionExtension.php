@@ -282,6 +282,8 @@ final class FunctionExtension extends AbstractExtension
      * Generates a random nonce parameter.
      *
      * @param Environment $env the Twig environnement
+     *
+     * @throws \Exception
      */
     private function getNonce(Environment $env): string
     {

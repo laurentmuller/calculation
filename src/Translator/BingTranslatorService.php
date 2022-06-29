@@ -209,6 +209,13 @@ class BingTranslatorService extends AbstractTranslatorService
         ];
     }
 
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     */
     private function checkResponse(ResponseInterface $response): array|false
     {
         if (Response::HTTP_OK !== $response->getStatusCode()) {
@@ -265,6 +272,8 @@ class BingTranslatorService extends AbstractTranslatorService
      * @param array  $query an associative array of query string values to add to the request
      *
      * @return array|false the HTTP response body on success, false on failure
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     private function get(string $uri, array $query = []): array|false
     {
@@ -308,6 +317,8 @@ class BingTranslatorService extends AbstractTranslatorService
      * @param array  $query an associative array of query string values to add to the request
      *
      * @return array|false the HTTP response body on success, false on failure
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     private function post(string $uri, array $data, array $query = []): array|false
     {

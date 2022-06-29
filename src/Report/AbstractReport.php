@@ -44,6 +44,7 @@ abstract class AbstractReport extends PdfDocument
      * @param PdfDocumentUnit|string        $unit        the measure unit
      * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
      *
+     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(protected AbstractController $controller, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)

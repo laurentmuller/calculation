@@ -646,8 +646,8 @@ table.table-fixed-header .thead-light th {
  * bold font for default action
  */
 .dropdown-menu .btn-default {
-    font-weight: bold !important;
+    font-weight: bolder !important;
 }
 .context-menu-item.btn-default {
-    font-weight: bold !important;
+    font-weight: bolder !important;
 }

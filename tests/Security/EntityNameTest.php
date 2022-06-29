@@ -47,6 +47,7 @@ class EntityNameTest extends TestCase
 
             ['Calculation', 0],
             ['EntityCalculation', 0],
+            [Calculation::class, 0],
         ];
     }
 

@@ -25,6 +25,9 @@ class MySqlReport extends AbstractReport
 {
     /**
      * Constructor.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(AbstractController $controller, private readonly DatabaseInfo $info)
     {

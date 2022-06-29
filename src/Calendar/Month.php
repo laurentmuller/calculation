@@ -49,6 +49,8 @@ class Month extends AbstractCalendarItem implements \Stringable
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
      */
     public function __toString(): string
     {

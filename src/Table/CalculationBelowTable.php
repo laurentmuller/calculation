@@ -95,6 +95,8 @@ class CalculationBelowTable extends CalculationTable implements \Countable
 
     /**
      * Gets the minimum margin, in percent, for a calculation.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getMinMargin(): float
     {

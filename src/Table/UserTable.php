@@ -56,6 +56,8 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Format the image user URL.
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatImage(?string $image, User $user): string
     {

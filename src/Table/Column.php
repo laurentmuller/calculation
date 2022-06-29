@@ -275,21 +275,19 @@ class Column implements SortModeInterface, \Stringable
     }
 
     /**
-     * Map the given object to a string value using this field property.
+     * Map the given entity or array to a string value using this field property.
      *
-     * @param AbstractEntity|array $objectOrArray the object to map
-     * @param PropertyAccessor     $accessor      the property accessor to get the object value
+     * @param AbstractEntity|array $objectOrArray the entity or array to map
+     * @param PropertyAccessor     $accessor      the property accessor to get the value
      *
      * @return string the mapped value
      */
     public function mapValue(AbstractEntity|array $objectOrArray, PropertyAccessor $accessor): string
     {
-        // get value
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
-        /** @var mixed $value */
+        /** @psalm-var mixed $value */
         $value = $accessor->getValue($objectOrArray, $property);
 
-        // format
         return $this->formatValue($objectOrArray, $value);
     }
 
@@ -415,7 +413,7 @@ class Column implements SortModeInterface, \Stringable
     /**
      * Formats the given value using the field formatter if applicable.
      *
-     * @param AbstractEntity|array $objectOrArray the object to map
+     * @param AbstractEntity|array $objectOrArray the parent entity or array
      * @param mixed                $value         the value to format
      *
      * @return string the formatted value

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 use App\Enums\EntityAction;
+use App\Enums\MessagePosition;
 use App\Enums\TableView;
 
 /**
@@ -45,7 +46,7 @@ interface ApplicationServiceInterface
     /**
      * The default position of the flash bag messages (string).
      */
-    final public const DEFAULT_MESSAGE_POSITION = 'bottom-right';
+    final public const DEFAULT_MESSAGE_POSITION = MessagePosition::BOTTOM_RIGHT;
 
     /**
      * The default display message progress bar (boolean).

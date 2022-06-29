@@ -88,6 +88,10 @@ trait FileTrait
      * @param string $filename the file to read
      *
      * @return \stdClass|false the content of file, as JSON, if success; false otherwise
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \ReflectionException
      */
     protected function loadJson(string $filename): \stdClass|false
     {
@@ -132,6 +136,8 @@ trait FileTrait
      * @param bool            $log        true to output error
      *
      * @return bool true if the property exists, false if it doesn't exist
+     *
+     * @throws \ReflectionException
      */
     protected function propertyExists(\stdClass $var, array|string $properties, bool $log = false): bool
     {
@@ -157,6 +163,10 @@ trait FileTrait
      * @param string $filename the file to read
      *
      * @return string|false the content of file, if success; false otherwise
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \ReflectionException
      */
     protected function readFile(string $filename): string|false
     {
@@ -193,6 +203,8 @@ trait FileTrait
      * Removes the given directory.
      *
      * @param string $file A filename to remove
+     *
+     * @throws \ReflectionException
      */
     protected function remove(string $file): void
     {
@@ -208,6 +220,8 @@ trait FileTrait
      * @param string $origin    The origin filename or directory
      * @param string $target    The new filename or directory
      * @param bool   $overwrite Whether to overwrite the target if it already exists
+     *
+     * @throws \ReflectionException
      */
     protected function rename(string $origin, string $target, bool $overwrite = true): void
     {
@@ -222,6 +236,8 @@ trait FileTrait
      * @param string $prefix The prefix of the generated temporary filename
      *
      * @return string The new temporary directory, or throw an exception on failure
+     *
+     * @throws \ReflectionException
      */
     protected function tempDir(string $dir, string $prefix = 'tmp'): string
     {
@@ -236,6 +252,8 @@ trait FileTrait
      *
      * @param string $filename the file to be written to
      * @param string $content  the data to write into the file
+     *
+     * @throws \ReflectionException
      */
     protected function writeFile(string $filename, string $content): void
     {

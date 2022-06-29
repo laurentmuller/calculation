@@ -40,6 +40,9 @@ class CalculationCategoryRepository extends AbstractRepository
      * @param Category $category the category to search for
      *
      * @return int the number of calculations
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countCategoryReferences(Category $category): int
     {

@@ -129,6 +129,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws NotFoundHttpException               if no group is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     #[Route(path: '/excel', name: 'group_excel')]
     public function excel(): SpreadsheetResponse
@@ -146,7 +147,9 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a PDF document.
      *
-     * @throws NotFoundHttpException if no group is found
+     * @throws NotFoundHttpException               if no group is found
+     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/pdf', name: 'group_pdf')]
     public function pdf(): PdfResponse
@@ -172,6 +175,8 @@ class GroupController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'group_table')]
     public function table(Request $request, GroupTable $table): Response

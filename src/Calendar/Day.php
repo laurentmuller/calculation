@@ -47,6 +47,8 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface, \Stringable
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
      */
     public function __toString(): string
     {

@@ -44,6 +44,8 @@ class TaskController extends AbstractEntityController
 {
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, TaskRepository $repository)
     {
@@ -52,6 +54,9 @@ class TaskController extends AbstractEntityController
 
     /**
      * Add a task.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'task_add')]
     public function add(Request $request): Response
@@ -66,6 +71,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Edit a copy (cloned) task.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Task $item): Response
@@ -115,6 +122,9 @@ class TaskController extends AbstractEntityController
 
     /**
      * Delete a task.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
@@ -131,6 +141,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Edit a task.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Task $item): Response
@@ -143,6 +155,7 @@ class TaskController extends AbstractEntityController
      *
      * @throws NotFoundHttpException               if no category is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     #[Route(path: '/excel', name: 'task_excel')]
     public function excel(): SpreadsheetResponse
@@ -160,7 +173,10 @@ class TaskController extends AbstractEntityController
     /**
      * Export tasks to a PDF document.
      *
-     * @throws NotFoundHttpException if no category is found
+     * @throws NotFoundHttpException                      if no category is found
+     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'task_pdf')]
     public function pdf(): PdfResponse
@@ -186,6 +202,8 @@ class TaskController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'task_table')]
     public function table(Request $request, TaskTable $table): Response
@@ -197,6 +215,8 @@ class TaskController extends AbstractEntityController
      * {@inheritdoc}
      *
      * @param Task $item
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

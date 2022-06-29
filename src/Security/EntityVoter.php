@@ -19,6 +19,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
+use Doctrine\ORM\Mapping\Entity;
 use Elao\Enum\FlagBag;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -144,6 +145,7 @@ class EntityVoter extends Voter
      */
     public static function getRoleUser(): Role
     {
+        /** @var FlagBag<EntityPermission> $default */
         $default = FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
@@ -197,7 +199,7 @@ class EntityVoter extends Voter
     {
         // check user
         $user = $token->getUser();
-        if (!($user instanceof User)) {
+        if (!$user instanceof User) {
             return false;
         }
 
@@ -207,8 +209,7 @@ class EntityVoter extends Voter
         }
 
         // super admin can access all
-        $roles = $token->getRoleNames();
-        if (\in_array(RoleInterface::ROLE_SUPER_ADMIN, $roles, true)) {
+        if ($user->isSuperAdmin()) {
             return true;
         }
 
@@ -219,7 +220,7 @@ class EntityVoter extends Voter
         }
 
         // special case for Log entity
-        if (EntityName::LOG->value === $name) {
+        if (EntityName::LOG->match($name)) {
             return true;
         }
 
@@ -238,7 +239,7 @@ class EntityVoter extends Voter
         // get rights
         if ($user->isOverwrite()) {
             $rights = $user->getRights();
-        } elseif (\in_array(RoleInterface::ROLE_ADMIN, $roles, true)) {
+        } elseif ($user->isAdmin()) {
             $rights = $this->service->getAdminRights();
         } else {
             $rights = $this->service->getUserRights();
@@ -252,10 +253,11 @@ class EntityVoter extends Voter
     }
 
     /**
-     * @psalm-return FlagBag<EntityPermission>
-     *
      * @psalm-suppress InvalidArgument
-     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     *
+     * @return FlagBag<EntityPermission>
      */
     private static function getFlagBagSorted(): FlagBag
     {

@@ -40,6 +40,8 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
 
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -62,6 +64,8 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
      * @param array  $options the options to use when saving image
      *
      * @return bool true on success, false on error or if the size is not a positive value
+     *
+     * @throws \ReflectionException
      */
     public function resize(string $source, string $target, int $size, array $options = []): bool
     {
@@ -108,6 +112,8 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
      * @param array  $options the options to use when saving image
      *
      * @return bool true on success, false on error
+     *
+     * @throws \ReflectionException
      */
     public function resizeDefault(string $source, string $target, array $options = []): bool
     {
@@ -122,6 +128,8 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
      * @param array  $options the options to use when saving image
      *
      * @return bool true on success, false on error
+     *
+     * @throws \ReflectionException
      */
     public function resizeMedium(string $source, string $target, array $options = []): bool
     {
@@ -136,6 +144,8 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
      * @param array  $options the options to use when saving image
      *
      * @return bool true on success, false on error
+     *
+     * @throws \ReflectionException
      */
     public function resizeSmall(string $source, string $target, array $options = []): bool
     {

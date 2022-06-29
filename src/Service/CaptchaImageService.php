@@ -175,6 +175,8 @@ class CaptchaImageService
      *               <td>The character height.</td>
      *               </tr>
      *               </table>
+     *
+     * @throws \Exception
      */
     private function computeText(ImageHandler $image, float $size, string $font, string $text): array
     {
@@ -225,6 +227,8 @@ class CaptchaImageService
 
     /**
      * Draws horizontal gray lines in the background.
+     *
+     * @throws \Exception
      */
     private function drawLines(ImageHandler $image, int $width, int $height): self
     {
@@ -243,6 +247,8 @@ class CaptchaImageService
 
     /**
      * Draws blue points in the background.
+     *
+     * @throws \Exception
      */
     private function drawPoints(ImageHandler $image, int $width, int $height): self
     {

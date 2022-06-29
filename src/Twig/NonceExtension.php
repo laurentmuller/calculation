@@ -47,6 +47,8 @@ final class NonceExtension extends AbstractExtension
 
     /**
      * Generates a random nonce parameter.
+     *
+     * @throws \Exception
      */
     public function getNonce(): string
     {

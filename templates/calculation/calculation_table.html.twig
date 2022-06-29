@@ -56,7 +56,7 @@
 
 {% block other_actions -%}
 {% if allow_export %}
-    {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+    {{- _self.item_separator() }}
     {{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', ICON_PDF, 'btn-calculation-pdf') }}
     {{- _self.item_path_external(path('calculation_excel_id', params), 'calculation.list.excel_single_title', ICON_EXCEL, 'btn-calculation-excel') }}
 {% endif %}

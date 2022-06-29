@@ -50,6 +50,7 @@ class AdminController extends AbstractController
      * Archive calculations.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/archive', name: 'admin_archive')]
@@ -90,6 +91,9 @@ class AdminController extends AbstractController
 
     /**
      * Clear the application cache.
+     *
+     * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/clear', name: 'admin_clear')]
@@ -150,6 +154,7 @@ class AdminController extends AbstractController
      * Import zip codes, cities and streets from Switzerland.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/import', name: 'admin_import')]
@@ -185,6 +190,7 @@ class AdminController extends AbstractController
      * Display the application parameters.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/parameters', name: 'admin_parameters')]
@@ -197,6 +203,7 @@ class AdminController extends AbstractController
             ApplicationServiceInterface::P_UPDATE_PRODUCTS,
             ApplicationServiceInterface::P_LAST_IMPORT,
         ]);
+
         // password options
         foreach (ParametersType::PASSWORD_OPTIONS as $option) {
             $data[$option] = $application->isPropertyBoolean($option);
@@ -225,6 +232,7 @@ class AdminController extends AbstractController
      * Edit rights for the administrator role ('ROLE_ADMIN').
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/rights/admin', name: 'admin_rights_admin')]
@@ -242,6 +250,7 @@ class AdminController extends AbstractController
      * Edit rights for the user role ('ROLE_USER').
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/rights/user', name: 'admin_rights_user')]
@@ -259,6 +268,7 @@ class AdminController extends AbstractController
      * Update product prices.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/product', name: 'admin_product')]
@@ -304,6 +314,7 @@ class AdminController extends AbstractController
      * @param string  $property the property name to update
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
     {

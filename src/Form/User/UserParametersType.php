@@ -24,6 +24,8 @@ class UserParametersType extends AbstractParametersType
 {
     /**
      * Constructor.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(Security $security, ApplicationService $service)
     {

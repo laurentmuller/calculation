@@ -59,6 +59,8 @@ class AlphaCaptchaType extends AbstractType
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

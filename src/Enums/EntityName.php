@@ -101,6 +101,14 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     }
 
     /**
+     * Returns if the given value is equal to this value.
+     */
+    public function match(string $value): bool
+    {
+        return $this->value === $value;
+    }
+
+    /**
      * Gets the offset.
      */
     public function offset(): int

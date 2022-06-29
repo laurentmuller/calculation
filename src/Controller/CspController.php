@@ -31,6 +31,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[IsGranted('ROLE_USER')]
 class CspController extends AbstractController
 {
+    /**
+     * @throws \ReflectionException
+     */
     #[Route(path: '/csp', name: 'log_csp')]
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
     {

@@ -36,6 +36,8 @@ trait LoggerTrait
      * @param string $message the message to output
      *
      * @return string the concat message
+     *
+     * @throws \ReflectionException
      */
     protected function concat(string $message): string
     {
@@ -46,6 +48,8 @@ trait LoggerTrait
      * Gets the installer name.
      *
      * @return string the installer name
+     *
+     * @throws \ReflectionException
      */
     protected function getInstallerName(): string
     {
@@ -91,6 +95,8 @@ trait LoggerTrait
      *
      * @param string $message the message to write
      * @param string $tag     the external tag (info, error, etc)
+     *
+     * @throws \ReflectionException
      */
     protected function write(string $message, string $tag = 'info'): void
     {
@@ -104,6 +110,8 @@ trait LoggerTrait
      * Writes the given error message.
      *
      * @param string $message the message to write
+     *
+     * @throws \ReflectionException
      */
     protected function writeError(string $message): void
     {
@@ -117,6 +125,8 @@ trait LoggerTrait
      * Writes the given error message.
      *
      * @param string $message the message to write
+     *
+     * @throws \ReflectionException
      */
     protected function writeNote(string $message): void
     {
@@ -130,6 +140,8 @@ trait LoggerTrait
      * Writes the given success message.
      *
      * @param string $message the message to write
+     *
+     * @throws \ReflectionException
      */
     protected function writeSuccess(string $message): void
     {
@@ -144,6 +156,8 @@ trait LoggerTrait
      *
      * @param string $message the message to write
      * @param string $tag     the external tag (info, error, etc)
+     *
+     * @throws \ReflectionException
      */
     protected function writeVerbose(string $message, string $tag = 'info'): void
     {
@@ -157,6 +171,8 @@ trait LoggerTrait
      *
      * @param string $message the message to write
      * @param string $tag     the external tag (info, error, etc)
+     *
+     * @throws \ReflectionException
      */
     protected function writeVeryVerbose(string $message, string $tag = 'info'): void
     {

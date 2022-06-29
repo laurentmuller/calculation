@@ -128,6 +128,8 @@ class ProductUpdater implements LoggerAwareInterface
 
     /**
      * Create the update query from session.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function createUpdateQuery(): ProductUpdateQuery
     {
@@ -149,6 +151,8 @@ class ProductUpdater implements LoggerAwareInterface
 
     /**
      *  Save the update query to session.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function saveUpdateQuery(ProductUpdateQuery $query): void
     {

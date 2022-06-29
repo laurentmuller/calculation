@@ -208,9 +208,11 @@ class PivotTableFactory
     /**
      * Creates a new instance.
      *
-     * @param class-string<AbstractAggregator>|null $aggregatorClass
+     * @template E of AbstractAggregator
      *
-     * @return PivotTableFactory<AbstractAggregator>
+     * @param class-string<E>|null $aggregatorClass
+     *
+     * @return PivotTableFactory<E>
      */
     public static function instance(array $dataset, ?string $title = null, ?string $aggregatorClass = null): self
     {

@@ -642,28 +642,8 @@ $.fn.extend({
         onUpdateHref: function (_$table, $actions) {
             if ($actions.length === 1) {
                 $actions.addClass('btn-default');
-            } else {
-                let was_separator = false;
-                const $children = $actions.parent().children();
-                const $first = $children.first();
-                if ($first.is('.dropdown-divider')) {
-                    $first.remove();
-                }
-                const $last = $children.last();
-                if ($last.is('.dropdown-divider')) {
-                    $last.remove();
-                }
-                $children.each(function () {
-                    const $item = $(this);
-                    const is_separator = $item.is('.dropdown-divider');
-                    if (was_separator && is_separator) {
-                        $item.remove();
-                        was_separator = false;
-                    } else {
-                        was_separator = is_separator;
-                    }
-                });
             }
+            $actions.parents('.dropdown-menu').removeSeparators();
         },
 
         // show message
@@ -802,4 +782,8 @@ $.fn.extend({
     if ($table.isEmpty()) {
         $('input.search-input').trigger('focus');
     }
+
+    $('.card-title').on('click', function () {
+         $('#modal-sort').modal('show');
+    });
 }(jQuery));

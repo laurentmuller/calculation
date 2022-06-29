@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\Calculation;
 use App\Entity\User;
 use App\Enums\Importance;
+use App\Enums\MessagePosition;
 use App\Form\Admin\ParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
@@ -48,6 +49,7 @@ use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,6 +91,8 @@ class TestController extends AbstractController
 
     /**
      * Test sending notification mail.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '/editor', name: 'test_editor')]
     public function editor(Request $request, MailerService $service, LoggerInterface $logger): Response
@@ -107,21 +111,29 @@ class TestController extends AbstractController
         $helper->field('message')
             ->updateAttribute('minlength', 10)
             ->add(SimpleEditorType::class);
+        $helper->field('attachments')
+            ->updateOptions([
+                'multiple' => true,
+                'maxfiles' => 3,
+                'maxsize' => '10mi',
+                'maxsizetotal' => '30mi', ])
+            ->notRequired()
+            ->addFileType();
 
         // handle request
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $user = $this->getUser();
             if ($user instanceof User) {
-                /** @var array $data */
+                /** @var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]}  $data */
                 $data = $form->getData();
-                $email = (string) $data['email'];
-                $message = (string) $data['message'];
-                /** @var Importance $importance */
+                $email = $data['email'];
+                $message = $data['message'];
                 $importance = $data['importance'];
+                $attachments = $data['attachments'];
 
                 try {
-                    $service->sendNotification($email, $user, $message, $importance);
+                    $service->sendNotification($email, $user, $message, $importance, $attachments);
                     $this->successTrans('user.comment.success');
 
                     return $this->redirectToHomePage();
@@ -176,6 +188,10 @@ class TestController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     #[Route(path: '/ipstack', name: 'test_ipstack')]
     public function ipStrack(Request $request, IpStackService $service): JsonResponse
     {
@@ -195,6 +211,7 @@ class TestController extends AbstractController
      * Test notifications.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/notifications', name: 'test_notifications')]
     public function notifications(): Response
@@ -204,6 +221,7 @@ class TestController extends AbstractController
             'position' => $application->getMessagePosition(),
             'timeout' => $application->getMessageTimeout(),
             'subtitle' => $application->isMessageSubTitle(),
+            'positions' => MessagePosition::sorted(),
         ];
 
         return $this->renderForm('test/notification.html.twig', $data);
@@ -422,6 +440,8 @@ class TestController extends AbstractController
 
     /**
      * Display calculations in a timeline.
+     *
+     * @throws \Exception
      */
     #[Route(path: '/timeline', name: 'test_timeline')]
     public function timeline(Request $request, CalculationRepository $repository): Response
@@ -577,6 +597,9 @@ class TestController extends AbstractController
         return $this->json($data);
     }
 
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
     #[Route(path: '/spam', name: 'test_spam')]
     public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
     {
@@ -593,6 +616,9 @@ class TestController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
     #[Route(path: '/verify', name: 'test_verify')]
     public function verifyAkismetKey(AkismetService $service): JsonResponse
     {

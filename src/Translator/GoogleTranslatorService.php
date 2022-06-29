@@ -63,6 +63,12 @@ class GoogleTranslatorService extends AbstractTranslatorService
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
      */
     public function detect(string $text): array|false
     {
@@ -123,6 +129,12 @@ class GoogleTranslatorService extends AbstractTranslatorService
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
     {
@@ -163,6 +175,11 @@ class GoogleTranslatorService extends AbstractTranslatorService
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
      */
     protected function doGetLanguages(): array|false
     {
@@ -197,6 +214,9 @@ class GoogleTranslatorService extends AbstractTranslatorService
         return [self::BASE_URI => self::HOST_NAME];
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     private function detectLanguage(array $response): ?string
     {
         if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
@@ -219,6 +239,11 @@ class GoogleTranslatorService extends AbstractTranslatorService
      * @param array  $query an associative array of query string values to add to the request
      *
      * @return array|false the data response on success, false otherwise
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
      */
     private function get(string $uri, array $query = []): array|false
     {
@@ -258,6 +283,9 @@ class GoogleTranslatorService extends AbstractTranslatorService
         return $data;
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     private function getTranslation(array $response): ?string
     {
         if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {

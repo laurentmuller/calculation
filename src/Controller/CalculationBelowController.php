@@ -39,6 +39,8 @@ class CalculationBelowController extends AbstractController
      * Export the calculations to a Spreadsheet document.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/excel', name: 'below_excel')]
     public function excel(CalculationRepository $repository): Response
@@ -58,6 +60,9 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Export calculations to a PDF document.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/pdf', name: 'below_pdf')]
     public function pdf(CalculationRepository $repository): Response
@@ -80,6 +85,8 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'below_table')]
     public function table(Request $request, CalculationBelowTable $table): Response

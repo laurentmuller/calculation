@@ -43,6 +43,8 @@ class CustomerController extends AbstractEntityController
 {
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, CustomerRepository $repository)
     {
@@ -51,6 +53,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Add a customer.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'customer_add')]
     public function add(Request $request): Response
@@ -60,6 +64,11 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Delete a customer.
+     *
+     * throws \Psr\Container\ContainerExceptionInterface
+     *
+     * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
@@ -76,6 +85,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Edit a customer.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Customer $item): Response
@@ -106,6 +117,8 @@ class CustomerController extends AbstractEntityController
      * Export the customers to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'customer_pdf')]
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
@@ -132,6 +145,8 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'customer_table')]
     public function table(Request $request, CustomerTable $table): Response

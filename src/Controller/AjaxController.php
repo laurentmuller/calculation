@@ -33,7 +33,6 @@ use App\Traits\StrengthTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
-use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
@@ -227,6 +226,8 @@ class AjaxController extends AbstractController
 
     /**
      * Gets the list of translate languages.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/languages', name: 'ajax_languages')]
@@ -327,6 +328,8 @@ class AjaxController extends AbstractController
      * Sets a session attribute.
      *
      * The request must contains 'name' and 'value' parameters.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/session/set', name: 'ajax_session_set')]
@@ -387,6 +390,8 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct calculation's customers in existing calculations.
+     *
+     * @throws \ReflectionException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/search/customer', name: 'ajax_search_customer')]
@@ -405,6 +410,8 @@ class AjaxController extends AbstractController
      * <li><code>query</code>: the value to search.</li>
      * <li><code>limit</code>: the number of results to retrieve (default = 15).</li>
      * </ul>
+     *
+     * @throws \ReflectionException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/search/distinct', name: 'ajax_search_distinct')]
@@ -436,6 +443,8 @@ class AjaxController extends AbstractController
 
     /**
      * Search products.
+     *
+     * @throws \ReflectionException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/search/product', name: 'ajax_search_product')]
@@ -462,6 +471,8 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct product and task suppliers.
+     *
+     * @throws \ReflectionException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/search/supplier', name: 'ajax_search_supplier')]
@@ -472,6 +483,8 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct customer's titles.
+     *
+     * @throws \ReflectionException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/search/title', name: 'ajax_search_title')]
@@ -482,6 +495,8 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct units from products and tasks.
+     *
+     * @throws \ReflectionException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/search/unit', name: 'ajax_search_unit')]
@@ -492,6 +507,9 @@ class AjaxController extends AbstractController
 
     /**
      * Translate a text.
+     *
+     * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/translate', name: 'ajax_translate')]
@@ -536,6 +554,9 @@ class AjaxController extends AbstractController
 
     /**
      * Update the calculation's totals.
+     *
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/update', name: 'ajax_update')]
@@ -614,6 +635,8 @@ class AjaxController extends AbstractController
      *
      * @template T of \App\Entity\AbstractEntity
      * @psalm-param AbstractRepository<T> $repository
+     *
+     * @throws \ReflectionException
      */
     private function getDistinctValues(Request $request, AbstractRepository $repository, string $field): JsonResponse
     {
@@ -643,6 +666,8 @@ class AjaxController extends AbstractController
      * @param ProductRepository $productRepository the product repository to search in
      * @param TaskRepository    $taskRepository    the task repository to search in
      * @param string            $field             the field name to search for
+     *
+     * @throws \ReflectionException
      */
     private function getDistinctValuesForCategoryItem(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository, string $field): JsonResponse
     {

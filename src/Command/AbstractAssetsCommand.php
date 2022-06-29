@@ -17,7 +17,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Abstract command for assets.
@@ -49,6 +48,8 @@ abstract class AbstractAssetsCommand extends Command
      * Gets the project directory.
      *
      * @return string|null the project directory, if found; null otherwise
+     *
+     * @throws \ReflectionException
      */
     protected function getProjectDir(): ?string
     {
@@ -59,20 +60,15 @@ abstract class AbstractAssetsCommand extends Command
             return null;
         }
 
-        $kernel = $application->getKernel();
-        if (!$kernel instanceof KernelInterface) {
-            $this->writeError('The Kernel is not defined.');
-
-            return null;
-        }
-
-        return $kernel->getProjectDir();
+        return $application->getKernel()->getProjectDir();
     }
 
     /**
      * Gets the public directory.
      *
      * @return string|null the public directory, if found; null otherwise
+     *
+     * @throws \ReflectionException
      */
     protected function getPublicDir(): ?string
     {

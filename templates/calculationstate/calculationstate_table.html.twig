@@ -33,7 +33,7 @@
 
 {% block other_actions -%}
 {% if is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) %}
-    {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+    {{- _self.item_separator() }}
     {{- _self.item_path(path('calculation_table'), 'calculationstate.list.calculation_title', ICON_CALCULATION, 'btn-show-calculation') }}
 {% endif %}
 {%- endblock %}

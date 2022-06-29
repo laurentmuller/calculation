@@ -60,6 +60,10 @@ class CompileAssetsCommand extends AbstractAssetsCommand
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \ReflectionException
      */
     protected function doExecute(InputInterface $input, OutputInterface $output): int
     {
@@ -214,6 +218,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param string $origFile the original file name
      *
      * @return string the compressed CSS file, if applicable; the content otherwise
+     *
+     * @throws \ReflectionException
      */
     private function compressCss(string $content, string $origFile): string
     {
@@ -241,6 +247,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param string $origFile the original file name
      *
      * @return string the compressed JS file, if applicable; the content otherwise
+     *
+     * @throws \ReflectionException
      */
     private function compressJs(string $content, string $origFile): string
     {
@@ -331,6 +339,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param string $origFile the original file name
      *
      * @return string the expanded file content, if applicable; the content otherwise
+     *
+     * @throws \ReflectionException
      */
     private function expandCssImports(string $content, string $origFile): string
     {
@@ -368,6 +378,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param string $origFile the original file name
      *
      * @return string the expanded file content, if applicable; the content otherwise
+     *
+     * @throws \ReflectionException
      */
     private function expandJsImports(string $content, string $origFile): string
     {
@@ -386,6 +398,11 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         }, $content);
     }
 
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     */
     private function loadConfiguration(string $publicDir): ?\stdClass
     {
         // check file
@@ -410,6 +427,10 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param SplFileInfo $file   the file to process
      * @param string      $source the source directory
      * @param string      $target the target directory
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \ReflectionException
      */
     private function processCss(SplFileInfo $file, string $source, string $target): void
     {
@@ -430,6 +451,10 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param SplFileInfo $file   the file to process
      * @param string      $source the source directory
      * @param string      $target the target directory
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \ReflectionException
      */
     private function processJs(SplFileInfo $file, string $source, string $target): void
     {

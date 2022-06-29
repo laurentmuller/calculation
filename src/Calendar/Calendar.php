@@ -118,6 +118,8 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      * Constructor.
      *
      * @param int|null $year the year to generate
+     *
+     * @throws CalendarException
      */
     public function __construct(?int $year = null)
     {
@@ -131,6 +133,8 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function __toString(): string
     {
@@ -147,6 +151,9 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      * Generates months, weeks and days for the given year.
      *
      * @param int $year the year to generate
+     *
+     * @throws \Exception
+     * @throws CalendarException
      */
     public function generate(int $year): self
     {

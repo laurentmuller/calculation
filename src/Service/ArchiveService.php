@@ -59,6 +59,8 @@ class ArchiveService
 
     /**
      * Create the edit form.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function createForm(ArchiveQuery $query): FormInterface
     {
@@ -101,6 +103,8 @@ class ArchiveService
 
     /**
      * Create the archive query.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function createQuery(): ArchiveQuery
     {
@@ -143,6 +147,8 @@ class ArchiveService
 
     /**
      * Save the query values to the session.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function saveQuery(ArchiveQuery $query): void
     {
@@ -195,6 +201,9 @@ class ArchiveService
         return $result;
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function getDate(): \DateTimeInterface
     {
         $timestamp = (int) $this->getSessionInt(self::KEY_DATE, 0);
@@ -289,6 +298,8 @@ class ArchiveService
 
     /**
      * @return CalculationState[]
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getSources(bool $useSession): array
     {
@@ -306,6 +317,9 @@ class ArchiveService
         return $sources;
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function getTarget(): ?CalculationState
     {
         $id = (int) $this->getSessionInt(self::KEY_TARGET, 0);
@@ -316,6 +330,9 @@ class ArchiveService
         return null;
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function isSimulate(): bool
     {
         return $this->isSessionBool(self::KEY_SIMULATE, true);

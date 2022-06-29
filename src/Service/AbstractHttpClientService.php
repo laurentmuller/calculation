@@ -175,6 +175,7 @@ abstract class AbstractHttpClientService
      *
      * @return mixed the value, if found; the default otherwise
      *
+     * @throws \ReflectionException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getUrlCacheValue(string $url, mixed $default = null): mixed
@@ -186,6 +187,8 @@ abstract class AbstractHttpClientService
 
     /**
      * Gets the cache key for the given URL.
+     *
+     * @throws \ReflectionException
      */
     protected function getUrlKey(string $url): string
     {
@@ -249,6 +252,8 @@ abstract class AbstractHttpClientService
      * @param \Exception|null $e       the optional source exception
      *
      * @return bool this function returns always false
+     *
+     * @throws \ReflectionException
      */
     protected function setLastError(int $code, string $message, \Exception $e = null): bool
     {
@@ -279,6 +284,7 @@ abstract class AbstractHttpClientService
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
      *
+     * @throws \ReflectionException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): static

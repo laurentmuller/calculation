@@ -232,28 +232,24 @@
     </tbody>
 </table>
 {# dropdown actions #}
-{% set is_separator = false %}
 <div id="dropdown-actions" class="dropdown d-print-none d-none">
     {{ icons.dropdownEllipsis() }}
     <div class="dropdown-menu dropdown-menu-right dropdown-menu-actions">
         {% if allow_edit %}
+            {{- _self.item_separator() }}
             {% block edit_actions -%}{%- endblock %}
-            {% set is_separator = true %}
         {% endif %}
         {% if allow_delete %}
-            {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+            {{- _self.item_separator() }}
             {% block delete_actions -%}{%- endblock %}
-            {% set is_separator = true %}
         {% endif %}
         {% if allow_add %}
-            {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+            {{- _self.item_separator() }}
             {% block add_actions -%}{%- endblock %}
-            {% set is_separator = true %}
         {% endif %}
         {% if allow_show %}
-            {% if is_separator %}{{- _self.item_separator() }}{% endif %}
+            {{- _self.item_separator() }}
             {% block show_actions -%}{%- endblock %}
-            {% set is_separator = true %}
         {% endif %}
         {% block other_actions -%}{%- endblock %}
     </div>
@@ -286,6 +282,45 @@
             </div>
             <div class="modal-footer">
                 <button id="page-button" class="btn btn-form btn-primary" role="button" style="">{{ 'common.button_ok'|trans }}</button>
+                {{ icons.button_close_modal(false) }}
+            </div>
+        </div>
+    </div>
+</div>
+{# sort dialog #}
+<div class="modal fade" id="modal-sort" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Trier les données</h5>{{ icons.button_close_modal() }}
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="required" for="sort-name">Nom la colonne à trier</label>
+                    <select class="form-control" id="sort-name" name="sort-name">
+                    {% for column in columns|filter(c => c.sortable and c.visible) -%}
+                        <option value="{{ column.field }}">{{- column.title|trans -}}</option>
+                    {%- endfor %}
+                    </select>
+                </div>
+                <div class="text-center">
+                    <span class="required">&nbsp;</span>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="sort-order-asc" name="sort-order" class="custom-control-input" value="asc">
+                        <label class="custom-control-label" for="sort-order-asc">
+                            {{- icons.icon('arrow-up-short-wide fa-solid fa-fw', 'Ordre croissant') -}}
+                        </label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="sort-order-desc" name="sort-order" class="custom-control-input" value="desc">
+                        <label class="custom-control-label" for="sort-order-desc">
+                            {{- icons.icon('arrow-down-short-wide fa-solid fa-fw', 'Ordre décroissant') -}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="sort-button" class="btn btn-form btn-primary" role="button" style="">{{ 'common.button_ok'|trans }}</button>
                 {{ icons.button_close_modal(false) }}
             </div>
         </div>

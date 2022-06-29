@@ -8,9 +8,10 @@
 </button>
 {%- endmacro %}
 
-{% macro position(value, selection) -%}
+{% macro position(position, selection) -%}
+{%- set value = position.value -%}
 {%- set text = 'parameters.message_position.' ~ value -%}
-<option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
+<option value="{{ value }}"{% if position == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
 {%- endmacro %}
 
 {% macro timeout(value, selection) -%}
@@ -50,18 +51,10 @@
     <div class="col-md-7">
         <div class="form-group">
             <label for="position">{{ 'parameters.fields.message_position'|trans }}</label>
-            <select id="position" name="position" class="form-control" data-default="{{ position }}" data-position="{{ position }}" data-random="{{ url('ajax_random_text') }}">
-                {{ _self.position('top-left', position) }}
-                {{ _self.position('top-center', position) }}
-                {{ _self.position('top-right', position) }}
-
-                {{ _self.position('center-left', position) }}
-                {{ _self.position('center-center', position) }}
-                {{ _self.position('center-right', position) }}
-
-                {{ _self.position('bottom-left', position) }}
-                {{ _self.position('bottom-center', position) }}
-                {{ _self.position('bottom-right', position) }}
+            <select id="position" name="position" class="form-control" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
+            {% for current in positions %}
+                {{ _self.position(current, position) }}
+            {% endfor %}
             </select>
         </div>
     </div>

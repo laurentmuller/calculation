@@ -18,6 +18,7 @@ use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
 use App\Traits\TranslatorTrait;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -63,9 +64,11 @@ class MailerService
     /**
      * Send a notification.
      *
+     * @param UploadedFile[] $attachments
+     *
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface if an exception occurs while sending the notification
      */
-    public function sendNotification(string $fromEmail, User $toUser, string $message, Importance $importance = Importance::LOW): void
+    public function sendNotification(string $fromEmail, User $toUser, string $message, Importance $importance = Importance::LOW, array $attachments = []): void
     {
         $notification = $this->createNotification()
             ->from($fromEmail)
@@ -73,7 +76,9 @@ class MailerService
             ->subject($this->trans('user.comment.title'))
             ->markdown($this->convert($message))
             ->importance($importance->value);
-
+        foreach ($attachments as $attachment) {
+            $notification->attachFromUploadedFile($attachment);
+        }
         $this->mailer->send($notification);
     }
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Enums\EntityAction;
+use App\Enums\MessagePosition;
 use App\Enums\TableView;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
@@ -35,6 +36,9 @@ class UserServiceTest extends KernelTestCase
         self::bootKernel();
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function testActions(): void
     {
         $service = $this->getUserService();
@@ -44,20 +48,29 @@ class UserServiceTest extends KernelTestCase
         $this->assertFalse($service->isActionNone());
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function testDisplayMode(): void
     {
         $service = $this->getUserService();
         $this->assertEquals(TableView::TABLE, $service->getDisplayMode());
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function testMessage(): void
     {
         $service = $this->getUserService();
-        $this->assertEquals('bottom-right', $service->getMessagePosition());
+        $this->assertEquals(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
         $this->assertEquals(4000, $service->getMessageTimeout());
         $this->assertFalse($service->isMessageSubTitle());
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function testOptions(): void
     {
         $service = $this->getUserService();
@@ -65,6 +78,9 @@ class UserServiceTest extends KernelTestCase
         $this->assertFalse($service->isPrintAddress());
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function testPanels(): void
     {
         $service = $this->getUserService();

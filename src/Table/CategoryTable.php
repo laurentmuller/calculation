@@ -44,6 +44,8 @@ class CategoryTable extends AbstractEntityTable
 
     /**
      * Formatter for the product's column.
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatProducts(\Countable $products, Category $category): string
     {
@@ -59,6 +61,8 @@ class CategoryTable extends AbstractEntityTable
 
     /**
      * Formatter for the task's column.
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatTasks(\Countable $tasks, Category $category): string
     {

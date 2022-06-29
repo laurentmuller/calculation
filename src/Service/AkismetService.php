@@ -125,6 +125,10 @@ class AkismetService extends AbstractHttpClientService
      * @param array  $options the parameter options to override
      *
      * @return bool true if the comment is a spam; false otherwise
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
      */
     public function verifyComment(string $content, array $options = []): bool
     {
@@ -180,6 +184,11 @@ class AkismetService extends AbstractHttpClientService
      * Verify that API key is valid.
      *
      * @return bool true if valid; false otherwise
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function verifyKey(): bool
     {
@@ -225,6 +234,10 @@ class AkismetService extends AbstractHttpClientService
 
     /**
      * Checks response error.
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     private function checkError(ResponseInterface $response): void
     {

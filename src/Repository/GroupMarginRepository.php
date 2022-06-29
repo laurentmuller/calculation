@@ -42,6 +42,8 @@ class GroupMarginRepository extends AbstractRepository
      * @param float $amount the amount to get percent for
      *
      * @return float the margin, in percent, if found; 0 otherwise
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getMargin(Group $group, float $amount): float
     {

@@ -60,6 +60,8 @@ final class DateUtils
      * @param \DateInterval|string $interval the interval to add
      *
      * @return \DateTimeInterface the new date
+     *
+     * @throws \Exception
      */
     public static function add(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
@@ -196,6 +198,8 @@ final class DateUtils
      * @param \DateInterval|string $interval the interval to subtract
      *
      * @return \DateTimeInterface the new date
+     *
+     * @throws \Exception
      */
     public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {

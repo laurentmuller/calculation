@@ -30,6 +30,8 @@ trait TableTrait
 
     /**
      * Handles a table request.
+     *
+     * @throws \ReflectionException
      */
     protected function handleTableRequest(Request $request, AbstractTable $table, string $template): Response
     {

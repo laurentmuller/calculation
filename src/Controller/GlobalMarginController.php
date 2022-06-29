@@ -86,6 +86,7 @@ class GlobalMarginController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     #[Route(path: '/excel', name: 'globalmargin_excel')]
     public function excel(): SpreadsheetResponse
@@ -104,6 +105,8 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
+     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/pdf', name: 'globalmargin_pdf')]
     public function pdf(): PdfResponse

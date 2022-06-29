@@ -71,6 +71,9 @@ class CalculationRepository extends AbstractRepository
      *
      * @return int the number of calculations
      * @psalm-return  int<0, max>
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countBelowItems(float $minMargin): int
     {
@@ -86,6 +89,9 @@ class CalculationRepository extends AbstractRepository
 
     /**
      * Returns the number of distinct years and months.
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countDistinctMonths(): int
     {
@@ -100,6 +106,9 @@ class CalculationRepository extends AbstractRepository
      *
      * @return int the number of calculations
      * @psalm-return  int<0, max>
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countDuplicateItems(): int
     {
@@ -132,6 +141,9 @@ class CalculationRepository extends AbstractRepository
      *
      * @return int the number of calculations
      * @psalm-return  int<0, max>
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countEmptyItems(): int
     {
@@ -164,6 +176,9 @@ class CalculationRepository extends AbstractRepository
      * @param CalculationState $state the state to search for
      *
      * @return int the number of calculations
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countStateReferences(CalculationState $state): int
     {
@@ -241,6 +256,8 @@ class CalculationRepository extends AbstractRepository
      *      month: int,
      *      margin: float,
      *      date: \DateTimeInterface}>
+     *
+     * @throws \Exception
      */
     public function getByMonth(int $maxResults = 6): array
     {
@@ -711,6 +728,9 @@ class CalculationRepository extends AbstractRepository
         };
     }
 
+    /**
+     * @throws \Exception
+     */
     private function convertToDate(array $item): \DateTimeInterface
     {
         $year = (int) $item['year'];

@@ -45,6 +45,8 @@ class CalendarController extends AbstractController
      *                                          year
      * @param int|null              $month      the month to search for or <code>null</code> for the current
      *                                          month
+     *
+     * @throws \App\Calendar\CalendarException
      */
     #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => self::DIGITS, 'month' => self::DIGITS])]
     public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
@@ -83,6 +85,8 @@ class CalendarController extends AbstractController
      *                                          year
      * @param int|null              $week       the week to search for or <code>null</code> for the current
      *                                          week
+     *
+     * @throws \App\Calendar\CalendarException
      */
     #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => self::DIGITS, 'week' => self::DIGITS])]
     public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
@@ -124,6 +128,8 @@ class CalendarController extends AbstractController
      * @param CalculationRepository $repository the repository to query calculations
      * @param int|null              $year       the year to search for or <code>null</code> for the current
      *                                          year
+     *
+     * @throws \App\Calendar\CalendarException
      */
     #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => self::DIGITS])]
     public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
@@ -156,6 +162,8 @@ class CalendarController extends AbstractController
      *
      * @param CalendarService $service the service
      * @param int             $year    the year to generate
+     *
+     * @throws \App\Calendar\CalendarException
      */
     private function generate(CalendarService $service, int $year): Calendar
     {

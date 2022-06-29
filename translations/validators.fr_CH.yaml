@@ -1,7 +1,7 @@
 captcha:
   generate: Impossible de générer une nouvelle image.
   invalid: Le code de contrôle est invalide.
-  timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de génerer une nouvelle image.
+  timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de générer une nouvelle image.
 category:
   id_not_found: La catégorie avec l'identifiant "%id%" n'existe pas.
   unique_code: Ce nom est déjà utilisé par une autre catégorie.

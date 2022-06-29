@@ -70,6 +70,10 @@ abstract class AbstractEntityTable extends AbstractTable
      * Count the number of filtered entities.
      *
      * @param QueryBuilder $builder the source builder
+     *
+     * @throws \Doctrine\ORM\Mapping\MappingException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function countFiltered(QueryBuilder $builder): int
     {
@@ -95,6 +99,10 @@ abstract class AbstractEntityTable extends AbstractTable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Doctrine\ORM\Mapping\MappingException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function handleQuery(DataQuery $query): DataResults
     {

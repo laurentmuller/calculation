@@ -30,6 +30,9 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
         $this->reset();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function __toString(): string
     {
         $name = Utils::getShortName($this);

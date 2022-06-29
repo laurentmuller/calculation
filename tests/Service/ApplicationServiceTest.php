@@ -14,6 +14,7 @@ namespace App\Tests\Service;
 
 use App\Entity\Calculation;
 use App\Enums\EntityAction;
+use App\Enums\MessagePosition;
 use App\Enums\TableView;
 use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
@@ -142,7 +143,7 @@ class ApplicationServiceTest extends KernelTestCase
     public function testMessage(): void
     {
         $service = $this->getApplicationService();
-        $this->assertEquals('bottom-right', $service->getMessagePosition());
+        $this->assertEquals(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
         $this->assertEquals(4000, $service->getMessageTimeout());
         $this->assertFalse($service->isMessageSubTitle());
     }

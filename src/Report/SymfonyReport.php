@@ -26,6 +26,9 @@ class SymfonyReport extends AbstractReport
 {
     /**
      * Constructor.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(AbstractController $controller, private readonly SymfonyInfo $info, private readonly string $locale, private readonly string $mode)
     {
@@ -40,6 +43,8 @@ class SymfonyReport extends AbstractReport
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {
@@ -106,6 +111,9 @@ class SymfonyReport extends AbstractReport
         }
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function outputInfo(SymfonyInfo $info): void
     {
         $app = $this->controller->getApplication();
@@ -136,21 +144,21 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @param array<array{name: string, version: string, description: string|null, homepage: string|null}> $packages
+     * @param array<string, array{name: string, version: string, description: string, homepage: string}> $packages
      */
     private function outputPackages(string $title, array $packages): void
     {
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumn(PdfColumn::left('Name', 30))
-            ->addColumn(PdfColumn::left('Version', 8))
+            ->addColumn(PdfColumn::left('Version', 10))
             ->addColumn(PdfColumn::left('Description', 62))
             ->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
 
         foreach ($packages as $package) {
-            $cell = new PdfCell(text: $package['name'], link: $package['homepage'] ?? null);
+            $cell = new PdfCell(text: $package['name'], link: $package['homepage']);
             $table->startRow()
                 ->addCell($cell)
                 ->add($package['version'])

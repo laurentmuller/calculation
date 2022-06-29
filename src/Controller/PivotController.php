@@ -44,6 +44,8 @@ class PivotController extends AbstractController
 
     /**
      * Show the pivot data table.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '', name: 'calculation_pivot')]
     public function pivot(): Response

@@ -73,6 +73,7 @@ class UserRightsDocument extends AbstractArrayDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function doRender(array $entities): bool
     {
@@ -139,7 +140,7 @@ class UserRightsDocument extends AbstractArrayDocument
     /**
      * Gets the cell text for the given rights and attribute.
      *
-     * @param FlagBag<EntityPermission>|null $rights
+     * @psalm-param ?FlagBag<\BackedEnum> $rights
      */
     private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
     {
@@ -149,7 +150,7 @@ class UserRightsDocument extends AbstractArrayDocument
     /**
      * Output the rights.
      *
-     * @param FlagBag<EntityPermission>|null $rights
+     * @psalm-param ?FlagBag<\BackedEnum> $rights
      */
     private function outputRights(string $title, ?FlagBag $rights, int $row): void
     {
@@ -180,7 +181,7 @@ class UserRightsDocument extends AbstractArrayDocument
             }
             if ($outputUsers || EntityName::USER !== $entity) {
                 $value = $entity->value;
-                /** @psalm-var FlagBag<EntityPermission>|null $rights */
+                /** @psalm-var ?FlagBag<\BackedEnum> $rights $rights */
                 $rights = $role->{$value};
                 $this->outputRights($entity->getReadable(), $rights, $row++);
             }

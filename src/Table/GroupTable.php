@@ -34,6 +34,8 @@ class GroupTable extends AbstractEntityTable
 
     /**
      * Formatter for the category's column.
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatCategories(\Countable $categories, Group $group): string
     {

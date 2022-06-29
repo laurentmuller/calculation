@@ -54,6 +54,9 @@ class CalculationDocument extends AbstractDocument
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {
@@ -222,6 +225,9 @@ class CalculationDocument extends AbstractDocument
 
     /**
      * Gets the overall margin format.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getMarginFormat(): string
     {

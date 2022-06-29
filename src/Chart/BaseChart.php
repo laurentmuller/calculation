@@ -75,6 +75,7 @@ class BaseChart extends Highchart
      * Constructor.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function __construct(protected ApplicationService $application, ThemeService $service, TranslatorInterface $translator)
     {

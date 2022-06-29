@@ -47,6 +47,8 @@ abstract class AbstractEntityGenerator implements LoggerAwareInterface, Generato
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \ReflectionException
      */
     public function generate(int $count, bool $simulate): JsonResponse
     {

@@ -43,6 +43,9 @@ class MonthChart extends BaseChart
      * @param int $months the number of months to display
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Exception
      */
     public function generate(int $months): array
     {
@@ -138,6 +141,9 @@ class MonthChart extends BaseChart
      * Gets the allowed months to display.
      *
      * @return int[]
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     private function getAllowedMonths(): array
     {

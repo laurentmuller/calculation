@@ -71,6 +71,9 @@ function onRestrictChange($restrict) {
         customClass: 'tooltip-danger'
     });
 
+    // remove separators
+    $('#calculations .dropdown-menu').removeSeparators();
+
     // user restrict
     const $restrict = $('#restrict');
     if ($restrict.length) {

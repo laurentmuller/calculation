@@ -67,6 +67,9 @@ class ThemeType extends AbstractHelperType
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     protected function addFormFields(FormHelper $helper): void
     {
@@ -109,6 +112,9 @@ class ThemeType extends AbstractHelperType
 
     /**
      * Adds the CSS field.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     private function addThemeField(FormHelper $helper): self
     {

@@ -51,8 +51,8 @@
 {%- endblock %}
 
 {% block other_actions -%}
+{{- _self.item_separator() }}
 {% if is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) %}
-    {% if is_separator %}{{- _self.item_separator() }}{% endif %}
     {{- _self.item_path(path('product_table', {'categoryid': 'id'}), 'category.list.product_title', ICON_PRODUCT, 'btn-show-product') }}
 {% endif %}
 {% if is_granted(ATTRIBUTE_LIST, ENTITY_TASK) %}

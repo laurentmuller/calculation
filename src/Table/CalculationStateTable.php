@@ -39,6 +39,8 @@ class CalculationStateTable extends AbstractEntityTable
 
     /**
      * Formatter for the calculation column.
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatCalculations(\Countable $calculations, CalculationState $state): string
     {

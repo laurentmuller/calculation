@@ -100,6 +100,8 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets the data query from the given request.
+     *
+     * @throws \ReflectionException
      */
     public function getDataQuery(Request $request): DataQuery
     {
@@ -244,6 +246,8 @@ abstract class AbstractTable implements SortModeInterface
      * @param bool                       $useSessionKey true to use session key; false to use the parameter name
      *
      * @psalm-suppress InvalidScalarArgument
+     *
+     * @throws \ReflectionException
      */
     protected function getRequestValue(Request $request, string $name, string|int|float|bool|null $default = null, bool $useSessionKey = true, string $prefix = ''): string|int|float|bool|null
     {
@@ -273,6 +277,8 @@ abstract class AbstractTable implements SortModeInterface
      * Gets the session key for the given name.
      *
      * @param string $name the parameter name
+     *
+     * @throws \ReflectionException
      */
     protected function getSessionKey(string $name): string
     {
@@ -321,11 +327,11 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Map the given object to an array where the keys are the column field.
+     * Map the given entity or array to an array where the keys are the column field.
      *
-     * @param AbstractEntity|array $objectOrArray the object to map
+     * @param AbstractEntity|array $objectOrArray the entity or array to map
      * @param array<Column>        $columns       the column definitions
-     * @param PropertyAccessor     $accessor      the property accessor to get the object values
+     * @param PropertyAccessor     $accessor      the property accessor to get the values
      *
      * @return array<string, string> the mapped object
      */
@@ -394,6 +400,8 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets the selected identifier parameter.
+     *
+     * @throws \ReflectionException
      */
     private function getParamId(Request $request): int
     {

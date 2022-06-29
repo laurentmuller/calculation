@@ -40,6 +40,9 @@ class CalculationGroupRepository extends AbstractRepository
      * @param Group $group the group to search for
      *
      * @return int the number of calculations
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countGroupReferences(Group $group): int
     {

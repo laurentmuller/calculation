@@ -181,7 +181,7 @@ class EntityVoter extends Voter
      */
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
-        // map entity to names
+        // map entity name to value
         if ($subject instanceof EntityName) {
             $subject = $subject->value;
         }

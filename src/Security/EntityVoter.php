@@ -179,6 +179,22 @@ class EntityVoter extends Voter
     /**
      * {@inheritdoc}
      */
+    public function vote(TokenInterface $token, mixed $subject, array $attributes): int
+    {
+        // map entity to names
+        if ($subject instanceof EntityName) {
+            $subject = $subject->value;
+        }
+
+        // map permissions to names
+        $attributes = \array_map(static fn (mixed $value): mixed => ($value instanceof EntityPermission) ? $value->name : $value, $attributes);
+
+        return parent::vote($token, $subject, $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         // check attribute

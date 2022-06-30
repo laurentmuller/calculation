@@ -36,7 +36,7 @@ abstract class AbstractEntityTable extends AbstractTable
      *
      * @psalm-param AbstractRepository<T> $repository
      */
-    public function __construct(protected AbstractRepository $repository)
+    public function __construct(protected readonly AbstractRepository $repository)
     {
     }
 

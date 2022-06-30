@@ -14,12 +14,16 @@ namespace App\Table;
 
 use App\Entity\Category;
 use App\Entity\Group;
+use App\Entity\Product;
+use App\Entity\Task;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
+use App\Traits\CheckerTrait;
 use App\Util\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
 
 /**
@@ -29,6 +33,8 @@ use Twig\Environment;
  */
 class CategoryTable extends AbstractEntityTable
 {
+    use CheckerTrait;
+
     /**
      * The group parameter name (int).
      */
@@ -37,43 +43,52 @@ class CategoryTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(CategoryRepository $repository, private readonly GroupRepository $groupRepository, private readonly Environment $twig)
-    {
+    public function __construct(
+        CategoryRepository $repository,
+        AuthorizationCheckerInterface $checker,
+        private readonly GroupRepository $groupRepository,
+        private readonly Environment $twig
+    ) {
         parent::__construct($repository);
+        $this->checker = $checker;
     }
 
     /**
-     * Formatter for the product's column.
+     * Formatter for the product column.
      *
      * @throws \Twig\Error\Error
      */
     public function formatProducts(\Countable $products, Category $category): string
     {
-        return $this->twig->render('macros/_cell_table_link.html.twig', [
-            'route' => 'product_table',
+        $context = [
             'count' => $products->count(),
             'title' => 'category.list.product_title',
+            'route' => $this->isGrantedList(Product::class) ? 'product_table' : false,
             'parameters' => [
                 AbstractCategoryItemTable::PARAM_CATEGORY => $category->getId(),
             ],
-        ]);
+        ];
+
+        return $this->twig->render('macros/_cell_table_link.html.twig', $context);
     }
 
     /**
-     * Formatter for the task's column.
+     * Formatter for the task column.
      *
      * @throws \Twig\Error\Error
      */
     public function formatTasks(\Countable $tasks, Category $category): string
     {
-        return $this->twig->render('macros/_cell_table_link.html.twig', [
-            'route' => 'task_table',
+        $context = [
             'count' => $tasks->count(),
             'title' => 'category.list.task_title',
+            'route' => $this->isGrantedList(Task::class) ? 'task_table' : false,
             'parameters' => [
                 AbstractCategoryItemTable::PARAM_CATEGORY => $category->getId(),
             ],
-        ]);
+        ];
+
+        return $this->twig->render('macros/_cell_table_link.html.twig', $context);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 /**
  * @typedef {Object} Options - the table options
+ * @property {number} id - the selected object identifier.
  * @property {string} searchText - the search text.
  * @property {number} pageNumber - the current page number.
  * @property {number} totalPages - the total number of pages.

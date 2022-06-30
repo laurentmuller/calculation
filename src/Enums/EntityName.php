@@ -117,22 +117,6 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     }
 
     /**
-     * Gets an array with entity value and entity offset.
-     *
-     * @return array<string, int>
-     */
-    public static function offsets(): array
-    {
-        $result = [];
-        $names = EntityName::cases();
-        foreach ($names as $name) {
-            $result[$name->value] = $name->offset();
-        }
-
-        return $result;
-    }
-
-    /**
      * @return EntityName[]
      */
     public static function sorted(): array

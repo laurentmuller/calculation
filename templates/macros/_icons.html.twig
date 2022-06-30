@@ -85,7 +85,7 @@
 {% if not ('btn-outline' in class) %}
     {% set class = (class ~ ' btn-outline-secondary')|trim %}
 {% endif %}
-<button class="{{ class }}" type="button"{% if id %} id="{{ id }}"{% endif %} data-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
+<button type="button" role="button" class="{{ class }}"{% if id %} id="{{ id }}"{% endif %} data-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
     {{- _self.icon('ellipsis-v') -}}
 </button>
 {%- endmacro %}
@@ -94,7 +94,7 @@
 {% if not ('btn-' in class) %}
     {% set class = (class ~ ' btn-secondary')|trim %}
 {% endif %}
-<button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
+<button type="button" role="button" class="{{ class }}" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
     {{- _self.icon('bars') -}}
 </button>
 {%- endmacro %}
@@ -106,7 +106,7 @@
 
 {% macro button_submit(text='common.button_ok', class='btn btn-form btn-primary', parameters={}) -%}
 {%- set parameters = parameters|merge({'class': class}) -%}
-<button type="submit"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans }}</button>
+<button type="submit" role="button"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans }}</button>
 {%- endmacro %}
 
 {% macro button_ok(href='#', text='common.button_ok', class='btn btn-form btn-primary') -%}
@@ -143,11 +143,11 @@
 {% macro button_close_modal(for_header=true) -%}
 {% set text = 'common.button_close'|trans %}
 {% if for_header %}
-    <button type="button" class="close" data-dismiss="modal" aria-label="{{ text }}" title="{{ text }}" >
+    <button type="button" role="button" class="close" data-dismiss="modal" aria-label="{{ text }}" title="{{ text }}" >
         <span aria-hidden="true">&times;</span>
     </button>
 {% else %}
-    <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">
+    <button type="button" role="button" class="btn btn-form btn-secondary" data-dismiss="modal">
         {{- text -}}
     </button>
 {% endif %}

@@ -43,7 +43,9 @@
             {{ icons.dropdownItem(link_dev, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) }}
         {% endif %}
         {{ icons.dropdownSeparator }}
-        {{ icons.dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
+        {% if is_granted_data %}
+            {{ icons.dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
+        {% endif %}
         {{ icons.dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
         {{ icons.dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
         </div>

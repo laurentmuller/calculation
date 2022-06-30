@@ -107,7 +107,8 @@
     {%- set edit_class = 'btn-edit btn-default' -%}
 {% endif %}
 {# parameters #}
-{%- set sortable = columns|filter(c => c.sortable and c.visible)|length -%}
+{%- set sortable_columns = columns|filter(c => c.sortable and c.visible) -%}
+{%- set sortable = sortable_columns|length -%}
 {%- set allow_search = attributes.search|default(true|json_encode) == true|json_encode -%}
 {%- set allow_global = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {%- set row_selector = 'table-primary' -%}
@@ -193,7 +194,7 @@
                         <i class="fa-solid fa-sort-amount-down-alt"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="button_sort">
-                    {% for column in columns|filter(c => c.sortable and c.visible) -%}
+                    {% for column in columns|filter(c => c.visible) -%}
                         {{ _self.output_sort(column, params.sort, params.order) }}
                         {% if not loop.last %}{{ _self.item_separator }}{% endif %}
                     {%- endfor %}
@@ -293,7 +294,10 @@
     <div class="modal-dialog modal-lg ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ 'datatable.dialog_title'|trans }}</h5>{{ icons.button_close_modal() }}
+                <h5 class="modal-title">
+                    {{- icons.icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
+                </h5>
+                {{ icons.button_close_modal() }}
             </div>
             <div class="modal-body">
                 <label id="dialog-page-title">{{ 'datatable.dialog_message'|trans }}</label>
@@ -303,7 +307,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="page-button" class="btn btn-form btn-primary" role="button" style="">{{ 'common.button_ok'|trans }}</button>
+                <button type="button" role="button" class="btn btn-form btn-primary"  id="page-button">
+                    {{- 'common.button_ok'|trans -}}
+                </button>
                 {{ icons.button_close_modal(false) }}
             </div>
         </div>
@@ -315,13 +321,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ 'list.sort_title'|trans }}</h5>{{ icons.button_close_modal() }}
+                <h5 class="modal-title">
+                    {{- icons.icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
+                </h5>
+                {{ icons.button_close_modal() }}
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="sort-name">{{ 'list.sort_column'|trans }}</label>
                     <select class="form-control" id="sort-name" name="sort-name">
-                        {% for column in columns|filter(c => c.sortable and c.visible) -%}
+                        {% for column in sortable_columns -%}
                             <option value="{{ column.field }}" data-sort="{{ column.order }}" data-default="{{ column.default|json_encode }}">
                                 {{- column.title|trans -}}
                             </option>
@@ -331,22 +340,22 @@
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="sort-order-asc" name="sort-order" class="custom-control-input" value="asc">
                     <label class="custom-control-label" for="sort-order-asc">
-                        {{- icons.icon('arrow-up-short-wide fa-solid fa-fw', 'list.sort_ascending') -}}
+                        {{- icons.icon('arrow-down-a-z fa-solid fa-fw', 'list.sort_ascending') -}}
                     </label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="sort-order-desc" name="sort-order" class="custom-control-input" value="desc">
                     <label class="custom-control-label" for="sort-order-desc">
-                        {{- icons.icon('arrow-down-short-wide fa-solid fa-fw', 'list.sort_descending') -}}
+                        {{- icons.icon('arrow-down-z-a fa-solid fa-fw', 'list.sort_descending') -}}
                     </label>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="sort-button" class="btn btn-form btn-primary" role="button" style="">
+                <button type="button" role="button" class="btn btn-form btn-primary" id="sort-button">
                     {{- 'common.button_ok'|trans -}}
                 </button>
-                {% if columns|filter(c => c.sortable and c.visible and c.default)|length %}
-                    <button id="sort-default-button" class="btn btn-form btn-success" role="button">
+                {% if columns|filter(c => c.visible and c.default)|length %}
+                    <button type="button" role="button" class="btn btn-form btn-success" id="sort-default-button">
                         {{- 'list.sort_default_title'|trans -}}
                     </button>
                 {% endif %}

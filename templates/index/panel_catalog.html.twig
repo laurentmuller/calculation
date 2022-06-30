@@ -1,17 +1,19 @@
 {% import "macros/_icons.html.twig" as icons %}
 
 {% macro cardEntry(entity, count, list_path, icon) -%}
+{% set title = entity ~ '.list.title' %}
+{% set counter = 'index.panel_count_' ~ entity %}
 <div class="card index-child m-1">
     <div class="card-body p-2">
         <div class="card-text">
             {%- if list_path -%}
-                {{- icons.link(path(list_path), entity ~ '.list.title', 'card-link stretched-link', icon, 'index.panel_title_' ~ entity) -}}
+                {{- icons.link(path(list_path), title, 'card-link stretched-link', icon, 'index.panel_title_' ~ entity) -}}
             {%- else -%}
-                {{- entity|trans -}}
+                {{- title|trans -}}
             {%- endif -%}
         </div>
         <div class="h4 font-weight-normal my-1">
-            <span title="{{ ('index.panel_count_' ~ entity)|trans }}">{{- count|integer -}}</span>
+            <span title="{{ counter|trans }}">{{- count|integer -}}</span>
         </div>
     </div>
 </div>

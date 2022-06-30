@@ -35,7 +35,7 @@
                 <h1 class="card-title">{{ icons.icon(ICON_CALCULATION_STATE, "index.panel_state") }}</h1>
             </div>
             <div class="col-auto d-print-none">
-                {%- if is_states -%}
+                {%- if list_path and is_states -%}
                     {{- icons.link(path('chart_by_state'), null, null, 'chart-pie', 'index.menu_chart_title') -}}
                 {%- endif -%}
             </div>

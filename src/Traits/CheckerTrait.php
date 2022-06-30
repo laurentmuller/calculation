@@ -46,13 +46,7 @@ trait CheckerTrait
      */
     protected function isGranted(string|EntityPermission $action, string|EntityName $subject): bool
     {
-        if ($action instanceof EntityPermission) {
-            $action = $action->name;
-        }
-        if ($subject instanceof EntityName) {
-            $subject = $subject->value;
-        }
-        $key = "$action.$subject";
+        $key = \sprintf('%s.%s', $this->toString($action), $this->toString($subject));
         if (!isset($this->rights[$key])) {
             if (null !== $this->checker) {
                 return $this->rights[$key] = $this->checker->isGranted($action, $subject);
@@ -110,5 +104,10 @@ trait CheckerTrait
     protected function isGrantedShow(string $subject): bool
     {
         return $this->isGranted(EntityPermission::SHOW, $subject);
+    }
+
+    private function toString(mixed $value): string
+    {
+        return $value instanceof \UnitEnum ? $value->name : (string) $value;
     }
 }

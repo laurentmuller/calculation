@@ -1,23 +1,25 @@
 {# tool menu #}
 {% import 'macros/_icons.html.twig' as icons %}
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{ icons.icon('tools', 'index.menu_tools') }}
-    </a>
-    <div class="dropdown-menu" aria-labelledby="toolsDropdown">
-        {{ icons.dropdownItem(path('search'), 'search.title', 'search') }}
-        {% if is_admin %}
-        {{ icons.dropdownSeparator }}
-        {{ icons.dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
-        {{ icons.dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
-        {{ icons.dropdownSeparator }}
-        {{ icons.dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
-        {{ icons.dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
-        {{ icons.dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
-        {%- if is_granted_task -%}
-        {{ icons.dropdownSeparator }}
-        {{ icons.dropdownItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
-        {% endif -%}
-        {% endif -%}
-    </div>
-</li>
+{% if is_granted_data %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ icons.icon('tools', 'index.menu_tools') }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="toolsDropdown">
+            {{ icons.dropdownItem(path('search'), 'search.title', 'search') }}
+            {% if is_admin %}
+                {{ icons.dropdownSeparator }}
+                {{ icons.dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
+                {{ icons.dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
+                {{ icons.dropdownSeparator }}
+                {{ icons.dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
+                {{ icons.dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
+                {{ icons.dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
+                {%- if is_granted_task -%}
+                    {{ icons.dropdownSeparator }}
+                    {{ icons.dropdownItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
+                {% endif -%}
+            {% endif -%}
+        </div>
+    </li>
+{% endif %}

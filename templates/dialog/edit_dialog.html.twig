@@ -14,7 +14,7 @@
 {%- endmacro -%}
 
 {# parameters #}
-{%- set icon = icon|default('fa-edit') -%}
+{%- set icon = icon|default(ICON_EDIT) -%}
 {%- set form_prefix = form_prefix|default('edit') -%}
 {%- set add_title = add_title|default('common.button_add'|trans) -%}
 {%- set edit_title = edit_title|default('common.button_edit'|trans) -%}
@@ -25,7 +25,7 @@
        <div class="modal-content">
             <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ _self.attributes(form_attr) }}>
                 <div class="modal-header cursor-move">
-                    <h5 class="modal-title"><i class="fa-solid fa-fw {{ icon }}"></i><span class="dialog-title">{{ edit_title }}</span></h5>
+                    <h5 class="modal-title">{{ icons.icon(icon) }}&nbsp;<span class="dialog-title">{{ edit_title }}</span></h5>
                     {{ icons.button_close_modal }}
                 </div>
                 <div class="modal-body">

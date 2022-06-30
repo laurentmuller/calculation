@@ -273,16 +273,16 @@
         checkType: function (type) {
             const types = this.NotificationTypes;
             switch (type) {
-            case types.INFO:
-            case types.SUCCESS:
-            case types.WARNING:
-            case types.DANGER:
-            case types.PRIMARY:
-            case types.SECONDARY:
-            case types.DARK:
-                return type;
-            default:
-                return types.INFO;
+                case types.INFO:
+                case types.SUCCESS:
+                case types.WARNING:
+                case types.DANGER:
+                case types.PRIMARY:
+                case types.SECONDARY:
+                case types.DARK:
+                    return type;
+                default:
+                    return types.INFO;
             }
         },
 
@@ -295,18 +295,18 @@
         checkPosition: function (position) {
             const positions = this.NotificationPositions;
             switch (position) {
-            case positions.TOP_LEFT:
-            case positions.TOP_CENTER:
-            case positions.TOP_RIGHT:
-            case positions.CENTER_LEFT:
-            case positions.CENTER_CENTER:
-            case positions.CENTER_RIGHT:
-            case positions.BOTTOM_LEFT:
-            case positions.BOTTOM_CENTER:
-            case positions.BOTTOM_RIGHT:
-                return position;
-            default:
-                return positions.BOTTOM_RIGHT;
+                case positions.TOP_LEFT:
+                case positions.TOP_CENTER:
+                case positions.TOP_RIGHT:
+                case positions.CENTER_LEFT:
+                case positions.CENTER_CENTER:
+                case positions.CENTER_RIGHT:
+                case positions.BOTTOM_LEFT:
+                case positions.BOTTOM_CENTER:
+                case positions.BOTTOM_RIGHT:
+                    return position;
+                default:
+                    return positions.BOTTOM_RIGHT;
             }
         },
 
@@ -319,15 +319,15 @@
         isPrepend: function (options) {
             const positions = this.NotificationPositions;
             switch (options.position) {
-            case positions.TOP_LEFT:
-            case positions.TOP_CENTER:
-            case positions.TOP_RIGHT:
-            case positions.CENTER_LEFT:
-            case positions.CENTER_CENTER:
-            case positions.CENTER_RIGHT:
-                return false;
-            default: // BOTTOM_XXX
-                return true;
+                case positions.TOP_LEFT:
+                case positions.TOP_CENTER:
+                case positions.TOP_RIGHT:
+                case positions.CENTER_LEFT:
+                case positions.CENTER_CENTER:
+                case positions.CENTER_RIGHT:
+                    return false;
+                default: // BOTTOM_XXX
+                    return true;
             }
         },
 
@@ -433,21 +433,21 @@
 
             let clazz = 'mr-2 mt-1 fas fa-lg fa-';
             switch (options.type) {
-            case this.NotificationTypes.INFO:
-                clazz += 'info-circle';
-                break;
-            case this.NotificationTypes.SUCCESS:
-                clazz += 'check-circle';
-                break;
-            case this.NotificationTypes.WARNING:
-                clazz += 'exclamation-circle';
-                break;
-            case this.NotificationTypes.DANGER:
-                clazz += 'exclamation-triangle';
-                break;
-            default:
-                clazz += 'check-circle';
-                break;
+                case this.NotificationTypes.INFO:
+                    clazz += 'info-circle';
+                    break;
+                case this.NotificationTypes.SUCCESS:
+                    clazz += 'check-circle';
+                    break;
+                case this.NotificationTypes.WARNING:
+                    clazz += 'exclamation-circle';
+                    break;
+                case this.NotificationTypes.DANGER:
+                    clazz += 'exclamation-triangle';
+                    break;
+                default:
+                    clazz += 'check-circle';
+                    break;
             }
 
             // icon only ?
@@ -536,7 +536,7 @@
                     'flex-basis': options.containerWidth,
                     'border-style': 'solid',
                     'border-width': '1px'
-                 }
+                }
             });
         },
 
@@ -546,16 +546,16 @@
          * @param {Object} options - The toast options.
          * @returns {JQuery} The progress bar or null if no progress.
          */
-        createProgressBar: function(options) {
+        createProgressBar: function (options) {
             if (!options.displayProgress) {
                 return null;
             }
-            const $bar =  $('<div/>', {
+            const $bar = $('<div/>', {
                 'class': 'progress-bar bg-' + options.type,
                 'role': 'progressbar',
-                'css': {
-                    'width': '100%'
-                }
+                'aria-valuenow': '0',
+                'aria-valuemin': '0',
+                'aria-valuemax': '100',
             });
             const $progress = $('<div/>', {
                 'class': 'progress bg-transparent',
@@ -580,7 +580,7 @@
             $toast.toast({
                 delay: options.timeout,
                 autohide: options.autohide
-            }).on('show.bs.toast', function() {
+            }).on('show.bs.toast', function () {
                 if (options.displayProgress) {
                     const timeout = options.timeout;
                     const endTime = new Date().getTime() + timeout;
@@ -609,12 +609,12 @@
          * @param {Number} endTime - The end time.
          * @param {Number} timeout - The time-out.
          */
-        updateProgress: function($progress, endTime, timeout) {
+        updateProgress: function ($progress, endTime, timeout) {
             const time = new Date().getTime();
             const delta = (endTime - time) / timeout;
-            const percent = Number.parseInt(delta * 100, 10);
-            $progress.css('width', percent + '%');
-            if (percent === 0) {
+            const percent = 100 - delta * 100;
+            $progress.css('width', `${percent}%`);
+            if (percent >= 100) {
                 $progress.parents('.toast').removeInterval();
             }
         }

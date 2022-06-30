@@ -64,9 +64,9 @@ enum EntityPermission : int implements ReadableEnumInterface, SortableEnumInterf
     public static function constants(): array
     {
         $result = [];
-        $entities = EntityPermission::cases();
-        foreach ($entities as $entity) {
-            $result['ATTRIBUTE_' . $entity->name] = $entity->name;
+        $permissions = EntityPermission::cases();
+        foreach ($permissions as $permission) {
+            $result['ATTRIBUTE_' . $permission->name] = $permission->name;
         }
 
         return $result;

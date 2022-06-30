@@ -12,10 +12,13 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
+use App\Traits\CheckerTrait;
 use App\Traits\TranslatorTrait;
 use App\Util\FileUtils;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -26,15 +29,21 @@ use Twig\Environment;
  */
 class CalculationStateTable extends AbstractEntityTable
 {
+    use CheckerTrait;
     use TranslatorTrait;
 
     /**
      * Constructor.
      */
-    public function __construct(CalculationStateRepository $repository, TranslatorInterface $translator, private readonly Environment $twig)
-    {
+    public function __construct(
+        CalculationStateRepository $repository,
+        TranslatorInterface $translator,
+        AuthorizationCheckerInterface $checker,
+        private readonly Environment $twig
+    ) {
         parent::__construct($repository);
         $this->translator = $translator;
+        $this->checker = $checker;
     }
 
     /**
@@ -44,14 +53,16 @@ class CalculationStateTable extends AbstractEntityTable
      */
     public function formatCalculations(\Countable $calculations, CalculationState $state): string
     {
-        return $this->twig->render('macros/_cell_table_link.html.twig', [
-            'route' => 'calculation_table',
+        $context = [
             'count' => $calculations->count(),
             'title' => 'calculationstate.list.calculation_title',
+            'route' => $this->isGrantedList(Calculation::class) ? 'calculation_table' : false,
             'parameters' => [
                 CalculationTable::PARAM_STATE => $state->getId(),
             ],
-        ]);
+        ];
+
+        return $this->twig->render('macros/_cell_table_link.html.twig', $context);
     }
 
     /**

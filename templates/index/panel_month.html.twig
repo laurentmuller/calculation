@@ -37,7 +37,7 @@
                 <h1 class="card-title">{{ icons.icon('calendar-alt far', 'index.panel_month') }}</h1>
             </div>
             <div class="col-auto d-print-none">
-                {%- if is_months -%}
+                {%- if list_path and is_months -%}
                     {{- icons.link(path('chart_by_month', {'count': 6}), null, null, 'chart-column', 'index.menu_chart_title') -}}
                 {%- endif -%}
             </div>

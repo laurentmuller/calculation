@@ -33,8 +33,8 @@ jobs:
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin psalm install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin psalm/plugin-symfony install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin weirdan/doctrine-psalm-plugin install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin plugin-symfony install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin doctrine-psalm-plugin install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run Psalm
         run: vendor/bin/psalm src

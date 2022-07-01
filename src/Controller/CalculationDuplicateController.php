@@ -37,6 +37,8 @@ class CalculationDuplicateController extends AbstractController
      * Export the duplicate items to a Spreadsheet document.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'duplicate_excel')]
     public function excel(CalculationRepository $repository): Response
@@ -54,6 +56,10 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Exports the duplicate items in the calculations.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'duplicate_pdf')]
     public function pdf(CalculationRepository $repository): Response
@@ -71,6 +77,8 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'duplicate_table')]
     public function table(Request $request, CalculationDuplicateTable $table): Response
@@ -101,6 +109,8 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Returns a value indicating if no item is duplicated.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function isEmptyItems(CalculationRepository $repository): bool
     {

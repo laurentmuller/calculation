@@ -32,6 +32,10 @@ class ChartController extends AbstractController
 
     /**
      * Gets the calculations by month.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Exception
      */
     #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => self::DIGITS])]
     public function month(MonthChart $chart, int $count = 6): Response
@@ -43,6 +47,9 @@ class ChartController extends AbstractController
 
     /**
      * Gets the calculations by state.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Exception
      */
     #[Route(path: '/state', name: 'chart_by_state')]
     public function state(StateChart $chart): Response

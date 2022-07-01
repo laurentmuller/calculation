@@ -43,6 +43,8 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int
     {

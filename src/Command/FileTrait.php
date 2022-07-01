@@ -89,8 +89,7 @@ trait FileTrait
      *
      * @return \stdClass|false the content of file, as JSON, if success; false otherwise
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
     protected function loadJson(string $filename): \stdClass|false
@@ -164,8 +163,7 @@ trait FileTrait
      *
      * @return string|false the content of file, if success; false otherwise
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
     protected function readFile(string $filename): string|false

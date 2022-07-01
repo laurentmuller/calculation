@@ -41,6 +41,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
      * Constructor.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
     {
@@ -72,6 +73,8 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
      */
     public function render(): bool
     {
@@ -206,6 +209,8 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
 
     /**
      * Render the QR code (if any).
+     *
+     * @throws \ReflectionException
      */
     private function renderQrCode(): void
     {

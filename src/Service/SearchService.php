@@ -134,6 +134,8 @@ class SearchService
      * @param string|null $entity the entity to search in or null for all
      *
      * @return int the number of rows
+     *
+     * @throws \ReflectionException
      */
     public function count(?string $search, ?string $entity = null): int
     {
@@ -205,6 +207,8 @@ class SearchService
      *      entityName: string,
      *      fieldName: string
      *  }>
+     *
+     * @throws \ReflectionException
      */
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
@@ -235,6 +239,8 @@ class SearchService
 
     /**
      * Create the SQL query for the calculation dates.
+     *
+     * @throws \ReflectionException
      */
     private function createCalculationDatesQuery(): self
     {
@@ -254,6 +260,8 @@ class SearchService
 
     /**
      * Create the SQL query for the calculation groups.
+     *
+     * @throws \ReflectionException
      */
     private function createCalculationGroupQuery(): self
     {
@@ -272,6 +280,8 @@ class SearchService
 
     /**
      * Create the SQL query for the calculation items.
+     *
+     * @throws \ReflectionException
      */
     private function createCalculationItemQuery(): self
     {
@@ -292,6 +302,8 @@ class SearchService
 
     /**
      * Create the SQL query for the calculation state.
+     *
+     * @throws \ReflectionException
      */
     private function createCalculationStateQuery(): self
     {
@@ -376,6 +388,8 @@ class SearchService
      *      entityName: string,
      *      fieldName: string
      *  }>
+     *
+     * @throws \ReflectionException
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
@@ -454,6 +468,8 @@ class SearchService
      * Gets the SQL queries.
      *
      * @return string[] the SQL queries
+     *
+     * @throws \ReflectionException
      */
     private function getQueries(): array
     {

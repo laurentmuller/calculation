@@ -39,8 +39,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     /**
      * {@inheritDoc}
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
     {

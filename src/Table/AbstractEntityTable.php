@@ -71,9 +71,7 @@ abstract class AbstractEntityTable extends AbstractTable
      *
      * @param QueryBuilder $builder the source builder
      *
-     * @throws \Doctrine\ORM\Mapping\MappingException
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function countFiltered(QueryBuilder $builder): int
     {
@@ -100,9 +98,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * {@inheritDoc}
      *
-     * @throws \Doctrine\ORM\Mapping\MappingException
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function handleQuery(DataQuery $query): DataResults
     {

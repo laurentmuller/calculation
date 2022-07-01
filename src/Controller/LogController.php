@@ -41,6 +41,7 @@ class LogController extends AbstractController
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
@@ -92,6 +93,7 @@ class LogController extends AbstractController
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
@@ -111,6 +113,7 @@ class LogController extends AbstractController
      * Export to PDF the content of the log file.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response
@@ -144,6 +147,7 @@ class LogController extends AbstractController
      * Show properties of a log entry.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => self::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response

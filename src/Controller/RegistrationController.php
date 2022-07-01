@@ -86,6 +86,8 @@ class RegistrationController extends AbstractController
 
     /**
      * Verify the user e-mail.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/verify', name: self::ROUTE_VERIFY)]
     public function verify(Request $request): RedirectResponse

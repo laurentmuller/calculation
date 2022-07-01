@@ -62,6 +62,9 @@ class AboutController extends AbstractController
 
     /**
      * Export the licence and policy pages to PDF.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/pdf', name: 'about_pdf')]
@@ -106,6 +109,9 @@ class AboutController extends AbstractController
 
     /**
      * Export the licence page to PDF.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/licence/pdf', name: 'about_licence_pdf')]
@@ -153,6 +159,9 @@ class AboutController extends AbstractController
 
     /**
      * Exports the MySql information as PDF.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/mysql/pdf', name: 'about_mysql_pdf')]
@@ -201,6 +210,9 @@ class AboutController extends AbstractController
 
     /**
      * Exports the PHP information as PDF.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/php/pdf', name: 'about_php_pdf')]
@@ -243,6 +255,9 @@ class AboutController extends AbstractController
 
     /**
      * Export the policy to PDF.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/policy/pdf', name: 'about_policy_pdf')]
@@ -291,6 +306,9 @@ class AboutController extends AbstractController
 
     /**
      * Exports the Symfony information as PDF.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/symfony/pdf', name: 'about_symfony_pdf')]

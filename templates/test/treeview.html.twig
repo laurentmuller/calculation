@@ -54,9 +54,14 @@
         <div class="form-group">
             <label for="state_single">Status (simple)</label>
             <select id="state_single" class="form-control">
-                {% for state in states -%}
+            {% set editable = null %}
+            {% for state in states -%}
+                {% if editable != state.editable  %}
+                    {% set editable = state.editable %}
+                    <optgroup label="{{ (state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans }}"></optgroup>
+                {% endif %}
                 <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
-                {%- endfor %}
+            {%- endfor %}
             </select>
         </div>
     </div>
@@ -65,9 +70,14 @@
             <label for="state">Status (multiple)</label>
             <div class="input-group">
                 <select id="state" class="form-control" multiple="multiple" data-delete="Supprimer le statut">
-                    {% for state in states -%}
+                {% set editable = null %}
+                {% for state in states -%}
+                    {% if editable != state.editable  %}
+                        {% set editable = state.editable %}
+                        <optgroup label="{{ (state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans }}"></optgroup>
+                    {% endif %}
                     <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
-                    {%- endfor %}
+                {%- endfor %}
                 </select>
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
@@ -88,8 +98,13 @@
                     <span class="input-group-text">@</span>
                 </div>
                 <select id="category" class="form-control" multiple="multiple" data-delete="Supprimer la catégorie">
+                    {% set group = null %}
                     {% for category in categories -%}
-                    <option value="{{ category.id }}">{{ category.code }}</option>
+                        {% if group != category.groupCode %}
+                            {% set group = category.groupCode %}
+                            <optgroup label="{{ group }}"></optgroup>
+                        {% endif %}
+                        <option value="{{ category.id }}">{{ category.code }}</option>
                     {%- endfor %}
                 </select>
                 <div class="input-group-append">

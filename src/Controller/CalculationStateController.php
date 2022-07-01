@@ -43,6 +43,8 @@ class CalculationStateController extends AbstractEntityController
 {
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, CalculationStateRepository $repository)
     {
@@ -51,6 +53,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Add a new calculation state.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'calculationstate_add')]
     public function add(Request $request): Response
@@ -60,6 +64,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Clone (copy) a calculation state.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, CalculationState $item): Response
@@ -72,6 +78,10 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Delete a calculation state.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
@@ -108,6 +118,8 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Edit a calculation state.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, CalculationState $item): Response
@@ -120,7 +132,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'calculationstate_excel')]
     public function excel(): SpreadsheetResponse
@@ -139,8 +151,9 @@ class CalculationStateController extends AbstractEntityController
      * Export the calculation states to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'calculationstate_pdf')]
     public function pdf(): PdfResponse

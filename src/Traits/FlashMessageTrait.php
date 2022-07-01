@@ -27,6 +27,8 @@ trait FlashMessageTrait
      *
      * @param FlashType|string $type    the message type
      * @param string           $message the message content
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function addFlashMessage(FlashType|string $type, string $message): static
     {
@@ -46,6 +48,8 @@ trait FlashMessageTrait
      * Do nothing if the session is not set.
      *
      * @param string $message The message to add
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function error(string $message): static
     {
@@ -57,6 +61,8 @@ trait FlashMessageTrait
      * Do nothing if the session is not set.
      *
      * @param string $message the message to add
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function info(string $message): static
     {
@@ -68,6 +74,8 @@ trait FlashMessageTrait
      * Do nothing if the session is not set.
      *
      * @param string $message the message to add
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function success(string $message): static
     {
@@ -79,6 +87,8 @@ trait FlashMessageTrait
      * Do nothing if the session is not set.
      *
      * @param string $message the message to add
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function warning(string $message): static
     {

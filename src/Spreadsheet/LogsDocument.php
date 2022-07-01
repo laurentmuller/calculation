@@ -44,6 +44,9 @@ class LogsDocument extends AbstractDocument
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function render(): bool
     {

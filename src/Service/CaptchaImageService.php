@@ -80,6 +80,8 @@ class CaptchaImageService
 
     /**
      * Remove captcha values from the session.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function clear(): self
     {
@@ -97,6 +99,9 @@ class CaptchaImageService
      * @param int  $height the image height
      *
      * @return string|null the image encoded with the base 64 or null if the image canot be created
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Exception
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {
@@ -131,6 +136,8 @@ class CaptchaImageService
 
     /**
      * Validate the timeout.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function validateTimeout(): bool
     {
@@ -195,6 +202,8 @@ class CaptchaImageService
 
     /**
      * Create an image.
+     *
+     * @throws \Exception
      */
     private function createImage(string $text, int $width, int $height): ?ImageHandler
     {
@@ -267,6 +276,8 @@ class CaptchaImageService
 
     /**
      * Draws the image text.
+     *
+     * @throws \Exception
      */
     private function drawText(ImageHandler $image, int $width, int $height, string $text): self
     {

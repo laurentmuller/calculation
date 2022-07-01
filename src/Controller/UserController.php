@@ -124,7 +124,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'user_excel')]
     public function excel(StorageInterface $storage): SpreadsheetResponse
@@ -268,7 +268,9 @@ class UserController extends AbstractEntityController
      * Export the users to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/pdf', name: 'user_pdf')]
     public function pdf(StorageInterface $storage): PdfResponse
@@ -352,7 +354,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/rights/excel', name: 'user_rights_excel')]
     public function rightsExcel(): SpreadsheetResponse
@@ -372,7 +374,7 @@ class UserController extends AbstractEntityController
      * Export user access rights to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */

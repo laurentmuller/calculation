@@ -65,9 +65,7 @@ class IpStackService extends AbstractHttpClientService
      * @return array|null the current Ip information if success; null on error
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getIpInfo(?Request $request = null): ?array

@@ -55,6 +55,9 @@ abstract class AbstractDocument extends SpreadsheetDocument
      *
      * @param string $title     the spreadsheet title to translate
      * @param bool   $landscape true to set landscape orientation, false for default (portrait)
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function start(string $title, bool $landscape = false): static
     {

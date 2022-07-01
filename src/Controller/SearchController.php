@@ -30,6 +30,8 @@ class SearchController extends AbstractController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/search', name: 'search')]

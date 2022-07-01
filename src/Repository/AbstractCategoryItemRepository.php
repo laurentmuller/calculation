@@ -41,8 +41,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
      *
      * @return int the number of products
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function countCategoryReferences(Category $category): int
     {

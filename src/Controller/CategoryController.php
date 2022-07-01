@@ -45,6 +45,8 @@ class CategoryController extends AbstractEntityController
 {
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, CategoryRepository $repository)
     {
@@ -53,6 +55,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Add a category.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'category_add')]
     public function add(Request $request): Response
@@ -62,6 +66,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Clone (copy) a category.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Category $item): Response
@@ -77,6 +83,10 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Delete a category.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
@@ -124,6 +134,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Edit a category.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Category $item): Response
@@ -134,9 +146,9 @@ class CategoryController extends AbstractEntityController
     /**
      * Export the categories to a Spreadsheet document.
      *
-     * @throws NotFoundHttpException               if no category is found
+     * @throws NotFoundHttpException                if no category is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'category_excel')]
     public function excel(): SpreadsheetResponse
@@ -155,7 +167,7 @@ class CategoryController extends AbstractEntityController
      * Export the categories to a PDF document.
      *
      * @throws NotFoundHttpException                      if no category is found
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
@@ -183,6 +195,8 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'category_table')]
     public function table(Request $request, CategoryTable $table): Response

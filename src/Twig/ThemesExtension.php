@@ -55,6 +55,7 @@ final class ThemesExtension extends AbstractExtension
      * @return Theme the current theme, if any; the default theme otherwise
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     private function getCurrentTheme(?Request $request = null): Theme
     {
@@ -89,6 +90,7 @@ final class ThemesExtension extends AbstractExtension
      * @param Request $request the request
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     private function getThemeCss(Request $request): string
     {
@@ -107,6 +109,7 @@ final class ThemesExtension extends AbstractExtension
      * @param Request $request the request
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     private function getThemeName(Request $request): string
     {
@@ -119,6 +122,7 @@ final class ThemesExtension extends AbstractExtension
      * @param Request $request the request
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     private function isDarkTheme(Request $request): bool
     {
@@ -131,6 +135,7 @@ final class ThemesExtension extends AbstractExtension
      * @param Request $request the request
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     private function isDefaultTheme(Request $request): bool
     {

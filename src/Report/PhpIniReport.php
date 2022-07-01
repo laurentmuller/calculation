@@ -28,6 +28,9 @@ class PhpIniReport extends AbstractReport
      * Constructor.
      *
      * @param array<string, array<string, mixed>> $content
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(AbstractController $controller, private readonly array $content, string $version)
     {

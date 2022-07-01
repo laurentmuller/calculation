@@ -42,9 +42,7 @@ class ExchangeRateController extends AbstractController
      * Display the view.
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '', name: 'exchange_display')]
@@ -60,9 +58,7 @@ class ExchangeRateController extends AbstractController
      * Gets the supported currency codes.
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/codes', name: 'exchange_codes')]
@@ -82,9 +78,7 @@ class ExchangeRateController extends AbstractController
      * @param string $code the base currency code
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/latest/{code}', name: 'exchange_latest')]
@@ -102,9 +96,7 @@ class ExchangeRateController extends AbstractController
      * Gets the exchange rate from the base currency code to the target currency code.
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/rate', name: 'exchange_rate')]

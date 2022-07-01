@@ -248,7 +248,7 @@ abstract class AbstractEntityController extends AbstractController
      * @psalm-suppress MixedReturnTypeCoercion
      * @psalm-param literal-string $alias
      *
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {

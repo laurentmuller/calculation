@@ -61,8 +61,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     /**
      * {@inheritdoc}
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
     protected function doExecute(InputInterface $input, OutputInterface $output): int
@@ -399,9 +398,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function loadConfiguration(string $publicDir): ?\stdClass
     {
@@ -428,8 +426,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param string      $source the source directory
      * @param string      $target the target directory
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
     private function processCss(SplFileInfo $file, string $source, string $target): void
@@ -452,8 +449,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * @param string      $source the source directory
      * @param string      $target the target directory
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
     private function processJs(SplFileInfo $file, string $source, string $target): void

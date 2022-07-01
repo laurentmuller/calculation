@@ -53,6 +53,8 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
      *
      * Subclass must call <code>parent::addFormFields($helper);</code> to add
      * the image captcha field (if applicable).
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function addFormFields(FormHelper $helper): void
     {

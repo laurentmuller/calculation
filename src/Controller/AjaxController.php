@@ -56,6 +56,8 @@ class AjaxController extends AbstractController
 
     /**
      * Returns a new captcha image.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/captcha/image', name: 'ajax_captcha_image')]
@@ -74,6 +76,8 @@ class AjaxController extends AbstractController
 
     /**
      * Validate a captcha image.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/captcha/validate', name: 'ajax_captcha_validate')]
@@ -347,19 +351,21 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Save a table parameters.
+     * Save table parameters.
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/save', name: 'ajax_save_table')]
     public function saveTable(Request $request): JsonResponse
     {
-        $view = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
-        $enum = TableView::tryFrom($view) ?? TableView::TABLE;
-        $value = $enum->value;
-        $limit = $enum->getPageSize();
+        $bag = Utils::getRequestInputBag($request);
+        $requestView = (string) $bag->get(TableInterface::PARAM_VIEW, TableView::TABLE->value);
+        $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
+        $requestLimit = $bag->getInt(TableInterface::PARAM_LIMIT, $view->getPageSize());
+
+        $key = $view->value;
         $response = $this->json(true);
-        $this->setCookie($response, TableInterface::PARAM_VIEW, $value);
-        $this->setCookie($response, TableInterface::PARAM_LIMIT, $limit, $value);
+        $this->setCookie($response, TableInterface::PARAM_VIEW, $key);
+        $this->setCookie($response, TableInterface::PARAM_LIMIT, $requestLimit, $key);
 
         return $response;
     }

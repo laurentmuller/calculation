@@ -63,6 +63,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/add', name: 'calculation_add')]
     public function add(Request $request): Response
@@ -88,6 +89,10 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit a copy (cloned) calculation.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => self::DIGITS])]
     public function clone(Request $request, Calculation $item): Response
@@ -106,6 +111,9 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Delete a calculation.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
@@ -123,6 +131,10 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit a calculation.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, Calculation $item): Response
@@ -137,7 +149,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
@@ -169,7 +181,9 @@ class CalculationController extends AbstractEntityController
      * Export calculations to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'calculation_pdf')]
     public function pdf(Request $request): PdfResponse
@@ -187,6 +201,9 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export a single calculation to a PDF document.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => self::DIGITS])]
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
@@ -200,6 +217,9 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Show properties of a calculation.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => self::DIGITS])]
     public function show(Calculation $item): Response
@@ -215,6 +235,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit the state of a calculation.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => self::DIGITS])]
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
@@ -245,6 +267,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'calculation_table')]
     public function table(Request $request, CalculationTable $table): Response
@@ -258,6 +282,7 @@ class CalculationController extends AbstractEntityController
      * @param Calculation $item
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
@@ -297,6 +322,8 @@ class CalculationController extends AbstractEntityController
      * {@inheritdoc}
      *
      * @psalm-param Calculation $item
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function saveToDatabase(AbstractEntity $item): void
     {
@@ -306,6 +333,9 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Gets the QR-code for the given calculation.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): ?string
     {

@@ -93,6 +93,7 @@ class TestController extends AbstractController
      * Test sending notification mail.
      *
      * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/editor', name: 'test_editor')]
     public function editor(Request $request, MailerService $service, LoggerInterface $logger): Response
@@ -156,22 +157,10 @@ class TestController extends AbstractController
     }
 
     /**
-     * Update calculations with random customers.
-     */
-    #[Route(path: '/flex', name: 'test_flex')]
-    public function flex(CalculationStateRepository $repository): Response
-    {
-        $items = $repository->getSortedBuilder()
-            ->getQuery()
-            ->getResult();
-
-        return $this->renderForm('test/flex.html.twig', [
-            'items' => $items,
-        ]);
-    }
-
-    /**
      * Export a HTML page to PDF.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/html', name: 'test_html')]
     public function html(): PdfResponse
@@ -190,10 +179,11 @@ class TestController extends AbstractController
 
     /**
      * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/ipstack', name: 'test_ipstack')]
-    public function ipStrack(Request $request, IpStackService $service): JsonResponse
+    public function ipStack(Request $request, IpStackService $service): JsonResponse
     {
         $result = $service->getIpInfo($request);
 
@@ -229,17 +219,14 @@ class TestController extends AbstractController
 
     /**
      * Test password validation.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/password', name: 'test_password')]
     public function password(Request $request, CaptchaImageService $service): Response
     {
-        // options
         $options = ParametersType::PASSWORD_OPTIONS;
-
-        // constraint
         $constraint = new Password(['all' => true]);
-
-        // listener
         $listener = function (FormEvent $event) use ($options, $constraint): void {
             /** @psalm-var array $data */
             $data = $event->getData();
@@ -249,7 +236,6 @@ class TestController extends AbstractController
             $constraint->min_strength = (int) ($data['min_strength'] ?? StrengthInterface::LEVEL_NONE);
         };
 
-        // default values
         $data = [
             'input' => 'aB123456#*/82568A',
             'min_strength' => StrengthInterface::LEVEL_MEDIUM,
@@ -258,31 +244,25 @@ class TestController extends AbstractController
             $data[$option] = true;
         }
 
-        // form
         $helper = $this->createFormHelper('password.', $data);
         $helper->addPreSubmitListener($listener);
-
         $helper->field('input')
             ->widgetClass('password-strength')
             ->minLength(6)
             ->constraints(new Length(['min' => 6]), $constraint)
             ->addTextType();
-
         foreach ($options as $option) {
             $helper->field($option)
                 ->notRequired()
                 ->addCheckboxType();
         }
-
         $helper->field('min_strength')
             ->add(MinStrengthType::class);
-
         $helper->field('captcha')
             ->label('captcha.label')
             ->constraints(new NotBlank(), new Captcha())
             ->updateOption('image', $service->generateImage())
             ->add(CaptchaImageType::class);
-
         $helper->field('alpha')
             ->label('captcha.label')
             ->add(AlphaCaptchaType::class);
@@ -322,6 +302,8 @@ class TestController extends AbstractController
 
     /**
      * Display the reCaptcha.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/recaptcha', name: 'test_recaptcha')]
     public function recaptcha(Request $request, bool $isDebug): Response
@@ -446,8 +428,10 @@ class TestController extends AbstractController
     #[Route(path: '/timeline', name: 'test_timeline')]
     public function timeline(Request $request, CalculationRepository $repository): Response
     {
+        $max_date = $repository->getMaxDate()?->format('Y-m-d') ?? 'today';
         $interval = (string) $this->getRequestString($request, 'interval', 'P1W');
-        $to = new \DateTime((string) $this->getRequestString($request, 'date', 'today'));
+        $to = new \DateTime((string) $this->getRequestString($request, 'date', $max_date));
+        $max_date = new \DateTime($max_date);
         $from = DateUtils::sub($to, $interval);
         $calculations = $repository->getByInterval($from, $to);
         $data = Utils::groupBy($calculations, fn (Calculation $c) => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG));
@@ -457,6 +441,7 @@ class TestController extends AbstractController
         $next = DateUtils::add($to, $interval);
 
         $parameters = [
+            'max_date' => $max_date->format('Y-m-d'),
             'date' => $to->format('Y-m-d'),
             'interval' => $interval,
             'today' => $today->format('Y-m-d'),
@@ -473,6 +458,8 @@ class TestController extends AbstractController
 
     /**
      * Show the translation page.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/translate', name: 'test_translate')]
     public function translate(TranslatorFactory $factory): Response
@@ -486,7 +473,7 @@ class TestController extends AbstractController
         // check error
         if ($error = $service->getLastError()) {
             // translate message
-            $id = $service->getDefaultIndexName() . '.' . (string) $error['code'];
+            $id = $service->getDefaultIndexName() . '.' . $error['code'];
             if ($this->isTransDefined($id, 'translator')) {
                 $error['message'] = $this->trans($id, [], 'translator');
             }
@@ -555,14 +542,24 @@ class TestController extends AbstractController
             return $this->json([$root]);
         }
 
+        $sortedCategories = $categories->getQueryBuilderByGroup()
+            ->getQuery()
+            ->getResult();
+        $sortedStates = $states->getQueryBuilderByEditable()
+            ->getQuery()
+            ->getResult();
+
         return $this->renderForm('test/treeview.html.twig', [
-            'categories' => $categories->findBy([], ['code' => 'ASC']),
             'currencies' => $this->getCurrencies(),
             'countries' => Countries::getNames(),
-            'states' => $states->getList(),
+            'categories' => $sortedCategories,
+            'states' => $sortedStates,
         ]);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     #[Route(path: '/union', name: 'test_union')]
     public function union(Request $request, SearchService $service): JsonResponse
     {
@@ -598,7 +595,8 @@ class TestController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/spam', name: 'test_spam')]
     public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
@@ -617,7 +615,9 @@ class TestController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/verify', name: 'test_verify')]
     public function verifyAkismetKey(AkismetService $service): JsonResponse
@@ -629,8 +629,12 @@ class TestController extends AbstractController
         return $this->json(['valid_key' => true]);
     }
 
+    /**
+     * @return array<int, array{code: string, name: string}>
+     */
     private function getCurrencies(): array
     {
+        /** @var array<int, array{code: string, name: string}> */
         $currencies = \array_map(function (string $code): array {
             $name = \ucfirst(Currencies::getName($code));
             $symbol = Currencies::getSymbol($code);
@@ -641,9 +645,9 @@ class TestController extends AbstractController
             ];
         }, Currencies::getCurrencyCodes());
 
-        $currencies = \array_filter($currencies, fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name']));
+        $currencies = \array_filter($currencies, static fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name']));
 
-        \usort($currencies, fn (array $left, array $right): int => \strnatcasecmp((string) $left['name'], (string) $right['name']));
+        \usort($currencies, static fn (array $left, array $right): int => \strnatcasecmp((string) $left['name'], (string) $right['name']));
 
         return $currencies;
     }

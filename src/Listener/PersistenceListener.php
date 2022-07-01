@@ -95,6 +95,7 @@ class PersistenceListener implements EventSubscriber
      * Handles the post persist event.
      *
      * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
@@ -109,6 +110,7 @@ class PersistenceListener implements EventSubscriber
      * Handles the post remove event.
      *
      * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function postRemove(LifecycleEventArgs $args): void
     {
@@ -123,6 +125,7 @@ class PersistenceListener implements EventSubscriber
      * Handles the post update event.
      *
      * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {

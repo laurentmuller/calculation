@@ -84,6 +84,9 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
      *      logs: array<int, Log>,
      *      levels: array<string, int>,
      *      channels: array<string, int>} $entries
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(AbstractController $controller, private readonly array $entries)
     {

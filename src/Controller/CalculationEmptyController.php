@@ -37,6 +37,8 @@ class CalculationEmptyController extends AbstractController
      * Export the empty items to a Spreadsheet document.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'empty_excel')]
     public function excel(CalculationRepository $repository): Response
@@ -54,6 +56,10 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Export the calculations where items have the price or the quantity is equal to 0.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'empty_pdf')]
     public function pdf(CalculationRepository $repository): Response
@@ -71,6 +77,8 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'empty_table')]
     public function table(Request $request, CalculationEmptyTable $table): Response
@@ -101,6 +109,8 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Returns a value indicating if no item is empty.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function isEmptyItems(CalculationRepository $repository): bool
     {

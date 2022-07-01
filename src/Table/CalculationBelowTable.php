@@ -34,6 +34,9 @@ class CalculationBelowTable extends CalculationTable implements \Countable
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function count(): int
     {
@@ -61,6 +64,8 @@ class CalculationBelowTable extends CalculationTable implements \Countable
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
@@ -74,6 +79,8 @@ class CalculationBelowTable extends CalculationTable implements \Countable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getCalculationStates(): array
     {
@@ -84,6 +91,8 @@ class CalculationBelowTable extends CalculationTable implements \Countable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {

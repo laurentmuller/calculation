@@ -1,15 +1,11 @@
 {% extends 'base.html.twig' %}
-
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'calendar/_calendar.html.twig' as helper %}
-
 {# macros #}
 {% macro addInterval(value, count, message, selection) -%}
     {%- set text = message|trans({count: count}) -%}
     <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text }}</option>
 {%- endmacro %}
-
 {% macro navigate(date, interval, icon, title) -%}
 {% if date %}
     {% set class = 'btn btn-secondary btn-' ~ title|split('.')[1] %}
@@ -17,45 +13,39 @@
     {{ icons.link(href, null, class, icon, title) }}
  {% endif %}
 {%- endmacro %}
-
 {# parameters #}
 {%- set title = 'timeline.title' -%}
 {%- set title_icon = 'stream' -%}
 {%- set route = 'calculation_table' -%}
-
 {# body #}
 {% block body -%}
 <form name="search" id="search" action="{{ path('test_timeline') }}">
-    <div class="row">
+    <div class="row align-items-center">
         <div class="col">
             <div class="form-inline">
                 <h4>{{ icons.icon(title_icon, title) }}</h4><br>
             </div>
         </div>
-        <div class="col-auto pr-1">
-            <div class="form-inline">
-                <label for="date" class="mr-2">{{ 'timeline.date'|trans }}</label>
-                <input id="date" name="date" type="date" class="form-control form-control-sm" value="{{ date }}">
-            </div>
-        </div>
-        <div class="col-auto px-1">
-            <div class="form-inline">
-                <label for="interval" class="mr-2">{{ 'timeline.interval'|trans }}</label>
-                <select id="interval" name="interval" class="form-control form-control-sm custom-select custom-select-sm">
-                    {{ _self.addInterval('P3D', 3, 'counters.days', interval) }}
-                    {{ _self.addInterval('P5D', 5, 'counters.days', interval) }}
-                    {{ _self.addInterval('P1W', 1, 'counters.weeks', interval) }}
-                    {{ _self.addInterval('P2W', 2, 'counters.weeks', interval) }}
-                    {{ _self.addInterval('P3W', 3, 'counters.weeks', interval) }}
-                    {{ _self.addInterval('P1M', 1, 'counters.months', interval) }}
-                    {{ _self.addInterval('P2M', 2, 'counters.months', interval) }}
-                    {{ _self.addInterval('P3M', 3, 'counters.months', interval) }}
-                </select>
-            </div>
-        </div>
-        <div class="col-auto pl-1">
-            <div class="form-inline">
-               <div class="btn-group btn-group-sm mr-2" role="group">
+        <div class="col-auto form-inline">
+            {# date #}
+            <label for="date" class="mr-sm-1">{{ 'timeline.date'|trans }}</label>
+            <input id="date" name="date" type="date" class="form-control form-control-sm mr-2" value="{{ date }}">
+            {# interval #}
+            <label for="interval" class="mr-sm-1 mt-sm-0 mt-2">{{ 'timeline.interval'|trans }}</label>
+            <select id="interval" name="interval" class="form-control form-control-sm custom-select custom-select-sm mr-2">
+                {{ _self.addInterval('P3D', 3, 'counters.days', interval) }}
+                {{ _self.addInterval('P5D', 5, 'counters.days', interval) }}
+                {{ _self.addInterval('P1W', 1, 'counters.weeks', interval) }}
+                {{ _self.addInterval('P2W', 2, 'counters.weeks', interval) }}
+                {{ _self.addInterval('P3W', 3, 'counters.weeks', interval) }}
+                {{ _self.addInterval('P1M', 1, 'counters.months', interval) }}
+                {{ _self.addInterval('P2M', 2, 'counters.months', interval) }}
+                {{ _self.addInterval('P3M', 3, 'counters.months', interval) }}
+            </select>
+            {# toolbar #}
+            <div class="form-group">
+                <div class="label my-2 d-sm-none">{{ 'theme.fields.background'|trans }}</div>
+                <div class="btn-group btn-group-sm" role="group">
                     {{ _self.navigate(previous, interval, 'chevron-left', 'timeline.previous') }}
                     {{ _self.navigate(today, interval, 'arrows-alt', 'timeline.today') }}
                     {{ _self.navigate(next, interval, 'chevron-right', 'timeline.next') }}
@@ -67,43 +57,58 @@
         </div>
     </div>
 </form>
-<p class="text-muted mb-0">{{ from|localedate('long') }} - {{ to|localedate('long') }}</p>
+<div class="row align-content-center my-1 text-muted">
+    <div class="col">
+        {{- from|localedate('long') }} - {{ to|localedate('long') -}}
+    </div>
+    <div class="col text-right">
+        {{- 'counters.calculations'|trans({'count': count}) -}}
+    </div>
+</div>
 <hr class="mt-0  mb-2">
 {% if data|length %}
-    <div class="row">
-        <div class="col">
-            <ul class="timeline">
+<div class="row no-gutters table-responsive">
+    <div class="col">
+        <ul class="timeline">
             {% for key, calculations in data %}
-                {%- set count = calculations|length -%}
-                {%- set query = calculations[0].date|localedate('short') -%}
-                {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
-                <li class="success">
-                    <div class="position-relative">
-                        <a class="text-decoration-none stretched-link" href="{{ path(route, {'search': query}) }}" title="{{ title }}">{{ key }}</a>
-                        <span class="float-right small">{{ 'counters.calculations'|trans({'count': count}) }}</span>
-                        <hr class="my-0">
-                        <table class="table table-sm table-borderless">
-                            <tbody>
+            {%- set count = calculations|length -%}
+            {%- set query = calculations[0].date|localedate('short') -%}
+            {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
+            <li class="success">
+                <div class="position-relative ml-2">
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="py-0 pl-0">
+                                    <a class="text-decoration-none stretched-link" href="{{ path(route, {'search': query}) }}" title="{{ title }}">{{ key }}</a>
+                                </td>
+                                <td colspan="2" class="py-0 text-right">
+                                    <small class="text-muted">{{ 'counters.calculations'|trans({'count': count}) }}</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="p-0"><hr class="my-0"></td>
+                            </tr>
                             {% for calculation in calculations %}
                                 {{ helper.dataRow(calculation, 'text-cell') -}}
                             {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </li>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
             {% endfor %}
-            </ul>
-        </div>
+        </ul>
     </div>
+</div>
 {% else %}
-    <div class="alert alert-warning mt-2" role="alert">{{ 'calculation.list.empty'|trans }}</div>
+<div class="alert alert-warning mt-2" role="alert">{{ 'calculation.list.empty'|trans }}</div>
 {% endif %}
 {%- endblock %}
-
+{# stylesheets #}
 {% block stylesheets -%}
 {{ asset_css('css/timeline.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/test/timeline.js') }}

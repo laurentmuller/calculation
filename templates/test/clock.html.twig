@@ -1,11 +1,10 @@
 {% extends 'base.html.twig' %}
-
 {# parameters #}
 {% set title = 'Horloge analogique' %}
 {% set dark = dark|default(false) %}
 {% set date_time_class = dark ? ' text-light' : '' %}
 {% set background_class = dark ? 'light' : 'dark' %}
-
+{# body #}
 {% block body -%}
 <div class="d-flex flex-column justify-content-center" style="height: 80vh">
     <div class="d-flex justify-content-center">
@@ -28,12 +27,12 @@
     </div>
 </div>
 {%- endblock %}
-
+{# stylesheets #}
 {% block stylesheets -%}
 {{ parent() }}
 {{ asset_css('css/clock.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/test/clock.js') }}

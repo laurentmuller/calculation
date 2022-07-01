@@ -5,6 +5,7 @@
 ul.timeline {
     list-style-type: none;
     position: relative;
+    padding-left: 20px;
 }
 
 ul.timeline:before {
@@ -12,14 +13,13 @@ ul.timeline:before {
     background: #d4d9df;
     display: inline-block;
     position: absolute;
-    left: 29px;
+    left: 9px;
     width: 2px;
     height: 100%;
     margin-top: 3px;
 }
 
 ul.timeline>li {
-    padding-left: 20px;
     margin-bottom: 20px;
 }
 
@@ -34,28 +34,50 @@ ul.timeline>li:before {
     position: absolute;
     border-radius: 50%;
     border: 3px solid var(--primary);
-    left: 20px;
+    left: 0;
     width: 20px;
     height: 20px;
     margin-top: 3px;
 }
 
+ul.timeline-square>li:before {
+    border-radius: initial;
+}
+ul.timeline-fill>li:before {
+    border: initial;
+}
+
 ul.timeline>li.secondary:before {
     border: 3px solid var(--secondary);
+}
+ul.timeline-fill>li.secondary:before {
+    background: var(--secondary);
 }
 
 ul.timeline>li.success:before {
     border: 3px solid var(--success);
 }
+ul.timeline-fill>li.success:before {
+    background: var(--success);
+}
 
 ul.timeline>li.info:before {
     border: 3px solid var(--info);
+}
+ul.timeline-fill>li.info:before {
+    background: var(--info);
 }
 
 ul.timeline>li.danger:before {
     border: 3px solid var(--danger);
 }
+ul.timeline-fill>li.danger:before {
+    background: var(--danger);
+}
 
 ul.timeline>li.warning:before {
     border: 3px solid var(--warning);
+}
+ul.timeline-fill>li.warning:before {
+    background: var(--warning);
 }

@@ -192,6 +192,8 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Output a link style sheet tag with a version and a nonce value.
+     *
+     * @throws \Exception
      */
     private function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -208,6 +210,8 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Output a javascript source tag with a version and a nonce value.
+     *
+     * @throws \Exception
      */
     private function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {

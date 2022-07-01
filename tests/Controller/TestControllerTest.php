@@ -23,7 +23,6 @@ class TestControllerTest extends AbstractControllerTest
     private const  ROUTES = [
         'clock',
         'editor',
-        'flex',
         'html',
         'ipstack',
         'notifications',

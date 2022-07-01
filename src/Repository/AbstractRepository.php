@@ -107,8 +107,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Gets the next identifier.
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getNextId(): int
     {
@@ -147,7 +146,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @see AbstractRepository::createDefaultQueryBuilder()
      * @psalm-param literal-string $alias
      *
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getSearchQuery(array $sortedFields = [], array $criterias = [], string $alias = self::DEFAULT_ALIAS): Query
     {
@@ -181,7 +180,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Gets the name of the single id field. Note that this only works on
      * entity classes that have a single-field primary key.
      *
-     * @throws \Doctrine\ORM\Mapping\MappingException if the class doesn't have an identifier, or it has a composite primary key
+     * @throws \Doctrine\ORM\Exception\ORMException if the class doesn't have an identifier, or it has a composite primary key
      */
     public function getSingleIdentifierFieldName(): string
     {

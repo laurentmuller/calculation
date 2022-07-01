@@ -21,6 +21,8 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int
     {

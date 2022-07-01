@@ -41,6 +41,8 @@ class GlobalMarginController extends AbstractEntityController
 {
     /**
      * Constructor.
+     *
+     * @throws \ReflectionException
      */
     public function __construct(TranslatorInterface $translator, GlobalMarginRepository $repository)
     {
@@ -49,6 +51,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Add a global margin.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'globalmargin_add')]
     public function add(Request $request): Response
@@ -58,6 +62,9 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Delete a global margin.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'globalmargin_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, GlobalMargin $item, LoggerInterface $logger): Response
@@ -74,6 +81,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Edit a global margin.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'globalmargin_edit', requirements: ['id' => self::DIGITS])]
     public function edit(Request $request, GlobalMargin $item): Response
@@ -86,7 +95,7 @@ class GlobalMarginController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'globalmargin_excel')]
     public function excel(): SpreadsheetResponse
@@ -105,8 +114,9 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'globalmargin_pdf')]
     public function pdf(): PdfResponse
@@ -132,6 +142,8 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Render the table view.
+     *
+     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'globalmargin_table')]
     public function table(Request $request, GlobalMarginTable $table): Response

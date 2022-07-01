@@ -69,6 +69,8 @@ class UpdateController extends AbstractController
 
     /**
      * Update calculations with random customers.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/calculation', name: 'update_calculation')]
     public function updateCalculation(EntityManagerInterface $manager, FakerService $service, SuspendEventListenerService $listener): RedirectResponse
@@ -118,6 +120,8 @@ class UpdateController extends AbstractController
 
     /**
      * Update customers with random values.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/customer', name: 'update_customer')]
     public function updateCustomer(EntityManagerInterface $manager, FakerService $service, SuspendEventListenerService $listener): RedirectResponse

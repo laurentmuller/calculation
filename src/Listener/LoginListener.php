@@ -46,6 +46,8 @@ class LoginListener implements EventSubscriberInterface
 
     /**
      * Handles the login success event.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
@@ -57,6 +59,8 @@ class LoginListener implements EventSubscriberInterface
 
     /**
      * Notify the success login to the user.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function notify(Request $request, UserInterface $user): void
     {

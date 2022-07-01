@@ -75,6 +75,10 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns current conditions data for a specific location.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/current', name: 'openweather_api_current')]
     public function apiCurrent(Request $request): JsonResponse
@@ -95,6 +99,10 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 16 day / daily forecast conditions data for a specific location.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/daily', name: 'openweather_api_daily')]
     public function apiDaily(Request $request): JsonResponse
@@ -116,6 +124,11 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 5 days / 3 hours forecast conditions data for a specific location.
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/api/forecast', name: 'openweather_api_forecast')]
     public function apiForecast(Request $request): JsonResponse
@@ -137,9 +150,14 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns all essential weather data for a specific location.
+     *
+     * @throws \ReflectionException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/api/onecall', name: 'openweather_api_onecall')]
-    public function apiOnecall(Request $request): JsonResponse
+    public function apiOneCall(Request $request): JsonResponse
     {
         try {
             $units = $this->getRequestUnits($request);
@@ -147,7 +165,7 @@ class OpenWeatherController extends AbstractController
             $longitude = $this->getRequestFloat($request, 'longitude');
             $exclude = (string) $this->getRequestString($request, 'exclude');
             $exclude = \explode(',', $exclude);
-            $response = $this->service->onecall($latitude, $longitude, $units, $exclude);
+            $response = $this->service->oneCall($latitude, $longitude, $units, $exclude);
             if (false === $response) {
                 return $this->json($this->service->getLastError());
             }
@@ -160,6 +178,9 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns an array of cities that match the query text.
+     *
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/api/search', name: 'openweather_api_search')]
     public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
@@ -200,6 +221,11 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns current conditions data for a specific location.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \ReflectionException
      */
     #[Route(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response
@@ -334,6 +360,11 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the search city view.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \ReflectionException
      */
     #[Route(path: '/search', name: 'openweather_search')]
     public function search(Request $request): Response
@@ -426,6 +457,8 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/wather', name: 'openweather_weather')]
     public function weather(Request $request): Response
@@ -538,16 +571,25 @@ class OpenWeatherController extends AbstractController
         return $this->getRequestInt($request, self::KEY_COUNT, $this->getRequestCount($request, $default));
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function getSessionLimit(Request $request, int $default = 25): int
     {
         return (int) $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request, $default));
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function getSessionQuery(Request $request): string
     {
         return (string) $this->getSessionString(self::KEY_QUERY, $this->getRequestQuery($request));
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function getSessionUnits(Request $request): string
     {
         return (string) $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));

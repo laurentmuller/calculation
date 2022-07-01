@@ -54,6 +54,8 @@ class ResponseListener implements EventSubscriberInterface
 
     /**
      * Constructor.
+     *
+     * @throws \Exception
      */
     public function __construct(ParameterBagInterface $params, UrlGeneratorInterface $router, NonceExtension $extension, string $file, private readonly bool $isDebug)
     {

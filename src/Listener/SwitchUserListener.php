@@ -54,6 +54,8 @@ class SwitchUserListener implements EventSubscriberInterface
 
     /**
      * Handles the switch user event.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function onSwitchUser(SwitchUserEvent $event): void
     {

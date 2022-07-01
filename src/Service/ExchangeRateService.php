@@ -86,9 +86,7 @@ class ExchangeRateService extends AbstractHttpClientService
      * @return array an array with the currency code as key and the currency rate as value or an empty array if an error occurs
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLatest(string $code): array
@@ -122,9 +120,7 @@ class ExchangeRateService extends AbstractHttpClientService
      * @return float the exchange rate or 0.0 if an error occurs.
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getRate(string $baseCode, string $targetCode): float
@@ -163,9 +159,7 @@ class ExchangeRateService extends AbstractHttpClientService
      * }
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
@@ -207,9 +201,7 @@ class ExchangeRateService extends AbstractHttpClientService
      * @return array the supported currency codes or an empty array if an error occurs
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getSupportedCodes(): array
@@ -265,9 +257,7 @@ class ExchangeRateService extends AbstractHttpClientService
 
     /**
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function getResponse(string $url): ?array
     {

@@ -37,6 +37,9 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
      *
      * @param AbstractController $controller the parent controller
      * @param array              $items      the items to render
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $items)
     {

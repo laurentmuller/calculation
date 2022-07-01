@@ -41,8 +41,7 @@ class CalculationCategoryRepository extends AbstractRepository
      *
      * @return int the number of calculations
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function countCategoryReferences(Category $category): int
     {

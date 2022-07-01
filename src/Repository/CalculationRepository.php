@@ -72,8 +72,7 @@ class CalculationRepository extends AbstractRepository
      * @return int the number of calculations
      * @psalm-return  int<0, max>
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function countBelowItems(float $minMargin): int
     {
@@ -90,8 +89,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Returns the number of distinct years and months.
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function countDistinctMonths(): int
     {
@@ -107,8 +105,7 @@ class CalculationRepository extends AbstractRepository
      * @return int the number of calculations
      * @psalm-return  int<0, max>
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function countDuplicateItems(): int
     {
@@ -142,8 +139,7 @@ class CalculationRepository extends AbstractRepository
      * @return int the number of calculations
      * @psalm-return  int<0, max>
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function countEmptyItems(): int
     {
@@ -177,8 +173,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return int the number of calculations
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function countStateReferences(CalculationState $state): int
     {
@@ -647,6 +642,40 @@ class CalculationRepository extends AbstractRepository
 
         // execute
         return $builder->getQuery()->getResult();
+    }
+
+    /**
+     * Gets tne maximum date of the calculations.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Exception
+     */
+    public function getMaxDate(): ?\DateTimeInterface
+    {
+        /** @psalm-var string|null $value */
+        $value = $this->createQueryBuilder('c')
+            ->select('MAX(c.date) as MAX_DATE')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return \is_string($value) ? new \DateTime($value) : null;
+    }
+
+    /**
+     * Gets tne minimum date of the calculations.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Exception
+     */
+    public function getMinDate(): ?\DateTimeInterface
+    {
+        /** @psalm-var string|null $value */
+        $value = $this->createQueryBuilder('c')
+            ->select('MIN(c.date) as MIN_DATE')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return \is_string($value) ? new \DateTime($value) : null;
     }
 
     /**

@@ -52,7 +52,7 @@ class GlobalMarginRepository extends AbstractRepository
      *
      * @return float the margin, in percent, if found; 0 otherwise
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getMargin(float $amount): float
     {

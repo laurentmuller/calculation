@@ -129,6 +129,9 @@ final class CalculationService
      * @param Calculation $calculation the calculation to get groups from
      *
      * @return array an array with the computed values used to render the total view
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function createGroupsFromCalculation(Calculation $calculation): array
     {
@@ -163,6 +166,7 @@ final class CalculationService
      * @return array an array with the computed values used to render the total view
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function createGroupsFromData(array $source): array
     {
@@ -263,6 +267,8 @@ final class CalculationService
      * @param calculation $calculation the calculation to update
      *
      * @return bool true if updated; false otherwise
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function updateTotal(Calculation $calculation): bool
     {
@@ -341,6 +347,7 @@ final class CalculationService
      * @return non-empty-array<array> the total groups
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function computeGroups(array $groups, float $user_margin, ?callable $callback = null, ?float $global_margin = null): array
     {
@@ -441,6 +448,8 @@ final class CalculationService
 
     /**
      * Gets the global margin, in percent, for the given amount.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function getGlobalMargin(float $amount): float
     {
@@ -461,6 +470,8 @@ final class CalculationService
 
     /**
      * Gets the margin, in percent, for the given group and amount.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function getGroupMargin(Group $group, float $amount): float
     {

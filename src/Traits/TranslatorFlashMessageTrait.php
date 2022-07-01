@@ -30,7 +30,8 @@ trait TranslatorFlashMessageTrait
      *
      * @return string the translated message
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws \InvalidArgumentException                  If the locale contains invalid characters
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function errorTrans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
@@ -50,7 +51,8 @@ trait TranslatorFlashMessageTrait
      *
      * @return string the translated message
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws \InvalidArgumentException                  If the locale contains invalid characters
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function infoTrans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
@@ -70,7 +72,8 @@ trait TranslatorFlashMessageTrait
      *
      * @return string the translated message
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws \InvalidArgumentException                  If the locale contains invalid characters
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function successTrans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
@@ -90,7 +93,8 @@ trait TranslatorFlashMessageTrait
      *
      * @return string the translated message
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws \InvalidArgumentException                  If the locale contains invalid characters
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function warningTrans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {

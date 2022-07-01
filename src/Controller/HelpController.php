@@ -85,6 +85,9 @@ class HelpController extends AbstractController
 
     /**
      * Export the help to a PDF document.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'help_pdf')]
     public function pdf(HelpService $service): PdfResponse

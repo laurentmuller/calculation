@@ -32,6 +32,8 @@ class CaptchaValidator extends AbstractConstraintValidator
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {

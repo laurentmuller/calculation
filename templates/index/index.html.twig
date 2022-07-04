@@ -21,13 +21,13 @@
 {% if enabled %}
     <div class="col">
         {%- include 'index/panel_table.html.twig' -%}
-        {% if app.panelState %}
+        {% if user_service.panelState %}
         {%- include 'index/panel_state.html.twig' -%}
         {% endif %}
-        {% if app.panelMonth %}
+        {% if user_service.panelMonth %}
         {%- include 'index/panel_month.html.twig' -%}
         {% endif %}
-        {% if app.panelCatalog %}
+        {% if user_service.panelCatalog %}
         {%- include 'index/panel_catalog.html.twig' -%}
         {% endif %}
         {%- include 'user/user_switch.html.twig' -%}

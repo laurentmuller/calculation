@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Database\SwissDatabase;
 use App\Form\FormHelper;
-use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\PropertyServiceInterface;
 use App\Model\SwissPostUpdateResult;
 use App\Traits\TranslatorTrait;
 use App\Util\FileUtils;
@@ -499,7 +499,7 @@ class SwissPostUpdater
     private function updateValidity(): void
     {
         if ($this->results->isValid() && null !== $validity = $this->results->getValidity()) {
-            $this->application->setProperty(ApplicationServiceInterface::P_LAST_IMPORT, $validity);
+            $this->application->setProperty(PropertyServiceInterface::P_LAST_IMPORT, $validity);
         }
     }
 

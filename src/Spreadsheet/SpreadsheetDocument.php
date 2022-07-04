@@ -127,7 +127,7 @@ class SpreadsheetDocument extends Spreadsheet
             $sheet->setTitle(self::checkSheetTitle($title));
         }
         $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
-        $customer = $controller->getApplication()->getCustomer();
+        $customer = $controller->getUserService()->getCustomer();
         $this->setHeaderFooter($title, $customer)
             ->setPrintGridlines(true);
 
@@ -176,7 +176,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function initialize(AbstractController $controller, string $title, bool $landscape = false): self
     {
-        $customer = $controller->getApplication()->getCustomer();
+        $customer = $controller->getUserService()->getCustomer();
         $application = $controller->getApplicationName();
         $username = $controller->getUserIdentifier();
         $title = $this->trans($title);
@@ -225,7 +225,7 @@ class SpreadsheetDocument extends Spreadsheet
         $title = self::checkSheetTitle($title);
         $this->getActiveSheet()->setTitle($title);
         if (null !== $controller) {
-            $customer = $controller->getApplication()->getCustomer();
+            $customer = $controller->getUserService()->getCustomer();
             $this->setHeaderFooter($title, $customer);
         }
 

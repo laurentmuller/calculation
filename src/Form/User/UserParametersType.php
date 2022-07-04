@@ -18,7 +18,7 @@ use App\Service\ApplicationService;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * Type for user's  parameters.
+ * Type for user parameters.
  */
 class UserParametersType extends AbstractParametersType
 {
@@ -45,12 +45,10 @@ class UserParametersType extends AbstractParametersType
      */
     protected function addSections(FormHelper $helper): void
     {
+        $this->addDisplaySection($helper);
+        $this->addMessageSection($helper);
         if ($this->superAdmin) {
             $this->addHomePageSection($helper);
-        }
-        $this->addMessageSection($helper);
-        $this->addDisplaySection($helper);
-        if ($this->superAdmin) {
             $this->addOptionsSection($helper);
         }
     }

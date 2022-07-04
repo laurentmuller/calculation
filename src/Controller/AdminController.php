@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enums\EntityPermission;
-use App\Form\Admin\ParametersType;
+use App\Form\Admin\ApplicationParametersType;
 use App\Form\User\RoleRightsType;
-use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Security\EntityVoter;
@@ -72,7 +72,7 @@ class AdminController extends AbstractController
 
                 // update last date
                 if (!$query->isSimulate() && $result->isValid()) {
-                    $application->setProperty(ApplicationServiceInterface::P_ARCHIVE_CALCULATION, new \DateTime());
+                    $application->setProperty(PropertyServiceInterface::P_ARCHIVE_CALCULATION, new \DateTime());
                 }
 
                 return $this->renderForm('admin/archive_result.html.twig', [
@@ -199,22 +199,22 @@ class AdminController extends AbstractController
         // properties
         $application = $this->getApplication();
         $data = $application->getProperties([
-            ApplicationServiceInterface::P_ARCHIVE_CALCULATION,
-            ApplicationServiceInterface::P_UPDATE_PRODUCTS,
-            ApplicationServiceInterface::P_LAST_IMPORT,
+            PropertyServiceInterface::P_ARCHIVE_CALCULATION,
+            PropertyServiceInterface::P_UPDATE_PRODUCTS,
+            PropertyServiceInterface::P_LAST_IMPORT,
         ]);
 
         // password options
-        foreach (ParametersType::PASSWORD_OPTIONS as $option) {
+        foreach (ApplicationParametersType::PASSWORD_OPTIONS as $option) {
             $data[$option] = $application->isPropertyBoolean($option);
         }
         // form
-        $form = $this->createForm(ParametersType::class, $data);
+        $form = $this->createForm(ApplicationParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $defaultProperties = $application->getDefaultValues();
-            foreach (ParametersType::PASSWORD_OPTIONS as $option) {
+            foreach (ApplicationParametersType::PASSWORD_OPTIONS as $option) {
                 $defaultProperties[$option] = false;
             }
             $application->setProperties($data, $defaultProperties);
@@ -241,7 +241,7 @@ class AdminController extends AbstractController
         $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
         $default = EntityVoter::getRoleAdmin();
-        $property = ApplicationServiceInterface::P_ADMIN_RIGHTS;
+        $property = PropertyServiceInterface::P_ADMIN_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
     }
@@ -259,7 +259,7 @@ class AdminController extends AbstractController
         $roleName = RoleInterface::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
         $default = EntityVoter::getRoleUser();
-        $property = ApplicationServiceInterface::P_USER_RIGHTS;
+        $property = PropertyServiceInterface::P_USER_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
     }
@@ -289,7 +289,7 @@ class AdminController extends AbstractController
 
             // update last date
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setProperty(ApplicationServiceInterface::P_UPDATE_PRODUCTS, new \DateTime());
+                $application->setProperty(PropertyServiceInterface::P_UPDATE_PRODUCTS, new \DateTime());
             }
 
             return $this->renderForm('product/product_result.html.twig', [

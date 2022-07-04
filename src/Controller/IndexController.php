@@ -67,18 +67,18 @@ class IndexController extends AbstractController
         $service->updateCache();
         $parameters = [
             'min_margin' => $application->getMinMargin(),
-            'calculations' => $this->getCalculations($application->getPanelCalculation(), $user),
+            'calculations' => $this->getCalculations($service->getPanelCalculation(), $user),
         ];
         if ($restrict) {
             $parameters[self::PARAM_RESTRICT] = 1;
         }
-        if ($application->isPanelState()) {
+        if ($service->isPanelState()) {
             $parameters['states'] = $this->getStates();
         }
-        if ($application->isPanelMonth()) {
+        if ($service->isPanelMonth()) {
             $parameters['months'] = $this->getMonths();
         }
-        if ($application->isPanelCatalog()) {
+        if ($service->isPanelCatalog()) {
             $parameters['task_count'] = $this->count(Task::class);
             $parameters['group_count'] = $this->count(Group::class);
             $parameters['product_count'] = $this->count(Product::class);

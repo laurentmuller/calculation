@@ -16,7 +16,7 @@ use App\Entity\Calculation;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
-use App\Form\Admin\ParametersType;
+use App\Form\Admin\ApplicationParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ImportanceType;
@@ -206,11 +206,11 @@ class TestController extends AbstractController
     #[Route(path: '/notifications', name: 'test_notifications')]
     public function notifications(): Response
     {
-        $application = $this->getApplication();
+        $service = $this->getUserService();
         $data = [
-            'position' => $application->getMessagePosition(),
-            'timeout' => $application->getMessageTimeout(),
-            'subtitle' => $application->isMessageSubTitle(),
+            'position' => $service->getMessagePosition(),
+            'timeout' => $service->getMessageTimeout(),
+            'subtitle' => $service->isMessageSubTitle(),
             'positions' => MessagePosition::sorted(),
         ];
 
@@ -225,7 +225,7 @@ class TestController extends AbstractController
     #[Route(path: '/password', name: 'test_password')]
     public function password(Request $request, CaptchaImageService $service): Response
     {
-        $options = ParametersType::PASSWORD_OPTIONS;
+        $options = ApplicationParametersType::PASSWORD_OPTIONS;
         $constraint = new Password(['all' => true]);
         $listener = function (FormEvent $event) use ($options, $constraint): void {
             /** @psalm-var array $data */
@@ -510,7 +510,7 @@ class TestController extends AbstractController
             $groups = $repository->findAllByCode();
             foreach ($groups as $group) {
                 $node = [
-                    'id' => 'group-' . (string) $group->getId(),
+                    'id' => \sprintf('group-%d', (int) $group->getId()),
                     'text' => $group->getCode(),
                     'icon' => 'fas fa-code-branch fa-fw',
                     'badgeValue' => $group->countItems(),
@@ -519,7 +519,7 @@ class TestController extends AbstractController
                 foreach ($group->getCategories() as $category) {
                     $count += $category->countItems();
                     $node['nodes'][] = [
-                        'id' => 'category-' . (string) $category->getId(),
+                        'id' => \sprintf('category-%d', (int) $category->getId()),
                         'text' => $category->getCode(),
                         'icon' => 'far fa-folder fa-fw',
                         'badgeValue' => $category->countItems(),

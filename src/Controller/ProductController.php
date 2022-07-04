@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
-use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\PropertyServiceInterface;
 use App\Report\ProductsReport;
 use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
@@ -185,7 +185,7 @@ class ProductController extends AbstractEntityController
         $application = $this->getApplication();
         $id = $application->getDefaultProductId();
         if ($id === $item->getId()) {
-            $application->setProperty(ApplicationServiceInterface::P_DEFAULT_PRODUCT, null);
+            $application->setProperty(PropertyServiceInterface::P_DEFAULT_PRODUCT, null);
         }
 
         parent::deleteFromDatabase($item);

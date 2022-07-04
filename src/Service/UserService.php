@@ -17,11 +17,10 @@ use App\Entity\UserProperty;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\TableView;
-use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\PropertyServiceInterface;
+use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
-use App\Traits\CacheTrait;
-use App\Traits\LoggerTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\PropertyTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -30,19 +29,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to manage user properties.
  */
-class UserService implements ApplicationServiceInterface
+class UserService implements PropertyServiceInterface
 {
-    use CacheTrait {
-        clearCache as traitClearCache;
-        saveDeferredCacheValue as traitSaveDeferredCacheValue;
-    }
-    use LoggerTrait;
-    use TranslatorTrait;
-
-    /**
-     * The cache saved key.
-     */
-    private const CACHE_SAVED = 'cache_saved';
+    use PropertyTrait;
 
     public function __construct(
         private readonly ApplicationService $service,
@@ -58,36 +47,33 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Clear this cache.
+     * Gets the customer information.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function clearCache(): bool
+    public function getCustomer(): CustomerInformation
     {
-        if ($this->traitClearCache()) {
-            $this->logInfo($this->trans('application_service.clear_success'));
+        $customer = $this->service->getCustomer();
+        $customer->setPrintAddress($this->isPrintAddress());
 
-            return true;
-        } else {
-            $this->logWarning($this->trans('application_service.clear_error'));
-
-            return false;
-        }
+        return $customer;
     }
 
     /**
-     * Gets the display mode for table.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDisplayMode(): TableView
     {
         $default = $this->service->getDisplayMode();
-        $value = $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
+        $value = (string) $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
 
-        return TableView::tryFrom((string) $value) ?? self::DEFAULT_DISPLAY_MODE;
+        return TableView::tryFrom($value) ?? $default;
     }
 
     /**
-     * Gets the action to trigger within the entities.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -100,7 +86,7 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Gets the position of the flash bag messages (default: 'bottom-right').
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -113,7 +99,7 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -125,7 +111,7 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns a value indicating number of displayed calculation in the home page.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -157,80 +143,18 @@ class UserService implements ApplicationServiceInterface
 
             self::P_DISPLAY_MODE => $this->getDisplayMode(),
 
-            self::P_QR_CODE => $this->isQrCode(),
-            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
-
-            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
             self::P_PANEL_STATE => $this->isPanelState(),
             self::P_PANEL_MONTH => $this->isPanelMonth(),
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
+            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
+
+            self::P_QR_CODE => $this->isQrCode(),
+            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
         ];
     }
 
     /**
-     * Gets an integer property.
-     *
-     * @param string $name    the property name to search for
-     * @param int    $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyInteger(string $name, int $default = 0): int
-    {
-        return (int) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets a string property.
-     *
-     * @param string      $name    the property name to search for
-     * @param string|null $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyString(string $name, ?string $default = null): ?string
-    {
-        /** @psalm-var mixed $value */
-        $value = $this->getItemValue($name, $default);
-        if (\is_string($value)) {
-            return $value;
-        }
-
-        return $default;
-    }
-
-    /**
-     * Returns a value indicating if the default action is to edit the entity.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isActionEdit(): bool
-    {
-        return EntityAction::EDIT === $this->getEditAction();
-    }
-
-    /**
-     * Returns a value indicating if the default action is to do nothing.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isActionNone(): bool
-    {
-        return EntityAction::NONE === $this->getEditAction();
-    }
-
-    /**
-     * Returns a value indicating if the default action is to show the entity.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isActionShow(): bool
-    {
-        return EntityAction::SHOW === $this->getEditAction();
-    }
-
-    /**
-     * Returns if the flash bag message icon is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -242,7 +166,7 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns if the flash bag message icon is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -254,7 +178,7 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns if the flash bag message progress bar is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -266,7 +190,7 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns if the flash bag message subtitle is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -278,7 +202,7 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns if the flash bag message title is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -338,19 +262,6 @@ class UserService implements ApplicationServiceInterface
     }
 
     /**
-     * Gets a boolean property.
-     *
-     * @param string $name    the property name to search for
-     * @param bool   $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isPropertyBoolean(string $name, bool $default = false): bool
-    {
-        return (bool) $this->getItemValue($name, $default);
-    }
-
-    /**
      * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
      *
      * @throws \Psr\Cache\InvalidArgumentException
@@ -360,17 +271,6 @@ class UserService implements ApplicationServiceInterface
         $default = $this->service->isQrCode();
 
         return $this->isPropertyBoolean(self::P_QR_CODE, $default);
-    }
-
-    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
-    {
-        if (!$this->traitSaveDeferredCacheValue($key, $value, $time)) {
-            $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -396,58 +296,11 @@ class UserService implements ApplicationServiceInterface
         return $this;
     }
 
-    /**
-     * Sets a single property value.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function setProperty(string $name, mixed $value): self
-    {
-        return $this->setProperties([$name => $value]);
-    }
-
-    /**
-     * Update the cache if needed.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function updateCache(): void
-    {
-        if (!$this->getCacheValue(self::CACHE_SAVED, false)) {
-            $this->updateAdapter();
-        }
-    }
-
-    /**
-     * Gets an item value.
-     *
-     * @param string $name    the item name
-     * @param mixed  $default the default value if the item is not found
-     *
-     * @return mixed the value, if hit; the default value otherwise
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function getItemValue(string $name, mixed $default): mixed
-    {
-        $item = $this->getCacheItem($name);
-        if (null !== $item && $item->isHit()) {
-            return $item->get();
-        }
-
-        return $default;
-    }
-
     private function getUser(): ?User
     {
         $user = $this->security->getUser();
 
         return $user instanceof User ? $user : null;
-    }
-
-    private function isDefaultValue(array $defaultProperties, string $name, mixed $value): bool
-    {
-        return \array_key_exists($name, $defaultProperties) && $defaultProperties[$name] === $value;
     }
 
     /**
@@ -478,18 +331,9 @@ class UserService implements ApplicationServiceInterface
      */
     private function updateAdapter(): void
     {
-        $this->clearCache();
         if (null !== $user = $this->getUser()) {
             $properties = $this->repository->findByUser($user);
-            foreach ($properties as $property) {
-                $this->saveDeferredCacheValue($property->getName(), $property->getString());
-            }
-            $this->saveDeferredCacheValue(self::CACHE_SAVED, true);
-            if ($this->commitDeferredValues()) {
-                $this->logInfo($this->trans('application_service.commit_success'));
-            } else {
-                $this->logWarning($this->trans('application_service.commit_error'));
-            }
+            $this->saveProperties($properties);
         }
     }
 }

@@ -18,13 +18,14 @@ use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParametersType;
 use App\Form\Product\ProductListType;
 use App\Form\Type\MinStrengthType;
+use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use Symfony\Component\Security\Core\Security;
 
 /**
  * Type for application parameters.
  */
-class ParametersType extends AbstractParametersType
+class ApplicationParametersType extends AbstractParametersType
 {
     /**
      * The password options.
@@ -67,63 +68,63 @@ class ParametersType extends AbstractParametersType
 
     private function addCustomerSection(FormHelper $helper): void
     {
-        $helper->field(self::P_CUSTOMER_NAME)
+        $helper->field(PropertyServiceInterface::P_CUSTOMER_NAME)
             ->updateAttribute('spellcheck', 'false')
             ->addTextType();
 
-        $helper->field(self::P_CUSTOMER_ADDRESS)
+        $helper->field(PropertyServiceInterface::P_CUSTOMER_ADDRESS)
             ->notRequired()
             ->addTextType();
 
-        $helper->field(self::P_CUSTOMER_ZIP_CITY)
+        $helper->field(PropertyServiceInterface::P_CUSTOMER_ZIP_CITY)
             ->notRequired()
             ->addTextType();
 
-        $helper->field(self::P_CUSTOMER_PHONE)
+        $helper->field(PropertyServiceInterface::P_CUSTOMER_PHONE)
             ->notRequired()
             ->addTelType();
 
-        $helper->field(self::P_CUSTOMER_FAX)
+        $helper->field(PropertyServiceInterface::P_CUSTOMER_FAX)
             ->notRequired()
             ->addFaxType();
 
-        $helper->field(self::P_CUSTOMER_EMAIL)
+        $helper->field(PropertyServiceInterface::P_CUSTOMER_EMAIL)
             ->notRequired()
             ->addEmailType();
 
-        $helper->field(self::P_CUSTOMER_URL)
+        $helper->field(PropertyServiceInterface::P_CUSTOMER_URL)
             ->notRequired()
             ->addUrlType();
     }
 
     private function addDefaultProductSection(FormHelper $helper): void
     {
-        $helper->field(self::P_DEFAULT_PRODUCT)
+        $helper->field(PropertyServiceInterface::P_DEFAULT_PRODUCT)
             ->notRequired()
-            ->updateOption('placeholder', 'parameters.placeholders.' . self::P_DEFAULT_PRODUCT)
+            ->updateOption('placeholder', 'parameters.placeholders.' . PropertyServiceInterface::P_DEFAULT_PRODUCT)
             ->updateAttribute('data-default', '')
             ->add(ProductListType::class);
 
-        $helper->field(self::P_DEFAULT_PRODUCT_QUANTITY)
-            ->updateAttribute('data-default', $this->getDefaultValue(self::P_DEFAULT_PRODUCT_QUANTITY))
+        $helper->field(PropertyServiceInterface::P_DEFAULT_PRODUCT_QUANTITY)
+            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DEFAULT_PRODUCT_QUANTITY))
             ->addNumberType();
 
-        $helper->field(self::P_DEFAULT_PRODUCT_EDIT)
-            ->updateAttribute('data-default', $this->getDefaultValue(self::P_DEFAULT_PRODUCT_EDIT))
+        $helper->field(PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT)
+            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT))
             ->notRequired()
             ->addCheckboxType();
     }
 
     private function addDefaultValueSection(FormHelper $helper): void
     {
-        $helper->field(self::P_DEFAULT_STATE)
+        $helper->field(PropertyServiceInterface::P_DEFAULT_STATE)
             ->add(CalculationStateListType::class);
 
-        $helper->field(self::P_DEFAULT_CATEGORY)
+        $helper->field(PropertyServiceInterface::P_DEFAULT_CATEGORY)
             ->add(CategoryListType::class);
 
-        $helper->field(self::P_MIN_MARGIN)
-            ->updateAttribute('data-default', (float) $this->getDefaultValue(self::P_MIN_MARGIN) * 100)
+        $helper->field(PropertyServiceInterface::P_MIN_MARGIN)
+            ->updateAttribute('data-default', (float) $this->getDefaultValue(PropertyServiceInterface::P_MIN_MARGIN) * 100)
             ->percent(true)
             ->addPercentType(0);
     }
@@ -131,16 +132,16 @@ class ParametersType extends AbstractParametersType
     private function addSecuritySection(FormHelper $helper): void
     {
         // security
-        $helper->field(self::P_DISPLAY_CAPTCHA)
-            ->updateAttribute('data-default', $this->getDefaultValue(self::P_DISPLAY_CAPTCHA))
+        $helper->field(PropertyServiceInterface::P_DISPLAY_CAPTCHA)
+            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DISPLAY_CAPTCHA))
             ->addChoiceType([
                 'parameters.display.show' => true,
                 'parameters.display.hide' => false,
             ]);
 
-        $helper->field(self::P_MIN_STRENGTH)
+        $helper->field(PropertyServiceInterface::P_MIN_STRENGTH)
             ->label('password.min_strength')
-            ->updateAttribute('data-default', $this->getDefaultValue(self::P_MIN_STRENGTH))
+            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MIN_STRENGTH))
             ->add(MinStrengthType::class);
 
         // password options

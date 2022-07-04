@@ -17,11 +17,12 @@ use App\Enums\MessagePosition;
 use App\Enums\TableView;
 
 /**
- * Application service constants and default values.
+ * Interface for application and user properties.
  *
  * @see \App\Service\ApplicationService
+ * @see \App\Service\UserService
  */
-interface ApplicationServiceInterface
+interface PropertyServiceInterface
 {
     /**
      * The default action to trigger.
@@ -286,4 +287,102 @@ interface ApplicationServiceInterface
      * The property name for the user role rights (string).
      */
     public const P_USER_RIGHTS = 'user_rights';
+
+    /**
+     * Gets the display mode for table.
+     */
+    public function getDisplayMode(): TableView;
+
+    /**
+     * Gets the action to trigger within the entities.
+     */
+    public function getEditAction(): EntityAction;
+
+    /**
+     * Gets the position of the flash bag messages (default: 'bottom-right').
+     */
+    public function getMessagePosition(): MessagePosition;
+
+    /**
+     * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
+     */
+    public function getMessageTimeout(): int;
+
+    /**
+     * Returns a value indicating number of displayed calculation in the home page.
+     */
+    public function getPanelCalculation(): int;
+
+    /**
+     * Returns a value indicating if the default action is to edit the entity.
+     */
+    public function isActionEdit(): bool;
+
+    /**
+     * Returns a value indicating if the default action is to do nothing.
+     */
+    public function isActionNone(): bool;
+
+    /**
+     * Returns a value indicating if the default action is to show the entity.
+     */
+    public function isActionShow(): bool;
+
+    /**
+     * Returns if the flash bag message icon is displayed (default: true).
+     */
+    public function isMessageClose(): bool;
+
+    /**
+     * Returns if the flash bag message icon is displayed (default: true).
+     */
+    public function isMessageIcon(): bool;
+
+    /**
+     * Returns if the flash bag message progress bar is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function isMessageProgress(): bool;
+
+    /**
+     * Returns if the flash bag message subtitle is displayed (default: true).
+     */
+    public function isMessageSubTitle(): bool;
+
+    /**
+     * Returns if the flash bag message title is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function isMessageTitle(): bool;
+
+    /**
+     * Returns a value indicating if the catalog panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function isPanelCatalog(): bool;
+
+    /**
+     * Returns a value indicating if the month panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function isPanelMonth(): bool;
+
+    /**
+     * Returns a value indicating if the state panel is displayed in the home page.
+     */
+    public function isPanelState(): bool;
+
+    /**
+     * Gets a value indicating if the customer address is output within the PDF documents.
+     */
+    public function isPrintAddress(): bool;
+
+    /**
+     * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
+     */
+    public function isQrCode(): bool;
 }

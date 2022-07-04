@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Web;
 
 use App\Entity\User;
-use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Security\EntityVoter;
@@ -59,9 +59,9 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 
         $application = $this->getService(ApplicationService::class);
         $application->setProperties([
-            ApplicationServiceInterface::P_USER_RIGHTS => $userRight,
-            ApplicationServiceInterface::P_ADMIN_RIGHTS => $adminRight,
-            ApplicationServiceInterface::P_QR_CODE => true,
+            PropertyServiceInterface::P_USER_RIGHTS => $userRight,
+            PropertyServiceInterface::P_ADMIN_RIGHTS => $adminRight,
+            PropertyServiceInterface::P_QR_CODE => true,
         ]);
     }
 

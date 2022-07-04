@@ -82,9 +82,9 @@
 {%- set allow_delete = allow_delete is defined ? allow_delete : is_granted(ATTRIBUTE_DELETE, object_type) -%}
 {%- set allow_export = allow_export is defined ? allow_export : is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {# default action #}
-{%- set row_none = app.actionNone -%}
-{%- set row_show = allow_show and app.actionShow -%}
-{%- set row_edit = allow_edit and app.actionEdit -%}
+{%- set row_none = user_service.actionNone -%}
+{%- set row_show = allow_show and user_service.actionShow -%}
+{%- set row_edit = allow_edit and user_service.actionEdit -%}
 {%- set show_class = 'btn-show' ~ (row_show ? ' btn-default' : '') -%}
 {%- set edit_class = 'btn-edit' ~ (row_edit ? ' btn-default' : '') -%}
 {% if not row_edit and not row_none and allow_show %}

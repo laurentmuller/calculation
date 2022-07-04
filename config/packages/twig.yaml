@@ -16,6 +16,7 @@ twig:
         mailer_user_email: '%mailer_user_email%'
         link_dev: '%link_dev%'
         link_prod: '%link_prod%'
+        user_service: '@App\Service\UserService'
 
     date:
         format: d.m.Y H:i:s

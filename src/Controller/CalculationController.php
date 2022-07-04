@@ -339,7 +339,7 @@ class CalculationController extends AbstractEntityController
      */
     private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): ?string
     {
-        if ($this->getApplication()->isQrCode()) {
+        if ($this->getUserService()->isQrCode()) {
             $name = 'calculation_show';
             $parameters = ['id' => (int) $calculation->getId()];
 

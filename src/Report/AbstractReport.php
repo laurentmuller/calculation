@@ -52,7 +52,6 @@ abstract class AbstractReport extends PdfDocument
         parent::__construct($orientation, $unit, $size);
         $this->translator = $this->controller->getTranslator();
         $this->extension = new FormatExtension($this->translator);
-        $application = $controller->getApplication();
         $appName = $controller->getApplicationName();
 
         // meta-data
@@ -62,7 +61,8 @@ abstract class AbstractReport extends PdfDocument
         }
 
         // header
-        $this->header->setCustomer($application->getCustomer());
+        $service = $this->controller->getUserService();
+        $this->header->setCustomer($service->getCustomer());
 
         // footer
         $this->footer->setContent($appName, $controller->getApplicationOwnerUrl());

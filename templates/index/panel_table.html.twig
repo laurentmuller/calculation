@@ -18,8 +18,8 @@
 {%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
 {%- set single_page_pdf = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
-{%- set default_page = app.actionEdit ? edit_page : show_page -%}
-{%- set row_link = not app.actionNone and (edit_page or show_page) -%}
+{%- set default_page = user_service.actionEdit ? edit_page : show_page -%}
+{%- set row_link = not user_service.actionNone and (edit_page or show_page) -%}
 {%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
 {%- set is_calculations = calculations|length -%}
 

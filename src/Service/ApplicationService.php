@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\AbstractProperty;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -21,15 +20,13 @@ use App\Entity\Property;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\TableView;
-use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\StrengthInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Security\EntityVoter;
-use App\Traits\CacheTrait;
-use App\Traits\LoggerTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\PropertyTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -41,19 +38,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Service to manage application properties.
  */
-class ApplicationService extends AppVariable implements LoggerAwareInterface, ApplicationServiceInterface
+class ApplicationService extends AppVariable implements LoggerAwareInterface, PropertyServiceInterface
 {
-    use CacheTrait {
-        clearCache as traitClearCache;
-        saveDeferredCacheValue as traitSaveDeferredCacheValue;
-    }
-    use LoggerTrait;
-    use TranslatorTrait;
-
-    /**
-     * The cache saved key.
-     */
-    private const CACHE_SAVED = 'cache_saved';
+    use PropertyTrait;
 
     /**
      * Constructor.
@@ -70,22 +57,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         $this->setDebug($kernel->isDebug());
         $this->setAdapter($applicationCache);
         $this->setEnvironment($kernel->getEnvironment());
-    }
-
-    /**
-     * Clear this cache.
-     */
-    public function clearCache(): bool
-    {
-        if ($this->traitClearCache()) {
-            $this->logInfo($this->trans('application_service.clear_success'));
-
-            return true;
-        } else {
-            $this->logWarning($this->trans('application_service.clear_error'));
-
-            return false;
-        }
     }
 
     /**
@@ -353,7 +324,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the display mode for table.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -366,7 +337,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the action to trigger within the entities.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -389,7 +360,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the position of the flash bag messages (default: 'bottom-right').
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -402,7 +373,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -432,7 +403,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns a value indicating number of displayed calculation in the home page.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -507,95 +478,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets an array property.
-     *
-     * @param string $name    the property name to search for
-     * @param array  $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyArray(string $name, array $default): array
-    {
-        /** @psalm-var mixed $value */
-        $value = $this->getItemValue($name, $default);
-        if (\is_string($value)) {
-            /** @psalm-var mixed $value */
-            $value = \json_decode($value, true);
-            if (\JSON_ERROR_NONE !== \json_last_error()) {
-                return $default;
-            }
-        }
-        if (\is_array($value) && \count($value) === \count($default)) {
-            return $value;
-        }
-
-        return $default;
-    }
-
-    /**
-     * Gets a date property.
-     *
-     * @param string                  $name    the property name to search for
-     * @param \DateTimeInterface|null $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
-    {
-        $timestamp = $this->getPropertyInteger($name);
-        if (AbstractProperty::FALSE_VALUE !== $timestamp) {
-            $date = \DateTime::createFromFormat('U', (string) $timestamp);
-            if ($date instanceof \DateTime) {
-                return $date;
-            }
-        }
-
-        return $default;
-    }
-
-    /**
-     * Gets a float property.
-     *
-     * @param string $name    the property name to search for
-     * @param float  $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyFloat(string $name, float $default = 0.0): float
-    {
-        return (float) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets an integer property.
-     *
-     * @param string $name    the property name to search for
-     * @param int    $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyInteger(string $name, int $default = 0): int
-    {
-        return (int) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets a string property.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyString(string $name, ?string $default = null): ?string
-    {
-        /** @psalm-var mixed $value */
-        $value = $this->getItemValue($name, $default);
-        if (\is_string($value)) {
-            return $value;
-        }
-
-        return $default;
-    }
-
-    /**
      * Gets the last products update.
      *
      * @throws \Psr\Cache\InvalidArgumentException
@@ -633,37 +515,8 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns a value indicating if the default action is to edit the entity.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isActionEdit(): bool
-    {
-        return EntityAction::EDIT === $this->getEditAction();
-    }
-
-    /**
-     * Returns a value indicating if the default action is to do nothing.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isActionNone(): bool
-    {
-        return EntityAction::NONE === $this->getEditAction();
-    }
-
-    /**
-     * Returns a value indicating if the default action is to show the entity.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isActionShow(): bool
-    {
-        return EntityAction::SHOW === $this->getEditAction();
-    }
-
-    /**
-     * Gets the default product edit on new calculation.
+     * Gets a value indicating if the default product (if any)  must be edited
+     * when a new calculation is created.
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -699,7 +552,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns if the flash bag message icon is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -709,7 +562,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns if the flash bag message icon is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -719,7 +572,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns if the flash bag message progress bar is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -729,7 +582,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns if the flash bag message subtitle is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -739,7 +592,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns if the flash bag message title is displayed (default: true).
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -749,7 +602,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns a value indicating if the catalog panel is displayed in the home page.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -759,7 +612,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns a value indicating if the month panel is displayed in the home page.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -769,7 +622,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Returns a value indicating if the state panel is displayed in the home page.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -779,7 +632,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets a value indicating if the customer address is output within the PDF documents.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -789,20 +642,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Gets a boolean property.
-     *
-     * @param string $name    the property name to search for
-     * @param bool   $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isPropertyBoolean(string $name, bool $default = false): bool
-    {
-        return (bool) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -826,17 +666,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         }
 
         return $this;
-    }
-
-    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
-    {
-        if (!$this->traitSaveDeferredCacheValue($key, $value, $time)) {
-            $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -875,38 +704,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
     }
 
     /**
-     * Update the cache if needed.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function updateCache(): void
-    {
-        if (!$this->getCacheValue(self::CACHE_SAVED, false)) {
-            $this->updateAdapter();
-        }
-    }
-
-    /**
-     * Gets an item value.
-     *
-     * @param string $name    the item name
-     * @param mixed  $default the default value if the item is not found
-     *
-     * @return mixed the value, if hit; the default value otherwise
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function getItemValue(string $name, mixed $default): mixed
-    {
-        $item = $this->getCacheItem($name);
-        if (null !== $item && $item->isHit()) {
-            return $item->get();
-        }
-
-        return $default;
-    }
-
-    /**
      * Gets the property repository.
      *
      * @psalm-suppress UnnecessaryVarAnnotation
@@ -917,11 +714,6 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
         $repository = $this->manager->getRepository(Property::class);
 
         return $repository;
-    }
-
-    private function isDefaultValue(array $defaultProperties, string $name, mixed $value): bool
-    {
-        return \array_key_exists($name, $defaultProperties) && $defaultProperties[$name] === $value;
     }
 
     /**
@@ -951,16 +743,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Ap
      */
     private function updateAdapter(): void
     {
-        $this->clearCache();
         $properties = $this->manager->getRepository(Property::class)->findAll();
-        foreach ($properties as $property) {
-            $this->saveDeferredCacheValue($property->getName(), $property->getString());
-        }
-        $this->saveDeferredCacheValue(self::CACHE_SAVED, true);
-        if ($this->commitDeferredValues()) {
-            $this->logInfo($this->trans('application_service.commit_success'));
-        } else {
-            $this->logWarning($this->trans('application_service.commit_error'));
-        }
+        $this->saveProperties($properties);
     }
 }

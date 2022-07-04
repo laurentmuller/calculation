@@ -1368,8 +1368,8 @@ user:
     user: Utilisateur
   parameters:
     title: Préférences
-    description: Définition des préférences de l'application.
-    success: Les préférences de l'application ont été mises à jour avec succès.
+    description: Définition de vos préférences.
+    success: Vos préférences ont été mises à jour avec succès.
   show:
     title: Propriétés de l'utilisateur
   switch:

@@ -17,6 +17,13 @@ function setDefaultValues() {
             $this.val(value);
         }
     });
+
+    // special case for radio inputs
+    $('#edit-form .form-group[data-default]:has(:radio)').each(function () {
+        const $this = $(this);
+        const value = $this.data('default');
+        $this.find(`:radio[value="${value}"]`).setChecked(true);
+    });
 }
 
 /**
@@ -50,7 +57,7 @@ function displayNotification() {
 
             // title
             if (!$('#parameters_message_title').isChecked()) {
-               title = null;
+                title = null;
             }
 
             // display

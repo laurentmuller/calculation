@@ -1,13 +1,4 @@
 {% extends 'notification/notification.html.twig' %}
-{# policy #}
-{% macro output_policy(value) -%}
-{% for key, entries in value %}
-    <tr>
-        <td>{{ key }}</td>
-        <td>{{ entries|nl2br }}</td>
-    </tr>
-{%- endfor %}
-{% endmacro %}
 {# content #}
 {% block content %}
 <container>
@@ -19,19 +10,24 @@
 </container>
 <container>
     <table id="csp">
-        {% for key, value in context %}
-            {% if 'original-policy' == key %}
-                <tr>
-                    <td colspan="2"><u>{{ key }}</u></td>
-                </tr>
-                {{ _self.output_policy(value) }}
-            {% else %}
-                <tr>
-                    <td><u>{{ key }}</u></td>
-                    <td>{{- value -}}</td>
-                </tr>
-            {% endif %}
-        {% endfor %}
+    {% for key, value in context %}
+        {% if 'original-policy' == key %}
+            <tr>
+                <td colspan="2"><u>{{ key }}</u></td>
+            </tr>
+            {% for policy_key, policy_values in value %}
+            <tr>
+                <td>{{ policy_key }}</td>
+                <td>{{ policy_values|nl2br }}</td>
+            </tr>
+            {%- endfor %}
+        {% else %}
+            <tr>
+                <td><u>{{ key }}</u></td>
+                <td>{{- value -}}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
     </table>
 </container>
 {% endblock %}

@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Service\LogService;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Psr\Log\LogLevel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -66,9 +67,12 @@ class Log extends AbstractEntity
     public function getColor(): string
     {
         return match ($this->level) {
-            'debug' => 'var(--secondary)',
-            'warning' => 'var(--warning)',
-            'error', 'critical', 'alert', 'emergency' => 'var(--danger)',
+            LogLevel::ALERT,
+            LogLevel::CRITICAL,
+            LogLevel::EMERGENCY,
+            LogLevel::ERROR => 'var(--danger)',
+            LogLevel::WARNING => 'var(--warning)',
+            LogLevel::DEBUG => 'var(--secondary)',
             default => 'var(--info)',
         };
     }

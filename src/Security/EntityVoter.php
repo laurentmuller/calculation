@@ -19,7 +19,6 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
-use Doctrine\ORM\Mapping\Entity;
 use Elao\Enum\FlagBag;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

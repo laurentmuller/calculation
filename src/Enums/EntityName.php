@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace App\Enums;
 
 use App\Interfaces\SortableEnumInterface;
-use App\Util\Utils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\ExtrasTrait;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
+use Symfony\Component\String\UnicodeString;
 
 /**
  * The entity name enumeration.
@@ -140,21 +140,17 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
      */
     public static function tryFromMixed(mixed $subject): ?EntityName
     {
-        if (\is_string($subject)) {
-            $name = $subject;
+        if (\is_scalar($subject)) {
+            $name = (string) $subject;
         } elseif (\is_object($subject)) {
             $name = $subject::class;
-        } elseif (\is_scalar($subject)) {
-            $name = (string) $subject;
         } else {
             return null;
         }
-        if (false !== ($pos = \strrpos($name, '\\'))) {
-            $name = \substr($name, $pos + 1);
-        }
-        if (!Utils::startWith($name, self::ENTITY_PREFIX)) {
-            $name = self::ENTITY_PREFIX . $name;
-        }
+        $name = (new UnicodeString($name))
+            ->afterLast('\\')
+            ->ensureStart(self::ENTITY_PREFIX)
+            ->toString();
 
         return EntityName::tryFrom($name);
     }

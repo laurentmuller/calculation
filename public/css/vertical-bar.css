@@ -1,0 +1,100 @@
+@import 'style.css';
+
+/**! compression tag for ftp-deployment */
+
+.navbar-vertical {
+    min-width: 17rem;
+    width: 17rem;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s;
+    overflow-y: auto;
+    flex-direction: column !important;
+    text-align: left !important;
+    justify-content: initial;
+    display: block;
+}
+
+.navbar-vertical::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+}
+.navbar-vertical::-webkit-scrollbar-track {
+    background: rgba(0,0,0,.1);
+    border-radius: 0
+}
+.navbar-vertical::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 5px;
+    background: rgba(0,0,0,.25);
+    -webkit-transition: color .2s ease;
+    transition: color .2s ease
+}
+.navbar-vertical::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(0,0,0,.15)
+}
+.navbar-vertical::-webkit-scrollbar-thumb:hover {
+    background: rgba(128,135,139,.8)
+}
+
+.navbar-vertical .navbar-nav {
+    list-style: none;
+    flex-direction: column !important;
+}
+
+.navbar-vertical .dropdown-header {
+    text-align: left;
+    font-weight: bold;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.navbar-vertical ul ul {
+    padding-left: 1rem;
+}
+
+.navbar-vertical .nav-item.nav-item-dropdown > ul {
+    display: none;
+}
+.navbar-vertical .nav-item.nav-item-dropdown.show > ul {
+    /*display: initial;*/
+}
+
+.navbar-vertical.active {
+    margin-left: -17rem;
+}
+
+.page-content {
+    width: calc(100% - 17rem);
+    margin-left: 17rem;
+    transition: all 0.4s;
+}
+
+.page-content.active {
+    width: 100%;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .navbar-vertical {
+        margin-left: -17rem;
+    }
+
+    .navbar-vertical.active {
+        margin-left: 0;
+    }
+
+    .page-content {
+        width: 100%;
+        margin: 0;
+    }
+
+    .page-content.active {
+        margin-left: 17rem;
+        width: calc(100% - 17rem);
+    }
+}

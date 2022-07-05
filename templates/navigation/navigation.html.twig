@@ -31,6 +31,13 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
+            {% if is_test -%}
+                <li class="nav-item">
+                    <a href="#" id="sidebarCollapse" class="nav-link">
+                        <span class="navbar-toggler-icon" title="Afficher / Masquer le menu"></span>
+                    </a>
+                </li>
+            {% endif %}
             {% if is_granted_calculation -%}
                 {{ icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
             {% endif %}

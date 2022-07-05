@@ -630,6 +630,15 @@ class TestController extends AbstractController
     }
 
     /**
+     * Show vertical menu.
+     */
+    #[Route(path: '/vertical', name: 'test_vertical')]
+    public function verticalBar(): Response
+    {
+        return $this->render('test/vertical-bar.html.twig');
+    }
+
+    /**
      * @return array<int, array{code: string, name: string}>
      */
     private function getCurrencies(): array

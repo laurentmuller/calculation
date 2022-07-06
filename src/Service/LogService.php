@@ -17,7 +17,6 @@ use App\Traits\CacheTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
-use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -290,43 +289,31 @@ class LogService
          *      channels: array<string, int>} $entries */
         $entries = [];
 
-        // file
-        $item = $this->getCacheItem(self::KEY_FILE);
-        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+        /** @psalm-var string|null $file */
+        $file = $this->getCacheValue(self::KEY_FILE);
+        if (null === $file) {
             return false;
         }
-        /** @psalm-var string $file */
-        $file = $item->get();
         $entries[self::KEY_FILE] = $file;
 
-        // logs
-        $item = $this->getCacheItem(self::KEY_LOGS);
-        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+        /** @psalm-var array<int, Log>|null */
+        $logs = $this->getCacheValue(self::KEY_LOGS);
+        if (null === $logs) {
             return false;
         }
-
-        /** @psalm-var array<int, Log> $logs */
-        $logs = $item->get();
         $entries[self::KEY_LOGS] = $logs;
 
-        // levels
-        $item = $this->getCacheItem(self::KEY_LEVELS);
-        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+        /** @psalm-var array<string, int>|null $levels */
+        $levels = $this->getCacheValue(self::KEY_LEVELS);
+        if (null === $levels) {
             return false;
         }
 
-        /** @psalm-var array<string, int> $levels */
-        $levels = $item->get();
-        $entries[self::KEY_LEVELS] = $levels;
-
-        // channels
-        $item = $this->getCacheItem(self::KEY_CHANNELS);
-        if (!$item instanceof CacheItemInterface || !$item->isHit()) {
+        /** @psalm-var array<string, int>|null $channels */
+        $channels = $this->getCacheItem(self::KEY_CHANNELS);
+        if (null === $channels) {
             return false;
         }
-
-        /** @psalm-var array<string, int> $channels */
-        $channels = $item->get();
         $entries[self::KEY_CHANNELS] = $channels;
 
         return $entries;

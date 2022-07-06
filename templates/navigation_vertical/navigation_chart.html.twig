@@ -1,0 +1,19 @@
+{# chart menu #}
+{% import 'macros/_icons.html.twig' as icons %}
+{# macros #}
+{% macro title(icon, text, domain) -%}
+    <h6 class="dropdown-header text-uppercase">
+        {{ icons.icon(icon, text, domain) }}
+    </h6>
+{% endmacro %}
+{% if is_granted_calculation %}
+    {{ _self.title('chart-area', 'menu_graphics', 'chart') }}
+    <ul class="navbar-nav">
+        {{ icons.navItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
+        {{ icons.navItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
+        {% if is_test %}
+            {{ icons.dropdownSeparator }}
+            {{ icons.navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
+        {% endif %}
+    </ul>
+{% endif %}

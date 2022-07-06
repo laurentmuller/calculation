@@ -329,6 +329,20 @@ class AjaxController extends AbstractController
     }
 
     /**
+     * Save navigation parameters.
+     */
+    #[IsGranted('ROLE_USER')]
+    #[Route(path: '/navigation', name: 'ajax_save_navigation')]
+    public function saveNavigation(Request $request): JsonResponse
+    {
+        $active = $this->getRequestBoolean($request, 'active');
+        $response = $this->json(true);
+        $this->setCookie($response, 'ACTIVE', $active);
+
+        return $response;
+    }
+
+    /**
      * Sets a session attribute.
      *
      * The request must contains 'name' and 'value' parameters.

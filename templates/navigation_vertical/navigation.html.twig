@@ -1,0 +1,80 @@
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+{# macros #}
+{% macro title(icon, text, domain) -%}
+    <h6 class="dropdown-header text-uppercase">
+        {{ icons.icon(icon, text, domain) }}
+    </h6>
+{% endmacro %}
+{# parameters #}
+{%- set is_env_dev = app_mode == 'dev' -%}
+{%- set is_env_prod = app_mode == 'prod' -%}
+{%- set is_env_local = app_mode == 'local' -%}
+{%- set is_dev = app.debug or is_env_dev -%}
+{%- set is_admin = is_granted('ROLE_ADMIN') -%}
+{%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
+{%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
+{%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+{%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
+{# rights #}
+{%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
+{%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
+{%- set is_granted_task = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) -%}
+{%- set is_granted_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
+{%- set is_granted_group = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) -%}
+{%- set is_granted_calculation_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
+{%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
+<!-- vertical navbar -->
+{{- asset_css('css/vertical-bar.css') }}
+<div class="navbar-vertical navbar navbar-dark bg-dark{{ active }}" style="padding-bottom: 30px;" data-url="{{ url('ajax_save_navigation') }}">
+    <div class="py-4 px-3 mb-1">
+        <div class="media d-flex align-items-center"><img src="{{ asset('/images/logo/logo-customer-96x96.png') }}" alt="{{ app.customerName }}" width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+            <div class="media-body">
+                <h4 class="m-0 text-white">{{ app.customerName }}</h4>
+                <p class="font-weight-light text-muted  mb-0">Pub Prod Print</p>
+            </div>
+        </div>
+    </div>
+    <ul class="navbar-nav mb-0">
+        {{ icons.navItem(path('homepage'), 'index.title', 'home fa-solid') }}
+        {{ include('navigation_vertical/navigation_data.html.twig') }}
+        {{ include('navigation_vertical/navigation_chart.html.twig') }}
+        {{ include('navigation_vertical/navigation_tools.html.twig') }}
+    </ul>
+    <ul class="navbar-nav mb-0">
+        <li class="nav-item nav-item-dropdown">
+            <a class="nav-link nav-link-toggle dropdown-toggle" href="#" role="button" aria-expanded="false">
+                Dropdown 2
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="fa fa-pie-chart fa-fw"></i> Item 1</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="fa fa-picture-o fa-fw"></i> Item 2</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Item 3</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Item 4</a>
+                </li>
+                <li class="nav-item nav-item-dropdown">
+                    <a class="nav-link nav-link-toggle dropdown-toggle" href="#" role="button" aria-expanded="false">
+                        <i class="fa fa-bar-chart fa-fw"></i> Item 5
+                    </a>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link"><i class="fa fa-pie-chart fa-fw"></i> Item 5.1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Item 5.2</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

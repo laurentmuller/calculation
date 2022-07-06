@@ -1,0 +1,26 @@
+{# tools menu #}
+{% import 'macros/_icons.html.twig' as icons %}
+{# macros #}
+{% macro title(icon, text, domain) -%}
+    <h6 class="dropdown-header text-uppercase">
+        {{ icons.icon(icon, text, domain) }}
+    </h6>
+{% endmacro %}
+{% if is_granted_data -%}
+    {{ _self.title('tools', 'index.menu_tools') }}
+    <ul class="navbar-nav">
+        {{ icons.navItem(path('search'), 'search.title', 'search') }}
+        {% if is_admin %}
+            {{ icons.navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
+            {{ icons.navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
+            {{ icons.dropdownSeparator }}
+            {{ icons.navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
+            {{ icons.navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
+            {{ icons.navItem(path('empty_table'), 'empty.title', 'file-code far') }}
+            {%- if is_granted_task -%}
+                {{ icons.dropdownSeparator }}
+                {{ icons.navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
+            {% endif -%}
+        {% endif %}
+    </ul>
+{% endif %}

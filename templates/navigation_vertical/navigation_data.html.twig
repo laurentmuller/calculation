@@ -1,0 +1,38 @@
+{# data menu #}
+{% import 'macros/_icons.html.twig' as icons %}
+{# macros #}
+{% macro title(icon, text, domain) -%}
+    <h6 class="dropdown-header text-uppercase">
+        {{ icons.icon(icon, text, domain) }}
+    </h6>
+{% endmacro %}
+{% if is_granted_data -%}
+    {{ _self.title('database', 'index.menu_data') }}
+    <ul class="navbar-nav">
+        {% if is_granted_calculation -%}
+            {{ icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
+        {% endif %}
+        {% if is_granted_product -%}
+            {{ icons.navItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}
+        {% endif -%}
+        {% if is_granted_task -%}
+            {{ icons.navItem(path('task_table'), 'task.list.title', ICON_TASK) }}
+        {% endif -%}
+        {% if is_granted_category -%}
+            {{ icons.navItem(path('category_table'), 'category.list.title', ICON_CATEGORY) }}
+        {% endif -%}
+        {% if is_granted_group -%}
+            {{ icons.navItem(path('group_table'), 'group.list.title', ICON_GROUP) }}
+        {% endif -%}
+        {% if is_granted_calculation_state -%}
+            {{ icons.navItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATION_STATE) }}
+        {% endif -%}
+        {% if is_granted_global_margin -%}
+            {{ icons.navItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
+        {% endif -%}
+        {% if is_granted_customer %}
+            {{ icons.navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
+        {% endif %}
+
+    </ul>
+{% endif %}

@@ -8,7 +8,7 @@
     top: 0;
     left: 0;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s;
+    transition: margin-left 0.4s;
     overflow-y: auto;
     flex-direction: column !important;
     text-align: left !important;
@@ -16,6 +16,7 @@
     display: block;
 }
 
+/* scrollbar */
 .navbar-vertical::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 10px;
@@ -43,9 +44,11 @@
     background: rgba(128, 135, 139, .8)
 }
 
+/* menus */
 .navbar-vertical .navbar-nav {
     list-style: none;
     flex-direction: column !important;
+    margin-bottom: 0;
 }
 
 .navbar-vertical .dropdown-header {
@@ -55,26 +58,47 @@
     padding-right: 0;
 }
 
-.navbar-vertical ul ul {
-    padding-left: 1rem;
-}
-
-.navbar-vertical .nav-item.nav-item-dropdown > ul {
-    display: none;
-}
-
-.navbar-vertical .nav-item.nav-item-dropdown.show > ul {
-    /*display: initial;*/
-}
-
 .navbar-vertical.active {
     margin-left: -17rem;
 }
 
+.navbar-vertical ul ul {
+    padding-left: 1rem;
+}
+
+.navbar-vertical .nav-link-toggle::after {
+    display: inline-block;
+    content: "";
+    float: right;
+    /*margin-top: 0.6em;*/
+    margin-top: 0.7em;
+    transition: all 0.1s;
+
+    /* left arrow */
+    border-right: 0.3em solid;
+    border-top: 0.3em solid transparent;
+    border-bottom: 0.3em solid transparent;
+    border-left: 0;
+
+    /* bottom arrow
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-left: 0.3em solid transparent;
+    border-bottom: 0;
+     */
+}
+
+.navbar-vertical .nav-link-toggle.nav-link-toggle-show::after {
+    /*margin-top: 0.7em;*/
+    margin-top: 0.6em;
+    transform: rotate(-90deg);
+}
+
+/* content */
 .page-content {
     width: calc(100% - 17rem);
     margin-left: 17rem;
-    transition: all 0.4s;
+    transition: margin-left 0.4s;
 }
 
 .page-content.active {
@@ -82,6 +106,15 @@
     margin: 0;
 }
 
+.page-content .sidebar-toggle {
+    transition: all 0.8s;
+}
+
+.page-content.active .sidebar-toggle {
+    transform: rotate(180deg);
+}
+
+/* small resolution */
 @media (max-width: 768px) {
     .navbar-vertical {
         margin-left: -17rem;

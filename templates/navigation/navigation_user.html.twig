@@ -18,6 +18,7 @@
             {{ icons.dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
             {{ icons.dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) }}
         {% endif %}
+        {#
         {% if is_admin -%}
             {{ icons.dropdownSeparator }}
             {{ icons.dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
@@ -30,10 +31,12 @@
         {% if is_super_admin -%}
             {{ icons.dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'unlock-alt') }}
         {% endif %}
+        #}
         {% if is_previous_admin -%}
             {{ icons.dropdownSeparator }}
             {{ icons.dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
         {% endif %}
+
         {# switch environment #}
         {% if is_env_dev -%}
             {{ icons.dropdownSeparator }}

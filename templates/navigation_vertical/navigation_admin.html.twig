@@ -1,0 +1,24 @@
+{# admin menu #}
+{% import 'macros/_icons.html.twig' as icons %}
+{% if is_admin -%}
+<li class="nav-item nav-item-dropdown" id="admin">
+    <a class="nav-link nav-link-toggle font-weight-bold" href="#" role="button" aria-expanded="false">
+        {{- icons.icon('gear fa-solid', 'index.menu_admin') -}}
+    </a>
+    <ul class="navbar-nav d-none">
+        {{ icons.navItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
+        {{ icons.navItem(path('log_table'), 'log.title', ICON_LOG) }}
+        {{ icons.navItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
+        {{ icons.dropdownSeparator }}
+        {{ icons.navItem(path('user_table'), 'user.list.title', ICON_USER) }}
+        {{ icons.navItem(path('admin_rights_user'), 'index.menu_rights_user', 'unlock-alt') }}
+        {% if is_super_admin -%}
+            {{ icons.navItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'unlock-alt') }}
+        {% endif %}
+        {% if is_previous_admin -%}
+            {{ icons.dropdownSeparator }}
+            {{ icons.navItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
+        {% endif %}
+    </ul>
+</li>
+{% endif %}

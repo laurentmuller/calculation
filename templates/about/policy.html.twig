@@ -9,6 +9,7 @@
 
 {% block card_container_class authenticate ? '' : ' mt-3' %}
 {% block navigation -%}{% if authenticate %}{{ parent() }}{% endif %}{%- endblock %}
+{% block vertical_navigation -%}{% if authenticate %}{{ parent() }}{% endif %}{%- endblock %}
 
 {% block card_body %}
 {% include 'about/policy_content.html.twig' with {'link': true} %}

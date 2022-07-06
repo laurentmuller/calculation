@@ -30,6 +30,9 @@ function applyTheme() {
         // update toolbar
         $('#navigation').setClass('navbar navbar-expand-md ' + background);
 
+        // update vertical toolbar
+        $('.navbar-vertical.navbar').setClass('navbar-vertical navbar ' + background);
+
         // save values
         $form.data('theme', theme).data('background', background);
     }

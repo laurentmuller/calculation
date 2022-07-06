@@ -1,14 +1,11 @@
 {# data menu #}
 {% import 'macros/_icons.html.twig' as icons %}
-{# macros #}
-{% macro title(icon, text, domain) -%}
-    <h6 class="dropdown-header text-uppercase">
-        {{ icons.icon(icon, text, domain) }}
-    </h6>
-{% endmacro %}
 {% if is_granted_data -%}
-    {{ _self.title('database', 'index.menu_data') }}
-    <ul class="navbar-nav">
+<li class="nav-item nav-item-dropdown" id="data">
+    <a class="nav-link nav-link-toggle nav-link-toggle-show font-weight-bold" href="#" role="button" aria-expanded="true">
+        {{- icons.icon('database', 'index.menu_data') -}}
+    </a>
+    <ul class="navbar-nav d-block">{#  style="display: block;" #}
         {% if is_granted_calculation -%}
             {{ icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
         {% endif %}
@@ -33,6 +30,6 @@
         {% if is_granted_customer %}
             {{ icons.navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
         {% endif %}
-
     </ul>
+</li>
 {% endif %}

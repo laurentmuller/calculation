@@ -4,7 +4,7 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{%- set active = app.request.cookies.get('ACTIVE', false) ? ' active': '' -%}
+{%- set active = app.request.cookies.get('ACTIVE', false) ? ' active' : '' -%}
 {# head #}
 <head>
 <meta charset="utf-8" />
@@ -57,14 +57,12 @@
         {% block body -%}{%- endblock %}
     </div>
 </div>
-
 {# messages #}
 {% block flashbag -%}{% include 'flashbag.html.twig' %}{%- endblock %}
 {# back to top #}
 {% block back_to_top -%}{% include 'back_to_top.html.twig' %}{%- endblock %}
 {# footer #}
 {% block footer -%}{% include 'footer.html.twig' %}{%- endblock %}
-{# java scripts #}
 {# java scripts #}
 {% block javascripts %}
 {% if app.debug %}
@@ -76,7 +74,7 @@
 {{ asset_js('js/extensions/string-extensions.js') }}
 {{ asset_js('js/plugins/plugin-toast.js') }}
 {{ asset_js('js/application/core_common.js') }}
-    {{ asset_js('js/test/vertical-bar.js') }}
+{{ asset_js('js/application/vertical-bar.js') }}
 {% else %}
 {{ asset_js('js/core_common.js') }}
 {% endif %}

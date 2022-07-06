@@ -623,6 +623,7 @@ index:
   menu_test: Tests
   menu_theme: Thème (%name%)
   menu_tools: Outils
+  menu_admin: Administration
   panel_count: Catalogue
   panel_last: Dernières calculations
   panel_month: Calculations par mois

@@ -24,20 +24,17 @@
 {# navigation #}
 <nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
     <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
-         {{- icons.icon('home') -}}
+        {{- icons.icon('home') -}}
+    </a>
+    <a href="#" class="navbar-brand sidebar-toggle">
+        <span class="navbar-toggler-icon" title="{{ 'index.toggle_navigation'|trans }}"></span>
     </a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
-            {% if is_test -%}
-                <li class="nav-item">
-                    <a href="#" id="sidebarCollapse" class="nav-link">
-                        <span class="navbar-toggler-icon" title="Afficher / Masquer le menu"></span>
-                    </a>
-                </li>
-            {% endif %}
+            {#
             {% if is_granted_calculation -%}
                 {{ icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
             {% endif %}
@@ -45,6 +42,7 @@
             {% include 'navigation/navigation_tools.html.twig' %}
             {% include 'navigation/navigation_chart.html.twig' %}
             {% include 'navigation/navigation_test.html.twig' %}
+            #}
         </ul>
         <ul class="navbar-nav">
             {% include 'navigation/navigation_search.html.twig' %}

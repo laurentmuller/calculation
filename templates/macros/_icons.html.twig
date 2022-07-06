@@ -55,6 +55,10 @@
 <li class="nav-item">{{ _self.link(href, text, 'nav-link', icon, null, domain, parameters) }}</li>
 {%- endmacro %}
 
+{% macro navItemExternal(href, text, icon, domain=null, parameters=[]) -%}
+    <li class="nav-item">{{ _self.linkExternal(href, text, 'nav-link', icon, null, domain, parameters) }}</li>
+{%- endmacro %}
+
 {% macro dropdownItem(href, text, icon, domain=null, parameters=[]) -%}
 {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
 {%- endmacro %}
@@ -164,3 +168,9 @@
     </div>
 </div>
 {%- endmacro %}
+
+{% macro vertical_title(icon, text, domain) -%}
+<h6 class="dropdown-header text-uppercase">
+    {{- _self.icon(icon, text, domain) -}}
+</h6>
+{% endmacro %}

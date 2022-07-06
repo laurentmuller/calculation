@@ -23,3 +23,4 @@
  * Common Files
  */
 <!--#include file="application/core_common.js" -->
+<!--#include file="application/vertical-bar.js" -->

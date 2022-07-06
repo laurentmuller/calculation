@@ -308,9 +308,10 @@ class LogService
         if (null === $levels) {
             return false;
         }
+        $entries[self::KEY_LEVELS] = $levels;
 
         /** @psalm-var array<string, int>|null $channels */
-        $channels = $this->getCacheItem(self::KEY_CHANNELS);
+        $channels = $this->getCacheValue(self::KEY_CHANNELS);
         if (null === $channels) {
             return false;
         }

@@ -130,8 +130,8 @@ class SearchService
     /**
      * Gets the number of returned rows.
      *
-     * @param string|null $search the term to search
-     * @param string|null $entity the entity to search in or null for all
+     * @param ?string $search the term to search
+     * @param ?string $entity the entity to search in or null for all
      *
      * @return int the number of rows
      *
@@ -193,10 +193,10 @@ class SearchService
      *
      * Do nothing if the search term is empty or if the limit is equal to 0.
      *
-     * @param string|null $search the term to search
-     * @param string|null $entity the entity name to search in or null for all
-     * @param int         $limit  the number of rows to return or -1 for all
-     * @param int         $offset the zero based index of the first row to return
+     * @param ?string $search the term to search
+     * @param ?string $entity the entity name to search in or null for all
+     * @param int     $limit  the number of rows to return or -1 for all
+     * @param int     $offset the zero based index of the first row to return
      *
      * @return array the array of results for the given search (can be empty)
      * @psalm-return array<array{
@@ -346,9 +346,9 @@ class SearchService
     /**
      * Creates a query builder.
      *
-     * @param string      $class   the entity class
-     * @param string      $field   the field name
-     * @param string|null $content the field content to search in or null to use the field name
+     * @param string  $class   the entity class
+     * @param string  $field   the field name
+     * @param ?string $content the field content to search in or null to use the field name
      * @psalm-param class-string $class
      *
      * @throws \ReflectionException
@@ -376,9 +376,9 @@ class SearchService
     /**
      * Creates the native query and returns the array result.
      *
-     * @param string      $search the term to search
-     * @param string|null $entity the entity to search in or null for all
-     * @param string      $extra  a SQL statement to add to the default native SELECT SQL statement
+     * @param string  $search the term to search
+     * @param ?string $entity the entity to search in or null for all
+     * @param string  $extra  a SQL statement to add to the default native SELECT SQL statement
      *
      * @psalm-return array<array{
      *      id: int,

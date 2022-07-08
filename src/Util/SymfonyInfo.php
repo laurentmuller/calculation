@@ -371,8 +371,8 @@ final class SymfonyInfo
     /**
      * Formats the given path within the given base path.
      *
-     * @param string      $path    the path
-     * @param string|null $baseDir the root path
+     * @param string  $path    the path
+     * @param ?string $baseDir the root path
      *
      * @return string the relative path
      */

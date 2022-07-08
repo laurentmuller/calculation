@@ -82,7 +82,7 @@ class CalculationState extends AbstractEntity
     /**
      * Clone this calculation state.
      *
-     * @param string|null $code the new code
+     * @param ?string $code the new code
      */
     public function clone(?string $code = null): self
     {

@@ -247,9 +247,9 @@ abstract class AbstractHttpClientService
     /**
      * Sets the last error.
      *
-     * @param int             $code    the error code
-     * @param string          $message the error message
-     * @param \Exception|null $e       the optional source exception
+     * @param int         $code    the error code
+     * @param string      $message the error message
+     * @param ?\Exception $e       the optional source exception
      *
      * @return bool this function returns always false
      *

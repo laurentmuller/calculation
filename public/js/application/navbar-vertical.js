@@ -1,7 +1,32 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Save the navigation_horizontal state.
+ * Gets the navigation state.
+ */
+function getNavigationState() {
+    'use strict';
+    const menus = {
+        'menu_active': $('.navbar-vertical').hasClass('active')
+    };
+
+    let visible;
+    let wasVisible = false;
+    $('.navbar-vertical .nav-item.nav-item-dropdown[id]').each(function () {
+        const $this = $(this);
+        visible = $this.find('.navbar-nav:first').is(':visible');
+        // check that only one menu is visible
+        if (wasVisible && visible) {
+            visible = false;
+        } else if (!wasVisible && visible) {
+            wasVisible = true;
+        }
+        menus[$(this).attr('id')] = visible;
+    });
+    return menus;
+}
+
+/**
+ * Save the navigation state.
  */
 function saveNavigationState() {
     'use strict';
@@ -15,21 +40,6 @@ function saveNavigationState() {
 }
 
 /**
- * Gets the navigation_horizontal state.
- */
-function getNavigationState() {
-    'use strict';
-    const menus = {
-        'menu_active': $('.navbar-vertical').hasClass('active')
-    };
-    $('.navbar-vertical .nav-item.nav-item-dropdown[id]').each(function () {
-        const $this = $(this);
-        menus[$(this).attr('id')] = $this.find('.navbar-nav:first').is(':visible');
-    });
-    return menus;
-}
-
-/**
  * Collapse all menus
  */
 function collapseAllMenus() {
@@ -39,7 +49,7 @@ function collapseAllMenus() {
         const title = $('.navbar-vertical').data('show');
         $toggle.removeClass('nav-link-toggle-show').attr('aria-expanded', 'false')
             .attr('title', title);
-        $('.navbar-vertical .nav-item-dropdown .navbar-nav:visible').hide(200);
+        $('.navbar-vertical .nav-item-dropdown .navbar-nav:visible').hide(350);
     }
 }
 
@@ -55,13 +65,13 @@ function toggleSidebar(e) {
     $selector.toggleClass('active');
     const active = $selector.hasClass('active');
     const $navigation = $('.navbar-horizontal');
-    $navigation.toggleClass('pl-0', !active);
+    // $navigation.toggleClass('pl-0', !active);
     $('.dropdown-menu.show, .dropdown.show').removeClass('show');
     const $toggle = $('.navbar-horizontal .nav-item-horizontal,.navbar-horizontal .navbar-brand');
     if (active) {
-        $toggle.show(200);
+        $toggle.show(350);
     } else {
-        $toggle.hide(200);
+        $toggle.hide(350);
     }
     const title = active ? $navigation.data('show') : $navigation.data('hide');
     $('.sidebar-toggle').attr('title', title);
@@ -86,7 +96,7 @@ function toggleMenu(e) {
         collapseAllMenus();
     }
     $link.toggleClass('nav-link-toggle-show');
-    $menu.toggle(400, function () {
+    $menu.toggle(350, function () {
         const $navbar = $('.navbar-vertical');
         const title = visible ? $navbar.data('show') : $navbar.data('hide');
         $link.attr('aria-expanded', String(visible)).attr('title', title);

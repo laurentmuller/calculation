@@ -447,8 +447,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      *
-     * @param File|null $imageFile the file
-     * @param bool      $update    true to update the modification date
+     * @param ?File $imageFile the file
+     * @param bool  $update    true to update the modification date
      */
     public function setImageFile(?File $imageFile = null, bool $update = true): self
     {

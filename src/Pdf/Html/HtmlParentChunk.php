@@ -32,8 +32,8 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     /**
      * Constructor.
      *
-     * @param string               $name   the tag name
-     * @param HtmlParentChunk|null $parent the parent chunk
+     * @param string           $name   the tag name
+     * @param ?HtmlParentChunk $parent the parent chunk
      */
     public function __construct(protected string $name, ?self $parent = null)
     {
@@ -69,7 +69,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     /**
      * Finds the first child for the given the tag names.
      *
-     * @return AbstractHtmlChunk|null the child, if found; <code>null</code> otherwise
+     * @return ?AbstractHtmlChunk the child, if found; <code>null</code> otherwise
      */
     public function findChild(string ...$names): ?AbstractHtmlChunk
     {

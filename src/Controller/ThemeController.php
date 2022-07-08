@@ -90,10 +90,10 @@ class ThemeController extends AbstractController
     /**
      * Update a response by adding or removing a cookie.
      *
-     * @param Response    $response the response to update
-     * @param string      $name     the cookie name
-     * @param string|null $value    the cookie value or null to remove
-     * @param int         $days     the number of days the cookie expires after
+     * @param Response $response the response to update
+     * @param string   $name     the cookie name
+     * @param ?string  $value    the cookie value or null to remove
+     * @param int      $days     the number of days the cookie expires after
      */
     private function updateCookie(Response $response, string $name, ?string $value, int $days = 30): self
     {

@@ -50,10 +50,10 @@ final class FormatUtils
      * Format a date for the current locale; ignoring the time part.
      *
      * @param \DateTimeInterface|int|null             $date     the date to format
-     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null                             $pattern  the optional pattern to use when formatting
+     * @param ?string                                 $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted date or null if formatting failed or if the date is null
      */
@@ -66,11 +66,11 @@ final class FormatUtils
      * Format a date and time for the current locale.
      *
      * @param \DateTimeInterface|int|null             $date     the date and time to format
-     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param int|null                                $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param ?int                                    $timetype the type of time formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null                             $pattern  the optional pattern to use when formatting
+     * @param ?string                                 $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
      */
@@ -138,10 +138,10 @@ final class FormatUtils
      * Format a time for the current locale; ignoring the date part.
      *
      * @param \DateTimeInterface|int|null             $date     the time to format
-     * @param int|null                                $timetype the type of date formatting, one of the format type constants or null to use default
+     * @param ?int                                    $timetype the type of date formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null                             $pattern  the optional pattern to use when formatting
+     * @param ?string                                 $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted time or null if formatting failed or if the date is null
      */
@@ -153,11 +153,11 @@ final class FormatUtils
     /**
      * Creates a date formatter for the current locale.
      *
-     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param int|null                                $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param ?int                                    $timetype the type of time formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null                             $pattern  the optional pattern to use when formatting
+     * @param ?string                                 $pattern  the optional pattern to use when formatting
      */
     public static function getDateFormatter(?int $datetype = null, ?int $timetype = null, \IntlTimeZone|\DateTimeZone|string|null $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null): \IntlDateFormatter
     {

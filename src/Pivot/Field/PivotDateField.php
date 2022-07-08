@@ -40,9 +40,9 @@ class PivotDateField extends PivotField
     /**
      * Constructor.
      *
-     * @param string      $name   the field name
-     * @param string      $format the format used to extract the date part
-     * @param string|null $title  the field title
+     * @param string  $name   the field name
+     * @param string  $format the format used to extract the date part
+     * @param ?string $title  the field title
      */
     public function __construct(protected string $name, protected string $format, protected ?string $title = null)
     {

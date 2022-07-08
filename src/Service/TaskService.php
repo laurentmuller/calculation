@@ -207,8 +207,8 @@ class TaskService implements \JsonSerializable
     /**
      * Sets the task.
      *
-     * @param Task|null $task      the task to set
-     * @param bool      $selectAll true to select all task items for the given task
+     * @param ?Task $task      the task to set
+     * @param bool  $selectAll true to select all task items for the given task
      */
     public function setTask(?Task $task, bool $selectAll = false): self
     {

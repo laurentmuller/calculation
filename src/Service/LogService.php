@@ -96,10 +96,10 @@ class LogService
     /**
      * Filters the given logs.
      *
-     * @param Log[]       $logs        the logs to search in
-     * @param string|null $value       the value to search for
-     * @param bool        $skipChannel true to skip search in channel
-     * @param bool        $skipLevel   true to skip search in level
+     * @param Log[]   $logs        the logs to search in
+     * @param ?string $value       the value to search for
+     * @param bool    $skipChannel true to skip search in channel
+     * @param bool    $skipLevel   true to skip search in level
      *
      * @return Log[] the filtered logs
      */
@@ -115,8 +115,8 @@ class LogService
     /**
      * Filters the log for the given channel.
      *
-     * @param Log[]       $logs  the logs to search in
-     * @param string|null $value the channel value to search for
+     * @param Log[]   $logs  the logs to search in
+     * @param ?string $value the channel value to search for
      *
      * @return Log[] the filtered logs
      */
@@ -132,8 +132,8 @@ class LogService
     /**
      * Filters the log for the given level.
      *
-     * @param Log[]       $logs  the logs to search in
-     * @param string|null $value the level value to search for
+     * @param Log[]   $logs  the logs to search in
+     * @param ?string $value the level value to search for
      *
      * @return Log[] the filtered logs
      */

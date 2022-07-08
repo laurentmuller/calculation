@@ -64,8 +64,8 @@ trait SessionTrait
     /**
      * Gets a session attribute, as float value.
      *
-     * @param string     $key     the attribute name
-     * @param float|null $default the default value if not found
+     * @param string $key     the attribute name
+     * @param ?float $default the default value if not found
      *
      * @return float|null the session value, if found; the default value otherwise
      *
@@ -79,8 +79,8 @@ trait SessionTrait
     /**
      * Gets a session attribute, as integer value.
      *
-     * @param string   $key     the attribute name
-     * @param int|null $default the default value if not found
+     * @param string $key     the attribute name
+     * @param ?int   $default the default value if not found
      *
      * @return int|null the session value, if found; the default value otherwise
      *
@@ -107,8 +107,8 @@ trait SessionTrait
     /**
      * Gets a session attribute, as string value.
      *
-     * @param string      $key     the attribute name
-     * @param string|null $default the default value if not found
+     * @param string  $key     the attribute name
+     * @param ?string $default the default value if not found
      *
      * @return string|null the session value, if found; the default value otherwise
      *

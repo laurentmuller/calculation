@@ -35,8 +35,8 @@ class PivotField implements \JsonSerializable
     /**
      * Constructor.
      *
-     * @param string      $name  the field name
-     * @param string|null $title the field title
+     * @param string  $name  the field name
+     * @param ?string $title the field title
      */
     public function __construct(protected string $name, protected ?string $title = null, protected int $method = self::METHOD_STRING)
     {

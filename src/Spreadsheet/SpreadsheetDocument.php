@@ -250,7 +250,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the category property.
      *
-     * @param string|null $category the category
+     * @param ?string $category the category
      */
     public function setCategory(?string $category): self
     {
@@ -376,7 +376,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the company name property.
      *
-     * @param string|null $company the company name
+     * @param ?string $company the company name
      */
     public function setCompany(?string $company): self
     {
@@ -780,7 +780,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the subject property.
      *
-     * @param string|null $subject the subject
+     * @param ?string $subject the subject
      */
     public function setSubject(?string $subject): self
     {

@@ -57,7 +57,7 @@ class CalendarService
     /**
      * Returns a calendar for specified year.
      *
-     * @param int|null $year the year to generate calendar for or null for the current year
+     * @param ?int $year the year to generate calendar for or null for the current year
      *
      * @return Calendar the generated calendar
      */
@@ -116,7 +116,7 @@ class CalendarService
     /**
      * Sets the calendar model class.
      *
-     * @param string|null $calendarModel the calendar model class or null for default
+     * @param ?string $calendarModel the calendar model class or null for default
      *
      * @throws CalendarException if the calendar class model does not exist
      *
@@ -132,7 +132,7 @@ class CalendarService
     /**
      * Sets the day model class.
      *
-     * @param string|null $dayModel the day model class or null for default
+     * @param ?string $dayModel the day model class or null for default
      *
      * @throws CalendarException if the day class model does not exist
      *
@@ -149,10 +149,10 @@ class CalendarService
     /**
      * Sets the models.
      *
-     * @param string|null $calendarModel the calendar model class or null for default
-     * @param string|null $monthModel    the month model class or null for default
-     * @param string|null $weekModel     the week model class or null for default
-     * @param string|null $dayModel      the day model class or null for default
+     * @param ?string $calendarModel the calendar model class or null for default
+     * @param ?string $monthModel    the month model class or null for default
+     * @param ?string $weekModel     the week model class or null for default
+     * @param ?string $dayModel      the day model class or null for default
      *
      * @throws CalendarException if the calendar, the month, the week or the day class model does not exist
      *
@@ -172,7 +172,7 @@ class CalendarService
     /**
      * Sets the month model class.
      *
-     * @param string|null $monthModel the month model class or null for default
+     * @param ?string $monthModel the month model class or null for default
      *
      * @throws CalendarException if the month class model does not exist
      *
@@ -189,7 +189,7 @@ class CalendarService
     /**
      * Sets the week model class.
      *
-     * @param string|null $weekModel the week model class or null for default
+     * @param ?string $weekModel the week model class or null for default
      *
      * @throws CalendarException if the week class model does not exist
      *

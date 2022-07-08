@@ -117,7 +117,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Constructor.
      *
-     * @param int|null $year the year to generate
+     * @param ?int $year the year to generate
      *
      * @throws CalendarException
      */
@@ -402,9 +402,9 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     /**
      * Sets the models.
      *
-     * @param string|null $monthModel the month model class or null for default
-     * @param string|null $weekModel  the week model class or null for default
-     * @param string|null $dayModel   the day model class or null for default
+     * @param ?string $monthModel the month model class or null for default
+     * @param ?string $weekModel  the week model class or null for default
+     * @param ?string $dayModel   the day model class or null for default
      *
      * @throws CalendarException if the month, the week or the day class model does not exist
      *

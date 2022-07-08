@@ -22,7 +22,7 @@ class HtmlParser
     /**
      * Constructor.
      *
-     * @param string|null $html the HTML content to parse
+     * @param ?string $html the HTML content to parse
      */
     public function __construct(protected ?string $html)
     {
@@ -31,7 +31,7 @@ class HtmlParser
     /**
      * Parses this HTML content and return the root parent.
      *
-     * @return HtmlParentChunk|null the root parent, if success; <code>null</code> otherwise
+     * @return ?HtmlParentChunk the root parent, if success; <code>null</code> otherwise
      */
     public function parse(): ?HtmlParentChunk
     {
@@ -65,7 +65,7 @@ class HtmlParser
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string|null     $class  the optional class name
+     * @param ?string         $class  the optional class name
      */
     private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlBrChunk
     {
@@ -80,7 +80,7 @@ class HtmlParser
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string|null     $class  the optional class name
+     * @param ?string         $class  the optional class name
      */
     private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlLiChunk
     {
@@ -95,7 +95,7 @@ class HtmlParser
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string|null     $class  the optional class name
+     * @param ?string         $class  the optional class name
      * @param \DOMNode        $node   the current node
      */
     private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlOlChunk
@@ -124,7 +124,7 @@ class HtmlParser
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string|null     $class  the optional class name
+     * @param ?string         $class  the optional class name
      */
     private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlParentChunk
     {
@@ -139,7 +139,7 @@ class HtmlParser
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string|null     $class  the optional class name
+     * @param ?string         $class  the optional class name
      * @param \DOMNode        $node   the current node
      */
     private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): ?HtmlTextChunk
@@ -163,7 +163,7 @@ class HtmlParser
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string|null     $class  the optional class name
+     * @param ?string         $class  the optional class name
      */
     private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlUlChunk
     {
@@ -178,7 +178,7 @@ class HtmlParser
      *
      * @param \DOMDocument $dom the document to search in
      *
-     * @return \DOMNode|null the body, if found; null otherwise
+     * @return ?\DOMNode the body, if found; null otherwise
      */
     private function findBody(\DOMDocument $dom): ?\DOMNode
     {
@@ -193,11 +193,11 @@ class HtmlParser
     /**
      * Gets an attribute value for the given node.
      *
-     * @param \DOMNode    $node    the node to get attribute for
-     * @param string      $name    the attribute name to find
-     * @param string|null $default the default value to return if the attribute is not found
+     * @param \DOMNode $node    the node to get attribute for
+     * @param string   $name    the attribute name to find
+     * @param ?string  $default the default value to return if the attribute is not found
      *
-     * @return string|null the attribute value, if found; the default value otherwise
+     * @return ?string the attribute value, if found; the default value otherwise
      */
     private function getAttribute(\DOMNode $node, string $name, ?string $default = null): ?string
     {
@@ -220,7 +220,7 @@ class HtmlParser
      *
      * @param \DOMNode $node the node to get class attribute for
      *
-     * @return string|null the class attribute, if found; null otherwise
+     * @return ?string the class attribute, if found; null otherwise
      */
     private function getClassAttribute(\DOMNode $node): ?string
     {
@@ -311,7 +311,7 @@ class HtmlParser
     /**
      * Gets the clean HTML content.
      *
-     * @return string|null the HTML content or null if no content
+     * @return ?string the HTML content or null if no content
      */
     private function trimHtml(): ?string
     {

@@ -38,10 +38,10 @@ final class FormatExtension extends AbstractExtension
     /**
      * Filter to format a boolean value.
      *
-     * @param bool        $value     the value to format
-     * @param string|null $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
-     * @param string|null $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
-     * @param bool        $translate <code>true</code> to translate texts
+     * @param bool    $value     the value to format
+     * @param ?string $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
+     * @param ?string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
+     * @param bool    $translate <code>true</code> to translate texts
      */
     public function booleanFilter(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
@@ -83,10 +83,10 @@ final class FormatExtension extends AbstractExtension
      *
      * @param Environment                    $env        the Twig environment
      * @param \DateTimeInterface|string|null $date       the date
-     * @param string|null                    $dateFormat the date format
+     * @param ?string                        $dateFormat the date format
      * @param \DateTimeZone|string|null      $timezone   the time zone
-     * @param string|null                    $calendar   the calendar type
-     * @param string|null                    $pattern    the optional pattern to use when formatting
+     * @param ?string                        $calendar   the calendar type
+     * @param ?string                        $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -102,11 +102,11 @@ final class FormatExtension extends AbstractExtension
      *
      * @param Environment                    $env        the Twig environment
      * @param \DateTimeInterface|string|null $date       the date
-     * @param string|null                    $dateFormat the date format
-     * @param string|null                    $timeFormat the time format
+     * @param ?string                        $dateFormat the date format
+     * @param ?string                        $timeFormat the time format
      * @param \DateTimeZone|string|null      $timezone   the time zone
-     * @param string|null                    $calendar   the calendar type
-     * @param string|null                    $pattern    the optional pattern to use when formatting
+     * @param ?string                        $calendar   the calendar type
+     * @param ?string                        $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
@@ -165,10 +165,10 @@ final class FormatExtension extends AbstractExtension
      *
      * @param Environment                    $env        the Twig environment
      * @param \DateTimeInterface|string|null $date       the date
-     * @param string|null                    $timeFormat the time format
+     * @param ?string                        $timeFormat the time format
      * @param \DateTimeZone|string|null      $timezone   the time zone
-     * @param string|null                    $calendar   the calendar type
-     * @param string|null                    $pattern    the optional pattern to use when formatting
+     * @param ?string                        $calendar   the calendar type
+     * @param ?string                        $pattern    the optional pattern to use when formatting
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *

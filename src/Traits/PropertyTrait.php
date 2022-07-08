@@ -72,8 +72,8 @@ trait PropertyTrait
     /**
      * Gets a date property.
      *
-     * @param string                  $name    the property name to search for
-     * @param \DateTimeInterface|null $default the default value if the property is not found
+     * @param string              $name    the property name to search for
+     * @param ?\DateTimeInterface $default the default value if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -119,8 +119,8 @@ trait PropertyTrait
     /**
      * Gets a string property.
      *
-     * @param string      $name    the property name to search for
-     * @param string|null $default the default value if the property is not found
+     * @param string  $name    the property name to search for
+     * @param ?string $default the default value if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */

@@ -76,7 +76,7 @@ class PivotTable extends AbstractPivotAggregator
      * Constructor.
      *
      * @param AbstractAggregator $aggregator the aggregator function
-     * @param string|null        $title      the table title
+     * @param ?string            $title      the table title
      */
     public function __construct(protected AbstractAggregator $aggregator, private ?string $title = null)
     {

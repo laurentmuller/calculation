@@ -84,11 +84,11 @@ class PdfTableBuilder
     /**
      * Adds a cell to the current row.
      *
-     * @param string|null           $text      the text of the cell
-     * @param int                   $cols      the number of columns to span
-     * @param PdfStyle|null         $style     the cell style to use or null to use the default cell style
-     * @param PdfTextAlignment|null $alignment the cell alignment
-     * @param string|null           $link      the link of the cell
+     * @param ?string           $text      the text of the cell
+     * @param int               $cols      the number of columns to span
+     * @param ?PdfStyle         $style     the cell style to use or null to use the default cell style
+     * @param ?PdfTextAlignment $alignment the cell alignment
+     * @param ?string           $link      the link of the cell
      */
     public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, ?string $link = null): static
     {
@@ -96,8 +96,7 @@ class PdfTableBuilder
     }
 
     /**
-     * Adds the given cell to the list of cells.
-     * Do nothing if the given cell is <code>null</code>.
+     * Adds the given cell to the list of cells. Do nothing if the cell is null.
      *
      * @throws \LogicException if no current row is started
      */
@@ -114,7 +113,7 @@ class PdfTableBuilder
     }
 
     /**
-     * Adds the given cells to the list of cells.
+     * Adds the given cells to the list of cells. The null cells are not added.
      *
      * @param PdfCell[] $cells the cells to add
      *
@@ -130,7 +129,7 @@ class PdfTableBuilder
     }
 
     /**
-     * Adds the given column to the list of columns.
+     * Adds the given column to the list of columns.  Do nothing if the column is null.
      */
     public function addColumn(?PdfColumn $column): static
     {
@@ -142,7 +141,7 @@ class PdfTableBuilder
     }
 
     /**
-     * Adds the given columns to the list of columns.
+     * Adds the given columns to the list of columns. The null columns are not added.
      */
     public function addColumns(PdfColumn ...$columns): static
     {
@@ -154,7 +153,7 @@ class PdfTableBuilder
     }
 
     /**
-     * Create and add a row with the given values.
+     * Create and add a header row with the given values.
      *
      * @throws \LogicException if the row is already started
      */
@@ -438,8 +437,8 @@ class PdfTableBuilder
     /**
      * Output a row.
      *
-     * @param PdfCell[]     $cells the cells to output
-     * @param PdfStyle|null $style the row style or null for default cell style
+     * @param PdfCell[] $cells the cells to output
+     * @param ?PdfStyle $style the row style or null for default cell style
      *
      * @throws \LogicException      if a row is already started
      * @throws \LengthException     if no cell is defined
@@ -477,7 +476,7 @@ class PdfTableBuilder
     /**
      * Sets the header style.
      *
-     * @param PdfStyle|null $headerStyle the custom header style to set or null to use the default header style
+     * @param ?PdfStyle $headerStyle the custom header style to set or null to use the default header style
      *
      * @see PdfStyle::getHeaderStyle()
      */
@@ -511,9 +510,9 @@ class PdfTableBuilder
     /**
      * Output a row with a single cell.
      *
-     * @param string|null           $text      the text of the cell
-     * @param PdfStyle|null         $style     the row style to use or null to use the default cell style
-     * @param PdfTextAlignment|null $alignment the cell alignment
+     * @param ?string           $text      the text of the cell
+     * @param ?PdfStyle         $style     the row style to use or null to use the default cell style
+     * @param ?PdfTextAlignment $alignment the cell alignment
      *
      * @throws \LogicException if a row is already started
      *
@@ -542,7 +541,7 @@ class PdfTableBuilder
     /**
      * Starts a new row.
      *
-     * @param PdfStyle|null $style the row style to use or null to use the default cell style
+     * @param ?PdfStyle $style the row style to use or null to use the default cell style
      *
      * @throws \LogicException if the row is already started
      */
@@ -765,10 +764,10 @@ class PdfTableBuilder
     /**
      * Gets the cell height.
      *
-     * @param string|null $text  the cell text
-     * @param float       $width the cell width
-     * @param PdfStyle    $style the cell style
-     * @param PdfCell     $cell  the cell
+     * @param ?string  $text  the cell text
+     * @param float    $width the cell width
+     * @param PdfStyle $style the cell style
+     * @param PdfCell  $cell  the cell
      *
      * @return float the cell height
      */

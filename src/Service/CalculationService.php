@@ -339,10 +339,10 @@ final class CalculationService
     /**
      * Creates calculation's total groups.
      *
-     * @param array         $groups        the calculation groups
-     * @param float         $user_margin   the user margin
-     * @param callable|null $callback      the function to create a group lines
-     * @param float|null    $global_margin the global margin or null to compute new global margin
+     * @param array     $groups        the calculation groups
+     * @param float     $user_margin   the user margin
+     * @param ?callable $callback      the function to create a group lines
+     * @param ?float    $global_margin the global margin or null to compute new global margin
      *
      * @return non-empty-array<array> the total groups
      *

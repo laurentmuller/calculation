@@ -8,8 +8,8 @@
             {{- form_label(form) -}}
         </div>
         <div class="col-auto">
-            <div class="btn-group btn-group-sm" role="group" aria-label="First group">
-                <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-toggle="collapse" data-target="#{{ id_content }} "title="{{ title|trans }}">
+            <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-toggle="collapse" data-target="#{{ id_content }}" title="{{ title|trans }}">
                     <i class="d-print-none fa-solid fa-caret-{% if show %}down{% else %}right{% endif %}"></i>
                 </button>
                 <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">

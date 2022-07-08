@@ -237,7 +237,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the entities to display.
      *
-     * @param string|null            $field     the optional sorted field
+     * @param ?string                $field     the optional sorted field
      * @param string                 $mode      the optional sort mode ("ASC" or "DESC")
      * @param array<Criteria|string> $criterias the filter criteria
      * @param string                 $alias     the entity alias
@@ -332,9 +332,9 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Update the parameters by adding the request query values.
      *
-     * @param Request  $request    the request to get the query values
-     * @param array    $parameters the parameters to update
-     * @param int|null $id         an optional entity identifier
+     * @param Request $request    the request to get the query values
+     * @param array   $parameters the parameters to update
+     * @param ?int    $id         an optional entity identifier
      */
     protected function updateQueryParameters(Request $request, array &$parameters, ?int $id = 0): void
     {

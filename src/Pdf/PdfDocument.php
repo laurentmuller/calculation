@@ -294,8 +294,8 @@ class PdfDocument extends FPDF
      * Gets the number of lines to use for the given text and width.
      * Computes the number of lines a MultiCell of the given width will take.
      *
-     * @param string|null $text  the text to compute
-     * @param float       $width the desired width. If 0, the width extends up to the right margin.
+     * @param ?string $text  the text to compute
+     * @param float   $width the desired width. If 0, the width extends up to the right margin.
      *
      * @return int the number of lines
      */
@@ -464,8 +464,8 @@ class PdfDocument extends FPDF
      * Puts an image.
      *
      * @param string              $file the path or the URL of the image
-     * @param float|null          $x    the abscissa of the upper-left corner. If not specified or equal to null, the current abscissa is used.
-     * @param float|null          $y    the ordinate of the upper-left corner. If not specified or equal to null, the current ordinate is used;
+     * @param ?float              $x    the abscissa of the upper-left corner. If not specified or equal to null, the current abscissa is used.
+     * @param ?float              $y    the ordinate of the upper-left corner. If not specified or equal to null, the current ordinate is used;
      *                                  moreover, a page break is triggered first if necessary (in case automatic page breaking is enabled) and,
      *                                  after the call, the current ordinate is moved to the bottom of the image.
      * @param float               $w    the width of the image in the page
@@ -774,9 +774,9 @@ class PdfDocument extends FPDF
     /**
      * Clean the given text.
      *
-     * @param string|null $str the text to convert
+     * @param ?string $str the text to convert
      *
-     * @return string|null the converted text
+     * @return ?string the converted text
      */
     protected function cleanText(?string $str): ?string
     {

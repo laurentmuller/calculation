@@ -22,11 +22,11 @@ class PdfColumn
     /**
      * Constructor.
      *
-     * @param string|null           $text      the column text
-     * @param float                 $width     the column width
-     * @param PdfTextAlignment|null $alignment the column alignment
-     * @param bool                  $fixed     true if the column width is fixed. This property is used only if the
-     *                                         parent's table use all the document width.
+     * @param ?string           $text      the column text
+     * @param float             $width     the column width
+     * @param ?PdfTextAlignment $alignment the column alignment
+     * @param bool              $fixed     true if the column width is fixed. This property is used only if the
+     *                                     parent's table use all the document width.
      */
     public function __construct(protected ?string $text, protected float $width = 0.0, protected ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT, protected bool $fixed = false)
     {
@@ -35,10 +35,10 @@ class PdfColumn
     /**
      * Create a column with center alignment.
      *
-     * @param string|null $text  the column text
-     * @param float       $width the column width
-     * @param bool        $fixed true if the column width is fixed. This property is used only if the
-     *                           parent's table use all the document width.
+     * @param ?string $text  the column text
+     * @param float   $width the column width
+     * @param bool    $fixed true if the column width is fixed. This property is used only if the
+     *                       parent's table use all the document width.
      *
      * @return PdfColumn the new newly created column
      */
@@ -87,10 +87,10 @@ class PdfColumn
     /**
      * Create a column with left alignment.
      *
-     * @param string|null $text  the column text
-     * @param float       $width the column width
-     * @param bool        $fixed true if the column width is fixed. This property is used only if the
-     *                           parent's table use all the document width.
+     * @param ?string $text  the column text
+     * @param float   $width the column width
+     * @param bool    $fixed true if the column width is fixed. This property is used only if the
+     *                       parent's table use all the document width.
      *
      * @return PdfColumn the new newly created column
      */
@@ -102,10 +102,10 @@ class PdfColumn
     /**
      * Create a column with right alignment.
      *
-     * @param string|null $text  the column text
-     * @param float       $width the column width
-     * @param bool        $fixed true if the column width is fixed. This property is used only if the
-     *                           parent's table use all the document width.
+     * @param ?string $text  the column text
+     * @param float   $width the column width
+     * @param bool    $fixed true if the column width is fixed. This property is used only if the
+     *                       parent's table use all the document width.
      *
      * @return PdfColumn the new newly created column
      */

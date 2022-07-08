@@ -108,7 +108,7 @@ class ThemeService
     /**
      * Finds a theme by the given css path.
      *
-     * @param string|null $css the theme css to search for
+     * @param ?string $css the theme css to search for
      *
      * @return Theme the theme, if found, the default theme (Boostrap) if not found
      *
@@ -132,7 +132,7 @@ class ThemeService
     /**
      * Gets the current theme.
      *
-     * @param Request|null $request the optional request
+     * @param ?Request $request the optional request
      *
      * @return Theme the current theme, if any; the default theme otherwise
      *
@@ -177,7 +177,7 @@ class ThemeService
     /**
      * Gets the theme background.
      *
-     * @param Request|null $request the request
+     * @param ?Request $request the request
      */
     public function getThemeBackground(?Request $request = null): string
     {
@@ -253,7 +253,7 @@ class ThemeService
     /**
      * Returns if the current theme is a dark theme.
      *
-     * @param Request|null $request the optional request
+     * @param ?Request $request the optional request
      *
      * @return bool true if dark; false otherwise
      *
@@ -268,7 +268,7 @@ class ThemeService
     /**
      * Gets the current request.
      *
-     * @param Request|null $request the optional request
+     * @param ?Request $request the optional request
      *
      * @return Request|null the request, if any; null otherwise
      */

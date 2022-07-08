@@ -427,10 +427,10 @@ class PlainType extends AbstractType
     /**
      * Gets the string value from the array options.
      *
-     * @param array       $options      the array options
-     * @param string      $name         the option name
-     * @param string|null $defaultValue the default value if option is not set
-     * @param bool        $translate    true to translate the default value
+     * @param array   $options      the array options
+     * @param string  $name         the option name
+     * @param ?string $defaultValue the default value if option is not set
+     * @param bool    $translate    true to translate the default value
      *
      * @return string|null the option value
      */

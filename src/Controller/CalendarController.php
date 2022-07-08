@@ -41,9 +41,9 @@ class CalendarController extends AbstractController
      *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
-     * @param int|null              $year       the year to search for or <code>null</code> for the current
+     * @param ?int                  $year       the year to search for or <code>null</code> for the current
      *                                          year
-     * @param int|null              $month      the month to search for or <code>null</code> for the current
+     * @param ?int                  $month      the month to search for or <code>null</code> for the current
      *                                          month
      *
      * @throws \App\Calendar\CalendarException
@@ -81,9 +81,9 @@ class CalendarController extends AbstractController
      *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
-     * @param int|null              $year       the year to search for or <code>null</code> for the current
+     * @param ?int                  $year       the year to search for or <code>null</code> for the current
      *                                          year
-     * @param int|null              $week       the week to search for or <code>null</code> for the current
+     * @param ?int                  $week       the week to search for or <code>null</code> for the current
      *                                          week
      *
      * @throws \App\Calendar\CalendarException
@@ -126,7 +126,7 @@ class CalendarController extends AbstractController
      *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
-     * @param int|null              $year       the year to search for or <code>null</code> for the current
+     * @param ?int                  $year       the year to search for or <code>null</code> for the current
      *                                          year
      *
      * @throws \App\Calendar\CalendarException
@@ -388,7 +388,7 @@ class CalendarController extends AbstractController
     /**
      * Validate the given month.
      *
-     * @param int|null $month the optional month to validate
+     * @param ?int $month the optional month to validate
      *
      * @return int a valid month
      *
@@ -407,7 +407,7 @@ class CalendarController extends AbstractController
     /**
      * Validate the given week.
      *
-     * @param int|null $week the optional week to validate
+     * @param ?int $week the optional week to validate
      *
      * @return int a valid week
      *
@@ -426,7 +426,7 @@ class CalendarController extends AbstractController
     /**
      * Validate the given year.
      *
-     * @param int|null $year the optional year to validate
+     * @param ?int $year the optional year to validate
      *
      * @return int a valid year
      */

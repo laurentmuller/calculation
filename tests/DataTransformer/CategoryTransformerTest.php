@@ -20,7 +20,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test for the {@link CategoryTransformer} class.
@@ -44,8 +43,7 @@ class CategoryTransformerTest extends KernelTestCase
         $this->group = $this->createGroup();
         $this->category = $this->createCategory($this->group);
         $repository = $this->getService(CategoryRepository::class);
-        $translator = $this->getService(TranslatorInterface::class);
-        $this->transformer = new CategoryTransformer($repository, $translator);
+        $this->transformer = new CategoryTransformer($repository);
     }
 
     /**

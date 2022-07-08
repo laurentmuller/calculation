@@ -14,10 +14,8 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
-use App\Traits\TranslatorTrait;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Transformer to convert a category to an identifier.
@@ -26,14 +24,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CategoryTransformer implements DataTransformerInterface
 {
-    use TranslatorTrait;
-
     /**
      * Constructor.
      */
-    public function __construct(private readonly CategoryRepository $repository, TranslatorInterface $translator)
+    public function __construct(private readonly CategoryRepository $repository)
     {
-        $this->translator = $translator;
     }
 
     /**
@@ -41,7 +36,7 @@ class CategoryTransformer implements DataTransformerInterface
      *
      * @param int|string|null $value
      *
-     * @return Category|null
+     * @return ?Category
      */
     public function reverseTransform(mixed $value)
     {
@@ -56,7 +51,7 @@ class CategoryTransformer implements DataTransformerInterface
 
         $category = $this->repository->find((int) $value);
         if (!$category instanceof Category) {
-            $message = $this->trans('category.id_not_found', ['%id%' => $value], 'validators');
+            $message = \sprintf('Unable to find a category for the value "%s".', $value);
             throw new TransformationFailedException($message);
         }
 
@@ -66,9 +61,9 @@ class CategoryTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param Category|null $value
+     * @param ?Category $value
      *
-     * @return int|null
+     * @return ?int
      */
     public function transform(mixed $value)
     {

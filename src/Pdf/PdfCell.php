@@ -22,11 +22,11 @@ class PdfCell
     /**
      * Constructor.
      *
-     * @param string|null           $text      the cell text
-     * @param int                   $cols      the cell columns span
-     * @param PdfStyle|null         $style     the cell style
-     * @param PdfTextAlignment|null $alignment the cell alignment
-     * @param string|null           $link      the cell link
+     * @param ?string           $text      the cell text
+     * @param int               $cols      the cell columns span
+     * @param ?PdfStyle         $style     the cell style
+     * @param ?PdfTextAlignment $alignment the cell alignment
+     * @param ?string           $link      the cell link
      */
     public function __construct(protected ?string $text = null, protected int $cols = 1, protected ?PdfStyle $style = null, protected ?PdfTextAlignment $alignment = null, protected ?string $link = null)
     {

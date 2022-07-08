@@ -19,7 +19,6 @@ use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test for the {@link GroupTransformer} class.
@@ -41,8 +40,7 @@ class GroupTransformerTest extends KernelTestCase
 
         $this->group = $this->createGroup();
         $repository = $this->getService(GroupRepository::class);
-        $translator = $this->getService(TranslatorInterface::class);
-        $this->transformer = new GroupTransformer($repository, $translator);
+        $this->transformer = new GroupTransformer($repository);
     }
 
     /**

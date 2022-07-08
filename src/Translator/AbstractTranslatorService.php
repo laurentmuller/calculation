@@ -40,7 +40,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * Gets the display name of the language for the given BCP 47 language tag.
      *
-     * @param string|null $tag the BCP 47 language tag to search for
+     * @param ?string $tag the BCP 47 language tag to search for
      *
      * @return string|null the display name, if found; null otherwise
      *

@@ -20,8 +20,8 @@ trait ModelTrait
     /**
      * Checks if the given class name exist.
      *
-     * @param string|null $className    the class name to verify
-     * @param string      $defaultClass the default class name to use if the class name si null
+     * @param ?string $className    the class name to verify
+     * @param string  $defaultClass the default class name to use if the class name si null
      *
      * @return string the class name if no exception
      *

@@ -27,11 +27,9 @@ function applyTheme() {
         $('#example_name').text(title);
         $('#example_description').text(description);
 
-        // update toolbar
-        $('#navigation_horizontal').setClass('navbar navbar-expand-md ' + background);
-
-        // update vertical toolbar
-        $('.navbar-vertical.navbar').setClass('navbar-vertical navbar ' + background);
+        // update toolbars
+        $('#navigation').setClass('navbar navbar-expand-md ' + background);
+        $('#sidebar').setClass('navbar-vertical navbar ' + background);
 
         // save values
         $form.data('theme', theme).data('background', background);

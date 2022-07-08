@@ -29,9 +29,9 @@ class PivotMonthField extends PivotDateField
     /**
      * Constructor.
      *
-     * @param string      $name  the field name
-     * @param string|null $title the field title
-     * @param bool        $short true to display the short month name, false to display the full month name
+     * @param string  $name  the field name
+     * @param ?string $title the field title
+     * @param bool    $short true to display the short month name, false to display the full month name
      */
     public function __construct(protected string $name, protected ?string $title = null, bool $short = false)
     {

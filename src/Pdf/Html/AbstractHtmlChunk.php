@@ -49,8 +49,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Constructor.
      *
-     * @param string               $name   the tag name
-     * @param HtmlParentChunk|null $parent the parent chunk
+     * @param string           $name   the tag name
+     * @param ?HtmlParentChunk $parent the parent chunk
      */
     public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
     {
@@ -282,7 +282,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * </pre>.
      *
      * @param HtmlReport                $report   the report to set and restore font
-     * @param PdfFont|null              $font     the font to apply
+     * @param ?PdfFont                  $font     the font to apply
      * @param callable(HtmlReport):void $callback the callback to call after the font has been set. The report is passed as argument.
      */
     protected function applyFont(HtmlReport $report, ?PdfFont $font, callable $callback): void

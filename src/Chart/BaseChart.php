@@ -177,7 +177,7 @@ class BaseChart extends Highchart
     /**
      * Sets the chart title.
      *
-     * @param string|null $title the title to set or null to hide
+     * @param ?string $title the title to set or null to hide
      */
     public function setTitle(?string $title): self
     {
@@ -214,7 +214,7 @@ class BaseChart extends Highchart
     /**
      * Sets the x-axis title.
      *
-     * @param string|null $title the title to set or null to hide
+     * @param ?string $title the title to set or null to hide
      */
     public function setXAxisTitle(?string $title): self
     {
@@ -226,7 +226,7 @@ class BaseChart extends Highchart
     /**
      * Sets the y-axis title.
      *
-     * @param string|null $title the title to set or null to hide
+     * @param ?string $title the title to set or null to hide
      */
     public function setYAxisTitle(?string $title): self
     {

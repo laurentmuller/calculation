@@ -22,7 +22,7 @@
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
 <!-- vertical toolbar -->
 {{- asset_css('css/navbar-vertical.css') }}
-<div class="navbar-vertical navbar {{ theme_background(app.request) }}{{ active }}" style="padding-bottom: 30px;" data-url="{{ url('ajax_save_navigation') }}" data-show="{{ 'index.menu_show'|trans }}" data-hide="{{ 'index.menu_hide'|trans }}">
+<div id="sidebar" class="navbar-vertical navbar {{ theme_background(app.request) }}{{ active }}" style="padding-bottom: 30px;" data-url="{{ url('ajax_save_navigation') }}" data-show="{{ 'index.menu_show'|trans }}" data-hide="{{ 'index.menu_hide'|trans }}">
     {# logo #}
     <div class="p-2 mb-1">
         <div class="media d-flex align-items-center">

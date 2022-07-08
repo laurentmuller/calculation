@@ -65,9 +65,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Gets sorted, distinct and not null values of the given column.
      *
-     * @param string      $field the field name (column) to get values for
-     * @param string|null $value a value to search within the column or <code>null</code> for all
-     * @param int         $limit the maximum number of results to retrieve (the "limit") or <code>-1</code> for all
+     * @param string  $field the field name (column) to get values for
+     * @param ?string $value a value to search within the column or <code>null</code> for all
+     * @param int     $limit the maximum number of results to retrieve (the "limit") or <code>-1</code> for all
      *
      * @return array an array, maybe empty; of matching values
      */

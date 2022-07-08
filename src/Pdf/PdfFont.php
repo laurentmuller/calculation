@@ -223,7 +223,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Sets the font name.
      *
-     * @param string|null $name the name or null for default
+     * @param ?string $name the name or null for default
      *
      * @return self this instance
      */

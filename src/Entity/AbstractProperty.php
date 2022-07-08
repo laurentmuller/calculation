@@ -50,7 +50,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Constructor.
      *
-     * @param string|null $name the optional name
+     * @param ?string $name the optional name
      */
     final public function __construct(?string $name = null)
     {

@@ -35,10 +35,10 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * Constructor.
      *
-     * @param mixed|null       $key       the group key
+     * @param ?mixed           $key       the group key
      * @param PdfTextAlignment $alignment the group alignment
-     * @param PdfBorder|null   $border    the group border or null to use default
-     * @param PdfStyle|null    $style     the group style or null to use default
+     * @param ?PdfBorder       $border    the group border or null to use default
+     * @param ?PdfStyle        $style     the group style or null to use default
      */
     public function __construct(protected mixed $key = null, protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT, ?PdfBorder $border = null, ?PdfStyle $style = null)
     {

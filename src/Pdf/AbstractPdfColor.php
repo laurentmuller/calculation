@@ -192,7 +192,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * The value must be a hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>.
      *
-     * @param string|null $value a hexadecimal string
+     * @param ?string $value a hexadecimal string
      *
      * @return int[]|false the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
      */

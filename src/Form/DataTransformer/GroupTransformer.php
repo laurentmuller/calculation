@@ -14,10 +14,8 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\Group;
 use App\Repository\GroupRepository;
-use App\Traits\TranslatorTrait;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Transformer to convert a group to an identifier.
@@ -26,14 +24,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class GroupTransformer implements DataTransformerInterface
 {
-    use TranslatorTrait;
-
     /**
      * Constructor.
      */
-    public function __construct(private readonly GroupRepository $repository, TranslatorInterface $translator)
+    public function __construct(private readonly GroupRepository $repository)
     {
-        $this->translator = $translator;
     }
 
     /**
@@ -41,7 +36,7 @@ class GroupTransformer implements DataTransformerInterface
      *
      * @param int|string|null $value
      *
-     * @return Group|null
+     * @return ?Group
      */
     public function reverseTransform(mixed $value)
     {
@@ -56,7 +51,7 @@ class GroupTransformer implements DataTransformerInterface
 
         $group = $this->repository->find((int) $value);
         if (!$group instanceof Group) {
-            $message = $this->trans('group.id_not_found', ['%id%' => $value], 'validators');
+            $message = \sprintf('Unable to find a group for the value %s.', $value);
             throw new TransformationFailedException($message);
         }
 
@@ -66,9 +61,9 @@ class GroupTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param Group|null $value
+     * @param ?Group $value
      *
-     * @return int|null
+     * @return ?int
      */
     public function transform(mixed $value)
     {

@@ -7,8 +7,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
-    transition: margin-left 0.4s;
+    /*box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);*/
+    transition: margin-left 0.35s ease;
     overflow-y: auto;
     flex-direction: column !important;
     text-align: left !important;
@@ -95,7 +95,7 @@
     float: right;
     margin-top: 0.7em;
     margin-right: 0.25em;
-    transition: all 0.1s;
+    transition: all 0.35s ease;
 
     /* left arrow */
     border-right: 0.3em solid;
@@ -121,7 +121,7 @@
 .page-content {
     width: calc(100% - 17rem);
     margin-left: 17rem;
-    transition: margin-left 0.4s;
+    transition: margin-left 0.35s ease;
 }
 
 .page-content.active {
@@ -130,13 +130,24 @@
 }
 /* toggle button */
 .page-content .sidebar-toggle {
-    transition: all 0.6s;
+    transition: all 0.35s;
+    margin-left: -16px !important;
 }
 
 .page-content.active .sidebar-toggle {
     transform: rotate(180deg);
+    margin-left: inherit !important;
 }
 
+/* horizontal toolbar
+.page-content .navbar-horizontal  {
+    padding-left: 0;
+}
+.page-content.active .navbar-horizontal  {
+    padding-left: 16px;
+}
+
+ */
 /* hide side bar on small resolution
 @media (max-width: 768px) {
     .navbar-vertical,

@@ -114,7 +114,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks if the given asset path exists.
      *
-     * @param string|null $path the path to be verified
+     * @param ?string $path the path to be verified
      *
      * @return bool true if exists
      */
@@ -147,8 +147,8 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Returns the given asset path, if existing; the default path otherwise.
      *
-     * @param string|null $path    the path to be verified
-     * @param string|null $default the default path
+     * @param ?string $path    the path to be verified
+     * @param ?string $default the default path
      *
      * @return string|null the path, if existing, the default path otherwise
      */
@@ -181,7 +181,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks the existence of file or directory.
      *
-     * @param string|null $filename the path to the file or directory
+     * @param ?string $filename the path to the file or directory
      *
      * @return bool true if the file or directory exists, false otherwise
      */
@@ -233,7 +233,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param Environment $env         the Twig environnement
      * @param string      $path        a public path
-     * @param string|null $packageName the optional name of the asset package to use
+     * @param ?string     $packageName the optional name of the asset package to use
      *
      * @return string the public path of the asset
      */

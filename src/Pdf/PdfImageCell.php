@@ -47,11 +47,11 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Constructor.
      *
-     * @param string                $path      the full image path
-     * @param int                   $cols      the cell columns span
-     * @param PdfStyle|null         $style     the cell style
-     * @param PdfTextAlignment|null $alignment the cell alignment
-     * @param string|null           $link      the cell link
+     * @param string            $path      the full image path
+     * @param int               $cols      the cell columns span
+     * @param ?PdfStyle         $style     the cell style
+     * @param ?PdfTextAlignment $alignment the cell alignment
+     * @param ?string           $link      the cell link
      */
     public function __construct(protected string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, ?string $link = null)
     {

@@ -83,7 +83,7 @@ class LogDatabase extends AbstractDatabase
     /**
      * Converts an array to a string.
      *
-     * @param array|null $array $array the array to convert
+     * @param ?array $array $array the array to convert
      *
      * @return string|null the converted array, if not empty; null otherwise
      */

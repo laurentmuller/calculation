@@ -31,7 +31,7 @@ final class HtmlStyleFactory
      *
      * @param string $name the tag name
      *
-     * @return HtmlStyle|null the style, if applicable; <code>null</code> otherwise
+     * @return ?HtmlStyle the style, if applicable; <code>null</code> otherwise
      */
     public static function create(string $name): ?HtmlStyle
     {

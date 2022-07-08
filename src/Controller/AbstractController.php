@@ -261,9 +261,9 @@ abstract class AbstractController extends BaseController
     /**
      * Creates and returns a form helper instance.
      *
-     * @param string|null $labelPrefix the label prefix. If the prefix is not null, the label is automatically added when the field property is set.
-     * @param mixed|null  $data        the initial data
-     * @param array       $options     the initial options
+     * @param ?string    $labelPrefix the label prefix. If the prefix is not null, the label is automatically added when the field property is set.
+     * @param mixed|null $data        the initial data
+     * @param array      $options     the initial options
      */
     protected function createFormHelper(string $labelPrefix = null, mixed $data = null, array $options = []): FormHelper
     {
@@ -322,9 +322,9 @@ abstract class AbstractController extends BaseController
     /**
      * Returns the request parameter value converted to string.
      *
-     * @param Request     $request the request to get parameter value from
-     * @param string      $key     the parameter key
-     * @param string|null $default the default value if the parameter key does not exist
+     * @param Request $request the request to get parameter value from
+     * @param string  $key     the parameter key
+     * @param ?string $default the default value if the parameter key does not exist
      */
     protected function getRequestString(Request $request, string $key, string $default = null): ?string
     {
@@ -388,8 +388,8 @@ abstract class AbstractController extends BaseController
     /**
      * Returns the given exception as a JsonResponse.
      *
-     * @param \Exception  $e       the exception to serialize
-     * @param string|null $message the optional error message
+     * @param \Exception $e       the exception to serialize
+     * @param ?string    $message the optional error message
      *
      * @throws \ReflectionException
      */

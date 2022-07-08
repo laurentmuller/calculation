@@ -23,10 +23,10 @@ trait TranslatorFlashMessageTrait
     /**
      * Add a translated error message to the session flash bag.
      *
-     * @param string      $id         the message id (may also be an object that can be cast to string)
-     * @param array       $parameters an array of parameters for the message
-     * @param string|null $domain     the domain for the message or null to use the default
-     * @param string|null $locale     the locale or null to use the default
+     * @param string  $id         the message id (may also be an object that can be cast to string)
+     * @param array   $parameters an array of parameters for the message
+     * @param ?string $domain     the domain for the message or null to use the default
+     * @param ?string $locale     the locale or null to use the default
      *
      * @return string the translated message
      *
@@ -44,10 +44,10 @@ trait TranslatorFlashMessageTrait
     /**
      * Add a translated information message to the session flash bag.
      *
-     * @param string      $id         the message id (may also be an object that can be cast to string)
-     * @param array       $parameters an array of parameters for the message
-     * @param string|null $domain     the domain for the message or null to use the default
-     * @param string|null $locale     the locale or null to use the default
+     * @param string  $id         the message id (may also be an object that can be cast to string)
+     * @param array   $parameters an array of parameters for the message
+     * @param ?string $domain     the domain for the message or null to use the default
+     * @param ?string $locale     the locale or null to use the default
      *
      * @return string the translated message
      *
@@ -65,10 +65,10 @@ trait TranslatorFlashMessageTrait
     /**
      * Add a translated success message to the session flash bag.
      *
-     * @param string      $id         the message id (may also be an object that can be cast to string)
-     * @param array       $parameters an array of parameters for the message
-     * @param string|null $domain     the domain for the message or null to use the default
-     * @param string|null $locale     the locale or null to use the default
+     * @param string  $id         the message id (may also be an object that can be cast to string)
+     * @param array   $parameters an array of parameters for the message
+     * @param ?string $domain     the domain for the message or null to use the default
+     * @param ?string $locale     the locale or null to use the default
      *
      * @return string the translated message
      *
@@ -86,10 +86,10 @@ trait TranslatorFlashMessageTrait
     /**
      * Add a translated warning message to the session flash bag.
      *
-     * @param string      $id         the message id (may also be an object that can be cast to string)
-     * @param array       $parameters an array of parameters for the message
-     * @param string|null $domain     the domain for the message or null to use the default
-     * @param string|null $locale     the locale or null to use the default
+     * @param string  $id         the message id (may also be an object that can be cast to string)
+     * @param array   $parameters an array of parameters for the message
+     * @param ?string $domain     the domain for the message or null to use the default
+     * @param ?string $locale     the locale or null to use the default
      *
      * @return string the translated message
      *

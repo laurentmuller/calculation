@@ -71,10 +71,10 @@ abstract class AbstractReport extends PdfDocument
     /**
      * Filter to format a boolean value.
      *
-     * @param bool        $value     the value to format
-     * @param string|null $true      the text to use when the value is <b>TRUE</b> or <code>null</code> to use default
-     * @param string|null $false     the text to use when the value is <b>FALSE</b> or <code>null</code> to use default
-     * @param bool        $translate <code>TRUE</code> to translate texts
+     * @param bool    $value     the value to format
+     * @param ?string $true      the text to use when the value is <b>TRUE</b> or <code>null</code> to use default
+     * @param ?string $false     the text to use when the value is <b>FALSE</b> or <code>null</code> to use default
+     * @param bool    $translate <code>TRUE</code> to translate texts
      */
     public function booleanFilter(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {

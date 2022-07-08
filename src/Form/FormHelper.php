@@ -103,7 +103,7 @@ class FormHelper
      * Constructor.
      *
      * @param FormBuilderInterface $builder     the parent builder
-     * @param string|null          $labelPrefix the label prefix. If the prefix is not null,
+     * @param ?string              $labelPrefix the label prefix. If the prefix is not null,
      *                                          the label is automatically added when the field property is
      *                                          set.
      */
@@ -543,7 +543,7 @@ class FormHelper
     /**
      * Add an Url type to the builder and reset all values to default.
      *
-     * @param string|null $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
+     * @param ?string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
      */
     public function addUrlType(?string $default_protocol = 'https'): self
     {
@@ -657,7 +657,7 @@ class FormHelper
     /**
      * Sets the translation domain.
      *
-     * @param string|null $domain the translation domain or null for default
+     * @param ?string $domain the translation domain or null for default
      */
     public function domain(?string $domain): self
     {
@@ -696,7 +696,7 @@ class FormHelper
     /**
      * Sets the help property.
      *
-     * @param string|null $help the help identifier to translate
+     * @param ?string $help the help identifier to translate
      */
     public function help(?string $help): self
     {
@@ -736,7 +736,7 @@ class FormHelper
     /**
      * Sets the label property.
      *
-     * @param string|null $label the label identifier to translate
+     * @param ?string $label the label identifier to translate
      */
     public function label(?string $label): self
     {
@@ -848,7 +848,7 @@ class FormHelper
     /**
      * Sets the tab index.
      *
-     * @param int|null $index the index or null to remove
+     * @param ?int $index the index or null to remove
      */
     public function tabindex(?int $index): self
     {

@@ -50,7 +50,7 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Gets the current theme.
      *
-     * @param Request|null $request the request
+     * @param ?Request $request the request
      *
      * @return Theme the current theme, if any; the default theme otherwise
      *

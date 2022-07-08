@@ -617,8 +617,8 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the last calculations.
      *
-     * @param int                $maxResults the maximum number of results to retrieve (the "limit")
-     * @param UserInterface|null $user       if not null, returns only calculations that are created or modified by the given user
+     * @param int            $maxResults the maximum number of results to retrieve (the "limit")
+     * @param ?UserInterface $user       if not null, returns only calculations that are created or modified by the given user
      *
      * @return Calculation[] the last calculations
      * @psalm-return list<Calculation>

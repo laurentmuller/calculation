@@ -76,10 +76,10 @@ interface TranslatorServiceInterface
     /**
      * Translates a text.
      *
-     * @param string      $text the text to translate
-     * @param string      $to   the language of the output text
-     * @param string|null $from the language of the input text. If the form parameter is not specified, automatic language detection is applied to determine the source language.
-     * @param bool        $html defines whether the text being translated is HTML text (true) or plain text (false)
+     * @param string  $text the text to translate
+     * @param string  $to   the language of the output text
+     * @param ?string $from the language of the input text. If the form parameter is not specified, automatic language detection is applied to determine the source language.
+     * @param bool    $html defines whether the text being translated is HTML text (true) or plain text (false)
      *
      * @return array|false on success, returns an array with the following entries:
      *                     <ul>

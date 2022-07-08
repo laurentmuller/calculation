@@ -212,9 +212,9 @@ class PersistenceListener implements EventSubscriber
     /**
      * Translates the given message and add the title as prefix.
      *
-     * @param string      $id         the message id
-     * @param array       $parameters an array of parameters for the message
-     * @param string|null $domain     the domain for the message or null to use the default
+     * @param string  $id         the message id
+     * @param array   $parameters an array of parameters for the message
+     * @param ?string $domain     the domain for the message or null to use the default
      *
      * @return string the translated string
      */

@@ -649,7 +649,7 @@ index:
   panel_count_task: Nombre de tâches dans le catalogue
   title: Accueil
   title_help: Afficher la page d'accueil
-  toggle_navigation: Basculer la navigation_horizontal
+  toggle_navigation: Basculer la navigation horizontal
   sidebar_show: Afficher la barre latérale
   sidebar_hide: Masquer la barre latérale
   menu_show: Développer le menu

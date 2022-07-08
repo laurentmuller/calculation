@@ -1156,11 +1156,13 @@ $.fn.extend({
                 $source.trigger('focus');
             }
         });
+
         $range.on('input', function () {
             const title = $this.formatPages($range.data('options'), $range.intVal());
             $range.attr('title', title);
             $label.text(title);
         });
+
         $button.on('click', function () {
             $dialog.modal('hide');
             $this.selectPage($range.intVal(), true);
@@ -1199,6 +1201,7 @@ $.fn.extend({
         }).on('hide.bs.modal', function () {
             $this.enableKeys();
         });
+
         $sortName.on('input', function () {
             // update default order
             const sortOrder = $sortName.getSelectedOption().data('sort');
@@ -1206,6 +1209,7 @@ $.fn.extend({
                 $('#sort-order-' + sortOrder).setChecked(true);
             }
         });
+
         $default.on('click', function () {
             // select default order
             const $option = $('#sort-name [data-default="true"]');
@@ -1219,6 +1223,7 @@ $.fn.extend({
                 }
             }
         });
+
         $button.on('click', function () {
             $dialog.modal('hide');
             const sortName = $sortName.val();

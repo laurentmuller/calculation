@@ -100,9 +100,10 @@ class SymfonyReport extends AbstractReport
     {
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumn(PdfColumn::left('Name', 30))
-            ->addColumn(PdfColumn::left('Path', 70))
-            ->setGroupBeforeHeader(true)
+            ->addColumns(
+                PdfColumn::left('Name', 30),
+                PdfColumn::left('Path', 70)
+            )->setGroupBeforeHeader(true)
             ->setGroupKey('Bundles')
             ->outputHeaders();
 
@@ -120,9 +121,10 @@ class SymfonyReport extends AbstractReport
 
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumn(PdfColumn::left('Name', 30))
-            ->addColumn(PdfColumn::left('Value', 70))
-            ->setGroupKey('Kernel')
+            ->addColumns(
+                PdfColumn::left('Name', 30),
+                PdfColumn::left('Value', 70)
+            )->setGroupKey('Kernel')
             ->outputHeaders();
 
         $this->outputRow($table, 'Environment', $info->getEnvironment())
@@ -150,10 +152,11 @@ class SymfonyReport extends AbstractReport
     {
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumn(PdfColumn::left('Name', 30))
-            ->addColumn(PdfColumn::left('Version', 10))
-            ->addColumn(PdfColumn::left('Description', 62))
-            ->setGroupBeforeHeader(true)
+            ->addColumns(
+                PdfColumn::left('Name', 30),
+                PdfColumn::left('Version', 10),
+                PdfColumn::left('Description', 62)
+            )->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
 
@@ -174,26 +177,24 @@ class SymfonyReport extends AbstractReport
     {
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumn(PdfColumn::left('Name', 30))
-            ->addColumn(PdfColumn::left('Path', 70))
-            ->setGroupBeforeHeader(true)
+            ->addColumns(
+                PdfColumn::left('Name', 30),
+                PdfColumn::left('Path', 70)
+            )->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
 
         foreach ($routes as $route) {
-            $table->startRow()
-                ->add($route['name'])
-                ->add($route['path'])
-                ->endRow();
+            $table->addRow(
+                $route['name'],
+                $route['path']
+            );
         }
     }
 
     private function outputRow(PdfGroupTableBuilder $table, string $key, string $value): self
     {
-        $table->startRow()
-            ->add($key)
-            ->add($value)
-            ->endRow();
+        $table->addRow($key, $value);
 
         return $this;
     }

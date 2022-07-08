@@ -39,17 +39,18 @@ class GlobalMarginsReport extends AbstractArrayReport
 
         // table
         $table = new PdfTableBuilder($this);
-        $table->addColumn(PdfColumn::right($this->trans('globalmargin.fields.minimum'), 50))
-            ->addColumn(PdfColumn::right($this->trans('globalmargin.fields.maximum'), 50))
-            ->addColumn(PdfColumn::right($this->trans('globalmargin.fields.margin'), 50))
-            ->outputHeaders();
+        $table->addColumns(
+            PdfColumn::right($this->trans('globalmargin.fields.minimum'), 50),
+            PdfColumn::right($this->trans('globalmargin.fields.maximum'), 50),
+            PdfColumn::right($this->trans('globalmargin.fields.margin'), 50)
+        )->outputHeaders();
 
         foreach ($entities as $entity) {
-            $table->startRow()
-                ->add(FormatUtils::formatAmount($entity->getMinimum()))
-                ->add(FormatUtils::formatAmount($entity->getMaximum()))
-                ->add(FormatUtils::formatPercent($entity->getMargin()))
-                ->endRow();
+            $table->addRow(
+                FormatUtils::formatAmount($entity->getMinimum()),
+                FormatUtils::formatAmount($entity->getMaximum()),
+                FormatUtils::formatPercent($entity->getMargin())
+            );
         }
 
         // count

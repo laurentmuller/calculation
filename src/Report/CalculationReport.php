@@ -185,17 +185,14 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
     {
         $calculation = $this->calculation;
 
-        $columns = [
-            PdfColumn::left(null, 100),
-            PdfColumn::right(null, 40, true),
-        ];
-
         $leftStyle = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT);
         $rightStyle = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
 
         $table = new PdfTableBuilder($this);
-        $table->addColumns($columns)
-            ->startHeaderRow()
+        $table->addColumns(
+            PdfColumn::left(null, 100),
+            PdfColumn::right(null, 40, true)
+        )->startHeaderRow()
             ->add(text: $calculation->getCustomer(), style: $leftStyle)
             ->add(text: $calculation->getStateCode(), style: $rightStyle)
             ->endRow()

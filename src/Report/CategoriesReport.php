@@ -53,12 +53,12 @@ class CategoriesReport extends AbstractArrayReport
         foreach ($groups as $key => $items) {
             $table->setGroupKey($key);
             foreach ($items as $item) {
-                $table->startRow()
-                    ->add($item->getCode())
-                    ->add($item->getDescription())
-                    ->add(FormatUtils::formatInt($item->countProducts()))
-                    ->add(FormatUtils::formatInt($item->countTasks()))
-                    ->endRow();
+                $table->addRow(
+                    $item->getCode(),
+                    $item->getDescription(),
+                    FormatUtils::formatInt($item->countProducts()),
+                    FormatUtils::formatInt($item->countTasks())
+                );
             }
         }
         $this->resetStyle();
@@ -93,12 +93,12 @@ class CategoriesReport extends AbstractArrayReport
     private function createTable(): PdfGroupTableBuilder
     {
         $table = new PdfGroupTableBuilder($this);
-        $table->addColumn(PdfColumn::left($this->trans('category.fields.code'), 40, true))
-            ->addColumn(PdfColumn::left($this->trans('category.fields.description'), 50))
-            ->addColumn(PdfColumn::right($this->trans('category.fields.products'), 20, true))
-            ->addColumn(PdfColumn::right($this->trans('category.fields.tasks'), 20, true))
-            ->outputHeaders();
 
-        return $table;
+        return $table->addColumns(
+            PdfColumn::left($this->trans('category.fields.code'), 40, true),
+            PdfColumn::left($this->trans('category.fields.description'), 50),
+            PdfColumn::right($this->trans('category.fields.products'), 20, true),
+            PdfColumn::right($this->trans('category.fields.tasks'), 20, true)
+        )->outputHeaders();
     }
 }

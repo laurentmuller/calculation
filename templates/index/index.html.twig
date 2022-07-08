@@ -1,21 +1,19 @@
 {% extends 'base.html.twig' %}
-
 {# parameters #}
 {%- set title = 'index.title' -%}
 {%- set enabled = app.user.enabled -%}
-
 {# show search #}
-{% block navigation -%}
+{% block navigation_horizontal -%}
 {%- if enabled -%}
     {%- set show_navigation = true -%}
     {{ parent() }}
 {%- endif -%}
 {%- endblock %}
-
+{# show footer #}
 {% block footer -%}
 {%- if enabled -%}{{- parent() -}}{%- endif -%}
 {%- endblock %}
-
+{# show body #}
 {% block body -%}
 <div class="row no-gutters">
 {% if enabled %}
@@ -40,11 +38,11 @@
 {% endif %}
 </div>
 {%- endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if enabled %}
 {% if app.debug %}

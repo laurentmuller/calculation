@@ -1,4 +1,4 @@
-{# Navigation toolbar #}
+{# horizontal toolbar #}
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 {# parameters #}
@@ -19,34 +19,36 @@
 {%- set is_granted_group = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) -%}
 {%- set is_granted_calculation_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
 {%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
-{# navigation #}
-<nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
-    <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
+{# navigation_horizontal #}
+<nav id="navigation" class="navbar navbar-horizontal navbar-expand-md {{ theme_background(app.request) }}{% if not active %} pl-0{% endif %}" data-show="{{ 'index.sidebar_show'|trans }}" data-hide="{{ 'index.sidebar_hide'|trans }}">
+    <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}" style="display: {{ active ? 'block' : 'none' }}">
         {{- icons.icon('home') -}}
     </a>
-    <a href="#" class="navbar-brand sidebar-toggle">
-        <span class="navbar-toggler-icon" title="{{ 'index.toggle_navigation'|trans }}"></span>
+    <a href="#" class="navbar-nav sidebar-toggle" title="{{ (active ? 'index.sidebar_show' : 'index.sidebar_hide')|trans }}">
+        <span class="navbar-toggler-icon"></span>
     </a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
-            {#
             {% if is_granted_calculation -%}
-                {{ icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
+                {% set display_style = active ? 'block' : 'none' %}
+                <div class="nav-item">
+                    <a href="{{ path('calculation_table') }}" class="nav-link nav-item-horizontal" style="display: {{ display_style }};">
+                        {{- icons.icon(ICON_CALCULATION, 'calculation.list.title') -}}
+                    </a>
+                </div>
             {% endif %}
-            {%- include 'navigation/navigation_data.html.twig' %}
-            {% include 'navigation/navigation_tools.html.twig' %}
-            {% include 'navigation/navigation_chart.html.twig' %}
-            {% include 'navigation/navigation_test.html.twig' %}
-            #}
+            {% include 'navigation_horizontal/navigation_data.html.twig' %}
+            {% include 'navigation_horizontal/navigation_tools.html.twig' %}
+            {% include 'navigation_horizontal/navigation_chart.html.twig' %}
         </ul>
         <ul class="navbar-nav">
-            {% include 'navigation/navigation_search.html.twig' %}
-            {% include 'navigation/navigation_user.html.twig' %}
+            {% include 'navigation_horizontal/navigation_search.html.twig' %}
+            {% include 'navigation_horizontal/navigation_user.html.twig' %}
         </ul>
     </div>
 </nav>

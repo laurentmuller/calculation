@@ -68,16 +68,13 @@ class ProductsReport extends AbstractArrayReport
      */
     private function createTable(): PdfGroupTableBuilder
     {
-        $columns = [
+        $table = new PdfGroupTableBuilder($this);
+
+        return $table->addColumns(
             PdfColumn::left($this->trans('product.fields.description'), 90),
             PdfColumn::right($this->trans('product.fields.price'), 20, true),
             PdfColumn::left($this->trans('product.fields.unit'), 20, true),
-            PdfColumn::left($this->trans('product.fields.supplier'), 45, true),
-        ];
-
-        $table = new PdfGroupTableBuilder($this);
-        $table->addColumns($columns)->outputHeaders();
-
-        return $table;
+            PdfColumn::left($this->trans('product.fields.supplier'), 45, true)
+        )->outputHeaders();
     }
 }

@@ -125,15 +125,15 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     private function createTable(): PdfGroupTableBuilder
     {
         $table = new PdfGroupTableBuilder($this);
-        $table->addColumn(PdfColumn::left($this->trans('task.fields.name'), 40))
-            ->addColumn(PdfColumn::left($this->trans('task.fields.category'), 50, true))
-            ->addColumn(PdfColumn::left($this->trans('task.fields.unit'), 15, true))
-            ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.minimum'), 20, true))
-            ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.maximum'), 20, true))
-            ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.value'), 20, true))
-            ->outputHeaders();
-        $table->setGroupListener($this);
 
-        return $table;
+        return $table->addColumns(
+            PdfColumn::left($this->trans('task.fields.name'), 40),
+            PdfColumn::left($this->trans('task.fields.category'), 50, true),
+            PdfColumn::left($this->trans('task.fields.unit'), 15, true),
+            PdfColumn::right($this->trans('taskitemmargin.fields.minimum'), 20, true),
+            PdfColumn::right($this->trans('taskitemmargin.fields.maximum'), 20, true),
+            PdfColumn::right($this->trans('taskitemmargin.fields.value'), 20, true)
+        )->outputHeaders()
+            ->setGroupListener($this);
     }
 }

@@ -61,10 +61,11 @@ class PhpIniReport extends AbstractReport
 
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumn(PdfColumn::left('Directive', 40))
-            ->addColumn(PdfColumn::left('Local Value', 30))
-            ->addColumn(PdfColumn::left('Master Value', 30))
-            ->outputHeaders();
+            ->addColumns(
+                PdfColumn::left('Directive', 40),
+                PdfColumn::left('Local Value', 30),
+                PdfColumn::left('Master Value', 30)
+            )->outputHeaders();
 
         foreach ($content as $key => $value) {
             $table->setGroupKey($key);

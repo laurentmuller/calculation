@@ -184,13 +184,15 @@ class ProductUpdater implements LoggerAwareInterface
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
             $newPrice = $this->computePrice($oldPrice, $query);
-            $product->setPrice($newPrice);
 
-            $result->addProduct([
-                'description' => $product->getDescription(),
-                'oldPrice' => $oldPrice,
-                'newPrice' => $newPrice,
-            ]);
+            if ($oldPrice !== $newPrice) {
+                $product->setPrice($newPrice);
+                $result->addProduct([
+                    'description' => $product->getDescription(),
+                    'oldPrice' => $oldPrice,
+                    'newPrice' => $newPrice,
+                ]);
+            }
         }
 
         if (!$query->isSimulate() && $result->isValid()) {
@@ -215,7 +217,7 @@ class ProductUpdater implements LoggerAwareInterface
     }
 
     /**
-     * Gets all products with a not empty price.
+     * Gets all products.
      *
      * @return Product[] the products
      */
@@ -226,7 +228,6 @@ class ProductUpdater implements LoggerAwareInterface
         /** @var Product[] $products */
         $products = $repository->createDefaultQueryBuilder('e')
             ->orderBy('e.description')
-            ->where('e.price != 0')
             ->getQuery()
             ->getResult();
 

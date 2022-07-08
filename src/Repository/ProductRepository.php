@@ -58,21 +58,16 @@ class ProductRepository extends AbstractCategoryItemRepository
     /**
      * Gets all products for the given category.
      *
-     * @param Category $category     the category to search products for
-     * @param bool     $excludeEmpty true to exclude products with an empty price (0.00)
+     * @param Category $category the category to search products for
      *
      * @return Product[] the products
      */
-    public function findByCategory(Category $category, bool $excludeEmpty = true): array
+    public function findByCategory(Category $category): array
     {
         $builder = $this->createDefaultQueryBuilder('e')
             ->where('e.category = :category')
             ->setParameter('category', $category->getId(), Types::INTEGER)
             ->orderBy('e.description');
-
-        if ($excludeEmpty) {
-            $builder->andWhere('e.price != 0');
-        }
 
         return $builder
             ->getQuery()

@@ -1,11 +1,13 @@
 {# tool menu #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_granted_data %}
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {% set id = 'dropdown_tools' %}
+    {% set display_style = active ? 'block' : 'none' %}
+    <li class="nav-item nav-item-horizontal dropdown" style="display: {{ display_style }}">
+        <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ icons.icon('tools', 'index.menu_tools') }}
         </a>
-        <div class="dropdown-menu" aria-labelledby="toolsDropdown">
+        <div class="dropdown-menu" aria-labelledby="{{ id }}">
             {{ icons.dropdownItem(path('search'), 'search.title', 'search') }}
             {% if is_admin %}
                 {{ icons.dropdownSeparator }}

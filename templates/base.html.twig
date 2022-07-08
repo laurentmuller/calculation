@@ -4,7 +4,7 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{%- set active = app.request.cookies.get('ACTIVE', false) ? ' active' : '' -%}
+{% set active = (app.session.get('menu_active') ?? false) ? ' active' : '' -%}
 {# head #}
 <head>
 <meta charset="utf-8" />
@@ -42,15 +42,15 @@
 {% endblock %}
 </head>
 <body>
-{# vertical navigation #}
-{%- block vertical_navigation -%}
+{# vertical navigation_horizontal #}
+{%- block navigation_vertical -%}
     {{ include('navigation_vertical/navigation.html.twig') }}
 {%- endblock %}
 {# main content #}
 <div class="page-content{{ active }}">
-    {# horizontal navigation #}
-    {%- block navigation -%}
-        {%- include 'navigation/navigation.html.twig' %}
+    {# horizontal navigation_horizontal #}
+    {%- block navigation_horizontal -%}
+        {%- include 'navigation_horizontal/navigation.html.twig' %}
     {%- endblock %}
     {# container #}
     <div role="main" class="{% block container_class 'container' %}">
@@ -74,7 +74,7 @@
 {{ asset_js('js/extensions/string-extensions.js') }}
 {{ asset_js('js/plugins/plugin-toast.js') }}
 {{ asset_js('js/application/core_common.js') }}
-{{ asset_js('js/application/vertical-bar.js') }}
+{{ asset_js('js/application/navbar-vertical.js') }}
 {% else %}
 {{ asset_js('js/core_common.js') }}
 {% endif %}

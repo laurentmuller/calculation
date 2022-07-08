@@ -215,15 +215,16 @@ class HelpReport extends AbstractReport
         $this->outputText($description);
 
         $table = new PdfTableBuilder($this);
-        $table->addColumn(PdfColumn::left($this->trans('help.fields.action'), 70, true))
-            ->addColumn(PdfColumn::left($this->trans('help.fields.description'), 50))
-            ->outputHeaders();
+        $table->addColumns(
+            PdfColumn::left($this->trans('help.fields.action'), 70, true),
+            PdfColumn::left($this->trans('help.fields.description'), 50)
+        )->outputHeaders();
 
         foreach ($actions as $action) {
-            $table->startRow()
-                ->add($this->trans($action['id']))
-                ->add($action['description'])
-                ->endRow();
+            $table->addRow(
+                $this->trans($action['id']),
+                $action['description']
+            );
         }
     }
 
@@ -234,14 +235,16 @@ class HelpReport extends AbstractReport
     private function outputColumns(array $item, array $fields): void
     {
         $table = new PdfTableBuilder($this);
-        $table->addColumn(PdfColumn::left($this->trans('help.fields.column'), 30, true))
-            ->addColumn(PdfColumn::left($this->trans('help.fields.description'), 50))
-            ->outputHeaders();
+        $table->addColumns(
+            PdfColumn::left($this->trans('help.fields.column'), 30, true),
+            PdfColumn::left($this->trans('help.fields.description'), 50)
+        )->outputHeaders();
+
         foreach ($fields as $field) {
-            $table->startRow()
-                ->add($this->formatFieldName($item, $field))
-                ->add($field['description'])
-                ->endRow();
+            $table->addRow(
+                $this->formatFieldName($item, $field),
+                $field['description']
+            );
         }
     }
 
@@ -512,18 +515,20 @@ class HelpReport extends AbstractReport
     private function outputFields(array $item, array $fields): void
     {
         $table = new PdfTableBuilder($this);
-        $table->addColumn(PdfColumn::left($this->trans('help.fields.field'), 30, true))
-            ->addColumn(PdfColumn::left($this->trans('help.fields.description'), 50))
-            ->addColumn(PdfColumn::left($this->trans('help.fields.type'), 30, true))
-            ->addColumn(PdfColumn::center($this->trans('help.fields.required'), 18, true))
-            ->outputHeaders();
+        $table->addColumns(
+            PdfColumn::left($this->trans('help.fields.field'), 30, true),
+            PdfColumn::left($this->trans('help.fields.description'), 50),
+            PdfColumn::left($this->trans('help.fields.type'), 30, true),
+            PdfColumn::center($this->trans('help.fields.required'), 18, true)
+        )->outputHeaders();
+
         foreach ($fields as $field) {
-            $table->startRow()
-                ->add($this->formatFieldName($item, $field))
-                ->add($field['description'])
-                ->add($this->formatFieldType($field))
-                ->add($this->formatRequired($field['required'] ?? true))
-                ->endRow();
+            $table->addRow(
+                $this->formatFieldName($item, $field),
+                $field['description'],
+                $this->formatFieldType($field),
+                $this->formatRequired($field['required'] ?? true)
+            );
         }
     }
 
@@ -588,9 +593,10 @@ class HelpReport extends AbstractReport
             $this->Ln(3);
             $this->outputText('help.labels.edit_actions');
             $table = new PdfTableBuilder($this);
-            $table->addColumn(PdfColumn::left($this->trans('help.fields.action'), 60, true))
-                ->addColumn(PdfColumn::left($this->trans('help.fields.description'), 50))
-                ->outputHeaders();
+            $table->addColumns(
+                PdfColumn::left($this->trans('help.fields.action'), 60, true),
+                PdfColumn::left($this->trans('help.fields.description'), 50)
+            )->outputHeaders();
             $this->outputMenus($table, $menus);
 
             return true;

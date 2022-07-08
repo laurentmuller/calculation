@@ -52,30 +52,24 @@ class MySqlReport extends AbstractReport
         }
 
         $this->AddPage();
-
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumn(PdfColumn::left('Name', 40))
-            ->addColumn(PdfColumn::left('Value', 60))
-            ->outputHeaders();
+            ->addColumns(
+                PdfColumn::left('Name', 40),
+                PdfColumn::left('Value', 60)
+            )->outputHeaders();
 
         if (!empty($database)) {
             $table->setGroupKey('Database');
             foreach ($database as $key => $value) {
-                $table->startRow()
-                    ->add($key)
-                    ->add($value)
-                    ->endRow();
+                $table->addRow($key, $value);
             }
         }
 
         if (!empty($configuration)) {
             $table->setGroupKey('Configuration');
             foreach ($configuration as $key => $value) {
-                $table->startRow()
-                    ->add($key)
-                    ->add($value)
-                    ->endRow();
+                $table->addRow($key, $value);
             }
         }
 

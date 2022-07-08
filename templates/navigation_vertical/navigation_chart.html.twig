@@ -1,15 +1,20 @@
 {# chart menu #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_granted_calculation %}
-    <li class="nav-item nav-item-dropdown" id="chart">
-        <a class="nav-link nav-link-toggle font-weight-bold" href="#" role="button" aria-expanded="false">
-            {{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}
+    {% set id = 'menu_chart' %}
+    {% set expanded = app.session.get(id) ?? false %}
+    {% set display_style = expanded ? 'block' : 'none' %}
+    {% set toggle_class = expanded ? ' nav-link-toggle-show' : '' %}
+    {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+    <li class="nav-item nav-item-dropdown" id="{{ id }}">
+        <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+            {{- icons.icon('chart-area fa-fw', 'menu_graphics', 'chart') -}}
         </a>
-        <ul class="navbar-nav d-none">
+        <ul class="navbar-nav" style="display: {{ display_style }}">
             {{ icons.navItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
             {{ icons.navItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
             {% if is_test %}
-                {{ icons.dropdownSeparator }}
+                {{ icons.dropdownSeparator(false, 'border-secondary') }}
                 {{ icons.navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
             {% endif %}
         </ul>

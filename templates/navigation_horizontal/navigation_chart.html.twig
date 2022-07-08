@@ -1,11 +1,13 @@
 {# chart menu #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_granted_calculation %}
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="chartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {% set id = 'dropdown_chart' %}
+    {% set display_style = active ? 'block' : 'none' %}
+    <li class="nav-item dropdown nav-item-horizontal" style="display: {{ display_style }}">
+        <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ icons.icon('chart-area', 'menu_graphics', 'chart') }}
         </a>
-        <div class="dropdown-menu" aria-labelledby="chartDropdown">
+        <div class="dropdown-menu" aria-labelledby="{{ id }}">
             {{ icons.dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
             {{ icons.dropdownItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
             {% if is_test %}

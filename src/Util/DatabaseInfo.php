@@ -47,12 +47,8 @@ final class DatabaseInfo
             $this->configuration = [];
 
             try {
-                $sql = 'SHOW VARIABLES';
-                $result = $this->executeQuery($sql);
                 /** @psalm-var array<array{Variable_name:string, Value:string}> $entries */
-                $entries = $result->fetchAllAssociative();
-                $result->free();
-
+                $entries = $this->executeQuery('SHOW VARIABLES', true);
                 // convert
                 foreach ($entries as $entry) {
                     $value = $entry['Value'];
@@ -118,10 +114,7 @@ final class DatabaseInfo
             $this->version = 'Unknown';
 
             try {
-                $sql = 'SHOW VARIABLES LIKE "version"';
-                $result = $this->executeQuery($sql);
-                $entries = $result->fetchAssociative();
-                $result->free();
+                $entries = $this->executeQuery('SHOW VARIABLES LIKE "version"', false);
                 if (false !== $entries) {
                     $this->version = (string) $entries['Value'];
                 }
@@ -138,13 +131,16 @@ final class DatabaseInfo
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    private function executeQuery(string $sql): Result
+    private function executeQuery(string $sql, bool $all): array|false
     {
         $connection = $this->getConnection();
         /** @psalm-var \Doctrine\DBAL\Statement $statement */
         $statement = $connection->prepare($sql);
+        $result = $statement->executeQuery();
+        $entries = $all ? $result->fetchAllAssociative() : $result->fetchAssociative();
+        $result->free();
 
-        return $statement->executeQuery();
+        return $entries;
     }
 
     /**

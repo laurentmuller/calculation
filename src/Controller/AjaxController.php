@@ -329,17 +329,24 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Save navigation parameters.
+     * Save navigation_horizontal state.
      */
     #[IsGranted('ROLE_USER')]
-    #[Route(path: '/navigation', name: 'ajax_save_navigation')]
-    public function saveNavigation(Request $request): JsonResponse
+    #[Route(path: '/navigation_horizontal', name: 'ajax_save_navigation')]
+    public function saveNavigationState(Request $request): JsonResponse
     {
-        $active = $this->getRequestBoolean($request, 'active');
-        $response = $this->json(true);
-        $this->setCookie($response, 'ACTIVE', $active);
+        if ($request->hasSession()) {
+            $session = $request->getSession();
+            /** @psalm-var array<string, string> $menus */
+            $menus = $request->request->all();
+            foreach ($menus as $key => $menu) {
+                $session->set($key, \filter_var($menu, \FILTER_VALIDATE_BOOLEAN));
+            }
 
-        return $response;
+            return $this->json(true);
+        }
+
+        return $this->json(false);
     }
 
     /**

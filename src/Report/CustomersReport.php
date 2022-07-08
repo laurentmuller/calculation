@@ -61,15 +61,13 @@ class CustomersReport extends AbstractArrayReport
         $this->AddPage();
 
         // create table
-        $columns = [
-            PdfColumn::left($this->trans('customer.fields.nameAndCompany'), 50),
-            PdfColumn::left($this->trans('customer.fields.address'), 25),
-            PdfColumn::left($this->trans('customer.fields.zipCity'), 25),
-        ];
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
-            ->addColumns($columns)
-            ->outputHeaders();
+            ->addColumns(
+                PdfColumn::left($this->trans('customer.fields.nameAndCompany'), 50),
+                PdfColumn::left($this->trans('customer.fields.address'), 25),
+                PdfColumn::left($this->trans('customer.fields.zipCity'), 25)
+            )->outputHeaders();
 
         // grouped?
         if ($this->grouped) {
@@ -145,10 +143,10 @@ class CustomersReport extends AbstractArrayReport
      */
     private function outputCustomer(PdfGroupTableBuilder $table, Customer $customer): void
     {
-        $table->startRow()
-            ->add($customer->getNameAndCompany())
-            ->add($customer->getAddress())
-            ->add($customer->getZipCity())
-            ->endRow();
+        $table->addRow(
+            $customer->getNameAndCompany(),
+            $customer->getAddress(),
+            $customer->getZipCity()
+        );
     }
 }

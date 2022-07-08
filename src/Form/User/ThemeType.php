@@ -42,7 +42,7 @@ class ThemeType extends AbstractHelperType
     ];
 
     /**
-     * The navigation bar choices.
+     * The navigation_horizontal bar choices.
      */
     final public const FOREGROUND_CHOICES = [
         'theme.foreground.dark' => 'navbar-dark',

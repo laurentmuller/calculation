@@ -649,7 +649,13 @@ index:
   panel_count_task: Nombre de tâches dans le catalogue
   title: Accueil
   title_help: Afficher la page d'accueil
-  toggle_navigation: Basculer la navigation
+  toggle_navigation: Basculer la navigation_horizontal
+  sidebar_show: Afficher la barre latérale
+  sidebar_hide: Masquer la barre latérale
+  menu_show: Développer le menu
+  menu_hide: Réduire le menu
+  menu_show_all: Développer tous les menus
+  menu_hide_all: Réduire tous les menus
 list:
   add_title: Créer un nouvel élément
   empty_list: Aucune donnée correspondante.

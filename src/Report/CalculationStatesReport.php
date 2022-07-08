@@ -84,12 +84,13 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
         // table
         $table = new PdfTableBuilder($this);
         $table->setListener($this)
-            ->addColumn(PdfColumn::left($this->trans('calculationstate.fields.code'), 20))
-            ->addColumn(PdfColumn::left($this->trans('calculationstate.fields.description'), 80))
-            ->addColumn(PdfColumn::center($this->trans('calculationstate.fields.editable'), 20, true))
-            ->addColumn(PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true))
-            ->addColumn(PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true))
-            ->outputHeaders();
+            ->addColumns(
+                PdfColumn::left($this->trans('calculationstate.fields.code'), 20),
+                PdfColumn::left($this->trans('calculationstate.fields.description'), 80),
+                PdfColumn::center($this->trans('calculationstate.fields.editable'), 20, true),
+                PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true),
+                PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true)
+            )->outputHeaders();
 
         foreach ($entities as $entity) {
             $table->startRow()

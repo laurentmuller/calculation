@@ -1,4 +1,4 @@
-{# macros for icons, links and navigation entries #}
+{# macros for icons, links and navigation_horizontal entries #}
 {% macro icon(icon, text, domain=null, parameters=[]) -%}
 {%- if icon -%}
     {%- if 'fab' in icon -%}
@@ -80,8 +80,8 @@
 </a>
 {%- endmacro %}
 
-{% macro dropdownSeparator(hidden=false) -%}
-{%- set class = ('dropdown-divider ' ~ (hidden ? ' d-none' : ''))|trim -%}
+{% macro dropdownSeparator(hidden=false, extra_class='') -%}
+{%- set class = ('dropdown-divider ' ~ extra_class ~ (hidden ? ' d-none' : ''))|trim -%}
 <div role="separator" class="{{ class }}"></div>
 {%- endmacro %}
 

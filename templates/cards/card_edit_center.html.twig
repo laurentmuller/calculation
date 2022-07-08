@@ -1,8 +1,8 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-{# hide navigation and footer #}
-{% block navigation %}{% endblock %}
-{%- block vertical_navigation -%}{% endblock %}
+{# hide navigation_horizontal and footer #}
+{% block navigation_horizontal %}{% endblock %}
+{% block navigation_vertical -%}{% endblock %}
 {% block footer %}{% endblock %}
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}

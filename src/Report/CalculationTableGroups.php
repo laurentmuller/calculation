@@ -64,7 +64,7 @@ class CalculationTableGroups extends PdfTableBuilder
             PdfColumn::right($this->trans('report.calculation.margin_amount'), 20, true),
             PdfColumn::right($this->trans('report.calculation.total'), 20, true),
         ];
-        $this->addColumns($columns);
+        $this->addColumns(...$columns);
 
         $this->startHeaderRow()
             ->add($columns[0]->getText())

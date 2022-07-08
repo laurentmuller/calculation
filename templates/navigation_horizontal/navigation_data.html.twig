@@ -2,11 +2,13 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% set is_granted_data = is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_task or is_granted_customer %}
 {% if is_granted_data -%}
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {% set id = 'dropdown_data' %}
+    {% set display_style = active ? 'block' : 'none' %}
+    <li class="nav-item nav-item-horizontal dropdown" style="display: {{ display_style }}">
+        <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ icons.icon('database', 'index.menu_data') }}
         </a>
-        <div class="dropdown-menu" aria-labelledby="dataDropdown">
+        <div class="dropdown-menu" aria-labelledby="{{ id }}">
             {% if is_granted_product -%}
                 {{ icons.dropdownItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}
             {% endif -%}

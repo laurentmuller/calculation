@@ -66,13 +66,14 @@ class UsersReport extends AbstractArrayReport
 
         // table
         $table = new PdfTableBuilder($this);
-        $table->addColumn(PdfColumn::center($this->trans('user.fields.imageFile'), 18, true))
-            ->addColumn(PdfColumn::left($this->trans('user.fields.username'), 25))
-            ->addColumn(PdfColumn::left($this->trans('user.fields.email'), 30))
-            ->addColumn(PdfColumn::left($this->trans('user.fields.role'), 35, true))
-            ->addColumn(PdfColumn::left($this->trans('user.fields.enabled'), 18, true))
-            ->addColumn(PdfColumn::left($this->trans('user.fields.lastLogin'), 30, true))
-            ->outputHeaders();
+        $table->addColumns(
+            PdfColumn::center($this->trans('user.fields.imageFile'), 18, true),
+            PdfColumn::left($this->trans('user.fields.username'), 25),
+            PdfColumn::left($this->trans('user.fields.email'), 30),
+            PdfColumn::left($this->trans('user.fields.role'), 35, true),
+            PdfColumn::left($this->trans('user.fields.enabled'), 18, true),
+            PdfColumn::left($this->trans('user.fields.lastLogin'), 30, true)
+        )->outputHeaders();
 
         foreach ($entities as $entity) {
             $enabled = $entity->isEnabled();

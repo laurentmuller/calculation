@@ -100,6 +100,7 @@ class CategoryRepository extends AbstractRepository
      * @param int    $filterType the filter type to apply. One of the FILTER_* constants.
      * @param string $alias      the default entity alias
      * @psalm-param literal-string $alias
+     * @psalm-param (self::FILTER_NONE | self::FILTER_PRODUCTS | self::FILTER_TASKS) $filterType
      */
     public function getQueryBuilderByGroup(int $filterType = self::FILTER_NONE, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

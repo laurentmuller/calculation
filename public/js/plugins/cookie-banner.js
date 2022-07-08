@@ -198,7 +198,7 @@
         cookieExpire: Infinity,
         cookieSamesite: 'lax',
 
-        message: 'This website uses cookies to provide you a better navigation experience. By closing this banner you agree to the use of cookies.',
+        message: 'This website uses cookies to provide you a better navigation_horizontal experience. By closing this banner you agree to the use of cookies.',
         linkMessage: 'Learn more',
         linkTitle: null,
         closeMessage: 'Close',

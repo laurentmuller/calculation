@@ -295,7 +295,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         // fill
         $table = new PdfTableBuilder($this);
         $table->setListener($this);
-        $table->addColumns($columns)
+        $table->addColumns(...$columns)
             ->row($valCells, PdfStyle::getCellStyle()->setFontSize(18))
             ->row($textCells, PdfStyle::getHeaderStyle()->resetFont());
 
@@ -319,20 +319,21 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
         $table = new PdfTableBuilder($this);
         $table->setListener($this)
-            ->addColumn(PdfColumn::left($this->trans('log.fields.createdAt'), 45))
-            ->addColumn(PdfColumn::left($this->trans('log.fields.channel'), 30))
-            ->addColumn(PdfColumn::left($this->trans('log.fields.level'), 30))
-            ->addColumn(PdfColumn::left($this->trans('log.fields.message'), 150))
-            ->outputHeaders();
+            ->addColumns(
+                PdfColumn::left($this->trans('log.fields.createdAt'), 45),
+                PdfColumn::left($this->trans('log.fields.channel'), 30),
+                PdfColumn::left($this->trans('log.fields.level'), 30),
+                PdfColumn::left($this->trans('log.fields.message'), 150)
+            )->outputHeaders();
 
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
-            $table->startRow()
-                ->add($this->formatDate($log->getCreatedAt()))
-                ->add($this->capitalize($log->getChannel()))
-                ->add($this->capitalize($log->getLevel()))
-                ->add($this->formatMessage($log))
-                ->endRow();
+            $table->addRow(
+                $this->formatDate($log->getCreatedAt()),
+                $this->capitalize($log->getChannel()),
+                $this->capitalize($log->getLevel()),
+                $this->formatMessage($log)
+            );
         }
 
         return $this->renderCount($logs);

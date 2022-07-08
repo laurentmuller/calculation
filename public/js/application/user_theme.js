@@ -28,7 +28,7 @@ function applyTheme() {
         $('#example_description').text(description);
 
         // update toolbar
-        $('#navigation').setClass('navbar navbar-expand-md ' + background);
+        $('#navigation_horizontal').setClass('navbar navbar-expand-md ' + background);
 
         // update vertical toolbar
         $('.navbar-vertical.navbar').setClass('navbar-vertical navbar ' + background);

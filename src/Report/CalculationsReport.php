@@ -132,10 +132,9 @@ class CalculationsReport extends AbstractArrayReport
         ]);
 
         $table = new PdfGroupTableBuilder($this);
-        $table->addColumns($columns)
-            ->outputHeaders();
 
-        return $table;
+        return $table->addColumns(...$columns)
+            ->outputHeaders();
     }
 
     /**

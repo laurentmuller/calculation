@@ -39,13 +39,13 @@ function showFlashbag() {
 function initSearchToolbar() {
     'use strict';
     // search form?
-    const $form = $("#navigation-search-form");
+    const $form = $("#navigation_horizontal-search-form");
     if ($form.length === 0) {
         return;
     }
 
-    const $button = $("#navigation-search-button");
-    const $search = $("#navigation-search-form #search");
+    const $button = $("#navigation_horizontal-search-button");
+    const $search = $("#navigation_horizontal-search-form #search");
 
     $.fn.extend({
         hideInvalid: function () {

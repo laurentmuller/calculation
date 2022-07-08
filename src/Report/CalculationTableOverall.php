@@ -50,14 +50,13 @@ class CalculationTableOverall extends PdfTableBuilder
     {
         $calculation = $this->calculation;
 
-        $columns = [
+        $this->addColumns(
             PdfColumn::left(null, 50),
             PdfColumn::right(null, 20, true),
             PdfColumn::right(null, 20, true),
             PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-        ];
-        $this->addColumns($columns)->setRepeatHeader(false);
+            PdfColumn::right(null, 20, true)
+        )->setRepeatHeader(false);
 
         // compute values
         $totalItems = $calculation->getGroupsAmount();

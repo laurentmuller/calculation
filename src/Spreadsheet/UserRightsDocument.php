@@ -104,6 +104,14 @@ class UserRightsDocument extends AbstractArrayDocument
             $this->outputUser($entity, $row);
         }
 
+        // width
+        $sheet = $this->getActiveSheet();
+        foreach (\range(2, \count($headers)) as $column) {
+            $name = $this->stringFromColumnIndex($column);
+            $sheet->getColumnDimension($name)->setAutoSize(false)
+                ->setWidth(11);
+        }
+
         $this->finish();
 
         return true;

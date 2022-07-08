@@ -67,15 +67,13 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
 
         // headers
-        $columns = [
+        $this->addColumns(
             PdfColumn::left($this->trans('calculationitem.fields.description'), 50),
             PdfColumn::left($this->trans('calculationitem.fields.unit'), 20, true),
             PdfColumn::right($this->trans('calculationitem.fields.price'), 20, true),
             PdfColumn::right($this->trans('calculationitem.fields.quantity'), 20, true),
-            PdfColumn::right($this->trans('calculationitem.fields.total'), 20, true),
-        ];
-        $this->addColumns($columns)
-            ->outputHeaders();
+            PdfColumn::right($this->trans('calculationitem.fields.total'), 20, true)
+        )->outputHeaders();
 
         foreach ($groups as $group) {
             $this->checkLines(3);

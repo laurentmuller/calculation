@@ -143,16 +143,44 @@ class PdfTableBuilder
 
     /**
      * Adds the given columns to the list of columns.
-     *
-     * @param PdfColumn[] $columns the columns to add
      */
-    public function addColumns(array $columns): static
+    public function addColumns(PdfColumn ...$columns): static
     {
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
 
         return $this;
+    }
+
+    /**
+     * Create and add a row with the given values.
+     *
+     * @throws \LogicException if the row is already started
+     */
+    public function addHeaderRow(?string ...$values): static
+    {
+        $this->startHeaderRow();
+        foreach ($values as $value) {
+            $this->add($value);
+        }
+
+        return $this->completeRow();
+    }
+
+    /**
+     * Create and add a row with the given values.
+     *
+     * @throws \LogicException if the row is already started
+     */
+    public function addRow(?string ...$values): static
+    {
+        $this->startRow();
+        foreach ($values as $value) {
+            $this->add($value);
+        }
+
+        return $this->completeRow();
     }
 
     /**
@@ -234,7 +262,7 @@ class PdfTableBuilder
 
         $index = 0;
         foreach ($cells as $cell) {
-            $texts[] = $cell->getText() ?: '';
+            $texts[] = $cell->getText() ?? '';
             $styles[] = $cell->getStyle() ?: $this->rowStyle ?: PdfStyle::getCellStyle();
             $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment() ?: PdfTextAlignment::LEFT;
 
@@ -404,12 +432,7 @@ class PdfTableBuilder
             throw new \LengthException('No column is defined.');
         }
 
-        $this->startHeaderRow();
-        foreach ($this->columns as $column) {
-            $this->add($column->getText());
-        }
-
-        return $this->endRow();
+        return $this->addHeaderRow(...\array_map(fn (PdfColumn $c): ?string => $c->getText(), $this->columns));
     }
 
     /**

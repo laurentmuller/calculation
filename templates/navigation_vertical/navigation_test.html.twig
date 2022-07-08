@@ -1,31 +1,36 @@
 {# admin menu #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_test -%}
-<li class="nav-item nav-item-dropdown" id="test">
-    <a class="nav-link nav-link-toggle font-weight-bold" href="#" role="button" aria-expanded="false">
-        {{- icons.icon('bug', 'index.menu_test') -}}
-    </a>
-    <ul class="navbar-nav d-none">
-        {{ icons.navItem(path('test_notifications'), 'test.notification', 'bell far') }}
-        {{ icons.navItem(path('test_editor'), 'test.editor', 'edit') }}
-        {{ icons.navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
-        {{ icons.navItem(path('test_timeline'), 'timeline.title', 'stream') }}
-        {{ icons.navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
-        {{ icons.dropdownSeparator }}
-        {{ icons.navItem(path('exchange_display'), 'exchangerate.title', 'comments-dollar') }}
-        {{ icons.navItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
-        {{ icons.navItem(path('test_translate'), 'translator.title', 'globe') }}
-        {{ icons.dropdownSeparator }}
-        {{ icons.navItemExternal(path('test_html'), 'test.html', 'code') }}
-        {{ icons.navItem(path('test_password'), 'password.title', 'lock') }}
-        {{ icons.dropdownSeparator }}
-        {{ icons.navItem(path('admin_import'), 'swisspost.title', 'download') }}
-        {{ icons.dropdownSeparator }}
-        {{ icons.navItem(path('generate'), 'generate.title', 'random') }}
-        {{ icons.navItem(path('update'), 'update.title', 'edit') }}
-        {{ icons.navItem(path('schema'), 'schema.index.title', 'table') }}
-        {{ icons.dropdownSeparator }}
-        {{ icons.navItem(path('help'), 'help.title', 'question-circle') }}
-    </ul>
-</li>
+    {% set id = 'menu_test' %}
+    {% set expanded = app.session.get(id) ?? false %}
+    {% set display_style = expanded ? 'block' : 'none' %}
+    {% set toggle_class = expanded ? ' nav-link-toggle-show' : '' %}
+    {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+    <li class="nav-item nav-item-dropdown" id="{{ id }}">
+        <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+            {{- icons.icon('bug fa-fw', 'index.menu_test') -}}
+        </a>
+        <ul class="navbar-nav" style="display: {{ display_style }}">
+            {{ icons.navItem(path('test_notifications'), 'test.notification', 'bell far') }}
+            {{ icons.navItem(path('test_editor'), 'test.editor', 'edit') }}
+            {{ icons.navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
+            {{ icons.navItem(path('test_timeline'), 'timeline.title', 'stream') }}
+            {{ icons.navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
+            {{ icons.dropdownSeparator(false, 'border-secondary') }}
+            {{ icons.navItem(path('exchange_display'), 'exchangerate.title', 'comments-dollar') }}
+            {{ icons.navItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
+            {{ icons.navItem(path('test_translate'), 'translator.title', 'globe') }}
+            {{ icons.dropdownSeparator(false, 'border-secondary') }}
+            {{ icons.navItemExternal(path('test_html'), 'test.html', 'code') }}
+            {{ icons.navItem(path('test_password'), 'password.title', 'lock') }}
+            {{ icons.dropdownSeparator(false, 'border-secondary') }}
+            {{ icons.navItem(path('admin_import'), 'swisspost.title', 'download') }}
+            {{ icons.dropdownSeparator(false, 'border-secondary') }}
+            {{ icons.navItem(path('generate'), 'generate.title', 'random') }}
+            {{ icons.navItem(path('update'), 'update.title', 'edit') }}
+            {{ icons.navItem(path('schema'), 'schema.index.title', 'table') }}
+            {{ icons.dropdownSeparator(false, 'border-secondary') }}
+            {{ icons.navItem(path('help'), 'help.title', 'question-circle') }}
+        </ul>
+    </li>
 {% endif %}

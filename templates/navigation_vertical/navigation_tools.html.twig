@@ -1,24 +1,29 @@
 {# tools menu #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_granted_data -%}
-<li class="nav-item nav-item-dropdown" id="tools">
-    <a class="nav-link nav-link-toggle font-weight-bold" href="#" role="button" aria-expanded="false">
-        {{- icons.icon('tools', 'index.menu_tools') -}}
-    </a>
-    <ul class="navbar-nav d-none">
-        {{ icons.navItem(path('search'), 'search.title', 'search') }}
-        {% if is_admin %}
-            {{ icons.navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
-            {{ icons.navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
-            {{ icons.dropdownSeparator }}
-            {{ icons.navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
-            {{ icons.navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
-            {{ icons.navItem(path('empty_table'), 'empty.title', 'file-code far') }}
-            {%- if is_granted_task -%}
-                {{ icons.dropdownSeparator }}
-                {{ icons.navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
-            {% endif -%}
-        {% endif %}
-    </ul>
-</li>
+    {% set id = 'menu_tools' %}
+    {% set expanded = app.session.get(id) ?? false %}
+    {% set display_style = expanded ? 'block' : 'none' %}
+    {% set toggle_class = expanded ? ' nav-link-toggle-show' : '' %}
+    {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+    <li class="nav-item nav-item-dropdown" id="{{ id }}">
+        <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+            {{- icons.icon('tools fa-fw', 'index.menu_tools') -}}
+        </a>
+        <ul class="navbar-nav" style="display: {{ display_style }}">
+            {{ icons.navItem(path('search'), 'search.title', 'search') }}
+            {% if is_admin %}
+                {{ icons.navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
+                {{ icons.navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
+                {{ icons.dropdownSeparator(false, 'border-secondary') }}
+                {{ icons.navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
+                {{ icons.navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
+                {{ icons.navItem(path('empty_table'), 'empty.title', 'file-code far') }}
+                {%- if is_granted_task -%}
+                    {{ icons.dropdownSeparator(false, 'border-secondary') }}
+                    {{ icons.navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
+                {% endif -%}
+            {% endif %}
+        </ul>
+    </li>
 {% endif %}

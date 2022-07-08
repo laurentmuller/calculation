@@ -16,6 +16,10 @@
     display: block;
 }
 
+.navbar-vertical.active {
+    margin-left: -17rem;
+}
+
 /* scrollbar */
 .navbar-vertical::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -43,6 +47,23 @@
 .navbar-vertical::-webkit-scrollbar-thumb:hover {
     background: rgba(128, 135, 139, .8)
 }
+/*
+.navbar-vertical.light::-webkit-scrollbar-track {
+    background: rgba(255,255,255,.1)
+}
+
+.navbar-vertical.light::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.25)
+}
+
+.navbar-vertical.light::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(255,255,255,.15)
+}
+
+.navbar-vertical.light::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,.35)
+}
+*/
 
 /* menus */
 .navbar-vertical .navbar-nav {
@@ -58,20 +79,22 @@
     padding-right: 0;
 }
 
-.navbar-vertical.active {
-    margin-left: -17rem;
-}
-
 .navbar-vertical ul ul {
     padding-left: 1rem;
 }
+
+/*
+.navbar-vertical .nav-link-toggle {
+    font-weight: bold;
+}
+*/
 
 .navbar-vertical .nav-link-toggle::after {
     display: inline-block;
     content: "";
     float: right;
-    /*margin-top: 0.6em;*/
     margin-top: 0.7em;
+    margin-right: 0.25em;
     transition: all 0.1s;
 
     /* left arrow */
@@ -105,16 +128,34 @@
     width: 100%;
     margin: 0;
 }
-
+/* toggle button */
 .page-content .sidebar-toggle {
-    transition: all 0.8s;
+    transition: all 0.6s;
 }
 
 .page-content.active .sidebar-toggle {
     transform: rotate(180deg);
 }
 
-/* small resolution */
+/* hide side bar on small resolution
+@media (max-width: 768px) {
+    .navbar-vertical,
+    .navbar-vertical.active {
+        margin-left: -17rem;
+    }
+
+    .navbar-vertical.active {
+        margin-left: 0;
+    }
+
+    .page-content,
+    .page-content.active{
+        width: 100%;
+        margin: 0;
+    }
+}
+ */
+/* hide side bar on small resolution
 @media (max-width: 768px) {
     .navbar-vertical {
         margin-left: -17rem;
@@ -134,3 +175,4 @@
         width: calc(100% - 17rem);
     }
 }
+ */

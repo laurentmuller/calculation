@@ -37,7 +37,7 @@
 {%- set is_admin = is_granted('ROLE_ADMIN') -%}
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
-{%- set is_bibi = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
+{%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
 {%- set route_params = {'caller': path('site_map')} -%}
 
 {# rights #}
@@ -69,9 +69,9 @@
 {%- set is_add_margin = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_export_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
 
-{%- set is_list_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_bibi -%}
-{%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_bibi -%}
-{%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_bibi -%}
+{%- set is_list_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
+{%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_test -%}
+{%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_test -%}
 
 {# class #}
 {% block container_class 'container-fluid' %}
@@ -153,7 +153,7 @@
                 <ul>
                     <li>{{ _self.link('chart_by_month', 'title_by_month', 'calendar-alt far', 'chart') }}</li>
                     <li>{{ _self.link('chart_by_state', 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}</li>
-                    {% if is_bibi -%}
+                    {% if is_test -%}
                     <li>{{ _self.link('calculation_pivot', 'pivot.title', 'table') }}</li>
                     {% endif %}
                 </ul>

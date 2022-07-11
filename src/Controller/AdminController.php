@@ -341,6 +341,7 @@ class AdminController extends AbstractController
         return $this->renderForm('admin/role_rights.html.twig', [
             'form' => $form,
             'default' => $default,
+            'is_admin' => $role->isAdmin(),
             'permissions' => EntityPermission::sorted(),
         ]);
     }

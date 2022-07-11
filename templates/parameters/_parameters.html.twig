@@ -1,6 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% form_theme form with _self %}
-
 {# macros #}
 {% macro collapseLine(href, form, expanded=false) %}
 {%- set name = ('parameters.group_' ~ href)|trans -%}
@@ -17,7 +16,6 @@
 </div>
 {% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded} %}
 {% endmacro %}
-
 {# customized fields #}
 {% block _parameters_message_timeout_widget -%}
 <div class="input-group">
@@ -27,23 +25,22 @@
     </div>
 </div>
 {%- endblock %}
-
 {# parameters #}
 {%- set cancel_path = path('homepage') -%}
 {%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set form_attr = form_attr|default({})|merge({'data-random': url('ajax_random_text'), 'data-failure': 'parameters.failure'|trans}) -%}
-
+{# form #}
 {% block actions_form -%}
 {{ parent() }}
 <button type="button" class="btn btn-form btn-default btn-outline-success">{{ 'theme.default'|trans }}</button>
 {%- endblock %}
-
+{# body #}
 {% block card_body -%}
 <div class="accordion" id="parent_accordion">
     {% block sections %}{% endblock %}
 </div>
 {%- endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

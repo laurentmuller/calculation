@@ -21,9 +21,9 @@
 {%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
-{# navigation_horizontal #}
+{# horizontal navigation #}
 <nav id="navigation" class="navbar navbar-horizontal navbar-expand-md {{ theme_background(app.request) }}" data-show="{{ 'index.sidebar_show'|trans }}" data-hide="{{ 'index.sidebar_hide'|trans }}">
-    <a href="#" class="navbar-nav sidebar-toggle" title="{{ (active ? 'index.sidebar_show' : 'index.sidebar_hide')|trans }}">
+    <a href="#" class="navbar-nav navbar-toggler sidebar-toggle" title="{{ (active ? 'index.sidebar_show' : 'index.sidebar_hide')|trans }}">
         <span class="navbar-toggler-icon"></span>
     </a>
     <a class="navbar-brand ml-3" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}" style="display: {{ active ? 'block' : 'none' }}">

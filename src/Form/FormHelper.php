@@ -316,7 +316,7 @@ class FormHelper
     }
 
     /**
-     * Add an flag bag enum type to the builder and reset all values to default.
+     * Add a flag bag enum type to the builder and reset all values to default.
      */
     public function addFlagBagType(string $class): self
     {

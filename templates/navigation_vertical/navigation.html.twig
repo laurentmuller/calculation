@@ -23,27 +23,28 @@
 <!-- vertical toolbar -->
 {{- asset_css('css/navbar-vertical.css') }}
 <div id="sidebar" class="navbar-vertical navbar {{ theme_background(app.request) }}{{ active }}" style="padding-bottom: 30px;" data-url="{{ url('ajax_save_navigation') }}" data-show="{{ 'index.menu_show'|trans }}" data-hide="{{ 'index.menu_hide'|trans }}">
-    {# logo #}
+    {# logo
     <div class="p-2 mb-1">
-        <div class="media d-flex align-items-center">
+        <div class="media position-relative d-flex align-items-center">
             <img src="{{ asset('/images/logo/logo-customer-148x148.png') }}" alt="{{ app.customerName }}" width="65" class="mr-3 rounded-circle shadow-sm">
             <div class="media-body">
                 <h4 class="m-0 text-white">{{ app.customerName }}</h4>
-                <p class="font-weight-light text-muted mb-0">PUB PROD & PRINT</p>
-            </div>
-        </div>
-    </div>
-    {#
-    <div class="py-2 mb-1">
-        <div class="media d-flex align-items-center">
-            <img alt="{{ app_name }}" class="rounded-lg img-fluid border border-dark mr-2" src="{{ asset('/images/icons/android-icon-72x72.png') }}">
-            <div class="media-body">
-                <h4 class="m-0 text-white">{{ app_name }}</h4>
-                <p class="font-weight-light text-muted mb-0"> {{ 'about.version'|trans({'%version%': app_version}) }}</p>
+                <p class="font-weight-light text-muted small mb-0">PUB PROD & PRINT</p>
+                <a href="{{ app.customerUrl }}" rel="noopener noreferrer" class="stretched-link" target="_blank"></a>
             </div>
         </div>
     </div>
     #}
+    <div class="py-2 mb-1">
+        <div class="media position-relative d-flex align-items-center">
+            <img alt="{{ app_name }}" class="rounded-lg img-fluid border border-dark mr-2" src="{{ asset('/images/icons/apple-icon-60x60.png') }}">
+            <div class="media-body">
+                <h4 class="m-0 text-white">{{ app_name }}</h4>
+                <p class="font-weight-light text-muted mb-0"> {{ 'about.version'|trans({'%version%': app_version}) }}</p>
+                <a href="{{ path('about') }}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
     {# home page #}
     <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
         {{- icons.icon('home', 'index.title') -}}

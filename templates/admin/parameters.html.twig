@@ -1,10 +1,9 @@
 {% extends 'parameters/_parameters.html.twig' %}
-
 {# parameters #}
 {%- set title = 'parameters.title' -%}
 {%- set title_icon = 'cogs' -%}
 {%- set title_description = 'parameters.description' -%}
-
+{# sections #}
 {% block sections -%}
 {{ _self.collapseLine('customer', form, true) }}
 {{ _self.collapseLine('default', form) }}

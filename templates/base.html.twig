@@ -42,13 +42,13 @@
 {% endblock %}
 </head>
 <body>
-{# vertical navigation_horizontal #}
+{# vertical navigation #}
 {%- block navigation_vertical -%}
     {{ include('navigation_vertical/navigation.html.twig') }}
 {%- endblock %}
 {# main content #}
 <div class="page-content{{ active }}">
-    {# horizontal navigation_horizontal #}
+    {# horizontal navigation #}
     {%- block navigation_horizontal -%}
         {%- include 'navigation_horizontal/navigation.html.twig' %}
     {%- endblock %}

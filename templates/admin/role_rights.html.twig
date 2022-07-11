@@ -2,8 +2,8 @@
 {% import 'macros/_rights.html.twig' as rights %}
 
 {# parameters #}
-{%- set title = 'admin.rights.title' -%}
-{%- set title_icon = 'unlock' -%}
+{%- set title = is_admin ? 'index.menu_rights_admin' : 'index.menu_rights_user' -%}
+{%- set title_icon = is_admin ? 'user-shield' : 'user-check' -%}
 {%- set title_description = 'user.rights.description' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set show_required = false -%}

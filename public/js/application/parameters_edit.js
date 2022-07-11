@@ -134,7 +134,7 @@ function displayEmail($email) {
         }
     });
 
-    // toogle icons and titles
+    // toggle icons and titles
     $('.toggle-icon').on('show.bs.collapse', function () {
         const $prev = $(this).prev();
         $prev.find('i').toggleClass('fa-caret-left fa-caret-down');

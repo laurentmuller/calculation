@@ -130,6 +130,7 @@
 }
 /* toggle button */
 .page-content .sidebar-toggle {
+    display: block;
     transition: all 0.35s;
     margin-left: -16px !important;
 }

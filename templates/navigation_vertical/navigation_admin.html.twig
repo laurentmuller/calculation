@@ -16,9 +16,9 @@
             {{ icons.navItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
             {{ icons.dropdownSeparator(false, 'border-secondary') }}
             {{ icons.navItem(path('user_table'), 'user.list.title', ICON_USER) }}
-            {{ icons.navItem(path('admin_rights_user'), 'index.menu_rights_user', 'unlock-alt') }}
+            {{ icons.navItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
             {% if is_super_admin -%}
-                {{ icons.navItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'unlock-alt') }}
+                {{ icons.navItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
             {% endif %}
             {% if is_previous_admin -%}
                 {{ icons.dropdownSeparator(false, 'border-secondary') }}

@@ -15,16 +15,21 @@ namespace App\Traits;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
  * Trait to save or load data from a cache.
  */
-trait CacheTrait
+trait CacheAwareTrait
 {
     /**
      * The cache adapter.
      */
-    protected ?CacheItemPoolInterface $adapter = null;
+    private ?CacheItemPoolInterface $adapter = null;
+    /**
+     * The debug state.
+     */
+    private bool $isDebugCache = false;
 
     /**
      * The reserved characters.
@@ -50,7 +55,11 @@ trait CacheTrait
      */
     public function clearCache(): bool
     {
-        return $this->adapter?->clear() ?? false;
+        if (!$this->isDebugCache) {
+            return $this->adapter()->clear();
+        }
+
+        return false;
     }
 
     /**
@@ -58,7 +67,11 @@ trait CacheTrait
      */
     public function commitDeferredValues(): bool
     {
-        return $this->adapter?->commit() ?? false;
+        if (!$this->isDebugCache) {
+            return $this->adapter()->commit();
+        }
+
+        return false;
     }
 
     /**
@@ -68,7 +81,11 @@ trait CacheTrait
      */
     public function deleteCacheItem(string $key): bool
     {
-        return $this->adapter?->deleteItem($this->cleanKey($key)) ?? false;
+        if (!$this->isDebugCache) {
+            return $this->adapter()->deleteItem($this->cleanKey($key));
+        }
+
+        return false;
     }
 
     /**
@@ -81,8 +98,11 @@ trait CacheTrait
     public function deleteCacheItems(array $keys): bool
     {
         $keys = \array_map(fn (string $key): string => $this->cleanKey($key), $keys);
+        if (!$this->isDebugCache) {
+            return $this->adapter()->deleteItems($keys);
+        }
 
-        return $this->adapter?->deleteItems($keys) ?? false;
+        return false;
     }
 
     /**
@@ -92,7 +112,7 @@ trait CacheTrait
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
-        return $this->adapter?->getItem($this->cleanKey($key));
+        return $this->isDebugCache ? null : $this->adapter()->getItem($this->cleanKey($key));
     }
 
     /**
@@ -141,24 +161,16 @@ trait CacheTrait
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         $item = $this->getCacheItem($key);
-        if (null !== $item && null !== $this->adapter) {
+        if (!$this->isDebugCache && null !== $item) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
             }
 
-            return $this->adapter->saveDeferred($item);
+            return $this->adapter()->saveDeferred($item);
         }
 
         return false;
-    }
-
-    /**
-     * Sets the adapter.
-     */
-    public function setAdapter(CacheItemPoolInterface $adapter): void
-    {
-        $this->adapter = $adapter;
     }
 
     /**
@@ -177,13 +189,32 @@ trait CacheTrait
         $key = $this->cleanKey($key);
         if (null === $value) {
             $this->deleteCacheItem($key);
-        } elseif (null !== $this->adapter && null !== $item = $this->getCacheItem($key)) {
+        } elseif (!$this->isDebugCache && null !== $item = $this->getCacheItem($key)) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
             }
-            $this->adapter->save($item);
+            $this->adapter()->save($item);
         }
+
+        return $this;
+    }
+
+    #[SubscribedService]
+    private function adapter(): CacheItemPoolInterface
+    {
+        if (null === $this->adapter) {
+            /** @psalm-var CacheItemPoolInterface $result */
+            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+            $this->adapter = $result;
+        }
+
+        return $this->adapter;
+    }
+
+    private function setAdapter(CacheItemPoolInterface $adapter): static
+    {
+        $this->adapter = $adapter;
 
         return $this;
     }

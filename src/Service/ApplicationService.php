@@ -29,16 +29,15 @@ use App\Security\EntityVoter;
 use App\Traits\PropertyTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\AppVariable;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage application properties.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class ApplicationService extends AppVariable implements LoggerAwareInterface, PropertyServiceInterface
+class ApplicationService extends AppVariable implements PropertyServiceInterface, ServiceSubscriberInterface
 {
     use PropertyTrait;
 
@@ -47,16 +46,10 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Pr
      */
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        LoggerInterface $logger,
-        KernelInterface $kernel,
-        TranslatorInterface $translator,
+        private readonly bool $isDebug,
         CacheItemPoolInterface $applicationCache
     ) {
-        $this->setLogger($logger);
-        $this->translator = $translator;
-        $this->setDebug($kernel->isDebug());
         $this->setAdapter($applicationCache);
-        $this->setEnvironment($kernel->getEnvironment());
     }
 
     /**
@@ -97,7 +90,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Pr
     }
 
     /**
-     * Gets the customer information.
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -319,7 +312,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Pr
             self::P_DEFAULT_PRODUCT_QUANTITY => 0,
 
             self::P_MIN_STRENGTH => StrengthInterface::LEVEL_NONE,
-            self::P_DISPLAY_CAPTCHA => !$this->getDebug(),
+            self::P_DISPLAY_CAPTCHA => !$this->isDebug,
         ];
     }
 
@@ -515,6 +508,14 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Pr
     }
 
     /**
+     * Return if the debug mode is enabled.
+     */
+    public function isDebug(): bool
+    {
+        return $this->isDebug;
+    }
+
+    /**
      * Gets a value indicating if the default product (if any)  must be edited
      * when a new calculation is created.
      *
@@ -532,7 +533,7 @@ class ApplicationService extends AppVariable implements LoggerAwareInterface, Pr
      */
     public function isDisplayCaptcha(): bool
     {
-        return $this->isPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->getDebug());
+        return $this->isPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->isDebug);
     }
 
     /**

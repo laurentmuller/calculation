@@ -3,6 +3,7 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         allowStringToStandInForClass="true"
+        allowNamedArgumentCalls="true"
         findUnusedVariablesAndParams="true"
         findUnusedPsalmSuppress="true"
         findUnusedCode="true"

@@ -19,29 +19,31 @@ use App\Form\FormHelper;
 use App\Model\ProductUpdateQuery;
 use App\Model\ProductUpdateResult;
 use App\Repository\CategoryRepository;
-use App\Traits\LoggerTrait;
+use App\Traits\LoggerAwareTrait;
 use App\Traits\MathTrait;
-use App\Traits\SessionTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\SessionAwareTrait;
+use App\Traits\TranslatorAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Psr\Log\LoggerAwareInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update the price of products.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class ProductUpdater implements LoggerAwareInterface
+class ProductUpdater implements ServiceSubscriberInterface
 {
-    use LoggerTrait;
+    use LoggerAwareTrait;
     use MathTrait;
-    use SessionTrait;
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use SessionAwareTrait;
+    use TranslatorAwareTrait;
 
     private const KEY_CATEGORY = 'product.update.category';
     private const KEY_FIXED = 'product.update.fixed';
@@ -55,12 +57,8 @@ class ProductUpdater implements LoggerAwareInterface
      */
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        private readonly FormFactoryInterface $factory,
-        TranslatorInterface $translator,
-        RequestStack $requestStack
+        private readonly FormFactoryInterface $factory
     ) {
-        $this->translator = $translator;
-        $this->setRequestStack($requestStack);
     }
 
     /**
@@ -118,7 +116,7 @@ class ProductUpdater implements LoggerAwareInterface
             ->addCheckboxType();
 
         $helper->addCheckboxSimulate()
-            ->addCheckboxConfirm($this->translator, $query->isSimulate());
+            ->addCheckboxConfirm($this->translator(), $query->isSimulate());
 
         $helper->field('type')
             ->addHiddenType();

@@ -15,12 +15,13 @@ namespace App\Chart;
 use App\Service\ApplicationService;
 use App\Service\ThemeService;
 use App\Traits\MathTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\TranslatorAwareTrait;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
 use Laminas\Json\Expr;
 use Ob\HighchartsBundle\Highcharts\Highchart;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * High chart with method shortcuts.
@@ -38,11 +39,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $plotOptions the plot options.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $lang        the language.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $title       the language.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class BaseChart extends Highchart
+class BaseChart extends Highchart implements ServiceSubscriberInterface
 {
     use MathTrait;
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The identifier (#id) of the div where to render the chart.
@@ -77,10 +81,9 @@ class BaseChart extends Highchart
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function __construct(protected ApplicationService $application, ThemeService $service, TranslatorInterface $translator)
+    public function __construct(protected ApplicationService $application, ThemeService $service)
     {
         parent::__construct();
-        $this->translator = $translator;
         $this->darkTheme = $service->isDarkTheme();
 
         $this->hideCredits()

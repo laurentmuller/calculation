@@ -16,26 +16,29 @@ use App\Entity\User;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
-use App\Traits\TranslatorTrait;
+use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Type to register a new user.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class UserRegistrationType extends AbstractUserCaptchaType
+class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Constructor.
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function __construct(CaptchaImageService $service, ApplicationService $application, TranslatorInterface $translator)
+    public function __construct(CaptchaImageService $service, ApplicationService $application)
     {
         parent::__construct($service, $application);
-        $this->translator = $translator;
     }
 
     /**

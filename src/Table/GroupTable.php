@@ -15,30 +15,31 @@ namespace App\Table;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\GroupRepository;
-use App\Traits\CheckerTrait;
+use App\Traits\CheckerAwareTrait;
 use App\Util\FileUtils;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
  * The groups table.
  *
  * @template-extends AbstractEntityTable<Group>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class GroupTable extends AbstractEntityTable
+class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
-    use CheckerTrait;
+    use CheckerAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
      * Constructor.
      */
     public function __construct(
         GroupRepository $repository,
-        AuthorizationCheckerInterface $checker,
         private readonly Environment $twig
     ) {
         parent::__construct($repository);
-        $this->checker = $checker;
     }
 
     /**

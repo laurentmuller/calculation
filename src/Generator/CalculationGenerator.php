@@ -21,19 +21,20 @@ use App\Service\FakerService;
 use App\Util\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to generate calculations.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalculationGenerator extends AbstractEntityGenerator
 {
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator, private readonly CalculationService $service, private readonly CalculationRepository $repository)
+    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, private readonly CalculationService $service, private readonly CalculationRepository $repository)
     {
-        parent::__construct($manager, $fakerService, $translator);
+        parent::__construct($manager, $fakerService);
     }
 
     /**

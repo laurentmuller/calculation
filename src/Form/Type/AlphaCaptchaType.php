@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Captcha\AlphaCaptchaInterface;
-use App\Traits\SessionTrait;
+use App\Traits\SessionAwareTrait;
 use App\Util\Utils;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Form\AbstractType;
@@ -21,18 +21,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to display an alpha captcha.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class AlphaCaptchaType extends AbstractType
+class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterface
 {
-    use SessionTrait;
+    use ServiceSubscriberTrait;
+    use SessionAwareTrait;
 
     private const SESSION_KEY = 'alpha_captcha_answer';
 
@@ -49,9 +53,8 @@ class AlphaCaptchaType extends AbstractType
      *
      * @param iterable<AlphaCaptchaInterface> $captchas
      */
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, #[TaggedIterator('alpha_captcha')] iterable $captchas)
+    public function __construct(TranslatorInterface $translator, #[TaggedIterator('alpha_captcha')] iterable $captchas)
     {
-        $this->setRequestStack($requestStack);
         $this->dataError = $translator->trans('required', [], 'captcha');
         $captchas = $captchas instanceof \Traversable ? \iterator_to_array($captchas) : $captchas;
         $this->captcha = $captchas[\array_rand($captchas)];
@@ -59,8 +62,6 @@ class AlphaCaptchaType extends AbstractType
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

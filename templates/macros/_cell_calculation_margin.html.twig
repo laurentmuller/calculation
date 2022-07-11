@@ -1,7 +1,7 @@
 {% apply spaceless %}
     {% set margin_text = margin|percent %}
-    {% if not empty and app.isMarginBelow(margin) %}
-        {% set minimum_text = app.minMargin|percent %}
+    {% if not empty and user_service.application.isMarginBelow(margin) %}
+        {% set minimum_text = user_service.application.minMargin|percent %}
         {% set title = 'calculation.list.margin_below'|trans({'%margin%': margin_text, '%minimum%': minimum_text}) %}
         <span class="has-tooltip text-danger" title="{{ title }}" data-html="true">{{- margin_text -}}</span>
     {% else -%}

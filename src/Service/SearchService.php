@@ -19,21 +19,25 @@ use App\Entity\Customer;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Traits\CheckerTrait;
+use App\Traits\CheckerAwareTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to search data in all entities.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class SearchService
+class SearchService implements ServiceSubscriberInterface
 {
-    use CheckerTrait;
+    use CheckerAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
      * The action column name.
@@ -122,9 +126,8 @@ class SearchService
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, private readonly bool $isDebug)
+    public function __construct(private readonly EntityManagerInterface $manager, private readonly bool $isDebug)
     {
-        $this->setChecker($checker);
     }
 
     /**

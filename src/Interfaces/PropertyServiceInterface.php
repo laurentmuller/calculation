@@ -15,6 +15,7 @@ namespace App\Interfaces;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\TableView;
+use App\Model\CustomerInformation;
 
 /**
  * Interface for application and user properties.
@@ -287,6 +288,13 @@ interface PropertyServiceInterface
      * The property name for the user role rights (string).
      */
     public const P_USER_RIGHTS = 'user_rights';
+
+    /**
+     * Gets the customer information.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function getCustomer(): CustomerInformation;
 
     /**
      * Gets the display mode for table.

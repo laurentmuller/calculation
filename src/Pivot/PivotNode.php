@@ -512,7 +512,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
                     return $this->sort();
                 }
-                break;
+            break;
         }
 
         return $this;

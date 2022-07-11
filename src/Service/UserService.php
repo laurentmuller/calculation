@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Calculation;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Enums\EntityAction;
@@ -22,14 +23,15 @@ use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
 use App\Traits\PropertyTrait;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage user properties.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class UserService implements PropertyServiceInterface
+class UserService implements PropertyServiceInterface, ServiceSubscriberInterface
 {
     use PropertyTrait;
 
@@ -37,17 +39,21 @@ class UserService implements PropertyServiceInterface
         private readonly ApplicationService $service,
         private readonly UserPropertyRepository $repository,
         private readonly Security $security,
-        LoggerInterface $logger,
-        TranslatorInterface $translator,
         CacheItemPoolInterface $userCache
     ) {
-        $this->setLogger($logger);
-        $this->translator = $translator;
         $this->setAdapter($userCache);
     }
 
     /**
-     * Gets the customer information.
+     * Gets the application service.
+     */
+    public function getApplication(): ApplicationService
+    {
+        return $this->service;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */

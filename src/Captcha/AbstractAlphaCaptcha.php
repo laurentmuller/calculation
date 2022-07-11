@@ -13,22 +13,25 @@ declare(strict_types=1);
 namespace App\Captcha;
 
 use App\Service\DictionaryService;
-use App\Traits\TranslatorTrait;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Traits\TranslatorAwareTrait;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Abstract implementation of the alpha captcha interface.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
+abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Constructor.
      */
-    public function __construct(protected DictionaryService $dictionary, TranslatorInterface $translator)
+    public function __construct(protected DictionaryService $dictionary)
     {
-        $this->translator = $translator;
     }
 
     /**

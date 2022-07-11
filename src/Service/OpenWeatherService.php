@@ -14,7 +14,6 @@ namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
 use App\Util\FormatUtils;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +24,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  * Service to get weather from OpenWeatherMap.
  *
  * @see https://openweathermap.org/api
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
@@ -192,11 +192,11 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, string $projectDir, bool $isDebug)
+    public function __construct(ParameterBagInterface $params, string $projectDir, bool $isDebug)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);
-        parent::__construct($adapter, $isDebug, $key);
+        parent::__construct($isDebug, $key);
         $this->dataDirectory = $projectDir . self::DATA_PATH;
     }
 
@@ -598,7 +598,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getWindDirection(int $deg): string
     {
         $deg %= 360;
-        $index = (int) \floor(($deg / 22.5 + 0.5));
+        $index = (int) \floor($deg / 22.5 + 0.5);
 
         return self::WIND_DIRECTIONS[$index];
     }
@@ -649,8 +649,8 @@ class OpenWeatherService extends AbstractHttpClientService
                     if ($name = $this->getCountryName((string) $value)) {
                         $result['country_name'] = $name;
                     }
-                    $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower((string) $value));
-                    break;
+                $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower((string) $value));
+                break;
 
                 case 'dt':
                     $result['dt_date'] = FormatUtils::formatDate((int) $value, self::TYPE_SHORT);
@@ -683,7 +683,7 @@ class OpenWeatherService extends AbstractHttpClientService
                         $first = $value[0];
                         $value = $first;
                     }
-                    break;
+                break;
 
                 case 'deg':
                     $result['deg_text'] = $this->getWindDirection((int) $value);
@@ -693,7 +693,7 @@ class OpenWeatherService extends AbstractHttpClientService
                     if (\is_array($value)) {
                         $this->updateResult($value, $timezone);
                     }
-                    break;
+                break;
             }
         }
     }

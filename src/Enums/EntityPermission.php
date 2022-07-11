@@ -56,6 +56,7 @@ enum EntityPermission : int implements ReadableEnumInterface, SortableEnumInterf
      */
     #[EnumCase('rights.show')]
     case SHOW = 1 << 5;
+
     /**
      * Gets this enumeration as constant.
      *

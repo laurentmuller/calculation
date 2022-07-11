@@ -44,6 +44,7 @@ enum MessagePosition: string implements ReadableEnumInterface, SortableEnumInter
     case TOP_LEFT = 'top-left';
     #[EnumCase('parameters.message_position.top-right')]
     case TOP_RIGHT = 'top-right';
+
     /**
      * @return MessagePosition[]
      */

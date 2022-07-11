@@ -41,6 +41,7 @@ enum TableView: string implements ReadableEnumInterface, SortableEnumInterface
      */
     #[EnumCase('view.table')]
     case TABLE = 'table';
+
     /**
      * Gets the default page size.
      */

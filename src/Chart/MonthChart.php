@@ -17,10 +17,11 @@ use App\Service\ApplicationService;
 use App\Service\ThemeService;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Chart to display calculations by month.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class MonthChart extends BaseChart
 {
@@ -32,9 +33,9 @@ class MonthChart extends BaseChart
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private readonly CalculationRepository $repository, UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, ThemeService $service, private readonly CalculationRepository $repository, UrlGeneratorInterface $generator)
     {
-        parent::__construct($application, $service, $translator);
+        parent::__construct($application, $service);
         $this->url = $generator->generate('calculation_table');
     }
 

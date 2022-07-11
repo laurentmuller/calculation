@@ -13,19 +13,23 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Log;
-use App\Traits\CacheTrait;
+use App\Traits\CacheAwareTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to read and cache log file.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class LogService
+class LogService implements ServiceSubscriberInterface
 {
-    use CacheTrait;
+    use CacheAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
      * The key for channels.
@@ -70,10 +74,9 @@ class LogService
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, CacheItemPoolInterface $adapter)
+    public function __construct(KernelInterface $kernel)
     {
         $this->fileName = $this->buildLogFile($kernel);
-        $this->setAdapter($adapter);
     }
 
     /**

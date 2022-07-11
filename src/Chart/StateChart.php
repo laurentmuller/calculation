@@ -18,10 +18,11 @@ use App\Service\ThemeService;
 use App\Table\CalculationTable;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Chart to display calculations by state.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class StateChart extends BaseChart
 {
@@ -31,9 +32,9 @@ class StateChart extends BaseChart
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function __construct(ApplicationService $application, ThemeService $service, TranslatorInterface $translator, private readonly CalculationStateRepository $repository, private readonly UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, ThemeService $service, private readonly CalculationStateRepository $repository, private readonly UrlGeneratorInterface $generator)
     {
-        parent::__construct($application, $service, $translator);
+        parent::__construct($application, $service);
     }
 
     /**

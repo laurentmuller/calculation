@@ -1,11 +1,11 @@
-{# search menu #}
+{# search form #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_granted_data and show_navigation ?? false -%}
 <li class="nav-item mx-2 my-auto">
     <a href="#" id="navigation-search-button" class="nav-link" title="{{ 'search.title'|trans }}">
         {{- icons.icon('search fa-fw') -}}
     </a>
-    <form id="navigation-search-form" name="navigation-search-form" class="form-inline my-auto mx-2" role="search" novalidate="novalidate" action="{{ path('search') }}" style="display: none; width: 0">
+    <form id="navigation-search-form" name="navigation-search-form" class="form-inline mx-2 my-auto" role="search" novalidate="novalidate" action="{{ path('search') }}" style="display: none; width: 0">
         <input id="search" name="search" type="text" required="required" minlength="2" autocomplete="off" class="form-control form-control-sm w-100" placeholder="{{ 'search.placeholder'|trans }}" data-title="{{ 'search.minimum'|trans }}">
     </form>
 </li>

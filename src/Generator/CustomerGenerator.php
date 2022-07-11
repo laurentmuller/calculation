@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class to generate customers.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CustomerGenerator extends AbstractEntityGenerator
 {
@@ -38,26 +40,26 @@ class CustomerGenerator extends AbstractEntityGenerator
             $gender = (string) $generator->randomElement($genders);
 
             switch ($style) {
-                    case 0: // company
-                        $customer->setCompany($generator->company())
-                            ->setEmail($generator->companyEmail());
-                        break;
+                case 0: // company
+                    $customer->setCompany($generator->company())
+                        ->setEmail($generator->companyEmail());
+                    break;
 
-                    case 1: // contact
-                        $customer->setTitle($generator->title($gender))
-                            ->setFirstName($generator->firstName($gender))
-                            ->setLastName($generator->lastName())
-                            ->setEmail($generator->email());
-                        break;
+                case 1: // contact
+                    $customer->setTitle($generator->title($gender))
+                        ->setFirstName($generator->firstName($gender))
+                        ->setLastName($generator->lastName())
+                        ->setEmail($generator->email());
+                    break;
 
-                    default: // both
-                        $customer->setCompany($generator->company())
-                            ->setFirstName($generator->firstName($gender))
-                            ->setTitle($generator->title($gender))
-                            ->setLastName($generator->lastName())
-                            ->setEmail($generator->email());
-                        break;
-                }
+                default: // both
+                    $customer->setCompany($generator->company())
+                        ->setFirstName($generator->firstName($gender))
+                        ->setTitle($generator->title($gender))
+                        ->setLastName($generator->lastName())
+                        ->setEmail($generator->email());
+                    break;
+            }
 
             $customer->setAddress($generator->streetAddress())
                 ->setZipCode($generator->postcode())

@@ -18,7 +18,7 @@
 
 {% macro dataRow(calculation) %}
 {% import 'macros/_properties.html.twig' as properties %}
-{% set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
+{% set margin_class = user_service.application.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
     <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
     <td class="text-state">{{ calculation.state.code }}</td>

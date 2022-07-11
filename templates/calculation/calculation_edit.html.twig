@@ -27,7 +27,7 @@
     {%- set form_attr = form_attr|merge({
         'data-title': title|trans(title_parameters),
         'data-update': url('ajax_update'),
-        'data-edit': (new ? app.defaultEdit : false)|json_encode,
+        'data-edit': (new ? user_service.application.defaultEdit : false)|json_encode,
         'data-search-customer': url('ajax_search_customer'),
         'data-search-product': url('ajax_search_product'),
         'data-search-unit': url('ajax_search_unit'),

@@ -15,17 +15,21 @@ namespace App\Twig;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\CalculationService;
-use App\Traits\CacheTrait;
-use Psr\Cache\CacheItemPoolInterface;
+use App\Traits\CacheAwareTrait;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
 /**
  * Twig extension to access global class and icon constants.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-final class ConstantExtension extends AbstractExtension implements GlobalsInterface
+final class ConstantExtension extends AbstractExtension implements GlobalsInterface, ServiceSubscriberInterface
 {
-    use CacheTrait;
+    use CacheAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
      * The key name to cache constants.
@@ -35,11 +39,9 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     /**
      * Constructor.
      */
-    public function __construct(CacheItemPoolInterface $adapter, bool $isDebug)
+    public function __construct(bool $isDebug)
     {
-        if (!$isDebug) {
-            $this->setAdapter($adapter);
-        }
+        $this->isDebugCache = $isDebug;
     }
 
     /**

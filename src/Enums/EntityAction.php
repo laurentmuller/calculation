@@ -41,6 +41,7 @@ enum EntityAction: string implements ReadableEnumInterface, SortableEnumInterfac
      */
     #[EnumCase('action.show')]
     case SHOW = 'show';
+
     /**
      * Returns if the given value is equal to this value.
      */

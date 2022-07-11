@@ -15,27 +15,29 @@ namespace App\Form\CalculationState;
 use App\Entity\CalculationState;
 use App\Form\AbstractListEntityType;
 use App\Repository\CalculationStateRepository;
-use App\Traits\TranslatorTrait;
+use App\Traits\TranslatorAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Type to display a list of calculation states.
  *
  * @template-extends AbstractListEntityType<CalculationState>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class CalculationStateListType extends AbstractListEntityType
+class CalculationStateListType extends AbstractListEntityType implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct()
     {
         parent::__construct(CalculationState::class);
-        $this->translator = $translator;
     }
 
     /**

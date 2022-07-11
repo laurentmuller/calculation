@@ -13,24 +13,28 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\AbstractEntity;
-use App\Traits\TranslatorTrait;
+use App\Traits\TranslatorAwareTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * A form type that just renders the field as a span tag.
  *
  * This is useful for forms where certain field need to be shown but not editable.
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class PlainType extends AbstractType
+class PlainType extends AbstractType implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The gregorian calendar type.
@@ -90,9 +94,8 @@ class PlainType extends AbstractType
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct()
     {
-        $this->translator = $translator;
     }
 
     /**

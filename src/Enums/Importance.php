@@ -34,6 +34,7 @@ enum Importance: string implements ReadableEnumInterface, SortableEnumInterface
     case MEDIUM = 'medium';
     #[EnumCase('importance.urgent')]
     case URGENT = 'urgent';
+
     /**
      * @return Importance[]
      */

@@ -15,35 +15,33 @@ namespace App\Table;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
-use App\Traits\CheckerTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\CheckerAwareTrait;
+use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
  * The calculation states table.
  *
  * @template-extends AbstractEntityTable<CalculationState>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class CalculationStateTable extends AbstractEntityTable
+class CalculationStateTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
-    use CheckerTrait;
-    use TranslatorTrait;
+    use CheckerAwareTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Constructor.
      */
     public function __construct(
         CalculationStateRepository $repository,
-        TranslatorInterface $translator,
-        AuthorizationCheckerInterface $checker,
         private readonly Environment $twig
     ) {
         parent::__construct($repository);
-        $this->translator = $translator;
-        $this->checker = $checker;
     }
 
     /**

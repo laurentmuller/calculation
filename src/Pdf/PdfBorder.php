@@ -109,7 +109,7 @@ class PdfBorder
      */
     public static function bottom(): self
     {
-        return new self((self::BOTTOM));
+        return new self(self::BOTTOM);
     }
 
     /**
@@ -303,7 +303,7 @@ class PdfBorder
      */
     public static function top(): self
     {
-        return new self((self::TOP));
+        return new self(self::TOP);
     }
 
     private function parseBorders(string $value): string|int

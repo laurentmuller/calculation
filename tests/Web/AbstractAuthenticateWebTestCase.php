@@ -69,7 +69,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      * Checks the given URL.
      *
      * @param string $url      the URL to be tested
-     * @param string $username the user name to login
+     * @param string $username the username to login
      * @param int    $expected the expected result
      */
     protected function checkResponse(string $url, string $username, int $expected): void

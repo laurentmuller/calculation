@@ -15,7 +15,9 @@ namespace App\Tests\Validator;
 use App\Interfaces\StrengthInterface;
 use App\Validator\Password;
 use App\Validator\PasswordValidator;
+
 use function PHPUnit\Framework\assertSame;
+
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

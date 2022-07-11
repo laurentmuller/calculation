@@ -12,17 +12,21 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\SessionTrait;
+use App\Traits\SessionAwareTrait;
 use App\Util\ImageHandler;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to generate and validate a captcha image.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class CaptchaImageService
+class CaptchaImageService implements ServiceSubscriberInterface
 {
-    use SessionTrait;
+    use ServiceSubscriberTrait;
+    use SessionAwareTrait;
 
     /**
      * The allowed characters.
@@ -72,16 +76,13 @@ class CaptchaImageService
     /**
      * Constructor.
      */
-    public function __construct(RequestStack $requestStack, KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel)
     {
-        $this->setRequestStack($requestStack);
         $this->font = $kernel->getProjectDir() . self::FONT_PATH;
     }
 
     /**
      * Remove captcha values from the session.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function clear(): self
     {
@@ -136,8 +137,6 @@ class CaptchaImageService
 
     /**
      * Validate the timeout.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function validateTimeout(): bool
     {
@@ -153,7 +152,7 @@ class CaptchaImageService
      */
     public function validateToken(?string $token): bool
     {
-        return $token && $this->session && 0 === \strcasecmp($token, (string) $this->session->get(self::KEY_TEXT, ''));
+        return $token && 0 === \strcasecmp($token, (string) $this->getSessionString(self::KEY_TEXT, ''));
     }
 
     /**

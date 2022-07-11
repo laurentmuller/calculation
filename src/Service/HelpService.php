@@ -12,18 +12,21 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\CacheTrait;
-use App\Traits\TranslatorTrait;
-use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Traits\CacheAwareTrait;
+use App\Traits\TranslatorAwareTrait;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to provide help.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class HelpService
+class HelpService implements ServiceSubscriberInterface
 {
-    use CacheTrait;
-    use TranslatorTrait;
+    use CacheAwareTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The key name to cache content.
@@ -53,12 +56,9 @@ class HelpService
     /**
      * Constructor.
      */
-    public function __construct(CacheItemPoolInterface $adapter, TranslatorInterface $translator, string $projectDir, bool $isDebug)
+    public function __construct(string $projectDir, bool $isDebug)
     {
-        if (!$isDebug) {
-            $this->setAdapter($adapter);
-        }
-        $this->translator = $translator;
+        $this->isDebugCache = $isDebug;
         $this->file = $projectDir . self::FILE_PATH;
         $this->imagePath = $projectDir . self::IMAGE_PATH;
     }

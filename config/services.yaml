@@ -78,9 +78,9 @@ services:
         arguments: ['%google_recaptcha_secret_key%']
 
     # used to display flash message when entities change
-    # App\Listener\PersistenceListener:
-    #     tags:
-    #         - { name: 'doctrine.event_subscriber' }
+    #    App\Listener\PersistenceListener:
+    #        tags:
+    #            - { name: 'doctrine.event_subscriber' }
 
     # used to update calculation when groups, categories or items change
     App\Listener\CalculationListener:
@@ -96,16 +96,6 @@ services:
     monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
-
-    # custom Twig AppVariable
-    twig.app_variable:
-        class: App\Service\ApplicationService
-        public: false
-        calls:
-            - [setEnvironment, ["%kernel.environment%"]]
-            - [setDebug, ["%kernel.debug%"]]
-            - [setTokenStorage, ['@security.token_storage']]
-            - [setRequestStack, ['@request_stack']]
 
     App\Listener\ResponseListener:
         arguments:

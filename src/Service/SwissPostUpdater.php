@@ -16,21 +16,25 @@ use App\Database\SwissDatabase;
 use App\Form\FormHelper;
 use App\Interfaces\PropertyServiceInterface;
 use App\Model\SwissPostUpdateResult;
-use App\Traits\TranslatorTrait;
+use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\File;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to import zip codes, cities and streets from Switzerland.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class SwissPostUpdater
+class SwissPostUpdater implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The pattern to parse validity date.
@@ -72,12 +76,11 @@ class SwissPostUpdater
     /** @var bool|resource */
     private $stream = false;
 
-    public function __construct(private readonly ApplicationService $application, private readonly FormFactoryInterface $factory, SwissPostService $service, TranslatorInterface $translator)
+    public function __construct(private readonly ApplicationService $application, private readonly FormFactoryInterface $factory, SwissPostService $service)
     {
         $this->dataDirectory = $service->getDataDirectory();
         $this->databaseName = $service->getDatabaseName();
         $this->results = new SwissPostUpdateResult();
-        $this->translator = $translator;
     }
 
     /**
@@ -378,7 +381,7 @@ class SwissPostUpdater
 
                         return false;
                     }
-                    break;
+                break;
 
                 case self::REC_CITY:
                     $this->processCity($data);

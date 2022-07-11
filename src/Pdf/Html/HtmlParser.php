@@ -147,7 +147,7 @@ class HtmlParser
         /** @var \DOMText $nodeText */
         $nodeText = $node;
         $value = $nodeText->wholeText;
-        if ('' !== (\trim($value))) {
+        if ('' !== \trim($value)) {
             $chunk = new HtmlTextChunk($name, $parent);
             $chunk->setClassName($class);
             $chunk->setText($value);
@@ -282,7 +282,7 @@ class HtmlParser
                 } else {
                     $parent = $this->createParentChunk($name, $parent, $class);
                 }
-                break;
+            break;
 
             case \XML_TEXT_NODE:
                 $this->createTextChunk($name, $parent, $class, $node);

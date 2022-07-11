@@ -12,20 +12,24 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\CacheTrait;
+use App\Traits\CacheAwareTrait;
 use App\Util\Utils;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service using the HttpClient.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractHttpClientService
+abstract class AbstractHttpClientService implements ServiceSubscriberInterface
 {
-    use CacheTrait;
+    use CacheAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
      * The base URI parameter name.
@@ -73,15 +77,13 @@ abstract class AbstractHttpClientService
      *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(CacheItemPoolInterface $adapter, bool $isDebug, protected string $key)
+    public function __construct(bool $isDebug, protected readonly string $key)
     {
         // check key
         if (empty($key)) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
-        if (!$isDebug) {
-            $this->setAdapter($adapter);
-        }
+        $this->isDebugCache = $isDebug;
     }
 
     /**

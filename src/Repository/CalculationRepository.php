@@ -332,8 +332,8 @@ class CalculationRepository extends AbstractRepository
         // convert
         /** @psalm-var array $entry */
         foreach ($result as &$entry) {
-            $entry['year'] = (int) ($entry['year']);
-            $entry['month'] = (int) ($entry['month']);
+            $entry['year'] = (int) $entry['year'];
+            $entry['month'] = (int) $entry['month'];
             $entry['year_month'] = $entry['year'] * 1000 + $entry['month'];
         }
 

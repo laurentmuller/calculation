@@ -12,19 +12,21 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Traits\TranslatorFlashMessageTrait;
+use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Listener for the switch user event.
  */
-class SwitchUserListener implements EventSubscriberInterface
+class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberInterface
 {
-    use TranslatorFlashMessageTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorFlashMessageAwareTrait;
 
     /**
      * The exit value action.
@@ -37,14 +39,6 @@ class SwitchUserListener implements EventSubscriberInterface
     private const SWITCH_USER = '_switch_user';
 
     /**
-     * Constructor.
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents(): array
@@ -54,20 +48,12 @@ class SwitchUserListener implements EventSubscriberInterface
 
     /**
      * Handles the switch user event.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function onSwitchUser(SwitchUserEvent $event): void
     {
-        // session?
-        $request = $event->getRequest();
-        if (!$this->setSessionFromRequest($request)) {
-            return;
-        }
-
         // get values
         /** @psalm-var string $action */
-        $action = Utils::getRequestInputBag($request)->get(self::SWITCH_USER);
+        $action = Utils::getRequestInputBag($event->getRequest())->get(self::SWITCH_USER);
         $original = $this->getOriginalUsername($event);
         $name = $this->getTargetUsername($event);
 

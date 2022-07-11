@@ -6,6 +6,7 @@
 {%- set title_icon = 'info-circle' -%}
 {%- set title_parameters = {'%app_name%': app_name} -%}
 {%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
+{% set customer = user_service.customer %}
 {# class #}
 {% block card_class ' mb-2' %}
 {% block card_container_class '' %}
@@ -25,7 +26,7 @@
             {{ tools.rowInfo('about.app_name'|trans, app_name) }}
             {{ tools.rowInfo('about.app_version'|trans, app_version) }}
             {{ tools.rowInfo('about.app_environment'|trans, ('environment.' ~ app_mode)|trans) }}
-            {{ tools.rowInfoLink('about.app_customer'|trans, app.customerName, app.customerUrl) }}
+            {{ tools.rowInfoLink('about.app_customer'|trans, customer.name, customer.url) }}
             {{ tools.rowInfoLink('about.app_owner'|trans, app_owner, app_owner_url) }}
         </tbody>
     </table>

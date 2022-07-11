@@ -13,8 +13,6 @@
         <ul class="navbar-nav" style="display: {{ display_style }}">
             {{ icons.navItem(path('search'), 'search.title', 'search') }}
             {% if is_admin %}
-                {{ icons.navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
-                {{ icons.navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
                 {{ icons.dropdownSeparator(false, 'border-secondary') }}
                 {{ icons.navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
                 {{ icons.navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}

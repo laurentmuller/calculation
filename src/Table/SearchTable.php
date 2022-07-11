@@ -15,22 +15,25 @@ namespace App\Table;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Service\SearchService;
-use App\Traits\CheckerTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\CheckerAwareTrait;
+use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * The search table.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class SearchTable extends AbstractTable
+class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 {
-    use CheckerTrait;
-    use TranslatorTrait;
+    use CheckerAwareTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The entity parameter name.
@@ -54,10 +57,8 @@ class SearchTable extends AbstractTable
     /**
      * Constructor.
      */
-    public function __construct(private readonly SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
+    public function __construct(private readonly SearchService $service)
     {
-        $this->setChecker($checker);
-        $this->translator = $translator;
     }
 
     /**

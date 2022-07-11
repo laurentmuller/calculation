@@ -132,7 +132,7 @@ class SymfonyReport extends AbstractReport
             ->outputRow($table, 'Intl Locale', $this->locale)
             ->outputRow($table, 'Timezone', $info->getTimeZone())
             ->outputRow($table, 'Charset', $info->getCharset())
-            ->outputBoolRow($table, 'Debug', $app->getDebug())
+            ->outputBoolRow($table, 'Debug', $app->isDebug())
             ->outputBoolRow($table, 'OP Cache', $info->isZendCacheLoaded())
             ->outputBoolRow($table, 'APCu', $info->isApcuLoaded())
             ->outputBoolRow($table, 'Xdebug', $info->isXdebugLoaded())

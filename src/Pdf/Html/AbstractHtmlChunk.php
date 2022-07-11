@@ -468,7 +468,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                                 $style->setTextColor($color);
                                 $update = true;
                             }
-                            break;
+                        break;
 
                         case 'background-color':
                             $color = PdfFillColor::create($value);
@@ -476,7 +476,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                                 $style->setFillColor($color);
                                 $update = true;
                             }
-                            break;
+                        break;
                     }
                 }
 
@@ -543,42 +543,42 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                         if (null !== $color) {
                             $style->setTextColor($color);
                         }
-                        break;
+                    break;
 
                     case 'text-secondary':
                         $color = PdfTextColor::create(HtmlBootstrapColors::SECONDARY);
                         if (null !== $color) {
                             $style->setTextColor($color);
                         }
-                        break;
+                    break;
 
                     case 'text-success':
                         $color = PdfTextColor::create(HtmlBootstrapColors::SUCCESS);
                         if (null !== $color) {
                             $style->setTextColor($color);
                         }
-                        break;
+                    break;
 
                     case 'text-danger':
                         $color = PdfTextColor::create(HtmlBootstrapColors::DANGER);
                         if (null !== $color) {
                             $style->setTextColor($color);
                         }
-                        break;
+                    break;
 
                     case 'text-warning':
                         $color = PdfTextColor::create(HtmlBootstrapColors::WARNING);
                         if (null !== $color) {
                             $style->setTextColor($color);
                         }
-                        break;
+                    break;
 
                     case 'text-info':
                         $color = PdfTextColor::create(HtmlBootstrapColors::INFO);
                         if (null !== $color) {
                             $style->setTextColor($color);
                         }
-                        break;
+                    break;
 
                     default:
                         $this->parseMargins($style, $class);

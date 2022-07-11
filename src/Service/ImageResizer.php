@@ -13,21 +13,24 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Interfaces\ImageExtensionInterface;
-use App\Traits\LoggerTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\LoggerAwareTrait;
+use App\Traits\TranslatorAwareTrait;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
-use Psr\Log\LoggerAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to resize images.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
+class ImageResizer implements ServiceSubscriberInterface, ImageExtensionInterface
 {
-    use LoggerTrait;
-    use TranslatorTrait;
+    use LoggerAwareTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The default options.
@@ -43,10 +46,8 @@ class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
      *
      * @throws \ReflectionException
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct()
     {
-        $this->translator = $translator;
-
         try {
             $this->imagine = new Imagine();
         } catch (\Exception $e) {

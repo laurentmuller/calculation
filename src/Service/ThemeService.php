@@ -13,21 +13,24 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Model\Theme;
-use App\Traits\CacheTrait;
-use App\Traits\LoggerTrait;
+use App\Traits\CacheAwareTrait;
+use App\Traits\LoggerAwareTrait;
 use App\Util\FileUtils;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to manage Bootstrap themes.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class ThemeService
+class ThemeService implements ServiceSubscriberInterface
 {
-    use CacheTrait;
-    use LoggerTrait;
+    use CacheAwareTrait;
+    use LoggerAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
      * The default background class name for the navigation_horizontal bar.
@@ -97,12 +100,9 @@ class ThemeService
     /**
      * Constructor.
      */
-    public function __construct(private readonly RequestStack $stack, LoggerInterface $logger, CacheItemPoolInterface $adapter, private readonly string $projectDir, bool $isDebug)
+    public function __construct(private readonly RequestStack $stack, private readonly string $projectDir, bool $isDebug)
     {
-        $this->setLogger($logger);
-        if (!$isDebug) {
-            $this->setAdapter($adapter);
-        }
+        $this->isDebugCache = $isDebug;
     }
 
     /**

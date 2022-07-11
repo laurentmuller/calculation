@@ -12,21 +12,23 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\TranslatorTrait;
-use Psr\Cache\CacheItemPoolInterface;
+use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to get IP lookup.
  *
  * @see https://ipstack.com/documentation
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class IpStackService extends AbstractHttpClientService
+class IpStackService extends AbstractHttpClientService implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The host name.
@@ -49,12 +51,11 @@ class IpStackService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, bool $isDebug, TranslatorInterface $translator)
+    public function __construct(ParameterBagInterface $params, bool $isDebug)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);
-        parent::__construct($adapter, $isDebug, $key);
-        $this->translator = $translator;
+        parent::__construct($isDebug, $key);
     }
 
     /**

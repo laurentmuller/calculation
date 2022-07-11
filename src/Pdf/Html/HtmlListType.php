@@ -39,6 +39,7 @@ enum HtmlListType : string
      * Numbered list with uppercase roman numbers.
      */
     case ROMAN_UPPER = 'I';
+
     /**
      * Gets the bullet text for the given number.
      *

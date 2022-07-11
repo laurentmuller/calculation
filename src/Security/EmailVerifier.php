@@ -14,33 +14,35 @@ namespace App\Security;
 
 use App\Entity\User;
 use App\Mime\RegistrationEmail;
-use App\Traits\TranslatorTrait;
+use App\Traits\TranslatorAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 /**
  * Email verifier used for register new user.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class EmailVerifier
+class EmailVerifier implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Constructor.
      */
     public function __construct(
-        TranslatorInterface $translator,
         private readonly VerifyEmailHelperInterface $helper,
         private readonly MailerInterface $mailer,
         private readonly EntityManagerInterface $manager
     ) {
-        $this->translator = $translator;
     }
 
     /**

@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Trait to manage application and user properties.
@@ -22,12 +23,13 @@ use App\Enums\EntityAction;
  */
 trait PropertyTrait
 {
-    use CacheTrait {
+    use CacheAwareTrait {
         clearCache as parentClearCache;
         saveDeferredCacheValue as parentSaveDeferredCacheValue;
     }
-    use LoggerTrait;
-    use TranslatorTrait;
+    use LoggerAwareTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Clear this cache.

@@ -18,22 +18,25 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
-use App\Traits\CheckerTrait;
+use App\Traits\CheckerAwareTrait;
 use App\Util\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
  * The categories table.
  *
  * @template-extends AbstractEntityTable<Category>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class CategoryTable extends AbstractEntityTable
+class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
-    use CheckerTrait;
+    use CheckerAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
      * The group parameter name (int).
@@ -45,12 +48,10 @@ class CategoryTable extends AbstractEntityTable
      */
     public function __construct(
         CategoryRepository $repository,
-        AuthorizationCheckerInterface $checker,
         private readonly GroupRepository $groupRepository,
         private readonly Environment $twig
     ) {
         parent::__construct($repository);
-        $this->checker = $checker;
     }
 
     /**

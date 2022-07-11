@@ -22,21 +22,23 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Entity\User;
-use App\Traits\TranslatorFlashMessageTrait;
+use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Entity modifications listener.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class PersistenceListener implements EventSubscriber
+class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
 {
-    use TranslatorFlashMessageTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorFlashMessageAwareTrait;
 
     /**
      * The entity class names to listen for.
@@ -54,25 +56,10 @@ class PersistenceListener implements EventSubscriber
     ];
 
     /**
-     * The debug mode.
-     */
-    private readonly bool $isDebug;
-
-    /**
-     * The message title.
-     */
-    private readonly string $title;
-
-    /**
      * Constructor.
      */
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, private readonly string $appName)
+    public function __construct(private readonly string $appName, private readonly bool $isDebug)
     {
-        $this->isDebug = $kernel->isDebug();
-        $this->translator = $translator;
-        $this->setRequestStack($requestStack);
-        $id = \sprintf('environment.%s', $kernel->getEnvironment());
-        $this->title = $this->trans($id);
     }
 
     /**
@@ -95,14 +82,13 @@ class PersistenceListener implements EventSubscriber
      * Handles the post persist event.
      *
      * @throws \ReflectionException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
         if (null !== ($entity = $this->getEntity($args))) {
             $id = $this->getId($entity, '.add.success');
             $params = $this->getParameters($entity);
-            $this->info($this->translateMessage($id, $params));
+            $this->successTrans($id, $params);
         }
     }
 
@@ -110,14 +96,13 @@ class PersistenceListener implements EventSubscriber
      * Handles the post remove event.
      *
      * @throws \ReflectionException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function postRemove(LifecycleEventArgs $args): void
     {
         if (null !== ($entity = $this->getEntity($args))) {
             $id = $this->getId($entity, '.delete.success');
             $params = $this->getParameters($entity);
-            $this->warning($this->translateMessage($id, $params));
+            $this->warningTrans($id, $params);
         }
     }
 
@@ -125,7 +110,6 @@ class PersistenceListener implements EventSubscriber
      * Handles the post update event.
      *
      * @throws \ReflectionException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
@@ -141,7 +125,7 @@ class PersistenceListener implements EventSubscriber
                 $id = $this->getId($entity, '.edit.success');
                 $params = $this->getParameters($entity);
             }
-            $this->info($this->translateMessage($id, $params));
+            $this->successTrans($id, $params);
         }
     }
 
@@ -207,21 +191,5 @@ class PersistenceListener implements EventSubscriber
         $changeSet = $unitOfWork->getEntityChangeSet($user);
 
         return \array_key_exists('lastLogin', $changeSet);
-    }
-
-    /**
-     * Translates the given message and add the title as prefix.
-     *
-     * @param string  $id         the message id
-     * @param array   $parameters an array of parameters for the message
-     * @param ?string $domain     the domain for the message or null to use the default
-     *
-     * @return string the translated string
-     */
-    private function translateMessage(string $id, array $parameters = [], ?string $domain = null): string
-    {
-        $message = $this->trans($id, $parameters, $domain);
-
-        return $this->title . '|' . $message;
     }
 }

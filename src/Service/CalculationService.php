@@ -19,16 +19,20 @@ use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
-use App\Traits\TranslatorTrait;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Traits\TranslatorAwareTrait;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update calculation totals.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-final class CalculationService
+final class CalculationService implements ServiceSubscriberInterface
 {
     use MathTrait;
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Empty row identifier.
@@ -72,10 +76,8 @@ final class CalculationService
         private readonly GlobalMarginRepository $globalRepository,
         private readonly GroupMarginRepository $marginRepository,
         private readonly GroupRepository $groupRepository,
-        private readonly ApplicationService $service,
-        TranslatorInterface $translator
+        private readonly ApplicationService $service
     ) {
-        $this->translator = $translator;
     }
 
     /**

@@ -14,6 +14,8 @@ namespace App\Captcha;
 
 /**
  * Alpha captcha to validate a letter.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class LetterCaptcha extends AbstractAlphaCaptcha
 {

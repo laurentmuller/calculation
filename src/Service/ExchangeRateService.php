@@ -12,21 +12,23 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\TranslatorTrait;
-use Psr\Cache\CacheItemPoolInterface;
+use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Intl\Currencies;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Exchange rate service.
  *
  * @see https://www.exchangerate-api.com/
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class ExchangeRateService extends AbstractHttpClientService
+class ExchangeRateService extends AbstractHttpClientService implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The host name.
@@ -69,13 +71,12 @@ class ExchangeRateService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, bool $isDebug, TranslatorInterface $translator)
+    public function __construct(ParameterBagInterface $params, bool $isDebug)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);
-        parent::__construct($adapter, $isDebug, $key);
+        parent::__construct($isDebug, $key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
-        $this->translator = $translator;
     }
 
     /**

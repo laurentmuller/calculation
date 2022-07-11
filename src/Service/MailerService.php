@@ -17,23 +17,29 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
-use App\Traits\TranslatorTrait;
+use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Extra\Markdown\MarkdownInterface;
 
-class MailerService
+/**
+ * Service to send notifications.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
+class MailerService implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, private readonly UrlGeneratorInterface $generator, private readonly MarkdownInterface $markdown, private readonly MailerInterface $mailer, private readonly string $appNameVersion)
+    public function __construct(private readonly UrlGeneratorInterface $generator, private readonly MarkdownInterface $markdown, private readonly MailerInterface $mailer, private readonly string $appNameVersion)
     {
-        $this->translator = $translator;
     }
 
     /**
@@ -89,7 +95,7 @@ class MailerService
 
     private function createNotification(): NotificationEmail
     {
-        $email = new NotificationEmail($this->translator);
+        $email = new NotificationEmail($this->translator());
         $email->setFooterText($this->getFooterText())
             ->action($this->trans('index.title'), $this->getHomeUrl());
 

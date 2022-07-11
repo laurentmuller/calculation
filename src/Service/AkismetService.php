@@ -12,24 +12,26 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\TranslatorTrait;
-use Psr\Cache\CacheItemPoolInterface;
+use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to check spams with the Akismet.
  *
  * @see https://akismet.com/
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class AkismetService extends AbstractHttpClientService
+class AkismetService extends AbstractHttpClientService implements ServiceSubscriberInterface
 {
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The host name.
@@ -79,13 +81,12 @@ class AkismetService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, bool $isDebug, private readonly RequestStack $stack, private readonly Security $security, TranslatorInterface $translator)
+    public function __construct(ParameterBagInterface $params, bool $isDebug, private readonly RequestStack $stack, private readonly Security $security)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);
-        parent::__construct($adapter, $isDebug, $key);
+        parent::__construct($isDebug, $key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
-        $this->translator = $translator;
     }
 
     /**

@@ -15,21 +15,24 @@ namespace App\Generator;
 use App\Faker\Generator;
 use App\Interfaces\GeneratorInterface;
 use App\Service\FakerService;
-use App\Traits\LoggerTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\LoggerAwareTrait;
+use App\Traits\TranslatorAwareTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Class to generate entities.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractEntityGenerator implements LoggerAwareInterface, GeneratorInterface
+abstract class AbstractEntityGenerator implements ServiceSubscriberInterface, GeneratorInterface
 {
-    use LoggerTrait;
-    use TranslatorTrait;
+    use LoggerAwareTrait;
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The faker generator.
@@ -39,10 +42,9 @@ abstract class AbstractEntityGenerator implements LoggerAwareInterface, Generato
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator)
+    public function __construct(private readonly EntityManagerInterface $manager, FakerService $fakerService)
     {
         $this->generator = $fakerService->getGenerator();
-        $this->translator = $translator;
     }
 
     /**

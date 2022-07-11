@@ -31,7 +31,6 @@ use App\Tests\ServiceTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link CalculationService} class.
@@ -117,9 +116,8 @@ class CalculationServiceTest extends KernelTestCase
         $marginRepository = $this->getService(GroupMarginRepository::class);
         $groupRepository = $this->getService(GroupRepository::class);
         $service = $this->getService(ApplicationService::class);
-        $translator = $this->getService(TranslatorInterface::class);
 
-        return new CalculationService($globalRepository, $marginRepository, $groupRepository, $service, $translator);
+        return new CalculationService($globalRepository, $marginRepository, $groupRepository, $service);
     }
 
     protected function init(): Product

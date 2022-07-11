@@ -38,6 +38,7 @@ enum PdfRectangleStyle: string
      * No border is draw, nor fill.
      */
     case NONE = '';
+
     /**
      * Return a value indicating if the fill or/and draw rectangle can be applied.
      */

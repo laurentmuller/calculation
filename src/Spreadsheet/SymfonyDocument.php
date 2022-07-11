@@ -148,7 +148,7 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($row++, 'Intl Locale', $this->locale)
             ->outputRow($row++, 'Timezone', $info->getTimeZone())
             ->outputRow($row++, 'Charset', $info->getCharset())
-            ->outputBoolRow($row++, 'Debug', $app->getDebug())
+            ->outputBoolRow($row++, 'Debug', $app->isDebug())
             ->outputBoolRow($row++, 'OP Cache', $info->isZendCacheLoaded())
             ->outputBoolRow($row++, 'APCu', $info->isApcuLoaded())
             ->outputBoolRow($row++, 'Xdebug', $info->isXdebugLoaded())

@@ -12,19 +12,22 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
-use App\Traits\SessionTrait;
+use App\Traits\SessionAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Factory to provide translator services.
  *
  * @see TranslatorServiceInterface
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class TranslatorFactory
+class TranslatorFactory implements ServiceSubscriberInterface
 {
-    use SessionTrait;
+    use ServiceSubscriberTrait;
+    use SessionAwareTrait;
 
     /**
      * The default translator service class name (Bing).
@@ -46,9 +49,8 @@ class TranslatorFactory
      *
      * @param iterable<TranslatorServiceInterface> $translators
      */
-    public function __construct(RequestStack $requestStack, #[TaggedIterator('translators_service')] iterable $translators)
+    public function __construct(#[TaggedIterator('translators_service')] iterable $translators)
     {
-        $this->setRequestStack($requestStack);
         $this->translators = $translators instanceof \Traversable ? \iterator_to_array($translators) : $translators;
     }
 

@@ -20,23 +20,26 @@ use App\Model\ArchiveQuery;
 use App\Model\ArchiveResult;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use App\Traits\SessionTrait;
-use App\Traits\TranslatorTrait;
+use App\Traits\SessionAwareTrait;
+use App\Traits\TranslatorAwareTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to archive calculations.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class ArchiveService
+class ArchiveService implements ServiceSubscriberInterface
 {
-    use SessionTrait;
-    use TranslatorTrait;
+    use ServiceSubscriberTrait;
+    use SessionAwareTrait;
+    use TranslatorAwareTrait;
 
     private const KEY_DATE = 'archive.date';
     private const KEY_SIMULATE = 'archive.simulate';
@@ -49,12 +52,8 @@ class ArchiveService
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
-        private readonly FormFactoryInterface $factory,
-        TranslatorInterface $translator,
-        RequestStack $requestStack
+        private readonly FormFactoryInterface $factory
     ) {
-        $this->translator = $translator;
-        $this->setRequestStack($requestStack);
     }
 
     /**
@@ -96,7 +95,7 @@ class ArchiveService
             ->add(CalculationStateListType::class);
 
         $helper->addCheckboxSimulate()
-            ->addCheckboxConfirm($this->translator, $query->isSimulate());
+            ->addCheckboxConfirm($this->translator(), $query->isSimulate());
 
         return $helper->createForm();
     }
@@ -147,8 +146,6 @@ class ArchiveService
 
     /**
      * Save the query values to the session.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function saveQuery(ArchiveQuery $query): void
     {

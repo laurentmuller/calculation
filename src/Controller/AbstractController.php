@@ -96,11 +96,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplication(): ApplicationService
     {
-        if (null === $this->application) {
-            $this->application = $this->getService(ApplicationService::class);
-        }
-
-        return $this->application;
+        return $this->getUserService()->getApplication();
     }
 
     /**

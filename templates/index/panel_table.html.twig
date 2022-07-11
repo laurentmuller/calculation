@@ -62,7 +62,7 @@
                         <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
                         <td class="text-customer text-cell user-select-none">{{ calculation.customer }}</td>
                         <td class="text-description text-cell user-select-none">{{ calculation.description }}</td>
-                        {%- if user_service.marginBelow(calculation) -%}
+                        {%- if user_service.application.marginBelow(calculation) -%}
                             {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                             <td class="text-percent user-select-none text-danger has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
                         {%- else -%}

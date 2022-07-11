@@ -29,7 +29,6 @@ use App\Security\EntityVoter;
 use App\Traits\PropertyTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -37,7 +36,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class ApplicationService extends AppVariable implements PropertyServiceInterface, ServiceSubscriberInterface
+class ApplicationService implements PropertyServiceInterface, ServiceSubscriberInterface
 {
     use PropertyTrait;
 

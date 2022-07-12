@@ -416,7 +416,7 @@ final class SymfonyInfo
                         if ('' !== $value && !\str_ends_with($value, '.')) {
                             $value .= '.';
                         }
-                    break;
+                        break;
                     case 'version':
                         $value = \ltrim($value, 'v');
                         break;

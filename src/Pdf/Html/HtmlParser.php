@@ -282,7 +282,7 @@ class HtmlParser
                 } else {
                     $parent = $this->createParentChunk($name, $parent, $class);
                 }
-            break;
+                break;
 
             case \XML_TEXT_NODE:
                 $this->createTextChunk($name, $parent, $class, $node);

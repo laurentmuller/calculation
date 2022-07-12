@@ -649,8 +649,8 @@ class OpenWeatherService extends AbstractHttpClientService
                     if ($name = $this->getCountryName((string) $value)) {
                         $result['country_name'] = $name;
                     }
-                $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower((string) $value));
-                break;
+                    $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower((string) $value));
+                    break;
 
                 case 'dt':
                     $result['dt_date'] = FormatUtils::formatDate((int) $value, self::TYPE_SHORT);
@@ -683,7 +683,7 @@ class OpenWeatherService extends AbstractHttpClientService
                         $first = $value[0];
                         $value = $first;
                     }
-                break;
+                    break;
 
                 case 'deg':
                     $result['deg_text'] = $this->getWindDirection((int) $value);
@@ -693,7 +693,7 @@ class OpenWeatherService extends AbstractHttpClientService
                     if (\is_array($value)) {
                         $this->updateResult($value, $timezone);
                     }
-                break;
+                    break;
             }
         }
     }

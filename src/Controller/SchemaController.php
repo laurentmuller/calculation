@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
@@ -33,6 +34,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route(path: '/schema')]
 class SchemaController extends AbstractController
 {
+    private readonly Connection $connection;
+
+    /**
+     * @var array<string, int>
+     */
+    private array $counters = [];
     /**
      * @var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      */
@@ -51,7 +58,8 @@ class SchemaController extends AbstractController
     public function __construct(TranslatorInterface $translator, EntityManagerInterface $manager)
     {
         parent::__construct($translator);
-        $this->manager = $manager->getConnection()->createSchemaManager();
+        $this->connection = $manager->getConnection();
+        $this->manager = $this->connection->createSchemaManager();
         $this->metaDatas = $this->filterMetaDatas($manager);
     }
 
@@ -82,6 +90,18 @@ class SchemaController extends AbstractController
             'columns' => $this->getColumns($name),
             'associations' => $this->getAssociations($name),
         ]);
+    }
+
+    private function count(string $name): int
+    {
+        if (!isset($this->counters[$name])) {
+            $result = $this->connection->executeQuery("SELECT COUNT(ID) AS TOTAL FROM $name");
+            $count = $result->fetchOne();
+            $result->free();
+            $this->counters[$name] = (int) $count;
+        }
+
+        return $this->counters[$name];
     }
 
     private function countAssociationNames(string $name): int
@@ -232,7 +252,7 @@ class SchemaController extends AbstractController
     private function getTables(): array
     {
         $tables = $this->getManager()->listTables();
-        \usort($tables, fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
+        \usort($tables, static fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
 
         return \array_map(function (Table $table): array {
             $name = $table->getName();
@@ -241,6 +261,7 @@ class SchemaController extends AbstractController
                 'name' => $name,
                 'columns' => \count($table->getColumns()),
                 'associations' => $this->countAssociationNames($name),
+                'records' => $this->count($name),
              ];
         }, $tables);
     }

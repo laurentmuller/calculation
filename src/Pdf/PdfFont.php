@@ -115,7 +115,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
                     if (!\str_contains($this->style, $style[$i])) {
                         $this->style .= $style[$i];
                     }
-                break;
+                    break;
             }
         }
 

@@ -381,7 +381,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
                         return false;
                     }
-                break;
+                    break;
 
                 case self::REC_CITY:
                     $this->processCity($data);

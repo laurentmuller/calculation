@@ -5,14 +5,14 @@
 @import 'toast.css';
 @import 'color-picker.css';
 @import 'colums.css';
-@import 'footer.css';
+@import 'navbar-vertical.css';
 
 /**! compression tag for ftp-deployment */
 
 /*
  * add margin and override padding for Bootswatch themes
  */
-.navbar {
+.navbar.navbar-horizontal {
     margin-bottom: 20px;
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;

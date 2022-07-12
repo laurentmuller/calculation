@@ -33,7 +33,7 @@ class ThemeService implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
 
     /**
-     * The default background class name for the navigation_horizontal bar.
+     * The default background class name for the navigation.
      */
     final public const DEFAULT_BACKGROUND = 'navbar-dark bg-dark';
 
@@ -58,7 +58,7 @@ class ThemeService implements ServiceSubscriberInterface
     final public const DEFAULT_NAME = 'Bootstrap';
 
     /**
-     * The key name of the background style for the navigation_horizontal bar.
+     * The key name of the background style for the navigation bar.
      */
     final public const KEY_BACKGROUND = 'THEME_BACKGROUND';
 

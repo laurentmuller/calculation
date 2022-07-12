@@ -2,7 +2,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_granted_data -%}
     {% set id = 'menu_data' %}
-    {% set expanded = app.session.get(id) ?? true %}
+    {% set expanded = app.session.get(id, true) %}
     {% set display_style = expanded ? 'block' : 'none' %}
     {% set toggle_class = expanded ? ' nav-link-toggle-show' : '' %}
     {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -10,7 +10,7 @@
         <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
             {{- icons.icon('database fa-fw', 'index.menu_data') -}}
         </a>
-        <ul class="navbar-nav" style="display: {{ display_style }}">
+        <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
             {% if is_granted_calculation -%}
                 {{ icons.navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
             {% endif %}

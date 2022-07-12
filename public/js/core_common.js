@@ -18,9 +18,9 @@
  * Plugin files
  */
 <!--#include file="plugins/plugin-toast.js" -->
+<!--#include file="plugins/plugin-sidebar.js" -->
 
 /**
  * Common Files
  */
 <!--#include file="application/core_common.js" -->
-<!--#include file="application/navbar-vertical.js" -->

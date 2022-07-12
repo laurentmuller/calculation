@@ -329,10 +329,10 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Save navigation_horizontal state.
+     * Save horizontal navigation state.
      */
     #[IsGranted('ROLE_USER')]
-    #[Route(path: '/navigation_horizontal', name: 'ajax_save_navigation')]
+    #[Route(path: '/navigation', name: 'ajax_save_navigation')]
     public function saveNavigationState(Request $request): JsonResponse
     {
         if ($request->hasSession()) {

@@ -18,6 +18,7 @@ use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -40,6 +41,7 @@ class SchemaController extends AbstractController
      * @var array<string, int>
      */
     private array $counters = [];
+
     /**
      * @var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      */
@@ -90,18 +92,6 @@ class SchemaController extends AbstractController
             'columns' => $this->getColumns($name),
             'associations' => $this->getAssociations($name),
         ]);
-    }
-
-    private function count(string $name): int
-    {
-        if (!isset($this->counters[$name])) {
-            $result = $this->connection->executeQuery("SELECT COUNT(ID) AS TOTAL FROM $name");
-            $count = $result->fetchOne();
-            $result->free();
-            $this->counters[$name] = (int) $count;
-        }
-
-        return $this->counters[$name];
     }
 
     private function countAssociationNames(string $name): int
@@ -208,8 +198,22 @@ class SchemaController extends AbstractController
                 'length' => (int) $column->getLength(),
                 'nullable' => !$column->getNotnull(),
                 'foreignTableName' => $foreignTableName,
+                'default' => $this->getDefaultValue($column),
             ];
         }, $table->getColumns());
+    }
+
+    private function getDefaultValue(Column $column): string
+    {
+        $default = $column->getDefault();
+        if (null !== $default && $column->getType() instanceof BooleanType) {
+            /** @psalm-var bool $value */
+            $value = \filter_var($default, \FILTER_VALIDATE_BOOLEAN);
+
+            return \ucfirst((string) \json_encode($value));
+        }
+
+        return $default ?? '';
     }
 
     /**
@@ -234,6 +238,28 @@ class SchemaController extends AbstractController
         return [];
     }
 
+    /**
+     * @param Column[] $columns
+     */
+    private function getRecords(Table $table, array $columns): int
+    {
+        $name = $table->getName();
+        if (!isset($this->counters[$name])) {
+            try {
+                $column = \array_key_first($columns);
+                $result = $this->connection->executeQuery("SELECT COUNT($column) AS TOTAL FROM $name");
+                /** @psalm-var int $count */
+                $count = $result->fetchOne();
+                $result->free();
+            } catch (\Doctrine\DBAL\Exception) {
+                $count = 0;
+            }
+            $this->counters[$name] = $count;
+        }
+
+        return $this->counters[$name];
+    }
+
     private function getTableMetaData(string $name): ?ClassMetadataInfo
     {
         return $this->metaDatas[\strtolower($name)] ?? null;
@@ -256,12 +282,13 @@ class SchemaController extends AbstractController
 
         return \array_map(function (Table $table): array {
             $name = $table->getName();
+            $columns = $table->getColumns();
 
             return [
                 'name' => $name,
-                'columns' => \count($table->getColumns()),
+                'columns' => \count($columns),
+                'records' => $this->getRecords($table, $columns),
                 'associations' => $this->countAssociationNames($name),
-                'records' => $this->count($name),
              ];
         }, $tables);
     }

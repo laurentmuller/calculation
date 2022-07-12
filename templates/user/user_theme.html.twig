@@ -5,7 +5,11 @@
 {%- set title_icon = 'file-image far' -%}
 {%- set title_description = 'theme.description' -%}
 {%- set cancel_path = path('homepage') -%}
-{%- set form_attr = form_attr|default({})|merge({'data-asset': asset_base}) -%}
+{%- set form_attr = form_attr|default({})|merge({
+    'data-asset': asset_base,
+    'data-theme': theme_name(app.request),
+    'data-background': theme_background(app.request)
+}) -%}
 
 {% block card_body %}
 {# fields #}

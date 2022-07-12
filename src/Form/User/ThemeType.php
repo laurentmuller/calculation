@@ -46,7 +46,7 @@ class ThemeType extends AbstractHelperType implements ServiceSubscriberInterface
     ];
 
     /**
-     * The navigation_horizontal bar choices.
+     * The navigation bar choices.
      */
     final public const FOREGROUND_CHOICES = [
         'theme.foreground.dark' => 'navbar-dark',

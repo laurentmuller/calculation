@@ -137,11 +137,20 @@ function initRounded() {
 }
 
 /**
+ * Initialize the sidebar.
+ */
+function initSidebar() {
+    'use strict';
+    $('.navbar-vertical').sidebar();
+}
+
+/**
  * Ready function
  */
 (function ($) { // jshint ignore:line
     'use strict';
     initRounded();
+    initSidebar();
     initBackToTop();
     initSearchToolbar();
     showFlashbag();

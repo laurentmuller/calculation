@@ -21,8 +21,7 @@
 {%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
 <!-- vertical navigation -->
-{{- asset_css('css/navbar-vertical.css') }}
-<div id="sidebar" class="navbar-vertical navbar {{ theme_background(app.request) }}{{ active }}" style="padding-bottom: 30px;" data-url="{{ url('ajax_save_navigation') }}" data-show="{{ 'index.menu_show'|trans }}" data-hide="{{ 'index.menu_hide'|trans }}">
+<div id="sidebar" class="d-print-none navbar navbar-vertical navbar-color {{ theme_background(app.request) }}{{ active }}" style="padding-bottom: 30px;" data-url="{{ url('ajax_save_navigation') }}" data-show="{{ 'index.menu_show'|trans }}" data-hide="{{ 'index.menu_hide'|trans }}">
     {# logo
     <div class="p-2 mb-1">
         <div class="media position-relative d-flex align-items-center">
@@ -41,7 +40,7 @@
             <div class="media-body">
                 <h4 class="m-0 text-white">{{ app_name }}</h4>
                 <p class="font-weight-light text-muted mb-0"> {{ 'about.version'|trans({'%version%': app_version}) }}</p>
-                <a href="{{ path('about') }}" class="stretched-link"></a>
+                <a href="{{ path('about') }}" class="stretched-link" title="{{ 'footer.about_title'|trans }}"></a>
             </div>
         </div>
     </div>

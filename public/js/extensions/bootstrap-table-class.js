@@ -24,16 +24,16 @@ BootstrapTable.prototype.init = function () {
     const that = this;
 
     // handle page item click
-    that.$pagination.on('keydown mousedown', '.page-link', function(e) {
+    that.$pagination.on('keydown mousedown', '.page-link', function (e) {
         const $this = $(this);
         const isKeyEnter = e.type === 'keydown' && e.which === 13;
         const isActive = $this.parents('.page-item').hasClass('active');
-        const isMouseDown = e.type === 'mousedown' &&  e.button === 0 && !isActive;
+        const isMouseDown = e.type === 'mousedown' && e.button === 0 && !isActive;
         if (isKeyEnter || isMouseDown) {
             const $parent = $this.parents('li');
             if ($parent.hasClass('page-pre')) {
                 that.focusPageItem = 'previous';
-            } else if ($parent .hasClass('page-next')) {
+            } else if ($parent.hasClass('page-next')) {
                 that.focusPageItem = 'next';
             } else {
                 that.focusPageItem = 'active';
@@ -79,7 +79,10 @@ BootstrapTable.prototype.init = function () {
         that.$pagination.find('.page-link').each(function (_index, element) {
             const $element = $(element);
             const href = $element.closest('.page-item').hasClass('disabled') ? null : '#';
-            $element.attr('href', href).attr('title', $element.attr('aria-label')).removeAttr('aria-label');
+            $element.attr({
+                'href': href,
+                'title': $element.attr('aria-label')
+            }).removeAttr('aria-label');
         });
 
         // set focus on selected page item
@@ -100,7 +103,7 @@ BootstrapTable.prototype.init = function () {
 
             const params = that.getParameters();
             const selector = '.custom-view-actions:eq(%index%)';
-            const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView: false;
+            const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
 
             that.$body.find('tr .actions').each(function (index, element) {
                 // copy actions
@@ -238,27 +241,27 @@ BootstrapTable.prototype.getCustomView = function () {
 BootstrapTable.prototype.setDisplayMode = function (mode) {
     'use strict';
     switch (mode) {
-    case 'custom':
-        if (!this.isCustomView()) {
-            this.toggleCustomView();
-        }
-        break;
-    case 'card':
-        if (!this.isCardView()) {
-            this.toggleView();
-        }
-        if (this.isCustomView()) {
-            this.toggleCustomView();
-        }
-        break;
-    default: // table
-        if (this.isCardView()) {
-            this.toggleView();
-        }
-        if (this.isCustomView()) {
-            this.toggleCustomView();
-        }
-        break;
+        case 'custom':
+            if (!this.isCustomView()) {
+                this.toggleCustomView();
+            }
+            break;
+        case 'card':
+            if (!this.isCardView()) {
+                this.toggleView();
+            }
+            if (this.isCustomView()) {
+                this.toggleCustomView();
+            }
+            break;
+        default: // table
+            if (this.isCardView()) {
+                this.toggleView();
+            }
+            if (this.isCustomView()) {
+                this.toggleCustomView();
+            }
+            break;
     }
     return this;
 };
@@ -526,7 +529,7 @@ BootstrapTable.prototype.showCustomViewMessage = function () {
     const $view = this.getCustomView();
     if ($view && $view.find('.no-records-found').length === 0) {
         $('<p/>', {
-            class:'no-records-found text-center border-top p-2 mb-1',
+            class: 'no-records-found text-center border-top p-2 mb-1',
             text: this.options.formatNoMatches()
         }).appendTo($view);
     }
@@ -571,7 +574,7 @@ BootstrapTable.prototype.enableKeys = function () {
                 return;
             }
 
-            switch(e.keyCode) {
+            switch (e.keyCode) {
                 case 13:  // enter (edit action on selected row)
                     if (this.editRow()) {
                         e.preventDefault();
@@ -618,7 +621,7 @@ BootstrapTable.prototype.enableKeys = function () {
                     break;
             }
         };
-        this.keyHandler= keyHandler;
+        this.keyHandler = keyHandler;
     }
 
     // add handlers

@@ -13,18 +13,18 @@
             <tr>
                 <th class="w-100">{{ 'schema.index.fields.name'|trans }}</th>
                 <th class="text-right">{{ 'schema.index.fields.count'|trans }}</th>
+                <th class="text-right">{{ 'schema.table.fields.records'|trans }}</th>
                 <th class="text-right">{{ 'schema.table.associations'|trans }}</th>
-                <th class="text-right">Records</th>
             </tr>
         </thead>
         <tbody data-link="row" class="rowlink">
         {% for table in tables %}
             {% set name = table.name %}
             <tr title="{{ 'schema.index.tooltip'|trans({'%name%': name}) }}">
-                <td><a href="{{ path('schema_table', {'name': name}) }}">{{ name }}</a></td>
+                <td class="w-100"><a href="{{ path('schema_table', {'name': name}) }}">{{ name }}</a></td>
                 <td class="text-right">{{ table.columns|integer }}</td>
-                <td class="text-right">{{ table.associations|integer }}</td>
                 <td class="text-right">{{ table.records|integer }}</td>
+                <td class="text-right">{{ table.associations|integer }}</td>
             </tr>
         {% endfor %}
         </tbody>

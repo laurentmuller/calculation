@@ -167,7 +167,11 @@ $.fn.extend({
                     const $item = $link.closest('.page-item');
                     const isModal = $item.hasClass('disabled');// || $item.hasClass('active');
                     const title = isModal ? $this.data('dialog_title') : $link.attr('aria-label');
-                    $link.attr('href', '#').attr('title', title).attr('aria-label', title);
+                    $link.attr({
+                        'href': '#',
+                        'title': title,
+                        'aria-label': title
+                    });
                     if (isModal) {
                         foundPages = true;
                         $item.removeClass('disabled');

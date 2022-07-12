@@ -4,7 +4,7 @@
 {% if is_granted_data -%}
     {% set id = 'dropdown_data' %}
     {% set display_style = active ? 'block' : 'none' %}
-    <li class="nav-item nav-item-horizontal dropdown" style="display: {{ display_style }}">
+    <li class="nav-item nav-sidebar-horizontal dropdown" style="display: {{ display_style }}">
         <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ icons.icon('database', 'index.menu_data') }}
         </a>

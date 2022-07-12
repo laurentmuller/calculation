@@ -9,30 +9,31 @@ function applyTheme() {
     // get values
     const $form = $('#edit-form');
     const $theme = $('#theme');
-    const theme = $theme.val();
-    const background = $('#background').val();
 
-    // need update?
-    if (theme && background && (theme !== $form.data('theme') || background !== $form.data('background'))) {
+    // theme
+    const newTheme = $theme.val();
+    const oldTheme = $form.data('theme') || '';
+    if (newTheme && newTheme !== oldTheme) {
         // get theme option
         const $option = $theme.getSelectedOption();
         const title = $option.text();
         const description = $option.data('description');
         const href = $form.data('asset') + $option.data('css');
 
-        // update link
-        $('head link[title][rel="stylesheet"]').attr('href', href);
-
-        // update texts
+        // update and save
         $('#example_name').text(title);
         $('#example_description').text(description);
+        $('head link[title][rel="stylesheet"]').attr('href', href);
+        $form.data('theme', newTheme);
+    }
 
-        // update toolbars
-        $('#navigation').setClass('navbar navbar-expand-md ' + background);
-        $('#sidebar').setClass('navbar-vertical navbar ' + background);
-
-        // save values
-        $form.data('theme', theme).data('background', background);
+    // background
+    const newBackground = $('#background').val();
+    const oldBackground = $form.data('background') || '';
+    if (newBackground && newBackground !== oldBackground) {
+        // apply and save
+        $('.navbar-color').toggleClass(newBackground + ' ' + oldBackground);
+        $form.data('background', newBackground);
     }
 }
 

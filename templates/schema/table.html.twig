@@ -18,6 +18,7 @@
                 <th class="text-date-time">{{ 'schema.table.fields.type'|trans }}</th>
                 <th class="text-currency">{{ 'schema.table.fields.length'|trans }}</th>
                 <th class="text-boolean">{{ 'schema.table.fields.empty'|trans }}</th>
+                <th class="text-id">{{ 'schema.table.fields.default'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
                 <td class="text-date-time">{{ column.type }}</td>
                 <td class="text-currency">{{ column.length ? column.length|integer : '&nbsp;' }}</a></td>
                 <td class="text-boolean">{{ column.nullable|boolean }}</td>
+                <td class="text-id">{{ column.default }}</td>
             </tr>
         {% endfor %}
         </tbody>

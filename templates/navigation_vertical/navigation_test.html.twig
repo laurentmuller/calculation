@@ -2,7 +2,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_test -%}
     {% set id = 'menu_test' %}
-    {% set expanded = app.session.get(id) ?? false %}
+    {% set expanded = app.session.get(id, false) %}
     {% set display_style = expanded ? 'block' : 'none' %}
     {% set toggle_class = expanded ? ' nav-link-toggle-show' : '' %}
     {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -10,7 +10,7 @@
         <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
             {{- icons.icon('bug fa-fw', 'index.menu_test') -}}
         </a>
-        <ul class="navbar-nav" style="display: {{ display_style }}">
+        <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
             {{ icons.navItem(path('test_notifications'), 'test.notification', 'bell far') }}
             {{ icons.navItem(path('test_editor'), 'test.editor', 'edit') }}
             {{ icons.navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}

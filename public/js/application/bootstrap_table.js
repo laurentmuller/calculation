@@ -593,8 +593,10 @@ $.fn.extend({
             const $link = $item.find('a.item-link');
             const $button = $item.find('a.btn-default');
             if ($link.length && $button.length) {
-                $link.attr('href', $button.attr('href'));
-                $link.attr('title', $button.text());
+                $link.attr({
+                    'href': $button.attr('href'),
+                    'title': $button.text()
+                });
             }
         },
 
@@ -780,7 +782,7 @@ $.fn.extend({
     $('.card .dropdown-menu').removeSeparators();
     $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
     $('.fixed-table-toolbar input.search-input').prependTo('.input-group-search')
-        .attr('type', 'text').css('width',  '130px');
+        .attr('type', 'text').css('width', '130px');
     $('.fixed-table-toolbar').appendTo('.col-search');
     $('.fixed-table-toolbar .search').remove();
     $('.btn-group-search').appendTo('.fixed-table-toolbar');

@@ -531,7 +531,10 @@
         toggleDisabled: function (state) {
             return this.each(function () {
                 if (state) {
-                    $(this).addClass('disabled').attr('disabled', 'disabled').attr('aria-disabled', 'true');
+                    $(this).addClass('disabled').attr({
+                        'disabled': 'disabled',
+                        'aria-disabled': 'true'
+                    });
                 } else {
                     $(this).removeClass('disabled').removeAttr('disabled aria-disabled');
                 }

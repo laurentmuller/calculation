@@ -3,7 +3,7 @@
 {% if is_granted_calculation %}
     {% set id = 'dropdown_chart' %}
     {% set display_style = active ? 'block' : 'none' %}
-    <li class="nav-item dropdown nav-item-horizontal" style="display: {{ display_style }}">
+    <li class="nav-item dropdown nav-sidebar-horizontal" style="display: {{ display_style }}">
         <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ icons.icon('chart-area', 'menu_graphics', 'chart') }}
         </a>

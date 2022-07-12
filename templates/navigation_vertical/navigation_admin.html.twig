@@ -2,7 +2,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% if is_admin -%}
     {% set id = 'menu_admin' %}
-    {% set expanded = app.session.get(id) ?? false %}
+    {% set expanded = app.session.get(id, false) %}
     {% set toggle_class = expanded ? ' nav-link-toggle-show' : '' %}
     {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
     {% set display_style = expanded ? 'block' : 'none' %}
@@ -10,7 +10,7 @@
         <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
             {{- icons.icon('gear fa-solid fa-fw', 'index.menu_admin') -}}
         </a>
-        <ul class="navbar-nav" style="display: {{ display_style }}">
+        <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
             {{ icons.navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
             {{ icons.navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
             {{ icons.dropdownSeparator(false, 'border-secondary') }}

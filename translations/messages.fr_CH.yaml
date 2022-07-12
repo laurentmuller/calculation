@@ -1032,7 +1032,9 @@ schema:
       name: Nom
       type: Type
       table: Table
+      records: Lignes
       inverse_side: Inverser
+      default: Défaut
     index_unique: Valeur unique
     primary_key: Clé primaire
     title: Table %name%

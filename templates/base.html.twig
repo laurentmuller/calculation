@@ -4,7 +4,7 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{% set active = (app.session.get('menu_active') ?? false) ? ' active' : '' -%}
+{% set active = app.session.get('menu_active', false) ? ' active' : '' -%}
 {# head #}
 <head>
 <meta charset="utf-8" />
@@ -44,7 +44,7 @@
 <body>
 {# vertical navigation #}
 {%- block navigation_vertical -%}
-    {{ include('navigation_vertical/navigation.html.twig') }}
+    {{- include('navigation_vertical/navigation.html.twig') }}
 {%- endblock %}
 {# main content #}
 <div class="page-content{{ active }}">
@@ -72,9 +72,9 @@
 {{ asset_js('js/extensions/jquery-extensions.js') }}
 {{ asset_js('js/extensions/params-extensions.js') }}
 {{ asset_js('js/extensions/string-extensions.js') }}
+{{ asset_js('js/plugins/plugin-sidebar.js') }}
 {{ asset_js('js/plugins/plugin-toast.js') }}
 {{ asset_js('js/application/core_common.js') }}
-{{ asset_js('js/application/navbar-vertical.js') }}
 {% else %}
 {{ asset_js('js/core_common.js') }}
 {% endif %}

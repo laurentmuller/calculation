@@ -92,11 +92,10 @@ final class FunctionExtension extends AbstractExtension
         return [
             // assets
             new TwigFunction('asset_exists', fn (?string $path): bool => $this->assetExists($path)),
-            new TwigFunction('file_exists', fn (?string $filename): bool => $this->fileExists($filename)),
-
             new TwigFunction('asset_if', fn (?string $path = null, ?string $default = null): ?string => $this->assetIf($path, $default)),
             new TwigFunction('asset_js', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetJs($env, $path, $parameters, $packageName), $assetOptions),
             new TwigFunction('asset_css', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetCss($env, $path, $parameters, $packageName), $assetOptions),
+            new TwigFunction('asset_version', fn (?string $path): int => $this->getAssetVersion($path)),
 
             // images
             new TwigFunction('image_height', fn (string $path): int => $this->getImageHeight($path)),
@@ -113,30 +112,10 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Checks if the given asset path exists.
-     *
-     * @param ?string $path the path to be verified
-     *
-     * @return bool true if exists
      */
     private function assetExists(?string $path): bool
     {
-        // path?
-        if (empty($path)) {
-            return false;
-        }
-
-        // web directory?
-        if (empty($this->webDir)) {
-            return false;
-        }
-
-        // real path?
-        if (!$file = \realpath($this->webDir . $path)) {
-            return false;
-        }
-
-        // file exist?
-        if (!FileUtils::isFile($file)) {
+        if (null === $file = $this->getAbsolutePath($path)) {
             return false;
         }
 
@@ -145,12 +124,7 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Returns the given asset path, if existing; the default path otherwise.
-     *
-     * @param ?string $path    the path to be verified
-     * @param ?string $default the default path
-     *
-     * @return string|null the path, if existing, the default path otherwise
+     * Returns the given asset path, if valid; the default path otherwise.
      */
     private function assetIf(?string $path = null, ?string $default = null): ?string
     {
@@ -166,12 +140,6 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Gets the cancel URL.
-     *
-     * @param Request $request      the request
-     * @param int     $id           the entity identifier
-     * @param string  $defaultRoute the default route to use
-     *
-     * @return string the cancel URL
      */
     private function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
@@ -180,10 +148,6 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Checks the existence of file or directory.
-     *
-     * @param ?string $filename the path to the file or directory
-     *
-     * @return bool true if the file or directory exists, false otherwise
      */
     private function fileExists(?string $filename): bool
     {
@@ -191,16 +155,44 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a link style sheet tag with a version and a nonce value.
+     * Gets the absolute path or null if not exist.
+     */
+    private function getAbsolutePath(?string $path): ?string
+    {
+        if (empty($path)) {
+            return null;
+        }
+
+        // web directory?
+        if (empty($this->webDir)) {
+            return null;
+        }
+
+        // real path?
+        $join_path = \implode('/', [$this->webDir, $path]);
+        if (!$file = \realpath($join_path)) {
+            return null;
+        }
+
+        // file exist?
+        if (!FileUtils::isFile($file)) {
+            return null;
+        }
+
+        return $file;
+    }
+
+    /**
+     * Output a link style sheet tag with a version and nonce.
      *
      * @throws \Exception
      */
     private function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
-        $url = $this->getAssetUrl($env, $path, $packageName);
+        $href = $this->getVersionedAsset($env, $path, $packageName);
         $parameters = \array_merge([
+            'href' => $href,
             'rel' => 'stylesheet',
-            'href' => \sprintf('%s?version=%d', $url, $this->version),
             'nonce' => $this->getNonce($env),
         ], $parameters);
         $attributes = $this->reduceParameters($parameters);
@@ -209,15 +201,15 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a javascript source tag with a version and a nonce value.
+     * Output a javascript source tag with a version and nonce.
      *
      * @throws \Exception
      */
     private function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
-        $url = $this->getAssetUrl($env, $path, $packageName);
+        $src = $this->getVersionedAsset($env, $path, $packageName);
         $parameters = \array_merge([
-            'src' => \sprintf('%s?version=%d', $url, $this->version),
+            'src' => $src,
             'nonce' => $this->getNonce($env),
         ], $parameters);
         $attributes = $this->reduceParameters($parameters);
@@ -230,12 +222,6 @@ final class FunctionExtension extends AbstractExtension
      *
      * If the package used to generate the path is an instance of
      * UrlPackage, you will always get a URL and not a path.
-     *
-     * @param Environment $env         the Twig environnement
-     * @param string      $path        a public path
-     * @param ?string     $packageName the optional name of the asset package to use
-     *
-     * @return string the public path of the asset
      */
     private function getAssetUrl(Environment $env, string $path, ?string $packageName = null): string
     {
@@ -247,6 +233,20 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * Gets the version for the given path.
+     */
+    private function getAssetVersion(?string $path): int
+    {
+        if (null !== $file = $this->getAbsolutePath($path)) {
+            return (int) \filemtime($file);
+        }
+
+        return $this->version;
+    }
+
+    /**
+     * Gets a Twig extension.
+     *
      * @template T of \Twig\Extension\ExtensionInterface
      * @psalm-param class-string<T> $className
      * @psalm-return T
@@ -258,55 +258,63 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Gets the image height.
-     *
-     * @param string $path an existing image path relative to the public directory
      */
     private function getImageHeight(string $path): int
     {
+        return $this->getImageSize($path)[1];
+    }
+
+    /**
+     * Gets the image size.
+     *
+     * @return array{0: int, 1: int}
+     */
+    private function getImageSize(string $path): array
+    {
         $fullPath = (string) \realpath($this->webDir . $path);
+        /** @psalm-var array{0: int, 1: int} $size */
         $size = (array) \getimagesize($fullPath);
 
-        return (int) $size[1];
+        return $size;
     }
 
     /**
      * Gets the image width.
-     *
-     * @param string $path an existing image path relative to the public directory
      */
     private function getImageWidth(string $path): int
     {
-        $fullPath = (string) \realpath($this->webDir . $path);
-        $size = (array) \getimagesize($fullPath);
-
-        return (int) $size[0];
+        return $this->getImageSize($path)[0];
     }
 
     /**
      * Generates a random nonce parameter.
-     *
-     * @param Environment $env the Twig environnement
      *
      * @throws \Exception
      */
     private function getNonce(Environment $env): string
     {
         if (null === $this->nonce) {
-            $extension = $this->getExtension($env, NonceExtension::class);
-            $this->nonce = $extension->getNonce();
+            $this->nonce = $this->getExtension($env, NonceExtension::class)->getNonce();
         }
 
         return $this->nonce;
     }
 
     /**
+     * Gets an asset with version.
+     */
+    private function getVersionedAsset(Environment $env, string $path, ?string $packageName = null): string
+    {
+        $url = $this->getAssetUrl($env, $path, $packageName);
+        $version = $this->getAssetVersion($path);
+
+        return \sprintf('%s?version=%d', $url, $version);
+    }
+
+    /**
      * This filter replaces duplicated spaces and/or linebreaks with single space.
      *
      * It also removes whitespace from the beginning and at the end of the string.
-     *
-     * @param string $value the value to clean
-     *
-     * @return string the cleaned value
      */
     private function normalizeWhitespace(string $value): string
     {
@@ -335,9 +343,6 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Gets the route parameters.
-     *
-     * @param Request $request the request
-     * @param int     $id      the entity identifier
      */
     private function routeParams(Request $request, int $id = 0): array
     {

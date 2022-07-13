@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for group entities.
@@ -46,9 +45,9 @@ class GroupController extends AbstractEntityController
      *
      * @throws \ReflectionException
      */
-    public function __construct(TranslatorInterface $translator, GroupRepository $repository)
+    public function __construct(GroupRepository $repository)
     {
-        parent::__construct($translator, $repository);
+        parent::__construct($repository);
     }
 
     /**

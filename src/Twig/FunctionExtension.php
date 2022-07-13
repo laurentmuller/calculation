@@ -34,7 +34,6 @@ use Twig\TwigFunction;
 final class FunctionExtension extends AbstractExtension
 {
     use RoleTranslatorTrait;
-
     /**
      * The asset extension.
      */
@@ -58,9 +57,8 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, TranslatorInterface $translator, private readonly UrlGeneratorService $generator)
+    public function __construct(KernelInterface $kernel, private readonly TranslatorInterface $translator, private readonly UrlGeneratorService $generator)
     {
-        $this->translator = $translator;
         $projectDir = $kernel->getProjectDir();
         $filename = FileUtils::buildPath($projectDir, 'composer.lock');
         $this->webDir = (string) \realpath(FileUtils::buildPath($projectDir, 'public'));
@@ -95,7 +93,8 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('asset_if', fn (?string $path = null, ?string $default = null): ?string => $this->assetIf($path, $default)),
             new TwigFunction('asset_js', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetJs($env, $path, $parameters, $packageName), $assetOptions),
             new TwigFunction('asset_css', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetCss($env, $path, $parameters, $packageName), $assetOptions),
-            new TwigFunction('asset_version', fn (?string $path): int => $this->getAssetVersion($path)),
+            new TwigFunction('asset_versioned', fn (Environment $env, string $path, ?string $packageName = null): string => $this->getVersionedAsset($env, $path, $packageName), $assetOptions),
+            new TwigFunction('asset_time', fn (?string $path): int => $this->getAssetVersion($path)),
 
             // images
             new TwigFunction('image_height', fn (string $path): int => $this->getImageHeight($path)),
@@ -111,11 +110,19 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    /**
      * Checks if the given asset path exists.
      */
     private function assetExists(?string $path): bool
     {
-        if (null === $file = $this->getAbsolutePath($path)) {
+        if (null === $file = $this->getRealPath($path)) {
             return false;
         }
 
@@ -152,34 +159,6 @@ final class FunctionExtension extends AbstractExtension
     private function fileExists(?string $filename): bool
     {
         return null !== $filename && FileUtils::exists($filename);
-    }
-
-    /**
-     * Gets the absolute path or null if not exist.
-     */
-    private function getAbsolutePath(?string $path): ?string
-    {
-        if (empty($path)) {
-            return null;
-        }
-
-        // web directory?
-        if (empty($this->webDir)) {
-            return null;
-        }
-
-        // real path?
-        $join_path = \implode('/', [$this->webDir, $path]);
-        if (!$file = \realpath($join_path)) {
-            return null;
-        }
-
-        // file exist?
-        if (!FileUtils::isFile($file)) {
-            return null;
-        }
-
-        return $file;
     }
 
     /**
@@ -237,7 +216,7 @@ final class FunctionExtension extends AbstractExtension
      */
     private function getAssetVersion(?string $path): int
     {
-        if (null !== $file = $this->getAbsolutePath($path)) {
+        if (null !== $file = $this->getRealPath($path)) {
             return (int) \filemtime($file);
         }
 
@@ -298,6 +277,30 @@ final class FunctionExtension extends AbstractExtension
         }
 
         return $this->nonce;
+    }
+
+    /**
+     * Gets the real (absolute) path or null if not exist.
+     */
+    private function getRealPath(?string $path): ?string
+    {
+        // empty?
+        if (empty($path) || empty($this->webDir)) {
+            return null;
+        }
+
+        // real path?
+        $join_path = \implode('/', [$this->webDir, $path]);
+        if (false === $file = \realpath($join_path)) {
+            return null;
+        }
+
+        // file exist?
+        if (!FileUtils::isFile($file)) {
+            return null;
+        }
+
+        return $file;
     }
 
     /**

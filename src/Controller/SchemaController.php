@@ -25,7 +25,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller to display the database schema.
@@ -57,9 +56,8 @@ class SchemaController extends AbstractController
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public function __construct(TranslatorInterface $translator, EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager)
     {
-        parent::__construct($translator);
         $this->connection = $manager->getConnection();
         $this->manager = $this->connection->createSchemaManager();
         $this->metaDatas = $this->filterMetaDatas($manager);

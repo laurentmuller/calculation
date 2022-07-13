@@ -95,7 +95,7 @@ class ArchiveService implements ServiceSubscriberInterface
             ->add(CalculationStateListType::class);
 
         $helper->addCheckboxSimulate()
-            ->addCheckboxConfirm($this->translator(), $query->isSimulate());
+            ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());
 
         return $helper->createForm();
     }

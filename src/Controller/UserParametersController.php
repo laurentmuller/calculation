@@ -30,7 +30,6 @@ class UserParametersController extends AbstractController
 {
     /**
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/parameters', name: 'user_parameters')]
     public function invoke(Request $request, UserService $service): Response

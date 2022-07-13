@@ -24,7 +24,7 @@ use App\Service\UrlGeneratorService;
 use App\Service\UserService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
-use App\Traits\TranslatorFlashMessageTrait;
+use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mime\Address;
+use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -43,7 +44,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class AbstractController extends BaseController
 {
-    use TranslatorFlashMessageTrait;
+    use TranslatorFlashMessageAwareTrait;
 
     /**
      * Integer requirement for route parameter.
@@ -55,23 +56,11 @@ abstract class AbstractController extends BaseController
      */
     final public const HOME_PAGE = 'homepage';
 
-    /**
-     * The URL generator service.
-     */
-    protected ?UrlGeneratorService $generatorService = null;
-
-    /**
-     * The user service.
-     */
-    protected ?UserService $userService = null;
-
-    /**
-     * Constructor.
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
+    // services
+    private ?UrlGeneratorService $generatorService = null;
+    private ?RequestStack $requestStack = null;
+    private ?TranslatorInterface $translator = null;
+    private ?UserService $userService = null;
 
     /**
      * Gets the address from (email and name) used to send email.
@@ -135,12 +124,16 @@ abstract class AbstractController extends BaseController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
+    #[SubscribedService]
     public function getRequestStack(): RequestStack
     {
-        /** @psalm-var RequestStack $requestStack */
-        $requestStack = $this->container->get('request_stack');
+        if (null === $this->requestStack) {
+            /** @psalm-var RequestStack $requestStack */
+            $requestStack = $this->container->get('request_stack');
+            $this->requestStack = $requestStack;
+        }
 
-        return $requestStack;
+        return $this->requestStack;
     }
 
     /**
@@ -156,10 +149,16 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the translator service.
+     * Gets the translator.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getTranslator(): TranslatorInterface
     {
+        if (null === $this->translator) {
+            $this->translator = $this->getService(TranslatorInterface::class);
+        }
+
         return $this->translator;
     }
 

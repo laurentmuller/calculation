@@ -116,7 +116,7 @@ class ProductUpdater implements ServiceSubscriberInterface
             ->addCheckboxType();
 
         $helper->addCheckboxSimulate()
-            ->addCheckboxConfirm($this->translator(), $query->isSimulate());
+            ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());
 
         $helper->field('type')
             ->addHiddenType();

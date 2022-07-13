@@ -32,10 +32,8 @@ abstract class AbstractReport extends PdfDocument
 {
     use TranslatorTrait;
 
-    /*
-     * The Twig extension to format values.
-     */
     private readonly FormatExtension $extension;
+    private readonly TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -82,11 +80,11 @@ abstract class AbstractReport extends PdfDocument
     }
 
     /**
-     * Gets the translator.
+     * {@inheritDoc}
      */
     public function getTranslator(): TranslatorInterface
     {
-        return $this->controller->getTranslator();
+        return $this->translator;
     }
 
     /**

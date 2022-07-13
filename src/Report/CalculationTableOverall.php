@@ -20,6 +20,7 @@ use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the overall totals of a calculation.
@@ -29,8 +30,8 @@ class CalculationTableOverall extends PdfTableBuilder
     use TranslatorTrait;
 
     private readonly Calculation $calculation;
-
     private readonly float $minMargin;
+    private readonly TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -41,6 +42,14 @@ class CalculationTableOverall extends PdfTableBuilder
         $this->translator = $parent->getTranslator();
         $this->calculation = $parent->getCalculation();
         $this->minMargin = $parent->getMinMargin();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

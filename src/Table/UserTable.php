@@ -38,10 +38,9 @@ class UserTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(UserRepository $repository, TranslatorInterface $translator, private readonly Environment $twig, private readonly Security $security)
+    public function __construct(UserRepository $repository, private readonly TranslatorInterface $translator, private readonly Environment $twig, private readonly Security $security)
     {
         parent::__construct($repository);
-        $this->translator = $translator;
     }
 
     /**
@@ -86,6 +85,14 @@ class UserTable extends AbstractEntityTable
     public function formatRole(string $role): string
     {
         return $this->translateRole($role);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

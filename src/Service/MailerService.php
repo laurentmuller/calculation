@@ -95,7 +95,7 @@ class MailerService implements ServiceSubscriberInterface
 
     private function createNotification(): NotificationEmail
     {
-        $email = new NotificationEmail($this->translator());
+        $email = new NotificationEmail($this->getTranslator());
         $email->setFooterText($this->getFooterText())
             ->action($this->trans('index.title'), $this->getHomeUrl());
 

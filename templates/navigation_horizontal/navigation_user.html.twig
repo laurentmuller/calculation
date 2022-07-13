@@ -5,7 +5,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {%- set image = vich_uploader_asset(app.user, 'imageFile')|replace({'192': '032'}) -%}
             {%- if asset_exists(image) -%}
-                <img alt="{{ 'user.image.title'|trans }}" src="{{ asset(image) }}?{{ asset_version(image) }}" class="avatar rounded-circle" title="{{ app.user.userIdentifier }}" width="{{ image_width(image) }}" height="{{ image_height(image) }}">
+                <img alt="{{ 'user.image.title'|trans }}" src="{{ asset(image) }}?{{ asset_time(image) }}" class="avatar rounded-circle" title="{{ app.user.userIdentifier }}" width="{{ image_width(image) }}" height="{{ image_height(image) }}">
             {%- else -%}
                 {{ icons.icon('user fa-lg far') }}{{ ' ' ~ app.user.userIdentifier }}
             {%- endif -%}

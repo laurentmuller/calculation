@@ -47,7 +47,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -65,9 +64,9 @@ class UserController extends AbstractEntityController
      *
      * @throws \ReflectionException
      */
-    public function __construct(TranslatorInterface $translator, UserRepository $repository)
+    public function __construct(UserRepository $repository)
     {
-        parent::__construct($translator, $repository);
+        parent::__construct($repository);
     }
 
     /**

@@ -22,6 +22,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the groups, categories and items of a calculation.
@@ -29,16 +30,13 @@ use App\Util\FormatUtils;
 class CalculationTableItems extends PdfGroupTableBuilder
 {
     use TranslatorTrait;
-
     /**
      * The categories and items indent.
      */
     private const INDENT = 4;
 
-    /**
-     * The calculation to render.
-     */
     private readonly Calculation $calculation;
+    private readonly TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -48,6 +46,14 @@ class CalculationTableItems extends PdfGroupTableBuilder
         parent::__construct($parent);
         $this->translator = $parent->getTranslator();
         $this->calculation = $parent->getCalculation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

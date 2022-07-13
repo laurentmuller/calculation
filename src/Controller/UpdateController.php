@@ -60,7 +60,7 @@ class UpdateController extends AbstractController
             ->help('update.help.customer')
             ->addChoiceType($choices);
 
-        $helper->addCheckboxConfirm($this->translator, false);
+        $helper->addCheckboxConfirm($this->getTranslator(), false);
 
         return $this->renderForm('admin/update.html.twig', [
             'form' => $helper->createForm(),

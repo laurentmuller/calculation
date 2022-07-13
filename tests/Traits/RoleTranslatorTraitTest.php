@@ -25,6 +25,8 @@ class RoleTranslatorTraitTest extends TestCase
 {
     use RoleTranslatorTrait;
 
+    private ?TranslatorInterface $translator;
+
     public function getTranslateRoles(): array
     {
         return [
@@ -38,6 +40,11 @@ class RoleTranslatorTraitTest extends TestCase
         ];
     }
 
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
     /**
      * @param string|RoleInterface $role the role to translate
      *
@@ -46,12 +53,12 @@ class RoleTranslatorTraitTest extends TestCase
     public function testTranslateRole(RoleInterface|string $role, string $message): void
     {
         $expected = "user.roles.$message";
-        $this->translator = $this->getTranslator($expected);
+        $this->translator = $this->createTranslator($expected);
         $actual = $this->translateRole($role);
         $this->assertEquals($actual, $expected);
     }
 
-    private function getTranslator(string $message): TranslatorInterface
+    private function createTranslator(string $message): TranslatorInterface
     {
         $translator = $this->getMockBuilder(TranslatorInterface::class)
             ->disableOriginalConstructor()

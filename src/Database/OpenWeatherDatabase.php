@@ -92,7 +92,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      *
      * @return bool true on success
      */
-    public function deletCities(): bool
+    public function deleteCities(): bool
     {
         return $this->exec(self::DELETE_CITIES);
     }

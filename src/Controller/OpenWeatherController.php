@@ -28,7 +28,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for the OpenWeather API.
@@ -68,9 +67,8 @@ class OpenWeatherController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, private readonly OpenWeatherService $service)
+    public function __construct(private readonly OpenWeatherService $service)
     {
-        parent::__construct($translator);
     }
 
     /**

@@ -302,7 +302,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * <p>
      * <b>NB</b>: The SQL query must contain 2 parameters:
      * <ul>
-     * <li>"<code>:value</code>" - The seach parameter.</li>
+     * <li>"<code>:value</code>" - The search parameter.</li>
      * <li>"<code>:limit</code>" - The limit parameter.</li>
      * </ul>
      * </p>.

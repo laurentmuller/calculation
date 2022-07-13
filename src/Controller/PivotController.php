@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller to display the pivot table.
@@ -37,9 +36,8 @@ class PivotController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, private readonly CalculationRepository $repository)
+    public function __construct(private readonly CalculationRepository $repository)
     {
-        parent::__construct($translator);
     }
 
     /**

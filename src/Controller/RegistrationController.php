@@ -27,7 +27,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 /**
@@ -41,12 +40,10 @@ class RegistrationController extends AbstractController
     private const ROUTE_VERIFY = 'user_verify';
 
     public function __construct(
-        TranslatorInterface $translator,
         private readonly EmailVerifier $verifier,
         private readonly UserRepository $repository,
         private readonly UserExceptionService $service
     ) {
-        parent::__construct($translator);
     }
 
     /**
@@ -111,7 +108,7 @@ class RegistrationController extends AbstractController
 
     private function createEmail(User $user): RegistrationEmail
     {
-        $email = new RegistrationEmail($this->translator);
+        $email = new RegistrationEmail($this->getTranslator());
         $email->subject($this->trans('registration.subject'))
             ->from($this->getAddressFrom())
             ->to((string) $user->getEmail())

@@ -44,14 +44,12 @@ trait SessionTrait
      * Gets the session.
      *
      * @return SessionInterface|null the session, if found; null otherwise
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function getSession(): ?SessionInterface
     {
         if (null === $this->session) {
             if (null === $this->requestStack && $this instanceof AbstractController) {
-                $this->requestStack = $this->getRequestStack();
+                $this->requestStack = $this->requestStack();
             }
             if (null !== $this->requestStack) {
                 $this->session = $this->requestStack->getSession();

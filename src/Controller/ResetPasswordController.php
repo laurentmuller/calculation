@@ -29,7 +29,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
@@ -55,12 +54,10 @@ class ResetPasswordController extends AbstractController
      * Constructor.
      */
     public function __construct(
-        TranslatorInterface $translator,
         private readonly ResetPasswordHelperInterface $helper,
         private readonly UserRepository $repository,
         private readonly UserExceptionService $service
     ) {
-        parent::__construct($translator);
     }
 
     /**
@@ -161,7 +158,7 @@ class ResetPasswordController extends AbstractController
 
     private function createEmail(User $user, ResetPasswordToken $resetToken): ResetPasswordEmail
     {
-        $email = new ResetPasswordEmail($this->translator);
+        $email = new ResetPasswordEmail($this->getTranslator());
         $email->to($user->getAddress())
             ->from($this->getAddressFrom())
             ->setFooterText($this->getFooterText())

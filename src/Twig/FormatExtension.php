@@ -30,9 +30,8 @@ final class FormatExtension extends AbstractExtension
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
-        $this->translator = $translator;
     }
 
     /**
@@ -76,6 +75,14 @@ final class FormatExtension extends AbstractExtension
             new TwigFilter('localetime', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->timeFilter($env, $date, $timeFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
             new TwigFilter('localedatetime', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->dateTimeFilter($env, $date, $dateFormat, $timeFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

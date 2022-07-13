@@ -79,10 +79,9 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct();
-        $this->translator = $translator;
         $this->setPageSize(PageSetup::PAPERSIZE_A4);
     }
 
@@ -162,6 +161,14 @@ class SpreadsheetDocument extends Spreadsheet
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

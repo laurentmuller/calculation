@@ -100,9 +100,6 @@ class CspController extends AbstractController
         $logger->error($title, $context);
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     */
     private function sendNotification(string $title, array $context, MailerInterface $mailer): void
     {
         $notification = new CspViolationEmail($this->getTranslator());

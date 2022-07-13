@@ -27,10 +27,9 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
 
     private ?string $footerText = null;
 
-    public function __construct(TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
+    public function __construct(private readonly TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
     {
         parent::__construct($headers, $body);
-        $this->translator = $translator;
         $this->htmlTemplate('notification/notification.html.twig');
     }
 
@@ -71,6 +70,14 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
         }
 
         return $headers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

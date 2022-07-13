@@ -34,7 +34,6 @@ class ThemeController extends AbstractController
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/theme', name: 'user_theme')]

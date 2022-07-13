@@ -23,6 +23,8 @@ class StrengthTranslatorTraitTest extends TestCase
 {
     use StrengthTranslatorTrait;
 
+    private ?TranslatorInterface $translator;
+
     public function getTranslateLevels(): array
     {
         return [
@@ -37,18 +39,23 @@ class StrengthTranslatorTraitTest extends TestCase
         ];
     }
 
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
     /**
      * @dataProvider getTranslateLevels
      */
     public function testTranslateLevel(int $level, string $message): void
     {
         $expected = "password.strength_level.$message";
-        $this->translator = $this->getTranslator($expected);
+        $this->translator = $this->createTranslator($expected);
         $actual = $this->translateLevel($level);
         $this->assertEquals($actual, $expected);
     }
 
-    private function getTranslator(string $message): TranslatorInterface
+    private function createTranslator(string $message): TranslatorInterface
     {
         $translator = $this->getMockBuilder(TranslatorInterface::class)
             ->disableOriginalConstructor()

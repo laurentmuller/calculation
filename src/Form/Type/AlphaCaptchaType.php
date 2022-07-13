@@ -41,11 +41,8 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
     private const SESSION_KEY = 'alpha_captcha_answer';
 
     private readonly AlphaCaptchaInterface $captcha;
-
     private readonly string $dataError;
-
     private ?string $previousAnswer = null;
-
     private ?string $question = null;
 
     /**

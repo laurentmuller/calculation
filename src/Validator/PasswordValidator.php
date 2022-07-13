@@ -31,10 +31,17 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct(Password::class);
-        $this->translator = $translator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

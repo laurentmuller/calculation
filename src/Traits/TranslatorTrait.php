@@ -21,9 +21,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 trait TranslatorTrait
 {
     /**
-     * The translator instance.
+     * Gets the translator.
      */
-    protected TranslatorInterface $translator;
+    abstract public function getTranslator(): TranslatorInterface;
 
     /**
      * Checks if a message has a translation (it does not take into account the fallback mechanism).
@@ -36,8 +36,9 @@ trait TranslatorTrait
      */
     public function isTransDefined(string $id, ?string $domain = null, ?string $locale = null): bool
     {
-        if ($this->translator instanceof TranslatorBagInterface) {
-            $catalogue = $this->translator->getCatalogue($locale);
+        $translator = $this->getTranslator();
+        if ($translator instanceof TranslatorBagInterface) {
+            $catalogue = $translator->getCatalogue($locale);
 
             return $catalogue->defines($id, $domain ?? 'messages');
         }
@@ -57,6 +58,6 @@ trait TranslatorTrait
      */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        return $this->translator->trans($id, $parameters, $domain, $locale);
+        return $this->getTranslator()->trans($id, $parameters, $domain, $locale);
     }
 }

@@ -19,6 +19,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the totals by group of a calculation.
@@ -27,10 +28,8 @@ class CalculationTableGroups extends PdfTableBuilder
 {
     use TranslatorTrait;
 
-    /**
-     * The calculation to render.
-     */
     private readonly Calculation $calculation;
+    private readonly TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -40,6 +39,14 @@ class CalculationTableGroups extends PdfTableBuilder
         parent::__construct($parent);
         $this->translator = $parent->getTranslator();
         $this->calculation = $parent->getCalculation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

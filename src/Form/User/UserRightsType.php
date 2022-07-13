@@ -26,6 +26,8 @@ class UserRightsType extends RightsType
 {
     use RoleTranslatorTrait;
 
+    private readonly TranslatorInterface $translator;
+
     /**
      * Constructor.
      */
@@ -43,6 +45,14 @@ class UserRightsType extends RightsType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(['data_class' => User::class]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

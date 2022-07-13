@@ -30,7 +30,7 @@ class ProductProvider extends EntityProvider
     private static array $material = ['acier', 'bois', 'béton', 'plastique', 'coton', 'granit', 'caoutchouc', 'cuir', 'soie', 'laine', 'lin', 'marbre', 'fer', 'bronze', 'cuivre', 'aluminium', 'papier'];
 
     /** @var string[] */
-    private static array $product = ['tabouret', 'camoin', 'ordinateur', 'gants', 'pantalon', 'chemisier', 'tabouret', 'chausse-pied', 'chapeau', 'vase', 'couteau', 'récipient', 'manteau', 'carnet', 'clavier', 'sac', 'banc', 'stylo', 'boîtier', 'portefeuille'];
+    private static array $product = ['tabouret', 'camion', 'ordinateur', 'gants', 'pantalon', 'chemisier', 'tabouret', 'chausse-pied', 'chapeau', 'vase', 'couteau', 'récipient', 'manteau', 'carnet', 'clavier', 'sac', 'banc', 'stylo', 'boîtier', 'portefeuille'];
 
     /**
      * Constructor.

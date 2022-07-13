@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for the exchange rate service.
@@ -33,9 +32,8 @@ class ExchangeRateController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, private readonly ExchangeRateService $service)
+    public function __construct(private readonly ExchangeRateService $service)
     {
-        parent::__construct($translator);
     }
 
     /**

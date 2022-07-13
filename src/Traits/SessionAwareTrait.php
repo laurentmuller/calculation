@@ -22,13 +22,22 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  */
 trait SessionAwareTrait
 {
+    #[SubscribedService]
+    public function getRequestStack(): RequestStack
+    {
+        /** @psalm-var RequestStack $result */
+        $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+
+        return $result;
+    }
+
     /**
      * Gets the session.
      */
     protected function getSession(): ?SessionInterface
     {
         try {
-            return $this->requestStack()->getSession();
+            return $this->getRequestStack()->getSession();
         } catch (SessionNotFoundException) {
             return null;
         }
@@ -199,14 +208,5 @@ trait SessionAwareTrait
         }
 
         return $this;
-    }
-
-    #[SubscribedService]
-    private function requestStack(): RequestStack
-    {
-        /** @psalm-var RequestStack $result */
-        $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
-
-        return $result;
     }
 }

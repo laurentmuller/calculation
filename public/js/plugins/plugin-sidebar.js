@@ -15,17 +15,15 @@
         // public functions
         // -----------------------------
         constructor(element, options) {
-            const that = this;
-            that.$element = $(element);
-            that.options = $.extend(true, {}, Sidebar.DEFAULTS, that.$element.data(), options);
-            that._init();
+            this.$element = $(element);
+            this.options = $.extend(true, {}, Sidebar.DEFAULTS, this.$element.data(), options);
+            this._init();
         }
 
         destroy() {
-            const that = this;
-            that.$sidebarToggle.off('click', that.toggleSidebarProxy);
-            that.$element.off('click', '.nav-link-toggle', that.toggleMenuProxy);
-            that.$element.removeData('sidebar');
+            this.$sidebarToggle.off('click', this.toggleSidebarProxy);
+            this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
+            this.$element.removeData('sidebar');
         }
 
         // -----------------------------
@@ -34,6 +32,7 @@
 
         /**
          * Initialize the plugin.
+         * @private
          */
         _init() {
             // get elements
@@ -50,6 +49,10 @@
             };
             that.$sidebarToggle.on('click', that.toggleSidebarProxy);
             that.$element.on('click', '.nav-link-toggle', that.toggleMenuProxy);
+
+            // update titles
+            that._updateSidebarTitle();
+            that._updateMenusTitle();
         }
 
         /**
@@ -79,6 +82,7 @@
 
         /**
          * Save the navigation state.
+         * @private
          */
         _saveState() {
             const url = this.options.url;
@@ -92,14 +96,14 @@
 
         /**
          * Collapse all menus
+         * @private
          */
         _collapseMenus() {
             const $toggle = this.$element.find('.nav-item-dropdown .nav-link-toggle.nav-link-toggle-show');
             if ($toggle.length) {
-                const title = this.options.show;
                 $toggle.removeClass('nav-link-toggle-show').attr({
-                    'aria-expanded': 'false',
-                    'title': title
+                    'title': this.options.showMenu,
+                    'aria-expanded': 'false'
                 });
                 this.$element.find('.navbar-menu:visible').hide(350);
             }
@@ -109,10 +113,10 @@
          * Toggle the sidebar.
          *
          * @param {Event} e - the event.
+         * @private
          */
         _toggleSidebar(e) {
             e.stopPropagation();
-            // hide drop-down menus
             $('.dropdown-menu.show, .dropdown.show').removeClass('show');
             this.$element.add(this.$pageContent).toggleClass('active');
             const active = this.$element.hasClass('active');
@@ -122,15 +126,42 @@
             } else {
                 $toggle.hide(350);
             }
-            const title = active ? this.options.show : this.options.hide;
-            this.$sidebarToggle.attr('title', title);
+            this._updateSidebarTitle();
             this._saveState();
+        }
+
+        /**
+         * Update the sidebar title.
+         * @private
+         */
+        _updateSidebarTitle() {
+            const active = this.$element.hasClass('active');
+            const title = active ? this.options.showSidebar : this.options.hideSidebar;
+            this.$sidebarToggle.attr('title', title);
+        }
+
+        /**
+         * Update the drop-down menu titles.
+         * @private
+         */
+        _updateMenusTitle() {
+            const options = this.options;
+            this.$element.find('.nav-item-dropdown .nav-link-toggle').each(function () {
+                const $menu = $(this);
+                const visible = $menu.parents('.nav-item-dropdown').find('.navbar-menu').is(':visible');
+                const title = visible ? options.hideMenu : options.showMenu;
+                $menu.attr({
+                    'aria-expanded': String(visible),
+                    'title': title
+                });
+            });
         }
 
         /**
          * Toggle a menu.
          *
          * @param {Event} e - the event.
+         * @private
          */
         _toggleMenu(e) {
             e.stopPropagation();
@@ -144,11 +175,7 @@
             }
             $link.toggleClass('nav-link-toggle-show');
             $menu.toggle(350, function () {
-                const title = visible ? that.options.show : that.options.hide;
-                $link.attr({
-                    'aria-expanded': String(visible),
-                    'title': title
-                });
+                that._updateMenusTitle();
                 that._saveState();
             });
         }
@@ -162,8 +189,10 @@
         sidebarHorizontal: '.navbar-horizontal',
         sidebarToggle: '.sidebar-toggle',
         pageContent: '.page-content',
-        show: 'Expand',
-        hide: 'Collapse',
+        showSidebar: 'Show Sidebar',
+        hideSidebar: 'Hide Sidebar',
+        showMenu: 'Expand',
+        hideMenu: 'Collapse',
     };
 
     // -----------------------------
@@ -174,10 +203,9 @@
     $.fn.sidebar = function (options) {
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('sidebar');
-            if (!data) {
+            if (!$this.data('sidebar')) {
                 const settings = typeof options === 'object' && options;
-                $this.data('sidebar', data = new Sidebar(this, settings));
+                $this.data('sidebar', new Sidebar(this, settings));
             }
         });
     };

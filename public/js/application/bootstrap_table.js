@@ -770,12 +770,23 @@ $.fn.extend({
         });
     }
 
+    // initialize calculation state drop-down
+    $('.dropdown-state').each(function () {
+        const $this = $(this);
+        $('<i />', {
+            class: 'fa-solid fa-square-full border mr-1',
+            css: {
+                color: $this.data('color')
+            }
+        }).prependTo($this);
+    });
+
     // initialize log levels drop-down
     $('.dropdown-level').each(function () {
-        const $level = $(this);
+        const $this = $(this);
         $('<i />', {
-            class: 'fa-solid fa-square-full border mr-1 ' + $level.data('value')
-        }).prependTo($level);
+            class: 'fa-solid fa-square-full border mr-1 ' + $this.data('value')
+        }).prependTo($this);
     });
 
     // update UI

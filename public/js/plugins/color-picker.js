@@ -568,8 +568,7 @@
     $.fn.colorpicker = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('colorpicker');
-            if (!data) {
+            if (!$this.data('colorpicker')) {
                 const settings = typeof options === 'object' && options;
                 $this.data('colorpicker', new ColorPicker(this, settings));
             }

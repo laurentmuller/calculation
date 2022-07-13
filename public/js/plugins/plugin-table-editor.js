@@ -175,8 +175,7 @@
     $.fn.tableEditor = function (options) {
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('tableEditor');
-            if (!data) {
+            if (!$this.data('tableEditor')) {
                 const settings = typeof options === 'object' && options;
                 $this.data('tableEditor', new TableEditor(this, settings));
             }

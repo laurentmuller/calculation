@@ -254,8 +254,7 @@
     $.fn.celledit = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('cell-edit');
-            if (!data) {
+            if (!$this.data('cell-edit')) {
                 const settings = typeof options === 'object' && options;
                 $this.data('cell-edit', new CellEdit(this, settings));
             }

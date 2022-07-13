@@ -443,7 +443,7 @@ flashbag:
 footer:
   about_title: Afficher les informations à propos de l'application
   breadcrumb_title: Accéder à la page %title%
-  copyright: Copyright © 2020 - %year% %owner%
+  copyright: Copyright © %year% %owner%
   copyright_title: Afficher le site du concepteur de l'application
   environment_title: Environnement d'exécution de l'application
 generate:

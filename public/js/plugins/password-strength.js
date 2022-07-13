@@ -286,8 +286,7 @@
     $.fn.passwordstrength = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('passwordstrength');
-            if (!data) {
+            if (!$this.data('passwordstrength')) {
                 const settings = typeof options === 'object' && options;
                 $this.data('passwordstrength', new PasswordStrength(this, settings));
             }

@@ -611,8 +611,7 @@
     $.fn.boostrapTreeView = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('boostrapTreeView');
-            if (!data) {
+            if (!$this.data('boostrapTreeView')) {
                 const settings = typeof options === 'object' && options;
                 $this.data('boostrapTreeView', new BoostrapTreeView(this, settings));
             }

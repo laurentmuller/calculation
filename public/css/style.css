@@ -345,8 +345,8 @@ span.state-color {
  * textarea
  */
 textarea.resizable {
-    min-height: 4rem;
-    max-height: 10rem;
+    min-height: 8rem;
+    max-height: 16rem;
 }
 
 textarea.fixed {

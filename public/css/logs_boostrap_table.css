@@ -42,7 +42,7 @@ td.user {
 }
 
 .dropdown-level i {
-    color: var(--light);
+    color: white;
 }
 
 .dropdown-level i.debug {

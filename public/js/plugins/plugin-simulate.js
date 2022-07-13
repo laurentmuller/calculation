@@ -63,8 +63,7 @@
     $.fn.simulate = function (options) {
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('simulate');
-            if (!data) {
+            if (!$this.data('simulate')) {
                 const settings = typeof options === 'object' && options;
                 $this.data('simulate', new Simulate(this, settings));
             }

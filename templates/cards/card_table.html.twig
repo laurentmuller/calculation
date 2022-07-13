@@ -9,8 +9,15 @@
 {%- endmacro %}
 
 {# macros #}
-{% macro output_dropdown(suffix, value, selection, text) -%}
-<button type="button" role="button" data-value="{{ value }}" class="dropdown-item dropdown-{{ suffix }}{% if value == selection %} active{% endif %}">
+{% macro output_dropdown(suffix, value, selection, text, attributes=[]) -%}
+{% set active = value == selection ? ' active' : '' %}
+{% set attributes = attributes|default([])|merge({
+    'type': 'button',
+    'role': 'button',
+    'data-value': value,
+    'class': 'dropdown-item dropdown-' ~ suffix ~ active
+}) %}
+<button{{ tools.attributes(attributes) }}>
     {{- text|default(value)|capitalize -}}
 </button>
 {%- endmacro %}

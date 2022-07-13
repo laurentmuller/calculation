@@ -56,11 +56,6 @@ abstract class AbstractController extends BaseController
     final public const HOME_PAGE = 'homepage';
 
     /**
-     * The application service.
-     */
-    protected ?ApplicationService $application = null;
-
-    /**
      * The URL generator service.
      */
     protected ?UrlGeneratorService $generatorService = null;
@@ -155,7 +150,6 @@ abstract class AbstractController extends BaseController
     {
         return \array_merge(parent::getSubscribedServices(), [
             UserService::class,
-            ApplicationService::class,
             TranslatorInterface::class,
             UrlGeneratorService::class,
         ]);

@@ -18,13 +18,13 @@
     </button>
     {% set editable = false %}
     <div class="dropdown-menu" aria-labelledby="stateid">
-        {{ _self.output_dropdown('state', 0, stateid, 'calculation.list.state_all_text'|trans) }}
+        {{ _self.output_dropdown('state', 0, stateid, 'calculation.list.state_all_text'|trans, {'data-color': 'white'}) }}
         {% for state in customData.states %}
             {% if editable != state.editable %}
                 {{ _self.output_dropdown_header((state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true) }}
                 {% set editable = state.editable %}
             {% endif %}
-            {{ _self.output_dropdown('state', state.id, stateid, state.code) }}
+            {{ _self.output_dropdown('state', state.id, stateid, state.code, {'data-color': state.color}) }}
         {% endfor %}
     </div>
 </div>

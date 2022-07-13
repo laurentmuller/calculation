@@ -40,8 +40,6 @@ class CalculationStateRepository extends AbstractRepository
      * Gets states used for the calculation table.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
-     *
-     * @return array an array with the state and the number of calculations
      */
     public function getDropDownStates(): array
     {
@@ -49,6 +47,7 @@ class CalculationStateRepository extends AbstractRepository
             ->select('s.id')
             ->addSelect('s.code')
             ->addSelect('s.editable')
+            ->addSelect('s.color')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.editable', Criteria::DESC)
@@ -58,6 +57,33 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Gets states where calculations have the overall margin below the given margin.
+     *
+     * <b>Note:</b> Only states with at least one calculation are returned.
+     *
+     * @param float $margin the minimum margin
+     */
+    public function getDropDownStatesBelow(float $margin): array
+    {
+        $builder = $this->createQueryBuilder('s')
+            ->select('s.id')
+            ->addSelect('s.code')
+            ->addSelect('s.editable')
+            ->addSelect('s.color')
+            ->innerJoin('s.calculations', 'c')
+            ->groupBy('s.id')
+            ->orderBy('s.editable', Criteria::DESC)
+            ->addOrderBy('s.code', Criteria::ASC)
+            ->where('c.itemsTotal != 0')
+            ->andWhere('(c.overallTotal / c.itemsTotal) < :margin')
+            ->setParameter('margin', $margin, Types::FLOAT);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Gets query builder for state where editable is true.
+     *
      * @psalm-param literal-string $alias
      */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
@@ -79,52 +105,6 @@ class CalculationStateRepository extends AbstractRepository
         return $this->getSortedBuilder()
             ->getQuery()
             ->getResult();
-    }
-
-    /**
-     * Gets states with the number and the sum (overall total) of calculations with overall margin below.
-     *
-     * <b>Note:</b> Only states with at least one calculation are returned.
-     *
-     * @param float $margin the minimum margin
-     *
-     * @return array the states with the number and the sum of calculations
-     * @psalm-return array<array{
-     *      id: int,
-     *      code: string,
-     *      editable: boolean,
-     *      color: string,
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      margin: float,
-     *      marginAmount: float}>
-     */
-    public function getListCountBelows(float $margin): array
-    {
-        $builder = $this->getListCountQueryBuilder()
-            ->where('c.itemsTotal != 0')
-            ->andWhere('(c.overallTotal / c.itemsTotal) < :margin')
-            ->setParameter('margin', $margin, Types::FLOAT);
-
-        $results = $builder->getQuery()->getArrayResult();
-
-        /** @psalm-var array{
-         *      id: int,
-         *      code: string,
-         *      editable: boolean,
-         *      color: string,
-         *      count: int,
-         *      items: float,
-         *      total: float,
-         *      margin: float,
-         *      marginAmount: float} $result
-         */
-        foreach ($results as &$result) {
-            $this->updateQueryResult($result);
-        }
-
-        return $results;
     }
 
     /**
@@ -169,6 +149,8 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Gets query builder for state where editable is false.
+     *
      * @psalm-param literal-string $alias
      */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder

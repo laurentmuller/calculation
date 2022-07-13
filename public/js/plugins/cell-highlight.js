@@ -249,8 +249,7 @@
     $.fn.cellhighlight = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('cellhighlight');
-            if (!data) {
+            if (!$this.data('cellhighlight')) {
                 const settings = typeof options === 'object' && options;
                 $this.data('cellhighlight', new CellHighlight(this, settings));
             }

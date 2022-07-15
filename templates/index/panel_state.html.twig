@@ -1,6 +1,5 @@
 {% import "macros/_icons.html.twig" as icons %}
 {% import 'index/_macros.html.twig' as macros %}
-
 {# macros #}
 {% macro cardEntry(state, list_path, parameters=[], min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
@@ -23,11 +22,10 @@
     </div>
 </div>
 {%- endmacro %}
-
 {# parameters #}
 {%- set list_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) ? 'calculation_table' : false -%}
 {%- set is_states = states|length -%}
-
+{# content #}
 <div class="card mb-2">
     <div class="card-header">
         <div class="row">

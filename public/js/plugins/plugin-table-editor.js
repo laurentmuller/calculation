@@ -99,13 +99,12 @@
 
             switch (keyCode) {
             case 13: // enter
-                e.stopPropagation();
+                e.preventDefault();
                 this.save(e, $input);
                 break;
 
             case 27:// escape
                 e.preventDefault();
-                e.stopPropagation();
                 this.update(e, $input);
                 break;
 

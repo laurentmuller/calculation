@@ -499,14 +499,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     }
 
     /**
-     * Sets the sort mode.
+     * Sets the sort mode and sort values if different from current sort mode.
      */
     public function setSortMode(string $sortMode): self
     {
         switch ($sortMode) {
             case self::SORT_ASC:
             case self::SORT_DESC:
-            case self::SORT_NONE:
                 if ($this->sortMode !== $sortMode) {
                     $this->sortMode = $sortMode;
 

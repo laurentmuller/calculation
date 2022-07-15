@@ -1,5 +1,5 @@
 {% import "macros/_icons.html.twig" as icons %}
-
+{# macros #}
 {% macro cardEntry(entity, count, list_path, icon) -%}
 {% set title = entity ~ '.list.title' %}
 {% set counter = 'index.panel_count_' ~ entity %}
@@ -18,7 +18,6 @@
     </div>
 </div>
 {%- endmacro %}
-
 {# list access #}
 {%- set task_path = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) ? 'task_table' : false -%}
 {%- set group_path = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) ? 'group_table' : false -%}
@@ -26,7 +25,7 @@
 {%- set category_path = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) ? 'category_table' : false -%}
 {%- set margin_path = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) ? 'globalmargin_table' : false -%}
 {%- set state_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) ? 'calculationstate_table' : false -%}
-
+{# content #}
 <div class="card mb-2">
     <div class="card-header">
         <h1 class="card-title">

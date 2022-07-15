@@ -84,7 +84,6 @@ class IndexController extends AbstractController
             $parameters['margin_count'] = $this->count(GlobalMargin::class);
             $parameters['state_count'] = $this->count(CalculationState::class);
         }
-        // save
         if ($request->hasSession()) {
             $request->getSession()->set(self::PARAM_RESTRICT, $restrict);
         }
@@ -126,7 +125,7 @@ class IndexController extends AbstractController
 
     private function getStates(): array
     {
-        $states = $this->manager->getRepository(CalculationState::class)->getListCountCalculations();
+        $states = $this->manager->getRepository(CalculationState::class)->getCalculations();
 
         // add overall entry
         $count = \array_sum(\array_column($states, 'count'));

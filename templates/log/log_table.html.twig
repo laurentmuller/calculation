@@ -22,7 +22,7 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="channel">
         {{ _self.output_dropdown('channel', '', channel, 'datatable.all'|trans) }}
-        {{- _self.item_separator() }}
+        {{ _self.item_separator() }}
         {% for key in customData.channels %}
         {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
         {% endfor %}

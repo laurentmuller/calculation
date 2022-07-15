@@ -7,7 +7,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    /*box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);*/
     transition: margin-left 0.35s ease;
     overflow-y: auto;
     flex-direction: column !important;

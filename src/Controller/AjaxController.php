@@ -338,6 +338,7 @@ class AjaxController extends AbstractController
             $session = $request->getSession();
             /** @psalm-var array<string, string> $menus */
             $menus = $request->request->all();
+            $menus = \array_filter($menus, static fn (string $key): bool => \str_starts_with($key, 'menu_'), \ARRAY_FILTER_USE_KEY);
             foreach ($menus as $key => $menu) {
                 $session->set($key, \filter_var($menu, \FILTER_VALIDATE_BOOLEAN));
             }

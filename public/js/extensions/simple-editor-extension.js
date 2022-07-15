@@ -157,7 +157,6 @@
                             const regex = /\r|\n|style="(.*?)"|class="(.*?)"|(?=<!--)([\s\S]*?)-->|<div.*>&nbsp;<\/div>/gm;
                             html = html.replace(regex, '').trim();
                             $content.html(html).trigger('input');
-                            e.stopPropagation();
                             e.preventDefault();
                             return false;
                         }

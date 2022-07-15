@@ -27,12 +27,6 @@
             {% if is_granted_global_margin -%}
                 {{ icons.dropdownItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
             {% endif -%}
-            {% if is_granted_customer %}
-                {%- if is_granted_data -%}
-                    {{ icons.dropdownSeparator }}
-                {% endif -%}
-                {{ icons.dropdownItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
-            {% endif %}
         </div>
     </li>
 {% endif %}

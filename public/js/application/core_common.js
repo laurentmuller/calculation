@@ -90,7 +90,6 @@ function initSearchToolbar() {
 
     $form.on('submit', function (e) {
         if ($input.hasClass('is-invalid')) {
-            e.stopPropagation();
             e.preventDefault();
         }
     });

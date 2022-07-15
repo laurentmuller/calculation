@@ -635,18 +635,20 @@ index:
   panel_state_title_all: Afficher toutes les calculations
   panel_title_total: Montant total des calculations
   panel_title_count: Nombre de calculations
-  panel_title_category: Afficher la liste des catégories
-  panel_count_category: Nombre de catégories dans le catalogue
-  panel_title_group: Afficher la liste des groupes
-  panel_count_group: Nombre de groupes dans le catalogue
-  panel_title_globalmargin: Afficher la liste des marges globales
-  panel_count_globalmargin: Nombre de marges globales dans le catalogue
+  panel_title_calculation: Afficher la liste des calculations
   panel_title_product: Afficher la liste des articles
-  panel_count_product: Nombre d'articles dans le catalogue
-  panel_title_calculationstate: Afficher la liste des statuts
-  panel_count_calculationstate: Nombre de statuts dans le catalogue
   panel_title_task: Afficher la liste des tâches
+  panel_title_category: Afficher la liste des catégories
+  panel_title_group: Afficher la liste des groupes
+  panel_title_calculationstate: Afficher la liste des statuts
+  panel_title_globalmargin: Afficher la liste des marges globales
+  panel_count_calculation: Nombre de calculations dans le catalogue
+  panel_count_product: Nombre d'articles dans le catalogue
   panel_count_task: Nombre de tâches dans le catalogue
+  panel_count_category: Nombre de catégories dans le catalogue
+  panel_count_group: Nombre de groupes dans le catalogue
+  panel_count_calculationstate: Nombre de statuts dans le catalogue
+  panel_count_globalmargin: Nombre de marges globales dans le catalogue
   title: Accueil
   title_help: Afficher la page d'accueil
   toggle_navigation: Basculer la navigation horizontal
@@ -1019,6 +1021,7 @@ schema:
     title: Tables
     tooltip: Afficher la définition de la table %name%
   table:
+    title: Table %name%
     description: Liste des colonnes et des associations de la base de données.
     empty: Aucune colonne n'est définie.
     error: La table '%name%' n'existe pas ou est introuvable.
@@ -1031,11 +1034,12 @@ schema:
       type: Type
       table: Table
       records: Lignes
-      inverse_side: Inverser
+      relation: Relation
       default: Défaut
     index_unique: Valeur unique
     primary_key: Clé primaire
-    title: Table %name%
+    one_to_many: Un à plusieurs.
+    many_to_one: Plusieurs à un.
 search:
   title: Rechercher
   clear: Effacer les critères de recherche

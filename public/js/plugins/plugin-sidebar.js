@@ -29,7 +29,6 @@
         // -----------------------------
         // private functions
         // -----------------------------
-
         /**
          * Initialize the plugin.
          * @private
@@ -51,8 +50,97 @@
             that.$element.on('click', '.nav-link-toggle', that.toggleMenuProxy);
 
             // update titles
-            that._updateSidebarTitle();
-            that._updateMenusTitle();
+            that._updateSidebar();
+            that._updateMenus();
+        }
+
+        /**
+         * Toggle the sidebar.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _toggleSidebar(e) {
+            e.preventDefault();
+            $('.dropdown-menu.show, .dropdown.show').removeClass('show');
+            this.$element.add(this.$pageContent).toggleClass('active');
+            const active = this.$element.hasClass('active');
+            const $toggle = this.$sidebarHorizontal.find('.nav-sidebar-horizontal');
+            if (active) {
+                $toggle.show(350);
+            } else {
+                $toggle.hide(350);
+            }
+            this._updateSidebar();
+            this._saveState();
+        }
+
+        /**
+         * Toggle a menu.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _toggleMenu(e) {
+            e.preventDefault();
+            const that = this;
+            const $link = $(e.currentTarget);
+            const $parent = $link.parents('.nav-item-dropdown');
+            const $menu = $parent.find('.navbar-menu');
+            const visible = $menu.is(':visible');
+            if (!visible) {
+                that._collapseMenus();
+            }
+            $link.toggleClass('nav-link-toggle-show');
+            $menu.toggle(350, function () {
+                that._updateMenus();
+                that._saveState();
+            });
+        }
+
+        /**
+         * Update the sidebar content.
+         * @private
+         */
+        _updateSidebar() {
+            const active = this.$element.hasClass('active');
+            const title = active ? this.options.showSidebar : this.options.hideSidebar;
+            this.$sidebarToggle.attr({
+                'aria-expanded': String(!active),
+                'title': title,
+            });
+        }
+
+        /**
+         * Update the menus content.
+         * @private
+         */
+        _updateMenus() {
+            const options = this.options;
+            this.$element.find('.nav-item-dropdown .nav-link-toggle').each(function () {
+                const $menu = $(this);
+                const visible = $menu.parents('.nav-item-dropdown').find('.navbar-menu').is(':visible');
+                const title = visible ? options.hideMenu : options.showMenu;
+                $menu.attr({
+                    'aria-expanded': String(visible),
+                    'title': title
+                });
+            });
+        }
+
+        /**
+         * Collapse all menus
+         * @private
+         */
+        _collapseMenus() {
+            const $toggle = this.$element.find('.nav-item-dropdown .nav-link-toggle.nav-link-toggle-show');
+            if ($toggle.length) {
+                $toggle.removeClass('nav-link-toggle-show').attr({
+                    'title': this.options.showMenu,
+                    'aria-expanded': 'false'
+                });
+                this.$element.find('.navbar-menu:visible').hide(350);
+            }
         }
 
         /**
@@ -62,7 +150,6 @@
             const menus = {
                 'menu_active': this.$element.hasClass('active')
             };
-
             let visible;
             let wasVisible = false;
             this.$element.find('.nav-item-dropdown[id]').each(function () {
@@ -92,92 +179,6 @@
                     $.ajaxSetup({global: true});
                 });
             }
-        }
-
-        /**
-         * Collapse all menus
-         * @private
-         */
-        _collapseMenus() {
-            const $toggle = this.$element.find('.nav-item-dropdown .nav-link-toggle.nav-link-toggle-show');
-            if ($toggle.length) {
-                $toggle.removeClass('nav-link-toggle-show').attr({
-                    'title': this.options.showMenu,
-                    'aria-expanded': 'false'
-                });
-                this.$element.find('.navbar-menu:visible').hide(350);
-            }
-        }
-
-        /**
-         * Toggle the sidebar.
-         *
-         * @param {Event} e - the event.
-         * @private
-         */
-        _toggleSidebar(e) {
-            e.stopPropagation();
-            $('.dropdown-menu.show, .dropdown.show').removeClass('show');
-            this.$element.add(this.$pageContent).toggleClass('active');
-            const active = this.$element.hasClass('active');
-            const $toggle = this.$sidebarHorizontal.find('.nav-sidebar-horizontal');
-            if (active) {
-                $toggle.show(350);
-            } else {
-                $toggle.hide(350);
-            }
-            this._updateSidebarTitle();
-            this._saveState();
-        }
-
-        /**
-         * Update the sidebar title.
-         * @private
-         */
-        _updateSidebarTitle() {
-            const active = this.$element.hasClass('active');
-            const title = active ? this.options.showSidebar : this.options.hideSidebar;
-            this.$sidebarToggle.attr('title', title);
-        }
-
-        /**
-         * Update the drop-down menu titles.
-         * @private
-         */
-        _updateMenusTitle() {
-            const options = this.options;
-            this.$element.find('.nav-item-dropdown .nav-link-toggle').each(function () {
-                const $menu = $(this);
-                const visible = $menu.parents('.nav-item-dropdown').find('.navbar-menu').is(':visible');
-                const title = visible ? options.hideMenu : options.showMenu;
-                $menu.attr({
-                    'aria-expanded': String(visible),
-                    'title': title
-                });
-            });
-        }
-
-        /**
-         * Toggle a menu.
-         *
-         * @param {Event} e - the event.
-         * @private
-         */
-        _toggleMenu(e) {
-            e.stopPropagation();
-            const that = this;
-            const $link = $(e.currentTarget);
-            const $parent = $link.parents('.nav-item-dropdown');
-            const $menu = $parent.find('.navbar-menu');
-            const visible = $menu.is(':visible');
-            if (!visible) {
-                that._collapseMenus();
-            }
-            $link.toggleClass('nav-link-toggle-show');
-            $menu.toggle(350, function () {
-                that._updateMenusTitle();
-                that._saveState();
-            });
         }
     };
 

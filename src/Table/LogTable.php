@@ -230,8 +230,6 @@ class LogTable extends AbstractTable implements \Countable
     /**
      * Sort logs.
      *
-     * <b>NB:</b> Sorts only when not set to the default order (created date field ascending).
-     *
      * @param Log[]  $entities  the logs to sort
      * @param string $field     the sorted field
      * @param string $direction the sorted direction ('asc' or 'desc')
@@ -240,17 +238,29 @@ class LogTable extends AbstractTable implements \Countable
      */
     private function sort(array &$entities, string $field, string $direction): void
     {
-        // need sort?
+        // default sorting?
         if (self::COLUMN_DATE === $field && self::SORT_ASC === $direction) {
             return;
         }
 
-        $fields = [
-            $field => SortModeInterface::SORT_ASC === $direction,
-        ];
-        if (self::COLUMN_DATE !== $field) {
-            $fields[self::COLUMN_DATE] = false;
+        // date? (single sort)
+        if (self::COLUMN_DATE === $field) {
+            $order = self::SORT_ASC === $direction ? 1 : -1;
+            \usort($entities, function (Log $a, Log $b) use ($order): int {
+                $dateA = $a->getCreatedAt()?->getTimestamp() ?? 0;
+                $dateB = $b->getCreatedAt()?->getTimestamp() ?? 0;
+
+                return $order * ($dateA <=> $dateB);
+            });
+
+            return;
         }
+
+        // multiple-sort
+        $fields = [
+                $field => SortModeInterface::SORT_ASC === $direction,
+                self::COLUMN_DATE => false,
+            ];
         Utils::sortFields($entities, $fields);
     }
 }

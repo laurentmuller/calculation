@@ -1,12 +1,10 @@
 {% import 'macros/_properties.html.twig' as properties %}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'index/_macros.html.twig' as macros %}
-
 {# parameters #}
 {%- set restrict = restrict|default(0) -%}
 {%- set selection = app.request.get('id', 0) -%}
 {%- set caller = path(app.request.get('_route')) -%}
-
 {# actions #}
 {%- set is_app_dev = app_mode == 'dev' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
@@ -22,7 +20,7 @@
 {%- set row_link = not user_service.actionNone and (edit_page or show_page) -%}
 {%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
 {%- set is_calculations = calculations|length -%}
-
+{# content #}
 <div class="card mb-2">
     <div class="card-header">
         <div class="row">

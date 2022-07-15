@@ -1,16 +1,15 @@
 {% extends 'cards/card_table.html.twig' %}
-
 {# parameters #}
 {%- set title = 'search.title' -%}
 {%- set title_icon = 'search' -%}
 {%- set path = path('homepage') -%}
 {%- set allow_global = false -%}
 {%- set entity = customData.entity|default('') -%}
-
+{# header #}
 {% block header_actions %}
 <small id="search_minimum" class="text-danger d-print-none">{{ 'search.minimum'|trans }}</small>
 {% endblock %}
-
+{# actions #}
 {% block toolbar_actions -%}
 {% if customData.entities and customData.entities|length > 1 %}
 <div class="input-group-append btn-dropdown">
@@ -19,14 +18,15 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="entity">
         {{ _self.output_dropdown('entity', '', entity, 'datatable.all'|trans) }}
-        {% for key, value in customData.entities %}
-        {{ _self.output_dropdown('entity', key, entity, value|trans) }}
+        {{ _self.item_separator() }}
+        {% for key, entry in customData.entities %}
+        {{ _self.output_dropdown('entity', key, entity, entry.name|trans, {'data-icon': entry.icon}) }}
         {% endfor %}
     </div>
 </div>
 {% endif %}
 {%- endblock %}
-
+{# other actions #}
 {% block other_actions -%}
     {%- set show_class = show_class ~ ' btn-search btn-show' -%}
     {%- set edit_class = show_class ~ ' btn-search btn-edit' -%}
@@ -34,11 +34,11 @@
     {{- _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', ICON_EDIT, edit_class) }}
     {{- _self.item_path(path ~ '_type_/delete/_id_', 'common.button_delete', ICON_DELETE, 'btn-search btn-delete') }}
 {%- endblock %}
-
+{# custom view #}
 {% block custom_view_header -%}
 <a href="#" class="item-link text-body">%entityname%</a>
 {%- endblock %}
-
+{# custom body #}
 {% block custom_view_body -%}
 {{ _self.property_row('search.fields.field', '%fieldname%') }}
 {{ _self.property_row('search.fields.content', '%content%', 'text-truncate') }}

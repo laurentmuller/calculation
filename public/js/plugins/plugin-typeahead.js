@@ -447,7 +447,6 @@
                 }
                 break;
             }
-            e.stopPropagation();
             e.preventDefault();
         }
 
@@ -463,7 +462,6 @@
         }
 
         click(e) {
-            e.stopPropagation();
             e.preventDefault();
             this.$element.trigger('focus');
             this.select();

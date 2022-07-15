@@ -1139,7 +1139,6 @@ $.fn.extend({
         $dialog.on('keydown', function (e) {
             if (e.which === 13) { // enter
                 e.preventDefault();
-                e.stopPropagation();
                 $button.trigger('click');
             }
         }).on('show.bs.modal', function () {
@@ -1192,7 +1191,6 @@ $.fn.extend({
         $dialog.on('keydown', function (e) {
             if (e.which === 13) { // enter
                 e.preventDefault();
-                e.stopPropagation();
                 $button.trigger('click');
             }
         }).on('show.bs.modal', function () {

@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-
+{% import 'macros/_icons.html.twig' as icons %}
 {# parameters #}
 {%- set title = 'theme.title' -%}
 {%- set title_icon = 'file-image far' -%}
@@ -10,7 +10,7 @@
     'data-theme': theme_name(app.request),
     'data-background': theme_background(app.request)
 }) -%}
-
+{# body #}
 {% block card_body %}
 {# fields #}
 <div class="form-row">
@@ -25,16 +25,32 @@
 <label>{{ 'theme.fields.example'|trans }}</label>
 <div class="form-row p-3 border rounded">
     <div class="col-12 mb-2">
-        <h1 id="example_name">{{ theme.name }}</h1>
+        <h2 id="example_name">{{ theme.name }}</h2>
         <p id="example_description" class="mb-1">{{ theme.description }}</p>
         <hr>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="required">{{ 'user.fields.email'|trans }}</label>
+            <span class="form-control">info@example.com</span>
+        </div>
+    </div>
+    <div class="col-md-6 mb-2">
+        <div class="form-group">
+            <label class="required">{{ 'user.fields.username'|trans }}</label>
+            <span class="form-control text-muted is-invalid">&nbsp;</span>
+            <small class="invalid-feedback">Le champ "Nom d'utilisateur" est requis.</small>
+        </div>
+    </div>
     <div class="col-12 text-center">
-        <span class="btn btn-form btn-danger btn-example disabled mb-2">{{ 'theme.button.danger'|trans }}</span>
-        <span class="btn btn-form btn-warning btn-example disabled mb-2">{{ 'theme.button.warning'|trans }}</span>
-        <span class="btn btn-form btn-success btn-example disabled mb-2">{{ 'theme.button.success'|trans }}</span>
-        <span class="btn btn-form btn-secondary btn-example disabled mb-2">{{ 'theme.button.secondary'|trans }}</span>
-        <span class="btn btn-form btn-primary btn-example disabled mb-2">{{ 'theme.button.primary'|trans }}</span>
+        <span class="btn btn-form btn-danger btn-example cursor-default mb-2">{{ 'theme.button.danger'|trans }}</span>
+        <span class="btn btn-form btn-warning btn-example cursor-default mb-2">{{ 'theme.button.warning'|trans }}</span>
+        <span class="btn btn-form btn-success btn-example cursor-default mb-2">{{ 'theme.button.success'|trans }}</span>
+        <span class="btn btn-form btn-secondary btn-example cursor-default mb-2">{{ 'theme.button.secondary'|trans }}</span>
+        <span class="btn btn-form btn-primary btn-example cursor-default mb-2">{{ 'theme.button.primary'|trans }}</span>
+        <span class="btn btn-sm border-0 pt-0 btn-outline-secondary cursor-default mb-2">
+            {{- icons.icon('ellipsis-v') -}}
+        </span>
     </div>
 </div>
 {# link #}
@@ -42,12 +58,12 @@
     <a href="https://bootswatch.com/4/sandstone/" target="_blank" rel="noopener noreferrer">Powered by Bootswatch</a>
 </div>
 {% endblock %}
-
+{# actions #}
 {% block actions_form %}
 {{ parent() }}
 <a href="#" id="default" class="btn btn-form btn-outline-success">{{ 'theme.default'|trans }}</a>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

@@ -37,6 +37,47 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Gets states with calculations statistics.
+     *
+     * <b>Note:</b> Only states with at least one calculation are returned.
+     *
+     * @return array the states with the number and the sum of calculations
+     * @psalm-return array<array{
+     *      id: int,
+     *      code: string,
+     *      editable: boolean,
+     *      color: string,
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      margin: float,
+     *      marginAmount: float}>
+     */
+    public function getCalculations(): array
+    {
+        $results = $this->getCalculationsQueryBuilder()
+            ->getQuery()
+            ->getArrayResult();
+
+        /** @psalm-var array{
+         *      id: int,
+         *      code: string,
+         *      editable: boolean,
+         *      color: string,
+         *      count: int,
+         *      items: string|float,
+         *      total: string|float,
+         *      margin: string|float,
+         *      marginAmount: string|float} $result
+         */
+        foreach ($results as &$result) {
+            $this->updateQueryResult($result);
+        }
+
+        return $results;
+    }
+
+    /**
      * Gets states used for the calculation table.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
@@ -88,64 +129,8 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @var literal-string $where */
-        $where = "$alias.editable = 1";
-
         return $this->getSortedBuilder($alias)
-            ->where($where);
-    }
-
-    /**
-     * Gets the list of calculation states sorted by code.
-     *
-     * @return CalculationState[] the calculation states
-     */
-    public function getList(): array
-    {
-        return $this->getSortedBuilder()
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Gets states with the number and the sum (overall total) of calculations.
-     *
-     * <b>Note:</b> Only states with at least one calculation are returned.
-     *
-     * @return array the states with the number and the sum of calculations
-     * @psalm-return array<array{
-     *      id: int,
-     *      code: string,
-     *      editable: boolean,
-     *      color: string,
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      margin: float,
-     *      marginAmount: float}>
-     */
-    public function getListCountCalculations(): array
-    {
-        $results = $this->getListCountQueryBuilder()
-            ->getQuery()
-            ->getArrayResult();
-
-        /** @psalm-var array{
-         *      id: int,
-         *      code: string,
-         *      editable: boolean,
-         *      color: string,
-         *      count: int,
-         *      items: string|float,
-         *      total: string|float,
-         *      margin: string|float,
-         *      marginAmount: string|float} $result
-         */
-        foreach ($results as &$result) {
-            $this->updateQueryResult($result);
-        }
-
-        return $results;
+            ->where("$alias.editable = 1");
     }
 
     /**
@@ -155,11 +140,8 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @var literal-string $where */
-        $where = "$alias.editable = 0";
-
         return $this->getSortedBuilder($alias)
-            ->where($where);
+            ->where("$alias.editable = 0");
     }
 
     /**
@@ -193,9 +175,9 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets query builder with the number and the sum (overall total) of calculations.
+     * Gets the query builder for calculations statistics.
      */
-    private function getListCountQueryBuilder(): QueryBuilder
+    private function getCalculationsQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('s')
             ->select('s.id')

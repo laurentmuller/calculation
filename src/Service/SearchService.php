@@ -207,8 +207,8 @@ class SearchService implements ServiceSubscriberInterface
      *      type: string,
      *      field: string,
      *      content: string,
-     *      entityName: string,
-     *      fieldName: string
+     *      entityname: string,
+     *      fieldname: string
      *  }>
      *
      * @throws \ReflectionException
@@ -359,13 +359,11 @@ class SearchService implements ServiceSubscriberInterface
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
         $name = Utils::getShortName($class);
-        $content = $content ?: "e.$field";
-
-        /** @psalm-var literal-string $where */
-        $where = "$content LIKE :" . self::SEARCH_PARAM;
-
+        $content ??= "e.$field";
         /** @psalm-var literal-string $from */
         $from = $class;
+        /** @psalm-var literal-string $where */
+        $where = "$content LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()
             ->select('e.id')
@@ -388,8 +386,8 @@ class SearchService implements ServiceSubscriberInterface
      *      type: string,
      *      field: string,
      *      content: string,
-     *      entityName: string,
-     *      fieldName: string
+     *      entityname: string,
+     *      fieldname: string
      *  }>
      *
      * @throws \ReflectionException
@@ -424,8 +422,8 @@ class SearchService implements ServiceSubscriberInterface
          *      type: string,
          *      field: string,
          *      content: string,
-         *      entityName: string,
-         *      fieldName: string
+         *      entityname: string,
+         *      fieldname: string
          *  }> $result
          */
         $result = $query->getArrayResult();
@@ -507,7 +505,7 @@ class SearchService implements ServiceSubscriberInterface
 
                 // replace column's names
                 foreach ($columns as $index => $name) {
-                    $query = \preg_replace("/AS[ ]\\w+[$index]/i", "AS $name", $query);
+                    $query = \preg_replace("/AS \\w+[$index]/i", "AS $name", $query);
                 }
             }
         }

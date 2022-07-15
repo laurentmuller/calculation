@@ -1,6 +1,5 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'index/_macros.html.twig' as macros %}
-
 {# macros #}
 {% macro cardEntry(month, list_path, min_margin) -%}
 <div class="card index-child m-1">
@@ -25,11 +24,10 @@
     </div>
 </div>
 {%- endmacro %}
-
 {# parameters #}
 {%- set list_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) ? 'calculation_table' : false -%}
 {%- set is_months = months|length -%}
-
+{# content #}
 <div class="card mb-2">
     <div class="card-header">
         <div class="row">

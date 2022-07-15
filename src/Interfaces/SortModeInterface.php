@@ -26,9 +26,4 @@ interface SortModeInterface
      * The descending sort order.
      */
     final public const SORT_DESC = 'desc';
-
-    /**
-     * The none sort order.
-     */
-    final public const SORT_NONE = 'none';
 }

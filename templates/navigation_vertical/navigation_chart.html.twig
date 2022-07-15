@@ -13,10 +13,6 @@
         <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
             {{ icons.navItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
             {{ icons.navItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
-            {% if is_test %}
-                {{ icons.dropdownSeparator(false, 'border-secondary') }}
-                {{ icons.navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
-            {% endif %}
         </ul>
     </li>
 {% endif %}

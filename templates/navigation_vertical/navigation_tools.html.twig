@@ -11,6 +11,20 @@
             {{- icons.icon('tools fa-fw', 'index.menu_tools') -}}
         </a>
         <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+            {#
+            {% if is_granted_data and app.request.get('_route') != 'search' -%}
+                <form role="search" action="{{ path('search') }}" autocomplete="off" novalidate="novalidate">
+                    <div class="input-group input-group-sm">
+                        <input  id="search" name="search" type="text" class="form-control bg-transparent text-white" required="required" minlength="2" placeholder="{{ 'search.placeholder'|trans }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit" role="button">
+                                {{- icons.icon('search fa-fw') -}}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
+            #}
             {{ icons.navItem(path('search'), 'search.title', 'search') }}
             {% if is_admin %}
                 {{ icons.dropdownSeparator(false, 'border-secondary') }}

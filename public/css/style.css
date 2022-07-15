@@ -610,12 +610,14 @@ table.table-fixed-header .thead-light th {
  * Cards in index page.
  */
 .index-parent {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .index-child {
-    flex: 1;
+    flex-grow: 1;
+    flex-basis: 0;
     min-width: 15%;
 }
 

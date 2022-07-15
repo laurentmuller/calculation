@@ -220,7 +220,7 @@ $.fn.extend({
                     callback: function (key, options, e) {
                         const item = options.items[key];
                         if (item && item.link && item.link.length) {
-                            e.stopPropagation();
+                            e.preventDefault();
                             item.link.get(0).click();
                             return true;
                         }

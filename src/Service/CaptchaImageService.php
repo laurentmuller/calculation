@@ -101,14 +101,13 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @return string|null the image encoded with the base 64 or null if the image canot be created
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Exception
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {
         // not force and valid?
         if (!$force && $this->validateTimeout() && $this->hasSessionValue(self::KEY_DATA)) {
-            return (string) $this->getSessionValue(self::KEY_DATA);
+            return (string) $this->getSessionString(self::KEY_DATA);
         }
 
         // clear previous values

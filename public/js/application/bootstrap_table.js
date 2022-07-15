@@ -557,7 +557,7 @@ $.fn.extend({
 
             // update search minimum
             if ($searchMinimum.length) {
-                $searchMinimum.toggleClass('d-none', $table.isSearchText());
+                $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
 
             // update sort
@@ -788,6 +788,18 @@ $.fn.extend({
             class: 'fa-solid fa-square-full border mr-1 ' + $this.data('value')
         }).prependTo($this);
     });
+
+    // initialize search entity drop-down
+    $('.dropdown-entity ').each(function () {
+        const $this = $(this);
+        const icon = $this.data('icon');
+        if (icon) {
+            $('<i />', {
+                class: ' mr-1 ' + $this.data('icon')
+            }).prependTo($this);
+        }
+    });
+
 
     // update UI
     $('.card .dropdown-menu').removeSeparators();

@@ -29,7 +29,7 @@ class ImportanceType extends AbstractType
     {
         parent::configureOptions($resolver);
         $resolver->setDefault('class', Importance::class)
-            ->setDefault('choice', Importance::sorted());
+            ->setDefault('choices', Importance::sorted());
     }
 
     public function getParent(): ?string

@@ -44,7 +44,7 @@ class StateChart extends BaseChart
      */
     public function generate(): array
     {
-        $states = $this->repository->getListCountCalculations();
+        $states = $this->repository->getCalculations();
         $count = \array_sum(\array_column($states, 'count'));
         $total = \array_sum(\array_column($states, 'total'));
         $items = \array_sum(\array_column($states, 'items'));

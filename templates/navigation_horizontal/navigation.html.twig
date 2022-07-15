@@ -1,5 +1,4 @@
 {# horizontal toolbar #}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 {# parameters #}
 {%- set is_env_dev = app_mode == 'dev' -%}
@@ -23,9 +22,9 @@
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
 {# horizontal navigation #}
 <nav id="navigation" class="navbar navbar-color navbar-horizontal navbar-expand-md {{ theme_background(app.request) }}" data-show="{{ 'index.sidebar_show'|trans }}" data-hide="{{ 'index.sidebar_hide'|trans }}">
-    <a href="#" class="navbar-nav navbar-toggler sidebar-toggle" title="{{ (active ? 'index.sidebar_show' : 'index.sidebar_hide')|trans }}">
-        <span class="navbar-toggler-icon"></span>
-    </a>
+    <button class="navbar-toggler sidebar-toggle py-1" aria-expanded="{{ (not active)|json_encode }}" title="{{ (active ? 'index.sidebar_show' : 'index.sidebar_hide')|trans }}">
+        <i class="fa-solid fa-angle-left"></i>
+    </button>
     <a class="navbar-brand nav-sidebar-horizontal ml-3" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}" style="display: {{ active ? 'block' : 'none' }}">
         {{- icons.icon('home') -}}
     </a>

@@ -11,6 +11,9 @@
             {{- icons.icon('bug fa-fw', 'index.menu_test') -}}
         </a>
         <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+            {{ icons.navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
+            {{ icons.navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
+            {{ icons.dropdownSeparator(false, 'border-secondary') }}
             {{ icons.navItem(path('test_notifications'), 'test.notification', 'bell far') }}
             {{ icons.navItem(path('test_editor'), 'test.editor', 'edit') }}
             {{ icons.navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}

@@ -41,13 +41,13 @@ function showError(message) {
  */
 function update(form) {
     'use strict';
-
     // get items
     const $itemsEmpty = $('.task-items-empty');
-    const items = $('#table-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
+    const items = $('#table-edit .item-row:not(.d-none) :checkbox:checked').map(function () {
         return Number.parseInt($(this).attr('value'), 10);
     }).get();
     if (items.length === 0) {
+        $('#table-edit .item-row:not(.d-none) :checkbox:first').trigger('focus');
         $itemsEmpty.removeClass('d-none');
         resetValues();
         return;
@@ -56,7 +56,7 @@ function update(form) {
 
     // get data
     const $form = $(form);
-    const url = $form.data('url');
+    const url = $form.prop('action');
     const data = {
         'id': $('#task').intVal(),
         'quantity': $('#quantity').floatVal(),
@@ -99,7 +99,6 @@ function update(form) {
  */
 function onInputChanged() {
     'use strict';
-
     // submit
     $("#edit-form").trigger('submit');
 }
@@ -109,8 +108,7 @@ function onInputChanged() {
  */
 function onTaskChanged() {
     'use strict';
-
-    // toogle rows visibility
+    // toggle rows visibility
     const id = $('#task').intVal();
     const selector = '[task-id="' + id + '"]';
     $('.item-row' + selector).removeClass('d-none');
@@ -132,12 +130,10 @@ function onTaskChanged() {
  */
 (function ($) {
     'use strict';
-
     // attach handlers
     $('#task').on('input', function () {
         $(this).updateTimer(onTaskChanged, 250);
     });
-
     $('#quantity').on('input', function () {
         $(this).updateTimer(onInputChanged, 250);
     }).inputNumberFormat();
@@ -160,5 +156,4 @@ function onTaskChanged() {
 
     // update
     onInputChanged();
-
 }(jQuery));

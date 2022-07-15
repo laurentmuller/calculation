@@ -198,9 +198,6 @@ class ArchiveService implements ServiceSubscriberInterface
         return $result;
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function getDate(): \DateTimeInterface
     {
         $timestamp = (int) $this->getSessionInt(self::KEY_DATE, 0);
@@ -295,8 +292,6 @@ class ArchiveService implements ServiceSubscriberInterface
 
     /**
      * @return CalculationState[]
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getSources(bool $useSession): array
     {
@@ -314,9 +309,6 @@ class ArchiveService implements ServiceSubscriberInterface
         return $sources;
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function getTarget(): ?CalculationState
     {
         $id = (int) $this->getSessionInt(self::KEY_TARGET, 0);
@@ -327,9 +319,6 @@ class ArchiveService implements ServiceSubscriberInterface
         return null;
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function isSimulate(): bool
     {
         return $this->isSessionBool(self::KEY_SIMULATE, true);

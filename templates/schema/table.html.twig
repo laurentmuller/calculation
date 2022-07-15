@@ -48,15 +48,15 @@
 <div class="table-responsive">
     <table class="table table-hover table-list table-sm">
         <tr>
-            <th class="w-50">{{ 'schema.table.fields.name'|trans }}</th>
-            <th class="w-50">{{ 'schema.table.fields.table'|trans }}</th>
-            <th class="text-boolean">{{ 'schema.table.fields.inverse_side'|trans }}</th>
+            <th class="w-30">{{ 'schema.table.fields.name'|trans }}</th>
+            <th class="w-35">{{ 'schema.table.fields.table'|trans }}</th>
+            <th class="w-25">{{ 'schema.table.fields.relation'|trans }}</th>
         </tr>
         {% for association in associations %}
             <tr>
                 <td>{{ association.name }}</td>
                 <td><a href="{{ association.table }}" title="{{ 'schema.index.tooltip'|trans({'%name%': association.table}) }}">{{ association.table }}</a></td>
-                <td>{{ association.inverseSide|boolean }}</td>
+                <td>{{ association.inverseSide|boolean('schema.table.one_to_many', 'schema.table.many_to_one', true) }}</td>
             </tr>
         {% endfor %}
     </table>

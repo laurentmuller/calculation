@@ -90,7 +90,6 @@
             const endVal = value.substring(selectionEnd, value.length - 1);
             const newValue = beginVal + e.key + endVal;
             if (!newValue.match(this.keypressRegex)) {
-                e.stopPropagation();
                 e.preventDefault();
             }
         }
@@ -103,10 +102,10 @@
             const parts = value.split(this.inputRegex);
             if (decimal > 0 && parts.length === 2 && parts[1].length > decimal) {
                 $element.val(parts[0] + options.separator + parts[1].substring(0, decimal));
-                e.stopPropagation();
+                e.preventDefault();
             } else if (decimal === 0 && parts.length > 1) {
                 $element.val(parts[0]);
-                e.stopPropagation();
+                e.preventDefault();
             }
         }
 

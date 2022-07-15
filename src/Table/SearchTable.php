@@ -18,9 +18,7 @@ use App\Service\SearchService;
 use App\Traits\CheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
-use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -108,43 +106,40 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        $results = parent::handleQuery($query);
-
-        // get parameters
+        /** array<array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string}> $items */
+        $items = [];
         $search = $query->search;
         $entity = (string) $query->customData[self::PARAM_ENTITY];
+        $results = parent::handleQuery($query);
 
-        // search
-        $items = \strlen($search) > 1 ? $this->service->search($search, $entity, SearchService::NO_LIMIT) : [];
+        // search?
+        if (\strlen($search) > 1) {
+            $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
+            $results->totalNotFiltered = $results->filtered = \count($items);
 
-        // total
-        $results->totalNotFiltered = $results->filtered = \count($items);
-
-        // found?
-        if (0 !== $results->totalNotFiltered) {
-            // process
-            $this->processItems($items);
-
-            // sort
-            $this->sortItems($items, $query->sort, $query->order);
-
-            // limit
-            $items = \array_slice($items, $query->offset, $query->limit);
-
-            // update entity name (icon)
-            foreach ($items as &$item) {
-                $this->updateItem($item);
+            if (0 !== $results->totalNotFiltered) {
+                $this->processItems($items);
+                $this->sortItems($items, $query->sort, $query->order);
+                $items = \array_slice($items, $query->offset, $query->limit);
+                foreach ($items as &$item) {
+                    $this->updateItem($item);
+                }
             }
-        } else {
-            $items = [];
         }
         $results->rows = $items;
 
         // ajax?
         if (!$query->callback) {
+            $entities = $this->service->getEntities();
+            foreach ($entities as $key => &$value) {
+                $value = [
+                    'name' => $value,
+                    'icon' => $this->getIcon($key),
+                ];
+            }
             $results->customData = [
                 'entity' => $entity,
-                'entities' => $this->service->getEntities(),
+                'entities' => $entities,
             ];
             $results->addParameter(self::PARAM_ENTITY, $entity);
         }
@@ -153,18 +148,35 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     }
 
     /**
+     * Gets icon for the given entity type.
+     */
+    private function getIcon(string $type): string
+    {
+        return match ($type) {
+            'calculation' => 'fa-fw fa-calculator fa-solid',
+            'calculationstate' => 'fa-fw fa-flag fa-regular',
+            'task' => 'fa-fw fa-tasks fa-solid',
+            'category' => 'fa-fw fa-folder fa-regular',
+            'group' => 'fa-fw fa-code-branch fa-solid',
+            'product' => 'fa-fw fa-file-alt fa-regular',
+            'customer' => 'fa-fw fa-address-card fa-regular',
+            default => 'fa-fw fa-file fa-regular',
+        };
+    }
+
+    /**
      * Update items.
      *
-     * @param array<array<string, mixed>> $items
+     * @param array<array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string}> $items
      */
     private function processItems(array &$items): void
     {
         foreach ($items as &$item) {
-            $type = (string) $item[SearchService::COLUMN_TYPE];
-            $field = (string) $item[SearchService::COLUMN_FIELD];
+            $type = $item[SearchService::COLUMN_TYPE];
+            $field = $item[SearchService::COLUMN_FIELD];
             $lowerType = \strtolower($type);
 
-            $item[SearchService::COLUMN_ACTION] = (int) $item['id'];
+            $item[SearchService::COLUMN_ACTION] = $item['id'];
             $item[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
             $item[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
             $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent("$type.$field", $item[SearchService::COLUMN_CONTENT]);
@@ -179,25 +191,23 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     /**
      * Sorts items.
      *
-     * @param array<array<string, mixed>> $items
+     * @param array<array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string}> $items
      */
     private function sortItems(array &$items, string $sort, string $order): void
     {
-        // create sort
-        $sorts = ["[$sort]" => self::SORT_ASC === $order];
+        /** @var array<string, int> */
+        $columns = [$sort => self::SORT_ASC === $order ? 1 : -1];
         foreach (self::SORT_COLUMNS as $field) {
-            $field = "[$field]";
-            if (!\array_key_exists($field, $sorts)) {
-                $sorts[$field] = true;
+            if (!\array_key_exists($field, $columns)) {
+                $columns[$field] = 1;
             }
         }
 
-        $accessor = PropertyAccess::createPropertyAccessor();
-        \uasort($items, function (array $a, array $b) use ($sorts, $accessor) {
-            foreach ($sorts as $field => $ascending) {
-                $result = Utils::compare($a, $b, $field, $accessor, $ascending);
+        \usort($items, function (array $a, array $b) use ($columns): int {
+            foreach ($columns as $key => $order) {
+                $result = \strnatcasecmp((string) $a[$key], (string) $b[$key]);
                 if (0 !== $result) {
-                    return $result;
+                    return $result * $order;
                 }
             }
 
@@ -208,38 +218,16 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     /**
      * Update the item.
      *
-     * @param array<string, mixed> $item
+     * @param array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string} $item
+     * @param-out  array<"content"|"entityname"|"field"|"fieldname"|"id"|"type", int|string> $item
      */
     private function updateItem(array &$item): void
     {
-        $name = (string) $item[SearchService::COLUMN_ENTITY_NAME];
-        $type = \strtolower((string) $item[SearchService::COLUMN_TYPE]);
+        $name = $item[SearchService::COLUMN_ENTITY_NAME];
+        $type = \strtolower($item[SearchService::COLUMN_TYPE]);
+        $icon = $this->getIcon($type);
 
-        $icon = 'file far';
-        switch ($type) {
-            case 'calculation':
-                $icon = 'calculator fas';
-                break;
-            case 'calculationstate':
-                $icon = 'flag far';
-                break;
-            case 'task':
-                $icon = 'tasks fas';
-                break;
-            case 'category':
-                $icon = 'folder far';
-                break;
-            case 'group':
-                $icon = 'code-branch fas';
-                break;
-            case 'product':
-                $icon = 'file-alt far';
-                break;
-            case 'customer':
-                $icon = 'address-card far';
-                break;
-        }
-        $item[SearchService::COLUMN_ENTITY_NAME] = \sprintf('<i class="fa-fw fa-%s" aria-hidden="true"></i>&nbsp;%s', $icon, $name);
+        $item[SearchService::COLUMN_ENTITY_NAME] = \sprintf('<i class="%s" aria-hidden="true"></i>&nbsp;%s', $icon, $name);
         $item[SearchService::COLUMN_TYPE] = $type;
         unset($item[SearchService::COLUMN_FIELD]);
     }

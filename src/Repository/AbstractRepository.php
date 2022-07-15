@@ -90,7 +90,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $builder->where($like)
                 ->setParameter($param, "%$value%");
         } else {
-            /** @var literal-string $where */
+            /** @psalm-var literal-string $where */
             $where = $expr->isNotNull($name);
             $builder->where($where);
         }

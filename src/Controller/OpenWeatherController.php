@@ -84,7 +84,6 @@ class OpenWeatherController extends AbstractController
         try {
             $cityId = $this->getRequestCityId($request);
             $units = $this->getRequestUnits($request);
-
             if (false === $response = $this->service->current($cityId, $units)) {
                 $response = $this->service->getLastError();
             }
@@ -109,7 +108,6 @@ class OpenWeatherController extends AbstractController
             $cityId = $this->getRequestCityId($request);
             $units = $this->getRequestUnits($request);
             $count = $this->getRequestCount($request);
-
             if (false === $response = $this->service->daily($cityId, $count, $units)) {
                 $response = $this->service->getLastError();
             }
@@ -135,7 +133,6 @@ class OpenWeatherController extends AbstractController
             $cityId = $this->getRequestCityId($request);
             $units = $this->getRequestUnits($request);
             $count = $this->getRequestCount($request);
-
             if (false === $response = $this->service->forecast($cityId, $count, $units)) {
                 $response = $this->service->getLastError();
             }
@@ -190,7 +187,6 @@ class OpenWeatherController extends AbstractController
             if ($lastError = $this->service->getLastError()) {
                 return $this->json($lastError);
             }
-
             if (!\is_array($response)) {
                 return $this->jsonFalse();
             }
@@ -207,7 +203,6 @@ class OpenWeatherController extends AbstractController
                 $city['current_url'] = $generator->generate('openweather_api_current', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
                 $city['forecast_url'] = $generator->generate('openweather_api_forecast', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
                 $city['daily_url'] = $generator->generate('openweather_api_daily', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-
                 unset($parameters['cityId']);
             }
 
@@ -395,38 +390,45 @@ class OpenWeatherController extends AbstractController
         // handle request
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            // get values
-            /** @psalm-var array $data */
+            /** @psalm-var array{
+             *     query: string,
+             *     units: string,
+             *     limit: int,
+             *     count: int
+             * } $data
+             */
             $data = $form->getData();
-            $query = (string) $data[self::KEY_QUERY];
-            $units = (string) $data[self::KEY_UNITS];
-            $limit = (int) $data[self::KEY_LIMIT];
-            $count = (int) $data[self::KEY_COUNT];
+            $query = $data[self::KEY_QUERY];
+            $units = $data[self::KEY_UNITS];
+            $limit = $data[self::KEY_LIMIT];
+            $count = $data[self::KEY_COUNT];
 
             /**
              * @var array<int, array{
              *      id: int,
              *      units: array,
              *      current: array
-             *      }> $cities
+             *      }>|false $cities
              */
             $cities = $this->service->search($query, $units, $limit);
-            $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
+            if (false !== $cities) {
+                $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
 
-            /** @var null|array{
-             *      units: array,
-             *      list: array<int, mixed>} $group
-             */
-            $group = null;
-            foreach (\array_keys($cities) as $index) {
-                // load current weather by chunk of 20 items
-                if (0 === $index % OpenWeatherService::MAX_GROUP) {
-                    $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
-                    $group = $this->service->group($ids, $units);
-                }
-                if (\is_array($group)) {
-                    $cities[$index]['units'] = $group['units'];
-                    $cities[$index]['current'] = (array) $group['list'][$index % 20];
+                /** @var null|array{
+                 *      units: array,
+                 *      list: array<int, mixed>} $group
+                 */
+                $group = null;
+                foreach (\array_keys($cities) as $index) {
+                    // load current weather by chunk of 20 items
+                    if (0 === $index % OpenWeatherService::MAX_GROUP) {
+                        $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
+                        $group = $this->service->group($ids, $units);
+                    }
+                    if (\is_array($group)) {
+                        $cities[$index]['units'] = $group['units'];
+                        $cities[$index]['current'] = (array) $group['list'][$index % 20];
+                    }
                 }
             }
 
@@ -569,25 +571,16 @@ class OpenWeatherController extends AbstractController
         return $this->getRequestInt($request, self::KEY_COUNT, $this->getRequestCount($request, $default));
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function getSessionLimit(Request $request, int $default = 25): int
     {
         return (int) $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request, $default));
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function getSessionQuery(Request $request): string
     {
         return (string) $this->getSessionString(self::KEY_QUERY, $this->getRequestQuery($request));
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function getSessionUnits(Request $request): string
     {
         return (string) $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));

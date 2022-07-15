@@ -62,7 +62,7 @@
         // private functions
         // -----------------------------
         _click(e) {
-            e.stopPropagation();
+            e.preventDefault();
             if (this.$input && this.$input.is(':focus')) {
                 return this;
             }
@@ -149,7 +149,7 @@
 
         _update(e) {
             if (e) {
-                e.stopPropagation();
+                e.preventDefault();
             }
             if (!this.$input.val()) {
                 return;
@@ -178,7 +178,7 @@
 
         _cancel(e, notify = true) {
             if (e) {
-                e.stopPropagation();
+                e.preventDefault();
             }
             if (this.$input) {
                 this.$input.off('blur', this.blurProxy);

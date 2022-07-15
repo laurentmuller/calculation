@@ -64,7 +64,7 @@
 
         change(e) {
             if (e) {
-                e.stopPropagation();
+                e.preventDefault();
             }
             const files = $.isUndefined(e.target.files) ? e.target && e.target.value ? [{name: e.target.value.replace(/^.+\\/, '')}] : [] : e.target.files;
             if (files.length === 0) {

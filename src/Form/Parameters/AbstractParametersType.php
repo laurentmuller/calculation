@@ -51,44 +51,50 @@ abstract class AbstractParametersType extends AbstractType
 
     protected function addDisplaySection(FormHelper $helper): void
     {
-        $helper->field(PropertyServiceInterface::P_DISPLAY_MODE)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DISPLAY_MODE))
+        $key = PropertyServiceInterface::P_DISPLAY_MODE;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(TableView::class);
 
-        $helper->field(PropertyServiceInterface::P_EDIT_ACTION)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_EDIT_ACTION))
+        $key = PropertyServiceInterface::P_EDIT_ACTION;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(EntityAction::class);
     }
 
     protected function addHomePageSection(FormHelper $helper): void
     {
-        $helper->field(PropertyServiceInterface::P_PANEL_STATE)
+        $key = PropertyServiceInterface::P_PANEL_STATE;
+        $helper->field($key)
             ->label('index.panel_state')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_PANEL_STATE))
-            ->help('parameters.helps.' . PropertyServiceInterface::P_PANEL_STATE)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field(PropertyServiceInterface::P_PANEL_MONTH)
+        $key = PropertyServiceInterface::P_PANEL_MONTH;
+        $helper->field($key)
             ->label('index.panel_month')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_PANEL_MONTH))
-            ->help('parameters.helps.' . PropertyServiceInterface::P_PANEL_MONTH)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field(PropertyServiceInterface::P_PANEL_CATALOG)
+        $key = PropertyServiceInterface::P_PANEL_CATALOG;
+        $helper->field($key)
             ->label('index.panel_count')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_PANEL_CATALOG))
-            ->help('parameters.helps.' . PropertyServiceInterface::P_PANEL_CATALOG)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
             ->rowClass('mb-1')
             ->notRequired()
             ->addCheckboxType();
 
-        /** @psalm-var int $calculations */
-        $calculations = $this->getDefaultValue(PropertyServiceInterface::P_PANEL_CALCULATION);
-        $helper->field(PropertyServiceInterface::P_PANEL_CALCULATION)
-            ->help('parameters.helps.' . PropertyServiceInterface::P_PANEL_CALCULATION)
-            ->updateRowAttribute('data-default', $calculations)
+        $key = PropertyServiceInterface::P_PANEL_CALCULATION;
+        /** @psalm-var int $default */
+        $default = $this->getDefaultValue($key);
+        $helper->field($key)
+            ->help('parameters.helps.' . $key)
+            ->updateRowAttribute('data-default', $default)
             ->labelClass('radio-inline')
             ->updateOptions([
                 'choice_translation_domain' => false,
@@ -99,50 +105,36 @@ abstract class AbstractParametersType extends AbstractType
 
     protected function addMessageSection(FormHelper $helper): void
     {
-        $helper->field(PropertyServiceInterface::P_MESSAGE_POSITION)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MESSAGE_POSITION))
+        $key = PropertyServiceInterface::P_MESSAGE_POSITION;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(MessagePosition::class);
-        $helper->field(PropertyServiceInterface::P_MESSAGE_TIMEOUT)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MESSAGE_TIMEOUT))
+
+        $key = PropertyServiceInterface::P_MESSAGE_TIMEOUT;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addChoiceType($this->getTimeouts());
-        $helper->field(PropertyServiceInterface::P_MESSAGE_TITLE)
-            ->rowClass('custom-control-inline')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MESSAGE_TITLE))
-            ->notRequired()
-            ->addCheckboxType();
-        $helper->field(PropertyServiceInterface::P_MESSAGE_SUB_TITLE)
-            ->rowClass('custom-control-inline')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MESSAGE_SUB_TITLE))
-            ->notRequired()
-            ->addCheckboxType();
-        $helper->field(PropertyServiceInterface::P_MESSAGE_PROGRESS)
-            ->rowClass('custom-control-inline')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MESSAGE_PROGRESS))
-            ->notRequired()
-            ->addCheckboxType();
-        $helper->field(PropertyServiceInterface::P_MESSAGE_ICON)
-            ->rowClass('custom-control-inline')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MESSAGE_ICON))
-            ->notRequired()
-            ->addCheckboxType();
-        $helper->field(PropertyServiceInterface::P_MESSAGE_CLOSE)
-            ->rowClass('custom-control-inline')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MESSAGE_CLOSE))
-            ->notRequired()
-            ->addCheckboxType();
+
+        $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_TITLE);
+        $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_SUB_TITLE);
+        $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_PROGRESS);
+        $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_ICON);
+        $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_CLOSE);
     }
 
     protected function addOptionsSection(FormHelper $helper): void
     {
-        $helper->field(PropertyServiceInterface::P_QR_CODE)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_QR_CODE))
-            ->help('parameters.helps.' . PropertyServiceInterface::P_QR_CODE)
+        $key = PropertyServiceInterface::P_QR_CODE;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field(PropertyServiceInterface::P_PRINT_ADDRESS)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_PRINT_ADDRESS))
-            ->help('parameters.helps.' . PropertyServiceInterface::P_PRINT_ADDRESS)
+        $key = PropertyServiceInterface::P_PRINT_ADDRESS;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
             ->notRequired()
             ->addCheckboxType();
     }
@@ -167,6 +159,18 @@ abstract class AbstractParametersType extends AbstractType
         }
 
         return $value;
+    }
+
+    /**
+     * Adds a checkbox type for message option.
+     */
+    private function addCheckBox(FormHelper $helper, string $key): void
+    {
+        $helper->field($key)
+            ->rowClass('custom-control-inline')
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->notRequired()
+            ->addCheckboxType();
     }
 
     /**

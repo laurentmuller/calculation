@@ -15,6 +15,7 @@ namespace App\Listener;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -32,6 +33,16 @@ class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberI
      * The exit value action.
      */
     private const EXIT_VALUE = '_exit';
+
+    /**
+     * The menu active key.
+     */
+    private const MENU_ACTIVE = 'menu_active';
+
+    /**
+     * The menus prefix.
+     */
+    private const MENU_PREFIX = 'menu_';
 
     /**
      * The switch user parameter name.
@@ -52,10 +63,14 @@ class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberI
     public function onSwitchUser(SwitchUserEvent $event): void
     {
         // get values
-        /** @psalm-var string $action */
-        $action = Utils::getRequestInputBag($event->getRequest())->get(self::SWITCH_USER);
+        $request = $event->getRequest();
+        /** @var ?string $action */
+        $action = Utils::getRequestInputBag($request)->get(self::SWITCH_USER);
         $original = $this->getOriginalUsername($event);
         $name = $this->getTargetUsername($event);
+
+        // clear menus
+        $this->clearMenus($request);
 
         // get message
         if (self::EXIT_VALUE === $action) {
@@ -71,6 +86,23 @@ class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberI
             '%orignal%' => $original,
             '%name%' => $name,
         ]);
+    }
+
+    private function clearMenus(Request $request): void
+    {
+        if ($request->hasSession()) {
+            $session = $request->getSession();
+            $values = \array_filter($session->all(), fn (string $key): bool => $this->filterKey($key), \ARRAY_FILTER_USE_KEY);
+            /** @var string $key */
+            foreach (\array_keys($values) as $key) {
+                $session->remove($key);
+            }
+        }
+    }
+
+    private function filterKey(string $key): bool
+    {
+        return \str_starts_with($key, self::MENU_PREFIX) && self::MENU_ACTIVE !== $key;
     }
 
     /**

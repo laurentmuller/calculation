@@ -1,12 +1,10 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# macros #}
 {% macro plain_text_input(id, class='') %}
 {%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
 <div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
 {% endmacro %}
-
 {% macro row_input(id, item, visible) %}
 <tr class="item-row{% if not visible %} d-none{% endif %}" task-id="{{ id }}">
     <td>
@@ -23,16 +21,15 @@
     </td>
 </tr>
 {% endmacro %}
-
 {# parameters #}
 {%- set title = 'taskcompute.title' -%}
 {%- set title_icon = 'keyboard' -%}
-{%- set form_attr = form_attr|default({})|merge({'action': path('ajax_task'), 'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
+{%- set form_attr = form_attr|default({})|merge({'action': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
 {%- set submit_text = 'taskcompute.button_ok' -%}
 {%- set service = form.vars.value -%}
 {%- set selection = service.task.id -%}
 {%- set items_count = service.task.count -%}
-
+{# body #}
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-8">
@@ -64,7 +61,7 @@
                 <td colspan="3"><hr class="my-1"></td>
             </tr>
             <tr>
-                <td><span class="task-items-empty text-danger d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
+                <td><span class="task-items-empty text-danger small d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
                 <td class="w-25 text-right pt-2">{{ 'taskcompute.fields.overall_total'|trans }}</td>
                 <td class="w-25 text-right">{{ _self.plain_text_input('overall') }}</td>
             </tr>
@@ -75,15 +72,15 @@
     <p class="small text-muted">{{ 'task.edit.empty_items'|trans }}</p>
 </div>
 {% endblock %}
-
+{# actions #}
 {% block actions_form -%}
 {% if app.request.get('caller')|default == '/' %}
 {{ icons.homepage() }}
 {% else %}
-{{ icons.button_cancel(cancel_path, 'common.button_close') }}
+{{ icons.button_cancel(cancel_path, 'common.button_back_list') }}
 {% endif %}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

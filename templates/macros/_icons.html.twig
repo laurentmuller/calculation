@@ -113,7 +113,7 @@
 <button type="submit" role="button"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans }}</button>
 {%- endmacro %}
 
-{% macro button_ok(href='#', text='common.button_ok', class='btn btn-form btn-primary') -%}
+{% macro button_ok(href='#', text='common.button_ok', class='btn btn-form btn-primary', autofocus=false) -%}
 {{- _self.link(href, text, class) -}}
 {%- endmacro %}
 

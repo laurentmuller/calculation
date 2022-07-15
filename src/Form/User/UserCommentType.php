@@ -53,7 +53,7 @@ class UserCommentType extends AbstractType
         }
 
         $helper->field('subject')
-            ->addPlainType(true);
+            ->addTextType();
 
         $helper->field('message')
             ->minLength(10)

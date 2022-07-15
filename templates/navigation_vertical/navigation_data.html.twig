@@ -32,9 +32,6 @@
             {% if is_granted_global_margin -%}
                 {{ icons.navItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
             {% endif -%}
-            {% if is_granted_customer %}
-                {{ icons.navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
-            {% endif %}
         </ul>
     </li>
 {% endif %}

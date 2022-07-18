@@ -46,7 +46,7 @@
             <em>{{ form_errors(margin.value) }}</em>
         </div>
     </td>
-    <td class="actions px-0 d-print-none">
+    <td class="actions align-middle px-0 d-print-none">
         {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-margin d-print-none', ICON_DELETE, 'taskitem.edit.delete_item') -}}
     </td>
 </tr>
@@ -80,7 +80,7 @@
             <hr class="my-0">
             <table class="table table-borderless table-sm table-edit{% if count == 0 %} d-none{% endif %}" data-prototype="{{ _self.printTaskItemMargin(item.margins.vars.prototype)|e('html_attr') }}">
                 <thead>
-                    <tr class="small">
+                    <tr>
                         <th class="vertical-middle text-right font-weight-normal required">{{ 'taskitemmargin.fields.minimum'|trans }}</th>
                         <th class="vertical-middle text-right font-weight-normal required">{{ 'taskitemmargin.fields.maximum'|trans }}</th>
                         <th class="vertical-middle text-right font-weight-normal required">{{ 'taskitemmargin.fields.value'|trans }}</th>

@@ -50,15 +50,16 @@ class PhpIniReport extends AbstractReport
      */
     public function render(): bool
     {
-        $content = $this->content;
-        if (empty($content)) {
-            return false;
-        }
-
         $this->AddPage();
 
-        \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
+        $content = $this->content;
+        if (empty($content)) {
+            $this->Cell(0, self::LINE_HEIGHT, $this->trans('about.error'));
 
+            return true;
+        }
+
+        \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(

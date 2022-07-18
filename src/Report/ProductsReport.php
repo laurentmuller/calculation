@@ -60,7 +60,7 @@ class ProductsReport extends AbstractArrayReport
         }
 
         // count
-        return $this->renderCount($entities);
+        return $this->renderCount($entities, 'counters.products');
     }
 
     /**

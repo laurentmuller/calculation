@@ -58,8 +58,6 @@ class ArchiveService implements ServiceSubscriberInterface
 
     /**
      * Create the edit form.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function createForm(ArchiveQuery $query): FormInterface
     {
@@ -102,8 +100,6 @@ class ArchiveService implements ServiceSubscriberInterface
 
     /**
      * Create the archive query.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function createQuery(): ArchiveQuery
     {

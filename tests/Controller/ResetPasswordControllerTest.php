@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ResetPasswordControllerTest extends AbstractControllerTest
 {
-    public function getRoutes()
+    public function getRoutes(): array
     {
         return [
             ['/reset-password', self::ROLE_USER],

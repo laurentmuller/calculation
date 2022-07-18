@@ -1,4 +1,4 @@
-![Icon](public/images/icons/android-icon-36x36.png) Calculation
+![Icon](public/images/icons/favicon-36x36.png) Calculation
 -----------
 Programme de calculs basé sur l'environnement de développement Symfony 6.x.
 
@@ -19,5 +19,3 @@ Qualité du code
 Actions
 -------
 [![Php-cs-fixer](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml) [![Lint](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml) [![PHP-Stan](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml) [![PHPUnit](https://github.com/laurentmuller/calculation/actions/workflows/php-unit.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-unit.yaml) [![Rector](https://github.com/laurentmuller/calculation/actions/workflows/rector.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/rector.yaml) [![Psalm Static analysis](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml) [![Twigcs](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml)
-
-<p style="text-align:right; font-size: smaller;">Dernière mise à jour : Mai 2022</p>

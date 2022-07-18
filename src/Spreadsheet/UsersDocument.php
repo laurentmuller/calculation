@@ -26,7 +26,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * Spreadsheet document for the list of users.
  *
  * @extends AbstractArrayDocument<User>
- * @psalm-suppress InternalMethod
  */
 class UsersDocument extends AbstractArrayDocument
 {

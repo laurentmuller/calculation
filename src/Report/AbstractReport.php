@@ -98,17 +98,18 @@ abstract class AbstractReport extends PdfDocument
      * Renders a line with the given number of elements.
      *
      * @param \Countable|array|int $count      the number of elements, an array or a \Countable object
+     * @param string               $message    the translatable message for the count
      * @param PdfTextAlignment     $align      the text alignment
      * @param bool                 $resetStyle true to reset style before output the line
      *
      * @return bool true if the number of elements is greater than 0
      */
-    public function renderCount(\Countable|array|int $count, PdfTextAlignment $align = PdfTextAlignment::LEFT, bool $resetStyle = true): bool
+    public function renderCount(\Countable|array|int $count, string $message = 'common.count', PdfTextAlignment $align = PdfTextAlignment::LEFT, bool $resetStyle = true): bool
     {
         if ($resetStyle) {
             $this->resetStyle();
         }
-        $text = $this->translateCount($count);
+        $text = $this->translateCount($count, $message);
         $margins = $this->setCellMargin(0);
         $this->Cell(0, self::LINE_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE, $align);
         $this->setCellMargin($margins);
@@ -135,12 +136,12 @@ abstract class AbstractReport extends PdfDocument
      *
      * @param \Countable|array|int $count the number of elements
      */
-    protected function translateCount(\Countable|array|int $count): string
+    protected function translateCount(\Countable|array|int $count, string $message = 'common.count'): string
     {
         if (\is_countable($count)) {
             $count = \count($count);
         }
 
-        return $this->trans('common.count', ['%count%' => FormatUtils::formatInt($count)]);
+        return $this->trans($message, ['%count%' => FormatUtils::formatInt($count)]);
     }
 }

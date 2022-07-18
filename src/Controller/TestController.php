@@ -93,7 +93,6 @@ class TestController extends AbstractController
      * Test sending notification mail.
      *
      * @throws \ReflectionException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/editor', name: 'test_editor')]
     public function editor(Request $request, MailerService $service, LoggerInterface $logger): Response
@@ -219,8 +218,6 @@ class TestController extends AbstractController
 
     /**
      * Test password validation.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/password', name: 'test_password')]
     public function password(Request $request, CaptchaImageService $service): Response
@@ -302,8 +299,6 @@ class TestController extends AbstractController
 
     /**
      * Display the reCaptcha.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/recaptcha', name: 'test_recaptcha')]
     public function recaptcha(Request $request, bool $isDebug): Response

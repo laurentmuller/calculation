@@ -86,15 +86,12 @@ class CalculationsReport extends AbstractArrayReport
         }
         $margins = $this->isFloatZero($items) ? 0 : $this->safeDivide($overall, $items);
 
-        $text = $this->trans('common.count', [
-            '%count%' => \count($entities),
-        ]);
-
         $style = null;
         if (!$this->isFloatZero($margins) && $margins < $this->minMargin) {
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
 
+        $text = $this->translateCount($entities, 'counters.calculations');
         $columns = $table->getColumnsCount() - 3;
         $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
             ->setFixed(false);

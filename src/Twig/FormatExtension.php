@@ -150,12 +150,12 @@ final class FormatExtension extends AbstractExtension
         }
 
         // get types and calendar
-        $datetype = $dateFormat ? $formats[$dateFormat] : null;
-        $timetype = $timeFormat ? $formats[$timeFormat] : null;
+        $date_type = $dateFormat ? $formats[$dateFormat] : null;
+        $time_type = $timeFormat ? $formats[$timeFormat] : null;
         $calendar = $calendars[$calendar ?? 'gregorian'];
 
         // no formats and pattern?
-        if (\IntlDateFormatter::NONE === $datetype && \IntlDateFormatter::NONE === $timetype && null === $pattern) {
+        if (\IntlDateFormatter::NONE === $date_type && \IntlDateFormatter::NONE === $time_type && null === $pattern) {
             return '';
         }
 
@@ -164,7 +164,7 @@ final class FormatExtension extends AbstractExtension
         $date = twig_date_converter($env, $date, $timezone);
 
         // format
-        return (string) FormatUtils::formatDateTime($date, $datetype, $timetype, $timezone, $calendar, $pattern);
+        return (string) FormatUtils::formatDateTime($date, $date_type, $time_type, $timezone, $calendar, $pattern);
     }
 
     /**

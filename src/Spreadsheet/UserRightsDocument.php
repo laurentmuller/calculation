@@ -39,7 +39,7 @@ class UserRightsDocument extends AbstractArrayDocument
     /**
      * {@inheritdoc}
      */
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): self
+    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): static
     {
         if (1 === $columnIndex && $this->writeName) {
             $values = \explode('|', (string) $value);

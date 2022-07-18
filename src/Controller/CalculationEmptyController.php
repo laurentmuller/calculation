@@ -38,7 +38,6 @@ class CalculationEmptyController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'empty_excel')]
     public function excel(CalculationRepository $repository): Response

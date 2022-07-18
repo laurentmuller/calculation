@@ -14,25 +14,21 @@ namespace App\Tests\Controller;
 
 use App\Entity\AbstractEntity;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link AboutController} class.
- * Asbtract unit test for controllers.
+ * Abstract unit test for controllers.
  */
 abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 {
     /**
      * Gets the routes to test.
      *
-     * Each entry must contain a URL, a username, an expected result and the request method.
-     *
-     * @return array|\Generator
-     *
-     * @see AbstractControllerTest::testRoutes()
+     * Each entry must contain a URL, a username, an optional expected result and the request method.
      */
-    abstract public function getRoutes();
+    abstract public function getRoutes(): array|Generator;
 
     /**
      * Checks the given route.

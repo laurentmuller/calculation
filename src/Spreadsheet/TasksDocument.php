@@ -29,7 +29,7 @@ class TasksDocument extends AbstractArrayDocument
     /**
      * {@inheritdoc}
      */
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): self
+    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): static
     {
         parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
 

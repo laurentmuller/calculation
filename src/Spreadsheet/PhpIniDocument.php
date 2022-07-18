@@ -44,17 +44,20 @@ class PhpIniDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        $content = $this->content;
-        if (empty($content)) {
-            return false;
-        }
-
         $title = $this->trans('about.php');
         if (!empty($this->version)) {
             $title .= ' ' . $this->version;
         }
         $this->start($title);
         $this->setActiveTitle('Configuration', $this->controller);
+
+        $content = $this->content;
+        if (empty($content)) {
+            $this->setCellValue($this->getActiveSheet(), 1, 1, $this->trans('about.error'))
+                ->finish('A1');
+
+            return true;
+        }
 
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
         $this->setHeaderValues([

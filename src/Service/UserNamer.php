@@ -20,6 +20,8 @@ use Vich\UploaderBundle\Naming\NamerInterface;
 
 /**
  * Namer for user images.
+ *
+ * @implements NamerInterface<User>
  */
 class UserNamer implements NamerInterface, ImageExtensionInterface
 {
@@ -43,7 +45,7 @@ class UserNamer implements NamerInterface, ImageExtensionInterface
     public function name($object, PropertyMapping $mapping): string
     {
         if (!$object instanceof User) {
-            throw new NameGenerationException('The name could not be generated. The object must be an instance of User.');
+            throw new NameGenerationException(\sprintf('Expected argument of type "%s", "%s" given.', User::class, \get_debug_type($object)));
         }
 
         return self::getBaseName($object, self::SIZE_DEFAULT, self::EXTENSION_PNG);

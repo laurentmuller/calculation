@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TestControllerTest extends AbstractControllerTest
 {
-    private const  ROUTES = [
+    private const ROUTES = [
         'clock',
         'editor',
         'html',

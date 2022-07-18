@@ -149,5 +149,3 @@ Nous vous conseillons de consulter la présente politique de confidentialité p�
 
 ## Nous contacter
 Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
-
-<p style="text-align:right; font-size: smaller;">Dernière mise à jour : Mai 2022</p>

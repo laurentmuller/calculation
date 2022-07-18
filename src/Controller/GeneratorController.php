@@ -109,8 +109,6 @@ class GeneratorController extends AbstractController
 
     /**
      * Generate entities.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function generateEntities(Request $request, GeneratorInterface $generator): JsonResponse
     {

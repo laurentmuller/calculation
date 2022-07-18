@@ -181,7 +181,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function initialize(AbstractController $controller, string $title, bool $landscape = false): self
+    public function initialize(AbstractController $controller, string $title, bool $landscape = false): static
     {
         $customer = $controller->getUserService()->getCustomer();
         $application = $controller->getApplicationName();
@@ -227,7 +227,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function setActiveTitle(string $title, ?AbstractController $controller = null): self
+    public function setActiveTitle(string $title, ?AbstractController $controller = null): static
     {
         $title = self::checkSheetTitle($title);
         $this->getActiveSheet()->setTitle($title);
@@ -259,7 +259,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param ?string $category the category
      */
-    public function setCategory(?string $category): self
+    public function setCategory(?string $category): static
     {
         if ($category) {
             $this->getProperties()->setCategory($category);
@@ -278,7 +278,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function setCellImage(string $path, string $coordinates, int $width, int $height): self
+    public function setCellImage(string $path, string $coordinates, int $width, int $height): static
     {
         $sheet = $this->getActiveSheet();
 
@@ -317,7 +317,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function setCellImageByColumnAndRow(string $path, int $columnIndex, int $rowIndex, int $width, int $height): self
+    public function setCellImageByColumnAndRow(string $path, int $columnIndex, int $rowIndex, int $width, int $height): static
     {
         $coordinates = $this->stringFromColumnAndRowIndex($columnIndex, $rowIndex);
 
@@ -332,7 +332,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int       $rowIndex    the row index of the cell (1 = First row)
      * @param mixed     $value       the value of the cell
      */
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, mixed $value): self
+    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, mixed $value): static
     {
         if (null !== $value && '' !== $value) {
             if ($value instanceof \DateTimeInterface) {
@@ -351,7 +351,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): self
+    public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): static
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
@@ -385,7 +385,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param ?string $company the company name
      */
-    public function setCompany(?string $company): self
+    public function setCompany(?string $company): static
     {
         if ($company) {
             $this->getProperties()->setCompany($company);
@@ -397,7 +397,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the margins of the active sheet to default value (10 millimeters).
      */
-    public function setDefaultMargins(): self
+    public function setDefaultMargins(): static
     {
         return $this->setMargins(self::DEFAULT_MARGIN);
     }
@@ -409,7 +409,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param string $color         the hexadecimal color or an empty string ('') for black color
      * @param bool   $includeHeader true to set color for all rows; false to skip the first row
      */
-    public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): self
+    public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): static
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
@@ -435,7 +435,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int    $columnIndex the column index (A = 1)
      * @param string $format      the format to set
      */
-    public function setFormat(int $columnIndex, string $format): self
+    public function setFormat(int $columnIndex, string $format): static
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
@@ -449,7 +449,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatAmount(int $columnIndex): self
+    public function setFormatAmount(int $columnIndex): static
     {
         return $this->setFormat($columnIndex, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
     }
@@ -462,7 +462,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param string $false       the value to display when <code>false</code>
      * @param bool   $translate   <code>true</code> to translate values
      */
-    public function setFormatBoolean(int $columnIndex, string $true, string $false, bool $translate = false): self
+    public function setFormatBoolean(int $columnIndex, string $true, string $false, bool $translate = false): static
     {
         $key = "$false-$true";
         if (!\array_key_exists($key, $this->booleanFormats)) {
@@ -486,7 +486,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatDate(int $columnIndex): self
+    public function setFormatDate(int $columnIndex): static
     {
         return $this->setFormat($columnIndex, NumberFormat::FORMAT_DATE_DDMMYYYY);
     }
@@ -496,7 +496,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatDateTime(int $columnIndex): self
+    public function setFormatDateTime(int $columnIndex): static
     {
         return $this->setFormat($columnIndex, self::FORMAT_DATE_TIME);
     }
@@ -506,7 +506,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatId(int $columnIndex): self
+    public function setFormatId(int $columnIndex): static
     {
         return $this->setFormat($columnIndex, self::FORMAT_ID);
     }
@@ -516,7 +516,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatInt(int $columnIndex): self
+    public function setFormatInt(int $columnIndex): static
     {
         return $this->setFormat($columnIndex, self::FORMAT_INT);
     }
@@ -527,7 +527,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int  $columnIndex the column index (A = 1)
      * @param bool $decimals    true to display 2 decimals ('0.00%'), false if none ('0%').
      */
-    public function setFormatPercent(int $columnIndex, bool $decimals = false): self
+    public function setFormatPercent(int $columnIndex, bool $decimals = false): static
     {
         return $this->setFormat($columnIndex, $this->getPercentFormat($decimals));
     }
@@ -537,7 +537,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatPrice(int $columnIndex): self
+    public function setFormatPrice(int $columnIndex): static
     {
         $format = NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
 
@@ -549,7 +549,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatYesNo(int $columnIndex): self
+    public function setFormatYesNo(int $columnIndex): static
     {
         return $this->setFormatBoolean($columnIndex, 'common.value_true', 'common.value_false', true);
     }
@@ -557,7 +557,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the header and footer texts.
      */
-    public function setHeaderFooter(?string $title, CustomerInformation $customer): self
+    public function setHeaderFooter(?string $title, CustomerInformation $customer): static
     {
         $sheet = $this->getActiveSheet();
         $pageMargins = $sheet->getPageMargins();
@@ -599,7 +599,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): self
+    public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): static
     {
         $sheet = $this->getActiveSheet();
 
@@ -637,7 +637,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set the manager property.
      */
-    public function setManager(?string $manager): self
+    public function setManager(?string $manager): static
     {
         if ($manager) {
             $this->getProperties()->setManager($manager);
@@ -651,7 +651,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param float $margins the margins to set
      */
-    public function setMargins(float $margins): self
+    public function setMargins(float $margins): static
     {
         $pageMargins = $this->getActiveSheet()->getPageMargins();
         $pageMargins->setTop($margins)
@@ -667,7 +667,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $row the row index (1 = First row)
      */
-    public function setPageBreak(int $row): self
+    public function setPageBreak(int $row): static
     {
         $this->getActiveSheet()->setBreakByColumnAndRow(1, $row, Worksheet::BREAK_ROW);
 
@@ -677,7 +677,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the orientation of the active sheet to landscape.
      */
-    public function setPageLandscape(): self
+    public function setPageLandscape(): static
     {
         $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
 
@@ -687,7 +687,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the orientation of the active sheet to portrait.
      */
-    public function setPagePortrait(): self
+    public function setPagePortrait(): static
     {
         $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_PORTRAIT);
 
@@ -700,7 +700,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int $size the paper size that must be one of PageSetup paper size constant
      * @psalm-param PageSetup::PAPERSIZE_* $size
      */
-    public function setPageSize(int $size): self
+    public function setPageSize(int $size): static
     {
         $this->getPageSetup()->setPaperSize($size);
 
@@ -710,7 +710,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the paper size to A4 for the active sheet.
      */
-    public function setPageSizeA4(): self
+    public function setPageSizeA4(): static
     {
         return $this->setPageSize(PageSetup::PAPERSIZE_A4);
     }
@@ -720,7 +720,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param bool $printGridlines true to print the gridlines
      */
-    public function setPrintGridlines(bool $printGridlines): self
+    public function setPrintGridlines(bool $printGridlines): static
     {
         $this->getActiveSheet()->setPrintGridlines($printGridlines);
 
@@ -734,7 +734,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param array $values      the values to set
      * @param int   $columnIndex the starting column index (A = 1)
      */
-    public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): self
+    public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): static
     {
         $sheet = $this->getActiveSheet();
         /** @psalm-var mixed $value*/
@@ -763,7 +763,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int $columnIndex the column index (A = 1)
      * @param int $rowIndex    the row index (1 = First row)
      */
-    public function setSelectedCellByColumnAndRow(int $columnIndex, int $rowIndex): self
+    public function setSelectedCellByColumnAndRow(int $columnIndex, int $rowIndex): static
     {
         $coordinates = $this->stringFromColumnAndRowIndex($columnIndex, $rowIndex);
 
@@ -775,7 +775,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $columnIndex the column index (A = 1)
      */
-    public function setShrinkToFit(int $columnIndex): self
+    public function setShrinkToFit(int $columnIndex): static
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
@@ -789,7 +789,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param ?string $subject the subject
      */
-    public function setSubject(?string $subject): self
+    public function setSubject(?string $subject): static
     {
         if ($subject) {
             $this->getProperties()->setSubject($subject);
@@ -801,7 +801,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the file title.
      */
-    public function setTitle(?string $title): self
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
         if ($title) {
@@ -814,7 +814,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the username for the creator and the last modified properties.
      */
-    public function setUserName(?string $userName): self
+    public function setUserName(?string $userName): static
     {
         if ($userName) {
             $this->getProperties()

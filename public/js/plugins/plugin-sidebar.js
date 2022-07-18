@@ -87,8 +87,7 @@
             const $link = $(e.currentTarget);
             const $parent = $link.parents('.nav-item-dropdown');
             const $menu = $parent.find('.navbar-menu');
-            const visible = $menu.is(':visible');
-            if (!visible) {
+            if (!$menu.is(':visible')) {
                 that._collapseMenus();
             }
             $link.toggleClass('nav-link-toggle-show');

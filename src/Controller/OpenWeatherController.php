@@ -215,7 +215,6 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns current conditions data for a specific location.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
@@ -355,7 +354,6 @@ class OpenWeatherController extends AbstractController
      * Shows the search city view.
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
@@ -457,8 +455,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/wather', name: 'openweather_weather')]
     public function weather(Request $request): Response

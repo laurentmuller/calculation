@@ -28,7 +28,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * Report for the list of users.
  *
  * @extends AbstractArrayReport<User>
- * @psalm-suppress InternalMethod
  */
 class UsersReport extends AbstractArrayReport
 {
@@ -93,7 +92,7 @@ class UsersReport extends AbstractArrayReport
         }
 
         // count
-        return $this->renderCount($entities);
+        return $this->renderCount($entities, 'counters.users');
     }
 
     /**

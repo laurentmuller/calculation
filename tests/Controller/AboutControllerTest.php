@@ -62,13 +62,11 @@ class AboutControllerTest extends AbstractControllerTest
 
             ['/about/php/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/about/php/excel', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            // to do: checked why array is empty
-            // ['/about/php/excel', self::ROLE_SUPER_ADMIN],
+            ['/about/php/excel', self::ROLE_SUPER_ADMIN],
 
             ['/about/php/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/about/php/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            // to do: checked why array is empty
-            // ['/about/php/pdf', self::ROLE_SUPER_ADMIN],
+            ['/about/php/pdf', self::ROLE_SUPER_ADMIN],
 
             ['/about/policy', ''],
             ['/about/policy', self::ROLE_USER],

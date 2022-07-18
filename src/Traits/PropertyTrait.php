@@ -179,7 +179,7 @@ trait PropertyTrait
 
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        if (!$this->parentSaveDeferredCacheValue($key, $value, $time)) {
+        if (!$this->parentSaveDeferredCacheValue($this->cleanKey($key), $value, $time)) {
             $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
 
             return false;

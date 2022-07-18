@@ -2,10 +2,10 @@
 <browserconfig>
 	<msapplication>
 		<tile>
-			<square70x70logo src="images/icons/ms-icon-70x70.png"/>
-			<square150x150logo src="images/icons/ms-icon-150x150.png"/>
-			<square310x310logo src="images/icons/ms-icon-310x310.png"/>
-			<TileColor>Peru</TileColor>
+			<square70x70logo src="images/icons/favicon-70x70.png"/>
+			<square150x150logo src="images/icons/favicon-150x150.png"/>
+			<square310x310logo src="images/icons/favicon-310x310.png"/>
+			<TileColor>#212529</TileColor>
 		</tile>
 	</msapplication>
 </browserconfig>

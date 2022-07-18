@@ -31,8 +31,6 @@ class ProfileController extends AbstractController
 {
     /**
      * Change password of the current user (if any).
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/change-password', name: 'user_profile_change_password')]
     public function changePassword(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager): Response
@@ -64,8 +62,6 @@ class ProfileController extends AbstractController
 
     /**
      * Edit the profile of the current user (if any).
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit', name: 'user_profile_edit')]
     public function editProfil(Request $request, EntityManagerInterface $manager): Response

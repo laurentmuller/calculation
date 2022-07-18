@@ -32,3 +32,6 @@ counters:
     task_items_lower: '{count, plural, =0 {aucune opération} one {1 opération} other {# opérations}}'
     states: '{count, plural, =0 {Aucun statut} one {1 statut} other {# status}}'
     states_lower: '{count, plural, =0 {aucun statut} one {1 statut} other {# status}}'
+    users: '{count, plural, =0 {Aucun utilisateur} one {1 utilisateur} other {# utilisateurs}}'
+index:
+  menu_show:

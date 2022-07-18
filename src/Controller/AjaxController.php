@@ -76,8 +76,6 @@ class AjaxController extends AbstractController
 
     /**
      * Validate a captcha image.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/captcha/validate', name: 'ajax_captcha_validate')]
@@ -339,11 +337,17 @@ class AjaxController extends AbstractController
             /** @psalm-var array<string, string> $menus */
             $menus = $request->request->all();
             $menus = \array_filter($menus, static fn (string $key): bool => \str_starts_with($key, 'menu_'), \ARRAY_FILTER_USE_KEY);
-            foreach ($menus as $key => $menu) {
-                $session->set($key, \filter_var($menu, \FILTER_VALIDATE_BOOLEAN));
+            foreach ($menus as $key => &$menu) {
+                $menu = \filter_var($menu, \FILTER_VALIDATE_BOOLEAN);
+                $session->set($key, $menu);
             }
 
-            return $this->json(true);
+            // save active menu state to cookie
+            $response = $this->json(true);
+            $active = $menus['menu_active'] ?? true;
+            $this->setCookie($response, 'MENU_ACTIVE', $active ? 1 : 0);
+
+            return $response;
         }
 
         return $this->json(false);
@@ -353,8 +357,6 @@ class AjaxController extends AbstractController
      * Sets a session attribute.
      *
      * The request must contains 'name' and 'value' parameters.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/session/set', name: 'ajax_session_set')]

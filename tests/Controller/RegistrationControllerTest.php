@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RegistrationControllerTest extends AbstractControllerTest
 {
-    public function getRoutes()
+    public function getRoutes(): array
     {
         return [
             ['/register', self::ROLE_USER],

@@ -36,7 +36,6 @@ class CommentController extends AbstractController
      * Send comment to the webmaster.
      *
      * @throws \ReflectionException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/comment', name: 'user_comment')]

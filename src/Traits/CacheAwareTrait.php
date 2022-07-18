@@ -132,7 +132,7 @@ trait CacheAwareTrait
     }
 
     /**
-     *  Confirms if the cache contains specified cache item.
+     * Confirms if the cache contains specified cache item.
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */

@@ -22,6 +22,9 @@ trait TranslatorAwareTrait
 {
     use TranslatorTrait;
 
+    /**
+     * {@inheritDoc}
+     */
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {

@@ -102,8 +102,6 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Validates and process the reset URL that the user clicked in their email.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/reset/{token}', name: self::ROUTE_RESET)]
     public function reset(Request $request, UserPasswordHasherInterface $hasher, ?string $token = null): Response

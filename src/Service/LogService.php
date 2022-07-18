@@ -36,9 +36,9 @@ class LogService implements ServiceSubscriberInterface
     private const DATE_FORMAT = 'd.m.Y H:i:s';
 
     /**
-     * The key for cache result.
+     * The key to cache result.
      */
-    private const KEY_CACHE = 'key.log';
+    private const KEY_CACHE = 'log_service_file';
 
     /**
      * The values separator.
@@ -152,16 +152,10 @@ class LogService implements ServiceSubscriberInterface
 
     /**
      * Gets the log date.
-     *
-     * @param string $value the source
-     *
-     * @return \DateTimeImmutable|null a new DateTime instance or null on failure
      */
-    private function parseDate(string $value): ?\DateTimeImmutable
+    private function parseDate(string $value): \DateTimeImmutable|false
     {
-        $date = \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
-
-        return $date instanceof \DateTimeImmutable ? $date : null;
+        return \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
     }
 
     /**
@@ -190,13 +184,13 @@ class LogService implements ServiceSubscriberInterface
                 if (6 !== \count($values)) {
                     continue;
                 }
-                if (null === ($date = self::parseDate($values[0]))) {
+                if (false === ($date = $this->parseDate($values[0]))) {
                     continue;
                 }
 
-                // add
-                $log = new Log();
-                $log->setCreatedAt($date)
+                // create and add
+                $log = (new Log())
+                    ->setCreatedAt($date)
                     ->setChannel($values[1])
                     ->setLevel($values[2])
                     ->setMessage($values[3])

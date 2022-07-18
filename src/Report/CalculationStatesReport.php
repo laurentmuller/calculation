@@ -103,7 +103,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
         }
 
         // count
-        return $this->renderCount($entities);
+        return $this->renderCount($entities, 'counters.states');
     }
 
     /**

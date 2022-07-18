@@ -1,7 +1,0 @@
-{# cell #}
-{%- set image = asset_if(vich_uploader_asset(item, 'imageFile')|replace({'192': '032'}), false) -%}
-{% if image -%}
-<img src="{{ asset(image) }}?{{ 'now'|date('c') }}" alt="{{ item.username }}" title="{{ 'user.image.title'|trans }}" width="{{ image_width(image) }}" height="{{ image_height(image) }}">
-{%- else -%}
-&nbsp;
-{%- endif %}

@@ -375,7 +375,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      */
     public function getTitle(): ?string
     {
-        return $this->title ?: (string) $this->key;
+        return $this->title ?? (string) $this->key;
     }
 
     /**

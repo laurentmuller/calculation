@@ -262,8 +262,8 @@ class PdfTableBuilder
         $index = 0;
         foreach ($cells as $cell) {
             $texts[] = $cell->getText() ?? '';
-            $styles[] = $cell->getStyle() ?: $this->rowStyle ?: PdfStyle::getCellStyle();
-            $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment() ?: PdfTextAlignment::LEFT;
+            $styles[] = $cell->getStyle() ?? $this->rowStyle ?? PdfStyle::getCellStyle();
+            $aligns[] = $cell->getAlignment() ?? $columns[$index]->getAlignment() ?? PdfTextAlignment::LEFT;
 
             $width = 0.0;
             $fixed = $columns[$index]->isFixed();
@@ -550,7 +550,7 @@ class PdfTableBuilder
         if ($this->isRowStarted()) {
             throw new \LogicException('A row is already started.');
         }
-        $this->rowStyle = $style ?: PdfStyle::getCellStyle();
+        $this->rowStyle = $style ?? PdfStyle::getCellStyle();
 
         return $this;
     }

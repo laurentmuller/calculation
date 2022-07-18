@@ -23,6 +23,8 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * Test for the {@link CategoryTransformer} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CategoryTransformerTest extends KernelTestCase
 {
@@ -80,15 +82,14 @@ class CategoryTransformerTest extends KernelTestCase
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $expected
      * @dataProvider getReverseTransformValues
      */
-    public function testReverseTransform($value, $expected, bool $exception = false): void
+    public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
         $this->assertEquals($expected, $actual);
     }
@@ -107,15 +108,14 @@ class CategoryTransformerTest extends KernelTestCase
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $expected
      * @dataProvider getTransformValues
      */
-    public function testTransform($value, $expected, bool $exception = false): void
+    public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
         $this->assertEquals($expected, $actual);
     }
@@ -127,10 +127,15 @@ class CategoryTransformerTest extends KernelTestCase
 
     public function testTransformValid(): void
     {
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->transform($this->category);
         $this->assertEquals($this->category->getId(), $actual);
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function createCategory(Group $group): Category
     {
         $category = new Category();
@@ -144,6 +149,10 @@ class CategoryTransformerTest extends KernelTestCase
         return $category;
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function createGroup(): Group
     {
         $group = new Group();
@@ -156,6 +165,10 @@ class CategoryTransformerTest extends KernelTestCase
         return $group;
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteCategory(): ?Category
     {
         if (null !== $this->category) {
@@ -168,6 +181,10 @@ class CategoryTransformerTest extends KernelTestCase
         return $this->category;
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteGroup(): ?Group
     {
         if (null !== $this->group) {

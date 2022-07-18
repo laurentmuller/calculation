@@ -34,7 +34,7 @@ trait ModelTrait
      */
     protected function checkClass(?string $className, string $defaultClass): string
     {
-        $name = $className ?: $defaultClass;
+        $name = $className ?? $defaultClass;
         if (!\class_exists($name)) {
             throw new CalendarException("Class '$name' not found.");
         }

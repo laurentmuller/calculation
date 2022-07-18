@@ -41,7 +41,7 @@ class CategoriesReport extends AbstractArrayReport
         // group by parent code
         $default = $this->trans('report.other');
         /** @var array<string, Category[]> $groups */
-        $groups = Utils::groupBy($entities, fn (Category $category) => $category->getGroupCode() ?: $default);
+        $groups = Utils::groupBy($entities, fn (Category $category) => $category->getGroupCode() ?? $default);
 
         // new page
         $this->AddPage();

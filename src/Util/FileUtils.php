@@ -240,7 +240,7 @@ final class FileUtils
         /** @var \SplFileInfo $file */
         foreach ($outerIterator as $file) {
             if ($file->isReadable()) {
-                $size += $file->getSize() ?: 0;
+                $size += $file->getSize();
             }
         }
 

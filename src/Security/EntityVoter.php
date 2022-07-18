@@ -59,9 +59,7 @@ class EntityVoter extends Voter
      */
     public static function getEntityName(mixed $subject): ?string
     {
-        $entity = EntityName::tryFromMixed($subject);
-
-        return $entity?->value;
+        return EntityName::tryFromMixed($subject)?->value;
     }
 
     /**
@@ -73,9 +71,7 @@ class EntityVoter extends Voter
      */
     public static function getEntityOffset(string $name): int
     {
-        $entity = EntityName::tryFromMixed($name);
-
-        return $entity?->offset() ?? self::INVALID_VALUE;
+        return EntityName::tryFromMixed($name)?->offset() ?? self::INVALID_VALUE;
     }
 
     /**
@@ -87,9 +83,7 @@ class EntityVoter extends Voter
      */
     public static function getPermissionValue(string $name): int
     {
-        $permission = EntityPermission::tryFromName($name);
-
-        return $permission instanceof EntityPermission ? $permission->value : self::INVALID_VALUE;
+        return EntityPermission::tryFromName($name)?->value ?: self::INVALID_VALUE;
     }
 
     /**
@@ -268,9 +262,9 @@ class EntityVoter extends Voter
     }
 
     /**
-     * @psalm-suppress all
-     *
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress all
      */
     private static function getFlagBagSorted(): FlagBag
     {

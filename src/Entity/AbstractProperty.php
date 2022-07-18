@@ -102,7 +102,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return $this->name ?: parent::getDisplay();
+        return $this->name ?? parent::getDisplay();
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function getInteger(): int
     {
-        return (int) ($this->value ?: self::FALSE_VALUE);
+        return (int) ($this->value ?? self::FALSE_VALUE);
     }
 
     /**

@@ -55,7 +55,7 @@ abstract class AbstractEntity implements \Stringable
      */
     public function getDisplay(): string
     {
-        return (string) ($this->getId() ?: 0);
+        return (string) ($this->getId() ?? 0);
     }
 
     /**

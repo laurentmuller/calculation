@@ -50,7 +50,7 @@ class AddressTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      *
-     * @return ?string
+     * @return string|null
      */
     public function transform(mixed $value)
     {

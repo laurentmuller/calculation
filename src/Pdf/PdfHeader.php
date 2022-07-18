@@ -248,7 +248,7 @@ class PdfHeader
         $align = $isAddress ? PdfTextAlignment::LEFT : PdfTextAlignment::RIGHT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
-        $this->outputText($width, PdfDocument::LINE_HEIGHT, $name, $border, $move, $align, $this->getUrl() ?: '');
+        $this->outputText($width, PdfDocument::LINE_HEIGHT, $name, $border, $move, $align, $this->getUrl());
     }
 
     private function outputPhone(float $width): void

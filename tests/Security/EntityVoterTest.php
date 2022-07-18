@@ -25,6 +25,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * Unit test for {@link EntityVoter} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityVoterTest extends TestCase
 {
@@ -36,6 +38,16 @@ class EntityVoterTest extends TestCase
     protected function setUp(): void
     {
         $this->voter = $this->getEntityVoter();
+    }
+
+    public function getSupportsAttribute(): array
+    {
+        return [
+            ['add', true],
+            ['ADD', true],
+            ['Fake', false],
+            ['', false],
+        ];
     }
 
     public function testAbstainAttribute(): void
@@ -106,6 +118,16 @@ class EntityVoterTest extends TestCase
         $subject = Calculation::class;
         $expected = VoterInterface::ACCESS_GRANTED;
         $this->checkVote($user, $subject, $attribute, $expected);
+    }
+
+    /**
+     * @dataProvider getSupportsAttribute
+     */
+    public function testSupportsAttribute(string $value, bool $expected): void
+    {
+        $this->assertNotNull($this->voter);
+        $result = $this->voter->supportsAttribute($value);
+        $this->assertEquals($expected, $result);
     }
 
     private function checkVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void

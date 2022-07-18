@@ -31,7 +31,7 @@ class CalculationsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         // initialize
-        $title = $this->title ?: 'calculation.list.title';
+        $title = $this->title ?? 'calculation.list.title';
         $this->start($title, true);
 
         // headers

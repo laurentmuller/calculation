@@ -67,11 +67,7 @@ trait DaysTrait
      */
     public function getFirstDate(): ?\DateTimeImmutable
     {
-        if ($day = $this->getFirstDay()) {
-            return $day->getDate();
-        }
-
-        return null;
+        return $this->getFirstDay()?->getDate();
     }
 
     /**
@@ -87,11 +83,7 @@ trait DaysTrait
      */
     public function getLastDate(): ?\DateTimeImmutable
     {
-        if ($day = $this->getLastDay()) {
-            return $day->getDate();
-        }
-
-        return null;
+        return $this->getLastDay()?->getDate();
     }
 
     /**

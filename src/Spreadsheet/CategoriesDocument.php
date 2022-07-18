@@ -52,7 +52,7 @@ class CategoriesDocument extends AbstractArrayDocument
             $this->setRowValues($row++, [
                 $entity->getCode(),
                 $entity->getDescription(),
-                $entity->getGroupCode() ?: $default,
+                $entity->getGroupCode() ?? $default,
                 $entity->countProducts(),
                 $entity->countTasks(),
             ]);

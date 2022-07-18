@@ -27,12 +27,12 @@
 {%- set class = item.enabled ? 'text-success' : 'text-danger' -%}
 {{ properties.property('user.fields.enabled', value, class) }}
 {{ properties.property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|localedatetime : 'common.value_none'|trans) }}
-{%- set image = vich_uploader_asset(item, 'imageFile')|replace({'192': '096'}) -%}
+{%- set image = vich_uploader_asset(item)|replace({'192': '096'}) -%}
 {%- if asset_exists(image) -%}
 <tr>
     <td class="w-25">{{ 'user.fields.imageFile'|trans }}</td>
     <td class="w-75">
-        <img class="img-thumbnail avatar-lg" alt="{{ 'user.fields.imageFile'|trans }}" src="{{ asset(image) }}?{{ 'now'|date('c') }}" width="{{ image_width(image) }}" height="{{ image_height(image) }}">
+        {{- asset_image(image, {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans, 'class': 'img-thumbnail avatar-lg'}) -}}
     </td>
 </tr>
 {%- endif -%}

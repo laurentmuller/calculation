@@ -1,6 +1,6 @@
 {% apply spaceless %}
-    {% set image = asset_if(vich_uploader_asset(user, 'imageFile')|replace({'192': '032'}), false) %}
+    {% set image = vich_uploader_asset(user)|replace({'192': '032'}) %}
     {% if image -%}
-        <img src="{{ asset(image) }}?{{ 'now'|date('c') }}" alt="{{ 'user.image.title'|trans }}">
+        {{ asset_image(image, {'alt': 'user.image.title'|trans, 'title': 'user.image.title'|trans, 'class': 'avatar'}) }}
     {% endif %}
 {% endapply %}

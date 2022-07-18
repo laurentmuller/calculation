@@ -22,6 +22,8 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * Test for the {@link GroupTransformer} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class GroupTransformerTest extends KernelTestCase
 {
@@ -37,7 +39,6 @@ class GroupTransformerTest extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->group = $this->createGroup();
         $repository = $this->getService(GroupRepository::class);
         $this->transformer = new GroupTransformer($repository);
@@ -71,21 +72,21 @@ class GroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $expected
      * @dataProvider getReverseTransformValues
      */
-    public function testReverseTransform($value, $expected, bool $exception = false): void
+    public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
         $this->assertEquals($expected, $actual);
     }
 
     public function testReverseTransformInvalid(): void
     {
+        $this->assertNotNull($this->transformer);
         $this->expectException(TransformationFailedException::class);
         $actual = $this->transformer->reverseTransform(-1);
         $this->assertEquals($this->group, $actual);
@@ -93,16 +94,15 @@ class GroupTransformerTest extends KernelTestCase
 
     public function testReverseTransformValid(): void
     {
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($this->group->getId());
         $this->assertEquals($this->group, $actual);
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $expected
      * @dataProvider getTransformValues
      */
-    public function testTransform($value, $expected, bool $exception = false): void
+    public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
@@ -122,6 +122,10 @@ class GroupTransformerTest extends KernelTestCase
         $this->assertEquals($this->group->getId(), $actual);
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function createGroup(): Group
     {
         $group = new Group();
@@ -134,6 +138,10 @@ class GroupTransformerTest extends KernelTestCase
         return $group;
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteGroup(): ?Group
     {
         if (null !== $this->group) {

@@ -18,7 +18,9 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
 
 /**
- * Test for the {@link DataTransformer\AddressTransformer} class.
+ * Test for the {@link AddressTransformer} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class AddressTransformerTest extends TestCase
 {
@@ -62,29 +64,27 @@ class AddressTransformerTest extends TestCase
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $expected
      * @dataProvider getReverseTransformValues
      */
-    public function testReverseTransform($value, $expected, bool $exception = false): void
+    public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $expected
      * @dataProvider getTransformValues
      */
-    public function testTransform($value, $expected, bool $exception = false): void
+    public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
         $this->assertEquals($expected, $actual);
     }

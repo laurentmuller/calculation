@@ -94,9 +94,9 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('asset_js', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetJs($env, $path, $parameters, $packageName), $assetOptions),
             new TwigFunction('asset_css', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetCss($env, $path, $parameters, $packageName), $assetOptions),
             new TwigFunction('asset_versioned', fn (Environment $env, string $path, ?string $packageName = null): string => $this->getVersionedAsset($env, $path, $packageName), $assetOptions),
-            new TwigFunction('asset_time', fn (?string $path): int => $this->getAssetVersion($path)),
 
             // images
+            new TwigFunction('asset_image', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetImage($env, $path, $parameters, $packageName), $assetOptions),
             new TwigFunction('image_height', fn (string $path): int => $this->getImageHeight($path)),
             new TwigFunction('image_width', fn (string $path): int => $this->getImageWidth($path)),
 
@@ -177,6 +177,25 @@ final class FunctionExtension extends AbstractExtension
         $attributes = $this->reduceParameters($parameters);
 
         return "<link$attributes>";
+    }
+
+    /**
+     * Output an image with a version.
+     *
+     * @throws \Exception
+     */
+    private function getAssetImage(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    {
+        $size = $this->getImageSize($path);
+        $src = $this->getVersionedAsset($env, $path, $packageName);
+        $parameters = \array_merge([
+            'src' => $src,
+            'width' => $size[0],
+            'height' => $size[1],
+        ], $parameters);
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<image$attributes>";
     }
 
     /**

@@ -36,13 +36,25 @@ class LogFile implements \Countable
      */
     private array $logs = [];
 
+    /**
+     * Constructor.
+     *
+     * @param ?string $file the optional file name
+     */
+    public function __construct(?string $file = null)
+    {
+        if (null !== $file) {
+            $this->setFile($file);
+        }
+    }
+
     public function addLog(Log $log): self
     {
         $id = \count($this->logs);
         $log->setId($id);
         $this->logs[$id] = $log;
-        $this->incrementLevel((string) $log->getLevel());
-        $this->incrementChannel((string) $log->getChannel());
+        $this->addLevel($log->getLevel());
+        $this->addChannel($log->getChannel());
 
         return $this;
     }
@@ -101,23 +113,27 @@ class LogFile implements \Countable
         return $this;
     }
 
+    /**
+     * Sort logs, channels and levels.
+     */
     public function sort(): self
     {
         if (!$this->isEmpty()) {
             \ksort($this->levels, \SORT_LOCALE_STRING);
             \ksort($this->channels, \SORT_LOCALE_STRING);
+            \uasort($this->logs, static fn (Log $a, Log $b): int => $b->getCreatedAt() <=> $a->getCreatedAt());
         }
 
         return $this;
     }
 
-    private function incrementChannel(string $channel): void
+    private function addChannel(string $channel): void
     {
         $value = $this->channels[$channel] ?? 0;
         $this->channels[$channel] = $value + 1;
     }
 
-    private function incrementLevel(string $level): void
+    private function addLevel(string $level): void
     {
         $value = $this->levels[$level] ?? 0;
         $this->levels[$level] = $value + 1;

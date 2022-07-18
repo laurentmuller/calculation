@@ -23,8 +23,8 @@ use App\Service\ArchiveService;
 use App\Service\ProductUpdater;
 use App\Service\SuspendEventListenerService;
 use App\Service\SwissPostUpdater;
+use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
-use App\Util\SymfonyInfo;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -97,7 +97,7 @@ class AdminController extends AbstractController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/clear', name: 'admin_clear')]
-    public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger, SymfonyInfo $info): Response
+    public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger, SymfonyInfoService $info): Response
     {
         // handle request
         $form = $this->createForm();

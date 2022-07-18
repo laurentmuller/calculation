@@ -18,12 +18,12 @@ use App\Report\PhpIniReport;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
+use App\Service\DatabaseInfoService;
+use App\Service\PhpInfoService;
+use App\Service\SymfonyInfoService;
 use App\Spreadsheet\MySqlDocument;
 use App\Spreadsheet\PhpIniDocument;
 use App\Spreadsheet\SymfonyDocument;
-use App\Util\DatabaseInfo;
-use App\Util\PhpInfo;
-use App\Util\SymfonyInfo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,7 +127,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/mysql/content', name: 'about_mysql_content')]
-    public function mysqlContent(DatabaseInfo $info): JsonResponse
+    public function mysqlContent(DatabaseInfoService $info): JsonResponse
     {
         $parameters = [
             'version' => $info->getVersion(),
@@ -148,7 +148,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/mysql/excel', name: 'about_mysql_excel')]
-    public function mysqlExcel(DatabaseInfo $info): SpreadsheetResponse
+    public function mysqlExcel(DatabaseInfoService $info): SpreadsheetResponse
     {
         $doc = new MySqlDocument($this, $info);
 
@@ -163,7 +163,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/mysql/pdf', name: 'about_mysql_pdf')]
-    public function mysqlPdf(DatabaseInfo $info): PdfResponse
+    public function mysqlPdf(DatabaseInfoService $info): PdfResponse
     {
         $report = new MySqlReport($this, $info);
 
@@ -175,7 +175,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/php/content', name: 'about_php_content')]
-    public function phpContent(Request $request, PhpInfo $info): JsonResponse
+    public function phpContent(Request $request, PhpInfoService $info): JsonResponse
     {
         $parameters = [
             'phpInfo' => $info->asHtml(),
@@ -197,7 +197,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/php/excel', name: 'about_php_excel')]
-    public function phpExcel(PhpInfo $info): SpreadsheetResponse
+    public function phpExcel(PhpInfoService $info): SpreadsheetResponse
     {
         $content = $info->asArray();
         $version = $info->getVersion();
@@ -214,7 +214,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/php/pdf', name: 'about_php_pdf')]
-    public function phpPdf(PhpInfo $info): PdfResponse
+    public function phpPdf(PhpInfoService $info): PdfResponse
     {
         $content = $info->asArray();
         $version = $info->getVersion();
@@ -274,7 +274,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/symfony/content', name: 'about_symfony_content')]
-    public function symfonyContent(SymfonyInfo $info): JsonResponse
+    public function symfonyContent(SymfonyInfoService $info): JsonResponse
     {
         $parameters = [
             'info' => $info,
@@ -294,7 +294,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/symfony/excel', name: 'about_symfony_excel')]
-    public function symfonyExcel(SymfonyInfo $info): SpreadsheetResponse
+    public function symfonyExcel(SymfonyInfoService $info): SpreadsheetResponse
     {
         $locale = $this->getLocaleName();
         $doc = new SymfonyDocument($this, $info, $locale, $this->appMode);
@@ -310,7 +310,7 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route(path: '/symfony/pdf', name: 'about_symfony_pdf')]
-    public function symfonyPdf(SymfonyInfo $info): PdfResponse
+    public function symfonyPdf(SymfonyInfoService $info): PdfResponse
     {
         $locale = $this->getLocaleName();
         $report = new SymfonyReport($this, $info, $locale, $this->appMode);

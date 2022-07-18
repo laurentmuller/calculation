@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Service\LogService;
+use App\Util\FormatUtils;
+use App\Util\Utils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\SqlFormatter\SqlFormatter;
 use Psr\Log\LogLevel;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,10 +25,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Log extends AbstractEntity
 {
+    /**
+     * The application channel.
+     */
+    private const APP_CHANNEL = 'app';
+
+    /**
+     * The doctrine channel.
+     */
+    private const DOCTRINE_CHANNEL = 'doctrine';
+
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
-    private string $channel = '';
+    private string $channel = 'application';
 
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
@@ -40,7 +52,7 @@ class Log extends AbstractEntity
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
-    private string $level = '';
+    private string $level = LogLevel::INFO;
 
     #[ORM\Column(type: Types::TEXT)]
     private string $message = '';
@@ -53,16 +65,32 @@ class Log extends AbstractEntity
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    /**
-     * Gets the channel.
-     */
-    public function getChannel(): string
+    public function formatMessage(SqlFormatter $formatter): string
     {
-        return $this->channel;
+        $message = $this->getMessage();
+        if (self::DOCTRINE_CHANNEL === $this->getChannel()) {
+            $message = $formatter->format($message);
+        }
+        if ($this->isContext()) {
+            $message .= "\nContext:\n" . Utils::exportVar($this->getContext());
+        }
+        if ($this->isExtra()) {
+            $message .= "\nExtra:\n" . Utils::exportVar($this->getExtra());
+        }
+
+        return $message;
     }
 
     /**
-     * Gets the HTML color depending on the level.
+     * Gets the channel.
+     */
+    public function getChannel(bool $capitalize = false): string
+    {
+        return $capitalize ? Utils::capitalize($this->channel) : $this->channel;
+    }
+
+    /**
+     * Gets the HTML color depending on this level.
      */
     public function getColor(): string
     {
@@ -98,7 +126,7 @@ class Log extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return empty($this->message) ? parent::getDisplay() : $this->getMessage();
+        return $this->isMessage() ? $this->getMessage() : parent::getDisplay();
     }
 
     /**
@@ -114,15 +142,15 @@ class Log extends AbstractEntity
      */
     public function getFormattedDate(): string
     {
-        return LogService::getCreatedAt($this->createdAt);
+        return (string) FormatUtils::formatDateTime($this->createdAt, null, \IntlDateFormatter::MEDIUM);
     }
 
     /**
      * Gets the level.
      */
-    public function getLevel(): string
+    public function getLevel(bool $capitalize = false): string
     {
-        return $this->level;
+        return $capitalize ? Utils::capitalize($this->level) : $this->level;
     }
 
     /**
@@ -138,11 +166,21 @@ class Log extends AbstractEntity
      */
     public function getUser(): ?string
     {
-        if (null !== $this->extra && isset($this->extra['user'])) {
+        if ($this->isExtra() && isset($this->extra['user'])) {
             return (string) $this->extra['user'];
         }
 
         return null;
+    }
+
+    public function isChannel(): bool
+    {
+        return !empty($this->channel);
+    }
+
+    public function isLevel(): bool
+    {
+        return !empty($this->level);
     }
 
     /**
@@ -150,7 +188,10 @@ class Log extends AbstractEntity
      */
     public function setChannel(string $channel): self
     {
-        $this->channel = $channel;
+        if (self::APP_CHANNEL === $channel) {
+            $channel = 'application';
+        }
+        $this->channel = \strtolower($channel);
 
         return $this;
     }
@@ -158,7 +199,7 @@ class Log extends AbstractEntity
     /**
      * Sets the context.
      */
-    public function setContext(array $context): self
+    public function setContext(?array $context): self
     {
         $this->context = $context;
 
@@ -178,7 +219,7 @@ class Log extends AbstractEntity
     /**
      * Sets the extra information.
      */
-    public function setExtra(array $extra): self
+    public function setExtra(?array $extra): self
     {
         $this->extra = $extra;
 
@@ -204,7 +245,7 @@ class Log extends AbstractEntity
      */
     public function setLevel(string $level): self
     {
-        $this->level = $level;
+        $this->level = \strtolower($level);
 
         return $this;
     }
@@ -214,8 +255,23 @@ class Log extends AbstractEntity
      */
     public function setMessage(string $message): self
     {
-        $this->message = $message;
+        $this->message = \trim($message);
 
         return $this;
+    }
+
+    private function isContext(): bool
+    {
+        return !empty($this->context);
+    }
+
+    private function isExtra(): bool
+    {
+        return !empty($this->extra);
+    }
+
+    private function isMessage(): bool
+    {
+        return !empty($this->message);
     }
 }

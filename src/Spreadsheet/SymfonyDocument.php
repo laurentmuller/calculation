@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Util\SymfonyInfo;
+use App\Service\SymfonyInfoService;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
@@ -24,7 +24,7 @@ class SymfonyDocument extends AbstractDocument
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private readonly SymfonyInfo $info, private readonly string $locale, private readonly string $mode)
+    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
     {
         parent::__construct($controller);
     }
@@ -58,22 +58,22 @@ class SymfonyDocument extends AbstractDocument
 
         // packages
         $packages = $info->getPackages();
-        $runtimePackages = $packages[SymfonyInfo::KEY_RUNTIME] ?? [];
+        $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if (!empty($runtimePackages)) {
             $this->outputPackages('Packages', $runtimePackages);
         }
-        $debugPackages = $packages[SymfonyInfo::KEY_DEBUG] ?? [];
+        $debugPackages = $packages[SymfonyInfoService::KEY_DEBUG] ?? [];
         if (!empty($debugPackages)) {
             $this->outputPackages('Debug Packages', $debugPackages);
         }
 
         // routes
         $routes = $info->getRoutes();
-        $runtimeRoutes = $routes[SymfonyInfo::KEY_RUNTIME] ?? [];
+        $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if (!empty($runtimeRoutes)) {
             $this->outputRoutes('Routes', $runtimeRoutes);
         }
-        $debugRoutes = $routes[SymfonyInfo::KEY_DEBUG] ?? [];
+        $debugRoutes = $routes[SymfonyInfoService::KEY_DEBUG] ?? [];
         if (!empty($debugRoutes)) {
             $this->outputRoutes('Debug Routes', $debugRoutes);
         }
@@ -131,7 +131,7 @@ class SymfonyDocument extends AbstractDocument
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function outputInfo(SymfonyInfo $info): void
+    private function outputInfo(SymfonyInfoService $info): void
     {
         $app = $this->controller->getApplication();
         $this->setActiveTitle('Symfony', $this->controller);

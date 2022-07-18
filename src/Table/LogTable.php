@@ -54,27 +54,23 @@ class LogTable extends AbstractTable implements \Countable
      */
     public function count(): int
     {
-        if (false === $logFile = $this->service->getLogFile()) {
-            return 0;
-        }
-
-        return $logFile->count();
+        return $this->service->getLogFile()?->count() ?? 0;
     }
 
     /**
      * Formats the channel.
      */
-    public function formatChannel(string $value): string
+    public function formatChannel(string $value, Log $log): string
     {
-        return LogService::getChannel($value, true);
+        return $log->getChannel(true);
     }
 
     /**
      * Formats the date.
      */
-    public function formatCreatedAt(\DateTimeInterface $value): string
+    public function formatCreatedAt(\DateTimeInterface $value, Log $log): string
     {
-        return LogService::getCreatedAt($value);
+        return $log->getFormattedDate();
     }
 
     /**
@@ -84,9 +80,9 @@ class LogTable extends AbstractTable implements \Countable
      *
      * @return string the level
      */
-    public function formatLevel(string $value): string
+    public function formatLevel(string $value, Log $log): string
     {
-        return LogService::getLevel($value, true);
+        return $log->getLevel(true);
     }
 
     /**
@@ -153,7 +149,7 @@ class LogTable extends AbstractTable implements \Countable
     {
         $results = parent::handleQuery($query);
 
-        if (false === $logFile = $this->service->getLogFile()) {
+        if (null === $logFile = $this->service->getLogFile()) {
             $results->status = Response::HTTP_PRECONDITION_FAILED;
 
             return $results;
@@ -172,12 +168,12 @@ class LogTable extends AbstractTable implements \Countable
         /** @var string|null $level */
         $level = $query->customData[self::PARAM_LEVEL];
         if ($isLevel = Utils::isString($level)) {
-            $entities = LogService::filterLevel($entities, $level);
+            $entities = $this->filterLevel($entities, (string) $level);
         }
         /** @var string|null $channel */
         $channel = $query->customData[self::PARAM_CHANNEL];
         if ($isChannel = Utils::isString($channel)) {
-            $entities = LogService::filterChannel($entities, $channel);
+            $entities = $this->filterChannel($entities, (string) $channel);
         }
         $search = $query->search;
         if (Utils::isString($search)) {
@@ -224,6 +220,30 @@ class LogTable extends AbstractTable implements \Countable
     }
 
     /**
+     * Filters the log for the given channel.
+     *
+     * @param Log[] $logs the logs to search in
+     *
+     * @return Log[] the filtered logs
+     */
+    private function filterChannel(array $logs, string $value): array
+    {
+        return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, $log->getChannel()));
+    }
+
+    /**
+     * Filters the log for the given level.
+     *
+     * @param Log[] $logs the logs to search in
+     *
+     * @return Log[] the filtered logs
+     */
+    private function filterLevel(array $logs, string $value): array
+    {
+        return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, $log->getLevel()));
+    }
+
+    /**
      * Sort logs.
      *
      * @param Log[]  $entities  the logs to sort
@@ -235,19 +255,13 @@ class LogTable extends AbstractTable implements \Countable
     private function sort(array &$entities, string $field, string $direction): void
     {
         // default sorting?
-        if (self::COLUMN_DATE === $field && self::SORT_ASC === $direction) {
+        if (self::COLUMN_DATE === $field && self::SORT_DESC === $direction) {
             return;
         }
 
         // date? (single sort)
         if (self::COLUMN_DATE === $field) {
-            $order = self::SORT_ASC === $direction ? 1 : -1;
-            \usort($entities, function (Log $a, Log $b) use ($order): int {
-                $dateA = $a->getCreatedAt()?->getTimestamp() ?? 0;
-                $dateB = $b->getCreatedAt()?->getTimestamp() ?? 0;
-
-                return $order * ($dateA <=> $dateB);
-            });
+            \uasort($entities, fn (Log $a, Log $b): int => $a->getCreatedAt() <=> $b->getCreatedAt());
 
             return;
         }

@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
-use App\Util\DatabaseInfo;
+use App\Service\DatabaseInfoService;
 
 /**
  * Report for MySql.
@@ -29,7 +29,7 @@ class MySqlReport extends AbstractReport
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function __construct(AbstractController $controller, private readonly DatabaseInfo $info)
+    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $info)
     {
         parent::__construct($controller);
         $title = $this->trans('about.mysql');

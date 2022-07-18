@@ -26,6 +26,7 @@ trait CacheAwareTrait
      * The cache adapter.
      */
     private ?CacheItemPoolInterface $adapter = null;
+
     /**
      * The debug state.
      */
@@ -89,23 +90,6 @@ trait CacheAwareTrait
     }
 
     /**
-     * Removes multiple items from the cache pool.
-     *
-     * @param string[] $keys An array of keys that should be removed from the pool
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function deleteCacheItems(array $keys): bool
-    {
-        $keys = \array_map(fn (string $key): string => $this->cleanKey($key), $keys);
-        if (!$this->isDebugCache) {
-            return $this->adapter()->deleteItems($keys);
-        }
-
-        return false;
-    }
-
-    /**
      * Gets the cache item for the given key.
      *
      * @throws \Psr\Cache\InvalidArgumentException
@@ -145,6 +129,16 @@ trait CacheAwareTrait
         }
 
         return $default;
+    }
+
+    /**
+     *  Confirms if the cache contains specified cache item.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function hasCacheItem(string $key): bool
+    {
+        return $this->adapter()->hasItem($this->cleanKey($key));
     }
 
     /**

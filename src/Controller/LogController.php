@@ -45,7 +45,7 @@ class LogController extends AbstractController
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
-        if (false === $logFile = $service->getLogFile()) {
+        if (null === $logFile = $service->getLogFile()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();
@@ -96,7 +96,7 @@ class LogController extends AbstractController
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
     {
-        if (false === $logFile = $service->getLogFile()) {
+        if (null === $logFile = $service->getLogFile()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();
@@ -115,7 +115,7 @@ class LogController extends AbstractController
     #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response
     {
-        if (false === $logFile = $service->getLogFile()) {
+        if (null === $logFile = $service->getLogFile()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();

@@ -10,8 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Service;
 
+use App\Util\FileUtils;
+use App\Util\FormatUtils;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -24,7 +26,7 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @internal
  */
-final class SymfonyInfo
+final class SymfonyInfoService
 {
     /**
      * The array key for debug packages and routes.

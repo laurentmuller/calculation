@@ -10,12 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Service;
 
 /**
  * Utility class to get PHP information.
  */
-final class PhpInfo
+final class PhpInfoService
 {
     /**
      * Gets PHP information as array.

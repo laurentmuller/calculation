@@ -16,8 +16,6 @@ use App\Entity\Log;
 use App\Model\LogFile;
 use App\Traits\CacheAwareTrait;
 use App\Util\FileUtils;
-use App\Util\FormatUtils;
-use App\Util\Utils;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -33,12 +31,7 @@ class LogService implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
 
     /**
-     * The application channel.
-     */
-    private const APP_CHANNEL = 'app';
-
-    /**
-     * The date format.
+     * The format to parse the date.
      */
     private const DATE_FORMAT = 'd.m.Y H:i:s';
 
@@ -66,13 +59,15 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Clear the cached values.
+     * Clear the cached log file.
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function clearCache(): self
     {
-        $this->deleteCacheItem(self::KEY_CACHE);
+        if ($this->hasCacheItem(self::KEY_CACHE)) {
+            $this->deleteCacheItem(self::KEY_CACHE);
+        }
 
         return $this;
     }
@@ -97,88 +92,13 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Filters the log for the given channel.
+     * Gets the given log.
      *
-     * @param Log[]   $logs  the logs to search in
-     * @param ?string $value the channel value to search for
-     *
-     * @return Log[] the filtered logs
-     */
-    public static function filterChannel(array $logs, ?string $value): array
-    {
-        if (null !== $value && '' !== $value) {
-            return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, (string) $log->getChannel()));
-        }
-
-        return $logs;
-    }
-
-    /**
-     * Filters the log for the given level.
-     *
-     * @param Log[]   $logs  the logs to search in
-     * @param ?string $value the level value to search for
-     *
-     * @return Log[] the filtered logs
-     */
-    public static function filterLevel(array $logs, ?string $value): array
-    {
-        if (null !== $value && '' !== $value) {
-            return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, (string) $log->getLevel()));
-        }
-
-        return $logs;
-    }
-
-    /**
-     * Gets the log channel.
-     *
-     * @param string $value      the source channel
-     * @param bool   $capitalize true to capitalize the channel
-     *
-     * @return string the channel
-     */
-    public static function getChannel(string $value, bool $capitalize = false): string
-    {
-        $value = self::APP_CHANNEL === $value ? 'application' : \strtolower($value);
-
-        return $capitalize ? Utils::capitalize($value) : $value;
-    }
-
-    /**
-     * Formats the log date.
-     */
-    public static function getCreatedAt(\DateTimeInterface $value): string
-    {
-        return (string) FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
-    }
-
-    /**
-     * Gets the log level.
-     *
-     * @param string $value      the source level
-     * @param bool   $capitalize true to capitalize the level
-     *
-     * @return string the level
-     */
-    public static function getLevel(string $value, bool $capitalize = false): string
-    {
-        $value = \strtolower($value);
-
-        return $capitalize ? Utils::capitalize($value) : $value;
-    }
-
-    /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLog(int $id): ?Log
     {
-        $logFile = $this->getLogFile();
-        if (false !== $logFile) {
-            return $logFile->getLog($id);
-        }
-
-        return null;
+        return $this->getLogFile()?->getLog($id);
     }
 
     /**
@@ -186,25 +106,15 @@ class LogService implements ServiceSubscriberInterface
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getLogFile(): LogFile|false
+    public function getLogFile(): ?LogFile
     {
-        /** @psalm-var LogFile|false $value */
-        $value = $this->getCacheValue(self::KEY_CACHE, false);
+        /** @psalm-var LogFile|null $value */
+        $value = $this->getCacheValue(self::KEY_CACHE);
         if ($value instanceof LogFile) {
             return $value;
         }
 
         return $this->parseFile();
-    }
-
-    /**
-     * Sort the given logs by the created date descending.
-     *
-     * @param Log[] $logs
-     */
-    public static function sortLogs(array &$logs): void
-    {
-        \usort($logs, static fn (Log $a, Log $b): int => $b->getCreatedAt() <=> $a->getCreatedAt());
     }
 
     /**
@@ -259,21 +169,20 @@ class LogService implements ServiceSubscriberInterface
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function parseFile(): LogFile|false
+    private function parseFile(): ?LogFile
     {
         // check file
         if (!$this->isFileValid()) {
-            return false;
+            return null;
         }
 
         try {
             // load content
             if (false === $lines = $this->loadFile()) {
-                return false;
+                return null;
             }
 
-            $result = new LogFile();
-            $result->setFile($this->fileName);
+            $result = new LogFile($this->fileName);
 
             // read line by line
             foreach ($lines as $line) {
@@ -284,42 +193,31 @@ class LogService implements ServiceSubscriberInterface
                 if (null === ($date = self::parseDate($values[0]))) {
                     continue;
                 }
-                $channel = self::getChannel($values[1]);
-                $level = self::getLevel($values[2]);
 
                 // add
                 $log = new Log();
-                $log->setLevel($level)
-                    ->setChannel($channel)
-                    ->setCreatedAt($date)
-                    ->setMessage($this->parseMessage($values[3]))
+                $log->setCreatedAt($date)
+                    ->setChannel($values[1])
+                    ->setLevel($values[2])
+                    ->setMessage($values[3])
                     ->setContext($this->parseJson($values[4]))
                     ->setExtra($this->parseJson($values[5]));
                 $result->addLog($log);
             }
         } catch (\Exception) {
-            return false;
+            return null;
         }
 
-        // logs?
-        if (!$result->isEmpty()) {
-            $result->sort();
-            $this->setCacheValue(self::KEY_CACHE, $result);
+        $result->sort();
+        $this->setCacheValue(self::KEY_CACHE, $result);
 
-            return $result;
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * Decode the given JSON string.
-     *
-     * @param string $value the value to decode
-     *
-     * @return array the decoded value
      */
-    private function parseJson(string $value): array
+    private function parseJson(string $value): ?array
     {
         /** @psalm-var mixed $result */
         $result = \json_decode($value, true);
@@ -327,18 +225,6 @@ class LogService implements ServiceSubscriberInterface
             return $result;
         }
 
-        return [];
-    }
-
-    /**
-     * Gets the log message.
-     *
-     * @param string $value the source
-     *
-     * @return string the message
-     */
-    private function parseMessage(string $value): string
-    {
-        return \trim($value);
+        return null;
     }
 }

@@ -154,9 +154,9 @@ final class Utils
      *
      * @param mixed $expression the variable to export
      *
-     * @return string|null the variable representation
+     * @return string the variable representation
      */
-    public static function exportVar(mixed $expression): ?string
+    public static function exportVar(mixed $expression): string
     {
         try {
             $export = \var_export($expression, true);
@@ -340,7 +340,7 @@ final class Utils
     public static function sortField(array &$array, string $field, bool $ascending = true): void
     {
         $accessor = self::getAccessor();
-        \usort($array, fn ($a, $b) => self::compare($a, $b, $field, $accessor, $ascending));
+        \uasort($array, fn ($a, $b) => self::compare($a, $b, $field, $accessor, $ascending));
     }
 
     /**
@@ -361,7 +361,7 @@ final class Utils
             self::sortField($array, $field, $ascending);
         } elseif ($count > 1) {
             $accessor = self::getAccessor();
-            \usort($array, function (mixed $a, mixed $b) use ($accessor, $fields): int {
+            \uasort($array, function (mixed $a, mixed $b) use ($accessor, $fields): int {
                 $result = 0;
                 foreach ($fields as $field => $ascending) {
                     $result = self::compare($a, $b, $field, $accessor, $ascending);

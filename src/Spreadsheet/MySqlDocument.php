@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Util\DatabaseInfo;
+use App\Service\DatabaseInfoService;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
@@ -24,7 +24,7 @@ class MySqlDocument extends AbstractDocument
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private readonly DatabaseInfo $info)
+    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $info)
     {
         parent::__construct($controller);
     }

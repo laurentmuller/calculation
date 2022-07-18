@@ -72,7 +72,7 @@ final class FunctionExtension extends AbstractExtension
     {
         return [
             new TwigFilter('trans_role', fn (RoleInterface|string $role): string => $this->translateRole($role)),
-            new TwigFilter('var_export', fn (mixed $expression): ?string => Utils::exportVar($expression)),
+            new TwigFilter('var_export', fn (mixed $expression): string => Utils::exportVar($expression)),
             new TwigFilter('normalize_whitespace', fn (string $value): string => $this->normalizeWhitespace($value), ['preserves_safety' => ['html']]),
         ];
     }

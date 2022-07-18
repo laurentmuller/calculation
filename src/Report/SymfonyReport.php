@@ -17,7 +17,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
-use App\Util\SymfonyInfo;
+use App\Service\SymfonyInfoService;
 
 /**
  * Report containing Symfony configuration.
@@ -30,7 +30,7 @@ class SymfonyReport extends AbstractReport
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function __construct(AbstractController $controller, private readonly SymfonyInfo $info, private readonly string $locale, private readonly string $mode)
+    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
     {
         parent::__construct($controller);
         $title = $this->trans('about.symfony');
@@ -62,24 +62,24 @@ class SymfonyReport extends AbstractReport
         }
 
         $packages = $info->getPackages();
-        $runtimePackages = $packages[SymfonyInfo::KEY_RUNTIME] ?? [];
+        $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if (!empty($runtimePackages)) {
             $this->Ln(self::LINE_HEIGHT / 2);
             $this->outputPackages('Packages', $runtimePackages);
         }
-        $debugPackages = $packages[SymfonyInfo::KEY_DEBUG] ?? [];
+        $debugPackages = $packages[SymfonyInfoService::KEY_DEBUG] ?? [];
         if (!empty($debugPackages)) {
             $this->Ln(self::LINE_HEIGHT / 2);
             $this->outputPackages('Debug Packages', $debugPackages);
         }
 
         $routes = $info->getRoutes();
-        $runtimeRoutes = $routes[SymfonyInfo::KEY_RUNTIME] ?? [];
+        $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if (!empty($runtimeRoutes)) {
             $this->Ln(self::LINE_HEIGHT / 2);
             $this->outputRoutes('Routes', $runtimeRoutes);
         }
-        $debugRoutes = $routes[SymfonyInfo::KEY_DEBUG] ?? [];
+        $debugRoutes = $routes[SymfonyInfoService::KEY_DEBUG] ?? [];
         if (!empty($debugRoutes)) {
             $this->Ln(self::LINE_HEIGHT / 2);
             $this->outputRoutes('Debug Routes', $debugRoutes);
@@ -115,7 +115,7 @@ class SymfonyReport extends AbstractReport
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    private function outputInfo(SymfonyInfo $info): void
+    private function outputInfo(SymfonyInfoService $info): void
     {
         $app = $this->controller->getApplication();
 

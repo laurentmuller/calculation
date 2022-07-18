@@ -47,21 +47,19 @@ class LogFilter
 
     private function acceptChannel(Log $log): bool
     {
-        return !$this->skipChannel && null !== $log->getChannel()
-            && $this->acceptValue(LogService::getChannel((string) $log->getChannel()));
+        return !$this->skipChannel && $log->isChannel()
+            && $this->acceptValue($log->getChannel());
     }
 
     private function acceptDate(Log $log): bool
     {
-        $date = $log->getCreatedAt();
-
-        return null !== $date && $this->acceptValue(LogService::getCreatedAt($date));
+        return $this->acceptValue($log->getFormattedDate());
     }
 
     private function acceptLevel(Log $log): bool
     {
-        return !$this->skipLevel && null !== $log->getLevel()
-            && $this->acceptValue(LogService::getLevel((string) $log->getLevel()));
+        return !$this->skipLevel && $log->isLevel()
+            && $this->acceptValue($log->getLevel());
     }
 
     private function acceptMessage(Log $log): bool

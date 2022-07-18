@@ -13,10 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Entity\Log;
 use App\Model\LogFile;
-use App\Service\LogService;
-use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -27,8 +24,6 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
  */
 class LogsDocument extends AbstractDocument
 {
-    private ?SqlFormatter $formatter = null;
-
     /**
      * Constructor.
      */
@@ -63,16 +58,15 @@ class LogsDocument extends AbstractDocument
         $this->setFormat(1, 'dd/mm/yyyy hh:mm:ss')
             ->setColumnWidth(4, 120, true);
 
-        $logs = $logFile->getLogs();
-        LogService::sortLogs($logs);
-
         $row = 2;
+        $logs = $logFile->getLogs();
+        $formatter = new SqlFormatter(new NullHighlighter());
         foreach ($logs as $log) {
             $this->setRowValues($row, [
                 $log->getCreatedAt(),
-                $this->capitalize($log->getChannel()),
-                $this->capitalize($log->getLevel()),
-                $this->formatMessage($log),
+                $log->getChannel(true),
+                $log->getLevel(true),
+                $log->formatMessage($formatter),
                 $log->getUser(),
             ]);
             $this->setBorderStyle($row, $log->getLevel());
@@ -90,42 +84,6 @@ class LogsDocument extends AbstractDocument
         $this->finish();
 
         return true;
-    }
-
-    private function capitalize(?string $channel): ?string
-    {
-        return null !== $channel ? Utils::capitalize($channel) : null;
-    }
-
-    /**
-     * Gets the message for the given log.
-     */
-    private function formatMessage(Log $log): string
-    {
-        $message = (string) $log->getMessage();
-        if ('doctrine' === $log->getChannel()) {
-            $message = $this->formatSql($message);
-        }
-        if (!empty($log->getContext())) {
-            $message .= "\nContext:\n" . (string) Utils::exportVar($log->getContext());
-        }
-        if (!empty($log->getExtra())) {
-            $message .= "\nExtra:\n" . (string) Utils::exportVar($log->getExtra());
-        }
-
-        return $message;
-    }
-
-    /**
-     * Format the given Sql query.
-     */
-    private function formatSql(string $sql): string
-    {
-        if (null === $this->formatter) {
-            $this->formatter = new SqlFormatter(new NullHighlighter());
-        }
-
-        return $this->formatter->format($sql);
     }
 
     /**

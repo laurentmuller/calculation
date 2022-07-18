@@ -10,16 +10,16 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Service;
 
+use App\Util\Utils;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Result;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Service to get database information.
  */
-final class DatabaseInfo
+final class DatabaseInfoService
 {
     /** @var array<string, string>|null */
     private ?array $configuration = null;

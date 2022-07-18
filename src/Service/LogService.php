@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Log;
+use App\Model\LogFile;
 use App\Traits\CacheAwareTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
@@ -32,26 +33,6 @@ class LogService implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
 
     /**
-     * The key for channels.
-     */
-    final public const KEY_CHANNELS = 'channels';
-
-    /**
-     * The key for file.
-     */
-    final public const KEY_FILE = 'file';
-
-    /**
-     * The key for levels.
-     */
-    final public const KEY_LEVELS = 'levels';
-
-    /**
-     * The key for logs.
-     */
-    final public const KEY_LOGS = 'logs';
-
-    /**
      * The application channel.
      */
     private const APP_CHANNEL = 'app';
@@ -60,6 +41,11 @@ class LogService implements ServiceSubscriberInterface
      * The date format.
      */
     private const DATE_FORMAT = 'd.m.Y H:i:s';
+
+    /**
+     * The key for cache result.
+     */
+    private const KEY_CACHE = 'key.log';
 
     /**
      * The values separator.
@@ -86,12 +72,7 @@ class LogService implements ServiceSubscriberInterface
      */
     public function clearCache(): self
     {
-        $this->deleteCacheItems([
-            self::KEY_FILE,
-            self::KEY_LOGS,
-            self::KEY_CHANNELS,
-            self::KEY_LEVELS,
-        ]);
+        $this->deleteCacheItem(self::KEY_CACHE);
 
         return $this;
     }
@@ -173,39 +154,6 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the entries.
-     *
-     * @psalm-return array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>}|false
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getEntries(): array|false
-    {
-        if ($entries = $this->getCachedValues()) {
-            return $entries;
-        }
-
-        $entries = $this->parseFile();
-        if (\is_array($entries)) {
-            return $this->setCachedValues($entries);
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets the log file name.
-     */
-    public function getFileName(): string
-    {
-        return $this->fileName;
-    }
-
-    /**
      * Gets the log level.
      *
      * @param string $value      the source level
@@ -221,32 +169,32 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the log for the given identifier.
-     *
-     * @param int $id the log identifier to find
-     *
-     * @return Log|null the log, if found; null otherwise
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLog(int $id): ?Log
     {
-        $entries = $this->getEntries();
-        if (\is_array($entries)) {
-            return $entries[self::KEY_LOGS][$id] ?? null;
+        $logFile = $this->getLogFile();
+        if (false !== $logFile) {
+            return $logFile->getLog($id);
         }
 
         return null;
     }
 
     /**
-     * Checks if this log file name exist and is not empty.
+     * Gets the parsed log file.
      *
-     * @return bool true if valid
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function isFileValid(): bool
+    public function getLogFile(): LogFile|false
     {
-        return FileUtils::exists($this->fileName) && 0 !== \filesize($this->fileName);
+        /** @psalm-var LogFile|false $value */
+        $value = $this->getCacheValue(self::KEY_CACHE, false);
+        if ($value instanceof LogFile) {
+            return $value;
+        }
+
+        return $this->parseFile();
     }
 
     /**
@@ -273,66 +221,13 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the cached values.
+     * Checks if this log file name exist and is not empty.
      *
-     * @return array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>}|false
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @return bool true if valid
      */
-    private function getCachedValues(): array|false
+    private function isFileValid(): bool
     {
-        /** @psalm-var array{
-         *      file: string,
-         *      logs: array<int, Log>,
-         *      levels: array<string, int>,
-         *      channels: array<string, int>} $entries */
-        $entries = [];
-
-        /** @psalm-var string|null $file */
-        $file = $this->getCacheValue(self::KEY_FILE);
-        if (null === $file) {
-            return false;
-        }
-        $entries[self::KEY_FILE] = $file;
-
-        /** @psalm-var array<int, Log>|null */
-        $logs = $this->getCacheValue(self::KEY_LOGS);
-        if (null === $logs) {
-            return false;
-        }
-        $entries[self::KEY_LOGS] = $logs;
-
-        /** @psalm-var array<string, int>|null $levels */
-        $levels = $this->getCacheValue(self::KEY_LEVELS);
-        if (null === $levels) {
-            return false;
-        }
-        $entries[self::KEY_LEVELS] = $levels;
-
-        /** @psalm-var array<string, int>|null $channels */
-        $channels = $this->getCacheValue(self::KEY_CHANNELS);
-        if (null === $channels) {
-            return false;
-        }
-        $entries[self::KEY_CHANNELS] = $channels;
-
-        return $entries;
-    }
-
-    /**
-     * Increment by one the given array.
-     *
-     * @param array<string, int> $array the array to update
-     * @param string             $key   the array's key to increment
-     */
-    private function increment(array &$array, string $key): void
-    {
-        $value = $array[$key] ?? 0;
-        $array[$key] = $value + 1;
+        return FileUtils::exists($this->fileName) && 0 !== \filesize($this->fileName);
     }
 
     /**
@@ -360,17 +255,11 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets all lines of the log file.
+     * Gets the log file.
      *
-     * @return array|bool an array with the file, the logs, the levels and the channels; <code>false</code> if an error occurs or if the file is empty
-     *
-     * @psalm-return array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>}|false
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function parseFile(): array|false
+    private function parseFile(): LogFile|false
     {
         // check file
         if (!$this->isFileValid()) {
@@ -383,13 +272,8 @@ class LogService implements ServiceSubscriberInterface
                 return false;
             }
 
-            $id = 1;
-            /** @psalm-var array<int, Log> $logs */
-            $logs = [];
-            /** @psalm-var array<string, int> $levels */
-            $levels = [];
-            /** @psalm-var array<string, int> $channels */
-            $channels = [];
+            $result = new LogFile();
+            $result->setFile($this->fileName);
 
             // read line by line
             foreach ($lines as $line) {
@@ -400,42 +284,29 @@ class LogService implements ServiceSubscriberInterface
                 if (null === ($date = self::parseDate($values[0]))) {
                     continue;
                 }
-
                 $channel = self::getChannel($values[1]);
                 $level = self::getLevel($values[2]);
 
                 // add
                 $log = new Log();
-                $log->setId($id)
-                    ->setCreatedAt($date)
+                $log->setLevel($level)
                     ->setChannel($channel)
-                    ->setLevel($level)
+                    ->setCreatedAt($date)
                     ->setMessage($this->parseMessage($values[3]))
                     ->setContext($this->parseJson($values[4]))
                     ->setExtra($this->parseJson($values[5]));
-                $logs[$id++] = $log;
-
-                // update
-                $this->increment($levels, $level);
-                $this->increment($channels, $channel);
+                $result->addLog($log);
             }
         } catch (\Exception) {
             return false;
         }
 
         // logs?
-        if (!empty($logs)) {
-            // sort
-            \ksort($levels, \SORT_LOCALE_STRING);
-            \ksort($channels, \SORT_LOCALE_STRING);
+        if (!$result->isEmpty()) {
+            $result->sort();
+            $this->setCacheValue(self::KEY_CACHE, $result);
 
-            // result
-            return [
-                self::KEY_FILE => $this->fileName,
-                self::KEY_LOGS => $logs,
-                self::KEY_LEVELS => $levels,
-                self::KEY_CHANNELS => $channels,
-            ];
+            return $result;
         }
 
         return false;
@@ -469,32 +340,5 @@ class LogService implements ServiceSubscriberInterface
     private function parseMessage(string $value): string
     {
         return \trim($value);
-    }
-
-    /**
-     * Save entries to cache.
-     *
-     * @psalm-param array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>} $entries the entries to cache
-     *
-     * @psalm-return array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>} the entries parameter
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function setCachedValues(array $entries): array
-    {
-        /** @psalm-var mixed $value */
-        foreach ($entries as $key => $value) {
-            $this->setCacheValue($key, $value);
-        }
-
-        return $entries;
     }
 }

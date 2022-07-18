@@ -41,19 +41,18 @@ class LogController extends AbstractController
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
-        // get entries
-        if (!$service->getEntries()) {
+        if (false === $logFile = $service->getLogFile()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();
         }
+
         // handle request
-        $file = $service->getFileName();
+        $file = $logFile->getFile();
         $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
@@ -93,18 +92,16 @@ class LogController extends AbstractController
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
     {
-        // get entries
-        if (!$entries = $service->getEntries()) {
+        if (false === $logFile = $service->getLogFile()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();
         }
-        $doc = new LogsDocument($this, $entries);
+        $doc = new LogsDocument($this, $logFile);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -118,13 +115,12 @@ class LogController extends AbstractController
     #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response
     {
-        // get entries
-        if (!$entries = $service->getEntries()) {
+        if (false === $logFile = $service->getLogFile()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();
         }
-        $doc = new LogReport($this, $entries);
+        $doc = new LogReport($this, $logFile);
 
         return $this->renderPdfDocument($doc);
     }
@@ -147,7 +143,6 @@ class LogController extends AbstractController
      * Show properties of a log entry.
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => self::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response

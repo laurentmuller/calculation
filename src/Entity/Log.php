@@ -26,7 +26,7 @@ class Log extends AbstractEntity
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
-    private ?string $channel = null;
+    private string $channel = '';
 
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
@@ -40,10 +40,10 @@ class Log extends AbstractEntity
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
-    private ?string $level = null;
+    private string $level = '';
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $message = null;
+    private string $message = '';
 
     /**
      * Constructor.
@@ -56,13 +56,13 @@ class Log extends AbstractEntity
     /**
      * Gets the channel.
      */
-    public function getChannel(): ?string
+    public function getChannel(): string
     {
         return $this->channel;
     }
 
     /**
-     * Gets the color depending on the level.
+     * Gets the HTML color depending on the level.
      */
     public function getColor(): string
     {
@@ -88,7 +88,7 @@ class Log extends AbstractEntity
     /**
      * Gets the creation date.
      */
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -98,7 +98,7 @@ class Log extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return $this->message ?? parent::getDisplay();
+        return empty($this->message) ? parent::getDisplay() : $this->getMessage();
     }
 
     /**
@@ -120,7 +120,7 @@ class Log extends AbstractEntity
     /**
      * Gets the level.
      */
-    public function getLevel(): ?string
+    public function getLevel(): string
     {
         return $this->level;
     }
@@ -128,7 +128,7 @@ class Log extends AbstractEntity
     /**
      * Gets the message.
      */
-    public function getMessage(): ?string
+    public function getMessage(): string
     {
         return $this->message;
     }

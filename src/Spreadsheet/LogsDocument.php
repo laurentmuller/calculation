@@ -14,6 +14,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Model\LogFile;
 use App\Service\LogService;
 use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
@@ -30,14 +31,8 @@ class LogsDocument extends AbstractDocument
 
     /**
      * Constructor.
-     *
-     * @param array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>} $entries
      */
-    public function __construct(AbstractController $controller, private readonly array $entries)
+    public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
         parent::__construct($controller);
     }
@@ -50,6 +45,8 @@ class LogsDocument extends AbstractDocument
      */
     public function render(): bool
     {
+        $logFile = $this->logFile;
+
         // initialize
         $this->start('log.title');
 
@@ -66,8 +63,7 @@ class LogsDocument extends AbstractDocument
         $this->setFormat(1, 'dd/mm/yyyy hh:mm:ss')
             ->setColumnWidth(4, 120, true);
 
-        /** @var Log[] $logs */
-        $logs = $this->entries['logs'];
+        $logs = $logFile->getLogs();
         LogService::sortLogs($logs);
 
         $row = 2;

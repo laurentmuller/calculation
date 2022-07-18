@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Log;
+use App\Model\LogFile;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
@@ -31,6 +32,7 @@ use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
+use Psr\Log\LogLevel;
 
 /**
  * Report for the log.
@@ -79,16 +81,10 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     /**
      * Constructor.
      *
-     * @param array{
-     *      file: string,
-     *      logs: array<int, Log>,
-     *      levels: array<string, int>,
-     *      channels: array<string, int>} $entries
-     *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function __construct(AbstractController $controller, private readonly array $entries)
+    public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
         parent::__construct($controller);
     }
@@ -130,12 +126,14 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
      */
     public function render(): bool
     {
+        $logFile = $this->logFile;
+
         // title
         $this->setTitleTrans('log.title');
 
         // description
         $description = $this->trans('log.list.file', [
-            '%file%' => $this->entries['file'],
+            '%file%' => $logFile->getFile(),
         ]);
         $this->header->setDescription($description);
 
@@ -143,7 +141,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $this->AddPage();
 
         // logs?
-        $logs = $this->entries['logs'];
+        $logs = $logFile->getLogs();
         if (empty($logs)) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.list.empty'));
 
@@ -151,8 +149,8 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         }
 
         // channels and levels
-        $this->outputCards('log.fields.channel', $this->entries['channels']);
-        $this->outputCards('log.fields.level', $this->entries['levels']);
+        $this->outputCards('log.fields.channel', $logFile->getChannels());
+        $this->outputCards('log.fields.level', $logFile->getLevels());
 
         // logs
         return $this->outputLogs($logs);
@@ -242,12 +240,14 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     private function getColor(string $level): ?PdfDrawColor
     {
         if (!\array_key_exists($level, $this->colors)) {
-            $this->colors[$level] = match ($level) {
-                'warning' => PdfDrawColor::create('#ffc107'),
-                'error', 'critical', 'alert', 'emergency' => PdfDrawColor::create('#dc3545'),
-                'debug' => PdfDrawColor::create('#007bff'),
-                'info', 'notice' => PdfDrawColor::create('#17a2b8'),
-                default => null,
+            return $this->colors[$level] = match ($level) {
+                LogLevel::ALERT,
+                LogLevel::CRITICAL,
+                LogLevel::EMERGENCY,
+                LogLevel::ERROR => PdfDrawColor::create('#dc3545'),
+                LogLevel::WARNING => PdfDrawColor::create('#ffc107'),
+                LogLevel::DEBUG => PdfDrawColor::create('#007bff'),
+                default => PdfDrawColor::create('#17a2b8'),
             };
         }
 

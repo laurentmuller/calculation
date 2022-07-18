@@ -54,12 +54,11 @@ class LogTable extends AbstractTable implements \Countable
      */
     public function count(): int
     {
-        $entries = $this->service->getEntries();
-        if (!\is_array($entries)) {
+        if (false === $logFile = $this->service->getLogFile()) {
             return 0;
         }
 
-        return \count($entries[LogService::KEY_LOGS]);
+        return $logFile->count();
     }
 
     /**
@@ -154,23 +153,20 @@ class LogTable extends AbstractTable implements \Countable
     {
         $results = parent::handleQuery($query);
 
-        $entries = $this->service->getEntries();
-        if (!\is_array($entries)) {
+        if (false === $logFile = $this->service->getLogFile()) {
             $results->status = Response::HTTP_PRECONDITION_FAILED;
 
             return $results;
         }
 
-        /** @var array<Log> $entities */
-        $entities = $entries[LogService::KEY_LOGS];
-        if (empty($entities)) {
+        if ($logFile->isEmpty()) {
             $results->status = Response::HTTP_PRECONDITION_FAILED;
 
             return $results;
         }
 
-        // count
-        $results->totalNotFiltered = \count($entities);
+        $entities = $logFile->getLogs();
+        $results->totalNotFiltered = $logFile->count();
 
         // filter
         /** @var string|null $level */
@@ -203,8 +199,8 @@ class LogTable extends AbstractTable implements \Countable
         $results->rows = $this->mapEntities($entities);
 
         // copy
-        $levels = \array_keys($entries[LogService::KEY_LEVELS]);
-        $channels = \array_keys($entries[LogService::KEY_CHANNELS]);
+        $levels = \array_keys($logFile->getLevels());
+        $channels = \array_keys($logFile->getChannels());
 
         // ajax?
         if (!$query->callback) {
@@ -220,7 +216,7 @@ class LogTable extends AbstractTable implements \Countable
                 'levels' => $levels,
                 'channel' => $channel,
                 'channels' => $channels,
-                'file' => $this->service->getFileName(),
+                'file' => $logFile->getFile(),
             ];
         }
 

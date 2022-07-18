@@ -268,9 +268,7 @@ class EntityVoter extends Voter
     }
 
     /**
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     * @psalm-suppress InvalidArgument
+     * @psalm-suppress all
      *
      * @return FlagBag<EntityPermission>
      */

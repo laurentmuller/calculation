@@ -28,16 +28,6 @@ use Twig\TokenParser\AbstractTokenParser;
  */
 final class SwitchTokenParser extends AbstractTokenParser
 {
-    public function decideIfEnd(Token $token): bool
-    {
-        return $token->test(['endswitch']);
-    }
-
-    public function decideIfFork(Token $token): bool
-    {
-        return $token->test(['case', 'default', 'endswitch']);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -119,5 +109,15 @@ final class SwitchTokenParser extends AbstractTokenParser
         $stream->expect(Token::BLOCK_END_TYPE);
 
         return new SwitchNode($nodes, [], $lineno, $this->getTag());
+    }
+
+    private function decideIfEnd(Token $token): bool
+    {
+        return $token->test(['endswitch']);
+    }
+
+    private function decideIfFork(Token $token): bool
+    {
+        return $token->test(['case', 'default', 'endswitch']);
     }
 }

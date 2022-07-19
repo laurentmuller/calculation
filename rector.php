@@ -14,6 +14,7 @@ use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 
 return static function (RectorConfig $rectorConfig): void {
     // bootstrap files
@@ -23,6 +24,12 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         'src',
         'tests',
+    ]);
+
+    $rectorConfig->skip([
+        CallableThisArrayToAnonymousFunctionRector::class => [
+          __DIR__ . '/src/Twig/*Extension.php',
+        ],
     ]);
 
     // rules to apply

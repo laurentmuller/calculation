@@ -49,8 +49,8 @@
         </thead>
         <tbody data-link="row" class="rowlink">
             {% for item in data -%}
-            {%- set month = item.date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
-            {%- set parameters = {'search': item.date|localedate('none', null, null, 'MM.Y')} -%}
+            {%- set month = item.date|locale_date('none', null, null, 'MMMM Y')|capitalize -%}
+            {%- set parameters = {'search': item.date|locale_date('none', null, null, 'MM.Y')} -%}
             <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
                 <td class="text-nowrap">
                     <a href="{{ path(list_path, parameters) }}">{{ month }}</a>

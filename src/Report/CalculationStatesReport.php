@@ -96,7 +96,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
             $table->startRow()
                 ->add($entity->getCode())
                 ->add($entity->getDescription())
-                ->add($this->booleanFilter($entity->isEditable()))
+                ->add($this->formatBoolean($entity->isEditable()))
                 ->add(style: $this->getColorStyle($entity))
                 ->add(FormatUtils::formatInt($entity->countCalculations()))
                 ->endRow();

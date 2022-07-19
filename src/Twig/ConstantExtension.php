@@ -34,7 +34,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     /**
      * The key name to cache constants.
      */
-    private const CACHE_KEY = 'constant_extension';
+    private const CACHE_KEY = 'twig_constant_extension';
 
     /**
      * Constructor.

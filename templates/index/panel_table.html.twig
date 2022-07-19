@@ -56,7 +56,7 @@
                             {{- calculation.id|identifier -}}
                          {%- endif -%}
                         </td>
-                        <td class="text-date user-select-none">{{ calculation.date|localedate }}</td>
+                        <td class="text-date user-select-none">{{ calculation.date|locale_date }}</td>
                         <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
                         <td class="text-customer text-cell user-select-none">{{ calculation.customer }}</td>
                         <td class="text-description text-cell user-select-none">{{ calculation.description }}</td>

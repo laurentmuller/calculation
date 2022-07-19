@@ -15,7 +15,7 @@
 
 {% block card_body %}
 {%- if results.valid %}
-<p>{{ 'swisspost.result.success'|trans({'%date%': results.validity|localedate('long')}) }}</p>
+<p>{{ 'swisspost.result.success'|trans({'%date%': results.validity|locale_date('long')}) }}</p>
 <table class="table table-bordered table-sm mb-0">
     <thead>
         <tr>

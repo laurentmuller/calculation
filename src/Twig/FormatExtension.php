@@ -35,57 +35,6 @@ final class FormatExtension extends AbstractExtension
     }
 
     /**
-     * Filter to format a boolean value.
-     *
-     * @param bool    $value     the value to format
-     * @param ?string $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
-     * @param ?string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
-     * @param bool    $translate <code>true</code> to translate texts
-     */
-    public function booleanFilter(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
-    {
-        if ($value) {
-            if (null !== $true) {
-                return $translate ? $this->trans($true) : $true;
-            }
-
-            return $this->trans('common.value_true');
-        }
-
-        if (null !== $false) {
-            return $translate ? $this->trans($false) : $false;
-        }
-
-        return $this->trans('common.value_false');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('identifier', fn (float|int|string|null $number): string => FormatUtils::formatId($number)),
-            new TwigFilter('integer', fn (float|int|string|null $number): string => FormatUtils::formatInt($number)),
-            new TwigFilter('amount', fn (float|int|string|null $number): string => FormatUtils::formatAmount($number)),
-            new TwigFilter('percent', fn (float|int|string|null $number, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): string => FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode)),
-
-            new TwigFilter('boolean', fn (bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string => $this->booleanFilter($value, $true, $false, $translate)),
-            new TwigFilter('localedate', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->dateFilter($env, $date, $dateFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
-            new TwigFilter('localetime', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->timeFilter($env, $date, $timeFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
-            new TwigFilter('localedatetime', fn (Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string => $this->dateTimeFilter($env, $date, $dateFormat, $timeFormat, $timezone, $calendar, $pattern), ['needs_environment' => true]),
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-    /**
      * Formats a date for the current locale; ignoring the time part.
      *
      * @param Environment                    $env        the Twig environment
@@ -99,7 +48,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws SyntaxError if the date format or the time format is unknown
      */
-    private function dateFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    public function dateFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar, $pattern);
     }
@@ -121,7 +70,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws SyntaxError if the date format or the time format is unknown
      */
-    private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    public function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         /** @psalm-var array<string, int> $formats */
         static $formats = [
@@ -168,6 +117,59 @@ final class FormatExtension extends AbstractExtension
     }
 
     /**
+     * Filter to format a boolean value.
+     *
+     * @param bool    $value     the value to format
+     * @param ?string $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
+     * @param ?string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
+     * @param bool    $translate <code>true</code> to translate texts
+     */
+    public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
+    {
+        if ($value) {
+            if (null !== $true) {
+                return $translate ? $this->trans($true) : $true;
+            }
+
+            return $this->trans('common.value_true');
+        }
+
+        if (null !== $false) {
+            return $translate ? $this->trans($false) : $false;
+        }
+
+        return $this->trans('common.value_false');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters(): array
+    {
+        $options = ['needs_environment' => true];
+
+        return [
+            new TwigFilter('identifier', [FormatUtils::class, 'formatId']),
+            new TwigFilter('integer', [FormatUtils::class, 'formatInt']),
+            new TwigFilter('amount', [FormatUtils::class, 'formatAmount']),
+            new TwigFilter('percent', [FormatUtils::class, 'formatPercent']),
+
+            new TwigFilter('boolean', [$this, 'formatBoolean']),
+            new TwigFilter('locale_date', [$this, 'dateFilter'], $options),
+            new TwigFilter('locale_time', [$this, 'timeFilter'], $options),
+            new TwigFilter('locale_datetime', [$this, 'dateTimeFilter'], $options),
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    /**
      * Formats a time for the current locale; ignoring the date part.
      *
      * @param Environment                    $env        the Twig environment
@@ -181,7 +183,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @return string the formatted date
      */
-    private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    public function timeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
     }

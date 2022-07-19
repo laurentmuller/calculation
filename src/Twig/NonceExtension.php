@@ -41,7 +41,7 @@ final class NonceExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('csp_nonce', fn (): string => $this->getNonce()),
+            new TwigFunction('csp_nonce', [$this, 'getNonce']),
         ];
     }
 

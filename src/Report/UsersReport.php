@@ -77,7 +77,7 @@ class UsersReport extends AbstractArrayReport
         foreach ($entities as $entity) {
             $enabled = $entity->isEnabled();
             $style = $enabled ? $enabledStyle : $disabledStyle;
-            $text = $this->booleanFilter($enabled, 'common.value_enabled', 'common.value_disabled', true);
+            $text = $this->formatBoolean($enabled, 'common.value_enabled', 'common.value_disabled', true);
             $role = $this->translateRole($entity->getRole());
             $cell = $this->getImageCell($entity);
 

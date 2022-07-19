@@ -23,6 +23,7 @@
         destroy() {
             this.$sidebarToggle.off('click', this.toggleSidebarProxy);
             this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
+            // $(window).on('resize', this.resizeProxy);
             this.$element.removeData('sidebar');
         }
 
@@ -39,6 +40,7 @@
             that.$pageContent = $(that.options.pageContent);
             that.$sidebarToggle = $(that.options.sidebarToggle);
             that.$sidebarHorizontal = $(that.options.sidebarHorizontal);
+
             // create and add proxies
             that.toggleSidebarProxy = function (e) {
                 that._toggleSidebar(e);
@@ -52,7 +54,29 @@
             // update titles
             that._updateSidebar();
             that._updateMenus();
+
+            // add resize handler
+            // that.resizeProxy = function (e) {
+            //     const width = document.documentElement.clientWidth;
+            //     if (width < 768) {
+            //         that._hideSidebar(e);
+            //     }
+            // };
+            // $(window).on('resize', that.resizeProxy);
+            // $(window).trigger('resize');
         }
+
+        // /**
+        //  * Hide the sidebar if visible.
+        //  *
+        //  * @param {Event} e - the event.
+        //  * @private
+        //  */
+        // _hideSidebar(e) {
+        //     if (!this.$element.hasClass('active')) {
+        //         this._toggleSidebar(e);
+        //     }
+        // }
 
         /**
          * Toggle the sidebar.

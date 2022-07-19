@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
-use App\Interfaces\RoleInterface;
 use App\Service\UrlGeneratorService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
@@ -66,63 +65,11 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('trans_role', fn (RoleInterface|string $role): string => $this->translateRole($role)),
-            new TwigFilter('var_export', fn (mixed $expression): string => Utils::exportVar($expression)),
-            new TwigFilter('normalize_whitespace', fn (string $value): string => $this->normalizeWhitespace($value), ['preserves_safety' => ['html']]),
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFunctions(): array
-    {
-        $options = [
-            'is_safe' => ['html'],
-            'needs_environment' => true,
-        ];
-
-        return [
-            // assets
-            new TwigFunction('asset_exists', fn (?string $path): bool => $this->assetExists($path)),
-            new TwigFunction('asset_if', fn (?string $path = null, ?string $default = null): ?string => $this->assetIf($path, $default)),
-            new TwigFunction('asset_js', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->assetJs($env, $path, $parameters, $packageName), $options),
-            new TwigFunction('asset_css', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->assetCss($env, $path, $parameters, $packageName), $options),
-            new TwigFunction('asset_versioned', fn (Environment $env, string $path, ?string $packageName = null): string => $this->versionedAsset($env, $path, $packageName), $options),
-
-            // images
-            new TwigFunction('asset_image', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->assetImage($env, $path, $parameters, $packageName), $options),
-            new TwigFunction('image_height', fn (string $path): int => $this->imageHeight($path)),
-            new TwigFunction('image_width', fn (string $path): int => $this->imageWidth($path)),
-
-            // routes
-            new TwigFunction('cancel_url', fn (Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string => $this->cancelUrl($request, $id, $defaultRoute)),
-            new TwigFunction('route_params', fn (Request $request, int $id = 0): array => $this->routeParams($request, $id)),
-
-            // php
-            new TwigFunction('is_int', 'is_int'),
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-    /**
      * Output a link style sheet tag with a version and nonce.
      *
      * @throws \Exception
      */
-    private function assetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    public function assetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $href = $this->versionedAsset($env, $path, $packageName);
         $parameters = \array_merge([
@@ -138,7 +85,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks if the given asset path exists.
      */
-    private function assetExists(?string $path): bool
+    public function assetExists(?string $path): bool
     {
         if (null === $file = $this->getRealPath($path)) {
             return false;
@@ -151,7 +98,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Returns the given asset path, if valid; the default path otherwise.
      */
-    private function assetIf(?string $path = null, ?string $default = null): ?string
+    public function assetIf(?string $path = null, ?string $default = null): ?string
     {
         if ($this->assetExists($path)) {
             return $path;
@@ -168,7 +115,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @throws \Exception
      */
-    private function assetImage(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    public function assetImage(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $size = $this->imageSize($path);
         $src = $this->versionedAsset($env, $path, $packageName);
@@ -187,7 +134,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @throws \Exception
      */
-    private function assetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    public function assetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $src = $this->versionedAsset($env, $path, $packageName);
         $parameters = \array_merge([
@@ -205,7 +152,7 @@ final class FunctionExtension extends AbstractExtension
      * If the package used to generate the path is an instance of
      * UrlPackage, you will always get a URL and not a path.
      */
-    private function assetUrl(Environment $env, string $path, ?string $packageName = null): string
+    public function assetUrl(Environment $env, string $path, ?string $packageName = null): string
     {
         if (null === $this->asset) {
             $this->asset = $this->getExtension($env, AssetExtension::class);
@@ -217,7 +164,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets the version for the given path.
      */
-    private function assetVersion(?string $path): int
+    public function assetVersion(?string $path): int
     {
         if (null !== $file = $this->getRealPath($path)) {
             return (int) \filemtime($file);
@@ -229,7 +176,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets the cancel URL.
      */
-    private function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
+    public function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
         return $this->generator->cancelUrl($request, $id, $defaultRoute);
     }
@@ -237,9 +184,88 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks the existence of file or directory.
      */
-    private function fileExists(?string $filename): bool
+    public function fileExists(?string $filename): bool
     {
         return null !== $filename && FileUtils::exists($filename);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('trans_role', [$this, 'translateRole']),
+            new TwigFilter('var_export', [Utils::class, 'exportVar']),
+            new TwigFilter('normalize_whitespace', [$this, 'normalizeWhitespace'], ['preserves_safety' => ['html']]),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions(): array
+    {
+        $options = [
+            'is_safe' => ['html'],
+            'needs_environment' => true,
+        ];
+
+        return [
+            // assets
+            new TwigFunction('asset_if', [$this, 'assetIf']),
+            new TwigFunction('asset_exists', [$this, 'assetExists']),
+            new TwigFunction('asset_js', [$this, 'assetJs'], $options),
+            new TwigFunction('asset_css', [$this, 'assetCss'], $options),
+            new TwigFunction('asset_image', [$this, 'assetImage'], $options),
+            new TwigFunction('asset_versioned', [$this, 'versionedAsset'], $options),
+            // routes
+            new TwigFunction('cancel_url', [$this, 'cancelUrl']),
+            new TwigFunction('route_params', [$this, 'routeParams']),
+            // php
+            new TwigFunction('is_int', 'is_int'),
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    /**
+     * This filter replaces duplicated spaces and/or linebreaks with single space.
+     */
+    public function normalizeWhitespace(string $value): string
+    {
+        // attributes
+        $value = (string) \preg_replace('/\s+=\s+/u', '=', $value);
+
+        // space and new lines
+        $value = (string) \preg_replace('/\s+/u', ' ', $value);
+
+        return \trim($value);
+    }
+
+    /**
+     * Gets the route parameters.
+     */
+    public function routeParams(Request $request, int $id = 0): array
+    {
+        return $this->generator->routeParams($request, $id);
+    }
+
+    /**
+     * Gets an asset with version.
+     */
+    public function versionedAsset(Environment $env, string $path, ?string $packageName = null): string
+    {
+        $url = $this->assetUrl($env, $path, $packageName);
+        $version = $this->assetVersion($path);
+
+        return \sprintf('%s?version=%d', $url, $version);
     }
 
     /**
@@ -293,14 +319,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets the image height.
-     */
-    private function imageHeight(string $path): int
-    {
-        return $this->imageSize($path)[1];
-    }
-
-    /**
      * Gets the image size.
      *
      * @return array{0: int, 1: int}
@@ -315,30 +333,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets the image width.
-     */
-    private function imageWidth(string $path): int
-    {
-        return $this->imageSize($path)[0];
-    }
-
-    /**
-     * This filter replaces duplicated spaces and/or linebreaks with single space.
-     *
-     * It also removes whitespace from the beginning and at the end of the string.
-     */
-    private function normalizeWhitespace(string $value): string
-    {
-        // attributes
-        $value = (string) \preg_replace('/\s+=\s+/u', '=', $value);
-
-        // space and new lines
-        $value = (string) \preg_replace('/\s+/u', ' ', $value);
-
-        return \trim($value);
-    }
-
-    /**
      * Reduce parameters with a key/value tags.
      */
     private function reduceParameters(array $parameters): string
@@ -346,24 +340,5 @@ final class FunctionExtension extends AbstractExtension
         $callback = static fn (string $carry, string $key, mixed $value): string => \sprintf('%s %s="%s"', $carry, $key, \htmlspecialchars((string) $value));
 
         return (string) Utils::arrayReduceKey($parameters, $callback, '');
-    }
-
-    /**
-     * Gets the route parameters.
-     */
-    private function routeParams(Request $request, int $id = 0): array
-    {
-        return $this->generator->routeParams($request, $id);
-    }
-
-    /**
-     * Gets an asset with version.
-     */
-    private function versionedAsset(Environment $env, string $path, ?string $packageName = null): string
-    {
-        $url = $this->assetUrl($env, $path, $packageName);
-        $version = $this->assetVersion($path);
-
-        return \sprintf('%s?version=%d', $url, $version);
     }
 }

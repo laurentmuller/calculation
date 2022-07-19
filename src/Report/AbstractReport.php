@@ -74,9 +74,9 @@ abstract class AbstractReport extends PdfDocument
      * @param ?string $false     the text to use when the value is <b>FALSE</b> or <code>null</code> to use default
      * @param bool    $translate <code>TRUE</code> to translate texts
      */
-    public function booleanFilter(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
+    public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
-        return $this->extension->booleanFilter($value, $true, $false, $translate);
+        return $this->extension->formatBoolean($value, $true, $false, $translate);
     }
 
     /**

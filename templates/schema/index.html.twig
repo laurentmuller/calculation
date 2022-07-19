@@ -1,11 +1,10 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'schema.index.title' -%}
 {%- set title_description = 'schema.index.description' -%}
 {%- set title_icon = 'table' -%}
-
+{# body #}
 {% block card_body -%}
 <div class="table-responsive">
     <table class="table table-hover table-list table-sm">
@@ -31,11 +30,11 @@
     </table>
 </div>
 {%- endblock %}
-
+{# footer #}
 {% block card_footer -%}
 {{- icons.homepage() -}}
 {%- endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}

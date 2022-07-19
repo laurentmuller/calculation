@@ -15,7 +15,6 @@ namespace App\Listener;
 use App\Interfaces\MimeTypeInterface;
 use App\Twig\NonceExtension;
 use App\Util\FileUtils;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,13 +56,11 @@ class ResponseListener implements EventSubscriberInterface
      *
      * @throws \Exception
      */
-    public function __construct(ParameterBagInterface $params, UrlGeneratorInterface $router, NonceExtension $extension, string $file, private readonly bool $isDebug)
+    public function __construct(UrlGeneratorInterface $router, NonceExtension $extension, string $file, private readonly bool $isDebug)
     {
-        /** @var string $asset */
-        $asset = $params->get('asset_base');
         $nonce = "'nonce-" . $extension->getNonce() . "'";
         $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $this->csp = $this->loadCSP($file, $asset, $nonce, $report);
+        $this->csp = $this->loadCSP($file, $nonce, $report);
     }
 
     /**
@@ -160,7 +157,7 @@ class ResponseListener implements EventSubscriberInterface
      *
      * @return array<string, string[]>
      */
-    private function loadCSP(string $file, string $asset, string $nonce, string $report): array
+    private function loadCSP(string $file, string $nonce, string $report): array
     {
         if (!FileUtils::exists($file)) {
             return [];
@@ -183,7 +180,6 @@ class ResponseListener implements EventSubscriberInterface
             'none',
             'self',
             'unsafe-inline',
-            '%asset%',
             '%nonce%',
             '%report%',
         ];
@@ -191,14 +187,11 @@ class ResponseListener implements EventSubscriberInterface
             self::CSP_NONE,
             self::CSP_SELF,
             self::CSP_UNSAFE_INLINE,
-            $asset,
             $nonce,
             $report,
         ];
 
-        /**
-         * @psalm-var array<string, string[]> $result
-         */
+        /** @psalm-var array<string, string[]> $result */
         $result = \array_map(fn (array $values): array => \str_replace($search, $replace, $values), $csp);
 
         return $result;

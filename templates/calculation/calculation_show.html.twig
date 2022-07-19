@@ -5,7 +5,7 @@
 
 {# macro #}
 {% macro propertyDateUser(name, date, user) -%}
-{% set created_date = date ? date|localedatetime : 'common.empty_date'|trans %}
+{% set created_date = date ? date|locale_datetime : 'common.empty_date'|trans %}
 {% set created_user = user|default('common.empty_user'|trans) -%}
 {{ properties.property(name, created_date ~ ' - ' ~ created_user) }}
 {%- endmacro %}
@@ -142,7 +142,7 @@
 {{ properties.property('calculation.fields.id', id|identifier, 'font-weight-bold') }}
 {{ properties.property('calculation.fields.customer', item.customer) }}
 {{ properties.property('calculation.fields.description', item.description) }}
-{{ properties.property('calculation.fields.date', item.date|localedate) }}
+{{ properties.property('calculation.fields.date', item.date|locale_date) }}
 {{ properties.property('calculation.fields.state', item.stateCode|default('')) }}
 {{ _self.propertyDateUser('calculation.fields.created', item.createdAt, item.createdBy) }}
 {{ _self.propertyDateUser('calculation.fields.updated', item.updatedAt, item.updatedBy) }}

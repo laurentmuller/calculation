@@ -13,14 +13,14 @@
 <meta name="theme-color" content="#212529">
 <meta name="msapplication-TileColor" content="#212529">
 <meta name="msapplication-TileImage" content="{{ asset('images/icons/favicon-144x144.png') }}">
-<meta name="msapplication-config" content="{{ asset('browserconfig.xml', 'local') }}" />
+<meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}" />
 <meta property="og:title" content="{{ page_title }}" />
 <meta property="og:image" content="{{ asset('images/icons/favicon-144x144.png') }}" />
 <meta property="og:url" content="{{ app.request.uri }}" />
 <meta property="og:description" content="{{ app_description }}">
 <meta property="og:type" content="website" />
 <title>{{ page_title }}</title>
-<link rel="manifest" type="application/manifest+json" href="{{ asset_versioned('site.webmanifest', 'local') }}">
+<link rel="manifest" type="application/manifest+json" href="{{ asset_versioned('site.webmanifest') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/icons/favicon-16x16.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/icons/favicon-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/icons/favicon-96x96.png') }}">
@@ -38,7 +38,7 @@
 {# stylesheets #}
 {{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
 {% block stylesheets %}
-    {{- asset_css('css/style.css') }}
+{{- asset_css('css/style.css') }}
 {% endblock %}
 </head>
 <body>
@@ -66,17 +66,17 @@
 {# java scripts #}
 {% block javascripts %}
 {% if app.debug %}
-{{ asset_js('js/vendor/jquery/jquery.js') }}
-{{ asset_js('js/vendor/twitter-bootstrap/js/bootstrap.bundle.js') }}
-{{ asset_js('js/extensions/array-extensions.js') }}
-{{ asset_js('js/extensions/jquery-extensions.js') }}
-{{ asset_js('js/extensions/params-extensions.js') }}
-{{ asset_js('js/extensions/string-extensions.js') }}
-{{ asset_js('js/plugins/plugin-sidebar.js') }}
-{{ asset_js('js/plugins/plugin-toast.js') }}
-{{ asset_js('js/application/core_common.js') }}
+    {{ asset_js('js/vendor/jquery/jquery.js') }}
+    {{ asset_js('js/vendor/twitter-bootstrap/js/bootstrap.bundle.js') }}
+    {{ asset_js('js/extensions/array-extensions.js') }}
+    {{ asset_js('js/extensions/jquery-extensions.js') }}
+    {{ asset_js('js/extensions/params-extensions.js') }}
+    {{ asset_js('js/extensions/string-extensions.js') }}
+    {{ asset_js('js/plugins/plugin-sidebar.js') }}
+    {{ asset_js('js/plugins/plugin-toast.js') }}
+    {{ asset_js('js/application/core_common.js') }}
 {% else %}
-{{ asset_js('js/core_common.js') }}
+    {{ asset_js('js/core_common.js') }}
 {% endif %}
 {% endblock %}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>

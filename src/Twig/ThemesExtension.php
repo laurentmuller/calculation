@@ -34,20 +34,6 @@ final class ThemesExtension extends AbstractExtension
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('theme_css', fn (Request $request): string => $this->getThemeCss($request)),
-            new TwigFunction('theme_name', fn (Request $request): string => $this->getThemeName($request)),
-            new TwigFunction('theme_default', fn (Request $request): bool => $this->isDefaultTheme($request)),
-            new TwigFunction('theme_background', fn (Request $request): string => $this->getThemeBackground($request)),
-            new TwigFunction('theme_dark', fn (Request $request): bool => $this->isDarkTheme($request)),
-        ];
-    }
-
-    /**
      * Gets the current theme.
      *
      * @param ?Request $request the request
@@ -57,9 +43,23 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function getCurrentTheme(?Request $request = null): Theme
+    public function getCurrentTheme(?Request $request = null): Theme
     {
         return $this->service->getCurrentTheme($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('theme_css', [$this, 'getThemeCss']),
+            new TwigFunction('theme_name', [$this, 'getThemeName']),
+            new TwigFunction('theme_default', [$this, 'isDefaultTheme']),
+            new TwigFunction('theme_background', [$this, 'getThemeBackground']),
+            new TwigFunction('theme_dark', [$this, 'isDarkTheme']),
+        ];
     }
 
     /**
@@ -67,7 +67,7 @@ final class ThemesExtension extends AbstractExtension
      *
      * @param Request $request the request
      */
-    private function getThemeBackground(Request $request): string
+    public function getThemeBackground(Request $request): string
     {
         // get background
         $background = $this->service->getThemeBackground($request);
@@ -92,7 +92,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function getThemeCss(Request $request): string
+    public function getThemeCss(Request $request): string
     {
         // get CSS
         $theme = $this->getCurrentTheme($request);
@@ -111,7 +111,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function getThemeName(Request $request): string
+    public function getThemeName(Request $request): string
     {
         return $this->getCurrentTheme($request)->getName();
     }
@@ -124,7 +124,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function isDarkTheme(Request $request): bool
+    public function isDarkTheme(Request $request): bool
     {
         return $this->service->isDarkTheme($request);
     }
@@ -137,7 +137,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function isDefaultTheme(Request $request): bool
+    public function isDefaultTheme(Request $request): bool
     {
         return $this->getCurrentTheme($request)->isDefault();
     }

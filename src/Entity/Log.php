@@ -65,6 +65,9 @@ class Log extends AbstractEntity
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    /**
+     * Gets the message with the context and extra properties if available.
+     */
     public function formatMessage(SqlFormatter $formatter): string
     {
         $message = $this->getMessage();
@@ -171,6 +174,14 @@ class Log extends AbstractEntity
         }
 
         return null;
+    }
+
+    /**
+     * Create an instance of Log.
+     */
+    public static function instance(): self
+    {
+        return new self();
     }
 
     public function isChannel(): bool

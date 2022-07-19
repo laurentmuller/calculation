@@ -121,7 +121,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The parameter name for the API key.
      */
-    private const PARAM_KEY = 'openweather_key';
+    private const PARAM_KEY = 'open_weather_key';
 
     /**
      * The medium format used for dates.

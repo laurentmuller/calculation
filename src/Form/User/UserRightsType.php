@@ -26,15 +26,12 @@ class UserRightsType extends RightsType
 {
     use RoleTranslatorTrait;
 
-    private readonly TranslatorInterface $translator;
-
     /**
      * Constructor.
      */
-    public function __construct(RoleHierarchyInterface $roleHierarchy, bool $isDebug, TranslatorInterface $translator)
+    public function __construct(RoleHierarchyInterface $roleHierarchy, bool $isDebug, private readonly TranslatorInterface $translator)
     {
         parent::__construct($roleHierarchy, $isDebug);
-        $this->translator = $translator;
     }
 
     /**

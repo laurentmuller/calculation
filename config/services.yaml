@@ -17,15 +17,11 @@ parameters:
     mailer_user_name: Calculation
     mailer_user_email: calculation@bibi.nu
 
-    # assets
-    asset_base: '%env(string:ASSET_BASE)%'
-    asset_locale: '%env(string:ASSET_LOCALE)%'
-
     # cookies
     cookie_path: '%env(string:COOKIE_PATH)%'
 
     # keys
-    openweather_key: '%env(string:OPENWEATHER_KEY)%'
+    open_weather_key: '%env(string:OPEN_WEATHER_KEY)%'
     bing_translator_key:   '%env(string:BING_TRANSLATOR_KEY)%'
     google_translator_key: '%env(string:GOOGLE_TRANSLATOR_KEY)%'
     google_recaptcha_secret_key: '%env(string:GOOGLE_RECAPTCHA_SECRET_KEY)%'

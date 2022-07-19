@@ -11,7 +11,7 @@
 {% block card_body %}
 <div class="row mb-1">
     <div class="col-md-6">
-        {{ 'archive.result.date'|trans({'%date%': result.date|localedate('full')}) }}
+        {{ 'archive.result.date'|trans({'%date%': result.date|locale_date('full')}) }}
     </div>
     <div class="col-md-6 text-md-right">
         {{ 'archive.result.new_state'|trans({'%state%': result.target.code}) }}
@@ -71,7 +71,7 @@
                                 {% for calculation in value.calculations %}
                                 <tr>
                                     <td class="text-id text-border" style="{{ style }}">{{ calculation.id|identifier }}</td>
-                                    <td class="text-date">{{ calculation.date|localedate }}</td>
+                                    <td class="text-date">{{ calculation.date|locale_date }}</td>
                                     <td>{{ calculation.customer }}</td>
                                     <td>{{ calculation.description }}</td>
                                     <td class="text-percent">{{ calculation.overallMargin|percent }}</td>

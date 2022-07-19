@@ -1,12 +1,11 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'schema.table.title' -%}
 {%- set title_description = 'schema.table.description' -%}
 {%- set title_parameters = {'%name%': name} -%}
 {%- set title_icon = 'table-columns' -%}
-
+{# body #}
 {% block card_body -%}
 {% if columns|length %}
 <p class="mb-0 font-weight-bold">{{ 'schema.table.columns'|trans }}</p>
@@ -15,8 +14,7 @@
         <thead>
             <tr>
                 <th class="w-100">{{ 'schema.table.fields.name'|trans }}</th>
-                <th class="text-date-time">{{ 'schema.table.fields.type'|trans }}</th>
-                <th class="text-currency">{{ 'schema.table.fields.length'|trans }}</th>
+                <th class="text-code">{{ 'schema.table.fields.type'|trans }}</th>
                 <th class="text-boolean">{{ 'schema.table.fields.empty'|trans }}</th>
                 <th class="text-id">{{ 'schema.table.fields.default'|trans }}</th>
             </tr>
@@ -30,8 +28,7 @@
                     {% if column.unique and not column.primaryKey %} <i class="fa-solid fa-lock" title="{{ 'schema.table.index_unique'|trans }}"></i>{% endif %}
                     {% if foreign_table -%} {{ icons.link(path('schema_table', {'name': foreign_table}), null, null, 'link', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
                 </td>
-                <td class="text-date-time">{{ column.type }}</td>
-                <td class="text-currency">{{ column.length ? column.length|integer : '&nbsp;' }}</a></td>
+                <td class="text-code">{{ column.type }}{% if column.length %} ({{ column.length|integer }}){% endif %}</td>
                 <td class="text-boolean">{{ column.nullable|boolean }}</td>
                 <td class="text-id">{{ column.default }}</td>
             </tr>
@@ -42,7 +39,7 @@
 {% else %}
     <div class="alert alert-warning text-center" role="alert">{{ 'schema.table.empty'|trans }}</div>
 {% endif %}
-
+{# associations #}
 {% if associations|length %}
 <p class="mb-0 font-weight-bold">{{ 'schema.table.associations'|trans }}</p>
 <div class="table-responsive">
@@ -63,8 +60,8 @@
 </div>
 {% endif %}
 {%- endblock %}
-
+{# footer #}
 {% block card_footer -%}
-{{- icons.homepage() }}
-{{ icons.link(path('schema'), 'schema.index.title', 'btn btn-secondary btn-form') -}}
+{{- icons.link(path('schema'), 'schema.index.title', 'btn btn-form btn-primary', null, 'schema.index.description') }}
+{{ icons.homepage(null, 'index.title', 'btn btn-form btn-outline-secondary') -}}
 {%- endblock %}

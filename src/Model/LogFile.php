@@ -24,6 +24,9 @@ class LogFile implements \Countable
      */
     private array $channels = [];
 
+    /**
+     * The log file name.
+     */
     private string $file = '';
 
     /**
@@ -39,7 +42,7 @@ class LogFile implements \Countable
     /**
      * Constructor.
      *
-     * @param ?string $file the optional file name
+     * @param ?string $file the optional log file name
      */
     public function __construct(?string $file = null)
     {
@@ -48,6 +51,9 @@ class LogFile implements \Countable
         }
     }
 
+    /**
+     * Add the given log to this list of logs. The levels and channels are updated accordingly.
+     */
     public function addLog(Log $log): self
     {
         $id = \count($this->logs);
@@ -114,7 +120,7 @@ class LogFile implements \Countable
     }
 
     /**
-     * Sort logs, channels and levels.
+     * Sort logs, channels and levels. Does nothing if no log is present.
      */
     public function sort(): self
     {

@@ -59,7 +59,7 @@
 </form>
 <div class="row align-content-center my-1 text-muted">
     <div class="col">
-        {{- from|localedate('long') }} - {{ to|localedate('long') -}}
+        {{- from|locale_date('long') }} - {{ to|locale_date('long') -}}
     </div>
     <div class="col text-right">
         {{- 'counters.calculations'|trans({'count': count}) -}}
@@ -72,7 +72,7 @@
         <ul class="timeline">
             {% for key, calculations in data %}
             {%- set count = calculations|length -%}
-            {%- set query = calculations[0].date|localedate('short') -%}
+            {%- set query = calculations[0].date|locale_date('short') -%}
             {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
             <li class="success">
                 <div class="position-relative ml-2">

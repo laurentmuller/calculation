@@ -154,25 +154,6 @@
     padding-left: 16px;
 }
 
- */
-/* hide side bar on small resolution
-@media (max-width: 768px) {
-    .navbar-vertical,
-    .navbar-vertical.active {
-        margin-left: -17rem;
-    }
-
-    .navbar-vertical.active {
-        margin-left: 0;
-    }
-
-    .page-content,
-    .page-content.active{
-        width: 100%;
-        margin: 0;
-    }
-}
- */
 /* hide side bar on small resolution
 @media (max-width: 768px) {
     .navbar-vertical {
@@ -192,5 +173,13 @@
         margin-left: 17rem;
         width: calc(100% - 17rem);
     }
+
+    .page-content .sidebar-toggle {
+        display: none !important;
+    }
+
+    .page-content .nav-sidebar-horizontal {
+        display: block !important;
+    }
 }
- */
+*/

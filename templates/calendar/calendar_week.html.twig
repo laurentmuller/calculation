@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-4">
         <h2 class="mb-0">{{ title|trans(title_parameters) }}</h2>
-        <p class="text-muted mb-1">{{ start_date|localedate('long') }} - {{ end_date|localedate('long') }}</p>
+        <p class="text-muted mb-1">{{ start_date|locale_date('long') }} - {{ end_date|locale_date('long') }}</p>
     </div>
     <div class="col-md-4 text-md-center">
         <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
@@ -54,10 +54,10 @@
         <table class="table table-sm table-borderless position-relative border-bottom border-right">
             <thead>
                 <tr class="bg-secondary text-white">
-                    <td colspan="5" class="week-head"><span>{{ day.date|localedate('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
+                    <td colspan="5" class="week-head"><span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
                     <td class="text-right">
                         {% if not day.empty -%}
-                            <span>{{ helper.linkCalculations(day.date|localedate('short'), day.date|localedate('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
+                            <span>{{ helper.linkCalculations(day.date|locale_date('short'), day.date|locale_date('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
                         {%- endif %}
                     </td>
                 </tr>

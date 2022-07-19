@@ -189,7 +189,7 @@ class LogService implements ServiceSubscriberInterface
                 }
 
                 // create and add
-                $log = (new Log())
+                $log = Log::instance()
                     ->setCreatedAt($date)
                     ->setChannel($values[1])
                     ->setLevel($values[2])
@@ -213,12 +213,9 @@ class LogService implements ServiceSubscriberInterface
      */
     private function parseJson(string $value): ?array
     {
-        /** @psalm-var mixed $result */
+        /** @psalm-var array|null $result */
         $result = \json_decode($value, true);
-        if (\is_array($result) && \JSON_ERROR_NONE === \json_last_error()) {
-            return $result;
-        }
 
-        return null;
+        return \is_array($result) ? $result : null;
     }
 }

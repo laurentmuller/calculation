@@ -36,13 +36,13 @@
 {%- set link = false -%}
 
 {% if day.inMonth(month) -%}
-    {%- set title = day.date|localedate('long') -%}
+    {%- set title = day.date|locale_date('long') -%}
     {%- set calculations = day.calculations -%}
     {% if calculations %}
         {%- set link = true -%}
         {%- set count = calculations|length -%}
         {%- set class = class ~ (small ? ' small' : '') ~ ' text-white' ~ (day.current ? ' bg-primary' : ' bg-success') -%}
-        {%- set href = path('calculation_table', {'search': day.date|localedate('short')}) -%}
+        {%- set href = path('calculation_table', {'search': day.date|locale_date('short')}) -%}
         {%- set content = _self.dataContent(calculations) -%}
     {%- elseif day.current -%}
         {%- set class = class ~ ' bg-primary text-white' -%}

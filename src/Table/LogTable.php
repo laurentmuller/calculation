@@ -75,10 +75,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * Formats the log level.
-     *
-     * @param string $value the source
-     *
-     * @return string the level
      */
     public function formatLevel(string $value, Log $log): string
     {

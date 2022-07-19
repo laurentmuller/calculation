@@ -26,7 +26,7 @@
 {%- set value = (item.enabled ? 'common.value_enabled' : 'common.value_disabled')|trans -%}
 {%- set class = item.enabled ? 'text-success' : 'text-danger' -%}
 {{ properties.property('user.fields.enabled', value, class) }}
-{{ properties.property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|localedatetime : 'common.value_none'|trans) }}
+{{ properties.property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|locale_datetime : 'common.value_none'|trans) }}
 {%- set image = vich_uploader_asset(item)|replace({'192': '096'}) -%}
 {%- if asset_exists(image) -%}
 <tr>

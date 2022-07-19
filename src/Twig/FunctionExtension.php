@@ -82,23 +82,23 @@ final class FunctionExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
-        $assetOptions = [
-            'needs_environment' => true,
+        $options = [
             'is_safe' => ['html'],
+            'needs_environment' => true,
         ];
 
         return [
             // assets
             new TwigFunction('asset_exists', fn (?string $path): bool => $this->assetExists($path)),
             new TwigFunction('asset_if', fn (?string $path = null, ?string $default = null): ?string => $this->assetIf($path, $default)),
-            new TwigFunction('asset_js', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetJs($env, $path, $parameters, $packageName), $assetOptions),
-            new TwigFunction('asset_css', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetCss($env, $path, $parameters, $packageName), $assetOptions),
-            new TwigFunction('asset_versioned', fn (Environment $env, string $path, ?string $packageName = null): string => $this->getVersionedAsset($env, $path, $packageName), $assetOptions),
+            new TwigFunction('asset_js', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->assetJs($env, $path, $parameters, $packageName), $options),
+            new TwigFunction('asset_css', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->assetCss($env, $path, $parameters, $packageName), $options),
+            new TwigFunction('asset_versioned', fn (Environment $env, string $path, ?string $packageName = null): string => $this->versionedAsset($env, $path, $packageName), $options),
 
             // images
-            new TwigFunction('asset_image', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->getAssetImage($env, $path, $parameters, $packageName), $assetOptions),
-            new TwigFunction('image_height', fn (string $path): int => $this->getImageHeight($path)),
-            new TwigFunction('image_width', fn (string $path): int => $this->getImageWidth($path)),
+            new TwigFunction('asset_image', fn (Environment $env, string $path, array $parameters = [], ?string $packageName = null): string => $this->assetImage($env, $path, $parameters, $packageName), $options),
+            new TwigFunction('image_height', fn (string $path): int => $this->imageHeight($path)),
+            new TwigFunction('image_width', fn (string $path): int => $this->imageWidth($path)),
 
             // routes
             new TwigFunction('cancel_url', fn (Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string => $this->cancelUrl($request, $id, $defaultRoute)),
@@ -115,6 +115,24 @@ final class FunctionExtension extends AbstractExtension
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
+    }
+
+    /**
+     * Output a link style sheet tag with a version and nonce.
+     *
+     * @throws \Exception
+     */
+    private function assetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    {
+        $href = $this->versionedAsset($env, $path, $packageName);
+        $parameters = \array_merge([
+            'href' => $href,
+            'rel' => 'stylesheet',
+            'nonce' => $this->getNonce($env),
+        ], $parameters);
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<link$attributes>";
     }
 
     /**
@@ -146,6 +164,69 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * Output an image tag with a version.
+     *
+     * @throws \Exception
+     */
+    private function assetImage(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    {
+        $size = $this->imageSize($path);
+        $src = $this->versionedAsset($env, $path, $packageName);
+        $parameters = \array_merge([
+            'src' => $src,
+            'width' => $size[0],
+            'height' => $size[1],
+        ], $parameters);
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<image$attributes>";
+    }
+
+    /**
+     * Output a javascript source tag with a version and nonce.
+     *
+     * @throws \Exception
+     */
+    private function assetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
+    {
+        $src = $this->versionedAsset($env, $path, $packageName);
+        $parameters = \array_merge([
+            'src' => $src,
+            'nonce' => $this->getNonce($env),
+        ], $parameters);
+        $attributes = $this->reduceParameters($parameters);
+
+        return "<script$attributes></script>";
+    }
+
+    /**
+     * Returns the public url/path of an asset.
+     *
+     * If the package used to generate the path is an instance of
+     * UrlPackage, you will always get a URL and not a path.
+     */
+    private function assetUrl(Environment $env, string $path, ?string $packageName = null): string
+    {
+        if (null === $this->asset) {
+            $this->asset = $this->getExtension($env, AssetExtension::class);
+        }
+
+        return $this->asset->getAssetUrl($path, $packageName);
+    }
+
+    /**
+     * Gets the version for the given path.
+     */
+    private function assetVersion(?string $path): int
+    {
+        if (null !== $file = $this->getRealPath($path)) {
+            return (int) \filemtime($file);
+        }
+
+        return $this->version;
+    }
+
+    /**
      * Gets the cancel URL.
      */
     private function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
@@ -162,87 +243,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a link style sheet tag with a version and nonce.
-     *
-     * @throws \Exception
-     */
-    private function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
-    {
-        $href = $this->getVersionedAsset($env, $path, $packageName);
-        $parameters = \array_merge([
-            'href' => $href,
-            'rel' => 'stylesheet',
-            'nonce' => $this->getNonce($env),
-        ], $parameters);
-        $attributes = $this->reduceParameters($parameters);
-
-        return "<link$attributes>";
-    }
-
-    /**
-     * Output an image with a version.
-     *
-     * @throws \Exception
-     */
-    private function getAssetImage(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
-    {
-        $size = $this->getImageSize($path);
-        $src = $this->getVersionedAsset($env, $path, $packageName);
-        $parameters = \array_merge([
-            'src' => $src,
-            'width' => $size[0],
-            'height' => $size[1],
-        ], $parameters);
-        $attributes = $this->reduceParameters($parameters);
-
-        return "<image$attributes>";
-    }
-
-    /**
-     * Output a javascript source tag with a version and nonce.
-     *
-     * @throws \Exception
-     */
-    private function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
-    {
-        $src = $this->getVersionedAsset($env, $path, $packageName);
-        $parameters = \array_merge([
-            'src' => $src,
-            'nonce' => $this->getNonce($env),
-        ], $parameters);
-        $attributes = $this->reduceParameters($parameters);
-
-        return "<script$attributes></script>";
-    }
-
-    /**
-     * Returns the public url/path of an asset.
-     *
-     * If the package used to generate the path is an instance of
-     * UrlPackage, you will always get a URL and not a path.
-     */
-    private function getAssetUrl(Environment $env, string $path, ?string $packageName = null): string
-    {
-        if (null === $this->asset) {
-            $this->asset = $this->getExtension($env, AssetExtension::class);
-        }
-
-        return $this->asset->getAssetUrl($path, $packageName);
-    }
-
-    /**
-     * Gets the version for the given path.
-     */
-    private function getAssetVersion(?string $path): int
-    {
-        if (null !== $file = $this->getRealPath($path)) {
-            return (int) \filemtime($file);
-        }
-
-        return $this->version;
-    }
-
-    /**
      * Gets a Twig extension.
      *
      * @template T of \Twig\Extension\ExtensionInterface
@@ -252,36 +252,6 @@ final class FunctionExtension extends AbstractExtension
     private function getExtension(Environment $env, string $className)
     {
         return $env->getExtension($className);
-    }
-
-    /**
-     * Gets the image height.
-     */
-    private function getImageHeight(string $path): int
-    {
-        return $this->getImageSize($path)[1];
-    }
-
-    /**
-     * Gets the image size.
-     *
-     * @return array{0: int, 1: int}
-     */
-    private function getImageSize(string $path): array
-    {
-        $fullPath = (string) \realpath($this->webDir . $path);
-        /** @psalm-var array{0: int, 1: int} $size */
-        $size = (array) \getimagesize($fullPath);
-
-        return $size;
-    }
-
-    /**
-     * Gets the image width.
-     */
-    private function getImageWidth(string $path): int
-    {
-        return $this->getImageSize($path)[0];
     }
 
     /**
@@ -309,8 +279,8 @@ final class FunctionExtension extends AbstractExtension
         }
 
         // real path?
-        $join_path = \implode('/', [$this->webDir, $path]);
-        if (false === $file = \realpath($join_path)) {
+        $full_path = \implode('/', [$this->webDir, $path]);
+        if (false === $file = \realpath($full_path)) {
             return null;
         }
 
@@ -323,14 +293,33 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets an asset with version.
+     * Gets the image height.
      */
-    private function getVersionedAsset(Environment $env, string $path, ?string $packageName = null): string
+    private function imageHeight(string $path): int
     {
-        $url = $this->getAssetUrl($env, $path, $packageName);
-        $version = $this->getAssetVersion($path);
+        return $this->imageSize($path)[1];
+    }
 
-        return \sprintf('%s?version=%d', $url, $version);
+    /**
+     * Gets the image size.
+     *
+     * @return array{0: int, 1: int}
+     */
+    private function imageSize(string $path): array
+    {
+        $full_path = (string) $this->getRealPath($path);
+        /** @psalm-var array{0: int, 1: int} $size */
+        $size = (array) \getimagesize($full_path);
+
+        return $size;
+    }
+
+    /**
+     * Gets the image width.
+     */
+    private function imageWidth(string $path): int
+    {
+        return $this->imageSize($path)[0];
     }
 
     /**
@@ -354,13 +343,9 @@ final class FunctionExtension extends AbstractExtension
      */
     private function reduceParameters(array $parameters): string
     {
-        if (!empty($parameters)) {
-            $callback = static fn (string $carry, string $key): string => $carry . ' ' . $key . '="' . \htmlspecialchars((string) $parameters[$key]) . '"';
+        $callback = static fn (string $carry, string $key, mixed $value): string => \sprintf('%s %s="%s"', $carry, $key, \htmlspecialchars((string) $value));
 
-            return (string) Utils::arrayReduceKey($parameters, $callback, '');
-        }
-
-        return '';
+        return (string) Utils::arrayReduceKey($parameters, $callback, '');
     }
 
     /**
@@ -369,5 +354,16 @@ final class FunctionExtension extends AbstractExtension
     private function routeParams(Request $request, int $id = 0): array
     {
         return $this->generator->routeParams($request, $id);
+    }
+
+    /**
+     * Gets an asset with version.
+     */
+    private function versionedAsset(Environment $env, string $path, ?string $packageName = null): string
+    {
+        $url = $this->assetUrl($env, $path, $packageName);
+        $version = $this->assetVersion($path);
+
+        return \sprintf('%s?version=%d', $url, $version);
     }
 }

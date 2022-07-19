@@ -79,7 +79,7 @@ class ThemeController extends AbstractController
 
         // render
         return $this->renderForm('user/user_theme.html.twig', [
-            'asset_base' => $this->getStringParameter('asset_base'),
+            'asset_base' => $request->getSchemeAndHttpHost() . '/',
             'themes' => $service->getThemes(),
             'theme' => $data['theme'],
             'form' => $form,

@@ -1,24 +1,20 @@
 {% extends 'help/help_base.html.twig' %}
-{# imports #}
 {% import 'help/_help_tools.html.twig' as tools %}
-
 {# parameters #}
 {%- set entity_name = entity.id ~ '.name' -%}
 {%- set title = 'help.title_name' -%}
 {%- set title_parameters = {'%name%': entity_name|trans} -%}
 {%- set fields = entity.fields|default(false) -%}
 {%- set actions = entity.actions|default(false) -%}
-
 {# body #}
 {% block help_title -%}
 {{- tools.output_icon(entity.icon|default(false), entity_name) -}}
 {%- endblock %}
-
+{# body #}
 {% block help_body -%}
 {# description #}
 <p class="mb-1">{{ entity.description }}</p>
 <hr class="my-2">
-
 {# fields #}
 {% if fields %}
 <p class="mb-1">{{ 'help.labels.entity_fields'|trans }}</p>
@@ -48,7 +44,6 @@
 {% else %}
 <p>{{ 'help.labels.entity_empty'|trans }}</p>
 {% endif %}
-
 {# constraints #}
 {%- if entity.constraints|default([])|length -%}
     <hr class="mt-0 mb-2">
@@ -59,11 +54,9 @@
     {%- endfor %}
     </ul>
 {%- endif -%}
-
 {# actions #}
 {% if actions %}
 <p class="mb-1 mt-2">{{ 'help.labels.entity_actions'|trans }}</p>
 {{ tools.output_table_actions(actions, table_class, head_class, service) }}
 {% endif %}
 {%- endblock %}
-

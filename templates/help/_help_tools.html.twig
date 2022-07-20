@@ -1,5 +1,4 @@
 {# macros for help templates #}
-
 {% macro output_type(field) -%}
 {%- set type = ('help.types.' ~ field.type|default('text'))|trans -%}
 {%- set length = field.length|default(false) -%}
@@ -12,7 +11,7 @@
 {%- endmacro %}
 
 {% macro output_image(path, screenshot=true) -%}
-{%- set image = asset_if('/help/images/' ~ path) -%}
+{%- set image = asset_if('help/images/' ~ path) -%}
 {% if image %}
 {% if screenshot %}<p class="mb-1">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
 <img src="{{ asset(image) }}" class="img-fluid d-block">
@@ -92,5 +91,4 @@
     {% endfor %}
     </ul>
 {%- endif %}
-
 {%- endmacro %}

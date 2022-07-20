@@ -5,11 +5,9 @@
  */
 function applyTheme() {
     'use strict';
-
     // get values
     const $form = $('#edit-form');
     const $theme = $('#theme');
-
     // theme
     const newTheme = $theme.val();
     const oldTheme = $form.data('theme') || '';
@@ -26,7 +24,6 @@ function applyTheme() {
         $('head link[title][rel="stylesheet"]').attr('href', href);
         $form.data('theme', newTheme);
     }
-
     // background
     const newBackground = $('#background').val();
     const oldBackground = $form.data('background') || '';
@@ -42,11 +39,9 @@ function applyTheme() {
  */
 function setDefaultValues() {
     'use strict';
-
     // set default values
     $('#theme').selectFirstOption();
     $('#background').selectFirstOption();
-
     // update
     applyTheme();
 }
@@ -56,11 +51,12 @@ function setDefaultValues() {
  */
 (function ($) {
     'use strict';
-
     $('#edit-form').initValidator();
-
     // bind events
-    $('#default').on('click', setDefaultValues);
+    $('#default').on('click', function (e) {
+        e.preventDefault();
+        setDefaultValues();
+    });
     $('#theme, #background').on('change', function () {
         $('#edit-form').updateTimer(applyTheme, 400);
     });

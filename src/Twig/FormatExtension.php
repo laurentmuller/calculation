@@ -154,10 +154,10 @@ final class FormatExtension extends AbstractExtension
             new TwigFilter('amount', [FormatUtils::class, 'formatAmount']),
             new TwigFilter('percent', [FormatUtils::class, 'formatPercent']),
 
-            new TwigFilter('boolean', [$this, 'formatBoolean']),
-            new TwigFilter('locale_date', [$this, 'dateFilter'], $options),
-            new TwigFilter('locale_time', [$this, 'timeFilter'], $options),
-            new TwigFilter('locale_datetime', [$this, 'dateTimeFilter'], $options),
+            new TwigFilter('boolean', $this->formatBoolean(...)),
+            new TwigFilter('locale_date', $this->dateFilter(...), $options),
+            new TwigFilter('locale_time', $this->timeFilter(...), $options),
+            new TwigFilter('locale_datetime', $this->dateTimeFilter(...), $options),
         ];
     }
 

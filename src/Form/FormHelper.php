@@ -562,8 +562,8 @@ class FormHelper
             ->updateRowAttribute('class', 'mb-0')
             ->updateOptions([
                 'translation_domain' => 'messages',
-                'download_uri' => false, ])
-            ->updateAttributes([
+                'download_uri' => false,
+            ])->updateAttributes([
                 'accept' => 'image/gif,image/jpeg,image/png,image/bmp',
                 'title' => '',
             ]);

@@ -13,14 +13,16 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\User\ThemeType;
+use App\Model\Theme;
 use App\Service\ThemeService;
-use App\Util\Utils;
+use App\Traits\CookieTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+
+use function Symfony\Component\String\u;
 
 /**
  * Controller to select the website theme.
@@ -29,6 +31,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/user')]
 class ThemeController extends AbstractController
 {
+    use CookieTrait;
+
     /**
      * Display the page to select the website theme.
      *
@@ -40,22 +44,20 @@ class ThemeController extends AbstractController
     public function invoke(Request $request, ThemeService $service): Response
     {
         $data = [
-            'theme' => $service->getCurrentTheme(),
+            'theme' => $service->getCurrentTheme($request),
             'background' => $service->getThemeBackground($request),
         ];
+
         $form = $this->createForm(ThemeType::class, $data);
-
         if ($this->handleRequestForm($request, $form)) {
-            // get values
-            /** @psalm-var array $data */
+            /** @psalm-var array{theme: Theme, background: string} $data */
             $data = $form->getData();
-            /** @psalm-var \App\Model\Theme $theme */
             $theme = $data['theme'];
-            $background = (string) $data['background'];
-            $dark = $theme->isDark();
-
-            // check values
             $css = $theme->getCss();
+            $dark = $theme->isDark();
+            $background = $data['background'];
+
+            // check for default values
             if (ThemeService::DEFAULT_CSS === $css) {
                 $css = null;
             }
@@ -68,10 +70,9 @@ class ThemeController extends AbstractController
 
             // create response and update cookies
             $response = $this->redirectToHomePage();
-            $this->updateCookie($response, ThemeService::KEY_CSS, $css)
-                ->updateCookie($response, ThemeService::KEY_BACKGROUND, $background)
-                ->updateCookie($response, ThemeService::KEY_DARK, (string) $dark);
-
+            $this->updateCookie($response, ThemeService::KEY_CSS, $css);
+            $this->updateCookie($response, ThemeService::KEY_DARK, $dark);
+            $this->updateCookie($response, ThemeService::KEY_BACKGROUND, $background);
             $this->successTrans('theme.success', ['%name%' => $theme->getName()]);
 
             return $response;
@@ -79,7 +80,7 @@ class ThemeController extends AbstractController
 
         // render
         return $this->renderForm('user/user_theme.html.twig', [
-            'asset_base' => $request->getSchemeAndHttpHost() . '/',
+            'asset_base' => $this->getAssetBase($request),
             'themes' => $service->getThemes(),
             'theme' => $data['theme'],
             'form' => $form,
@@ -87,25 +88,13 @@ class ThemeController extends AbstractController
     }
 
     /**
-     * Update a response by adding or removing a cookie.
-     *
-     * @param Response $response the response to update
-     * @param string   $name     the cookie name
-     * @param ?string  $value    the cookie value or null to remove
-     * @param int      $days     the number of days the cookie expires after
+     * Gets the asset base.
      */
-    private function updateCookie(Response $response, string $name, ?string $value, int $days = 30): self
+    private function getAssetBase(Request $request): string
     {
-        $headers = $response->headers;
-        $path = $this->getStringParameter('cookie_path');
-        if (Utils::isString($value)) {
-            $time = (int) \strtotime("now + $days day");
-            $cookie = new Cookie($name, $value, $time, $path);
-            $headers->setCookie($cookie);
-        } else {
-            $headers->clearCookie($name, $path);
-        }
-
-        return $this;
+        return u($request->getSchemeAndHttpHost())
+            ->append($this->getStringParameter('cookie_path'))
+            ->ensureEnd('/')
+            ->toString();
     }
 }

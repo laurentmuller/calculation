@@ -37,23 +37,27 @@ final class NonceExtension extends AbstractExtension
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('csp_nonce', [$this, 'getNonce']),
+            new TwigFunction('csp_nonce', $this->getNonce(...)),
         ];
     }
 
     /**
      * Generates a random nonce parameter.
      *
+     * @psalm-param positive-int $length
+     *
      * @throws \Exception
      */
-    public function getNonce(): string
+    public function getNonce(?int $length = null): string
     {
         if (!$this->nonce) {
-            $this->nonce = \bin2hex(\random_bytes($this->length));
+            $this->nonce = \bin2hex(\random_bytes($length ?? $this->length));
         }
 
         return $this->nonce;

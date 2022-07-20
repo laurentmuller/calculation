@@ -98,7 +98,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
             'ICON_TASK' => 'tasks',
             'ICON_USER' => 'user far',
             // action
-            'ICON_SHOW' => 'tv',
+            'ICON_SHOW' => 'whmcs fab',
             'ICON_ADD' => 'file far',
             'ICON_EDIT' => 'pencil',
             'ICON_DELETE' => 'times',

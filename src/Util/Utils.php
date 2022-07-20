@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+
+use function Symfony\Component\String\u;
+
 use Symfony\Component\String\UnicodeString;
 
 /**
@@ -68,7 +71,7 @@ final class Utils
      */
     public static function ascii(string $value): string
     {
-        return (new UnicodeString($value))->ascii()->toString();
+        return u($value)->ascii()->toString();
     }
 
     /**
@@ -85,7 +88,7 @@ final class Utils
      */
     public static function capitalize(string $string): string
     {
-        return (new UnicodeString($string))->lower()->title()->toString();
+        return u($string)->lower()->title()->toString();
     }
 
     /**
@@ -437,11 +440,6 @@ final class Utils
      */
     private static function getString(string $string, bool $ignore_case): UnicodeString
     {
-        $string = new UnicodeString($string);
-        if ($ignore_case) {
-            return $string->ignoreCase();
-        }
-
-        return $string;
+        return $ignore_case ? u($string)->ignoreCase() : u($string);
     }
 }

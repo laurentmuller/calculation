@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
+use App\Entity\User;
 use App\Service\UrlGeneratorService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
@@ -20,12 +21,12 @@ use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * Twig extension for the application.
@@ -56,9 +57,12 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, private readonly TranslatorInterface $translator, private readonly UrlGeneratorService $generator)
-    {
-        $projectDir = $kernel->getProjectDir();
+    public function __construct(
+        string $projectDir,
+        private readonly UploaderHelper $helper,
+        private readonly UrlGeneratorService $generator,
+        private readonly TranslatorInterface $translator
+    ) {
         $filename = FileUtils::buildPath($projectDir, 'composer.lock');
         $this->webDir = (string) \realpath(FileUtils::buildPath($projectDir, 'public'));
         $this->version = $this->fileExists($filename) ? (int) \filemtime($filename) : Kernel::VERSION_ID;
@@ -130,6 +134,27 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * Output the user image profile.
+     *
+     * @throws \Exception
+     */
+    public function assetImageUser(Environment $env, ?User $user, ?string $size = null, array $parameters = []): string|false
+    {
+        if (null === $user) {
+            return false;
+        }
+        $asset = $this->helper->asset($user);
+        if (null === $asset) {
+            return false;
+        }
+        if (null !== $size) {
+            $asset = \str_replace('192', $size, $asset);
+        }
+
+        return $this->assetImage($env, \ltrim($asset, '/'), $parameters);
+    }
+
+    /**
      * Output a javascript source tag with a version and nonce.
      *
      * @throws \Exception
@@ -195,9 +220,9 @@ final class FunctionExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('trans_role', [$this, 'translateRole']),
+            new TwigFilter('trans_role', $this->translateRole(...)),
             new TwigFilter('var_export', [Utils::class, 'exportVar']),
-            new TwigFilter('normalize_whitespace', [$this, 'normalizeWhitespace'], ['preserves_safety' => ['html']]),
+            new TwigFilter('normalize_whitespace', $this->normalizeWhitespace(...), ['preserves_safety' => ['html']]),
         ];
     }
 
@@ -213,15 +238,17 @@ final class FunctionExtension extends AbstractExtension
 
         return [
             // assets
-            new TwigFunction('asset_if', [$this, 'assetIf']),
-            new TwigFunction('asset_exists', [$this, 'assetExists']),
-            new TwigFunction('asset_js', [$this, 'assetJs'], $options),
-            new TwigFunction('asset_css', [$this, 'assetCss'], $options),
-            new TwigFunction('asset_image', [$this, 'assetImage'], $options),
-            new TwigFunction('asset_versioned', [$this, 'versionedAsset'], $options),
+            new TwigFunction('asset_if', $this->assetIf(...)),
+            new TwigFunction('asset_exists', $this->assetExists(...)),
+            new TwigFunction('asset_js', $this->assetJs(...), $options),
+            new TwigFunction('asset_css', $this->assetCss(...), $options),
+            new TwigFunction('asset_image', $this->assetImage(...), $options),
+            new TwigFunction('asset_image_user', $this->assetImageUser(...), $options),
+
+            new TwigFunction('asset_versioned', $this->versionedAsset(...), $options),
             // routes
-            new TwigFunction('cancel_url', [$this, 'cancelUrl']),
-            new TwigFunction('route_params', [$this, 'routeParams']),
+            new TwigFunction('cancel_url', $this->cancelUrl(...)),
+            new TwigFunction('route_params', $this->routeParams(...)),
             // php
             new TwigFunction('is_int', 'is_int'),
         ];

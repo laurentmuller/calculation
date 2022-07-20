@@ -505,11 +505,12 @@ $.fn.extend({
                 if (pageList.length <= 1) {
                     $pageButton.toggleDisabled(true);
                 } else {
+                    // window.console.log($table.getOptions().en.formatAllRows());
                     const pageSize = Number.parseInt(options.pageSize, 10);
                     const $links = pageList.map(function (page) {
                         const $link = $('<button/>', {
                             'class': 'dropdown-page dropdown-item',
-                            'data-value': page,
+                            'data-value':  page,
                             'text': page
                         });
                         if (page === pageSize) {
@@ -713,6 +714,9 @@ $.fn.extend({
     if ($pageButton.length) {
         $pageButton.initDropdown().on('input', function () {
             const pageSize = $pageButton.getDataValue();
+            if (pageSize === 'all') {
+
+            }
             $table.refresh({
                 pageSize: pageSize
             });

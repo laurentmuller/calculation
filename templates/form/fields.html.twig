@@ -161,7 +161,7 @@
     <div class="text-center fileinput {{ thumbnail_src ? 'fileinput-exists' : 'fileinput-new' }}" data-provider="fileinput">
         <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" data-default="{{ empty_image }}">
         {% if thumbnail_src or empty_image -%}
-            <img alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}" src="{{ thumbnail_src|default(empty_image) }}">
+            <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}">
         {%- endif %}
         </div>
         <div>
@@ -198,9 +198,9 @@
 {% block vich_image_widget -%}
 {# file #}
 {%- set alt = 'user.image.title' -%}
-{%- set empty_image = asset('/images/avatar.png') -%}
-{%- set uri = asset_exists(image_uri) ? image_uri : false -%}
-{%- set src = uri ? asset(uri) ~ '?' ~ 'now'|date('c') : false -%}
+{%- set empty_image = asset('images/avatar.png') -%}
+{%- set uri = asset_exists(image_uri) ? asset_versioned(image_uri|trim('/', 'left')) : false -%}
+{%- set src = uri ? asset(uri) : false -%}
 {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt, empty_image: empty_image}) -}}
 {# delete #}
 {% if form.delete is defined -%}

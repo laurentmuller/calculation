@@ -54,11 +54,11 @@ final class ThemesExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('theme_css', [$this, 'getThemeCss']),
-            new TwigFunction('theme_name', [$this, 'getThemeName']),
-            new TwigFunction('theme_default', [$this, 'isDefaultTheme']),
-            new TwigFunction('theme_background', [$this, 'getThemeBackground']),
-            new TwigFunction('theme_dark', [$this, 'isDarkTheme']),
+            new TwigFunction('theme_css', $this->getThemeCss(...)),
+            new TwigFunction('theme_name', $this->getThemeName(...)),
+            new TwigFunction('theme_default', $this->isDefaultTheme(...)),
+            new TwigFunction('theme_background', $this->getThemeBackground(...)),
+            new TwigFunction('theme_dark', $this->isDarkTheme(...)),
         ];
     }
 
@@ -92,7 +92,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function getThemeCss(Request $request): string
+    private function getThemeCss(Request $request): string
     {
         // get CSS
         $theme = $this->getCurrentTheme($request);
@@ -111,7 +111,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function getThemeName(Request $request): string
+    private function getThemeName(Request $request): string
     {
         return $this->getCurrentTheme($request)->getName();
     }
@@ -124,7 +124,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function isDarkTheme(Request $request): bool
+    private function isDarkTheme(Request $request): bool
     {
         return $this->service->isDarkTheme($request);
     }
@@ -137,7 +137,7 @@ final class ThemesExtension extends AbstractExtension
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function isDefaultTheme(Request $request): bool
+    private function isDefaultTheme(Request $request): bool
     {
         return $this->getCurrentTheme($request)->isDefault();
     }

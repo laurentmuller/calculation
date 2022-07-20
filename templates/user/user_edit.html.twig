@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title = new ? 'user.add.title' : 'user.edit.title' -%}
 {%- set title_icon = ICON_USER -%}
@@ -8,7 +7,7 @@
                         'data-check-name': url('ajax_check_user_name'),
                         'data-check-email': url('ajax_check_user_email'),
                         'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
-
+{# body #}
 {% block card_body %}
 {{ form_row(form.username) }}
 {{ form_row(form.email) }}
@@ -37,11 +36,11 @@
 {% endif %}
 {{ form_row(form.imageFile) }}
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/fileinput.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

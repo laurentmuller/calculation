@@ -39,8 +39,6 @@ trait CookieTrait
 
     /**
      * Sets a cookie in the browser.
-     *
-     * @param mixed $value the cookie value
      */
     protected function setCookie(Response $response, string $key, mixed $value, string $prefix = '', string $modify = '+1 year'): void
     {
@@ -48,5 +46,17 @@ trait CookieTrait
         $expire = (new \DateTime())->modify($modify);
         $cookie = new Cookie($name, (string) $value, $expire);
         $response->headers->setCookie($cookie);
+    }
+
+    /**
+     * Add or remove a cookie depending on the value. If value is null or empty the cookie is removed.
+     */
+    protected function updateCookie(Response $response, string $key, mixed $value, string $prefix = '', string $modify = '+1 year'): void
+    {
+        if (null === $value || '' === (string) $value) {
+            $this->clearCookie($response, $key, $prefix);
+        } else {
+            $this->setCookie($response, $key, $value, $prefix, $modify);
+        }
     }
 }

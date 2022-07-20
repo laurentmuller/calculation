@@ -22,3 +22,6 @@ framework:
     # see https://symfony.com/doc/current/forms.html#form-validation-messages
     form:
         legacy_error_messages: false
+
+    #assets:
+    #    base_urls: '%asset_base%'

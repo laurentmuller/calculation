@@ -17,7 +17,8 @@ use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\ExtrasTrait;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
-use Symfony\Component\String\UnicodeString;
+
+use function Symfony\Component\String\u;
 
 /**
  * The entity name enumeration.
@@ -147,7 +148,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
         } else {
             return null;
         }
-        $name = (new UnicodeString($name))
+        $name = u($name)
             ->afterLast('\\')
             ->ensureStart(self::ENTITY_PREFIX)
             ->toString();

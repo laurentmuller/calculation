@@ -122,10 +122,10 @@ class ThemeType extends AbstractHelperType implements ServiceSubscriberInterface
     private function addThemeField(FormHelper $helper): self
     {
         $themes = $this->service->getThemes();
-        $choice_attr = function (Theme $choice): array {
+        $choice_attr = function (Theme $theme): array {
             return [
-                'data-description' => $choice->getDescription(),
-                'data-css' => $choice->getCss(),
+                'data-description' => $theme->getDescription(),
+                'data-css' => $theme->getCss(),
             ];
         };
         $helper->field('theme')
@@ -133,8 +133,8 @@ class ThemeType extends AbstractHelperType implements ServiceSubscriberInterface
                 'choice_label' => 'name',
                 'choice_value' => 'name',
                 'choice_attr' => $choice_attr,
-                'choice_translation_domain' => false, ])
-            ->addChoiceType($themes);
+                'choice_translation_domain' => false,
+            ])->addChoiceType($themes);
 
         return $this;
     }

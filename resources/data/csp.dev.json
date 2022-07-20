@@ -14,7 +14,7 @@
 		"https://api.iconify.design"
 	],
 	"connect-src": [
-		"self"
+		"self",
 	],
 	"frame-src": [
 		"self",

@@ -3,12 +3,14 @@
 {% if is_remembered -%}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {%- set image = vich_uploader_asset(app.user)|replace({'192': '032'}) -%}
-            {%- if asset_exists(image) -%}
-                {{- asset_image(image, {'alt': 'user.image.title'|trans, 'title': app.user.userIdentifier, 'class': 'avatar rounded-circle'}) -}}
-            {%- else -%}
-                {{- icons.icon('user fa-lg far') }}{{ ' ' ~ app.user.userIdentifier -}}
-            {%- endif -%}
+            {% apply spaceless %}
+                {% set image = asset_image_user(app.user, '032', {'alt': 'user.fields.imageFile'|trans, 'title': app.user.userIdentifier, 'class': 'avatar rounded-circle'}) %}
+                {% if image %}
+                    {{ image|raw }}
+                {% else -%}
+                    {{ icons.icon('user fa-lg far') }}&nbsp;{{ app.user.userIdentifier }}
+                {% endif -%}
+            {% endapply %}
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
         {{ icons.dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') }}
@@ -18,25 +20,10 @@
             {{ icons.dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
             {{ icons.dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) }}
         {% endif %}
-        {#
-        {% if is_admin -%}
-            {{ icons.dropdownSeparator }}
-            {{ icons.dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
-            {{ icons.dropdownItem(path('log_table'), 'log.title', ICON_LOG) }}
-            {{ icons.dropdownItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
-            {{ icons.dropdownSeparator }}
-            {{ icons.dropdownItem(path('user_table'), 'user.list.title', ICON_USER) }}
-            {{ icons.dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'unlock') }}
-        {% endif %}
-        {% if is_super_admin -%}
-            {{ icons.dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'unlock') }}
-        {% endif %}
-        #}
         {% if is_previous_admin -%}
             {{ icons.dropdownSeparator }}
             {{ icons.dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
         {% endif %}
-
         {# switch environment #}
         {% if is_env_dev -%}
             {{ icons.dropdownSeparator }}

@@ -191,7 +191,9 @@ class ResponseListener implements EventSubscriberInterface
             $report,
         ];
 
-        /** @psalm-var array<string, string[]> $result */
+        /**
+         * @psalm-var array<string, string[]> $result
+         */
         $result = \array_map(fn (array $values): array => \str_replace($search, $replace, $values), $csp);
 
         return $result;

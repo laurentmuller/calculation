@@ -104,11 +104,7 @@ trait TableTrait
     {
         /** @psalm-var string|int|float|bool|array|null $value */
         $value = $results->getParams($key, $default);
-        if (null !== $value) {
-            $this->setCookie($response, $key, $value, $prefix, $modify);
-        } else {
-            $this->clearCookie($response, $key, $prefix);
-        }
+        $this->updateCookie($response, $key, $value, $prefix, $modify);
     }
 
     /**

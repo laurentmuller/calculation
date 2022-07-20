@@ -1,7 +1,6 @@
 {% extends 'help/help_base.html.twig' %}
-{# imports #}
 {% import 'help/_help_tools.html.twig' as tools %}
-
+{# macro #}
 {% macro output_entity_columns(entity, table_class, head_class) -%}
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
@@ -24,7 +23,6 @@
     </table>
 {% endif %}
 {%- endmacro %}
-
 {% macro output_entity_fields(entity, table_class, head_class) -%}
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
@@ -51,7 +49,6 @@
     </table>
 {% endif %}
 {%- endmacro %}
-
 {% macro output_entity_actions(entity, table_class, head_class, service) -%}
 {% set actions = entity.actions|default(false) %}
 {% if actions %}
@@ -59,56 +56,48 @@
     {{ tools.output_table_actions(actions, table_class, head_class, service) }}
 {% endif %}
 {%- endmacro %}
-
 {# parameters #}
 {%- set dialog_name = dialog.name|default(dialog.id) -%}
 {%- set title = 'help.title_name' -%}
 {%- set title_parameters = {'%name%': dialog_name|trans} -%}
-
+{# title #}
 {% block help_title -%}
 {{- tools.output_icon(dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false), dialog_name) -}}
 {%- endblock %}
-
+{# body #}
 {% block help_body -%}
 <p class="mb-1">{{ dialog.description }}</p>
 <hr class="my-2">
 {{ tools.output_image(dialog.image|default(false)) }}
-
 {# details #}
 {%- if dialog.details|default([])|length -%}
     <p class="mt-2 mb-0">{{ 'help.labels.description'|trans }}</p>
     <p class="mb-0 ml">{% for detail in dialog.details -%}{{ detail|raw }} {% endfor %}</p>
 {%- endif -%}
-
 {# entity columns #}
 {%- if dialog.displayEntityColumns|default(false) -%}
     {{- _self.output_entity_columns(entity, table_class, head_class) }}
 {%- endif -%}
-
 {# entity fields #}
 {%- if dialog.displayEntityFields|default(false) -%}
     {{- _self.output_entity_fields(entity, table_class, head_class) }}
 {%- endif -%}
-
 {# entity actions #}
 {%- if dialog.displayEntityActions|default(false) -%}
     {{- _self.output_entity_actions(entity, table_class, head_class, service) }}
 {%- endif -%}
-
 {# edit actions #}
 {% set actions = dialog.editActions|default(false) %}
 {% if actions %}
     <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>
     {{ tools.output_table_actions(actions, table_class, head_class, service) }}
 {% endif %}
-
 {# global actions #}
 {% set actions = dialog.globalActions|default(false) %}
 {% if actions -%}
     <p class="mt-2 mb-0">{{ 'help.labels.global_actions'|trans }}</p>
     {{ tools.output_table_actions(actions, table_class, head_class, service) }}
 {%- endif %}
-
 {# forbidden #}
 {% if dialog.forbidden|default(false) -%}
     {%- set text = dialog.forbidden.text|default('help.labels.forbidden_text'|trans) -%}
@@ -121,7 +110,6 @@
         {{ tools.output_table_actions({action}, table_class, head_class, service) }}
     {% endif %}
 {%- endif %}
-
 {# links and entity #}
 {% set links = dialog.links|default([]) %}
 {# entity #}
@@ -132,5 +120,4 @@
 {% if links|length -%}
     {{ tools.output_links(links, service) }}
 {%- endif %}
-
 {%- endblock %}

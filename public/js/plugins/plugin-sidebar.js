@@ -61,28 +61,18 @@
             that._updateMenus();
 
             // toggle sidebar if too small
-            const width = document.documentElement.clientWidth;
-            if (that._getClientWidth() < this.options.minWidth && !this.$element.hasClass('sidebar-hide')) {
+            if (that._isClientTooSmall() && !this.$element.hasClass('sidebar-hide')) {
                 $(window).trigger('resize');
             }
         }
 
         /**
-         * Gets the client width.
+         * Returns a value indicating if the client width is smaller than the minimum width option.
          *
-         * @return {number} the client width.
-         * @private
-         */
-        _getClientWidth() {
-            return document.documentElement.clientWidth;
-        }
-
-        /**
-         * Returns a value indicating if the client width is to small to display sidebar.
          * @return {boolean}
          * @private
          */
-        _getClientA() {
+        _isClientTooSmall() {
             const width = document.documentElement.clientWidth;
             return width < this.options.minWidth;
         }
@@ -94,8 +84,7 @@
          * @private
          */
         _onResize(e) {
-            const width = document.documentElement.clientWidth;
-            if (this._getClientWidth() < this.options.minWidth) {
+            if (this._isClientTooSmall()) {
                 this._hideSidebar(e);
             } else if (this.wasHidden) {
                 this._showSidebar(e);

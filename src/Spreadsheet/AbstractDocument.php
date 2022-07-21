@@ -23,6 +23,8 @@ abstract class AbstractDocument extends SpreadsheetDocument
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(protected AbstractController $controller)
     {

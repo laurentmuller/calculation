@@ -74,10 +74,10 @@
 {% endblock %}
 {# actions #}
 {% block actions_form -%}
-{% if app.request.get('caller')|default == '/' %}
-{{ icons.homepage() }}
+{% if form.vars['simple_widget'] %}
+    {{ icons.button_cancel(cancel_path, 'common.button_back_list') }}
 {% else %}
-{{ icons.button_cancel(cancel_path, 'common.button_back_list') }}
+    {{ icons.homepage() }}
 {% endif %}
 {% endblock %}
 {# javascripts #}

@@ -57,7 +57,7 @@ class AjaxController extends AbstractController
     /**
      * Returns a new captcha image.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Exception
      */
     #[IsGranted('PUBLIC_ACCESS')]
     #[Route(path: '/captcha/image', name: 'ajax_captcha_image')]
@@ -342,10 +342,11 @@ class AjaxController extends AbstractController
                 $session->set($key, $menu);
             }
 
-            // save active menu state to cookie
+            // save hidden menu state to cookie
             $response = $this->json(true);
-            $active = $menus['menu_active'] ?? true;
-            $this->setCookie($response, 'MENU_ACTIVE', $active ? 1 : 0);
+            $isHidden = $menus['menu_sidebar_hide'] ?? true;
+            $path = $this->getStringParameter('cookie_path');
+            $this->updateCookie($response, 'SIDEBAR_HIDE', $isHidden ? 1 : 0, '', $path);
 
             return $response;
         }
@@ -387,8 +388,9 @@ class AjaxController extends AbstractController
 
         $key = $view->value;
         $response = $this->json(true);
-        $this->setCookie($response, TableInterface::PARAM_VIEW, $key);
-        $this->setCookie($response, TableInterface::PARAM_LIMIT, $requestLimit, $key);
+        $path = $this->getStringParameter('cookie_path');
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $key, '', $path);
+        $this->updateCookie($response, TableInterface::PARAM_LIMIT, $requestLimit, $key, $path);
 
         return $response;
     }

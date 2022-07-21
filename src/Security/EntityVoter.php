@@ -133,12 +133,10 @@ class EntityVoter extends Voter
 
     /**
      * Gets the user role ('ROLE_USER') with the default rights.
-     *
-     * @psalm-suppress InvalidArgument
      */
     public static function getRoleUser(): Role
     {
-        /** @var FlagBag<EntityPermission> $default */
+        /** @psalm-var FlagBag<EntityPermission> $default */
         $default = FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
@@ -262,7 +260,7 @@ class EntityVoter extends Voter
     }
 
     /**
-     * @return FlagBag<EntityPermission>
+     * @psalm-return FlagBag<EntityPermission>
      *
      * @psalm-suppress all
      */

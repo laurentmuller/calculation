@@ -35,6 +35,7 @@ class TaskServiceType extends AbstractHelperType
             $form->remove('task')
                 ->add('task', PlainType::class, $this->getPlainTypeOptions());
         }
+        $view->vars['simple_widget'] = $options['simple_widget'];
     }
 
     /**

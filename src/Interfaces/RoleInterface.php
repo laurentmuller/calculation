@@ -34,6 +34,8 @@ interface RoleInterface
 
     /**
      * Gets the role.
+     *
+     * @pslam-return RoleInterface::ROLE_*
      */
     public function getRole(): string;
 
@@ -43,6 +45,8 @@ interface RoleInterface
      * @param string $role the role name to be tested
      *
      * @return bool true if this has the given role
+     *
+     * @psalm-param RoleInterface::ROLE_* $role
      */
     public function hasRole(string $role): bool;
 

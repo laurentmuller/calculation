@@ -76,8 +76,6 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more calculations with random data.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/calculation', name: self::ROUTE_CALCULATION)]
     public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
@@ -87,8 +85,6 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more customers with random data.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/customer', name: self::ROUTE_CUSTOMER)]
     public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
@@ -98,8 +94,6 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more products with random data.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/product', name: self::ROUTE_PRODUCT)]
     public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse

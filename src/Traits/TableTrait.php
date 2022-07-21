@@ -98,13 +98,14 @@ trait TableTrait
     }
 
     /**
-     * @param string|int|float|bool|null $default the default value if the result parameter is null
+     * Save the given parameter from the data result to a cookie.
      */
-    protected function saveCookie(Response $response, DataResults $results, string $key, string|int|float|bool|null $default = null, string $prefix = '', string $modify = '+1 year'): void
+    protected function saveCookie(Response $response, DataResults $results, string $key, string|int|float|bool|null $default = null, string $prefix = ''): void
     {
         /** @psalm-var string|int|float|bool|array|null $value */
         $value = $results->getParams($key, $default);
-        $this->updateCookie($response, $key, $value, $prefix, $modify);
+        $path = $this->getStringParameter('cookie_path');
+        $this->updateCookie($response, $key, $value, $prefix, $path);
     }
 
     /**

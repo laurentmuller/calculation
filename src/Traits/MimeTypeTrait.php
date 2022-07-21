@@ -10,30 +10,28 @@
 
 declare(strict_types=1);
 
-namespace App\Response;
+namespace App\Traits;
 
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 
 /**
- * Utility class for response headers.
+ * Trait to create file response headers.
  */
-class ResponseUtils
+trait MimeTypeTrait
 {
     /**
-     * Build response headers for an attachment.
+     * Build response header for an attachment.
      *
-     * @param string $name     the document name
-     * @param string $mimetype the document mime type
-     * @param bool   $inline   True to send the file inline to the browser. The document viewer is used if available.
-     *                         False to send to the browser and force a file download with the name given.
+     * @param string $name   the document name
+     * @param bool   $inline true to send the file inline to the browser. The document viewer is used if available,
+     *                       false to send to the browser and force a file download with the name given.
      */
-    public static function buildHeaders(string $name, string $mimetype, bool $inline): array
+    public function buildHeaders(string $name, bool $inline): array
     {
         $encoded = Utils::ascii($name);
-
         if ($inline) {
-            $type = $mimetype;
+            $type = $this->getMimeType();
             $disposition = HeaderUtils::DISPOSITION_INLINE;
         } else {
             $type = 'application/x-download';
@@ -47,4 +45,9 @@ class ResponseUtils
             'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
         ];
     }
+
+    /**
+     * Gets the mime type.
+     */
+    abstract public function getMimeType(): string;
 }

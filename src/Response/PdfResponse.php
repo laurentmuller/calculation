@@ -15,6 +15,7 @@ namespace App\Response;
 use App\Interfaces\MimeTypeInterface;
 use App\Pdf\Enums\PdfDocumentOutput;
 use App\Pdf\PdfDocument;
+use App\Traits\MimeTypeTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,10 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PdfResponse extends Response implements MimeTypeInterface
 {
-    /**
-     * The application PDF mime type.
-     */
-    final public const MIME_TYPE_PDF = 'application/pdf';
+    use MimeTypeTrait;
 
     /**
      * Constructor.
@@ -41,7 +39,7 @@ class PdfResponse extends Response implements MimeTypeInterface
     public function __construct(PdfDocument $doc, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.pdf' : \basename($name);
-        $headers = ResponseUtils::buildHeaders($name, self::MIME_TYPE_PDF, $inline);
+        $headers = $this->buildHeaders($name, $inline);
         $content = $doc->Output(PdfDocumentOutput::STRING);
         parent::__construct($content, self::HTTP_OK, $headers);
     }
@@ -51,6 +49,6 @@ class PdfResponse extends Response implements MimeTypeInterface
      */
     public function getMimeType(): string
     {
-        return self::MIME_TYPE_PDF;
+        return 'application/pdf';
     }
 }

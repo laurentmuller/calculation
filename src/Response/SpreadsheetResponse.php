@@ -14,6 +14,7 @@ namespace App\Response;
 
 use App\Interfaces\MimeTypeInterface;
 use App\Spreadsheet\SpreadsheetDocument;
+use App\Traits\MimeTypeTrait;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -25,10 +26,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
 {
-    /**
-     * The application Microsoft Excel (OpenXML) mime type.
-     */
-    final public const MIME_TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    use MimeTypeTrait;
 
     /**
      * Constructor.
@@ -41,7 +39,7 @@ class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
     public function __construct(SpreadsheetDocument $doc, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.xlsx' : \basename($name);
-        $headers = ResponseUtils::buildHeaders($name, self::MIME_TYPE_EXCEL, $inline);
+        $headers = $this->buildHeaders($name, $inline);
         $callback = function () use ($doc): void {
             $writer = IOFactory::createWriter($doc, 'Xlsx');
             $writer->save('php://output');
@@ -54,6 +52,6 @@ class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
      */
     public function getMimeType(): string
     {
-        return self::MIME_TYPE_EXCEL;
+        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     }
 }

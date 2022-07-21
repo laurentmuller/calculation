@@ -23,7 +23,7 @@
         destroy() {
             this.$sidebarToggle.off('click', this.toggleSidebarProxy);
             this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
-            // $(window).on('resize', this.resizeProxy);
+            $(window).off('resize', this.resizeProxy);
             this.$element.removeData('sidebar');
         }
 
@@ -37,6 +37,7 @@
         _init() {
             // get elements
             const that = this;
+            that.wasHidden = false;
             that.$pageContent = $(that.options.pageContent);
             that.$sidebarToggle = $(that.options.sidebarToggle);
             that.$sidebarHorizontal = $(that.options.sidebarHorizontal);
@@ -48,35 +49,84 @@
             that.toggleMenuProxy = function (e) {
                 that._toggleMenu(e);
             };
+            that.resizeProxy = function (e) {
+                that._onResize(e);
+            };
             that.$sidebarToggle.on('click', that.toggleSidebarProxy);
             that.$element.on('click', '.nav-link-toggle', that.toggleMenuProxy);
+            $(window).on('resize', that.resizeProxy);
 
             // update titles
             that._updateSidebar();
             that._updateMenus();
 
-            // add resize handler
-            // that.resizeProxy = function (e) {
-            //     const width = document.documentElement.clientWidth;
-            //     if (width < 768) {
-            //         that._hideSidebar(e);
-            //     }
-            // };
-            // $(window).on('resize', that.resizeProxy);
-            // $(window).trigger('resize');
+            // toggle sidebar if too small
+            const width = document.documentElement.clientWidth;
+            if (that._getClientWidth() < this.options.minWidth && !this.$element.hasClass('sidebar-hide')) {
+                $(window).trigger('resize');
+            }
         }
 
-        // /**
-        //  * Hide the sidebar if visible.
-        //  *
-        //  * @param {Event} e - the event.
-        //  * @private
-        //  */
-        // _hideSidebar(e) {
-        //     if (!this.$element.hasClass('active')) {
-        //         this._toggleSidebar(e);
-        //     }
-        // }
+        /**
+         * Gets the client width.
+         *
+         * @return {number} the client width.
+         * @private
+         */
+        _getClientWidth() {
+            return document.documentElement.clientWidth;
+        }
+
+        /**
+         * Returns a value indicating if the client width is to small to display sidebar.
+         * @return {boolean}
+         * @private
+         */
+        _getClientA() {
+            const width = document.documentElement.clientWidth;
+            return width < this.options.minWidth;
+        }
+
+        /**
+         * Handle the window resize event.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _onResize(e) {
+            const width = document.documentElement.clientWidth;
+            if (this._getClientWidth() < this.options.minWidth) {
+                this._hideSidebar(e);
+            } else if (this.wasHidden) {
+                this._showSidebar(e);
+            }
+        }
+
+        /**
+         * Hide the sidebar if visible.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _hideSidebar(e) {
+            if (!this.$element.hasClass('sidebar-hide')) {
+                this._toggleSidebar(e);
+                this.wasHidden = true;
+            }
+        }
+
+        /**
+         * Show the sidebar if hidden.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _showSidebar(e) {
+            if (this.$element.hasClass('sidebar-hide')) {
+                this._toggleSidebar(e);
+                this.wasHidden = false;
+            }
+        }
 
         /**
          * Toggle the sidebar.
@@ -87,10 +137,10 @@
         _toggleSidebar(e) {
             e.preventDefault();
             $('.dropdown-menu.show, .dropdown.show').removeClass('show');
-            this.$element.add(this.$pageContent).toggleClass('active');
-            const active = this.$element.hasClass('active');
+            this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
+            const isHidden = this.$element.hasClass('sidebar-hide');
             const $toggle = this.$sidebarHorizontal.find('.nav-sidebar-horizontal');
-            if (active) {
+            if (isHidden) {
                 $toggle.show(350);
             } else {
                 $toggle.hide(350);
@@ -126,10 +176,10 @@
          * @private
          */
         _updateSidebar() {
-            const active = this.$element.hasClass('active');
-            const title = active ? this.options.showSidebar : this.options.hideSidebar;
+            const isHidden = this.$element.hasClass('sidebar-hide');
+            const title = isHidden ? this.options.showSidebar : this.options.hideSidebar;
             this.$sidebarToggle.attr({
-                'aria-expanded': String(!active),
+                'aria-expanded': String(!isHidden),
                 'title': title,
             });
         }
@@ -152,7 +202,7 @@
         }
 
         /**
-         * Collapse all menus
+         * Collapse all expanded menus
          * @private
          */
         _collapseMenus() {
@@ -171,7 +221,7 @@
          */
         _getState() {
             const menus = {
-                'menu_active': this.$element.hasClass('active')
+                'menu_sidebar_hide': this.$element.hasClass('sidebar-hide')
             };
             let visible;
             let wasVisible = false;
@@ -217,6 +267,7 @@
         hideSidebar: 'Hide Sidebar',
         showMenu: 'Expand',
         hideMenu: 'Collapse',
+        minWidth: 960
     };
 
     // -----------------------------
@@ -235,5 +286,13 @@
     };
 
     $.fn.sidebar.Constructor = Sidebar;
+
+    // ------------------------------------
+    // sidebar no conflict
+    // ------------------------------------
+    $.fn.sidebar.noConflict = function () {
+        $.fn.sidebar = oldSidebar;
+        return this;
+    };
 
 }(jQuery));

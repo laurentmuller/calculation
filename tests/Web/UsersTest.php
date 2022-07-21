@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
+use App\Interfaces\RoleInterface;
+
 /**
  * Test class for users.
  */
@@ -58,6 +60,8 @@ class UsersTest extends AbstractAuthenticateWebTestCase
 
     /**
      * @dataProvider getUserRole
+     *
+     * @psalm-param RoleInterface::ROLE_* $username
      */
     public function testUserRole(string $username): void
     {

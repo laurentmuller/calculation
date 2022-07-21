@@ -1532,16 +1532,16 @@
         },
         {
             "name": "elao/enum",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/PhpEnums.git",
-                "reference": "784095fd6bebbcb78de6add4f55949ca70fc5785"
+                "reference": "a2966732d34c09093fe821ee424ac59a214bc618"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/784095fd6bebbcb78de6add4f55949ca70fc5785",
-                "reference": "784095fd6bebbcb78de6add4f55949ca70fc5785",
+                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/a2966732d34c09093fe821ee424ac59a214bc618",
+                "reference": "a2966732d34c09093fe821ee424ac59a214bc618",
                 "shasum": ""
             },
             "require": {
@@ -1605,7 +1605,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Elao/PhpEnums/issues",
-                "source": "https://github.com/Elao/PhpEnums/tree/v2.0.0"
+                "source": "https://github.com/Elao/PhpEnums/tree/v2.0.1"
             },
             "funding": [
                 {
@@ -1613,7 +1613,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-16T14:56:06+00:00"
+            "time": "2022-07-21T13:25:10+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -1790,16 +1790,16 @@
         },
         {
             "name": "fakerphp/faker",
-            "version": "v1.19.0",
+            "version": "v1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "d7f08a622b3346766325488aa32ddc93ccdecc75"
+                "reference": "37f751c67a5372d4e26353bd9384bc03744ec77b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/d7f08a622b3346766325488aa32ddc93ccdecc75",
-                "reference": "d7f08a622b3346766325488aa32ddc93ccdecc75",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/37f751c67a5372d4e26353bd9384bc03744ec77b",
+                "reference": "37f751c67a5372d4e26353bd9384bc03744ec77b",
                 "shasum": ""
             },
             "require": {
@@ -1826,7 +1826,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "v1.19-dev"
+                    "dev-main": "v1.20-dev"
                 }
             },
             "autoload": {
@@ -1851,9 +1851,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FakerPHP/Faker/issues",
-                "source": "https://github.com/FakerPHP/Faker/tree/v1.19.0"
+                "source": "https://github.com/FakerPHP/Faker/tree/v1.20.0"
             },
-            "time": "2022-02-02T17:38:57+00:00"
+            "time": "2022-07-20T13:12:54+00:00"
         },
         {
             "name": "google/recaptcha",

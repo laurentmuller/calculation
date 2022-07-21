@@ -52,12 +52,12 @@
 <div class="card">
     <div class="card-header" id="{{ id }}-header">
         <div class="row no-gutters">
-            <div class="col mr-auto" style="transform: rotate(0);">
+            <div class="col mr-auto">
                 <a data-toggle="collapse" role="button" href="#{{ id }}" class="card-link stretched-link" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
                     {{- title -}}
                 </a>
             </div>
-            <div class="col text-right d-print-none">
+            <div class="col-auto d-print-none">
                 {{ icons.linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_pdf') }}
                 {% if excel_route %}
                     {{ icons.linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export') }}

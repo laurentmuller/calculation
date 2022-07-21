@@ -131,6 +131,8 @@ class DatabaseTest extends KernelTestCase
 
     /**
      * @dataProvider getUsers
+     *
+     * @psalm-param RoleInterface::ROLE_* $role
      */
     public function testUser(string $username, string $role): void
     {

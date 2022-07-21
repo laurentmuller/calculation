@@ -4,7 +4,7 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{% set active = app.request.cookies.get('MENU_ACTIVE', true) ? ' active' : '' -%}
+{% set active = app.request.cookies.get('SIDEBAR_HIDE', true) ? ' sidebar-hide' : '' -%}
 {# head #}
 <head>
 <meta charset="utf-8" />

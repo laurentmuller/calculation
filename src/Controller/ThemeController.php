@@ -70,9 +70,11 @@ class ThemeController extends AbstractController
 
             // create response and update cookies
             $response = $this->redirectToHomePage();
-            $this->updateCookie($response, ThemeService::KEY_CSS, $css);
-            $this->updateCookie($response, ThemeService::KEY_DARK, $dark);
-            $this->updateCookie($response, ThemeService::KEY_BACKGROUND, $background);
+            $path = $this->getStringParameter('cookie_path');
+            $this->updateCookie($response, ThemeService::KEY_CSS, $css, '', $path);
+            $this->updateCookie($response, ThemeService::KEY_DARK, $dark, '', $path);
+            $this->updateCookie($response, ThemeService::KEY_BACKGROUND, $background, '', $path);
+
             $this->successTrans('theme.success', ['%name%' => $theme->getName()]);
 
             return $response;

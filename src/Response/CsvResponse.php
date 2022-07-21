@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Response;
 
 use App\Interfaces\MimeTypeInterface;
+use App\Traits\MimeTypeTrait;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -22,10 +23,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class CsvResponse extends StreamedResponse implements MimeTypeInterface
 {
-    /**
-     * The CSV mime type.
-     */
-    final public const MIME_TYPE_CSV = 'text/csv';
+    use MimeTypeTrait;
 
     /**
      * Constructor.
@@ -38,7 +36,7 @@ class CsvResponse extends StreamedResponse implements MimeTypeInterface
     public function __construct(callable $callback = null, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.csv' : \basename($name);
-        $headers = ResponseUtils::buildHeaders($name, self::MIME_TYPE_CSV, $inline);
+        $headers = $this->buildHeaders($name, $inline);
         parent::__construct($callback, self::HTTP_OK, $headers);
     }
 
@@ -47,6 +45,6 @@ class CsvResponse extends StreamedResponse implements MimeTypeInterface
      */
     public function getMimeType(): string
     {
-        return self::MIME_TYPE_CSV;
+        return 'text/csv';
     }
 }

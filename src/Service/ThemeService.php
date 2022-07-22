@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Model\Theme;
 use App\Traits\CacheAwareTrait;
+use App\Traits\CookieTrait;
 use App\Traits\LoggerAwareTrait;
 use App\Util\FileUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class ThemeService implements ServiceSubscriberInterface
 {
     use CacheAwareTrait;
+    use CookieTrait;
     use LoggerAwareTrait;
     use ServiceSubscriberTrait;
 
@@ -142,7 +144,8 @@ class ThemeService implements ServiceSubscriberInterface
     public function getCurrentTheme(?Request $request = null): Theme
     {
         if (null !== ($request = $this->getRequest($request))) {
-            $css = $request->cookies->get(self::KEY_CSS, self::DEFAULT_CSS);
+            /** @psalm-var string $css */
+            $css = $this->getCookieValue($request, self::KEY_CSS, '', self::DEFAULT_CSS);
 
             return $this->findTheme($css);
         }
@@ -182,7 +185,10 @@ class ThemeService implements ServiceSubscriberInterface
     public function getThemeBackground(?Request $request = null): string
     {
         if (null !== ($request = $this->getRequest($request))) {
-            return $request->cookies->get(self::KEY_BACKGROUND, self::DEFAULT_BACKGROUND);
+            /** @psalm-var string $value */
+            $value = $this->getCookieValue($request, self::KEY_BACKGROUND, '', self::DEFAULT_BACKGROUND);
+
+            return $value;
         }
 
         return self::DEFAULT_BACKGROUND;

@@ -112,15 +112,13 @@ trait TableTrait
      * @param string|int|float|bool|null $default the default value if the input key does not exist
      *
      * @return string|int|float|bool|null the request value, the cookie value or the default value
-     * @psalm-suppress InvalidScalarArgument
      */
     private function updateRequest(Request $request, string $key, string|int|float|bool|null $default = null, string $prefix = ''): string|int|float|bool|null
     {
         $input = Utils::getRequestInputBag($request);
         $value = $input->get($key);
         if (null === $value) {
-            $name = $this->getCookieName($key, $prefix);
-            $value = $request->cookies->get($name, $default); // @phpstan-ignore-line
+            $value = $this->getCookieValue($request, $key, $prefix, $default);
             if (null !== $value) {
                 $input->set($key, $value);
             }

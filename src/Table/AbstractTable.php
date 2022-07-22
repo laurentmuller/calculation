@@ -16,6 +16,7 @@ use App\Entity\AbstractEntity;
 use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
+use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
@@ -28,6 +29,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 abstract class AbstractTable implements SortModeInterface
 {
+    use CookieTrait;
     use MathTrait;
 
     /**
@@ -245,8 +247,6 @@ abstract class AbstractTable implements SortModeInterface
      * @param string|int|float|bool|null $default       the default value if not found
      * @param bool                       $useSessionKey true to use session key; false to use the parameter name
      *
-     * @psalm-suppress InvalidScalarArgument
-     *
      * @throws \ReflectionException
      */
     protected function getRequestValue(Request $request, string $name, string|int|float|bool|null $default = null, bool $useSessionKey = true, string $prefix = ''): string|int|float|bool|null
@@ -261,8 +261,7 @@ abstract class AbstractTable implements SortModeInterface
         }
 
         // find in cookies
-        $cookieName = '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
-        $cookieValue = $request->cookies->get($cookieName, $default); // @phpstan-ignore-line
+        $cookieValue = $this->getCookieValue($request, $key, $prefix, $default);
 
         // find in request
         $value = Utils::getRequestInputBag($request)->get($name, $cookieValue);

@@ -41,13 +41,14 @@ trait CookieTrait
     /**
      * Gets a scalar cookie value.
      *
-     * @param string|null $default the default value if the input key does not exist
+     * @psalm-suppress InvalidScalarArgument
      */
-    protected function getCookieValue(Request $request, string $key, string $prefix = '', mixed $default = null): string|int|float|bool|null
+    protected function getCookieValue(Request $request, string $key, string $prefix = '', string|int|float|bool|null $default = null): string|int|float|bool|null
     {
         $name = $this->getCookieName($key, $prefix);
+        $value = $request->cookies->get($name, $default);
 
-        return $request->cookies->get($name, $default);
+        return $value;
     }
 
     /**

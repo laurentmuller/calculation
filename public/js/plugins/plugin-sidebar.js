@@ -50,7 +50,7 @@
                 that._toggleMenu(e);
             };
             that.resizeProxy = function (e) {
-                that._onResize(e);
+                that._validateSize(e);
             };
             that.$sidebarToggle.on('click', that.toggleSidebarProxy);
             that.$element.on('click', '.nav-link-toggle', that.toggleMenuProxy);
@@ -83,7 +83,7 @@
          * @param {Event} e - the event.
          * @private
          */
-        _onResize(e) {
+        _validateSize(e) {
             if (this._isClientTooSmall()) {
                 this._hideSidebar(e);
             } else if (this.wasHidden) {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -35,6 +36,18 @@ trait CookieTrait
     protected function getCookieName(string $key, string $prefix = ''): string
     {
         return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
+    }
+
+    /**
+     * Gets a scalar cookie value.
+     *
+     * @param string|null $default the default value if the input key does not exist
+     */
+    protected function getCookieValue(Request $request, string $key, string $prefix = '', mixed $default = null): string|int|float|bool|null
+    {
+        $name = $this->getCookieName($key, $prefix);
+
+        return $request->cookies->get($name, $default);
     }
 
     /**

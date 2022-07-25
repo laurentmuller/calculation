@@ -48,8 +48,7 @@ class AboutController extends AbstractController
     public function __construct(
         #[Autowire('%app_mode%')]
         private readonly string $appMode
-    )
-    {
+    ) {
     }
 
     /**

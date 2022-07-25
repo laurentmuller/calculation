@@ -64,8 +64,7 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
         private readonly string $appName,
         #[Autowire('%kernel.debug%')]
         private readonly bool $isDebug
-    )
-    {
+    ) {
     }
 
     /**

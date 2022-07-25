@@ -63,8 +63,7 @@ class ResponseListener implements EventSubscriberInterface
         string $file,
         #[Autowire('%kernel.debug%')]
         private readonly bool $isDebug
-    )
-    {
+    ) {
         $nonce = "'nonce-" . $extension->getNonce() . "'";
         $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $this->csp = $this->loadCSP($file, $nonce, $report);

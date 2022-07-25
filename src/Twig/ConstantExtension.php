@@ -43,8 +43,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     public function __construct(
         #[Autowire('%kernel.debug%')]
         bool $isDebug
-    )
-    {
+    ) {
         $this->isDebugCache = $isDebug;
     }
 

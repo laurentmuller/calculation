@@ -62,8 +62,7 @@ class HelpService implements ServiceSubscriberInterface
         string $projectDir,
         #[Autowire('%kernel.debug%')]
         bool $isDebug
-    )
-    {
+    ) {
         $this->isDebugCache = $isDebug;
         $this->file = $projectDir . self::FILE_PATH;
         $this->imagePath = $projectDir . self::IMAGE_PATH;

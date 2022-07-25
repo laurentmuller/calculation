@@ -35,8 +35,7 @@ class UserRightsType extends RightsType
         #[Autowire('%kernel.debug%')]
         bool $isDebug,
         private readonly TranslatorInterface $translator
-    )
-    {
+    ) {
         parent::__construct($roleHierarchy, $isDebug);
     }
 

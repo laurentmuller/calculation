@@ -109,8 +109,7 @@ class ThemeService implements ServiceSubscriberInterface
         private readonly string $projectDir,
         #[Autowire('%kernel.debug%')]
         bool $isDebug
-    )
-    {
+    ) {
         $this->isDebugCache = $isDebug;
     }
 

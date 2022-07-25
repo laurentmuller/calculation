@@ -31,8 +31,7 @@ class RecaptchaValidator extends AbstractConstraintValidator
     public function __construct(
         #[Autowire('%google_recaptcha_secret_key%')]
         private readonly string $secret
-    )
-    {
+    ) {
         parent::__construct(Recaptcha::class);
     }
 

@@ -27,6 +27,7 @@ use App\Util\Utils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -58,7 +59,12 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly string $appName, private readonly bool $isDebug)
+    public function __construct(
+        #[Autowire('%app_name%')]
+        private readonly string $appName,
+        #[Autowire('%kernel.debug%')]
+        private readonly bool $isDebug
+    )
     {
     }
 

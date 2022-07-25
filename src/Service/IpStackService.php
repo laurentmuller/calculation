@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\TranslatorAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -36,11 +36,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     private const HOST_NAME = 'https://api.ipstack.com/';
 
     /**
-     * The parameter name for the API key.
-     */
-    private const PARAM_KEY = 'ip_stack_key';
-
-    /**
      * The API endpoint for detecting the IP address.
      */
     private const URI_CHECK = 'check';
@@ -51,10 +46,12 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, bool $isDebug)
-    {
-        /** @var string $key */
-        $key = $params->get(self::PARAM_KEY);
+    public function __construct(
+        #[Autowire('%ip_stack_key%')]
+        string $key,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    ) {
         parent::__construct($isDebug, $key);
     }
 

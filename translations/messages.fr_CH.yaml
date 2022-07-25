@@ -315,6 +315,7 @@ common:
   value_none: Aucune
   value_null: Vide
   value_true: Oui
+  value_unknown: Inconnu
   view_card: Vue détaillée
   view_custom: Vue mosaïque
   view_table: Vue tabulaire
@@ -779,7 +780,7 @@ pagination:
   page_previous: Page précédente (%page%)
 parameters:
   action_display: Afficher
-  action_test: Tester
+  action_test: Tester l'affichage d'un message avec des données aléatoires
   customize: Personnaliser
   description: Définition des paramètres de l'application.
   display:
@@ -813,6 +814,7 @@ parameters:
     message_sub_title: Sous-titre
     message_timeout: Durée
     message_title: Titre
+    message_height: Barre de progression
     minimum_margin: Marge minimum
     mintrength: Force minimum
     panel_calculation: Calculations
@@ -1062,8 +1064,8 @@ security:
     password: Mot de passe
     remember_me: Se souvenir de moi
     submit: Connexion
-    success: Bienvenue <b>%username%</b>. Vous vous êtes connecté à l'application
-      <b>%appname%</b> avec succès.
+    success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application
+      <b>%app_name% v%app_version%</b> avec succès.
     error: Le nom de l'utilisateur ou le mot de passe est invalide.
   logout:
     success: Vous vous êtes déconnecté de l'application <b>%appname%</b> avec succès.
@@ -1420,5 +1422,5 @@ archive:
 notification:
   csp_title: Violation de règles CSP
   csp_description: L'agent utilisateur de l'application %name% a rapporté des violations des règles de la politique de sécurité de contenu (Content Security Policy).
-  footer: Notification envoyée par l'application %name%.
+  footer: Notification envoyée par l'application %app_name% v%app_version%.
   exception: La trace de la pile d'exception est en pièce jointe.

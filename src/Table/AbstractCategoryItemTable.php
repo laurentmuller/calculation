@@ -48,7 +48,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
-        $categoryId = (int) $this->getRequestValue($request, self::PARAM_CATEGORY, 0, false);
+        $categoryId = $this->getRequestInt($request, self::PARAM_CATEGORY);
         $query->addCustomData(self::PARAM_CATEGORY, $categoryId);
 
         return $query;

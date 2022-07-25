@@ -30,6 +30,27 @@ trait CookieTrait
         $response->headers->clearCookie($name, $path);
     }
 
+    protected function getCookieBoolean(Request $request, string $key, string $prefix = '', bool $default = false): bool
+    {
+        $name = $this->getCookieName($key, $prefix);
+
+        return $request->cookies->getBoolean($name, $default);
+    }
+
+    protected function getCookieFloat(Request $request, string $key, string $prefix = '', float $default = 0): float
+    {
+        $name = $this->getCookieName($key, $prefix);
+
+        return (float) $request->cookies->get($name, (string) $default);
+    }
+
+    protected function getCookieInt(Request $request, string $key, string $prefix = '', int $default = 0): int
+    {
+        $name = $this->getCookieName($key, $prefix);
+
+        return $request->cookies->getInt($name, $default);
+    }
+
     /**
      * Gets the cookie name.
      */
@@ -38,17 +59,11 @@ trait CookieTrait
         return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
     }
 
-    /**
-     * Gets a scalar cookie value.
-     *
-     * @psalm-suppress InvalidScalarArgument
-     */
-    protected function getCookieValue(Request $request, string $key, string $prefix = '', string|int|float|bool|null $default = null): string|int|float|bool|null
+    protected function getCookieString(Request $request, string $key, string $prefix = '', string|null $default = null): string|null
     {
         $name = $this->getCookieName($key, $prefix);
-        $value = $request->cookies->get($name, $default);
 
-        return $value;
+        return $request->cookies->get($name, $default);
     }
 
     /**

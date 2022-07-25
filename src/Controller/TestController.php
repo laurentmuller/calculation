@@ -47,6 +47,7 @@ use App\Validator\Password;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -185,7 +186,6 @@ class TestController extends AbstractController
     public function ipStack(Request $request, IpStackService $service): JsonResponse
     {
         $result = $service->getIpInfo($request);
-
         if ($lastError = $service->getLastError()) {
             return $this->json($lastError);
         }
@@ -198,26 +198,17 @@ class TestController extends AbstractController
 
     /**
      * Test notifications.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/notifications', name: 'test_notifications')]
     public function notifications(): Response
     {
-        $service = $this->getUserService();
-        $data = [
-            'position' => $service->getMessagePosition(),
-            'timeout' => $service->getMessageTimeout(),
-            'subtitle' => $service->isMessageSubTitle(),
-            'positions' => MessagePosition::sorted(),
-        ];
-
-        return $this->renderForm('test/notification.html.twig', $data);
+        return $this->renderForm('test/notification.html.twig', ['positions' => MessagePosition::sorted()]);
     }
 
     /**
      * Test password validation.
+     *
+     * @throws \Exception
      */
     #[Route(path: '/password', name: 'test_password')]
     public function password(Request $request, CaptchaImageService $service): Response
@@ -301,8 +292,15 @@ class TestController extends AbstractController
      * Display the reCaptcha.
      */
     #[Route(path: '/recaptcha', name: 'test_recaptcha')]
-    public function recaptcha(Request $request, bool $isDebug): Response
-    {
+    public function recaptcha(
+        Request $request,
+        #[Autowire('%google_recaptcha_site_key%')]
+        string $siteKey,
+        #[Autowire('%google_recaptcha_secret_key%')]
+        string $secretKey,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    ): Response {
         $data = [
             'subject' => 'My subject',
             'message' => 'My message',
@@ -327,11 +325,10 @@ class TestController extends AbstractController
             $response = (string) $data['recaptcha'];
             $hostname = (string) $request->server->get('SERVER_NAME');
             $remoteIp = (string) $request->server->get('REMOTE_ADDR');
-            $secret = $this->getStringParameter('google_recaptcha_secret_key');
             $expectedHostName = $isDebug ? $remoteIp : $hostname;
 
             // verify
-            $recaptcha = new ReCaptcha($secret);
+            $recaptcha = new ReCaptcha($secretKey);
             $recaptcha->setExpectedHostname($expectedHostName)
                 ->setExpectedAction($action)
                 ->setChallengeTimeout(60)
@@ -373,7 +370,7 @@ class TestController extends AbstractController
         }
 
         return $this->renderForm('test/recaptcha.html.twig', [
-            'google_recaptcha_site_key' => $this->getStringParameter('google_recaptcha_site_key'),
+            'google_recaptcha_site_key' => $siteKey,
             'google_recaptcha_action' => $action,
             'form' => $form,
         ]);
@@ -594,12 +591,12 @@ class TestController extends AbstractController
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/spam', name: 'test_spam')]
-    public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
+    public function verifyAkismetComment(AkismetService $akismetService, FakerService $fakerService): JsonResponse
     {
         $generator = $fakerService->getGenerator();
         $comment = $generator->realText(145);
-        $value = $akismetservice->verifyComment($comment);
-        if ($lastError = $akismetservice->getLastError()) {
+        $value = $akismetService->verifyComment($comment);
+        if ($lastError = $akismetService->getLastError()) {
             return $this->json($lastError);
         }
 

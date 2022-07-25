@@ -3,7 +3,7 @@
 {% if is_admin -%}
     {% set id = 'menu_admin' %}
     {% set expanded = app.session.get(id, false) %}
-    {% set toggle_class = expanded ? ' nav-link-toggle-show' : '' %}
+    {% set toggle_class = expanded ? ' nav-link-toggle-show active' : '' %}
     {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
     {% set display_style = expanded ? 'block' : 'none' %}
     <li class="nav-item nav-item-dropdown" id="{{ id }}">

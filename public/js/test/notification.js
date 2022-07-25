@@ -32,7 +32,7 @@ function notify(type, title, options) {
 function random() {
     'use strict';
     const button = $('.btn-notify').toArray().randomElement();
-    $(button).trigger('click').focus();
+    $(button).trigger('click'); //.focus();
 }
 
 /**
@@ -53,10 +53,10 @@ function random() {
         options.title = $('#title').isChecked();
         options.position = $('#position').val();
         options.timeout = $('#timeout').intVal();
+        options.progress = $('#progress').intVal();
         options.autohide = $('#autohide').isChecked();
         options.displayClose = $('#close').isChecked();
         options.displaySubtitle = $('#subtitle').isChecked();
-        options.displayProgress = $('#progress').isChecked();
 
         // notify
         const type = $(this).data('type');
@@ -82,9 +82,10 @@ function random() {
         random();
     });
 
-    // options
+    $('#position, #timeout, #progress').on('input', function () {
+        random();
+    });
     $('.control-option').on('click', function () {
-        //$(button).trigger('click').focus();
         random();
     });
 

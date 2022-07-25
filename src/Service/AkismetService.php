@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\TranslatorAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -37,11 +37,6 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      * The host name.
      */
     private const HOST_NAME = 'https://%s.rest.akismet.com/1.1/';
-
-    /**
-     * The parameter name for the API key.
-     */
-    private const PARAM_KEY = 'akismet_key';
 
     /**
      * The comment check URI.
@@ -81,10 +76,14 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, bool $isDebug, private readonly RequestStack $stack, private readonly Security $security)
-    {
-        /** @var string $key */
-        $key = $params->get(self::PARAM_KEY);
+    public function __construct(
+        #[Autowire('%akismet_key%')]
+        string $key,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug,
+        private readonly RequestStack $stack,
+        private readonly Security $security
+    ) {
         parent::__construct($isDebug, $key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
     }

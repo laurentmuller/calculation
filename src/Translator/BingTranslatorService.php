@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -36,11 +35,6 @@ class BingTranslatorService extends AbstractTranslatorService
     private const HOST_NAME = 'https://api.cognitive.microsofttranslator.com/';
 
     /**
-     * The parameter name for the API key.
-     */
-    private const PARAM_KEY = 'bing_translator_key';
-
-    /**
      * The detection language URI.
      */
     private const URI_DETECT = 'detect';
@@ -58,13 +52,14 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the API key parameter is not defined
-     * @throws \InvalidArgumentException  if the API key is null or empty
+     * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, bool $isDebug)
-    {
-        /** @var string $key */
-        $key = $params->get(self::PARAM_KEY);
+    public function __construct(
+        #[Autowire('%bing_translator_key%')]
+        string $key,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    ) {
         parent::__construct($isDebug, $key);
     }
 

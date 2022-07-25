@@ -18,6 +18,7 @@ use App\Form\User\ResetChangePasswordType;
 use App\Mime\ResetPasswordEmail;
 use App\Repository\UserRepository;
 use App\Service\UserExceptionService;
+use App\Traits\FooterTextTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +43,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 #[Route(path: '/reset-password')]
 class ResetPasswordController extends AbstractController
 {
+    use FooterTextTrait;
     use ResetPasswordControllerTrait;
 
     private const ROUTE_CHECK = 'app_check_email';
@@ -159,7 +161,7 @@ class ResetPasswordController extends AbstractController
         $email = new ResetPasswordEmail($this->getTranslator());
         $email->to($user->getAddress())
             ->from($this->getAddressFrom())
-            ->setFooterText($this->getFooterText())
+            ->setFooterText($this->getFooterText($this->getParameterString('app_name'), $this->getParameterString('app_version')))
             ->subject($this->trans('resetting.request.title'))
             ->action($this->trans('resetting.request.submit'), $this->getResetAction($resetToken))
             ->context([
@@ -181,11 +183,6 @@ class ResetPasswordController extends AbstractController
             $resetToken->getExpirationMessageData(),
             'ResetPasswordBundle'
         );
-    }
-
-    private function getFooterText(): string
-    {
-        return $this->trans('notification.footer', ['%name%' => $this->getApplicationName()]);
     }
 
     private function getResetAction(ResetPasswordToken $resetToken): string

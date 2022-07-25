@@ -18,6 +18,7 @@ use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\UserExceptionService;
+use App\Traits\FooterTextTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,8 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route(path: '/register')]
 class RegistrationController extends AbstractController
 {
+    use FooterTextTrait;
+
     private const ROUTE_REGISTER = 'user_register';
     private const ROUTE_VERIFY = 'user_verify';
 
@@ -110,7 +113,7 @@ class RegistrationController extends AbstractController
         $email->subject($this->trans('registration.subject'))
             ->from($this->getAddressFrom())
             ->to((string) $user->getEmail())
-            ->setFooterText($this->getFooterText())
+            ->setFooterText($this->getFooterText($this->getParameterString('app_name'), $this->getParameterString('app_version')))
             ->importance(NotificationEmail::IMPORTANCE_MEDIUM);
 
         return $email;
@@ -123,10 +126,5 @@ class RegistrationController extends AbstractController
         }
 
         return null;
-    }
-
-    private function getFooterText(): string
-    {
-        return $this->trans('notification.footer', ['%name%' => $this->getApplicationName()]);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\SwissDatabase;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Service to search zip codes, cities and streets from Switzerland.
@@ -37,8 +38,10 @@ class SwissPostService
     /**
      * Constructor.
      */
-    public function __construct(string $projectDir)
-    {
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir
+    ) {
         $this->dataDirectory = $projectDir . self::DATA_PATH;
     }
 

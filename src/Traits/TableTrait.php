@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait TableTrait
 {
     use CookieTrait;
+    use RequestTrait;
 
     /**
      * Handles a table request.
@@ -36,18 +37,11 @@ trait TableTrait
     protected function handleTableRequest(Request $request, AbstractTable $table, string $template): Response
     {
         // check permission
-        if ($subject = $table->getEntityClassName()) {
+        if (null !== $subject = $table->getEntityClassName()) {
             $this->denyAccessUnlessGranted(EntityPermission::LIST, $subject);
         }
 
         try {
-            // update request parameters
-            $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
-            if (\is_string($view)) {
-                $enum = TableView::tryFrom($view) ?? TableView::TABLE;
-                $this->updateRequest($request, TableInterface::PARAM_LIMIT, $enum->getPageSize(), $enum->value);
-            }
-
             // check empty
             if ($message = $table->checkEmpty()) {
                 $this->infoTrans($message);
@@ -75,8 +69,8 @@ trait TableTrait
             }
 
             // save results
-            $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE->value);
-            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $query->view->value);
+            $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
+            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize());
 
             return $response;
         } catch (\Throwable $e) {
@@ -100,30 +94,11 @@ trait TableTrait
     /**
      * Save the given parameter from the data result to a cookie.
      */
-    protected function saveCookie(Response $response, DataResults $results, string $key, string|int|float|bool|null $default = null, string $prefix = ''): void
+    protected function saveCookie(Response $response, DataResults $results, string $key, mixed $default = null): void
     {
-        /** @psalm-var string|int|float|bool|array|null $value */
+        /** @psalm-var mixed $value */
         $value = $results->getParams($key, $default);
-        $path = $this->getStringParameter('cookie_path');
-        $this->updateCookie($response, $key, $value, $prefix, $path);
-    }
-
-    /**
-     * @param string|int|float|bool|null $default the default value if the input key does not exist
-     *
-     * @return string|int|float|bool|null the request value, the cookie value or the default value
-     */
-    private function updateRequest(Request $request, string $key, string|int|float|bool|null $default = null, string $prefix = ''): string|int|float|bool|null
-    {
-        $input = Utils::getRequestInputBag($request);
-        $value = $input->get($key);
-        if (null === $value) {
-            $value = $this->getCookieValue($request, $key, $prefix, $default);
-            if (null !== $value) {
-                $input->set($key, $value);
-            }
-        }
-
-        return $value;
+        $path = $this->getParameterString('cookie_path');
+        $this->updateCookie($response, $key, $value, '', $path);
     }
 }

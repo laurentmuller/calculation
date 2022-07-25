@@ -17,11 +17,11 @@
 {% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded} %}
 {% endmacro %}
 {# customized fields #}
-{% block _parameters_message_timeout_widget -%}
+{% block _message_progress_widget -%}
 <div class="input-group">
     {{- block('choice_widget') -}}
     <div class="input-group-append d-print-none">
-        <button class="btn btn-notify btn-outline-secondary" type="button">{{ 'parameters.action_test'|trans }}</button>
+        <button class="btn btn-notify btn-outline-secondary" type="button" title="{{ 'parameters.action_test'|trans }}"><i class="fa-regular fa-bell"></i></button>
     </div>
 </div>
 {%- endblock %}

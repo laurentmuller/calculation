@@ -16,6 +16,7 @@ use App\Enums\EntityName;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Interfaces\RoleInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -27,7 +28,11 @@ class RightsType extends AbstractHelperType
     /**
      * Constructor.
      */
-    public function __construct(protected readonly RoleHierarchyInterface $roleHierarchy, protected readonly bool $isDebug)
+    public function __construct(
+        protected readonly RoleHierarchyInterface $roleHierarchy,
+        #[Autowire('%kernel.debug%')]
+        protected readonly bool $isDebug
+    )
     {
     }
 

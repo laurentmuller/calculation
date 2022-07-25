@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use Symfony\Component\HttpFoundation\InputBag;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -235,25 +233,6 @@ final class Utils
             'class' => self::getShortName($e),
             'trace' => $e->getTraceAsString(),
         ];
-    }
-
-    /**
-     * Gets the request input bag. This function merge the attributes,
-     * the request and the query parameters.
-     *
-     * @param Request $request the request to get values from
-     *
-     * @return InputBag<bool|float|int|string>
-     */
-    public static function getRequestInputBag(Request $request): InputBag
-    {
-        // merge
-        $result = new InputBag();
-        $result->add($request->attributes->all());
-        $result->add($request->request->all());
-        $result->add($request->query->all());
-
-        return $result;
     }
 
     /**

@@ -1,6 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# macros #}
 {% macro button(type, icon) -%}
 <button type="button" data-type="{{ type }}" class="mx-2 mb-2 btn btn-notify btn-form btn-{{ type }}">
@@ -20,17 +19,24 @@
 <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
 {%- endmacro %}
 
+{% macro progress(value, selection) -%}
+    {%- set text = 'counters.pixels'|trans({'%count%': value}) -%}
+    <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text }}</option>
+{%- endmacro %}
+
 {% macro checkbox(id, text, checked=true) -%}
 <div class="custom-control custom-switch custom-control-inline">
   <input type="checkbox" class="custom-control-input control-option" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked="checked"{% endif %}>
   <label class="custom-control-label" for="{{ id }}">{{ text|trans }}</label>
 </div>
 {%- endmacro %}
-
 {# parameters #}
 {%- set title = 'test.notification' -%}
 {%- set title_icon = 'bell far' -%}
-
+{%- set timeout = user_service.messageTimeout -%}
+{%- set position = user_service.messagePosition %}
+{%- set progress = user_service.messageProgress %}
+{# body #}
 {% block card_body %}
 <div class="form-row">
     <div class="col">
@@ -48,7 +54,7 @@
 </div>
 <hr>
 <div class="form-row">
-    <div class="col-md-7">
+    <div class="col-md-4">
         <div class="form-group">
             <label for="position">{{ 'parameters.fields.message_position'|trans }}</label>
             <select id="position" name="position" class="form-control" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
@@ -58,15 +64,23 @@
             </select>
         </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-4">
         <div class="form-group">
             <label for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
             <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-control">
-                {{ _self.timeout(1000, timeout) }}
-                {{ _self.timeout(2000, timeout) }}
-                {{ _self.timeout(3000, timeout) }}
-                {{ _self.timeout(4000, timeout) }}
-                {{ _self.timeout(5000, timeout) }}
+                {% for i in 1..5 %}
+                    {{ _self.timeout(i * 1000, timeout) }}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="progressHeight">{{ 'parameters.fields.message_progress'|trans }}</label>
+            <select id="progress" name="progress" data-default="{{ progress }}" class="form-control">
+                {% for i in 0..5 %}
+                    {{ _self.progress(i, progress) }}
+                {% endfor %}
             </select>
         </div>
     </div>
@@ -79,18 +93,17 @@
 <div class="form-row flex-column flex-md-row justify-content-start px-2">
     {{ _self.checkbox('title', 'parameters.fields.message_title') }}
     {{ _self.checkbox('icon', 'parameters.fields.message_icon') }}
-    {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', subtitle) }}
+    {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}
     {{ _self.checkbox('close', 'parameters.fields.message_close') }}
     {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
-    {{ _self.checkbox('progress', 'parameters.fields.message_progress') }}
 </div>
 {% endblock %}
-
+{# footer #}
 {% block card_footer %}
 {{ icons.homepage() }}
 <button type="button" class="btn btn-default btn-outline-secondary">{{ 'theme.default'|trans }}</button>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/test/notification.js') }}

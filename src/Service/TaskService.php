@@ -15,7 +15,7 @@ namespace App\Service;
 use App\Entity\Category;
 use App\Entity\Task;
 use App\Entity\TaskItem;
-use App\Util\Utils;
+use App\Traits\RequestTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +25,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TaskService implements \JsonSerializable
 {
+    use RequestTrait;
+
     private ?Category $category = null;
 
     /**
@@ -246,7 +248,7 @@ class TaskService implements \JsonSerializable
     private function parseRequest(Request $request): array
     {
         /** @var int[] $items */
-        $items = Utils::getRequestInputBag($request)->all('items');
+        $items = $this->getRequestAll($request, 'items');
 
         return \array_map('intval', $items);
     }

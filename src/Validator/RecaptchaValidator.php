@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use ReCaptcha\ReCaptcha as ReCaptchaService;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -27,7 +28,10 @@ class RecaptchaValidator extends AbstractConstraintValidator
      *
      * @param string $secret the reCaptcha secret key
      */
-    public function __construct(private readonly string $secret)
+    public function __construct(
+        #[Autowire('%google_recaptcha_secret_key%')]
+        private readonly string $secret
+    )
     {
         parent::__construct(Recaptcha::class);
     }

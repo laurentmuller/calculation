@@ -154,6 +154,7 @@
                 that._collapseMenus();
             }
             $link.toggleClass('nav-link-toggle-show');
+            $link.toggleClass('active', $link.hasClass('nav-link-toggle-show'));
             $menu.toggle(350, function () {
                 that._updateMenus();
                 that._saveState();
@@ -197,7 +198,7 @@
         _collapseMenus() {
             const $toggle = this.$element.find('.nav-item-dropdown .nav-link-toggle.nav-link-toggle-show');
             if ($toggle.length) {
-                $toggle.removeClass('nav-link-toggle-show').attr({
+                $toggle.removeClass('nav-link-toggle-show active').attr({
                     'title': this.options.showMenu,
                     'aria-expanded': 'false'
                 });

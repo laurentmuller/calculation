@@ -98,7 +98,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
-        $groupId = (int) $this->getRequestValue($request, self::PARAM_GROUP, 0, false);
+        $groupId = $this->getRequestInt($request, self::PARAM_GROUP);
         $query->addCustomData(self::PARAM_GROUP, $groupId);
 
         return $query;

@@ -29,13 +29,13 @@ use App\Service\SwissPostService;
 use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
+use App\Traits\RequestTrait;
 use App\Traits\StrengthTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +52,7 @@ class AjaxController extends AbstractController
 {
     use CookieTrait;
     use MathTrait;
+    use RequestTrait;
     use StrengthTranslatorTrait;
 
     /**
@@ -90,33 +91,6 @@ class AjaxController extends AbstractController
         }
 
         return $this->json($response);
-    }
-
-    /**
-     * Check if the given reCaptcha response (if any) is valid.
-     */
-    #[IsGranted('ROLE_USER')]
-    #[Route(path: '/checkrecaptcha', name: 'ajax_check_recaptcha')]
-    public function checkRecaptcha(Request $request): JsonResponse
-    {
-        // get values
-        $remoteIp = $request->getClientIp();
-        $response = (string) $this->getRequestString($request, 'g-recaptcha-response', $this->getRequestString($request, 'response'));
-        $secret = $this->getStringParameter('recaptcha_secret');
-        // verify
-        $recaptcha = new ReCaptcha($secret);
-        $result = $recaptcha->verify($response, $remoteIp);
-        // ok?
-        if ($result->isSuccess()) {
-            return $this->json(true);
-        }
-        $errorCodes = \array_map(fn (mixed $code): string => $this->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
-        if (empty($errorCodes)) {
-            $errorCodes[] = $this->trans('recaptcha.unknown-error', [], 'validators');
-        }
-        $message = \implode(' ', $errorCodes);
-
-        return $this->json($message);
     }
 
     /**
@@ -252,13 +226,12 @@ class AjaxController extends AbstractController
     #[Route(path: '/password', name: 'ajax_password')]
     public function password(Request $request): JsonResponse
     {
-        $inputBag = Utils::getRequestInputBag($request);
-        if (!$password = $inputBag->get('password')) {
+        if (null === $password = $this->getRequestString($request, 'password')) {
             return $this->jsonFalse([
                 'message' => 'No password is defined.',
             ]);
         }
-        $minimum = (int) $inputBag->get('strength', -1);
+        $minimum = $this->getRequestInt($request, 'strength', -1);
         if (!\in_array($minimum, StrengthInterface::ALLOWED_LEVELS, true)) {
             $values = \implode(', ', StrengthInterface::ALLOWED_LEVELS);
             $message = \sprintf('The minimum strength parameter %d is invalid. Allowed values: [%s].', $minimum, $values);
@@ -279,15 +252,15 @@ class AjaxController extends AbstractController
         }
 
         $inputs = [];
-        if ($userField = $inputBag->get('user')) {
+        if (null !== $userField = $this->getRequestString($request, 'user')) {
             $inputs[] = $userField;
         }
-        if ($emailField = $inputBag->get('email')) {
+        if (null !== $emailField = $this->getRequestString($request, 'email')) {
             $inputs[] = $emailField;
         }
 
         $service = new Zxcvbn();
-        $result = $service->passwordStrength((string) $password, $inputs);
+        $result = $service->passwordStrength($password, $inputs);
         $score = (int) $result['score'];
         if ($score < $minimum) {
             return $this->jsonFalse([
@@ -345,7 +318,7 @@ class AjaxController extends AbstractController
             // save hidden menu state to cookie
             $response = $this->json(true);
             $isHidden = $menus['menu_sidebar_hide'] ?? true;
-            $path = $this->getStringParameter('cookie_path');
+            $path = $this->getParameterString('cookie_path');
             $this->updateCookie($response, 'SIDEBAR_HIDE', $isHidden ? 1 : 0, '', $path);
 
             return $response;
@@ -381,16 +354,14 @@ class AjaxController extends AbstractController
     #[Route(path: '/save', name: 'ajax_save_table')]
     public function saveTable(Request $request): JsonResponse
     {
-        $bag = Utils::getRequestInputBag($request);
-        $requestView = (string) $bag->get(TableInterface::PARAM_VIEW, TableView::TABLE->value);
+        $requestView = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
         $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
-        $requestLimit = $bag->getInt(TableInterface::PARAM_LIMIT, $view->getPageSize());
+        $requestLimit = $this->getRequestInt($request, TableInterface::PARAM_LIMIT, $view->getPageSize());
 
-        $key = $view->value;
         $response = $this->json(true);
-        $path = $this->getStringParameter('cookie_path');
-        $this->updateCookie($response, TableInterface::PARAM_VIEW, $key, '', $path);
-        $this->updateCookie($response, TableInterface::PARAM_LIMIT, $requestLimit, $key, $path);
+        $path = $this->getParameterString('cookie_path');
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $path);
+        $this->updateCookie($response, TableInterface::PARAM_LIMIT, $requestLimit, '', $path);
 
         return $response;
     }
@@ -600,7 +571,7 @@ class AjaxController extends AbstractController
 
         try {
             // source
-            $source = Utils::getRequestInputBag($request)->all('calculation');
+            $source = $this->getRequestAll($request, 'calculation');
 
             // compute
             $parameters = $service->createGroupsFromData($source);

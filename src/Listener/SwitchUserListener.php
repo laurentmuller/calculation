@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
-use App\Util\Utils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
@@ -26,6 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  */
 class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberInterface
 {
+    use RequestTrait;
     use ServiceSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
@@ -64,8 +65,7 @@ class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberI
     {
         // get values
         $request = $event->getRequest();
-        /** @var ?string $action */
-        $action = Utils::getRequestInputBag($request)->get(self::SWITCH_USER);
+        $action = $this->getRequestString($request, self::SWITCH_USER);
         $original = $this->getOriginalUsername($event);
         $name = $this->getTargetUsername($event);
 

@@ -16,6 +16,7 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\CalculationService;
 use App\Traits\CacheAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Extension\AbstractExtension;
@@ -39,7 +40,10 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     /**
      * Constructor.
      */
-    public function __construct(bool $isDebug)
+    public function __construct(
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    )
     {
         $this->isDebugCache = $isDebug;
     }

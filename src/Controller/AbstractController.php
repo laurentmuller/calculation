@@ -24,6 +24,7 @@ use App\Service\UrlGeneratorService;
 use App\Service\UserService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
+use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
@@ -44,6 +45,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class AbstractController extends BaseController
 {
+    use RequestTrait;
     use TranslatorFlashMessageAwareTrait;
 
     /**
@@ -67,8 +69,8 @@ abstract class AbstractController extends BaseController
      */
     public function getAddressFrom(): Address
     {
-        $email = $this->getStringParameter('mailer_user_email');
-        $name = $this->getStringParameter('mailer_user_name');
+        $email = $this->getParameterString('mailer_user_email');
+        $name = $this->getParameterString('mailer_user_name');
 
         return new Address($email, $name);
     }
@@ -88,8 +90,8 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationName(): string
     {
-        $name = $this->getStringParameter('app_name');
-        $version = $this->getStringParameter('app_version');
+        $name = $this->getParameterString('app_name');
+        $version = $this->getParameterString('app_version');
 
         return \sprintf('%s v%s', $name, $version);
     }
@@ -99,7 +101,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwner(): string
     {
-        return $this->getStringParameter('app_owner');
+        return $this->getParameterString('app_owner');
     }
 
     /**
@@ -107,16 +109,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwnerUrl(): string
     {
-        return $this->getStringParameter('app_owner_url');
-    }
-
-    /**
-     * Gets a boolean container parameter by its name.
-     */
-    public function getBoolParameter(string $name): bool
-    {
-        /* @psalm-var bool */
-        return (bool) $this->getParameter($name);
+        return $this->getParameterString('app_owner_url');
     }
 
     /**
@@ -130,7 +123,8 @@ abstract class AbstractController extends BaseController
         if (null === $this->requestStack) {
             /** @psalm-var RequestStack $requestStack */
             $requestStack = $this->container->get('request_stack');
-            $this->requestStack = $requestStack;
+
+            return $this->requestStack = $requestStack;
         }
 
         return $this->requestStack;
@@ -219,14 +213,6 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Returns if the debug mode is enabled.
-     */
-    public function isDebug(): bool
-    {
-        return $this->getBoolParameter('kernel.debug');
-    }
-
-    /**
      * Redirect to the home page.
      */
     public function redirectToHomePage(): RedirectResponse
@@ -273,53 +259,14 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Returns the request parameter value converted to boolean.
-     *
-     * @param Request $request the request to get parameter value from
-     * @param string  $key     the parameter key
-     * @param bool    $default the default value if the parameter key does not exist
+     * Gets a string container parameter by its name.
      */
-    protected function getRequestBoolean(Request $request, string $key, bool $default = false): bool
+    protected function getParameterString(string $name): string
     {
-        return Utils::getRequestInputBag($request)->getBoolean($key, $default);
-    }
+        /** @psalm-var string $value */
+        $value = $this->getParameter($name);
 
-    /**
-     * Returns the request parameter value converted to float.
-     *
-     * @param Request $request the request to get parameter value from
-     * @param string  $key     the parameter key
-     * @param float   $default the default value if the parameter key does not exist
-     */
-    protected function getRequestFloat(Request $request, string $key, float $default = 0): float
-    {
-        return (float) Utils::getRequestInputBag($request)->get($key, $default);
-    }
-
-    /**
-     * Returns the request parameter value converted to integer.
-     *
-     * @param Request $request the request to get parameter value from
-     * @param string  $key     the parameter key
-     * @param int     $default the default value if the parameter key does not exist
-     */
-    protected function getRequestInt(Request $request, string $key, int $default = 0): int
-    {
-        return Utils::getRequestInputBag($request)->getInt($key, $default);
-    }
-
-    /**
-     * Returns the request parameter value converted to string.
-     *
-     * @param Request $request the request to get parameter value from
-     * @param string  $key     the parameter key
-     * @param ?string $default the default value if the parameter key does not exist
-     */
-    protected function getRequestString(Request $request, string $key, string $default = null): ?string
-    {
-        $value = Utils::getRequestInputBag($request)->get($key, $default);
-
-        return \is_string($value) ? $value : $default;
+        return $value;
     }
 
     /**
@@ -341,17 +288,6 @@ abstract class AbstractController extends BaseController
         $service = $this->container->get($id);
 
         return $service;
-    }
-
-    /**
-     * Gets a string container parameter by its name.
-     */
-    protected function getStringParameter(string $name): string
-    {
-        /** @psalm-var string $value */
-        $value = $this->getParameter($name);
-
-        return $value;
     }
 
     /**

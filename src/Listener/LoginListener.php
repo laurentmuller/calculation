@@ -15,6 +15,7 @@ namespace App\Listener;
 use App\Entity\User;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
@@ -34,8 +35,13 @@ class LoginListener implements EventSubscriberInterface, ServiceSubscriberInterf
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, private readonly string $appNameVersion)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $manager,
+        #[Autowire('%app_name%')]
+        private readonly string $appName,
+        #[Autowire('%app_version%')]
+        private readonly string $appVersion,
+    ) {
     }
 
     /**
@@ -62,8 +68,9 @@ class LoginListener implements EventSubscriberInterface, ServiceSubscriberInterf
     private function notify(UserInterface $user): void
     {
         $params = [
-            '%username%' => $user->getUserIdentifier(),
-            '%appname%' => $this->appNameVersion,
+            '%user_name%' => $user->getUserIdentifier(),
+            '%app_name%' => $this->appName,
+            '%app_version%' => $this->appVersion,
         ];
         $this->successTrans('security.login.success', $params);
     }

@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Traits\CacheAwareTrait;
 use App\Traits\TranslatorAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -56,7 +57,12 @@ class HelpService implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(string $projectDir, bool $isDebug)
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    )
     {
         $this->isDebugCache = $isDebug;
         $this->file = $projectDir . self::FILE_PATH;

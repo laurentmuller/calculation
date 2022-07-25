@@ -21,6 +21,7 @@ use App\Form\Type\MinStrengthType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type for application parameters.
@@ -42,13 +43,13 @@ class ApplicationParametersType extends AbstractParametersType
     /**
      * Constructor.
      */
-    public function __construct(Security $security, ApplicationService $application)
+    public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $application)
     {
         $values = $application->getDefaultValues();
         foreach (self::PASSWORD_OPTIONS as $option) {
             $values[$option] = false;
         }
-        parent::__construct($security, $values);
+        parent::__construct($security, $translator, $values);
     }
 
     protected function addSections(FormHelper $helper): void

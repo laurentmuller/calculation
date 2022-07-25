@@ -20,7 +20,7 @@ use App\Table\CalculationTable;
 use App\Table\CategoryTable;
 use App\Table\LogTable;
 use App\Table\SearchTable;
-use App\Util\Utils;
+use App\Traits\RequestTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +31,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class UrlGeneratorService
 {
+    use RequestTrait;
     /**
      * The caller parameter name.
      */
@@ -55,7 +56,7 @@ class UrlGeneratorService
         TableInterface::PARAM_VIEW,
         TableInterface::PARAM_LIMIT,
 
-        // entities
+        // tables
         LogTable::PARAM_LEVEL,
         LogTable::PARAM_CHANNEL,
 
@@ -117,9 +118,8 @@ class UrlGeneratorService
         $params = [];
 
         // parameters
-        $input = Utils::getRequestInputBag($request);
         foreach (self::PARAMETER_NAMES as $name) {
-            if (null !== ($value = $input->get($name))) {
+            if (null !== ($value = $this->getRequestValue($request, $name))) {
                 $params[$name] = $value;
             }
         }

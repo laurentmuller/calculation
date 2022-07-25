@@ -15,6 +15,7 @@ namespace App\Listener;
 use App\Interfaces\MimeTypeInterface;
 use App\Twig\NonceExtension;
 use App\Util\FileUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,7 +57,13 @@ class ResponseListener implements EventSubscriberInterface
      *
      * @throws \Exception
      */
-    public function __construct(UrlGeneratorInterface $router, NonceExtension $extension, string $file, private readonly bool $isDebug)
+    public function __construct(
+        UrlGeneratorInterface $router,
+        NonceExtension $extension,
+        string $file,
+        #[Autowire('%kernel.debug%')]
+        private readonly bool $isDebug
+    )
     {
         $nonce = "'nonce-" . $extension->getNonce() . "'";
         $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);

@@ -25,6 +25,7 @@ use App\Spreadsheet\MySqlDocument;
 use App\Spreadsheet\PhpIniDocument;
 use App\Spreadsheet\SymfonyDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +45,10 @@ class AboutController extends AbstractController
      *
      * @param string $appMode the application mode
      */
-    public function __construct(private readonly string $appMode)
+    public function __construct(
+        #[Autowire('%app_mode%')]
+        private readonly string $appMode
+    )
     {
     }
 
@@ -66,8 +70,10 @@ class AboutController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(path: '/pdf', name: 'about_pdf')]
-    public function aboutPdf(string $appName): PdfResponse
-    {
+    public function aboutPdf(
+        #[Autowire('%app_name%')]
+        string $appName
+    ): PdfResponse {
         $templateParameters = [
             'comments' => false,
             'link' => false,

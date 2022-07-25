@@ -6,20 +6,20 @@
 <p class="flashbag d-none" data-type="{{ key }}" data-title="{{ title }}">{{ content }}</p>
 {%- endmacro %}
 
-{# add all flashbag messages #}
+{# add flashbag messages #}
 {% apply spaceless %}
 <div id=flashbags class="d-none"
      data-margin-top="85px"
      data-margin-bottom="45px"
      data-timeout="{{ user_service.messageTimeout }}"
      data-position="{{ user_service.messagePosition.value }}"
+     data-progress="{{ user_service.messageProgress }}"
      data-icon="{{ user_service.messageIcon|json_encode() }}"
      data-title="{{ user_service.messageTitle|json_encode() }}"
      data-subtitle="{{ app_name_version }}"
      data-display-subtitle="{{ user_service.messageSubTitle|json_encode() }}"
      data-close-title="{{ 'common.button_close'|trans }}"
-     data-display-close="{{ user_service.messageClose|json_encode() }}"
-     data-display-progress="{{ user_service.messageProgress|json_encode() }}">
+     data-display-close="{{ user_service.messageClose|json_encode() }}">
     {% for key, messages in app.flashes %}
         {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
     {% endfor %}

@@ -331,7 +331,7 @@ final class CalculationService implements ServiceSubscriberInterface
             'margin' => 0.0,
             'margin_amount' => 0.0,
             'total' => 0.0,
-            'description' => 'Unknown',
+            'description' => $this->trans('common.value_unknown'),
         ];
         $groups[] = $new_group;
 

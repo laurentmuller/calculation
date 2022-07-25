@@ -244,16 +244,13 @@
             // - string: A custom icon is displayed.
             icon: true,
 
-            // display a progress bar at the bottom
-            displayProgress: true,
-
-            // the progress bar height
-            progressHeight: '1px',
+            // the progress bar height or 0 for none
+            progress: 1,
 
             // the toast z-index
             zindex: 3,
 
-            // auto hide
+            // auto hide after delay
             autohide: true,
 
             // handler when a toast is hidden
@@ -547,7 +544,7 @@
          * @returns {JQuery} The progress bar or null if no progress.
          */
         createProgressBar: function (options) {
-            if (!options.displayProgress) {
+            if (!options.progress) {
                 return null;
             }
             const $bar = $('<div/>', {
@@ -560,7 +557,7 @@
             const $progress = $('<div/>', {
                 'class': 'progress bg-transparent',
                 'css': {
-                    'height': options.progressHeight
+                    'height': options.progress + 'px'
                 },
             });
             $progress.append($bar);
@@ -581,7 +578,7 @@
                 delay: options.timeout,
                 autohide: options.autohide
             }).on('show.bs.toast', function () {
-                if (options.displayProgress) {
+                if (options.progress) {
                     const timeout = options.timeout;
                     const endTime = new Date().getTime() + timeout;
                     const $progress = $toast.find('.progress-bar');
@@ -590,7 +587,7 @@
                     }
                 }
             }).on('hide.bs.toast', function () {
-                if (options.displayProgress) {
+                if (options.progress) {
                     $toast.removeInterval();
                 }
             }).on('hidden.bs.toast', function () {
@@ -614,6 +611,7 @@
             const delta = (endTime - time) / timeout;
             const percent = 100 - delta * 100;
             $progress.css('width', `${percent}%`);
+            $progress.parent().attr('aria-valuenow', percent);
             if (percent >= 100) {
                 $progress.parents('.toast').removeInterval();
             }

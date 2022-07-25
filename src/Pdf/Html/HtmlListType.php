@@ -17,7 +17,7 @@ namespace App\Pdf\Html;
  *
  * @see HtmlOlChunk
  */
-enum HtmlListType : string
+enum HtmlListType: string
 {
     /*
      * Numbered list with lowercase letters.

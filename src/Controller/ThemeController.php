@@ -70,7 +70,7 @@ class ThemeController extends AbstractController
 
             // create response and update cookies
             $response = $this->redirectToHomePage();
-            $path = $this->getStringParameter('cookie_path');
+            $path = $this->getParameterString('cookie_path');
             $this->updateCookie($response, ThemeService::KEY_CSS, $css, '', $path);
             $this->updateCookie($response, ThemeService::KEY_DARK, $dark, '', $path);
             $this->updateCookie($response, ThemeService::KEY_BACKGROUND, $background, '', $path);
@@ -95,7 +95,7 @@ class ThemeController extends AbstractController
     private function getAssetBase(Request $request): string
     {
         return u($request->getSchemeAndHttpHost())
-            ->append($this->getStringParameter('cookie_path'))
+            ->append($this->getParameterString('cookie_path'))
             ->ensureEnd('/')
             ->toString();
     }

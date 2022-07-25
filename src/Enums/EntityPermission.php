@@ -22,7 +22,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<EntityPermission>
  */
-enum EntityPermission : int implements ReadableEnumInterface, SortableEnumInterface
+enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterface
 {
     use ReadableEnumTrait;
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Mime\CspViolationEmail;
+use App\Traits\FooterTextTrait;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -31,6 +32,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[IsGranted('ROLE_USER')]
 class CspController extends AbstractController
 {
+    use FooterTextTrait;
+
     /**
      * @throws \ReflectionException
      */
@@ -90,11 +93,6 @@ class CspController extends AbstractController
         return false;
     }
 
-    private function getFooterText(): string
-    {
-        return $this->trans('notification.footer', ['%name%' => $this->getApplicationName()]);
-    }
-
     private function logContext(string $title, array $context, LoggerInterface $logger): void
     {
         $logger->error($title, $context);
@@ -107,7 +105,7 @@ class CspController extends AbstractController
             ->subject($title)
             ->to($this->getAddressFrom())
             ->from($this->getAddressFrom())
-            ->setFooterText($this->getFooterText())
+            ->setFooterText($this->getFooterText($this->getParameterString('app_name'), $this->getParameterString('app_version')))
             ->action($this->trans('index.title'), $this->getActionUrl())
             ->context([
                 'context' => $context,

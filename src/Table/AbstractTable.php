@@ -16,8 +16,8 @@ use App\Entity\AbstractEntity;
 use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
-use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
+use App\Traits\ParameterTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,8 +29,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 abstract class AbstractTable implements SortModeInterface
 {
-    use CookieTrait;
     use MathTrait;
+    use ParameterTrait;
 
     /**
      * The column definitions.
@@ -102,24 +102,27 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets the data query from the given request.
-     *
-     * @throws \ReflectionException
      */
     public function getDataQuery(Request $request): DataQuery
     {
         $query = new DataQuery();
 
         // global parameters
-        $query->id = $this->getParamId($request);
         $query->callback = $request->isXmlHttpRequest();
-        $query->search = (string) $this->getRequestValue($request, TableInterface::PARAM_SEARCH, '', false);
-        $view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableView::TABLE->value, false);
-        $query->view = TableView::tryFrom($view) ?? TableView::TABLE;
+        $query->id = $this->getParamInt($request, TableInterface::PARAM_ID);
+        $query->search = (string) $this->getParamString($request, TableInterface::PARAM_SEARCH, '');
 
-        // limit, offset and page
-        $defaultSize = $query->view->getPageSize();
-        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, $defaultSize, false, $query->view->value);
-        $query->offset = (int) $this->getRequestValue($request, TableInterface::PARAM_OFFSET, 0, false);
+        // find view
+        $view = (string) $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE->value);
+        $tableView = TableView::tryFrom($view) ?? TableView::TABLE;
+        $query->view = $tableView;
+
+        // find limit
+        $limit = $this->getParamInt($request, TableInterface::PARAM_LIMIT, '', $tableView->getPageSize());
+        $query->limit = $limit;
+
+        // offset and page
+        $query->offset = $this->getParamInt($request, TableInterface::PARAM_OFFSET);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
         // sort and order
@@ -127,8 +130,8 @@ abstract class AbstractTable implements SortModeInterface
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
         }
-        $query->sort = (string) $this->getRequestValue($request, TableInterface::PARAM_SORT, $query->sort);
-        $query->order = (string) $this->getRequestValue($request, TableInterface::PARAM_ORDER, $query->order);
+        $query->sort = (string) $this->getParamString($request, TableInterface::PARAM_SORT, $query->sort);
+        $query->order = (string) $this->getParamString($request, TableInterface::PARAM_ORDER, $query->order);
 
         return $query;
     }
@@ -237,39 +240,6 @@ abstract class AbstractTable implements SortModeInterface
     protected function getDefaultOrder(): array
     {
         return [];
-    }
-
-    /**
-     * Gets the request parameter value.
-     *
-     * @param Request                    $request       the request to get value from
-     * @param string                     $name          the parameter name
-     * @param string|int|float|bool|null $default       the default value if not found
-     * @param bool                       $useSessionKey true to use session key; false to use the parameter name
-     *
-     * @throws \ReflectionException
-     */
-    protected function getRequestValue(Request $request, string $name, string|int|float|bool|null $default = null, bool $useSessionKey = true, string $prefix = ''): string|int|float|bool|null
-    {
-        $key = $useSessionKey ? $this->getSessionKey($name) : $name;
-        $session = $useSessionKey && $request->hasSession() ? $request->getSession() : null;
-
-        // find in session
-        if (null !== $session) {
-            /** @psalm-var string|int|float|bool|null $default */
-            $default = $session->get($key, $default);
-        }
-
-        // find in cookies
-        $cookieValue = $this->getCookieValue($request, $key, $prefix, $default);
-
-        // find in request
-        $value = Utils::getRequestInputBag($request)->get($name, $cookieValue);
-
-        // save
-        $session?->set($key, $value);
-
-        return $value;
     }
 
     /**
@@ -395,15 +365,5 @@ abstract class AbstractTable implements SortModeInterface
             'card-view' => \json_encode($query->isViewCard()),
             'show-custom-view' => \json_encode($query->isViewCustom()),
         ], $results->attributes);
-    }
-
-    /**
-     * Gets the selected identifier parameter.
-     *
-     * @throws \ReflectionException
-     */
-    private function getParamId(Request $request): int
-    {
-        return (int) $this->getRequestValue($request, TableInterface::PARAM_ID, 0, false);
     }
 }

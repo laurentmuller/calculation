@@ -26,6 +26,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -126,7 +127,11 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, private readonly bool $isDebug)
+    public function __construct(
+        private readonly EntityManagerInterface $manager,
+        #[Autowire('%kernel.debug%')]
+        private readonly bool $isDebug
+    )
     {
     }
 

@@ -25,7 +25,7 @@
             $element.off('keypress', this.keyPressProxy);
             $element.off('blur', this.updateProxy);
             $element.off('change', this.updateProxy);
-            $element.removeData('inputNumberFormat');
+            $element.removeData('input-number-format');
         }
 
         // -----------------------------
@@ -160,9 +160,9 @@
     $.fn.inputNumberFormat = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('inputNumberFormat')) {
+            if (!$this.data('input-number-format')) {
                 const settings = typeof options === 'object' && options;
-                $this.data('inputNumberFormat', new InputNumberFormat(this, settings));
+                $this.data('input-number-format', new InputNumberFormat(this, settings));
             }
         });
     };

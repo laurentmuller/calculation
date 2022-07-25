@@ -18,21 +18,25 @@ use App\Enums\TableView;
 use App\Form\FormHelper;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Traits\TranslatorTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract parameters type.
  */
 abstract class AbstractParametersType extends AbstractType
 {
+    use TranslatorTrait;
+
     protected bool $superAdmin = false;
 
     /**
      * Constructor.
      */
-    public function __construct(Security $security, private readonly array $defaultValues)
+    public function __construct(Security $security, private readonly TranslatorInterface $translator, private readonly array $defaultValues)
     {
         if (null !== ($user = $security->getUser())) {
             $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
@@ -47,6 +51,19 @@ abstract class AbstractParametersType extends AbstractType
         parent::buildForm($builder, $options);
         $helper = new FormHelper($builder, 'parameters.fields.');
         $this->addSections($helper);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBlockPrefix(): string
+    {
+        return '';
+    }
+
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     protected function addDisplaySection(FormHelper $helper): void
@@ -115,9 +132,14 @@ abstract class AbstractParametersType extends AbstractType
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addChoiceType($this->getTimeouts());
 
+        $key = PropertyServiceInterface::P_MESSAGE_PROGRESS;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->updateOption('choice_translation_domain', false)
+            ->addChoiceType($this->getProgress());
+
         $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_TITLE);
         $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_SUB_TITLE);
-        $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_PROGRESS);
         $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_ICON);
         $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_CLOSE);
     }
@@ -181,6 +203,19 @@ abstract class AbstractParametersType extends AbstractType
         $values = [5, 10, 15, 20, 25];
 
         return \array_combine($values, $values);
+    }
+
+    /**
+     * Gets the message progress height choices.
+     */
+    private function getProgress(): array
+    {
+        $result = [];
+        for ($i = 0; $i < 6; ++$i) {
+            $result[$this->trans('counters.pixels', ['%count%' => $i])] = $i;
+        }
+
+        return $result;
     }
 
     /**

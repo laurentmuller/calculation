@@ -41,7 +41,7 @@ function displayNotification() {
             const content = '<p class="m-0 p-0">' + response.content + '</p>';
 
             // position
-            const $position = $("#parameters_message_position");
+            const $position = $("#message_position");
             const oldPosition = $position.data('position');
             const newPosition = $position.val();
             $position.data('position', newPosition);
@@ -52,31 +52,22 @@ function displayNotification() {
             const type = types.randomElement(last);
             $position.data('type', type);
 
-            // timeout
-            const timeout = $('#parameters_message_timeout').intVal();
-
             // title
-            if (!$('#parameters_message_title').isChecked()) {
+            if (!$('#message_title').isChecked()) {
                 title = null;
             }
 
-            // display
-            const icon = $('#parameters_message_icon').isChecked();
-            const displayClose = $('#parameters_message_close').isChecked();
-            const displaySubtitle = $('#parameters_message_sub_title').isChecked();
-            const displayProgress = $('#parameters_message_progress').isChecked();
-
             // options
             const options = $.extend({}, $("#flashbags").data(), {
-                icon: icon,
-                timeout: timeout,
                 position: newPosition,
-                displayClose: displayClose,
-                displayProgress: displayProgress,
-                displaySubtitle: displaySubtitle,
+                icon: $('#message_icon').isChecked(),
+                timeout: $('#message_timeout').intVal(),
+                progress: $('#message_progress').intVal(),
+                displayClose: $('#message_close').isChecked(),
+                displaySubtitle: $('#message_sub_title').isChecked(),
             });
 
-            // clear (if required) and display
+            // remove container is needed
             if (oldPosition && oldPosition !== newPosition) {
                 Toaster.removeContainer();
             }
@@ -128,7 +119,7 @@ function displayEmail($email) {
     $('#edit-form').initValidator({
         inline: true,
         rules: {
-            'parameters[customer_url]': {
+            'customer_url': {
                 url: true
             }
         }
@@ -159,7 +150,7 @@ function displayEmail($email) {
         displayNotification();
     });
 
-    const $url = $('#parameters_customer_url');
+    const $url = $('#customer_url');
     const $urlGroup = $url.parents('.input-group').find('.input-group-url');
     if ($url.length && $urlGroup.length) {
         const handler = function (e) {
@@ -177,7 +168,7 @@ function displayEmail($email) {
         $url.trigger('input');
     }
 
-    const $email = $('#parameters_customer_email');
+    const $email = $('#customer_email');
     const $emailGroup = $email.parents('.input-group').find('.input-group-email');
     if ($email.length && $emailGroup.length) {
         const handler = function (e) {

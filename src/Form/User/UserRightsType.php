@@ -15,6 +15,7 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\FormHelper;
 use App\Traits\RoleTranslatorTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -29,7 +30,12 @@ class UserRightsType extends RightsType
     /**
      * Constructor.
      */
-    public function __construct(RoleHierarchyInterface $roleHierarchy, bool $isDebug, private readonly TranslatorInterface $translator)
+    public function __construct(
+        RoleHierarchyInterface $roleHierarchy,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug,
+        private readonly TranslatorInterface $translator
+    )
     {
         parent::__construct($roleHierarchy, $isDebug);
     }

@@ -54,15 +54,24 @@
             if (this.$input) {
                 this._cancel(null, false);
             }
-            this.$element.off('click', this.clickProxy);
-            this.$element.removeData('cell-edit');
+            this.$element.off('click', this.clickProxy)
+                .removeData('cell-edit');
+        }
+
+        /**
+         * Gets the input element.
+         *
+         * @return {jQuery|null|JQuery<HTMLElement>}
+         */
+        getInput() {
+            return this.$input;
         }
 
         // -----------------------------
         // private functions
         // -----------------------------
         _click(e) {
-            e.preventDefault();
+            e.stopPropagation();
             if (this.$input && this.$input.is(':focus')) {
                 return this;
             }
@@ -78,25 +87,31 @@
             const valid = !required || '' + this.value;
             const className = valid ? options.inputClass : options.inputClass + ' is-invalid';
             const customClass = valid ? options.tooltipEditClass : options.tooltipErrorClass;
-            const title = valid ? options.tooltipEdit : options.tooltipError ;
+            const title = valid ? options.tooltipEdit : options.tooltipError;
 
-            this.$input = $('<input>', {
+            //$.extend({}, object1, object2);
+
+            const attributes = $.extend(true, {
                 'data-custom-class': customClass,
                 'type': options.type,
                 'required': required,
                 'value': this.value,
                 'class': className,
                 'title': title
-            });
+            }, options.attributes);
+            this.$input = $('<input>', attributes);
 
-            this.$element.addClass(options.cellClass);
-            this.$element.empty().append(this.$input);
-            this.$element.parents('tr').addClass(options.rowClass);
+            this.$element.addClass(options.cellClass)
+                .empty().append(this.$input)
+                .parents('tr').addClass(options.rowClass);
 
-            this.$input.on('blur', this.blurProxy);
-            this.$input.on('input', this.inputProxy);
-            this.$input.on('keydown', this.keydownProxy);
+            this.$input.on('blur', this.blurProxy)
+                .on('input', this.inputProxy)
+                .on('keydown', this.keydownProxy);
 
+            if (options.useNumberFormat) {
+                this.$input.inputNumberFormat(options.numberFormatOptions);
+            }
             if (options.onStartEdit) {
                 options.onStartEdit();
             }
@@ -109,7 +124,7 @@
         }
 
         _blur(e) {
-            return this._cancel(e);
+            return this._cancel(e, true);
         }
 
         _input() {
@@ -137,19 +152,19 @@
         _keydown(e) {
             if (e) {
                 switch (e.which) {
-                case 13: // enter
-                    return this._update(e);
-                case 27: // escape
-                    return this._cancel(e);
-                default:
-                    return this;
+                    case 13: // enter
+                        return this._update(e);
+                    case 27: // escape
+                        return this._cancel(e, true);
+                    default:
+                        return this;
                 }
             }
         }
 
         _update(e) {
             if (e) {
-                e.preventDefault();
+                e.stopPropagation();
             }
             if (!this.$input.val()) {
                 return;
@@ -176,22 +191,25 @@
             return this;
         }
 
-        _cancel(e, notify = true) {
+        _cancel(e, notify) {
             if (e) {
-                e.preventDefault();
+                e.stopPropagation();
             }
+            const options = this.options;
             if (this.$input) {
-                this.$input.off('blur', this.blurProxy);
-                this.$input.off('input', this.inputProxy);
-                this.$input.off('keydown', this.keydownProxy);
-                this.$input.tooltip('dispose');
+                if (options.useNumberFormat) {
+                    this.$input.data('input-number-format').destroy();
+                }
+                this.$input.off('blur', this.blurProxy)
+                    .off('input', this.inputProxy)
+                    .off('keydown', this.keydownProxy)
+                    .tooltip('dispose');
                 this.$input.remove();
                 this.$input = null;
             }
-            const options = this.options;
-            this.$element.html(this.html || '');
-            this.$element.removeClass(options.cellClass);
-            this.$element.parents('tr').removeClass(options.rowClass);
+            this.$element.html(this.html || '')
+                .removeClass(options.cellClass)
+                .parents('tr').removeClass(options.rowClass);
             if (notify && options.onCancelEdit) {
                 options.onCancelEdit();
             }
@@ -226,10 +244,13 @@
     CellEdit.DEFAULTS = {
         'type': 'text', // the input type
         'required': false, // the required input attribute
-
         'inputClass': 'form-control form-control-sm m-0', // the input class
         'cellClass': 'pt-1 pb-1', // the cell class to add when editing
         'rowClass': 'table-primary', // the row class to add when editing
+        'attributes': {}, // the input attributes to merge
+
+        'useNumberFormat': false, // true to use the input number plugin
+        'numberFormatOptions': {}, // the options to use with the input number plugin
 
         'tooltipEdit': 'Enter the value', // the edit tooltip
         'tooltipError': 'The value can not be empty.', // the error tooltip

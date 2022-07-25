@@ -99,9 +99,9 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
     /**
      * Delete an entity from the database.
      *
-     * @return mixed this function returns always null
+     * @return null this function returns always null
      */
-    protected function deleteEntity(?AbstractEntity $entity)
+    protected function deleteEntity(?AbstractEntity $entity): mixed
     {
         if (null !== $entity) {
             $em = self::getManager();

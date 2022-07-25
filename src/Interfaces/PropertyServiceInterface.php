@@ -51,9 +51,9 @@ interface PropertyServiceInterface
     final public const DEFAULT_MESSAGE_POSITION = MessagePosition::BOTTOM_RIGHT;
 
     /**
-     * The default display message progress bar (boolean).
+     * The default display message progress bar height (int).
      */
-    final public const DEFAULT_MESSAGE_PROGRESS = true;
+    final public const DEFAULT_MESSAGE_PROGRESS = 1;
 
     /**
      * The default display flash bag message sub-title (boolean).
@@ -220,7 +220,7 @@ interface PropertyServiceInterface
     final public const P_MESSAGE_POSITION = 'message_position';
 
     /**
-     * The property name for displaying progress bar (default = true) of the flash bag messages (boolean).
+     * The property name for progress bar height (default = 1 px) of the flash bag messages (integer).
      */
     final public const P_MESSAGE_PROGRESS = 'message_progress';
 
@@ -312,6 +312,11 @@ interface PropertyServiceInterface
     public function getMessagePosition(): MessagePosition;
 
     /**
+     * Gets the message progress bar height (default: 1 pixel).
+     */
+    public function getMessageProgress(): int;
+
+    /**
      * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
      */
     public function getMessageTimeout(): int;
@@ -345,13 +350,6 @@ interface PropertyServiceInterface
      * Returns if the flash bag message icon is displayed (default: true).
      */
     public function isMessageIcon(): bool;
-
-    /**
-     * Returns if the flash bag message progress bar is displayed (default: true).
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isMessageProgress(): bool;
 
     /**
      * Returns if the flash bag message subtitle is displayed (default: true).

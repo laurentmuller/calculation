@@ -1824,11 +1824,16 @@ const MoveHandler = {
     $tableEdit.on('click', 'td.text-editable', function () {
         const $cell = $(this);
         $cell.celledit({
-            'inputClass': 'form-control form-control-sm text-right my-n1 mx-0',
-            'autoDispose': true,
-            'autoEdit': true,
-            'required': true,
             'type': 'number',
+            'required': true,
+            'autoEdit': true,
+            'autoDispose': true,
+            'useNumberFormat': true,
+            'inputClass': 'form-control form-control-sm text-right my-n1 mx-0',
+            'attributes': {
+                'inputmode': 'decimal',
+                'scale': '2'
+            },
             'parser': function (value) {
                 return $.parseFloat(value);
             },

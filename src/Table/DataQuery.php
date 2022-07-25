@@ -66,7 +66,7 @@ class DataQuery implements SortModeInterface
     public string $sort = '';
 
     /**
-     * The view ('table', 'card' or 'custom').
+     * The view.
      */
     public TableView $view;
 
@@ -76,7 +76,7 @@ class DataQuery implements SortModeInterface
     public function __construct()
     {
         $this->view = TableView::TABLE;
-        $this->limit = $this->view->getPageSize();
+        $this->limit = TableView::TABLE->getPageSize();
     }
 
     /**

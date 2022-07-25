@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\TranslatorAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -34,11 +34,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * The host name.
      */
     private const HOST_NAME = 'https://v6.exchangerate-api.com/v6/%s/';
-
-    /**
-     * The parameter name for the API key.
-     */
-    private const PARAM_KEY = 'exchange_rate_key';
 
     /**
      * The success response code.
@@ -71,10 +66,12 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @throws ParameterNotFoundException if the API key is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, bool $isDebug)
-    {
-        /** @var string $key */
-        $key = $params->get(self::PARAM_KEY);
+    public function __construct(
+        #[Autowire('%exchange_rate_key%')]
+        string $key,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    ) {
         parent::__construct($isDebug, $key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
     }

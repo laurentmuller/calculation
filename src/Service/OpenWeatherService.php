@@ -14,8 +14,8 @@ namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
 use App\Util\FormatUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
@@ -119,11 +119,6 @@ class OpenWeatherService extends AbstractHttpClientService
     private const ICON_SMALL_URL = 'https://openweathermap.org/img/wn/{0}@2x.png';
 
     /**
-     * The parameter name for the API key.
-     */
-    private const PARAM_KEY = 'open_weather_key';
-
-    /**
      * The medium format used for dates.
      */
     private const TYPE_MEDIUM = \IntlDateFormatter::MEDIUM;
@@ -192,10 +187,14 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, string $projectDir, bool $isDebug)
-    {
-        /** @var string $key */
-        $key = $params->get(self::PARAM_KEY);
+    public function __construct(
+        #[Autowire('%open_weather_key%')]
+        string $key,
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    ) {
         parent::__construct($isDebug, $key);
         $this->dataDirectory = $projectDir . self::DATA_PATH;
     }

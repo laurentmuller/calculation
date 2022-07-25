@@ -17,6 +17,7 @@ use App\Traits\CacheAwareTrait;
 use App\Traits\CookieTrait;
 use App\Traits\LoggerAwareTrait;
 use App\Util\FileUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -102,7 +103,13 @@ class ThemeService implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly RequestStack $stack, private readonly string $projectDir, bool $isDebug)
+    public function __construct(
+        private readonly RequestStack $stack,
+        #[Autowire('%kernel.project_dir%')]
+        private readonly string $projectDir,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    )
     {
         $this->isDebugCache = $isDebug;
     }
@@ -145,7 +152,7 @@ class ThemeService implements ServiceSubscriberInterface
     {
         if (null !== ($request = $this->getRequest($request))) {
             /** @psalm-var string $css */
-            $css = $this->getCookieValue($request, self::KEY_CSS, '', self::DEFAULT_CSS);
+            $css = $this->getCookieString($request, self::KEY_CSS, '', self::DEFAULT_CSS);
 
             return $this->findTheme($css);
         }
@@ -186,7 +193,7 @@ class ThemeService implements ServiceSubscriberInterface
     {
         if (null !== ($request = $this->getRequest($request))) {
             /** @psalm-var string $value */
-            $value = $this->getCookieValue($request, self::KEY_BACKGROUND, '', self::DEFAULT_BACKGROUND);
+            $value = $this->getCookieString($request, self::KEY_BACKGROUND, '', self::DEFAULT_BACKGROUND);
 
             return $value;
         }

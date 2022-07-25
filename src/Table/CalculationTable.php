@@ -62,7 +62,7 @@ class CalculationTable extends AbstractEntityTable
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
-        $stateId = (int) $this->getRequestValue($request, self::PARAM_STATE, 0, false);
+        $stateId = $this->getRequestInt($request, self::PARAM_STATE);
         $query->addCustomData(self::PARAM_STATE, $stateId);
 
         return $query;

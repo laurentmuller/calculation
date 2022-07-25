@@ -16,6 +16,7 @@ use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParametersType;
 use App\Service\ApplicationService;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type for user parameters.
@@ -27,17 +28,9 @@ class UserParametersType extends AbstractParametersType
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function __construct(Security $security, ApplicationService $service)
+    public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $service)
     {
-        parent::__construct($security, $service->getProperties());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix(): string
-    {
-        return 'parameters';
+        parent::__construct($security, $translator, $service->getProperties());
     }
 
     /**

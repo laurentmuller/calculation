@@ -9,7 +9,6 @@
 	"script-src": "%nonce%",
 	"script-src-elem": [
 		"%nonce%",
-		"unsafe-inline",
 		"https://www.google.com",
 		"https://api.iconify.design"
 	],

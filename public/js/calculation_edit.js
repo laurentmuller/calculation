@@ -23,7 +23,7 @@
 <!--#include file="plugins/plugin-rowlink.js" -->
 <!--#include file="plugins/plugin-input.js" -->
 <!--#include file="plugins/plugin-typeahead.js" -->
-<!--#include file="plugins/cell-edit.js" -->
+<!--#include file="plugins/plugin-cell-edit.js" -->
 
 /**
  * Specific Files

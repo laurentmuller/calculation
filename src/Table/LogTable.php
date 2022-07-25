@@ -86,8 +86,8 @@ class LogTable extends AbstractTable implements \Countable
      */
     public function getDataQuery(Request $request): DataQuery
     {
-        $level = (string) $this->getRequestValue($request, self::PARAM_LEVEL, '', false);
-        $channel = (string) $this->getRequestValue($request, self::PARAM_CHANNEL, '', false);
+        $level = (string) $this->getRequestString($request, self::PARAM_LEVEL, '');
+        $channel = (string) $this->getRequestString($request, self::PARAM_CHANNEL, '');
 
         $query = parent::getDataQuery($request);
         $query->addCustomData(self::PARAM_CHANNEL, $channel);

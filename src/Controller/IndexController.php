@@ -20,7 +20,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Traits\MathTrait;
-use App\Util\Utils;
+use App\Traits\ParameterTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +35,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class IndexController extends AbstractController
 {
     use MathTrait;
+    use ParameterTrait;
 
     /**
      * The restriction query parameter.
@@ -59,10 +60,11 @@ class IndexController extends AbstractController
     {
         $service = $this->getUserService();
         $application = $this->getApplication();
-        $restrict = $this->getRestrict($request);
+        $restrict = $this->getParamBoolean($request, self::PARAM_RESTRICT);
         $user = $restrict ? $this->getUser() : null;
         $application->updateCache();
         $service->updateCache();
+
         $parameters = [
             'min_margin' => $application->getMinMargin(),
             'calculations' => $this->getCalculations($service->getPanelCalculation(), $user),
@@ -84,11 +86,17 @@ class IndexController extends AbstractController
             $parameters['margin_count'] = $this->count(GlobalMargin::class);
             $parameters['state_count'] = $this->count(CalculationState::class);
         }
-        if ($request->hasSession()) {
-            $request->getSession()->set(self::PARAM_RESTRICT, $restrict);
-        }
 
-        return $this->renderForm('index/index.html.twig', $parameters);
+        $response = $this->renderForm('index/index.html.twig', $parameters);
+        $path = $this->getParameterString('cookie_path');
+        $this->setCookie($response, self::PARAM_RESTRICT, $restrict, '', $path);
+
+        return $response;
+    }
+
+    protected function getSessionKey(string $key): string
+    {
+        return self::PARAM_RESTRICT === $key ? \strtoupper($key) : $key;
     }
 
     /**
@@ -108,19 +116,6 @@ class IndexController extends AbstractController
     private function getMonths(): array
     {
         return $this->manager->getRepository(Calculation::class)->getByMonth();
-    }
-
-    private function getRestrict(Request $request): bool
-    {
-        $input = Utils::getRequestInputBag($request);
-        if ($input->has(self::PARAM_RESTRICT)) {
-            return $input->getBoolean(self::PARAM_RESTRICT);
-        }
-        if ($request->hasSession()) {
-            return (bool) $request->getSession()->get(self::PARAM_RESTRICT, false);
-        }
-
-        return false;
     }
 
     private function getStates(): array

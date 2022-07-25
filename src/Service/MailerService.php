@@ -17,7 +17,9 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
+use App\Traits\FooterTextTrait;
 use App\Traits\TranslatorAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -32,14 +34,22 @@ use Twig\Extra\Markdown\MarkdownInterface;
  */
 class MailerService implements ServiceSubscriberInterface
 {
+    use FooterTextTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly UrlGeneratorInterface $generator, private readonly MarkdownInterface $markdown, private readonly MailerInterface $mailer, private readonly string $appNameVersion)
-    {
+    public function __construct(
+        private readonly UrlGeneratorInterface $generator,
+        private readonly MarkdownInterface $markdown,
+        private readonly MailerInterface $mailer,
+        #[Autowire('%app_name%')]
+        private readonly string $appName,
+        #[Autowire('%app_version%')]
+        private readonly string $appVersion,
+    ) {
     }
 
     /**
@@ -96,15 +106,10 @@ class MailerService implements ServiceSubscriberInterface
     private function createNotification(): NotificationEmail
     {
         $email = new NotificationEmail($this->getTranslator());
-        $email->setFooterText($this->getFooterText())
+        $email->setFooterText($this->getFooterText($this->appName, $this->appVersion))
             ->action($this->trans('index.title'), $this->getHomeUrl());
 
         return $email;
-    }
-
-    private function getFooterText(): string
-    {
-        return $this->trans('notification.footer', ['%name%' => $this->appNameVersion]);
     }
 
     private function getHomeUrl(): string

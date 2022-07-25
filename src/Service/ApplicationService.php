@@ -29,6 +29,7 @@ use App\Security\EntityVoter;
 use App\Traits\PropertyTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -45,6 +46,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function __construct(
         private readonly EntityManagerInterface $manager,
+        #[Autowire('%kernel.debug%')]
         private readonly bool $isDebug,
         CacheItemPoolInterface $applicationCache
     ) {
@@ -369,6 +371,16 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
+    public function getMessageProgress(): int
+    {
+        return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, self::DEFAULT_MESSAGE_PROGRESS);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function getMessageTimeout(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, self::DEFAULT_MESSAGE_TIMEOUT);
@@ -435,7 +447,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_MESSAGE_TITLE => $this->isMessageTitle(),
             self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
             self::P_MESSAGE_CLOSE => $this->isMessageClose(),
-            self::P_MESSAGE_PROGRESS => $this->isMessageProgress(),
+            self::P_MESSAGE_PROGRESS => $this->getMessageProgress(),
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
 
@@ -569,16 +581,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function isMessageIcon(): bool
     {
         return $this->isPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_MESSAGE_ICON);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isMessageProgress(): bool
-    {
-        return $this->isPropertyBoolean(self::P_MESSAGE_PROGRESS, self::DEFAULT_MESSAGE_PROGRESS);
     }
 
     /**

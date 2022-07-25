@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Google translator service v2.0.
@@ -27,11 +26,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
      * The host name.
      */
     private const HOST_NAME = 'https://translation.googleapis.com/language/translate/v2/';
-
-    /**
-     * The parameter name for the API key.
-     */
-    private const PARAM_KEY = 'google_translator_key';
 
     /**
      * The detection language URI.
@@ -51,13 +45,14 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the API key parameter is not defined
-     * @throws \InvalidArgumentException  if the API key is null or empty
+     * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, bool $isDebug)
-    {
-        /** @var string $key */
-        $key = $params->get(self::PARAM_KEY);
+    public function __construct(
+        #[Autowire('%google_translator_key%')]
+        string $key,
+        #[Autowire('%kernel.debug%')]
+        bool $isDebug
+    ) {
         parent::__construct($isDebug, $key);
     }
 

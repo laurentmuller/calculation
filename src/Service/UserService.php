@@ -108,6 +108,18 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
+    public function getMessageProgress(): int
+    {
+        $default = $this->service->getMessageProgress();
+
+        return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, $default);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function getMessageTimeout(): int
     {
         $default = $this->service->getMessageTimeout();
@@ -142,7 +154,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
             self::P_MESSAGE_TITLE => $this->isMessageTitle(),
             self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
             self::P_MESSAGE_CLOSE => $this->isMessageClose(),
-            self::P_MESSAGE_PROGRESS => $this->isMessageProgress(),
+            self::P_MESSAGE_PROGRESS => $this->getMessageProgress(),
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
 
@@ -180,18 +192,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         $default = $this->service->isMessageIcon();
 
         return $this->isPropertyBoolean(self::P_MESSAGE_ICON, $default);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isMessageProgress(): bool
-    {
-        $default = $this->service->isMessageProgress();
-
-        return $this->isPropertyBoolean(self::P_MESSAGE_PROGRESS, $default);
     }
 
     /**

@@ -19,6 +19,7 @@ use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -58,6 +59,7 @@ final class FunctionExtension extends AbstractExtension
      * Constructor.
      */
     public function __construct(
+        #[Autowire('%kernel.project_dir%')]
         string $projectDir,
         private readonly UploaderHelper $helper,
         private readonly UrlGeneratorService $generator,

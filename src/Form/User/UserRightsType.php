@@ -31,10 +31,10 @@ class UserRightsType extends RightsType
      * Constructor.
      */
     public function __construct(
+        private readonly TranslatorInterface $translator,
         RoleHierarchyInterface $roleHierarchy,
         #[Autowire('%kernel.debug%')]
-        bool $isDebug,
-        private readonly TranslatorInterface $translator
+        bool $isDebug
     ) {
         parent::__construct($roleHierarchy, $isDebug);
     }

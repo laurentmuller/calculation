@@ -61,10 +61,10 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private function callback(): array
     {
         return \array_merge(
+            $this->getIcons(),
             EntityName::constants(),
             EntityPermission::constants(),
-            $this->getConstants(CalculationService::class),
-            $this->getIcons()
+            $this->getConstants(CalculationService::class)
         );
     }
 

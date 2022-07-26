@@ -29,11 +29,10 @@ class RightsType extends AbstractHelperType
      * Constructor.
      */
     public function __construct(
-        protected readonly RoleHierarchyInterface $roleHierarchy,
+        private readonly RoleHierarchyInterface $roleHierarchy,
         #[Autowire('%kernel.debug%')]
-        protected readonly bool $isDebug
-    )
-    {
+        private readonly bool $isDebug
+    ) {
     }
 
     /**

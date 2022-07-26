@@ -39,11 +39,11 @@
         </div>
     </div>
     #}
-    <div class="py-2 mb-1">
+    <div class="mb-2">
         <div class="media position-relative d-flex align-items-center">
-            <img src="{{ asset('images/icons/favicon-60x60.png') }}" alt="{{ app_name }}" class="rounded-lg img-fluid border border-dark mr-2">
+            <img src="{{ asset('images/icons/favicon-60x60.png') }}" width="60" height="60" alt="{{ app_name }}" class="rounded-lg mr-2">
             <div class="media-body">
-                <h4 class="m-0 text-white">{{ app_name }}</h4>
+                <p class="m-0 navbar-brand" style="font-size: 1.5rem">{{ app_name }}</p>
                 <p class="font-weight-light text-muted mb-0"> {{ 'about.version'|trans({'%version%': app_version}) }}</p>
                 <a href="{{ path('about') }}" class="stretched-link" title="{{ 'footer.about_title'|trans }}"></a>
             </div>

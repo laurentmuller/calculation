@@ -36,14 +36,14 @@ trait ParameterTrait
         return $this->getRequestFloat($request, $key, $default);
     }
 
-    protected function getParamInt(Request $request, string $key, string $prefix = '', int $default = 0): int
+    protected function getParamInt(Request $request, string $key, string $prefix = '', int|\BackedEnum $default = 0): int
     {
         $default = $this->getCookieInt($request, $key, $prefix, $default);
 
         return $this->getRequestInt($request, $key, $default);
     }
 
-    protected function getParamString(Request $request, string $key, string $prefix = '', string|null $default = null): string|null
+    protected function getParamString(Request $request, string $key, string $prefix = '', string|\BackedEnum $default = null): string|null
     {
         $default = $this->getCookieString($request, $key, $prefix, $default);
 

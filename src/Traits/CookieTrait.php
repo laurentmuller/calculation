@@ -44,9 +44,12 @@ trait CookieTrait
         return (float) $request->cookies->get($name, (string) $default);
     }
 
-    protected function getCookieInt(Request $request, string $key, string $prefix = '', int $default = 0): int
+    protected function getCookieInt(Request $request, string $key, string $prefix = '', int|\BackedEnum $default = 0): int
     {
         $name = $this->getCookieName($key, $prefix);
+        if ($default instanceof \BackedEnum) {
+            $default = (int) $default->value;
+        }
 
         return $request->cookies->getInt($name, $default);
     }
@@ -59,9 +62,12 @@ trait CookieTrait
         return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
     }
 
-    protected function getCookieString(Request $request, string $key, string $prefix = '', string|null $default = null): string|null
+    protected function getCookieString(Request $request, string $key, string $prefix = '', string|\BackedEnum $default = null): string|null
     {
         $name = $this->getCookieName($key, $prefix);
+        if ($default instanceof \BackedEnum) {
+            $default = (string) $default->value;
+        }
 
         return $request->cookies->get($name, $default);
     }

@@ -354,7 +354,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/save', name: 'ajax_save_table')]
     public function saveTable(Request $request): JsonResponse
     {
-        $requestView = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
+        $requestView = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE);
         $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
 
         $response = $this->json(true);

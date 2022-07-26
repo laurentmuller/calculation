@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
+use function Symfony\Component\String\u;
+
 /**
  * The abstract table.
  */
@@ -113,7 +115,7 @@ abstract class AbstractTable implements SortModeInterface
         $query->search = (string) $this->getParamString($request, TableInterface::PARAM_SEARCH, '');
 
         // find view
-        $view = (string) $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE->value);
+        $view = (string) $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
         $tableView = TableView::tryFrom($view) ?? TableView::TABLE;
         $query->view = $tableView;
 
@@ -158,7 +160,7 @@ abstract class AbstractTable implements SortModeInterface
     public function getPrefix(): string
     {
         if (null === $this->prefix) {
-            $this->prefix = Utils::getShortName($this);
+            $this->prefix = u(Utils::getShortName($this))->snake()->toString();
         }
 
         return $this->prefix;

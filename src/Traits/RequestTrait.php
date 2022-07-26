@@ -59,8 +59,11 @@ trait RequestTrait
     /**
      * Returns the request parameter value converted to integer.
      */
-    protected function getRequestInt(Request $request, string $key, int $default = 0): int
+    protected function getRequestInt(Request $request, string $key, int|\BackedEnum $default = 0): int
     {
+        if ($default instanceof \BackedEnum) {
+            $default = (int) $default->value;
+        }
         if (null !== $input = $this->getRequestBag($request, $key)) {
             return $input->getInt($key, $default);
         }
@@ -71,8 +74,11 @@ trait RequestTrait
     /**
      * Returns the request parameter value converted to string.
      */
-    protected function getRequestString(Request $request, string $key, string $default = null): ?string
+    protected function getRequestString(Request $request, string $key, string|\BackedEnum $default = null): ?string
     {
+        if ($default instanceof \BackedEnum) {
+            $default = (string) $default->value;
+        }
         if (null !== $input = $this->getRequestBag($request, $key)) {
             /** @psalm-var string|null $default */
             $default = $input->get($key, $default);

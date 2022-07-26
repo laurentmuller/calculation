@@ -202,8 +202,7 @@ span.state-color {
     display: none;
     position: fixed;
     right: 15px;
-    /*bottom: 15px;*/
-    bottom: 35px;
+    bottom: 45px;
     opacity: 0.25;
     z-index: 999997;
     padding-top: 5px;

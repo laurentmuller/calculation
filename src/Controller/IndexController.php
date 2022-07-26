@@ -59,7 +59,7 @@ class IndexController extends AbstractController
     public function invoke(Request $request): Response
     {
         $service = $this->getUserService();
-        $application = $this->getApplication();
+        $application = $service->getApplication();
         $restrict = $this->getParamBoolean($request, self::PARAM_RESTRICT);
         $user = $restrict ? $this->getUser() : null;
         $application->updateCache();
@@ -79,12 +79,12 @@ class IndexController extends AbstractController
             $parameters['months'] = $this->getMonths();
         }
         if ($service->isPanelCatalog()) {
-            $parameters['task_count'] = $this->count(Task::class);
-            $parameters['group_count'] = $this->count(Group::class);
             $parameters['product_count'] = $this->count(Product::class);
+            $parameters['task_count'] = $this->count(Task::class);
             $parameters['category_count'] = $this->count(Category::class);
-            $parameters['margin_count'] = $this->count(GlobalMargin::class);
+            $parameters['group_count'] = $this->count(Group::class);
             $parameters['state_count'] = $this->count(CalculationState::class);
+            $parameters['margin_count'] = $this->count(GlobalMargin::class);
         }
 
         $response = $this->renderForm('index/index.html.twig', $parameters);
@@ -100,8 +100,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @template T of \App\Entity\AbstractEntity
-     * @psalm-param class-string<T> $className
+     * @psalm-param class-string $className
      */
     private function count($className): int
     {
@@ -120,23 +119,23 @@ class IndexController extends AbstractController
 
     private function getStates(): array
     {
-        $states = $this->manager->getRepository(CalculationState::class)->getCalculations();
+        $results = $this->manager->getRepository(CalculationState::class)->getCalculations();
 
         // add overall entry
-        $count = \array_sum(\array_column($states, 'count'));
-        $total = \array_sum(\array_column($states, 'total'));
-        $items = \array_sum(\array_column($states, 'items'));
+        $count = \array_sum(\array_column($results, 'count'));
+        $total = \array_sum(\array_column($results, 'total'));
+        $items = \array_sum(\array_column($results, 'items'));
         $margin = $this->safeDivide($total, $items);
 
-        $states[] = [
+        $results[] = [
             'id' => 0,
-            'color' => false,
             'code' => $this->trans('calculation.fields.total'),
+            'color' => false,
             'count' => $count,
             'total' => $total,
             'margin' => $margin,
         ];
 
-        return $states;
+        return $results;
     }
 }

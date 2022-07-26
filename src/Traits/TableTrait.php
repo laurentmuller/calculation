@@ -43,7 +43,7 @@ trait TableTrait
 
         try {
             // check empty
-            if ($message = $table->checkEmpty()) {
+            if (null !== $message = $table->checkEmpty()) {
                 $this->infoTrans($message);
 
                 return $this->redirectToHomePage();
@@ -70,7 +70,7 @@ trait TableTrait
 
             // save results
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
-            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize());
+            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $table->getPrefix());
 
             return $response;
         } catch (\Throwable $e) {
@@ -94,11 +94,11 @@ trait TableTrait
     /**
      * Save the given parameter from the data result to a cookie.
      */
-    protected function saveCookie(Response $response, DataResults $results, string $key, mixed $default = null): void
+    protected function saveCookie(Response $response, DataResults $results, string $key, mixed $default = null, string $prefix = ''): void
     {
         /** @psalm-var mixed $value */
         $value = $results->getParams($key, $default);
         $path = $this->getParameterString('cookie_path');
-        $this->updateCookie($response, $key, $value, '', $path);
+        $this->updateCookie($response, $key, $value, $prefix, $path);
     }
 }

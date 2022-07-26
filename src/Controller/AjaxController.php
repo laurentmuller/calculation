@@ -356,12 +356,10 @@ class AjaxController extends AbstractController
     {
         $requestView = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE->value);
         $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
-        $requestLimit = $this->getRequestInt($request, TableInterface::PARAM_LIMIT, $view->getPageSize());
 
         $response = $this->json(true);
         $path = $this->getParameterString('cookie_path');
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $path);
-        $this->updateCookie($response, TableInterface::PARAM_LIMIT, $requestLimit, '', $path);
 
         return $response;
     }

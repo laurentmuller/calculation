@@ -35,6 +35,13 @@
 }
 
 /**
+ * Reset color for headers
+ */
+.bootstrap-table .fixed-table-container .table thead th {
+    color: initial !important;
+}
+
+/**
  * Use sort arrows from FontAwesome
  */
 .bootstrap-table .fixed-table-container .table thead th .sortable {

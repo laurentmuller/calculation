@@ -40,12 +40,12 @@ abstract class AbstractTable implements SortModeInterface
     protected ?array $columns = null;
 
     /**
-     * The session prefix.
+     * The cookie and session prefix.
      */
     private ?string $prefix = null;
 
     /**
-     * Gets the empty message if empty is not allowed and this is empty.
+     * Gets the empty message if empty is not allowed and this contains no data.
      */
     public function checkEmpty(): ?string
     {
@@ -118,7 +118,7 @@ abstract class AbstractTable implements SortModeInterface
         $query->view = $tableView;
 
         // find limit
-        $limit = $this->getParamInt($request, TableInterface::PARAM_LIMIT, '', $tableView->getPageSize());
+        $limit = $this->getParamInt($request, TableInterface::PARAM_LIMIT, $this->getPrefix(), $tableView->getPageSize());
         $query->limit = $limit;
 
         // offset and page
@@ -130,8 +130,8 @@ abstract class AbstractTable implements SortModeInterface
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
         }
-        $query->sort = (string) $this->getParamString($request, TableInterface::PARAM_SORT, $query->sort);
-        $query->order = (string) $this->getParamString($request, TableInterface::PARAM_ORDER, $query->order);
+        $query->sort = (string) $this->getParamString($request, TableInterface::PARAM_SORT, '', $query->sort);
+        $query->order = (string) $this->getParamString($request, TableInterface::PARAM_ORDER, '', $query->order);
 
         return $query;
     }
@@ -150,6 +150,18 @@ abstract class AbstractTable implements SortModeInterface
     public function getEntityClassName(): ?string
     {
         return null;
+    }
+
+    /**
+     * Gets cookie and session prefix.
+     */
+    public function getPrefix(): string
+    {
+        if (null === $this->prefix) {
+            $this->prefix = Utils::getShortName($this);
+        }
+
+        return $this->prefix;
     }
 
     /**
@@ -251,11 +263,7 @@ abstract class AbstractTable implements SortModeInterface
      */
     protected function getSessionKey(string $name): string
     {
-        if (null === $this->prefix) {
-            $this->prefix = Utils::getShortName($this);
-        }
-
-        return "$this->prefix.$name";
+        return $this->getPrefix() . '.' . $name;
     }
 
     /**

@@ -25,12 +25,8 @@ trait RequestTrait
      */
     protected function getRequestAll(Request $request, string $key, array $default = []): array
     {
-        if ($request->query->has($key)) {
-            return $request->query->all($key);
-        } elseif ($request->request->has($key)) {
-            return $request->request->all($key);
-        } elseif ($request->attributes->has($key)) {
-            return $request->attributes->all($key);
+        if (null !== $input = $this->getRequestBag($request, $key)) {
+            return $input->all($key);
         }
 
         return $default;
@@ -98,24 +94,14 @@ trait RequestTrait
         return $default;
     }
 
-    /**
-     * Returns if the request contains the given key.
-     */
-    protected function hasRequestKey(Request $request, string $key): bool
-    {
-        return $request->query->has($key) ||
-                $request->request->has($key) ||
-                $request->attributes->has($key);
-    }
-
     private function getRequestBag(Request $request, string $key): ?ParameterBag
     {
-        if ($request->query->has($key)) {
+        if ($request->attributes->has($key)) {
+            return $request->attributes;
+        } elseif ($request->query->has($key)) {
             return $request->query;
         } elseif ($request->request->has($key)) {
             return $request->request;
-        } elseif ($request->attributes->has($key)) {
-            return $request->attributes;
         } else {
             return null;
         }

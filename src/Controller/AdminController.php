@@ -19,9 +19,6 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Security\EntityVoter;
-use App\Service\ArchiveService;
-use App\Service\ProductUpdater;
-use App\Service\SuspendEventListenerService;
 use App\Service\SwissPostUpdater;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
@@ -45,49 +42,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     use RoleTranslatorTrait;
-
-    /**
-     * Archive calculations.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route(path: '/archive', name: 'admin_archive')]
-    public function archive(Request $request, ArchiveService $service, SuspendEventListenerService $listener): Response
-    {
-        $application = $this->getApplication();
-        $query = $service->createQuery();
-        $form = $service->createForm($query);
-
-        // handle request
-        if ($this->handleRequestForm($request, $form)) {
-            try {
-                // save
-                $service->saveQuery($query);
-
-                // update
-                $listener->disableListeners();
-                $result = $service->processQuery($query);
-
-                // update last date
-                if (!$query->isSimulate() && $result->isValid()) {
-                    $application->setProperty(PropertyServiceInterface::P_ARCHIVE_CALCULATION, new \DateTime());
-                }
-
-                return $this->renderForm('admin/archive_result.html.twig', [
-                    'result' => $result,
-                ]);
-            } finally {
-                $listener->enableListeners();
-            }
-        }
-
-        return $this->renderForm('admin/archive_query.html.twig', [
-            'last_update' => $application->getArchiveCalculation(),
-            'form' => $form,
-        ]);
-    }
 
     /**
      * Clear the application cache.
@@ -265,46 +219,6 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Update product prices.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route(path: '/product', name: 'admin_product')]
-    public function updateProduct(Request $request, ProductUpdater $updater): Response
-    {
-        // create form
-        $application = $this->getApplication();
-        $query = $updater->createUpdateQuery();
-        $form = $updater->createForm($query);
-
-        // handle request
-        if ($this->handleRequestForm($request, $form)) {
-            // save query
-            $updater->saveUpdateQuery($query);
-
-            // update
-            $result = $updater->update($query);
-
-            // update last date
-            if (!$query->isSimulate() && $result->isValid()) {
-                $application->setProperty(PropertyServiceInterface::P_UPDATE_PRODUCTS, new \DateTime());
-            }
-
-            return $this->renderForm('product/product_result.html.twig', [
-                'result' => $result,
-                'query' => $query,
-            ]);
-        }
-
-        return $this->renderForm('product/product_update.html.twig', [
-            'last_update' => $application->getUpdateProducts(),
-            'form' => $form,
-        ]);
-    }
-
-    /**
      * Edit rights.
      *
      * @param Request $request  the request
@@ -326,6 +240,7 @@ class AdminController extends AbstractController
         // create and handle form
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
+            // update property
             $application = $this->getApplication();
             if ($role->getRights() === $default->getRights()) {
                 $application->removeProperty($property);

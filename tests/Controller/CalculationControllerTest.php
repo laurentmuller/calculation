@@ -19,6 +19,8 @@ use App\Entity\Group;
 
 /**
  * Unit test for {@link CalculationController} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalculationControllerTest extends AbstractControllerTest
 {

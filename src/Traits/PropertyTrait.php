@@ -51,7 +51,7 @@ trait PropertyTrait
      * Gets an array property.
      *
      * @param string $name    the property name to search for
-     * @param array  $default the default value if the property is not found
+     * @param array  $default the default array if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */

@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Gets the visible product's checkboxes.
+ * Gets the product's checkboxes for the selected category.
  *
  * @returns {jQuery} - the checkboxes.
  */
@@ -39,7 +39,30 @@ function validateProducts() {
  */
 function isProductsRequired() {
     'use strict';
-    return !(isAllProducts() || getVisibleProducts().filter(':checked').length > 0);
+    return !(isAllProducts() || getVisibleProducts().filter(':checked:visible').length > 0);
+}
+
+/**
+ * Returns a value indicating if the percent checkbox is checked.
+ *
+ * @return {boolean} true if checked, false otherwise.
+ */
+function isPercent() {
+    'use strict';
+    return $('#form_type_percent').isChecked();
+}
+
+/**
+ * Hide rows with empty price when percent is selected.
+ */
+function hideEmptyPrices() {
+    'use strict';
+    const disabled = isPercent();
+    getVisibleProducts().each(function () {
+        const $this = $(this);
+        const price = $.parseFloat($this.attr('price'));
+        $this.parents('tr').toggleClass('d-none', disabled && price === 0);
+    });
 }
 
 /**
@@ -62,11 +85,10 @@ function computePrice(oldPrice, value, isPercent, round) {
  */
 function updatePrices() {
     'use strict';
-
     let value;
+    const percent = isPercent();
     const round = $('#form_round').isChecked();
-    const isPercent = $('#form_type_percent').isChecked();
-    if (isPercent) {
+    if (percent) {
         value = $.parseFloat($('#form_percent').val());
     } else {
         value = $.parseFloat($('#form_fixed').val());
@@ -78,7 +100,7 @@ function updatePrices() {
         const $this = $(this);
         if (result) {
             const oldPrice = $.parseFloat($this.attr('price'));
-            const newPrice = computePrice(oldPrice, value, isPercent, round);
+            const newPrice = computePrice(oldPrice, value, percent, round);
             if (!Number.isNaN(newPrice)) {
                 text = $.formatFloat(newPrice);
             }
@@ -92,7 +114,6 @@ function updatePrices() {
  */
 (function ($) {
     'use strict';
-
     // get widgets
     const $type = $('#form_type');
     const $fixed = $('#form_fixed');
@@ -126,17 +147,19 @@ function updatePrices() {
 
     // handle events
     $('#form_type_percent, #form_type_fixed').on('click', function () {
-        const isPercent = $('#form_type_percent').isChecked();
-        $fixed.toggleDisabled(isPercent);
-        $percent.toggleDisabled(!isPercent);
-        if (isPercent) {
+        const percent = isPercent();
+        $fixed.toggleDisabled(percent);
+        $percent.toggleDisabled(!percent);
+        if (percent) {
             $fixed.removeValidation();
             $type.val($percent.data('type'));
         } else {
             $percent.removeValidation();
             $type.val($fixed.data('type'));
         }
+        hideEmptyPrices();
         updatePrices();
+        validateProducts();
     });
 
     $('#form_percent, #form_fixed, #form_round').on('input', updatePrices);
@@ -149,6 +172,7 @@ function updatePrices() {
         if ($products.find(':checked').length === 0) {
             $products.setChecked(true);
         }
+        hideEmptyPrices();
         validateProducts();
         updatePrices();
     });

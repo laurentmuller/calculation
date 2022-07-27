@@ -1,7 +1,7 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
 {% form_theme form _self %}
-
+{# macros #}
 {% macro add_product(item, category_id) -%}
 {%- set product_category_id = item.vars.attr.category -%}
 <tr category="{{ product_category_id }}" class="text-secondary user-select-none{% if product_category_id != category_id %} d-none{% endif %}">
@@ -10,7 +10,6 @@
     <td class="text-currency">{{ item.vars.attr.price|amount }}</td>
 </tr>
 {%- endmacro %}
-
 {% block _form_percent_widget -%}
 <div class="input-group">
     <div class="input-group-prepend">
@@ -24,7 +23,6 @@
 {{ block('form_help') }}
 {{ block('form_errors') }}
 {%- endblock %}
-
 {% block _form_fixed_widget -%}
 <div class="input-group">
     <div class="input-group-prepend">
@@ -38,7 +36,6 @@
 {{ block('form_help') }}
 {{ block('form_errors') }}
 {%- endblock %}
-
 {# parameters #}
 {%- set title = 'product.update.title' -%}
 {%- set title_icon = ICON_PRODUCT -%}
@@ -48,7 +45,8 @@
 {%- set percent_attr = is_percent ? {} : {'disabled': 'disabled'} -%}
 {%- set fixed_attr = is_percent ? {'disabled': 'disabled'} : {} -%}
 {%- set category_id = form.category.vars.value|default(0) -%}
-
+{%- set submit_text = 'update.submit_text' -%}
+{# body #}
 {% block card_body %}
 {{ form_row(form.category) }}
 <div class="row mb-2">
@@ -105,7 +103,7 @@
     <p class="mb-0 text-right text-muted small">{{ 'product.update.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
     {% if app.debug %}
         {{ parent() }}

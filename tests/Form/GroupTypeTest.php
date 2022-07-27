@@ -18,12 +18,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Test for the {@link GroupType} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class GroupTypeTest extends AbstractEntityTypeTestCase
 {
-    /**
-     * (non-PHPdoc).
-     */
     protected function getData(): array
     {
         return [
@@ -34,17 +33,11 @@ class GroupTypeTest extends AbstractEntityTypeTestCase
         ];
     }
 
-    /**
-     * (non-PHPdoc).
-     */
     protected function getEntityClass(): string
     {
         return Group::class;
     }
 
-    /**
-     * (non-PHPdoc).
-     */
     protected function getFormTypeClass(): string
     {
         return GroupType::class;

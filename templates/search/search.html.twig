@@ -1,4 +1,5 @@
 {% extends 'cards/card_table.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
 {# parameters #}
 {%- set title = 'search.title' -%}
 {%- set title_icon = 'search' -%}
@@ -13,11 +14,11 @@
 {% block toolbar_actions -%}
 {% if customData.entities and customData.entities|length > 1 %}
 <div class="input-group-append btn-dropdown">
-    <button id="entity" data-value="{{ entity }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'datatable.all'|trans }}" title="{{ 'search.entity_help'|trans }}">
-        {{- entity ? customData.entities[entity]|trans : 'datatable.all'|trans -}}
+    <button id="entity" data-value="{{ entity }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'search.entity'|trans }}" title="{{ 'search.entity_help'|trans }}">
+        {{ icons.icon('database') }}&nbsp;{{- entity ? customData.entities[entity]|trans : 'search.entity'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="entity">
-        {{ _self.output_dropdown('entity', '', entity, 'datatable.all'|trans) }}
+        {{ _self.output_dropdown('entity', '', entity, 'search.all_entities'|trans, {'data-icon': 'fa-fw fa-solid fa-database'}) }}
         {{ _self.item_separator() }}
         {% for key, entry in customData.entities %}
         {{ _self.output_dropdown('entity', key, entity, entry.name|trans, {'data-icon': entry.icon}) }}

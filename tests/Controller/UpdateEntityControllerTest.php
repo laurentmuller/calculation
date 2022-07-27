@@ -20,9 +20,11 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link UpdateController} class.
+ * Unit test for {@link UpdateEntityController} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class UpdateControllerTest extends AbstractControllerTest
+class UpdateEntityControllerTest extends AbstractControllerTest
 {
     private static ?Category $category = null;
     private static ?Customer $customer = null;

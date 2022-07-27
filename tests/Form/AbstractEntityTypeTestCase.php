@@ -16,7 +16,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * Test for the {@link AbstractEntityType} class.
+ * Test for type class.
  */
 abstract class AbstractEntityTypeTestCase extends TypeTestCase
 {
@@ -61,20 +61,22 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
 
     /**
      * Gets the entity class name.
+     *
+     * @psalm-return class-string
      */
     abstract protected function getEntityClass(): string;
 
     /**
      * Gets the form type class name.
+     *
+     * @psalm-return class-string
      */
     abstract protected function getFormTypeClass(): string;
 
     /**
      * Update the given entity with the given data.
-     *
-     * @return mixed
      */
-    protected function populate(string $className, array $data)
+    protected function populate(string $className, array $data): mixed
     {
         $entity = new $className();
         $accessor = PropertyAccess::createPropertyAccessor();

@@ -14,6 +14,8 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link ChartController} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class ChartControllerTest extends AbstractControllerTest
 {

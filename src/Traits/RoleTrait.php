@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Trait to deal with a role name and rights.
+ * A trait used by classes that deal with roles and access rights.
  */
 trait RoleTrait
 {

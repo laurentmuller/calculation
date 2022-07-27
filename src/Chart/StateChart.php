@@ -49,10 +49,10 @@ class StateChart extends BaseChart
         $total = \array_sum(\array_column($states, 'total'));
         $items = \array_sum(\array_column($states, 'items'));
 
-        /** @psalm-var array $state */
+        /** @psalm-var array{count: int, total: float} $state */
         foreach ($states as &$state) {
-            $state['percentCalculation'] = $this->safeDivide((float) $state['count'], $count);
-            $state['percentAmount'] = $this->safeDivide((float) $state['total'], $total);
+            $state['percentCalculation'] = $this->safeDivide($state['count'], $count);
+            $state['percentAmount'] = $this->safeDivide($state['total'], $total);
         }
 
         $data = \array_map(function (array $state): array {
@@ -101,22 +101,13 @@ class StateChart extends BaseChart
     }
 
     /**
-     * @param array<array{
-     *      id: int,
-     *      code: string,
-     *      editable: boolean,
-     *      color: string,
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      margin: float,
-     *      marginAmount: float}> $states
+     * @pslam-param array<QueryCalculation> $states
      *
      * @return string[]
      */
     private function getColors(array $states): array
     {
-        return \array_map(fn (array $state): string => $state['color'], $states);
+        return \array_map(fn (array $state): string => (string) $state['color'], $states);
     }
 
     private function getPie(): array

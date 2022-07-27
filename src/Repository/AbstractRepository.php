@@ -138,33 +138,32 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Creates a search query.
      *
      * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
-     * @param array<Criteria|string> $criterias    the filter criteria (the where clause)
+     * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
      * @param string                 $alias        the entity alias
      *
      * @throws Query\QueryException
+     * @throws \Doctrine\ORM\Exception\ORMException
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      * @psalm-param literal-string $alias
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function getSearchQuery(array $sortedFields = [], array $criterias = [], string $alias = self::DEFAULT_ALIAS): Query
+    public function getSearchQuery(array $sortedFields = [], array $criteria = [], string $alias = self::DEFAULT_ALIAS): Query
     {
         // builder
         $builder = $this->createDefaultQueryBuilder($alias);
 
-        // criteria
-        if (!empty($criterias)) {
-            foreach ($criterias as $criteria) {
-                if ($criteria instanceof Criteria) {
-                    $builder->addCriteria($criteria);
+        // add criteria
+        if (!empty($criteria)) {
+            foreach ($criteria as $criterion) {
+                if ($criterion instanceof Criteria) {
+                    $builder->addCriteria($criterion);
                 } else {
-                    $builder->andWhere($criteria);
+                    $builder->andWhere($criterion);
                 }
             }
         }
 
-        // order by clause
+        // add order by clause
         if (!empty($sortedFields)) {
             foreach ($sortedFields as $name => $order) {
                 $field = $this->getSortField($name, $alias);

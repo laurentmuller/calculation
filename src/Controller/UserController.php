@@ -435,15 +435,15 @@ class UserController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
+    protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         // remove super admin users if not granted
         $role = RoleInterface::ROLE_SUPER_ADMIN;
         if (!$this->isGranted($role)) {
-            $criterias[] = "$alias.role <> '$role' or $alias.role IS NULL";
+            $criteria[] = "$alias.role <> '$role' or $alias.role IS NULL";
         }
 
-        return parent::getEntities($field, $mode, $criterias, $alias);
+        return parent::getEntities($field, $mode, $criteria, $alias);
     }
 
     /**

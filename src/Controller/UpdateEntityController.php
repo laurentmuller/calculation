@@ -34,14 +34,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[AsController]
 #[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/update')]
-class UpdateController extends AbstractController
+class UpdateEntityController extends AbstractController
 {
     #[Route(path: '', name: 'update')]
     public function update(): Response
     {
-        $type = UrlGeneratorInterface::ABSOLUTE_URL;
-
         // choices
+        $type = UrlGeneratorInterface::ABSOLUTE_URL;
         $choices = [
             'customer.name' => $this->generateUrl('update_customer', [], $type),
             'calculation.name' => $this->generateUrl('update_calculation', [], $type),

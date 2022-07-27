@@ -12,19 +12,21 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
- * Unit test for {@link SiteMapController} class.
+ * Unit test for {@link ArchiveCalculationController} class.
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class SiteMapControllerTest extends AbstractControllerTest
+class ArchiveCalculationControllerTest extends AbstractControllerTest
 {
     public function getRoutes(): array
     {
         return [
-            ['/sitemap', self::ROLE_USER],
-            ['/sitemap', self::ROLE_ADMIN],
-            ['/sitemap', self::ROLE_SUPER_ADMIN],
+            ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/admin/archive', self::ROLE_ADMIN],
+            ['/admin/archive', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

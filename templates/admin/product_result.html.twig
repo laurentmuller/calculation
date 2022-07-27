@@ -1,19 +1,19 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
+{# macro #}
 {% macro add_line_info(name, value) -%}
 </tr>
     <td class="w-30">{{ name|trans }}</td>
     <td>{{ value|raw }}</td>
 </tr>
 {%- endmacro %}
-
+{# parameters #}
 {%- set title = 'product.update.title' -%}
 {%- set title_icon = ICON_PRODUCT -%}
 {%- set title_description = 'product.result.description' -%}
-
+{# body #}
 {% block card_body %}
-<table class="table table-sm border-bottom">
+<table class="table table-sm border-bottom position-relative">
     {{ _self.add_line_info('category.fields.group', query.groupCode) }}
     {{ _self.add_line_info('product.fields.category', query.categoryCode) }}
     {{ _self.add_line_info('product.update.type', (query.percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
@@ -23,7 +23,7 @@
         <tr>
             <td class="w-30">{{ 'product.result.updated'|trans }}</td>
             <td>
-                <a href="#" data-toggle="modal" data-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
+                <a href="#" class="stretched-link" data-toggle="modal" data-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
                     {{- result.count|integer -}}
                 </a>
             </td>
@@ -85,10 +85,9 @@
     </div>
 </div>
 {% endif %}
-
 {% endblock %}
-
+{# footer #}
 {% block card_footer %}
 {{ icons.homepage() }}
-{{ icons.link(path('admin_product'), 'product.result.new_update', 'btn btn-outline-secondary', null) }}
+{{ icons.link(path('admin_product'), 'product.result.new_update', 'btn btn-form btn-secondary', null) }}
 {% endblock %}

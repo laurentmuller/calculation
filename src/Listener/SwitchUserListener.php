@@ -65,9 +65,9 @@ class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberI
     {
         // get values
         $request = $event->getRequest();
-        $action = $this->getRequestString($request, self::SWITCH_USER);
-        $original = $this->getOriginalUsername($event);
         $name = $this->getTargetUsername($event);
+        $original = $this->getOriginalUsername($event);
+        $action = $this->getRequestString($request, self::SWITCH_USER);
 
         // clear menus
         $this->clearMenus($request);
@@ -102,12 +102,9 @@ class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberI
 
     private function filterKey(string $key): bool
     {
-        return \str_starts_with($key, self::MENU_PREFIX) && self::MENU_ACTIVE !== $key;
+        return self::MENU_ACTIVE !== $key && \str_starts_with($key, self::MENU_PREFIX);
     }
 
-    /**
-     * Gets the original username (if any).
-     */
     private function getOriginalUsername(SwitchUserEvent $event): ?string
     {
         $token = $event->getToken();
@@ -118,9 +115,6 @@ class SwitchUserListener implements EventSubscriberInterface, ServiceSubscriberI
         return null;
     }
 
-    /**
-     * Gets the target username.
-     */
     private function getTargetUsername(SwitchUserEvent $event): string
     {
         return $event->getTargetUser()->getUserIdentifier();

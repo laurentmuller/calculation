@@ -16,16 +16,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link AdminController} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class AdminControllerTest extends AbstractControllerTest
 {
     public function getRoutes(): array
     {
         return [
-            ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/archive', self::ROLE_ADMIN],
-            ['/admin/archive', self::ROLE_SUPER_ADMIN],
-
             ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/admin/clear', self::ROLE_ADMIN],
             ['/admin/clear', self::ROLE_SUPER_ADMIN],
@@ -45,10 +43,6 @@ class AdminControllerTest extends AbstractControllerTest
             ['/admin/rights/user', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/admin/rights/user', self::ROLE_ADMIN],
             ['/admin/rights/user', self::ROLE_SUPER_ADMIN],
-
-            ['/admin/product', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/product', self::ROLE_ADMIN],
-            ['/admin/product', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

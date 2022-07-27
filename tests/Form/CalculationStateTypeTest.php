@@ -12,37 +12,33 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
-use App\Entity\Customer;
-use App\Form\Customer\CustomerType;
+use App\Entity\CalculationState;
+use App\Form\CalculationState\CalculationStateType;
 
 /**
- * Test for the {@link CustomerType} class.
+ * Test fo the {@link CalculationStateType} class.
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class CustomerTypeTest extends AbstractEntityTypeTestCase
+class CalculationStateTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array
     {
         return [
-            'company' => 'company',
-            'firstName' => 'firstName',
-            'lastName' => 'lastName',
-            'title' => 'title',
-            'address' => 'address',
-            'city' => 'city',
-            'zipCode' => 'zipCode',
-            'email' => 'email',
+            'code' => 'code',
+            'color' => 'black',
+            'description' => 'description',
+            'editable' => true,
         ];
     }
 
     protected function getEntityClass(): string
     {
-        return Customer::class;
+        return CalculationState::class;
     }
 
     protected function getFormTypeClass(): string
     {
-        return CustomerType::class;
+        return CalculationStateType::class;
     }
 }

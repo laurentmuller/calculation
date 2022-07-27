@@ -21,6 +21,17 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation state entity.
  *
+ * @psalm-type QueryCalculation array{
+ *      id: int,
+ *      code: string,
+ *      editable: boolean,
+ *      color: string,
+ *      count: int,
+ *      items: float|string,
+ *      total: float|string,
+ *      margin: float|string,
+ *      marginAmount: float|string}
+ *
  * @template-extends AbstractRepository<CalculationState>
  * @psalm-suppress  MixedReturnTypeCoercion
  */
@@ -42,16 +53,7 @@ class CalculationStateRepository extends AbstractRepository
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
      * @return array the states with the number and the sum of calculations
-     * @psalm-return array<array{
-     *      id: int,
-     *      code: string,
-     *      editable: boolean,
-     *      color: string,
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      margin: float,
-     *      marginAmount: float}>
+     * @psalm-return QueryCalculation[]
      */
     public function getCalculations(): array
     {
@@ -59,17 +61,7 @@ class CalculationStateRepository extends AbstractRepository
             ->getQuery()
             ->getArrayResult();
 
-        /** @psalm-var array{
-         *      id: int,
-         *      code: string,
-         *      editable: boolean,
-         *      color: string,
-         *      count: int,
-         *      items: string|float,
-         *      total: string|float,
-         *      margin: string|float,
-         *      marginAmount: string|float} $result
-         */
+        /** @psalm-var QueryCalculation $result */
         foreach ($results as &$result) {
             $this->updateQueryResult($result);
         }
@@ -195,16 +187,7 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * @psalm-param array{
-     *      id: int,
-     *      code: string,
-     *      editable: boolean,
-     *      color: string,
-     *      count: int,
-     *      items: string|float,
-     *      total: string|float,
-     *      margin: string|float,
-     *      marginAmount: string|float} $result
+     * @psalm-param QueryCalculation $result
      */
     private function updateQueryResult(array &$result): void
     {

@@ -170,14 +170,21 @@ class ProductUpdater implements ServiceSubscriberInterface
     {
         $result = new ProductUpdateResult();
 
+        // get products
         $products = $query->isAllProducts() ? $this->getProducts($query->getCategory()) : $query->getProducts();
         if (empty($products)) {
             return $result;
         }
 
+        // get query values
+        $percent = $query->isPercent();
+        $value = $query->getValue();
+        $round = $query->isRound();
+
+        // update price
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
-            $newPrice = $this->computePrice($oldPrice, $query);
+            $newPrice = $this->computePrice($oldPrice, $percent, $value, $round);
 
             if ($oldPrice !== $newPrice) {
                 $product->setPrice($newPrice);
@@ -189,6 +196,7 @@ class ProductUpdater implements ServiceSubscriberInterface
             }
         }
 
+        // save if applicable
         if (!$query->isSimulate() && $result->isValid()) {
             $this->manager->flush();
             $this->logResult($query, $result);
@@ -200,10 +208,10 @@ class ProductUpdater implements ServiceSubscriberInterface
     /**
      * Compute the new product price.
      */
-    private function computePrice(float $oldPrice, ProductUpdateQuery $query): float
+    private function computePrice(float $oldPrice, bool $percent, float $value, bool $isRound): float
     {
-        $newPrice = $query->isPercent() ? $oldPrice * (1 + $query->getValue()) : $oldPrice + $query->getValue();
-        if ($query->isRound()) {
+        $newPrice = $percent ? $oldPrice * (1 + $value) : $oldPrice + $value;
+        if ($isRound) {
             $newPrice = \round($newPrice * 20) / 20;
         }
 

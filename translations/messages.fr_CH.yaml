@@ -964,6 +964,7 @@ product:
     round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
     title: Mise à jour des articles
     type: Type de mise à jour
+    submit_text: Mettre à jour
 profile:
   change_password:
     failure: Impossible de trouver l'utilisateur actuel.
@@ -1046,6 +1047,8 @@ search:
   title: Rechercher
   clear: Effacer les critères de recherche
   empty: Aucun objet correspondant.
+  entity: Objet
+  all_entities: Tous les objets
   entity_help: Afficher les résultats pour l'objet sélectionné
   fields:
     content: Contenu

@@ -1,5 +1,5 @@
 {% extends 'cards/card_table.html.twig' %}
-
+{% import 'macros/_icons.html.twig' as icons %}
 {# parameters #}
 {%- set title = 'product.list.title' -%}
 {%- set title_icon = ICON_PRODUCT -%}
@@ -15,7 +15,7 @@
 {% set group = '' %}
 <div class="input-group-append">
     <button id="categoryid" data-value="{{ categoryid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
-        <i class="fa-regular fa-folder"></i>&nbsp;{{- customData.category ? customData.category.code : 'product.fields.category'|trans -}}
+        {{ icons.icon(ICON_CATEGORY) }}&nbsp;{{- customData.category ? customData.category.code : 'product.fields.category'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="categoryid">
         {{ _self.output_dropdown('category', 0, categoryid, 'product.list.category_all_text'|trans) }}

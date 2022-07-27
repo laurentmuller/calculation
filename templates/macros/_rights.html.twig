@@ -16,7 +16,7 @@
         {%- if not overwrite -%}
             {%- set attr = attr|merge({'disabled': 'disabled', 'checked': checked}) -%}
         {%- endif -%}
-        <td>{{ form_widget(entry, {label_attr: {class: 'switch-custom'}, attr: attr}) }}</td>
+        <td>{{ form_widget(entry, {label_attr: {class: 'checkbox-custom'}, attr: attr}) }}</td>
     {% endfor %}
 </tr>
 {%- endmacro %}

@@ -80,7 +80,7 @@ class RightsType extends AbstractHelperType
     private function hasRole(mixed $data, string $role): bool
     {
         if ($data instanceof RoleInterface) {
-            $roles = $this->roleHierarchy->getReachableRoleNames([$data->getRole()]);
+            $roles = $this->roleHierarchy->getReachableRoleNames($data->getRoles());
 
             return \in_array($role, $roles, true);
         }

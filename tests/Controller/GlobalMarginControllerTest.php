@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link GlobalMarginController} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class GlobalMarginControllerTest extends AbstractControllerTest
 {

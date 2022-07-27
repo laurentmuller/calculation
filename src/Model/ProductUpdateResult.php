@@ -18,14 +18,14 @@ namespace App\Model;
 class ProductUpdateResult implements \Countable
 {
     /**
-     * @var array<array<string, mixed>>
+     * @var array<array{description: string|null, oldPrice: float, newPrice: float}>
      */
     private array $products = [];
 
     /**
      * Add a product to the list of updated products.
      *
-     * @param array<string, mixed> $values
+     * @param array{description: string|null, oldPrice: float, newPrice: float} $values
      */
     public function addProduct(array $values): self
     {
@@ -44,6 +44,8 @@ class ProductUpdateResult implements \Countable
 
     /**
      * Gets the updated products.
+     *
+     * @return array<array{description: string|null, oldPrice: float, newPrice: float}>
      */
     public function getProducts(): array
     {

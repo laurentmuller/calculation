@@ -40,6 +40,15 @@ interface RoleInterface
     public function getRole(): string;
 
     /**
+     * Gets roles.
+     *
+     * @return string[]
+     *
+     * @pslam-return RoleInterface::ROLE_*[]
+     */
+    public function getRoles(): array;
+
+    /**
      * Checks if this has the given role.
      *
      * @param string $role the role name to be tested

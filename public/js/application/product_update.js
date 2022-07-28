@@ -33,16 +33,6 @@ function validateProducts() {
 }
 
 /**
- * Check if products selection is required.
- *
- * @returns {boolean} true if required; false if not.
- */
-function isProductsRequired() {
-    'use strict';
-    return !(isAllProducts() || getVisibleProducts().filter(':checked:visible').length > 0);
-}
-
-/**
  * Returns a value indicating if the percent checkbox is checked.
  *
  * @return {boolean} true if checked, false otherwise.
@@ -120,6 +110,16 @@ function updatePrices() {
     const $percent = $('#form_percent');
     const $category = $('#form_category');
 
+    // add custom method for products
+    $.validator.addMethod('checkProducts', function (_value, _element, _param) {
+        const filter = isAllProducts() ? ':visible' : ':checked:visible';
+        const result = getVisibleProducts().filter(filter).length !== 0;
+        $('#form_products thead').toggleClass('d-none', !result);
+        $('#form_products tfoot').toggleClass('d-none', result);
+        return result;
+
+    }, $('#form_allProducts').data('error'));
+
     // validation
     $('#edit-form').simulate().initValidator({
         rules: {
@@ -130,7 +130,7 @@ function updatePrices() {
                 notEqualToZero: true
             },
             'form[allProducts]': {
-                required: isProductsRequired
+                checkProducts: true
             }
         },
         submitHandler: function (form) {

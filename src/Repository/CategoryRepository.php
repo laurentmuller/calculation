@@ -88,10 +88,10 @@ class CategoryRepository extends AbstractRepository
      */
     public function getDropDownTasks(): array
     {
-        $builder = $this->getDropDownQuery()
-            ->innerJoin('c.tasks', 't');
-
-        return $builder->getQuery()->getArrayResult();
+        return $this->getDropDownQuery()
+            ->innerJoin('c.tasks', 't')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

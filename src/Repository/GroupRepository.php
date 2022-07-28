@@ -53,16 +53,16 @@ class GroupRepository extends AbstractRepository
      */
     public function getListCountCategories(): array
     {
-        $builder = $this->createQueryBuilder('g')
+        return $this->createQueryBuilder('g')
             ->select('g.id')
             ->addSelect('g.code')
             ->addSelect('g.description')
             ->addSelect('COUNT(c.id) as count')
             ->innerJoin('g.categories', 'c')
             ->groupBy('g.id')
-            ->orderBy('g.code', Criteria::ASC);
-
-        return $builder->getQuery()->getArrayResult();
+            ->orderBy('g.code', Criteria::ASC)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

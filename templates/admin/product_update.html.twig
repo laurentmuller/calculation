@@ -67,7 +67,7 @@
         </div>
     </div>
 </div>
-<div class="overflow-auto table-fixed-header table-fixed-header-sm border">
+<div class="overflow-auto table-fixed-header table-fixed-header-sm border mb-3">
     <table class="table table-hover table-fixed-header table-sm" id="form_products">
         <thead class="thead-light">
             <tr>
@@ -81,8 +81,14 @@
             {{- _self.add_product(item, category_id) }}
         {%- endfor %}
         </tbody>
+        <tfoot class="d-none">
+            <tr>
+                <td class="table-warning text-center" colspan="3">{{ 'product.update.products_empty'|trans }}</td>
+            </tr>
+        </tfoot>
     </table>
 </div>
+
 <label class="required">{{ 'product.update.type'|trans }}</label>
 <div class="row">
     <div class="col-md-6">

@@ -219,21 +219,14 @@ class ProductUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets all products.
+     * Gets all products ordered by descriptions.
      *
      * @return Product[] the products
      */
     private function getAllProducts(): array
     {
-        $repository = $this->manager->getRepository(Product::class);
-
-        /** @var Product[] $products */
-        $products = $repository->createDefaultQueryBuilder('e')
-            ->orderBy('e.description')
-            ->getQuery()
-            ->getResult();
-
-        return $products;
+        return $this->manager->getRepository(Product::class)
+            ->findAllByDescription();
     }
 
     /**
@@ -251,19 +244,15 @@ class ProductUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets products for the given category.
+     * Gets products for the given category (if any); an empty array otherwise.
      *
      * @return Product[] the products
-     *
-     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getProducts(?Category $category): array
     {
         if (null !== $category) {
-            /** @var \App\Repository\ProductRepository $repository */
-            $repository = $this->manager->getRepository(Product::class);
-
-            return $repository->findByCategory($category);
+            return $this->manager->getRepository(Product::class)
+                ->findByCategory($category);
         }
 
         return [];

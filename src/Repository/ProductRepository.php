@@ -14,6 +14,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,16 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
+     * Gets all products order by description.
+     *
+     * @return Product[]
+     */
+    public function findAllByDescription(): array
+    {
+        return $this->findBy([], ['description' => Criteria::ASC]);
+    }
+
+    /**
      * Gets all products order by group, category and description.
      *
      * @return Product[]
@@ -47,12 +58,12 @@ class ProductRepository extends AbstractCategoryItemRepository
         $categoryField = $this->getSortField('category.code');
         $descriptionField = $this->getSortField('description');
 
-        $builder = $this->createDefaultQueryBuilder()
+        return $this->createDefaultQueryBuilder()
             ->orderBy($groupField)
             ->addOrderBy($categoryField)
-            ->addOrderBy($descriptionField);
-
-        return $builder->getQuery()->getResult();
+            ->addOrderBy($descriptionField)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -64,12 +75,10 @@ class ProductRepository extends AbstractCategoryItemRepository
      */
     public function findByCategory(Category $category): array
     {
-        $builder = $this->createDefaultQueryBuilder('e')
+        return $this->createDefaultQueryBuilder('e')
             ->where('e.category = :category')
             ->setParameter('category', $category->getId(), Types::INTEGER)
-            ->orderBy('e.description');
-
-        return $builder
+            ->orderBy('e.description')
             ->getQuery()
             ->getResult();
     }

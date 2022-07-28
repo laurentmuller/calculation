@@ -960,6 +960,7 @@ product:
     percent: Pourcentage
     percent_help: 'Example : 50.00 + 12% = 56.00'
     products_error: Un ou plusieurs articles doivent être sélectionnés.
+    products_empty: Aucun article ne correspond aux critères. Veuillez sélectionner une autre catégorie ou un autre type de mise à jour.
     round: Arrondir au 5 centimes
     round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
     title: Mise à jour des articles

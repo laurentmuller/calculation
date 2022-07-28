@@ -76,7 +76,7 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getDropDownStates(): array
     {
-        $builder = $this->createQueryBuilder('s')
+        return $this->createQueryBuilder('s')
             ->select('s.id')
             ->addSelect('s.code')
             ->addSelect('s.editable')
@@ -84,9 +84,9 @@ class CalculationStateRepository extends AbstractRepository
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.editable', Criteria::DESC)
-            ->addOrderBy('s.code', Criteria::ASC);
-
-        return $builder->getQuery()->getArrayResult();
+            ->addOrderBy('s.code', Criteria::ASC)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -98,7 +98,7 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getDropDownStatesBelow(float $margin): array
     {
-        $builder = $this->createQueryBuilder('s')
+        return $this->createQueryBuilder('s')
             ->select('s.id')
             ->addSelect('s.code')
             ->addSelect('s.editable')
@@ -109,9 +109,9 @@ class CalculationStateRepository extends AbstractRepository
             ->addOrderBy('s.code', Criteria::ASC)
             ->where('c.itemsTotal != 0')
             ->andWhere('(c.overallTotal / c.itemsTotal) < :margin')
-            ->setParameter('margin', $margin, Types::FLOAT);
-
-        return $builder->getQuery()->getArrayResult();
+            ->setParameter('margin', $margin, Types::FLOAT)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

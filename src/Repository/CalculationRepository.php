@@ -225,15 +225,15 @@ class CalculationRepository extends AbstractRepository
      */
     public function getByInterval(\DateTimeInterface $from, \DateTimeInterface $to): array
     {
-        $builder = $this->createQueryBuilder('c')
+        return $this->createQueryBuilder('c')
             ->where('c.date > :from')
             ->andWhere('c.date <= :to')
             ->setParameter('from', $from, Types::DATETIME_MUTABLE)
             ->setParameter('to', $to, Types::DATETIME_MUTABLE)
             ->orderBy('c.date', Criteria::DESC)
-            ->addOrderBy('c.id', Criteria::DESC);
-
-        return $builder->getQuery()->getResult();
+            ->addOrderBy('c.id', Criteria::DESC)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

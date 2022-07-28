@@ -73,7 +73,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getAdminRole(): Role
     {
         $role = EntityVoter::getRoleAdmin();
-        /** @psalm-var int[] $rights */
         $rights = $this->getPropertyArray(self::P_ADMIN_RIGHTS, $role->getRights());
         $role->setRights($rights);
 
@@ -511,7 +510,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getUserRole(): Role
     {
         $role = EntityVoter::getRoleUser();
-        /** @psalm-var int[] $rights */
         $rights = $this->getPropertyArray(self::P_USER_RIGHTS, $role->getRights());
         $role->setRights($rights);
 

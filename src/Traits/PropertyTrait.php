@@ -54,6 +54,10 @@ trait PropertyTrait
      * @param array  $default the default array if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @psalm-template T
+     * @psalm-param T[] $default
+     * @psalm-return T[]
      */
     public function getPropertyArray(string $name, array $default): array
     {

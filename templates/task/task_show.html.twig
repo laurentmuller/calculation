@@ -1,18 +1,13 @@
 {% extends 'cards/card_show.html.twig' %}
-
-{# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
-
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'task.show.title' -%}
 {%- set params = route_params(app.request, id) %}
-
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('task_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'task_table') -%}
-
 {# properties #}
 {% block property_body %}
 {{ properties.property('task.fields.name', item.name) }}
@@ -20,7 +15,7 @@
 {{ properties.property('task.fields.unit', item.unit) }}
 {{ properties.property('task.fields.items', item.count ? item.count|integer : 'task.edit.empty_items'|trans) }}
 {% endblock %}
-
+{# body #}
 {% block card_body %}
 {{ parent() }}
 {% if not item.empty %}

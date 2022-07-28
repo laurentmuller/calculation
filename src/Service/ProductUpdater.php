@@ -92,8 +92,8 @@ class ProductUpdater implements ServiceSubscriberInterface
                 'choices' => $this->getAllProducts(),
                 'choice_attr' => static function (Product $product) {
                     return [
-                        'price' => $product->getPrice(),
-                        'category' => $product->getCategoryId(),
+                        'data-price' => $product->getPrice(),
+                        'data-category' => $product->getCategoryId(),
                     ];
                 },
             ])

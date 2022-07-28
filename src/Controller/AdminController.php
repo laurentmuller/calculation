@@ -19,7 +19,6 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Security\EntityVoter;
-use App\Service\SwissPostUpdater;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\Utils;
@@ -105,43 +104,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Import zip codes, cities and streets from Switzerland.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route(path: '/import', name: 'admin_import')]
-    public function import(Request $request, SwissPostUpdater $updater): Response
-    {
-        // clear cache
-        $application = $this->getApplication();
-        $application->clearCache();
-        // create form
-        $form = $updater->createForm();
-        // handle request
-        if ($this->handleRequestForm($request, $form)) {
-            // import
-            /** @psalm-var array $data */
-            $data = $form->getData();
-            /** @psalm-var \Symfony\Component\HttpFoundation\File\UploadedFile|string|null $file */
-            $file = $data['file'];
-            $results = $updater->import($file);
-
-            // display result
-            return $this->renderForm('admin/import_result.html.twig', [
-                'results' => $results,
-            ]);
-        }
-        // display
-        return $this->renderForm('admin/import_file.html.twig', [
-            'last_import' => $application->getLastImport(),
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * Display the application parameters.
+     * Edit the application parameters.
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -219,13 +182,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Edit rights.
+     * Edit rights for the given role name.
      *
-     * @param Request $request  the request
-     * @param string  $roleName the role name
-     * @param int[]   $rights   the role rights
-     * @param Role    $default  the role with default rights
-     * @param string  $property the property name to update
+     * @param int[] $rights
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface

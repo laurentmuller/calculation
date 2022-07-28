@@ -7,7 +7,6 @@
  */
 function setDefaultValues() {
     'use strict';
-
     $('#edit-form :input:not(button)[data-default], :checkbox[data-default]').each(function () {
         const $this = $(this);
         const value = $this.data('default');
@@ -31,7 +30,6 @@ function setDefaultValues() {
  */
 function displayNotification() {
     'use strict';
-
     // get random text
     const url = $("form").data("random");
     $.getJSON(url, function (response) {
@@ -115,7 +113,10 @@ function displayEmail($email) {
  */
 (function ($) {
     'use strict';
+    // numbers
+    $('#default_product_quantity').inputNumberFormat();
 
+    // validation
     $('#edit-form').initValidator({
         inline: true,
         rules: {

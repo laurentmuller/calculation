@@ -1238,7 +1238,7 @@ theme:
     secondary: Refuser
     success: Succès
     warning: Alerte
-  default: Valeurs par défaut
+  default: Thème par défaut
   description: Sélection du thème à appliquer sur le site.
   error: Impossible de sélectionné le thème.
   fields:

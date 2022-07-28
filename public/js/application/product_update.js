@@ -8,11 +8,11 @@
 function getVisibleProducts() {
     'use strict';
     const id = $('#form_category').val();
-    return $('#form_products :checkbox[category="' + id + '"]');
+    return $('#form_products :checkbox[data-category="' + id + '"]');
 }
 
 /**
- * Returns a value indicating if all product checkboxes are checked.
+ * Returns a value indicating if all product checkbox is checked.
  *
  * @returns {boolean} - true if checked.
  */
@@ -43,14 +43,14 @@ function isPercent() {
 }
 
 /**
- * Hide rows with empty price when percent is selected.
+ * Hide rows with empty price when percent checkbox is checked.
  */
 function hideEmptyPrices() {
     'use strict';
     const disabled = isPercent();
     getVisibleProducts().each(function () {
         const $this = $(this);
-        const price = $.parseFloat($this.attr('price'));
+        const price = $.parseFloat($this.attr('data-price'));
         $this.parents('tr').toggleClass('d-none', disabled && price === 0);
     });
 }
@@ -62,7 +62,7 @@ function hideEmptyPrices() {
  * @param {number} value - the value to update with.
  * @param {boolean} isPercent - true if the value is a percentage, false if is a fixed amount
  * @param {boolean} round - true to round new value up to 0.05
- * @returns {number} the new price or Number.NaN if not applicable.
+ * @returns {number} the new price.
  */
 function computePrice(oldPrice, value, isPercent, round) {
     'use strict';
@@ -79,22 +79,15 @@ function updatePrices() {
     const percent = isPercent();
     const round = $('#form_round').isChecked();
     if (percent) {
-        value = $.parseFloat($('#form_percent').val());
+        value = $('#form_percent').floatVal();
     } else {
-        value = $.parseFloat($('#form_fixed').val());
+        value = $('#form_fixed').floatVal();
     }
-    const result = !Number.isNaN(value);
-
     getVisibleProducts().each(function () {
-        let text = '-.--';
         const $this = $(this);
-        if (result) {
-            const oldPrice = $.parseFloat($this.attr('price'));
-            const newPrice = computePrice(oldPrice, value, percent, round);
-            if (!Number.isNaN(newPrice)) {
-                text = $.formatFloat(newPrice);
-            }
-        }
+        const oldPrice = $.parseFloat($this.attr('data-price'));
+        const newPrice = computePrice(oldPrice, value, percent, round);
+        const text = $.formatFloat(newPrice);
         $this.closest('tr').find('td:eq(2)').text(text);
     });
 }
@@ -109,16 +102,26 @@ function updatePrices() {
     const $fixed = $('#form_fixed');
     const $percent = $('#form_percent');
     const $category = $('#form_category');
+    const $allProducts = $('#form_allProducts');
 
-    // add custom method for products
-    $.validator.addMethod('checkProducts', function (_value, _element, _param) {
+    // number inputs
+    $fixed.inputNumberFormat();
+
+    // add custom method for products selection
+    $.validator.addMethod('checkProducts', function () {
+        const $table =$('#form_products');
         const filter = isAllProducts() ? ':visible' : ':checked:visible';
-        const result = getVisibleProducts().filter(filter).length !== 0;
-        $('#form_products thead').toggleClass('d-none', !result);
-        $('#form_products tfoot').toggleClass('d-none', result);
-        return result;
-
-    }, $('#form_allProducts').data('error'));
+        const isValid = getVisibleProducts().filter(filter).length !== 0;
+        if (isValid) {
+            $table.find('tfoot').hide();
+            $table.find('thead').show(500);
+        } else {
+            $table.find('thead').hide();
+            $table.find('tfoot').show(500);
+        }
+        $table.parent().toggleClass('border-top-0', !isValid);
+        return isValid;
+    }, $allProducts.data('error'));
 
     // validation
     $('#edit-form').simulate().initValidator({
@@ -138,7 +141,7 @@ function updatePrices() {
                 $('#form_products :checkbox').setChecked(false);
             } else {
                 const id = $category.val();
-                $('#form_products :checkbox[category!="' + id + '"]').setChecked(false);
+                $('#form_products :checkbox[data-category!="' + id + '"]').setChecked(false);
             }
             $(form).showSpinner();
             form.submit();
@@ -166,8 +169,8 @@ function updatePrices() {
 
     $category.on('input', function () {
         const id = $(this).val();
-        $('#form_products tbody tr[category="' + id + '"]').removeClass('d-none');
-        $('#form_products tbody tr[category!="' + id + '"]').addClass('d-none');
+        $('#form_products tbody tr[data-category="' + id + '"]').removeClass('d-none');
+        $('#form_products tbody tr[data-category!="' + id + '"]').addClass('d-none');
         const $products = getVisibleProducts();
         if ($products.find(':checked').length === 0) {
             $products.setChecked(true);
@@ -185,12 +188,11 @@ function updatePrices() {
             validateProducts();
         }
     });
-
-    $('#form_products :checkbox').on('click', function () {
+    $('#form_products tbody').on('click', ':checkbox', function () {
         validateProducts();
     });
 
-    $('#form_allProducts').on('click', function () {
+    $allProducts.on('click', function () {
         const disabled = $(this).isChecked();
         $('#form_products tbody tr').toggleClass('text-secondary', disabled);
         $('#btn-all, #btn-none, #btn-reverse, #form_products :checkbox').toggleDisabled(disabled);
@@ -201,12 +203,10 @@ function updatePrices() {
         getVisibleProducts().setChecked(true);
         validateProducts();
     });
-
     $('#btn-none').on('click', function () {
         getVisibleProducts().setChecked(false);
         validateProducts();
     });
-
     $('#btn-reverse').on('click', function () {
         getVisibleProducts().toggleChecked();
         validateProducts();

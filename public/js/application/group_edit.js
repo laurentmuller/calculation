@@ -5,13 +5,9 @@
  */
 function updateUI() {
     'use strict';
-
     // initialize the number input formats
     $("input[name$='[minimum]']").inputNumberFormat();
     $("input[name$='[maximum]']").inputNumberFormat();
-    $("input[name$='[margin]']").inputNumberFormat({
-        'decimal': 0
-    });
 
     // show / hide elements
     const $table = $('#data-table-edit');
@@ -28,7 +24,6 @@ function updateUI() {
  */
 function getMaxValue() {
     'use strict';
-
     let maximum = 0;
     $("input[name$='[maximum]']").each(function () {
         maximum = Math.max(maximum, $(this).floatVal());
@@ -43,7 +38,6 @@ function getMaxValue() {
  */
 function getMinMargin() {
     'use strict';
-
     let minimum = Number.MAX_VALUE;
     $("input[name$='[margin]']").each(function () {
         minimum = Math.min(minimum, $(this).intVal());
@@ -58,7 +52,6 @@ function getMinMargin() {
  */
 function addMargin($table) {
     'use strict';
-
     // get values before inserting the row
     const margin = getMinMargin();
     const minimum = getMaxValue();
@@ -91,8 +84,6 @@ function addMargin($table) {
  */
 function removeMargin($caller) {
     'use strict';
-
-    // remove row
     $caller.closest('tr').fadeOut(200, function () {
         $(this).remove();
         updateUI();
@@ -106,7 +97,6 @@ function removeMargin($caller) {
  */
 function sortMargins($table) {
     'use strict';
-
     const $body = $table.find('tbody');
     const $rows = $body.find('tr');
     if ($rows.length < 2) {
@@ -131,7 +121,6 @@ function sortMargins($table) {
  */
 (function ($) {
     'use strict';
-
     // handle delete button
     const $table = $('#data-table-edit');
     $table.on('click', '.btn-delete', function (e) {

@@ -1,18 +1,17 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'swisspost.title' -%}
 {%- set title_icon = 'download' -%}
 {%- set title_description = 'swisspost.result.description' -%}
-
+{# class #}
 {% block card_class -%}
 {% if results.valid %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock %}
 {% block card_header_class -%}
 {% if results.valid %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
 {%- endblock %}
-
+{# body #}
 {% block card_body %}
 {%- if results.valid %}
 <p>{{ 'swisspost.result.success'|trans({'%date%': results.validity|locale_date('long')}) }}</p>
@@ -52,7 +51,7 @@
 {% if results.error -%}<p class="mb-0">{{ results.error }}</p>{%- endif %}
 {%- endif %}
 {% endblock %}
-
+{# footer #}
 {% block card_footer %}
 {{- icons.homepage() -}}
 {% if not results.valid %}

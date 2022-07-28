@@ -44,6 +44,7 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
+{{ asset_js('js/plugins/plugin-input.js') }}
 {{ asset_js('js/application/parameters_edit.js') }}
 {% else %}
 {{ asset_js('js/parameters_edit.js') }}

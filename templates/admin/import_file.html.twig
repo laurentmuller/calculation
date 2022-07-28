@@ -1,11 +1,10 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title = 'swisspost.title' -%}
 {%- set title_icon = 'download' -%}
 {%- set title_description = 'swisspost.import.description' -%}
 {%- set cancel_path = path('homepage') -%}
-
+{# body #}
 {% block card_body %}
 {{ parent() }}
 {% if last_import -%}
@@ -13,12 +12,12 @@
     <p class="mb-0 text-right text-muted small">{{ 'swisspost.import.last_import'|trans({'%date%': date}) }}</p>
 {%- endif %}
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ parent() }}
 {{ asset_css('css/fileinput.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

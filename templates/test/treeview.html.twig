@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
-
+{% import 'macros/_icons.html.twig' as icons %}
 {# parameters #}
 {% set title = 'test.tree_view' %}
-{% set title_icon = 'table' %}
-
+{% set title_icon = 'folder-tree' %}
+{# body #}
 {% block body -%}
 <div class="row pt-5">
     <div class="col-md-6 offset-md-2">
-        <h1>{{ title }}</h1>
+        <h1>{{- icons.icon(title_icon, title) }}</h1>
     </div>
     <div class="col-md-2 text-right mt-3">
         <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">
@@ -118,15 +118,35 @@
             </div>
         </div>
     </div>
+    <div class="col-md-8 offset-md-2 my-2 form-inline">
+        <div class="form-group">
+            <label for="percent1">Pourcentage 1</label>
+            <div class="ml-2 input-group">
+                <input type="number" id="percent1" name="percent1" inputmode="decimal"  value="5" min="-10" max="255" step="1" class="form-control text-right">
+                <div class="input-group-append">
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="percent2">Pourcentage 2</label>
+            <div class="ml-2 input-group">
+                <input type="number" id="percent2" name="percent2" inputmode="decimal"  value="5" min="-10" max="255" step="1" class="form-control text-right">
+                <div class="input-group-append">
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {%- endblock %}
-
+{# stylesheets #}
 {% block stylesheets -%}
 {{ asset_css('js/vendor/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {{ asset_css('css/flags.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/plugins/bootstrap-treeview.js') }}

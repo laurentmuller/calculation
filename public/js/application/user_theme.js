@@ -35,15 +35,14 @@ function applyTheme() {
 }
 
 /**
- * Set the default theme (Boostrap dark)
+ * Set the default theme (Boostrap dark) and submit form.
  */
 function setDefaultValues() {
     'use strict';
-    // set default values
     $('#theme').selectFirstOption();
     $('#background').selectFirstOption();
-    // update
-    applyTheme();
+    $('#default').toggleDisabled(true);
+    $('#edit-form').trigger('submit');
 }
 
 /**
@@ -52,9 +51,7 @@ function setDefaultValues() {
 (function ($) {
     'use strict';
     $('#edit-form').initValidator();
-    // bind events
-    $('#default').on('click', function (e) {
-        e.preventDefault();
+    $('#default').on('click', function () {
         setDefaultValues();
     });
     $('#theme, #background').on('change', function () {

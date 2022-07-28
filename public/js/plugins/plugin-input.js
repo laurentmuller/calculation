@@ -22,9 +22,10 @@
         destroy() {
             // remove handlers and data
             const $element = this.$element;
-            $element.off('keypress', this.keyPressProxy);
             $element.off('blur', this.updateProxy);
             $element.off('change', this.updateProxy);
+            $element.off('input', this.inputProxy);
+            $element.off('keypress', this.keyPressProxy);
             $element.removeData('input-number-format');
         }
 

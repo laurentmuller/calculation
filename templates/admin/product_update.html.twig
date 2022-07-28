@@ -3,11 +3,12 @@
 {% form_theme form _self %}
 {# macros #}
 {% macro add_product(item, category_id) -%}
-{%- set product_category_id = item.vars.attr.category -%}
-<tr category="{{ product_category_id }}" class="text-secondary user-select-none{% if product_category_id != category_id %} d-none{% endif %}">
+{%- set product_price = item.vars.attr['data-price']|amount -%}
+{%- set product_category_id = item.vars.attr['data-category'] -%}
+<tr data-category="{{ product_category_id }}" class="text-secondary user-select-none{% if product_category_id != category_id %} d-none{% endif %}">
     <td>{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
-    <td class="text-currency">{{ item.vars.attr.price|amount }}</td>
-    <td class="text-currency">{{ item.vars.attr.price|amount }}</td>
+    <td class="text-currency">{{ product_price }}</td>
+    <td class="text-currency">{{ product_price }}</td>
 </tr>
 {%- endmacro %}
 {% block _form_percent_widget -%}
@@ -81,7 +82,7 @@
             {{- _self.add_product(item, category_id) }}
         {%- endfor %}
         </tbody>
-        <tfoot class="d-none">
+        <tfoot style="display: none;">
             <tr>
                 <td class="table-warning text-center" colspan="3">{{ 'product.update.products_empty'|trans }}</td>
             </tr>
@@ -114,6 +115,7 @@
     {% if app.debug %}
         {{ parent() }}
         {{ asset_js('js/plugins/plugin-simulate.js') }}
+        {{ asset_js('js/plugins/plugin-input.js') }}
         {{ asset_js('js/application/product_update.js') }}
     {% else %}
         {{ asset_js('js/product_update.js') }}

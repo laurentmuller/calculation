@@ -15,12 +15,15 @@ function formatCountry(country) {
     }
 
     const $img = $('<img/>', {
-        'class': 'mr-1 flag flag-' + id.toLowerCase(), 'src': $('#country').data('url'), 'alt': ''
+        'class': 'mr-1 flag flag-' + id.toLowerCase(),
+        'src': $('#country').data('url'),
+        'alt': 'Country'
     });
-    const $span = $('<span/>', {
-        'class': 'text-truncate', 'text': text
+    const $text = $('<span/>', {
+        'class': 'text-truncate',
+        'text': text
     });
-    return $span.prepend($img);
+    return $text.prepend($img);
 }
 
 function formatState(state) {
@@ -32,14 +35,19 @@ function formatState(state) {
     }
     const color = $(state.element).data('color');
     const $color = $('<span/>', {
-        'class': 'border border-secondary mr-1', 'css': {
-            'background-color': color, 'display': 'inline-block', 'height': '0.75rem', 'width': '1rem'
+        'class': 'border border-secondary mr-1',
+        'css': {
+            'background-color': color,
+            'display': 'inline-block',
+            'height': '0.75rem',
+            'width': '1rem'
         }
     });
-    const $span = $('<div/>', {
-        'class': 'text-truncate', 'text': text
+    const $text = $('<div/>', {
+        'class': 'text-truncate',
+        'text': text
     });
-    return $span.prepend($color);
+    return $text.prepend($color);
 }
 
 function formatStateSelection(state) {
@@ -51,14 +59,19 @@ function formatStateSelection(state) {
     }
     const color = $(state.element).data('color');
     const $color = $('<span/>', {
-        'class': 'border border-secondary mr-1', 'css': {
-            'background-color': color, 'display': 'inline-block', 'height': '0.75rem', 'width': '1rem'
+        'class': 'border border-secondary mr-1',
+        'css': {
+            'background-color': color,
+            'display': 'inline-block',
+            'height': '0.75rem',
+            'width': '1rem'
         }
     });
-    const $span = $('<span/>', {
-        'class': 'mx-1', 'text': text
+    const $text = $('<span/>', {
+        'class': 'mx-1',
+        'text': text
     });
-    return $span.prepend($color);
+    return $text.prepend($color);
 }
 
 function formatCurrency(currency) {
@@ -68,12 +81,12 @@ function formatCurrency(currency) {
     if (!id) {
         return text;
     }
-
     const $flag = $('<span/>', {
         'class': 'mr-1 currency-flag currency-flag-' + id.toLowerCase(),
     });
     const $text = $('<span/>', {
-        'class': 'text-truncate', 'text': text
+        'class': 'text-truncate',
+        'text': text
     });
     const $div = $('<div/>', {
         'class': 'd-inline-flex align-items-center w-100'
@@ -88,15 +101,14 @@ function formatCategory(category) {
     if (!id) {
         return text;
     }
-
     const $icon = $('<i/>', {
         'class': 'far fa-folder fa-fw',
     });
-    const $span = $('<span/>', {
-        'class': 'text-truncate', 'text': text
+    const $text = $('<span/>', {
+        'class': 'text-truncate',
+        'text': text
     });
-
-    return $span.prepend($icon);
+    return $text.prepend($icon);
 }
 
 function formatCategorySelection(category) {
@@ -106,30 +118,72 @@ function formatCategorySelection(category) {
     if (!id) {
         return text;
     }
-
     const $icon = $('<i/>', {
         'class': 'far fa-folder fa-fw',
     });
-    const $span = $('<span/>', {
-        'text': text, 'class': 'mx-1'
+    const $text = $('<span/>', {
+        'text': text,
+        'class': 'mx-1'
     });
+    return $text.prepend($icon);
+}
 
-    return $span.prepend($icon);
+function formatProduct(product) {
+    'use strict';
+    const id = product.id;
+    let text = product.text;
+    if (!id) {
+        return text;
+    }
+
+    const price = $(product.element).data('price');
+    const unit = $(product.element).data('unit');
+
+    // const $result = $(
+    //     '<div class="row w-100">' +
+    //     '<div class="col-8">' + text + '</div>' +
+    //     '<div class="col-4 text-muted text-rigth">' + $.formatFloat(price) + ' / ' + unit + '</div>' +
+    //     '</div>'
+    // );
+    // if ($result) {
+    //     return $result;
+    // }
+
+    const $text = $('<span/>', {
+        text: text + ' ('
+    });
+    $text.append($('<span/>', {
+        'text': $.formatFloat(price),
+        'class': price ? '' : 'text-danger'
+    }));
+    if (unit) {
+        $text.append($('<span/>', {
+            'text': ' / ' + unit
+        }));
+    }
+    $text.append($('<span/>', {
+        text: ')'
+    }));
+
+    return $text;
 }
 
 function initPercent() {
     'use strict';
     const regExp = /\d/;
     const validate = function (e) {
-
         if (e.key.length > 1) {
             return true;
         } else if (e.key === '-') {
+            window.console.log(e.currentTarget.value);
             const $target = $(e.currentTarget);
             const value = $target.val();
             if (value.indexOf('-') === -1) {
+                if (value.length === 0) {
+                    return true;
+                }
                 //return true;
-                $target.val(value.length ? e.key + value : e.key);
+                $target.val(e.key + value);
             }
             // if (value.indexOf('-') === -1) {
             //     //$target.val(value.length ? e.key + value : e.key);
@@ -140,7 +194,7 @@ function initPercent() {
             return regExp.test(e.key);
         }
     };
-    $('input[type="number"][step="1"]').on('keydown', function (e) {
+    $('input[type="number"][step="1"]').on('keyup', function (e) {
         if (!validate(e)) {
             e.preventDefault();
         }
@@ -179,21 +233,32 @@ function initPercent() {
 
     // countries
     $('#country').initSelect2({
-        templateSelection: formatCountry, templateResult: formatCountry
+        templateResult: formatCountry,
+        templateSelection: formatCountry
     }).val('CH').trigger('change');
 
     // currency
     $('#currency').initSelect2({
-        templateSelection: formatCurrency, templateResult: formatCurrency
+        templateResult: formatCurrency,
+        templateSelection: formatCurrency
     }).val('CHF').trigger('change');
 
     // states
     $('#state_single').initSelect2({
-        templateResult: formatState, templateSelection: formatStateSelection, minimumResultsForSearch: Infinity
+        templateResult: formatState,
+        templateSelection: formatStateSelection,
+        minimumResultsForSearch: Infinity
     });
     $('#state').initSelect2({
-        templateResult: formatState, templateSelection: formatStateSelection,
+        templateResult: formatState,
+        templateSelection: formatStateSelection,
     }).val([1, 5]).trigger('change');
+
+    // product
+    $('#product').initSelect2({
+        templateResult: formatProduct,
+        templateSelection: formatProduct,
+    });
 
     // categories
     $('#category').initSelect2({

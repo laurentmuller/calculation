@@ -231,24 +231,16 @@
 
         /**
          * Create a timer within the element. Callback function parameters can
-         * be given after the callback and timeout values.
+         * be given after the callback and timeout parameters.
          *
          * @param {function} callback - The callback function that will be executed after the timer expires.
          * @param {int} timeout - The number of milliseconds to wait before executing the callback.
          * @return {jQuery} The jQuery element for chaining.
          */
         createTimer: function (callback, timeout) {
-            let id;
             const $element = $(this);
             const args = Array.prototype.slice.call(arguments, 2);
-            if (args.length) {
-                const wrapper = function () {
-                    callback.apply(this, args);
-                };
-                id = setTimeout(wrapper, timeout);
-            } else {
-                id = setTimeout(callback, timeout);
-            }
+            const id = setTimeout(callback, timeout, ...args);
             return $element.data('timer', id);
         },
 
@@ -270,7 +262,8 @@
 
         /**
          * Clear the existing timer (if any) and create a new timer within the
-         * element.
+         * element. Callback function parameters can be given after the callback
+         * and timeout parameters.
          *
          * @param {function} _callback - The callback function that will be executed after the timer expires.
          * @param {int} _timeout - The number of milliseconds to wait before executing the callback.
@@ -290,17 +283,9 @@
          * @return {jQuery} The jQuery element for chaining.
          */
         createInterval: function (callback, timeout) {
-            let id;
             const $element = $(this);
             const args = Array.prototype.slice.call(arguments, 2);
-            if (args.length) {
-                const wrapper = function () {
-                    callback.apply(this, args);
-                };
-                id = setInterval(wrapper, timeout);
-            } else {
-                id = setInterval(callback, timeout);
-            }
+            const id = setInterval(callback, timeout, ...args);
             return $element.data('interval', id);
         },
 

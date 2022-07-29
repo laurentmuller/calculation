@@ -65,8 +65,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the black color.
      *
      * Value is RGB(0, 0, 0).
+     *
+     * @return static
      */
-    public static function black(): static
+    public static function black(): self
     {
         return new static(self::MIN_VALUE, self::MIN_VALUE, self::MIN_VALUE);
     }
@@ -75,8 +77,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the blue color.
      *
      * Value is RGB(255, 0, 0).
+     *
+     * @return static
      */
-    public static function blue(): static
+    public static function blue(): self
     {
         return new static(self::MIN_VALUE, self::MIN_VALUE, self::MAX_VALUE);
     }
@@ -85,8 +89,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the border cell color.
      *
      * Value is RGB(221, 221, 221).
+     *
+     * @return static
      */
-    public static function cellBorder(): static
+    public static function cellBorder(): self
     {
         return new static(221, 221, 221);
     }
@@ -117,8 +123,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the dark-green color.
      *
      * Value is RGB(0, 128, 0).
+     *
+     * @return static
      */
-    public static function darkGreen(): static
+    public static function darkGreen(): self
     {
         return new static(self::MIN_VALUE, 128, self::MIN_VALUE);
     }
@@ -161,8 +169,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the green color.
      *
      * Value is RGB(0, 255, 0).
+     *
+     * @return static
      */
-    public static function green(): static
+    public static function green(): self
     {
         return new static(self::MIN_VALUE, self::MAX_VALUE, self::MIN_VALUE);
     }
@@ -171,8 +181,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the header fill color.
      *
      * Value is RGB(245, 245, 245).
+     *
+     * @return static
      */
-    public static function header(): static
+    public static function header(): self
     {
         return new static(245, 245, 245);
     }
@@ -181,8 +193,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the link color (blue).
      *
      * Value is RGB(0, 0, 255).
+     *
+     * @return static
      */
-    public static function link(): static
+    public static function link(): self
     {
         return static::blue();
     }
@@ -232,8 +246,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the red color.
      *
      * Value is RGB(255, 0, 0).
+     *
+     * @return static
      */
-    public static function red(): static
+    public static function red(): self
     {
         return new static(self::MAX_VALUE, self::MIN_VALUE, self::MIN_VALUE);
     }
@@ -293,8 +309,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the white color.
      *
      * Value is RGB(255, 255, 255).
+     *
+     * @return static
      */
-    public static function white(): static
+    public static function white(): self
     {
         return new static(self::MAX_VALUE, self::MAX_VALUE, self::MAX_VALUE);
     }

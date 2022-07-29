@@ -21,8 +21,8 @@
         }
 
         destroy() {
-            this.$sidebarToggle.off('click', this.toggleSidebarProxy);
             this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
+            this.$sidebarToggle.off('click', this.toggleSidebarProxy);
             $(window).off('resize', this.resizeProxy);
             this.$element.removeData('sidebar');
         }
@@ -52,8 +52,9 @@
             that.resizeProxy = function (e) {
                 that._validateSize(e);
             };
-            that.$sidebarToggle.on('click', that.toggleSidebarProxy);
+
             that.$element.on('click', '.nav-link-toggle', that.toggleMenuProxy);
+            that.$sidebarToggle.on('click', that.toggleSidebarProxy);
             $(window).on('resize', that.resizeProxy);
 
             // update titles
@@ -61,9 +62,21 @@
             that._updateMenus();
 
             // toggle sidebar if too small
-            if (that._isClientTooSmall() && !this.$element.hasClass('sidebar-hide')) {
+            if (that._isClientTooSmall() && that._isSideBarVisible()) {
                 $(window).trigger('resize');
             }
+
+            // show the sidebar, if hidden, after 1 second
+            that.$sidebarToggle.hover(function (e) {
+                if (!that._isSideBarVisible()) {
+                    that.$element.createTimer(function () {
+                        that.$element.removeTimer();
+                        that._toggleSidebar(e);
+                    }, 1000);
+                }
+            }, function () {
+                that.$element.removeTimer();
+            });
         }
 
         /**
@@ -98,7 +111,7 @@
          * @private
          */
         _hideSidebar(e) {
-            if (!this.$element.hasClass('sidebar-hide')) {
+            if (this._isSideBarVisible()) {
                 this._toggleSidebar(e);
                 this.wasHidden = true;
             }
@@ -111,7 +124,7 @@
          * @private
          */
         _showSidebar(e) {
-            if (this.$element.hasClass('sidebar-hide')) {
+            if (!this._isSideBarVisible()) {
                 this._toggleSidebar(e);
                 this.wasHidden = false;
             }
@@ -124,10 +137,12 @@
          * @private
          */
         _toggleSidebar(e) {
-            e.preventDefault();
+            if (e) {
+                e.preventDefault();
+            }
             $('.dropdown-menu.show, .dropdown.show').removeClass('show');
             this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
-            const isHidden = this.$element.hasClass('sidebar-hide');
+            const isHidden = !this._isSideBarVisible();
             const $toggle = this.$sidebarHorizontal.find('.nav-sidebar-horizontal');
             if (isHidden) {
                 $toggle.show(350);
@@ -166,7 +181,7 @@
          * @private
          */
         _updateSidebar() {
-            const isHidden = this.$element.hasClass('sidebar-hide');
+            const isHidden = !this._isSideBarVisible();
             const title = isHidden ? this.options.showSidebar : this.options.hideSidebar;
             this.$sidebarToggle.attr({
                 'aria-expanded': String(!isHidden),
@@ -207,11 +222,22 @@
         }
 
         /**
+         * Returns if the sidebar is visible.
+         *
+         * @return {boolean} true if visible; false otherwise.
+         * @private
+         */
+        _isSideBarVisible() {
+            return !this.$element.hasClass('sidebar-hide');
+        }
+
+        /**
          * Gets the navigation state.
+         * @private
          */
         _getState() {
             const menus = {
-                'menu_sidebar_hide': this.$element.hasClass('sidebar-hide')
+                'menu_sidebar_hide': !this._isSideBarVisible()
             };
             let visible;
             let wasVisible = false;

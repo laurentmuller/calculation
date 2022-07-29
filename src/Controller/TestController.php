@@ -28,6 +28,7 @@ use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
+use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\AkismetService;
@@ -493,7 +494,7 @@ class TestController extends AbstractController
     }
 
     #[Route(path: '/tree', name: 'test_tree')]
-    public function tree(Request $request, GroupRepository $repository, CategoryRepository $categories, CalculationStateRepository $states): Response
+    public function tree(Request $request, GroupRepository $repository, CategoryRepository $categories, CalculationStateRepository $states, ProductRepository $productRepository): Response
     {
         // JSON?
         if ($request->isXmlHttpRequest()) {
@@ -540,12 +541,14 @@ class TestController extends AbstractController
         $sortedStates = $states->getQueryBuilderByEditable()
             ->getQuery()
             ->getResult();
+        $products = $productRepository->findAllByGroup();
 
         return $this->renderForm('test/treeview.html.twig', [
             'currencies' => $this->getCurrencies(),
             'countries' => Countries::getNames(),
             'categories' => $sortedCategories,
             'states' => $sortedStates,
+            'products' => $products,
         ]);
     }
 

@@ -30,27 +30,27 @@
     {# logo
     <div class="p-2 mb-1">
         <div class="media position-relative d-flex align-items-center">
-            <img src="{{ asset('/images/logo/logo-customer-148x148.png') }}" alt="{{ app.customerName }}" width="65" class="mr-3 rounded-circle shadow-sm">
+            <img src="{{ asset('/images/logo/logo-customer-148x148.png') }}" alt="{{ user_service.application.customerName }}" width="65" class="mr-3 rounded-circle shadow-sm">
             <div class="media-body">
-                <h4 class="m-0 text-white">{{ app.customerName }}</h4>
+                <h4 class="m-0 text-white">{{ user_service.application.customerName }}</h4>
                 <p class="font-weight-light text-muted small mb-0">PUB PROD & PRINT</p>
-                <a href="{{ app.customerUrl }}" rel="noopener noreferrer" class="stretched-link" target="_blank"></a>
+                <a href="{{ user_service.application.customerUrl }}" rel="noopener noreferrer" class="stretched-link" target="_blank"></a>
             </div>
         </div>
     </div>
     #}
     <div class="mb-2">
-        <div class="media position-relative d-flex align-items-center">
-            <img src="{{ asset('images/icons/favicon-60x60.png') }}" width="60" height="60" alt="{{ app_name }}" class="rounded-lg mr-2">
+        <div class="media position-relative">
+            <img src="{{ asset('images/icons/favicon-57x57.png') }}" width="57" height="57" alt="{{ app_name }}" class="rounded-lg mr-2 align-self-end">
             <div class="media-body">
-                <p class="m-0 navbar-brand" style="font-size: 1.5rem">{{ app_name }}</p>
-                <p class="font-weight-light text-muted mb-0"> {{ 'about.version'|trans({'%version%': app_version}) }}</p>
+                <p class="navbar-brand p-0 m-0" style="font-size: 1.75rem">{{ app_name }}</p>
+                <p class="font-weight-light text-muted p-0 m-0">{{ 'about.version'|trans({'%version%': app_version}) }}</p>
                 <a href="{{ path('about') }}" class="stretched-link" title="{{ 'footer.about_title'|trans }}"></a>
             </div>
         </div>
     </div>
     {# home page #}
-    <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
+    <a class="navbar-brand mt-1" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
         {{- icons.icon('home', 'index.title') -}}
     </a>
     {# search

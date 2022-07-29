@@ -1219,7 +1219,7 @@ test:
   minify: Minify
   notification: Notifications
   recaptcha: reCAPTCHA
-  tree_view: Bootstrap TreeView
+  tree_view: TreeView
   use_notification: Utiliser une notification.
 theme:
   background:

@@ -118,6 +118,24 @@
             </div>
         </div>
     </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group">
+            <label for="product">Article</label>
+            <select id="product" class="form-control">
+                {% set category = null %}
+                {% for product in products -%}
+                    {% if category != product.categoryCode %}
+                        {% set category = product.categoryCode %}
+                        <optgroup label="{{ product.groupCode }} - {{ product.categoryCode }}"></optgroup>
+                    {% endif %}
+                    <option data-price="{{ product.price }}"
+                            data-unit="{{ product.unit }}"
+                            value="{{ product.id }}">{{ product.description }}
+                    </option>
+                {%- endfor %}
+            </select>
+        </div>
+    </div>
     <div class="col-md-8 offset-md-2 my-2 form-inline">
         <div class="form-group">
             <label for="percent1">Pourcentage 1</label>

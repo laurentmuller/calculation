@@ -1208,17 +1208,6 @@ const Application = {
     },
 
     /**
-     * Hide all drop-down menus.
-     *
-     * @return {Application} This instance for chaining.
-     */
-    hideMenus: function () {
-        'use strict';
-        $('.dropdown-menu.show').removeClass('show');
-        return this;
-    },
-
-    /**
      * Edit the calculation item's price.
      *
      * @param {jQuery} $element - the caller element (button).
@@ -1524,7 +1513,7 @@ const MoveHandler = {
     moveGroup: function ($source, $target, up) {
         'use strict';
         // hide menus
-        Application.hideMenus();
+        $.hideDropDownMenus();
 
         // check
         if ($source && $target && $source !== $target) {
@@ -1619,7 +1608,7 @@ const MoveHandler = {
     moveCategory: function ($source, $target, up) {
         'use strict';
         // hide menus
-        Application.hideMenus();
+        $.hideDropDownMenus();
 
         // check
         if ($source && $target && $source !== $target) {
@@ -1708,7 +1697,7 @@ const MoveHandler = {
     moveItem: function ($source, $target, up) {
         'use strict';
         // hide menus
-        Application.hideMenus();
+        $.hideDropDownMenus();
 
         // check
         if ($source && $target && $source !== $target) {
@@ -1812,7 +1801,7 @@ const MoveHandler = {
     const $tableEdit = $('.table-edit');
     const selector = '.table-edit th:not(.d-print-none),.table-edit td:not(.d-print-none,:has(:input))';
     const show = function () {
-        Application.hideMenus();
+        $.hideDropDownMenus();
         $(this).parents('tr').addClass('table-primary');
     };
     const hide = function () {
@@ -1841,7 +1830,7 @@ const MoveHandler = {
                 return $.formatFloat(value);
             },
             'onStartEdit': function () {
-                Application.hideMenus();
+                $.hideDropDownMenus();
                 $cell.removeClass('empty-cell');
             },
             'onEndEdit': function (oldValue, newValue) {

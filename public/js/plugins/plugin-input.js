@@ -19,8 +19,10 @@
             this._init();
         }
 
+        /**
+         * Remove handlers and data.
+         */
         destroy() {
-            // remove handlers and data
             const $element = this.$element;
             $element.off('blur', this.updateProxy);
             $element.off('change', this.updateProxy);
@@ -32,6 +34,10 @@
         // -----------------------------
         // private functions
         // -----------------------------
+
+        /**
+         * @private
+         */
         _init() {
             const that = this;
             const options = that.options;

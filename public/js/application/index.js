@@ -55,7 +55,7 @@ function onRestrictChange($restrict) {
         // initialize context menu
         const show = function () {
             $table.find('tr.table-primary').removeClass('table-primary');
-            $('.dropdown-menu.show').removeClass('show');
+            $.hideDropDownMenus();
             $(this).parent().addClass('table-primary');
         };
         const hide = function () {

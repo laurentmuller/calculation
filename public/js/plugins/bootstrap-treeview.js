@@ -6,26 +6,173 @@
 (function ($) {
     'use strict';
 
-    // -----------------------------
-    // Initialization
-    // -----------------------------
+    // ------------------------------------------
+    // BoostrapTreeView public class definition
+    // ------------------------------------------
+
+    /**
+     * @typedef Node
+     * @type {object}
+     * @property {string} [id] the optional node identifier.
+     * @property {string} [text] - the optional node text.
+     * @property {string} [badgeValue] the optional node badge value.
+     * @property {string} [href] the optional node URL.
+     * @property {string} [class] the optional node class.
+     * @property {boolean} expanded - the expanded state.
+     * @property {boolean} disable - the disabled state.
+     * @property {string} icon - the state icon.
+     * @property {Node[]} [nodes] - the optional children nodes.
+     *
+     * @type {BoostrapTreeView}
+     */
     const BoostrapTreeView = class {
 
-        /**
-         * Constructor.
-         */
+        // -----------------------------
+        // public functions
+        // -----------------------------
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, BoostrapTreeView.DEFAULTS, this.$element.data(), options);
-            this.init();
+            this._init();
         }
 
         /**
-         * Initialize widget.
+         * Remove handlers and data.
+         */
+        destroy() {
+            this._removeProxies();
+            this.$element.removeData('boostrap-tree-view');
+        }
+
+        /**
+         * Expand all items.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        init() {
+        expandAll() {
+            const that = this;
+            const $groups = this.$element.find('.list-group:not(:visible)');
+            if ($groups.length === 0) {
+                return that;
+            }
+
+            const $items = $groups.map(function () {
+                return $(this).prev('.list-group-item');
+            });
+            const params = {
+                'items': $items
+            };
+            if (!that._trigger('expandall.bs.treeview', params)) {
+                return that;
+            }
+
+            $groups.each(function () {
+                that._toggleGroup($(this));
+            });
+
+            return that;
+        }
+
+        /**
+         * Collapse all items.
+         *
+         * @return {BoostrapTreeView} this instance for chaining.
+         */
+        collapseAll() {
+            const that = this;
+            const $groups = that.$element.find('.list-group:visible');
+            if ($groups.length === 0) {
+                return that;
+            }
+
+            const $items = $groups.map(function () {
+                return $(this).prev('.list-group-item');
+            });
+            const params = {
+                'items': $items
+            };
+            if (!that._trigger('collapseall.bs.treeview', params)) {
+                return that;
+            }
+
+            $groups.each(function () {
+                that._toggleGroup($(this));
+            });
+
+            return that._selectFirst();
+        }
+
+        /**
+         * Expand to the given level.
+         *
+         * @param {number} level - the level.
+         * @return {BoostrapTreeView} this instance for chaining.
+         */
+        expandToLevel(level) {
+            const that = this;
+            const $groups = that.$element.find('.list-group').filter(function () {
+                const $this = $(this);
+                const visible = $this.is(':visible');
+                const $item = $this.prev('.list-group-item');
+                const groupLevel = Number.parseInt($item.attr('aria-level'), 10);
+                return visible && groupLevel > level || !visible && groupLevel <= level;
+            });
+            if ($groups.length === 0) {
+                return that;
+            }
+            const $items = $groups.map(function () {
+                return $(this).prev('.list-group-item');
+            });
+            const params = {
+                'level': level,
+                'items': $items
+            };
+            if (!that._trigger('expandtolevel.bs.treeview', params)) {
+                return that;
+            }
+
+            $groups.each(function () {
+                that._toggleGroup($(this));
+            });
+
+            return that._selectFirst();
+        }
+
+        /**
+         * Refresh data.
+         *
+         * @return {BoostrapTreeView} this instance for chaining.
+         */
+        refresh() {
+            this._removeProxies();
+            this.$element.children().remove();
+            this._init();
+            return this;
+        }
+
+        /**
+         * Set focus to the selected item ,if any; the element otherwise.
+         *
+         * @return {BoostrapTreeView} this instance for chaining.
+         */
+        focus() {
+            const $selection = this._getSelection();
+            if ($selection) {
+                $selection.trigger('focus');
+            } else {
+                this.$element.trigger('focus');
+            }
+            return this;
+        }
+
+        // -----------------------------
+        // private functions
+        // -----------------------------
+
+        /**
+         * @private
+         */
+        _init() {
             const that = this;
             const options = that.options;
             const $element = that.$element;
@@ -33,13 +180,13 @@
             that.tree = [];
             that.nodes = [];
             that.clickProxy = function (e) {
-                that.click(e) ;
+                that._click(e);
             };
             that.doubleClickProxy = function (e) {
-                that.doubleclick(e);
+                that._doubleClick(e);
             };
             that.keyDownProxy = function (e) {
-                that.keydown(e);
+                that._keydown(e);
             };
             that.toggling = false;
 
@@ -53,14 +200,13 @@
 
                 // initialise
                 if (that.tree.length) {
-                    that.initData({
+                    that._initData({
                         nodes: that.tree
                     });
-                    that.build($element, that.tree, 0);
-                    that.updateBorders().selectFirst();
+                    that._build($element, that.tree, 0);
+                    that._updateBorders()._selectFirst();
                 }
             } else if (options.url) {
-                $('*').css('cursor', 'wait');
                 const $loading = $(options.templates.item)
                     .addClass(options.loadingClass)
                     .text(options.loadingText)
@@ -74,32 +220,30 @@
 
                     // initialise
                     if (that.tree.length) {
-                        that.initData({
+                        that._initData({
                             nodes: that.tree
                         });
-                        that.build(that.$element, that.tree, 0);
+                        that._build(that.$element, that.tree, 0);
                     }
 
                 }).always(function () {
                     $loading.remove();
-                    that.updateBorders().selectFirst();
-                    $('*').css('cursor', '');
+                    that._updateBorders()._selectFirst();
                 });
             }
 
             $element.on('click', '.list-group-item, .state-icon', that.clickProxy);
             $element.on('dblclick', '.list-group-item', that.doubleClickProxy);
             $element.on('keydown', '.list-group-item', that.keyDownProxy);
-
-            return that;
         }
 
         /**
          * Initialize data.
          *
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        initData(node) {
+        _initData(node) {
             const that = this;
             if (node.nodes && node.nodes.length) {
                 const parent = node;
@@ -108,7 +252,7 @@
                     node.parentId = parent.nodeId;
                     that.nodes.push(node);
                     if (node.nodes && node.nodes.length) {
-                        that.initData(node);
+                        that._initData(node);
                     }
                 });
             }
@@ -119,8 +263,9 @@
          * Build nodes.
          *
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        build($parent, nodes, depth) {
+        _build($parent, nodes, depth) {
             const that = this;
             const options = that.options;
             const templates = options.templates;
@@ -202,7 +347,7 @@
                         .appendTo($parent);
 
                     // children
-                    that.build($groupItem, node.nodes, depth);
+                    that._build($groupItem, node.nodes, depth);
                 }
             });
             return that;
@@ -213,12 +358,13 @@
          *
          * @param {Event} e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        click(e) {
+        _click(e) {
             const $target = $(e.currentTarget);
             const $item = $target.closest('.list-group-item');
             if ($target.is('.state-icon')) {
-                this.toggleGroup($item.next('.list-group'));
+                this._toggleGroup($item.next('.list-group'));
             } else {
                 const href = $item.attr('href');
                 if (href) {
@@ -230,7 +376,7 @@
                 }
             }
 
-            return this.setSelection($item);
+            return this._setSelection($item);
         }
 
         /**
@@ -238,95 +384,96 @@
          *
          * @param {Event} e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        doubleclick(e) {
+        _doubleClick(e) {
             const $target = $(e.currentTarget);
-            this.toggleGroup($target.next('.list-group'));
-            return this.setSelection($target);
+            this._toggleGroup($target.next('.list-group'));
+            return this._setSelection($target);
         }
-
 
         /**
          * Handle item key down event
          *
          * @param {Event} e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        keydown(e) {
+        _keydown(e) {
             if (this.toggling) {
                 return this;
             }
 
             const $target = $(e.currentTarget);
-            switch (e.keyCode || e.which) {
-            case 35: { // end => last
-                const $item = this.$element.find('.list-group-item:visible:last');
-                this.setSelection($item);
-                break;
-            }
-
-            case 36: { // home => first
-                const $item = this.$element.find('.list-group-item:visible:first');
-                this.setSelection($item);
-                break;
-            }
-
-            case 37: { // arrow left => collapse or parent
-                const $group = $target.next('.list-group:visible');
-                if ($group.length) {
-                    this.toggleGroup($group);
-                } else {
-                    const $item = $target.parents('.list-group').prev('.list-group-item:first');
-                    this.setSelection($item);
+            switch (e.which) {
+                case 35: { // end => last
+                    const $item = this.$element.find('.list-group-item:visible:last');
+                    this._setSelection($item);
+                    break;
                 }
-                break;
-            }
 
-            case 38:{ // arrow up => select previous
-                const $items = this.$element.find('.list-group-item:visible');
-                const index = $items.index($target);
-                if (index > 0) {
-                    const $item = $items.eq(index - 1);
-                    this.setSelection($item);
+                case 36: { // home => first
+                    const $item = this.$element.find('.list-group-item:visible:first');
+                    this._setSelection($item);
+                    break;
                 }
-                break;
-            }
 
-            case 39: { // arrow right => expand or select first child
-                const $group = $target.next('.list-group:first:not(:visible)');
-                if ($group.length) {
-                    this.toggleGroup($group);
-                } else {
-                    const $item = $target.next('.list-group:first').find('.list-group-item:first');
-                    this.setSelection($item);
+                case 37: { // arrow left => collapse or parent
+                    const $group = $target.next('.list-group:visible');
+                    if ($group.length) {
+                        this._toggleGroup($group);
+                    } else {
+                        const $item = $target.parents('.list-group').prev('.list-group-item:first');
+                        this._setSelection($item);
+                    }
+                    break;
                 }
-              break;
-            }
 
-            case 40: {  // arrow down => select next
-                const $items = this.$element.find('.list-group-item:visible');
-                const index = $items.index($target);
-                const length = $items.length;
-                if (index !==-1 && index < length - 1) {
-                    const $item = $items.eq(index + 1);
-                    this.setSelection($item);
+                case 38: { // arrow up => select previous
+                    const $items = this.$element.find('.list-group-item:visible');
+                    const index = $items.index($target);
+                    if (index > 0) {
+                        const $item = $items.eq(index - 1);
+                        this._setSelection($item);
+                    }
+                    break;
                 }
-                break;
-            }
 
-            case 49:
-            case 107: { // + => expand
-                const $group = $target.next('.list-group:first:not(:visible)');
-                this.toggleGroup($group);
-                break;
-            }
+                case 39: { // arrow right => expand or select first child
+                    const $group = $target.next('.list-group:first:not(:visible)');
+                    if ($group.length) {
+                        this._toggleGroup($group);
+                    } else {
+                        const $item = $target.next('.list-group:first').find('.list-group-item:first');
+                        this._setSelection($item);
+                    }
+                    break;
+                }
 
-            case 109:
-            case 189: { // - => collapse
-                const $group = $target.next('.list-group:first:visible');
-                this.toggleGroup($group);
-                break;
-            }
+                case 40: {  // arrow down => select next
+                    const $items = this.$element.find('.list-group-item:visible');
+                    const index = $items.index($target);
+                    const length = $items.length;
+                    if (index !== -1 && index < length - 1) {
+                        const $item = $items.eq(index + 1);
+                        this._setSelection($item);
+                    }
+                    break;
+                }
+
+                case 49:
+                case 107: { // + => expand
+                    const $group = $target.next('.list-group:first:not(:visible)');
+                    this._toggleGroup($group);
+                    break;
+                }
+
+                case 109:
+                case 189: { // - => collapse
+                    const $group = $target.next('.list-group:first:visible');
+                    this._toggleGroup($group);
+                    break;
+                }
             }
 
             return this;
@@ -337,35 +484,30 @@
          *
          * @param {JQuery} $group - the group to toggle.
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        toggleGroup($group) {
+        _toggleGroup($group) {
             const that = this;
             if ($group && $group.length) {
                 const options = that.options;
                 const $item = $group.prev('.list-group-item');
                 const $icon = $item.find('.state-icon');
-                const event = new $.Event('togglegroup', {
+                const params = {
                     'item': $item,
-                    'expanding': $icon.hasClass(options.collapseIcon)});
-                if (!that.trigger(event)) {
+                    'expanding': $icon.hasClass(options.collapseIcon)
+                };
+                if (!that._trigger('togglegroup.bs.treeview', params)) {
                     return that;
                 }
 
                 that.toggling = true;
                 $item.removeClass('rounded-bottom');
+                $icon.toggleClass(options.collapseIcon).toggleClass(options.expandIcon);
                 $group.toggle(options.toggleDuration, function () {
-                    $icon.toggleClass(options.collapseIcon)
-                        .toggleClass(options.expandIcon);
-                    if ($icon.hasClass(options.collapseIcon)) {
-                        $icon.attr('title', options.texts.expand);
-                    } else {
-                        $icon.attr('title', options.texts.collapse);
-                    }
-
-                    that.updateBorders().toggling = false;
-
+                    const title = $icon.hasClass(options.expandIcon) ? options.texts.collapse : options.texts.expand;
+                    $icon.attr('title', title);
+                    that._updateBorders().toggling = false;
                 });
-
             }
             return that;
         }
@@ -374,8 +516,9 @@
          * Update the borders.
          *
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        updateBorders() {
+        _updateBorders() {
             this.$element.find('.list-group-item:first').removeClass('border-top-0');
             this.$element.find('.list-group-item.rounded-bottom').removeClass('rounded-bottom');
             this.$element.find('.list-group-item:visible:last').addClass('rounded-bottom');
@@ -383,23 +526,27 @@
         }
 
         /**
-         * Destroy.
-         *
-         * @return {BoostrapTreeView} this instance for chaining.
-         */
-        destroy() {
-            this.removeProxies();
-            this.$element.removeData('boostrapTreeView');
-            return this;
-        }
-
-        /**
          * Select the first element.
          *
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        selectFirst() {
-            return this.setSelection(this.$element.find('.list-group-item:first'));
+        _selectFirst() {
+            return this._setSelection(this.$element.find('.list-group-item:first'));
+        }
+
+        /**
+         * Gets the selected item.
+         *
+         * @return {JQuery} the selected item, if any; null otherwise.
+         * @private
+         */
+        _getSelection() {
+            const selectionClass = this.options.selectionClass;
+            const $filter = this.$element.find('.list-group-item:visible').filter(function () {
+                return $(this).hasClass(selectionClass);
+            });
+            return $filter.length ? $filter : null;
         }
 
         /**
@@ -407,8 +554,9 @@
          *
          * @param {JQuery} $selection - the item to select.
          * @return {BoostrapTreeView} this instance for chaining.
+         * @private
          */
-        setSelection($selection) {
+        _setSelection($selection) {
             const selectionClass = this.options.selectionClass;
             if ($selection && $selection.length) {
                 this.$element.find('.list-group-item').removeClass(selectionClass);
@@ -418,158 +566,27 @@
         }
 
         /**
-         * Gets the selected item.
-         *
-         * @return {JQuery} the selected item, if any; null otherwise.
-         */
-        getSelection() {
-            const selectionClass = this.options.selectionClass;
-            const $filter = this.$element.find('.list-group-item:visible').filter(function () {
-                return $(this).hasClass(selectionClass);
-            });
-            return $filter.length ? $filter : null;
-        }
-
-        /**
-         * Set focus to the selected item.
-         *
-         * @return {BoostrapTreeView} this instance for chaining.
-         */
-        focus() {
-            const $selection = this.getSelection();
-            if ($selection) {
-                $selection.trigger('focus');
-            } else {
-                this.$element.trigger('focus');
-            }
-            return this;
-        }
-
-        /**
          * Trigger the given event.
          *
-         * @param {Event} e - the event to trigger.
+         * @param {string} name - the event name to trigger.
+         * @param {Object} parameters - the event parameters.
          * @return true if the event is not prevented; false otherwise.
+         * @private
          */
-        trigger(e) {
-            if (e) {
-                this.$element.trigger(e);
-                return !e.isDefaultPrevented();
-            }
-            return false;
-        }
-
-        /**
-         * Refresh data.
-         *
-         * @return {BoostrapTreeView} this instance for chaining.
-         */
-        refresh() {
-            this.removeProxies();
-            this.$element.children().remove();
-            this.init();
-            return this;
+        _trigger(name, parameters) {
+            const e = new $.Event(name, parameters);
+            this.$element.trigger(e);
+            return !e.isDefaultPrevented();
         }
 
         /**
          * Remove handlers proxies.
+         * @private
          */
-        removeProxies() {
+        _removeProxies() {
             this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
             this.$element.off('dblclick', '.list-group-item', this.doubleClickProxy);
             this.$element.off('keydown', '.list-group-item', this.keyDownProxy);
-        }
-
-        /**
-         * Collapse all items.
-         *
-         * @return {BoostrapTreeView} this instance for chaining.
-         */
-        collapseAll() {
-            const that = this;
-            const $groups = that.$element.find('.list-group:visible');
-            if ($groups.length === 0) {
-                return that;
-            }
-
-            const $items = $groups.map(function () {
-                return $(this).prev('.list-group-item');
-            });
-            const event = new $.Event('collapseall', {
-                'items': $items});
-            if (!that.trigger(event)) {
-                return that;
-            }
-
-            $groups.each(function () {
-                that.toggleGroup($(this));
-            });
-
-            return that.selectFirst();
-        }
-
-        /**
-         * Expand all items.
-         *
-         * @return {BoostrapTreeView} this instance for chaining.
-         */
-        expandAll() {
-            const that = this;
-            const $groups = this.$element.find('.list-group:not(:visible)');
-            if ($groups.length === 0) {
-                return that;
-            }
-
-            const $items = $groups.map(function () {
-                return $(this).prev('.list-group-item');
-            });
-            const event = new $.Event('expandall', {
-                'items': $items});
-            if (!that.trigger(event)) {
-                return that;
-            }
-
-            $groups.each(function () {
-                that.toggleGroup($(this));
-            });
-
-            return that;
-        }
-
-        /**
-         * Expand to the given level.
-         *
-         * @param {number} level - the level.
-         * @return {BoostrapTreeView} this instance for chaining.
-         */
-        expandToLevel(level) {
-            const that = this;
-            const $groups = that.$element.find('.list-group').filter(function () {
-                const $this = $(this);
-                const visible = $this.is(':visible');
-                const $item = $this.prev('.list-group-item');
-                const groupLevel = Number.parseInt($item.attr('aria-level'), 10);
-                return visible && groupLevel > level || !visible && groupLevel <= level;
-            });
-            if ($groups.length === 0) {
-                return that;
-            }
-
-            const $items = $groups.map(function () {
-                return $(this).prev('.list-group-item');
-            });
-            const event = new $.Event('expandtolevel', {
-                'level': level,
-                'items': $items});
-            if (!that.trigger(event)) {
-                return that;
-            }
-
-            $groups.each(function () {
-                that.toggleGroup($(this));
-            });
-
-            return that.selectFirst();
         }
     };
 
@@ -611,9 +628,9 @@
     $.fn.boostrapTreeView = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('boostrapTreeView')) {
+            if (!$this.data('boostrap-tree-view')) {
                 const settings = typeof options === 'object' && options;
-                $this.data('boostrapTreeView', new BoostrapTreeView(this, settings));
+                $this.data('boostrap-tree-view', new BoostrapTreeView(this, settings));
             }
         });
     };

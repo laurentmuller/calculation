@@ -138,17 +138,6 @@ function formatProduct(product) {
 
     const price = $(product.element).data('price');
     const unit = $(product.element).data('unit');
-
-    // const $result = $(
-    //     '<div class="row w-100">' +
-    //     '<div class="col-8">' + text + '</div>' +
-    //     '<div class="col-4 text-muted text-rigth">' + $.formatFloat(price) + ' / ' + unit + '</div>' +
-    //     '</div>'
-    // );
-    // if ($result) {
-    //     return $result;
-    // }
-
     const $text = $('<span/>', {
         text: text + ' ('
     });
@@ -207,7 +196,12 @@ function initPercent() {
 (function ($) {
     'use strict';
     const $tree = $('#tree');
-    const treeView = $tree.boostrapTreeView().data('boostrapTreeView');
+    const treeView = $tree.boostrapTreeView({
+        texts: {
+            expand: 'Développer',
+            collapse: 'Réduire'
+        }
+    }).data('boostrapTreeView');
     $('.btn-expand-all').on('click', function () {
         treeView.expandAll().focus();
     });
@@ -221,13 +215,13 @@ function initPercent() {
         treeView.refresh().focus();
     });
 
-    $tree.on('collapseall', function (e) {
+    $tree.on('collapseall.bs.treeview', function (e) {
         window.console.log('Collapse All', e.items);
-    }).on('expandall', function (e) {
+    }).on('expandall.bs.treeview', function (e) {
         window.console.log('Expand All', e.items);
-    }).on('expandtolevel', function (e) {
+    }).on('expandtolevel.bs.treeview', function (e) {
         window.console.log('Expand to Level', e.level, e.items);
-    }).on('togglegroup', function (e) {
+    }).on('togglegroup.bs.treeview', function (e) {
         window.console.log('Toggle Group', 'expanding:' + e.expanding, e.item);
     });
 
@@ -262,7 +256,8 @@ function initPercent() {
 
     // categories
     $('#category').initSelect2({
-        templateResult: formatCategory, templateSelection: formatCategorySelection
+        templateResult: formatCategory,
+        templateSelection: formatCategorySelection
     }).val([1, 2, 3, 4, 5, 6]).trigger('change');
 
     $('.btn-search').on('click', function () {

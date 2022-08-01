@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th class="w-100">{{ 'schema.table.fields.name'|trans }}</th>
-                <th class="text-code">{{ 'schema.table.fields.type'|trans }}</th>
+                <th class="text-group">{{ 'schema.table.fields.type'|trans }}</th>
                 <th class="text-boolean">{{ 'schema.table.fields.empty'|trans }}</th>
                 <th class="text-id">{{ 'schema.table.fields.default'|trans }}</th>
             </tr>
@@ -28,7 +28,7 @@
                     {% if column.unique and not column.primaryKey %} <i class="fa-solid fa-lock" title="{{ 'schema.table.index_unique'|trans }}"></i>{% endif %}
                     {% if foreign_table -%} {{ icons.link(path('schema_table', {'name': foreign_table}), null, null, 'link', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
                 </td>
-                <td class="text-code">{{ column.type }}{% if column.length %} ({{ column.length|integer }}){% endif %}</td>
+                <td class="text-group">{{ column.type }}{% if column.length %} ({{ column.length|integer }}){% endif %}</td>
                 <td class="text-boolean">{{ column.nullable|boolean }}</td>
                 <td class="text-id">{{ column.default }}</td>
             </tr>

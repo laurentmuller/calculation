@@ -760,7 +760,7 @@ $.fn.extend({
     // initialize context menu
     const ctxSelector = 'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
     const hideMenus = function () {
-        $('.dropdown-menu.show').removeClass('show');
+        $.hideDropDownMenus();
         return true;
     };
     $table.parents('.bootstrap-table').initContextMenu(ctxSelector, hideMenus);

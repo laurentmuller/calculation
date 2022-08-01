@@ -136,6 +136,13 @@
             }
             value = $.parseFloat(value);
             return $.floatFormatter.format(value);
+        },
+
+        /**
+         * Hide the drop-down menus.
+         */
+        hideDropDownMenus: function () {
+            $('.dropdown-menu.show').removeClass('show');
         }
     });
 
@@ -322,8 +329,8 @@
         /**
          * Sets or gets the value as integer.
          *
-         * @param {int|string} [value] - if present the value to set; otherwise return the value.
-         * @return {int} The value if the value parameter is not set.
+         * @param {number|string} [value] - if present the value to set; otherwise return the value.
+         * @return {jQuery|number} The value if the value parameter is not set.
          */
         intVal: function (value) {
             // get?
@@ -460,7 +467,7 @@
         /**
          * Gets select option in the list.
          *
-         * @return {Object|null} the selected element, if any; null otherwise.
+         * @return {?jQuery} the selected element, if any; null otherwise.
          */
         getSelectedOption: function () {
             return $(this).find(':selected');
@@ -472,7 +479,7 @@
          *
          * @param {string} selector - a string containing a selector expression to
          *            match elements against.
-         * @return {jQuery} the selected element or null if matching element's length is equal to 0.
+         * @return {?jQuery} the selected element or null if matching element's length is equal to 0.
          */
         findExists: function (selector) {
             const $elements = $(this).find(selector);

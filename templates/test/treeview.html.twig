@@ -54,13 +54,12 @@
         <div class="form-group">
             <label for="state_single">Status (simple)</label>
             <select id="state_single" class="form-control">
-            {% set editable = null %}
-            {% for state in states -%}
-                {% if editable != state.editable  %}
-                    {% set editable = state.editable %}
-                    <optgroup label="{{ (state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans }}"></optgroup>
-                {% endif %}
-                <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+            {% for key, group in states -%}
+                <optgroup label="{{ key|trans }}">
+                    {% for state in group -%}
+                        <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                    {% endfor %}
+                </optgroup>
             {%- endfor %}
             </select>
         </div>
@@ -70,13 +69,12 @@
             <label for="state">Status (multiple)</label>
             <div class="input-group">
                 <select id="state" class="form-control" multiple="multiple" data-delete="Supprimer le statut">
-                {% set editable = null %}
-                {% for state in states -%}
-                    {% if editable != state.editable  %}
-                        {% set editable = state.editable %}
-                        <optgroup label="{{ (state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans }}"></optgroup>
-                    {% endif %}
-                    <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                {% for key, group in states -%}
+                    <optgroup label="{{ key|trans }}">
+                        {% for state in group -%}
+                            <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                        {% endfor %}
+                    </optgroup>
                 {%- endfor %}
                 </select>
                 <div class="input-group-append">
@@ -98,13 +96,12 @@
                     <span class="input-group-text">@</span>
                 </div>
                 <select id="category" class="form-control" multiple="multiple" data-delete="Supprimer la catégorie">
-                    {% set group = null %}
-                    {% for category in categories -%}
-                        {% if group != category.groupCode %}
-                            {% set group = category.groupCode %}
-                            <optgroup label="{{ group }}"></optgroup>
-                        {% endif %}
-                        <option value="{{ category.id }}">{{ category.code }}</option>
+                    {% for key, group in categories -%}
+                        <optgroup label="{{ key }}">
+                        {% for category in group -%}
+                            <option value="{{ category.id }}">{{ category.code }}</option>
+                        {%- endfor %}
+                        </optgroup>
                     {%- endfor %}
                 </select>
                 <div class="input-group-append">
@@ -122,17 +119,13 @@
         <div class="form-group">
             <label for="product">Article</label>
             <select id="product" class="form-control">
-                {% set category = null %}
-                {% for product in products -%}
-                    {% if category != product.categoryCode %}
-                        {% set category = product.categoryCode %}
-                        <optgroup label="{{ product.groupCode }} - {{ product.categoryCode }}"></optgroup>
-                    {% endif %}
-                    <option data-price="{{ product.price }}"
-                            data-unit="{{ product.unit }}"
-                            value="{{ product.id }}">{{ product.description }}
-                    </option>
-                {%- endfor %}
+                {% for key, group in products -%}
+                    <optgroup label="{{ key }}">
+                    {% for product in group -%}
+                        <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
+                    {% endfor %}
+                    </optgroup>/
+                {% endfor %}
             </select>
         </div>
     </div>

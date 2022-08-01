@@ -268,8 +268,7 @@ final class Utils
         $callable = \is_callable($key) ? $key : null;
 
         // load the new array, splitting by the target key
-        $grouped = [];
-
+        $result = [];
         foreach ($array as $value) {
             if ($callable) {
                 $groupKey = $callable($value);
@@ -278,7 +277,7 @@ final class Utils
             } else { // array
                 $groupKey = $value[$key] ?? null;
             }
-            $grouped[$groupKey][] = $value;
+            $result[$groupKey][] = $value;
         }
 
         // Recursively build a nested grouping if more parameters are supplied
@@ -286,17 +285,17 @@ final class Utils
         if (\func_num_args() > 2) {
             $args = \func_get_args();
             $callback = [__CLASS__, __FUNCTION__];
-            /** @psalm-var array $grouped */
+            /** @psalm-var array $result */
             /** @psalm-var int|string $value */
-            foreach ($grouped as $groupKey => $value) {
+            foreach ($result as $groupKey => $value) {
                 $params = \array_merge([$value], \array_slice($args, 2, \func_num_args()));
                 /** @psalm-var mixed $value */
                 $value = \call_user_func_array($callback, $params);
-                $grouped[$groupKey] = $value;
+                $result[$groupKey] = $value;
             }
         }
 
-        return $grouped;
+        return $result;
     }
 
     /**

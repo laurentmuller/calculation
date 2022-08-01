@@ -124,6 +124,8 @@
 			"*" : "dist"
 		},
 		"sort-packages" : true,
+		"platform-check": true,
+		"discard-changes": true,
 		"allow-plugins": {
 			"composer/package-versions-deprecated": true,
 			"bamarni/composer-bin-plugin": true,

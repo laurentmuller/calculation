@@ -140,7 +140,7 @@
             if (e) {
                 e.preventDefault();
             }
-            $('.dropdown-menu.show, .dropdown.show').removeClass('show');
+            $.hideDropDownMenus();
             this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
             const isHidden = !this._isSideBarVisible();
             const $toggle = this.$sidebarHorizontal.find('.nav-sidebar-horizontal');

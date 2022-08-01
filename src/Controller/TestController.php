@@ -13,6 +13,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationState;
+use App\Entity\Category;
+use App\Entity\Group;
+use App\Entity\Product;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
@@ -25,10 +29,6 @@ use App\Form\Type\SimpleEditorType;
 use App\Interfaces\StrengthInterface;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
-use App\Repository\CalculationStateRepository;
-use App\Repository\CategoryRepository;
-use App\Repository\GroupRepository;
-use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\AkismetService;
@@ -45,6 +45,7 @@ use App\Util\FormatUtils;
 use App\Util\Utils;
 use App\Validator\Captcha;
 use App\Validator\Password;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -494,13 +495,13 @@ class TestController extends AbstractController
     }
 
     #[Route(path: '/tree', name: 'test_tree')]
-    public function tree(Request $request, GroupRepository $repository, CategoryRepository $categories, CalculationStateRepository $states, ProductRepository $productRepository): Response
+    public function tree(Request $request, EntityManagerInterface $manager): Response
     {
         // JSON?
         if ($request->isXmlHttpRequest()) {
             $count = 0;
             $nodes = [];
-            $groups = $repository->findAllByCode();
+            $groups = $manager->getRepository(Group::class)->findAllByCode();
             foreach ($groups as $group) {
                 $node = [
                     'id' => \sprintf('group-%d', (int) $group->getId()),
@@ -535,20 +536,12 @@ class TestController extends AbstractController
             return $this->json([$root]);
         }
 
-        $sortedCategories = $categories->getQueryBuilderByGroup()
-            ->getQuery()
-            ->getResult();
-        $sortedStates = $states->getQueryBuilderByEditable()
-            ->getQuery()
-            ->getResult();
-        $products = $productRepository->findAllByGroup();
-
         return $this->renderForm('test/treeview.html.twig', [
+            'categories' => $this->getCategories($manager),
+            'products' => $this->getProducts($manager),
+            'states' => $this->getStates($manager),
             'currencies' => $this->getCurrencies(),
             'countries' => Countries::getNames(),
-            'categories' => $sortedCategories,
-            'states' => $sortedStates,
-            'products' => $products,
         ]);
     }
 
@@ -624,6 +617,16 @@ class TestController extends AbstractController
         return $this->json(['valid_key' => true]);
     }
 
+    private function getCategories(EntityManagerInterface $manager): array
+    {
+        $categories = $manager->getRepository(Category::class)
+            ->getQueryBuilderByGroup()
+            ->getQuery()
+            ->getResult();
+
+        return Utils::groupBy($categories, fn (Category $c): string => (string) $c->getGroupCode());
+    }
+
     /**
      * @return array<int, array{code: string, name: string}>
      */
@@ -645,5 +648,23 @@ class TestController extends AbstractController
         \usort($currencies, static fn (array $left, array $right): int => \strnatcasecmp((string) $left['name'], (string) $right['name']));
 
         return $currencies;
+    }
+
+    private function getProducts(EntityManagerInterface $manager): array
+    {
+        $products = $manager->getRepository(Product::class)
+            ->findAllByGroup();
+
+        return Utils::groupBy($products, fn (Product $p): string => \sprintf('%s - %s', (string) $p->getGroupCode(), (string) $p->getCategoryCode()));
+    }
+
+    private function getStates(EntityManagerInterface $manager): array
+    {
+        $states = $manager->getRepository(CalculationState::class)
+            ->getQueryBuilderByEditable()
+            ->getQuery()
+            ->getResult();
+
+        return Utils::groupBy($states, fn (CalculationState $state): string => $state->isEditable() ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable');
     }
 }

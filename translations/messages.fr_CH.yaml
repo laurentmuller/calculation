@@ -780,9 +780,10 @@ pagination:
   page_previous: Page précédente (%page%)
 parameters:
   action_display: Afficher
-  action_test: Tester l'affichage d'un message avec des données aléatoires
+  action_test: Tester l'affichage d'une notification avec des données aléatoires
   customize: Personnaliser
   description: Définition des paramètres de l'application.
+  default: Valeurs par défaut
   display:
     hide: Masquer
     show: Afficher
@@ -829,9 +830,9 @@ parameters:
   group_display: Affichage
   group_display_help: Mode d'affichage et d'édition des éléments.
   group_home: Page d'accueil
-  group_home_help: Elements affichés sur la page d'accueil.
-  group_message: Messages
-  group_message_help: Messages affichés dans l'application.
+  group_home_help: Éléments affichés sur la page d'accueil.
+  group_message: Notification
+  group_message_help: Notifications affichés dans l'application.
   group_options: Options
   group_options_help: Autres options utilisées par l'application.
   group_product: Article par défaut
@@ -845,10 +846,8 @@ parameters:
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
     panel_month: Afficher la liste des calculations regroupées par mois.
     panel_state: Afficher la liste des calculations regroupées par status.
-    print_address: L'adresse du client est imprimée sur les entêtes des documents
-      PDF.
-    qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher
-      la calculation.
+    print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
+    qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
   message_position:
     bottom-center: En bas centré
     bottom-left: En bas à gauche

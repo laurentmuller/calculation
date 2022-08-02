@@ -261,7 +261,9 @@
 
         /**
          * Build nodes.
-         *
+         * @param {JQuery} $parent -the parent element.
+         * @param {Node[]} nodes - the children nodes.
+         * @param {number} depth - the node depth.
          * @return {BoostrapTreeView} this instance for chaining.
          * @private
          */

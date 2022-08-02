@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\User\ThemeType;
+use App\Interfaces\RoleInterface;
 use App\Model\Theme;
 use App\Service\ThemeService;
 use App\Traits\CookieTrait;
@@ -29,6 +30,7 @@ use function Symfony\Component\String\u;
  */
 #[AsController]
 #[Route(path: '/user')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class ThemeController extends AbstractController
 {
     use CookieTrait;
@@ -39,7 +41,6 @@ class ThemeController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
     #[Route(path: '/theme', name: 'user_theme')]
     public function invoke(Request $request, ThemeService $service): Response
     {

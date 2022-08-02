@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\AbstractEntity;
+use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Pdf\PdfDocument;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
-use App\Security\EntityVoter;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TableTrait;
 use App\Util\Utils;
@@ -68,7 +68,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function checkPermission(EntityPermission $permission): void
     {
-        $subject = EntityVoter::getEntityName($this->className);
+        $subject = EntityName::tryFindValue($this->className);
         $this->denyAccessUnlessGranted($permission, $subject);
     }
 

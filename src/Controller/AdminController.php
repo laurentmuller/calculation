@@ -18,9 +18,9 @@ use App\Form\User\RoleRightsType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Security\EntityVoter;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
+use App\Util\RoleBuilder;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -48,7 +48,7 @@ class AdminController extends AbstractController
      * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/clear', name: 'admin_clear')]
     public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger, SymfonyInfoService $info): Response
     {
@@ -109,7 +109,7 @@ class AdminController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
     {
@@ -146,36 +146,36 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Edit rights for the administrator role ('ROLE_ADMIN').
+     * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/rights/admin', name: 'admin_rights_admin')]
     public function rightsAdmin(Request $request): Response
     {
         $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
-        $default = EntityVoter::getRoleAdmin();
+        $default = RoleBuilder::getRoleAdmin();
         $property = PropertyServiceInterface::P_ADMIN_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
     }
 
     /**
-     * Edit rights for the user role ('ROLE_USER').
+     * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request): Response
     {
         $roleName = RoleInterface::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
-        $default = EntityVoter::getRoleUser();
+        $default = RoleBuilder::getRoleUser();
         $property = PropertyServiceInterface::P_USER_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);

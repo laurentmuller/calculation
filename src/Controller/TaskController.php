@@ -16,6 +16,7 @@ use App\Entity\AbstractEntity;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
+use App\Interfaces\RoleInterface;
 use App\Report\TasksReport;
 use App\Repository\TaskRepository;
 use App\Response\PdfResponse;
@@ -37,8 +38,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @template-extends AbstractEntityController<Task>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/task')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class TaskController extends AbstractEntityController
 {
     /**

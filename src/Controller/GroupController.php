@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\AbstractEntity;
 use App\Entity\Group;
 use App\Form\Group\GroupType;
+use App\Interfaces\RoleInterface;
 use App\Report\GroupsReport;
 use App\Repository\CalculationGroupRepository;
 use App\Repository\GroupRepository;
@@ -36,8 +37,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @template-extends AbstractEntityController<Group>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/group')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class GroupController extends AbstractEntityController
 {
     /**

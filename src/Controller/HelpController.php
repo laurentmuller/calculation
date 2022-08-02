@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
 use App\Service\HelpService;
@@ -25,8 +26,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display help.
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/help')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class HelpController extends AbstractController
 {
     /**

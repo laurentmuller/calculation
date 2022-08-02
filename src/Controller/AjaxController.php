@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Enums\TableView;
+use App\Interfaces\RoleInterface;
 use App\Interfaces\StrengthInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
@@ -41,6 +42,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use ZxcvbnPhp\Zxcvbn;
 
 /**
@@ -60,7 +62,7 @@ class AjaxController extends AbstractController
      *
      * @throws \Exception
      */
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/captcha/image', name: 'ajax_captcha_image')]
     public function captchaImage(CaptchaImageService $service): JsonResponse
     {
@@ -78,7 +80,7 @@ class AjaxController extends AbstractController
     /**
      * Validate a captcha image.
      */
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/captcha/validate', name: 'ajax_captcha_validate')]
     public function captchaValidate(Request $request, CaptchaImageService $service): JsonResponse
     {
@@ -96,7 +98,7 @@ class AjaxController extends AbstractController
     /**
      * Check if a username or e-mail exist.
      */
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/checkuser', name: 'ajax_check_user')]
     public function checkUser(Request $request, UserRepository $repository): JsonResponse
     {
@@ -112,7 +114,7 @@ class AjaxController extends AbstractController
     /**
      * Check if a user e-mail already exists.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/checkuseremail', name: 'ajax_check_user_email')]
     public function checkUserEmail(Request $request, UserRepository $repository): JsonResponse
     {
@@ -143,7 +145,7 @@ class AjaxController extends AbstractController
     /**
      * Check if a username already exists.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/checkusername', name: 'ajax_check_user_name')]
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
@@ -174,7 +176,7 @@ class AjaxController extends AbstractController
     /**
      * Compute a task.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/task', name: 'ajax_task')]
     public function computeTask(Request $request, TaskService $service, TaskRepository $repository): JsonResponse
     {
@@ -204,7 +206,7 @@ class AjaxController extends AbstractController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/languages', name: 'ajax_languages')]
     public function languages(Request $request, TranslatorFactory $factory): JsonResponse
     {
@@ -222,7 +224,7 @@ class AjaxController extends AbstractController
     /**
      * Validate a strength password.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/password', name: 'ajax_password')]
     public function password(Request $request): JsonResponse
     {
@@ -283,7 +285,7 @@ class AjaxController extends AbstractController
     /**
      * Gets random text used to display notifications.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/random/text', name: 'ajax_random_text')]
     public function randomText(Request $request, FakerService $service): JsonResponse
     {
@@ -301,7 +303,7 @@ class AjaxController extends AbstractController
     /**
      * Save horizontal navigation state.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/navigation', name: 'ajax_save_navigation')]
     public function saveNavigationState(Request $request): JsonResponse
     {
@@ -332,7 +334,7 @@ class AjaxController extends AbstractController
      *
      * The request must contains 'name' and 'value' parameters.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/session/set', name: 'ajax_session_set')]
     public function saveSession(Request $request): JsonResponse
     {
@@ -350,7 +352,7 @@ class AjaxController extends AbstractController
     /**
      * Save table parameters.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/save', name: 'ajax_save_table')]
     public function saveTable(Request $request): JsonResponse
     {
@@ -367,7 +369,7 @@ class AjaxController extends AbstractController
     /**
      * Search streets, zip codes or cities.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/address', name: 'ajax_search_address')]
     public function searchAddress(Request $request, SwissPostService $service): JsonResponse
     {
@@ -393,7 +395,7 @@ class AjaxController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/customer', name: 'ajax_search_customer')]
     public function searchCustomer(Request $request, CalculationRepository $repository): JsonResponse
     {
@@ -413,7 +415,7 @@ class AjaxController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/distinct', name: 'ajax_search_distinct')]
     public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
     {
@@ -446,7 +448,7 @@ class AjaxController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/product', name: 'ajax_search_product')]
     public function searchProduct(Request $request, ProductRepository $repository): JsonResponse
     {
@@ -474,7 +476,7 @@ class AjaxController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/supplier', name: 'ajax_search_supplier')]
     public function searchSupplier(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
@@ -486,7 +488,7 @@ class AjaxController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/title', name: 'ajax_search_title')]
     public function searchTitle(Request $request, CustomerRepository $repository): JsonResponse
     {
@@ -498,7 +500,7 @@ class AjaxController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/unit', name: 'ajax_search_unit')]
     public function searchUnit(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
@@ -511,7 +513,7 @@ class AjaxController extends AbstractController
      * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/translate', name: 'ajax_translate')]
     public function translate(Request $request, TranslatorFactory $factory): JsonResponse
     {
@@ -558,7 +560,7 @@ class AjaxController extends AbstractController
      * @throws \ReflectionException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/update', name: 'ajax_update')]
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {

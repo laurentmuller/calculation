@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
 use App\Traits\FooterTextTrait;
 use App\Util\Utils;
@@ -29,7 +30,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Controller to handle CSP violation.
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class CspController extends AbstractController
 {
     use FooterTextTrait;

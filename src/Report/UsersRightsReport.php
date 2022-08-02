@@ -24,9 +24,9 @@ use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
-use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Traits\RoleTranslatorTrait;
+use App\Util\RoleBuilder;
 use Elao\Enum\FlagBag;
 
 /**
@@ -282,7 +282,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         foreach ($users as $user) {
             // update rights
             if (!$user->isOverwrite()) {
-                $rights = EntityVoter::getRole($user)->getRights();
+                $rights = RoleBuilder::getRole($user)->getRights();
                 $user->setRights($rights);
             }
 

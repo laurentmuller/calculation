@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -21,12 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display the site map.
  */
 #[AsController]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class SiteMapController extends AbstractController
 {
-    /**
-     * Display the site map.
-     */
-    #[IsGranted('ROLE_USER')]
     #[Route(path: '/sitemap', name: 'site_map')]
     public function invoke(): Response
     {

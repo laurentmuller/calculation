@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
@@ -30,8 +31,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display the database schema.
  */
 #[AsController]
-#[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/schema')]
+#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class SchemaController extends AbstractController
 {
     private readonly Connection $connection;

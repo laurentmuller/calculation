@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\Category\CategoryType;
+use App\Interfaces\RoleInterface;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationCategoryRepository;
 use App\Repository\CategoryRepository;
@@ -38,8 +39,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @template-extends AbstractEntityController<Category>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/category')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class CategoryController extends AbstractEntityController
 {
     /**

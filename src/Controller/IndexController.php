@@ -19,9 +19,11 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Interfaces\RoleInterface;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -32,6 +34,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Controller to display the home page.
  */
 #[AsController]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class IndexController extends AbstractController
 {
     use MathTrait;

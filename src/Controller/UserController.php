@@ -28,11 +28,11 @@ use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
-use App\Security\EntityVoter;
 use App\Service\MailerService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\UserTable;
+use App\Util\RoleBuilder;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,8 +55,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * @template-extends AbstractEntityController<User>
  */
 #[AsController]
-#[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/user')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class UserController extends AbstractEntityController
 {
     /**
@@ -343,7 +343,7 @@ class UserController extends AbstractEntityController
             'item' => $item,
             'form' => $form,
             'params' => ['id' => $item->getId()],
-            'default' => EntityVoter::getRole($item),
+            'default' => RoleBuilder::getRole($item),
             'permissions' => EntityPermission::sorted(),
         ]);
     }

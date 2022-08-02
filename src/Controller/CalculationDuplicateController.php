@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDuplicateDocument;
@@ -27,8 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display and export duplicate items in the calculations.
  */
 #[AsController]
-#[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/duplicate')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationDuplicateController extends AbstractController
 {
     use TableTrait;

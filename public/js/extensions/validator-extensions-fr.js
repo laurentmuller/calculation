@@ -507,7 +507,15 @@
         stepLabel: 'Le champ \"{0}\" doit être un multiple de {1}.',
         step: function (parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.stepLabel, $.validator.messages.stepFallback, parameters);
-        }
+        },
 
+        /*
+        * number
+        */
+        numberFallback: 'La valeur doit être un nombre.',
+        numberLabel: 'Le champ \"{0}\" doit être un nombre.',
+        number: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.numberLabel, $.validator.messages.numberFallback, parameters);
+        },
     });
 }(jQuery));

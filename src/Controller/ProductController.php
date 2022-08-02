@@ -16,6 +16,7 @@ use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
 use App\Interfaces\PropertyServiceInterface;
+use App\Interfaces\RoleInterface;
 use App\Report\ProductsReport;
 use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
@@ -35,8 +36,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @template-extends AbstractEntityController<Product>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/product')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class ProductController extends AbstractEntityController
 {
     /**

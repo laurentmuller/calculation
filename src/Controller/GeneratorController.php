@@ -16,6 +16,7 @@ use App\Generator\CalculationGenerator;
 use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
 use App\Interfaces\GeneratorInterface;
+use App\Interfaces\RoleInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to generate entities.
  */
 #[AsController]
-#[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/generate')]
+#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class GeneratorController extends AbstractController
 {
     final public const ROUTE_CALCULATION = 'generate_calculation';

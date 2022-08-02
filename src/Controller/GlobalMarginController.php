@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
 use App\Form\GlobalMargin\GlobalMarginType;
+use App\Interfaces\RoleInterface;
 use App\Report\GlobalMarginsReport;
 use App\Repository\GlobalMarginRepository;
 use App\Response\PdfResponse;
@@ -34,8 +35,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @template-extends AbstractEntityController<GlobalMargin>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/globalmargin')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class GlobalMarginController extends AbstractEntityController
 {
     /**

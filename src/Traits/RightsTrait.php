@@ -14,7 +14,7 @@ namespace App\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Security\EntityVoter;
+use App\Util\RoleBuilder;
 use Doctrine\ORM\Mapping as ORM;
 use Elao\Enum\FlagBag;
 
@@ -86,7 +86,7 @@ trait RightsTrait
      */
     public function getRights(): array
     {
-        return $this->rights ?? EntityVoter::getEmptyRights();
+        return $this->rights ?? $this->getEmptyRights();
     }
 
     /**
@@ -130,14 +130,26 @@ trait RightsTrait
     }
 
     /**
+     * Gets the empty rights.
+     *
+     * @return int[]
+     */
+    private function getEmptyRights(): array
+    {
+        $len = \count(EntityName::cases());
+
+        return \array_fill(0, $len, 0);
+    }
+
+    /**
      * Gets the rights for the given entity name.
      *
      * @return FlagBag<EntityPermission>|null
      */
     private function getEntityRights(string $entity): ?FlagBag
     {
-        $offset = EntityVoter::getEntityOffset($entity);
-        if (EntityVoter::INVALID_VALUE === $offset) {
+        $offset = EntityName::tryFindOffset($entity);
+        if (RoleBuilder::INVALID_VALUE === $offset) {
             return null;
         }
         $rights = $this->getRights();
@@ -153,8 +165,8 @@ trait RightsTrait
      */
     private function setEntityRights(string $entity, FlagBag $rights): static
     {
-        $offset = EntityVoter::getEntityOffset($entity);
-        if (EntityVoter::INVALID_VALUE !== $offset) {
+        $offset = EntityName::tryFindOffset($entity);
+        if (RoleBuilder::INVALID_VALUE !== $offset) {
             $newRights = $this->getRights();
             $newRights[$offset] = $rights->getValue();
 

@@ -36,6 +36,12 @@ final class FormatUtils
      */
     private static array $numberFormatters = [];
 
+    // prevent instance creation
+    private function __construct()
+    {
+        // no-op
+    }
+
     /**
      * Format a number for the current locale with 2 decimals (Ex: 2312.5 -> 2'312.50).
      */

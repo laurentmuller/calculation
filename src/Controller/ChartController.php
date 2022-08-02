@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Chart\MonthChart;
 use App\Chart\StateChart;
+use App\Interfaces\RoleInterface;
 use App\Traits\MathTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,8 +25,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * The controller for charts.
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/chart')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class ChartController extends AbstractController
 {
     use MathTrait;

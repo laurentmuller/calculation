@@ -26,6 +26,7 @@ use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
+use App\Interfaces\RoleInterface;
 use App\Interfaces\StrengthInterface;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
@@ -68,8 +69,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * Controller for tests.
  */
 #[AsController]
-#[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/test')]
+#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestController extends AbstractController
 {
     use StrengthTranslatorTrait;

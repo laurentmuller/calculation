@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
+use App\Interfaces\RoleInterface;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
 use App\Response\PdfResponse;
@@ -36,8 +37,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @template-extends AbstractEntityController<Customer>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/customer')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class CustomerController extends AbstractEntityController
 {
     /**

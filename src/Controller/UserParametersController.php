@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\User\UserParametersType;
+use App\Interfaces\RoleInterface;
 use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +25,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display user's preferences.
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/user')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class UserParametersController extends AbstractController
 {
     /**

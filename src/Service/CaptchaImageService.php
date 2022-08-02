@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Traits\SessionAwareTrait;
 use App\Util\ImageHandler;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -76,9 +76,11 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel)
-    {
-        $this->font = $kernel->getProjectDir() . self::FONT_PATH;
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        string $project_dir
+    ) {
+        $this->font = $project_dir . self::FONT_PATH;
     }
 
     /**

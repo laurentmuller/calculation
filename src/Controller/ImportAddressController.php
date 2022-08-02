@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Service\SwissPostUpdater;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 #[AsController]
 #[Route(path: '/admin')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ImportAddressController extends AbstractController
 {
     /**

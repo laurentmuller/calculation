@@ -17,8 +17,8 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Security\EntityVoter;
 use App\Traits\RoleTranslatorTrait;
+use App\Util\RoleBuilder;
 use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -206,7 +206,7 @@ class UserRightsDocument extends AbstractArrayDocument
     private function outputUser(User $user, int &$row): void
     {
         if (!$user->isOverwrite()) {
-            $rights = EntityVoter::getRole($user)->getRights();
+            $rights = RoleBuilder::getRole($user)->getRights();
             $user->setRights($rights);
         }
         $this->outputRole($user, $row);

@@ -18,6 +18,7 @@ use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
 use App\Form\Dialog\EditItemDialogType;
 use App\Form\Dialog\EditTaskDialogType;
+use App\Interfaces\RoleInterface;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
@@ -43,8 +44,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * @template-extends AbstractEntityController<Calculation>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/calculation')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationController extends AbstractEntityController
 {
     /**

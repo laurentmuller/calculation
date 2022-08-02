@@ -25,8 +25,8 @@ use App\Interfaces\StrengthInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
-use App\Security\EntityVoter;
 use App\Traits\PropertyTrait;
+use App\Util\RoleBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -72,7 +72,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getAdminRole(): Role
     {
-        $role = EntityVoter::getRoleAdmin();
+        $role = RoleBuilder::getRoleAdmin();
         $rights = $this->getPropertyArray(self::P_ADMIN_RIGHTS, $role->getRights());
         $role->setRights($rights);
 
@@ -509,7 +509,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getUserRole(): Role
     {
-        $role = EntityVoter::getRoleUser();
+        $role = RoleBuilder::getRoleUser();
         $rights = $this->getPropertyArray(self::P_USER_RIGHTS, $role->getRights());
         $role->setRights($rights);
 

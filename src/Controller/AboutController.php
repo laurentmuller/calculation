@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Report\MySqlReport;
 use App\Report\PhpIniReport;
@@ -32,6 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
  * Controller for application information.
@@ -54,7 +56,7 @@ class AboutController extends AbstractController
     /**
      * Display information about the application.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '', name: 'about')]
     public function about(): Response
     {
@@ -67,7 +69,7 @@ class AboutController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/pdf', name: 'about_pdf')]
     public function aboutPdf(
         #[Autowire('%app_name%')]
@@ -87,7 +89,7 @@ class AboutController extends AbstractController
     /**
      * Display the licence page.
      */
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/licence ', name: 'about_licence')]
     public function licence(): Response
     {
@@ -99,7 +101,7 @@ class AboutController extends AbstractController
     /**
      * Render the licence information.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/licence/content', name: 'about_licence_content')]
     public function licenceContent(): JsonResponse
     {
@@ -116,7 +118,7 @@ class AboutController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/licence/pdf', name: 'about_licence_pdf')]
     public function licencePdf(): PdfResponse
     {
@@ -130,7 +132,7 @@ class AboutController extends AbstractController
     /**
      * Render the MySql information.
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/mysql/content', name: 'about_mysql_content')]
     public function mysqlContent(DatabaseInfoService $info): JsonResponse
     {
@@ -151,7 +153,7 @@ class AboutController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/mysql/excel', name: 'about_mysql_excel')]
     public function mysqlExcel(DatabaseInfoService $info): SpreadsheetResponse
     {
@@ -166,7 +168,7 @@ class AboutController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/mysql/pdf', name: 'about_mysql_pdf')]
     public function mysqlPdf(DatabaseInfoService $info): PdfResponse
     {
@@ -178,7 +180,7 @@ class AboutController extends AbstractController
     /**
      * Render the PHP information.
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/php/content', name: 'about_php_content')]
     public function phpContent(Request $request, PhpInfoService $info): JsonResponse
     {
@@ -200,7 +202,7 @@ class AboutController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/php/excel', name: 'about_php_excel')]
     public function phpExcel(PhpInfoService $info): SpreadsheetResponse
     {
@@ -217,7 +219,7 @@ class AboutController extends AbstractController
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/php/pdf', name: 'about_php_pdf')]
     public function phpPdf(PhpInfoService $info): PdfResponse
     {
@@ -231,7 +233,7 @@ class AboutController extends AbstractController
     /**
      * Display the policy page.
      */
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/policy', name: 'about_policy')]
     public function policy(): Response
     {
@@ -244,7 +246,7 @@ class AboutController extends AbstractController
     /**
      * Render the policy information.
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/policy/content', name: 'about_policy_content')]
     public function policyContent(): JsonResponse
     {
@@ -262,7 +264,7 @@ class AboutController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/policy/pdf', name: 'about_policy_pdf')]
     public function policyPdf(): PdfResponse
     {
@@ -277,7 +279,7 @@ class AboutController extends AbstractController
     /**
      * Render Symfony information.
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/symfony/content', name: 'about_symfony_content')]
     public function symfonyContent(SymfonyInfoService $info): JsonResponse
     {
@@ -297,7 +299,7 @@ class AboutController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/symfony/excel', name: 'about_symfony_excel')]
     public function symfonyExcel(SymfonyInfoService $info): SpreadsheetResponse
     {
@@ -313,7 +315,7 @@ class AboutController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/symfony/pdf', name: 'about_symfony_pdf')]
     public function symfonyPdf(SymfonyInfoService $info): PdfResponse
     {

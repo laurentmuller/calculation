@@ -13,28 +13,29 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link AjaxController} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class AjaxControllerTest extends AbstractAuthenticateWebTestCase
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private ?TranslatorInterface $translator = null;
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Exception
      *
      * @see \App\Tests\Web\AbstractAuthenticateWebTestCase::setUp()
      */
     protected function setUp(): void
     {
         parent::setUp();
-
         $translator = $this->getContainer()->get(TranslatorInterface::class);
         if ($translator instanceof TranslatorInterface) {
             $this->translator = $translator;
@@ -76,55 +77,50 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     }
 
     /**
-     * @param string|bool $expected
-     *
      * @dataProvider getUsers
      */
-    public function testCheckUser($expected, string $user = null): void
+    public function testCheckUser(string|bool $expected, string $user = null): void
     {
         $parameters = ['user' => $user];
-        $this->client->request('GET', '/ajax/checkuser', $parameters);
+        $this->assertNotNull($this->client);
+        $this->client->request(Request::METHOD_GET, '/ajax/checkuser', $parameters);
         $response = $this->client->getResponse();
-        $this->validateRespons($response, $expected);
+        $this->validateResponse($response, $expected);
     }
 
     /**
-     * @param string|bool $expected
-     *
      * @dataProvider getUserEmails
      */
-    public function testCheckUserEmail($expected, string $email = null, int $id = null): void
+    public function testCheckUserEmail(string|bool $expected, string $email = null, int $id = null): void
     {
         $this->loginUserName('ROLE_SUPER_ADMIN');
         $parameters = ['email' => $email, 'id' => $id];
-        $this->client->request('GET', '/ajax/checkuseremail', $parameters);
+        $this->assertNotNull($this->client);
+        $this->client->request(Request::METHOD_GET, '/ajax/checkuseremail', $parameters);
         $response = $this->client->getResponse();
-        $this->validateRespons($response, $expected);
+        $this->validateResponse($response, $expected);
     }
 
     /**
-     * @param string|bool $expected
-     *
      * @dataProvider getUserNames
      */
-    public function testCheckUserName($expected, string $username = null, int $id = null): void
+    public function testCheckUserName(string|bool $expected, string $username = null, int $id = null): void
     {
         $this->loginUserName('ROLE_SUPER_ADMIN');
         $parameters = ['username' => $username, 'id' => $id];
-        $this->client->request('GET', '/ajax/checkusername', $parameters);
+        $this->assertNotNull($this->client);
+        $this->client->request(Request::METHOD_GET, '/ajax/checkusername', $parameters);
         $response = $this->client->getResponse();
-        $this->validateRespons($response, $expected);
+        $this->validateResponse($response, $expected);
     }
 
-    /**
-     * @param string|bool $expected
-     */
-    private function validateRespons(Response $response, $expected): void
+    private function validateResponse(Response $response, string|bool $expected): void
     {
         $this->assertTrue($response->isOk());
-
+        /** @psalm-var  mixed $result */
         $result = \json_decode((string) $response->getContent(), true);
         if (\is_string($expected)) {
+            $this->assertNotNull($this->translator);
             $expected = $this->translator->trans($expected, [], 'validators');
         }
         $this->assertSame($expected, $result);

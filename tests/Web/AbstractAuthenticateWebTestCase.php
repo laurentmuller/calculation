@@ -16,10 +16,10 @@ use App\Entity\User;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
-use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
+use App\Util\RoleBuilder;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -54,8 +54,8 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         $this->client = static::createClient();
 
         // get rights
-        $userRight = EntityVoter::getRoleUser()->getRights();
-        $adminRight = EntityVoter::getRoleAdmin()->getRights();
+        $userRight = RoleBuilder::getRoleUser()->getRights();
+        $adminRight = RoleBuilder::getRoleAdmin()->getRights();
 
         $application = $this->getService(ApplicationService::class);
         $application->setProperties([
@@ -91,7 +91,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     /**
      * Loads an user from the database.
      *
-     * @param string $username the user name to search for
+     * @param string $username the username to search for
      * @param bool   $verify   true to check if the user is not null
      *
      * @return User|null the user, if found; null otherwise

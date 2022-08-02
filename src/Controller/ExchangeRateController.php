@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Service\ExchangeRateService;
 use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -25,8 +26,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller for the exchange rate service.
  */
 #[AsController]
-#[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/exchange')]
+#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class ExchangeRateController extends AbstractController
 {
     /**

@@ -13,10 +13,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\User\UserLoginType;
+use App\Interfaces\RoleInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -25,7 +27,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 #[AsController]
 class SecurityController extends AbstractController
 {
-    #[IsGranted('PUBLIC_ACCESS')]
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $utils): Response
     {
@@ -42,7 +44,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): never
     {

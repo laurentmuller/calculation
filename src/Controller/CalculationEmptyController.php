@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Report\CalculationEmptyReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsEmptyDocument;
@@ -27,8 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller for calculations where items have the price or the quantity is equal to 0.
  */
 #[AsController]
-#[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/empty')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationEmptyController extends AbstractController
 {
     use TableTrait;

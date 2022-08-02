@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Database\OpenWeatherDatabase;
+use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherService;
 use App\Util\FileUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -35,8 +36,8 @@ use Symfony\Component\Validator\Constraints\Length;
  * @see https://openweathermap.org/api
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/openweather')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class OpenWeatherController extends AbstractController
 {
     /**
@@ -249,7 +250,7 @@ class OpenWeatherController extends AbstractController
      *
      * Data can be downloaded from the <a href="http://bulk.openweathermap.org/sample/">sample directory</a>.
      */
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/import', name: 'openweather_import')]
     public function import(Request $request, OpenWeatherService $service): Response
     {

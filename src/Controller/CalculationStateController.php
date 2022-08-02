@@ -16,6 +16,7 @@ use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
 use App\Interfaces\PropertyServiceInterface;
+use App\Interfaces\RoleInterface;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -36,8 +37,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @template-extends AbstractEntityController<CalculationState>
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/calculationstate')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationStateController extends AbstractEntityController
 {
     /**

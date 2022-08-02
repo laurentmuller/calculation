@@ -27,6 +27,12 @@ final class FileUtils
         0 => '%.0f B',
     ];
 
+    // prevent instance creation
+    private function __construct()
+    {
+        // no-op
+    }
+
     /**
      * Concat all given segments with the directory separator.
      */

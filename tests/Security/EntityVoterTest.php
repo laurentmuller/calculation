@@ -19,6 +19,7 @@ use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
+use App\Util\RoleBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -70,7 +71,7 @@ class EntityVoterTest extends TestCase
 
     public function testAdmin(): void
     {
-        $role = EntityVoter::getRoleAdmin();
+        $role = RoleBuilder::getRoleAdmin();
         $user = $this->getAdminUser()
             ->setRights($role->getRights())
             ->setOverwrite(true);
@@ -95,7 +96,7 @@ class EntityVoterTest extends TestCase
         $entities = \array_values(EntityName::constants());
         foreach ($entities as $index => $entity) {
             $this->assertNotNull($this->voter);
-            $actual = $this->voter->getEntityOffset($entity);
+            $actual = EntityName::tryFindOffset($entity);
             $this->assertEquals($index, $actual);
         }
     }
@@ -106,7 +107,7 @@ class EntityVoterTest extends TestCase
         foreach ($keys as $index => $key) {
             $expected = 2 ** $index;
             $this->assertNotNull($this->voter);
-            $actual = $this->voter->getPermissionValue($key);
+            $actual = EntityPermission::tryFindValue($key);
             $this->assertEquals($expected, $actual);
         }
     }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Report\LogReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
@@ -30,8 +31,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * The log controller.
  */
 #[AsController]
-#[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/log')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class LogController extends AbstractController
 {
     use TableTrait;

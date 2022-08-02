@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Calculation;
+use App\Interfaces\RoleInterface;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDocument;
@@ -29,8 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller for calculations where margins are below the minimum.
  */
 #[AsController]
-#[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/below')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationBelowController extends AbstractController
 {
     use TableTrait;

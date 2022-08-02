@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Table\SearchTable;
 use App\Traits\TableTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -24,6 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display the search page.
  */
 #[AsController]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class SearchController extends AbstractController
 {
     use TableTrait;
@@ -33,7 +35,6 @@ class SearchController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
     #[Route(path: '/search', name: 'search')]
     public function search(Request $request, SearchTable $table): Response
     {

@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\User\UserCommentType;
+use App\Interfaces\RoleInterface;
 use App\Model\Comment;
 use App\Service\MailerService;
 use App\Util\Utils;
@@ -37,7 +38,7 @@ class CommentController extends AbstractController
      *
      * @throws \ReflectionException
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/comment', name: 'user_comment')]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {

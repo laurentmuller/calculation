@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\PropertyServiceInterface;
+use App\Interfaces\RoleInterface;
 use App\Service\ProductUpdater;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 #[AsController]
 #[Route(path: '/admin')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ProductUpdateController extends AbstractController
 {
     /**

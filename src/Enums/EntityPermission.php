@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Enums;
 
 use App\Interfaces\SortableEnumInterface;
+use App\Util\RoleBuilder;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
@@ -86,6 +87,14 @@ enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterfa
             EntityPermission::DELETE,
             EntityPermission::EXPORT,
         ];
+    }
+
+    /**
+     * Find an entity permission value from the given name.
+     */
+    public static function tryFindValue(string $name, int $default = RoleBuilder::INVALID_VALUE): int
+    {
+        return EntityPermission::tryFromName($name)?->value ?: $default;
     }
 
     /**

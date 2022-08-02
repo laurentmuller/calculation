@@ -15,7 +15,7 @@ namespace App\Util;
 /**
  * Bit manipulation class.
  */
-class BitSet
+class BitSet implements \Stringable
 {
     /**
      * The number of bits per word.
@@ -27,6 +27,9 @@ class BitSet
      */
     private array $words = [];
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString(): string
     {
         return \sprintf('BitSet{%s}', \implode(',', $this->toIndexes()));
@@ -55,12 +58,8 @@ class BitSet
      */
     public function clear(int $bit): self
     {
-        if ($bit < 0) {
-            throw new \InvalidArgumentException("The bit argument '$bit' is negative");
-        }
-
         // get word position
-        $index = \intdiv($bit, self::WORD_BITS);
+        $index = $this->index($bit);
         if ($index < $this->count()) {
             $this->words[$index] &= ~$this->bitValue($bit);
         }
@@ -182,8 +181,7 @@ class BitSet
         }
 
         // get word position
-        $index = \intdiv($bit, self::WORD_BITS);
-
+        $index = $this->index($bit);
         $size = $this->count();
         if ($size < $index) {
             return false;
@@ -233,11 +231,7 @@ class BitSet
      */
     public function set(int $bit): self
     {
-        if ($bit < 0) {
-            throw new \InvalidArgumentException("The bit argument '$bit' is negative");
-        }
-
-        $index = \intdiv($bit, self::WORD_BITS);
+        $index = $this->index($bit);
         $this->expand($index);
         $this->words[$index] |= $this->bitValue($bit);
 
@@ -424,5 +418,19 @@ class BitSet
                 $this->words[$i] = 0;
             }
         }
+    }
+
+    /**
+     * Gets the words index for thr given bit.
+     *
+     * @throws \InvalidArgumentException If the bit argument is negative
+     */
+    private function index(int $bit): int
+    {
+        if ($bit < 0) {
+            throw new \InvalidArgumentException("The bit argument '$bit' is negative");
+        }
+
+        return \intdiv($bit, self::WORD_BITS);
     }
 }

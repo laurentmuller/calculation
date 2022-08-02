@@ -16,7 +16,7 @@ use App\Entity\User;
 use App\Form\User\UserRegistrationType;
 use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
+use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
 use App\Traits\FooterTextTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;

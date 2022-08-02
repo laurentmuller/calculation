@@ -29,6 +29,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -39,8 +40,8 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
  * Controller to reset the user password.
  */
 #[AsController]
-#[IsGranted('PUBLIC_ACCESS')]
 #[Route(path: '/reset-password')]
+#[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
 class ResetPasswordController extends AbstractController
 {
     use FooterTextTrait;

@@ -15,7 +15,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\User\ProfileChangePasswordType;
 use App\Form\User\ProfileEditType;
+use App\Interfaces\RoleInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -27,6 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 #[AsController]
 #[Route(path: '/profile')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class ProfileController extends AbstractController
 {
     /**

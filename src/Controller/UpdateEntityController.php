@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Customer;
+use App\Interfaces\RoleInterface;
 use App\Service\FakerService;
 use App\Service\SuspendEventListenerService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,8 +33,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Controller to update entities.
  */
 #[AsController]
-#[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route(path: '/update')]
+#[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class UpdateEntityController extends AbstractController
 {
     #[Route(path: '', name: 'update')]

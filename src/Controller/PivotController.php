@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\RoleInterface;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotTable;
@@ -29,8 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller to display the pivot table.
  */
 #[AsController]
-#[IsGranted('ROLE_USER')]
 #[Route(path: '/pivot')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class PivotController extends AbstractController
 {
     /**

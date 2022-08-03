@@ -6,10 +6,14 @@
 (function ($) {
     'use strict';
 
-    // -----------------------------
-    // Initialization
-    // -----------------------------
+    // -----------------------------------
+    // ColorPicker public class definition
+    // -----------------------------------
     const ColorPicker = class {
+
+        // -----------------------------
+        // public functions
+        // -----------------------------
 
         /**
          * Constructor.
@@ -17,18 +21,31 @@
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, ColorPicker.DEFAULTS, this.$element.data(), options);
-            this.$element.removeDataAttributes();
-            this.init();
+            this._init();
         }
 
         /**
-         * Initialize widget.
+         * Destructor.
          */
-        init() {
+        destroy() {
+            this.$dropdown.before(this.$dropdown).remove();
+            this.$element.removeClasss('d-none').removeData('color-picker');
+        }
+
+        // -----------------------------
+        // private functions
+        // -----------------------------
+
+        /**
+         * Initialize widget.
+         * @private
+         */
+        _init() {
             const that = this;
             const $element = that.$element;
             const focused = $element.is(':focus');
 
+            $element.removeDataAttributes();
             const length = Object.keys(that.options.colors).length;
             that.cols = that.options.columns;
             that.rows = Math.trunc(length / that.cols);
@@ -37,32 +54,25 @@
             }
 
             // drop-down
-            that.createDropDown();
+            that._createDropDown();
 
             // add handler
             $element.on('input', function () {
-                that.onElementInput();
+                that._onElementInput();
             });
-            that.updateUI();
+            that._updateUI();
 
             // focus
             if (focused || that.options.focus) {
-                that.setFocus();
+                that._setFocus();
             }
         }
 
         /**
-         * Destroy color-picker.
-         */
-        destroy() {
-            this.$dropdown.before(this.$dropdown).remove();
-            this.$element.removeClasss('d-none').removeData('colorpicker');
-        }
-
-        /**
          * Creates the drop-down element, if applicable.
+         * @private
          */
-        createDropDown() {
+        _createDropDown() {
             const that = this;
             const options = that.options;
 
@@ -108,23 +118,25 @@
 
             // add handlers
             that.$dropdown.on('show.bs.dropdown', function () {
-                that.onDropdownBeforeVisible($(this));
+                that._onDropdownBeforeVisible($(this));
             });
             that.$dropdown.on('shown.bs.dropdown', function () {
-                that.onDropdownAfterVisible($(this));
+                that._onDropdownAfterVisible($(this));
             });
             that.$dropdown.parents('.form-group').find('label').on('click', function () {
-                that.setFocus();
+                that._setFocus();
             });
         }
 
         /**
          * Create the palette element.
+         * @private
          */
-        createPalette() {
+        _createPalette() {
             const that = this;
             const options = that.options;
-            const colors = this.options.colors;
+            const colors = options.colors;
+            const columns = options.columns;
 
             // get tooltip options
             const display = options.tooltipDisplay;
@@ -133,7 +145,7 @@
             // default buttons options
             let buttonOptions = {
                 'type': 'button',
-                'class': 'btn btn-color',
+                'class': 'border btn btn-color',
             };
             if (display) {
                 buttonOptions['data-toggle'] = 'tooltip';
@@ -146,17 +158,17 @@
                 'class': 'color-palette'
             });
 
+            // colors
             let $row;
             Object.keys(colors).forEach(function (name, index) {
                 // row
-                if (index % options.columns === 0) {
+                if (index % columns === 0) {
                     $row = $('<div/>', {
                         'class': 'color-row'
                     });
                     $row.appendTo(that.$palette);
                 }
-
-                // buttons
+                // button
                 const color = colors[name];
                 buttonOptions.css = {
                     'background-color': color
@@ -178,18 +190,18 @@
 
             // tooltip
             if (display) {
-                that.findButton('.btn-color').tooltip();
+                that._findButton('.btn-color').tooltip();
             }
 
             // add handlers
             that.$customButton.on('click', function (e) {
-                that.onCustomButtonClick(e);
+                that._onCustomButtonClick(e);
             });
             that.$palette.on('click', '.btn-color', function (e) {
-                that.onColorButtonClick(e);
+                that._onColorButtonClick(e);
             });
             that.$palette.on('keydown', '.btn-color', function (e) {
-                that.onColorButtonKeyDown(e);
+                that._onColorButtonKeyDown(e);
             });
         }
 
@@ -199,34 +211,37 @@
 
         /**
          * Handles the color input event.
+         * @private
          */
-        onElementInput() {
-            this.updateUI();
-            this.setFocus();
+        _onElementInput() {
+            this._updateUI();
+            this._setFocus();
         }
 
         /**
          * Handles the dropdown before show event.
+         * @private
          */
-        onDropdownBeforeVisible() {
+        _onDropdownBeforeVisible() {
             if (!this.$palette) {
-                this.createPalette();
+                this._createPalette();
             }
         }
 
         /**
          * Handles the dropdown after show event.
+         * @private
          */
-        onDropdownAfterVisible() {
+        _onDropdownAfterVisible() {
             // get value
             const value = (this.$element.val() || '').toUpperCase();
 
             // find button
-            const $button = this.findButton('.btn-color[data-value="' + value + '"]:first');
+            const $button = this._findButton('.btn-color[data-value="' + value + '"]:first');
             if ($button) {
                 $button.trigger('focus');
             } else {
-                this.setSelection({
+                this._setSelection({
                     col: 0,
                     row: 0
                 });
@@ -237,19 +252,21 @@
          * Handles the custom button click event.
          *
          * @param {Event} e - the event.
+         * @private
          */
-        onCustomButtonClick(e) {
+        _onCustomButtonClick(e) {
             e.preventDefault();
             this.$element.trigger('click');
-            this.setFocus();
+            this._setFocus();
         }
 
         /**
          * Handles the color button click event.
          *
          * @param {Event} e - the event.
+         * @private
          */
-        onColorButtonClick(e) {
+        _onColorButtonClick(e) {
             e.preventDefault();
             const $button = $(e.target);
             const oldValue = this.$element.val();
@@ -264,89 +281,90 @@
          * Handles the color button key down event.
          *
          * @param {Event} e - the event.
+         * @private
          */
-        onColorButtonKeyDown(e) {
+        _onColorButtonKeyDown(e) {
             const cols = this.cols;
             const lastCol = this.cols - 1;
             const lastRow = this.rows - 1;
             const $button = $(e.target);
-            const selection = this.getSelection($button);
-            const count =  this.$palette.find('.btn-color').length;
+            const selection = this._getSelection($button);
+            const count = this.$palette.find('.btn-color').length;
             let index = selection.row * this.cols + selection.col;
 
             switch (e.which || e.keyCode) {
-            case 35: // end
-                selection.col = lastCol;
-                if (e.ctrlKey || selection.row * cols + selection.col >= count) {
-                    index = count - 1;
-                    selection.row =  Math.trunc(index / cols);
-                    selection.col = index % this.cols;
-                }
-                break;
+                case 35: // end
+                    selection.col = lastCol;
+                    if (e.ctrlKey || selection.row * cols + selection.col >= count) {
+                        index = count - 1;
+                        selection.row = Math.trunc(index / cols);
+                        selection.col = index % this.cols;
+                    }
+                    break;
 
-            case 36: // home
-                selection.col = 0;
-                if (e.ctrlKey) {
-                    selection.row = 0;
-                }
-                break;
-
-            case 37: // left arrow
-                selection.col = selection.col > 0 ? selection.col - 1 : lastCol;
-                if (selection.row * cols + selection.col >= count) {
-                    index = count - 1;
-                    selection.row =  Math.trunc(index / cols);
-                    selection.col = index % this.cols;
-                }
-                break;
-
-            case 38: // up arrow
-                selection.row = selection.row > 0 ? selection.row - 1 : lastRow;
-                if (selection.row * cols + selection.col >= count) {
-                    selection.row = lastRow - 1;
-                }
-                break;
-
-            case 39: // right arrow
-                selection.col = selection.col < lastCol ? selection.col + 1 : 0;
-                if (selection.row * cols + selection.col >= count) {
+                case 36: // home
                     selection.col = 0;
-                }
-                break;
+                    if (e.ctrlKey) {
+                        selection.row = 0;
+                    }
+                    break;
 
-            case 40: // down arrow
-                selection.row = selection.row < lastRow ? selection.row + 1 : 0;
-                if (selection.row * cols + selection.col >= count) {
-                    selection.row = 0;
-                }
-                break;
+                case 37: // left arrow
+                    selection.col = selection.col > 0 ? selection.col - 1 : lastCol;
+                    if (selection.row * cols + selection.col >= count) {
+                        index = count - 1;
+                        selection.row = Math.trunc(index / cols);
+                        selection.col = index % this.cols;
+                    }
+                    break;
 
-            case 107: // add
-                if (index < count - 1) {
-                    index++;
-                    selection.row =  Math.trunc(index / cols);
+                case 38: // up arrow
+                    selection.row = selection.row > 0 ? selection.row - 1 : lastRow;
+                    if (selection.row * cols + selection.col >= count) {
+                        selection.row = lastRow - 1;
+                    }
+                    break;
+
+                case 39: // right arrow
+                    selection.col = selection.col < lastCol ? selection.col + 1 : 0;
+                    if (selection.row * cols + selection.col >= count) {
+                        selection.col = 0;
+                    }
+                    break;
+
+                case 40: // down arrow
+                    selection.row = selection.row < lastRow ? selection.row + 1 : 0;
+                    if (selection.row * cols + selection.col >= count) {
+                        selection.row = 0;
+                    }
+                    break;
+
+                case 107: // add
+                    if (index < count - 1) {
+                        index++;
+                        selection.row = Math.trunc(index / cols);
+                        selection.col = index % cols;
+                    } else {
+                        selection.col = selection.row = 0;
+                    }
+                    break;
+
+                case 109: // subtract
+                    if (index > 0) {
+                        index--;
+                    } else {
+                        index = count - 1;
+                    }
+                    selection.row = Math.trunc(index / cols);
                     selection.col = index % cols;
-                } else {
-                    selection.col = selection.row = 0;
-                }
-                break;
+                    break;
 
-            case 109: // subtract
-                if (index > 0) {
-                    index--;
-                } else {
-                    index = count - 1;
-                }
-                selection.row =  Math.trunc(index / cols);
-                selection.col = index % cols;
-                break;
-
-            default:
-                return;
+                default:
+                    return;
             }
 
             // update
-            this.setSelection(selection);
+            this._setSelection(selection);
             e.preventDefault();
         }
 
@@ -356,19 +374,21 @@
 
         /**
          * Sets focus to the dropdown toggle.
+         * @private
          */
-        setFocus() {
+        _setFocus() {
             this.$dropdownToggle.trigger('focus');
         }
 
         /**
          * Update the UI.
+         * @private
          */
-        updateUI() {
+        _updateUI() {
             const value = this.$element.val();
             this.$spanColor.css('background-color', value);
             if (this.$spanText) {
-                const text = this.getColorName(value);
+                const text = this._getColorName(value);
                 this.$spanText.text(text);
             }
         }
@@ -378,10 +398,11 @@
          *
          * @param {JQuery} $button - the clicked button element.
          * @returns {Object} the row and column index of the selected button.
+         * @private
          */
-        getSelection($button) {
+        _getSelection($button) {
             // find focus
-            const $focused = this.findButton('.btn-color:focus');
+            const $focused = this._findButton('.btn-color:focus');
             if ($focused) {
                 return {
                     col: $focused.index(),
@@ -407,8 +428,9 @@
          *
          * @param {string} selector - the button selector.
          * @returns {JQuery} the buttons, if found; null otherwise.
+         * @private
          */
-        findButton(selector) {
+        _findButton(selector) {
             const $button = this.$palette.find(selector);
             return $button.length ? $button : null;
         }
@@ -418,10 +440,11 @@
          *
          * @param {Object} selection - the selection to set (must contain a 'row' and a 'col' fields).
          * @returns {JQuery} the button, if found; null otherwise.
+         * @private
          */
-        setSelection(selection) {
+        _setSelection(selection) {
             const selector = '.color-row:eq(' + selection.row + ') .btn-color:eq(' + selection.col + ')';
-            const $button = this.findButton(selector);
+            const $button = this._findButton(selector);
             if ($button) {
                 return $button.trigger('focus');
             }
@@ -433,38 +456,19 @@
          *
          * @param {string} color - the hexadecimal color to search for.
          * @returns {string} the color name, if found; the custom text otherwise.
+         * @private
          */
-        getColorName(color) {
+        _getColorName(color) {
             color = color || '';
             const colors = this.options.colors;
             const values = Object.values(colors);
             const index = values.findIndex((value) => value.equalsIgnoreCase(color));
             if (index !== -1) {
-               return Object.keys(colors)[index];
+                return Object.keys(colors)[index];
             }
 
             // custom text
             return this.options.customText;
-        }
-
-        /**
-         * Find the hexadecimal color for the given name.
-         *
-         * @param {string} name - the color name to search for.
-         * @returns {string} the hexadecimal color, if found; the first color
-         *          otherwise.
-         */
-        getColorHex(name) {
-            name = name || '';
-            const colors = this.options.colors;
-            const names = Object.keys(colors);
-            const found = names.find((key) => key.equalsIgnoreCase(name));
-            if (found) {
-                return colors[found];
-            }
-
-            // first color
-            return colors[names[0]];
         }
     };
 
@@ -497,7 +501,7 @@
             "Tundora": "#424242",
             "Colombe grise": "#636363",
             "Poussière d'étoile": "#9C9C94",
-            "Ardoise pâle": "#CEC6CE",
+            "Ardoise": "#CEC6CE",
             "Galerie": "#EFEFEF",
             "Albâtre": "#F7F7F7",
             "Blanc": "#FFFFFF",
@@ -507,7 +511,7 @@
             "Vert": "#00FF00",
             "Cyan": "#00FFFF",
             "Bleu": "#0000FF",
-            "Violet électrique": "#9C00FF",
+            "Violet": "#9C00FF",
             "Magenta": "#FF00FF",
             "Azalée": "#F7C6CE",
             "Karry": "#FFE7CE",
@@ -529,14 +533,14 @@
             "Rajah": "#F7AD6B",
             "Pissenlit": "#FFD663",
             "Olivine": "#94BD7B",
-            "Ruisseau du Golfe": "#73A5AD",
+            "Ruisseau": "#73A5AD",
             "Viking": "#6BADDE",
             "Blue Marguerite": "#8C7BC6",
             "Puce": "#C67BA5",
             "Gardien Rouge": "#CE0000",
             "Fire Bush": "#E79439",
             "Rêve d'or": "#EFC631",
-            "Concombre de Chelsea": "#6BA54A",
+            "Concombre": "#6BA54A",
             "Bleu slim": "#4A7B8C",
             "Bleu Boston": "#3984C6",
             "Papillon du Bush": "#634AA5",
@@ -568,9 +572,9 @@
     $.fn.colorpicker = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('colorpicker')) {
+            if (!$this.data('color-picker')) {
                 const settings = typeof options === 'object' && options;
-                $this.data('colorpicker', new ColorPicker(this, settings));
+                $this.data('color-picker', new ColorPicker(this, settings));
             }
         });
     };

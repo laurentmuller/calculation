@@ -16,19 +16,17 @@ use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Model\Theme;
 use App\Service\ThemeService;
-use App\Traits\TranslatorAwareTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use App\Traits\TranslatorTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to select a theme.
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class ThemeType extends AbstractHelperType implements ServiceSubscriberInterface
+class ThemeType extends AbstractHelperType
 {
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
+    use TranslatorTrait;
 
     /**
      * The background choices.
@@ -56,7 +54,7 @@ class ThemeType extends AbstractHelperType implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly ThemeService $service)
+    public function __construct(private readonly ThemeService $service, private readonly TranslatorInterface $translator)
     {
     }
 
@@ -66,6 +64,14 @@ class ThemeType extends AbstractHelperType implements ServiceSubscriberInterface
     public function getBlockPrefix(): string
     {
         return '';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

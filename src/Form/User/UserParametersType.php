@@ -40,7 +40,7 @@ class UserParametersType extends AbstractParametersType
     {
         $this->addDisplaySection($helper);
         $this->addMessageSection($helper);
-        if ($this->superAdmin) {
+        if ($this->isSuperAdmin()) {
             $this->addHomePageSection($helper);
             $this->addOptionsSection($helper);
         }

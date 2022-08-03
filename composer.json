@@ -138,6 +138,10 @@
 			"allow-contrib": true,
 			"require": "6.1.*",
 			"docker": false
+		},
+		"bamarni-bin": {
+			"bin-links": false,
+			"forward-command": true
 		}
 	},
 	"autoload" : {

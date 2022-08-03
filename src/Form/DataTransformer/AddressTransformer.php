@@ -17,16 +17,16 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
 
 /**
- * Transformer for mime address.
+ * Data transformer for mime address.
  *
- * @implements DataTransformerInterface<?Address, mixed>
+ * @implements DataTransformerInterface<Address|null, string|null>
  */
 class AddressTransformer implements DataTransformerInterface
 {
     /**
      * {@inheritDoc}
      *
-     * @return ?Address
+     * @return Address|null
      */
     public function reverseTransform(mixed $value)
     {

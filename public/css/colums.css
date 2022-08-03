@@ -90,6 +90,22 @@
     mix-blend-mode: multiply;
 }
 
+.text-user-name {
+    width: 175px;
+}
+
+.text-email {
+    width: 275px;
+}
+
+.text-role {
+    width: 175px;
+}
+
+.text-enabled {
+    width: 100px;
+}
+
 .text-nowrap {
     white-space: nowrap;
 }

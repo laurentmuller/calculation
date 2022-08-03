@@ -14,12 +14,19 @@
         // -----------------------------
         // public functions
         // -----------------------------
+
+        /**
+         * Constructor.
+         */
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, Sidebar.DEFAULTS, this.$element.data(), options);
             this._init();
         }
 
+        /**
+         * Destructor.
+         */
         destroy() {
             this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
             this.$sidebarToggle.off('click', this.toggleSidebarProxy);
@@ -30,6 +37,7 @@
         // -----------------------------
         // private functions
         // -----------------------------
+
         /**
          * Initialize the plugin.
          * @private

@@ -15,24 +15,24 @@
         "field": "username",
         "title": "user.fields.username_short",
         "default": true,
-        "class": "w-15 text-cell",
+        "class": "text-user-name",
         "cardClass": "font-weight-bold"
     },
     {
         "field": "email",
         "title": "user.fields.email",
-        "class": "w-25 text-cell"
+        "class": "text-email"
     },
     {
         "field": "role",
         "title": "user.fields.role",
-        "class": "w-25 text-cell",
+        "class": "text-role",
         "fieldFormatter": "formatRole"
     },
     {
         "field": "enabled",
         "title": "user.fields.enabled",
-        "class": "w-15 text-cell",
+        "class": "text-enabled",
         "fieldFormatter": "formatEnabled"
     },
     {

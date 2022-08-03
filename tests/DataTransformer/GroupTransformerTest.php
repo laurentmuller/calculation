@@ -14,7 +14,6 @@ namespace App\Tests\DataTransformer;
 
 use App\Entity\Group;
 use App\Form\DataTransformer\GroupTransformer;
-use App\Repository\GroupRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -35,17 +34,22 @@ class GroupTransformerTest extends KernelTestCase
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->group = $this->createGroup();
-        $repository = $this->getService(GroupRepository::class);
-        $this->transformer = new GroupTransformer($repository);
+        $this->transformer = new GroupTransformer($this->getManager());
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function tearDown(): void
     {
@@ -72,6 +76,7 @@ class GroupTransformerTest extends KernelTestCase
     }
 
     /**
+     * @psalm-param int|string|null $value
      * @dataProvider getReverseTransformValues
      */
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
@@ -94,6 +99,7 @@ class GroupTransformerTest extends KernelTestCase
 
     public function testReverseTransformValid(): void
     {
+        $this->assertNotNull($this->group);
         $this->assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($this->group->getId());
         $this->assertEquals($this->group, $actual);
@@ -107,6 +113,7 @@ class GroupTransformerTest extends KernelTestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
         $this->assertEquals($expected, $actual);
     }
@@ -118,6 +125,8 @@ class GroupTransformerTest extends KernelTestCase
 
     public function testTransformValid(): void
     {
+        $this->assertNotNull($this->group);
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->transform($this->group);
         $this->assertEquals($this->group->getId(), $actual);
     }

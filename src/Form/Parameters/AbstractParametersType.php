@@ -31,7 +31,7 @@ abstract class AbstractParametersType extends AbstractType
 {
     use TranslatorTrait;
 
-    protected bool $superAdmin = false;
+    private bool $superAdmin = false;
 
     /**
      * Constructor.
@@ -61,9 +61,17 @@ abstract class AbstractParametersType extends AbstractType
         return '';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->superAdmin;
     }
 
     protected function addDisplaySection(FormHelper $helper): void

@@ -15,7 +15,6 @@ namespace App\Tests\DataTransformer;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Form\DataTransformer\CategoryTransformer;
-use App\Repository\CategoryRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -37,6 +36,9 @@ class CategoryTransformerTest extends KernelTestCase
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function setUp(): void
     {
@@ -44,12 +46,14 @@ class CategoryTransformerTest extends KernelTestCase
 
         $this->group = $this->createGroup();
         $this->category = $this->createCategory($this->group);
-        $repository = $this->getService(CategoryRepository::class);
-        $this->transformer = new CategoryTransformer($repository);
+        $this->transformer = new CategoryTransformer($this->getManager());
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function tearDown(): void
     {
@@ -82,6 +86,7 @@ class CategoryTransformerTest extends KernelTestCase
     }
 
     /**
+     * @psalm-param int|string|null $value
      * @dataProvider getReverseTransformValues
      */
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
@@ -96,6 +101,7 @@ class CategoryTransformerTest extends KernelTestCase
 
     public function testReverseTransformInvalid(): void
     {
+        $this->assertNotNull($this->transformer);
         $this->expectException(TransformationFailedException::class);
         $actual = $this->transformer->reverseTransform(-1);
         $this->assertEquals($this->category, $actual);
@@ -103,6 +109,8 @@ class CategoryTransformerTest extends KernelTestCase
 
     public function testReverseTransformValid(): void
     {
+        $this->assertNotNull($this->category);
+        $this->assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($this->category->getId());
         $this->assertEquals($this->category, $actual);
     }
@@ -127,6 +135,7 @@ class CategoryTransformerTest extends KernelTestCase
 
     public function testTransformValid(): void
     {
+        $this->assertNotNull($this->category);
         $this->assertNotNull($this->transformer);
         $actual = $this->transformer->transform($this->category);
         $this->assertEquals($this->category->getId(), $actual);

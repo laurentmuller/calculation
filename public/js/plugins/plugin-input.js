@@ -13,6 +13,10 @@
         // -----------------------------
         // public functions
         // -----------------------------
+
+        /**
+         * Constructor.
+         */
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, InputNumberFormat.DEFAULTS, options);

@@ -134,6 +134,9 @@
 		}
 	},
 	"extra" : {
+		"bamarni-bin": {
+            "bin-links": true
+		},
 		"symfony" : {
 			"allow-contrib": true,
 			"require": "6.1.*",

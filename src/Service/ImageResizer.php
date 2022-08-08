@@ -26,7 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class ImageResizer implements ServiceSubscriberInterface, ImageExtensionInterface
+class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
     use ServiceSubscriberTrait;

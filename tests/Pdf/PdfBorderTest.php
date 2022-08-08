@@ -55,6 +55,6 @@ class PdfBorderTest extends TestCase
     public function testBorder(string|int $value, string|int $expected): void
     {
         $broder = new PdfBorder($value);
-        $this->assertSame($expected, $broder->getValue());
+        self::assertSame($expected, $broder->getValue());
     }
 }

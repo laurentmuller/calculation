@@ -72,7 +72,7 @@ class GroupTransformerTest extends KernelTestCase
 
     public function testGroupNotNull(): void
     {
-        $this->assertNotNull($this->group);
+        self::assertNotNull($this->group);
     }
 
     /**
@@ -84,25 +84,25 @@ class GroupTransformerTest extends KernelTestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testReverseTransformInvalid(): void
     {
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $this->expectException(TransformationFailedException::class);
         $actual = $this->transformer->reverseTransform(-1);
-        $this->assertEquals($this->group, $actual);
+        self::assertEquals($this->group, $actual);
     }
 
     public function testReverseTransformValid(): void
     {
-        $this->assertNotNull($this->group);
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->group);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($this->group->getId());
-        $this->assertEquals($this->group, $actual);
+        self::assertEquals($this->group, $actual);
     }
 
     /**
@@ -113,22 +113,22 @@ class GroupTransformerTest extends KernelTestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTransformerNotNull(): void
     {
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
     }
 
     public function testTransformValid(): void
     {
-        $this->assertNotNull($this->group);
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->group);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($this->group);
-        $this->assertEquals($this->group->getId(), $actual);
+        self::assertEquals($this->group->getId(), $actual);
     }
 
     /**

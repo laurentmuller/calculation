@@ -40,6 +40,10 @@ class RoleTranslatorTraitTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-suppress InvalidNullableReturnType
+     * @psalm-suppress NullableReturnStatement
+     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -55,7 +59,7 @@ class RoleTranslatorTraitTest extends TestCase
         $expected = "user.roles.$message";
         $this->translator = $this->createTranslator($expected);
         $actual = $this->translateRole($role);
-        $this->assertEquals($actual, $expected);
+        self::assertEquals($actual, $expected);
     }
 
     private function createTranslator(string $message): TranslatorInterface

@@ -77,12 +77,12 @@ class CategoryTransformerTest extends KernelTestCase
 
     public function testCategoryNotNull(): void
     {
-        $this->assertNotNull($this->category);
+        self::assertNotNull($this->category);
     }
 
     public function testGroupNotNull(): void
     {
-        $this->assertNotNull($this->group);
+        self::assertNotNull($this->group);
     }
 
     /**
@@ -94,25 +94,25 @@ class CategoryTransformerTest extends KernelTestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testReverseTransformInvalid(): void
     {
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $this->expectException(TransformationFailedException::class);
         $actual = $this->transformer->reverseTransform(-1);
-        $this->assertEquals($this->category, $actual);
+        self::assertEquals($this->category, $actual);
     }
 
     public function testReverseTransformValid(): void
     {
-        $this->assertNotNull($this->category);
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->category);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($this->category->getId());
-        $this->assertEquals($this->category, $actual);
+        self::assertEquals($this->category, $actual);
     }
 
     /**
@@ -123,22 +123,22 @@ class CategoryTransformerTest extends KernelTestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTransformerNotNull(): void
     {
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
     }
 
     public function testTransformValid(): void
     {
-        $this->assertNotNull($this->category);
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->category);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($this->category);
-        $this->assertEquals($this->category->getId(), $actual);
+        self::assertEquals($this->category->getId(), $actual);
     }
 
     /**

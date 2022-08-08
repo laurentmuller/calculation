@@ -18,7 +18,7 @@ use App\Traits\RoleTrait;
 /**
  * Implementation of the role interface with access rights.
  */
-class Role implements RoleInterface, \Stringable
+class Role implements \Stringable, RoleInterface
 {
     use RoleTrait;
 

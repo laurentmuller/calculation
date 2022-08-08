@@ -39,16 +39,16 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
         $form->submit($data);
 
         // check form
-        $this->assertTrue($form->isSynchronized());
+        self::assertTrue($form->isSynchronized());
 
         // check data
-        $this->assertEquals($expected, $model);
+        self::assertEquals($expected, $model);
 
         // check view
         $view = $form->createView();
         $children = $view->children;
         foreach (\array_keys($data) as $key) {
-            $this->assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 

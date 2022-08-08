@@ -61,7 +61,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
             return;
         }
 
-        if (!\is_scalar($value) && !(\is_object($value) && \method_exists($value, '__toString'))) {
+        if (!\is_scalar($value) && !$value instanceof \Stringable && !(\is_object($value) && \method_exists($value, '__toString'))) {
             throw new UnexpectedValueException($value, 'string');
         }
 
@@ -76,8 +76,8 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     /**
      * Performs validation.
      *
-     * @param string $value the value that should be validated
-     * @psalm-param T $constraint
+     * @param string $value      the value that should be validated
+     * @param T      $constraint
      */
     abstract protected function doValidate(string $value, Constraint $constraint): void;
 }

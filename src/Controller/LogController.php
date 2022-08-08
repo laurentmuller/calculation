@@ -164,9 +164,9 @@ class LogController extends AbstractController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'log_table')]
-    public function table(Request $request, LogTable $table): Response
+    public function table(Request $request, LogTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'log/log_table.html.twig');
+        return $this->handleTableRequest($request, $table, 'log/log_table.html.twig', $logger);
     }
 
     /**

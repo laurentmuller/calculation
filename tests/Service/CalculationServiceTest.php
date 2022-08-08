@@ -58,18 +58,18 @@ class CalculationServiceTest extends KernelTestCase
         $service = $this->getTestedService($manager);
         $service->updateTotal($calculation);
 
-        $this->assertEquals(1, $calculation->getGroupsCount());
-        $this->assertEquals(1, $calculation->getCategoriesCount());
+        self::assertEquals(1, $calculation->getGroupsCount());
+        self::assertEquals(1, $calculation->getCategoriesCount());
 
         /** @var CalculationGroup $group */
         $group = $calculation->getGroups()->first();
 
-        $this->assertCount(1, $calculation->getGroups());
-        $this->assertCount(1, $group->getCategories());
+        self::assertCount(1, $calculation->getGroups());
+        self::assertCount(1, $group->getCategories());
 
         /** @var CalculationCategory $category */
         $category = $group->getCategories()->first();
-        $this->assertCount(1, $category->getItems());
+        self::assertCount(1, $category->getItems());
 
         /** @var CalculationItem $item */
         $item = $category->getItems()->first();
@@ -80,25 +80,25 @@ class CalculationServiceTest extends KernelTestCase
         $totalOverall = $totalUser * self::MARGIN_PERCENT;
 
         // item
-        $this->assertEquals(self::PRODUCT_PRICE, $item->getPrice());
-        $this->assertEquals(self::QUANTITY, $item->getQuantity());
-        $this->assertEquals($totalItem, $item->getTotal());
+        self::assertEquals(self::PRODUCT_PRICE, $item->getPrice());
+        self::assertEquals(self::QUANTITY, $item->getQuantity());
+        self::assertEquals($totalItem, $item->getTotal());
 
         // group
-        $this->assertEquals($totalItem, $group->getAmount());
-        $this->assertEquals(self::MARGIN_PERCENT, $group->getMargin());
-        $this->assertEquals($totalGroup, $group->getTotal());
+        self::assertEquals($totalItem, $group->getAmount());
+        self::assertEquals(self::MARGIN_PERCENT, $group->getMargin());
+        self::assertEquals($totalGroup, $group->getTotal());
 
         // category
-        $this->assertEquals($totalItem, $category->getAmount());
-        $this->assertEquals($category->getAmount(), $item->getTotal());
+        self::assertEquals($totalItem, $category->getAmount());
+        self::assertEquals($category->getAmount(), $item->getTotal());
 
         // assert
-        $this->assertEquals($totalItem, $calculation->getItemsTotal());
-        $this->assertEquals($totalGroup, $calculation->getGroupsTotal());
-        $this->assertEquals(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
-        $this->assertEquals(self::MARGIN_USER, $calculation->getUserMargin());
-        $this->assertEquals($totalOverall, $calculation->getOverallTotal());
+        self::assertEquals($totalItem, $calculation->getItemsTotal());
+        self::assertEquals($totalGroup, $calculation->getGroupsTotal());
+        self::assertEquals(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
+        self::assertEquals(self::MARGIN_USER, $calculation->getUserMargin());
+        self::assertEquals($totalOverall, $calculation->getOverallTotal());
     }
 
     /**

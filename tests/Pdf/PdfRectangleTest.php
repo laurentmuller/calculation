@@ -23,18 +23,18 @@ class PdfRectangleTest extends TestCase
     public function testBottom(): void
     {
         $r = new PdfRectangle(10, 10, 20, 20);
-        $this->assertSame(30.0, $r->bottom());
+        self::assertSame(30.0, $r->bottom());
     }
 
     public function testContains(): void
     {
         $r = new PdfRectangle(10, 10, 20, 20);
-        $this->assertTrue($r->contains(10, 10));
-        $this->assertTrue($r->contains(15, 15));
-        $this->assertTrue($r->contains(29.999999, 29.999999));
+        self::assertTrue($r->contains(10, 10));
+        self::assertTrue($r->contains(15, 15));
+        self::assertTrue($r->contains(29.999999, 29.999999));
 
-        $this->assertFalse($r->contains(0, 0));
-        $this->assertFalse($r->contains(30, 30));
+        self::assertFalse($r->contains(0, 0));
+        self::assertFalse($r->contains(30, 30));
     }
 
     public function testIndent(): void
@@ -90,13 +90,13 @@ class PdfRectangleTest extends TestCase
     {
         $r1 = new PdfRectangle(10, 10, 20, 20);
         $r2 = new PdfRectangle(10, 10, 20, 20);
-        $this->assertTrue($r1->intersect($r2));
+        self::assertTrue($r1->intersect($r2));
     }
 
     public function testRight(): void
     {
         $r = new PdfRectangle(10, 10, 20, 20);
-        $this->assertSame(30.0, $r->right());
+        self::assertSame(30.0, $r->right());
     }
 
     public function testSetBottom(): void
@@ -130,9 +130,9 @@ class PdfRectangleTest extends TestCase
 
     private function validate(PdfRectangle $r, float $x, float $y, float $w, float $h): void
     {
-        $this->assertSame($x, $r->x());
-        $this->assertSame($y, $r->y());
-        $this->assertSame($w, $r->width());
-        $this->assertSame($h, $r->height());
+        self::assertSame($x, $r->x());
+        self::assertSame($y, $r->y());
+        self::assertSame($w, $r->width());
+        self::assertSame($h, $r->height());
     }
 }

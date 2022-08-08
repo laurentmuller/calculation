@@ -113,10 +113,10 @@ class DatabaseTest extends KernelTestCase
          * @psalm-var AbstractRepository<T> $repository
          */
         $repository = $this->getService($className);
-        $this->assertNotNull($repository);
+        self::assertNotNull($repository);
 
         $result = $repository->findAll();
-        $this->assertCount($expected, $result);
+        self::assertCount($expected, $result);
     }
 
     /**
@@ -126,7 +126,7 @@ class DatabaseTest extends KernelTestCase
     {
         $query = "SELECT COUNT(id) FROM $tablename";
         $result = self::$database->querySingle($query);
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -137,13 +137,13 @@ class DatabaseTest extends KernelTestCase
     public function testUser(string $username, string $role): void
     {
         $repository = $this->getService(UserRepository::class);
-        $this->assertNotNull($repository);
+        self::assertNotNull($repository);
 
         /** @var User $user */
         $user = $repository->findOneBy(['username' => $username]);
-        $this->assertInstanceOf(User::class, $user);
+        self::assertInstanceOf(User::class, $user);
 
-        $this->assertEquals($username, $user->getUserIdentifier());
-        $this->assertTrue($user->hasRole($role));
+        self::assertEquals($username, $user->getUserIdentifier());
+        self::assertTrue($user->hasRole($role));
     }
 }

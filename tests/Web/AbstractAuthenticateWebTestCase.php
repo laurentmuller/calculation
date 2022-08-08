@@ -76,7 +76,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     {
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
-        $this->assertEquals($expected, $statusCode, "Invalid status code for '{$url}' and '{$username}'.");
+        self::assertEquals($expected, $statusCode, "Invalid status code for '{$url}' and '{$username}'.");
     }
 
     /**
@@ -104,7 +104,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         $user = $repository->findByUsername($username);
 
         if ($verify) {
-            $this->assertNotNull($user, "The user '$username' is null.");
+            self::assertNotNull($user, "The user '$username' is null.");
         }
 
         return $user;

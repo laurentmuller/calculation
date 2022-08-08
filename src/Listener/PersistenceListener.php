@@ -25,8 +25,9 @@ use App\Entity\User;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -86,6 +87,8 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
     /**
      * Handles the post persist event.
      *
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
+     *
      * @throws \ReflectionException
      */
     public function postPersist(LifecycleEventArgs $args): void
@@ -100,6 +103,8 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
     /**
      * Handles the post remove event.
      *
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
+     *
      * @throws \ReflectionException
      */
     public function postRemove(LifecycleEventArgs $args): void
@@ -113,6 +118,8 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
 
     /**
      * Handles the post update event.
+     *
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
      *
      * @throws \ReflectionException
      */
@@ -137,9 +144,7 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
     /**
      * Gets the entity from the given arguments.
      *
-     * @param LifecycleEventArgs $args the arguments to get entity for
-     *
-     * @return AbstractEntity|null the entity, if found; null otherwise
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
      */
     private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
     {
@@ -155,11 +160,6 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
     /**
      * Gets the message identifier to translate.
      *
-     * @param AbstractEntity $entity the entity
-     * @param string         $suffix the message suffix
-     *
-     * @return string the message identifier to translate
-     *
      * @throws \ReflectionException
      */
     private function getId(AbstractEntity $entity, string $suffix): string
@@ -171,10 +171,6 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
 
     /**
      * Gets the message parameters.
-     *
-     * @param AbstractEntity $entity the entity
-     *
-     * @return array the message parameters
      */
     private function getParameters(AbstractEntity $entity): array
     {
@@ -184,14 +180,13 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
     /**
      * Checks if the last login field is updated.
      *
-     * @param LifecycleEventArgs $args the post update arguments
-     * @param User               $user the user entity
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
      *
      * @return bool true if updated
      */
     private function isLastLogin(LifecycleEventArgs $args, User $user): bool
     {
-        $manager = $args->getEntityManager();
+        $manager = $args->getObjectManager();
         $unitOfWork = $manager->getUnitOfWork();
         $changeSet = $unitOfWork->getEntityChangeSet($user);
 

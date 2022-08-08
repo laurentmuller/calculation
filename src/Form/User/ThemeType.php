@@ -128,18 +128,15 @@ class ThemeType extends AbstractHelperType
     private function addThemeField(FormHelper $helper): self
     {
         $themes = $this->service->getThemes();
-        $choice_attr = function (Theme $theme): array {
-            return [
-                'data-description' => $theme->getDescription(),
-                'data-css' => $theme->getCss(),
-            ];
-        };
         $helper->field('theme')
             ->updateOptions([
                 'choice_label' => 'name',
                 'choice_value' => 'name',
-                'choice_attr' => $choice_attr,
                 'choice_translation_domain' => false,
+                'choice_attr' => static fn (Theme $theme): array => [
+                    'data-description' => $theme->getDescription(),
+                    'data-css' => $theme->getCss(),
+                ],
             ])->addChoiceType($themes);
 
         return $this;

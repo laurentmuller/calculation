@@ -20,6 +20,7 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -193,13 +194,22 @@ class SchemaController extends AbstractController
                 'name' => $name,
                 'primaryKey' => $isPrimaryKey,
                 'unique' => $unique,
-                'type' => $column->getType()->getName(),
+                'type' => $this->getColumnType($column),
                 'length' => (int) $column->getLength(),
                 'nullable' => !$column->getNotnull(),
                 'foreignTableName' => $foreignTableName,
                 'default' => $this->getDefaultValue($column),
             ];
         }, $table->getColumns());
+    }
+
+    private function getColumnType(Column $column): string
+    {
+        try {
+            return Type::getTypeRegistry()->lookupName($column->getType());
+        } catch (\Doctrine\DBAL\Exception) {
+            return 'Unknown';
+        }
     }
 
     private function getDefaultValue(Column $column): string

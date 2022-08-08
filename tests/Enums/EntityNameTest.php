@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Security;
+namespace App\Tests\Enums;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
@@ -28,6 +28,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for {@link EntityName} enumeration.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityNameTest extends TestCase
 {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enums\EntityPermission;
+use App\Enums\StrengthLevel;
 use App\Form\Admin\ApplicationParametersType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\PropertyServiceInterface;
@@ -120,19 +121,25 @@ class AdminController extends AbstractController
             PropertyServiceInterface::P_UPDATE_PRODUCTS,
             PropertyServiceInterface::P_LAST_IMPORT,
         ]);
-
         // password options
-        foreach (ApplicationParametersType::PASSWORD_OPTIONS as $option) {
+        $options = ApplicationParametersType::PASSWORD_OPTIONS;
+        foreach ($options as $option) {
             $data[$option] = $application->isPropertyBoolean($option);
         }
+
         // form
         $form = $this->createForm(ApplicationParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $defaultProperties = $application->getDefaultValues();
-            foreach (ApplicationParametersType::PASSWORD_OPTIONS as $option) {
+            foreach ($options as $option) {
                 $defaultProperties[$option] = false;
+            }
+            /** @psalm-var bool $captcha */
+            $captcha = $data[PropertyServiceInterface::P_DISPLAY_CAPTCHA];
+            if (!$captcha) {
+                $data[PropertyServiceInterface::P_STRENGTH_LEVEL] = StrengthLevel::NONE;
             }
             $application->setProperties($data, $defaultProperties);
             $this->successTrans('parameters.success');
@@ -141,6 +148,7 @@ class AdminController extends AbstractController
         }
         // display
         return $this->renderForm('admin/parameters.html.twig', [
+            'options' => $options,
             'form' => $form,
         ]);
     }

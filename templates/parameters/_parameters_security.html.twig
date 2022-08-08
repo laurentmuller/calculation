@@ -6,9 +6,12 @@
                 {{ form_row(form.display_captcha) }}
             </div>
             <div class="col-md-6">
-                {{ form_row(form.min_strength) }}
+                {{ form_row(form.strength_level) }}
             </div>
         </div>
-        {{ form_rest(form) }}
+        <label>{{ 'user.fields.password'|trans }}</label>
+        {% for option in options %}
+            {{ form_row(form[option]) }}
+        {% endfor %}
     </div>
 </div>

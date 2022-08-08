@@ -192,9 +192,9 @@ class GroupController extends AbstractEntityController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'group_table')]
-    public function table(Request $request, GroupTable $table): Response
+    public function table(Request $request, GroupTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'group/group_table.html.twig');
+        return $this->handleTableRequest($request, $table, 'group/group_table.html.twig', $logger);
     }
 
     /**

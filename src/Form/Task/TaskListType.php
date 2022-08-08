@@ -39,15 +39,14 @@ class TaskListType extends AbstractListEntityType
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'choice_label' => 'name',
-            'choice_attr' => function (Task $task): array {
-                return [
-                    'data-category-id' => $task->getCategoryId(),
-                    'data-category-code' => $task->getCategoryCode(),
-                    'data-unit' => $task->getUnit(),
-                ];
-            },
+            'choice_attr' => static fn (Task $task): array => [
+                'data-category-id' => $task->getCategoryId(),
+                'data-category-code' => $task->getCategoryCode(),
+                'data-unit' => $task->getUnit(),
+            ],
             'query_builder' => fn (TaskRepository $repository): QueryBuilder => $repository->getSortedBuilder(false),
         ]);
     }

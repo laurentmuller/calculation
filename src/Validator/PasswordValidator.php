@@ -12,12 +12,9 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Interfaces\StrengthInterface;
-use App\Traits\StrengthTranslatorTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Password constraint validator.
@@ -26,8 +23,6 @@ use ZxcvbnPhp\Zxcvbn;
  */
 class PasswordValidator extends AbstractConstraintValidator
 {
-    use StrengthTranslatorTrait;
-
     /**
      * Constructor.
      */
@@ -61,18 +56,14 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Adds a violation.
      *
-     * @param string $message    the message
-     * @param string $value      the value
-     * @param array  $parameters an optional array with the parameter names as keys and
-     *                           the values to be inserted in their place as values
-     *
      * @return bool this function return always true
      */
-    private function addViolation(string $message, string $value, array $parameters = []): bool
+    private function addViolation(string $message, string $value, array $parameters, string $code): bool
     {
         $this->context->buildViolation($message)
             ->setParameters($parameters)
             ->setInvalidValue($value)
+            ->setCode($code)
             ->addViolation();
 
         return true;
@@ -88,7 +79,6 @@ class PasswordValidator extends AbstractConstraintValidator
         $this->checkNumber($constraint, $value);
         $this->checkSpecialChar($constraint, $value);
         $this->checkEmail($constraint, $value);
-        $this->checkStrength($constraint, $value);
         $this->checkPwned($constraint, $value);
     }
 
@@ -102,35 +92,24 @@ class PasswordValidator extends AbstractConstraintValidator
             || $this->checkNumber($constraint, $value)
             || $this->checkSpecialChar($constraint, $value)
             || $this->checkEmail($constraint, $value)
-            || $this->checkStrength($constraint, $value)
             || $this->checkPwned($constraint, $value);
     }
 
     /**
      * Checks the presence of lower/upper character.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
      */
     private function checkCaseDiff(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->case_diff, '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value, $constraint->case_diff_message);
+        return $this->validateRegex($constraint->case_diff, '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value, $constraint->case_diff_message, Password::CASE_DIFF_ERROR);
     }
 
     /**
      * Checks if the value is an e-mail.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
      */
     private function checkEmail(Password $constraint, string $value): bool
     {
         if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
-            return $this->addViolation($constraint->email_message, $value);
+            return $this->addViolation($constraint->email_message, $value, [], Password::EMAIL_ERROR);
         }
 
         return false;
@@ -138,46 +117,31 @@ class PasswordValidator extends AbstractConstraintValidator
 
     /**
      * Checks the presence of letter character.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
      */
     private function checkLetters(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->letters, '/\pL/u', $value, $constraint->letters_message);
+        return $this->validateRegex($constraint->letters, '/\pL/u', $value, $constraint->letters_message, Password::LETTERS_ERROR);
     }
 
     /**
      * Checks the presence of one or more numbers characters.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
      */
     private function checkNumber(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->numbers, '/\pN/u', $value, $constraint->numbers_message);
+        return $this->validateRegex($constraint->numbers, '/\pN/u', $value, $constraint->numbers_message, Password::NUMBERS_ERROR);
     }
 
     /**
      * Check if the password is compromised.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
      */
     private function checkPwned(Password $constraint, string $value): bool
     {
-        if ($constraint->pwned && $count = $this->getPasswordCount($value)) {
+        if ($constraint->pwned && 0 !== $count = $this->getPasswordCount($value)) {
             $parameters = [
                 '{{count}}' => FormatUtils::formatInt($count),
             ];
 
-            return $this->addViolation($constraint->pwned_message, $value, $parameters);
+            return $this->addViolation($constraint->pwned_message, $value, $parameters, Password::PWNED_ERROR);
         }
 
         return false;
@@ -185,48 +149,14 @@ class PasswordValidator extends AbstractConstraintValidator
 
     /**
      * Checks the presence of one or more special characters.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
      */
     private function checkSpecialChar(Password $constraint, string $value): bool
     {
-        return $this->validateRegex($constraint->special_char, '/[^p{Ll}\p{Lu}\pL\pN]/u', $value, $constraint->special_char_message);
-    }
-
-    /**
-     * Checks the password strength.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
-     */
-    private function checkStrength(Password $constraint, string $value): bool
-    {
-        if (StrengthInterface::LEVEL_NONE !== $constraint->min_strength) {
-            $service = new Zxcvbn();
-            $result = $service->passwordStrength($value);
-            $score = (int) $result['score'];
-            $minimum = $constraint->min_strength;
-            if ($score < $minimum) {
-                $this->addStrengthViolation($this->context, $minimum, $score);
-
-                return true;
-            }
-        }
-
-        return false;
+        return $this->validateRegex($constraint->special_char, '/[^p{Ll}\p{Lu}\pL\pN]/u', $value, $constraint->special_char_message, Password::SPECIAL_CHAR_ERROR);
     }
 
     /**
      * Check if the password has been compromised in a data breach.
-     *
-     * @param string $password the password to verify
-     *
-     * @return int the number of compromised passwords
      */
     private function getPasswordCount(string $password): int
     {
@@ -243,6 +173,10 @@ class PasswordValidator extends AbstractConstraintValidator
 
         // search
         foreach ($lines as $line) {
+            if (!\str_contains($line, ':')) {
+                continue;
+            }
+
             [$hashSuffix, $count] = \explode(':', $line);
             if ($hashPrefix . $hashSuffix === $hash) {
                 return (int) $count;
@@ -252,10 +186,10 @@ class PasswordValidator extends AbstractConstraintValidator
         return 0;
     }
 
-    private function validateRegex(bool $apply, string $pattern, string $value, string $message): bool
+    private function validateRegex(bool $apply, string $pattern, string $value, string $message, string $code): bool
     {
         if ($apply && !\preg_match($pattern, $value)) {
-            return $this->addViolation($message, $value);
+            return $this->addViolation($message, $value, [], $code);
         }
 
         return false;

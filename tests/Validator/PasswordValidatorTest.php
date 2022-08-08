@@ -12,12 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Validator;
 
-use App\Interfaces\StrengthInterface;
 use App\Validator\Password;
 use App\Validator\PasswordValidator;
-
-use function PHPUnit\Framework\assertSame;
-
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -25,6 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Unit test for {@link PasswordValidator} class.
  *
  * @extends ConstraintValidatorTestCase<PasswordValidator>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
@@ -39,19 +36,18 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ['numbers'],
             ['special_char'],
             ['pwned'],
-            ['min_strength', StrengthInterface::LEVEL_VERY_STRONG],
         ];
     }
 
     public function getInvalidValues(): array
     {
         return [
-            ['abc', ['case_diff' => true], 'password.case_diff'],
-            ['myemail@website.com', ['email' => true], 'password.email'],
-            ['123', ['letters' => true], 'password.letters'],
-            ['abc', ['numbers' => true], 'password.numbers'],
-            ['123', ['special_char' => true], 'password.special_char'],
-            ['@@@', ['letters' => true, 'numbers' => true], 'password.letters'],
+            ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR],
+            ['myemail@website.com', ['email' => true], 'password.email', Password::EMAIL_ERROR],
+            ['123', ['letters' => true], 'password.letters', Password::LETTERS_ERROR],
+            ['@@@', ['letters' => true, 'numbers' => true], 'password.letters', Password::LETTERS_ERROR],
+            ['abc', ['numbers' => true], 'password.numbers', Password::NUMBERS_ERROR],
+            ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR],
         ];
     }
 
@@ -63,23 +59,11 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function getStrengths(): \Generator
-    {
-        for ($i = -2; $i < 6; ++$i) {
-            yield ['123', $i, $i > 0];
-        }
-    }
-
     public function getValidValues(): array
     {
         return [
             ['ABC abc', ['case_diff' => true]],
             ['test', ['email' => true]],
-            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_VERY_WEEK]],
-            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_WEEK]],
-            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_MEDIUM]],
-            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_STRONG]],
-            ['123*9-*55sA', ['min_strength' => StrengthInterface::LEVEL_VERY_STRONG]],
             ['abc', ['letters' => true]],
             ['123', ['numbers' => true]],
             ['123*9-*55sA', ['pwned' => true]],
@@ -88,15 +72,13 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     /**
-     * @param mixed|bool $value
-     *
      * @dataProvider getConstraints
      */
-    public function testEmptyStringIsValid(string $constraint, mixed $value = true): void
+    public function testEmptyStringIsValid(string $constraint): void
     {
-        $constraint = $this->createPassword([$constraint => $value]);
+        $constraint = $this->createPassword([$constraint => true]);
         $this->validator->validate('', $constraint);
-        $this->assertNoViolation();
+        self::assertNoViolation();
     }
 
     /**
@@ -104,66 +86,43 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
      *
      * @dataProvider getInvalidValues
      */
-    public function testInvalid(mixed $value, array $options, string $message, array $parameters = []): void
+    public function testInvalid(mixed $value, array $options, string $message, string $code, array $parameters = []): void
     {
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
         $this->buildViolation($message)
             ->setParameters($parameters)
             ->setInvalidValue($value)
+            ->setCode($code)
             ->assertRaised();
     }
 
     /**
-     * @param mixed|bool $value
-     *
      * @dataProvider getConstraints
      */
-    public function testNullIsValid(string $constraint, mixed $value = true): void
+    public function testNullIsValid(string $constraint): void
     {
-        $constraint = $this->createPassword([$constraint => $value]);
+        $constraint = $this->createPassword([$constraint => true]);
         $this->validator->validate(null, $constraint);
-        $this->assertNoViolation();
+        self::assertNoViolation();
     }
 
     /**
      * @dataProvider getPasswords
      */
-    public function testPwned(string $value, bool $violation = true): void
+    public function testPwned(string $value, bool $violation): void
     {
         $options = ['pwned' => true];
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
         if ($violation) {
             $violations = $this->context->getViolations();
-            assertSame(1, \count($violations));
+            self::assertCount(1, $violations);
             $first = $violations[0];
-            assertSame('password.pwned', $first->getMessageTemplate());
-            assertSame($value, $first->getInvalidValue());
+            self::assertSame('password.pwned', $first->getMessageTemplate());
+            self::assertSame($value, $first->getInvalidValue());
         } else {
-            $this->assertNoViolation();
-        }
-    }
-
-    /**
-     * @dataProvider getStrengths
-     */
-    public function testStrength(string $value, int $min_strength, bool $violation = true): void
-    {
-        $options = ['min_strength' => $min_strength];
-        $constraint = $this->createPassword($options);
-        $this->validator->validate($value, $constraint);
-
-        if ($violation) {
-            $parameters = [
-                '%minimum%' => self::EMPTY_MESSAGE,
-                '%current%' => self::EMPTY_MESSAGE,
-            ];
-            $this->buildViolation('password.min_strength')
-                ->setParameters($parameters)
-                ->assertRaised();
-        } else {
-            $this->assertNoViolation();
+            self::assertNoViolation();
         }
     }
 
@@ -176,7 +135,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     {
         $constraint = $this->createPassword($options);
         $this->validator->validate($value, $constraint);
-        $this->assertNoViolation();
+        self::assertNoViolation();
     }
 
     protected function createValidator(): PasswordValidator
@@ -197,7 +156,6 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             'case_diff' => false,
             'email' => false,
             'letters' => false,
-            'min_strength' => StrengthInterface::LEVEL_NONE,
             'numbers' => false,
             'pwned' => false,
             'special_char' => false,

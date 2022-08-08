@@ -37,45 +37,45 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     public function testCurrent(): void
     {
-        $this->assertNotNull($this->service);
+        self::assertNotNull($this->service);
         $result = $this->service->current(self::CITY_VALID);
-        $this->assertIsArray($result);
-        $this->assertEquals(self::CITY_VALID, $result['id']);
+        self::assertIsArray($result);
+        self::assertEquals(self::CITY_VALID, $result['id']);
 
-        $this->assertIsArray($result['units']);
+        self::assertIsArray($result['units']);
         $this->validateResult($result, true);
     }
 
     public function testCurrentInvalid(): void
     {
-        $this->assertNotNull($this->service);
+        self::assertNotNull($this->service);
         $result = $this->service->current(self::CITY_INVALID);
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testDaily(): void
     {
         $count = 5;
         $result = $this->service->daily(self::CITY_VALID, $count);
-        $this->assertIsArray($result);
-        $this->assertEquals($count, $result['cnt']);
-        $this->assertCount($count, $result['list']);
-        $this->assertIsArray($result['units']);
+        self::assertIsArray($result);
+        self::assertEquals($count, $result['cnt']);
+        self::assertCount($count, $result['list']);
+        self::assertIsArray($result['units']);
 
-        $this->assertIsArray($result['city']);
+        self::assertIsArray($result['city']);
         $city = $result['city'];
-        $this->assertIsArray($city['coord']);
+        self::assertIsArray($city['coord']);
         $this->validateCoord($city['coord']);
 
         $result = $result['list'][0];
-        $this->assertIsInt($result['sunrise']);
-        $this->assertIsInt($result['sunset']);
+        self::assertIsInt($result['sunrise']);
+        self::assertIsInt($result['sunset']);
     }
 
     public function testDailyInvalid(): void
     {
         $result = $this->service->daily(self::CITY_INVALID);
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testGroup(): void
@@ -83,14 +83,14 @@ class OpenWeatherServiceTest extends KernelTestCase
         $cityIds = [self::CITY_VALID];
         $result = $this->service->group($cityIds);
 
-        $this->assertIsArray($result);
-        $this->assertEquals(1, $result['cnt']);
-        $this->assertCount(1, $result['list']);
-        $this->assertIsArray($result['units']);
+        self::assertIsArray($result);
+        self::assertEquals(1, $result['cnt']);
+        self::assertCount(1, $result['list']);
+        self::assertIsArray($result['units']);
 
         // @phpstan-ignore-next-line
         $result = $result['list'][0];
-        $this->assertIsArray($result);
+        self::assertIsArray($result);
         $this->validateResult($result, false);
     }
 
@@ -102,61 +102,61 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     private function validateCoord(array $data): void
     {
-        $this->assertIsNumeric($data['lon']);
-        $this->assertIsNumeric($data['lat']);
+        self::assertIsNumeric($data['lon']);
+        self::assertIsNumeric($data['lat']);
     }
 
     private function validateMain(array $data): void
     {
-        $this->assertIsNumeric($data['temp']);
-        $this->assertIsNumeric($data['feels_like']);
-        $this->assertIsNumeric($data['temp_min']);
-        $this->assertIsNumeric($data['temp_max']);
-        $this->assertIsNumeric($data['pressure']);
-        $this->assertIsNumeric($data['humidity']);
+        self::assertIsNumeric($data['temp']);
+        self::assertIsNumeric($data['feels_like']);
+        self::assertIsNumeric($data['temp_min']);
+        self::assertIsNumeric($data['temp_max']);
+        self::assertIsNumeric($data['pressure']);
+        self::assertIsNumeric($data['humidity']);
     }
 
     private function validateResult(array $result, bool $includeDeg): void
     {
-        $this->assertIsArray($result['coord']);
+        self::assertIsArray($result['coord']);
         $this->validateCoord($result['coord']);
 
-        $this->assertIsArray($result['weather']);
+        self::assertIsArray($result['weather']);
         $this->validateWeather($result['weather']);
 
-        $this->assertIsArray($result['main']);
+        self::assertIsArray($result['main']);
         $this->validateMain($result['main']);
 
-        $this->assertIsArray($result['wind']);
+        self::assertIsArray($result['wind']);
         $this->validateWind($result['wind'], $includeDeg);
 
-        $this->assertIsArray($result['sys']);
+        self::assertIsArray($result['sys']);
         $this->validateSys($result['sys']);
     }
 
     private function validateSys(array $data): void
     {
-        $this->assertIsString($data['country']);
-        $this->assertEquals(2, \strlen((string) $data['country']));
-        $this->assertIsInt($data['sunrise']);
-        $this->assertIsInt($data['sunset']);
+        self::assertIsString($data['country']);
+        self::assertEquals(2, \strlen((string) $data['country']));
+        self::assertIsInt($data['sunrise']);
+        self::assertIsInt($data['sunset']);
     }
 
     private function validateWeather(array $data): void
     {
-        $this->assertIsInt($data['id']);
-        $this->assertIsString($data['main']);
-        $this->assertIsString($data['description']);
-        $this->assertIsString($data['icon']);
-        $this->assertIsString($data['icon_big']);
-        $this->assertIsString($data['icon_small']);
+        self::assertIsInt($data['id']);
+        self::assertIsString($data['main']);
+        self::assertIsString($data['description']);
+        self::assertIsString($data['icon']);
+        self::assertIsString($data['icon_big']);
+        self::assertIsString($data['icon_small']);
     }
 
     private function validateWind(array $data, bool $includeDeg): void
     {
-        $this->assertIsNumeric($data['speed']);
+        self::assertIsNumeric($data['speed']);
         if ($includeDeg) {
-            $this->assertIsNumeric($data['deg']);
+            self::assertIsNumeric($data['deg']);
         }
     }
 }

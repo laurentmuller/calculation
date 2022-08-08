@@ -82,7 +82,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     public function testCheckUser(string|bool $expected, string $user = null): void
     {
         $parameters = ['user' => $user];
-        $this->assertNotNull($this->client);
+        self::assertNotNull($this->client);
         $this->client->request(Request::METHOD_GET, '/ajax/checkuser', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
@@ -95,7 +95,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     {
         $this->loginUserName('ROLE_SUPER_ADMIN');
         $parameters = ['email' => $email, 'id' => $id];
-        $this->assertNotNull($this->client);
+        self::assertNotNull($this->client);
         $this->client->request(Request::METHOD_GET, '/ajax/checkuseremail', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
@@ -108,7 +108,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     {
         $this->loginUserName('ROLE_SUPER_ADMIN');
         $parameters = ['username' => $username, 'id' => $id];
-        $this->assertNotNull($this->client);
+        self::assertNotNull($this->client);
         $this->client->request(Request::METHOD_GET, '/ajax/checkusername', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
@@ -116,13 +116,13 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
 
     private function validateResponse(Response $response, string|bool $expected): void
     {
-        $this->assertTrue($response->isOk());
+        self::assertTrue($response->isOk());
         /** @psalm-var  mixed $result */
         $result = \json_decode((string) $response->getContent(), true);
         if (\is_string($expected)) {
-            $this->assertNotNull($this->translator);
+            self::assertNotNull($this->translator);
             $expected = $this->translator->trans($expected, [], 'validators');
         }
-        $this->assertSame($expected, $result);
+        self::assertSame($expected, $result);
     }
 }

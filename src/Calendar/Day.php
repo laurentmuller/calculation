@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @psalm-consistent-constructor
  */
-class Day extends AbstractCalendarItem implements WeekDaysInterface, \Stringable
+class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 {
     /**
      * The date format used to generate this key.

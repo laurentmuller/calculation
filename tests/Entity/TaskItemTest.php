@@ -49,17 +49,17 @@ class TaskItemTest extends AbstractEntityValidatorTest
     {
         $item = new TaskItem();
         $item->addMargin($this->createMargin(10));
-        $this->assertNull($item->findMargin(-1));
-        $this->assertNull($item->findMargin(101));
-        $this->assertNotNull($item->findMargin(0));
+        self::assertNull($item->findMargin(-1));
+        self::assertNull($item->findMargin(101));
+        self::assertNotNull($item->findMargin(0));
     }
 
     public function testFindValue(): void
     {
         $item = new TaskItem();
         $item->addMargin($this->createMargin(0.1));
-        $this->assertEqualsWithDelta(0.1, $item->findValue(50), 0.01);
-        $this->assertEqualsWithDelta(0, $item->findValue(100), 0.01);
+        self::assertEqualsWithDelta(0.1, $item->findValue(50), 0.01);
+        self::assertEqualsWithDelta(0, $item->findValue(100), 0.01);
     }
 
     public function testNotDuplicate(): void

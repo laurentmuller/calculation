@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\SortableEnumInterface;
+use App\Traits\DefaultEnumTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
@@ -22,33 +24,26 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<EntityAction>
  */
-enum EntityAction: string implements ReadableEnumInterface, SortableEnumInterface
+enum EntityAction: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
+    use DefaultEnumTrait;
     use ReadableEnumTrait;
 
     /*
-     * Edit the entity.
+     * Edit the entity (default value).
      */
-    #[EnumCase('action.edit')]
+    #[EnumCase('entity_action.edit', ['default' => true])]
     case EDIT = 'edit';
     /*
      * No action.
      */
-    #[EnumCase('action.none')]
+    #[EnumCase('entity_action.none')]
     case NONE = 'none';
     /*
      * Show the entity.
      */
-    #[EnumCase('action.show')]
+    #[EnumCase('entity_action.show')]
     case SHOW = 'show';
-
-    /**
-     * Returns if the given value is equal to this value.
-     */
-    public function match(string $value): bool
-    {
-        return $this->value === $value;
-    }
 
     /**
      * @return EntityAction[]
@@ -60,5 +55,15 @@ enum EntityAction: string implements ReadableEnumInterface, SortableEnumInterfac
             EntityAction::SHOW,
             EntityAction::NONE,
         ];
+    }
+
+    /**
+     * Gets the action values.
+     *
+     * @return string[]
+     */
+    public static function values(): array
+    {
+        return \array_map(fn (EntityAction $action): string => $action->value, EntityAction::sorted());
     }
 }

@@ -146,9 +146,9 @@ class GlobalMarginController extends AbstractEntityController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'globalmargin_table')]
-    public function table(Request $request, GlobalMarginTable $table): Response
+    public function table(Request $request, GlobalMarginTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig');
+        return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig', $logger);
     }
 
     /**

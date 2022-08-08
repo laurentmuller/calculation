@@ -406,9 +406,9 @@ class UserController extends AbstractEntityController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'user_table')]
-    public function table(Request $request, UserTable $table): Response
+    public function table(Request $request, UserTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'user/user_table.html.twig');
+        return $this->handleTableRequest($request, $table, 'user/user_table.html.twig', $logger);
     }
 
     /**

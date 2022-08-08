@@ -1,23 +1,22 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'openweather.import.title' -%}
 {%- set title_icon = 'download' -%}
 {%- set title_description = 'openweather.import.description' -%}
 {%- set cancel_path = path('openweather_search') -%}
 {%- set cancel_text = 'common.button_search' -%}
-
+{# body #}
 {% block card_body %}
 {{ parent() }}
 <p class="mb-0">{{ 'openweather.import.link'|trans|format(sample, openweathermap)|raw }}</p>
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ parent() }}
 {{ asset_css('css/fileinput.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

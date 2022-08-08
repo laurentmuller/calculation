@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Interfaces\StrengthInterface;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -23,6 +22,18 @@ use Symfony\Component\Validator\Constraint;
  */
 class Password extends Constraint
 {
+    final public const CASE_DIFF_ERROR = '4c725240-da48-42df-ba9a-ce09a16ab1b5';
+
+    final public const EMAIL_ERROR = '85386dde-1b29-42d4-9b7c-de03693fb963';
+
+    final public const LETTERS_ERROR = 'cc369ec9-ea3d-4d27-8f96-6e03bfb63323';
+
+    final public const NUMBERS_ERROR = '902a620e-8cf9-42bd-9219-3938c3fea0c5';
+
+    final public const PWNED_ERROR = 'd042c39d-b2d3-4ef3-97b8-10948aed2988';
+
+    final public const SPECIAL_CHAR_ERROR = '5c5998ca-d67b-45ed-b210-dda950c8ea09';
+
     /**
      * Add all violations or stop of the first violation found.
      */
@@ -57,16 +68,6 @@ class Password extends Constraint
      * Letters error message.
      */
     public string $letters_message = 'password.letters';
-
-    /**
-     * Checks the password strength (value from 0 to 4 or -1 to disable).
-     */
-    public int $min_strength = StrengthInterface::LEVEL_NONE;
-
-    /**
-     * Strength error message.
-     */
-    public string $min_strength_message = 'password.min_strength';
 
     /**
      * Checks if the password contains numbers.

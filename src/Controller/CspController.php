@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
 use App\Traits\FooterTextTrait;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -94,6 +94,14 @@ class CspController extends AbstractController
         return false;
     }
 
+    private function getFooterValue(): string
+    {
+        $appName = $this->getParameterString('app_name');
+        $appVersion = $this->getParameterString('app_version');
+
+        return $this->getFooterText($appName, $appVersion);
+    }
+
     private function logContext(string $title, array $context, LoggerInterface $logger): void
     {
         $logger->error($title, $context);
@@ -102,11 +110,11 @@ class CspController extends AbstractController
     private function sendNotification(string $title, array $context, MailerInterface $mailer): void
     {
         $notification = new CspViolationEmail($this->getTranslator());
-        $notification->importance(NotificationEmail::IMPORTANCE_HIGH)
-            ->subject($title)
+        $notification->subject($title)
             ->to($this->getAddressFrom())
             ->from($this->getAddressFrom())
-            ->setFooterText($this->getFooterText($this->getParameterString('app_name'), $this->getParameterString('app_version')))
+            ->importance(Importance::HIGH)
+            ->setFooterText($this->getFooterValue())
             ->action($this->trans('index.title'), $this->getActionUrl())
             ->context([
                 'context' => $context,

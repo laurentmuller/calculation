@@ -162,7 +162,7 @@ class ResetPasswordController extends AbstractController
         $email = new ResetPasswordEmail($this->getTranslator());
         $email->to($user->getAddress())
             ->from($this->getAddressFrom())
-            ->setFooterText($this->getFooterText($this->getParameterString('app_name'), $this->getParameterString('app_version')))
+            ->setFooterText($this->getFooterValue())
             ->subject($this->trans('resetting.request.title'))
             ->action($this->trans('resetting.request.submit'), $this->getResetAction($resetToken))
             ->context([
@@ -184,6 +184,14 @@ class ResetPasswordController extends AbstractController
             $resetToken->getExpirationMessageData(),
             'ResetPasswordBundle'
         );
+    }
+
+    private function getFooterValue(): string
+    {
+        $appName = $this->getParameterString('app_name');
+        $appVersion = $this->getParameterString('app_version');
+
+        return $this->getFooterText($appName, $appVersion);
     }
 
     private function getResetAction(ResetPasswordToken $resetToken): string

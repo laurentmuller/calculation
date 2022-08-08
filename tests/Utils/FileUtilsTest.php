@@ -38,46 +38,46 @@ class FileUtilsTest extends TestCase
         switch (\count($segments)) {
             case 1:
                 $actual = FileUtils::buildPath($segments[0]);
-                $this->assertSame($expected, $actual);
+                self::assertSame($expected, $actual);
                 break;
             case 2:
                 $actual = FileUtils::buildPath($segments[0], $segments[1]);
-                $this->assertSame($expected, $actual);
+                self::assertSame($expected, $actual);
                 break;
             case 3:
                 $actual = FileUtils::buildPath($segments[0], $segments[1], $segments[2]);
-                $this->assertSame($expected, $actual);
+                self::assertSame($expected, $actual);
                 break;
         }
     }
 
     public function testExist(): void
     {
-        $this->assertTrue(FileUtils::exists(__FILE__));
+        self::assertTrue(FileUtils::exists(__FILE__));
     }
 
     public function testFilesystem(): void
     {
-        $this->assertNotNull(FileUtils::getFilesystem());
+        self::assertNotNull(FileUtils::getFilesystem());
     }
 
     public function testFormatSize(): void
     {
         $file = $this->getReaderFile();
-        $this->assertTrue(FileUtils::exists($file));
-        $this->assertSame('21 B', FileUtils::formatSize($file));
+        self::assertTrue(FileUtils::exists($file));
+        self::assertSame('21 B', FileUtils::formatSize($file));
     }
 
     public function testIsFile(): void
     {
-        $this->assertTrue(FileUtils::isFile(__FILE__));
+        self::assertTrue(FileUtils::isFile(__FILE__));
     }
 
     public function testLineCount(): void
     {
         $file = $this->getReaderFile();
-        $this->assertTrue(FileUtils::exists($file));
-        $this->assertSame(4, FileUtils::getLinesCount($file));
+        self::assertTrue(FileUtils::exists($file));
+        self::assertSame(4, FileUtils::getLinesCount($file));
     }
 
     private function getReaderFile(): string

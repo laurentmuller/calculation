@@ -50,10 +50,10 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         try {
             $this->saveEntity($expected);
             $actual = $this->getRepository()->findByName($user, 'name');
-            $this->assertNotNull($actual);
-            $this->assertEquals($expected->getName(), $actual->getName());
-            $this->assertEquals($expected->getString(), $actual->getString());
-            $this->assertEquals($expected->getUser(), $actual->getUser());
+            self::assertNotNull($actual);
+            self::assertEquals($expected->getName(), $actual->getName());
+            self::assertEquals($expected->getString(), $actual->getString());
+            self::assertEquals($expected->getUser(), $actual->getUser());
         } finally {
             $this->deleteEntity($expected);
         }
@@ -68,12 +68,12 @@ class UserPropertyTest extends AbstractEntityValidatorTest
 
         try {
             $actual = $this->getRepository()->findByUser($user);
-            $this->assertCount(0, $actual);
+            self::assertCount(0, $actual);
 
             $this->saveEntity($expected);
 
             $actual = $this->getRepository()->findByUser($user);
-            $this->assertCount(1, $actual);
+            self::assertCount(1, $actual);
         } finally {
             $this->deleteEntity($expected);
         }
@@ -83,7 +83,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
     {
         $object = new UserProperty();
         $result = $this->validator->validate($object);
-        $this->assertEquals(3, $result->count());
+        self::assertEquals(3, $result->count());
     }
 
     public function testInvalidName(): void
@@ -92,7 +92,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         $object->setString('value');
         $object->setUser($this->getUser());
         $result = $this->validator->validate($object);
-        $this->assertEquals(1, $result->count());
+        self::assertEquals(1, $result->count());
     }
 
     public function testInvalidUser(): void
@@ -100,7 +100,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         $object = new UserProperty('name');
         $object->setString('value');
         $result = $this->validator->validate($object);
-        $this->assertEquals(1, $result->count());
+        self::assertEquals(1, $result->count());
     }
 
     public function testInvalidValue(): void
@@ -108,7 +108,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         $object = new UserProperty('name');
         $object->setUser($this->getUser());
         $result = $this->validator->validate($object);
-        $this->assertEquals(1, $result->count());
+        self::assertEquals(1, $result->count());
     }
 
     public function testNotDuplicate(): void
@@ -137,7 +137,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         $object->setString('value');
         $object->setUser($this->getUser());
         $result = $this->validator->validate($object);
-        $this->assertEquals(0, $result->count());
+        self::assertEquals(0, $result->count());
     }
 
     private function getRepository(): UserPropertyRepository

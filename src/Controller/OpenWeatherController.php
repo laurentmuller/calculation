@@ -226,37 +226,31 @@ class OpenWeatherController extends AbstractController
         $cityId = $this->getRequestCityId($request);
         $units = $this->getRequestUnits($request);
         $count = $this->getRequestCount($request);
-        $current = $this->service->current($cityId, $units);
-        $forecast = $this->service->forecast($cityId, $count, $units);
-        $daily = $this->service->daily($cityId, $count, $units);
-        if (false !== $current) {
+
+        $values = $this->service->all($cityId, $count, $units);
+        if (false !== $values['current']) {
             $this->setSessionValues([
                 self::KEY_CITY_ID => $cityId,
                 self::KEY_UNITS => $units,
                 self::KEY_COUNT => $count,
             ]);
         }
+        $values['count'] = $count;
 
-        return $this->renderForm('openweather/current_weather.htm.twig', [
-            'current' => $current,
-            'forecast' => $forecast,
-            'daily' => $daily,
-            'count' => $count,
-        ]);
+        return $this->renderForm('openweather/current_weather.htm.twig', $values);
     }
 
     /**
      * Import cities.
      *
-     * Data can be downloaded from the <a href="http://bulk.openweathermap.org/sample/">sample directory</a>.
+     * Data can be downloaded from the <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/import', name: 'openweather_import')]
     public function import(Request $request, OpenWeatherService $service): Response
     {
-        // create form
+        // create form and handle request
         $form = $this->createImportForm();
-        // handle request
         if ($this->handleRequestForm($request, $form)) {
             $db = null;
             $file = null;
@@ -279,7 +273,7 @@ class OpenWeatherController extends AbstractController
                 // decode content
                 /**
                  * @psalm-var null|array<array{
-                 *      id: int,
+                 *      id: int|float,
                  *      name: string,
                  *      country: string,
                  *      coord: array{
@@ -301,7 +295,7 @@ class OpenWeatherController extends AbstractController
                 $valids = 0;
                 $errors = 0;
                 foreach ($cities as $city) {
-                    if (!$db->insertCity($city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
+                    if (!$db->insertCity((int) $city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
                         ++$errors;
                     } elseif (0 === ++$valids % 50000) {
                         $db->commitTransaction();
@@ -320,9 +314,8 @@ class OpenWeatherController extends AbstractController
                 }
 
                 // move
-                $target = $service->getDatabaseName();
-
                 try {
+                    $target = $service->getDatabaseName();
                     if (!FileUtils::rename($temp_name, $target, true)) {
                         return $this->renderErrorResult('openweather.error.move_database');
                     }
@@ -368,6 +361,7 @@ class OpenWeatherController extends AbstractController
             self::KEY_LIMIT => $this->getSessionLimit($request),
             self::KEY_COUNT => $this->getSessionCount($request),
         ];
+
         // create form
         $helper = $this->createFormHelper('openweather.search.', $data);
         $helper->field(self::KEY_QUERY)
@@ -386,6 +380,7 @@ class OpenWeatherController extends AbstractController
             ->addChoiceType(\array_combine($limits, $limits));
         $helper->field(self::KEY_COUNT)
             ->addHiddenType();
+
         // handle request
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {

@@ -51,6 +51,7 @@ $rules = [
     'array_syntax' => ['syntax' => 'short'],
     'list_syntax' => ['syntax' => 'short'],
     'doctrine_annotation_array_assignment' => ['operator' => '='],
+    'ordered_interfaces' => true
 ];
 
 $finder = Finder::create()

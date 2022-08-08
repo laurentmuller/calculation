@@ -135,7 +135,8 @@
 	},
 	"extra" : {
 		"bamarni-bin": {
-            "bin-links": true
+			"bin-links": true,
+			"forward-command": false
 		},
 		"symfony" : {
 			"allow-contrib": true,

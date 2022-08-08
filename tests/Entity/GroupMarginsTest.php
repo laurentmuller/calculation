@@ -28,7 +28,7 @@ class GroupMarginsTest extends AbstractEntityValidatorTest
 
         $results = $this->validate($group, 2);
         $path = $results->get(0)->getPropertyPath();
-        $this->assertEquals('margins[1].maximum', $path);
+        self::assertEquals('margins[1].maximum', $path);
     }
 
     public function testInvalidMinimum(): void
@@ -39,7 +39,7 @@ class GroupMarginsTest extends AbstractEntityValidatorTest
 
         $results = $this->validate($group, 1);
         $path = $results->get(0)->getPropertyPath();
-        $this->assertEquals('margins[1].minimum', $path);
+        self::assertEquals('margins[1].minimum', $path);
     }
 
     public function testValid(): void

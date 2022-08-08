@@ -200,6 +200,29 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
+     * Returns the current, the 5 days/3 hours forecast and 16 day/daily forecast
+     * conditions data for a specific location.
+     *
+     * @param int    $cityId the city identifier
+     * @param int    $count  the number of result to return or -1 for all
+     * @param string $units  the units to use
+     *
+     * @return array{current: array|false, forecast: array|false, daily: array|false}
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function all(int $cityId, int $count = -1, string $units = self::UNIT_METRIC): array
+    {
+        return [
+            'current' => $this->current($cityId, $units),
+            'forecast' => $this->forecast($cityId, $count, $units),
+            'daily' => $this->daily($cityId, $count, $units),
+        ];
+    }
+
+    /**
      * Returns current conditions data for a specific location.
      *
      * @param int    $cityId the city identifier
@@ -217,11 +240,8 @@ class OpenWeatherService extends AbstractHttpClientService
             'id' => $cityId,
             'units' => $units,
         ];
-        if (!$result = $this->get(self::URI_CURRENT, $query)) {
-            return false;
-        }
 
-        return $result;
+        return $this->get(self::URI_CURRENT, $query);
     }
 
     /**
@@ -246,11 +266,8 @@ class OpenWeatherService extends AbstractHttpClientService
         if ($count > 0) {
             $query['cnt'] = $count;
         }
-        if (!$result = $this->get(self::URI_DAILY, $query)) {
-            return false;
-        }
 
-        return $result;
+        return $this->get(self::URI_DAILY, $query);
     }
 
     /**
@@ -275,11 +292,8 @@ class OpenWeatherService extends AbstractHttpClientService
         if ($count > 0) {
             $query['cnt'] = $count;
         }
-        if (!$result = $this->get(self::URI_FORECAST, $query)) {
-            return false;
-        }
 
-        return $result;
+        return $this->get(self::URI_FORECAST, $query);
     }
 
     /**
@@ -388,11 +402,8 @@ class OpenWeatherService extends AbstractHttpClientService
         if (!empty($exclude)) {
             $query['exclude'] = \implode(',', $exclude);
         }
-        if (!$result = $this->get(self::URI_ONECALL, $query)) {
-            return false;
-        }
 
-        return $result;
+        return $this->get(self::URI_ONECALL, $query);
     }
 
     /**

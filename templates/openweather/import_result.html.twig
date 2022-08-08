@@ -1,18 +1,17 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'openweather.import.title' -%}
 {%- set title_icon = 'download' -%}
 {%- set title_description = 'openweather.result.description' -%}
-
+{# class #}
 {% block card_class -%}
 {% if result %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock %}
 {% block card_header_class -%}
 {% if result %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
 {%- endblock %}
-
+{# body #}
 {% block card_body %}
 {%- if result %}
 <p>{{ 'openweather.result.success'|trans }}</p>
@@ -43,7 +42,7 @@
 </p>
 {%- endif %}
 {% endblock %}
-
+{# footer #}
 {% block card_footer %}
 {{ icons.homepage() }}
 {{ icons.link(path('openweather_search'), 'common.button_search', 'btn btn-form btn-secondary') }}

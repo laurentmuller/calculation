@@ -1,12 +1,11 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'openweather/_weather_macro.html.twig' as tools %}
-
 {# parameters #}
 {%- set title = 'openweather.search.title' -%}
 {%- set title_icon = 'search' -%}
 {%- set submit_text = submit_text|default('common.button_search') -%}
-
+{# body #}
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-8">
@@ -45,14 +44,14 @@
     {% endif %}
 {% endif %}
 {% endblock %}
-
+{# actions #}
 {% block actions_form -%}
 {{ parent() }}
 {% if is_granted('ROLE_ADMIN') %}
     {{ icons.link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
 {% endif %}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/application/validation_edit.js') }}

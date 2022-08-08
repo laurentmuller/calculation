@@ -183,9 +183,9 @@ class CalculationStateController extends AbstractEntityController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'calculationstate_table')]
-    public function table(Request $request, CalculationStateTable $table): Response
+    public function table(Request $request, CalculationStateTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'calculationstate/calculationstate_table.html.twig');
+        return $this->handleTableRequest($request, $table, 'calculationstate/calculationstate_table.html.twig', $logger);
     }
 
     /**

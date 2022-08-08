@@ -64,7 +64,7 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
             $this->markTestSkipped('The validator is null.');
         }
         $result = $this->validator->validate($object);
-        $this->assertEquals($expected, $result->count());
+        self::assertEquals($expected, $result->count());
 
         return $result;
     }

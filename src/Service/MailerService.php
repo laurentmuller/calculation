@@ -61,7 +61,7 @@ class MailerService implements ServiceSubscriberInterface
     {
         $notification = $this->createNotification();
         $notification->subject((string) $comment->getSubject())
-            ->importance($comment->getImportanceValue())
+            ->importance($comment->getImportance())
             ->markdown($this->convert((string) $comment->getMessage()))
             ->action($this->trans('index.title'), $this->getHomeUrl());
 
@@ -91,7 +91,7 @@ class MailerService implements ServiceSubscriberInterface
             ->to($toUser->getAddress())
             ->subject($this->trans('user.comment.title'))
             ->markdown($this->convert($message))
-            ->importance($importance->value);
+            ->importance($importance);
         foreach ($attachments as $attachment) {
             $notification->attachFromUploadedFile($attachment);
         }

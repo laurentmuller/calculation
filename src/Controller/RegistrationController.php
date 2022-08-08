@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enums\Importance;
 use App\Form\User\UserRegistrationType;
 use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
 use App\Traits\FooterTextTrait;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -113,8 +113,8 @@ class RegistrationController extends AbstractController
         $email->subject($this->trans('registration.subject'))
             ->from($this->getAddressFrom())
             ->to((string) $user->getEmail())
-            ->setFooterText($this->getFooterText($this->getParameterString('app_name'), $this->getParameterString('app_version')))
-            ->importance(NotificationEmail::IMPORTANCE_MEDIUM);
+            ->importance(Importance::MEDIUM)
+            ->setFooterText($this->getFooterValue());
 
         return $email;
     }
@@ -126,5 +126,13 @@ class RegistrationController extends AbstractController
         }
 
         return null;
+    }
+
+    private function getFooterValue(): string
+    {
+        $appName = $this->getParameterString('app_name');
+        $appVersion = $this->getParameterString('app_version');
+
+        return $this->getFooterText($appName, $appVersion);
     }
 }

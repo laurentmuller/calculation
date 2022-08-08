@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Security;
+namespace App\Tests\Enums;
 
 use App\Enums\EntityPermission;
 use Elao\Enum\FlagBag;
@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for {@link EntityPermission} enumeration.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityPermissionTest extends TestCase
 {
@@ -36,18 +38,6 @@ class EntityPermissionTest extends TestCase
 
             [null, ''],
             [null, 'FAKE'],
-        ];
-    }
-
-    public function getValues(): array
-    {
-        return [
-            [EntityPermission::ADD, 1],
-            [EntityPermission::DELETE, 2],
-            [EntityPermission::EDIT, 4],
-            [EntityPermission::EXPORT, 8],
-            [EntityPermission::LIST, 16],
-            [EntityPermission::SHOW, 32],
         ];
     }
 
@@ -81,6 +71,16 @@ class EntityPermissionTest extends TestCase
         self::assertCount(6, $flags);
     }
 
+    public function testLabel(): void
+    {
+        self::assertEquals('rights.add', EntityPermission::ADD->getReadable());
+        self::assertEquals('rights.delete', EntityPermission::DELETE->getReadable());
+        self::assertEquals('rights.edit', EntityPermission::EDIT->getReadable());
+        self::assertEquals('rights.export', EntityPermission::EXPORT->getReadable());
+        self::assertEquals('rights.list', EntityPermission::LIST->getReadable());
+        self::assertEquals('rights.show', EntityPermission::SHOW->getReadable());
+    }
+
     public function testSorted(): void
     {
         $expected = [
@@ -91,7 +91,8 @@ class EntityPermissionTest extends TestCase
             EntityPermission::DELETE,
             EntityPermission::EXPORT,
         ];
-        self::assertEquals($expected, EntityPermission::sorted());
+        $sorted = EntityPermission::sorted();
+        self::assertEquals($expected, $sorted);
     }
 
     public function testSum(): void
@@ -109,12 +110,14 @@ class EntityPermissionTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @dataProvider getValues
-     */
-    public function testValue(EntityPermission $p, int $expected): void
+    public function testValue(): void
     {
-        self::assertEquals($expected, $p->value);
+        self::assertEquals(1, EntityPermission::ADD->value);
+        self::assertEquals(2, EntityPermission::DELETE->value);
+        self::assertEquals(4, EntityPermission::EDIT->value);
+        self::assertEquals(8, EntityPermission::EXPORT->value);
+        self::assertEquals(16, EntityPermission::LIST->value);
+        self::assertEquals(32, EntityPermission::SHOW->value);
     }
 
     /**

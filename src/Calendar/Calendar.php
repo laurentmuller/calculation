@@ -21,7 +21,7 @@ use App\Util\Utils;
  *
  * @psalm-consistent-constructor
  */
-class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDaysInterface, \Stringable
+class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterface, WeekDaysInterface
 {
     use DaysTrait;
     use ModelTrait;

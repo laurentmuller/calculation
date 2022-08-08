@@ -95,9 +95,9 @@ class EntityVoterTest extends TestCase
     {
         $entities = \array_values(EntityName::constants());
         foreach ($entities as $index => $entity) {
-            $this->assertNotNull($this->voter);
+            self::assertNotNull($this->voter);
             $actual = EntityName::tryFindOffset($entity);
-            $this->assertEquals($index, $actual);
+            self::assertEquals($index, $actual);
         }
     }
 
@@ -106,9 +106,9 @@ class EntityVoterTest extends TestCase
         $keys = \array_values(EntityPermission::constants());
         foreach ($keys as $index => $key) {
             $expected = 2 ** $index;
-            $this->assertNotNull($this->voter);
+            self::assertNotNull($this->voter);
             $actual = EntityPermission::tryFindValue($key);
-            $this->assertEquals($expected, $actual);
+            self::assertEquals($expected, $actual);
         }
     }
 
@@ -126,17 +126,17 @@ class EntityVoterTest extends TestCase
      */
     public function testSupportsAttribute(string $value, bool $expected): void
     {
-        $this->assertNotNull($this->voter);
+        self::assertNotNull($this->voter);
         $result = $this->voter->supportsAttribute($value);
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     private function checkVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void
     {
         $token = $this->getUserToken($user);
-        $this->assertNotNull($this->voter);
+        self::assertNotNull($this->voter);
         $result = $this->voter->vote($token, $subject, [$attribute]);
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     private function getAdminUser(): User

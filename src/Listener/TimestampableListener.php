@@ -50,7 +50,7 @@ class TimestampableListener implements DisableListenerInterface
             return;
         }
 
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         $unitOfWork = $em->getUnitOfWork();
 
         // get entities

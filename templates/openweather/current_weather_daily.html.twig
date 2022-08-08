@@ -1,5 +1,4 @@
 {% import 'openweather/_weather_macro.html.twig' as tools %}
-
 {# title #}
 <h6 class="border-top pt-1">{{ 'counters.weather_daily'|trans({count: daily.cnt}) }}</h6>
 {# table #}
@@ -18,8 +17,9 @@
                 </td>
                 <td class="ow-icon"><img alt="Daily" src="{{ data.weather.icon_small }}" width="40" height="40">
                 <td class="ow-temperature">
+                    <span class="ow-temperature-pills ow-temperature-night" title="{{ 'openweather.fields.temp_night'|trans }}">{{ tools.value_temp(data.temp.night, units_temp) }}</span>
                     <span class="ow-temperature-pills ow-temperature-day" title="{{ 'openweather.fields.temp_day'|trans }}">{{ tools.value_temp(data.temp.day, units_temp) }}</span>
-                    <span class="ow-temperature-pills ow-temperature-night" title="{{ 'openweather.fields.temp_night'|trans }}">{{ tools.value_temp(data.temp.night, units_temp) }}</span><br>
+                    <br>
                     <span title={{ 'openweather.fields.wind'|trans }}>{{ tools.value_speed(data.speed, units_speed) }}</span>
                 </td>
                 <td>

@@ -65,7 +65,7 @@ trait LoggerAwareTrait
      *
      * @throws \ReflectionException
      */
-    public function logException(\Exception $e, ?string $message = null): void
+    public function logException(\Throwable $e, ?string $message = null): void
     {
         $context = Utils::getExceptionContext($e);
         $this->logError($message ?? $e->getMessage(), $context);

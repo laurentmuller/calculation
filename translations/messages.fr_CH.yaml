@@ -24,21 +24,15 @@ about:
   version: Version %version%
   expand: Afficher le contenu
   collapse: Masquer le contenu
-action:
-  edit: Modifier l'objet
-  none: Aucune action
-  show: Afficher l'objet
 admin:
   rights:
-    success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec
-      succès.
+    success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec succès.
     title: Droits d'accès
 application_service:
   clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
   clear_success: Le cache des propriétés a été vidé avec succès.
   commit_error: Impossible de valider les changements dans le cache des propriétés.
-  commit_success: La validation des changements dans le cache des propriétés a été
-    effectuer avec succès.
+  commit_success: La validation des changements dans le cache des propriétés a été effectuer avec succès.
   deferred_error: Impossible de différer la sauvegarde de la propriété '%key%'.
 below:
   count: 'Nombre de calculations : %calculations%'
@@ -63,8 +57,7 @@ calculation:
   edit:
     add_item: Ajouter un article
     add_task: Ajouter une tâche
-    adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de
-      <b>%minimum%</b>
+    adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
     delete_category: Supprimer la catégorie
     delete_group: Supprimer le groupe
     delete_item: Supprimer l'article
@@ -130,8 +123,7 @@ calculation:
     empty: Aucune calculation définie.
     excel_single_title: Exporter la calculation
     excel_title: Exporter la liste des calculations
-    margin_below: La marge globale de <b>%margin%</b> est en dessous du seuil minimal
-      de <b>%minimum%</b>
+    margin_below: La marge globale de <b>%margin%</b> est en dessous du seuil minimal de <b>%minimum%</b>
     pdf_single_title: Télécharger la calculation
     pdf_title: Télécharger la liste des calculations
     state_all_description: Toutes les calculations
@@ -225,8 +217,7 @@ category:
     success: La catégorie <b>%name%</b> a été créée avec succès.
     title: Nouvelle catégorie
   delete:
-    failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée
-      dans :'
+    failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
     message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
     success: La catégorie <b>%name%</b> a été supprimée avec succès.
     title: Supprimer la catégorie
@@ -255,8 +246,7 @@ category:
 clear_cache:
   failure: Impossible de vider le cache de l'application.
   message: Êtes-vous sûr de vouloir vider le cache de l'application ?
-  note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle
-    : %size%).'
+  note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle : %size%).'
   submit: Vider
   success: Le cache de l'application a été vidé avec succès.
   title: Vider le cache
@@ -316,10 +306,6 @@ common:
   value_null: Vide
   value_true: Oui
   value_unknown: Inconnu
-  view_card: Vue détaillée
-  view_custom: Vue mosaïque
-  view_table: Vue tabulaire
-  view_title: Affichage
   simulate:
     label: Simuler la mise à jour
     help: Simule une mise à jour sans enregistrer les changements dans la base de données.
@@ -386,8 +372,7 @@ duplicate:
   title: Articles à double
 empty:
   count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
-  description: Calculations contenant un article avec une quantité ou un prix égale
-    à 0.
+  description: Calculations contenant un article avec une quantité ou un prix égale à 0.
   empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
   title: Articles vides
 environment:
@@ -406,18 +391,15 @@ error_page:
     line: Ligne
     message: Message
     trace: Trace
-  link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a>
-    du site pour signaler cette erreur.
+  link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a> du site pour signaler cette erreur.
   property: Propriété
   title: Erreur %status_code%
   value: Valeur
 errors:
   invalid_request: La demande Http est invalide.
-  item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de
-    données.
+  item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de données.
   page_not_found: La page %page% n'existe pas.
-  render_document: Impossible de générer le document PDF ou le document ne contient
-    aucune donnée.
+  render_document: Impossible de générer le document PDF ou le document ne contient aucune donnée.
 exchangerate:
   amount: Montant
   description: Choisissez les devises et le montant pour obtenir le taux de change.
@@ -491,8 +473,7 @@ group:
     success: Le groupe <b>%name%</b> a été créé avec succès.
     title: Nouveau groupe
   delete:
-    failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans
-      :'
+    failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
     message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
     success: Le groupe <b>%name%</b> a été supprimé avec succès.
     title: Supprimer le groupe
@@ -571,38 +552,20 @@ help:
     reference: Référence
     text: Texte
 http_error:
-  description: Il y a eu une erreur inconnue (%status_code% - %status_text%) qui a
-    empêché l'aboutissement de votre requête.
-  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur
-    la <a href="%url%">page d'accueil</a>.
+  description: Il y a eu une erreur inconnue (%status_code% - %status_text%) qui a empêché l'aboutissement de votre requête.
+  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
 http_error_403:
   description: Vous n'avez pas les droits pour accéder à cette page.
-  suggestion: Demandez à votre manager ou à votre administrateur système de vous donner
-    les droits pour accéder à cette page.
+  suggestion: Demandez à votre manager ou à votre administrateur système de vous donner les droits pour accéder à cette page.
 http_error_404:
   description: Le serveur n'a pas pu trouver la page demandée.
-  suggestion: Vérifiez si l'URL ne comporte pas d'erreurs ou retournez sur la <a href="%url%">page
-    d'accueil</a>.
+  suggestion: Vérifiez si l'URL ne comporte pas d'erreurs ou retournez sur la <a href="%url%">page d'accueil</a>.
 http_error_500:
-  description: Le serveur a rencontré un problème inattendu qui l'empêche de répondre
-    à votre requête.
-  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur
-    la <a href="%url%">page d'accueil</a>.
+  description: Le serveur a rencontré un problème inattendu qui l'empêche de répondre à votre requête.
+  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
 http_error_503:
   description: Le service est temporairement indisponible ou en maintenance.
-  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur
-    la <a href="%url%">page d'accueil</a>.
-importance:
-  full:
-    high: Importance haute
-    low: Importance basse
-    medium: Importance moyenne
-    urgent: Urgent !
-  high: Haute
-  low: Basse
-  medium: Moyenne
-  name: Importance
-  urgent: Urgente
+  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
 color_picker:
   advanced_text: Avancé...
   custom_text: Personnalisé
@@ -727,7 +690,7 @@ openweather:
     humidity: Humidité
     last_3_hours: 3 dernières heures
     last_hour: Dernière heure
-    locale_date: Heure locale
+    locale_date: Date locale
     miscellaneous: Divers
     position: Position
     position_lat: Latitude
@@ -825,8 +788,7 @@ parameters:
   group_customer: Client
   group_customer_help: Données du client utilisées pour l'impression des documents.
   group_default: Valeurs par défaut
-  group_default_help: Valeurs par défaut utilisées pour la création de nouveaux éléments
-    et pour le calcul des marges.
+  group_default_help: Valeurs par défaut utilisées pour la création de nouveaux éléments et pour le calcul des marges.
   group_display: Affichage
   group_display_help: Mode d'affichage et d'édition des éléments.
   group_home: Page d'accueil
@@ -836,11 +798,9 @@ parameters:
   group_options: Options
   group_options_help: Autres options utilisées par l'application.
   group_product: Article par défaut
-  group_product_help: Article à ajouter automatiquement lors de la création d'une
-    nouvelle calculation.
+  group_product_help: Article à ajouter automatiquement lors de la création d'une nouvelle calculation.
   group_security: Sécurité
-  group_security_help: Options de sécurité utilisées lors de la connection à l'application
-    et de la définition du mot de passe.
+  group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition du mot de passe.
   helps:
     panel_calculation: Nombre de calculations à afficher.
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
@@ -848,45 +808,21 @@ parameters:
     panel_state: Afficher la liste des calculations regroupées par status.
     print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
     qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
-  message_position:
-    bottom-center: En bas centré
-    bottom-left: En bas à gauche
-    bottom-right: En bas à droite
-    center-center: Au milieu centré
-    center-left: Au milieu à gauche
-    center-right: Au milieu à droite
-    top-center: En haut centré
-    top-left: En haut à gauche
-    top-right: En haut à droite
-  message_timeout:
-    1: 1 seconde
-    2: 2 secondes
-    3: 3 secondes
-    4: 4 secondes
-    5: 5 secondes
   placeholders:
     default_product: <Aucun article sélectionné>
   success: Les paramètres de l'application ont été mis à jour avec succès.
   title: Paramètres
 password:
+  title: Mot de passe
+  success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
+  letters: Une lettre est obligatoire
+  special_char: Un caractère spécial est obligatoire
   case_diff: Une majuscule et une minuscule est obligatoire
+  numbers: Un chiffre est obligatoire
   email: Le mot de passe ne doit pas être une adresse e-mail
   input: Mot de passe
-  letters: Une lettre est obligatoire
-  min_strength: Force minimum
-  numbers: Un chiffre est obligatoire
+  strength_level: Force minimum
   pwned: Le mot de passe ne doit pas être compromis
-  special_char: Un caractère spécial est obligatoire
-  strength_level:
-    medium: Moyenne
-    none: Aucune
-    strong: Forte
-    very_strong: Très forte
-    very_weak: Très faible
-    weak: Faible
-  success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées
-    :'
-  title: Vérifier un mot de passe
 pivot:
   column: Colonne
   fields:
@@ -1136,7 +1072,7 @@ swisspost:
     new_import: Nouvelle importation
     success: L'importation des localités et des noms de rue a été réalisée avec succès.
       La nouvelle date de validité est le %date%.
-  title: Importer les localités et les noms de rue
+  title: Importer les localités
 task:
   add:
     success: La tâche <b>%name%</b> a été créée avec succès.
@@ -1213,12 +1149,12 @@ taskitemmargin:
   name: Marge
 test:
   drag_drop: Drag & drop
-  editor: Éditer un message simple
+  editor: Message
   html: Exportation HTML
   minify: Minify
   notification: Notifications
   recaptcha: reCAPTCHA
-  tree_view: TreeView
+  tree_view: Tree View
   use_notification: Utiliser une notification.
 theme:
   background:
@@ -1328,6 +1264,7 @@ user:
     toAddress: Destinataire
     username: Nom d'utilisateur
     username_short: Nom
+    password: Mot de passe
   image:
     failure: Une erreur s'est produite lors du redimensionnement de l'image.
     success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec
@@ -1398,10 +1335,6 @@ user:
       success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b>
         avec succès.
       title: Prendre l'identité de l'utilisateur
-view:
-  card: Vue détaillée
-  custom: Vue mosaïque
-  table: Vue tabulaire
 archive:
   title: Archiver des calculations
   edit:
@@ -1427,3 +1360,38 @@ notification:
   csp_description: L'agent utilisateur de l'application %name% a rapporté des violations des règles de la politique de sécurité de contenu (Content Security Policy).
   footer: Notification envoyée par l'application %app_name% v%app_version%.
   exception: La trace de la pile d'exception est en pièce jointe.
+# enumerations
+message_position:
+  top_left: En haut à gauche
+  top_center: En haut centré
+  top_right: En haut à droite
+  center_left: Au milieu à gauche
+  center_center: Au milieu centré
+  center_right: Au milieu à droite
+  bottom_left: En bas à gauche
+  bottom_center: En bas centré
+  bottom_right: En bas à droite
+strength_level:
+  medium: Moyenne
+  none: Aucune
+  strong: Forte
+  very_strong: Très forte
+  very_weak: Très faible
+  weak: Faible
+table_view:
+  card: Vue détaillée
+  custom: Vue mosaïque
+  table: Vue tabulaire
+entity_action:
+  edit: Modifier l'objet
+  none: Aucune action
+  show: Afficher l'objet
+importance:
+  low: Basse
+  medium: Moyenne
+  high: Haute
+  urgent: Urgente
+  low_full: Importance basse
+  medium_full: Importance moyenne
+  high_full: Importance haute
+  urgent_full: Urgent !

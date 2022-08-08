@@ -39,24 +39,24 @@ class GroupTest extends AbstractEntityValidatorTest
     {
         $group = new Group();
         $group->addMargin($this->createMargin());
-        $this->assertNotNull($group->findMargin(0));
-        $this->assertNull($group->findMargin(100));
+        self::assertNotNull($group->findMargin(0));
+        self::assertNull($group->findMargin(100));
     }
 
     public function testFindPercent(): void
     {
         $group = new Group();
         $group->addMargin($this->createMargin());
-        $this->assertEqualsWithDelta(0.1, $group->findPercent(50), 0.01);
-        $this->assertEqualsWithDelta(0, $group->findPercent(100), 0.01);
+        self::assertEqualsWithDelta(0.1, $group->findPercent(50), 0.01);
+        self::assertEqualsWithDelta(0, $group->findPercent(100), 0.01);
     }
 
     public function testGroupMargin(): void
     {
         $margin = $this->createMargin();
-        $this->assertTrue($margin->contains(0));
-        $this->assertFalse($margin->contains(100));
-        $this->assertEqualsWithDelta(1.0, $margin->getMarginAmount(10), 0.1);
+        self::assertTrue($margin->contains(0));
+        self::assertFalse($margin->contains(100));
+        self::assertEqualsWithDelta(1.0, $margin->getMarginAmount(10), 0.1);
     }
 
     public function testInvalidCode(): void

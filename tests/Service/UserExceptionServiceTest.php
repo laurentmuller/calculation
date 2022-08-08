@@ -75,20 +75,20 @@ class UserExceptionServiceTest extends TestCase
     public function testException(\Throwable $e, string $message, int $messageData = 0): void
     {
         $result = $this->mapException($e);
-        $this->assertEquals(0, $result->getCode());
-        $this->assertEquals($message, $result->getMessage());
-        $this->assertEquals($message, $result->getMessageKey());
-        $this->assertCount($messageData, $result->getMessageData());
-        $this->assertInstanceOf($e::class, $result->getPrevious());
+        self::assertEquals(0, $result->getCode());
+        self::assertEquals($message, $result->getMessage());
+        self::assertEquals($message, $result->getMessageKey());
+        self::assertCount($messageData, $result->getMessageData());
+        self::assertInstanceOf($e::class, $result->getPrevious());
     }
 
     private function mapException(\Throwable $e): CustomUserMessageAuthenticationException
     {
-        $this->assertNotNull($this->request);
-        $this->assertNotNull($this->service);
+        self::assertNotNull($this->request);
+        self::assertNotNull($this->service);
         $this->service->handleException($this->request, $e);
         $result = $this->request->getSession()->get(Security::AUTHENTICATION_ERROR);
-        $this->assertInstanceOf(CustomUserMessageAuthenticationException::class, $result);
+        self::assertInstanceOf(CustomUserMessageAuthenticationException::class, $result);
 
         return $result;
     }

@@ -18,6 +18,7 @@ use App\Interfaces\TableInterface;
 use App\Table\AbstractTable;
 use App\Table\DataResults;
 use App\Util\Utils;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,7 +35,7 @@ trait TableTrait
      *
      * @throws \ReflectionException
      */
-    protected function handleTableRequest(Request $request, AbstractTable $table, string $template): Response
+    protected function handleTableRequest(Request $request, AbstractTable $table, string $template, LoggerInterface $logger): Response
     {
         // check permission
         if (null !== $subject = $table->getEntityClassName()) {
@@ -74,13 +75,18 @@ trait TableTrait
 
             return $response;
         } catch (\Throwable $e) {
+            // log error
+            $context = Utils::getExceptionContext($e);
+            $message = $this->trans('error_page.description');
+            $logger->error($message, $context);
+
             $status = Response::HTTP_BAD_REQUEST;
             $parameters = [
                 'result' => false,
+                'message' => $message,
+                'exception' => $context,
                 'status_code' => $status,
                 'status_text' => $this->trans('errors.invalid_request'),
-                'message' => $this->trans('error_page.description'),
-                'exception' => Utils::getExceptionContext($e),
             ];
 
             if ($request->isXmlHttpRequest()) {

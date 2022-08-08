@@ -10,7 +10,6 @@
      * -------------- jQuery Extensions --------------
      */
     $.fn.extend({
-
         /**
          * Initialize the show/hide password.
          */
@@ -70,7 +69,6 @@
                 // default options
                 const defaults = {
                     container: $container,
-                    // labelContainer: $container,
                     progressContainer: $container,
                     verdictKeys: $.validator.messages.passwordLevels,
                     onUpdateUI: function (verdict) {

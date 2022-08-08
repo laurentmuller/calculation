@@ -87,6 +87,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
                 'autocomplete' => 'off',
                 'spellcheck' => 'false',
                 'autocorrect' => 'off',
+                'minlength' => 1,
                 'maxlength' => 1,
             ],
             'label_attr' => [

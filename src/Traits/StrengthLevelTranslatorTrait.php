@@ -12,47 +12,47 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Form\Type\MinStrengthType;
-use App\Interfaces\StrengthInterface;
+use App\Enums\StrengthLevel;
+use App\Validator\Strength;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * Trait to deal with strength levels.
+ * Trait to translate {@see StrengthLevel}.
  */
-trait StrengthTranslatorTrait
+trait StrengthLevelTranslatorTrait
 {
-    use MathTrait;
     use TranslatorTrait;
 
     /**
-     * Add a violation to this context.
+     * Add a violation.
      */
-    public function addStrengthViolation(ExecutionContextInterface $context, int $minimum, int $score): void
+    public function addStrengthLevelViolation(ExecutionContextInterface $context, Strength $constraint, StrengthLevel $minimum, StrengthLevel $score): void
     {
         $parameters = [
             '%minimum%' => $this->translateLevel($minimum),
             '%current%' => $this->translateLevel($score),
         ];
 
-        $context->buildViolation('password.min_strength')
+        $context->buildViolation($constraint->strength_message)
+            ->setCode(Strength::IS_STRENGTH_ERROR)
             ->setParameters($parameters)
             ->addViolation();
     }
 
     /**
-     * Translate the password strength level.
+     * Translate the strength level.
      */
-    public function translateLevel(int $level): string
+    public function translateLevel(StrengthLevel $level): string
     {
-        $level = $this->validateIntRange($level, StrengthInterface::LEVEL_NONE, StrengthInterface::LEVEL_VERY_STRONG);
-        $id = MinStrengthType::CHOICE_LEVELS[$level];
-
-        return $this->trans($id);
+        return $this->trans($level->getReadable());
     }
 
-    public function translateStrength(int $minimum, int $score): string
+    /**
+     * Translate the score.
+     */
+    public function translateScore(StrengthLevel $minimum, StrengthLevel $score): string
     {
-        return $this->trans('password.min_strength', [
+        return $this->trans('password.strength_level', [
             '%minimum%' => $this->translateLevel($minimum),
             '%score%' => $this->translateLevel($score),
         ], 'validators');

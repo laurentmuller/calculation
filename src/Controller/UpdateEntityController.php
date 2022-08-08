@@ -20,6 +20,7 @@ use App\Service\FakerService;
 use App\Service\SuspendEventListenerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
+use Psr\Container\ContainerExceptionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +38,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class UpdateEntityController extends AbstractController
 {
+    /**
+     * @throws ContainerExceptionInterface
+     */
     #[Route(path: '', name: 'update')]
     public function update(): Response
     {

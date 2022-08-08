@@ -25,14 +25,14 @@ class ReverseReaderTest extends TestCase
     public function testFileExist(): void
     {
         $filename = $this->getFileName();
-        $this->assertFileExists($filename);
-        $this->assertFileIsReadable($filename);
+        self::assertFileExists($filename);
+        self::assertFileIsReadable($filename);
     }
 
     public function testIsOpen(): void
     {
         $reader = $this->getReader();
-        $this->assertTrue($reader->isOpen());
+        self::assertTrue($reader->isOpen());
         $reader->close();
     }
 
@@ -41,9 +41,9 @@ class ReverseReaderTest extends TestCase
         $reader = $this->getReader();
         for ($i = 3; $i >= 1; --$i) {
             $line = $reader->current();
-            $this->assertSame("Line $i", $line);
+            self::assertSame("Line $i", $line);
         }
-        $this->assertNull($reader->current());
+        self::assertNull($reader->current());
         $reader->close();
     }
 

@@ -28,7 +28,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractEntityGenerator implements ServiceSubscriberInterface, GeneratorInterface
+abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
     use ServiceSubscriberTrait;

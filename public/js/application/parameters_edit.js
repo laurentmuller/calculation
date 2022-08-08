@@ -31,30 +31,26 @@ function setDefaultValues() {
 function displayNotification() {
     'use strict';
     // get random text
+    const title = $('.card-title').text();
     const url = $("form").data("random");
     $.getJSON(url, function (response) {
-        let title = $('.card-title').text();
-        if (response.result) {
+        if (response.result && response.content) {
             // content
             const content = '<p class="m-0 p-0">' + response.content + '</p>';
-
             // position
             const $position = $("#message_position");
             const oldPosition = $position.data('position');
             const newPosition = $position.val();
             $position.data('position', newPosition);
-
             // type
             const last = $position.data('type');
             const types = Object.values(Toaster.NotificationTypes);
             const type = types.randomElement(last);
             $position.data('type', type);
-
             // title
             if (!$('#message_title').isChecked()) {
                 title = null;
             }
-
             // options
             const options = $.extend({}, $("#flashbags").data(), {
                 position: newPosition,
@@ -64,19 +60,16 @@ function displayNotification() {
                 displayClose: $('#message_close').isChecked(),
                 displaySubtitle: $('#message_sub_title').isChecked(),
             });
-
             // remove container is needed
             if (oldPosition && oldPosition !== newPosition) {
                 Toaster.removeContainer();
             }
             Toaster.notify(type, content, title, options);
-
         } else {
             const message = $('form').data('failure');
             Toaster.danger(message, title, $("#flashbags").data());
         }
     }).fail(function () {
-        const title = $('.card-title').text();
         const message = $('form').data('failure');
         Toaster.danger(message, title, $("#flashbags").data());
     });
@@ -185,5 +178,19 @@ function displayEmail($email) {
             }
         });
         $email.trigger('input');
+    }
+
+    const $captcha = $('#display_captcha');
+    if ($captcha.length) {
+        const $strength = $('#strength_level');
+        $captcha.on('input', function () {
+            const enabled = $captcha.getSelectedOption().intVal();
+            if (enabled) {
+                $strength.removeAttr('disabled');
+            } else {
+                $strength.attr('disabled', 'disabled');
+            }
+        });
+        $captcha.trigger('input');
     }
 }(jQuery));

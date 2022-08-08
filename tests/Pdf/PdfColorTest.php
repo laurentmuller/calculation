@@ -84,7 +84,7 @@ class PdfColorTest extends TestCase
     public function testCreateInvalid(array|string $rgb): void
     {
         $color = PdfTextColor::create($rgb);
-        $this->assertNull($color);
+        self::assertNull($color);
     }
 
     /**
@@ -113,11 +113,11 @@ class PdfColorTest extends TestCase
     public function testParse(?string $value, int $red, int $green, int $blue): void
     {
         $rgb = PdfTextColor::parse($value);
-        $this->assertIsArray($rgb);
-        $this->assertCount(3, $rgb);
-        $this->assertEquals($red, $rgb[0]);
-        $this->assertEquals($green, $rgb[1]);
-        $this->assertEquals($blue, $rgb[2]);
+        self::assertIsArray($rgb);
+        self::assertCount(3, $rgb);
+        self::assertEquals($red, $rgb[0]);
+        self::assertEquals($green, $rgb[1]);
+        self::assertEquals($blue, $rgb[2]);
     }
 
     /**
@@ -126,7 +126,7 @@ class PdfColorTest extends TestCase
     public function testParseInvalid(?string $value): void
     {
         $color = PdfFillColor::parse($value);
-        $this->assertFalse($color);
+        self::assertFalse($color);
     }
 
     /**
@@ -141,9 +141,9 @@ class PdfColorTest extends TestCase
 
     private function validateColor(?AbstractPdfColor $color, int $red, int $green, int $blue): void
     {
-        $this->assertNotNull($color);
-        $this->assertEquals($red, $color->getRed());
-        $this->assertEquals($green, $color->getGreen());
-        $this->assertEquals($blue, $color->getBlue());
+        self::assertNotNull($color);
+        self::assertEquals($red, $color->getRed());
+        self::assertEquals($green, $color->getGreen());
+        self::assertEquals($blue, $color->getBlue());
     }
 }

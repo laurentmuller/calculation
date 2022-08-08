@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Interfaces\StrengthInterface;
-use App\Traits\StrengthTranslatorTrait;
+use App\Enums\StrengthLevel;
+use App\Traits\StrengthLevelTranslatorTrait;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -29,7 +29,7 @@ use ZxcvbnPhp\Zxcvbn;
  */
 class StrengthValidator extends AbstractConstraintValidator
 {
-    use StrengthTranslatorTrait;
+    use StrengthLevelTranslatorTrait;
 
     /**
      * Constructor.
@@ -54,17 +54,17 @@ class StrengthValidator extends AbstractConstraintValidator
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
-        $minimum = $constraint->min_strength;
-        if (StrengthInterface::LEVEL_NONE === $minimum) {
+        $minimum = $constraint->minimum;
+        if (StrengthLevel::NONE === $minimum) {
             return;
         }
 
         $service = new Zxcvbn();
         $userInputs = $this->getUserInputs($constraint);
         $result = $service->passwordStrength($value, $userInputs);
-        $score = (int) $result['score'];
-        if ($score < $minimum) {
-            $this->addStrengthViolation($this->context, $minimum, $score);
+        $score = StrengthLevel::tryFrom((int) $result['score']) ?? StrengthLevel::NONE;
+        if ($score->isSmaller($minimum)) {
+            $this->addStrengthLevelViolation($this->context, $constraint, $minimum, $score);
         }
     }
 

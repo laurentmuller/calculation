@@ -197,19 +197,19 @@ class FormatUtilsTest extends TestCase
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::getDateFormatter($datetype, $timetype, self::TIME_ZONE, \IntlDateFormatter::GREGORIAN, $pattern);
-        $this->assertEquals($expected, $actual->getPattern());
+        self::assertEquals($expected, $actual->getPattern());
     }
 
     public function testDateType(): void
     {
-        $this->assertEquals(\IntlDateFormatter::SHORT, FormatUtils::getDateType());
+        self::assertEquals(\IntlDateFormatter::SHORT, FormatUtils::getDateType());
     }
 
     public function testDecimal(): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
-        $this->assertEquals('.', FormatUtils::getDecimal());
+        self::assertEquals('.', FormatUtils::getDecimal());
     }
 
     /**
@@ -219,7 +219,7 @@ class FormatUtilsTest extends TestCase
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         $actual = FormatUtils::formatAmount($number);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -230,7 +230,7 @@ class FormatUtilsTest extends TestCase
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatDate($date, $datetype, self::TIME_ZONE);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -241,7 +241,7 @@ class FormatUtilsTest extends TestCase
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatDateTime($date, $datetype, $timetype, self::TIME_ZONE);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -250,7 +250,7 @@ class FormatUtilsTest extends TestCase
     public function testFormatId(mixed $number, string $expected): void
     {
         $actual = FormatUtils::formatId($number);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -259,7 +259,7 @@ class FormatUtilsTest extends TestCase
     public function testFormatInteger(mixed $number, string $expected): void
     {
         $actual = FormatUtils::formatInt($number);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -270,13 +270,13 @@ class FormatUtilsTest extends TestCase
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $contains = \str_contains($actual, self::PERCENT_SIGN);
-        $this->assertEquals($includeSign, $contains);
+        self::assertEquals($includeSign, $contains);
 
         $ends_with = \str_ends_with($actual, self::PERCENT_SIGN);
-        $this->assertEquals($ends_with, $contains);
+        self::assertEquals($ends_with, $contains);
     }
 
     /**
@@ -287,26 +287,26 @@ class FormatUtilsTest extends TestCase
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatTime($date, $timetype, self::TIME_ZONE);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testGrouping(): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
-        $this->assertEquals("'", FormatUtils::getGrouping());
+        self::assertEquals("'", FormatUtils::getGrouping());
     }
 
     public function testPercent(): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
-        $this->assertEquals(self::PERCENT_SIGN, FormatUtils::getPercent());
+        self::assertEquals(self::PERCENT_SIGN, FormatUtils::getPercent());
     }
 
     public function testTimeType(): void
     {
-        $this->assertEquals(\IntlDateFormatter::SHORT, FormatUtils::getTimeType());
+        self::assertEquals(\IntlDateFormatter::SHORT, FormatUtils::getTimeType());
     }
 
     private function createDate(): \DateTime

@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Form\Admin;
 
+use App\Enums\StrengthLevel;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParametersType;
 use App\Form\Product\ProductListType;
-use App\Form\Type\MinStrengthType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
 use Symfony\Component\Security\Core\Security;
@@ -45,11 +45,11 @@ class ApplicationParametersType extends AbstractParametersType
      */
     public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $application)
     {
-        $values = $application->getDefaultValues();
+        $defaultValues = $application->getDefaultValues();
         foreach (self::PASSWORD_OPTIONS as $option) {
-            $values[$option] = false;
+            $defaultValues[$option] = false;
         }
-        parent::__construct($security, $translator, $values);
+        parent::__construct($security, $translator, $defaultValues);
     }
 
     protected function addSections(FormHelper $helper): void
@@ -59,7 +59,6 @@ class ApplicationParametersType extends AbstractParametersType
         $this->addDefaultProductSection($helper);
         $this->addDisplaySection($helper);
         $this->addMessageSection($helper);
-
         if ($this->isSuperAdmin()) {
             $this->addHomePageSection($helper);
             $this->addOptionsSection($helper);
@@ -132,7 +131,6 @@ class ApplicationParametersType extends AbstractParametersType
 
     private function addSecuritySection(FormHelper $helper): void
     {
-        // security
         $helper->field(PropertyServiceInterface::P_DISPLAY_CAPTCHA)
             ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DISPLAY_CAPTCHA))
             ->addChoiceType([
@@ -140,12 +138,11 @@ class ApplicationParametersType extends AbstractParametersType
                 'parameters.display.hide' => false,
             ]);
 
-        $helper->field(PropertyServiceInterface::P_MIN_STRENGTH)
-            ->label('password.min_strength')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_MIN_STRENGTH))
-            ->add(MinStrengthType::class);
+        $helper->field(PropertyServiceInterface::P_STRENGTH_LEVEL)
+            ->label('password.strength_level')
+            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_STRENGTH_LEVEL))
+            ->addEnumType(StrengthLevel::class);
 
-        // password options
         foreach (self::PASSWORD_OPTIONS as $option) {
             $helper->field($option)
                 ->label("password.$option")

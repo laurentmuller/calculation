@@ -43,12 +43,10 @@ class CategoryListType extends AbstractListEntityType
         $resolver->setDefaults([
             'choice_label' => 'code',
             'group_by' => 'groupCode',
-            'choice_attr' => function (Category $category): array {
-                return [
-                    'data-group-id' => $category->getGroupId(),
-                    'data-group-code' => $category->getGroupCode(),
-                ];
-            },
+            'choice_attr' => static fn (Category $category): array => [
+                'data-group-id' => $category->getGroupId(),
+                'data-group-code' => $category->getGroupCode(),
+            ],
             'query_builder' => fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(),
         ]);
     }

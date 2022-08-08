@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
-use App\Interfaces\StrengthInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
@@ -31,7 +31,7 @@ use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Traits\RequestTrait;
-use App\Traits\StrengthTranslatorTrait;
+use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
@@ -55,7 +55,7 @@ class AjaxController extends AbstractController
     use CookieTrait;
     use MathTrait;
     use RequestTrait;
-    use StrengthTranslatorTrait;
+    use StrengthLevelTranslatorTrait;
 
     /**
      * Returns a new captcha image.
@@ -233,21 +233,24 @@ class AjaxController extends AbstractController
                 'message' => 'No password is defined.',
             ]);
         }
-        $minimum = $this->getRequestInt($request, 'strength', -1);
-        if (!\in_array($minimum, StrengthInterface::ALLOWED_LEVELS, true)) {
-            $values = \implode(', ', StrengthInterface::ALLOWED_LEVELS);
-            $message = \sprintf('The minimum strength parameter %d is invalid. Allowed values: [%s].', $minimum, $values);
+
+        $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE->value);
+        $minimum = StrengthLevel::tryFrom($strength);
+        if (!$minimum instanceof StrengthLevel) {
+            $values = \implode(', ', StrengthLevel::values());
+            $message = \sprintf('The minimum strength parameter %d is invalid. Allowed values: [%s].', $strength, $values);
 
             return $this->jsonFalse(
                 [
-                    'minimum' => $minimum,
+                    'minimum' => $strength,
                     'message' => $message,
                 ]
             );
         }
-        if (StrengthInterface::LEVEL_NONE === $minimum) {
+
+        if (StrengthLevel::NONE === $minimum) {
             return $this->jsonFalse([
-                'minimum' => $minimum,
+                'minimum' => $minimum->value,
                 'minimum_text' => $this->translateLevel($minimum),
                 'message' => 'The strength level is disabled.',
             ]);
@@ -263,21 +266,21 @@ class AjaxController extends AbstractController
 
         $service = new Zxcvbn();
         $result = $service->passwordStrength($password, $inputs);
-        $score = (int) $result['score'];
-        if ($score < $minimum) {
+        $score = StrengthLevel::tryFrom((int) $result['score']) ?? StrengthLevel::NONE;
+        if ($score->isSmaller($minimum)) {
             return $this->jsonFalse([
-                'score' => $score,
+                'score' => $score->value,
                 'score_text' => $this->translateLevel($score),
-                'minimum' => $minimum,
+                'minimum' => $minimum->value,
                 'minimum_text' => $this->translateLevel($minimum),
-                'message' => $this->translateStrength($minimum, $score),
+                'message' => $this->translateScore($minimum, $score),
             ]);
         }
 
         return $this->jsonTrue([
-            'score' => $score,
+            'score' => $score->value,
             'score_text' => $this->translateLevel($score),
-            'minimum' => $minimum,
+            'minimum' => $minimum->value,
             'minimum_text' => $this->translateLevel($minimum),
         ]);
     }

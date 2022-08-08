@@ -1,7 +1,7 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% form_theme form with _self %}
 {# macros #}
-{% macro collapseLine(href, form, expanded=false) %}
+{% macro collapseLine(href, form, expanded=false, options=null) %}
 {%- set name = ('parameters.group_' ~ href)|trans -%}
 {%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
@@ -14,7 +14,7 @@
         <i class="fa-solid fa-fw fa-lg {{ icon }}"></i>
     </a>
 </div>
-{% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded} %}
+{% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded, options: options} %}
 {% endmacro %}
 {# customized fields #}
 {% block _message_progress_widget -%}
@@ -39,6 +39,7 @@
 <div class="accordion" id="parent_accordion">
     {% block sections %}{% endblock %}
 </div>
+{{ parent() }}
 {%- endblock %}
 {# javascripts #}
 {% block javascripts %}

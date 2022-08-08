@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Mime;
 
+use App\Enums\Importance;
 use App\Traits\TranslatorTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Header\Headers;
@@ -80,6 +81,15 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
         return $this->translator;
     }
 
+    public function importance(string|Importance $importance): static
+    {
+        if ($importance instanceof Importance) {
+            $importance = $importance->value;
+        }
+
+        return parent::importance($importance);
+    }
+
     /**
      * Sets the footer text.
      */
@@ -90,12 +100,18 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
         return $this;
     }
 
+    private function translateImportance(): string
+    {
+        $importance = Importance::tryFrom((string) $this->getContext()['importance']) ?? Importance::LOW;
+
+        return $this->trans($importance->getReadableFull());
+    }
+
     private function translateSubject(): string
     {
         $subject = (string) $this->getSubject();
-        $importance = (string) ($this->getContext()['importance'] ?? self::IMPORTANCE_LOW);
-        $translated = $this->trans("importance.full.$importance");
+        $importance = $this->translateImportance();
 
-        return \sprintf('%s - %s', $subject, $translated);
+        return \sprintf('%s - %s', $subject, $importance);
     }
 }

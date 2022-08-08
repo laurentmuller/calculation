@@ -35,6 +35,8 @@ abstract class AbstractParametersType extends AbstractType
 
     /**
      * Constructor.
+     *
+     * @param array<string, mixed> $defaultValues
      */
     public function __construct(Security $security, private readonly TranslatorInterface $translator, private readonly array $defaultValues)
     {
@@ -67,11 +69,6 @@ abstract class AbstractParametersType extends AbstractType
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
-    }
-
-    public function isSuperAdmin(): bool
-    {
-        return $this->superAdmin;
     }
 
     protected function addDisplaySection(FormHelper $helper): void
@@ -138,6 +135,7 @@ abstract class AbstractParametersType extends AbstractType
         $key = PropertyServiceInterface::P_MESSAGE_TIMEOUT;
         $helper->field($key)
             ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->updateOption('choice_translation_domain', false)
             ->addChoiceType($this->getTimeouts());
 
         $key = PropertyServiceInterface::P_MESSAGE_PROGRESS;
@@ -175,7 +173,7 @@ abstract class AbstractParametersType extends AbstractType
     abstract protected function addSections(FormHelper $helper): void;
 
     /**
-     * Gets the default value for the given name.
+     * Gets the default value for the given property name.
      */
     protected function getDefaultValue(string $name, mixed $default = ''): mixed
     {
@@ -189,6 +187,14 @@ abstract class AbstractParametersType extends AbstractType
         }
 
         return $value;
+    }
+
+    /**
+     * Returns if the current logged user has the super administrator role.
+     */
+    protected function isSuperAdmin(): bool
+    {
+        return $this->superAdmin;
     }
 
     /**
@@ -219,8 +225,9 @@ abstract class AbstractParametersType extends AbstractType
     private function getProgress(): array
     {
         $result = [];
-        for ($i = 0; $i < 6; ++$i) {
-            $result[$this->trans('counters.pixels', ['%count%' => $i])] = $i;
+        foreach (\range(0, 5) as $pixel) {
+            $key = $this->trans('counters.pixels', ['%count%' => $pixel]);
+            $result[$key] = $pixel;
         }
 
         return $result;
@@ -232,8 +239,9 @@ abstract class AbstractParametersType extends AbstractType
     private function getTimeouts(): array
     {
         $result = [];
-        for ($i = 1; $i < 6; ++$i) {
-            $result["parameters.message_timeout.$i"] = $i * 1000;
+        foreach (\range(1, 5) as $second) {
+            $key = $this->trans('counters.seconds', ['%count%' => $second]);
+            $result[$key] = $second * 1000;
         }
 
         return $result;

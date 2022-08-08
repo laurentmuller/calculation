@@ -42,10 +42,10 @@ class UserServiceTest extends KernelTestCase
     public function testActions(): void
     {
         $service = $this->getUserService();
-        $this->assertEquals(EntityAction::EDIT, $service->getEditAction());
-        $this->assertTrue($service->isActionEdit());
-        $this->assertFalse($service->isActionShow());
-        $this->assertFalse($service->isActionNone());
+        self::assertEquals(EntityAction::EDIT, $service->getEditAction());
+        self::assertTrue($service->isActionEdit());
+        self::assertFalse($service->isActionShow());
+        self::assertFalse($service->isActionNone());
     }
 
     /**
@@ -54,7 +54,7 @@ class UserServiceTest extends KernelTestCase
     public function testDisplayMode(): void
     {
         $service = $this->getUserService();
-        $this->assertEquals(TableView::TABLE, $service->getDisplayMode());
+        self::assertEquals(TableView::TABLE, $service->getDisplayMode());
     }
 
     /**
@@ -63,9 +63,9 @@ class UserServiceTest extends KernelTestCase
     public function testMessage(): void
     {
         $service = $this->getUserService();
-        $this->assertEquals(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
-        $this->assertEquals(4000, $service->getMessageTimeout());
-        $this->assertFalse($service->isMessageSubTitle());
+        self::assertEquals(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
+        self::assertEquals(4000, $service->getMessageTimeout());
+        self::assertFalse($service->isMessageSubTitle());
     }
 
     /**
@@ -74,8 +74,8 @@ class UserServiceTest extends KernelTestCase
     public function testOptions(): void
     {
         $service = $this->getUserService();
-        $this->assertFalse($service->isQrCode());
-        $this->assertFalse($service->isPrintAddress());
+        self::assertFalse($service->isQrCode());
+        self::assertFalse($service->isPrintAddress());
     }
 
     /**
@@ -84,10 +84,10 @@ class UserServiceTest extends KernelTestCase
     public function testPanels(): void
     {
         $service = $this->getUserService();
-        $this->assertTrue($service->isPanelCatalog());
-        $this->assertTrue($service->isPanelMonth());
-        $this->assertTrue($service->isPanelState());
-        $this->assertEquals(10, $service->getPanelCalculation());
+        self::assertTrue($service->isPanelCatalog());
+        self::assertTrue($service->isPanelMonth());
+        self::assertTrue($service->isPanelState());
+        self::assertEquals(10, $service->getPanelCalculation());
     }
 
     private function getUserService(): UserService

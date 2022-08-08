@@ -107,7 +107,7 @@ class MathTraitTest extends TestCase
     public function testIsBitSet(int $value, int $mask, bool $expected = true): void
     {
         $actual = $this->isBitSet($value, $mask);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -116,7 +116,7 @@ class MathTraitTest extends TestCase
     public function testIsFloatEquals(float $val1, float $val2, int $precision = 2, bool $expected = true): void
     {
         $actual = $this->isFloatEquals($val1, $val2, $precision);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -125,7 +125,7 @@ class MathTraitTest extends TestCase
     public function testIsFloatZero(float $val, int $precision = 2, bool $expected = true): void
     {
         $actual = $this->isFloatZero($val, $precision);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -134,7 +134,7 @@ class MathTraitTest extends TestCase
     public function testRound(float $val, float $expected, int $precision = 2): void
     {
         $actual = $this->round($val, $precision);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -143,8 +143,8 @@ class MathTraitTest extends TestCase
     public function testSafeDivide(float $dividend, float $divisor, float $expected, float $default = 0.0): void
     {
         $actual = $this->safeDivide($dividend, $divisor, $default);
-        $this->assertSame($expected, $actual);
-        $this->assertEquals(11.0, $this->safeDivide(100, 0, 11));
+        self::assertSame($expected, $actual);
+        self::assertEquals(11.0, $this->safeDivide(100, 0, 11));
     }
 
     /**
@@ -153,6 +153,6 @@ class MathTraitTest extends TestCase
     public function testValidateIntRange(int $value, int $min, int $max, int $expected): void
     {
         $actual = $this->validateIntRange($value, $min, $max);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

@@ -18,6 +18,7 @@ use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsEmptyDocument;
 use App\Table\CalculationEmptyTable;
 use App\Traits\TableTrait;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,9 +82,9 @@ class CalculationEmptyController extends AbstractController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'empty_table')]
-    public function table(Request $request, CalculationEmptyTable $table): Response
+    public function table(Request $request, CalculationEmptyTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_empty.html.twig');
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_empty.html.twig', $logger);
     }
 
     /**

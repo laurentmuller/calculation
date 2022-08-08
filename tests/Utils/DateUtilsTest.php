@@ -128,14 +128,14 @@ class DateUtilsTest extends TestCase
         $date = new \DateTime('2020-01-10');
         $interval = new \DateInterval('P1W');
         $add = DateUtils::add($date, $interval);
-        $this->assertEquals('2020-01-17', $add->format('Y-m-d'));
+        self::assertEquals('2020-01-17', $add->format('Y-m-d'));
     }
 
     public function testAddByString(): void
     {
         $date = new \DateTime('2020-01-10');
         $add = DateUtils::add($date, 'P1W');
-        $this->assertEquals('2020-01-17', $add->format('Y-m-d'));
+        self::assertEquals('2020-01-17', $add->format('Y-m-d'));
     }
 
     /**
@@ -144,7 +144,7 @@ class DateUtilsTest extends TestCase
     public function testCompletYear(int $value, int $expected, int $change = 1930): void
     {
         $year = DateUtils::completYear($value, $change);
-        $this->assertEquals($expected, $year);
+        self::assertEquals($expected, $year);
     }
 
     /**
@@ -153,14 +153,14 @@ class DateUtilsTest extends TestCase
     public function testMonthNames(string $name, int $index, string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getMonths($locale);
-        $this->assertArrayHasKey($index, $values);
-        $this->assertSame($name, $values[$index]);
+        self::assertArrayHasKey($index, $values);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testMonthsCount(): void
     {
         $values = DateUtils::getMonths();
-        $this->assertCount(12, $values);
+        self::assertCount(12, $values);
     }
 
     /**
@@ -169,14 +169,14 @@ class DateUtilsTest extends TestCase
     public function testShortMonthNames(string $name, int $index, string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getShortMonths($locale);
-        $this->assertArrayHasKey($index, $values);
-        $this->assertSame($name, $values[$index]);
+        self::assertArrayHasKey($index, $values);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testShortMonthsCount(): void
     {
         $values = DateUtils::getShortMonths();
-        $this->assertCount(12, $values);
+        self::assertCount(12, $values);
     }
 
     /**
@@ -185,14 +185,14 @@ class DateUtilsTest extends TestCase
     public function testShortWeekdayNames(string $name, int $index, string $firstday = 'sunday', string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getShortWeekdays($firstday, $locale);
-        $this->assertArrayHasKey($index, $values);
-        $this->assertSame($name, $values[$index]);
+        self::assertArrayHasKey($index, $values);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testShortWeekdaysCount(): void
     {
         $values = DateUtils::getShortWeekdays();
-        $this->assertCount(7, $values);
+        self::assertCount(7, $values);
     }
 
     public function testSubByInterval(): void
@@ -200,14 +200,14 @@ class DateUtilsTest extends TestCase
         $date = new \DateTime('2020-01-10');
         $interval = new \DateInterval('P1W');
         $add = DateUtils::sub($date, $interval);
-        $this->assertEquals('2020-01-03', $add->format('Y-m-d'));
+        self::assertEquals('2020-01-03', $add->format('Y-m-d'));
     }
 
     public function testSubByString(): void
     {
         $date = new \DateTime('2020-01-10');
         $add = DateUtils::sub($date, 'P1W');
-        $this->assertEquals('2020-01-03', $add->format('Y-m-d'));
+        self::assertEquals('2020-01-03', $add->format('Y-m-d'));
     }
 
     /**
@@ -216,13 +216,13 @@ class DateUtilsTest extends TestCase
     public function testWeekdayNames(string $name, int $index, string $firstday = 'sunday', string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getWeekdays($firstday, $locale);
-        $this->assertArrayHasKey($index, $values);
-        $this->assertSame($name, $values[$index]);
+        self::assertArrayHasKey($index, $values);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testWeekdaysCount(): void
     {
         $values = DateUtils::getWeekdays();
-        $this->assertCount(7, $values);
+        self::assertCount(7, $values);
     }
 }

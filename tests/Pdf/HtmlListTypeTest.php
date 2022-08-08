@@ -69,7 +69,7 @@ class HtmlListTypeTest extends TestCase
     public function testLetter(int $value, string $expected): void
     {
         $actual = HtmlListType::toLetter($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -78,7 +78,7 @@ class HtmlListTypeTest extends TestCase
     public function testLetterLower(int $value, string $expected): void
     {
         $actual = HtmlListType::LETTER_LOWER->getBulletText($value, '');
-        $this->assertEquals(\strtolower($expected), $actual);
+        self::assertEquals(\strtolower($expected), $actual);
     }
 
     /**
@@ -87,7 +87,7 @@ class HtmlListTypeTest extends TestCase
     public function testLetterUpper(int $value, string $expected): void
     {
         $actual = HtmlListType::LETTER_UPPER->getBulletText($value, '');
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -96,7 +96,7 @@ class HtmlListTypeTest extends TestCase
     public function testRoman(int $value, string $expected): void
     {
         $actual = HtmlListType::toRoman($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -105,7 +105,7 @@ class HtmlListTypeTest extends TestCase
     public function testRomanLower(int $value, string $expected): void
     {
         $actual = HtmlListType::ROMAN_LOWER->getBulletText($value, '');
-        $this->assertEquals(\strtolower($expected), $actual);
+        self::assertEquals(\strtolower($expected), $actual);
     }
 
     /**
@@ -114,6 +114,6 @@ class HtmlListTypeTest extends TestCase
     public function testRomanUpper(int $value, string $expected): void
     {
         $actual = HtmlListType::ROMAN_UPPER->getBulletText($value, '');
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

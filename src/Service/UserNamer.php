@@ -23,7 +23,7 @@ use Vich\UploaderBundle\Naming\NamerInterface;
  *
  * @implements NamerInterface<User>
  */
-class UserNamer implements NamerInterface, ImageExtensionInterface
+class UserNamer implements ImageExtensionInterface, NamerInterface
 {
     /**
      * Gets the base file name.

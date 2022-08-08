@@ -18,6 +18,7 @@ use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
 use App\Traits\TableTrait;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,9 +82,9 @@ class CalculationDuplicateController extends AbstractController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'duplicate_table')]
-    public function table(Request $request, CalculationDuplicateTable $table): Response
+    public function table(Request $request, CalculationDuplicateTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_duplicate.html.twig');
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_duplicate.html.twig', $logger);
     }
 
     /**

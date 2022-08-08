@@ -9,19 +9,19 @@
 
 {% macro position(position, selection) -%}
 {%- set value = position.value -%}
-{%- set text = 'parameters.message_position.' ~ value -%}
+{%- set text = 'message_position.' ~ value -%}
 <option value="{{ value }}"{% if position == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
 {%- endmacro %}
 
-{% macro timeout(value, selection) -%}
-{%- set round = (value / 1000)|round(0, 'floor') -%}
-{%- set text = 'parameters.message_timeout.' ~ round -%}
-<option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
+{% macro timeout(seconds, selection) -%}
+{%- set milliseconds = seconds * 1000 -%}
+{%- set text = 'counters.seconds'|trans({'%count%': seconds}) -%}
+<option value="{{ milliseconds }}"{% if milliseconds == selection %} selected="selected"{% endif %}>{{ text }}</option>
 {%- endmacro %}
 
-{% macro progress(value, selection) -%}
-    {%- set text = 'counters.pixels'|trans({'%count%': value}) -%}
-    <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text }}</option>
+{% macro progress(pixels, selection) -%}
+{%- set text = 'counters.pixels'|trans({'%count%': pixels}) -%}
+<option value="{{ pixels }}"{% if pixels == selection %} selected="selected"{% endif %}>{{ text }}</option>
 {%- endmacro %}
 
 {% macro checkbox(id, text, checked=true) -%}
@@ -68,8 +68,8 @@
         <div class="form-group">
             <label for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
             <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-control">
-                {% for i in 1..5 %}
-                    {{ _self.timeout(i * 1000, timeout) }}
+                {% for seconds in 1..5 %}
+                    {{ _self.timeout(seconds, timeout) }}
                 {% endfor %}
             </select>
         </div>

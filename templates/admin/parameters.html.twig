@@ -13,6 +13,6 @@
 {% if super_admin %}
     {{ _self.collapseLine('home', form) }}
     {{ _self.collapseLine('options', form) }}
-    {{ _self.collapseLine('security', form) }}
+    {{ _self.collapseLine('security', form, false, options) }}
 {% endif %}
 {%- endblock %}

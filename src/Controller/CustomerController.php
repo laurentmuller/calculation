@@ -149,9 +149,9 @@ class CustomerController extends AbstractEntityController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'customer_table')]
-    public function table(Request $request, CustomerTable $table): Response
+    public function table(Request $request, CustomerTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'customer/customer_table.html.twig');
+        return $this->handleTableRequest($request, $table, 'customer/customer_table.html.twig', $logger);
     }
 
     /**

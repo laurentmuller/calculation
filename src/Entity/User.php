@@ -41,7 +41,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[UniqueEntity(fields: ['email'], message: 'email.already_used')]
 #[UniqueEntity(fields: ['username'], message: 'username.already_used')]
 #[Vich\Uploadable]
-class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface
+class User extends AbstractEntity implements PasswordAuthenticatedUserInterface, ResetPasswordRequestInterface, RoleInterface, UserInterface
 {
     use RoleTrait;
 

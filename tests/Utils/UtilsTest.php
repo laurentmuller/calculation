@@ -190,7 +190,7 @@ class UtilsTest extends TestCase
     public function testAscii(string $value, string $expected): void
     {
         $result = Utils::ascii($value);
-        $this->assertSame($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -199,7 +199,7 @@ class UtilsTest extends TestCase
     public function testCapitalize(string $value, string $expected): void
     {
         $actual = Utils::capitalize($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -209,7 +209,7 @@ class UtilsTest extends TestCase
     {
         $accessor = Utils::getAccessor();
         $actual = Utils::compare($a, $b, $field, $accessor, $ascending);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -218,7 +218,7 @@ class UtilsTest extends TestCase
     public function testContains(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $actual = Utils::contains($haystack, $needle, $ignore_case);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -227,7 +227,7 @@ class UtilsTest extends TestCase
     public function testEndWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $actual = Utils::endWith($haystack, $needle, $ignore_case);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -240,15 +240,15 @@ class UtilsTest extends TestCase
         $e = new \Exception($message, $code);
         $result = Utils::getExceptionContext($e);
 
-        $this->assertArrayHasKey('message', $result);
-        $this->assertArrayHasKey('code', $result);
-        $this->assertArrayHasKey('file', $result);
-        $this->assertArrayHasKey('line', $result);
-        $this->assertArrayHasKey('trace', $result);
+        self::assertArrayHasKey('message', $result);
+        self::assertArrayHasKey('code', $result);
+        self::assertArrayHasKey('file', $result);
+        self::assertArrayHasKey('line', $result);
+        self::assertArrayHasKey('trace', $result);
 
-        $this->assertSame($message, $result['message']);
-        $this->assertSame($code, $result['code']);
-        $this->assertSame(__FILE__, $result['file']);
+        self::assertSame($message, $result['message']);
+        self::assertSame($code, $result['code']);
+        self::assertSame(__FILE__, $result['file']);
     }
 
     /**
@@ -257,7 +257,7 @@ class UtilsTest extends TestCase
     public function testExportVar(mixed $var, mixed $expected): void
     {
         $actual = Utils::exportVar($var);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -273,7 +273,7 @@ class UtilsTest extends TestCase
             $this->expectException(\ReflectionException::class);
         }
         $actual = Utils::getShortName($var);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testGroupByArrays(): void
@@ -293,10 +293,10 @@ class UtilsTest extends TestCase
          */
         $result = Utils::groupBy($array, $key);
 
-        $this->assertArrayHasKey(1, $result);
-        $this->assertArrayHasKey(2, $result);
-        $this->assertCount(1, $result[1]);
-        $this->assertCount(2, $result[2]);
+        self::assertArrayHasKey(1, $result);
+        self::assertArrayHasKey(2, $result);
+        self::assertCount(1, $result[1]);
+        self::assertCount(2, $result[2]);
     }
 
     public function testGroupByCallable(): void
@@ -316,10 +316,10 @@ class UtilsTest extends TestCase
          */
         $result = Utils::groupBy($array, $key);
 
-        $this->assertArrayHasKey(1, $result);
-        $this->assertArrayHasKey(2, $result);
-        $this->assertCount(1, $result[1]);
-        $this->assertCount(2, $result[2]);
+        self::assertArrayHasKey(1, $result);
+        self::assertArrayHasKey(2, $result);
+        self::assertCount(1, $result[1]);
+        self::assertCount(2, $result[2]);
     }
 
     public function testGroupByMultiple(): void
@@ -343,24 +343,24 @@ class UtilsTest extends TestCase
         $result = Utils::groupBy($array, 'id0', 'id1');
 
         // first level
-        $this->assertArrayHasKey(1, $result);
-        $this->assertArrayHasKey(2, $result);
-        $this->assertCount(2, $result[1]);
-        $this->assertCount(2, $result[2]);
+        self::assertArrayHasKey(1, $result);
+        self::assertArrayHasKey(2, $result);
+        self::assertCount(2, $result[1]);
+        self::assertCount(2, $result[2]);
 
         // second level - first
         $result1 = $result[1];
-        $this->assertArrayHasKey(1, $result1);
-        $this->assertArrayHasKey(2, $result1);
-        $this->assertCount(2, $result1[1]);
-        $this->assertCount(1, $result1[2]);
+        self::assertArrayHasKey(1, $result1);
+        self::assertArrayHasKey(2, $result1);
+        self::assertCount(2, $result1[1]);
+        self::assertCount(1, $result1[2]);
 
         // second level - second
         $result2 = $result[2];
-        $this->assertArrayHasKey(1, $result2);
-        $this->assertArrayHasKey(2, $result2);
-        $this->assertCount(2, $result2[1]);
-        $this->assertCount(1, $result2[2]);
+        self::assertArrayHasKey(1, $result2);
+        self::assertArrayHasKey(2, $result2);
+        self::assertCount(2, $result2[1]);
+        self::assertCount(1, $result2[2]);
     }
 
     public function testGroupByObjects(): void
@@ -376,10 +376,10 @@ class UtilsTest extends TestCase
          */
         $result = Utils::groupBy($array, $key);
 
-        $this->assertArrayHasKey(1, $result);
-        $this->assertArrayHasKey(2, $result);
-        $this->assertCount(1, $result[1]);
-        $this->assertCount(2, $result[2]);
+        self::assertArrayHasKey(1, $result);
+        self::assertArrayHasKey(2, $result);
+        self::assertCount(1, $result[1]);
+        self::assertCount(2, $result[2]);
     }
 
     /**
@@ -388,7 +388,7 @@ class UtilsTest extends TestCase
     public function testIsString(?string $var, bool $expected): void
     {
         $actual = Utils::isString($var);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -397,7 +397,7 @@ class UtilsTest extends TestCase
     public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $actual = Utils::startWith($haystack, $needle, $ignore_case);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -407,9 +407,9 @@ class UtilsTest extends TestCase
     {
         $actual = Utils::toFloat($var);
         if ($equal) {
-            $this->assertEquals($actual, $expected);
+            self::assertEquals($actual, $expected);
         } else {
-            $this->assertNotEquals($actual, $expected);
+            self::assertNotEquals($actual, $expected);
         }
     }
 
@@ -420,9 +420,9 @@ class UtilsTest extends TestCase
     {
         $actual = Utils::toInt($var);
         if ($equal) {
-            $this->assertEquals($actual, $expected);
+            self::assertEquals($actual, $expected);
         } else {
-            $this->assertNotEquals($actual, $expected);
+            self::assertNotEquals($actual, $expected);
         }
     }
 
@@ -433,9 +433,9 @@ class UtilsTest extends TestCase
     {
         $actual = Utils::toString($var);
         if ($equal) {
-            $this->assertEquals($actual, $expected);
+            self::assertEquals($actual, $expected);
         } else {
-            $this->assertNotEquals($actual, $expected);
+            self::assertNotEquals($actual, $expected);
         }
     }
 

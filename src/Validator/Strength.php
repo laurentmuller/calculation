@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Interfaces\StrengthInterface;
+use App\Enums\StrengthLevel;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
@@ -24,29 +24,35 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
  */
 class Strength extends Constraint
 {
+    final public const IS_STRENGTH_ERROR = '6218da5e-12d8-481e-b0fc-9bc4cbaad2ef';
+
     /**
-     * The password strength (Value from 0 to 4 or -1 to disable).
+     * The password strength level.
      */
-    public int $min_strength;
+    public StrengthLevel $minimum;
 
     /**
      * The password strength error message.
      */
-    public string $min_strength_message = 'password.min_strength';
+    public string $strength_message = 'password.strength_level';
 
     /**
      * Constructor.
      *
-     * @throws InvalidArgumentException if the minimum strength value is not between -1 and 4 (inclusive)
+     * @throws InvalidArgumentException if the minimum parameter is an integer and cannot be parsed to a strength level
      */
-    public function __construct(int $min_strength, public ?string $userNamePath = null, public ?string $emailPath = null)
+    public function __construct(StrengthLevel|int $minimum = StrengthLevel::NONE, public ?string $userNamePath = null, public ?string $emailPath = null)
     {
         parent::__construct();
-        if (!\in_array($min_strength, StrengthInterface::ALLOWED_LEVELS, true)) {
-            $values = \implode(', ', StrengthInterface::ALLOWED_LEVELS);
-            throw new InvalidArgumentException(\sprintf('The minimum strength parameter "%s" for "%s" is invalid. Allowed values: [%s].', $min_strength, static::class, $values));
+        if (\is_int($minimum)) {
+            $level = StrengthLevel::tryFrom($minimum);
+            if (!$level instanceof StrengthLevel) {
+                throw new InvalidArgumentException(\sprintf('Unable to find a strength level for the value %d.', $minimum));
+            }
+            $this->minimum = $level;
+        } else {
+            $this->minimum = $minimum;
         }
-        $this->min_strength = $min_strength;
     }
 
     /**
@@ -54,6 +60,6 @@ class Strength extends Constraint
      */
     public function getDefaultOption(): ?string
     {
-        return 'min_strength';
+        return 'minimum';
     }
 }

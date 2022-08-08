@@ -14,6 +14,7 @@ namespace App\Interfaces;
 
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
+use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Model\CustomerInformation;
 
@@ -94,6 +95,11 @@ interface PropertyServiceInterface
      * The default output qr-code (boolean).
      */
     final public const DEFAULT_QR_CODE = false;
+
+    /**
+     * The default password strength level.
+     */
+    final public const DEFAULT_STRENGTH_LEVEL = StrengthLevel::NONE;
 
     /**
      * The property name for the administrator role rights (string).
@@ -245,7 +251,7 @@ interface PropertyServiceInterface
     final public const P_MIN_MARGIN = 'minimum_margin';
 
     /**
-     * The property name for the minimum password strength (int).
+     * The property name for the minimum password strength level (int).
      */
     final public const P_MIN_STRENGTH = 'min_strength';
 
@@ -278,6 +284,11 @@ interface PropertyServiceInterface
      * The property name to output a QR Code at the end of the PDF calculation document.
      */
     final public const P_QR_CODE = 'qr_code';
+
+    /**
+     * The property name for the password strength level (int).
+     */
+    final public const P_STRENGTH_LEVEL = 'strength_level';
 
     /**
      * The property name for the last products update (date).

@@ -238,11 +238,7 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Sets the primary key identifier.
-     *
-     * Used only when create a log from a file.
-     *
-     * @param int $id the key identifier to set
+     * Sets the identifier.
      */
     public function setId(int $id): self
     {

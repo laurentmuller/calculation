@@ -71,9 +71,9 @@ class AddressTransformerTest extends TestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -84,13 +84,13 @@ class AddressTransformerTest extends TestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTransformerNotNull(): void
     {
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
     }
 }

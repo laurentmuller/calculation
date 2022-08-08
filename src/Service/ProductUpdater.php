@@ -90,12 +90,10 @@ class ProductUpdater implements ServiceSubscriberInterface
                 'class' => Product::class,
                 'choice_label' => 'description',
                 'choices' => $this->getAllProducts(),
-                'choice_attr' => static function (Product $product) {
-                    return [
-                        'data-price' => $product->getPrice(),
-                        'data-category' => $product->getCategoryId(),
-                    ];
-                },
+                'choice_attr' => static fn (Product $product): array => [
+                    'data-price' => $product->getPrice(),
+                    'data-category' => $product->getCategoryId(),
+                ],
             ])
             ->add(EntityType::class);
 

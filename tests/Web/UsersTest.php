@@ -52,9 +52,9 @@ class UsersTest extends AbstractAuthenticateWebTestCase
     {
         $user = $this->loadUser($username, false);
         if ($exist) {
-            $this->assertNotNull($user, "The user '$username' is null.");
+            self::assertNotNull($user, "The user '$username' is null.");
         } else {
-            $this->assertNull($user, "The user '$username' is not null.");
+            self::assertNull($user, "The user '$username' is not null.");
         }
     }
 
@@ -66,7 +66,7 @@ class UsersTest extends AbstractAuthenticateWebTestCase
     public function testUserRole(string $username): void
     {
         $user = $this->loadUser($username, false);
-        $this->assertNotNull($user, "The user '$username' is null.");
-        $this->assertTrue($user->hasRole($username));
+        self::assertNotNull($user, "The user '$username' is null.");
+        self::assertTrue($user->hasRole($username));
     }
 }

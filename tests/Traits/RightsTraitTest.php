@@ -85,21 +85,21 @@ class RightsTraitTest extends TestCase
     {
         /** @psalm-var FlagBag<EntityPermission> $entity */
         $entity = $this->$entity;
-        $this->assertSame(0, $entity->getValue());
+        self::assertSame(0, $entity->getValue());
     }
 
     public function testInvalidAttribute(): void
     {
         $attribute = $this->getAttribute('UnknownAttribute');
-        $this->assertTrue(RoleBuilder::INVALID_VALUE === $attribute);
+        self::assertTrue(RoleBuilder::INVALID_VALUE === $attribute);
     }
 
     public function testIsNotSet(): void
     {
         $className = 'UnknownClass';
-        $this->assertFalse($this->__isset($className));
+        self::assertFalse($this->__isset($className));
         $value = $this->__get($className);
-        $this->assertNull($value);
+        self::assertNull($value);
     }
 
     /**
@@ -107,11 +107,11 @@ class RightsTraitTest extends TestCase
      */
     public function testIsSet(string $entity): void
     {
-        $this->assertTrue($this->__isset($entity));
+        self::assertTrue($this->__isset($entity));
         /** @psalm-var FlagBag<EntityPermission> $entity */
         $entity = $this->$entity;
-        $this->assertInstanceOf(FlagBag::class, $entity);
-        $this->assertSame(0, $entity->getValue());
+        self::assertInstanceOf(FlagBag::class, $entity);
+        self::assertSame(0, $entity->getValue());
     }
 
     private function checkAttribute(string $entity, string $key): void
@@ -121,7 +121,7 @@ class RightsTraitTest extends TestCase
         $this->$entity = $rights;
         /** @psalm-var FlagBag<EntityPermission> $value */
         $value = $this->$entity;
-        $this->assertEquals($rights, $value);
+        self::assertEquals($rights, $value);
     }
 
     private function getAttribute(string $key): int

@@ -20,14 +20,12 @@ use App\Entity\Product;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
+use App\Enums\StrengthLevel;
 use App\Form\Admin\ApplicationParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
-use App\Form\Type\ImportanceType;
-use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\RoleInterface;
-use App\Interfaces\StrengthInterface;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
 use App\Response\PdfResponse;
@@ -39,13 +37,14 @@ use App\Service\IpStackService;
 use App\Service\MailerService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
-use App\Traits\StrengthTranslatorTrait;
+use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use App\Validator\Captcha;
 use App\Validator\Password;
+use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
@@ -73,7 +72,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestController extends AbstractController
 {
-    use StrengthTranslatorTrait;
+    use StrengthLevelTranslatorTrait;
 
     /**
      * Show analog clock.
@@ -111,7 +110,7 @@ class TestController extends AbstractController
             ->addEmailType();
         $helper->field('importance')
             ->label('importance.name')
-            ->add(ImportanceType::class);
+            ->addEnumType(Importance::class);
         $helper->field('message')
             ->updateAttribute('minlength', 10)
             ->add(SimpleEditorType::class);
@@ -217,19 +216,21 @@ class TestController extends AbstractController
     public function password(Request $request, CaptchaImageService $service): Response
     {
         $options = ApplicationParametersType::PASSWORD_OPTIONS;
-        $constraint = new Password(['all' => true]);
-        $listener = function (FormEvent $event) use ($options, $constraint): void {
+        $passwordConstraint = new Password(['all' => true]);
+        $strengthConstraint = new Strength(StrengthLevel::MEDIUM);
+        $listener = function (FormEvent $event) use ($options, $passwordConstraint, $strengthConstraint): void {
             /** @psalm-var array $data */
             $data = $event->getData();
             foreach ($options as $option) {
-                $constraint->{$option} = (bool) ($data[$option] ?? false);
+                $passwordConstraint->{$option} = (bool) ($data[$option] ?? false);
             }
-            $constraint->min_strength = (int) ($data['min_strength'] ?? StrengthInterface::LEVEL_NONE);
+            $strength = (int) $data['level'];
+            $strengthConstraint->minimum = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;
         };
 
         $data = [
             'input' => 'aB123456#*/82568A',
-            'min_strength' => StrengthInterface::LEVEL_MEDIUM,
+            'level' => StrengthLevel::MEDIUM,
         ];
         foreach ($options as $option) {
             $data[$option] = true;
@@ -240,15 +241,16 @@ class TestController extends AbstractController
         $helper->field('input')
             ->widgetClass('password-strength')
             ->minLength(6)
-            ->constraints(new Length(['min' => 6]), $constraint)
+            ->constraints(new Length(['min' => 6]), $passwordConstraint, $strengthConstraint)
             ->addTextType();
         foreach ($options as $option) {
             $helper->field($option)
                 ->notRequired()
                 ->addCheckboxType();
         }
-        $helper->field('min_strength')
-            ->add(MinStrengthType::class);
+        $helper->field('level')
+            ->label('password.strength_level')
+            ->addEnumType(StrengthLevel::class);
         $helper->field('captcha')
             ->label('captcha.label')
             ->constraints(new NotBlank(), new Captcha())
@@ -260,7 +262,7 @@ class TestController extends AbstractController
 
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array<bool|int> $data */
+            /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';
@@ -272,16 +274,15 @@ class TestController extends AbstractController
                 }
             }
 
-            // minimum strength
-            $min_strength = (int) $data['min_strength'];
-            if (StrengthInterface::LEVEL_NONE !== $min_strength) {
+            /** @psalm-var StrengthLevel $level */
+            $level = $data['level'];
+            if (StrengthLevel::NONE !== $level) {
                 $message .= '<li>';
-                $message .= $this->trans('password.min_strength');
+                $message .= $this->trans('password.strength_level');
                 $message .= ' : ';
-                $message .= $this->translateLevel($min_strength);
+                $message .= $this->translateLevel($level);
                 $message .= '</li>';
             }
-
             $message .= '</ul>';
 
             return $this->success($message)

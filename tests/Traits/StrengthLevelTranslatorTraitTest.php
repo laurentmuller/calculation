@@ -12,16 +12,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
-use App\Traits\StrengthTranslatorTrait;
+use App\Enums\StrengthLevel;
+use App\Traits\StrengthLevelTranslatorTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for {@link StrengthTranslatorTrait} class.
+ * Unit test for {@link StrengthLevelTranslatorTrait} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class StrengthTranslatorTraitTest extends TestCase
+class StrengthLevelTranslatorTraitTest extends TestCase
 {
-    use StrengthTranslatorTrait;
+    use StrengthLevelTranslatorTrait;
 
     private ?TranslatorInterface $translator;
 
@@ -39,6 +42,10 @@ class StrengthTranslatorTraitTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-suppress InvalidNullableReturnType
+     * @psalm-suppress NullableReturnStatement
+     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -47,12 +54,13 @@ class StrengthTranslatorTraitTest extends TestCase
     /**
      * @dataProvider getTranslateLevels
      */
-    public function testTranslateLevel(int $level, string $message): void
+    public function testTranslateLevel(int $value, string $message): void
     {
-        $expected = "password.strength_level.$message";
+        $expected = "strength_level.$message";
         $this->translator = $this->createTranslator($expected);
+        $level = StrengthLevel::tryFrom($value) ?? StrengthLevel::NONE;
         $actual = $this->translateLevel($level);
-        $this->assertEquals($actual, $expected);
+        self::assertEquals($actual, $expected);
     }
 
     private function createTranslator(string $message): TranslatorInterface

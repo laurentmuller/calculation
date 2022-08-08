@@ -1,7 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'openweather/_weather_macro.html.twig' as tools %}
-
 {# macros #}
 {% macro system(units, route, city_id, count) -%}
 {% set text = units == 'metric' ? '°C' : '°F' %}
@@ -13,13 +12,11 @@
     <span class="small" title="{{ title }}">{{ text }}</span>
 {% endif %}
 {%- endmacro %}
-
 {# parameters #}
 {%- set title = 'openweather.current.title' -%}
 {%- set title_icon = 'cloud-sun' -%}
 {%- set city_id = current.id|default(false) -%}
 {%- set route = app.request.get('_route') -%}
-
 {# units #}
 {% if city_id %}
     {%- set units_system = current.units.system -%}
@@ -30,13 +27,11 @@
     {%- set units_speed = current.units.speed -%}
     {%- set units_volume = current.units.volume -%}
 {% endif %}
-
 {# class #}
 {%- block card_container_class city_id ? '' : parent() -%}
 {%- block card_class city_id ? parent() : ' border-danger' -%}
 {%- block card_header_class city_id ? parent() : ' bg-danger text-white' -%}
 {%- block card_footer_class ' d-none' -%}
-
 {# header #}
 {% block card_header %}
 {% if city_id %}
@@ -58,7 +53,6 @@
     {{ parent() }}
 {% endif %}
 {% endblock %}
-
 {# body #}
 {% block card_body %}
 {% if city_id %}
@@ -79,7 +73,7 @@
     <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
 {% endif %}
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/open_weather.css') }}
 {% endblock %}

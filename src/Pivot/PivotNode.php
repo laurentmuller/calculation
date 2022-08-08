@@ -19,7 +19,7 @@ use App\Util\Utils;
 /**
  * Represents a pivot node.
  */
-class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeInterface, \Stringable
+class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringable, SortModeInterface
 {
     /**
      * The children.

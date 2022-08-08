@@ -21,7 +21,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 /**
  * The table column.
  */
-class Column implements SortModeInterface, \Stringable
+class Column implements \Stringable, SortModeInterface
 {
     /**
      * The property name of the field formatter.

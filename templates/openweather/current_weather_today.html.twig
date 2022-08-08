@@ -1,6 +1,5 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'openweather/_weather_macro.html.twig' as tools %}
-
 {# macros #}
 {% macro row_title(name) %}
 <tr>
@@ -30,7 +29,6 @@
 {% macro row_no_sep(name, value, unit='') %}
     {{ _self.row_unit(name, value|number_format(1), unit, '') }}
 {% endmacro %}
-
 {# title #}
 <h6 class="border-top pt-1">{{ 'openweather.fields.current'|trans }}</h6>
 {# table #}

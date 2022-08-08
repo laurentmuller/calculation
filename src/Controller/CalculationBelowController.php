@@ -20,6 +20,7 @@ use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationBelowTable;
 use App\Traits\TableTrait;
 use App\Util\FormatUtils;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,9 +91,9 @@ class CalculationBelowController extends AbstractController
      * @throws \ReflectionException
      */
     #[Route(path: '', name: 'below_table')]
-    public function table(Request $request, CalculationBelowTable $table): Response
+    public function table(Request $request, CalculationBelowTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_below.html.twig');
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_below.html.twig', $logger);
     }
 
     /**

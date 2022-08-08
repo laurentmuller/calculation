@@ -19,9 +19,9 @@ use App\Entity\Product;
 use App\Entity\Property;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
+use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
-use App\Interfaces\StrengthInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
@@ -311,7 +311,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_DEFAULT_PRODUCT_EDIT => true,
             self::P_DEFAULT_PRODUCT_QUANTITY => 0,
 
-            self::P_MIN_STRENGTH => StrengthInterface::LEVEL_NONE,
+            self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
             self::P_DISPLAY_CAPTCHA => !$this->isDebug,
         ];
     }
@@ -396,16 +396,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * Gets the minimum password strength.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getMinStrength(): int
-    {
-        return $this->getPropertyInteger(self::P_MIN_STRENGTH, StrengthInterface::LEVEL_NONE);
-    }
-
-    /**
      * {@inheritDoc}
      *
      * @throws \Psr\Cache\InvalidArgumentException
@@ -478,6 +468,19 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         }
 
         return $result;
+    }
+
+    /**
+     * Gets the password strength level.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function getStrengthLevel(): StrengthLevel
+    {
+        $default = self::DEFAULT_STRENGTH_LEVEL;
+        $value = $this->getPropertyInteger(self::P_STRENGTH_LEVEL, $default->value);
+
+        return StrengthLevel::tryFrom($value) ?? $default;
     }
 
     /**

@@ -32,13 +32,19 @@ class CaptchaValidator extends AbstractConstraintValidator
 
     /**
      * {@inheritdoc}
+     *
+     * @param Captcha $constraint
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
         if (!$this->service->validateTimeout()) {
-            $this->context->addViolation('captcha.timeout');
+            $this->context->buildViolation($constraint->timeout_message)
+                ->setCode(Captcha::IS_TIMEOUT_ERROR)
+                ->addViolation();
         } elseif (!$this->service->validateToken($value)) {
-            $this->context->addViolation('captcha.invalid');
+            $this->context->buildViolation($constraint->invalid_message)
+                ->setCode(Captcha::IS_INVALID_ERROR)
+                ->addViolation();
         }
     }
 }

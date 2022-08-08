@@ -94,11 +94,6 @@ class Comment
         return $this->importance;
     }
 
-    public function getImportanceValue(): string
-    {
-        return $this->importance->value;
-    }
-
     /**
      * Gets the message.
      */

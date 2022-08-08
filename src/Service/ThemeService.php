@@ -150,8 +150,7 @@ class ThemeService implements ServiceSubscriberInterface
     public function getCurrentTheme(?Request $request = null): Theme
     {
         if (null !== ($request = $this->getRequest($request))) {
-            /** @psalm-var string $css */
-            $css = $this->getCookieString($request, self::KEY_CSS, '', self::DEFAULT_CSS);
+            $css = (string) $this->getCookieString($request, self::KEY_CSS, '', self::DEFAULT_CSS);
 
             return $this->findTheme($css);
         }
@@ -191,10 +190,7 @@ class ThemeService implements ServiceSubscriberInterface
     public function getThemeBackground(?Request $request = null): string
     {
         if (null !== ($request = $this->getRequest($request))) {
-            /** @psalm-var string $value */
-            $value = $this->getCookieString($request, self::KEY_BACKGROUND, '', self::DEFAULT_BACKGROUND);
-
-            return $value;
+            return (string) $this->getCookieString($request, self::KEY_BACKGROUND, '', self::DEFAULT_BACKGROUND);
         }
 
         return self::DEFAULT_BACKGROUND;

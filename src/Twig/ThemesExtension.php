@@ -64,10 +64,8 @@ final class ThemesExtension extends AbstractExtension
 
     /**
      * Gets the theme background.
-     *
-     * @param Request $request the request
      */
-    public function getThemeBackground(Request $request): string
+    public function getThemeBackground(?Request $request = null): string
     {
         // get background
         $background = $this->service->getThemeBackground($request);
@@ -87,12 +85,10 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Gets the theme CSS.
      *
-     * @param Request $request the request
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function getThemeCss(Request $request): string
+    private function getThemeCss(?Request $request = null): string
     {
         // get CSS
         $theme = $this->getCurrentTheme($request);
@@ -106,12 +102,10 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Gets the theme name.
      *
-     * @param Request $request the request
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function getThemeName(Request $request): string
+    private function getThemeName(?Request $request = null): string
     {
         return $this->getCurrentTheme($request)->getName();
     }
@@ -119,12 +113,10 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Returns if the selected theme is dark.
      *
-     * @param Request $request the request
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function isDarkTheme(Request $request): bool
+    private function isDarkTheme(?Request $request = null): bool
     {
         return $this->service->isDarkTheme($request);
     }
@@ -132,12 +124,10 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Returns if the selected theme is the default theme (Boostrap).
      *
-     * @param Request $request the request
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ReflectionException
      */
-    private function isDefaultTheme(Request $request): bool
+    private function isDefaultTheme(?Request $request = null): bool
     {
         return $this->getCurrentTheme($request)->isDefault();
     }

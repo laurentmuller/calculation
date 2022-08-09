@@ -37,7 +37,7 @@
             that.$element = $(element);
             that.options = $.extend({}, Rowlink.DEFAULTS, options);
             that.proxy = function (e) {
-                that.click(e);
+                that._click(e);
             };
             that.enabled = false;
             that.enable();
@@ -65,7 +65,14 @@
         // -----------------------------
         // private functions
         // -----------------------------
-        click(e, ctrlKey) {
+        /**
+         * Handle the click event.
+         *
+         * @param {Event} e - the event.
+         * @param {boolean} [ctrlKey] - the control key value.
+         * @private
+         */
+        _click(e, ctrlKey) {
             const target = $(e.currentTarget).closest('tr').find(this.options.target)[0];
             if (typeof target === 'undefined' || $(e.target)[0] === target) {
                 return;

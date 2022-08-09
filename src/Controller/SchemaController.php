@@ -195,7 +195,7 @@ class SchemaController extends AbstractController
                 'primaryKey' => $isPrimaryKey,
                 'unique' => $unique,
                 'type' => $this->getColumnType($column),
-                'length' => (int) $column->getLength(),
+                'length' => $column->getLength() ?? 0,
                 'nullable' => !$column->getNotnull(),
                 'foreignTableName' => $foreignTableName,
                 'default' => $this->getDefaultValue($column),
@@ -257,8 +257,7 @@ class SchemaController extends AbstractController
             try {
                 $column = \array_key_first($columns);
                 $result = $this->connection->executeQuery("SELECT COUNT($column) AS TOTAL FROM $name");
-                /** @psalm-var int $count */
-                $count = $result->fetchOne();
+                $count = (int) $result->fetchOne();
                 $result->free();
             } catch (\Doctrine\DBAL\Exception) {
                 $count = 0;

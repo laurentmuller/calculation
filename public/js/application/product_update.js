@@ -3,7 +3,7 @@
 /**
  * Gets the product's checkboxes for the selected category.
  *
- * @returns {jQuery} - the checkboxes.
+ * @returns {JQuery} - the checkboxes.
  */
 function getVisibleProducts() {
     'use strict';
@@ -187,8 +187,7 @@ function updatePrices() {
             $(this).closest('tr').find(':checkbox').toggleChecked().trigger('focus');
             validateProducts();
         }
-    });
-    $('#form_products tbody').on('click', ':checkbox', function () {
+    }).on('click', ':checkbox', function () {
         validateProducts();
     });
 

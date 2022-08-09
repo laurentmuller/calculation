@@ -14,7 +14,7 @@
         /**
          * Initialize captcha.
          *
-         * @return {jQuery} the caller for chaining.
+         * @return {JQuery} the caller for chaining.
          */
         initCaptcha() {
             return this.each(function () {
@@ -51,7 +51,7 @@
         /**
          * Finds the reCaptcha frame within the current element.
          *
-         * @return {jQuery} the frame.
+         * @return {JQuery} the frame.
          */
         findReCaptcha: function () {
             const $element = $(this);
@@ -61,7 +61,7 @@
         /**
          * Finds the color-picker drop-down
          *
-         * @return {jQuery}.
+         * @return {JQuery}.
          */
         findColorPicker() {
             const $element = $(this);
@@ -72,7 +72,7 @@
         /**
          * Remove validation class and error
          *
-         * @return {jQuery} the caller for chaining.
+         * @return {JQuery} the caller for chaining.
          */
         removeValidation: function () {
             return this.each(function () {
@@ -92,6 +92,7 @@
          * @param {boolean} [options.colorPicker]
          * @param {boolean} [options.simpleEditor]
          * @param {function} [options.submitHandler]
+         * @param {Object} [options.rules]
          * @returns the validator.
          */
         initValidator: function (options) {
@@ -171,7 +172,7 @@
             /**
              * Finds the container of the given element.
              *
-             * @param {jQuery} $element - the element to update.
+             * @param {JQuery} $element - the element to update.
              */
             $.validator.prototype.findElement = function ($element) {
                 let $toUpdate = false;
@@ -331,7 +332,7 @@
         /**
          * Reset the form content and the validator (if any).
          *
-         * @return {jQuery} the caller for chaining.
+         * @return {JQuery} the caller for chaining.
          */
         resetValidator: function () {
             const $that = $(this);
@@ -347,7 +348,7 @@
         /**
          * Show a spinner when form is submitted.
          *
-         * @return {jQuery} the caller for chaining.
+         * @return {JQuery} the caller for chaining.
          */
         showSpinner: function() {
             const $this = $(this);

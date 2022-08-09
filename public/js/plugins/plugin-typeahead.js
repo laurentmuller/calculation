@@ -10,6 +10,7 @@
     // Typeahead public class definition
     // ------------------------------------
     const Typeahead = class {
+
         // -----------------------------
         // public functions
         // -----------------------------
@@ -21,64 +22,14 @@
          * @param {Object} [options] - the options.
          */
         constructor(element, options) {
-            const that = this;
-            that.$element = $(element);
-            that.options = $.extend(true, {}, Typeahead.DEFAULTS, options);
-            that.$menu = $(that.options.menu).insertAfter(that.$element);
-
-            // Method overrides
-            that.eventSupported = that.options.eventSupported || that.eventSupported;
-            that.filter = that.options.filter || that.filter;
-            that.highlighter = that.options.highlighter || that.highlighter;
-            that.lookup = that.options.lookup || that.lookup;
-            that.matcher = that.options.matcher || that.matcher;
-            that.render = that.options.render || that.render;
-            that.onSelect = that.options.onSelect || null;
-            that.onError = that.options.onError || null;
-            that.sorter = that.options.sorter || that.sorter;
-            that.select = that.options.select || that.select;
-            that.source = that.options.source || that.source;
-            that.displayField = that.options.displayField;
-            that.valueField = that.options.valueField;
-
-            if (that.options.ajax) {
-                const ajax = that.options.ajax;
-                if (that.isString(ajax)) {
-                    that.ajax = $.extend({}, Typeahead.DEFAULTS.ajax, {
-                        url: ajax
-                    });
-                } else {
-                    if (that.isString(ajax.displayField)) {
-                        that.displayField = that.options.displayField = ajax.displayField;
-                    }
-                    if (that.isString(ajax.valueField)) {
-                        that.valueField = that.options.valueField = ajax.valueField;
-                    }
-                    that.ajax = $.extend({}, Typeahead.DEFAULTS.ajax, ajax);
-                }
-                if (!that.ajax.url) {
-                    that.ajax = null;
-                }
-                if (that.ajax) {
-                    that.ajaxExecuteProxy = function () {
-                        that._ajaxExecute();
-                    };
-                    that.ajaxSuccessProxy = function (data) {
-                        that._ajaxSuccess(data);
-                    };
-                    that.ajaxErrorProxy = function (jqXHR, textStatus, errorThrown) {
-                        that._ajaxError(jqXHR, textStatus, errorThrown);
-                    };
-                }
-                that.query = '';
-            } else {
-                that.source = that.options.source;
-                that.ajax = null;
-            }
-            that.visible = false;
-            that._listen();
+            this.$element = $(element);
+            this.options = $.extend(true, {}, Typeahead.DEFAULTS, options);
+            this._init();
         }
 
+        /**
+         * Destructor.
+         */
         destroy() {
             // remove element handlers
             const that = this;
@@ -303,6 +254,73 @@
         // -----------------------------
 
         /**
+         * Initialize.
+         *
+         * @return {Typeahead} this instance for chaining.
+         * @private
+         */
+        _init() {
+            // menu
+            this.$menu = $(this.options.menu).insertAfter(this.$element);
+
+            // method overrides
+            this.eventSupported = this.options.eventSupported || this.eventSupported;
+            this.filter = this.options.filter || this.filter;
+            this.highlighter = this.options.highlighter || this.highlighter;
+            this.lookup = this.options.lookup || this.lookup;
+            this.matcher = this.options.matcher || this.matcher;
+            this.render = this.options.render || this.render;
+            this.onSelect = this.options.onSelect || null;
+            this.onError = this.options.onError || null;
+            this.sorter = this.options.sorter || this.sorter;
+            this.select = this.options.select || this.select;
+            this.source = this.options.source || this.source;
+            this.displayField = this.options.displayField;
+            this.valueField = this.options.valueField;
+
+            const that = this;
+            if (that.options.ajax) {
+                const ajax = this.options.ajax;
+                if (that._isString(ajax)) {
+                    that.ajax = $.extend({}, Typeahead.DEFAULTS.ajax, {
+                        url: ajax
+                    });
+                } else {
+                    if (that._isString(ajax.displayField)) {
+                        that.displayField = that.options.displayField = ajax.displayField;
+                    }
+                    if (that._isString(ajax.valueField)) {
+                        that.valueField = that.options.valueField = ajax.valueField;
+                    }
+                    that.ajax = $.extend({}, Typeahead.DEFAULTS.ajax, ajax);
+                }
+                if (!that.ajax.url) {
+                    that.ajax = null;
+                }
+
+                if (that.ajax) {
+                    that.ajaxExecuteProxy = function () {
+                        that._ajaxExecute();
+                    };
+                    that.ajaxSuccessProxy = function (data) {
+                        that._ajaxSuccess(data);
+                    };
+                    that.ajaxErrorProxy = function (jqXHR, textStatus, errorThrown) {
+                        that._ajaxError(jqXHR, textStatus, errorThrown);
+                    };
+                }
+                that.query = '';
+            } else {
+                that.source = that.options.source;
+                that.ajax = null;
+            }
+            that.visible = false;
+            that._listen();
+
+            return that;
+        }
+
+        /**
          * Returns if the given event name is supported.
          * @param {string} eventName - the event name.
          * @return {boolean} true if supported.
@@ -472,6 +490,7 @@
 
         /**
          * Highlight the given item.
+         *
          * @param {String} item - the item to highlight.
          *
          * @return {String}
@@ -522,6 +541,7 @@
 
         /**
          * Handle the key event.
+         *
          * @param {Event} e - the event.
          * @private
          */
@@ -530,7 +550,7 @@
             if (!that.visible) {
                 return;
             }
-            switch (e.keyCode) {
+            switch (e.which || e.keyCode) {
                 case 9: // tab
                 case 13: // enter
                 case 27: // escape
@@ -550,17 +570,19 @@
 
         /**
          * Handle the key down event.
+         *
          * @param {Event} e - the event.
          * @private
          */
         _keydown(e) {
-            const that = this;
-            that.suppressKeyPressRepeat = $.inArray(e.keyCode, [40, 38, 9, 13, 27]) !== -1;
-            that._move(e);
+            const key = e.which || e.keyCode;
+            this.suppressKeyPressRepeat = $.inArray(key, [40, 38, 9, 13, 27]) !== -1;
+            this._move(e);
         }
 
         /**
          * Handle the key press event.
+         *
          * @param {Event} e - the event.
          * @private
          */
@@ -573,11 +595,13 @@
 
         /**
          * Handle the key up event.
+         *
          * @param {Event} e - the event.
          * @private
          */
         _keyup(e) {
-            switch (e.keyCode) {
+            const key = e.which || e.keyCode;
+            switch (key) {
                 case 40: // down arrow
                     if (e.ctrlKey && !this.visible && this.query !== '') {
                         this.show();
@@ -611,8 +635,7 @@
         }
 
         /**
-         * Handle thefocus event.
-         * @param {Event} e - the event.
+         * Handle the focus event.
          * @private
          */
         _focus() {
@@ -621,7 +644,6 @@
 
         /**
          * Handle the blur event.
-         * @param {Event} e - the event.
          * @private
          */
         _blur() {
@@ -633,6 +655,7 @@
 
         /**
          * Handle the click event.
+         *
          * @param {Event} e - the event.
          * @private
          */
@@ -644,6 +667,7 @@
 
         /**
          * Handle the mouse enter event.
+         *
          * @param {Event} e - the event.
          * @private
          */
@@ -655,7 +679,6 @@
 
         /**
          * Handle the mouse leave event.
-         * @param {Event} e - the event.
          * @private
          */
         _mouseleave() {

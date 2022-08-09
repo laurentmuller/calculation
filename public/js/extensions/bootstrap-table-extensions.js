@@ -22,11 +22,11 @@
  * @property {string} view - the display mode ('table', 'card' or 'custom').
  * @property {string} searchText - the search text.
  *
- * @typedef {jQuery} jQueryTable - the bootstrap table.
+ * @typedef {JQuery} jQueryTable - the bootstrap table.
  * @property {Options} getOptions - the options.
  * @property {boolean} isCardView - true if card view is displayed.
  * @property {boolean} isCustomView - true if custom view is displayed.
- * @property {jQuery} getCustomView - get the custom view.
+ * @property {JQuery} getCustomView - get the custom view.
  * @property {jQueryTable} enableKeys - enable the key handler.
  * @property {jQueryTable} disableKeys - disable the key handler.
  */
@@ -124,7 +124,7 @@ $.fn.extend({
      * Initialize the table-boostrap.
      *
      * @param {object} options - the options to merge with default.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     initBootstrapTable: function (options) {
         'use strict';
@@ -417,7 +417,7 @@ $.fn.extend({
     /**
      * Gets the selected row.
      *
-     * @return {jQuery} the selected row, if any; null otherwise.
+     * @return {JQuery} the selected row, if any; null otherwise.
      */
     getSelection: function () {
         'use strict';
@@ -440,7 +440,7 @@ $.fn.extend({
     /**
      * Gets the custom view container.
      *
-     * @return {jQuery} the custom view container, if displayed, null otherwise.
+     * @return {JQuery} the custom view container, if displayed, null otherwise.
      */
     getCustomView: function () {
         'use strict';
@@ -455,7 +455,7 @@ $.fn.extend({
     /**
      * Save parameters to the session.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     saveParameters: function () {
         'use strict';
@@ -471,7 +471,7 @@ $.fn.extend({
      * Update the href attribute of the actions.
      *
      * @param {array} rows - the rendered data.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     updateHref: function (rows) {
         'use strict';
@@ -519,7 +519,7 @@ $.fn.extend({
     /**
      * Update this card view UI.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     updateCardView: function () {
         'use strict';
@@ -577,7 +577,7 @@ $.fn.extend({
      * Refresh/reload the remote server data.
      *
      * @param {object} [options] - the refresh options.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     refresh: function (options) {
         'use strict';
@@ -588,7 +588,7 @@ $.fn.extend({
      * Reset the search text.
      *
      * @param {string} [text] - the optional search text.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     resetSearch: function (text) {
         'use strict';
@@ -599,7 +599,7 @@ $.fn.extend({
      * Refresh the table options.
      *
      * @param {Object} [options] - the options to refresh.
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     refreshOptions: function (options) {
         'use strict';
@@ -609,7 +609,7 @@ $.fn.extend({
     /**
      * Toggle the card/table view.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     toggleView: function () {
         'use strict';
@@ -619,7 +619,7 @@ $.fn.extend({
     /**
      * Toggles the view between the table and the custom view.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     toggleCustomView: function () {
         'use strict';
@@ -630,7 +630,7 @@ $.fn.extend({
      * Toggles the display mode.
      *
      * @param {string} mode - the display mode to set ('table', 'card' or 'custom').
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     setDisplayMode: function (mode) {
         'use strict';
@@ -684,7 +684,7 @@ $.fn.extend({
     /**
      * Highlight matching text.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     highlight: function () {
         'use strict';
@@ -770,7 +770,7 @@ $.fn.extend({
      * @param {string} sortName - the sort field.
      * @param {string} sortOrder - the sort order ('asc' or 'desc').
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     sort: function (sortName, sortOrder) {
         'use strict';
@@ -852,7 +852,7 @@ $.fn.extend({
      * Finds an action for the given selector
      *
      * @param {string} actionSelector - the action selector.
-     * @return {jQuery} the action, if found; null otherwise.
+     * @return {JQuery} the action, if found; null otherwise.
      */
     findAction: function (actionSelector) {
         'use strict';
@@ -904,7 +904,7 @@ $.fn.extend({
     /**
      * Enable the key handler.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     enableKeys: function () {
         'use strict';
@@ -973,7 +973,7 @@ $.fn.extend({
     /**
      * Disable the key handler.
      *
-     * @return {jQuery} this instance for chaining.
+     * @return {JQuery} this instance for chaining.
      */
     disableKeys: function () {
         'use strict';

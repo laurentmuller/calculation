@@ -31,7 +31,7 @@ function setDefaultValues() {
 function displayNotification() {
     'use strict';
     // get random text
-    const title = $('.card-title').text();
+    let title = $('.card-title').text();
     const url = $("form").data("random");
     $.getJSON(url, function (response) {
         if (response.result && response.content) {

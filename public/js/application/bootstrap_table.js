@@ -136,7 +136,7 @@ function styleTextMuted(row, index) { // jshint ignore:line
 /**
  * Returns if the current row is rendered for the connected user
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -150,7 +150,7 @@ function isConnectedUser($table, row) {
 /**
  * Returns if the current row is rendered for the original connected user
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -164,10 +164,10 @@ function isOrignalUser($table, row) {
 /**
  * Update the user message action.
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateUserMessageAction($table, row, _$element, $action) {
     'use strict';
@@ -180,10 +180,10 @@ function updateUserMessageAction($table, row, _$element, $action) {
 /**
  * Update the user delete action.
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateUserDeleteAction($table, row, _$element, $action) {
     'use strict';
@@ -196,10 +196,10 @@ function updateUserDeleteAction($table, row, _$element, $action) {
 /**
  * Update the switch user action.
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
@@ -219,11 +219,11 @@ function updateUserSwitchAction($table, row, _$element, $action) {
 /**
  * Update the reset request password user action.
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {string} row.resetPassword - the reset password value
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateUserResetAction($table, row, _$element, $action) {
     'use strict';
@@ -237,15 +237,15 @@ function updateUserResetAction($table, row, _$element, $action) {
 /**
  * Update the search action.
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {number} row.id - the row identifier.
  * @param {number} row.type - the entity type.
  * @param {boolean} row.allowShow - the show granted.
  * @param {boolean} row.allowEdit - the  edit granted.
  * @param {boolean} row.allowDelete - the deleted granted.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
@@ -272,10 +272,10 @@ function updateSearchAction($table, row, _$element, $action) {
 /**
  * Update the edit calculation action.
  *
- * @param {jQuery} _$table - the parent table.
+ * @param {JQuery} _$table - the parent table.
  * @param {Object} row - the row data.
- * @param {jQuery} $element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} $element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
@@ -294,10 +294,10 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
 /**
  * Update the export calculation action.
  *
- * @param {jQuery} _$table - the parent table.
+ * @param {JQuery} _$table - the parent table.
  * @param {Object} _row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
@@ -308,10 +308,10 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 /**
  * Update the task compute action.
  *
- * @param {jQuery} _$table - the parent table.
+ * @param {JQuery} _$table - the parent table.
  * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} _$element - the table row.
+ * @param {JQuery} $action - the action to update
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
@@ -326,7 +326,7 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
  * Update the show entity action.
  *
  * @param {Object} row - the row data.
- * @param {jQuery} $action - the action to update
+ * @param {JQuery} $action - the action to update
  * @param {string} propertyName -  the property name to get from row.
  */
 function updateShowEntityAction(row, $action, propertyName) {
@@ -714,9 +714,6 @@ $.fn.extend({
     if ($pageButton.length) {
         $pageButton.initDropdown().on('input', function () {
             const pageSize = $pageButton.getDataValue();
-            if (pageSize === 'all') {
-
-            }
             $table.refresh({
                 pageSize: pageSize
             });

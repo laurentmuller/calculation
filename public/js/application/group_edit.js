@@ -48,7 +48,7 @@ function getMinMargin() {
 /**
  * Adds a new margin row.
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  */
 function addMargin($table) {
     'use strict';
@@ -80,7 +80,7 @@ function addMargin($table) {
 /**
  * Remove the margin.
  *
- * @param {jQuery} $caller - the caller.
+ * @param {JQuery} $caller - the caller.
  */
 function removeMargin($caller) {
     'use strict';
@@ -93,7 +93,7 @@ function removeMargin($caller) {
 /**
  * Sorts the margins.
  *
- * @param {jQuery} $table - the parent table.
+ * @param {JQuery} $table - the parent table.
  */
 function sortMargins($table) {
     'use strict';

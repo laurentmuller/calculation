@@ -11,6 +11,16 @@
     // ----------------------------------------------
     const Simulate = class {
 
+        // -----------------------------
+        // public functions
+        // -----------------------------
+
+        /**
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
+         */
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, Simulate.DEFAULTS, options);
@@ -25,6 +35,10 @@
             $element.removeData('simulate');
         }
 
+        // -----------------------------
+        // private functions
+        // -----------------------------
+
         _init() {
             const that = this;
             that.$simulate = that.$element.find(that.options.simulateSelector);
@@ -37,7 +51,7 @@
             }
         }
 
-        _onInput () {
+        _onInput() {
             if (this.$simulate.isChecked()) {
                 this.$confirm.toggleDisabled(true).removeValidation();
                 if (this.options.uncheck) {

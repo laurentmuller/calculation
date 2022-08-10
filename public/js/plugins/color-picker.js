@@ -16,7 +16,10 @@
         // -----------------------------
 
         /**
-         * Constructor.
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
             this.$element = $(element);
@@ -292,7 +295,7 @@
             const count = this.$palette.find('.btn-color').length;
             let index = selection.row * this.cols + selection.col;
 
-            switch (e.which || e.keyCode) {
+            switch (e.which) {
                 case 35: // end
                     selection.col = lastCol;
                     if (e.ctrlKey || selection.row * cols + selection.col >= count) {

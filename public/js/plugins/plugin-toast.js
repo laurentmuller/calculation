@@ -21,7 +21,7 @@
          * @param {string} type - The type.
          * @param {string} message - The message.
          * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         notify: function (type, message, title, options) {

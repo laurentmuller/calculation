@@ -14,6 +14,13 @@
         // -----------------------------
         // public functions
         // -----------------------------
+
+        /**
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
+         */
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, CellEdit.DEFAULTS, this.$element.data(), options);

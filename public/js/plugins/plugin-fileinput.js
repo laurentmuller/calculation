@@ -10,6 +10,12 @@
     // ------------------------------------
     const FileInput = class {
 
+        /**
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
+         */
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend({}, FileInput.DEFAULTS, options);

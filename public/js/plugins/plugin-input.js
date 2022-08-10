@@ -15,7 +15,10 @@
         // -----------------------------
 
         /**
-         * Constructor.
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
             this.$element = $(element);

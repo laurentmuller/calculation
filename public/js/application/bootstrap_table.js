@@ -240,7 +240,7 @@ function updateUserResetAction($table, row, _$element, $action) {
  * @param {JQuery} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {number} row.id - the row identifier.
- * @param {number} row.type - the entity type.
+ * @param {string} row.type - the entity type.
  * @param {boolean} row.allowShow - the show granted.
  * @param {boolean} row.allowEdit - the  edit granted.
  * @param {boolean} row.allowDelete - the deleted granted.

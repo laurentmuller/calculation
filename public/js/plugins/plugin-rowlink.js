@@ -32,6 +32,13 @@
         // -----------------------------
         // public functions
         // -----------------------------
+
+        /**
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
+         */
         constructor(element, options) {
             const that = this;
             that.$element = $(element);

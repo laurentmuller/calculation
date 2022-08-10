@@ -19,7 +19,7 @@
          * Constructor.
          *
          * @param {HTMLElement} element - the element to handle.
-         * @param {Object} [options] - the options.
+         * @param {Object|string} [options] - the options.
          */
         constructor(element, options) {
             this.$element = $(element);

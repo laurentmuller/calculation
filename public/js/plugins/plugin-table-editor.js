@@ -6,42 +6,32 @@
 (function ($) {
     'use strict';
 
-    /**
-     * Table editor.
-     */
+    // -----------------------------------
+    // Table editor public class definition
+    // -----------------------------------
     const TableEditor = class {
+
+        // -----------------------------
+        // public functions
+        // -----------------------------
+
+        /**
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
+         */
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, TableEditor.DEFAULTS, options);
-            this.options.dotCellClass = this.space2Dot(this.options.cellClass);
-            this.options.dotInputClass = this.space2Dot(this.options.inputClass);
-            this.init();
+            this.options.dotCellClass = this._space2Dot(this.options.cellClass);
+            this.options.dotInputClass = this._space2Dot(this.options.inputClass);
+            this._init();
         }
 
-        init() {
-            // proxies
-            const that = this;
-            that.clickProxy = function (e) {
-                that.click(e);
-            };
-            that.keydownProxy = function (e) {
-                that.keydown(e);
-            };
-            that.inputProxy = function (e) {
-                that.input(e);
-            };
-            that.blurProxy = function (e) {
-                that.blur(e);
-            };
-
-            // add handlers
-            const options = this.options;
-            that.$element.on('click', options.dotCellClass, that.clickProxy);
-            that.$element.on('keydown', options.dotInputClass, that.keydownProxy);
-            that.$element.on('input', options.dotInputClass, that.inputProxy);
-            that.$element.on('blur', options.dotInputClass, that.blurProxy);
-        }
-
+        /**
+         * Destructor.
+         */
         destroy() {
             // remove handlers
             const options = this.options;
@@ -54,7 +44,41 @@
             this.$element.removeData('tableEditor');
         }
 
-        click(e) {
+        // -----------------------------
+        // private functions
+        // -----------------------------
+
+        _init() {
+            // proxies
+            const that = this;
+            that.clickProxy = function (e) {
+                that._click(e);
+            };
+            that.keydownProxy = function (e) {
+                that._keydown(e);
+            };
+            that.inputProxy = function (e) {
+                that._input(e);
+            };
+            that.blurProxy = function (e) {
+                that._blur(e);
+            };
+
+            // add handlers
+            const options = this.options;
+            that.$element.on('click', options.dotCellClass, that.clickProxy);
+            that.$element.on('keydown', options.dotInputClass, that.keydownProxy);
+            that.$element.on('input', options.dotInputClass, that.inputProxy);
+            that.$element.on('blur', options.dotInputClass, that.blurProxy);
+        }
+
+        /**
+         * Handles the click event.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _click(e) {
             const options = this.options;
             const $this = $(e.currentTarget);
 
@@ -85,7 +109,7 @@
             $this.addClass('p-0').html($input);
 
             // handler?
-            if (this.isFunction(this.options.onCreateInput)) {
+            if (this._isFunction(this.options.onCreateInput)) {
                 this.options.onCreateInput(e, $input);
             }
 
@@ -93,66 +117,100 @@
             $input.trigger('select').trigger('focus');
         }
 
-        keydown(e) {
+        /**
+         * Handles the key down event.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _keydown(e) {
             const $input = $(e.currentTarget);
-            const keyCode = e.keyCode || e.which;
-
-            switch (keyCode) {
+            switch (e.which) {
             case 13: // enter
                 e.preventDefault();
-                this.save(e, $input);
+                this._save(e, $input);
                 break;
-
             case 27:// escape
                 e.preventDefault();
-                this.update(e, $input);
+                this._update(e, $input);
                 break;
-
             default:
-                if (this.isFunction(this.options.onKeyDown)) {
+                if (this._isFunction(this.options.onKeyDown)) {
                     this.options.onKeyDown(e, $input);
                 }
                 break;
             }
         }
 
-        input(e) {
-            if (this.isFunction(this.options.onInput)) {
+        /**
+         * Handles the input event.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _input(e) {
+            if (this._isFunction(this.options.onInput)) {
                 this.options.onInput(e, $(e.currentTarget));
             }
         }
 
-        blur(e) {
-            this.update(e, $(e.currentTarget));
+        /**
+         * Handles the blur event.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _blur(e) {
+            this._update(e, $(e.currentTarget));
         }
 
-        save(e, $input) {
-            if (this.isFunction(this.options.onSave)) {
+        _save(e, $input) {
+            if (this._isFunction(this.options.onSave)) {
                 this.options.onSave(e, $input);
             }
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-                this.update(e, $input, $input.val());
+                this._update(e, $input, $input.val());
             }
         }
 
-        update(e, $input, content) {
-            const $parent = $input.parents('td');
-            if (this.isFunction(this.options.onRemoveInput)) {
+        /**
+         * Update the cell content.
+         * @param {Event} e - the event.
+         * @param {JQuery} $input - the input.
+         * @param {String} [content] - the input content.
+         * @private
+         */
+        _update(e, $input, content) {
+            if (this._isFunction(this.options.onRemoveInput)) {
                 this.options.onRemoveInput(e, $input);
             }
+            const $parent = $input.parents('td');
             content = content || $input.data('content');
             $parent.html(content).removeClass('p-0');
             $input.remove();
         }
 
-        space2Dot(className) {
-            // remove consecutive spaces
+        /**
+         * Remove consecutive spaces.
+         *
+         * @param {string} className
+         * @return {string}
+         * @private
+         */
+        _space2Dot(className) {
             className = className.replaceAll(/\s{2,}/g, ' ').trim();
             return '.' + className.replaceAll(' ', '.').trim();
         }
 
-        isFunction(value) {
+        /**
+         * Returns if the given value is a function.
+         *
+         * @param {*} value - the value to be tested.
+         * @return {boolean} true if a function.
+         * @private
+         */
+        _isFunction(value) {
             return typeof value === 'function' &&  value !== $.noop;
         }
     };
@@ -169,8 +227,11 @@
         'onSave': $.noop,
     };
 
+    // -----------------------------------
     // TableEditor plugin definition
+    // -----------------------------------
     const oldTableEditor = $.fn.tableEditor;
+
     $.fn.tableEditor = function (options) {
         return this.each(function () {
             const $this = $(this);

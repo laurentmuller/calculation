@@ -11,7 +11,7 @@
         const $this = $(this);
         const $selected = $this.getSelectedOption();
 
-        $('form').attr('action', $this.val());
+        $('form').attr('action', String($this.val()));
         $('#form_entity_help').text($selected.data('help'));
     });
 

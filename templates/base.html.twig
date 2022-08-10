@@ -79,6 +79,8 @@
     {{ asset_js('js/core_common.js') }}
 {% endif %}
 {% endblock %}
+{# cookie_banner #}
+{% block cookie_banner -%}{% include 'cookie_banner.html.twig' %}{%- endblock %}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
 </body>
 </html>

@@ -79,7 +79,7 @@ function compute() {
  * Format the currency entry.
  *
  * @param {Object} currency - the currency data.
- * @returns the formated currency.
+ * @returns the formatted currency.
  */
 function formatCurrency(currency) {
     'use strict';

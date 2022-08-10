@@ -73,16 +73,18 @@
             that._updateMenus();
 
             // toggle sidebar if too small
-            if (that._isClientTooSmall() && that._isSideBarVisible()) {
+            if (that._isClientTooSmall() && !that._isSideBarHidden()) {
                 $(window).trigger('resize');
             }
 
             // show the sidebar, if hidden, after 1 second
             that.$sidebarToggle.hover(function (e) {
-                if (!that._isSideBarVisible()) {
+                if (that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
                         that.$element.removeTimer();
-                        that._toggleSidebar(e);
+                        if (that._isSideBarHidden()) {
+                            that._toggleSidebar(e);
+                        }
                     }, 1000);
                 }
             }, function () {
@@ -122,7 +124,7 @@
          * @private
          */
         _hideSidebar(e) {
-            if (this._isSideBarVisible()) {
+            if (!this._isSideBarHidden()) {
                 this._toggleSidebar(e);
                 this.wasHidden = true;
             }
@@ -135,7 +137,7 @@
          * @private
          */
         _showSidebar(e) {
-            if (!this._isSideBarVisible()) {
+            if (this._isSideBarHidden()) {
                 this._toggleSidebar(e);
                 this.wasHidden = false;
             }
@@ -153,7 +155,7 @@
             }
             $.hideDropDownMenus();
             this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
-            const isHidden = !this._isSideBarVisible();
+            const isHidden = this._isSideBarHidden();
             const $toggle = this.$sidebarHorizontal.find('.nav-sidebar-horizontal');
             if (isHidden) {
                 $toggle.show(350);
@@ -192,7 +194,7 @@
          * @private
          */
         _updateSidebar() {
-            const isHidden = !this._isSideBarVisible();
+            const isHidden = this._isSideBarHidden();
             const title = isHidden ? this.options.showSidebar : this.options.hideSidebar;
             this.$sidebarToggle.attr({
                 'aria-expanded': String(!isHidden),
@@ -233,13 +235,13 @@
         }
 
         /**
-         * Returns if the sidebar is visible.
+         * Returns if the sidebar is hidden.
          *
-         * @return {boolean} true if visible; false otherwise.
+         * @return {boolean} true if hidden; false if visible.
          * @private
          */
-        _isSideBarVisible() {
-            return !this.$element.hasClass('sidebar-hide');
+        _isSideBarHidden() {
+            return this.$element.hasClass('sidebar-hide');
         }
 
         /**
@@ -248,7 +250,7 @@
          */
         _getState() {
             const menus = {
-                'menu_sidebar_hide': !this._isSideBarVisible()
+                'menu_sidebar_hide': this._isSideBarHidden()
             };
             let visible;
             let wasVisible = false;

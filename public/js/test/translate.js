@@ -35,7 +35,7 @@ function handleError(response) {
 /**
  * Translate.
  *
- * @param form form - the submitted form.
+ * @param {HTMLElement} form - the submitted form.
  */
 function translate(form) {
     'use strict';

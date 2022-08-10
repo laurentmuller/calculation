@@ -23,13 +23,13 @@
     <div class="col">
         {%- include 'index/panel_table.html.twig' -%}
         {% if user_service.panelState %}
-        {%- include 'index/panel_state.html.twig' -%}
+            {%- include 'index/panel_state.html.twig' -%}
         {% endif %}
         {% if user_service.panelMonth %}
-        {%- include 'index/panel_month.html.twig' -%}
+            {%- include 'index/panel_month.html.twig' -%}
         {% endif %}
         {% if user_service.panelCatalog %}
-        {%- include 'index/panel_catalog.html.twig' -%}
+            {%- include 'index/panel_catalog.html.twig' -%}
         {% endif %}
         {%- include 'user/user_switch.html.twig' -%}
     </div>
@@ -57,6 +57,5 @@
 {% else %}
 {{ asset_js('js/index.js') }}
 {% endif %}
-{% include 'cookie_banner.html.twig' %}
 {% endif %}
 {% endblock %}

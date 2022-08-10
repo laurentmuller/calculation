@@ -16,8 +16,8 @@ function getTimeTransform(value, maximum) {
 /**
  * Update UI.
  *
- * @param {DateTimeFormat} dateFormat - the format used for the date.
- * @param {DateTimeFormat} timeFormat - the format used for the time.
+ * @param {intl.DateTimeFormat} dateFormat - the format used for the date.
+ * @param {intl.DateTimeFormat} timeFormat - the format used for the time.
  */
 function updateTime(dateFormat, timeFormat) {
     'use strict';

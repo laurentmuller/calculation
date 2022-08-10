@@ -6,9 +6,9 @@
 (function (window, $) {
     'use strict';
 
-    /**
-     * Shared Instance.
-     */
+    // ------------------------------------
+    // Toaster public class definition
+    // ------------------------------------
     window.Toaster = {
 
         // ------------------------
@@ -28,8 +28,8 @@
             // merge options
             const settings = $.extend({}, this.DEFAULTS, options);
             settings.closeButton = settings.closeButton || !settings.autohide;
-            settings.position = this.checkPosition(settings.position);
-            settings.type = this.checkType(type);
+            settings.position = this._checkPosition(settings.position);
+            settings.type = this._checkType(type);
             settings.message = message;
             settings.title = title;
             if (!settings.title && settings.displaySubtitle) {
@@ -39,11 +39,11 @@
             }
 
             // create DOM
-            const $container = this.getContainer(settings);
-            const $title = this.createTitle(settings);
-            const $message = this.createMessage(settings);
-            const $progress = this.createProgressBar(settings);
-            const $toast = this.createToast(settings);
+            const $container = this._getContainer(settings);
+            const $title = this._createTitle(settings);
+            const $message = this._createMessage(settings);
+            const $progress = this._createProgressBar(settings);
+            const $toast = this._createToast(settings);
 
             // save identifier
             this.containerId = $container.attr('id');
@@ -56,7 +56,7 @@
             if ($progress) {
                 $toast.append($progress);
             }
-            if (this.isPrepend(settings)) {
+            if (this._isPrepend(settings.position)) {
                 $container.prepend($toast);
             } else {
                 $container.append($toast);
@@ -69,16 +69,16 @@
                 const end = background.indexOf(')', start + 1);
                 if (start !== -1 && end !== -1) {
                     const rgb = background.substring(start + 1, end).split(',').splice(0, 3).join(',');
-                    $toast.css('background-color', 'rgb(' + rgb + ')');
+                    $toast.css('background-color', `rgb(${rgb})`);
                 }
             }
 
             // show
-            return this.showToast($toast, settings);
+            return this._showToast($toast, settings);
         },
 
         /**
-         * Display a toast with info style.
+         * Display a toast with information style.
          *
          * @param {string} message - The message.
          * @param {string} title - The title.
@@ -248,7 +248,7 @@
             progress: 1,
 
             // the toast z-index
-            zindex: 3,
+            zIndex: 3,
 
             // auto hide after delay
             autohide: true,
@@ -266,8 +266,9 @@
          *
          * @param {string} type - The type to validate.
          * @returns {string} A valid type.
+         * @private
          */
-        checkType: function (type) {
+        _checkType: function (type) {
             const types = this.NotificationTypes;
             switch (type) {
                 case types.INFO:
@@ -288,8 +289,9 @@
          *
          * @param {string} position - The position to validate.
          * @returns {string} A valid position.
+         * @private
          */
-        checkPosition: function (position) {
+        _checkPosition: function (position) {
             const positions = this.NotificationPositions;
             switch (position) {
                 case positions.TOP_LEFT:
@@ -310,12 +312,13 @@
         /**
          * Returns if toast must be prepended or appended to the list; depending on the position.
          *
-         * @param {Object} options - The toast options.
+         * @param {string} position - The toast position.
          * @returns {boolean} true to prepend, false to append.
+         * @private
          */
-        isPrepend: function (options) {
+        _isPrepend: function (position) {
             const positions = this.NotificationPositions;
-            switch (options.position) {
+            switch (position) {
                 case positions.TOP_LEFT:
                 case positions.TOP_CENTER:
                 case positions.TOP_RIGHT:
@@ -333,8 +336,9 @@
          *
          * @param {Object} options - The toast options.
          * @returns {JQuery} The toasts container.
+         * @private
          */
-        getContainer: function (options) {
+        _getContainer: function (options) {
             // check if div is already created
             const id = options.containerId + options.position;
             const $div = $('#' + id);
@@ -344,7 +348,7 @@
 
             // global style
             const css = {
-                'z-index': options.zindex
+                'z-index': options.zIndex
             };
 
             // margins
@@ -375,8 +379,9 @@
          *
          * @param {Object} options - The toast options.
          * @returns {JQuery} The div title or null if no title.
+         * @private
          */
-        createTitle: function (options) {
+        _createTitle: function (options) {
             if (options.title || options.icon !== false || options.displayClose || options.subtitle && options.displaySubtitle) {
                 // header
                 const clazz = 'toast-header toast-header-' + options.type;
@@ -385,7 +390,7 @@
                 });
 
                 // icon
-                const $icon = this.createIcon(options);
+                const $icon = this._createIcon(options);
                 if ($icon) {
                     $div.append($icon);
                 }
@@ -398,13 +403,13 @@
                 $div.append($title);
 
                 // sub-title
-                const $subtitle = this.createSubtitle(options);
+                const $subtitle = this._createSubtitle(options);
                 if ($subtitle) {
                     $div.append($subtitle);
                 }
 
                 // close button
-                const $close = this.createCloseButton(options);
+                const $close = this._createCloseButton(options);
                 if ($close) {
                     $div.append($close);
                 }
@@ -419,8 +424,9 @@
          *
          * @param {Object} options - The options.
          * @returns {JQuery} The icon or null if no icon.
+         * @private
          */
-        createIcon: function (options) {
+        _createIcon: function (options) {
             if (options.icon === false) {
                 return null;
             } else if ($.isString(options.icon)) {
@@ -464,11 +470,12 @@
          *
          * @param {Object} options - The toast options.
          * @returns {JQuery} The subtitle or null if no subtitle defined.
+         * @private
          */
-        createSubtitle: function (options) {
+        _createSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
-                return $('<span/>', {
-                    'class': 'small mt-1 ml-2',
+                return $('<small/>', {
+                    'class': 'mt-1 ml-2',
                     'html': options.subtitle
                 });
             }
@@ -480,8 +487,9 @@
          *
          * @param {Object} options - The toast options.
          * @returns {JQuery} The close button or null if no button.
+         * @private
          */
-        createCloseButton: function (options) {
+        _createCloseButton: function (options) {
             if (options.displayClose) {
                 const $span = $('<span />', {
                     'aria-hidden': 'true',
@@ -508,8 +516,9 @@
          *
          * @param {Object} options - The toast options.
          * @returns {JQuery} The div message.
+         * @private
          */
-        createMessage: function (options) {
+        _createMessage: function (options) {
             return $('<div/>', {
                 'class': 'toast-body',
                 'html': options.message
@@ -521,8 +530,9 @@
          *
          * @param {Object} options - The toast options.
          * @returns {JQuery} The div toast.
+         * @private
          */
-        createToast: function (options) {
+        _createToast: function (options) {
             return $('<div/>', {
                 'role': 'alert',
                 'aria-atomic': 'true',
@@ -542,8 +552,9 @@
          *
          * @param {Object} options - The toast options.
          * @returns {JQuery} The progress bar or null if no progress.
+         * @private
          */
-        createProgressBar: function (options) {
+        _createProgressBar: function (options) {
             if (!options.progress) {
                 return null;
             }
@@ -571,8 +582,9 @@
          * @param {JQuery} $toast - The toast to show.
          * @param {Object} options - The toast options.
          * @return {Object} This instance.
+         * @private
          */
-        showToast: function ($toast, options) {
+        _showToast: function ($toast, options) {
             const that = this;
             $toast.toast({
                 delay: options.timeout,
@@ -583,7 +595,7 @@
                     const endTime = new Date().getTime() + timeout;
                     const $progress = $toast.find('.progress-bar');
                     if ($progress.length) {
-                        $toast.createInterval(that.updateProgress, 10, $progress, endTime, timeout);
+                        $toast.createInterval(that._updateProgress, 10, $progress, endTime, timeout);
                     }
                 }
             }).on('hide.bs.toast', function () {
@@ -596,6 +608,7 @@
                     options.onHide(options);
                 }
             }).toast('show');
+
             return that;
         },
 
@@ -605,13 +618,14 @@
          * @param {JQuery} $progress - The progress bar to update.
          * @param {Number} endTime - The end time.
          * @param {Number} timeout - The time-out.
+         * @private
          */
-        updateProgress: function ($progress, endTime, timeout) {
+        _updateProgress: function ($progress, endTime, timeout) {
             const time = new Date().getTime();
             const delta = (endTime - time) / timeout;
-            const percent = 100 - delta * 100;
+            const percent = Math.min(100 - delta * 100, 100);
             $progress.css('width', `${percent}%`);
-            $progress.parent().attr('aria-valuenow', percent);
+            $progress.attr('aria-valuenow', percent);
             if (percent >= 100) {
                 $progress.parents('.toast').removeInterval();
             }

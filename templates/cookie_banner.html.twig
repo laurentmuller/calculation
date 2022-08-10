@@ -1,16 +1,17 @@
 {% if not app.request.cookies.has('POLICY_ACCEPTED') %}
 {{ asset_js('js/plugins/cookie-banner.js', {
-    'id': "cookiebanner",
+    'id': "cookie-banner",
+    'data-display-banner': (displayBanner is defined ? displayBanner : true)|json_encode,
     'data-cookie-name': 'POLICY_ACCEPTED',
     'data-cookie-same-site': 'lax',
     'data-cookie-path': cookie_path,
     'data-cookie-expire': 'now'|date_modify('+1 month')|date('r'),
     'data-message': 'cookie_banner.message'|trans,
     'data-link-message': 'cookie_banner.link'|trans,
-    'data-link-title': 'about.policy'|trans,
+    'data-link-title': 'cookie_banner.link_title'|trans,
     'data-close-message': 'cookie_banner.close'|trans,
     'data-close-title': 'cookie_banner.close_title'|trans,
-    'data-link-url': link_url is defined ? link_url : path('about_policy'),
+    'data-link-url': path('about_policy'),
     'data-link-target': '_self',
     'data-link-rel': 'license'
     }) }}

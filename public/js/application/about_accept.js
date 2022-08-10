@@ -5,12 +5,9 @@
  */
 (function ($) {
     'use strict';
-    const $close = $('#cookie-banner-close');
-    if ($close.length && $.cookiebanner) {
+    if ($.cookiebanner) {
         $('.btn-accept').on('click', function () {
-            // simulate the close button click
-            $close.trigger('click');
-            // goto home page
+            $.cookiebanner.accept();
             const target = $(this).data('target');
             if (target) {
                 window.location.assign(target);

@@ -317,6 +317,7 @@ cookie_banner:
   close: J'accepte
   close_title: Accepter la politique de confidentialité
   link: En savoir plus
+  link_title: Afficher la politique de confidentialité
   message: Afin de vous proposer le meilleur service possible, ce site utilise des
     cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
 customer:

@@ -61,6 +61,8 @@ final class FunctionExtension extends AbstractExtension
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
+        #[Autowire('%kernel.debug%')]
+        private readonly bool $debug,
         private readonly UploaderHelper $helper,
         private readonly UrlGeneratorService $generator,
         private readonly TranslatorInterface $translator
@@ -193,7 +195,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function assetVersion(?string $path): int
     {
-        if (null !== $file = $this->getRealPath($path)) {
+        if (!$this->debug && null !== $file = $this->getRealPath($path)) {
             return (int) \filemtime($file);
         }
 
@@ -246,7 +248,6 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('asset_css', $this->assetCss(...), $options),
             new TwigFunction('asset_image', $this->assetImage(...), $options),
             new TwigFunction('asset_image_user', $this->assetImageUser(...), $options),
-
             new TwigFunction('asset_versioned', $this->versionedAsset(...), $options),
             // routes
             new TwigFunction('cancel_url', $this->cancelUrl(...)),

@@ -184,7 +184,6 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($user)) {
             $this->warningTrans('user.message.connected');
 
-            // redirect
             return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
 

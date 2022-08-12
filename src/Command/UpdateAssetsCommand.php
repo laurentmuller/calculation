@@ -432,11 +432,11 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     private function findStyles(string $content, string $style): array|false
     {
         $matches = [];
-        $pattern = '/^' . \preg_quote($style, '/') . '\s+\{([^}]+)\}/m';
+        $pattern = '/^\s{0,2}' . \preg_quote($style, '/') . '\s+\{([^}]+)\}/m';
         if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER))) {
             $result = [];
             foreach ($matches as $matche) {
-                $result[] = $matche[0];
+                $result[] = \ltrim($matche[0]);
             }
 
             return $result;
@@ -648,33 +648,37 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             '.context-menu-list',
             ['background-color', 'border', 'border-radius', 'color', 'font-size']
         );
-
         $toAppend .= $this->copyStyleEntries(
             $content,
             '.dropdown-item',
             '.context-menu-item',
             ['background-color', 'color', 'font-size', 'font-weight', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top']
         );
-
         $toAppend .= $this->copyStyleEntries(
             $content,
             '.dropdown-item:hover, .dropdown-item:focus',
             '.context-menu-hover',
             ['background', 'background-color', 'color', 'text-decoration']
         );
-
         $toAppend .= $this->copyStyleEntries(
             $content,
             '.dropdown-divider',
             '.context-menu-separator',
             ['border-top']
         );
-
         $toAppend .= $this->copyStyleEntries(
             $content,
             '.dropdown-header',
             '.context-menu-header',
             ['color', 'display', 'font-size', 'margin-bottom', 'white-space']
+        );
+
+        // simple editor
+        $toAppend .= $this->copyStyleEntries(
+            $content,
+            '.form-control',
+            '.simple-editor',
+            ['color', 'background-color']
         );
 
         if (empty($toAppend)) {

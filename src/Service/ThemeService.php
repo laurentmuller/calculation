@@ -270,6 +270,10 @@ class ThemeService implements ServiceSubscriberInterface
      */
     public function isDarkTheme(?Request $request = null): bool
     {
+        if (null !== ($request = $this->getRequest($request))) {
+            return $this->getCookieBoolean($request, self::KEY_DARK);
+        }
+
         return $this->getCurrentTheme($request)->isDark();
     }
 

@@ -157,39 +157,6 @@ function formatProduct(product) {
     return $text;
 }
 
-function initPercent() {
-    'use strict';
-    const regExp = /\d/;
-    const validate = function (e) {
-        if (e.key.length > 1) {
-            return true;
-        } else if (e.key === '-') {
-            window.console.log(e.currentTarget.value);
-            const $target = $(e.currentTarget);
-            const value = $target.val();
-            if (value.indexOf('-') === -1) {
-                if (value.length === 0) {
-                    return true;
-                }
-                //return true;
-                $target.val(e.key + value);
-            }
-            // if (value.indexOf('-') === -1) {
-            //     //$target.val(value.length ? e.key + value : e.key);
-            //     $target.val('-' + value);
-            // }
-            return false;
-        } else {
-            return regExp.test(e.key);
-        }
-    };
-    $('input[type="number"][step="1"]').on('keyup', function (e) {
-        if (!validate(e)) {
-            e.preventDefault();
-        }
-    });
-}
-
 /**
  * Ready function
  */
@@ -266,5 +233,4 @@ function initPercent() {
     $('.btn-clear').on('click', function () {
         $(this).parents('.form-group').find('select').val('').trigger('change').focus();
     });
-    initPercent();
 }(jQuery));

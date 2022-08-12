@@ -259,7 +259,7 @@
 {%- set actions = form.vars.actions|default([]) -%}
 <div class="simple-editor border" id="{{ editor_id }}" name="{{ editor_id }}">
     {% if groups|default([])|length -%}
-    <div class="simple-editor-toolbar btn-toolbar d-print-none" role="toolbar" >
+    <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar" >
         {% for group, actions in groups %}
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
         {% for action in actions %}

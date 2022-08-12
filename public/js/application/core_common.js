@@ -144,6 +144,63 @@ function initSidebar() {
 }
 
 /**
+ * Initialize the switch light/dark theme.
+ */
+function initSwitchTheme() {
+    'use strict';
+    const $theme = $('#theme');
+    const $button = $('.dropdown-item-theme');
+    if ($theme.length === 0 || $button.length === 0) {
+        return;
+    }
+    $button.on('click', function () {
+        // update CSS
+        let href = $theme.attr('href');
+        const lightCss = $button.data('light-css');
+        const darkCss = $button.data('dark-css');
+        if (href === lightCss) {
+            href = darkCss;
+            $('body').removeClass('light').addClass('dark');
+        } else {
+            href = lightCss;
+            $('body').removeClass('dark').addClass('light');
+        }
+        $theme.attr('href', href);
+
+        // update button
+        const dark = href === darkCss;
+        const text = dark ? $button.data('light-text') : $button.data('dark-text');
+        const icon = dark ? $button.data('light-icon') : $button.data('dark-icon');
+        const $icon = $('<i/>', {
+            'class': icon
+        });
+        $button.text(' ' + text).prepend($icon);
+
+        // save
+        const url = $button.data('path');
+        const options = $("#flashbags").data();
+        const title = options.title ? $button.data('title') : '';
+        Toaster.removeContainer();
+        if (url) {
+            $.getJSON(url, {
+                dark: dark
+            }, function (data) {
+                if (data.result && data.message) {
+
+                    Toaster.success(data.message, title, options);
+                } else {
+                    const message = $button.data('error');
+                    Toaster.danger(message, title, options);
+                }
+            }).fail(function () {
+                const message = $button.data('error');
+                Toaster.danger(message, title, options);
+            });
+        }
+    });
+}
+
+/**
  * Ready function
  */
 (function ($) { // jshint ignore:line
@@ -152,5 +209,6 @@ function initSidebar() {
     initSidebar();
     initBackToTop();
     initSearchToolbar();
+    initSwitchTheme();
     showFlashbag();
 }(jQuery));

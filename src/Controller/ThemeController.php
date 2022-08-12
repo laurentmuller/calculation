@@ -18,6 +18,7 @@ use App\Model\Theme;
 use App\Service\ThemeService;
 use App\Traits\CookieTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -75,7 +76,6 @@ class ThemeController extends AbstractController
             $this->updateCookie($response, ThemeService::KEY_CSS, $css, '', $path);
             $this->updateCookie($response, ThemeService::KEY_DARK, $dark, '', $path);
             $this->updateCookie($response, ThemeService::KEY_BACKGROUND, $background, '', $path);
-
             $this->successTrans('theme.success', ['%name%' => $theme->getName()]);
 
             return $response;
@@ -88,6 +88,22 @@ class ThemeController extends AbstractController
             'theme' => $data['theme'],
             'form' => $form,
         ]);
+    }
+
+    /**
+     * Save the theme.
+     */
+    #[Route(path: '/theme/save', name: 'user_save_theme')]
+    public function saveTheme(Request $request): JsonResponse
+    {
+        $dark = $this->getRequestBoolean($request, 'dark');
+        $response = $this->jsonTrue([
+            'message' => $this->trans($dark ? 'theme.dark_success' : 'theme.light_success'),
+        ]);
+        $path = $this->getParameterString('cookie_path');
+        $this->updateCookie($response, ThemeService::KEY_DARK, $dark ? 1 : null, '', $path);
+
+        return $response;
     }
 
     /**

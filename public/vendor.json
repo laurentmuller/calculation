@@ -206,17 +206,10 @@
             "source": "https://cdn.jsdelivr.net/npm/@forevolve/",
             "format": "{source}{name}@{version}/dist/css/{file}",
             "name": "bootstrap-dark",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "files": [
-                "toggle-bootstrap.css",
-                "toggle-bootstrap-dark.css",
-                "toggle-bootstrap-print.css",
-
                 "bootstrap-dark.css",
-                "bootstrap-light.css",
-
-                "bootstrap-prefers-light.css",
-                "bootstrap-prefers-dark.css"
+                "bootstrap-light.css"
             ]
         }
     ]

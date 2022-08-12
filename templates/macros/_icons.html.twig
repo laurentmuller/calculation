@@ -8,7 +8,7 @@
     {%- else -%}
         {%- set class = 'fa-solid fa-' ~ icon -%}
     {%- endif -%}
-<i class="{{ class }}"></i>
+    <i class="{{ class }}"></i>
 {%- endif %}
 {%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
 {%- endmacro %}

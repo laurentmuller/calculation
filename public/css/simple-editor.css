@@ -1,23 +1,24 @@
 @import 'fileinput.css';
 
 /**! compression tag for ftp-deployment */
-
+/*
 .simple-editor {
-    background-color: var(--white);
+    background-color: #fff;
 }
-
+*/
 .simple-editor .simple-editor-toolbar {
     border-bottom: 0;
 }
 
+/**
+ * scrollbar for toolbar
+ */
 .simple-editor .simple-editor-toolbar::-webkit-scrollbar {
     height: 3px;
 }
-
 .simple-editor .simple-editor-toolbar::-webkit-scrollbar-thumb {
     background: var(--secondary);
 }
-
 .simple-editor .simple-editor-toolbar button {
     border-radius: 0;
     border: 0;
@@ -25,6 +26,22 @@
 
 .simple-editor .simple-editor-toolbar button:first-child {
     border-bottom-left-radius: 0 !important;
+}
+
+/**
+ * scrollbar for content
+ */
+.simple-editor .simple-editor-content::-webkit-scrollbar {
+    width: 8px;
+}
+.simple-editor .simple-editor-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.simple-editor .simple-editor-content::-webkit-scrollbar-thumb {
+    background: #888;
+}
+.simple-editor .simple-editor-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .simple-editor .simple-editor-content {

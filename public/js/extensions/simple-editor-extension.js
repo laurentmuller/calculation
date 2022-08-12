@@ -12,7 +12,7 @@
     $.fn.extend({
 
         /**
-         * Finds the Simple-Editor container within the current element.
+         * Finds the simple editor container within the current element.
          *
          * @return {JQuery} the editor or null if not found.
          */
@@ -22,7 +22,7 @@
         },
 
         /**
-         * Set focus to the editor.
+         * Set focus to the simple editor.
          *
          * @return {boolean} true if focused.
          */
@@ -39,7 +39,7 @@
         },
 
         /**
-         * Gets the editor content as text.
+         * Gets the simple editor content as text.
          *
          * @return {string} the content.
          */
@@ -57,7 +57,7 @@
         },
 
         /**
-         * Initialize a Simple-Editor.
+         * Initialize a simple editor.
          *
          * @param {Object} options - the initialisation options.
          * @return {JQuery} the input for chaining.

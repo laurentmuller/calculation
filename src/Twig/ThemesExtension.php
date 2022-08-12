@@ -118,10 +118,6 @@ final class ThemesExtension extends AbstractExtension
      */
     private function isDarkTheme(?Request $request = null): bool
     {
-        if (null !== $request && $request->cookies->has(ThemeService::KEY_DARK)) {
-            return $request->cookies->getBoolean(ThemeService::KEY_DARK);
-        }
-
         return $this->service->isDarkTheme($request);
     }
 

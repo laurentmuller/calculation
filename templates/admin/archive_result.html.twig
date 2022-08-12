@@ -7,6 +7,7 @@
 {%- set title_description = 'archive.result.description' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set results = result.results -%}
+{%- set thead_class = theme_dark(app.request) ? 'thead-dark' : 'thead-light' -%}
 {# body #}
 {% block card_body %}
 <div class="row mb-1">
@@ -64,7 +65,7 @@
                             {%- set border = ' border-top-0' -%}
                             {% for key, value in results %}
                                 {%- set style = properties.stateCss(value.state.color) -%}
-                                <tr class="thead-light">
+                                <tr class="{{ thead_class }}">
                                     <th class="text-border{{ border }}" colspan="4" style="{{ style }}">{{ key }}</th>
                                     <th class="text-currency{{ border }}"colspan="2" >{{ 'counters.calculations'|trans({'count': value.calculations|length}) }}</th>
                                 </tr>
@@ -82,7 +83,7 @@
                             {% endfor %}
                             </tbody>
                             <tfoot>
-                                <tr class="thead-light">
+                                <tr class="{{ thead_class }}">
                                     <th class="text-border" colspan="4">{{ 'archive.result.total'|trans }}</th>
                                     <th class="text-right" colspan="2">{{ 'counters.calculations'|trans({'count': result.total}) }}</th>
                                 </tr>

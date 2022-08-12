@@ -202,14 +202,16 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@2.1.0/dist/css/bootstrap-dark.css",
             "source": "https://cdn.jsdelivr.net/npm/@forevolve/",
-            "format": "{source}{name}@{version}/dist/css/{file}",
+            "format": "{source}{name}@{version}/dist/{file}",
             "name": "bootstrap-dark",
+            "target": "bootstrap",
             "version": "2.1.1",
             "files": [
-                "bootstrap-dark.css",
-                "bootstrap-light.css"
+                "js/bootstrap.bundle.js",
+                "js/bootstrap.bundle.js.map",
+                "css/bootstrap-dark.css",
+                "css/bootstrap-light.css"
             ]
         }
     ]

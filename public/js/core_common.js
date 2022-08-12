@@ -4,7 +4,7 @@
  * Vendor Files
  */
 <!--#include file="vendor/jquery/jquery.js" -->
-<!--#include file="vendor/twitter-bootstrap/js/bootstrap.bundle.js" -->
+<!--#include file="vendor/bootstrap/js/bootstrap.bundle.js" -->
 
 /**
  * Extension files

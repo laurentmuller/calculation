@@ -127,3 +127,13 @@ pre.highlight .number {
 pre.highlight .error {
     color: #C82829;
 }
+
+/**
+ * dark theme highlight
+ */
+body.dark pre.highlight .keyword {
+    color: #007bff;
+}
+body.dark pre.highlight .word {
+    color: #d3d3d3;
+}

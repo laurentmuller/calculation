@@ -2,7 +2,7 @@
 {% import 'help/_help_tools.html.twig' as tools %}
 {# parameters #}
 {%- set table_class = 'table table-list table-sm' -%}
-{%- set head_class = 'thead-light' -%}
+{%- set head_class = theme_dark(app.request) ? 'thead-dark' : 'thead-light' -%}
 {# body #}
 {% block body -%}
 <div class="row no-gutters">

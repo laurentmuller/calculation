@@ -52,7 +52,7 @@
                 <p class="mb-2 font-weight-bold">{{ 'product.result.updated'|trans }}</p>
                 <div class="overflow-auto table-fixed-header border">
                     <table class="table table-hover table-fixed-header table-sm">
-                        <thead class="thead-light">
+                        <thead class="{{ theme_dark(app.request) ? 'thead-dark' : 'thead-light' }}">
                             <tr>
                                 <th>{{ 'product.fields.description'|trans }}</th>
                                 <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>

@@ -59,9 +59,9 @@
 
 {% block custom_view_header -%}
 {%- if row_edit -%}
-    <a href="{{ path('product_edit', params) }}" class="item-link stretched-link text-body" title="{{ 'product.edit.title'|trans }}">%description%</a>
+    <a href="{{ path('product_edit', params) }}" class="item-link text-body" title="{{ 'product.edit.title'|trans }}">%description%</a>
 {%- elseif row_show -%}
-    <a href="{{ path('product_show', params) }}" class="item-link stretched-link text-body" title="{{ 'product.show.title'|trans }}">%description%</a>
+    <a href="{{ path('product_show', params) }}" class="item-link text-body" title="{{ 'product.show.title'|trans }}">%description%</a>
 {%- else -%}
     <span>%description%</span>
 {%- endif -%}

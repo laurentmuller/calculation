@@ -4,7 +4,8 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{% set active = app.request.cookies.get('SIDEBAR_HIDE', true) ? ' sidebar-hide' : '' -%}
+{%- set active = app.request.cookies.get('SIDEBAR_HIDE', true) ? ' sidebar-hide' : '' -%}
+{%- set theme_class = theme_class|default(theme_dark(app.request) ? 'dark' : 'light') -%}
 {# head #}
 <head>
 <meta charset="utf-8" />
@@ -39,8 +40,7 @@
     {{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
 #}
 {# theme #}
-{% set theme_class = theme_dark(app.request) ? 'dark' : 'light' %}
-{{ asset_css('js/vendor/bootstrap-dark/bootstrap-' ~ theme_class ~ '.css', {'id': 'theme'}) }}
+{{ asset_css('js/vendor/bootstrap/css/bootstrap-' ~ theme_class ~ '.css', {'id': 'theme'}) }}
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}
 {% endblock %}
@@ -71,7 +71,7 @@
 {% block javascripts %}
 {% if app.debug %}
     {{ asset_js('js/vendor/jquery/jquery.js') }}
-    {{ asset_js('js/vendor/twitter-bootstrap/js/bootstrap.bundle.js') }}
+    {{ asset_js('js/vendor/bootstrap/js/bootstrap.bundle.js') }}
     {{ asset_js('js/extensions/array-extensions.js') }}
     {{ asset_js('js/extensions/jquery-extensions.js') }}
     {{ asset_js('js/extensions/params-extensions.js') }}

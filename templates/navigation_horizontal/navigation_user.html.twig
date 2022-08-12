@@ -23,17 +23,18 @@
         <button class="dropdown-item dropdown-item-theme" type="button"
                 data-title="{{ 'theme.title'|trans }}"
                 data-path="{{ path('user_save_theme') }}"
-                data-light-css="{{ asset_versioned('js/vendor/bootstrap-dark/bootstrap-light.css') }}"
+                data-light-css="{{ asset_versioned('js/vendor/bootstrap/css/bootstrap-light.css') }}"
                 data-light-text="{{ 'theme.light'|trans }}"
                 data-light-icon="fa-regular fa-lightbulb"
-                data-dark-css="{{ asset_versioned('js/vendor/bootstrap-dark/bootstrap-dark.css') }}"
+                data-dark-css="{{ asset_versioned('js/vendor/bootstrap/css/bootstrap-dark.css') }}"
                 data-dark-text="{{ 'theme.dark'|trans }}"
                 data-dark-icon="fa-solid fa-lightbulb"
                 data-error="{{ 'theme.error'|trans }}">
             {{- icons.icon(theme_icon, theme_text) -}}
         </button>
+        {{ icons.dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
         {% if is_test -%}
-            {{ icons.dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
+            {{ icons.dropdownSeparator }}
             {{ icons.dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) }}
         {% endif %}
         {% if is_previous_admin -%}

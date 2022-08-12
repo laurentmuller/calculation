@@ -361,12 +361,14 @@
                 css: {
                     top: '50%',
                     left: '50%',
-                    width: '600px',
+                    width: '90%',
                     position: 'absolute',
                     transform: 'translate(-50%, -50%)',
                     display: 'none',
                     zIndex: 2
                 },
+                show: 150,
+                hide: 350,
                 timeout: 1500
             }, options);
             const $alert = $('<div />', {
@@ -379,18 +381,13 @@
                 class: settings.iconClass
             });
 
-            $alert.prepend($icon).appendTo(settings.parent).show(150, function () {
+            $alert.prepend($icon).appendTo(settings.parent).show(settings.show, function () {
                 $alert.createTimer(function () {
-                    $alert.hide(350, function () {
+                    $alert.hide(settings.hide, function () {
                         $alert.removeTimer().remove();
                     });
                 }, settings.timeout);
             });
-
-            // $alert.prepend($spinner).appendTo(settings.parent).show(150)
-            //     .createTimer(function () {
-            //         $alert.hide(350).removeTimer().remove();
-            //     }, settings.timeout);
 
             return $this;
         }

@@ -247,7 +247,7 @@
 
             if (!options.submitHandler) {
                 defaults.submitHandler = function (form) {
-                    $(form).showSpinner();
+                    $(form).showSubmit(options.spinner || {});
                     form.submit();
                 };
             }
@@ -346,16 +346,53 @@
         },
 
         /**
-         * Show a spinner when form is submitted.
+         * Display an information alert while the form is submitted.
          *
-         * @return {JQuery} the caller for chaining.
+         * @param {Object} [options] - the alert options.
+         * @return {JQuery} this form for chaining.
          */
-        showSpinner: function() {
+        showSubmit: function (options) {
             const $this = $(this);
-            const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-            $this.find(':submit').toggleDisabled(true).html(spinner);
-            $this.find('.btn-cancel').toggleDisabled(true);
-            return  $this;
+            const settings = $.extend(true, {
+                parent: $this,
+                text: $this.data('save') || 'Saving data...',
+                alertClass: 'alert alert-info text-center',
+                iconClass: 'fa-solid fa-spinner fa-spin mr-2',
+                css: {
+                    top: '50%',
+                    left: '50%',
+                    width: '600px',
+                    position: 'absolute',
+                    transform: 'translate(-50%, -50%)',
+                    display: 'none',
+                    zIndex: 2
+                },
+                timeout: 1500
+            }, options);
+            const $alert = $('<div />', {
+                class: settings.alertClass,
+                text: settings.text,
+                css: settings.css,
+                role: 'alert',
+            });
+            const $icon = $('<i />', {
+                class: settings.iconClass
+            });
+
+            $alert.prepend($icon).appendTo(settings.parent).show(150, function () {
+                $alert.createTimer(function () {
+                    $alert.hide(350, function () {
+                        $alert.removeTimer().remove();
+                    });
+                }, settings.timeout);
+            });
+
+            // $alert.prepend($spinner).appendTo(settings.parent).show(150)
+            //     .createTimer(function () {
+            //         $alert.hide(350).removeTimer().remove();
+            //     }, settings.timeout);
+
+            return $this;
         }
     });
 
@@ -472,9 +509,9 @@
     /*
      * check if contains a greater than or equal value
      */
-    $.validator.addMethod( 'greaterThanEqualValue', function (value, element, param) {
+    $.validator.addMethod('greaterThanEqualValue', function (value, element, param) {
         return this.optional(element) || value >= param;
-    }, 'The field must contain a greater than or equal value.' );
+    }, 'The field must contain a greater than or equal value.');
 
     /*
      * check if contains a lesser value
@@ -488,7 +525,7 @@
      */
     $.validator.addMethod('lessThanEqualValue', function (value, element, param) {
         return this.optional(element) || value <= param;
-    }, 'The field must contain a lesser than or equal value.' );
+    }, 'The field must contain a lesser than or equal value.');
 
     /*
      * check for unique value
@@ -496,7 +533,7 @@
     $.validator.addMethod('unique', function (value, element, param) {
         const $fields = $(param, element.form);
         const $fieldsFirst = $fields.eq(0);
-        const validator = $fieldsFirst.data('valid_unique') ? $fieldsFirst.data('valid_unique' ) : $.extend( {}, this );
+        const validator = $fieldsFirst.data('valid_unique') ? $fieldsFirst.data('valid_unique') : $.extend({}, this);
 
         let isValid = true;
         $fields.each(function () {
@@ -511,7 +548,7 @@
 
         // If element isn't being validated, run each require_from_group field's
         // validation rules
-        if (!$(element).data('being_validated') ) {
+        if (!$(element).data('being_validated')) {
             $fields.data('being_validated', true);
             $fields.each(function () {
                 validator.element(this);

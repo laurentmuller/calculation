@@ -1,5 +1,5 @@
 {% import 'macros/_icons.html.twig' as icons %}
-<footer class="navbar navbar-color mb-0 py-1 px-2 justify-content-md-end fixed-bottom d-print-none {{ theme_background(app.request) }}" style="font-size: .8rem;">
+<footer class="navbar navbar-color py-1 px-2 justify-content-md-end fixed-bottom small d-print-none {{ theme_background(app.request) }}">
     <div class="navbar-nav flex-row">
         <a class="nav-link py-0 pr-2 text-truncate" href="{{ path('about') }}" title="{{ 'footer.about_title'|trans }}">
             {{- app_name_version -}}

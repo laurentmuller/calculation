@@ -56,7 +56,8 @@ class AdminController extends AbstractController
         // handle request
         $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            // first clear application service cache
+            // first clear user and application caches
+            $this->getUserService()->clearCache();
             $this->getApplication()->clearCache();
 
             try {

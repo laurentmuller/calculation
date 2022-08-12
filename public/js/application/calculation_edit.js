@@ -1857,7 +1857,14 @@ const MoveHandler = {
 
     // main form validation
     const $form = $('#edit-form');
-    $form.initValidator();
+    $form.initValidator({
+        spinner: {
+            parent: $('#navigation'),
+            css: {
+                top: '20rem'
+            }
+        }
+    });
 
     // edit the default product if new calculation
     const edit = $form.data('edit') || false;

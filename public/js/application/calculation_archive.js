@@ -17,5 +17,8 @@
                 require_from_group: [1, '.form-check-inline .custom-control-input'],
             }
         },
+        spinner: {
+            text: $('.card-title').text() + '...'
+        }
     });
 }(jQuery));

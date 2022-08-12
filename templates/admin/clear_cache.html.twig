@@ -6,6 +6,6 @@
 {% set page_list = 'homepage' %}
 
 {% block card_body %}
-    <p>{{ 'clear_cache.message'|trans }}</p>
-    <p class="mb-0">{{ 'clear_cache.note'|trans({'%size%': size})|raw }}</p>
+    <p>{{ 'clear_cache.message'|trans({'%size%': size})|raw }}</p>
+    <p class="mb-0">{{ 'clear_cache.note'|trans|raw }}</p>
 {% endblock %}

@@ -16,6 +16,12 @@
         {{ icons.dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') }}
         {{ icons.dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
         {{ icons.dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
+        {{ icons.dropdownSeparator }}
+        {% if theme_dark(app.request) %}
+            {{ icons.dropdownItem(path('user_toggle'), 'theme.light', 'lightbulb far') }}
+        {% else %}
+            {{ icons.dropdownItem(path('user_toggle'), 'theme.dark', 'lightbulb') }}
+        {% endif %}
         {% if is_test -%}
             {{ icons.dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
             {{ icons.dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) }}

@@ -25,10 +25,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:update-assets')]
 class UpdateAssetsCommand extends AbstractAssetsCommand
 {
+    private const BOOTSTRAP_FILE_NAME = 'bootstrap.css';
+
     /**
      * The boostrap CSS file name.
      */
-    private const BOOTSTRAP_FILE_NAME = 'bootstrap.css';
+    private const BOOTSTRAP_FILES_STYLE = [
+        'bootstrap.css',
+        'bootstrap-dark.css',
+        'bootstrap-light.css',
+    ];
 
     /**
      * The CSS custom style comments.
@@ -376,7 +382,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
         // bootstrap.css?
         $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
-        if (self::BOOTSTRAP_FILE_NAME === $name) {
+        if (\in_array($name, self::BOOTSTRAP_FILES_STYLE, true)) {
             $content = $this->updateStyle($content);
         }
 

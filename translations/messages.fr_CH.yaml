@@ -245,8 +245,8 @@ category:
     title: Propriétés de la catégorie
 clear_cache:
   failure: Impossible de vider le cache de l'application.
-  message: Êtes-vous sûr de vouloir vider le cache de l'application ?
-  note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle : %size%).'
+  message: "Êtes-vous sûr de vouloir vider le cache de l'application (taille actuelle : %size%) ?"
+  note: '<b>Note : </b>Cette opération peut durer un certain temps.'
   submit: Vider
   success: Le cache de l'application a été vidé avec succès.
   title: Vider le cache
@@ -306,6 +306,7 @@ common:
   value_null: Vide
   value_true: Oui
   value_unknown: Inconnu
+  save_data: Sauvegarde des données...
   simulate:
     label: Simuler la mise à jour
     help: Simule une mise à jour sans enregistrer les changements dans la base de données.
@@ -1186,6 +1187,10 @@ theme:
     light: Foncé
   success: Le thème <b>%name%</b> a été sélectionné avec succès.
   title: Thème
+  dark: Thème sombre
+  dark_success: Le <b>thème sombre</b> a été sélectionné avec succès.
+  light: Thème claire
+  light_success: Le <b>thème claire</b> a été sélectionné avec succès.
 timeline:
   date: Date
   interval: Période

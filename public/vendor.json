@@ -200,6 +200,24 @@
                 "font-mfizz.ttf",
                 "font-mfizz.woff"
             ]
+        },
+        {
+            "example": "https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@2.1.0/dist/css/bootstrap-dark.css",
+            "source": "https://cdn.jsdelivr.net/npm/@forevolve/",
+            "format": "{source}{name}@{version}/dist/css/{file}",
+            "name": "bootstrap-dark",
+            "version": "2.1.0",
+            "files": [
+                "toggle-bootstrap.css",
+                "toggle-bootstrap-dark.css",
+                "toggle-bootstrap-print.css",
+
+                "bootstrap-dark.css",
+                "bootstrap-light.css",
+
+                "bootstrap-prefers-light.css",
+                "bootstrap-prefers-dark.css"
+            ]
         }
     ]
 }

@@ -109,7 +109,7 @@ function updatePrices() {
 
     // add custom method for products selection
     $.validator.addMethod('checkProducts', function () {
-        const $table =$('#form_products');
+        const $table = $('#form_products');
         const filter = isAllProducts() ? ':visible' : ':checked:visible';
         const isValid = getVisibleProducts().filter(filter).length !== 0;
         if (isValid) {
@@ -143,7 +143,9 @@ function updatePrices() {
                 const id = $category.val();
                 $('#form_products :checkbox[data-category!="' + id + '"]').setChecked(false);
             }
-            $(form).showSpinner();
+            $(form).showSubmit({
+                text: $('.card-title').text() + '...'
+            });
             form.submit();
         }
     });

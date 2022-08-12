@@ -35,8 +35,17 @@
 <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('images/icons/favicon-144x144.png') }}">
 <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('images/icons/favicon-152x152.png') }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/icons/favicon-180x180.png') }}">
-{# stylesheets #}
-{{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
+{# stylesheets
+    {{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
+    {{ asset_css('js/vendor/bootstrap-dark/bootstrap-dark.css') }}
+    {{ asset_css('js/vendor/bootstrap-dark/bootstrap-light.css') }}
+    {{ asset_css('js/vendor/bootstrap-dark/toggle-bootstrap.css') }}
+    {{ asset_css('js/vendor/bootstrap-dark/toggle-bootstrap-dark.css') }}
+    {{ asset_css('js/vendor/bootstrap-dark/toggle-bootstrap-print.css') }}
+#}
+{# theme #}
+{% set is_theme_dark = theme_dark(app.request) %}
+{{ asset_css('js/vendor/bootstrap-dark/bootstrap-' ~ (is_theme_dark ? 'dark' : 'light') ~ '.css') }}
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}
 {% endblock %}

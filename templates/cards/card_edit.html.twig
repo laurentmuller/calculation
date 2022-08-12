@@ -4,7 +4,7 @@
 {%- set submit_text = submit_text|default('common.button_ok') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-primary') -%}
 {%- set submit_params = submit_params|default({}) -%}
-{%- set form_attr = form_attr|default({})|merge({'id': 'edit-form'}) -%}
+{%- set form_attr = form_attr|default({})|merge({'id': 'edit-form', 'data-save': 'common.save_data'|trans}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
 {%- if cancel_path is not defined -%}
     {%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}

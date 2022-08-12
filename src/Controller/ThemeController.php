@@ -91,6 +91,21 @@ class ThemeController extends AbstractController
     }
 
     /**
+     * Toggle the theme between dark and light.
+     */
+    #[Route(path: '/toggle', name: 'user_toggle')]
+    public function toggle(Request $request): Response
+    {
+        $wasDark = $this->getCookieBoolean($request, ThemeService::KEY_DARK);
+        $response = $this->redirectToHomePage();
+        $path = $this->getParameterString('cookie_path');
+        $this->updateCookie($response, ThemeService::KEY_DARK, $wasDark ? null : 1, '', $path);
+        $this->successTrans($wasDark ? 'theme.light_success' : 'theme.dark_success');
+
+        return $response;
+    }
+
+    /**
      * Gets the asset base.
      */
     private function getAssetBase(Request $request): string

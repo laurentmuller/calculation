@@ -60,7 +60,3 @@ jobs:
       - name: Composer validate
         if: always() && steps.install.outcome == 'success'
         run: composer validate --strict
-
-      - name: Check Security
-        if: always() && steps.install.outcome == 'success'
-        run: /home/runner/.symfony/bin/symfony check:security

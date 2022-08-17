@@ -57,20 +57,20 @@
 {%- endmacro %}
 
 {% macro output_icon(icon, text) -%}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {%- if text -%}
     {%- set values = text|split('|') -%}
     {%- set text = values[0] -%}
     {%- set domain = values|length > 1 ? values[1] : null -%}
-    {{- icons.icon(icon ? icon ~ ' fa-fw' : null, text, domain) -}}
+    {{- icon(icon ? icon ~ ' fa-fw' : null, text, domain) -}}
 {%- else -%}
-    {{- icons.icon(icon ? icon ~ ' fa-fw' : null, text) -}}
+    {{- icon(icon ? icon ~ ' fa-fw' : null, text) -}}
 {%- endif -%}
 {%- endmacro %}
 
 {% macro home() -%}
-{% import 'macros/_icons.html.twig' as icons %}
-{{ icons.link(path('help'), null, null, 'home', 'help.back_menu') }}
+{% from 'macros/_icons.html.twig' import link %}
+{{ link(path('help'), null, null, 'home', 'help.back_menu') }}
 {%- endmacro %}
 
 {% macro output_links(links, service) -%}

@@ -30,10 +30,3 @@
         max-width: 66.666667%;
     }
 }
-
-/**
- * dark theme
- */
-body.dark #data-table-edit .group .bg-light {
-    background-color: #343a40 !important;
-}

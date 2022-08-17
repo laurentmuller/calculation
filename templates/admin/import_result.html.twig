@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link, homepage %}
 {# parameters #}
 {%- set title = 'swisspost.title' -%}
 {%- set title_icon = 'download' -%}
@@ -53,8 +53,8 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-{{- icons.homepage() -}}
+{{- homepage() -}}
 {% if not results.valid %}
-    {{ icons.link(path('admin_import'), 'swisspost.result.new_import', 'btn btn-outline-secondary', null) -}}
+    {{ link(path('admin_import'), 'swisspost.result.new_import', 'btn btn-outline-secondary', null) -}}
 {%- endif %}
 {% endblock %}

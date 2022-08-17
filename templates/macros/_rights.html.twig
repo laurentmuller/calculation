@@ -22,12 +22,12 @@
 {%- endmacro %}
 
 {% macro table(form, default, permissions, overwrite=true) %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 <div class="table-responsive">
     <table class="table table-bordered table-list" id="table-edit">
         <thead>
            <tr class="text-center">
-               <th class="text-left text-nowrap font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
+               <th class="text-left text-nowrap font-weight-normal">{{ icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icon('arrow-right') }}</th>
                {% for permission in permissions %}
                    {{ _self.header(permission.readable, overwrite) }}
                {% endfor %}

@@ -1,5 +1,5 @@
 {% extends 'cards/card_table.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {# parameters #}
 {%- set title = title|default('calculation.list.title') -%}
 {%- set title_icon = title_icon|default(ICON_CALCULATION) -%}
@@ -15,7 +15,7 @@
 {%- set stateid = customData.state ? customData.state.id : 0 -%}
 <div class="input-group-append">
     <button id="stateid" data-value="{{ stateid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
-        {{ icons.icon(ICON_CALCULATION_STATE) }}&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
+        {{ icon(ICON_CALCULATION_STATE) }}&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
     </button>
     {% set editable = false %}
     <div class="dropdown-menu" aria-labelledby="stateid">

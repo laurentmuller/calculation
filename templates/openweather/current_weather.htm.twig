@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link %}
 {% import 'openweather/_weather_macro.html.twig' as tools %}
 {# macros #}
 {% macro system(units, route, city_id, count) -%}
@@ -46,7 +46,7 @@
             {% else %}
                 {{ _self.system('metric', route, city_id, count) }}<span class"small"> / </span>{{ _self.system(units_system) }}
             {% endif %}
-            {{ icons.link(path('openweather_search'), 'common.button_search', 'btn btn-link btn-sm') }}
+            {{ link(path('openweather_search'), 'common.button_search', 'btn btn-link btn-sm') }}
         </div>
     </div>
 {% else %}

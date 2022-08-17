@@ -1,5 +1,5 @@
 {# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {# parameters #}
 {%- set is_env_dev = app_mode == 'dev' -%}
 {%- set is_env_prod = app_mode == 'prod' -%}
@@ -51,7 +51,7 @@
     </div>
     {# home page #}
     <a class="navbar-brand mt-1" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
-        {{- icons.icon('home', 'index.title') -}}
+        {{- icon('home', 'index.title') -}}
     </a>
     {# search
     {% if is_granted_data and app.request.get('_route') != 'search' -%}
@@ -60,7 +60,7 @@
                 <input id="search" name="search" type="text" class="form-control bg-transparent text-white" required="required" minlength="2" placeholder="{{ 'search.placeholder'|trans }}">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit" role="button">
-                        {{- icons.icon('search fa-fw') -}}
+                        {{- icon('search fa-fw') -}}
                     </button>
                 </div>
             </div>

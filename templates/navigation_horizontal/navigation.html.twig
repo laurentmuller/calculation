@@ -1,5 +1,5 @@
 {# horizontal toolbar #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {# parameters #}
 {%- set is_env_dev = app_mode == 'dev' -%}
 {%- set is_env_prod = app_mode == 'prod' -%}
@@ -26,7 +26,7 @@
         <i class="fa-solid fa-angle-left"></i>
     </button>
     <a class="navbar-brand nav-sidebar-horizontal ml-3" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}" style="display: {{ active ? 'block' : 'none' }}">
-        {{- icons.icon('home') -}}
+        {{- icon('home') -}}
     </a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
         <span class="navbar-toggler-icon"></span>
@@ -37,7 +37,7 @@
                 {% set display_style = active ? 'block' : 'none' %}
                 <li class="nav-item">
                     <a href="{{ path('calculation_table') }}" class="nav-link nav-sidebar-horizontal" style="display: {{ display_style }};">
-                        {{- icons.icon(ICON_CALCULATION, 'calculation.list.title') -}}
+                        {{- icon(ICON_CALCULATION, 'calculation.list.title') -}}
                     </a>
                 </li>
             {% endif %}

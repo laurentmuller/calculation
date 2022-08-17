@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link, homepage, button_close_modal %}
 {% import 'macros/_properties.html.twig' as properties %}
 {# parameters #}
 {%- set title = 'archive.title' -%}
@@ -55,7 +55,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ title|trans }}</h5>{{ icons.button_close_modal }}
+                    <h5 class="modal-title">{{ title|trans }}</h5>{{ button_close_modal() }}
                 </div>
                 <div class="modal-body">
                     <label class="font-weight-bold">{{ 'archive.result.calculations'|trans }}</label>
@@ -94,7 +94,7 @@
                 <div class="modal-footer">
                     <div class="row no-gutters w-100">
                         <div class="col-md-3">
-                            {{ icons.button_close_modal(false) }}
+                            {{ button_close_modal(false) }}
                         </div>
                         {% if result.simulate %}
                         <div class="col-md-9 text-md-right">
@@ -114,6 +114,6 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-{{ icons.homepage() }}
-{{ icons.link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-form btn-secondary', null) -}}
+{{ homepage() }}
+{{ link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-form btn-secondary', null) -}}
 {% endblock %}

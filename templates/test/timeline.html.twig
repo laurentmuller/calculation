@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, link %}
 {% import 'calendar/_calendar.html.twig' as helper %}
 {# macros #}
 {% macro addInterval(value, count, message, selection) -%}
@@ -10,7 +10,7 @@
 {% if date %}
     {% set class = 'btn btn-secondary btn-' ~ title|split('.')[1] %}
     {% set href = url('test_timeline', {'date': date, 'interval': interval}) %}
-    {{ icons.link(href, null, class, icon, title) }}
+    {{ link(href, null, class, icon, title) }}
  {% endif %}
 {%- endmacro %}
 {# parameters #}
@@ -23,7 +23,7 @@
     <div class="row align-items-center">
         <div class="col">
             <div class="form-inline">
-                <h4>{{ icons.icon(title_icon, title) }}</h4><br>
+                <h4>{{ icon(title_icon, title) }}</h4><br>
             </div>
         </div>
         <div class="col-auto form-inline">
@@ -50,7 +50,7 @@
                     {{ _self.navigate(today, interval, 'arrows-alt', 'timeline.today') }}
                     {{ _self.navigate(next, interval, 'chevron-right', 'timeline.next') }}
                     <button class="btn btn-secondary btn-submit" type="submit" title="{{ 'common.button_refresh'|trans }}" style="min-width: 38px;">
-                        {{ icons.icon('sync') }}
+                        {{ icon('sync') }}
                     </button>
                 </div>
             </div>

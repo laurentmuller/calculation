@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import button_cancel, homepage %}
 {# macros #}
 {% macro plain_text_input(id, class='') %}
 {%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
@@ -75,9 +75,9 @@
 {# actions #}
 {% block actions_form -%}
 {% if form.vars['simple_widget'] %}
-    {{ icons.button_cancel(cancel_path, 'common.button_back_list') }}
+    {{ button_cancel(cancel_path, 'common.button_back_list') }}
 {% else %}
-    {{ icons.homepage() }}
+    {{ homepage() }}
 {% endif %}
 {% endblock %}
 {# javascripts #}

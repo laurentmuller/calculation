@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link, homepage, button_close_modal %}
 {# macro #}
 {% macro add_line_info(name, value) -%}
 <tr>
@@ -46,7 +46,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'product.update.title'|trans }}</h5>
-                {{ icons.button_close_modal }}
+                {{ button_close_modal() }}
             </div>
             <div class="modal-body">
                 <p class="mb-2 font-weight-bold">{{ 'product.result.updated'|trans }}</p>
@@ -74,7 +74,7 @@
             <div class="modal-footer">
                 <div class="row no-gutters w-100">
                     <div class="col-3">
-                        {{ icons.button_close_modal(false) }}
+                        {{ button_close_modal(false) }}
                     </div>
                     <div class="col-9 text-right">
                         <p class="small mb-0{% if not query.simulate %} d-none{% endif %}">{{ 'common.simulate.message'|trans }}</p>
@@ -88,6 +88,6 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-{{ icons.homepage() }}
-{{ icons.link(path('admin_product'), 'product.result.new_update', 'btn btn-form btn-secondary', null) }}
+{{ homepage() }}
+{{ link(path('admin_product'), 'product.result.new_update', 'btn btn-form btn-secondary', null) }}
 {% endblock %}

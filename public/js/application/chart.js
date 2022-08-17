@@ -7,7 +7,6 @@
  */
 function onMonthsChange($months) {
     'use strict';
-
     const oldMonths = $months.data('months');
     const newMonths = Number.parseInt($months.val(), 10);
     if (newMonths !== oldMonths) {

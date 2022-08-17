@@ -1,9 +1,8 @@
 {# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% from 'macros/_icons.html.twig' import icon %}
 <div id="totals-panel" class="card mb-3">
     <div class="card-header">
-        <h1 class="card-title">{{ icons.icon('list-ul', 'calculation.edit.panel_resume') }}</h1>
+        <h1 class="card-title">{{ icon('list-ul', 'calculation.edit.panel_resume') }}</h1>
     </div>
     <div class="card-body py-1 px-2">
         <div class="table-responsive">

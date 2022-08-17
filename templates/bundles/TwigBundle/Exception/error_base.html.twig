@@ -1,7 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% from 'macros/_icons.html.twig' import link, homepage %}
 {# parameters #}
 {%- set is_exception = exception is defined -%}
 {%- set title_icon = 'exclamation-circle' -%}
@@ -96,8 +95,8 @@
 {% if page_list is defined %}
     {%- set id = id|default(0) -%}
     {%- set href = cancel_url(app.request, id, page_list) -%}
-    {{ icons.link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
+    {{ link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
 {% else %}
-    {{ icons.homepage() }}
+    {{ homepage() }}
 {% endif %}
 {% endblock %}

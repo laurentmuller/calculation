@@ -35,10 +35,10 @@
 {%- endmacro %}
 
 {% macro rowPackage(package) -%}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import linkExternal %}
 <tr>
     <td class="e pl-3">
-        {{- package.name -}}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', 'd-print-none', 'link', 'about.extern_link') -}}{%- endif -%}
+        {{- package.name -}}{%- if package.homepage %}&nbsp;{{- linkExternal(package.homepage, '', 'd-print-none', 'link', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="f text-nowrap">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
@@ -46,7 +46,7 @@
 {%- endmacro %}
 
 {% macro aboutCard(id, pdf_route, excel_route=false) -%}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import linkExternal %}
 {%- set route = path('about_' ~ id ~ '_content') -%}
 {%- set title = ('about.' ~ id)|trans -%}
 <div class="card">
@@ -58,9 +58,9 @@
                 </a>
             </div>
             <div class="col-auto d-print-none">
-                {{ icons.linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_pdf') }}
+                {{ linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_pdf') }}
                 {% if excel_route %}
-                    {{ icons.linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export') }}
+                    {{ linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export') }}
                 {% endif %}
             </div>
         </div>

@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {# body #}
 {% block body -%}
 <div class="row no-gutters">
@@ -12,7 +12,7 @@
             <div class="card-header{% block card_header_class %}{% endblock %}">
                 {% block card_header %}
                 <h1 class="card-title">
-                    {{- icons.icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
+                    {{- icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
                 </h1>
                 {% if title_description is defined and title_description %}
                     <small>{% block card_header_description %}{{ title_description|trans }}{%- endblock %}</small>

@@ -1,11 +1,9 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'test.editor' -%}
 {%- set title_icon = 'edit' -%}
 {%- set cancel_path = path('homepage') -%}
-
+{# body #}
 {% block card_body %}
 <div class="row">
     <div class="col-md-8">{{ form_row(form.email) }}</div>
@@ -14,12 +12,12 @@
 {{ form_row(form.message) }}
 {{ form_row(form.attachments) }}
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ parent() }}
 {{ asset_css('css/simple-editor.css') }}
 {%- endblock -%}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/plugins/plugin-fileinput.js') }}

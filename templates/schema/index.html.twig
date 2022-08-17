@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import homepage %}
 {# parameters #}
 {%- set title = 'schema.index.title' -%}
 {%- set title_description = 'schema.index.description' -%}
@@ -32,7 +32,7 @@
 {%- endblock %}
 {# footer #}
 {% block card_footer -%}
-{{- icons.homepage() -}}
+{{- homepage() -}}
 {%- endblock %}
 {# javascripts #}
 {% block javascripts %}

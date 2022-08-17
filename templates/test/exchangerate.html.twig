@@ -1,6 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% from 'macros/_icons.html.twig' import homepage %}
 {# macros #}
 {% macro fillCodes(codes, selection='') %}
 {% for key, code in codes -%}
@@ -78,7 +77,7 @@
 {% endblock %}
 
 {% block actions_form -%}
-{{ icons.homepage() }}
+{{ homepage() }}
 {%- endblock %}
 
 {% block stylesheets %}

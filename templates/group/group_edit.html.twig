@@ -1,7 +1,6 @@
 {% extends 'cards/card_edit.html.twig' %}
 {# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = new ? 'group.add.title' : 'group.edit.title' -%}
 {%- set title_icon = ICON_GROUP -%}
@@ -31,7 +30,7 @@
         </div>
     </td>
     <td class="actions align-middle px-0 d-print-none">
-        {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete d-print-none', ICON_DELETE, 'group.edit.delete_margin') -}}
+        {{- link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete d-print-none', ICON_DELETE, 'group.edit.delete_margin') -}}
     </td>
 </tr>
 {% endmacro %}

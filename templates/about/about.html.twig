@@ -1,6 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'about/_about_macro.html.twig' as tools %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link, homepage, button_pdf %}
 {# parameters #}
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'info-circle' -%}
@@ -46,9 +46,9 @@
 </div>
 <div class="row no-gutters mt-2 pb-3 d-print-none">
     <div class="col">
-        {{ icons.homepage() }}
-        {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
-        {{ icons.button_pdf('about_pdf') }}
+        {{ homepage() }}
+        {{ link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
+        {{ button_pdf('about_pdf') }}
     </div>
 </div>
 {% endblock %}

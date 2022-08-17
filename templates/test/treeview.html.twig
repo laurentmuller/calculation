@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {# parameters #}
 {% set title = 'test.tree_view' %}
 {% set title_icon = 'folder-tree' %}
@@ -7,7 +7,7 @@
 {% block body -%}
 <div class="row pt-5">
     <div class="col-md-6 offset-md-2">
-        <h1>{{- icons.icon(title_icon, title) }}</h1>
+        <h1>{{- icon(title_icon, title) }}</h1>
     </div>
     <div class="col-md-2 text-right mt-3">
         <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">

@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 {# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link %}
 {% import 'calendar/_calendar.html.twig' as helper %}
-
 {# macros #}
 {% macro weekRow(month, week) %}
 {%- set class = 'border text-center text-white p-2 week' -%}
@@ -66,14 +65,12 @@
     </table>
 </div>
 {% endmacro %}
-
 {# parameters #}
 {%- set title = 'calendar.year_title' -%}
 {%- set title_parameters = {'%year%': calendar.year} -%}
-
 {# class #}
 {% block container_class 'container-xl' %}
-
+{# body #}
 {% block body %}
 <div class="row">
     <div class="col-md-4">
@@ -87,36 +84,35 @@
             {# today year #}
             {% if today %}
                 {% set href = path('calendar_year', {'year': today}) %}
-                {{ icons.link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.year_current', null, {'%year%': today}) }}
+                {{ link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.year_current', null, {'%year%': today}) }}
             {% endif %}
             {# previous year #}
             {% if previous %}
                 {% set href = path('calendar_year', {'year': previous}) %}
-                {{ icons.link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.year_previous', null, {'%year%': previous}) }}
+                {{ link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.year_previous', null, {'%year%': previous}) }}
             {% endif %}
             {# next year #}
             {% if next %}
                 {% set href = path('calendar_year', {'year': next}) %}
-                {{ icons.link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.year_next', null, {'%year%': next}) }}
+                {{ link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.year_next', null, {'%year%': next}) }}
             {% endif %}
             {# calculations #}
             {{ helper.linkCalculations(calendar.year, calendar.year, calculations|length, 'btn btn-primary') }}
         </div>
     </div>
 </div>
-
 <div class="row popover-w-100">
 {% for month in calendar.months %}
     {{ _self.monthTable(month) }}
 {% endfor %}
 </div>
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets -%}
 {{ parent() }}
 {{ asset_css('css/calendar.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/test/calendar.js') }}

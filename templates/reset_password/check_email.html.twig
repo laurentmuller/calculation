@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link, footer_center %}
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
 {%- set title_icon = 'eraser' -%}
@@ -27,8 +27,8 @@
 {%- endblock %}
 {# footer #}
 {% block card_footer -%}
-{{ icons.link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary', null, 'security.login.description') }}
-{{ icons.footer_center() }}
+{{ link(path('app_login'), 'security.login.submit', 'btn btn-form btn-primary', null, 'security.login.description') }}
+{{ footer_center() }}
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets -%}

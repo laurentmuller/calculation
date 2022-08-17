@@ -1,5 +1,5 @@
 {% extends 'cards/card_table.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {# parameters #}
 {%- set title = 'search.title' -%}
 {%- set title_icon = 'search' -%}
@@ -15,7 +15,7 @@
 {% if customData.entities and customData.entities|length > 1 %}
 <div class="input-group-append btn-dropdown">
     <button id="entity" data-value="{{ entity }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'search.entity'|trans }}" title="{{ 'search.entity_help'|trans }}">
-        {{ icons.icon('database') }}&nbsp;{{- (entity ? customData.entities[entity].name : 'search.entity')|trans -}}
+        {{ icon('database') }}&nbsp;{{- (entity ? customData.entities[entity].name : 'search.entity')|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="entity">
         {{ _self.output_dropdown('entity', '', entity, 'search.all_entities'|trans, {'data-icon': 'fa-fw fa-solid fa-database'}) }}

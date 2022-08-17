@@ -1,8 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link, button_pdf %}
 {% import 'macros/_properties.html.twig' as properties %}
-
 {# macro #}
 {% macro propertyDateUser(name, date, user) -%}
 {% set created_date = date ? date|locale_datetime : 'common.empty_date'|trans %}
@@ -156,10 +154,10 @@
     <div class="col-md-8">
     {{ parent() }}
     {% if state_path %}
-        {{ icons.link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
+        {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
     {% endif %}
     {% if pdf_export %}
-        {{ icons.button_pdf('calculation_pdf_id', {'id': id}) }}
+        {{ button_pdf('calculation_pdf_id', {'id': id}) }}
     {%- endif %}
     </div>
     <div class="col-md-4 text-md-right">

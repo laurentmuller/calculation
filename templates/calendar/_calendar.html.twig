@@ -1,13 +1,13 @@
 {# macros #}
 {% macro linkCalculations(query, date, count, class, title_message='counters.calculations_calendar') -%}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {%- set title = title_message|trans({date: date, count: count}) -%}
-<a class="{{ class }}" href="{{ path('calculation_table', {'search': query}) }}" title="{{ title }}">{{ icons.icon(ICON_CALCULATION) }}</a>
+<a class="{{ class }}" href="{{ path('calculation_table', {'search': query}) }}" title="{{ title }}">{{ icon(ICON_CALCULATION) }}</a>
 {%- endmacro %}
 
 {% macro dataContent(calculations) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-<table class="table table-popover table-sm mb-0">
+<table class="table table-popover table-sm bg-themed mb-0">
     <tbody>
     {% for calculation in calculations -%}
         {{ _self.dataRow(calculation) }}
@@ -34,7 +34,6 @@
 {%- set title = '' -%}
 {%- set class = 'text-center align-middle' ~ (small ? ' border' : '') -%}
 {%- set link = false -%}
-
 {% if day.inMonth(month) -%}
     {%- set title = day.date|locale_date('long') -%}
     {%- set calculations = day.calculations -%}

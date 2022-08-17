@@ -1,4 +1,5 @@
-{% import 'macros/_icons.html.twig' as icons %}
+{# import #}
+{% from 'macros/_icons.html.twig' import icon, link %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
 {% macro cardEntry(month, list_path, min_margin) -%}
@@ -32,11 +33,11 @@
     <div class="card-header">
         <div class="row">
             <div class="col-auto mr-auto">
-                <h1 class="card-title">{{ icons.icon('calendar-alt far', 'index.panel_month') }}</h1>
+                <h1 class="card-title">{{ icon('calendar-alt far', 'index.panel_month') }}</h1>
             </div>
             <div class="col-auto d-print-none">
                 {%- if list_path and is_months -%}
-                    {{- icons.link(path('chart_by_month', {'count': 6}), null, null, 'chart-column', 'index.menu_chart_title') -}}
+                    {{- link(path('chart_by_month', {'count': 6}), null, null, 'chart-column', 'index.menu_chart_title') -}}
                 {%- endif -%}
             </div>
         </div>

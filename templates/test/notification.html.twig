@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import homepage %}
 {# macros #}
 {% macro button(type, icon) -%}
 <button type="button" data-type="{{ type }}" class="mx-2 mb-2 btn btn-notify btn-form btn-{{ type }}">
@@ -100,7 +100,7 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-{{ icons.homepage() }}
+{{ homepage() }}
 <button type="button" class="btn btn-default btn-outline-success">{{ 'parameters.default'|trans }}</button>
 {% endblock %}
 {# javascripts #}

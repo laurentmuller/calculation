@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import button_close_modal %}
 {# parameters #}
 {%- set title = 'generate.title' -%}
 {%- set title_icon = 'random' -%}
@@ -39,7 +39,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ title|trans }}</h5>{{ icons.button_close_modal }}
+                <h5 class="modal-title">{{ title|trans }}</h5>{{ button_close_modal() }}
             </div>
             <div class="modal-body">
                 <label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
@@ -52,7 +52,7 @@
             <div class="modal-footer">
                 <div class="row no-gutters w-100">
                     <div class="col-md-3">
-                        {{ icons.button_close_modal(false) }}
+                        {{ button_close_modal(false) }}
                     </div>
                     <div class="col-md-9 text-md-right">
                         <p id="simulated" class="small mb-0 d-none">{{ 'common.simulate.message'|trans }}</p>

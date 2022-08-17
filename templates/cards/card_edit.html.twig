@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import button_submit, button_cancel %}
 {# parameters #}
 {%- set submit_text = submit_text|default('common.button_ok') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-primary') -%}
@@ -31,9 +31,9 @@
     <div class="row no-gutters">
         <div class="col{% if show_required %}-md-9{% endif %}">
             {% block actions_form -%}
-                {{ icons.button_submit(submit_text, submit_class, submit_params) }}
+                {{ button_submit(submit_text, submit_class, submit_params) }}
                 {% if cancel_path|default(false) -%}
-                    {{ icons.button_cancel(cancel_path, cancel_text) }}
+                    {{ button_cancel(cancel_path, cancel_text) }}
                 {%- endif %}
             {%- endblock %}
         </div>

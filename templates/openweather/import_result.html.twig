@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link, homepage %}
 {# parameters #}
 {%- set title = 'openweather.import.title' -%}
 {%- set title_icon = 'download' -%}
@@ -44,6 +44,6 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-{{ icons.homepage() }}
-{{ icons.link(path('openweather_search'), 'common.button_search', 'btn btn-form btn-secondary') }}
+{{ homepage() }}
+{{ link(path('openweather_search'), 'common.button_search', 'btn btn-form btn-secondary') }}
 {% endblock %}

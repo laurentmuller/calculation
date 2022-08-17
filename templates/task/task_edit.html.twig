@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link %}
 {% form_theme form with _self %}
 {# item label #}
 {% block _task_items_entry_name_label -%}
@@ -47,7 +47,7 @@
         </div>
     </td>
     <td class="actions align-middle px-0 d-print-none">
-        {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-margin d-print-none', ICON_DELETE, 'taskitem.edit.delete_item') -}}
+        {{- link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-margin d-print-none', ICON_DELETE, 'taskitem.edit.delete_item') -}}
     </td>
 </tr>
 {% endmacro -%}

@@ -1,6 +1,6 @@
 {% extends 'help/help_base.html.twig' %}
 {% import 'help/_help_tools.html.twig' as tools %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import linkExternal %}
 {# macro #}
 {% macro output_dialog(item) -%}
 {% set href = path('help_dialog', {'id': item.id}) %}
@@ -104,5 +104,5 @@
 {%- endblock %}
 
 {% block help_home -%}
-{{- icons.linkExternal(path('help_pdf'), 'common.button_pdf', '', '', 'help.pdf_menu') -}}
+{{- linkExternal(path('help_pdf'), 'common.button_pdf', '', '', 'help.pdf_menu') -}}
 {%- endblock %}

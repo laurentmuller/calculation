@@ -1,4 +1,4 @@
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import copyright_link %}
 <footer class="navbar navbar-color py-1 px-2 justify-content-md-end fixed-bottom small d-print-none {{ theme_background(app.request) }}">
     <div class="navbar-nav flex-row">
         <a class="nav-link py-0 pr-2 text-truncate" href="{{ path('about') }}" title="{{ 'footer.about_title'|trans }}">
@@ -7,6 +7,6 @@
         <span class="navbar-text py-0 px-2 border-left border-secondary" title="{{ 'footer.environment_title'|trans }}">
             {{- ('environment.' ~ app_mode)|trans -}}
         </span>
-        {{- icons.copyright_link('nav-link py-0 pl-2 border-left border-secondary text-truncate') -}}
+        {{- copyright_link('nav-link py-0 pl-2 border-left border-secondary text-truncate') -}}
     </div>
 </footer>

@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon %}
 {% macro create_button(class, text) %}
 <span class="btn btn-form btn-example cursor-default btn-{{ class }} mb-2">{{ text|trans }}</span>
 {% endmacro %}
@@ -54,7 +54,7 @@
         {{ _self.create_button('secondary', 'theme.button.secondary') }}
         {{ _self.create_button('warning', 'theme.button.warning') }}
         {{ _self.create_button('danger', 'theme.button.danger') }}
-        <span class="btn btn-sm border-0 pt-0 btn-outline-secondary cursor-default mb-2">{{- icons.icon('ellipsis-v') -}}</span>
+        <span class="btn btn-sm border-0 pt-0 btn-outline-secondary cursor-default mb-2">{{- icon('ellipsis-v') -}}</span>
     </div>
     <div class="col-12 text-center">
         {{ _self.create_button('outline-success', 'theme.button.success') }}
@@ -62,7 +62,7 @@
         {{ _self.create_button('outline-secondary', 'theme.button.secondary') }}
         {{ _self.create_button('outline-warning', 'theme.button.warning') }}
         {{ _self.create_button('outline-danger', 'theme.button.danger') }}
-        <span class="btn btn-sm btn-outline-secondary cursor-default mb-2">{{- icons.icon('ellipsis-v') -}}</span>
+        <span class="btn btn-sm btn-outline-secondary cursor-default mb-2">{{- icon('ellipsis-v') -}}</span>
     </div>
 </div>
 {# link #}

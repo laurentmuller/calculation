@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import link %}
 {% import 'openweather/_weather_macro.html.twig' as tools %}
 {# parameters #}
 {%- set title = 'openweather.search.title' -%}
@@ -48,7 +48,7 @@
 {% block actions_form -%}
 {{ parent() }}
 {% if is_granted('ROLE_ADMIN') %}
-    {{ icons.link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
+    {{ link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
 {% endif %}
 {% endblock %}
 {# javascripts #}

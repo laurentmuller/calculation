@@ -1,15 +1,14 @@
 {% extends 'base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {# macros #}
 {% macro link(route, text, icon, domain=null, parameters=[]) -%}
 {% set href = path(route, parameters) %}
-{{ icons.link(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
+{{ link(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
 {%- endmacro %}
 
 {% macro linkExternal(route, text, icon, domain=null, parameters=[]) -%}
 {% set href = path(route, parameters) %}
-{{ icons.linkExternal(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
+{{ linkExternal(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
 {%- endmacro %}
 
 {% macro add_entity_entry(prefix, icon, is_list, is_add, is_export, parameters=[]) -%}
@@ -119,7 +118,7 @@
             {% endif %}
             {%- if is_list_product or is_list_task or is_list_category or is_list_group or is_list_state or is_list_margin or is_list_customer -%}
             <li>
-                <span class="rounded">{{- icons.icon('database', 'index.menu_data') -}}</span>
+                <span class="rounded">{{- icon('database', 'index.menu_data') -}}</span>
                 <ul>
                     {{ _self.add_entity_entry('product', ICON_PRODUCT, is_list_product, is_add_product, is_export_product, route_params) }}
                     {{ _self.add_entity_entry('task', ICON_TASK, is_list_task, is_add_task, is_export_task, route_params) }}
@@ -132,7 +131,7 @@
             </li>
             {% endif %}
             <li>
-                <span>{{- icons.icon('tools', 'index.menu_tools') -}}</span>
+                <span>{{- icon('tools', 'index.menu_tools') -}}</span>
                 <ul>
                     <li>{{ _self.link('search', 'search.title', 'search') }}</li>
                     {% if is_admin %}
@@ -149,7 +148,7 @@
             </li>
             {%- if is_list_calculation -%}
             <li>
-                <span>{{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}</span>
+                <span>{{- icon('chart-area', 'menu_graphics', 'chart') -}}</span>
                 <ul>
                     <li>{{ _self.link('chart_by_month', 'title_by_month', 'calendar-alt far', 'chart') }}</li>
                     <li>{{ _self.link('chart_by_state', 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}</li>

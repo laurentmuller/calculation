@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
-
+{% from 'macros/_icons.html.twig' import icon %}
 {# macros #}
 {% macro format(value) -%}
 {{ is_int(value) ? value|integer : value|amount }}
@@ -127,7 +126,7 @@
 {% block body %}
 <div class="row mb-2">
     <div class="col-auto mr-auto">
-        <h4>{{ icons.icon(title_icon, title) }}</h4>
+        <h4>{{ icon(title_icon, title) }}</h4>
     </div>
     <div class="col-auto d-print-none">
         <div class="form-inline">

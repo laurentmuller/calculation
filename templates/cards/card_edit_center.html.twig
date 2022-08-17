@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import footer_center %}
 {# parameters #}
 {% set theme_class = 'light' %}
 {# hide navigation and footer #}
@@ -20,7 +20,7 @@
 {# footer #}
 {% block card_footer -%}
 {{ parent() }}
-{{ icons.footer_center() }}
+{{ footer_center() }}
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets -%}

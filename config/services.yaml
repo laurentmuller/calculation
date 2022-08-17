@@ -87,3 +87,7 @@ services:
     App\Listener\ResponseListener:
         arguments:
             $file: '%kernel.project_dir%/resources/data/csp.%kernel.environment%.json'
+
+    App\Twig\FunctionExtension:
+        arguments:
+            $extension: '@twig.extension.assets'

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Interfaces\MimeTypeInterface;
-use App\Twig\NonceExtension;
+use App\Service\NonceService;
 use App\Util\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -58,13 +58,13 @@ class ResponseListener implements EventSubscriberInterface
      * @throws \Exception
      */
     public function __construct(
+        NonceService $service,
         UrlGeneratorInterface $router,
-        NonceExtension $extension,
         string $file,
         #[Autowire('%kernel.debug%')]
         private readonly bool $isDebug
     ) {
-        $nonce = "'nonce-" . $extension->getNonce() . "'";
+        $nonce = $service->getCspNonce();
         $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $this->csp = $this->loadCSP($file, $nonce, $report);
     }
@@ -132,9 +132,7 @@ class ResponseListener implements EventSubscriberInterface
             $csp['plugin-types'] = [$response->getMimeType()];
         }
 
-        $keys = \array_keys($csp);
-
-        return \array_reduce($keys, fn (string $carry, string $key): string => $carry . $key . ' ' . \implode(' ', $csp[$key]) . ';', '');
+        return \array_reduce(\array_keys($csp), fn (string $carry, string $key): string => $carry . $key . ' ' . \implode(' ', $csp[$key]) . ';', '');
     }
 
     /**
@@ -172,7 +170,7 @@ class ResponseListener implements EventSubscriberInterface
             return [];
         }
 
-        /** @var array<string, string|string[]> $csp */
+        /** @psalm-var array<string, string|string[]> $csp */
         $csp = \json_decode($content, true);
         if (\JSON_ERROR_NONE !== \json_last_error() || empty($csp)) {
             return [];
@@ -197,9 +195,7 @@ class ResponseListener implements EventSubscriberInterface
             $report,
         ];
 
-        /**
-         * @psalm-var array<string, string[]> $result
-         */
+        /** @psalm-var array<string, string[]> $result */
         $result = \array_map(fn (array $values): array => \str_replace($search, $replace, $values), $csp);
 
         return $result;

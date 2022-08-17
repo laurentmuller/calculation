@@ -11,10 +11,10 @@
 {%- endmacro %}
 
 {% macro output_image(path, screenshot=true) -%}
-{%- set image = asset_if('help/images/' ~ path) -%}
-{% if image %}
-{% if screenshot %}<p class="mb-1">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-<img src="{{ asset(image) }}" class="img-fluid d-block">
+{%- set full_path = 'help/images/' ~ path -%}
+{% if asset_exists(full_path) %}
+    {% if screenshot %}<p class="mb-1">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
+    <img src="{{ asset(full_path) }}" class="img-fluid d-block">
 {% endif %}
 {%- endmacro %}
 

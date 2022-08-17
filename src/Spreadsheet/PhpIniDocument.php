@@ -30,6 +30,8 @@ class PhpIniDocument extends AbstractDocument
      * Constructor.
      *
      * @param array<string, array<string, mixed>> $content $content
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly array $content, private readonly string $version)
     {

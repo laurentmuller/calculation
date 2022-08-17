@@ -34,6 +34,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for {@link CalculationService} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalculationServiceTest extends KernelTestCase
 {

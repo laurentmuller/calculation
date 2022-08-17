@@ -34,21 +34,6 @@ final class ThemesExtension extends AbstractExtension
     }
 
     /**
-     * Gets the current theme.
-     *
-     * @param ?Request $request the request
-     *
-     * @return Theme the current theme, if any; the default theme otherwise
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     */
-    public function getCurrentTheme(?Request $request = null): Theme
-    {
-        return $this->service->getCurrentTheme($request);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getFunctions(): array
@@ -63,9 +48,24 @@ final class ThemesExtension extends AbstractExtension
     }
 
     /**
+     * Gets the current theme.
+     *
+     * @param ?Request $request the request
+     *
+     * @return Theme the current theme, if any; the default theme otherwise
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     */
+    private function getCurrentTheme(?Request $request = null): Theme
+    {
+        return $this->service->getCurrentTheme($request);
+    }
+
+    /**
      * Gets the theme background.
      */
-    public function getThemeBackground(?Request $request = null): string
+    private function getThemeBackground(?Request $request = null): string
     {
         // get background
         $background = $this->service->getThemeBackground($request);

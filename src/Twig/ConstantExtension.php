@@ -49,10 +49,11 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
 
     /**
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function getGlobals(): array
     {
-        return (array) $this->getCacheValue(self::CACHE_KEY, fn (): array => $this->callback());
+        return (array) $this->getCacheValue(self::CACHE_KEY, $this->callback());
     }
 
     /**

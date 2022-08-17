@@ -23,6 +23,8 @@ class SymfonyDocument extends AbstractDocument
 {
     /**
      * Constructor.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
     {

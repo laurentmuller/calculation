@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Psr\Container\ContainerExceptionInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -24,6 +25,8 @@ trait TranslatorAwareTrait
 
     /**
      * {@inheritDoc}
+     *
+     * @throws ContainerExceptionInterface
      */
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface

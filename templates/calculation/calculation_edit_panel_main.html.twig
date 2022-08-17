@@ -1,16 +1,16 @@
 {# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, link, button_submit, button_cancel, button_ok %}
 <div id="main-panel" class="card mb-3">
     <div class="card-header">
     {%- if editable -%}
         <h1 class="card-title">
-            {{- icons.icon(ICON_CALCULATION, title, null, title_parameters) -}}
+            {{- icon(ICON_CALCULATION, title, null, title_parameters) -}}
         </h1>
     {% else %}
         <div class="row">
             <div class="col-xl-5">
                 <h1 class="card-title">
-                    {{- icons.icon(ICON_CALCULATION, title, null, title_parameters) -}}
+                    {{- icon(ICON_CALCULATION, title, null, title_parameters) -}}
                 </h1>
             </div>
             <div class="col-xl-7 text-xl-right">
@@ -40,8 +40,8 @@
         {%- if editable -%}
             <div class="row">
                 <div class="col-md-8">
-                    {{ icons.button_submit() }}
-                    {{ icons.button_cancel(cancel_path) }}
+                    {{ button_submit() }}
+                    {{ button_cancel(cancel_path) }}
                 </div>
                 <div class="col-md-4 text-md-right mt-1">
                     <small>{{ 'common.required'|trans|raw }}</small>
@@ -50,11 +50,11 @@
         {%- else -%}
             <div class="row">
                 <div class="col">
-                    {{ icons.button_ok(cancel_path, 'common.button_close') }}
+                    {{ button_ok(cancel_path, 'common.button_close') }}
                     {% if is_granted(ATTRIBUTE_EDIT, ENTITY_CALCULATION) %}
                         {%- set state_params = route_params(app.request, item.id) -%}
                         {%- set state_path = path('calculation_state', state_params) -%}
-                        {{ icons.link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
+                        {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
                     {% endif %}
                 </div>
             </div>

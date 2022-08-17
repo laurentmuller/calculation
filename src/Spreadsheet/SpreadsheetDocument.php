@@ -423,7 +423,7 @@ class SpreadsheetDocument extends Spreadsheet
 
         if (!$includeHeader) {
             $sheet->getStyle("{$name}1")->getFont()->getColor()
-                ->setARGB(Color::COLOR_BLACK);
+                ->setARGB();
         }
 
         return $this;

@@ -9,7 +9,7 @@
 <container>
     <row>
         <columns large="1" small="2" valign="middle">
-            <img src="{{ email.image('@images/icons/favicon-36x36.png') }}" alt="{{ app_description }}">
+            <img src="{{ email.image('@images/icons/favicon_36x36.png') }}" alt="{{ app_description }}">
         </columns>
         <columns large="11" small="10" valign="middle">
             {% if importance is not null %}<small><strong>{{ ('importance.full.' ~ importance)|trans }}</strong></small>{% endif %}

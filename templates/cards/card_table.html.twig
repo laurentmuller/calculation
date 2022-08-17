@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, link, linkExternal, dropdownItem, dropdownSeparator, dropdownEllipsis, button_close_modal %}
 {% import 'macros/_attributes.html.twig' as tools %}
 {# macros #}
 {% macro output_column(column) -%}
@@ -25,21 +25,21 @@
 {%- endmacro %}
 {% macro item_path(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
-{{ icons.link(path, text, class, icon ~ ' fa-fw') }}
+{{ link(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
 {% macro item_path_external(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
-{{ icons.linkExternal(path, text, class, icon ~ ' fa-fw') }}
+{{ linkExternal(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
 {% macro item_global(path, text, icon) %}
-{{ icons.dropdownItem(path, text, icon) }}
+{{ dropdownItem(path, text, icon) }}
 {%- endmacro %}
 {% macro item_external(path, text, icon, class='') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
-{{ icons.linkExternal(path, text, class, icon ~ ' fa-fw') }}
+{{ linkExternal(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
 {% macro item_separator() %}
-{{ icons.dropdownSeparator() }}
+{{ dropdownSeparator() }}
 {%- endmacro %}
 {% macro property_row(field, value, class='') -%}
 {% set class = ('col-8 text-truncate user-select-none ' ~ class)|trim %}
@@ -65,7 +65,7 @@
 {%- endmacro %}
 {% macro button_view(text, icon, view, selection) %}
 <button type="button" role="button" class="dropdown-item dropdown-menu-view{% if view == selection %} dropdown-item-checked{% endif %}" data-value="{{ view }}">
-    {{- icons.icon(icon ~ ' fa-fw', text) -}}
+    {{- icon(icon ~ ' fa-fw', text) -}}
 </button>
 {%- endmacro %}
 {# granted actions #}
@@ -181,11 +181,11 @@
                 {% if sortable %}
                     {{ _self.item_separator() }}
                     <button type="button" role="button" class="dropdown-item btn-sort-data">
-                        {{- icons.icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
+                        {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
                     </button>
                 {% endif %}
                     <button type="button" role="button" class="dropdown-item btn-show-page">
-                        {{- icons.icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
+                        {{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
                     </button>
                 {% if allow_global %}
                     {{ _self.item_separator() }}
@@ -217,7 +217,7 @@
 </table>
 {# dropdown actions #}
 <div id="dropdown-actions" class="dropdown d-print-none d-none">
-    {{ icons.dropdownEllipsis() }}
+    {{ dropdownEllipsis() }}
     <div class="dropdown-menu dropdown-menu-right dropdown-menu-actions">
         {% if allow_edit %}
             {{- _self.item_separator() }}
@@ -256,9 +256,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{- icons.icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
+                    {{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
                 </h5>
-                {{ icons.button_close_modal() }}
+                {{ button_close_modal() }}
             </div>
             <div class="modal-body">
                 <label id="dialog-page-title">{{ 'datatable.dialog_message'|trans }}</label>
@@ -271,7 +271,7 @@
                 <button type="button" role="button" class="btn btn-form btn-primary"  id="page-button">
                     {{- 'common.button_ok'|trans -}}
                 </button>
-                {{ icons.button_close_modal(false, 'common.button_cancel') }}
+                {{ button_close_modal(false, 'common.button_cancel') }}
             </div>
         </div>
     </div>
@@ -283,9 +283,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{- icons.icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
+                    {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
                 </h5>
-                {{ icons.button_close_modal() }}
+                {{ button_close_modal() }}
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -301,13 +301,13 @@
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="sort-order-asc" name="sort-order" class="custom-control-input" value="asc">
                     <label class="custom-control-label" for="sort-order-asc">
-                        {{- icons.icon('arrow-down-a-z fa-solid fa-fw', 'list.sort_ascending') -}}
+                        {{- icon('arrow-down-a-z fa-solid fa-fw', 'list.sort_ascending') -}}
                     </label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="sort-order-desc" name="sort-order" class="custom-control-input" value="desc">
                     <label class="custom-control-label" for="sort-order-desc">
-                        {{- icons.icon('arrow-down-z-a fa-solid fa-fw', 'list.sort_descending') -}}
+                        {{- icon('arrow-down-z-a fa-solid fa-fw', 'list.sort_descending') -}}
                     </label>
                 </div>
             </div>
@@ -323,7 +323,7 @@
                         {{- 'list.sort_default_title'|trans -}}
                     </button>
                 {% endif %}
-                {{ icons.button_close_modal(false, 'common.button_cancel') }}
+                {{ button_close_modal(false, 'common.button_cancel') }}
             </div>
         </div>
     </div>

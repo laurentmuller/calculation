@@ -1,5 +1,5 @@
 {# admin menu #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal %}
 {% if is_test -%}
     {% set id = 'menu_test' %}
     {% set expanded = app.session.get(id, false) %}
@@ -8,33 +8,33 @@
     {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
     <li class="nav-item nav-item-dropdown" id="{{ id }}">
         <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
-            {{- icons.icon('bug fa-fw', 'index.menu_test') -}}
+            {{- icon('bug fa-fw', 'index.menu_test') -}}
         </a>
         <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
-            {{ icons.navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
-            {{ icons.navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
-            {{ icons.dropdownSeparator(false, 'border-secondary') }}
-            {{ icons.navItem(path('test_notifications'), 'test.notification', 'bell far') }}
-            {{ icons.navItem(path('test_editor'), 'test.editor', 'edit') }}
-            {{ icons.navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
-            {{ icons.navItem(path('test_timeline'), 'timeline.title', 'stream') }}
-            {{ icons.navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
-            {{ icons.navItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
-            {{ icons.dropdownSeparator(false, 'border-secondary') }}
-            {{ icons.navItem(path('exchange_display'), 'exchangerate.title', 'comments-dollar') }}
-            {{ icons.navItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
-            {{ icons.navItem(path('test_translate'), 'translator.title', 'globe') }}
-            {{ icons.dropdownSeparator(false, 'border-secondary') }}
-            {{ icons.navItemExternal(path('test_html'), 'test.html', 'code') }}
-            {{ icons.navItem(path('test_password'), 'password.title', 'lock') }}
-            {{ icons.dropdownSeparator(false, 'border-secondary') }}
-            {{ icons.navItem(path('admin_import'), 'swisspost.title', 'download') }}
-            {{ icons.dropdownSeparator(false, 'border-secondary') }}
-            {{ icons.navItem(path('generate'), 'generate.title', 'random') }}
-            {{ icons.navItem(path('update'), 'update.title', 'edit') }}
-            {{ icons.navItem(path('schema'), 'schema.index.title', 'table') }}
-            {{ icons.dropdownSeparator(false, 'border-secondary') }}
-            {{ icons.navItem(path('help'), 'help.title', 'question-circle') }}
+            {{ navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
+            {{ navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
+            {{ dropdownSeparator(false, 'border-secondary') }}
+            {{ navItem(path('test_notifications'), 'test.notification', 'bell far') }}
+            {{ navItem(path('test_editor'), 'test.editor', 'edit') }}
+            {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
+            {{ navItem(path('test_timeline'), 'timeline.title', 'stream') }}
+            {{ navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
+            {{ navItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
+            {{ dropdownSeparator(false, 'border-secondary') }}
+            {{ navItem(path('exchange_display'), 'exchangerate.title', 'comments-dollar') }}
+            {{ navItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
+            {{ navItem(path('test_translate'), 'translator.title', 'globe') }}
+            {{ dropdownSeparator(false, 'border-secondary') }}
+            {{ navItemExternal(path('test_html'), 'test.html', 'code') }}
+            {{ navItem(path('test_password'), 'password.title', 'lock') }}
+            {{ dropdownSeparator(false, 'border-secondary') }}
+            {{ navItem(path('admin_import'), 'swisspost.title', 'download') }}
+            {{ dropdownSeparator(false, 'border-secondary') }}
+            {{ navItem(path('generate'), 'generate.title', 'random') }}
+            {{ navItem(path('update'), 'update.title', 'edit') }}
+            {{ navItem(path('schema'), 'schema.index.title', 'table') }}
+            {{ dropdownSeparator(false, 'border-secondary') }}
+            {{ navItem(path('help'), 'help.title', 'question-circle') }}
         </ul>
     </li>
 {% endif %}

@@ -111,7 +111,7 @@ class HelpReport extends AbstractReport
      */
     private function br2nl(string $str): string
     {
-        return \preg_replace('/\<br(\s*)?\/?\>/i', \PHP_EOL, $str);
+        return \preg_replace('/<br(\s*)?\/?\>/i', \PHP_EOL, $str);
     }
 
     /**
@@ -211,9 +211,15 @@ class HelpReport extends AbstractReport
      */
     private function outputActions(array $actions, string $description): void
     {
-        $this->Ln(3);
+        // check height
+        $height = self::LINE_HEIGHT * (empty($description) ? 0 : $this->getLinesCount($description, 0))
+            + 3 + self::LINE_HEIGHT;
+        if (!$this->isPrintable($height)) {
+            $this->AddPage();
+        } else {
+            $this->Ln(3);
+        }
         $this->outputText($description);
-
         $table = new PdfTableBuilder($this);
         $table->addColumns(
             PdfColumn::left($this->trans('help.fields.action'), 70, true),

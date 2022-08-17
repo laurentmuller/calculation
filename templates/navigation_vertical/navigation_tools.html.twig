@@ -1,5 +1,5 @@
 {# tools menu #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, navItem, dropdownSeparator, dropdownItem %}
 {% if is_granted_data -%}
     {% set id = 'menu_tools' %}
     {% set expanded = app.session.get(id, false) %}
@@ -8,7 +8,7 @@
     {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
     <li class="nav-item nav-item-dropdown" id="{{ id }}">
         <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
-            {{- icons.icon('tools fa-fw', 'index.menu_tools') -}}
+            {{- icon('tools fa-fw', 'index.menu_tools') -}}
         </a>
         <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
             {# search form
@@ -18,22 +18,22 @@
                         <input id="search" name="search" type="text" class="form-control bg-transparent text-white" required="required" minlength="2" placeholder="{{ 'search.placeholder'|trans }}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit" role="button">
-                                {{- icons.icon('search fa-fw') -}}
+                                {{- icon('search fa-fw') -}}
                             </button>
                         </div>
                     </div>
                 </form>
             {% endif %}
             #}
-            {{ icons.navItem(path('search'), 'search.title', 'search') }}
+            {{ navItem(path('search'), 'search.title', 'search') }}
             {% if is_admin %}
-                {{ icons.dropdownSeparator(false, 'border-secondary') }}
-                {{ icons.navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
-                {{ icons.navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
-                {{ icons.navItem(path('empty_table'), 'empty.title', 'file-code far') }}
+                {{ dropdownSeparator(false, 'border-secondary') }}
+                {{ navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
+                {{ navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
+                {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}
                 {%- if is_granted_task -%}
-                    {{ icons.dropdownSeparator(false, 'border-secondary') }}
-                    {{ icons.navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
+                    {{ dropdownSeparator(false, 'border-secondary') }}
+                    {{ navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
                 {% endif -%}
             {% endif %}
         </ul>

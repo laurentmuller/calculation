@@ -14,7 +14,6 @@ namespace App\Validator;
 
 use App\Util\FormatUtils;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Password constraint validator.
@@ -26,17 +25,9 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Constructor.
      */
-    public function __construct(private readonly TranslatorInterface $translator)
+    public function __construct()
     {
         parent::__construct(Password::class);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -88,11 +79,11 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkAny(string $value, Password $constraint): bool
     {
         return $this->checkLetters($constraint, $value)
-            || $this->checkCaseDiff($constraint, $value)
-            || $this->checkNumber($constraint, $value)
-            || $this->checkSpecialChar($constraint, $value)
-            || $this->checkEmail($constraint, $value)
-            || $this->checkPwned($constraint, $value);
+        || $this->checkCaseDiff($constraint, $value)
+        || $this->checkNumber($constraint, $value)
+        || $this->checkSpecialChar($constraint, $value)
+        || $this->checkEmail($constraint, $value)
+        || $this->checkPwned($constraint, $value);
     }
 
     /**

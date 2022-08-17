@@ -153,9 +153,10 @@ class TaskController extends AbstractEntityController
     /**
      * Export tasks to a Spreadsheet document.
      *
-     * @throws NotFoundHttpException                if no category is found
+     * @throws NotFoundHttpException                      if no category is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'task_excel')]
     public function excel(): SpreadsheetResponse

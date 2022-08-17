@@ -112,7 +112,7 @@ abstract class AbstractTable implements SortModeInterface
         // global parameters
         $query->callback = $request->isXmlHttpRequest();
         $query->id = $this->getParamInt($request, TableInterface::PARAM_ID);
-        $query->search = (string) $this->getParamString($request, TableInterface::PARAM_SEARCH, '');
+        $query->search = (string) $this->getParamString($request, TableInterface::PARAM_SEARCH);
 
         // find view
         $view = (string) $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
@@ -156,6 +156,8 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets cookie and session prefix.
+     *
+     * @throws \ReflectionException
      */
     public function getPrefix(): string
     {

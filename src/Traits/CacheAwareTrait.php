@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
@@ -194,6 +195,9 @@ trait CacheAwareTrait
         return $this;
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     */
     #[SubscribedService]
     private function adapter(): CacheItemPoolInterface
     {

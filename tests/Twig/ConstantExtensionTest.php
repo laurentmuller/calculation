@@ -17,6 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for Twig {@link ConstantExtension}.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class ConstantExtensionTest extends KernelTestCase
 {

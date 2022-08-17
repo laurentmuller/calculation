@@ -21,7 +21,9 @@ use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- *  Unit test for the {@link UserService} class.
+ * Unit test for the {@link UserService} class.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class UserServiceTest extends KernelTestCase
 {

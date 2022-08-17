@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -22,6 +23,9 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  */
 trait SessionAwareTrait
 {
+    /**
+     * @throws ContainerExceptionInterface
+     */
     #[SubscribedService]
     public function getRequestStack(): RequestStack
     {

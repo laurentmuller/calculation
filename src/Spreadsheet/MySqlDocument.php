@@ -23,6 +23,8 @@ class MySqlDocument extends AbstractDocument
 {
     /**
      * Constructor.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $info)
     {

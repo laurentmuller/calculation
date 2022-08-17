@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Util\Utils;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
@@ -95,6 +96,9 @@ trait LoggerAwareTrait
         $this->logger()->warning($message, $context);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     */
     #[SubscribedService]
     private function logger(): LoggerInterface
     {

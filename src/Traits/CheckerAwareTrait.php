@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
@@ -95,6 +96,9 @@ trait CheckerAwareTrait
         return $value instanceof \UnitEnum ? $value->name : (string) $value;
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     */
     #[SubscribedService]
     private function checker(): AuthorizationCheckerInterface
     {

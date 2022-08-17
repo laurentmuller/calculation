@@ -15,7 +15,6 @@ namespace App\Tests\Validator;
 use App\Validator\Password;
 use App\Validator\PasswordValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link PasswordValidator} class.
@@ -25,8 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
-    private const EMPTY_MESSAGE = 'empty';
-
     public function getConstraints(): array
     {
         return [
@@ -140,13 +137,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
 
     protected function createValidator(): PasswordValidator
     {
-        $translator = $this->getMockBuilder(TranslatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->method('trans')
-            ->willReturn(self::EMPTY_MESSAGE);
-
-        return new PasswordValidator($translator);
+        return new PasswordValidator();
     }
 
     private function createPassword(array $options): Password

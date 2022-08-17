@@ -108,7 +108,7 @@
 {{- _self.link(href, text, class, 'home', 'index.title_help', domain) -}}
 {%- endmacro %}
 
-{% macro button_submit(text='common.button_ok', class='btn btn-form btn-primary', parameters={}) -%}
+{% macro button_submit(text='common.button_ok', class='btn btn-form btn-primary', parameters=[]) -%}
 {%- set parameters = parameters|merge({'class': class}) -%}
 <button type="submit" role="button"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans }}</button>
 {%- endmacro %}

@@ -1,6 +1,6 @@
 {# Macro for a calculation categories #}
 {% macro printCategoryRow(category, editable, first, last) -%}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemWithClass, dropdownSeparator, button_pdf %}
 {% import 'calculation/_macro_items.html.twig' as macroItems %}
 {# body #}
 <tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ macroItems.printItemRow(category.items.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
@@ -14,17 +14,17 @@
             {# menu #}
             <div class="dropdown">
                 {%- set menu_id = 'dropdownMenuCategory_' ~ category.vars.id -%}
-                {{ icons.dropdownEllipsis(menu_id) }}
+                {{ dropdownEllipsis(menu_id) }}
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_category', ICON_DELETE, 'btn-delete-category') }}
-                    {{ icons.dropdownSeparator() }}
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
-                    {{ icons.dropdownSeparator(first and last) }}
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-category', first) }}
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-category', first) }}
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-category', last) }}
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-category', last) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.delete_category', ICON_DELETE, 'btn-delete-category') }}
+                    {{ dropdownSeparator() }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
+                    {{ dropdownSeparator(first and last) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-category', first) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-category', first) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-category', last) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-category', last) }}
                 </div>
             </div>
         </th>

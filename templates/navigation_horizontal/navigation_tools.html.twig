@@ -1,22 +1,22 @@
 {# tool menu #}
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem %}
 {% if is_granted_data %}
     {% set id = 'dropdown_tools' %}
     {% set display_style = active ? 'block' : 'none' %}
     <li class="nav-item nav-sidebar-horizontal dropdown" style="display: {{ display_style }}">
         <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ icons.icon('tools', 'index.menu_tools') }}
+            {{ icon('tools', 'index.menu_tools') }}
         </a>
         <div class="dropdown-menu" aria-labelledby="{{ id }}">
-            {{ icons.dropdownItem(path('search'), 'search.title', 'search') }}
+            {{ dropdownItem(path('search'), 'search.title', 'search') }}
             {% if is_admin %}
-                {{ icons.dropdownSeparator }}
-                {{ icons.dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
-                {{ icons.dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
-                {{ icons.dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
+                {{ dropdownSeparator() }}
+                {{ dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
+                {{ dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
+                {{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
                 {%- if is_granted_task -%}
-                    {{ icons.dropdownSeparator }}
-                    {{ icons.dropdownItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
+                    {{ dropdownSeparator() }}
+                    {{ dropdownItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
                 {% endif -%}
             {% endif -%}
         </div>

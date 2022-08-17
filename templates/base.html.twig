@@ -13,33 +13,30 @@
 <meta name="description" content="{{ app_description }}">
 <meta name="theme-color" content="#212529">
 <meta name="msapplication-TileColor" content="#212529">
-<meta name="msapplication-TileImage" content="{{ asset('images/icons/favicon-144x144.png') }}">
+<meta name="msapplication-TileImage" content="{{ asset_icon(144) }}">
 <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}" />
 <meta property="og:title" content="{{ page_title }}" />
-<meta property="og:image" content="{{ asset('images/icons/favicon-144x144.png') }}" />
+<meta property="og:image" content="{{ asset_icon(144) }}" />
 <meta property="og:url" content="{{ app.request.uri }}" />
 <meta property="og:description" content="{{ app_description }}">
 <meta property="og:type" content="website" />
 <title>{{ page_title }}</title>
 <link rel="manifest" type="application/manifest+json" href="{{ asset_versioned('site.webmanifest') }}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/icons/favicon-16x16.png') }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/icons/favicon-32x32.png') }}">
-<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/icons/favicon-96x96.png') }}">
-<link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/icons/favicon-192x192.png') }}">
-<link rel="icon" type="image/png" sizes="256x256" href="{{ asset('images/icons/favicon-256x256.png') }}">
-<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('images/icons/favicon-57x57.png') }}">
-<link rel="apple-touch-icon" sizes="60x60" href="{{ asset('images/icons/favicon-60x60.png') }}">
-<link rel="apple-touch-icon" sizes="72x72" href="{{ asset('images/icons/favicon-72x72.png') }}">
-<link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/icons/favicon-76x76.png') }}">
-<link rel="apple-touch-icon" sizes="114x114" href="{{ asset('images/icons/favicon-114x114.png') }}">
-<link rel="apple-touch-icon" sizes="120x120" href="{{ asset('images/icons/favicon-120x120.png') }}">
-<link rel="apple-touch-icon" sizes="144x144" href="{{ asset('images/icons/favicon-144x144.png') }}">
-<link rel="apple-touch-icon" sizes="152x152" href="{{ asset('images/icons/favicon-152x152.png') }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/icons/favicon-180x180.png') }}">
-{# stylesheets
-    {{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
-#}
-{# theme #}
+<link rel="icon" type="image/png" sizes="16x16" href="{{ asset_icon(16) }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset_icon(32) }}">
+<link rel="icon" type="image/png" sizes="96x96" href="{{ asset_icon(96) }}">
+<link rel="icon" type="image/png" sizes="192x192" href="{{ asset_icon(192) }}">
+<link rel="icon" type="image/png" sizes="256x256" href="{{ asset_icon(256) }}">
+<link rel="apple-touch-icon" sizes="57x57" href="{{ asset_icon(57) }}">
+<link rel="apple-touch-icon" sizes="60x60" href="{{ asset_icon(60) }}">
+<link rel="apple-touch-icon" sizes="72x72" href="{{ asset_icon(72) }}">
+<link rel="apple-touch-icon" sizes="76x76" href="{{ asset_icon(76) }}">
+<link rel="apple-touch-icon" sizes="114x114" href="{{ asset_icon(114) }}">
+<link rel="apple-touch-icon" sizes="120x120" href="{{ asset_icon(120) }}">
+<link rel="apple-touch-icon" sizes="144x144" href="{{ asset_icon(144) }}">
+<link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
+{# stylesheets #}
 {{ asset_css('js/vendor/bootstrap/css/bootstrap-' ~ theme_class ~ '.css', {'id': 'theme'}) }}
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}

@@ -14,7 +14,6 @@ namespace App\Chart;
 
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
-use App\Service\ThemeService;
 use App\Table\CalculationTable;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -28,13 +27,10 @@ class StateChart extends BaseChart
 {
     /**
      * Constructor.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
-    public function __construct(ApplicationService $application, ThemeService $service, private readonly CalculationStateRepository $repository, private readonly UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, private readonly CalculationStateRepository $repository, private readonly UrlGeneratorInterface $generator)
     {
-        parent::__construct($application, $service);
+        parent::__construct($application);
     }
 
     /**
@@ -145,7 +141,6 @@ class StateChart extends BaseChart
         return [
             'fontSize' => '14px',
             'fontWeight' => 'normal',
-            'color' => $this->getForeground(),
         ];
     }
 }

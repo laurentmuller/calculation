@@ -14,7 +14,6 @@ namespace App\Chart;
 
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
-use App\Service\ThemeService;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -29,13 +28,10 @@ class MonthChart extends BaseChart
 
     /**
      * Constructor.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
-    public function __construct(ApplicationService $application, ThemeService $service, private readonly CalculationRepository $repository, UrlGeneratorInterface $generator)
+    public function __construct(ApplicationService $application, private readonly CalculationRepository $repository, UrlGeneratorInterface $generator)
     {
-        parent::__construct($application, $service);
+        parent::__construct($application);
         $this->url = $generator->generate('calculation_table');
     }
 
@@ -66,9 +62,8 @@ class MonthChart extends BaseChart
         $series = $this->getSeries($marginsData, $itemsData);
 
         // axes
-        $color = $this->getForeground();
-        $yAxis = $this->getYaxis($color);
-        $xAxis = $this->getXAxis($color, $dates);
+        $yAxis = $this->getYaxis();
+        $xAxis = $this->getXAxis($dates);
 
         // update
         $this->setType(self::TYPE_COLUMN)
@@ -324,7 +319,7 @@ class MonthChart extends BaseChart
         return \array_map(fn (array $item): float => $item['total'], $data);
     }
 
-    private function getXAxis(string $color, array $dates): array
+    private function getXAxis(array $dates): array
     {
         return [
             'type' => 'datetime',
@@ -332,14 +327,13 @@ class MonthChart extends BaseChart
             'labels' => [
                 'format' => '{value:%B %Y}',
                 'style' => [
-                    'color' => $color,
                     'fontSize' => '12px',
                 ],
             ],
         ];
     }
 
-    private function getYaxis(string $color): array
+    private function getYaxis(): array
     {
         $function = <<<JS
             function() {
@@ -353,7 +347,6 @@ class MonthChart extends BaseChart
                 'labels' => [
                     'formatter' => $formatter,
                     'style' => [
-                        'color' => $color,
                         'fontSize' => '12px',
                     ],
                 ],

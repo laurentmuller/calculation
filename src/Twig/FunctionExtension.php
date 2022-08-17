@@ -54,9 +54,10 @@ final class FunctionExtension extends AbstractExtension
         string $projectDir,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
+        #[Autowire(service: 'twig.extension.assets')]
+        private readonly AssetExtension $extension,
         private readonly NonceService $service,
         private readonly UploaderHelper $helper,
-        private readonly AssetExtension $extension,
         private readonly UrlGeneratorService $generator,
         private readonly TranslatorInterface $translator
     ) {
@@ -209,9 +210,6 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Returns the public url/path of an asset.
-     *
-     * If the package used to generate the path is an instance of
-     * UrlPackage, you will always get a URL and not a path.
      */
     private function assetUrl(string $path, ?string $packageName = null): string
     {

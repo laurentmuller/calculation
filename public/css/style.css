@@ -652,3 +652,8 @@ table.table-fixed-header .thead-light th {
 .context-menu-item.btn-default {
     font-weight: bolder !important;
 }
+
+#chartContainer > text {
+    color: red !important;
+    fill: red !important;
+}

@@ -21,14 +21,14 @@ parameters:
     cookie_path: '%env(string:COOKIE_PATH)%'
 
     # keys
+    akismet_key: '%env(string:AKISMET_KEY)%'
+    ip_stack_key: '%env(string:IP_STACK_KEY)%'
     open_weather_key: '%env(string:OPEN_WEATHER_KEY)%'
+    exchange_rate_key: '%env(string:EXCHANGE_RATE_KEY)%'
     bing_translator_key:   '%env(string:BING_TRANSLATOR_KEY)%'
     google_translator_key: '%env(string:GOOGLE_TRANSLATOR_KEY)%'
     google_recaptcha_secret_key: '%env(string:GOOGLE_RECAPTCHA_SECRET_KEY)%'
     google_recaptcha_site_key: '%env(string:GOOGLE_RECAPTCHA_SITE_KEY)%'
-    exchange_rate_key: '%env(string:EXCHANGE_RATE_KEY)%'
-    akismet_key: '%env(string:AKISMET_KEY)%'
-    ip_stack_key: '%env(string:IP_STACK_KEY)%'
 
     #links
     link_dev: '%env(string:LINK_DEV)%'
@@ -87,7 +87,3 @@ services:
     App\Listener\ResponseListener:
         arguments:
             $file: '%kernel.project_dir%/resources/data/csp.%kernel.environment%.json'
-
-    App\Twig\FunctionExtension:
-        arguments:
-            $extension: '@twig.extension.assets'

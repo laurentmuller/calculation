@@ -7,3 +7,19 @@ div.chart {
     min-height: 500px;
     margin: 0 auto;
 }
+
+body div.chart .highcharts-axis-labels text {
+    fill: #212529 !important;
+}
+
+body.dark div.chart .highcharts-axis-labels text {
+    fill: #d3d3d3 !important;
+}
+
+body div.chart .highcharts-legend-item text {
+    fill: #212529 !important;
+}
+
+body.dark div.chart .highcharts-legend-item text {
+    fill: #d3d3d3 !important;
+}

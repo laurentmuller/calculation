@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Chart;
 
 use App\Service\ApplicationService;
-use App\Service\ThemeService;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\DateUtils;
@@ -73,18 +72,12 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     final public const TYPE_SP_LINE = 'spline';
 
-    private readonly bool $darkTheme;
-
     /**
      * Constructor.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
-    public function __construct(protected ApplicationService $application, ThemeService $service)
+    public function __construct(protected ApplicationService $application)
     {
         parent::__construct();
-        $this->darkTheme = $service->isDarkTheme();
 
         $this->hideCredits()
             ->initLangOptions()
@@ -107,14 +100,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
         $this->chart->events($events); // @phpstan-ignore-line
 
         return $this;
-    }
-
-    /**
-     * Gets the foreground of the graph label; depending on the theme of the application.
-     */
-    public function getForeground(): string
-    {
-        return $this->darkTheme ? 'white' : 'black';
     }
 
     /**

@@ -187,6 +187,9 @@ final class FunctionExtension extends AbstractExtension
         if (null !== $size) {
             $asset = \str_replace('192', $size, $asset);
         }
+        if (!$this->assetExists($asset)) {
+            return false;
+        }
 
         return $this->assetImage(\ltrim($asset, '/'), $parameters);
     }

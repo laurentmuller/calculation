@@ -153,12 +153,12 @@ class MonthChart extends BaseChart
 
     private function getClickExpression(): Expr
     {
-        $function = <<<EOF
+        $function = <<<FUNCTION
             function() {
                 const href = "$this->url?search=" + Highcharts.dateFormat("%m.%Y", this.category);
                 location.href = href;
             }
-            EOF;
+            FUNCTION;
 
         return new Expr($function);
     }
@@ -199,7 +199,7 @@ class MonthChart extends BaseChart
 
     private function getFormatterExpression(): Expr
     {
-        $function = <<<EOF
+        $function = <<<FUNCTION
             function () {
                 window.console.log(this);
                 var date = Highcharts.dateFormat("%B %Y", this.x);
@@ -213,7 +213,7 @@ class MonthChart extends BaseChart
                 html += "</table>";
                 return html;
             }
-            EOF;
+            FUNCTION;
 
         return new Expr($function);
     }
@@ -335,11 +335,11 @@ class MonthChart extends BaseChart
 
     private function getYaxis(): array
     {
-        $function = <<<JS
+        $function = <<<FUNCTION
             function() {
                return Highcharts.numberFormat(this.value, 0);
             }
-            JS;
+            FUNCTION;
         $formatter = new Expr($function);
 
         return [

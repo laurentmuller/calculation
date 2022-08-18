@@ -60,7 +60,7 @@ function displayNotification() {
                 displayClose: $('#message_close').isChecked(),
                 displaySubtitle: $('#message_sub_title').isChecked(),
             });
-            // remove container is needed
+            // remove container if needed
             if (oldPosition && oldPosition !== newPosition) {
                 Toaster.removeContainer();
             }
@@ -119,18 +119,17 @@ function displayEmail($email) {
         }
     });
 
-    // toggle icons and titles
+    // toggle titles
     $('.toggle-icon').on('show.bs.collapse', function () {
         const $prev = $(this).prev();
-        $prev.find('i').toggleClass('fa-caret-left fa-caret-down');
         $prev.find('a').attr('title', $prev.data('hide'));
     }).on('hide.bs.collapse', function () {
         const $prev = $(this).prev();
-        $prev.find('i').toggleClass('fa-caret-left fa-caret-down');
         $prev.find('a').attr('title', $prev.data('show'));
     }).on('shown.bs.collapse', function () {
-        if ($(this).find('.is-invalid').length === 0) {
-            $(this).find(':input:first').trigger('focus');
+        const $this = $(this);
+        if ($this.find('.is-invalid').length === 0) {
+            $this.find(':input:first').trigger('focus');
         }
     });
 

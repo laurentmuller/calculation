@@ -522,6 +522,20 @@ body {
 }
 
 /**
+ * link with drop-down caret on the left
+ */
+a.drop-down-caret:before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    padding-right: 3px;
+    content: "\f0da";
+}
+a.drop-down-caret[aria-expanded="true"]:before {
+    content: "\f0d7";
+}
+
+
+/**
  * Context menu
  */
  .context-menu-list {

@@ -92,6 +92,7 @@
          * @param {boolean} [options.colorPicker]
          * @param {boolean} [options.simpleEditor]
          * @param {function} [options.submitHandler]
+         * @param {Object} [options.spinner]
          * @param {Object} [options.rules]
          * @returns the validator.
          */
@@ -220,15 +221,6 @@
                             $toUpdate.removeClass('field-valid').addClass('field-invalid');
                         }
                     }
-
-                    // fix bug:
-                    // https://getbootstrap.com/docs/4.5/components/forms/#input-group-validation-workaround
-                    // const rightRadius =
-                    // $left.css('border-bottom-left-radius');
-                    // const $text = $element.parents('.input-group')
-                    // .find('.input-group-append:last .input-group-text:last');
-                    // console.log($text.css('border-bottom-right-radius'));
-                    // .addClass('border-right rounded-right');
                 },
 
                 unhighlight: function (element, errorClass) {
@@ -371,6 +363,18 @@
                 hide: 350,
                 timeout: 1500
             }, options);
+
+            // check width
+            let width = settings.css.width;
+            if (width.endsWith('px')) {
+                width = Number.parseInt(width, 10);
+                if (!Number.isNaN(width)) {
+                    const maxWidth = Math.floor($(window).width() * 0.9);
+                    settings.css.width = Math.min(width, maxWidth) + 'px';
+                }
+            }
+
+            // build alert
             const $alert = $('<div />', {
                 class: settings.alertClass,
                 text: settings.text,

@@ -1858,13 +1858,13 @@ const MoveHandler = {
     // main form validation
     const $form = $('#edit-form');
     $form.initValidator({
-    spinner: {
-        parent: $('#navigation'),
-        css: {
-            top: '20rem',
-            width: '600px'
+        spinner: {
+            parent: $('#navigation'),
+            css: {
+                top: '20rem',
+                width: '600px'
+            }
         }
-    }
     });
 
     // edit the default product if new calculation

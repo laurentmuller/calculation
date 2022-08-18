@@ -179,9 +179,9 @@ final class FormatExtension extends AbstractExtension
      * @param ?string                        $calendar   the calendar type
      * @param ?string                        $pattern    the optional pattern to use when formatting
      *
-     * @throws SyntaxError if the date format or the time format is unknown
-     *
      * @return string the formatted date
+     *
+     * @throws SyntaxError if the date format or the time format is unknown
      */
     private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {

@@ -7,11 +7,8 @@
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
 {%- set icon = expanded ? 'fa-caret-down' : 'fa-caret-left' -%}
 <div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
-    <a href="#{{ href }}" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">
+    <a href="#{{ href }}" class="flex-fill horizontal-line drop-down-caret" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}">
         {{- name -}}
-    </a>
-    <a href="#{{ href }}" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}">
-        <i class="fa-solid fa-fw fa-lg {{ icon }}"></i>
     </a>
 </div>
 {% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded, options: options} %}

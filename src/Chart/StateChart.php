@@ -87,11 +87,11 @@ class StateChart extends BaseChart
 
     private function getClickExpression(): Expr
     {
-        $function = <<<EOF
+        $function = <<<FUNCTION
             function() {
                 location.href = this.url;
             }
-            EOF;
+            FUNCTION;
 
         return new Expr($function);
     }

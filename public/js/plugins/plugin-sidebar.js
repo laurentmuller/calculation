@@ -181,9 +181,8 @@
             if (!$menu.is(':visible')) {
                 that._collapseMenus();
             }
-            $link.toggleClass('nav-link-toggle-show');
-            $link.toggleClass('active', $link.hasClass('nav-link-toggle-show'));
             $menu.toggle(350, function () {
+                $link.addClass('active');
                 that._updateMenus();
                 that._saveState();
             });
@@ -224,9 +223,9 @@
          * @private
          */
         _collapseMenus() {
-            const $toggle = this.$element.find('.nav-item-dropdown .nav-link-toggle.nav-link-toggle-show');
+            const $toggle = this.$element.find('.nav-item-dropdown .nav-link-toggle[aria-expanded="true"]');
             if ($toggle.length) {
-                $toggle.removeClass('nav-link-toggle-show active').attr({
+                $toggle.removeClass('active').attr({
                     'title': this.options.showMenu,
                     'aria-expanded': 'false'
                 });

@@ -155,7 +155,7 @@
 
 {# use file-input style #}
 {% block file_widget -%}
-{%- if thumbnail is defined and  thumbnail -%}
+{%- if thumbnail is defined and thumbnail -%}
     {%- set empty_image = empty_image|default(false) -%}
     {%- set thumbnail_src = thumbnail_src|default(false) -%}
     {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}

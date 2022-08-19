@@ -4,7 +4,7 @@
     {% set id = 'menu_data' %}
     {% set expanded = app.session.get(id, true) %}
     {% set display_style = expanded ? 'block' : 'none' %}
-    {% set toggle_class = expanded ? ' nav-link-toggle-show active' : '' %}
+    {% set toggle_class = expanded ? ' active' : '' %}
     {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
     <li class="nav-item nav-item-dropdown" id="{{ id }}">
         <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">

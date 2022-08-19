@@ -76,7 +76,7 @@
     border-left: 0;
 }
 
-.navbar-vertical .nav-link-toggle.nav-link-toggle-show::after {
+.navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {
     /* down arrow */
     transform: rotate(-90deg);
 }

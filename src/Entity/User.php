@@ -131,7 +131,10 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * @param array{id: int|null, username: string|null, password: string|null} $data
+     * @param array{
+     *     id: int|null,
+     *     username: string|null,
+     *     password: string|null} $data
      */
     public function __unserialize(array $data): void
     {
@@ -210,13 +213,12 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         if ($size > 0) {
             $query['size'] = \sprintf('%dx%d', $size, $size);
         }
-        if ($set >= 2 && $set <= 5) {
+        if (\in_array($set, \range(2, 5), true)) {
             $query['set'] = \sprintf('set%d', $set);
         }
-        if ($background >= 1 && $background <= 2) {
+        if (\in_array($background, \range(1, 2), true)) {
             $query['bgset'] = \sprintf('bg%d', $background);
         }
-
         $url = 'https://robohash.org/' . \urlencode($this->getUserIdentifier());
         if (!empty($query)) {
             return $url . '?' . \http_build_query($query);

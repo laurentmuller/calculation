@@ -120,22 +120,6 @@ function initBackToTop() {
 }
 
 /**
- * Update the rounded class.
- */
-function initRounded() {
-    'use strict';
-    const $button = $('<button/>', {
-        'class': 'btn'
-    });
-    $('body').append($button);
-    const border = $button.css('border-radius');
-    $button.remove();
-    $('.rounded').each(function () {
-        $(this)[0].style.setProperty('border-radius', border, 'important');
-    });
-}
-
-/**
  * Initialize the sidebar.
  */
 function initSidebar() {
@@ -205,7 +189,6 @@ function initSwitchTheme() {
  */
 (function ($) { // jshint ignore:line
     'use strict';
-    initRounded();
     initSidebar();
     initBackToTop();
     initSearchToolbar();

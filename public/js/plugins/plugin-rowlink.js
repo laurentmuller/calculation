@@ -134,6 +134,7 @@
     // Rowlink data-api
     // ------------------------------------
     $(document).on('click.bs.rowlink.data-api', '[data-link="row"]', function (e) {
+        // check event
         if (e.type === 'mouseup' && e.which !== 1) {
             return;
         }
@@ -141,11 +142,13 @@
             return;
         }
 
+        // already initialized?
         const $this = $(this);
         if ($this.data('bs.rowlink')) {
             return;
         }
 
+        // initialize
         $this.rowlink($this.data());
         const ctrlKey = e.ctrlKey || e.which === 2;
         $(e.target).trigger('click.bs.rowlink', [ctrlKey]);

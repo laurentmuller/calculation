@@ -5,17 +5,19 @@
 {% block form_row -%}
     {%- if compound is defined and compound -%}
         {%- set element = 'fieldset' -%}
+    {% else %}
+        {%- set element = element|default('div') -%}
     {%- endif -%}
     {%- set widget_attr = {} -%}
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~ "_help"}} -%}
     {%- endif -%}
-    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
+    <{{ element }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
         {{- form_label(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {{- form_help(form) -}}
         {{- form_errors(form) }}
-    </{{ element|default('div') }}>
+    </{{ element }}>
 {%- endblock form_row %}
 
 {# empty block because errors are displayed after input #}
@@ -151,42 +153,42 @@
 </div>
 {%- endblock -%}
 
-{# use fileinput style #}
+{# use file-input style #}
 {% block file_widget -%}
-{%- if thumbnail ?? false -%}
+{%- if thumbnail is defined and  thumbnail -%}
     {%- set empty_image = empty_image|default(false) -%}
     {%- set thumbnail_src = thumbnail_src|default(false) -%}
     {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
     {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-    <div class="text-center fileinput {{ thumbnail_src ? 'fileinput-exists' : 'fileinput-new' }}" data-provider="fileinput">
-        <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" data-default="{{ empty_image }}">
+    <div class="text-center file-input {{ thumbnail_src ? 'file-input-exists' : 'file-input-new' }}" data-provider="file-input">
+        <div class="file-input-preview img-thumbnail" data-trigger="file-input" data-default="{{ empty_image }}">
         {% if thumbnail_src or empty_image -%}
             <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}">
         {%- endif %}
         </div>
         <div>
             <span class="btn btn-file btn-sm btn-form-sm btn-outline-secondary">
-                <span class="fileinput-new">{{ 'common.button_browse'|trans }}</span>
-                <span class="fileinput-exists">{{ 'common.button_edit'|trans }}</span>
+                <span class="file-input-new">{{ 'common.button_browse'|trans }}</span>
+                <span class="file-input-exists">{{ 'common.button_edit'|trans }}</span>
                 {% set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
                 {{- block('form_widget_simple') -}}
             </span>
-            <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger fileinput-exists" data-dismiss="fileinput">{{ 'common.button_delete'|trans }}</button>
+            <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger file-input-exists" data-dismiss="file-input">{{ 'common.button_delete'|trans }}</button>
         </div>
     </div>
 {%- else -%}
     {%- set placeholder = attr.placeholder is defined ? (translation_domain is same as(false) ? attr.placeholder : attr.placeholder|trans({}, translation_domain)) : false -%}
-    <div class="fileinput fileinput-new input-group rounded border" data-provider="fileinput">
-        <div class="form-control" data-trigger="fileinput">
-            <span class="fileinput-filename">{%- if placeholder -%}{{ placeholder }}{%- endif -%}</span>
+    <div class="file-input file-input-new input-group rounded border" data-provider="file-input">
+        <div class="form-control" data-trigger="file-input">
+            <span class="file-input-filename">{%- if placeholder -%}{{ placeholder }}{%- endif -%}</span>
         </div>
         <span class="input-group-append">
-            <span class="input-group-text btn-file rounded-right" style="border-right: 0px;">
-                <span class="fileinput-new">{{ 'common.button_browse'|trans }}</span>
-                <span class="fileinput-exists">{{ 'common.button_edit'|trans }}</span>
+            <span class="input-group-text btn-file rounded-right border-right-0">
+                <span class="file-input-new">{{ 'common.button_browse'|trans }}</span>
+                <span class="file-input-exists">{{ 'common.button_edit'|trans }}</span>
                 {{- block('form_widget_simple') -}}
             </span>
-            <span class="input-group-text fileinput-exists" data-dismiss="fileinput" title="{{ 'common.button_delete'|trans }}">
+            <span class="input-group-text file-input-exists" data-dismiss="file-input" title="{{ 'common.button_delete'|trans }}">
                 <i class="fa-solid fa-times"></i>
             </span>
         </span>
@@ -198,10 +200,8 @@
 {% block vich_image_widget -%}
 {# file #}
 {%- set alt = 'user.image.title' -%}
-{%- set empty_image = asset('images/avatar.png') -%}
-{%- set uri = asset_exists(image_uri) ? asset_versioned(image_uri|trim('/', 'left')) : false -%}
-{%- set src = uri ? asset(uri) : false -%}
-{{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt, empty_image: empty_image}) -}}
+{%- set src = asset_exists(image_uri) ? asset_versioned(image_uri|trim('/', 'left')) : false -%}
+{{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt}) -}}
 {# delete #}
 {% if form.delete is defined -%}
 <div class="d-none">

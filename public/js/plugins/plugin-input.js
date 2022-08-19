@@ -43,6 +43,7 @@
         // -----------------------------
 
         /**
+         * Initialize this plugin.
          * @private
          */
         _init() {

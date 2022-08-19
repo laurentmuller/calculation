@@ -119,9 +119,6 @@ class LogFile implements \Countable
         return $this;
     }
 
-    /**
-     * Sort logs, channels and levels. Does nothing if no log is present.
-     */
     public function sort(): self
     {
         if (!$this->isEmpty()) {
@@ -135,13 +132,11 @@ class LogFile implements \Countable
 
     private function addChannel(string $channel): void
     {
-        $value = $this->channels[$channel] ?? 0;
-        $this->channels[$channel] = $value + 1;
+        $this->channels[$channel] = 1 + ($this->channels[$channel] ?? 0);
     }
 
     private function addLevel(string $level): void
     {
-        $value = $this->levels[$level] ?? 0;
-        $this->levels[$level] = $value + 1;
+        $this->levels[$level] = 1 + ($this->levels[$level] ?? 0);
     }
 }

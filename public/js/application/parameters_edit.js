@@ -121,11 +121,11 @@ function displayEmail($email) {
 
     // toggle titles
     $('.toggle-icon').on('show.bs.collapse', function () {
-        const $prev = $(this).prev();
-        $prev.find('a').attr('title', $prev.data('hide'));
+        const $link = $(this).prev();
+        $link.attr('title', $link.data('hide'));
     }).on('hide.bs.collapse', function () {
-        const $prev = $(this).prev();
-        $prev.find('a').attr('title', $prev.data('show'));
+        const $link = $(this).prev();
+        $link.attr('title', $link.data('show'));
     }).on('shown.bs.collapse', function () {
         const $this = $(this);
         if ($this.find('.is-invalid').length === 0) {

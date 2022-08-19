@@ -5,13 +5,13 @@
 {%- set name = ('parameters.group_' ~ href)|trans -%}
 {%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
-{%- set icon = expanded ? 'fa-caret-down' : 'fa-caret-left' -%}
-<div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
-    <a href="#{{ href }}" class="flex-fill horizontal-line drop-down-caret" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ show }}">
+{%- set title = expanded ? hide : show -%}
+<div class="mb-2">
+    <a href="#{{ href }}" class="drop-down-icon-left horizontal-line" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
         {{- name -}}
     </a>
+    {% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded, options: options} %}
 </div>
-{% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded, options: options} %}
 {% endmacro %}
 {# customized fields #}
 {% block _message_progress_widget -%}

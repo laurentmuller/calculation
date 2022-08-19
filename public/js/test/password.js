@@ -8,7 +8,8 @@
 
     // password strength
     $("#form_input").initPasswordStrength({
-        debug: true
+        debug: true,
+        labelContainer: $('#score')
     });
 
     // validation

@@ -57,6 +57,9 @@
             }
         }
 
+        /**
+         * Destructor.
+         */
         destroy() {
             if (this.$input) {
                 this._cancel(null, false);

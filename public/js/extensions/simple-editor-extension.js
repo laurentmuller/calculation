@@ -75,15 +75,12 @@
             };
 
             options = options || {};
-            const borderRadius = $.isBorderRadius();
             const events = 'click focus keyup mouseup input';
             return this.each(function () {
                 const $this = $(this);
                 const $editor = $this.parents('div.simple-editor');
                 const $content = $editor.find('div.simple-editor-content');
-                if (borderRadius) {
-                    $editor.addClass('rounded');
-                }
+                $editor.addClass('rounded');
 
                 // actions
                 $editor.find('.simple-editor-toolbar button').each(function (index) {
@@ -93,7 +90,7 @@
                     const state = exec && data.state || false;
                     const enabled = exec && data.enabled || false;
 
-                    if (index === 0 && borderRadius) {
+                    if (index === 0) {
                         $button.addClass('rounded-left');
                     }
 

@@ -512,28 +512,70 @@ body {
 .horizontal-line:after {
     content: "";
     flex: 1 1;
-    border-bottom: 1px solid #ced4da;
+    display: inline-block;
+    border-bottom: 1px solid #ced4da !important;
     margin: auto auto auto 0.5rem;
 }
 
-.horizontal-line i {
-    font-size: inherit;
-    line-height: inherit;
+
+body.dark .horizontal-line:after {
+    border-bottom: 1px solid #adadad !important;
 }
 
 /**
- * link with drop-down caret on the left
+ * Add a drop-down caret before the element
  */
-a.drop-down-caret:before {
+.drop-down-icon-left:before {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
-    padding-right: 3px;
+    padding-right: 4px;
     content: "\f0da";
 }
-a.drop-down-caret[aria-expanded="true"]:before {
+.drop-down-icon-left[aria-expanded="true"]:before {
     content: "\f0d7";
+    padding-right: 2px;
 }
 
+/**
+ * Add a drop-down caret before the element
+ */
+.drop-down-caret-left::before {
+    display: inline-block;
+    content: "";
+    float: left;
+    margin-top: 0.5em;
+    margin-right: 0.25em;
+    transition: all 0.35s ease;
+    /* right arrow */
+    border-left: 0.3em solid;
+    border-top: 0.3em solid transparent;
+    border-bottom: 0.3em solid transparent;
+    border-right: 0;
+}
+.drop-down-caret-left[aria-expanded="true"]::before {
+    /* down arrow */
+    transform: rotate(90deg);
+}
+/**
+ * Add a drop-down caret after the element
+ */
+.drop-down-caret-right::after {
+    display: inline-block;
+    content: "";
+    float: right;
+    margin-top: 0.5em;
+    margin-left: 0.25em;
+    transition: all 0.35s ease;
+    /* left arrow */
+    border-right: 0.3em solid;
+    border-top: 0.3em solid transparent;
+    border-bottom: 0.3em solid transparent;
+    border-left: 0;
+}
+.drop-down-caret-right[aria-expanded="true"]::after {
+    /* down arrow */
+    transform: rotate(-90deg);
+}
 
 /**
  * Context menu
@@ -667,7 +709,6 @@ table.table-fixed-header .thead-light th {
     font-weight: bolder !important;
 }
 
-#chartContainer > text {
-    color: red !important;
-    fill: red !important;
+body.dark .form-control-plaintext.border {
+    color: inherit;
 }

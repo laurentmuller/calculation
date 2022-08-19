@@ -66,8 +66,8 @@
     display: inline-block;
     content: "";
     float: right;
-    margin-top: 0.7em;
-    margin-right: 0.25em;
+    margin-top: 0.5em;
+    margin-left: 0.25em;
     transition: all 0.35s ease;
     /* left arrow */
     border-right: 0.3em solid;
@@ -78,7 +78,6 @@
 
 .navbar-vertical .nav-link-toggle.nav-link-toggle-show::after {
     /* down arrow */
-    margin-top: 0.6em;
     transform: rotate(-90deg);
 }
 

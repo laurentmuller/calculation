@@ -53,14 +53,12 @@ function startDragItems() {
 
     // items?
     if ($items.find('.item').length > 1) {
-        const isRadius = $('.card:first').css('border-radius') !== '0px';
-        const placeholderClass = 'border border-primary' + (isRadius ? ' rounded' : '');
         sortable($items, {
             items: '.item',
             //handle: '.stretched-link',
             handle: '.card-header-item',
             forcePlaceholderSize: true,
-            placeholderClass: placeholderClass
+            placeholderClass: 'border border-primary rounded'
         });
         $items.on('sortupdate', updateUI);
         $items.data('sortable', true);

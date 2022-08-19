@@ -5,10 +5,14 @@
  */
 (function ($) {
     'use strict';
+
     // ------------------------------------
     // FileInput public class definition
     // ------------------------------------
     const FileInput = class {
+        // -----------------------------
+        // public functions
+        // -----------------------------
 
         /**
          * Constructor
@@ -19,67 +23,132 @@
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend({}, FileInput.DEFAULTS, options);
+            this._init();
+        }
+
+        /**
+         * Display the selection file dialog by trigger the click event on the input file element.
+         *
+         * @param {Event} [e] - the source event.
+         */
+        selectFile(e) {
+            if (e) {
+                e.preventDefault();
+            }
+            this.$input.trigger('click');
+        }
+
+        /**
+         * Destructor.
+         */
+        destroy() {
+            this.$element.off('change.bs.file-input', this.changeProxy);
+            this.$element.find('[data-dismiss="file-input"]').off('click.bs.file-input', this.clearProxy);
+            this.$element.find('[data-trigger="file-input"]').off('click.bs.file-input', this.clickProxy);
+            $(this.$input[0].form).off('reset.bs.file-input', this.resetProxy);
+            this.$element.removeData('bs.file-input');
+        }
+
+
+        // -----------------------------
+        // private functions
+        // -----------------------------
+
+        /**
+         * Initialize this plugin.
+         * @private
+         */
+        _init() {
             this.$input = this.$element.find(':file');
             if (this.$input.length === 0) {
                 return;
             }
+            const options = this.options;
             this.name = this.$input.attr('name') || options.name;
             this.placeholder = this.$input.attr('placeholder') || options.placeholder || '';
             this.$hidden = this.$element.find('input[type=hidden][name="' + this.name + '"]');
             if (this.$hidden.length === 0) {
                 this.$hidden = $('<input type="hidden">').insertBefore(this.$input);
             }
-            this.$preview = this.$element.find('.fileinput-preview');
+            this.$preview = this.$element.find('.file-input-preview');
             this.original = {
-                exists: this.$element.hasClass('fileinput-exists'),
+                exists: this.$element.hasClass('file-input-exists'),
                 preview: this.$preview.html(),
                 hiddenVal: this.$hidden.val()
             };
-            this.listen();
-            this.reset();
+            this._listen();
+            this._reset();
         }
 
-        listen() {
+        /**
+         * Start listen events.
+         * @return {FileInput} this instance for chaining.
+         * @private
+         */
+        _listen() {
             const that = this;
-            that.$input.on('change.bs.fileinput', function (e) {
-                that.change(e);
-            });
-            $(that.$input[0].form).on('reset.bs.fileinput', function (e) {
-                that.reset(e);
-            });
-            that.$element.find('[data-trigger="fileinput"]').on('click.bs.fileinput', function (e) {
-                that.trigger(e);
-            });
-            that.$element.find('[data-dismiss="fileinput"]').on('click.bs.fileinput', function (e) {
-                that.clear(e);
-            });
+            that.changeProxy = function (e) {
+                that._change(e);
+            };
+            that.$input.on('change.bs.file-input', that.changeProxy);
+
+            that.clearProxy = function (e) {
+                that._clear(e);
+            };
+            that.$element.find('[data-dismiss="file-input"]').on('click.bs.file-input', that.clearProxy);
+
+            that.clickProxy = function (e) {
+                that.selectFile(e);
+            };
+            that.$element.find('[data-trigger="file-input"]').on('click.bs.file-input', that.clickProxy);
+
+            that.resetProxy = function (e) {
+                that._reset(e);
+            };
+            $(that.$input[0].form).on('reset.bs.file-input', that.resetProxy);
+
+            return that;
         }
 
-        reset(e) {
-            this.clear(e);
+        /**
+         * Reset image.
+         * @param {Event} [e] - the source event.
+         * @return {FileInput} this instance for chaining.
+         * @private
+         */
+        _reset(e) {
+            this._clear(e);
             this.$hidden.val(this.original.hiddenVal);
             this.$preview.html(this.original.preview);
-            this.$element.find('.fileinput-filename').text(this.placeholder);
+            this.$element.find('.file-input-filename').text(this.placeholder);
             if (this.original.exists) {
-                this.$element.addClass('fileinput-exists').removeClass('fileinput-new');
+                this.$element.addClass('file-input-exists').removeClass('file-input-new');
             } else {
-                this.$element.addClass('fileinput-new').removeClass('fileinput-exists');
+                this.$element.addClass('file-input-new').removeClass('file-input-exists');
             }
-            this.$element.trigger('reseted.bs.fileinput');
+            this.$element.trigger('reseted.bs.file-input');
+            return this;
         }
 
-        change(e) {
+        /**
+         * Handle the change event.
+         *
+         * @param {Event} [e] - the source event.
+         * @return {FileInput} this instance for chaining.
+         * @private
+         */
+        _change(e) {
             if (e) {
                 e.preventDefault();
             }
             const files = $.isUndefined(e.target.files) ? e.target && e.target.value ? [{name: e.target.value.replace(/^.+\\/, '')}] : [] : e.target.files;
             if (files.length === 0) {
-                this.clear(e);
+                this._clear(e);
                 return;
             }
-            if (!this.verifySizes(files)) {
-                this.$element.trigger('max_size.bs.fileinput');
-                this.clear(e);
+            if (!this._verifySizes(files)) {
+                this.$element.trigger('max_size.bs.file-input');
+                this._clear(e);
                 return;
             }
             this.$hidden.val('');
@@ -87,10 +156,10 @@
             this.$input.attr('name', this.name);
             const file = files[0];
             if (this.$preview.length && (!$.isUndefined(file.type) ? file.type.match(/^image\/(gif|png|bmp|jpeg|svg\+xml)$/) : file.name.match(/\.(gif|png|bmp|jpe?g|svg)$/i)) && !$.isUndefined(FileReader)) {
-                this.loadImage(files);
+                this._loadImage(files);
             } else {
                 let text = file.name;
-                const $nameView = this.$element.find('.fileinput-filename');
+                const $nameView = this.$element.find('.file-input-filename');
                 if (files.length > 1) {
                     text = $.map(files, function (file) {
                         return file.name;
@@ -98,13 +167,21 @@
                 }
                 $nameView.text(text);
                 this.$preview.text(file.name);
-                this.$element.addClass('fileinput-exists').removeClass('fileinput-new');
-                this.$element.trigger('input.bs.fileinput');
+                this.$element.addClass('file-input-exists').removeClass('file-input-new');
+                this.$element.trigger('input.bs.file-input');
                 this.$input.trigger('input');
             }
+            return this;
         }
 
-        clear(e) {
+        /**
+         * Clear image.
+         *
+         * @param {Event} [e] - the source event.
+         * @return {FileInput} this instance for chaining.
+         * @private
+         */
+        _clear(e) {
             if (e) {
                 e.preventDefault();
             }
@@ -115,8 +192,8 @@
                 this.$input.attr('name', '');
             }
             this.$input.val('');
-            this.$element.find('.fileinput-filename').text(this.placeholder);
-            this.$element.addClass('fileinput-new').removeClass('fileinput-exists');
+            this.$element.find('.file-input-filename').text(this.placeholder);
+            this.$element.addClass('file-input-new').removeClass('file-input-exists');
             // empty image
             let found = false;
             const $img = this.$preview.find('img');
@@ -131,18 +208,20 @@
                 this.$preview.html('');
             }
             if (e) {
-                this.$element.trigger('clear.bs.fileinput');
+                this.$element.trigger('clear.bs.file-input');
                 this.$input.trigger('input');
             }
             this.$input.focus();
+            return this;
         }
 
-        trigger(e) {
-            e.preventDefault();
-            this.$input.trigger('click');
-        }
-
-        verifySizes(files) {
+        /**
+         * Validate the file sizes.
+         * @param {File[]} files - the files to validate.
+         * @return {boolean} true if valid; false otherwise.
+         * @private
+         */
+        _verifySizes(files) {
             if ($.isUndefined(this.options.maxSize)) {
                 return true;
             }
@@ -163,7 +242,13 @@
             return true;
         }
 
-        loadImage(files) {
+        /**
+         * Load the image from the first given files.
+         *
+         * @param {File[]} files - the selected files.
+         * @private
+         */
+        _loadImage(files) {
             const that = this;
             const file = files[0];
             const reader = new FileReader();
@@ -178,7 +263,7 @@
                 }
                 $img[0].src = event.target.result;
                 file.result = event.target.result;
-                $element.find('.fileinput-filename').text(file.name);
+                $element.find('.file-input-filename').text(file.name);
                 // if parent has max-height, using `(max-)height: 100%` on
                 // child doesn't take padding and border into account
                 if ($preview.css('max-height') !== 'none') {
@@ -192,28 +277,42 @@
                 $preview.html($img);
                 if (that.options.exif) {
                     // Fix image transformation if this is possible
-                    that.setImageTransform($img, file);
+                    that._setImageTransform($img, file);
                 }
-                $element.addClass('fileinput-exists').removeClass('fileinput-new');
-                $element.trigger('change.bs.fileinput', files);
+                $element.addClass('file-input-exists').removeClass('file-input-new');
+                $element.trigger('change.bs.file-input', files);
             };
             reader.readAsDataURL(file);
         }
 
-        setImageTransform($img, file) {
+        /**
+         * Load the image.
+         *
+         * @param {JQuery} $image - the target image element.
+         * @param {File} file - the file to load.
+         * @private
+         */
+        _setImageTransform($image, file) {
             const that = this;
             const reader = new FileReader();
             reader.onload = function () {
                 const view = new DataView(reader.result);
-                const exif = that.getImageExif(view);
+                const exif = that._getImageExif(view);
                 if (exif) {
-                    that.resetOrientation($img, exif);
+                    that._resetOrientation($image, exif);
                 }
             };
             reader.readAsArrayBuffer(file);
         }
 
-       getImageExif (view) {
+        /**
+         * Gets the Exif image.
+         *
+         * @param {DataView} view - the data view.
+         * @return {number} the result.
+         * @private
+         */
+        _getImageExif(view) {
             if (view.getUint16(0, false) !== 0xFFD8) {
                 return -2;
             }
@@ -245,54 +344,61 @@
             return -1;
         }
 
-       resetOrientation($img, transform) {
-           const img = new Image();
-           img.onload = function () {
-               const width = img.width;
-               const height = img.height;
-               const canvas = document.createElement('canvas');
-               const ctx = canvas.getContext('2d');
-               // set proper canvas dimensions before transform & export
-               if ([5, 6, 7, 8].indexOf(transform) > -1) {
-                   canvas.width = height;
-                   canvas.height = width;
-               } else {
-                   canvas.width = width;
-                   canvas.height = height;
-               }
-               // transform context before drawing image
-               switch (transform) {
-                   case 2:
-                       ctx.transform(-1, 0, 0, 1, width, 0);
-                       break;
-                   case 3:
-                       ctx.transform(-1, 0, 0, -1, width, height);
-                       break;
-                   case 4:
-                       ctx.transform(1, 0, 0, -1, 0, height);
-                       break;
-                   case 5:
-                       ctx.transform(0, 1, 1, 0, 0, 0);
-                       break;
-                   case 6:
-                       ctx.transform(0, 1, -1, 0, height, 0);
-                       break;
-                   case 7:
-                       ctx.transform(0, -1, -1, 0, height, width);
-                       break;
-                   case 8:
-                       ctx.transform(0, -1, 1, 0, 0, width);
-                       break;
-                   default:
-                       ctx.transform(1, 0, 0, 1, 0, 0);
-               }
-               // draw image
-               ctx.drawImage(img, 0, 0);
-               // export base64
-               $img.attr('src', canvas.toDataURL());
-           };
-           img.src = $img.attr('src');
-       }
+        /**
+         * Reset the image orientation.
+         *
+         * @param {JQuery} $image - the image element.
+         * @param {number} transform - the transform value.
+         * @private
+         */
+        _resetOrientation($image, transform) {
+            const img = new Image();
+            img.onload = function () {
+                const width = img.width;
+                const height = img.height;
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                // set proper canvas dimensions before transform & export
+                if ([5, 6, 7, 8].indexOf(transform) > -1) {
+                    canvas.width = height;
+                    canvas.height = width;
+                } else {
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+                // transform context before drawing image
+                switch (transform) {
+                    case 2:
+                        ctx.transform(-1, 0, 0, 1, width, 0);
+                        break;
+                    case 3:
+                        ctx.transform(-1, 0, 0, -1, width, height);
+                        break;
+                    case 4:
+                        ctx.transform(1, 0, 0, -1, 0, height);
+                        break;
+                    case 5:
+                        ctx.transform(0, 1, 1, 0, 0, 0);
+                        break;
+                    case 6:
+                        ctx.transform(0, 1, -1, 0, height, 0);
+                        break;
+                    case 7:
+                        ctx.transform(0, -1, -1, 0, height, width);
+                        break;
+                    case 8:
+                        ctx.transform(0, -1, 1, 0, 0, width);
+                        break;
+                    default:
+                        ctx.transform(1, 0, 0, 1, 0, 0);
+                }
+                // draw image
+                ctx.drawImage(img, 0, 0);
+                // export base64
+                $image.attr('src', canvas.toDataURL());
+            };
+            img.src = $image.attr('src');
+        }
     };
 
     // -----------------------------
@@ -311,10 +417,10 @@
     $.fn.fileinput = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('bs.fileinput');
+            const data = $this.data('bs.file-input');
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('bs.fileinput', new FileInput(this, settings));
+                $this.data('bs.file-input', new FileInput(this, settings));
             }
         });
     };
@@ -331,20 +437,23 @@
     // ------------------------------------
     // FileInput data-api
     // ------------------------------------
-    $(document).on('click.fileinput.data-api', '[data-provider="fileinput"]', function (e) {
+    $(document).on('click.bs.file-input.data-api', '[data-provider="file-input"]', function (e) {
+        // already initialized?
         const $this = $(this);
-        if ($this.data('bs.fileinput')) {
+        if ($this.data('bs.file-input')) {
             return;
         }
+
+        // initialize
         $this.fileinput($this.data());
         const $target = $(e.target);
         if ($target.is('img')) {
-            $this.data('bs.fileinput').trigger(e);
+            $this.data('bs.file-input').selectFile(e);
         } else {
-            const $closest = $target.closest('[data-dismiss="fileinput"],[data-trigger="fileinput"]');
+            const $closest = $target.closest('[data-dismiss="file-input"],[data-trigger="file-input"]');
             if ($closest.length > 0) {
                 e.preventDefault();
-                $closest.trigger('click.bs.fileinput');
+                $closest.trigger('click.bs.file-input');
             }
         }
     });

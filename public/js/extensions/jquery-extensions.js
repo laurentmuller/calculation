@@ -66,24 +66,6 @@
         },
 
         /**
-         * Returns if the input fields have a radius style.
-         *
-         * @return {boolean} true if a border radius is set.
-         */
-        isBorderRadius: function () {
-            if ($.isUndefined(window.isBorderRadius)) {
-                const $input = $('<input>', {
-                    'class': 'form-control'
-                });
-                $('body').append($input);
-                const border = $input.css('border-radius');
-                $input.remove();
-                window.isBorderRadius = border && border !== '0px';
-            }
-            return window.isBorderRadius;
-        },
-
-        /**
          * Parse the given value as float. If the parsed valus is NaN, 0 is
          * returned.
          *

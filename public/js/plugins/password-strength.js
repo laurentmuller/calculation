@@ -12,28 +12,59 @@
     // PasswordStrength public class definition
     // ----------------------------------------------
     const PasswordStrength = class {
-
+        // -----------------------------
+        // public functions
+        // -----------------------------
         /**
-         * Constructor.
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
-            const that = this;
-            that.$element = $(element);
-            that.options = $.extend(true, {}, PasswordStrength.DEFAULTS, options);
+            this.$element = $(element);
+            this.options = $.extend(true, {}, PasswordStrength.DEFAULTS, options);
+            this._init();
+        }
 
-            // add handler
-            that.$element.on('keyup', function () {
-                that.onKeyup();
-            });
+        /**
+         * Remove handlers and data.
+         */
+        destroy() {
+            if (this.$progress) {
+                this.$progress.remove();
+            }
+            if (this.$label) {
+                this.$label.remove();
+            }
+            this.$element.off('keyup', this.keyupProxy);
+            this.$element.removeData('password-strength');
+        }
+
+        // -----------------------------
+        // private functions
+        // -----------------------------
+
+        /**
+         * Initialize this plugin.
+         * @private
+         */
+        _init() {
+            const that = this;
+            that.keyupProxy = function () {
+                that._onKeyup();
+            };
+            that.$element.on('keyup', that.keyupProxy);
             if (that.$element.val()) {
-                that.onKeyup();
+                that._onKeyup();
             }
         }
 
         /**
          * Handles the password key up event.
+         * @private
          */
-        onKeyup() {
+        _onKeyup() {
             let result;
             const that = this;
             const text = that.$element.val();
@@ -41,11 +72,11 @@
             if (text.length) {
                 // add inputs
                 const inputs = [];
-                const user = that.getInputValue(options.userField);
+                const user = that._getInputValue(options.userField);
                 if (user) {
                     inputs.push(user);
                 }
-                const email = that.getInputValue(options.emailField);
+                const email = that._getInputValue(options.emailField);
                 if (email) {
                     inputs.push(email);
                 }
@@ -60,24 +91,24 @@
             }
 
             // get verdict
-            const verdict = that.getVerdict(result, options);
+            const verdict = that._getVerdict(result, options);
 
             // update UI
             let updateUI = false;
-            const $progress = that.getProgress(options);
+            const $progress = that._getProgress(options);
             if ($progress) {
                 updateUI = true;
                 $progress.find('.progress-bar').each(function (index, element) {
                     $(element).toggleClass('d-none', index > verdict.score);
                 });
             }
-            const $label = that.getLabel(options);
+            const $label = that._getLabel(options);
             if ($label) {
                 updateUI = true;
                 $label.text(verdict.text);
             }
             if (options.hideOnEmpty) {
-                const $container = that.getContainer(options);
+                const $container = that._getContainer(options);
                 if ($container) {
                     updateUI = true;
                     if (result) {
@@ -101,9 +132,14 @@
         }
 
         /**
-         * Gets the verdict.
+         * Convert the result to a verdict.
+         *
+         * @param {ZXCVBNResult} result - the score.
+         * @param {Object} options - the plugin options.
+         * @return {{score: number, text: string, percent: number}} the verdict
+         * @private
          */
-        getVerdict(result, options) {
+        _getVerdict(result, options) {
             // value?
             if (!result) {
                 return {
@@ -127,27 +163,34 @@
 
         /**
          * Gets the UI container.
+         *
+         * @param {Object} options - the plugin options.
+         * @return {JQuery} the UI container.
+         * @private
          */
-        getContainer(options) {
+        _getContainer(options) {
             // already set?
-            const that = this;
-            if (that.$container) {
-                return that.$container;
+            if (this.$container) {
+                return this.$container;
             }
 
             // find
-            that.$container = $(options.container);
-            if (!that.$container || that.$container.length === 0) {
-                that.$container = that.$element.parent();
+            this.$container = $(options.container);
+            if (!this.$container || this.$container.length === 0) {
+                this.$container = this.$element.parent();
             }
 
-            return that.$container;
+            return this.$container;
         }
 
         /**
          * Gets or create the progress bars container.
+         *
+         * @param {Object} options - the plugin options.
+         * @return {JQuery|null} the progress bar container or null if none.
+         * @private
          */
-        getProgress(options) {
+        _getProgress(options) {
             // already created?
             const that = this;
             if (that.$progress) {
@@ -155,7 +198,7 @@
             }
 
             // get the container
-            const $container = that.getContainer(options);
+            const $container = that._getContainer(options);
             if (!$container) {
                 return null;
             }
@@ -167,7 +210,7 @@
             }
 
             // progress
-            that.$progress = that.createControl('div', 'progress bg-transparent').css({ // rounded-bottom
+            that.$progress = that._createControl('div', 'progress bg-transparent').css({
                 'height': options.height + 'px',
                 'border-radius': 0
             }).appendTo($progressContainer);
@@ -175,7 +218,7 @@
             // progress bars
             for (let i = 0; i < 5; i++) {
                 const className = 'progress-bar d-none ' + options.progressClasses[i];
-                that.createControl('div', className).css({
+                that._createControl('div', className).css({
                     'width': '20%',
                     'margin-right': i < 4 ? '2px' : 0
                 }).appendTo(that.$progress);
@@ -186,8 +229,12 @@
 
         /**
          * Gets or create the verdict label
+         *
+         * @param {Object} options - the plugin options.
+         * @return {JQuery|null} the verdict label or null if none.
+         * @private
          */
-        getLabel(options) {
+        _getLabel(options) {
             // already created?
             const that = this;
             if (that.$label) {
@@ -195,7 +242,7 @@
             }
 
             // get the container
-            const $container = that.getContainer(options);
+            const $container = that._getContainer(options);
             if (!$container) {
                 return null;
             }
@@ -207,15 +254,20 @@
             }
 
             // create
-            that.$label = that.createControl('span').appendTo($labelContainer);
+            that.$label = that._createControl('span').appendTo($labelContainer);
 
             return that.$label;
         }
 
         /**
-         * Creates a HTML element.
+         * Creates an HTML element.
+         *
+         * @param {string} type - the tag type.
+         * @param {string} [className] - the class name
+         * @return {JQuery} the newly created element.
+         * @private
          */
-        createControl(type, className) {
+        _createControl(type, className) {
             const $element = $('<' + type + '/>');
             if (className) {
                 $element.addClass(className);
@@ -225,8 +277,12 @@
 
         /**
          * Gets the content of the given named input.
+         *
+         * @param {string} name
+         * @return {string|boolean}
+         * @private
          */
-        getInputValue(name) {
+        _getInputValue(name) {
             if (name) {
                 return $(name).val() || false;
             }
@@ -286,9 +342,9 @@
     $.fn.passwordstrength = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('passwordstrength')) {
+            if (!$this.data('password-strength')) {
                 const settings = typeof options === 'object' && options;
-                $this.data('passwordstrength', new PasswordStrength(this, settings));
+                $this.data('password-strength', new PasswordStrength(this, settings));
             }
         });
     };

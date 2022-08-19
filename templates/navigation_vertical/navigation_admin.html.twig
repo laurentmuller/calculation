@@ -21,6 +21,7 @@
             {% endif %}
             {{ dropdownSeparator(false, 'border-secondary') }}
             {{ navItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
+            {{ dropdownSeparator(false, 'border-secondary') }}
             {{ navItem(path('log_table'), 'log.title', ICON_LOG) }}
             {{ navItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
             {% if is_previous_admin -%}

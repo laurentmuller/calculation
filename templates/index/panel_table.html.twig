@@ -118,7 +118,6 @@
             {{ macros.empty() }}
         {%- endif -%}
     </div>
-    {% if is_calculations and app.user and is_app_dev %}
     <div class="card-footer d-print-none p-2">
         <div class="text-sm-right">
             <div class="form-control-sm custom-control custom-switch" title="{{ 'index.panel_month_user_help'|trans }}">
@@ -127,5 +126,4 @@
             </div>
         </div>
     </div>
-    {% endif %}
 </div>

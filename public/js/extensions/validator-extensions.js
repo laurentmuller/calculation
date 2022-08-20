@@ -359,6 +359,7 @@
                     display: 'none',
                     zIndex: 2
                 },
+                maxWidth: 600,
                 show: 150,
                 hide: 350,
                 timeout: 1500
@@ -366,13 +367,15 @@
 
             // check width
             let width = settings.css.width;
-            if (width.endsWith('px')) {
+            const parentWidth = settings.parent.width();
+            const windowWidth = Math.floor($(window).width() * 0.9);
+            if (width.endsWith('%')) {
                 width = Number.parseInt(width, 10);
-                if (!Number.isNaN(width)) {
-                    const maxWidth = Math.floor($(window).width() * 0.9);
-                    settings.css.width = Math.min(width, maxWidth) + 'px';
-                }
+                width = Math.floor(parentWidth * width / 100.0);
+            } else if (width.endsWith('px')) {
+                width = Number.parseInt(width, 10);
             }
+            settings.css.width = Math.min(width, windowWidth, settings.maxWidth) + 'px';
 
             // build alert
             const $alert = $('<div />', {

@@ -58,6 +58,13 @@ function random() {
         options.displayClose = $('#close').isChecked();
         options.displaySubtitle = $('#subtitle').isChecked();
 
+        // moved position ?
+        const oldPosition = $('#position').data('position');
+        if (oldPosition && oldPosition !== options.position) {
+            Toaster.removeContainer();
+        }
+        $('#position').data('position', options.position);
+
         // notify
         const type = $(this).data('type');
         const title = options.title ? $(this).text() : null;

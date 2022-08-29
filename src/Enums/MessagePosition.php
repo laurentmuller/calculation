@@ -33,47 +33,49 @@ enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterf
      * Bottom center position.
      */
     #[EnumCase('message_position.bottom_center')]
-    case BOTTOM_CENTER = 'bottom_center';
+    case BOTTOM_CENTER = 'bottom-center';
     /*
      * Bottom left position.
      */
     #[EnumCase('message_position.bottom_left')]
-    case BOTTOM_LEFT = 'bottom_left';
+    case BOTTOM_LEFT = 'bottom-left';
     /*
      * Bottom right position.
      */
     #[EnumCase('message_position.bottom_right', ['default' => true])]
-    case BOTTOM_RIGHT = 'bottom_right';
+    case BOTTOM_RIGHT = 'bottom-right';
     /*
      * Center position.
      */
     #[EnumCase('message_position.center_center')]
-    case CENTER_CENTER = 'center_center';
+    case CENTER_CENTER = 'center-center';
     /*
      * Center left position.
      */
     #[EnumCase('message_position.center_left')]
-    case CENTER_LEFT = 'center_left';
+    case CENTER_LEFT = 'center-left';
     /*
      * Center right position.
      */
     #[EnumCase('message_position.center_right')]
-    case CENTER_RIGHT = 'center_right';
-    #[EnumCase('message_position.top_center')]
+    case CENTER_RIGHT = 'center-right';
     /*
      * Top center position.
      */
-    case TOP_CENTER = 'top_center';
-    #[EnumCase('message_position.top_left')]
+    #[EnumCase('message_position.top_center')]
+    case TOP_CENTER = 'top-center';
+
     /*
      * Top left position.
      */
-    case TOP_LEFT = 'top_left';
-    #[EnumCase('message_position.top_right')]
+    #[EnumCase('message_position.top_left')]
+    case TOP_LEFT = 'top-left';
+
     /*
      * Top right position.
      */
-    case TOP_RIGHT = 'top_right';
+    #[EnumCase('message_position.top_right')]
+    case TOP_RIGHT = 'top-right';
 
     /**
      * @return MessagePosition[]

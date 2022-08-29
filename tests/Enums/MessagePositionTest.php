@@ -70,16 +70,16 @@ class MessagePositionTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertEquals('top_left', MessagePosition::TOP_LEFT->value);
-        self::assertEquals('top_center', MessagePosition::TOP_CENTER->value);
-        self::assertEquals('top_right', MessagePosition::TOP_RIGHT->value);
+        self::assertEquals('top-left', MessagePosition::TOP_LEFT->value);
+        self::assertEquals('top-center', MessagePosition::TOP_CENTER->value);
+        self::assertEquals('top-right', MessagePosition::TOP_RIGHT->value);
 
-        self::assertEquals('center_left', MessagePosition::CENTER_LEFT->value);
-        self::assertEquals('center_center', MessagePosition::CENTER_CENTER->value);
-        self::assertEquals('center_right', MessagePosition::CENTER_RIGHT->value);
+        self::assertEquals('center-left', MessagePosition::CENTER_LEFT->value);
+        self::assertEquals('center-center', MessagePosition::CENTER_CENTER->value);
+        self::assertEquals('center-right', MessagePosition::CENTER_RIGHT->value);
 
-        self::assertEquals('bottom_left', MessagePosition::BOTTOM_LEFT->value);
-        self::assertEquals('bottom_center', MessagePosition::BOTTOM_CENTER->value);
-        self::assertEquals('bottom_right', MessagePosition::BOTTOM_RIGHT->value);
+        self::assertEquals('bottom-left', MessagePosition::BOTTOM_LEFT->value);
+        self::assertEquals('bottom-center', MessagePosition::BOTTOM_CENTER->value);
+        self::assertEquals('bottom-right', MessagePosition::BOTTOM_RIGHT->value);
     }
 }

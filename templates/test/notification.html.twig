@@ -9,8 +9,7 @@
 
 {% macro position(position, selection) -%}
 {%- set value = position.value -%}
-{%- set text = 'message_position.' ~ value -%}
-<option value="{{ value }}"{% if position == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
+<option value="{{ value }}"{% if position == selection %} selected="selected"{% endif %}>{{ position.readable|trans }}</option>
 {%- endmacro %}
 
 {% macro timeout(seconds, selection) -%}

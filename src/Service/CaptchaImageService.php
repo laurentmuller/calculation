@@ -31,7 +31,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * The allowed characters.
      */
-    private const ALLOWED_VALUES = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    private const ALLOWED_VALUES = 'abcdefghjklmnpqrstuvwxyz23456789';
 
     /**
      * The space between characters.

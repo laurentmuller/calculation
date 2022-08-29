@@ -18,17 +18,17 @@
         {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         {{ dropdownSeparator() }}
         {% set is_dark = theme_dark(app.request) %}
-        {% set theme_icon = is_dark ? 'lightbulb far' : 'lightbulb' %}
+        {% set theme_icon = is_dark ? 'sun far' : 'moon fas' %}
         {% set theme_text = is_dark ? 'theme.light' : 'theme.dark' %}
         <button class="dropdown-item dropdown-item-theme" type="button"
                 data-title="{{ 'theme.title'|trans }}"
                 data-path="{{ path('user_save_theme') }}"
                 data-light-css="{{ asset_versioned('js/vendor/bootstrap/css/bootstrap-light.css') }}"
                 data-light-text="{{ 'theme.light'|trans }}"
-                data-light-icon="fa-regular fa-lightbulb"
+                data-light-icon="fa-regular fa-sun"
                 data-dark-css="{{ asset_versioned('js/vendor/bootstrap/css/bootstrap-dark.css') }}"
                 data-dark-text="{{ 'theme.dark'|trans }}"
-                data-dark-icon="fa-solid fa-lightbulb"
+                data-dark-icon="fa-solid fa-moon"
                 data-error="{{ 'theme.error'|trans }}">
             {{- icon(theme_icon, theme_text) -}}
         </button>

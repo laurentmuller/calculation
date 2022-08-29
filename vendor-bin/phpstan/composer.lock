@@ -338,16 +338,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.2.9",
+            "version": "1.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "f4cb3b8915d3656e780f305f01c86b70ff933272"
+                "reference": "e7767d9cf191e6865a2205f77ecac3716872e055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/f4cb3b8915d3656e780f305f01c86b70ff933272",
-                "reference": "f4cb3b8915d3656e780f305f01c86b70ff933272",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/e7767d9cf191e6865a2205f77ecac3716872e055",
+                "reference": "e7767d9cf191e6865a2205f77ecac3716872e055",
                 "shasum": ""
             },
             "require": {
@@ -365,15 +365,15 @@
                 "phpstan/phpstan-strict-rules": "^1.0",
                 "phpunit/phpunit": "^9.5",
                 "psr/container": "1.0 || 1.1.1",
-                "symfony/config": "^4.2 || ^5.0",
-                "symfony/console": "^4.0 || ^5.0",
-                "symfony/dependency-injection": "^4.0 || ^5.0",
-                "symfony/form": "^4.0 || ^5.0",
-                "symfony/framework-bundle": "^4.4 || ^5.0",
-                "symfony/http-foundation": "^5.1",
-                "symfony/messenger": "^4.2 || ^5.0",
+                "symfony/config": "^5.4 || ^6.1",
+                "symfony/console": "^5.4 || ^6.1",
+                "symfony/dependency-injection": "^5.4 || ^6.1",
+                "symfony/form": "^5.4 || ^6.1",
+                "symfony/framework-bundle": "^5.4 || ^6.1",
+                "symfony/http-foundation": "^5.4 || ^6.1",
+                "symfony/messenger": "^5.4",
                 "symfony/polyfill-php80": "^1.24",
-                "symfony/serializer": "^4.0 || ^5.0"
+                "symfony/serializer": "^5.4"
             },
             "type": "phpstan-extension",
             "extra": {
@@ -403,9 +403,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.9"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.12"
             },
-            "time": "2022-08-05T20:13:38+00:00"
+            "time": "2022-08-26T14:30:43+00:00"
         },
         {
             "name": "slam/phpstan-extensions",

@@ -20,7 +20,7 @@
          *
          * @param {string} type - The type.
          * @param {string} message - The message.
-         * @param {string} title - The title.
+         * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
@@ -81,8 +81,8 @@
          * Display a toast with information style.
          *
          * @param {string} message - The message.
-         * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {string} [title] - The title.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         info: function (message, title, options) {
@@ -93,8 +93,8 @@
          * Display a toast with success style.
          *
          * @param {string} message - The message.
-         * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {string} [title] - The title.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         success: function (message, title, options) {
@@ -105,8 +105,8 @@
          * Display a toast with warning style.
          *
          * @param {string} message - The message.
-         * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {string} [title] - The title.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         warning: function (message, title, options) {
@@ -117,8 +117,8 @@
          * Display a toast with danger style.
          *
          * @param {string} message - The message.
-         * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {string} [title] - The title.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         danger: function (message, title, options) {
@@ -129,8 +129,8 @@
          * Display a toast with primary style.
          *
          * @param {string} message - The message.
-         * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {string} [title] - The title.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         primary: function (message, title, options) {
@@ -141,8 +141,8 @@
          * Display a toast with secondary style.
          *
          * @param {string} message - The message.
-         * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {string} [title] - The title.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         secondary: function (message, title, options) {
@@ -153,8 +153,8 @@
          * Display a toast with dark style.
          *
          * @param {string} message - The message.
-         * @param {string} title - The title.
-         * @param {Object} options - The options.
+         * @param {string} [title] - The title.
+         * @param {Object} [options] - The options.
          * @returns {JQuery} this instance.
          */
         dark: function (message, title, options) {

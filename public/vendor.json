@@ -2,7 +2,6 @@
     "source": "https://cdnjs.cloudflare.com/ajax/libs/",
     "target": "js/vendor/",
     "format": "{source}{name}/{version}/{file}",
-    "bootswatch": "https://bootswatch.com/api/4.json",
     "prefixes": {
         "js": "/**! compression tag for ftp-deployment */\n\n",
         "css": "/**! compression tag for ftp-deployment */\n\n"
@@ -13,14 +12,15 @@
     "plugins": [
         {
             "name": "jquery",
-            "version": "3.6.0",
+            "version": "3.6.1",
             "files": [
                 "jquery.js"
             ]
         },
         {
             "name": "bootstrap",
-            "version": "4.6.0",
+            "version": "4.6.2",
+            "disabled": true,
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
             "target": "twitter-bootstrap",
@@ -133,7 +133,7 @@
         },
         {
             "name": "bootstrap-table",
-            "version": "1.20.2",
+            "version": "1.21.0",
             "target": "bootstrap-table",
             "files": [
                 "bootstrap-table.js",
@@ -143,7 +143,7 @@
         {
             "display": "bootstrap-table-defer-url",
             "name": "bootstrap-table",
-            "version": "1.20.2",
+            "version": "1.21.0",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/extensions/defer-url/{file}",
             "target": "bootstrap-table",
@@ -154,7 +154,7 @@
         {
             "display": "bootstrap-table-custom-view",
             "name": "bootstrap-table",
-            "version": "1.20.2",
+            "version": "1.21.0",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/extensions/custom-view/{file}",
             "target": "bootstrap-table",

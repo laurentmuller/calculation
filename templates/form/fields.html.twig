@@ -214,7 +214,6 @@
 {% block captcha_image_widget -%}
 {%- set type = type|default('text') -%}
 {%- set image_title = 'captcha.title'|trans -%}
-{%- set image_style = theme_dark(app.request) ? ' style="margin-top: 1px; margin-bottom: 1px;"' : '' -%}
 {%- if remote|default(false) -%}
     {%- set attr = attr|merge({'data-remote': remote}) -%}
 {%- endif -%}
@@ -224,7 +223,7 @@
 {%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-lowercase')|trim}) -%}
 <div class="input-group">
     <div class="input-group-prepend">
-        <span class="input-group-text py-0 px-1 bg-white"{{ image_style }}>
+        <span class="input-group-text py-0 px-1 bg-white">
             <img id="{{ id }}_image" name="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
         </span>
     </div>

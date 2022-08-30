@@ -1,13 +1,13 @@
 {% extends 'help/help_base.html.twig' %}
 {% import 'help/_help_tools.html.twig' as tools %}
 {# macro #}
-{% macro output_entity_columns(entity, table_class, head_class) -%}
+{% macro output_entity_columns(entity) -%}
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
     <p class="mt-2 mb-1">{{ 'help.labels.edit_columns'|trans }}</p>
-    <table class="{{ table_class }}">
-        <thead class="{{ head_class }}">
-            <tr>
+    <table class="w-100">
+        <thead>
+            <tr class="bg-themed">
                 <th class="text-date-time">{{ 'help.fields.column'|trans }}</th>
                 <th>{{ 'help.fields.description'|trans }}</th>
             </tr>
@@ -23,13 +23,13 @@
     </table>
 {% endif %}
 {%- endmacro %}
-{% macro output_entity_fields(entity, table_class, head_class) -%}
+{% macro output_entity_fields(entity) -%}
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
     <p class="mt-2 mb-1">{{ 'help.labels.edit_fields'|trans }}</p>
-    <table class="{{ table_class }}">
-        <thead class="{{ head_class }}">
-            <tr>
+    <table class="w-100">
+        <thead>
+            <tr class="bg-themed">
                 <th class="text-date-time">{{ 'help.fields.field'|trans }}</th>
                 <th>{{ 'help.fields.description'|trans }}</th>
                 <th>{{ 'help.fields.type'|trans }}</th>
@@ -49,11 +49,11 @@
     </table>
 {% endif %}
 {%- endmacro %}
-{% macro output_entity_actions(entity, table_class, head_class, service) -%}
+{% macro output_entity_actions(entity, service) -%}
 {% set actions = entity.actions|default(false) %}
 {% if actions %}
     <p class="mt-2 mb-0">{{ 'help.labels.entity_actions'|trans }}</p>
-    {{ tools.output_table_actions(actions, table_class, head_class, service) }}
+    {{ tools.output_table_actions(actions, service) }}
 {% endif %}
 {%- endmacro %}
 {# parameters #}
@@ -76,27 +76,27 @@
 {%- endif -%}
 {# entity columns #}
 {%- if dialog.displayEntityColumns|default(false) -%}
-    {{- _self.output_entity_columns(entity, table_class, head_class) }}
+    {{- _self.output_entity_columns(entity) }}
 {%- endif -%}
 {# entity fields #}
 {%- if dialog.displayEntityFields|default(false) -%}
-    {{- _self.output_entity_fields(entity, table_class, head_class) }}
+    {{- _self.output_entity_fields(entity) }}
 {%- endif -%}
 {# entity actions #}
 {%- if dialog.displayEntityActions|default(false) -%}
-    {{- _self.output_entity_actions(entity, table_class, head_class, service) }}
+    {{- _self.output_entity_actions(entity, service) }}
 {%- endif -%}
 {# edit actions #}
 {% set actions = dialog.editActions|default(false) %}
 {% if actions %}
     <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>
-    {{ tools.output_table_actions(actions, table_class, head_class, service) }}
+    {{ tools.output_table_actions(actions, service) }}
 {% endif %}
 {# global actions #}
 {% set actions = dialog.globalActions|default(false) %}
 {% if actions -%}
     <p class="mt-2 mb-0">{{ 'help.labels.global_actions'|trans }}</p>
-    {{ tools.output_table_actions(actions, table_class, head_class, service) }}
+    {{ tools.output_table_actions(actions, service) }}
 {%- endif %}
 {# forbidden #}
 {% if dialog.forbidden|default(false) -%}
@@ -107,7 +107,7 @@
     {% if image %}{{- tools.output_image(image, false) -}}{% endif %}
     {% if action %}
         <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>
-        {{ tools.output_table_actions({action}, table_class, head_class, service) }}
+        {{ tools.output_table_actions({action}, service) }}
     {% endif %}
 {%- endif %}
 {# links and entity #}

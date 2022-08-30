@@ -12,26 +12,22 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Model\Theme;
-use App\Service\ThemeService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Command to update Javascript and CSS dependencies.
  */
-#[AsCommand(name: 'app:update-assets')]
+#[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
 class UpdateAssetsCommand extends AbstractAssetsCommand
 {
-    private const BOOTSTRAP_FILE_NAME = 'bootstrap.css';
-
     /**
-     * The boostrap CSS file name.
+     * The boostrap CSS file name to update.
      */
     private const BOOTSTRAP_FILES_STYLE = [
-        'bootstrap.css',
         'bootstrap-dark.css',
         'bootstrap-light.css',
     ];
@@ -54,16 +50,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
     /**
      * {@inheritdoc}
-     */
-    protected function configure(): void
-    {
-        $this->setDescription('Update Javascript and CSS dependencies.');
-    }
-
-    /**
-     * {@inheritdoc}
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      * @throws \ReflectionException
      */
     protected function doExecute(InputInterface $input, OutputInterface $output): int
@@ -105,14 +93,13 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         try {
             // parse plugins
             foreach ($plugins as $plugin) {
-                // disabled?
-                if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
-                    continue;
-                }
-
                 $name = (string) $plugin->name;
                 $version = (string) $plugin->version;
                 $display = (string) ($plugin->display ?? $plugin->name);
+                if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
+                    $this->writeVerbose("Skipping   '$display v$version'.");
+                    continue;
+                }
                 $this->writeVerbose("Installing '$display v$version'.");
 
                 // copy files
@@ -135,9 +122,9 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
                 // check version
                 $versionSource = (string) ($plugin->source ?? $source);
                 if (false !== \stripos($versionSource, 'cdnjs')) {
-                    $this->checkApiCdnjsLastVersion($name, $version);
+                    $this->checkVersionCdnjs($name, $version);
                 } elseif (false !== \stripos($versionSource, 'jsdelivr')) {
-                    $this->checkJsDelivrLastVersion($name, $version);
+                    $this->checkVersionJsDelivr($name, $version);
                 }
             }
 
@@ -151,12 +138,6 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             }, 0);
             if ($expected !== $countFiles) {
                 $this->writeError("Not all files has been loaded! Expected: $expected, Loaded: $countFiles.");
-            }
-
-            // bootswatch
-            if (0 !== $bootswatchCount = $this->installBootswatch($configuration, $targetTemp, $prefixes, $suffixes)) {
-                $countFiles += $bootswatchCount;
-                ++$countPlugins;
             }
 
             // rename directory
@@ -177,51 +158,17 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * Checks if the plugin installed is the last version.
-     *
-     * This works only for 'https://api.cdnjs.com' server.
-     *
-     * @param string $name    the plugin name
-     * @param string $version the actual version
-     *
-     * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    private function checkApiCdnjsLastVersion(string $name, string $version): void
-    {
-        $url = "https://api.cdnjs.com/libraries/$name?fields=version";
-        $this->checkVersion($url, $name, $version, ['version']);
-    }
-
-    /**
-     * Checks if the plugin installed is the last version.
-     *
-     * This works only for 'https://data.jsdelivr.com' server.
-     *
-     * @param string $name    the plugin name
-     * @param string $version the actual version
-     *
-     * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    private function checkJsDelivrLastVersion(string $name, string $version): void
-    {
-        $url = "https://data.jsdelivr.com/v1/package/npm/$name";
-        $this->checkVersion($url, $name, $version, ['tags', 'latest']);
-    }
-
-    /**
      * Checks the plugin version.
      *
-     * @param string   $url     the URL content to download
-     * @param string   $name    the plugin name
-     * @param string   $version the actual version
-     * @param string[] $paths   the paths to the version
+     * @param string $url      the URL content to download
+     * @param string $name     the plugin name
+     * @param string $version  the actual version
+     * @param string ...$paths the paths to the version
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
-    private function checkVersion(string $url, string $name, string $version, array $paths): void
+    private function checkVersion(string $url, string $name, string $version, string ...$paths): void
     {
         $content = $this->loadJson($url);
         if (false === $content) {
@@ -248,6 +195,40 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
+     * Checks if the plugin installed is the last version.
+     *
+     * This works only for 'https://api.cdnjs.com' server.
+     *
+     * @param string $name    the plugin name
+     * @param string $version the actual version
+     *
+     * @throws \ReflectionException
+     * @throws ExceptionInterface
+     */
+    private function checkVersionCdnjs(string $name, string $version): void
+    {
+        $url = "https://api.cdnjs.com/libraries/$name?fields=version";
+        $this->checkVersion($url, $name, $version, 'version');
+    }
+
+    /**
+     * Checks if the plugin installed is the last version.
+     *
+     * This works only for 'https://data.jsdelivr.com' server.
+     *
+     * @param string $name    the plugin name
+     * @param string $version the actual version
+     *
+     * @throws \ReflectionException
+     * @throws ExceptionInterface
+     */
+    private function checkVersionJsDelivr(string $name, string $version): void
+    {
+        $url = "https://data.jsdelivr.com/v1/package/npm/$name";
+        $this->checkVersion($url, $name, $version, 'tags', 'latest');
+    }
+
+    /**
      * Copy a file.
      *
      * @param string $sourceFile the source file
@@ -263,7 +244,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @psalm-param array<string, string> $renames
      *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -280,19 +261,16 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * @param string $content     the style sheet content to search in
      * @param string $searchStyle the style name to copy
      * @param string $newStyle    the new style name
-     * @param bool   $important   true to add <code>!important</code> to each style entries
      *
      * @return string the new style, if applicable; an empty string otherwise
      */
-    private function copyStyle(string $content, string $searchStyle, string $newStyle, bool $important = true): string
+    private function copyStyle(string $content, string $searchStyle, string $newStyle): string
     {
         $styles = $this->findStyles($content, $searchStyle);
         if (\is_array($styles)) {
             $result = "\n/*\n * Copied from '$searchStyle'  \n */";
             foreach ($styles as $style) {
-                if ($important) {
-                    $style = \str_replace(';', ' !important;', $style);
-                }
+                $style = \str_replace(';', ' !important;', $style);
                 $result .= "\n" . \str_replace($searchStyle, $newStyle, $style) . "\n";
             }
 
@@ -405,15 +383,14 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function findStyleEntries(string $style, array $entries): array|false
     {
-        /** @var string[] $result */
         $result = [];
         $matches = [];
         foreach ($entries as $entry) {
             $pattern = '/^\s*' . \preg_quote($entry, '/') . '\s*:\s*.*;/m';
             if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER))) {
-                /** @var string $matche */
-                foreach ($matches as $matche) {
-                    $result[] = $matche[0];
+                /** @var string $match */
+                foreach ($matches as $match) {
+                    $result[] = $match[0];
                 }
             }
         }
@@ -434,12 +411,13 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $matches = [];
         $pattern = '/^\s{0,2}' . \preg_quote($style, '/') . '\s+\{([^}]+)\}/m';
         if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER))) {
-            $result = [];
-            foreach ($matches as $matche) {
-                $result[] = \ltrim($matche[0]);
-            }
-
-            return $result;
+//            $result = [];
+//            foreach ($matches as $match) {
+//                $result[] = \ltrim($match[0]);
+//            }
+//
+//            return $result;
+            return \array_map(fn (array $value): string => \ltrim($value[0]), $matches);
         }
 
         return false;
@@ -514,84 +492,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * Install the Bootswatch themes.
-     *
-     * @param \stdClass $configuration the vendor configuration
-     * @param string    $targetDir     the target directory
-     * @param array     $prefixes      the prefixes where each key is the file extension and the value is the text to prepend
-     * @param array     $suffixes      the suffixes where each key is the file extension and the value is the text to append
-     * @param array     $renames       the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
-     *
-     * @return int the number of downloaded themes
-     *
-     * @psalm-param array<string, string> $prefixes
-     * @psalm-param array<string, string> $suffixes
-     * @psalm-param array<string, string> $renames
-     *
      * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    private function installBootswatch(\stdClass $configuration, string $targetDir, array $prefixes = [], array $suffixes = [], array $renames = []): int
-    {
-        // check if the default boostrap theme is present
-        $target = (string) $configuration->target;
-        $relative = \rtrim($this->makePathRelative('/' . ThemeService::DEFAULT_CSS, '/' . $target), '/');
-        $targetFile = $targetDir . $relative;
-        if (!$this->exists($targetFile)) {
-            $this->writeError("The file '$targetFile' for default theme does not exist.");
-
-            return 0;
-        }
-
-        $count = 0;
-        $result = [ThemeService::getDefaultTheme()];
-        $themesDir = ThemeService::getThemesDirectory();
-
-        // check bootswatch entry
-        if ($this->propertyExists($configuration, 'bootswatch')) {
-            // load file
-            $source = $this->loadJson((string) $configuration->bootswatch);
-            if ($source instanceof \stdClass) {
-                // message
-                $version = (string) $source->version;
-                $this->writeVerbose("Installing 'bootswatch v$version'.");
-
-                // themes
-                /** @var \stdClass[] $themes */
-                $themes = $source->themes;
-                foreach ($themes as $theme) {
-                    $css = (string) $theme->css;
-                    $name = (string) $theme->name;
-                    $description = (string) $theme->description . '.';
-                    $relativePath = $themesDir . \strtolower($name) . '/' . self::BOOTSTRAP_FILE_NAME;
-
-                    // copy file
-                    $targetFile = $targetDir . $relativePath;
-                    if ($this->copyFile($css, $targetFile, $prefixes, $suffixes, $renames)) {
-                        $result[] = new Theme([
-                            'name' => $name,
-                            'description' => $description,
-                            'css' => $target . $relativePath,
-                        ]);
-                        ++$count;
-                    }
-                }
-            }
-        }
-
-        // save
-        $targetFile = $targetDir . $themesDir . ThemeService::getFileName();
-        $content = \json_encode($result, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
-        if ($this->dumpFile((string) $content, $targetFile, $prefixes, $suffixes, $renames)) {
-            ++$count;
-        }
-
-        return $count;
-    }
-
-    /**
-     * @throws \ReflectionException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     private function loadConfiguration(string $publicDir): ?\stdClass
     {
@@ -646,13 +548,13 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             $content,
             '.dropdown-menu',
             '.context-menu-list',
-            ['background-color', 'border', 'border-radius', 'color', 'font-size']
+            ['background', 'background-color', 'border-radius', 'color', 'font-size']
         );
         $toAppend .= $this->copyStyleEntries(
             $content,
             '.dropdown-item',
             '.context-menu-item',
-            ['background-color', 'color', 'font-size', 'font-weight', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top']
+            ['background-color', 'color', 'font-size', 'font-weight', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 'margin']
         );
         $toAppend .= $this->copyStyleEntries(
             $content,
@@ -664,7 +566,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             $content,
             '.dropdown-divider',
             '.context-menu-separator',
-            ['border-top']
+            ['border-top', 'margin']
         );
         $toAppend .= $this->copyStyleEntries(
             $content,

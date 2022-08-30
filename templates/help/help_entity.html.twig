@@ -18,9 +18,9 @@
 {# fields #}
 {% if fields %}
 <p class="mb-1">{{ 'help.labels.entity_fields'|trans }}</p>
-<table class="{{ table_class }}">
-    <thead class="{{ head_class }}">
-        <tr>
+<table class="w-100">
+    <thead>
+        <tr class="bg-themed">
             <th class="text-date-time">{{ 'help.fields.field'|trans }}</th>
             <th>{{ 'help.fields.description'|trans }}</th>
             <th>{{ 'help.fields.type'|trans }}</th>
@@ -57,6 +57,6 @@
 {# actions #}
 {% if actions %}
 <p class="mb-1 mt-2">{{ 'help.labels.entity_actions'|trans }}</p>
-{{ tools.output_table_actions(actions, table_class, head_class, service) }}
+{{ tools.output_table_actions(actions, service) }}
 {% endif %}
 {%- endblock %}

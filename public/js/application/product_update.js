@@ -2,13 +2,34 @@
 
 /**
  * Gets the product's checkboxes for the selected category.
- *
+ * @param {number} [id] - the selected category.
  * @returns {JQuery} - the checkboxes.
  */
-function getVisibleProducts() {
+function getProducts(id) {
     'use strict';
-    const id = $('#form_category').val();
+    id = id || $('#form_category').val();
     return $('#form_products :checkbox[data-category="' + id + '"]');
+}
+
+/**
+ * Gets the product's checked checkboxes.
+ *
+ * @return {JQuery} - the checked checkboxes.
+ */
+function getSelectedProducts() {
+    'use strict';
+    const selector = isAllProducts() ? '.selectable' : '.selectable:checked';
+    return getProducts().filter(selector);
+}
+
+/**
+ * Gets the selectable product's checkboxes.
+ *
+ * @return {JQuery} - the selectable checkboxes.
+ */
+function getSelectableProducts() {
+    'use strict';
+    return getProducts().filter('.selectable');
 }
 
 /**
@@ -43,15 +64,16 @@ function isPercent() {
 }
 
 /**
- * Hide rows with empty price when percent checkbox is checked.
+ * Hide rows with empty price when percent radio is selected.
  */
 function hideEmptyPrices() {
     'use strict';
     const disabled = isPercent();
-    getVisibleProducts().each(function () {
+    getProducts().each(function () {
         const $this = $(this);
         const price = $.parseFloat($this.attr('data-price'));
-        $this.parents('tr').toggleClass('d-none', disabled && price === 0);
+        const selectable = !disabled || price !== 0;
+        $this.toggleClass('selectable', selectable).parents('tr').toggleClass('d-none', !selectable);
     });
 }
 
@@ -83,13 +105,24 @@ function updatePrices() {
     } else {
         value = $('#form_fixed').floatVal();
     }
-    getVisibleProducts().each(function () {
+    getProducts().each(function () {
         const $this = $(this);
         const oldPrice = $.parseFloat($this.attr('data-price'));
         const newPrice = computePrice(oldPrice, value, percent, round);
         const text = $.formatFloat(newPrice);
         $this.closest('tr').find('td:eq(2)').text(text);
     });
+    updateButtons();
+}
+
+/**
+ * Update the select all, select none and reverse buttons.
+ */
+function updateButtons() {
+    'use strict';
+    const disabled = $('#form_allProducts').isChecked();
+    const noSelectable = getSelectableProducts().length === 0;
+    $('#btn-all, #btn-none, #btn-reverse').toggleDisabled(disabled || noSelectable);
 }
 
 /**
@@ -104,23 +137,22 @@ function updatePrices() {
     const $category = $('#form_category');
     const $allProducts = $('#form_allProducts');
 
+    const $alert = $('#alert');
+    const $overFlow = $('#overflow-table');
+
     // number inputs
     $fixed.inputNumberFormat();
 
     // add custom method for products selection
     $.validator.addMethod('checkProducts', function () {
-        const $table = $('#form_products');
-        const filter = isAllProducts() ? ':visible' : ':checked:visible';
-        const isValid = getVisibleProducts().filter(filter).length !== 0;
-        if (isValid) {
-            $table.find('tfoot').hide();
-            $table.find('thead').show(500);
+        if (getSelectableProducts().length === 0) {
+            $overFlow.hide();
+            $alert.show(250);
         } else {
-            $table.find('thead').hide();
-            $table.find('tfoot').show(500);
+            $alert.hide();
+            $overFlow.show(250);
         }
-        $table.parent().toggleClass('border-top-0', !isValid);
-        return isValid;
+        return getSelectedProducts().length !== 0;
     }, $allProducts.data('error'));
 
     // validation
@@ -170,10 +202,15 @@ function updatePrices() {
     $('#form_percent, #form_fixed, #form_round').on('input', updatePrices);
 
     $category.on('input', function () {
+        // update visibility
         const id = $(this).val();
-        $('#form_products tbody tr[data-category="' + id + '"]').removeClass('d-none');
-        $('#form_products tbody tr[data-category!="' + id + '"]').addClass('d-none');
-        const $products = getVisibleProducts();
+        $('#form_products tbody tr[data-category="' + id + '"]').removeClass('d-none')
+            .find(':checkbox').addClass('selectable');
+        $('#form_products tbody tr[data-category!="' + id + '"]').addClass('d-none')
+            .find(':checkbox').removeClass('selectable');
+
+        // select all if none
+        const $products = getProducts(id);
         if ($products.find(':checked').length === 0) {
             $products.setChecked(true);
         }
@@ -195,21 +232,22 @@ function updatePrices() {
 
     $allProducts.on('click', function () {
         const disabled = $(this).isChecked();
+        $('#form_products :checkbox').toggleDisabled(disabled);
         $('#form_products tbody tr').toggleClass('text-secondary', disabled);
-        $('#btn-all, #btn-none, #btn-reverse, #form_products :checkbox').toggleDisabled(disabled);
+        updateButtons();
         validateProducts();
     });
 
     $('#btn-all').on('click', function () {
-        getVisibleProducts().setChecked(true);
+        getProducts().setChecked(true);
         validateProducts();
     });
     $('#btn-none').on('click', function () {
-        getVisibleProducts().setChecked(false);
+        getProducts().setChecked(false);
         validateProducts();
     });
     $('#btn-reverse').on('click', function () {
-        getVisibleProducts().toggleChecked();
+        getProducts().toggleChecked();
         validateProducts();
     });
 }(jQuery));

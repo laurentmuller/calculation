@@ -74,10 +74,6 @@ class UserControllerTest extends AbstractControllerTest
             ['/user/excel', self::ROLE_ADMIN],
             ['/user/excel', self::ROLE_SUPER_ADMIN],
 
-            ['/user/theme', self::ROLE_USER],
-            ['/user/theme', self::ROLE_ADMIN],
-            ['/user/theme', self::ROLE_SUPER_ADMIN],
-
             ['/user/parameters', self::ROLE_USER],
             ['/user/parameters', self::ROLE_ADMIN],
             ['/user/parameters', self::ROLE_SUPER_ADMIN],

@@ -3,7 +3,7 @@
 {# macro #}
 {% macro add_line_info(name, value) -%}
 <tr>
-    <td class="w-30">{{ name|trans }}</td>
+    <td class="w-30 text-nowrap">{{ name|trans }}</td>
     <td>{{ value|raw }}</td>
 </tr>
 {%- endmacro %}
@@ -18,12 +18,12 @@
     {{ _self.add_line_info('product.fields.category', query.categoryCode) }}
     {{ _self.add_line_info('product.update.type', (query.percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
     {{ _self.add_line_info('product.result.value', query.formattedValue) }}
-    {{ _self.add_line_info('product.update.round', (query.round ? 'common.value_true' : 'common.value_false')|trans) }}
+    {{ _self.add_line_info('product.update.round', query.round|boolean) }}
     {% if result.valid %}
         <tr>
-            <td class="w-30">{{ 'product.result.updated'|trans }}</td>
+            <td class="w-30 text-nowrap">{{ 'product.result.updated'|trans }}</td>
             <td>
-                <a href="#" class="stretched-link" data-toggle="modal" data-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
+                <a href="#" class="stretched-link text-decoration-none text-reset" data-toggle="modal" data-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
                     {{- result.count|integer -}}
                 </a>
             </td>
@@ -31,7 +31,7 @@
     {% endif %}
 </table>
 {% if result.valid %}
-    {% if query.simulate %}
+    {% if result.simulate %}
         <p class="mb-0 text-right text-muted small">{{ 'common.simulate.message'|trans }}</p>
     {% endif %}
 {% else %}
@@ -51,10 +51,10 @@
             <div class="modal-body">
                 <p class="mb-2 font-weight-bold">{{ 'product.result.updated'|trans }}</p>
                 <div class="overflow-auto table-fixed-header border">
-                    <table class="table table-hover table-fixed-header table-sm">
-                        <thead class="{{ theme_dark(app.request) ? 'thead-dark' : 'thead-light' }}">
-                            <tr>
-                                <th>{{ 'product.fields.description'|trans }}</th>
+                    <table class="table table-hover table-fixed-header table-sm mb-0">
+                        <thead>
+                            <tr class="bg-themed">
+                                <th class="text-nowrap">{{ 'product.fields.description'|trans }}</th>
                                 <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>
                                 <th class="text-currency">{{ 'product.result.new_price'|trans }}</th>
                             </tr>
@@ -62,22 +62,25 @@
                         <tbody>
                         {% for product in result.products -%}
                         <tr>
-                            <td>{{ product.description }}</td>
+                            <td class="text-nowrap">{{ product.description }}</td>
                             <td class="text-currency">{{ product.oldPrice|amount }}</td>
                             <td class="text-currency">{{ product.newPrice|amount }}</td>
                         </tr>
                         {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <tr class="bg-themed">
+                                <th class="text-nowrap" colspan="2">{{ 'product.result.total'|trans }}</th>
+                                <th class="text-currency">{{- 'counters.products'|trans({'count': result.count}) -}}</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="row no-gutters w-100">
-                    <div class="col-3">
+                <div class="row align-items-center no-gutters w-100">
+                    <div class="col">
                         {{ button_close_modal(false) }}
-                    </div>
-                    <div class="col-9 text-right">
-                        <p class="small mb-0{% if not query.simulate %} d-none{% endif %}">{{ 'common.simulate.message'|trans }}</p>
                     </div>
                 </div>
             </div>

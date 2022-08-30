@@ -196,8 +196,8 @@
             let defaults = {
                 focus: true,
                 errorElement: 'small',
-                errorClass: 'is-invalid',
-                ignore: '[type="hidden"]:not(".must-validate")',
+                errorClass: 'is-invalid d-inline-block',
+                ignore: ':hidden:not(".must-validate")',
 
                 errorPlacement: function (error, element) {
                     let $parent = $(element).closest('.form-group').find('.passwordstrength');

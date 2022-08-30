@@ -5,7 +5,7 @@
 {%- set product_price = item.vars.attr['data-price']|amount -%}
 {%- set product_category_id = item.vars.attr['data-category'] -%}
 <tr data-category="{{ product_category_id }}" class="text-secondary user-select-none{% if product_category_id != category_id %} d-none{% endif %}">
-    <td>{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
+    <td class="text-nowrap">{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
     <td class="text-currency">{{ product_price }}</td>
     <td class="text-currency">{{ product_price }}</td>
 </tr>
@@ -67,11 +67,11 @@
         </div>
     </div>
 </div>
-<div class="overflow-auto table-fixed-header table-fixed-header-sm border mb-3">
-    <table class="table table-hover table-fixed-header table-sm" id="form_products">
-        <thead class="{{ theme_dark(app.request) ? 'thead-dark' : 'thead-light' }}">
-            <tr>
-                <th>{{ 'product.fields.description'|trans }}</th>
+<div id="overflow-table" class="overflow-auto table-fixed-header border mb-3">
+    <table class="table table-hover table-fixed-header table-sm mb-0" id="form_products">
+        <thead>
+            <tr class="bg-themed">
+                <th class="text-nowrap">{{ 'product.fields.description'|trans }}</th>
                 <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>
                 <th class="text-currency">{{ 'product.result.new_price'|trans }}</th>
             </tr>
@@ -81,14 +81,11 @@
             {{- _self.add_product(item, category_id) }}
         {%- endfor %}
         </tbody>
-        <tfoot style="display: none;">
-            <tr>
-                <td class="table-warning text-center" colspan="3">{{ 'product.update.products_empty'|trans }}</td>
-            </tr>
-        </tfoot>
     </table>
 </div>
-
+<div id="alert" class="alert alert-warning small p-2" role="alert" style="display: none;">
+    {{- 'product.update.products_empty'|trans|raw -}}
+</div>
 <label class="required">{{ 'product.update.type'|trans }}</label>
 <div class="row">
     <div class="col-md-6">
@@ -103,7 +100,7 @@
     </div>
 </div>
 {{ form_rest(form) }}
-{% if last_update is defined and last_update %}
+    {% if last_update is defined and last_update %}
     {%- set date = last_update|locale_datetime('long', 'short') -%}
     <hr class="my-2">
     <p class="mb-0 text-right text-muted small">{{ 'product.update.last_update'|trans({'%date%': date}) }}</p>

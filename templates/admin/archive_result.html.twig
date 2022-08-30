@@ -7,45 +7,39 @@
 {%- set title_description = 'archive.result.description' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set results = result.results -%}
-{%- set thead_class = theme_dark(app.request) ? 'thead-dark' : 'thead-light' -%}
 {# body #}
 {% block card_body %}
-<div class="row mb-1">
-    <div class="col-md-6">
-        {{ 'archive.result.date'|trans({'%date%': result.date|locale_date('full')}) }}
-    </div>
-    <div class="col-md-6 text-md-right">
-        {{ 'archive.result.new_state'|trans({'%state%': result.target.code}) }}
-    </div>
-</div>
-{% if result.valid %}
-    {# results #}
-    <div class="table-responsive position-relative">
-        <table class="table table-no-bottom table-sm mb-0">
-            <thead>
+<div class="table-responsive position-relative">
+    <table class="table table-no-bottom table-sm mb-0">
+        <tr>
+            <td class="text-nowrap">{{ 'archive.result.date'|trans }}</td>
+            <td class="text-right">{{ result.date|locale_date('full') }}</td>
+        </tr>
+        <tr>
+            <td class="text-nowrap">{{ 'archive.result.new_state'|trans }}</td>
+            <td class="text-right">{{ result.target.code }}</td>
+        </tr>
+        {% if result.valid %}
             <tr>
-                <th>{{ 'archive.result.old_state'|trans }}</th>
-                <th class="text-right">{{ 'archive.result.calculations'|trans }}</th>
+                <th class="pt-3 text-nowrap">{{ 'archive.result.old_state'|trans }}</th>
+                <th class="pt-3 text-right">{{ 'archive.result.calculations'|trans }}</th>
             </tr>
-            </thead>
-            <tbody>
             {% for key, value in results %}
                 <tr>
                     <td class="text-border" style="{{ properties.stateCss(value.state.color) }}">{{ key }}</td>
                     <td class="text-right">{{ value.calculations|length|integer }}</td>
                 </tr>
             {% endfor %}
-            </tbody>
-            <tfoot>
             <tr>
                 <th class="text-border">{{ 'archive.result.total'|trans }}</th>
                 <th class="text-right">
-                    <a href="#" class="stretched-link" title="{{ 'archive.result.show'|trans }}" data-toggle="modal" data-target="#modal-result">{{ result.total|integer }}</a>
+                    <a href="#" class="stretched-link text-decoration-none text-reset" title="{{ 'archive.result.show'|trans }}" data-toggle="modal" data-target="#modal-result">{{ result.total|integer }}</a>
                 </th>
             </tr>
-            </tfoot>
-        </table>
-    </div>
+        {% endif %}
+    </table>
+</div>
+{% if result.valid %}
     {% if result.simulate %}
         <hr class="mt-0"/>
         <p class="mb-0 text-right text-muted small">{{ 'common.simulate.message'|trans }}</p>
@@ -65,7 +59,7 @@
                             {%- set border = ' border-top-0' -%}
                             {% for key, value in results %}
                                 {%- set style = properties.stateCss(value.state.color) -%}
-                                <tr class="{{ thead_class }}">
+                                <tr class="bg-themed">
                                     <th class="text-border{{ border }}" colspan="4" style="{{ style }}">{{ key }}</th>
                                     <th class="text-currency{{ border }}"colspan="2" >{{ 'counters.calculations'|trans({'count': value.calculations|length}) }}</th>
                                 </tr>
@@ -73,8 +67,8 @@
                                 <tr>
                                     <td class="text-id text-border" style="{{ style }}">{{ calculation.id|identifier }}</td>
                                     <td class="text-date">{{ calculation.date|locale_date }}</td>
-                                    <td>{{ calculation.customer }}</td>
-                                    <td>{{ calculation.description }}</td>
+                                    <td class="text-nowrap">{{ calculation.customer }}</td>
+                                    <td class="text-nowrap">{{ calculation.description }}</td>
                                     <td class="text-percent">{{ calculation.overallMargin|percent }}</td>
                                     <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
                                 </tr>
@@ -83,7 +77,7 @@
                             {% endfor %}
                             </tbody>
                             <tfoot>
-                                <tr class="{{ thead_class }}">
+                                <tr class="bg-themed">
                                     <th class="text-border" colspan="4">{{ 'archive.result.total'|trans }}</th>
                                     <th class="text-right" colspan="2">{{ 'counters.calculations'|trans({'count': result.total}) }}</th>
                                 </tr>
@@ -92,15 +86,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="row no-gutters w-100">
-                        <div class="col-md-3">
+                    <div class="row align-items-center no-gutters w-100">
+                        <div class="col">
                             {{ button_close_modal(false) }}
                         </div>
-                        {% if result.simulate %}
-                        <div class="col-md-9 text-md-right">
-                            <p class="small mb-0">{{ 'common.simulate.message'|trans }}</p>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -883,6 +883,7 @@ product:
     old_price: Ancien prix
     updated: Articles mises à jour
     value: Valeur
+    total: Total
   show:
     title: Propriétés de l'article
   update:
@@ -897,7 +898,7 @@ product:
     percent: Pourcentage
     percent_help: 'Example : 50.00 + 12% = 56.00'
     products_error: Un ou plusieurs articles doivent être sélectionnés.
-    products_empty: Aucun article ne correspond aux critères. Veuillez sélectionner une autre catégorie ou un autre type de mise à jour.
+    products_empty: '<b>Remarque :</b> Aucun article ne correspond aux critères. Veuillez sélectionner une autre catégorie ou un autre type de mise à jour.'
     round: Arrondir au 5 centimes
     round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
     title: Mise à jour des articles
@@ -1351,9 +1352,9 @@ archive:
     new_archive: Nouvel archivage
     description: Résultat de l'archivage des calculations.
     empty: Aucune calculation ne correspond aux critères de mise à jour.
-    date: 'Date limite : %date%'
+    date: Date limite
     total: Total
-    new_state: 'Nouveau statut : %state%'
+    new_state: Nouveau statut
     old_state: Anciens statut
     calculations: Calculations
     show: Afficher les calculations modifiées

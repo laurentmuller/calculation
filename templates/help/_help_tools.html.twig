@@ -18,10 +18,10 @@
 {% endif %}
 {%- endmacro %}
 
-{% macro output_table_actions(actions, table_class, head_class, service) -%}
-<table class="{{ table_class }}">
-    <thead class="{{ head_class }}">
-        <tr>
+{% macro output_table_actions(actions, service) -%}
+<table class="w-100">
+    <thead>
+        <tr class="bg-themed">
             <th class="w-25">{{ 'help.fields.action'|trans }}</th>
             <th>{{ 'help.fields.description'|trans }}</th>
         </tr>

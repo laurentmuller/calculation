@@ -21,6 +21,7 @@ class ProductUpdateResult implements \Countable
      * @var array<array{description: string|null, oldPrice: float, newPrice: float}>
      */
     private array $products = [];
+    private bool $simulate = true;
 
     /**
      * Add a product to the list of updated products.
@@ -52,11 +53,23 @@ class ProductUpdateResult implements \Countable
         return $this->products;
     }
 
+    public function isSimulate(): bool
+    {
+        return $this->simulate;
+    }
+
     /**
      * Returns if the update is valid.
      */
     public function isValid(): bool
     {
         return !empty($this->products);
+    }
+
+    public function setSimulate(bool $simulate): self
+    {
+        $this->simulate = $simulate;
+
+        return $this;
     }
 }

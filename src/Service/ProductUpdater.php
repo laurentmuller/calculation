@@ -167,6 +167,7 @@ class ProductUpdater implements ServiceSubscriberInterface
     public function update(ProductUpdateQuery $query): ProductUpdateResult
     {
         $result = new ProductUpdateResult();
+        $result->setSimulate($query->isSimulate());
 
         // get products
         $products = $query->isAllProducts() ? $this->getProducts($query->getCategory()) : $query->getProducts();

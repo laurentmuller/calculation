@@ -1,19 +1,15 @@
 {% import 'about/_about_macro.html.twig' as tools %}
-
-{# parameters #}
 {%- set runtime_packages = info.packages.runtime|default([]) -%}
 {%- set debug_packages = info.packages.debug|default([]) -%}
 {%- set runtime_routes = info.routes.runtime|default([]) -%}
 {%- set debug_routes = info.routes.debug|default([]) -%}
-{%- set color = theme_dark(app.request) ? 'white' : 'black' -%}
-
 <div class="phpversion">
     <table id="data-table-symfony" class="table table-hover table-sm mb-0">
         <tbody>
             <tr class="h">
                 <td colspan="2" style="transform: rotate(0);">
-                    <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer" class="stretched-link">
-                        <i class="icon-symfony icon-about" style="color:{{ color }};"></i>
+                    <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset">
+                        <i class="icon-symfony icon-about"></i>
                         <h1 class="p text-body">{{ 'about.version'|trans({'%version%': info.version}) }}</h1>
                     </a>
                 </td>

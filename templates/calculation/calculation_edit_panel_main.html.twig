@@ -20,7 +20,6 @@
     {% endif %}
         <div>{{ form_errors(form) }}</div>
     </div>
-
     <div class="card-body">
         {{ form_row(form.customer, {disabled: not editable}) }}
         {{ form_row(form.description, {disabled: not editable}) }}
@@ -38,18 +37,18 @@
     </div>
     <div class="card-footer d-print-none">
         {%- if editable -%}
-            <div class="row">
-                <div class="col-md-8">
+            <div class="row align-items-center no-gutters">
+                <div class="col-auto mr-auto">
                     {{ button_submit() }}
                     {{ button_cancel(cancel_path) }}
                 </div>
-                <div class="col-md-4 text-md-right mt-1">
+                <div class="col-auto">
                     <small>{{ 'common.required'|trans|raw }}</small>
                 </div>
             </div>
         {%- else -%}
-            <div class="row">
-                <div class="col">
+            <div class="row align-items-center no-gutters">
+                <div class="col-auto mr-auto">
                     {{ button_ok(cancel_path, 'common.button_close') }}
                     {% if is_granted(ATTRIBUTE_EDIT, ENTITY_CALCULATION) %}
                         {%- set state_params = route_params(app.request, item.id) -%}

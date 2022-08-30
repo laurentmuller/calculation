@@ -18,25 +18,23 @@
         {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         {{ dropdownSeparator() }}
         {% set is_dark = theme_dark(app.request) %}
-        {% set theme_icon = is_dark ? 'sun far' : 'moon fas' %}
-        {% set theme_text = is_dark ? 'theme.light' : 'theme.dark' %}
+        {% set theme_dark = enum('App\\Enums\\Theme::DARK') %}
+        {% set theme_light = enum('App\\Enums\\Theme::LIGHT') %}
+        {% set theme_icon = is_dark ? theme_light.icon : theme_dark.icon %}
+        {% set theme_text = is_dark ? theme_light.readable : theme_dark.readable %}
         <button class="dropdown-item dropdown-item-theme" type="button"
                 data-title="{{ 'theme.title'|trans }}"
-                data-path="{{ path('user_save_theme') }}"
-                data-light-css="{{ asset_versioned('js/vendor/bootstrap/css/bootstrap-light.css') }}"
-                data-light-text="{{ 'theme.light'|trans }}"
-                data-light-icon="fa-regular fa-sun"
-                data-dark-css="{{ asset_versioned('js/vendor/bootstrap/css/bootstrap-dark.css') }}"
-                data-dark-text="{{ 'theme.dark'|trans }}"
-                data-dark-icon="fa-solid fa-moon"
+                data-path="{{ path('theme_save') }}"
+                data-light-css="{{ asset_versioned(theme_light.css) }}"
+                data-light-text="{{ theme_light.readable|trans }}"
+                data-light-icon="{{ theme_light.icon }}"
+                data-dark-css="{{ asset_versioned(theme_dark.css) }}"
+                data-dark-text="{{ theme_dark.readable|trans }}"
+                data-dark-icon="{{ theme_dark.icon }}"
                 data-error="{{ 'theme.error'|trans }}">
             {{- icon(theme_icon, theme_text) -}}
         </button>
         {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
-        {% if is_test -%}
-            {{ dropdownSeparator() }}
-            {{ dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) }}
-        {% endif %}
         {% if is_previous_admin -%}
             {{ dropdownSeparator() }}
             {{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}

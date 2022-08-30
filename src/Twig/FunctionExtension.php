@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
+use App\Controller\ThemeController;
 use App\Entity\User;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
@@ -99,6 +100,8 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('route_params', $this->routeParams(...)),
             // php
             new TwigFunction('is_int', 'is_int'),
+            // theme
+            new TwigFunction('theme_dark', $this->isDarkTheme(...)),
         ];
     }
 
@@ -283,6 +286,14 @@ final class FunctionExtension extends AbstractExtension
         $size = (array) \getimagesize($full_path);
 
         return $size;
+    }
+
+    /**
+     * Returns if the selected theme is dark.
+     */
+    private function isDarkTheme(Request $request): bool
+    {
+        return $request->cookies->getBoolean(ThemeController::KEY_DARK);
     }
 
     /**

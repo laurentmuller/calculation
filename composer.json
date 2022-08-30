@@ -60,6 +60,7 @@
 		"symfony/intl": "6.1.*",
 		"symfony/mailer": "6.1.*",
 		"symfony/mime": "6.1.*",
+		"symfony/monolog-bridge": "6.1.*",
 		"symfony/monolog-bundle": "^3.0",
 		"symfony/notifier": "6.1.*",
 		"symfony/property-access": "6.1.*",

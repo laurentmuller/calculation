@@ -411,12 +411,6 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $matches = [];
         $pattern = '/^\s{0,2}' . \preg_quote($style, '/') . '\s+\{([^}]+)\}/m';
         if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER))) {
-//            $result = [];
-//            foreach ($matches as $match) {
-//                $result[] = \ltrim($match[0]);
-//            }
-//
-//            return $result;
             return \array_map(fn (array $value): string => \ltrim($value[0]), $matches);
         }
 

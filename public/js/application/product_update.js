@@ -12,6 +12,26 @@ function getProducts(id) {
 }
 
 /**
+ * Returns a value indicating if all product checkbox is checked.
+ *
+ * @returns {boolean} - true if checked.
+ */
+function isAllProducts() {
+    'use strict';
+    return $('#form_allProducts').isChecked();
+}
+
+/**
+ * Returns a value indicating if the percent checkbox is checked.
+ *
+ * @return {boolean} true if checked, false otherwise.
+ */
+function isPercent() {
+    'use strict';
+    return $('#form_type_percent').isChecked();
+}
+
+/**
  * Gets the product's checked checkboxes.
  *
  * @return {JQuery} - the checked checkboxes.
@@ -33,16 +53,6 @@ function getSelectableProducts() {
 }
 
 /**
- * Returns a value indicating if all product checkbox is checked.
- *
- * @returns {boolean} - true if checked.
- */
-function isAllProducts() {
-    'use strict';
-    return $('#form_allProducts').isChecked();
-}
-
-/**
  * Validate the product's selection.
  *
  * @returns {boolean} - true if valid.
@@ -51,16 +61,6 @@ function validateProducts() {
     'use strict';
     const validator = $('#edit-form').validate();
     return validator.element("#form_allProducts");
-}
-
-/**
- * Returns a value indicating if the percent checkbox is checked.
- *
- * @return {boolean} true if checked, false otherwise.
- */
-function isPercent() {
-    'use strict';
-    return $('#form_type_percent').isChecked();
 }
 
 /**
@@ -93,6 +93,16 @@ function computePrice(oldPrice, value, isPercent, round) {
 }
 
 /**
+ * Update the select all, select none and reverse buttons.
+ */
+function updateButtons() {
+    'use strict';
+    const disabled = $('#form_allProducts').isChecked();
+    const noSelectable = getSelectableProducts().length === 0;
+    $('#btn-all, #btn-none, #btn-reverse').toggleDisabled(disabled || noSelectable);
+}
+
+/**
  * Update the product's prices.
  */
 function updatePrices() {
@@ -113,16 +123,6 @@ function updatePrices() {
         $this.closest('tr').find('td:eq(2)').text(text);
     });
     updateButtons();
-}
-
-/**
- * Update the select all, select none and reverse buttons.
- */
-function updateButtons() {
-    'use strict';
-    const disabled = $('#form_allProducts').isChecked();
-    const noSelectable = getSelectableProducts().length === 0;
-    $('#btn-all, #btn-none, #btn-reverse').toggleDisabled(disabled || noSelectable);
 }
 
 /**

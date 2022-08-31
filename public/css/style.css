@@ -19,6 +19,19 @@
     transition: top 0.3s;
 }
 
+.navbar.navbar-vertical:after {
+    content: "";
+    position: absolute;
+    top: 65px;
+    right: 0;
+    height: calc(100% - 65px - 30px);
+    width: 1px;
+    border-right: 1px solid #dee2e6;
+}
+body.dark .navbar.navbar-vertical:after {
+    border-right: initial;
+}
+
 /*
  * Example button for theme example
  */

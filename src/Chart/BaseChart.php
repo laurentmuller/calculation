@@ -97,7 +97,8 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
         /** @psalm-var \stdClass $events */
         $events = $this->chart->events ?? new \stdClass();
         $events->$eventName = $handler;
-        $this->chart->events($events); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->chart->events($events);
 
         return $this;
     }
@@ -107,9 +108,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      *
      * @psalm-suppress MixedMethodCall
      */
-    public function hideCredits(): self
+    public function hideCredits(): static
     {
-        $this->credits->enabled(false); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->credits->enabled(false);
 
         return $this;
     }
@@ -117,9 +119,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     /**
      * Hides the series legend.
      */
-    public function hideLegend(): self
+    public function hideLegend(): static
     {
-        $this->legend->enabled(false); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->legend->enabled(false);
 
         return $this;
     }
@@ -127,7 +130,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     /**
      * Hides the chart title.
      */
-    public function hideTitle(): self
+    public function hideTitle(): static
     {
         return $this->setTitle(null);
     }
@@ -135,9 +138,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     /**
      * Sets background color for the outer chart area.
      */
-    public function setBackground(string $color): self
+    public function setBackground(string $color): static
     {
-        $this->chart->backgroundColor($color); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->chart->backgroundColor($color);
 
         return $this;
     }
@@ -145,7 +149,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     /**
      * Sets the font family.
      */
-    public function setFontFamily(string $font): self
+    public function setFontFamily(string $font): static
     {
         $this->style(['fontFamily' => $font]);
 
@@ -155,9 +159,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     /**
      * Sets the HTML element where the chart will be rendered.
      */
-    public function setRenderTo(string $id): self
+    public function setRenderTo(string $id): static
     {
-        $this->chart->renderTo($id); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->chart->renderTo($id);
 
         return $this;
     }
@@ -167,9 +172,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      *
      * @param ?string $title the title to set or null to hide
      */
-    public function setTitle(?string $title): self
+    public function setTitle(?string $title): static
     {
-        $this->title->text($title); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->title->text($title);
 
         return $this;
     }
@@ -180,9 +186,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      * @param string $type the chart type to set
      * @psalm-param 'column'|'line'|'pie'|'spline' $type
      */
-    public function setType(string $type): self
+    public function setType(string $type): static
     {
-        $this->chart->type($type); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->chart->type($type);
 
         return $this;
     }
@@ -194,7 +201,8 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setXAxisCategories(mixed $categories): self
     {
-        $this->xAxis->categories($categories); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->xAxis->categories($categories);
 
         return $this;
     }
@@ -206,7 +214,8 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setXAxisTitle(?string $title): self
     {
-        $this->xAxis->title(['text' => $title]); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->xAxis->title(['text' => $title]);
 
         return $this;
     }
@@ -218,9 +227,49 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setYAxisTitle(?string $title): self
     {
-        $this->yAxis->title(['text' => $title]); // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        $this->yAxis->title(['text' => $title]);
 
         return $this;
+    }
+
+    /**
+     * Create an expression.
+     *
+     * @param string $expression the expression to represent
+     *
+     * @return Expr the expression
+     */
+    protected function createExpression(string $expression): Expr
+    {
+        return new Expr($expression);
+    }
+
+    /**
+     * Gets the default font style.
+     *
+     * @return string[]
+     */
+    protected function getFontStyle(int $fontSize = 16): array
+    {
+        return [
+            'fontWeight' => 'normal',
+            'fontSize' => $fontSize . 'px',
+            'fontFamily' => '"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif',
+        ];
+    }
+
+    /**
+     * Translate the given key within the 'chart' domain.
+     *
+     * @param string $id         the message id (may also be an object that can be cast to string)
+     * @param array  $parameters an array of parameters for the message
+     *
+     * @return string the translated string or the message id if this translator is not defined
+     */
+    protected function transChart(string $id, array $parameters = []): string
+    {
+        return $this->trans($id, $parameters, 'chart');
     }
 
     /**

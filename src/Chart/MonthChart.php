@@ -69,24 +69,11 @@ class MonthChart extends BaseChart
         $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
             ->hideLegend()
+            ->setPlotOptions()
+            ->setTooltipOptions()
             ->xAxis($xAxis)
             ->yAxis($yAxis)
             ->series($series);
-
-        // @phpstan-ignore-next-line
-        $this->plotOptions->series([
-            'stacking' => 'normal',
-            'cursor' => 'pointer',
-            'point' => [
-                'events' => [
-                    'click' => $this->getClickExpression(),
-                ],
-            ],
-        ]);
-
-        // @phpstan-ignore-next-line
-        $this->tooltip->formatter($this->getFormatterExpression())
-            ->useHTML(true);
 
         // data
         $data = [];
@@ -95,15 +82,15 @@ class MonthChart extends BaseChart
                 'date' => ($date / 1000),
                 'count' => $countData[$index],
                 'sum' => $sumData[$index],
-                'items' => $itemsData[$index],
+                'items' => $itemsData[$index][0],
                 'marginAmount' => $marginsAmount[$index],
                 'marginPercent' => $marginsPercent[$index],
             ];
         }
 
         $count = \array_sum($countData);
-        $items = \array_sum($itemsData);
         $total = \array_sum($sumData);
+        $items = \array_sum(\array_column($itemsData, 1));
         $marginAmount = $total - $items;
         $marginPercent = $this->safeDivide($total, $items);
 
@@ -160,7 +147,7 @@ class MonthChart extends BaseChart
             }
             FUNCTION;
 
-        return new Expr($function);
+        return $this->createExpression($function);
     }
 
     /**
@@ -199,23 +186,50 @@ class MonthChart extends BaseChart
 
     private function getFormatterExpression(): Expr
     {
+        $month = $this->transChart('fields.month');
+        $count = $this->transChart('fields.count');
+        $amount = $this->transChart('fields.net');
+        $total = $this->transChart('fields.total');
+        $marginAmount = $this->transChart('fields.margin_amount');
+        $marginPercent = $this->transChart('fields.margin_percent');
+
         $function = <<<FUNCTION
             function () {
-                window.console.log(this);
-                var date = Highcharts.dateFormat("%B %Y", this.x);
-                var name = this.series.name;
-                var yValue = Highcharts.numberFormat(this.y, 0);
-                var totalValue = Highcharts.numberFormat(this.total, 0);
-                var html = "<table>";
-                html += "<tr><th colspan=\"3\">" + date + "</th></tr>";
-                html += "<tr><td>" +  name + "</td><td>:</td><td class=\"text-currency\">" + yValue + "</td></tr>";
-                html += "<tr><td>Total</td><td>:</td><td class=\"text-currency\">" + totalValue + "</td></tr>";
-                html += "</table>";
+                const ptMargin = this.points[0];
+                const ptAmount = this.points[1];
+                var html = '<table class="m-1">';
+
+                // month
+                html += '<tr class="border-bottom border-dark"><th>$month</th><th>:</th class="text-calculation"><th>' + Highcharts.dateFormat("%B %Y", this.x) + '</th></tr>';
+
+                // count (calculations)
+                let value = Highcharts.numberFormat(ptAmount.point.custom.count, 0);
+                html += '<tr><td class="text-category">$count</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+
+                // amount
+                let color = 'color:' + ptAmount.color + ';';
+                value = Highcharts.numberFormat(ptAmount.y, 0);
+                html += '<tr><td class="text-category" style="' + color + '">$amount</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+
+                // margin amount
+                color = 'color:' + ptMargin.color + ';';
+                value = Highcharts.numberFormat(ptMargin.y, 0);
+                html += '<tr><td class="text-category" style="' + color + '">$marginAmount</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+
+                // margin percent
+                value =  Highcharts.numberFormat(100 + Math.floor(ptMargin.y * 100 / ptAmount.y), 0);
+                html += '<tr><td class="text-category">$marginPercent</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+
+                // total
+                value = Highcharts.numberFormat(ptAmount.y + ptMargin.y, 0);
+                html += '<tr class="border-top border-dark"><th>$total</th><th>:</th><th class="text-calculation">' + value + '</th></tr>';
+
+                html += '</table>';
                 return html;
             }
             FUNCTION;
 
-        return new Expr($function);
+        return $this->createExpression($function);
     }
 
     /**
@@ -228,11 +242,11 @@ class MonthChart extends BaseChart
      *      margin: float,
      *      date: \DateTimeInterface}> $data
      *
-     * @return float[]
+     * @return array<array-key, array{float, int}>
      */
     private function getItems(array $data): array
     {
-        return \array_map(fn (array $item): float => $item['items'], $data);
+        return \array_map(fn (array $item): array => [$item['items'], $item['count']], $data);
     }
 
     /**
@@ -279,23 +293,23 @@ class MonthChart extends BaseChart
      *      margin: float,
      *      date: \DateTimeInterface}> $data
      *
-     * @return float[]
+     * @return array<array-key, array{float, int}>
      */
     private function getMargins(array $data): array
     {
-        return \array_map(fn (array $item): float => $item['total'] - $item['items'], $data);
+        return \array_map(fn (array $item): array => [$item['total'] - $item['items'], $item['count']], $data);
     }
 
     private function getSeries(array $marginsData, array $itemsData): array
     {
         return [
             [
-                'name' => $this->trans('fields.margin', [], 'chart'),
+                'name' => $this->transChart('fields.margin'),
                 'data' => $marginsData,
                 'color' => 'darkred',
             ],
             [
-                'name' => $this->trans('fields.net', [], 'chart'),
+                'name' => $this->trans('fields.net'),
                 'data' => $itemsData,
                 'color' => 'darkgreen',
             ],
@@ -326,9 +340,7 @@ class MonthChart extends BaseChart
             'categories' => $dates,
             'labels' => [
                 'format' => '{value:%B %Y}',
-                'style' => [
-                    'fontSize' => '12px',
-                ],
+                'style' => $this->getFontStyle(12),
             ],
         ];
     }
@@ -340,7 +352,7 @@ class MonthChart extends BaseChart
                return Highcharts.numberFormat(this.value, 0);
             }
             FUNCTION;
-        $formatter = new Expr($function);
+        $formatter = $this->createExpression($function);
 
         return [
             [
@@ -355,5 +367,41 @@ class MonthChart extends BaseChart
                 ],
             ],
         ];
+    }
+
+    /**
+     * Sets the plot options.
+     */
+    private function setPlotOptions(): self
+    {
+        // @phpstan-ignore-next-line
+        $this->plotOptions->series([
+            'cursor' => 'pointer',
+            'stacking' => 'normal',
+            'keys' => ['y', 'custom.count'],
+            'point' => [
+                'events' => [
+                    'click' => $this->getClickExpression(),
+                ],
+            ],
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Sets the tooltip options.
+     */
+    private function setTooltipOptions(): self
+    {
+        // @phpstan-ignore-next-line
+        $this->tooltip->formatter($this->getFormatterExpression())
+            ->style($this->getFontStyle(12))
+            ->borderColor('rgba(255, 255, 255, 0.125)')
+            ->borderRadius(4)
+            ->useHTML(true)
+            ->shared(true);
+
+        return $this;
     }
 }

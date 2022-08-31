@@ -21,6 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Chart to display calculations by state.
  *
+ * @psalm-import-type QueryCalculation from CalculationStateRepository
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class StateChart extends BaseChart
@@ -61,17 +62,13 @@ class StateChart extends BaseChart
             ];
         }, $states);
 
-        $style = $this->getStyle();
-
         $this->hideTitle()
+            ->setPlotOptions()
+            ->setLegendOptions()
+            ->setTooltipOptions()
             ->series($this->getSeries($data));
 
         $this->colors = $this->getColors($states);
-        $this->plotOptions->pie($this->getPie()); // @phpstan-ignore-line
-        $this->legend->itemStyle($style)->itemHoverStyle($style); // @phpstan-ignore-line
-
-        $this->tooltip->headerFormat(''); // @phpstan-ignore-line
-        $this->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>'); // @phpstan-ignore-line
 
         return [
                 'chart' => $this,
@@ -93,11 +90,11 @@ class StateChart extends BaseChart
             }
             FUNCTION;
 
-        return new Expr($function);
+        return $this->createExpression($function);
     }
 
     /**
-     * @pslam-param array<QueryCalculation> $states
+     * @pslam-param QueryCalculation[] $states
      *
      * @return string[]
      */
@@ -106,10 +103,11 @@ class StateChart extends BaseChart
         return \array_map(fn (array $state): string => (string) $state['color'], $states);
     }
 
+    /**
+     * Gets the pie options.
+     */
     private function getPie(): array
     {
-        $click = $this->getClickExpression();
-
         return [
             'cursor' => 'pointer',
             'showInLegend' => true,
@@ -119,7 +117,7 @@ class StateChart extends BaseChart
             ],
             'point' => [
                 'events' => [
-                    'click' => $click,
+                    'click' => $this->getClickExpression(),
                 ],
             ],
         ];
@@ -130,17 +128,47 @@ class StateChart extends BaseChart
         return [
             [
                 'data' => $data,
-                'name' => $this->trans('title_by_state', [], 'chart'),
+                'name' => $this->transChart('title_by_state'),
                 'type' => self::TYPE_PIE,
             ],
         ];
     }
 
-    private function getStyle(): array
+    /**
+     * Sets the legend options.
+     */
+    private function setLegendOptions(): self
     {
-        return [
-            'fontSize' => '14px',
-            'fontWeight' => 'normal',
-        ];
+        $style = $this->getFontStyle();
+
+        // @phpstan-ignore-next-line
+        $this->legend->itemStyle($style)->itemHoverStyle($style);
+
+        return $this;
+    }
+
+    /**
+     * Sets the plot options.
+     */
+    private function setPlotOptions(): self
+    {
+        // @phpstan-ignore-next-line
+        $this->plotOptions->pie($this->getPie());
+
+        return $this;
+    }
+
+    /**
+     * Sets the tooltip options.
+     */
+    private function setTooltipOptions(): self
+    {
+        // @phpstan-ignore-next-line
+        $this->tooltip
+            ->style($this->getFontStyle(12))
+            ->headerFormat('')
+            ->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>');
+
+        return $this;
     }
 }

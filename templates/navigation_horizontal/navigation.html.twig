@@ -21,7 +21,7 @@
 {%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
 {# horizontal navigation #}
-<nav id="navigation" class="navbar navbar-dark bg-dark navbar-color navbar-expand-md navbar-horizontal" data-show="{{ 'index.sidebar_show'|trans }}" data-hide="{{ 'index.sidebar_hide'|trans }}">
+<nav id="navigation" class="navbar navbar-horizontal navbar-themed navbar-color navbar-expand-md border-bottom" data-show="{{ 'index.sidebar_show'|trans }}" data-hide="{{ 'index.sidebar_hide'|trans }}">
     <button class="navbar-toggler sidebar-toggle py-1" aria-expanded="{{ (not active)|json_encode }}" title="{{ (active ? 'index.sidebar_show' : 'index.sidebar_hide')|trans }}">
         <i class="fa-solid fa-angle-left"></i>
     </button>

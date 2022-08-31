@@ -21,7 +21,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation state entity.
  *
- * @psalm-type QueryCalculation array{
+ * @psalm-type QueryCalculation = array{
  *      id: int,
  *      code: string,
  *      editable: boolean,

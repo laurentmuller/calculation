@@ -63,10 +63,13 @@ td.required:after {
 }
 
 /*
- * Plain text DIV
+ * plain text (read-only control)
  */
-.plain-text {
-    padding: 6px 12px;
+.form-control-plaintext.border {
+    border: 1px solid #ced4da !important;
+}
+body.dark .form-control-plaintext.border {
+    border: 1px solid #6c757d !important;
 }
 
 /*

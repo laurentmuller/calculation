@@ -1,17 +1,11 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% from 'macros/_margins_edit.html.twig' import printMargins %}
 {# parameters #}
-{%- set title = new ? 'group.add.title' : 'group.edit.title' -%}
-{%- set title_icon = ICON_GROUP -%}
-{%- set page_list = 'group_table' -%}
+{%- set title = 'globalmargin.edit.title' -%}
+{%- set title_icon = ICON_GLOBAL_MARGIN -%}
+{%- set page_list = 'globalmargin_table' -%}
 {# body #}
 {% block card_body %}
-<div class="form-row">
-    <div class="col-md-6">
-        {{ form_row(form.code) }}
-    </div>
-</div>
-{{ form_row(form.description) }}
 {{ printMargins(form.margins) }}
 {% endblock %}
 {# javascripts #}

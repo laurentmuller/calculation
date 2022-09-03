@@ -24,6 +24,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  * Service to get weather from OpenWeatherMap.
  *
  * @see https://openweathermap.org/api
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class OpenWeatherService extends AbstractHttpClientService

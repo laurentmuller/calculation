@@ -33,6 +33,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *      marginAmount: float|string}
  *
  * @template-extends AbstractRepository<CalculationState>
+ *
  * @psalm-suppress  MixedReturnTypeCoercion
  */
 class CalculationStateRepository extends AbstractRepository
@@ -53,6 +54,7 @@ class CalculationStateRepository extends AbstractRepository
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
      * @return array the states with the number and the sum of calculations
+     *
      * @psalm-return QueryCalculation[]
      */
     public function getCalculations(): array
@@ -140,6 +142,7 @@ class CalculationStateRepository extends AbstractRepository
      * Gets the query builder for the list of states sorted by the editable and the code fields.
      *
      * @param string $alias the default entity alias
+     *
      * @psalm-param literal-string $alias
      */
     public function getQueryBuilderByEditable(string $alias = self::DEFAULT_ALIAS): QueryBuilder
@@ -156,6 +159,7 @@ class CalculationStateRepository extends AbstractRepository
      * Gets the query builder for the list of states sorted by code.
      *
      * @param string $alias the default entity alias
+     *
      * @psalm-param literal-string $alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder

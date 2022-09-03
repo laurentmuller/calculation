@@ -44,7 +44,7 @@ function update(form) {
     // get items
     const $itemsEmpty = $('.task-items-empty');
     const items = $('#table-edit .item-row:not(.d-none) :checkbox:checked').map(function () {
-        return Number.parseInt($(this).attr('value'), 10);
+        return $.parseInt($(this).attr('value'));
     }).get();
     if (items.length === 0) {
         $('#table-edit .item-row:not(.d-none) :checkbox:first').trigger('focus');

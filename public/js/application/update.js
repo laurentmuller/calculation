@@ -10,7 +10,6 @@
     $('#form_entity').on('input', function () {
         const $this = $(this);
         const $selected = $this.getSelectedOption();
-
         $('form').attr('action', String($this.val()));
         $('#form_entity_help').text($selected.data('help'));
     });

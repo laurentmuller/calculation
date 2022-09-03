@@ -56,11 +56,8 @@ class ResetPasswordController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(
-        private readonly ResetPasswordHelperInterface $helper,
-        private readonly UserRepository $repository,
-        private readonly UserExceptionService $service
-    ) {
+    public function __construct(private readonly ResetPasswordHelperInterface $helper, private readonly UserRepository $repository, private readonly UserExceptionService $service)
+    {
     }
 
     /**
@@ -201,10 +198,11 @@ class ResetPasswordController extends AbstractController
 
     private function getThrottleAt(ResetPasswordToken $resetToken): \DateTimeInterface
     {
-        /** @var \DateTime|\DateTimeImmutable $expireAt */
+        /** @var \DateTime $expireAt */
         $expireAt = clone $resetToken->getExpiresAt();
+        $interval = new \DateInterval(self::THROTTLE_OFFSET);
 
-        return $expireAt->sub(new \DateInterval(self::THROTTLE_OFFSET));
+        return $expireAt->sub($interval);
     }
 
     private function getThrottleLifeTime(): string

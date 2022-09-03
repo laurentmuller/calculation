@@ -219,6 +219,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
      * Update the item.
      *
      * @param array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string} $item
+     *
      * @param-out  array<"content"|"entityname"|"field"|"fieldname"|"id"|"type", int|string> $item
      */
     private function updateItem(array &$item): void

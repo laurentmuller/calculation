@@ -1,34 +1,40 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Returns this trimmed text content.
- *
- * @returns {string} the trimmed text content.
+ * -------------- JQuery functions extensions --------------
  */
-$.fn.trimmedText = function () {
-    'use strict';
-    const $this = $(this);
-    if ($this.is("input")) {
-        return $this.val().trim();
-    }
-    return $this.text().trim();
-};
+$.fn.extend({
 
-/**
- * Returns if this cell content is equal to 0.
- *
- * @returns {boolean} true if empty.
- */
-$.fn.isEmptyValue = function () {
-    'use strict';
-    const text = $(this).trimmedText();
-    return $.parseFloat(text) === 0;
-};
+    /**
+     * Returns this trimmed text or value content.
+     *
+     * @returns {string} the trimmed content.
+     */
+    trimText: function () {
+        'use strict';
+        const $this = $(this);
+        if ($this.is('input')) {
+            return $this.val().trim();
+        }
+        return $this.text().trim();
+    },
+
+    /**
+     * Returns if this cell content is equal to 0.
+     *
+     * @returns {boolean} true if empty.
+     */
+    isEmptyValue: function () {
+        'use strict';
+        const text = $(this).trimText();
+        return $.parseFloat(text) === 0;
+    }
+});
 
 /**
  * Updates the rows and cells errors.
  *
- * @returns {boolean} true if any error found.
+ * @returns {boolean} true if any error is found.
  */
 function updateErrors() {
     'use strict';
@@ -37,15 +43,15 @@ function updateErrors() {
     let emptyFound = false;
     let duplicateFound = false;
 
-    const emptyClass = "empty-cell";
-    const duplicateClass = "duplicate-cell";
+    const emptyClass = 'empty-cell';
+    const duplicateClass = 'duplicate-cell';
 
-    $("#data-table-edit tbody tr").each(function () {
+    $('#data-table-edit .item').each(function () {
         const $row = $(this);
 
         // duplicate
-        const $cell = $row.find("td:eq(0)");
-        const key = $cell.trimmedText().toLowerCase();
+        const $cell = $row.find('td:eq(0)');
+        const key = $cell.trimText().toLowerCase();
         $cell.removeClass(duplicateClass);
         if (key) {
             if (key in existing) {
@@ -58,7 +64,7 @@ function updateErrors() {
         }
 
         // empty
-        $row.find("td:eq(2), td:eq(3)").each(function () {
+        $row.find('td:eq(2), td:eq(3)').each(function () {
             const $cell = $(this);
             if ($cell.isEmptyValue()) {
                 emptyFound = true;
@@ -71,9 +77,9 @@ function updateErrors() {
 
     // show or hide
     if (emptyFound || duplicateFound) {
-        $("#error-empty").toggleClass("d-none", !emptyFound);
-        $("#error-duplicate").toggleClass("d-none", !duplicateFound);
-        $("#error-all").removeClass("d-none").fadeIn();
+        $("#error-empty").toggleClass('d-none', !emptyFound);
+        $("#error-duplicate").toggleClass('d-none', !duplicateFound);
+        $("#error-all").removeClass('d-none').fadeIn();
     } else {
         $("#error-all").fadeOut();
     }
@@ -86,18 +92,11 @@ function updateErrors() {
  */
 (function ($) {
     'use strict';
-
     // tooltip
-    const $button = $('.btn-adjust');
-    if ($button.length) {
-        $button.tooltip();
-    }
     $('body').tooltip({
         selector: '.has-tooltip',
         customClass: 'tooltip-danger overall-cell'
     });
-
-
     // errors
     if ($("#data-table-edit").length) {
         updateErrors();

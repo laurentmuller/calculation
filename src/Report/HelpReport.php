@@ -116,6 +116,7 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param array{entity: null|string} $dialog
+     *
      * @psalm-return null|array{
      *      id: string,
      *      name:string,
@@ -148,6 +149,7 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param array{fields: null|array} $entity
+     *
      * @psalm-return null|array<array{
      *      name: string,
      *      description: string,
@@ -510,7 +512,6 @@ class HelpReport extends AbstractReport
      *      id: string,
      *      name:string,
      *      description: string|null} $item
-     *
      * @psalm-param array<array{
      *      name: string,
      *      description: string,
@@ -617,6 +618,7 @@ class HelpReport extends AbstractReport
      *      description: string,
      *      menus: array|null
      *      }> $menus
+     *
      *  @psalm-suppress MixedArgumentTypeCoercion
      */
     private function outputMenus(PdfTableBuilder $table, array $menus, int $indent = 0): void

@@ -54,6 +54,7 @@ class PivotQuarterField extends PivotDateField
      * The function receive the quarter (1 to 4) as parameter and must return a string.
      *
      * @param ?callable $formatter the optional callback
+     *
      * @psalm-param callable(int): string|null $formatter
      */
     public function setFormatter(?callable $formatter): self

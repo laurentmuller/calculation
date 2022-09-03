@@ -177,7 +177,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
 };
 
 /**
- * -------------- jQuery extensions --------------
+ * -------------- JQuery extensions --------------
  */
 $.fn.extend({
     /**
@@ -198,7 +198,7 @@ $.fn.extend({
      * @param {function} [fnShow] - the function called when the context menu is shown.
      * @param {function} [fnHide] - the function called when the context menu is hidden.
      * @param {Object} [options] - the context menu options to override.
-     * @return {JQuery} The jQuery element for chaining.
+     * @return {JQuery} The JQuery element for chaining.
      */
     initContextMenu: function (selector, fnShow, fnHide, options) {
         'use strict';

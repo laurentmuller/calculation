@@ -34,7 +34,7 @@
             this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
             this.$sidebarToggle.off('click', this.toggleSidebarProxy);
             $(window).off('resize', this.resizeProxy);
-            this.$element.removeData('sidebar');
+            this.$element.removeData(Sidebar.NAME);
         }
 
         // -----------------------------
@@ -298,6 +298,12 @@
         minWidth: 960
     };
 
+
+    /**
+     * The plugin name.
+     */
+    Sidebar.NAME = 'sidebar-boostrap';
+
     // -----------------------------
     // sidebar plugin definition
     // -----------------------------
@@ -306,9 +312,9 @@
     $.fn.sidebar = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('sidebar')) {
+            if (!$this.data(Sidebar.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('sidebar', new Sidebar(this, settings));
+                $this.data(Sidebar.NAME, new Sidebar(this, settings));
             }
         });
     };

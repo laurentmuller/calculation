@@ -56,8 +56,5 @@ URLSearchParams.prototype.getIntOrDefault = function (name, defaultValue) {
         return defaultValue;
     }
     const value = Number.parseInt(this.get(name), 10);
-    if (!Number.isInteger(value)) {
-        return defaultValue;
-    }
-    return value;
+    return Number.isInteger(value) ? value : defaultValue;
 };

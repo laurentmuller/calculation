@@ -20,6 +20,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * Microsoft BingTranslatorService Text API 3.0.
  *
  * @see https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class BingTranslatorService extends AbstractTranslatorService

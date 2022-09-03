@@ -301,6 +301,6 @@ class Group extends AbstractEntity
      */
     private function reduceCategories(callable $callback): int
     {
-        return (int) \array_reduce($this->categories->toArray(), $callback, 0);
+        return \array_reduce($this->categories->toArray(), $callback, 0);
     }
 }

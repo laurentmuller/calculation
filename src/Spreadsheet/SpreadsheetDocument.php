@@ -595,6 +595,7 @@ class SpreadsheetDocument extends Spreadsheet
      *                           alignments
      * @param int   $columnIndex the starting column index (A = 1)
      * @param int   $rowIndex    the row index (1 = First row)
+     *
      * @psalm-param array<string, string|string[]> $headers
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
@@ -698,6 +699,7 @@ class SpreadsheetDocument extends Spreadsheet
      * Sets the paper size for the active sheet.
      *
      * @param int $size the paper size that must be one of PageSetup paper size constant
+     *
      * @psalm-param PageSetup::PAPERSIZE_* $size
      */
     public function setPageSize(int $size): static

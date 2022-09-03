@@ -26,6 +26,7 @@ abstract class AbstractArrayDocument extends AbstractDocument
      *
      * @param AbstractController $controller the parent controller
      * @param array              $entities   the entities to render
+     *
      * @psalm-param T[] $entities
      *
      * @throws \Psr\Container\ContainerExceptionInterface

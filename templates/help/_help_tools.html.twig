@@ -7,7 +7,11 @@
 
 {% macro output_required(field) -%}
 {%- set required = field.required is defined ? field.required : true -%}
-{{ (required ? 'common.value_true' : 'common.value_false')|trans }}
+{% if required %}
+    <i class="fa-solid fa-check"></i>
+{% else %}
+    &nbsp;
+{% endif %}
 {%- endmacro %}
 
 {% macro output_image(path, screenshot=true) -%}
@@ -19,19 +23,21 @@
 {%- endmacro %}
 
 {% macro output_table_actions(actions, service) -%}
-<table class="w-100">
-    <thead>
-        <tr class="bg-themed">
-            <th class="w-25">{{ 'help.fields.action'|trans }}</th>
-            <th>{{ 'help.fields.description'|trans }}</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for action in actions %}
-        {{ _self.output_row_action(action, service) }}
-    {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-sm w-100">
+        <thead>
+            <tr class="bg-themed">
+                <th class="text-nowrap">{{ 'help.fields.action'|trans }}</th>
+                <th class="w-100">{{ 'help.fields.description'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for action in actions %}
+            {{ _self.output_row_action(action, service) }}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {%- endmacro %}
 
 {% macro output_row_action(action, service) -%}
@@ -40,7 +46,7 @@
 {%- set text = action.label|default(action.id) -%}
 {%- set icon = action.icon|default(false) -%}
 <tr>
-    <td class="w-25">
+    <td class="text-nowrap">
         {%- if href -%}
             {%- if icon -%}
                 {{- _self.output_icon(icon) -}}
@@ -52,7 +58,7 @@
             {{- _self.output_icon(icon, text) -}}
         {%- endif -%}
     </td>
-    <td>{{ action.description }}</td>
+    <td class="w-100">{{ action.description }}</td>
 </tr>
 {%- endmacro %}
 
@@ -87,6 +93,8 @@
             {%- set entity = service.findEntity(link.id) -%}
             {%- set href = path('help_entity', {'id': entity.id}) -%}
             <li><a href="{{ href }}">{{ (entity.id ~ '.name')|trans }}</a></li>
+        {% elseif link.href is defined and link.text is defined %}
+            <li><a href="{{ href }}">{{ link.text|trans }}</a></li>
         {% endif %}
     {% endfor %}
     </ul>

@@ -31,17 +31,9 @@ class GlobalMarginControllerTest extends AbstractControllerTest
             ['/globalmargin', self::ROLE_ADMIN],
             ['/globalmargin', self::ROLE_SUPER_ADMIN],
 
-            ['/globalmargin/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/globalmargin/add', self::ROLE_ADMIN],
-            ['/globalmargin/add', self::ROLE_SUPER_ADMIN],
-
-            ['/globalmargin/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/globalmargin/edit/1', self::ROLE_ADMIN],
-            ['/globalmargin/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/globalmargin/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/globalmargin/delete/1', self::ROLE_ADMIN],
-            ['/globalmargin/delete/1', self::ROLE_SUPER_ADMIN],
+            ['/globalmargin/edit', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/globalmargin/edit', self::ROLE_ADMIN],
+            ['/globalmargin/edit', self::ROLE_SUPER_ADMIN],
 
             ['/globalmargin/show/1', self::ROLE_USER],
             ['/globalmargin/show/1', self::ROLE_ADMIN],

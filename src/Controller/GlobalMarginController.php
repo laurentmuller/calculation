@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
+use App\Enums\EntityPermission;
+use App\Form\GlobalMargin\GlobalMarginsType;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Interfaces\RoleInterface;
 use App\Report\GlobalMarginsReport;
@@ -22,6 +23,8 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GlobalMarginsDocument;
 use App\Table\GlobalMarginTable;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,45 +52,43 @@ class GlobalMarginController extends AbstractEntityController
         parent::__construct($repository);
     }
 
-    /**
-     * Add a global margin.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    #[Route(path: '/add', name: 'globalmargin_add')]
-    public function add(Request $request): Response
+    #[Route(path: '/edit', name: 'globalmargin_edit')]
+    public function edit(Request $request, EntityManagerInterface $manager): Response
     {
-        return $this->editEntity($request, new GlobalMargin());
-    }
+        // check permissions
+        $subject = GlobalMargin::class;
+        $permissions = [EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE];
+        foreach ($permissions as $permission) {
+            $this->denyAccessUnlessGranted($permission, $subject);
+        }
 
-    /**
-     * Delete a global margin.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \ReflectionException
-     */
-    #[Route(path: '/delete/{id}', name: 'globalmargin_delete', requirements: ['id' => self::DIGITS])]
-    public function delete(Request $request, GlobalMargin $item, LoggerInterface $logger): Response
-    {
-        $parameters = [
-            'title' => 'globalmargin.delete.title',
-            'message' => 'globalmargin.delete.message',
-            'success' => 'globalmargin.delete.success',
-            'failure' => 'globalmargin.delete.failure',
-        ];
+        /** @var GlobalMargin[] $existingMargins */
+        $existingMargins = $this->repository->findBy([], ['minimum' => Criteria::ASC]);
 
-        return $this->deleteEntity($request, $item, $logger, $parameters);
-    }
+        $form = $this->createForm(GlobalMarginsType::class, ['margins' => $existingMargins]);
+        if ($this->handleRequestForm($request, $form)) {
+            /** @var array{margins: GlobalMargin[]} $data */
+            $data = $form->getData();
+            $newMargins = $data['margins'];
 
-    /**
-     * Edit a global margin.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    #[Route(path: '/edit/{id}', name: 'globalmargin_edit', requirements: ['id' => self::DIGITS])]
-    public function edit(Request $request, GlobalMargin $item): Response
-    {
-        return $this->editEntity($request, $item);
+            // update
+            foreach ($newMargins as $margin) {
+                $manager->persist($margin);
+            }
+            // delete
+            $deletedMargins = \array_diff($existingMargins, $newMargins);
+            foreach ($deletedMargins as $margin) {
+                $manager->remove($margin);
+            }
+            $manager->flush();
+            $this->successTrans('globalmargin.edit.success');
+
+            return $this->redirectToRoute('globalmargin_table');
+        }
+
+        return $this->renderForm('globalmargin/globalmargin_edit_list.html.twig', [
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -96,6 +97,7 @@ class GlobalMarginController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'globalmargin_excel')]
     public function excel(): SpreadsheetResponse
@@ -149,17 +151,6 @@ class GlobalMarginController extends AbstractEntityController
     public function table(Request $request, GlobalMarginTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig', $logger);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
-    {
-        // update parameters
-        $parameters['success'] = $item->isNew() ? 'globalmargin.add.success' : 'globalmargin.edit.success';
-
-        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

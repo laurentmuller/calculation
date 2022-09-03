@@ -20,6 +20,7 @@ use Faker\Provider\Base;
  * Entity provider.
  *
  * @template T of \App\Entity\AbstractEntity
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityProvider extends Base

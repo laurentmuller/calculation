@@ -20,6 +20,7 @@ use Doctrine\ORM\QueryBuilder;
  * Abstract repository for products and tasks.
  *
  * @template T of \App\Entity\AbstractCategoryItemEntity
+ *
  * @template-extends AbstractRepository<T>
  */
 abstract class AbstractCategoryItemRepository extends AbstractRepository

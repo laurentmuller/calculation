@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * The SpreadsheetResponse represents an HTTP streamed response within an Excel 2007 (.xlsx) document.
  *
  * @see SpreadsheetDocument
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface

@@ -25,6 +25,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * Type to display a list of calculation states.
  *
  * @template-extends AbstractListEntityType<CalculationState>
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalculationStateListType extends AbstractListEntityType implements ServiceSubscriberInterface

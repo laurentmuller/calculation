@@ -52,7 +52,7 @@
                 <th class="border bg-secondary">&nbsp;</th>
                 {% for name in month.calendar.weekShortNames %}
                     {%- set class = 'border text-center font-weight-normal' -%}
-                    {% if loop.index in [6, 7] %}{%- set class = class ~ ' bg-light' -%}{% endif %}
+                    {% if loop.index in [6, 7] %}{%- set class = class ~ ' bg-themed text-themed' -%}{% endif %}
                     <th class="{{ class }}">{{ name }}</th>
                 {% endfor %}
             </tr>

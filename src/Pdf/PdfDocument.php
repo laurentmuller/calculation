@@ -621,8 +621,6 @@ class PdfDocument extends FPDF
      * @param PdfRectangle                $bounds the rectangle to output
      * @param PdfBorder|PdfRectangleStyle $border the style of rendering
      *
-     * @return PdfDocument
-     *
      * @see PdfBorder::isRectangleStyle()
      * @see PdfBorder::getRectangleStyle()
      * @see PdfDocument::Rect()

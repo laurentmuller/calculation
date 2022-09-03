@@ -1,18 +1,14 @@
 {% extends 'cards/card_show.html.twig' %}
-
-{# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
-
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'globalmargin.show.title' -%}
 {%- set params = route_params(app.request, id) %}
-
-{# actions #}
+{%- set cancel_path = cancel_url(app.request, id, 'globalmargin_table') -%}
+{# actions
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('globalmargin_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('globalmargin_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'globalmargin_table') -%}
-
+#}
 {# properties #}
 {% block property_body %}
 {{ properties.property('globalmargin.fields.minimum', item.minimum|amount) }}

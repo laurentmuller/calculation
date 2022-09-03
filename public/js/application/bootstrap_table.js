@@ -122,7 +122,7 @@ function styleProductPrice(value) { // jshint ignore:line
  */
 function styleTextMuted(row, index) { // jshint ignore:line
     'use strict';
-    const value = Number.parseInt(row.textMuted, 10);
+    const value = $.parseInt(row.textMuted);
     if (!Number.isNaN(value) && value === 0) {
         const $row = $('#table-edit tbody tr:eq(' + index + ')');
         const classes = $row.attr('class') + ' text-muted';
@@ -142,8 +142,8 @@ function styleTextMuted(row, index) { // jshint ignore:line
  */
 function isConnectedUser($table, row) {
     'use strict';
-    const currentId = Number.parseInt(row.id, 10);
-    const connectedId = Number.parseInt($table.data('user-id'), 10);
+    const currentId = $.parseInt(row.id);
+    const connectedId = $.parseInt($table.data('user-id'));
     return Number.isNaN(currentId) || Number.isNaN(connectedId) || currentId === connectedId;
 }
 
@@ -156,9 +156,9 @@ function isConnectedUser($table, row) {
  */
 function isOrignalUser($table, row) {
     'use strict';
-    const currentId = Number.parseInt(row.id, 10);
-    const originalId = Number.parseInt($table.data('original-user-id'), 10);
-    return Number.isNaN(currentId) || Number.isNaN(originalId) || currentId === originalId;
+    const currentId = $.parseInt(row.id);
+    const originalId = $.parseInt($table.data('original-user-id'));
+    return currentId === originalId;
 }
 
 /**
@@ -227,8 +227,8 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  */
 function updateUserResetAction($table, row, _$element, $action) {
     'use strict';
-    const value = Number.parseInt(row.resetPassword, 10);
-    if (Number.isNaN(value) || value === 0) {
+    const value = $.parseInt(row.resetPassword);
+    if (value === 0) {
         $action.prev('.dropdown-divider').remove();
         $action.remove();
     }
@@ -279,8 +279,8 @@ function updateSearchAction($table, row, _$element, $action) {
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
-    const value = Number.parseInt(row.textMuted, 10);
-    if (!Number.isNaN(value) && value === 0) {
+    const value = $.parseInt(row.textMuted);
+    if (value === 0) {
         const $state = $element.find('.btn-state');
         if ($state.length) {
             $state.addClass('btn-default');
@@ -315,8 +315,8 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
-    const items = Number.parseInt(row.items, 10);
-    if (Number.isNaN(items) || items === 0) {
+    const items = $.parseInt(row.items);
+    if (items === 0) {
         $action.prev('.dropdown-divider').remove();
         $action.remove();
     }
@@ -506,7 +506,7 @@ $.fn.extend({
                     $pageButton.toggleDisabled(true);
                 } else {
                     // window.console.log($table.getOptions().en.formatAllRows());
-                    const pageSize = Number.parseInt(options.pageSize, 10);
+                    const pageSize = $.parseInt(options.pageSize);
                     const $links = pageList.map(function (page) {
                         const $link = $('<button/>', {
                             'class': 'dropdown-page dropdown-item',
@@ -584,8 +584,8 @@ $.fn.extend({
 
             // text-muted
             if (typeof row.textMuted !== 'undefined') {
-                const value = Number.parseInt(row.textMuted, 10);
-                if (!Number.isNaN(value) && value === 0) {
+                const value = $.parseInt(row.textMuted);
+                if (value === 0) {
                     $item.addClass('text-muted');
                 }
             }
@@ -611,8 +611,8 @@ $.fn.extend({
 
             // text-muted
             if (typeof row.textMuted !== 'undefined') {
-                const value = Number.parseInt(row.textMuted, 10);
-                if (!Number.isNaN(value) && value === 0) {
+                const value = $.parseInt(row.textMuted);
+                if (value === 0) {
                     $item.find('.card-view-value.font-weight-bold').addClass('text-body');
                 }
             }

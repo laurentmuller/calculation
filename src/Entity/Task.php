@@ -129,6 +129,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      * @param \Closure $p the predicate used for filtering
      *
      * @return Collection<int, TaskItem>
+     *
      * @psalm-param Closure(TaskItem=):bool $p
      */
     public function filter(\Closure $p): Collection

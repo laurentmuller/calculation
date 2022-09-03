@@ -22,13 +22,13 @@
  * @property {string} view - the display mode ('table', 'card' or 'custom').
  * @property {string} searchText - the search text.
  *
- * @typedef {JQuery} jQueryTable - the bootstrap table.
+ * @typedef {JQuery} JQueryTable - the bootstrap table.
  * @property {Options} getOptions - the options.
  * @property {boolean} isCardView - true if card view is displayed.
  * @property {boolean} isCustomView - true if custom view is displayed.
  * @property {JQuery} getCustomView - get the custom view.
- * @property {jQueryTable} enableKeys - enable the key handler.
- * @property {jQueryTable} disableKeys - disable the key handler.
+ * @property {JQueryTable} enableKeys - enable the key handler.
+ * @property {JQueryTable} disableKeys - disable the key handler.
  */
 
 /**
@@ -43,7 +43,7 @@ function loadingTemplate(message) { // jshint ignore:line
 }
 
 /**
- * jQuery's extension for Bootstrap tables, rows and cells.
+ * JQuery's extension for Bootstrap tables, rows and cells.
  */
 $.fn.extend({
 
@@ -54,7 +54,7 @@ $.fn.extend({
     /**
      * Update the selected row.
      *
-     * @param {jQueryTable} $table - the bootstrap table.
+     * @param {JQueryTable} $table - the bootstrap table.
      * @return {boolean} this function returns always true.
      */
     updateRow: function ($table) {
@@ -127,7 +127,7 @@ $.fn.extend({
      */
     initBootstrapTable: function (options) {
         'use strict';
-        /** @var jQueryTable $this */
+        /** @var JQueryTable $this */
         const $this = $(this);
 
         // settings

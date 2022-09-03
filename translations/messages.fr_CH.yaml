@@ -444,29 +444,19 @@ generate:
   submit_text: Générer
   title: Générateur de données
 globalmargin:
-  add:
-    success: La marge globale <b>%name%</b> a été créée avec succès.
-    title: Nouvelle marge globale
-  delete:
-    failure: Impossible de supprimer la marge globale <b>%name%</b>.
-    message: Êtes-vous sûr de vouloir supprimer la marge globale <b>%name%</b> ?
-    success: La marge globale <b>%name%</b> a été supprimée avec succès.
-    title: Supprimer la marge globale
   edit:
-    success: La marge globale <b>%name%</b> a été mise à jour avec succès.
-    title: Modifier la marge globale
+    success: Les marges globales ont été mises à jour avec succès.
+    title: Modifier les marges globales
   fields:
     margin: Marge
     margin_percent: Marge (%)
     maximum: Maximum
     minimum: Minimum
   list:
-    add_title: Créer une nouvelle marge globale
+    title: Marges globales
     empty: Aucune marge globale définie.
     excel_title: Exporter la liste des marges globales
-    id: Marge %id%
     pdf_title: Télécharger la liste des marges globales
-    title: Marges globales
   name: Marge globale
   show:
     title: Propriétés de la marge globale
@@ -553,6 +543,7 @@ help:
     quantity: Quantité
     reference: Référence
     text: Texte
+    boolean: Oui/Non
 http_error:
   description: Il y a eu une erreur inconnue (%status_code% - %status_text%) qui a empêché l'aboutissement de votre requête.
   suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
@@ -1395,10 +1386,10 @@ entity_action:
   show: Afficher l'objet
 importance:
   low: Basse
-  medium: Moyenne
-  high: Haute
-  urgent: Urgente
   low_full: Importance basse
+  medium: Moyenne
   medium_full: Importance moyenne
+  high: Haute
   high_full: Importance haute
+  urgent: Urgente
   urgent_full: Urgent !

@@ -110,6 +110,7 @@ class DatabaseTest extends KernelTestCase
     {
         /**
          * @var AbstractRepository $repository
+         *
          * @psalm-var AbstractRepository<T> $repository
          */
         $repository = $this->getService($className);

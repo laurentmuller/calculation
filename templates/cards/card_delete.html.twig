@@ -4,7 +4,6 @@
 {%- set title = title|default('common.delete_title') -%}
 {%- set submit_text = submit_text|default('common.button_delete') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-danger') -%}
-{%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
 {%- set show_required = false -%}
 {# class #}
 {% block card_class ' border-danger' %}
@@ -16,9 +15,9 @@
 {# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/application/validation_edit.js') }}
+    {{- parent() }}
+    {{- asset_js('js/application/validation_edit.js') }}
 {% else %}
-{{ asset_js('js/validation_edit.js') }}
+    {{- asset_js('js/validation_edit.js') }}
 {% endif %}
 {%- endblock %}

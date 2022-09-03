@@ -75,7 +75,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(protected ApplicationService $application)
+    public function __construct(protected readonly ApplicationService $application)
     {
         parent::__construct();
 
@@ -184,6 +184,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      * Sets the chart type.
      *
      * @param string $type the chart type to set
+     *
      * @psalm-param 'column'|'line'|'pie'|'spline' $type
      */
     public function setType(string $type): static
@@ -247,16 +248,24 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Gets the default font style.
-     *
-     * @return string[]
      */
-    protected function getFontStyle(int $fontSize = 16): array
+    protected function getFontStyle(int $fontSize = 16, array $style = []): array
     {
-        return [
+        return \array_merge([
             'fontWeight' => 'normal',
-            'fontSize' => $fontSize . 'px',
+            'fontSize' => "{$fontSize}px",
             'fontFamily' => '"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif',
-        ];
+        ], $style);
+    }
+
+    /**
+     * Gets the minimum margin, in percent, for a calculation (default: 3.0 = 300%).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function getMinMargin(): float
+    {
+        return $this->application->getMinMargin();
     }
 
     /**

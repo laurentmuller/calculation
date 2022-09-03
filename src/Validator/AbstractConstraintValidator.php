@@ -35,6 +35,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
      * Constructor.
      *
      * @param string $className the constraint class
+     *
      * @psalm-param class-string<T> $className
      *
      * @throws UnexpectedTypeException if the given class name is not a subclass of the Constraint class

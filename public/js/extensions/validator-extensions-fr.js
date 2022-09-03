@@ -247,7 +247,7 @@
         maxfilesLabelSingle: 'Le champ \"{0}\" ne doit contenir qu\'un fichier.',
         maxfilesLabelPlural: 'Le champ \"{0}\" ne doit pas contenir plus de {1} fichiers.',
         maxfiles: function (count, element) {
-            if (Number.parseInt(count, 10) > 1) {
+            if ($.parseInt(count) > 1) {
                 return $.validator.formatLabel(element, $.validator.messages.maxfilesLabelPlural, $.validator.messages.maxfilesFallback, count);
             } else {
                 return $.validator.formatLabel(element, $.validator.messages.maxfilesLabelSingle, $.validator.messages.maxfilesFallback, count);

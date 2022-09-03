@@ -69,6 +69,7 @@ class PdfColorTest extends TestCase
 
     /**
      * @param int[]|string $rgb
+     *
      * @dataProvider getCreateColors
      */
     public function testCreate(array|string $rgb, int $red, int $green, int $blue): void
@@ -79,6 +80,7 @@ class PdfColorTest extends TestCase
 
     /**
      * @param int[]|string $rgb
+     *
      * @dataProvider getCreateColorsInvalid
      */
     public function testCreateInvalid(array|string $rgb): void

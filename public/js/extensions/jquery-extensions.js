@@ -73,11 +73,20 @@
          * @returns {number} the parsed value.
          */
         parseFloat: function (value) {
-            let parsedValue = Number.parseFloat(value);
-            if (Number.isNaN(parsedValue)) {
-                parsedValue = Number.parseFloat(0);
-            }
-            return parsedValue;
+            const parsedValue = Number.parseFloat(value);
+            return Number.isNaN(parsedValue) ? 0 : parsedValue;
+        },
+
+        /**
+         * Parse the given value as integer. If the parsed valus is NaN, 0 is
+         * returned.
+         *
+         * @param {string} value - the value to parse.
+         * @returns {number} the parsed value.
+         */
+        parseInt: function (value) {
+            const parsedValue = Number.parseInt(value, 10);
+            return Number.isInteger(parsedValue) ? parsedValue : 0;
         },
 
         /**
@@ -160,7 +169,7 @@
          *
          * @param {int} delay - The scroll animation delay in milliseconds (default to 400).
          * @param {number} bottomMargin - The bottom margin (default to 60).
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         scrollInViewport: function (delay = 400, bottomMargin = 50) {
             const $this = $(this);
@@ -191,7 +200,7 @@
          *
          * @param {string} className - The class name to toggle.
          * @param {function} [callback] - The function to call after the class has been removed.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         timeoutToggle: function (className, callback) {
             const $this = $(this);
@@ -210,7 +219,7 @@
          * Sets the given attribute class name to the element.
          *
          * @param {string} className - The class name to set.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         setClass: function (className) {
             return $(this).each(function () {
@@ -224,7 +233,7 @@
          *
          * @param {function} callback - The callback function that will be executed after the timer expires.
          * @param {int} timeout - The number of milliseconds to wait before executing the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         createTimer: function (callback, timeout) {
             const $element = $(this);
@@ -236,7 +245,7 @@
         /**
          * Clear the timer (if any) of the element.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         removeTimer: function () {
             return $(this).each(function () {
@@ -256,7 +265,7 @@
          *
          * @param {function} _callback - The callback function that will be executed after the timer expires.
          * @param {int} _timeout - The number of milliseconds to wait before executing the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         updateTimer: function (_callback, _timeout) {// jshint ignore:line
             $(this).removeTimer();
@@ -269,7 +278,7 @@
          *
          * @param {function} callback - The callback function that will be executed.
          * @param {int} timeout - The intervals (in milliseconds) on how often to execute the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The JQuery element for chaining.
          */
         createInterval: function (callback, timeout) {
             const $element = $(this);
@@ -281,7 +290,7 @@
         /**
          * Clear the timer interval (if any) of the element.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         removeInterval: function () {
             return $(this).each(function () {
@@ -301,7 +310,7 @@
          *
          * @param {function} _callback - The callback function that will be executed.
          * @param {int} _timeout - The intervals (in milliseconds) on how often to execute the callback.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         updateInterval: function (_callback, _timeout) { // jshint ignore:line
             $(this).removeInterval();
@@ -312,20 +321,16 @@
          * Sets or gets the value as integer.
          *
          * @param {number|string} [value] - if present the value to set; otherwise return the value.
-         * @return {jQuery|number} The value if the value parameter is not set.
+         * @return {JQuery|number} The value if the value parameter is not set.
          */
         intVal: function (value) {
             // get?
             if (!arguments.length) {
-                const parsedValue = Number.parseInt($(this).val(), 10);
-                return Number.isNaN(parsedValue) ? 0 : parsedValue;
+                return $.parseInt($(this).val());
             }
 
             // set
-            let parsedValue = Number.parseInt(value, 10);
-            if (isNaN(parsedValue) || parsedValue === -0) {
-                parsedValue = 0;
-            }
+            const parsedValue = $.parseInt(value);
             return $(this).val(parsedValue.toString());
         },
 
@@ -338,15 +343,11 @@
         floatVal: function (value) {
             // get?
             if (!arguments.length) {
-                const parsedValue = Number.parseFloat($(this).val());
-                return Number.isNaN(parsedValue) ? 0 : parsedValue;
+                return $.parseFloat($(this).val());
             }
 
             // set
-            let parsedValue = Number.parseFloat(value);
-            if (Number.isNaN(parsedValue) || parsedValue === -0) {
-                parsedValue = 0;
-            }
+            const parsedValue = $.parseFloat(value);
             return $(this).val(parsedValue.toFixed(2));
         },
 
@@ -363,7 +364,7 @@
          * Sets the checkbox checked value.
          *
          * @param {boolean} checked - the checked value to set.
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         setChecked: function (checked) {
             return $(this).each(function () {
@@ -374,7 +375,7 @@
         /**
          * Toggle the checkbox checked value
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         toggleChecked: function () {
             return $(this).each(function () {
@@ -429,7 +430,7 @@
         /**
          * Select content and set focus.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         selectFocus: function () {
             $(this).focus().select();
@@ -439,7 +440,7 @@
         /**
          * Select the first option in the list.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         selectFirstOption: function () {
             const value = $(this).find(':first').val();
@@ -449,7 +450,7 @@
         /**
          * Gets select option in the list.
          *
-         * @return {?jQuery} the selected element, if any; null otherwise.
+         * @return {?JQuery} the selected element, if any; null otherwise.
          */
         getSelectedOption: function () {
             return $(this).find(':selected');
@@ -457,11 +458,10 @@
 
         /**
          * Get the descendants of each element in the current set of matched
-         * elements, filtered by a selector, jQuery object, or element.
+         * elements, filtered by a selector, JQuery object, or element.
          *
-         * @param {string} selector - a string containing a selector expression to
-         *            match elements against.
-         * @return {?jQuery} the selected element or null if matching element's length is equal to 0.
+         * @param {string} selector - a string containing a selector expression to match elements against.
+         * @return {?JQuery} the selected element or null if matching element's length is equal to 0.
          */
         findExists: function (selector) {
             const $elements = $(this).find(selector);
@@ -471,7 +471,7 @@
         /**
          * Remove all 'data' attributes.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         removeDataAttributes: function () {
             return $(this).each(function () {
@@ -485,7 +485,7 @@
         /**
          * Remove duplicate classes.
          *
-         * @return {JQuery} The jQuery element for chaining.
+         * @return {JQuery} The element for chaining.
          */
         removeDuplicateClasses: function () {
             return this.each(function (_index, element) {

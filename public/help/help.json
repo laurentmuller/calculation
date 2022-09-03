@@ -310,6 +310,44 @@
 			]
 		},
 		{
+			"id": "calculationstate",
+			"icon": "flag far",
+			"description": "Repésente le statut d'une calculation.",
+			"fields": [
+				{
+					"name": "code",
+					"description": "Nom du statut.",
+					"length": "30"
+				},
+				{
+					"name": "editable",
+					"description": "Définit si une calculation avec ce statut peut être modifiée.",
+					"type": "boolean"
+				},
+				{
+					"name": "color",
+					"description": "Couleur utilisée dans interface utilisateur (UI).",
+					"length": "10"
+				},
+				{
+					"name": "description",
+					"description": "Description du statut.",
+					"length": "255",
+					"required": false
+				},
+				{
+					"name": "calculations",
+					"description": "Liste des calculations appartenant à ce statut.",
+					"required": false,
+					"type": "collection",
+					"entity": "calculation"
+				}
+			],
+			"constraints": [
+				"Le nom du statut doit être unique à travers tout le catalogue."
+			]
+		},
+		{
 			"id": "calculation",
 			"icon": "calculator",
 			"description": "Représente une calculation.",
@@ -338,7 +376,7 @@
 					"name": "state",
 					"description": "Statut de la calculation.",
 					"type": "reference",
-					"entity2": "calculationstate"
+					"entity": "calculationstate"
 				},
 				{
 					"name": "itemsTotal",

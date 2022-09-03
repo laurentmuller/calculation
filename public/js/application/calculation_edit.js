@@ -197,83 +197,6 @@ const Application = {
     },
 
     /**
-     * Initialize the draggable edit dialogs.
-     *
-     * @return {Application} This instance for chaining.
-     */
-    initDragDialog: function () {
-        'use strict';
-
-        // already initialized?
-        const that = this;
-        if (that.dragDialogInitialized) {
-            return that;
-        }
-
-        // constants
-        const $body = $('body');
-        const eventName = 'mousemove.draggable';
-        const className = 'bg-primary text-white';
-
-        // draggable edit dialog
-        $('.modal .modal-header').on('mousedown', function (e) {
-            // left button?
-            if (e.button !== 0) {
-                return;
-            }
-
-            // get elements
-            const $draggable = $(this);
-            const $dialog = $draggable.closest('.modal-dialog');
-            const $content = $draggable.closest('.modal-content');
-            const $close = $draggable.find('.close');
-            const $focused = $(':focus');
-
-            // save values
-            const startX = e.pageX - $draggable.offset().left;
-            const startY = e.pageY - $draggable.offset().top;
-            const footerHeight = $('.footer').outerHeight();
-            const margin = Number.parseInt($dialog.css('margin-top'), 10);
-            const windowWidth = window.innerWidth - margin;
-            const windowHeight = window.innerHeight - margin - footerHeight;
-            const right = windowWidth - $content.width();
-            const bottom = windowHeight - $content.height();
-
-            // update style
-            $draggable.toggleClass(className);
-            $close.toggleClass(className);
-
-            $body.on(eventName, function (e) {
-                // compute
-                const left = Math.max(margin, Math.min(right, e.pageX - startX));
-                const top = Math.max(margin, Math.min(bottom, e.pageY - startY));
-                // move
-                $dialog.offset({
-                    left: left,
-                    top: top
-                });
-            }).one('mouseup', function () {
-                $body.off(eventName);
-                $draggable.toggleClass(className);
-                $close.toggleClass(className);
-                if ($focused.length) {
-                    $focused.trigger('focus');
-                }
-            });
-
-            $draggable.closest('.modal').one('hide.bs.modal', function () {
-                $body.off(eventName);
-            }).one('hidden.bs.modal', function () {
-                $dialog.css({'left': '', 'top': ''});
-            });
-        });
-
-        // ok
-        that.dragDialogInitialized = true;
-        return that;
-    },
-
-    /**
      * Initialize group and item menus.
      *
      * @return {Application} This instance for chaining.
@@ -284,11 +207,14 @@ const Application = {
         const that = this;
 
         // adjust button
-        $('.btn-adjust').on('click', function (e) {
-            e.preventDefault();
-            $(this).tooltip('hide');
-            that.updateTotals(true);
-        });
+        const $buttonAdjust = $('.btn-adjust');
+        if ($buttonAdjust.length) {
+            $buttonAdjust.on('click', function (e) {
+                e.preventDefault();
+                $buttonAdjust.tooltip('hide');
+                that.updateTotals(true);
+            }).tooltip();
+        }
 
         // add item button
         $('#items-panel .card-header .btn-add-item').on('click', function (e) {
@@ -607,14 +533,10 @@ const Application = {
      */
     findOrCreateGroup: function (group) {
         'use strict';
-
-        const selector = ":has(input[name*='group'][value=" + group.id + "])";
-        const $group = this.getGroups().filter(selector);
+        const $group = $('#data-table-edit .group:has(input[name$="[group]"][value="' + group.id + '"])');
         if ($group.length > 0) {
             return $group;
         }
-
-        // append
         return this.appendGroup(group);
     },
 
@@ -627,12 +549,10 @@ const Application = {
      */
     findOrCreateCategory: function ($group, category) {
         'use strict';
-
-        const $body = $("#data-table-edit tbody:has(input[name*='category'][value=" + category.id + "])");
+        const $body = $('#data-table-edit tbody:has(input[name$="[category]"][value="' + category.id + '"])');
         if ($body.length > 0) {
             return $body;
         }
-
         return this.appendCategory($group, category);
     },
 
@@ -1244,20 +1164,6 @@ const Application = {
 $.fn.extend({
 
     /**
-     * Gets the index, for a row, of the first item input. For example:
-     * calculation_groups_4_items_12_total will return 12.
-     *
-     * @returns {int} the index, if found; -1 otherwise.
-     */
-    inputIndex() {
-        'use strict';
-        const $input = $(this).find('input:first');
-        const values = $input.attr('id').split('_');
-        const value = Number.parseInt(values[values.length - 2], 10);
-        return Number.isNaN(value) ? -1 : value;
-    },
-
-    /**
      * Finds an input element that have the name attribute within a given
      * substring.
      *
@@ -1278,7 +1184,6 @@ $.fn.extend({
      */
     removeFadeOut: function (callback) {
         'use strict';
-
         const $this = $(this);
         const lastIndex = $this.length - 1;
         $this.each(function (i, element) {
@@ -1300,17 +1205,13 @@ $.fn.extend({
      */
     getPrototype: function (pattern, key) {
         'use strict';
-
         const $parent = $(this);
-
         // get and update index
         const $table = $('#data-table-edit');
-        const index = Number.parseInt($table.data(key), 10);
+        const index = $.parseInt($table.data(key));
         $table.data(key, index + 1);
-
         // get prototype
         const prototype = $parent.data('prototype');
-
         // replace index
         return prototype.replace(pattern, index);
     },
@@ -1322,7 +1223,6 @@ $.fn.extend({
      */
     getRowItem: function () {
         'use strict';
-
         const $row = $(this);
         const price = $row.findNamedInput('price').floatVal();
         const quantity = $row.findNamedInput('quantity').floatVal();
@@ -1345,7 +1245,6 @@ $.fn.extend({
      */
     appendRow: function (item) {
         'use strict';
-
         // tbody
         const $parent = $(this);
 
@@ -1364,23 +1263,19 @@ $.fn.extend({
      */
     updateRow: function (item) {
         'use strict';
-
         const $row = $(this);
-
         // update inputs
         $row.findNamedInput('description').val(item.description);
         $row.findNamedInput('unit').val(item.unit);
         $row.findNamedInput('price').floatVal(item.price);
         $row.findNamedInput('quantity').floatVal(item.quantity);
         $row.findNamedInput('total').floatVal(item.total);
-
         // update cells
         $row.find('td:eq(0) .btn-edit-item').text(item.description);
         $row.find('td:eq(1)').text(item.unit);
         $row.find('td:eq(2)').text($.formatFloat(item.price));
         $row.find('td:eq(3)').text($.formatFloat(item.quantity));
         $row.find('td:eq(4)').text($.formatFloat(item.total));
-
         return $row;
     },
 
@@ -1391,7 +1286,6 @@ $.fn.extend({
      */
     updateTotal: function () {
         'use strict';
-
         const $row = $(this);
         const item = $row.getRowItem();
         $row.find('td:eq(4)').text($.formatFloat(item.total));
@@ -1869,5 +1763,4 @@ const MoveHandler = {
     if (edit && $button.length === 1) {
         Application.showEditItemDialog($button);
     }
-
 }(jQuery));

@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraint;
  * Captcha contraint.
  *
  * @Annotation
+ *
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
 class Captcha extends Constraint

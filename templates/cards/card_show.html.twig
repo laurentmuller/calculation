@@ -38,7 +38,7 @@
     {% if cancel_path|default(false) %}
         <script nonce="{{ csp_nonce() }}">
             (function ($) {
-                $('#btn-ok').trigger('focus');
+                $('.btn-ok').trigger('focus');
             }(jQuery));
         </script>
     {% endif %}

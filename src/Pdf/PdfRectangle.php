@@ -60,8 +60,6 @@ class PdfRectangle
      * Sets the left indent. Do nothing if the indent is smaller than or equal to 0.
      *
      * @param float $indent the indent
-     *
-     * @return PdfRectangle
      */
     public function indent(float $indent): self
     {

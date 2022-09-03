@@ -22,6 +22,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * Factory to provide translator services.
  *
  * @see TranslatorServiceInterface
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class TranslatorFactory implements ServiceSubscriberInterface

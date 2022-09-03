@@ -1,13 +1,13 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * jQuery Simple-Editor extensions.
+ * JQuery Simple-Editor extensions.
  */
 (function ($) {
     'use strict';
 
     /**
-     * -------------- jQuery Extensions --------------
+     * -------------- JQuery Extensions --------------
      */
     $.fn.extend({
 

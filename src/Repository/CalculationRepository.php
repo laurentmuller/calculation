@@ -24,6 +24,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Repository for calculation entity.
  *
  * @template-extends AbstractRepository<Calculation>
+ *
  * @psalm-suppress  MixedReturnTypeCoercion
  */
 class CalculationRepository extends AbstractRepository
@@ -70,6 +71,7 @@ class CalculationRepository extends AbstractRepository
      * @param float $minMargin the minimum margin
      *
      * @return int the number of calculations
+     *
      * @psalm-return  int<0, max>
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -103,6 +105,7 @@ class CalculationRepository extends AbstractRepository
      * Count the number of calculations with duplicate items. Items are duplicate if the descriptions are equal.
      *
      * @return int the number of calculations
+     *
      * @psalm-return  int<0, max>
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -137,6 +140,7 @@ class CalculationRepository extends AbstractRepository
      * Count the number of calculations with empty items. Items are empty if the price or the quantity is equal to 0.
      *
      * @return int the number of calculations
+     *
      * @psalm-return  int<0, max>
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -310,6 +314,7 @@ class CalculationRepository extends AbstractRepository
      * Gets the distinct years and months of calculations.
      *
      * @return array<int[]> the distinct years and months
+     *
      * @psalm-return array<array{
      *      year: int,
      *      month: int,
@@ -344,6 +349,7 @@ class CalculationRepository extends AbstractRepository
      * Gets the distinct years and week of calculations.
      *
      * @return int[] the distinct years and weeks
+     *
      * @psalm-return array<array{
      *      year: int,
      *      month: int,
@@ -588,6 +594,7 @@ class CalculationRepository extends AbstractRepository
      * @param int $week the week number (1 to 53)
      *
      * @return Calculation[] the matching calculations
+     *
      * @psalm-return list<Calculation>
      */
     public function getForWeek(int $year, int $week): array
@@ -605,6 +612,7 @@ class CalculationRepository extends AbstractRepository
      * @param int $year the year
      *
      * @return Calculation[] the matching calculations
+     *
      * @psalm-return list<Calculation>
      */
     public function getForYear(int $year): array
@@ -618,6 +626,7 @@ class CalculationRepository extends AbstractRepository
      * Gets the last calculations.
      *
      * @return Calculation[] the last calculations
+     *
      * @psalm-return list<Calculation>
      */
     public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array

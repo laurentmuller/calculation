@@ -22,6 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Chart to display calculations by state.
  *
  * @psalm-import-type QueryCalculation from CalculationStateRepository
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class StateChart extends BaseChart
@@ -78,7 +79,7 @@ class StateChart extends BaseChart
                 'total' => $total,
                 'margin' => $this->safeDivide($total, $items),
                 'marginAmount' => $total - $items,
-                'min_margin' => $this->application->getMinMargin(),
+                'min_margin' => $this->getMinMargin(),
             ];
     }
 
@@ -106,7 +107,7 @@ class StateChart extends BaseChart
     /**
      * Gets the pie options.
      */
-    private function getPie(): array
+    private function getPieOptions(): array
     {
         return [
             'cursor' => 'pointer',
@@ -128,8 +129,8 @@ class StateChart extends BaseChart
         return [
             [
                 'data' => $data,
-                'name' => $this->transChart('title_by_state'),
                 'type' => self::TYPE_PIE,
+                'name' => $this->transChart('title_by_state'),
             ],
         ];
     }
@@ -153,7 +154,7 @@ class StateChart extends BaseChart
     private function setPlotOptions(): self
     {
         // @phpstan-ignore-next-line
-        $this->plotOptions->pie($this->getPie());
+        $this->plotOptions->pie($this->getPieOptions());
 
         return $this;
     }

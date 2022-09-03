@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Product provider.
  *
  * @template-extends EntityProvider<Product>
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class ProductProvider extends EntityProvider

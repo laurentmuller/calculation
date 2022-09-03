@@ -22,8 +22,8 @@
 <tr>
     <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
     <td class="text-state">{{ calculation.state.code }}</td>
-    <td class="text-customer">{{ calculation.customer }}</td>
-    <td class="text-description">{{ calculation.description }}</td>
+    <td class="text-cell text-customer">{{ calculation.customer }}</td>
+    <td class="text-cell text-description">{{ calculation.description }}</td>
     <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
     <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
 </tr>
@@ -46,10 +46,10 @@
     {%- elseif day.current -%}
         {%- set class = class ~ ' bg-primary text-white' -%}
     {% elseif day.weekEnd %}
-        {%- set class = class ~ ' bg-light' -%}
+        {%- set class = class ~ ' bg-themed text-themed' -%}
     {%- endif %}
 {% elseif day.weekEnd %}
-    {%- set class = class ~ ' bg-light' -%}
+    {%- set class = class ~ ' bg-themed text-themed' -%}
     {%- set text = '&nbsp;' -%}
 {% else %}
     {%- set text = '&nbsp;' -%}

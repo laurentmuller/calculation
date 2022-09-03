@@ -23,6 +23,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * Exchange rate service.
  *
  * @see https://www.exchangerate-api.com/
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class ExchangeRateService extends AbstractHttpClientService implements ServiceSubscriberInterface
@@ -150,6 +151,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $targetCode the target currency code
      *
      * @return array|null the exchange rate, the next update and last update dates or null if an error occurs
+     *
      * @psalm-return null|array{
      *      rate: float,
      *      next: int|null,

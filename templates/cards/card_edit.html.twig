@@ -52,13 +52,13 @@
 {# javascript #}
 {% block javascripts -%}
     {% if app.debug %}
-        {{ parent() -}}
-        {{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
-        {{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
-        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
-        {{ asset_js('js/extensions/validator-extensions.js') }}
-        {{ asset_js('js/extensions/validator-extensions-fr.js') -}}
+        {{- parent() -}}
+        {{- asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
+        {{- asset_js('js/vendor/jquery-validate/additional-methods.js') }}
+        {{- asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
+        {{- asset_js('js/extensions/validator-extensions.js') }}
+        {{- asset_js('js/extensions/validator-extensions-fr.js') -}}
     {% else %}
-        {{ asset_js('js/core_edit.js') }}
+        {{- asset_js('js/core_edit.js') }}
     {% endif %}
 {%- endblock %}

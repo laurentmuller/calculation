@@ -277,7 +277,9 @@ abstract class AbstractController extends BaseController
      * @return mixed|null the service, if found; null otherwise
      *
      * @template T
+     *
      * @psalm-param class-string<T> $id
+     *
      * @psalm-return T
      *
      * @throws \Psr\Container\ContainerExceptionInterface

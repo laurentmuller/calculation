@@ -233,4 +233,12 @@ function formatProduct(product) {
     $('.btn-clear').on('click', function () {
         $(this).parents('.form-group').find('select').val('').trigger('change').focus();
     });
+
+    // drag modal
+    $('#dragModal').draggableModal({
+        marginBottom: $('footer').outerHeight(),
+        focusOnShow: true
+    }).on('shown.bs.modal', function () {
+        $('#text').trigger('focus');
+    });
 }(jQuery));

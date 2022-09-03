@@ -308,22 +308,17 @@ class PdfBorder
 
     private function parseBorders(string $value): string|int
     {
-        $values = [];
         $allowed = [self::TOP, self::LEFT, self::BOTTOM, self::RIGHT];
-        $chars = \str_split(\strtoupper($value));
-        foreach ($chars as $char) {
-            if (\in_array($char, $allowed, true) && !\in_array($char, $values, true)) {
-                $values[] = $char;
-            }
-        }
-        if (empty($values)) {
+        $chars = \array_unique(\str_split(\strtoupper($value)));
+        $chars = \array_filter($chars, fn (string $ch) => \in_array($ch, $allowed, true));
+
+        if (empty($chars)) {
             return self::NONE;
         }
-
-        if (\count($values) === \count($allowed)) {
+        if (\count($chars) === \count($allowed)) {
             return self::ALL;
         }
 
-        return \implode('', $values);
+        return \implode('', $chars);
     }
 }

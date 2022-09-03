@@ -23,6 +23,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * Service to get IP lookup.
  *
  * @see https://ipstack.com/documentation
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class IpStackService extends AbstractHttpClientService implements ServiceSubscriberInterface

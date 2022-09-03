@@ -48,7 +48,7 @@
                     {%- set class_primary = id == selection ? 'table-primary' : '' -%}
                     {%- set class_muted = calculation.editable ? '' : 'text-muted' -%}
                     {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}
-                    <tr{% if class_name %} class="{{ class_name }}"{% endif %}>
+                    <tr data-id="{{ id }}" {% if class_name %} class="{{ class_name }}"{% endif %}>
                         <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
                         {%- if row_link and default_page -%}
                             <a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
@@ -84,7 +84,7 @@
                                     {%- if delete_page -%}
                                         {{- dropdownSeparator() }}
                                         {%- set path = path(delete_page, params) -%}
-                                        {{ dropdownItem(path, 'calculation.delete.title', ICON_DELETE) }}
+                                        {{ dropdownItemWithClass(path, 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
                                     {%- endif -%}
                                     {%- if add_page -%}
                                         {{- dropdownSeparator() }}

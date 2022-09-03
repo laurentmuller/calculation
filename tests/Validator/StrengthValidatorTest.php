@@ -23,6 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Unit test for {@link StrengthValidator} class.
  *
  * @extends ConstraintValidatorTestCase<StrengthValidator>
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class StrengthValidatorTest extends ConstraintValidatorTestCase

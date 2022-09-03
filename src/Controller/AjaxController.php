@@ -639,6 +639,7 @@ class AjaxController extends AbstractController
      * @param string             $field      the field name to search for
      *
      * @template T of \App\Entity\AbstractEntity
+     *
      * @psalm-param AbstractRepository<T> $repository
      *
      * @throws \ReflectionException

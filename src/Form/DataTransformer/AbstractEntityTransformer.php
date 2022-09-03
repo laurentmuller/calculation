@@ -22,6 +22,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  * Abstract data transformer to convert an entity to an identifier (integer).
  *
  * @template T of \App\Entity\AbstractEntity
+ *
  * @implements DataTransformerInterface<T|null, int|null>
  */
 class AbstractEntityTransformer implements DataTransformerInterface

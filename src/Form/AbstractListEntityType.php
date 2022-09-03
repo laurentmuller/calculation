@@ -35,6 +35,7 @@ abstract class AbstractListEntityType extends AbstractType
      * Constructor.
      *
      * @param string $className the entity class name
+     *
      * @psalm-param class-string<T> $className
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class

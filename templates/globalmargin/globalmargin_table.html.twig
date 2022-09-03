@@ -7,7 +7,7 @@
 {% block card_container_class %} col-md-8 offset-md-2{% endblock -%}
 
 {% block header_actions -%}
-{% if allow_add %}<a class="add-link p-0" href="{{ path('globalmargin_add', params) }}">{{ 'globalmargin.add.title'|trans }}</a>{% endif %}
+{% if allow_edit %}<a class="add-link p-0" href="{{ path('globalmargin_edit', params) }}">{{ 'globalmargin.edit.title'|trans }}</a>{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}
@@ -20,15 +20,7 @@
 {%- endblock %}
 
 {% block edit_actions -%}
-{{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT, edit_class) }}
-{%- endblock %}
-
-{% block delete_actions -%}
-{{- _self.item_path(path('globalmargin_delete', params), 'globalmargin.delete.title', ICON_DELETE, 'btn-delete') }}
-{%- endblock %}
-
-{% block add_actions -%}
-{{- _self.item_path(path('globalmargin_add', params), 'globalmargin.add.title', ICON_ADD, 'btn-add') }}
+{{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
 {%- endblock %}
 
 {% block custom_view_header -%}

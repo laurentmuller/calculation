@@ -106,14 +106,14 @@ class EditItemDialog extends EditDialog { // jshint ignore:line
         that._initDialog(that.$modal);
 
         // handle input events
-        that.updateProxy = function() {
+        that.updateProxy = function () {
             that._updateTotal();
         };
         that.$price.on('input', that.updateProxy);
         that.$quantity.on('input', that.updateProxy);
 
         // handle delete button
-        that.deleteProxy = function() {
+        that.deleteProxy = function () {
             that._onDelete();
         };
         that.$deleteButton.on('click', that.deleteProxy);

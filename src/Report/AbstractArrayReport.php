@@ -32,6 +32,7 @@ abstract class AbstractArrayReport extends AbstractReport
      * @param PdfDocumentOrientation|string $orientation the page orientation
      * @param PdfDocumentUnit|string        $unit        the measure unit
      * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
+     *
      * @psalm-param T[] $entities
      *
      * @throws \Psr\Cache\InvalidArgumentException

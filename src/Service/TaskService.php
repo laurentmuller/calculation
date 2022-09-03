@@ -228,8 +228,6 @@ class TaskService implements \JsonSerializable
      * Sets the selected task item.
      *
      * @param Collection<int, TaskItem> $items
-     *
-     * @return TaskService
      */
     public function setTaskItems(Collection $items): self
     {

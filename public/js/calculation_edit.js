@@ -24,6 +24,7 @@
 <!--#include file="plugins/plugin-input.js" -->
 <!--#include file="plugins/plugin-typeahead.js" -->
 <!--#include file="plugins/plugin-cell-edit.js" -->
+<!--#include file="plugins/plugin-drag-modal.js" -->
 
 /**
  * Specific Files

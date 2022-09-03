@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Google translator service v2.0.
  *
  * @see https://cloud.google.com/translate/docs/translating-text
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class GoogleTranslatorService extends AbstractTranslatorService

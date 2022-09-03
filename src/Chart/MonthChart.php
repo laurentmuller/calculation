@@ -50,20 +50,20 @@ class MonthChart extends BaseChart
         $allowedMonths = $this->getAllowedMonths();
         $months = $this->checkMonth($months, $allowedMonths);
         $data = $this->repository->getByMonth($months);
-        $dates = $this->getDates($data);
-        $countData = $this->getCount($data);
-        $itemsData = $this->getItems($data);
-        $marginsData = $this->getMargins($data);
-        $sumData = $this->getSums($data);
-        $marginsPercent = $this->getMarginPercents($data);
-        $marginsAmount = $this->getMarginAmounts($data);
+
+        $dateValues = $this->getDateValues($data);
+        $countValues = $this->getCountValues($data);
+        $itemValues = $this->getItemValues($data);
+        $sumValues = $this->getSumValues($data);
+        $marginPercents = $this->getMarginPercents($data);
+        $marginAmounts = $this->getMarginAmounts($data);
 
         // series
-        $series = $this->getSeries($marginsData, $itemsData);
+        $series = $this->getSeries($data);
 
         // axes
         $yAxis = $this->getYaxis();
-        $xAxis = $this->getXAxis($dates);
+        $xAxis = $this->getXAxis($dateValues);
 
         // update
         $this->setType(self::TYPE_COLUMN)
@@ -77,20 +77,20 @@ class MonthChart extends BaseChart
 
         // data
         $data = [];
-        foreach ($dates as $index => $date) {
+        foreach ($dateValues as $index => $date) {
             $data[] = [
                 'date' => ($date / 1000),
-                'count' => $countData[$index],
-                'sum' => $sumData[$index],
-                'items' => $itemsData[$index][0],
-                'marginAmount' => $marginsAmount[$index],
-                'marginPercent' => $marginsPercent[$index],
+                'count' => $countValues[$index],
+                'sum' => $sumValues[$index],
+                'items' => $itemValues[$index],
+                'marginAmount' => $marginAmounts[$index],
+                'marginPercent' => $marginPercents[$index],
             ];
         }
 
-        $count = \array_sum($countData);
-        $total = \array_sum($sumData);
-        $items = \array_sum(\array_column($itemsData, 1));
+        $count = \array_sum($countValues);
+        $total = \array_sum($sumValues);
+        $items = \array_sum($itemValues);
         $marginAmount = $total - $items;
         $marginPercent = $this->safeDivide($total, $items);
 
@@ -104,7 +104,7 @@ class MonthChart extends BaseChart
             'marginAmount' => $marginAmount,
             'total' => $total,
             'allowed_months' => $allowedMonths,
-            'min_margin' => $this->application->getMinMargin(),
+            'min_margin' => $this->getMinMargin(),
         ];
     }
 
@@ -162,7 +162,7 @@ class MonthChart extends BaseChart
      *
      * @return int[]
      */
-    private function getCount(array $data): array
+    private function getCountValues(array $data): array
     {
         return \array_map(fn (array $item): int => $item['count'], $data);
     }
@@ -179,7 +179,7 @@ class MonthChart extends BaseChart
      *
      * @return int[]
      */
-    private function getDates(array $data): array
+    private function getDateValues(array $data): array
     {
         return \array_map(fn (array $item): int => (int) $item['date']->getTimestamp() * 1000, $data);
     }
@@ -200,29 +200,29 @@ class MonthChart extends BaseChart
                 var html = '<table class="m-1">';
 
                 // month
-                html += '<tr class="border-bottom border-dark"><th>$month</th><th>:</th class="text-calculation"><th>' + Highcharts.dateFormat("%B %Y", this.x) + '</th></tr>';
+                html += '<tr class="border-bottom border-dark"><th>$month</th><th>&nbsp:&nbsp</th class="text-calculation"><th>' + Highcharts.dateFormat("%B %Y", this.x) + '</th></tr>';
 
                 // count (calculations)
                 let value = Highcharts.numberFormat(ptAmount.point.custom.count, 0);
-                html += '<tr><td class="text-category">$count</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr><td class="text-category">$count</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
 
                 // amount
                 let color = 'color:' + ptAmount.color + ';';
                 value = Highcharts.numberFormat(ptAmount.y, 0);
-                html += '<tr><td class="text-category" style="' + color + '">$amount</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr><td class="text-category" style="' + color + '">$amount</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
 
                 // margin amount
                 color = 'color:' + ptMargin.color + ';';
                 value = Highcharts.numberFormat(ptMargin.y, 0);
-                html += '<tr><td class="text-category" style="' + color + '">$marginAmount</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr><td class="text-category" style="' + color + '">$marginAmount</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
 
                 // margin percent
                 value =  Highcharts.numberFormat(100 + Math.floor(ptMargin.y * 100 / ptAmount.y), 0);
-                html += '<tr><td class="text-category">$marginPercent</td><td>:</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr><td class="text-category">$marginPercent</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
 
                 // total
                 value = Highcharts.numberFormat(ptAmount.y + ptMargin.y, 0);
-                html += '<tr class="border-top border-dark"><th>$total</th><th>:</th><th class="text-calculation">' + value + '</th></tr>';
+                html += '<tr class="border-top border-dark"><th>$total</th><th>&nbsp:&nbsp</th><th class="text-calculation">' + value + '</th></tr>';
 
                 html += '</table>';
                 return html;
@@ -244,9 +244,26 @@ class MonthChart extends BaseChart
      *
      * @return array<array-key, array{float, int}>
      */
-    private function getItems(array $data): array
+    private function getItemsSeries(array $data): array
     {
         return \array_map(fn (array $item): array => [$item['items'], $item['count']], $data);
+    }
+
+    /**
+     * @param array<array{
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      year: int,
+     *      month: int,
+     *      margin: float,
+     *      date: \DateTimeInterface}> $data
+     *
+     * @return float[]
+     */
+    private function getItemValues(array $data): array
+    {
+        return \array_map(fn (array $item): float => $item['items'], $data);
     }
 
     /**
@@ -293,24 +310,53 @@ class MonthChart extends BaseChart
      *      margin: float,
      *      date: \DateTimeInterface}> $data
      *
-     * @return array<array-key, array{float, int}>
+     * @return float[]
      */
     private function getMargins(array $data): array
+    {
+        return \array_map(fn (array $item): float => $item['total'] - $item['items'], $data);
+    }
+
+    /**
+     * @param array<array{
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      year: int,
+     *      month: int,
+     *      margin: float,
+     *      date: \DateTimeInterface}> $data
+     *
+     * @return array<array-key, array{float, int}>
+     */
+    private function getMarginsSeries(array $data): array
     {
         return \array_map(fn (array $item): array => [$item['total'] - $item['items'], $item['count']], $data);
     }
 
-    private function getSeries(array $marginsData, array $itemsData): array
+    /**
+     * @param array<array{
+     *      count: int,
+     *      items: float,
+     *      total: float,
+     *      year: int,
+     *      month: int,
+     *      margin: float,
+     *      date: \DateTimeInterface}> $data
+     *
+     * @return array[]
+     */
+    private function getSeries(array $data): array
     {
         return [
             [
                 'name' => $this->transChart('fields.margin'),
-                'data' => $marginsData,
+                'data' => $this->getMarginsSeries($data),
                 'color' => 'darkred',
             ],
             [
-                'name' => $this->trans('fields.net'),
-                'data' => $itemsData,
+                'name' => $this->transChart('fields.net'),
+                'data' => $this->getItemsSeries($data),
                 'color' => 'darkgreen',
             ],
         ];
@@ -328,7 +374,7 @@ class MonthChart extends BaseChart
      *
      * @return float[]
      */
-    private function getSums(array $data): array
+    private function getSumValues(array $data): array
     {
         return \array_map(fn (array $item): float => $item['total'], $data);
     }
@@ -378,10 +424,11 @@ class MonthChart extends BaseChart
         $this->plotOptions->series([
             'cursor' => 'pointer',
             'stacking' => 'normal',
+            'pointPadding' => 0,
             'keys' => ['y', 'custom.count'],
             'point' => [
                 'events' => [
-                    'click' => $this->getClickExpression(),
+                   'click' => $this->getClickExpression(),
                 ],
             ],
         ]);
@@ -395,9 +442,11 @@ class MonthChart extends BaseChart
     private function setTooltipOptions(): self
     {
         // @phpstan-ignore-next-line
-        $this->tooltip->formatter($this->getFormatterExpression())
+        $this->tooltip
+            ->formatter($this->getFormatterExpression())
             ->style($this->getFontStyle(12))
             ->borderColor('rgba(255, 255, 255, 0.125)')
+            ->backgroundColor('white')
             ->borderRadius(4)
             ->useHTML(true)
             ->shared(true);

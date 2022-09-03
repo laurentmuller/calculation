@@ -23,6 +23,7 @@ trait ServiceTrait
      * Gets the service for the given class name.
      *
      * @template T
+     *
      * @psalm-param class-string<T> $class
      *
      * @return T

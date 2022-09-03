@@ -66,10 +66,12 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
-    protected function checkPermission(EntityPermission $permission): void
+    protected function checkPermission(EntityPermission ...$permissions): void
     {
         $subject = EntityName::tryFindValue($this->className);
-        $this->denyAccessUnlessGranted($permission, $subject);
+        foreach ($permissions as $permission) {
+            $this->denyAccessUnlessGranted($permission, $subject);
+        }
     }
 
     /**
@@ -85,6 +87,7 @@ abstract class AbstractEntityController extends AbstractController
      *                                    <li><code>success</code> : the message to display on success.</li>
      *                                    <li><code>failure</code> : the message to display on failure.</li>
      *                                    </ul>
+     *
      * @psalm-param T $item
      *
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -149,6 +152,7 @@ abstract class AbstractEntityController extends AbstractController
      * This function delete the given entity from the database.
      *
      * @param AbstractEntity $item the entity to delete
+     *
      * @psalm-param T $item
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
@@ -166,6 +170,7 @@ abstract class AbstractEntityController extends AbstractController
      *                                   <li><code>success</code> : the message to display on success (optional).</li>
      *                                   <li><code>route</code> : the route to display on success (optional).</li>
      *                                   </ul>
+     *
      * @psalm-param T $item
      *
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -240,9 +245,11 @@ abstract class AbstractEntityController extends AbstractController
      * @param string                 $alias    the entity alias
      *
      * @return AbstractEntity[] the entities
+     *
      * @psalm-return T[]
      *
      * @psalm-suppress MixedReturnTypeCoercion
+     *
      * @psalm-param literal-string $alias
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -294,6 +301,7 @@ abstract class AbstractEntityController extends AbstractController
      * Derived class can update entity before it is saved to the database.
      *
      * @param AbstractEntity $item the entity to save
+     *
      * @psalm-param T $item
      */
     protected function saveToDatabase(AbstractEntity $item): void
@@ -312,6 +320,7 @@ abstract class AbstractEntityController extends AbstractController
      * @param array          $parameters the additional parameters to pass to the template
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
+     *
      * @psalm-param T $item
      */
     protected function showEntity(AbstractEntity $item, array $parameters = []): Response

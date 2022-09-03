@@ -62,10 +62,10 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
         that._initDialog(that.$modal);
 
         // handle input events
-        that.taskProxy = function() {
+        that.taskProxy = function () {
             that._onTaskChanged();
         };
-        that.updateProxy = function() {
+        that.updateProxy = function () {
             that._update();
         };
         that.$task.on('input', function () {
@@ -200,7 +200,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
     _getItems() {
         'use strict';
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
-            return Number.parseInt($(this).attr('value'), 10);
+            return $.parseInt($(this).attr('value'));
         }).get();
     }
 

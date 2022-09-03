@@ -129,6 +129,34 @@
             </select>
         </div>
     </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dragModal">
+            Launch modal
+        </button>
+    </div>
+</div>
+<div class="modal fade" id="dragModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header cursor-move">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="text">Text</label>
+                    <input type="text" class="form-control" id="text" aria-describedby="textHelp">
+                    <small id="textHelp" class="form-text text-muted">We'll never share your text with anyone else.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-form btn-primary" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 {%- endblock %}
 {# stylesheets #}
@@ -141,6 +169,7 @@
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/plugins/bootstrap-treeview.js') }}
+{{ asset_js('js/plugins/plugin-drag-modal.js') }}
 {{ asset_js('js/vendor/select2/js/select2.js') }}
 {{ asset_js('js/vendor/select2/js/i18n/fr.js') }}
 {{ asset_js('js/extensions/select2-extensions.js') }}

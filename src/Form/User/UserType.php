@@ -97,6 +97,7 @@ class UserType extends AbstractEntityType
         $helper->field('lastLogin')
             ->updateOption('value_transformer', fn (\DateTimeInterface|string $lastLogin): ?string => $this->formatLastLogin($lastLogin))
             ->updateOption('empty_value', 'common.value_none')
+            ->widgetClass('text-center')
             ->addPlainType(true);
 
         $helper->field('imageFile')

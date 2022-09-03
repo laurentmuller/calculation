@@ -1,13 +1,13 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * jQuery file input extensions.
+ * JQuery file input extensions.
  */
 (function ($) {
     'use strict';
 
     /**
-     * -------------- jQuery Extensions --------------
+     * -------------- JQuery Extensions --------------
      */
     $.fn.extend({
 

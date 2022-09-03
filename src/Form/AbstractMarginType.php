@@ -16,6 +16,7 @@ namespace App\Form;
  * Abstract margin edit type.
  *
  * @template T of \App\Entity\AbstractMargin
+ *
  * @template-extends AbstractEntityType<T>
  */
 abstract class AbstractMarginType extends AbstractEntityType

@@ -67,6 +67,7 @@ class Column implements \Stringable, SortModeInterface
      * The field formatter (server side).
      *
      * @var string|callable|null
+     *
      * @psalm-var string|callable(mixed, AbstractEntity|array): string|null
      */
     private $fieldFormatter = null;

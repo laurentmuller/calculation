@@ -220,12 +220,12 @@ class FormHelper
 
         return $this->updateOptions([
                 'entry_type' => $entryType,
-                'by_reference' => false,
-                'allow_add' => $allow_add,
+                'entry_options' => ['label' => false],
                 'allow_delete' => $allow_delete,
+                'allow_add' => $allow_add,
+                'by_reference' => false,
                 'label' => false,
-                'entry_options' => ['label' => false], ])
-            ->add(CollectionType::class);
+            ])->add(CollectionType::class);
     }
 
     /**
@@ -264,7 +264,9 @@ class FormHelper
      * Add an enum type to the builder and reset all values to default.
      *
      * @param string $class the enumeration class
+     *
      * @psalm-template T of \UnitEnum
+     *
      * @psalm-param class-string<T> $class
      */
     public function addEnumType(string $class): self
@@ -288,6 +290,7 @@ class FormHelper
      * @param int      $priority  The priority of the listener. Listeners
      *                            with a higher priority are called before
      *                            listeners with a lower priority.
+     *
      * @psalm-suppress ArgumentTypeCoercion
      * @psalm-suppress MixedArgumentTypeCoercion
      */

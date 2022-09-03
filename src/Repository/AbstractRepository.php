@@ -23,6 +23,7 @@ use Doctrine\ORM\QueryBuilder;
  * Base repository.
  *
  * @template T of \App\Entity\AbstractEntity
+ *
  * @template-extends ServiceEntityRepository<T>
  */
 abstract class AbstractRepository extends ServiceEntityRepository
@@ -47,6 +48,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Creates a default query builder.
      *
      * @param string $alias the entity alias
+     *
      * @psalm-param literal-string $alias
      */
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
@@ -145,6 +147,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\Exception\ORMException
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
+     *
      * @psalm-param literal-string $alias
      */
     public function getSearchQuery(array $sortedFields = [], array $criteria = [], string $alias = self::DEFAULT_ALIAS): Query

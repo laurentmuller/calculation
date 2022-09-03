@@ -206,6 +206,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param int     $offset the zero based index of the first row to return
      *
      * @return array the array of results for the given search (can be empty)
+     *
      * @psalm-return array<array{
      *      id: int,
      *      type: string,
@@ -332,6 +333,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @param string   $class  the entity class
      * @param string[] $fields the entity fields to search in
+     *
      * @psalm-param class-string $class
      *
      * @throws \ReflectionException
@@ -356,6 +358,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param string  $class   the entity class
      * @param string  $field   the field name
      * @param ?string $content the field content to search in or null to use the field name
+     *
      * @psalm-param class-string $class
      *
      * @throws \ReflectionException
@@ -458,6 +461,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param string $field the field
      *
      * @return string the key
+     *
      * @psalm-param class-string $class
      *
      * @throws \ReflectionException

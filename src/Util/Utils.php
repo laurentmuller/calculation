@@ -192,6 +192,7 @@ final class Utils
      * @param callable $callback the filter callback
      *
      * @return mixed the first matching item, if any; null otherwise
+     *
      * @psalm-param callable(mixed): bool $callback
      */
     public static function findFirst(array $array, callable $callback): mixed
@@ -258,6 +259,7 @@ final class Utils
      *
      * @param array               $array the array to be grouped
      * @param callable|int|string $key   a set of keys to group by
+     *
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedArrayAccess
      * @psalm-suppress MixedArrayOffset
@@ -316,6 +318,7 @@ final class Utils
      * @param array  $array     the array to sort
      * @param string $field     the field name to get values for
      * @param bool   $ascending true to sort in ascending, false to sort in descending
+     *
      * @psalm-suppress MixedArgument
      */
     public static function sortField(array &$array, string $field, bool $ascending = true): void

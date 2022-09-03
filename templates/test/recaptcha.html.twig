@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title = 'test.recaptcha' -%}
 {%- set title_icon = 'google fab' -%}
@@ -9,14 +8,14 @@
     'data-action': google_recaptcha_action,
     'data-key': google_recaptcha_site_key
 }) -%}
-
+{# body #}
 {% block card_body %}
 {{ parent() }}
 <div class="form-group text-right mb-0">
     <a href="https://developers.google.com/recaptcha/intro" target="_blank" rel="noopener noreferrer">reCAPTCHA API</a>
 </div>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 <script src="https://www.google.com/recaptcha/api.js?render={{ google_recaptcha_site_key }}" nonce="{{ csp_nonce() }}"></script>

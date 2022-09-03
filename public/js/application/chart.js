@@ -8,7 +8,7 @@
 function onMonthsChange($months) {
     'use strict';
     const oldMonths = $months.data('months');
-    const newMonths = Number.parseInt($months.val(), 10);
+    const newMonths = $.parseInt($months.val());
     if (newMonths !== oldMonths) {
         const url = $months.data('url') + "/" + newMonths;
         window.location.assign(url);
@@ -23,7 +23,7 @@ function onMonthsChange($months) {
     // tooltip
     $('#data').tooltip({
         selector: '.has-tooltip',
-        customClass: 'tooltip-danger overall-datatable'
+        customClass: 'tooltip-danger'
     });
     // handle months change
     const $months = $('#months');

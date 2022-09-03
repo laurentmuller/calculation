@@ -88,6 +88,7 @@ abstract class AbstractEntityTable extends AbstractTable
      * Creates a default query builder.
      *
      * @param string $alias the entity alias
+     *
      * @psalm-param literal-string $alias
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder

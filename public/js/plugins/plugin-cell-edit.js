@@ -71,7 +71,7 @@
         /**
          * Gets the input element.
          *
-         * @return {jQuery|null|JQuery<HTMLElement>}
+         * @return {JQuery|null|JQuery<HTMLElement>}
          */
         getInput() {
             return this.$input;

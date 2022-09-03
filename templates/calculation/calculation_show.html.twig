@@ -45,7 +45,7 @@
             </tr>
             {# items #}
             {% for product in category.items %}
-            <tr>
+            <tr class="item">
                 <td class="text-nowrap pl-3">{{ product.description }}</td>
                 <td class="text-unit">{{ product.unit }}</td>
                 <td class="text-currency">{{ product.price|amount }}</td>

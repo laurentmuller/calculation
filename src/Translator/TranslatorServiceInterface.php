@@ -31,6 +31,7 @@ interface TranslatorServiceInterface
      *                    <li>'name': The detected language display name.</li>
      *                    </ul>
      *                    Returns false if an error occurs.
+     *
      * @psalm-return array{
      *      tag: string,
      *      name: string|null
@@ -57,6 +58,7 @@ interface TranslatorServiceInterface
      * Gets the set of languages currently supported by other operations of the service.
      *
      * @return array|false an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
+     *
      * @psalm-return array<string, string>|false
      */
     public function getLanguages(): array|false;
@@ -65,6 +67,7 @@ interface TranslatorServiceInterface
      * Gets the last error.
      *
      * @return array|null the last error with the 'code' and the 'message' entries; null if none
+     *
      * @psalm-return null|array{
      *      result: bool,
      *      code: string|int,

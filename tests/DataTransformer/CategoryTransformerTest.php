@@ -87,6 +87,7 @@ class CategoryTransformerTest extends KernelTestCase
 
     /**
      * @psalm-param int|string|null $value
+     *
      * @dataProvider getReverseTransformValues
      */
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void

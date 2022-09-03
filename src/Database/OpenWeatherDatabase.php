@@ -104,6 +104,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
+     *
      * @psalm-return array<array{
      *      id: int,
      *      name: string,
@@ -129,12 +130,14 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param int    $limit   the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
+     *
      * @psalm-return array<array{
      *      id: int,
      *      name: string,
      *      country: string,
      *      latitude: float,
      *      longitude: float}|mixed>
+     *
      * @psalm-suppress PossiblyNullReference
      */
     public function findCityCountry(string $city, string $country, int $limit = 25): array
@@ -160,6 +163,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param float  $longitude the city longitude
      *
      * @return bool true if success
+     *
      * @psalm-suppress PossiblyNullReference
      */
     public function insertCity(int $id, string $name, string $country, float $latitude, float $longitude): bool

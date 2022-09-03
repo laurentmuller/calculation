@@ -26,6 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * Service to check spams with the Akismet.
  *
  * @see https://akismet.com/
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class AkismetService extends AbstractHttpClientService implements ServiceSubscriberInterface

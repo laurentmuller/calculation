@@ -5,48 +5,52 @@
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
     <p class="mt-2 mb-1">{{ 'help.labels.edit_columns'|trans }}</p>
-    <table class="w-100">
-        <thead>
-            <tr class="bg-themed">
-                <th class="text-date-time">{{ 'help.fields.column'|trans }}</th>
-                <th>{{ 'help.fields.description'|trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for field in fields %}
-            <tr>
-                <td>{{ (entity.id ~ '.fields.' ~ field.name)|trans }}</td>
-                <td>{{ field.description }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-sm w-100">
+            <thead>
+                <tr class="bg-themed">
+                    <th class="text-date-time">{{ 'help.fields.column'|trans }}</th>
+                    <th class="w-100">{{ 'help.fields.description'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for field in fields %}
+                <tr>
+                    <td>{{ (entity.id ~ '.fields.' ~ field.name)|trans }}</td>
+                    <td class="w-100">{{ field.description }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endif %}
 {%- endmacro %}
 {% macro output_entity_fields(entity) -%}
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
     <p class="mt-2 mb-1">{{ 'help.labels.edit_fields'|trans }}</p>
-    <table class="w-100">
-        <thead>
-            <tr class="bg-themed">
-                <th class="text-date-time">{{ 'help.fields.field'|trans }}</th>
-                <th>{{ 'help.fields.description'|trans }}</th>
-                <th>{{ 'help.fields.type'|trans }}</th>
-                <th>{{ 'help.fields.required'|trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for field in fields %}
-            <tr>
-                <td>{{ (entity.id ~ '.fields.' ~ field.name)|trans }}</td>
-                <td>{{ field.description }}</td>
-                <td>{{ tools.output_type(field) }}</td>
-                <td>{{ tools.output_required(field) }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-sm w-100">
+            <thead>
+                <tr class="bg-themed">
+                    <th class="text-date-time">{{ 'help.fields.field'|trans }}</th>
+                    <th class="w-100">{{ 'help.fields.description'|trans }}</th>
+                    <th class="text-nowrap">{{ 'help.fields.type'|trans }}</th>
+                    <th class="text-nowrap text-center">{{ 'help.fields.required'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for field in fields %}
+                <tr>
+                    <td>{{ (entity.id ~ '.fields.' ~ field.name)|trans }}</td>
+                    <td class="w-100">{{ field.description }}</td>
+                    <td class="text-nowrap">{{ tools.output_type(field) }}</td>
+                    <td class="text-nowrap text-center">{{- tools.output_required(field) -}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endif %}
 {%- endmacro %}
 {% macro output_entity_actions(entity, service) -%}

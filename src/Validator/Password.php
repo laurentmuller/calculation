@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraint;
  * Password constraint.
  *
  * @Annotation
+ *
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
 class Password extends Constraint

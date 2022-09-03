@@ -18,29 +18,31 @@
 {# fields #}
 {% if fields %}
 <p class="mb-1">{{ 'help.labels.entity_fields'|trans }}</p>
-<table class="w-100">
-    <thead>
-        <tr class="bg-themed">
-            <th class="text-date-time">{{ 'help.fields.field'|trans }}</th>
-            <th>{{ 'help.fields.description'|trans }}</th>
-            <th>{{ 'help.fields.type'|trans }}</th>
-            <th>{{ 'help.fields.required'|trans }}</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for field in fields %}
-        {% set field_name = (entity.id ~ '.fields.' ~ field.name)|trans %}
-        {% set field_entity = field.entity|default(false) %}
-        {% set path = field_entity ? path('help_entity', {'id': field_entity}) : false %}
-        <tr>
-            <td>{% if path %}<a href="{{ path }}">{% endif %}{{ field_name }}{% if path %}</a>{% endif %}</td>
-            <td>{{ field.description }}</td>
-            <td>{{ tools.output_type(field) }}</td>
-            <td>{{ tools.output_required(field) }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-sm w-100">
+        <thead>
+            <tr class="bg-themed">
+                <th class="text-date-time">{{ 'help.fields.field'|trans }}</th>
+                <th class="w-100">{{ 'help.fields.description'|trans }}</th>
+                <th class="text-nowrap">{{ 'help.fields.type'|trans }}</th>
+                <th class="text-nowrap text-center">{{ 'help.fields.required'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for field in fields %}
+            {% set field_name = (entity.id ~ '.fields.' ~ field.name)|trans %}
+            {% set field_entity = field.entity|default(false) %}
+            {% set path = field_entity ? path('help_entity', {'id': field_entity}) : false %}
+            <tr>
+                <td class="text-nowrap">{% if path %}<a href="{{ path }}">{% endif %}{{ field_name }}{% if path %}</a>{% endif %}</td>
+                <td class="w-100">{{ field.description }}</td>
+                <td class="text-nowrap">{{ tools.output_type(field) }}</td>
+                <td class="text-nowrap text-center">{{- tools.output_required(field) -}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% else %}
 <p>{{ 'help.labels.entity_empty'|trans }}</p>
 {% endif %}

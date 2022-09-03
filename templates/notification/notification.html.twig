@@ -12,7 +12,7 @@
             <img src="{{ email.image('@images/icons/favicon-36x36.png') }}" alt="{{ app_description }}">
         </columns>
         <columns large="11" small="10" valign="middle">
-            {% if importance is not null %}<small><strong>{{ ('importance.full.' ~ importance)|trans }}</strong></small>{% endif %}
+            {% if importance is not null %}<small><strong>{{ ('importance.' ~ importance ~ '_full')|trans }}</strong></small>{% endif %}
             <p class="lead">
                 {{- email.subject -}}
             </p>

@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
  * Strength constraint.
  *
  * @Annotation
+ *
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
 class Strength extends Constraint

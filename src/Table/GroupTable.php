@@ -25,6 +25,7 @@ use Twig\Environment;
  * The groups table.
  *
  * @template-extends AbstractEntityTable<Group>
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterface

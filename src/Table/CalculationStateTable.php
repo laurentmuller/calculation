@@ -26,6 +26,7 @@ use Twig\Environment;
  * The calculation states table.
  *
  * @template-extends AbstractEntityTable<CalculationState>
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalculationStateTable extends AbstractEntityTable implements ServiceSubscriberInterface

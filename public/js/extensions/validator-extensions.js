@@ -370,10 +370,10 @@
             const parentWidth = settings.parent.width();
             const windowWidth = Math.floor($(window).width() * 0.9);
             if (width.endsWith('%')) {
-                width = Number.parseInt(width, 10);
+                width = $.parseInt(width);
                 width = Math.floor(parentWidth * width / 100.0);
             } else if (width.endsWith('px')) {
-                width = Number.parseInt(width, 10);
+                width = $.parseInt(width, 10);
             }
             settings.css.width = Math.min(width, windowWidth, settings.maxWidth) + 'px';
 

@@ -1,10 +1,9 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title = new ? 'globalmargin.add.title' : 'globalmargin.edit.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set page_list = 'globalmargin_table' -%}
-
+{# body #}
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-4">
@@ -18,13 +17,13 @@
     </div>
 </div>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/plugins/plugin-input.js') }}
-{{ asset_js('js/application/globalmargin_edit.js') }}
+{{- asset_js('js/plugins/plugin-input.js') }}
+{{- asset_js('js/application/globalmargin_edit.js') }}
 {% else %}
-{{ asset_js('js/globalmargin_edit.js') }}
+{{- asset_js('js/globalmargin_edit.js') }}
 {% endif %}
 {% endblock %}

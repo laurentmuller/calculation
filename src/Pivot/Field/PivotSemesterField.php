@@ -54,6 +54,7 @@ class PivotSemesterField extends PivotDateField
      * The function receive the semestre (1 or 2 ) as parameter and must return a string.
      *
      * @param ?callable $formatter the optional callback
+     *
      * @psalm-param callable(int): string|null $formatter
      */
     public function setFormatter(?callable $formatter): self

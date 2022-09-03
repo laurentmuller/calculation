@@ -45,8 +45,8 @@ function renderCalculations(items) {
         'id': 'text-id text-border',
         'date': 'text-date',
         'state': 'text-state',
-        'customer': null,
-        'description': null,
+        'customer': 'text-nowrap',
+        'description': 'text-nowrap',
         'margin': 'text-percent',
         'total': 'text-currency'
     };
@@ -65,9 +65,9 @@ function renderCalculations(items) {
 function renderCustomers(items) {
     'use strict';
     const mapping = {
-        'nameAndCompany': 'w-50',
-        'address': 'w-25',
-        'zipCity': 'w-25'
+        'nameAndCompany': 'w-50 text-nowrap',
+        'address': 'w-25 text-nowrap',
+        'zipCity': 'w-25 text-nowrap'
     };
     createRows(items, mapping);
 }
@@ -80,7 +80,7 @@ function renderCustomers(items) {
 function renderProducts(items) {
     'use strict';
     const mapping = {
-        'description': 'w-50',
+        'description': 'w-50 text-nowrap',
         'group': 'text-group',
         'category': 'text-category',
         'price': 'text-currency',

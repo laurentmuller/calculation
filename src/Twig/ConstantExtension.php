@@ -71,6 +71,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
 
     /**
      * @psalm-template T
+     *
      * @psalm-param class-string<T> $className
      *
      * @throws \ReflectionException

@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Object to edit global margins.
  */
-class RootMargins
+class GlobalMargins
 {
     use ValidateMarginsTrait;
 

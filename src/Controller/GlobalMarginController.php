@@ -17,15 +17,13 @@ use App\Enums\EntityPermission;
 use App\Form\GlobalMargin\GlobalMarginsType;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Interfaces\RoleInterface;
-use App\Model\RootMargins;
+use App\Model\GlobalMargins;
 use App\Report\GlobalMarginsReport;
 use App\Repository\GlobalMarginRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GlobalMarginsDocument;
 use App\Table\GlobalMarginTable;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,31 +52,32 @@ class GlobalMarginController extends AbstractEntityController
     }
 
     #[Route(path: '/edit', name: 'globalmargin_edit')]
-    public function edit(Request $request, EntityManagerInterface $manager): Response
+    public function edit(Request $request): Response
     {
         // check permissions
         $this->checkPermission(EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE);
 
-        /** @var GlobalMargin[] $existingMargins */
-        $existingMargins = $this->repository->findBy([], ['minimum' => Criteria::ASC]);
-        $root = new RootMargins($existingMargins);
+        /** @var GlobalMarginRepository $repository */
+        $repository = $this->repository;
+        $existingMargins = $repository->findAllByMinimum();
+        $root = new GlobalMargins($existingMargins);
 
         $form = $this->createForm(GlobalMarginsType::class, $root);
         if ($this->handleRequestForm($request, $form)) {
-            /** @var RootMargins $data */
+            /** @var GlobalMargins $data */
             $data = $form->getData();
             $newMargins = $data->getMargins()->toArray();
 
             // update
             foreach ($newMargins as $margin) {
-                $manager->persist($margin);
+                $repository->add($margin, false);
             }
             // delete
             $deletedMargins = \array_diff($existingMargins, $newMargins);
             foreach ($deletedMargins as $margin) {
-                $manager->remove($margin);
+                $repository->remove($margin, false);
             }
-            $manager->flush();
+            $repository->flush();
             $this->successTrans('globalmargin.edit.success');
 
             return $this->redirectToRoute('globalmargin_table');

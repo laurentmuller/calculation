@@ -108,6 +108,8 @@
     'undefined-text': '&nbsp;',
     'silent-sort': false,
     'side-pagination': "server",
+    'show-custom-view': 'false',
+    'custom-view': 'customViewFormatter',
     'show-extended-pagination': 'true',
     'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
     'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
@@ -332,7 +334,7 @@
 {%- endblock -%}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/bootstrap-table.css') }}
+{{ asset_css('css/table.css') }}
 {%- endblock -%}
 {# javascripts #}
 {% block javascripts -%}

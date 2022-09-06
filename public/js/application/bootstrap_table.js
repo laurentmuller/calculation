@@ -515,7 +515,7 @@ $.fn.extend({
                     const $links = pageList.map(function (page) {
                         const $link = $('<button/>', {
                             'class': 'dropdown-page dropdown-item',
-                            'data-value':  page,
+                            'data-value': page,
                             'text': page
                         });
                         if (page === pageSize) {

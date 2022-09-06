@@ -22,7 +22,7 @@
         {% for category in customData.categories %}
             {% if group != category.group %}
                 {% set group = category.group %}
-                {{ _self.output_dropdown_header(group) }}
+                {{ _self.output_dropdown_header(group, false) }}
             {% endif %}
             {{ _self.output_dropdown('category', category.id, categoryid, category.code) }}
         {% endfor %}

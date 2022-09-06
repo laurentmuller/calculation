@@ -12,22 +12,19 @@ declare(strict_types=1);
 
 namespace App\Form\GlobalMargin;
 
+use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Type to edit all global margins.
  */
-class GlobalMarginsType extends AbstractType
+class GlobalMarginsType extends AbstractHelperType
 {
     /**
      * {@inheritDoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
-        $helper = new FormHelper($builder);
-        $helper->field('margins')
-            ->addCollectionType(GlobalMarginType::class);
+        $helper->field('margins')->addCollectionType(GlobalMarginType::class);
     }
 }

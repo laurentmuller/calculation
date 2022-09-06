@@ -32,8 +32,8 @@ class Category extends AbstractEntity
      * The unique code.
      */
     #[Assert\NotBlank]
-    #[Assert\Length(max: 30)]
-    #[ORM\Column(length: 30, unique: true)]
+    #[Assert\Length(max: self::MAX_CODE_LENGTH)]
+    #[ORM\Column(length: self::MAX_CODE_LENGTH, unique: true)]
     private ?string $code = null;
 
     /**

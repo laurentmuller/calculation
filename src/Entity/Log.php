@@ -85,6 +85,22 @@ class Log extends AbstractEntity
     }
 
     /**
+     * Gets the HTML card color depending on this level.
+     */
+    public function getCardColor(): string
+    {
+        return match ($this->level) {
+            LogLevel::ALERT,
+            LogLevel::CRITICAL,
+            LogLevel::EMERGENCY,
+            LogLevel::ERROR => 'danger',
+            LogLevel::WARNING => 'warning',
+            LogLevel::DEBUG => 'secondary',
+            default => 'info',
+        };
+    }
+
+    /**
      * Gets the channel.
      */
     public function getChannel(bool $capitalize = false): string
@@ -93,19 +109,11 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Gets the HTML color depending on this level.
+     * Gets the HTML border color depending on this level.
      */
     public function getColor(): string
     {
-        return match ($this->level) {
-            LogLevel::ALERT,
-            LogLevel::CRITICAL,
-            LogLevel::EMERGENCY,
-            LogLevel::ERROR => 'var(--danger)',
-            LogLevel::WARNING => 'var(--warning)',
-            LogLevel::DEBUG => 'var(--secondary)',
-            default => 'var(--info)',
-        };
+        return \sprintf('var(--%s)', $this->getCardColor());
     }
 
     /**
@@ -146,6 +154,21 @@ class Log extends AbstractEntity
     public function getFormattedDate(): string
     {
         return (string) FormatUtils::formatDateTime($this->createdAt, null, \IntlDateFormatter::MEDIUM);
+    }
+
+    /**
+     * Gets the icon depending on this level.
+     */
+    public function getIcon(): string
+    {
+        return match ($this->level) {
+            LogLevel::ALERT,
+            LogLevel::CRITICAL,
+            LogLevel::EMERGENCY,
+            LogLevel::ERROR => 'fa-solid fa-circle-exclamation',
+            LogLevel::WARNING => 'fa-solid fa-triangle-exclamation',
+            default => 'fa-solid fa-circle-info',
+        };
     }
 
     /**

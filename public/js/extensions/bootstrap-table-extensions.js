@@ -8,7 +8,7 @@
  * @property {number} totalPages - the total number of pages.
  * @property {string} rowClass - the row class.
  * @property {string} rowSelector - the row selector.
- * @property {string} customSelector - the custom selector.
+ * @property {string} customSelector - the custom view selector.
  * @property {string} saveUrl - the URL to save state.
  * @property {boolean} cardView - true if displaying card view is allowed
  *
@@ -365,7 +365,7 @@ $.fn.extend({
     /**
      * Return if the card view mode is displayed.
      *
-     * @return {boolean} true if the card view mode is displayed.
+     * @return {boolean} true if displayed.
      */
     isCardView: function () {
         'use strict';
@@ -375,12 +375,12 @@ $.fn.extend({
     /**
      * Return if the custom view mode is displayed.
      *
-     * @return {boolean} true if the custom view mode is displayed.
+     * @return {boolean} true if displayed.
      */
     isCustomView: function () {
         'use strict';
         const data = $(this).getBootstrapTable();
-        return data && data.showCustomView;
+        return data && data.customViewDefaultView;
     },
 
     /**
@@ -1126,7 +1126,7 @@ $.fn.extend({
     initPageDialog: function () {
         'use strict';
         const $dialog = $('#modal-page');
-        if ($dialog.data('initialized')) {
+        if ($dialog.length === 0 || $dialog.data('initialized')) {
             return;
         }
         $dialog.data('initialized', true);
@@ -1135,7 +1135,6 @@ $.fn.extend({
         const $range = $('#page-range');
         const $label = $('#page-label');
         const $button = $('#page-button');
-        const options = $this.getOptions().draggableModal || false;
 
         $dialog.on('keydown', function (e) {
             if (e.which === 13) { // enter
@@ -1162,8 +1161,10 @@ $.fn.extend({
                 $source.trigger('focus');
             }
         });
-        if (options) {
-            $dialog.draggableModal(options);
+
+        const modalOptions = $this.getOptions().draggableModal || false;
+        if (modalOptions) {
+            $dialog.draggableModal(modalOptions);
         }
 
         $range.on('input', function () {
@@ -1184,7 +1185,7 @@ $.fn.extend({
     initSortDialog: function () {
         'use strict';
         const $dialog = $('#modal-sort');
-        if ($dialog.data('initialized')) {
+        if ($dialog.length === 0 || $dialog.data('initialized')) {
             return;
         }
         $dialog.data('initialized', true);
@@ -1193,7 +1194,6 @@ $.fn.extend({
         const $sortName = $('#sort-name');
         const $button = $('#sort-button');
         const $default = $('#sort-default-button');
-        const options = $this.getOptions().draggableModal || false;
 
         $dialog.on('keydown', function (e) {
             if (e.which === 13) { // enter
@@ -1212,8 +1212,10 @@ $.fn.extend({
         }).on('hide.bs.modal', function () {
             $this.enableKeys();
         });
-        if (options) {
-            $dialog.draggableModal(options);
+
+        const modalOptions = $this.getOptions().draggableModal || false;
+        if (modalOptions) {
+            $dialog.draggableModal(modalOptions);
         }
 
         $sortName.on('input', function () {

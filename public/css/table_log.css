@@ -1,9 +1,8 @@
-@import 'bootstrap-table.css';
+@import 'table.css';
 
 /**! compression tag for ftp-deployment */
 
 .date {
-    border-left: 0.3rem solid transparent !important;
     width: 170px;
 }
 
@@ -65,25 +64,6 @@ td.user {
     color: var(--danger);
 }
 
-.text-border.debug {
-    border-left-color: var(--secondary) !important;
-}
-
-.text-border.info,
-.text-border.notice {
-    border-left-color: var(--info) !important;
-}
-
-.text-border.warning {
-    border-left-color: var(--warning) !important;
-}
-
-.text-border.error,
-.text-border.critical,
-.text-border.alert,
-.text-border.emergency {
-    border-left-color: var(--danger) !important;
-}
 /**
  * detail content
  */
@@ -92,7 +72,7 @@ td.user {
 }
 
 /**
- * highlight
+ * highlight (SQL)
  */
 pre.highlight  {
     margin: 0;

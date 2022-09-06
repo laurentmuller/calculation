@@ -59,8 +59,8 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
      * The code.
      */
     #[Assert\NotBlank]
-    #[Assert\Length(max: 30)]
-    #[ORM\Column(length: 30)]
+    #[Assert\Length(max: self::MAX_CODE_LENGTH)]
+    #[ORM\Column(length: self::MAX_CODE_LENGTH)]
     protected ?string $code = null;
 
     /**

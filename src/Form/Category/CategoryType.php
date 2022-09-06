@@ -39,7 +39,7 @@ class CategoryType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')
-            ->maxLength(30)
+            ->maxLength(AbstractEntity::MAX_CODE_LENGTH)
             ->addTextType();
 
         $helper->field('description')

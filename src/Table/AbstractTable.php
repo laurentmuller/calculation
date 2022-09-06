@@ -373,9 +373,8 @@ abstract class AbstractTable implements SortModeInterface
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
 
-            'custom-view' => 'customViewFormatter',
             'card-view' => \json_encode($query->isViewCard()),
-            'show-custom-view' => \json_encode($query->isViewCustom()),
+            'custom-view-default-view' => \json_encode($query->isViewCustom()),
         ], $results->attributes);
     }
 }

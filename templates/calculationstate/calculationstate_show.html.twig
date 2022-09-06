@@ -16,8 +16,6 @@
 {{ properties.property('calculationstate.fields.calculations', item.countCalculations|integer) }}
 <tr>
     <td>{{ 'calculationstate.fields.color'|trans }}</td>
-    <td>
-        <span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span>
-    </td>
+    <td><span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span></td>
 </tr>
 {% endblock %}

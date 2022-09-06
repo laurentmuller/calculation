@@ -12,8 +12,21 @@
 {% block header_actions %}
 <small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>
 {% endblock %}
-
 {% block toolbar_actions -%}
+{% if customData.levels|length > 1 %}
+    <div class="input-group-append">
+        <button id="level" data-value="{{ level }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
+            <i class="fa-solid fa-layer-group"></i>&nbsp;{{- level|length ? level|capitalize : 'log.fields.level'|trans -}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="level">
+            {{ _self.output_dropdown('level', '', level, 'datatable.all'|trans) }}
+            {{- _self.item_separator() }}
+            {% for key in customData.levels %}
+                {{ _self.output_dropdown('level', key, level, key|capitalize) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
 {% if customData.channels|length > 1 %}
 <div class="input-group-append">
     <button id="channel" data-value="{{ channel }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
@@ -24,20 +37,6 @@
         {{ _self.item_separator() }}
         {% for key in customData.channels %}
         {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
-        {% endfor %}
-    </div>
-</div>
-{% endif %}
-{% if customData.levels|length > 1 %}
-<div class="input-group-append">
-    <button id="level" data-value="{{ level }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
-        <i class="fa-solid fa-layer-group"></i>&nbsp;{{- level|length ? level|capitalize : 'log.fields.level'|trans -}}
-    </button>
-    <div class="dropdown-menu" aria-labelledby="level">
-        {{ _self.output_dropdown('level', '', level, 'datatable.all'|trans) }}
-        {{- _self.item_separator() }}
-        {% for key in customData.levels %}
-        {{ _self.output_dropdown('level', key, level, key|capitalize) }}
         {% endfor %}
     </div>
 </div>
@@ -59,7 +58,7 @@
 {%- endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/logs_boostrap_table.css') }}
+{{ asset_css('css/table_log.css') }}
 {% endblock %}
 
 {% block custom_view_card_class ' text-border' %}

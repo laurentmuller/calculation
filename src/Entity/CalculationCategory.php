@@ -48,8 +48,8 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
      * The code.
      */
     #[Assert\NotBlank]
-    #[Assert\Length(max: 30)]
-    #[ORM\Column(length: 30)]
+    #[Assert\Length(max: self::MAX_CODE_LENGTH)]
+    #[ORM\Column(length: self::MAX_CODE_LENGTH)]
     protected ?string $code = null;
 
     /**

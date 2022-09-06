@@ -19,6 +19,7 @@ use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
  * The application logs table.
@@ -43,7 +44,7 @@ class LogTable extends AbstractTable implements \Countable
     /**
      * Constructor.
      */
-    public function __construct(private readonly LogService $service)
+    public function __construct(private readonly LogService $service, private readonly Environment $twig)
     {
     }
 
@@ -74,11 +75,13 @@ class LogTable extends AbstractTable implements \Countable
     }
 
     /**
-     * Formats the log level.
+     * Format the level.
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatLevel(string $value, Log $log): string
     {
-        return $log->getLevel(true);
+        return $this->twig->render('macros/_cell_log_level.html.twig', ['log' => $log]);
     }
 
     /**

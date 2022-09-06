@@ -25,7 +25,12 @@ abstract class AbstractEntity implements \Stringable
     use MathTrait;
 
     /**
-     * The default maximum length for a string property.
+     * The maximum length for a code property.
+     */
+    final public const MAX_CODE_LENGTH = 30;
+
+    /**
+     * The maximum length for a string property.
      */
     final public const MAX_STRING_LENGTH = 255;
 

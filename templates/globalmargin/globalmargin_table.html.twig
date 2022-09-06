@@ -24,9 +24,7 @@
 {%- endblock %}
 
 {% block custom_view_header -%}
-{%- if row_edit -%}
-    <a href="{{ path('globalmargin_edit', params) }}" class="item-link stretched-link text-body" title="{{ 'globalmargin.edit.title'|trans }}">%minimum% - %maximum%</a>
-{%- elseif row_show -%}
+{%- if allow_show -%}
     <a href="{{ path('globalmargin_show', params) }}" class="item-link stretched-link text-body" title="{{ 'globalmargin.show.title'|trans }}">%minimum% - %maximum%</a>
 {%- else -%}
     <span>%minimum% - %maximum%</span>

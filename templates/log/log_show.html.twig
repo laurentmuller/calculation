@@ -15,9 +15,7 @@
 {%- if value|length -%}
     <tr>
         <td class="w-25">{{ name|trans }}</td>
-        <td class="w-75">
-            <pre class="text-break text-success white-space-pre-wrap mb-0">{{- _self.format_var(value) -}}</pre>
-        </td>
+        <td class="w-75"><pre class="text-break text-success white-space-pre-wrap mb-0">{{- _self.format_var(value) -}}</pre></td>
     </tr>
 {%- endif -%}
 {% endmacro %}
@@ -27,47 +25,28 @@
     <td class="w-75">{{ value|doctrine_format_sql(true) }}</td>
 </tr>
 {% endmacro %}
-{% macro level_class(level, background) -%}
-{% switch level -%}
-{%- case 'alert' -%}
-    {%- set class = 'danger' -%}
-{%- case 'critical' -%}
-    {%- set class = 'danger' -%}
-{%- case 'emergency' -%}
-    {%- set class = 'danger' -%}
-{%- case 'error' %}
-    {%- set class = 'danger' -%}
-{%- case 'warning' -%}
-    {%- set class = 'warning' -%}
-{%- case 'debug' -%}
-    {%- set class = 'secondary' -%}
-{%- default -%}
-    {%- set class = 'info' -%}
-{%- endswitch %}
-{% if background %}
-    {%- set class = ' border-' ~ class ~ ' text-white bg-' ~ class -%}
-{%- else -%}
-    {%- set class = ' border-' ~ class -%}
-{% endif %}
-{{- class -}}
-{%- endmacro %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'log.show.title' -%}
 {%- set route = route|default('log_table') -%}
 {%- set params = route_params(app.request, id) -%}
+{%- set card_color = item.cardColor -%}
 {# actions #}
 {%- set cancel_path = cancel_url(app.request, id, route) -%}
 {# classes #}
 {% block card_container_class '' %}
 {% block table_responsive_class '' %}
-{% block card_class -%}{{ _self.level_class(item.level, false) }}{%- endblock %}
-{% block card_header_class -%}{{ _self.level_class(item.level, true) }}{%- endblock %}
+{% block card_class -%}{{ ' border-' ~ card_color }}{%- endblock %}
+{% block card_header_class -%}{{ ' border-' ~ card_color ~ ' text-white bg-' ~ card_color }}{%- endblock %}
 {# properties #}
 {% block property_body %}
-{{ properties.property('log.fields.createdAt', item.createdAt|locale_datetime(null, 'medium')) }}
-{{ properties.property('log.fields.channel', item.channel|humanize) }}
+<tr>
+    <td class="w-25">{{ 'log.fields.level'|trans }}</td>
+    <td class="w-75"><span style="color:{{ item.color }};"><i class="{{ item.icon }} mr-1"></i>{{ item.level(true) }}</span></td>
+</tr>
 {{ properties.property('log.fields.level', item.level|humanize) }}
+{{ properties.property('log.fields.channel', item.channel|humanize) }}
+{{ properties.property('log.fields.createdAt', item.createdAt|locale_datetime(null, 'medium')) }}
 {%- if item.channel == 'doctrine' -%}
 {{ _self.formatSql('log.fields.message', item.message) }}
 {%- else -%}
@@ -78,5 +57,5 @@
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}
-{{ asset_css('css/logs_boostrap_table.css') }}
+{{ asset_css('css/table_log.css') }}
 {% endblock %}

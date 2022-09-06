@@ -46,24 +46,25 @@ class GlobalMarginRepository extends AbstractRepository
     }
 
     /**
-     * Gets the margin, in percent, for the given amount.
+     * Gets the margin in percent for the given amount.
      *
      * @param float $amount the amount to get percent for
      *
-     * @return float the margin, in percent, if found; 0 otherwise
+     * @return float the margin in percent, if found; 0 otherwise
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getMargin(float $amount): float
     {
-        // builder
-        $builder = $this->createQueryBuilder('e')
+        // build
+        $query = $this->createQueryBuilder('e')
             ->select('e.margin')
             ->where(':amount >= e.minimum')
             ->andWhere(':amount < e.maximum')
-            ->setParameter('amount', $amount, Types::FLOAT);
+            ->setParameter('amount', $amount, Types::FLOAT)
+            ->getQuery();
 
         // execute
-        return (float) $builder->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+        return (float) $query->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 }

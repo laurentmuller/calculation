@@ -98,12 +98,12 @@ function removeMargin($caller) {
 function sortMargins($table) {
     'use strict';
     const $body = $table.find('tbody');
-    const $rows = $body.find('tr');
+    let $rows = $body.find('tr');
     if ($rows.length < 2) {
-        return;
+        return $rows;
     }
 
-    $rows.sort(function (rowA, rowB) {
+    $rows = $rows.sort(function (rowA, rowB) {
         const valueA = $(rowA).find("input[name$='[minimum]']").floatVal();
         const valueB = $(rowB).find("input[name$='[minimum]']").floatVal();
         if (valueA < valueB) {
@@ -137,7 +137,7 @@ function sortMargins($table) {
     // handle sort button
     $('.btn-sort').on('click', function (e) {
         e.preventDefault();
-        sortMargins($table);
+        sortMargins($table, true);
     });
 
     // update UI

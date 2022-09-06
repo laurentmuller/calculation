@@ -1,18 +1,13 @@
 {% extends 'cards/card_show.html.twig' %}
-
-{# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
-
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'calculationstate.show.title' -%}
 {%- set params = route_params(app.request, id) %}
-
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('calculationstate_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('calculationstate_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'calculationstate_table') -%}
-
 {# properties #}
 {% block property_body %}
 {{ properties.property('calculationstate.fields.code', item.code) }}

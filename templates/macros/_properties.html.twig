@@ -7,7 +7,6 @@
     <td class="{{ class }}">{{ value|raw }}</td>
 </tr>
 {% endmacro %}
-
 {# create a property row with a single value #}
 {% macro line(value, class, colspan=2) %}
 {%- set value = value|default('&nbsp;') -%}
@@ -16,7 +15,6 @@
     <td{% if colspan > 1 %} colspan="{{ colspan }}"{% endif %} class="{{ class }}">{{ value|raw }}</td>
 </tr>
 {% endmacro %}
-
 {# create a property row with an e-mail value #}
 {% macro email(value, class, name=false, colspan=2) %}
 {%- if value -%}
@@ -28,7 +26,6 @@
     {{- _self.line(value, class, colspan) -}}
 {%- endif -%}
 {% endmacro %}
-
 {# create a property row with a link value #}
 {% macro link(href, text, class, name=false, colspan=2) %}
 {%- set text = text|default(href) -%}
@@ -41,7 +38,6 @@
     {{- _self.line(href, class, colspan) -}}
 {%- endif -%}
 {% endmacro %}
-
 {# create a property row with an external link #}
 {% macro externalLink(href, text, class, name=false, colspan=2) %}
 {%- set text = text|default(href) -%}
@@ -54,14 +50,12 @@
     {{- _self.line(href, class, colspan) -}}
 {%- endif -%}
 {% endmacro %}
-
 {# create a property line separator #}
 {% macro separator(colspan=2) %}
 <tr>
     <td{% if colspan > 1 %} colspan="{{ colspan }}"{% endif %}><hr class="my-1 mr-3"></td>
 </tr>
 {% endmacro %}
-
 {# set the CSS left border style for the given state color #}
 {% macro stateCss(color) -%}
 {{ 'border-left-color: %s !important;'|format(color|default('transparent')) }}

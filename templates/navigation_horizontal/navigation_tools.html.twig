@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem %}
 {% if is_granted_data %}
     {% set id = 'dropdown_tools' %}
-    {% set display_style = active ? 'block' : 'none' %}
+    {% set display_style = sidebar_hide ? 'block' : 'none' %}
     <li class="nav-item nav-sidebar-horizontal dropdown" style="display: {{ display_style }}">
         <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ icon('tools', 'index.menu_tools') }}

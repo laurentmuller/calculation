@@ -4,8 +4,28 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{%- set active = app.request.cookies.get('SIDEBAR_HIDE', true) ? ' sidebar-hide' : '' -%}
+{%- set sidebar_hide = app.request.cookies.get('SIDEBAR_HIDE', true) -%}
+{%- set sidebar_class = sidebar_hide ? ' sidebar-hide' : '' -%}
 {%- set theme_class = theme_class|default(theme_dark(app.request) ? 'dark' : 'light') -%}
+{%- set is_env_dev = app_mode == 'dev' -%}
+{%- set is_env_prod = app_mode == 'prod' -%}
+{%- set is_env_local = app_mode == 'local' -%}
+{%- set is_dev = app.debug or is_env_dev -%}
+{%- set is_admin = is_granted('ROLE_ADMIN') -%}
+{%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
+{%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
+{%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+{%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
+{# rights #}
+{%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
+{%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
+{%- set is_granted_task = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) -%}
+{%- set is_granted_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
+{%- set is_granted_group = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) -%}
+{%- set is_granted_calculation_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
+{%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
+{%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
 {# head #}
 <head>
 <meta charset="utf-8" />
@@ -48,7 +68,7 @@
     {{- include('navigation_vertical/navigation.html.twig') }}
 {%- endblock %}
 {# main content #}
-<div class="page-content{{ active }}">
+<div class="page-content{{ sidebar_class }}">
     {# horizontal navigation #}
     {%- block navigation_horizontal -%}
         {%- include 'navigation_horizontal/navigation.html.twig' %}

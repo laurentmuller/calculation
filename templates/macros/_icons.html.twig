@@ -14,7 +14,7 @@
 {%- endmacro %}
 
 {# iconify version
-{% macro icon2(icon, text, domain = null, parameters = []) -%}
+{% macro icon2(icon, text=null, domain = null, parameters = []) -%}
 {%- if icon -%}
     {% if 'fa-fw' in icon -%}
         {% set size = 'data-width="1.5rem" data-height="1rem" hAlign="left"' %}

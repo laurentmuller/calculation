@@ -94,15 +94,14 @@ trait LoggerTrait
      * Writes the given message.
      *
      * @param string $message the message to write
-     * @param string $tag     the external tag (info, error, etc)
      *
      * @throws \ReflectionException
      */
-    protected function write(string $message, string $tag = 'info'): void
+    protected function write(string $message): void
     {
         if (null !== $this->io) {
             $concat = $this->concat($message);
-            $this->io->writeln("<$tag>$concat</$tag>");
+            $this->io->writeln("<info>$concat</info>");
         }
     }
 
@@ -154,15 +153,14 @@ trait LoggerTrait
     /**
      * Writes the given message.
      *
-     * @param string $message the message to write
-     * @param string $tag     the external tag (info, error, etc)
+     * @param string $message the message to write with information style
      *
      * @throws \ReflectionException
      */
-    protected function writeVerbose(string $message, string $tag = 'info'): void
+    protected function writeVerbose(string $message): void
     {
         if ($this->isVerbose()) {
-            $this->write($message, $tag);
+            $this->write($message);
         }
     }
 
@@ -170,14 +168,13 @@ trait LoggerTrait
      * Writes the given message.
      *
      * @param string $message the message to write
-     * @param string $tag     the external tag (info, error, etc)
      *
      * @throws \ReflectionException
      */
-    protected function writeVeryVerbose(string $message, string $tag = 'info'): void
+    protected function writeVeryVerbose(string $message): void
     {
         if ($this->isVeryVerbose()) {
-            $this->write($message, $tag);
+            $this->write($message);
         }
     }
 }

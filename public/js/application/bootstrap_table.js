@@ -476,6 +476,11 @@ $.fn.extend({
 
     // initialize table
     const options = {
+        draggableModal: {
+            marginBottom: $('footer').outerHeight(),
+            focusOnShow: true
+        },
+
         queryParams: function (params) {
             $inputs.each(function () {
                 const $this = $(this);

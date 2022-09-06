@@ -1,32 +1,15 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon %}
-{# parameters #}
-{%- set is_env_dev = app_mode == 'dev' -%}
-{%- set is_env_prod = app_mode == 'prod' -%}
-{%- set is_env_local = app_mode == 'local' -%}
-{%- set is_dev = app.debug or is_env_dev -%}
-{%- set is_admin = is_granted('ROLE_ADMIN') -%}
-{%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
-{%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
-{%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
-{%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
-{# rights #}
-{%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
-{%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
-{%- set is_granted_task = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) -%}
-{%- set is_granted_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
-{%- set is_granted_group = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) -%}
-{%- set is_granted_calculation_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
-{%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
-{%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
+{% from 'macros/_attributes.html.twig' import attributes %}
 <!-- vertical navigation -->
-<div id="sidebar" class="navbar navbar-vertical navbar-themed navbar-color{{ active }} d-print-none" style="padding-bottom: 30px;"
-     data-url="{{ url('ajax_save_navigation') }}"
-     data-show-menu="{{ 'index.menu_show'|trans }}"
-     data-hide-menu="{{ 'index.menu_hide'|trans }}"
-     data-show-sidebar="{{ 'index.sidebar_show'|trans }}"
-     data-hide-sidebar="{{ 'index.sidebar_hide'|trans }}">
+{%- set sidebar_attributes = {
+    'url': url('ajax_save_navigation'),
+    'show-menu': 'index.menu_show'|trans,
+    'hide-menu': 'index.menu_hide'|trans,
+    'show-sidebar': 'index.sidebar_show'|trans,
+    'hide-sidebar': 'index.sidebar_hide'|trans
+} -%}
+<div id="sidebar" class="navbar navbar-vertical navbar-themed d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
     {# logo
     <div class="p-2 mb-1">
         <div class="media position-relative d-flex align-items-center">
@@ -39,6 +22,9 @@
         </div>
     </div>
     #}
+    <div class="mb-2">
+
+    </div>
     <div class="mb-2">
         <div class="media position-relative">
             <img src="{{ asset_icon(57) }}" width="57" height="57" alt="{{ app_name }}" class="rounded-lg mr-2 align-self-end">

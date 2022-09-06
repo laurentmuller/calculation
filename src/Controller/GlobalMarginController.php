@@ -17,6 +17,7 @@ use App\Enums\EntityPermission;
 use App\Form\GlobalMargin\GlobalMarginsType;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Interfaces\RoleInterface;
+use App\Model\RootMargins;
 use App\Report\GlobalMarginsReport;
 use App\Repository\GlobalMarginRepository;
 use App\Response\PdfResponse;
@@ -56,20 +57,17 @@ class GlobalMarginController extends AbstractEntityController
     public function edit(Request $request, EntityManagerInterface $manager): Response
     {
         // check permissions
-        $subject = GlobalMargin::class;
-        $permissions = [EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE];
-        foreach ($permissions as $permission) {
-            $this->denyAccessUnlessGranted($permission, $subject);
-        }
+        $this->checkPermission(EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE);
 
         /** @var GlobalMargin[] $existingMargins */
         $existingMargins = $this->repository->findBy([], ['minimum' => Criteria::ASC]);
+        $root = new RootMargins($existingMargins);
 
-        $form = $this->createForm(GlobalMarginsType::class, ['margins' => $existingMargins]);
+        $form = $this->createForm(GlobalMarginsType::class, $root);
         if ($this->handleRequestForm($request, $form)) {
-            /** @var array{margins: GlobalMargin[]} $data */
+            /** @var RootMargins $data */
             $data = $form->getData();
-            $newMargins = $data['margins'];
+            $newMargins = $data->getMargins()->toArray();
 
             // update
             foreach ($newMargins as $margin) {

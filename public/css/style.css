@@ -18,7 +18,9 @@
     padding-top: 0.5rem;
     transition: top 0.3s;
 }
-
+.navbar.navbar-vertical {
+    padding-bottom: 30px;
+}
 .navbar.navbar-vertical:after {
     content: "";
     position: absolute;
@@ -28,8 +30,13 @@
     width: 1px;
     border-right: 1px solid #dee2e6;
 }
+
 body.dark .navbar.navbar-vertical:after {
     border-right: initial;
+}
+body.dark .navbar-vertical .dropdown-divider,
+body.dark footer .border-left {
+    border-color: #6c757d !important;
 }
 
 /*

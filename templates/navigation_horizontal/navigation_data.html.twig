@@ -3,7 +3,7 @@
 {% set is_granted_data = is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_task or is_granted_customer %}
 {% if is_granted_data -%}
     {% set id = 'dropdown_data' %}
-    {% set display_style = active ? 'block' : 'none' %}
+    {% set display_style = sidebar_hide ? 'block' : 'none' %}
     <li class="nav-item nav-sidebar-horizontal dropdown" style="display: {{ display_style }}">
         <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ icon('database', 'index.menu_data') }}

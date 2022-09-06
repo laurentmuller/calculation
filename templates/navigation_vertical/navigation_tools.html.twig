@@ -27,12 +27,12 @@
             #}
             {{ navItem(path('search'), 'search.title', 'search') }}
             {% if is_admin %}
-                {{ dropdownSeparator(false, 'border-secondary') }}
+                {{ dropdownSeparator() }}
                 {{ navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
                 {{ navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
                 {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}
                 {%- if is_granted_task -%}
-                    {{ dropdownSeparator(false, 'border-secondary') }}
+                    {{ dropdownSeparator() }}
                     {{ navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
                 {% endif -%}
             {% endif %}

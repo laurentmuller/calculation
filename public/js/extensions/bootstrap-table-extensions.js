@@ -1135,6 +1135,8 @@ $.fn.extend({
         const $range = $('#page-range');
         const $label = $('#page-label');
         const $button = $('#page-button');
+        const options = $this.getOptions().draggableModal || false;
+
         $dialog.on('keydown', function (e) {
             if (e.which === 13) { // enter
                 e.preventDefault();
@@ -1143,6 +1145,7 @@ $.fn.extend({
             }
         }).on('show.bs.modal', function () {
             $this.disableKeys();
+            $.hideDropDownMenus();
             const options = $this.getOptions();
             $('#page-range').val(options.pageNumber)
                 .attr('max', options.totalPages)
@@ -1159,6 +1162,9 @@ $.fn.extend({
                 $source.trigger('focus');
             }
         });
+        if (options) {
+            $dialog.draggableModal(options);
+        }
 
         $range.on('input', function () {
             const title = $this.formatPages($range.data('options'), $range.intVal());
@@ -1187,6 +1193,7 @@ $.fn.extend({
         const $sortName = $('#sort-name');
         const $button = $('#sort-button');
         const $default = $('#sort-default-button');
+        const options = $this.getOptions().draggableModal || false;
 
         $dialog.on('keydown', function (e) {
             if (e.which === 13) { // enter
@@ -1196,6 +1203,7 @@ $.fn.extend({
             }
         }).on('show.bs.modal', function () {
             $this.disableKeys();
+            $.hideDropDownMenus();
             const options = $this.getOptions();
             $sortName.val(options.sortName);
             $('#sort-order-' + options.sortOrder).setChecked(true);
@@ -1204,6 +1212,9 @@ $.fn.extend({
         }).on('hide.bs.modal', function () {
             $this.enableKeys();
         });
+        if (options) {
+            $dialog.draggableModal(options);
+        }
 
         $sortName.on('input', function () {
             // update default order

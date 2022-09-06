@@ -7,7 +7,7 @@
         "field": "name",
         "title": "task.fields.name",
         "default": true,
-        "class": "f-400 mw-100 text-cell",
+        "class": "f-400 w-100 text-cell",
         "cardClass": "font-weight-bold"
     },
     {

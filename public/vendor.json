@@ -33,7 +33,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.1.2",
+            "version": "6.2.0",
             "files": [
                 "css/all.css",
                 "webfonts/fa-brands-400.ttf",
@@ -57,7 +57,7 @@
         },
         {
             "name": "highcharts",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/{file}",
             "files": [
@@ -66,7 +66,7 @@
         },
         {
             "name": "highcharts",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/modules/{file}",
             "target": "highcharts",

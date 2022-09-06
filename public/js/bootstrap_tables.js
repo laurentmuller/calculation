@@ -17,8 +17,8 @@
 /**
  * Plugin Files
  */
+<!--#include file="plugins/plugin-drag-modal.js" -->
 <!--#include file="plugins/plugin-rowlink.js" -->
-
 /**
  * Extensions files
  */

@@ -11,14 +11,13 @@
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
-
 {# parameters #}
 {%- set icon = icon|default(ICON_EDIT) -%}
 {%- set form_prefix = form_prefix|default('edit') -%}
 {%- set add_title = add_title|default('common.button_add'|trans) -%}
 {%- set edit_title = edit_title|default('common.button_edit'|trans) -%}
 {%- set form_attr = form_attr|default({}) -%}
-
+{# modal #}
 <div id="{{ form_prefix }}_modal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
        <div class="modal-content">

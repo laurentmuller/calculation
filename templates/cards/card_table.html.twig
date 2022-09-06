@@ -254,7 +254,7 @@
 <div class="modal fade" id="modal-page" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1" data-page="{{ 'datatable.dialog_page'|trans }}">
     <div class="modal-dialog modal-lg ">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header cursor-move">
                 <h5 class="modal-title">
                     {{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
                 </h5>
@@ -281,7 +281,7 @@
     <div class="modal fade" id="modal-sort" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header cursor-move">
                 <h5 class="modal-title">
                     {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
                 </h5>
@@ -343,6 +343,7 @@
 {{ asset_js('js/vendor/bootstrap-table/bootstrap-table-defer-url.js') }}
 {{ asset_js('js/vendor/bootstrap-table/bootstrap-table-custom-view.js') }}
 {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/plugins/plugin-drag-modal.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}
 {{ asset_js('js/extensions/bootstrap-table-extensions.js') }}
 {{ asset_js('js/extensions/bootstrap-table-fr-CH.js') }}

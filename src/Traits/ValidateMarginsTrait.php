@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Interfaces\MarginInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -23,11 +24,22 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 trait ValidateMarginsTrait
 {
+    /**
+     * Get margins.
+     *
+     * @pslam-template T extends MarginInterface
+     *
+     * @pslam-return Collection<int, T>
+     */
+    abstract public function getMargins(): Collection;
+
     #[Assert\Callback]
     public function validateMargins(ExecutionContextInterface $context): void
     {
         /** @var ArrayCollection<int, MarginInterface> $margins */
         $margins = $this->getMargins();
+
+        // margins?
         if (\count($margins) < 2) {
             return;
         }

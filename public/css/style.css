@@ -1,9 +1,9 @@
 @import '../js/vendor/font-awesome/css/all.css';
-@import 'custom-control.css';
+@import 'custom_control.css';
 @import 'tooltips.css';
 @import 'popover.css';
 @import 'toast.css';
-@import 'color-picker.css';
+@import 'color_picker.css';
 @import 'colums.css';
 @import 'sidebar.css';
 
@@ -30,12 +30,13 @@
     width: 1px;
     border-right: 1px solid #dee2e6;
 }
-
 body.dark .navbar.navbar-vertical:after {
     border-right: initial;
 }
-body.dark .navbar-vertical .dropdown-divider,
-body.dark footer .border-left {
+
+
+body.dark footer .border-left,
+body.dark .navbar-vertical .dropdown-divider {
     border-color: #6c757d !important;
 }
 

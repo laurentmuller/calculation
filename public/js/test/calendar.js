@@ -8,7 +8,7 @@
     $('[data-toggle="popover"]').popover({
         html: true,
         trigger: 'hover',
-        placement: 'top',
+        placement: 'auto',
         customClass: 'popover-light popover-w-100 bg-themed',
         content: function () {
             const content = $(this).data("html");

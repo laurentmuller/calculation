@@ -109,11 +109,19 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Gets the HTML border color depending on this level.
+     * Gets the channel's icon.
      */
-    public function getColor(): string
+    public function getChannelIcon(): string
     {
-        return \sprintf('var(--%s)', $this->getCardColor());
+        return match ($this->channel) {
+            'application' => 'fa-fw fa-solid fa-laptop-code',
+            'request' => 'fa-fw fa-solid fa-code-pull-request',
+            'doctrine' => 'fa-fw fa-solid fa-database',
+            'cache' => 'fa-fw fa-solid fa-hard-drive',
+            'security' => 'fa-fw fa-solid fa-key',
+            'php' => 'fa-fw fa-solid fa-code',
+            default => 'fa-fw fa-solid fa-file',
+        };
     }
 
     /**
@@ -157,26 +165,34 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Gets the icon depending on this level.
-     */
-    public function getIcon(): string
-    {
-        return match ($this->level) {
-            LogLevel::ALERT,
-            LogLevel::CRITICAL,
-            LogLevel::EMERGENCY,
-            LogLevel::ERROR => 'fa-solid fa-circle-exclamation',
-            LogLevel::WARNING => 'fa-solid fa-triangle-exclamation',
-            default => 'fa-solid fa-circle-info',
-        };
-    }
-
-    /**
      * Gets the level.
      */
     public function getLevel(bool $capitalize = false): string
     {
         return $capitalize ? Utils::capitalize($this->level) : $this->level;
+    }
+
+    /**
+     * Gets the level color.
+     */
+    public function getLevelColor(): string
+    {
+        return \sprintf('var(--%s)', $this->getCardColor());
+    }
+
+    /**
+     * Gets the level's icon.
+     */
+    public function getLevelIcon(): string
+    {
+        return match ($this->level) {
+            LogLevel::ALERT,
+            LogLevel::CRITICAL,
+            LogLevel::EMERGENCY,
+            LogLevel::ERROR => 'fa-fw fa-solid fa-circle-exclamation',
+            LogLevel::WARNING => 'fa-fw fa-solid fa-triangle-exclamation',
+            default => 'fa-fw fa-solid fa-circle-info',
+        };
     }
 
     /**

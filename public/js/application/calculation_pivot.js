@@ -35,7 +35,6 @@ $.fn.extend({
  */
 function toggleHighlight($source, $table, save) {
     'use strict';
-
     const checked = $source.isChecked();
     const highlight = $table.data('cellhighlight');
     if (checked) {
@@ -63,7 +62,6 @@ function toggleHighlight($source, $table, save) {
             highlight.disable();
         }
     }
-
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
@@ -73,7 +71,6 @@ function toggleHighlight($source, $table, save) {
         };
         $.post(url, data);
     }
-
     return $source;
 }
 
@@ -87,7 +84,6 @@ function toggleHighlight($source, $table, save) {
  */
 function togglePopover($source, $selector, save) {
     'use strict';
-
     const checked = $source.isChecked();
     const popover = $selector.data('bs.popover');
     if (checked) {
@@ -97,11 +93,11 @@ function togglePopover($source, $selector, save) {
             $selector.popover({
                 html: true,
                 trigger: 'hover',
-                placement: 'top',
-                customClass: 'popover-primary popover-w-100',
+                placement: 'auto',
+                customClass: 'popover-w-100',
                 content: function () {
-                    const body = $(this).data('body');
-                    return $(body);
+                    const content = $(this).data('html');
+                    return $(content);
                 }
             });
         }
@@ -110,7 +106,6 @@ function togglePopover($source, $selector, save) {
             $selector.popover('disable');
         }
     }
-
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
@@ -120,7 +115,6 @@ function togglePopover($source, $selector, save) {
         };
         $.post(url, data);
     }
-
     return $source;
 }
 

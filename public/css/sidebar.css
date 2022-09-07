@@ -131,30 +131,17 @@
 .navbar-vertical::-webkit-scrollbar {
     width: 8px;
 }
-.navbar-vertical::-webkit-scrollbar-track {
+/* light mode */
+.navbar-vertical::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.15);
+}
+/* dark mode */
+body.dark .navbar-vertical::-webkit-scrollbar-track {
     background: #343a40;
 }
-.navbar-vertical::-webkit-scrollbar-thumb {
+body.dark .navbar-vertical::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, .1);
 }
-.navbar-vertical::-webkit-scrollbar-thumb:hover {
+body.dark .navbar-vertical::-webkit-scrollbar-thumb:hover {
     background: rgba(128, 135, 139, .8)
 }
-
-/*
-.navbar-vertical.light::-webkit-scrollbar-track {
-    background: rgba(255,255,255,.1)
-}
-
-.navbar-vertical.light::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,.25)
-}
-
-.navbar-vertical.light::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(255,255,255,.15)
-}
-
-.navbar-vertical.light::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,.35)
-}
-*/

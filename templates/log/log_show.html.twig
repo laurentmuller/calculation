@@ -42,9 +42,12 @@
 {% block property_body %}
 <tr>
     <td class="w-25">{{ 'log.fields.level'|trans }}</td>
-    <td class="w-75"><span style="color:{{ item.color }};"><i class="{{ item.icon }} mr-1"></i>{{ item.level(true) }}</span></td>
+    <td class="w-75">{% include 'macros/_cell_log_level.html.twig' with {'log': item} %}</td>
 </tr>
-{{ properties.property('log.fields.channel', item.channel|humanize) }}
+<tr>
+    <td class="w-25">{{ 'log.fields.channel'|trans }}</td>
+    <td class="w-75">{% include 'macros/_cell_log_channel.html.twig' with {'log': item} %}</td>
+</tr>
 {{ properties.property('log.fields.createdAt', item.createdAt|locale_datetime(null, 'medium')) }}
 {%- if item.channel == 'doctrine' -%}
 {{ _self.formatSql('log.fields.message', item.message) }}

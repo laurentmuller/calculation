@@ -60,10 +60,12 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * Formats the channel.
+     *
+     * @throws \Twig\Error\Error
      */
     public function formatChannel(string $value, Log $log): string
     {
-        return $log->getChannel(true);
+        return $this->twig->render('macros/_cell_log_channel.html.twig', ['log' => $log]);
     }
 
     /**

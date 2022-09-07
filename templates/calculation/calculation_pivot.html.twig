@@ -42,15 +42,15 @@
 {% macro outputHeaders(nodes, separator) -%}
 {%- for node in nodes %}
     {%- if node.leaf -%}
-        <td class="text-currency not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, separator)|e }}">{{ node.title|raw }}</td>
+        <td class="text-currency not-hover" data-toggle="popover" data-html="{{ _self.outputPopoverTitle(node, separator)|e }}">{{ node.title|raw }}</td>
     {%- else -%}
-        <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, separator)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
+        <td class="text-nowrap not-hover" data-toggle="popover" data-html="{{ _self.outputPopoverTitle(node, separator)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
     {%- endif -%}
 {%- endfor -%}
 {%- endmacro %}
 
 {% macro outputPopoverTotal(cell, separator) -%}
-<td class="bg-success text-white text-currency" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(cell, separator)|e }}">
+<td class="bg-success text-white text-currency" data-toggle="popover" data-html="{{ _self.outputPopoverTitle(cell, separator)|e }}">
     {{- _self.format(cell.value) -}}
 </td>
 {%- endmacro %}
@@ -60,7 +60,7 @@
 {% if cell %}
     {%- set popover = 'not-hover' not in class -%}
     {%- set value = _self.format(cell.value) -%}
-    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-body="{{ _self.outputPopover(cell, value, separator)|e }}"{% endif %}>{{ value }}</td>
+    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-html="{{ _self.outputPopover(cell, value, separator)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
     <td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
@@ -82,7 +82,7 @@
 {% if row.index >= row.level - 1 -%}
 <tr>
 {% endif -%}
-    <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, separator)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
+    <td class="text-nowrap not-hover" data-toggle="popover" data-html="{{ _self.outputPopoverTitle(row, separator)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
 {%- if row.leaf -%}
     {{ _self.outputCells(table, columns, row, separator) -}}
 </tr>
@@ -111,7 +111,6 @@
     </tbody>
 </table>
 {%- endmacro %}
-
 {# parameters #}
 {%- set title = 'pivot.title' -%}
 {%- set title_icon = 'table' -%}
@@ -121,8 +120,7 @@
 {%- set icon = '<i class="fa-solid fa-caret-right"></i>' -%}
 {%- set separator = separator|default('&nbsp;&nbsp;' ~ icon ~ '&nbsp;&nbsp;') -%}
 {% block container_class 'container-fluid' %}
-
-{# header #}
+{# body #}
 {% block body %}
 <div class="row mb-2">
     <div class="col-auto mr-auto">
@@ -170,7 +168,7 @@
     </table>
 </div>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}

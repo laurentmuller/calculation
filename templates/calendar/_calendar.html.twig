@@ -1,4 +1,4 @@
-{# macros #}
+{# macros for calendar #}
 {% macro linkCalculations(query, date, count, class, title_message='counters.calculations_calendar') -%}
 {% from 'macros/_icons.html.twig' import icon %}
 {%- set title = title_message|trans({date: date, count: count}) -%}

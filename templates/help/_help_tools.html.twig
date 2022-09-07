@@ -9,8 +9,6 @@
 {%- set required = field.required is defined ? field.required : true -%}
 {% if required %}
     <i class="fa-solid fa-check"></i>
-{% else %}
-    &nbsp;
 {% endif %}
 {%- endmacro %}
 

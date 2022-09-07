@@ -962,7 +962,7 @@ schema:
     columns: Colonnes
     associations: Associations
     fields:
-      empty: Nulle
+      required: Requis
       length: Longueur
       name: Nom
       type: Type

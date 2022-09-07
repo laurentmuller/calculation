@@ -1,5 +1,12 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import link, homepage %}
+{# macros #}
+{% macro output_required(column) -%}
+{%- set required = column.nullable is defined ? not column.nullable : true -%}
+{% if required %}
+<i class="fa-solid fa-check"></i>
+{% endif %}
+{%- endmacro %}
 {# parameters #}
 {%- set title = 'schema.table.title' -%}
 {%- set title_description = 'schema.table.description' -%}
@@ -15,8 +22,8 @@
             <tr>
                 <th class="w-100 text-nowrap">{{ 'schema.table.fields.name'|trans }}</th>
                 <th class="text-group">{{ 'schema.table.fields.type'|trans }}</th>
-                <th class="text-boolean">{{ 'schema.table.fields.empty'|trans }}</th>
-                <th class="text-id">{{ 'schema.table.fields.default'|trans }}</th>
+                <th class="text-boolean">{{ 'schema.table.fields.required'|trans }}</th>
+                <th class="text-nowrap text-center">{{ 'schema.table.fields.default'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -24,12 +31,13 @@
             {% set foreign_table = column.foreignTableName ?? false %}
             <tr>
                 <td class="w-100 text-nowrap">
-                    {{- column.name }}{% if column.primaryKey %} <i class="fa-solid fa-key" title="{{ 'schema.table.primary_key'|trans }}"></i>{% endif %}
-                    {% if column.unique and not column.primaryKey %} <i class="fa-solid fa-lock" title="{{ 'schema.table.index_unique'|trans }}"></i>{% endif %}
-                    {% if foreign_table -%} {{ link(path('schema_table', {'name': foreign_table}), null, null, 'link', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
+                    {% if column.primaryKey %}<i class="fa-solid fa-key mr-1" title="{{ 'schema.table.primary_key'|trans }}"></i>{% endif %}
+                    {% if column.unique and not column.primaryKey %}<i class="fa-solid fa-lock mr-1" title="{{ 'schema.table.index_unique'|trans }}"></i>{% endif %}
+                    {% if foreign_table -%}{{ link(path('schema_table', {'name': foreign_table}), null, null, 'link mr-1', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
+                    {{ column.name }}
                 </td>
                 <td class="text-group">{{ column.type }}{% if column.length %}({{ column.length|integer }}){% endif %}</td>
-                <td class="text-boolean">{{ column.nullable|boolean }}</td>
+                <td class="text-nowrap text-center">{{ _self.output_required(column) }}</td>
                 <td class="text-id">{{ column.default }}</td>
             </tr>
         {% endfor %}

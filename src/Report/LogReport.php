@@ -162,7 +162,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
      */
     private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, PdfBorder $border): bool
     {
-        if ($level && $color = $this->getColor($level)) {
+        if ($level && $color = $this->getLevelColor($level)) {
             // get values
             $x = $bounds->x() + self::HALF_WIDTH;
             $y = $bounds->y() + self::HALF_WIDTH;
@@ -190,7 +190,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     /**
      * Gets the border color for the given level.
      */
-    private function getColor(string $level): ?PdfDrawColor
+    private function getLevelColor(string $level): ?PdfDrawColor
     {
         if (!\array_key_exists($level, $this->colors)) {
             return $this->colors[$level] = match ($level) {

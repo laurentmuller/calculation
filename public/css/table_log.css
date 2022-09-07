@@ -6,13 +6,13 @@
     width: 170px;
 }
 
-.channel {
-    width: 100px;
+.level {
+    width: 95px;
     white-space: nowrap;
 }
 
-.level {
-    width: 90px;
+.channel {
+    width: 120px;
     white-space: nowrap;
 }
 

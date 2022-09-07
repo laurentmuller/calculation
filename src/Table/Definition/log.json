@@ -42,7 +42,8 @@
         "cellFormatter": "formatActions"
     },
     {
-        "field": "color",
+        "field": "levelColor",
+        "alias": "color",
         "visible": false
     }
 ]

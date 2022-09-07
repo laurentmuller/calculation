@@ -34,5 +34,5 @@
 
 body.dark .bg-themed.text-themed {
     color: #d3d3d3 !important;
-    background-color: rgba(52,58,64,0.3) !important;
+    background-color: #343A404C !important;
 }

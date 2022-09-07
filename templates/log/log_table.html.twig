@@ -45,8 +45,7 @@
 
 {% block global_actions -%}
 {%- set route = app.request.get('_route') -%}
-{{- _self.item_global(path('log_refresh', {'route': route}), 'common.button_refresh', 'sync-alt') }}
-{{- _self.item_separator() }}
+{{- _self.item_global(path('log_refresh', {'route': route}), 'log.list.refresh_title', 'sync-alt') }}
 {{- _self.item_global(path('log_delete', {'route': route}), 'log.delete.title', ICON_DELETE) }}
 {{- _self.item_separator() }}
 {{- _self.item_external(path('log_pdf'), 'log.list.pdf_title', ICON_PDF) }}

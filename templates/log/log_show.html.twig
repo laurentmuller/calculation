@@ -44,7 +44,6 @@
     <td class="w-25">{{ 'log.fields.level'|trans }}</td>
     <td class="w-75"><span style="color:{{ item.color }};"><i class="{{ item.icon }} mr-1"></i>{{ item.level(true) }}</span></td>
 </tr>
-{{ properties.property('log.fields.level', item.level|humanize) }}
 {{ properties.property('log.fields.channel', item.channel|humanize) }}
 {{ properties.property('log.fields.createdAt', item.createdAt|locale_datetime(null, 'medium')) }}
 {%- if item.channel == 'doctrine' -%}
@@ -52,6 +51,9 @@
 {%- else -%}
 {{ properties.property('log.fields.message', item.message, 'text-break') }}
 {%- endif -%}
+{% if item.user %}
+{{ properties.property('log.fields.user', item.user) }}
+{% endif %}
 {{ _self.formatArray('log.fields.context', item.context) }}
 {{ _self.formatArray('log.fields.extra', item.extra) }}
 {% endblock %}

@@ -81,16 +81,6 @@ trait LoggerTrait
     }
 
     /**
-     * Sets the installer name.
-     *
-     * @param string $installerName the installer name to set
-     */
-    protected function setInstallerName(string $installerName): void
-    {
-        $this->installerName = $installerName;
-    }
-
-    /**
      * Writes the given message.
      *
      * @param string $message the message to write

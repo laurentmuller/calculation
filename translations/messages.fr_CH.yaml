@@ -648,13 +648,14 @@ log:
     user: Utilisateur
   level_all: Tous les niveaux
   list:
-    channel_help: Afficher les entrées pour le canal sélectionné
+    title: Journal de l'application
     empty: Le journal de l'application ne contient aucune entrée.
+    pdf_title: Télécharger le journal
     excel_title: Exporter le journal
+    refresh_title: Recharger le journal
     file: 'Fichier : %file%'
     level_help: Afficher les entrées pour le niveau sélectionné
-    pdf_title: Télécharger le journal
-    title: Journal de l'application
+    channel_help: Afficher les entrées pour le canal sélectionné
   name: Entré du journal
   show:
     not_found: Impossible d'afficher l'entrée du journal.

@@ -164,7 +164,7 @@ final class Utils
 
             $searches = [
                 '\\\\' => '\\',
-                ',' => '',
+                 ',' => '',
             ];
             $export = \str_replace(\array_keys($searches), \array_values($searches), $export);
 

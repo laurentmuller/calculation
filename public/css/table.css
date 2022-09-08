@@ -105,13 +105,6 @@ tr.text-muted td .text-danger {
 }
 
 /**
- * User image
- */
-.bootstrap-table img {
-    mix-blend-mode: multiply;
-}
-
-/**
  * Checkbox on the right
  */
 .dropdown-menu-checked {

@@ -98,6 +98,7 @@ class UtilsTest extends TestCase
     public function getExportVar(): array
     {
         return [
+            [null, 'NULL'],
             [true, 'true'],
             [false, 'false'],
             [0, '0'],
@@ -105,6 +106,7 @@ class UtilsTest extends TestCase
             [0.01, '0.01'],
             [1000, '1000'],
             ['fake', "'fake'"],
+            [['key' => 'value'], $this->getVarArray()],
         ];
     }
 
@@ -445,5 +447,14 @@ class UtilsTest extends TestCase
             'value' => $value,
             'string' => $string,
         ];
+    }
+
+    private function getVarArray(): string
+    {
+        return <<<ARRAY
+            [
+              'key' => 'value'
+            ]
+            ARRAY;
     }
 }

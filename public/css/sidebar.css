@@ -133,15 +133,15 @@
 }
 /* light mode */
 .navbar-vertical::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.15);
 }
 /* dark mode */
 body.dark .navbar-vertical::-webkit-scrollbar-track {
-    background: #343a40;
+    background-color: #343a40;
 }
 body.dark .navbar-vertical::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, .1);
+    background-color: rgba(0, 0, 0, .1);
 }
 body.dark .navbar-vertical::-webkit-scrollbar-thumb:hover {
-    background: rgba(128, 135, 139, .8)
+    background-color: rgba(128, 135, 139, .8)
 }

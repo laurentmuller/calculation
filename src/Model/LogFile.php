@@ -25,11 +25,6 @@ class LogFile implements \Countable
     private array $channels = [];
 
     /**
-     * The log file name.
-     */
-    private string $file = '';
-
-    /**
      * @var array<string, int>
      */
     private array $levels = [];
@@ -41,14 +36,9 @@ class LogFile implements \Countable
 
     /**
      * Constructor.
-     *
-     * @param ?string $file the optional log file name
      */
-    public function __construct(?string $file = null)
+    public function __construct(private readonly string $file)
     {
-        if (null !== $file) {
-            $this->setFile($file);
-        }
     }
 
     /**
@@ -56,11 +46,9 @@ class LogFile implements \Countable
      */
     public function addLog(Log $log): self
     {
-        $id = \count($this->logs);
-        $log->setId($id);
-        $this->logs[$id] = $log;
-        $this->addLevel($log->getLevel());
-        $this->addChannel($log->getChannel());
+        $this->logs[(int) $log->getId()] = $log;
+        $this->updateCounter($this->levels, $log->getLevel());
+        $this->updateCounter($this->channels, $log->getChannel());
 
         return $this;
     }
@@ -112,13 +100,6 @@ class LogFile implements \Countable
         return empty($this->logs);
     }
 
-    public function setFile(string $file): self
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
     public function sort(): self
     {
         if (!$this->isEmpty()) {
@@ -130,13 +111,11 @@ class LogFile implements \Countable
         return $this;
     }
 
-    private function addChannel(string $channel): void
+    /**
+     * @param array<string, int> $counter
+     */
+    private function updateCounter(array &$counter, string $key): void
     {
-        $this->channels[$channel] = 1 + ($this->channels[$channel] ?? 0);
-    }
-
-    private function addLevel(string $level): void
-    {
-        $this->levels[$level] = 1 + ($this->levels[$level] ?? 0);
+        $counter[$key] = 1 + ($counter[$key] ?? 0);
     }
 }

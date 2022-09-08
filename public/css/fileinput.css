@@ -132,18 +132,13 @@
 
 .file-input .input-group-append .input-group-text:hover {
     cursor: pointer;
-    /*background: var(--light);*/
 }
 
 .file-input .file-input-preview {
     cursor: pointer;
-    background: white;
+    background-color: white;
 }
-/*
-body.dark .file-input .file-input-preview {
-    background: white;
-}
-*/
+
 .form-group.has-warning .file-input .file-input-preview {
     color: var(--warning);
 }

@@ -164,12 +164,12 @@ a.btn-list {
 .table-exception th.property,
 .table-exception td.property {
     width: 15%;
-    background: transparent;
+    background-color: transparent;
 }
 .table-exception th.value,
 .table-exception td.value {
     width: 85%;
-    background: transparent;
+    background-color: transparent;
 }
 .table-exception td samp {
     font-size: 14px;
@@ -605,7 +605,7 @@ body.dark .horizontal-line:after {
  * Context menu
  */
  .context-menu-list {
-     background: inherit !important;
+     background-color: inherit !important;
     -webkit-box-shadow: inherit !important;
        -moz-box-shadow: inherit !important;
          -o-box-shadow: inherit !important;
@@ -624,7 +624,7 @@ body.dark .horizontal-line:after {
     margin-right: 0.3rem;
 }
 body.dark .context-menu-list {
-    background: #000 !important;
+    background-color: #000 !important;
     border: 1px solid #343a40;
 }
 

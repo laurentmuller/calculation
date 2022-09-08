@@ -1,5 +1,5 @@
 body {
-    background: #fff;
+    background-color: #fff;
 }
 
 table.container {
@@ -7,11 +7,11 @@ table.container {
 }
 
 .wrapper.secondary {
-    background: #fff;
+    background-color: #fff;
 }
 
 table.body.wrapper {
-    background: #fff;
+    background-color: #fff;
 }
 
 .container.body_alert,

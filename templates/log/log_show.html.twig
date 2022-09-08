@@ -3,20 +3,20 @@
 {# macros #}
 {% macro format_var(value) -%}
 {{- value|var_export|replace({
-    '[': '<samp class="text-danger">[</samp>',
-    ']': '<samp class="text-danger">]</samp>',
-    '"': '<samp class="text-danger">"</samp>',
-    '\'': '<samp class="text-danger">\'</samp>',
-    '=>': '<samp class="text-danger">=></samp>',
+    '[': '<samp class="comment">[</samp>',
+    ']': '<samp class="comment">]</samp>',
+    '"': '<samp class="number">"</samp>',
+    '\'': '<samp class="number">\'</samp>',
+    '=>': '<samp class="backtick">=></samp>',
     ',': '<samp class="text-muted">,</samp>'
 })|raw -}}
 {%- endmacro %}
 {% macro formatArray(name, value) %}
 {%- if value|length -%}
-    <tr>
-        <td class="w-25">{{ name|trans }}</td>
-        <td class="w-75"><pre class="text-break text-success white-space-pre-wrap mb-0">{{- _self.format_var(value) -}}</pre></td>
-    </tr>
+<tr>
+    <td class="w-25">{{ name|trans }}</td>
+    <td class="w-75"><pre class="highlight text-body mb-0">{{- _self.format_var(value) -}}</pre></td>
+</tr>
 {%- endif -%}
 {% endmacro %}
 {% macro formatSql(name, value) %}
@@ -25,30 +25,30 @@
     <td class="w-75">{{ value|doctrine_format_sql(true) }}</td>
 </tr>
 {% endmacro %}
+{% macro cellTemplate(name, value, template) %}
+<tr>
+    <td class="w-25">{{ name|trans }}</td>
+    <td class="w-75">{% include template with {'log': value} %}</td>
+</tr>
+{% endmacro %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'log.show.title' -%}
 {%- set route = route|default('log_table') -%}
 {%- set params = route_params(app.request, id) -%}
-{%- set card_color = item.cardColor -%}
+{%- set level_color = item.levelColor -%}
 {# actions #}
 {%- set cancel_path = cancel_url(app.request, id, route) -%}
 {# classes #}
 {% block card_container_class '' %}
 {% block table_responsive_class '' %}
-{% block card_class -%}{{ ' border-' ~ card_color }}{%- endblock %}
-{% block card_header_class -%}{{ ' border-' ~ card_color ~ ' text-white bg-' ~ card_color }}{%- endblock %}
+{% block card_class -%}{{ ' border-' ~ level_color }}{%- endblock %}
+{% block card_header_class -%}{{ ' border-' ~ level_color ~ ' text-white bg-' ~ level_color }}{%- endblock %}
 {# properties #}
 {% block property_body %}
-<tr>
-    <td class="w-25">{{ 'log.fields.level'|trans }}</td>
-    <td class="w-75">{% include 'macros/_cell_log_level.html.twig' with {'log': item} %}</td>
-</tr>
-<tr>
-    <td class="w-25">{{ 'log.fields.channel'|trans }}</td>
-    <td class="w-75">{% include 'macros/_cell_log_channel.html.twig' with {'log': item} %}</td>
-</tr>
-{{ properties.property('log.fields.createdAt', item.createdAt|locale_datetime(null, 'medium')) }}
+{{ _self.cellTemplate('log.fields.level', item, 'macros/_cell_log_level.html.twig') }}
+{{ _self.cellTemplate('log.fields.channel', item, 'macros/_cell_log_channel.html.twig') }}
+{{ properties.property('log.fields.createdAt', item.formattedDate) }}
 {%- if item.channel == 'doctrine' -%}
 {{ _self.formatSql('log.fields.message', item.message) }}
 {%- else -%}

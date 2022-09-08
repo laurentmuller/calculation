@@ -16,6 +16,7 @@ use App\Entity\Log;
 use App\Model\LogFile;
 use App\Traits\CacheAwareTrait;
 use App\Util\FileUtils;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -46,6 +47,11 @@ class LogService implements ServiceSubscriberInterface
     private const VALUES_SEP = '|';
 
     /**
+     * The log directory.
+     */
+    private readonly string $directory;
+
+    /**
      * The log file name.
      */
     private readonly string $fileName;
@@ -55,6 +61,7 @@ class LogService implements ServiceSubscriberInterface
      */
     public function __construct(KernelInterface $kernel)
     {
+        $this->directory = $this->buildLogDirectory($kernel);
         $this->fileName = $this->buildLogFile($kernel);
     }
 
@@ -92,6 +99,36 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
+     * Gets the log directory.
+     */
+    public function getDirectory(): string
+    {
+        return $this->directory;
+    }
+
+    /**
+     * Gets the log file names.
+     *
+     * @return string[]
+     */
+    public function getFileNames(): array
+    {
+        $finder = Finder::create()
+            ->in($this->directory)
+            ->sortByName()
+            ->name('*.log');
+
+        $files = [];
+        foreach ($finder as $file) {
+            if ($file->isReadable()) {
+                $files[] = $file->getRealPath();
+            }
+        }
+
+        return $files;
+    }
+
+    /**
      * Gets the given log.
      *
      * @throws \Psr\Cache\InvalidArgumentException
@@ -108,7 +145,7 @@ class LogService implements ServiceSubscriberInterface
      */
     public function getLogFile(): ?LogFile
     {
-        /** @psalm-var LogFile|null $value */
+        /** @var ?LogFile $value */
         $value = $this->getCacheValue(self::KEY_CACHE);
         if ($value instanceof LogFile) {
             return $value;
@@ -118,16 +155,19 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
+     * Builds the log directory.
+     */
+    private function buildLogDirectory(KernelInterface $kernel): string
+    {
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $kernel->getLogDir()) . \DIRECTORY_SEPARATOR;
+    }
+
+    /**
      * Builds the log file name.
      */
     private function buildLogFile(KernelInterface $kernel): string
     {
-        $dir = $kernel->getLogDir();
-        $env = $kernel->getEnvironment();
-        $sep = \DIRECTORY_SEPARATOR;
-        $file = "$dir$sep$env.log";
-
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $file);
+        return $this->directory . $kernel->getEnvironment() . '.log';
     }
 
     /**
@@ -176,7 +216,8 @@ class LogService implements ServiceSubscriberInterface
                 return null;
             }
 
-            $result = new LogFile($this->fileName);
+            $id = 0;
+            $file = new LogFile($this->fileName);
 
             // read line by line
             foreach ($lines as $line) {
@@ -190,22 +231,23 @@ class LogService implements ServiceSubscriberInterface
 
                 // create and add
                 $log = Log::instance()
+                    ->setId($id++)
                     ->setCreatedAt($date)
                     ->setChannel($values[1])
                     ->setLevel($values[2])
                     ->setMessage($values[3])
                     ->setContext($this->parseJson($values[4]))
                     ->setExtra($this->parseJson($values[5]));
-                $result->addLog($log);
+                $file->addLog($log);
             }
         } catch (\Exception) {
             return null;
         }
 
-        $result->sort();
-        $this->setCacheValue(self::KEY_CACHE, $result);
+        $file->sort();
+        $this->setCacheValue(self::KEY_CACHE, $file);
 
-        return $result;
+        return $file;
     }
 
     /**

@@ -15,7 +15,7 @@ html {
 }
 
 body {
-    background: var(--secondary);
+    background-color: var(--secondary);
 }
 
 .page-content {
@@ -24,5 +24,5 @@ body {
 
 ::-webkit-scrollbar {
     width: 0;
-    background: transparent;
+    background-color: transparent;
 }

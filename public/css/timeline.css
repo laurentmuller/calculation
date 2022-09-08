@@ -10,7 +10,7 @@ ul.timeline {
 
 ul.timeline:before {
     content: ' ';
-    background: #d4d9df;
+    background-color: #d4d9df;
     display: inline-block;
     position: absolute;
     left: 9px;
@@ -29,7 +29,7 @@ ul.timeline>li:last-child {
 
 ul.timeline>li:before {
     content: ' ';
-    background: var(--white);
+    background-color: var(--white);
     display: inline-block;
     position: absolute;
     border-radius: 50%;
@@ -51,33 +51,33 @@ ul.timeline>li.secondary:before {
     border: 3px solid var(--secondary);
 }
 ul.timeline-fill>li.secondary:before {
-    background: var(--secondary);
+    background-color: var(--secondary);
 }
 
 ul.timeline>li.success:before {
     border: 3px solid var(--success);
 }
 ul.timeline-fill>li.success:before {
-    background: var(--success);
+    background-color: var(--success);
 }
 
 ul.timeline>li.info:before {
     border: 3px solid var(--info);
 }
 ul.timeline-fill>li.info:before {
-    background: var(--info);
+    background-color: var(--info);
 }
 
 ul.timeline>li.danger:before {
     border: 3px solid var(--danger);
 }
 ul.timeline-fill>li.danger:before {
-    background: var(--danger);
+    background-color: var(--danger);
 }
 
 ul.timeline>li.warning:before {
     border: 3px solid var(--warning);
 }
 ul.timeline-fill>li.warning:before {
-    background: var(--warning);
+    background-color: var(--warning);
 }

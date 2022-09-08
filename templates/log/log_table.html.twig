@@ -8,10 +8,11 @@
 {%- set allow_add = false -%}
 {%- set allow_edit = false -%}
 {%- set allow_delete = false -%}
-
+{# actions #}
 {% block header_actions %}
 <small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>
 {% endblock %}
+
 {% block toolbar_actions -%}
 {% if customData.levels|length > 1 %}
     <div class="input-group-append">
@@ -55,11 +56,6 @@
 {% block show_actions -%}
 {{- _self.item_path(path('log_show', params), 'log.show.title', ICON_SHOW, 'btn-show btn-default') }}
 {%- endblock %}
-
-{% block stylesheets %}
-{{ asset_css('css/table_log.css') }}
-{% endblock %}
-
 {% block custom_view_card_class ' text-border' %}
 {% block custom_view_header -%}
 {%- if allow_show -%}
@@ -68,10 +64,14 @@
     <span>%createdAt%</span>
 {%- endif -%}
 {%- endblock %}
-
+{# custom view #}
 {% block custom_view_body -%}
 {{ _self.property_value('%message%') }}
 {{ _self.property_row('log.fields.channel', '%channel%') }}
 {{ _self.property_row('log.fields.level', '%level%') }}
 {{ _self.property_row('log.fields.user', '%user%') }}
 {%- endblock %}
+{# stylesheets #}
+{% block stylesheets %}
+    {{ asset_css('css/table_log.css') }}
+{% endblock %}

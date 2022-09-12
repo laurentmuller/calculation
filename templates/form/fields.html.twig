@@ -63,10 +63,15 @@
 
 {# override password widget with an addon to show or hide the password within jQuery #}
 {% block password_widget -%}
+{% if 'password-strength' in attr.class|default('') %}
+    {% set attr = attr|default({})|merge({'data-url': url('ajax_password'), 'data-strength': user_service.application.strengthLevel.value}) %}
+{% endif %}
 <div class="input-group">
     <div class="input-group-prepend">
         <span class="input-group-text"><i class="fa-solid fa-fw fa-lock"></i></span>
     </div>
+    {% if ('strength' in first_options|default('')) %}
+    {% endif %}
     {{ parent() }}
     <div class="input-group-append">
         <span class="btn btn-outline-secondary btn-password{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">

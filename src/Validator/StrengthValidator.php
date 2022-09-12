@@ -61,8 +61,9 @@ class StrengthValidator extends AbstractConstraintValidator
 
         $service = new Zxcvbn();
         $userInputs = $this->getUserInputs($constraint);
+        /** @psalm-var array{score: int} $result */
         $result = $service->passwordStrength($value, $userInputs);
-        $score = StrengthLevel::tryFrom((int) $result['score']) ?? StrengthLevel::NONE;
+        $score = StrengthLevel::tryFrom($result['score']) ?? StrengthLevel::NONE;
         if ($score->isSmaller($minimum)) {
             $this->addStrengthLevelViolation($this->context, $constraint, $minimum, $score);
         }

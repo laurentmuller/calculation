@@ -159,29 +159,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Compute the text layout.
      *
-     * @return array the text layout. Each entry is an array of 4 elements with the following values:<br><br>
-     *               <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *               <tr>
-     *               <th>Key</th>
-     *               <th>Content</th>
-     *               </tr>
-     *               <tr>
-     *               <td>'char'</td>
-     *               <td>The character to output.</td>
-     *               </tr>
-     *               <tr>
-     *               <td>'angle'</td>
-     *               <td>The angle in degrees.</td>
-     *               </tr>
-     *               <tr>
-     *               <td>'width'</td>
-     *               <td>The character width.</td>
-     *               </tr>
-     *               <tr>
-     *               <td>'height'</td>
-     *               <td>The character height.</td>
-     *               </tr>
-     *               </table>
+     * @pslam-return array<array{angle: int(-8, 8), char: string, height: int, width: int}>
      *
      * @throws \Exception
      */
@@ -287,27 +265,19 @@ class CaptchaImageService implements ServiceSubscriberInterface
         if (\is_int($color)) {
             // get layout
             $size = (int) ($height * 0.7);
+            /** @psalm-var non-empty-array<array{angle: int, char: string, height: int, width: int}> $items */
             $items = $this->computeText($image, $size, $font, $text);
 
             // get position
-            $textHeight = 0;
-            $textWidth = -self::CHAR_SPACE;
-            /** @psalm-var array $item */
-            foreach ($items as $item) {
-                $textWidth += (int) $item['width'] + self::CHAR_SPACE;
-                $textHeight = \max($textHeight, (int) $item['height']);
-            }
+            $textHeight = \max(\array_column($items, 'height'));
+            $textWidth = \array_sum(\array_column($items, 'width')) + (\count($items) - 1) * self::CHAR_SPACE;
             $x = \intdiv($width - $textWidth, 2);
             $y = \intdiv($height - $textHeight, 2) + $size;
 
             // draw
-            /** @psalm-var array $item */
             foreach ($items as $item) {
-                $char = (string) $item['char'];
-                $angle = (float) $item['angle'];
-                $width = (float) $item['width'];
-                $image->ttfText($size, $angle, (int) $x, $y, $color, $font, $char);
-                $x += $width + self::CHAR_SPACE;
+                $image->ttfText($size, $item['angle'], $x, $y, $color, $font, $item['char']);
+                $x += $item['width'] + self::CHAR_SPACE;
             }
         }
 

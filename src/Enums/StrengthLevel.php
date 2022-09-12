@@ -68,9 +68,13 @@ enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, 
     /**
      * Returns if this value is smaller than the given level.
      */
-    public function isSmaller(StrengthLevel $level): bool
+    public function isSmaller(int|StrengthLevel $level): bool
     {
-        return $this->value < $level->value;
+        if ($level instanceof StrengthLevel) {
+            $level = $level->value;
+        }
+
+        return $this->value < $level;
     }
 
     /**

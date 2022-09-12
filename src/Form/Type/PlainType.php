@@ -92,13 +92,6 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     final public const NUMBER_PERCENT = 'percent';
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void

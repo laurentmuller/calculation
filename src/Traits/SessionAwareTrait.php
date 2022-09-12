@@ -48,6 +48,25 @@ trait SessionAwareTrait
     }
 
     /**
+     * Gets a session attribute, as date value.
+     *
+     * @param string                  $key     the attribute name
+     * @param \DateTimeInterface|null $default the default value if not found
+     *
+     * @return \DateTimeInterface|null the session value, if found; the default value otherwise
+     */
+    protected function getSessionDate(string $key, \DateTimeInterface $default = null): ?\DateTimeInterface
+    {
+        /** @var int|\DateTimeInterface|null $value */
+        $value = $this->getSessionValue($key, $default);
+        if (\is_int($value)) {
+            return (new \DateTime())->setTimestamp($value);
+        }
+
+        return $value;
+    }
+
+    /**
      * Gets a session attribute, as float value.
      *
      * @param string $key     the attribute name

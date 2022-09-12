@@ -178,18 +178,4 @@ function displayEmail($email) {
         });
         $email.trigger('input');
     }
-
-    const $captcha = $('#display_captcha');
-    if ($captcha.length) {
-        const $strength = $('#strength_level');
-        $captcha.on('input', function () {
-            const enabled = $captcha.getSelectedOption().intVal();
-            if (enabled) {
-                $strength.removeAttr('disabled');
-            } else {
-                $strength.attr('disabled', 'disabled');
-            }
-        });
-        $captcha.trigger('input');
-    }
 }(jQuery));

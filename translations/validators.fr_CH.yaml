@@ -29,6 +29,7 @@ new_password:
   blank: Entrez un nouveau mot de passe s'il vous plait.
   short: Le nouveau mot de passe est trop court.
 password:
+  empty: Le mot de passe est vide.
   case_diff: Le mot de passe doit contenir une majuscule et une minuscule.
   email: Le mot de passe ne peut être une adresse e-mail.
   letters: Le mot de passe doit contenir une lettre.
@@ -37,6 +38,7 @@ password:
   pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
   special_char: Le mot de passe doit contenir un caractère spécial.
   strength_level: Le mot de passe doit avoir une force "%minimum%", la force actuelle est "%score%".
+  strength_disabled: La force minimum du mot de passe est désactivée.
 product:
   unique_description: Cette description est déjà utilisée par autre article.
 property:

@@ -83,7 +83,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         if ($violation) {
             $parameters = [
                 '%minimum%' => self::EMPTY_MESSAGE,
-                '%current%' => self::EMPTY_MESSAGE,
+                '%score%' => self::EMPTY_MESSAGE,
             ];
             $this->buildViolation('password.strength_level')
                 ->setCode(Strength::IS_STRENGTH_ERROR)

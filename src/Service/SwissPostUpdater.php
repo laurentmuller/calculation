@@ -73,7 +73,11 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private SwissPostUpdateResult $results;
     private ?string $sourceName = null;
 
-    /** @var bool|resource */
+    /**
+     * @var resource|false
+     *
+     * @psalm-var resource|closed-resource|false
+     */
     private $stream = false;
 
     public function __construct(private readonly ApplicationService $application, private readonly FormFactoryInterface $factory, SwissPostService $service)
@@ -222,8 +226,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     /**
      * Close the Zip archive entry stream.
-     *
-     * @psalm-suppress InvalidPropertyAssignmentValue
      */
     private function closeStream(): void
     {

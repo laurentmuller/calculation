@@ -40,7 +40,7 @@
         /**
          * Initialize the password strength.
          *
-         * @param {Object} [options] - The optional options.
+         * @param {Object} [options] - The options.
          */
         initPasswordStrength: function (options) {
             return this.each(function () {
@@ -50,8 +50,8 @@
                 const id = $element.attr('id') + '_passwordstrength';
 
                 // find or create UI container
-                let $container = $parent.findExists('#' + id);
-                if (!$container) {
+                let $container = $parent.find('#' + id);
+                if ($container.length === 0) {
                     $container = $('<div/>', {
                         'id': id,
                         'class': 'd-print-none password-strength'

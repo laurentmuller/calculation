@@ -420,6 +420,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         $this->updateAdapter();
 
         $result = [
+            // customer
             self::P_CUSTOMER_NAME => $this->getCustomerName(),
             self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
             self::P_CUSTOMER_ZIP_CITY => $this->getCustomerZipCity(),
@@ -427,11 +428,18 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_CUSTOMER_FAX => $this->getCustomerFax(),
             self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
             self::P_CUSTOMER_URL => $this->getCustomerUrl(),
-
-            self::P_EDIT_ACTION => $this->getEditAction(),
+            // default state, category and margin
             self::P_DEFAULT_STATE => $this->getDefaultState(),
             self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
-
+            self::P_MIN_MARGIN => $this->getMinMargin(),
+            // default edit product
+            self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
+            self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
+            self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
+            // display
+            self::P_DISPLAY_MODE => $this->getDisplayMode(),
+            self::P_EDIT_ACTION => $this->getEditAction(),
+            // notification
             self::P_MESSAGE_ICON => $this->isMessageIcon(),
             self::P_MESSAGE_TITLE => $this->isMessageTitle(),
             self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
@@ -439,27 +447,21 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_MESSAGE_PROGRESS => $this->getMessageProgress(),
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
-
-            self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
-            self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
-            self::P_LAST_IMPORT => $this->getLastImport(),
-
-            self::P_MIN_MARGIN => $this->getMinMargin(),
-
-            self::P_DISPLAY_MODE => $this->getDisplayMode(),
-            self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
-
-            self::P_QR_CODE => $this->isQrCode(),
-            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
-
-            self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
-            self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
-            self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
-
+            // home page
             self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
             self::P_PANEL_STATE => $this->isPanelState(),
             self::P_PANEL_MONTH => $this->isPanelMonth(),
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
+            // las update dates
+            self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
+            self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
+            self::P_LAST_IMPORT => $this->getLastImport(),
+            // document options
+            self::P_QR_CODE => $this->isQrCode(),
+            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
+            // security
+            self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
+            self::P_STRENGTH_LEVEL => $this->getStrengthLevel(),
         ];
 
         // exclude keys

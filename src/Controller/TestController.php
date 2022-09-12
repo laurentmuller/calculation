@@ -61,6 +61,7 @@ use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -240,6 +241,8 @@ class TestController extends AbstractController
         $helper->addPreSubmitListener($listener);
         $helper->field('input')
             ->widgetClass('password-strength')
+            ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
+            ->updateAttribute('data-url', $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL))
             ->minLength(6)
             ->constraints(new Length(['min' => 6]), $passwordConstraint, $strengthConstraint)
             ->addTextType();

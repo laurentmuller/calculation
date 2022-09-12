@@ -145,11 +145,12 @@ class ArchiveService implements ServiceSubscriberInterface
      */
     public function saveQuery(ArchiveQuery $query): void
     {
+        $date = $query->isSimulate() ? $query->getDate()->getTimestamp() : null;
         $this->setSessionValues([
             self::KEY_SOURCES => $this->getIds($query->getSources()),
-            self::KEY_DATE => $query->getDate()->getTimestamp(),
             self::KEY_TARGET => $query->getTarget()?->getId(),
             self::KEY_SIMULATE => $query->isSimulate(),
+            self::KEY_DATE => $date,
         ]);
     }
 
@@ -196,9 +197,9 @@ class ArchiveService implements ServiceSubscriberInterface
 
     private function getDate(): \DateTimeInterface
     {
-        $timestamp = (int) $this->getSessionInt(self::KEY_DATE, 0);
-        if (0 !== $timestamp) {
-            return (new \DateTime())->setTimestamp($timestamp);
+        $date = $this->getSessionDate(self::KEY_DATE);
+        if (null !== $date) {
+            return $date;
         }
 
         $sources = $this->getSources(false);

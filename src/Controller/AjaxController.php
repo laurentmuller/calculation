@@ -228,15 +228,16 @@ class AjaxController extends AbstractController
     #[Route(path: '/password', name: 'ajax_password')]
     public function password(Request $request): JsonResponse
     {
-        if (null === $password = $this->getRequestString($request, 'password')) {
+        $level = $this->getStrengthLevel($request);
+        if (!$level instanceof StrengthLevel) {
             return $this->jsonFalse([
-                'message' => 'No password is defined.',
+                'message' => $this->trans('password.empty', [], 'validators'),
             ]);
         }
 
-        $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE->value);
-        $minimum = StrengthLevel::tryFrom($strength);
-        if (!$minimum instanceof StrengthLevel) {
+        $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE);
+        $minimumLevel = StrengthLevel::tryFrom($strength);
+        if (!$minimumLevel instanceof StrengthLevel) {
             $values = \implode(', ', StrengthLevel::values());
             $message = \sprintf('The minimum strength parameter %d is invalid. Allowed values: [%s].', $strength, $values);
 
@@ -248,41 +249,31 @@ class AjaxController extends AbstractController
             );
         }
 
-        if (StrengthLevel::NONE === $minimum) {
-            return $this->jsonFalse([
-                'minimum' => $minimum->value,
-                'minimum_text' => $this->translateLevel($minimum),
-                'message' => 'The strength level is disabled.',
-            ]);
+        $result = [
+            'minimum' => $minimumLevel->value,
+            'minimum_text' => $this->translateLevel($minimumLevel),
+            'percent' => 0,
+        ];
+
+        if (StrengthLevel::NONE === $minimumLevel) {
+            $result['message'] = $this->trans('password.strength_disabled', [], 'validators');
+
+            return $this->jsonFalse($result);
         }
 
-        $inputs = [];
-        if (null !== $userField = $this->getRequestString($request, 'user')) {
-            $inputs[] = $userField;
-        }
-        if (null !== $emailField = $this->getRequestString($request, 'email')) {
-            $inputs[] = $emailField;
-        }
-
-        $service = new Zxcvbn();
-        $result = $service->passwordStrength($password, $inputs);
-        $score = StrengthLevel::tryFrom((int) $result['score']) ?? StrengthLevel::NONE;
-        if ($score->isSmaller($minimum)) {
-            return $this->jsonFalse([
-                'score' => $score->value,
-                'score_text' => $this->translateLevel($score),
-                'minimum' => $minimum->value,
-                'minimum_text' => $this->translateLevel($minimum),
-                'message' => $this->translateScore($minimum, $score),
-            ]);
-        }
-
-        return $this->jsonTrue([
-            'score' => $score->value,
-            'score_text' => $this->translateLevel($score),
-            'minimum' => $minimum->value,
-            'minimum_text' => $this->translateLevel($minimum),
+        $result = \array_merge($result, [
+            'score' => $level->value,
+            'score_text' => $this->translateLevel($level),
+            'percent' => ($level->value + 1) * 20,
         ]);
+
+        if ($level->isSmaller($minimumLevel)) {
+            $result['message'] = $this->translateScore($minimumLevel, $level);
+
+            return $this->jsonFalse($result);
+        }
+
+        return $this->jsonTrue($result);
     }
 
     /**
@@ -698,6 +689,28 @@ class AjaxController extends AbstractController
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
+    }
+
+    private function getStrengthLevel(Request $request): ?StrengthLevel
+    {
+        $password = $this->getRequestString($request, 'password');
+        if (empty($password)) {
+            return null;
+        }
+
+        $inputs = [];
+        if (null !== $userField = $this->getRequestString($request, 'user')) {
+            $inputs[] = $userField;
+        }
+        if (null !== $emailField = $this->getRequestString($request, 'email')) {
+            $inputs[] = $emailField;
+        }
+
+        $service = new Zxcvbn();
+        /** @psalm-var array{score: int<0, 4>} $result */
+        $result = $service->passwordStrength($password, $inputs);
+
+        return StrengthLevel::tryFrom($result['score']);
     }
 
     private function handleTranslationError(TranslatorServiceInterface $service, string $message): JsonResponse

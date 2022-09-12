@@ -78,7 +78,7 @@
             },
             messages: {
                 'user[plainPassword][second]': {
-                    'equalTo': message
+                    equalTo: message
                 }
             }
         });

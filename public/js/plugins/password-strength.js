@@ -15,6 +15,7 @@
         // -----------------------------
         // public functions
         // -----------------------------
+
         /**
          * Constructor
          *
@@ -28,7 +29,7 @@
         }
 
         /**
-         * Remove handlers and data.
+         * Destructor.
          */
         destroy() {
             if (this.$progress) {
@@ -80,6 +81,24 @@
                 if (email) {
                     inputs.push(email);
                 }
+
+                // const url = that.$element.data('url');
+                // if (url) {
+                //     // request values
+                //     const request = {
+                //         password: text,
+                //         strength: that.$element.data('strength')
+                //     };
+                //     if (user) {
+                //         request.user = user;
+                //     }
+                //     if (email) {
+                //         request.email = email;
+                //     }
+                //     $.post(url, request, function (data) {
+                //         window.console.log(data);
+                //     });
+                // }
 
                 // compute
                 result = zxcvbn(text, inputs);

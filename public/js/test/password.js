@@ -8,8 +8,8 @@
 
     // password strength
     $("#form_input").initPasswordStrength({
-        debug: true,
-        labelContainer: $('#score')
+        labelContainer: $('#score'),
+        debug: true
     });
 
     // validation
@@ -39,4 +39,12 @@
             }
         });
     });
+
+    // strength level
+    // const $level = $('#form_level');
+    $('#form_level').on('input', function () {
+        const value = $(this).val();
+        $('#form_input').data('strength', value).trigger('keyup');
+    }).trigger('keyup');
+
 }(jQuery));

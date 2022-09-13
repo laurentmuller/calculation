@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2eea8d43a9d1e63c149a6b87fea579d",
+    "content-hash": "55e955c01dcade5dad813dcbeb5c1617",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -172,6 +172,53 @@
                 "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.3.1"
             },
             "time": "2021-12-21T18:37:02+00:00"
+        },
+        {
+            "name": "createnl/zxcvbn-bundle",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/createnl/zxcvbn-bundle.git",
+                "reference": "49f3ccb41f37db7e5ddadd056cf26a3d57915044"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/createnl/zxcvbn-bundle/zipball/49f3ccb41f37db7e5ddadd056cf26a3d57915044",
+                "reference": "49f3ccb41f37db7e5ddadd056cf26a3d57915044",
+                "shasum": ""
+            },
+            "require": {
+                "bjeavons/zxcvbn-php": "^1.3",
+                "php": "^7.4|^8.0",
+                "symfony/translation": "^5.4|^6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "symfony/console": "^5.4|^6.0",
+                "symfony/framework-bundle": "^5.4|^6.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Createnl\\ZxcvbnBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Lisenkov",
+                    "email": "alex@create.nl"
+                }
+            ],
+            "description": "zxcvbn-php symfony bundle",
+            "support": {
+                "issues": "https://github.com/createnl/zxcvbn-bundle/issues",
+                "source": "https://github.com/createnl/zxcvbn-bundle/tree/2.1.0"
+            },
+            "time": "2022-05-12T09:49:03+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -388,16 +435,16 @@
         },
         {
             "name": "doctrine/collections",
-            "version": "1.7.2",
+            "version": "1.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "3fe77330f5591108bbf1315da7377a7e704ed8a0"
+                "reference": "09dde3eb237756190f2de738d3c97cff10a8407b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/3fe77330f5591108bbf1315da7377a7e704ed8a0",
-                "reference": "3fe77330f5591108bbf1315da7377a7e704ed8a0",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/09dde3eb237756190f2de738d3c97cff10a8407b",
+                "reference": "09dde3eb237756190f2de738d3c97cff10a8407b",
                 "shasum": ""
             },
             "require": {
@@ -452,9 +499,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/collections/issues",
-                "source": "https://github.com/doctrine/collections/tree/1.7.2"
+                "source": "https://github.com/doctrine/collections/tree/1.7.3"
             },
-            "time": "2022-08-27T16:08:58+00:00"
+            "time": "2022-09-01T19:34:23+00:00"
         },
         {
             "name": "doctrine/common",

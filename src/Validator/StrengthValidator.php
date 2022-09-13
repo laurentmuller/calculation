@@ -14,6 +14,7 @@ namespace App\Validator;
 
 use App\Enums\StrengthLevel;
 use App\Traits\StrengthLevelTranslatorTrait;
+use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -31,10 +32,12 @@ class StrengthValidator extends AbstractConstraintValidator
 {
     use StrengthLevelTranslatorTrait;
 
+    private ?Zxcvbn $service = null;
+
     /**
      * Constructor.
      */
-    public function __construct(private readonly TranslatorInterface $translator, private ?PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(private readonly TranslatorInterface $translator, private readonly ZxcvbnFactoryInterface $factory, private ?PropertyAccessorInterface $propertyAccessor = null)
     {
         parent::__construct(Strength::class);
     }
@@ -59,7 +62,7 @@ class StrengthValidator extends AbstractConstraintValidator
             return;
         }
 
-        $service = new Zxcvbn();
+        $service = $this->getService();
         $userInputs = $this->getUserInputs($constraint);
         /** @psalm-var array{score: int} $result */
         $result = $service->passwordStrength($value, $userInputs);
@@ -76,6 +79,15 @@ class StrengthValidator extends AbstractConstraintValidator
         }
 
         return $this->propertyAccessor;
+    }
+
+    private function getService(): Zxcvbn
+    {
+        if (null === $this->service) {
+            $this->service = $this->factory->createZxcvbn();
+        }
+
+        return $this->service;
     }
 
     /**

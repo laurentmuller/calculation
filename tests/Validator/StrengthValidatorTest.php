@@ -15,9 +15,11 @@ namespace App\Tests\Validator;
 use App\Enums\StrengthLevel;
 use App\Validator\Strength;
 use App\Validator\StrengthValidator;
+use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Unit test for {@link StrengthValidator} class.
@@ -112,6 +114,12 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         $translator->method('trans')
             ->willReturn(self::EMPTY_MESSAGE);
 
-        return new StrengthValidator($translator);
+        $factory = $this->getMockBuilder(ZxcvbnFactoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $factory->method('createZxcvbn')
+            ->willReturn(new Zxcvbn());
+
+        return new StrengthValidator($translator, $factory);
     }
 }

@@ -35,6 +35,7 @@ use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
+use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -43,7 +44,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
@@ -226,9 +226,9 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/password', name: 'ajax_password')]
-    public function password(Request $request): JsonResponse
+    public function password(Request $request, ZxcvbnFactoryInterface $factory): JsonResponse
     {
-        $level = $this->getStrengthLevel($request);
+        $level = $this->getStrengthLevel($request, $factory);
         if (!$level instanceof StrengthLevel) {
             return $this->jsonFalse([
                 'message' => $this->trans('password.empty', [], 'validators'),
@@ -251,7 +251,7 @@ class AjaxController extends AbstractController
 
         $result = [
             'minimum' => $minimumLevel->value,
-            'minimum_text' => $this->translateLevel($minimumLevel),
+            'minimumText' => $this->translateLevel($minimumLevel),
             'percent' => 0,
         ];
 
@@ -263,7 +263,7 @@ class AjaxController extends AbstractController
 
         $result = \array_merge($result, [
             'score' => $level->value,
-            'score_text' => $this->translateLevel($level),
+            'scoreText' => $this->translateLevel($level),
             'percent' => ($level->value + 1) * 20,
         ]);
 
@@ -691,7 +691,7 @@ class AjaxController extends AbstractController
         }
     }
 
-    private function getStrengthLevel(Request $request): ?StrengthLevel
+    private function getStrengthLevel(Request $request, ZxcvbnFactoryInterface $factory): ?StrengthLevel
     {
         $password = $this->getRequestString($request, 'password');
         if (empty($password)) {
@@ -706,8 +706,8 @@ class AjaxController extends AbstractController
             $inputs[] = $emailField;
         }
 
-        $service = new Zxcvbn();
-        /** @psalm-var array{score: int<0, 4>} $result */
+        $service = $factory->createZxcvbn();
+        /** @psalm-var array{score: int} $result */
         $result = $service->passwordStrength($password, $inputs);
 
         return StrengthLevel::tryFrom($result['score']);

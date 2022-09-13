@@ -16,4 +16,5 @@ return [
     SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
     Elao\Enum\Bridge\Symfony\Bundle\ElaoEnumBundle::class => ['all' => true],
+    Createnl\ZxcvbnBundle\ZxcvbnBundle::class => ['all' => true],
 ];

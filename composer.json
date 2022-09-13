@@ -34,7 +34,7 @@
 		"ext-zip": "*",
 		"ext-zlib": "*",
 		"beberlei/doctrineextensions": "dev-master",
-		"bjeavons/zxcvbn-php": "^1.2",
+		"createnl/zxcvbn-bundle": "^2.1",
 		"doctrine/annotations": "^1.0",
 		"doctrine/doctrine-bundle": "^2.6",
 		"doctrine/orm": "^2.11",

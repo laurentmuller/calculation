@@ -87,7 +87,7 @@
                 //     // request values
                 //     const request = {
                 //         password: text,
-                //         strength: that.$element.data('strength')
+                //         strength: that.$element.data('strength') || 0
                 //     };
                 //     if (user) {
                 //         request.user = user;
@@ -95,8 +95,14 @@
                 //     if (email) {
                 //         request.email = email;
                 //     }
+                //     /**
+                //      * @param {{result: boolean, score: number, scoreText: string, percent: number}} data
+                //      */
                 //     $.post(url, request, function (data) {
-                //         window.console.log(data);
+                //         data.text = data.scoreText;
+                //         if (options.debug && window.console) {
+                //             window.console.log(data);
+                //         }
                 //     });
                 // }
 

@@ -47,7 +47,7 @@
                 // get parent
                 const $element = $(this);
                 const $parent = $element.parents('.form-group');
-                const id = $element.attr('id') + '_passwordstrength';
+                const id = $element.attr('id') + '_passwordStrength';
 
                 // find or create UI container
                 let $container = $parent.find('#' + id);
@@ -96,7 +96,7 @@
 
                 // merge and initialize
                 const settings = $.extend(true, defaults, options);
-                $element.passwordstrength(settings);
+                $element.passwordStrength(settings);
             });
         }
     });

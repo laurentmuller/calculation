@@ -19,12 +19,12 @@
 </div>
 {%- endmacro %}
 {# list access #}
-{%- set task_path = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) ? 'task_table' : false -%}
-{%- set group_path = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) ? 'group_table' : false -%}
-{%- set product_path = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) ? 'product_table' : false -%}
-{%- set category_path = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) ? 'category_table' : false -%}
-{%- set margin_path = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) ? 'globalmargin_table' : false -%}
-{%- set state_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) ? 'calculationstate_table' : false -%}
+{%- set task_path = is_granted_task ? 'task_table' : false -%}
+{%- set group_path = is_granted_group ? 'group_table' : false -%}
+{%- set product_path = is_granted_product ? 'product_table' : false -%}
+{%- set category_path = is_granted_category ? 'category_table' : false -%}
+{%- set margin_path = is_granted_global_margin ? 'globalmargin_table' : false -%}
+{%- set state_path = is_granted_calculation_state ? 'calculationstate_table' : false -%}
 {# content #}
 <div class="card mb-2">
     <div class="card-header">

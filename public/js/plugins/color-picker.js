@@ -32,7 +32,7 @@
          */
         destroy() {
             this.$dropdown.before(this.$dropdown).remove();
-            this.$element.removeClasss('d-none').removeData('color-picker');
+            this.$element.removeClass('d-none').removeData('color-picker');
         }
 
         // -----------------------------
@@ -84,8 +84,8 @@
                 // find elements
                 that.$dropdown = that.$element.parents('.dropdown');
                 that.$dropdownToggle = that.$dropdown.find('.dropdown-toggle');
-                that.$spanColor = that.$dropdown.find('.drowpdown-color');
-                that.$spanText = that.$dropdown.find('.drowpdown-text');
+                that.$spanColor = that.$dropdown.find('.dropdown-color');
+                that.$spanText = that.$dropdown.find('.dropdown-text');
                 that.$dropdownMenu = that.$dropdown.find('.dropdown-menu');
             } else {
                 // create
@@ -102,12 +102,12 @@
                 }).appendTo(that.$dropdown);
 
                 that.$spanColor = $('<span/>', {
-                    'class': 'drowpdown-color border'
+                    'class': 'dropdown-color border'
                 }).appendTo(that.$dropdownToggle);
 
                 if (options.displayText) {
                     that.$spanText = $('<span/>', {
-                        'class': 'drowpdown-text'
+                        'class': 'dropdown-text'
                     }).appendTo(that.$dropdownToggle);
                 }
 
@@ -283,7 +283,7 @@
         /**
          * Handles the color button key down event.
          *
-         * @param {Event} e - the event.
+         * @param {KeyboardEvent} e - the event.
          * @private
          */
         _onColorButtonKeyDown(e) {
@@ -388,6 +388,7 @@
          * @private
          */
         _updateUI() {
+            /** @type {string} */
             const value = this.$element.val();
             this.$spanColor.css('background-color', value);
             if (this.$spanText) {

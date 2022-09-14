@@ -68,7 +68,7 @@
 
         destroy() {
             this.disable();
-            this.$element.removeData('cellhighlight');
+            this.$element.removeData('cellHighlight');
         }
 
         // -----------------------------
@@ -79,7 +79,7 @@
             const $target = $(e.currentTarget);
             const rowspan = $target.rowspan();
             const colspan = $target.colspan();
-            const offsetInMatrix = $target.data('cellhighlight.offsetInMatrix');
+            const offsetInMatrix = $target.data('cellHighlight.offsetInMatrix');
             const tableIndex = that.tableIndex;
             const options = that.options;
 
@@ -105,10 +105,10 @@
             }
 
             // trigger events
-            that.horizontal.trigger('cellhighlight.mouseenter-horizontal');
-            that.vertical.trigger('cellhighlight.mouseenter-vertical');
+            that.horizontal.trigger('cellHighlight.mouseenter-horizontal');
+            that.vertical.trigger('cellHighlight.mouseenter-vertical');
 
-            that.$element.trigger('cellhighlight.mouseenter', {
+            that.$element.trigger('cellHighlight.mouseenter', {
                 horizontal: that.horizontal,
                 vertical: that.vertical
             });
@@ -130,10 +130,10 @@
             }
 
             // trigger events
-            that.horizontal.trigger('cellhighlight.mouseleave-horizontal');
-            that.vertical.trigger('cellhighlight.mouseleave-vertical');
+            that.horizontal.trigger('cellHighlight.mouseleave-horizontal');
+            that.vertical.trigger('cellHighlight.mouseleave-vertical');
 
-            that.$element.trigger('cellhighlight.mouseleave', {
+            that.$element.trigger('cellHighlight.mouseleave', {
                 horizontal: that.horizontal,
                 vertical: that.vertical
             });
@@ -217,8 +217,8 @@
                         }
                     }
 
-                    if (cell.data && that.isUndefined(cell.data('cellhighlight.offsetInMatrix'))) {
-                        cell.data('cellhighlight.offsetInMatrix', [x, y]);
+                    if (cell.data && that.isUndefined(cell.data('cellHighlight.offsetInMatrix'))) {
+                        cell.data('cellHighlight.offsetInMatrix', [x, y]);
                     }
                 });
             });
@@ -249,9 +249,9 @@
     $.fn.cellhighlight = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('cellhighlight')) {
+            if (!$this.data('cellHighlight')) {
                 const settings = typeof options === 'object' && options;
-                $this.data('cellhighlight', new CellHighlight(this, settings));
+                $this.data('cellHighlight', new CellHighlight(this, settings));
             }
         });
     };

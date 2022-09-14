@@ -40,35 +40,27 @@
 {%- set route_params = {'caller': path('site_map')} -%}
 
 {# rights #}
-{%- set is_list_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set is_add_calculation = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION) -%}
 {%- set is_export_calculation = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
 
-{%- set is_list_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
 {%- set is_add_product = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
 {%- set is_export_product = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
 
-{%- set is_list_task = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) -%}
 {%- set is_add_task = is_granted(ATTRIBUTE_ADD, ENTITY_TASK) -%}
 {%- set is_export_task = is_granted(ATTRIBUTE_EXPORT, ENTITY_TASK) -%}
 
-{%- set is_list_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
 {%- set is_add_category = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
 {%- set is_export_category = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
 
-{%- set is_list_group = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) -%}
 {%- set is_add_group = is_granted(ATTRIBUTE_ADD, ENTITY_GROUP) -%}
 {%- set is_export_group = is_granted(ATTRIBUTE_EXPORT, ENTITY_GROUP) -%}
 
-{%- set is_list_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
 {%- set is_add_state = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
 {%- set is_export_state = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
 
-{%- set is_list_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_add_margin = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_export_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
 
-{%- set is_list_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_test -%}
 
@@ -96,7 +88,7 @@
     </nav>
     <nav class="primaryNav">
         <ul>
-            {% if is_list_calculation %}
+            {% if is_granted_calculation %}
             <li id="home">{{ _self.link('homepage', 'index.title', 'home') }}</li>
             <li>
                 <ul>{{ _self.link('calculation_table', 'calculation.list.title', ICON_CALCULATION) }}
@@ -116,17 +108,17 @@
                 </ul>
             </li>
             {% endif %}
-            {%- if is_list_product or is_list_task or is_list_category or is_list_group or is_list_state or is_list_margin or is_list_customer -%}
+            {%- if is_granted_data -%}
             <li>
                 <span class="rounded">{{- icon('database', 'index.menu_data') -}}</span>
                 <ul>
-                    {{ _self.add_entity_entry('product', ICON_PRODUCT, is_list_product, is_add_product, is_export_product, route_params) }}
-                    {{ _self.add_entity_entry('task', ICON_TASK, is_list_task, is_add_task, is_export_task, route_params) }}
-                    {{ _self.add_entity_entry('category', ICON_CATEGORY, is_list_category, is_add_category, is_export_category, route_params) }}
-                    {{ _self.add_entity_entry('group', ICON_GROUP, is_list_group, is_add_group, is_export_group, route_params) }}
-                    {{ _self.add_entity_entry('calculationstate', ICON_CALCULATION_STATE, is_list_state, is_add_state, is_export_state, route_params) }}
-                    {{ _self.add_entity_entry('globalmargin', ICON_GLOBAL_MARGIN, is_list_margin, false, is_export_margin, route_params) }}
-                    {{ _self.add_entity_entry('customer', ICON_CUSTOMER, is_list_customer, is_add_customer, is_export_customer, route_params) }}
+                    {{ _self.add_entity_entry('product', ICON_PRODUCT, is_granted_product, is_add_product, is_export_product, route_params) }}
+                    {{ _self.add_entity_entry('task', ICON_TASK, is_granted_task, is_add_task, is_export_task, route_params) }}
+                    {{ _self.add_entity_entry('category', ICON_CATEGORY, is_granted_category, is_add_category, is_export_category, route_params) }}
+                    {{ _self.add_entity_entry('group', ICON_GROUP, is_granted_group, is_add_group, is_export_group, route_params) }}
+                    {{ _self.add_entity_entry('calculationstate', ICON_CALCULATION_STATE, is_granted_calculation_state, is_add_state, is_export_state, route_params) }}
+                    {{ _self.add_entity_entry('globalmargin', ICON_GLOBAL_MARGIN, is_granted_global_margin, false, is_export_margin, route_params) }}
+
                 </ul>
             </li>
             {% endif %}
@@ -141,12 +133,12 @@
                     <li>{{ _self.link('below_table', 'below.title', ICON_GLOBAL_MARGIN) }}</li>
                     <li>{{ _self.link('duplicate_table', 'duplicate.title', ICON_COPY) }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
-                    {% if is_list_task %}
+                    {% if is_granted_task %}
                     <li>{{ _self.link('task_compute', 'taskcompute.title', 'keyboard', null, route_params|merge({'id': 0})) }}</li>
                     {% endif %}
                 </ul>
             </li>
-            {%- if is_list_calculation -%}
+            {%- if is_granted_calculation -%}
             <li>
                 <span>{{- icon('chart-area', 'menu_graphics', 'chart') -}}</span>
                 <ul>

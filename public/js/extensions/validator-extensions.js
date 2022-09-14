@@ -41,7 +41,7 @@
          */
         findPasswordScore: function () {
             const $that = $(this);
-            const data = $that.data('passwordstrength');
+            const data = $that.data('password-strength');
             if (data && data.verdict && !$.isUndefined(data.verdict.score)) {
                 return data.verdict.score;
             }

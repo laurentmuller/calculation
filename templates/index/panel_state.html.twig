@@ -23,7 +23,7 @@
 </div>
 {%- endmacro %}
 {# parameters #}
-{%- set list_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) ? 'calculation_table' : false -%}
+{%- set list_path = is_granted_calculation ? 'calculation_table' : false -%}
 {%- set is_states = states|length -%}
 {# content #}
 <div class="card mb-2">

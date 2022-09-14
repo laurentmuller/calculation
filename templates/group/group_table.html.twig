@@ -31,7 +31,7 @@
 {%- endblock %}
 
 {% block other_actions -%}
-{% if is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) %}
+{% if is_granted_category %}
     {{- _self.item_separator() }}
     {{- _self.item_path(path('category_table', {'groupid': 'id'}), 'group.list.category_title', ICON_CATEGORY, 'btn-show-category') }}
 {% endif %}

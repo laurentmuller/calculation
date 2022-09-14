@@ -158,9 +158,9 @@
         /*
          * password
          */
-        passwordLevels: ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort'],
-        passwordFallback: 'Ce champ doit être \"{0}\" (valeur actuelle : \"{2}\").',
-        passwordLabel: 'Le champ \"{0}\" doit être \"{1}\" (valeur actuelle : \"{2}\").',
+        passwordLevels: ['Très faible', 'Faible', 'Moyenne', 'Forte', 'Très forte'],
+        passwordFallback: 'Ce champ doit avoir une valeur \"{0}\" (valeur actuelle : \"{2}\").',
+        passwordLabel: 'Le champ \"{0}\" doit avoir une valeur \"{1}\" (valeur actuelle : \"{2}\").',
         password: function (parameter, element) {
             let current = $(element).findPasswordScore();
             current = $.validator.messages.passwordLevels[current];

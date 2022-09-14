@@ -47,7 +47,7 @@
 {%- block form_widget -%}
 {{ parent() }}
 {% if ('password-strength' in attr.class|default('')) %}
-    <div id="{{ form.vars.id }}_passwordstrength" class="d-print-none password-strength"></div>
+    <div id="{{ form.vars.id }}_passwordStrength" class="d-print-none password-strength"></div>
 {%- endif %}
 {%- endblock %}
 
@@ -70,8 +70,6 @@
     <div class="input-group-prepend">
         <span class="input-group-text"><i class="fa-solid fa-fw fa-lock"></i></span>
     </div>
-    {% if ('strength' in first_options|default('')) %}
-    {% endif %}
     {{ parent() }}
     <div class="input-group-append">
         <span class="btn btn-outline-secondary btn-password{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">
@@ -105,8 +103,8 @@
         {# <input type="color" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
         {{ block('form_widget_simple') }}
         <button type="button" class="dropdown-toggle btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="drowpdown-color border border-secondary" style="background-color: {{ value|default('#000000') }};"></span>
-            <span class="drowpdown-text"></span>
+            <span class="dropdown-color border border-secondary" style="background-color: {{ value|default('#000000') }};"></span>
+            <span class="dropdown-text"></span>
         </button>
         <div class="dropdown-menu d-print-none"></div>
     </div>

@@ -40,7 +40,7 @@
     margin-top: 0.5rem;
 }
 
-.color-picker .drowpdown-color {
+.color-picker .dropdown-color {
     height: 1rem;
     width: 1.5rem;
     display: inline-block;
@@ -48,7 +48,7 @@
     align-self: center;
 }
 
-.color-picker .drowpdown-text {
+.color-picker .dropdown-text {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

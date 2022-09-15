@@ -5,26 +5,21 @@
     <td colspan="2">{{ name|trans }}</td>
 </tr>
 {% endmacro %}
-
 {% macro row_text(name, value) %}
 <tr>
     <td class="pl-4 w-35">{{ name|trans }}</td>
     <td>{{ value|raw }}</td>
 </tr>
 {% endmacro %}
-
 {% macro row_unit(name, value, unit='', separator=' ') %}
     {{ _self.row_text(name, tools.value_unit(value, unit, separator)) }}
 {% endmacro %}
-
 {% macro row_temp(name, value, unit='') %}
     {{ _self.row_text(name, tools.value_temp(value, unit, '')) }}
 {% endmacro %}
-
 {% macro row_volume(name, value, unit='') %}
     {{ _self.row_unit(name, value|number_format(1), unit, ' ') }}
 {% endmacro %}
-
 {% macro row_no_sep(name, value, unit='') %}
     {{ _self.row_unit(name, value|number_format(1), unit, '') }}
 {% endmacro %}

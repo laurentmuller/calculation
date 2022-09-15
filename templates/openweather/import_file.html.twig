@@ -8,7 +8,7 @@
 {# body #}
 {% block card_body %}
 {{ parent() }}
-<p class="mb-0">{{ 'openweather.import.link'|trans|format(sample, openweathermap)|raw }}</p>
+<p class="mb-0">{{ 'openweather.import.link'|trans|format(sample_url, site_url)|raw }}</p>
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}

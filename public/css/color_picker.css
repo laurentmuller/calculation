@@ -19,7 +19,7 @@
 }
 
 .color-picker .btn-color:hover {
-    outline: solid var(--primary);
+    outline: solid var(--primary) 1px;
 }
 
 .color-picker.dropdown.form-control {

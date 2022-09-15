@@ -399,7 +399,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             }
 
             // commit
-            if (0 === $this->results->getValids() % 50000 && null !== $this->database) {
+            if (0 === $this->results->getValids() % 50_000 && null !== $this->database) {
                 $this->database->commitTransaction();
                 $this->database->beginTransaction();
             }

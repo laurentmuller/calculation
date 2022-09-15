@@ -8,13 +8,31 @@
 }
 
 .ow-icon {
-    width: 100px;
+    width: 50px;
     text-align: center;
+}
+
+.ow-image {
+    margin-top: -8px;
     vertical-align: top;
+    width: 40px;
+    height: 40px;
+}
+
+.ow-flag {
+    margin-left: 0.25rem;
+}
+.ow-image-search {
+    margin-top: -5px !important;
+}
+
+.ow-image-title {
+    width: 50px;
+    height: 50px;
 }
 
 .ow-temperature {
-    width: 150px;
+    width: 110px;
 }
 
 .ow-temperature-pills {

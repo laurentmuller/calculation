@@ -586,7 +586,7 @@ index:
   panel_month: Calculations par mois
   panel_month_title: Afficher les calculations pour %month%
   panel_month_user: Mes calculations
-  panel_month_user_help: Afficher uniquement les calculations que j'ai créés ou modifiés
+  panel_month_user_help: Afficher uniquement les calculations que vous avez créés ou modifiés
   panel_state: Calculations par statut
   panel_state_title: Afficher les calculations pour le statut %code%
   panel_state_title_all: Afficher toutes les calculations
@@ -677,7 +677,6 @@ openweather:
   error:
     empty_city: Aucune localité n'a été importée.
     mime_type: Le type de fichier est invalide.
-    move_database: Impossible de renommer la base de données.
   fields:
     clouds: Nébulosité
     current: Valeurs actuelles
@@ -714,14 +713,14 @@ openweather:
       rel="noopener noreferrer">OpenWeather</a>.
     title: Importer les localités
   result:
-    cities: Localités
     description: Résultats de l'importation.
-    errors: Erreurs
-    failure: Une erreur s'est produite lors de l'importation des localités.
-    objects: Objets
     success: L'importation des localités a été réalisée avec succès.
+    failure: Une erreur s'est produite lors de l'importation des localités.
+    object: Objet
+    city: Localité
+    error: Erreur
+    valid: Valide
     total: Total
-    valids: Valides
   search:
     limit: Limite
     place_holder: Veuillez saisir une localité

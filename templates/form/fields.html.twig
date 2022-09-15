@@ -103,7 +103,7 @@
         {# <input type="color" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
         {{ block('form_widget_simple') }}
         <button type="button" class="dropdown-toggle btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="dropdown-color border border-secondary" style="background-color: {{ value|default('#000000') }};"></span>
+            <span class="dropdown-color border" style="background-color: {{ value|default('#000000') }};"></span>
             <span class="dropdown-text"></span>
         </button>
         <div class="dropdown-menu d-print-none"></div>

@@ -573,7 +573,7 @@
     // -----------------------------------
     const oldColorPicker = $.fn.colorpicker;
 
-    $.fn.colorpicker = function (options) { // jslint ignore:line
+    $.fn.colorpicker = function (options) {
         return this.each(function () {
             const $this = $(this);
             if (!$this.data('color-picker')) {
@@ -586,7 +586,7 @@
     $.fn.colorpicker.Constructor = ColorPicker;
 
     // -----------------------------------
-    // Colorpicker no conflict
+    // ColorPicker no conflict
     // -----------------------------------
     $.fn.colorpicker.noConflict = function () {
         $.fn.colorpicker = oldColorPicker;

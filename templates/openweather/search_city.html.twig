@@ -27,15 +27,15 @@
         {% for city in cities %}
             {%- set current = city.current -%}
             <tr>
-                <td class="text-unit align-top">
-                    <img src="{{ current.weather.icon_small }}" alt="image" width="36" height="36">
+                <td class="text-unit">
+                    <img src="{{ current.weather.icon_small }}" class="ow-image ow-image-search" alt="Image">
                 </td>
                 <td class="w-75">
-                    <a href="{{ path('openweather_current', {'cityId': city.id, 'units': units, 'count': count}) }}"><b>{{ city.name }}</b></a><br>
+                    <a href="{{ path('openweather_current', {'city': city.id, 'units': units, 'count': count}) }}"><b>{{ city.name }}</b></a><br>
                     <span class="small">{{ tools.value_temp(current.main.temp, city.units.temperature) }}, {{ current.weather.description }}</span>
                 </td>
                 <td class="w-25">
-                    {{- city.country_name }} <img class="align-baseline" alt="Flag" src="{{ city.country_flag }}">
+                    {{- city.country_name }} <img class="ow-flag" alt="Flag" src="{{ city.country_flag }}">
                 </td>
             <td>
         {% endfor %}
@@ -50,6 +50,10 @@
 {% if is_granted('ROLE_ADMIN') %}
     {{ link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
 {% endif %}
+{% endblock %}
+{# stylesheets #}
+{% block stylesheets %}
+{{ asset_css('css/open_weather.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}

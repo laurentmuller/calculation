@@ -98,7 +98,7 @@ $.fn.extend({
      * Update the href attribute of the action.
      *
      * @param {Object} row - the row data.
-     * @param {Parameters} params - the query parameters.
+     * @param {{Parameters}} params - the query parameters.
      */
     updateLink: function (row, params) {
         'use strict';
@@ -216,7 +216,8 @@ $.fn.extend({
                     $this.find('tbody tr .actions').each(function (index, element) {
                         // copy actions
                         const $rowActions = $(element).children();
-                        const $cardActions = $view.find(selector.replace('%index%', '' + index));
+                        const rowSelector = selector.replace('%index%', '' + index);
+                        const $cardActions = $view.find(rowSelector);
                         $rowActions.appendTo($cardActions);
 
                         if (callback) {
@@ -1036,7 +1037,7 @@ $.fn.extend({
         const $this = $(this);
         const page = $this.data('focusPageItem') || '';
 
-        let selector = false;
+        let selector = null;
         switch (page) {
             case 'previous':
                 selector = '.fixed-table-pagination li.page-pre:not(.disabled) .page-link';

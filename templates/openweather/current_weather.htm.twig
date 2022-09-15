@@ -6,7 +6,7 @@
 {% set text = units == 'metric' ? '°C' : '°F' %}
 {% set title = ('openweather.current.' ~ units)|trans %}
 {% if route %}
-    {% set href = path(route, {'cityId': city_id, 'units': units, 'count': count}) %}
+    {% set href = path(route, {'city': city_id, 'units': units, 'count': count}) %}
     <a href="{{ href }}" class="small" title="{{ title }}">{{ text }}</a>
 {% else %}
     <span class="small" title="{{ title }}">{{ text }}</span>
@@ -42,9 +42,9 @@
         </div>
         <div class="col-md-6 text-md-right d-print-none">
             {% if units_system == 'metric' %}
-                {{ _self.system(units_system) }}<span class"small"> / </span>{{ _self.system('imperial', route, city_id, count) }}
+                {{ _self.system(units_system) }}<span class="small"> / </span>{{ _self.system('imperial', route, city_id, count) }}
             {% else %}
-                {{ _self.system('metric', route, city_id, count) }}<span class"small"> / </span>{{ _self.system(units_system) }}
+                {{ _self.system('metric', route, city_id, count) }}<span class="small"> / </span>{{ _self.system(units_system) }}
             {% endif %}
             {{ link(path('openweather_search'), 'common.button_search', 'btn btn-link btn-sm') }}
         </div>
@@ -56,9 +56,9 @@
 {# body #}
 {% block card_body %}
 {% if city_id %}
-    <h2>{{ current.name }}, {{ current.sys.country_name }}<img class="align-top pt-2 pl-1" alt="Flag" src="{{ current.sys.country_flag }}"></h2>
+    <h2>{{ current.name }}, {{ current.sys.country_name }}<img class="ow-flag" alt="Flag" src="{{ current.sys.country_flag }}"></h2>
     <h3 class="font-weight-normal">
-        <img src="{{ current.weather.icon_small }}" alt="Icon" width="50" height="50">{{ tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
+        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="Current">{{ tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
     </h3>
     <div class="row">
         <div class="col-lg-5">

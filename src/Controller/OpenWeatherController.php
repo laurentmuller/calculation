@@ -12,12 +12,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Database\OpenWeatherDatabase;
 use App\Interfaces\RoleInterface;
+use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherService;
-use App\Util\FileUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,7 +25,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
 /**
@@ -41,25 +38,40 @@ use Symfony\Component\Validator\Constraints\Length;
 class OpenWeatherController extends AbstractController
 {
     /**
+     * The number of daily results to return.
+     */
+    private const DEFAULT_COUNT = 5;
+
+    /**
+     * The number of search results to return.
+     */
+    private const DEFAULT_LIMIT = 25;
+
+    /**
      * The city identifier key name.
      */
-    private const KEY_CITY_ID = 'cityId';
+    private const KEY_CITY_ID = 'city';
+
     /**
      * The count key name.
      */
     private const KEY_COUNT = 'count';
+
     /**
      * The limit key name.
      */
     private const KEY_LIMIT = 'limit';
+
     /**
      * The query key name.
      */
     private const KEY_QUERY = 'query';
+
     /**
      * The units key name.
      */
     private const KEY_UNITS = 'units';
+
     /**
      * the prefix key for sessions.
      */
@@ -247,99 +259,20 @@ class OpenWeatherController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/import', name: 'openweather_import')]
-    public function import(Request $request, OpenWeatherService $service): Response
+    public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {
-        // create form and handle request
-        $form = $this->createImportForm();
+        $form = $updater->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            $db = null;
-            $file = null;
+            /** @var UploadedFile $file */
+            $file = $form['file']->getData();
+            $results = $updater->import($file);
 
-            try {
-                // get temp file
-                if (null === $temp_name = FileUtils::tempfile('sql')) {
-                    return $this->renderErrorResult('import.error.temp_file');
-                }
-
-                /** @var UploadedFile $file */
-                $file = $form['file']->getData();
-                $name = $file->getClientOriginalName();
-
-                // get content
-                if (!$content = $this->getGzContent($file)) {
-                    return $this->renderErrorResult('import.error.open_archive', ['name' => $name]);
-                }
-
-                // decode content
-                /**
-                 * @psalm-var null|array<array{
-                 *      id: int|float,
-                 *      name: string,
-                 *      country: string,
-                 *      coord: array{
-                 *          lat: float,
-                 *          lon: float
-                 *      }
-                 * }> $cities
-                 */
-                $cities = $this->getJsonContent($content);
-                if (!\is_array($cities)) {
-                    return $this->renderErrorResult('import.error.empty_archive', ['name' => $name]);
-                }
-
-                // create database
-                $db = new OpenWeatherDatabase($temp_name);
-                $db->beginTransaction();
-
-                // insert cities
-                $valids = 0;
-                $errors = 0;
-                foreach ($cities as $city) {
-                    if (!$db->insertCity((int) $city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
-                        ++$errors;
-                    } elseif (0 === ++$valids % 50000) {
-                        $db->commitTransaction();
-                        $db->beginTransaction();
-                    }
-                }
-
-                // close
-                $db->commitTransaction();
-                $db->compact();
-                $db->close();
-
-                // cities?
-                if (0 === $valids) {
-                    return $this->renderErrorResult('openweather.error.empty_city');
-                }
-
-                // move
-                try {
-                    $target = $service->getDatabaseName();
-                    if (!FileUtils::rename($temp_name, $target, true)) {
-                        return $this->renderErrorResult('openweather.error.move_database');
-                    }
-                } catch (IOException) {
-                    return $this->renderErrorResult('openweather.error.move_database');
-                }
-
-                // ok
-                return $this->renderForm('openweather/import_result.html.twig', [
-                    'valids' => $valids,
-                    'errors' => $errors,
-                    'result' => true,
-                ]);
-            } finally {
-                $db?->close();
-                if (null !== $file) {
-                    FileUtils::remove($file);
-                }
-            }
+            return $this->renderForm('openweather/import_result.html.twig', $results);
         }
-        // display form
+
         return $this->renderForm('openweather/import_file.html.twig', [
-            'sample' => 'https://bulk.openweathermap.org/sample/',
-            'openweathermap' => 'https://openweathermap.org/',
+            'sample_url' => 'https://bulk.openweathermap.org/sample/',
+            'site_url' => 'https://openweathermap.org/',
             'form' => $form,
         ]);
     }
@@ -361,57 +294,40 @@ class OpenWeatherController extends AbstractController
             self::KEY_LIMIT => $this->getSessionLimit($request),
             self::KEY_COUNT => $this->getSessionCount($request),
         ];
-
-        // create form
-        $helper = $this->createFormHelper('openweather.search.', $data);
-        $helper->field(self::KEY_QUERY)
-            ->constraints(new Length(['min' => 2]))
-            ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
-            ->add(SearchType::class);
-        $helper->field(self::KEY_UNITS)
-            ->updateOption('choice_translation_domain', false)
-            ->addChoiceType([
-                OpenWeatherService::DEGREE_METRIC => OpenWeatherService::UNIT_METRIC,
-                OpenWeatherService::DEGREE_IMPERIAL => OpenWeatherService::UNIT_IMPERIAL,
-            ]);
-        $limits = [10, 15, 25, 50, 100];
-        $helper->field(self::KEY_LIMIT)
-            ->updateOption('choice_translation_domain', false)
-            ->addChoiceType(\array_combine($limits, $limits));
-        $helper->field(self::KEY_COUNT)
-            ->addHiddenType();
+        $form = $this->createSearchForm($data);
 
         // handle request
-        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array{
-             *     query: string,
-             *     units: string,
-             *     limit: int,
-             *     count: int
-             * } $data
-             */
+            /** @var array{query: string, units: string, limit: int, count: int} $data */
             $data = $form->getData();
             $query = $data[self::KEY_QUERY];
             $units = $data[self::KEY_UNITS];
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
 
-            /**
-             * @var array<int, array{
-             *      id: int,
-             *      units: array,
-             *      current: array
-             *      }>|false $cities
-             */
+            /** @var array<int, array{id: int, units: array, current: array}>|false $cities */
             $cities = $this->service->search($query, $units, $limit);
             if (false !== $cities) {
+                // save
+                $this->setSessionValues([
+                    self::KEY_QUERY => $query,
+                    self::KEY_UNITS => $units,
+                    self::KEY_LIMIT => $limit,
+                    self::KEY_COUNT => $count,
+                ]);
+
                 $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
 
-                /** @var null|array{
-                 *      units: array,
-                 *      list: array<int, mixed>} $group
-                 */
+                // display if only 1 city is found
+                if (1 === \count($cityIds)) {
+                    return $this->redirectToRoute('openweather_current', [
+                        self::KEY_CITY_ID => \reset($cityIds),
+                        self::KEY_UNITS => $units,
+                        self::KEY_COUNT => $count,
+                    ]);
+                }
+
+                /** @var array{units: array, list: array<int, mixed>}|null $group */
                 $group = null;
                 foreach (\array_keys($cities) as $index) {
                     // load current weather by chunk of 20 items
@@ -425,14 +341,6 @@ class OpenWeatherController extends AbstractController
                     }
                 }
             }
-
-            // save
-            $this->setSessionValues([
-                self::KEY_QUERY => $query,
-                self::KEY_UNITS => $units,
-                self::KEY_LIMIT => $limit,
-                self::KEY_COUNT => $count,
-            ]);
 
             // display
             return $this->renderForm('openweather/search_city.html.twig', [
@@ -452,7 +360,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
      */
-    #[Route(path: '/wather', name: 'openweather_weather')]
+    #[Route(path: '/weather', name: 'openweather_weather')]
     public function weather(Request $request): Response
     {
         $cityId = $this->getSessionCityId($request);
@@ -472,60 +380,27 @@ class OpenWeatherController extends AbstractController
         return self::PREFIX_KEY . $key;
     }
 
-    private function createImportForm(): FormInterface
+    private function createSearchForm(array $data): FormInterface
     {
-        // create form
-        $helper = $this->createFormHelper();
-
-        // constraints
-        $constraint = new File([
-            'mimeTypes' => 'application/gzip',
-            'mimeTypesMessage' => $this->trans('openweather.error.mime_type'),
-        ]);
-
-        // file input
-        $helper->field('file')
-            ->label('openweather.import.file')
-            ->constraints($constraint)
-            ->updateAttribute('accept', 'application/x-gzip')
-            ->addFileType();
+        $helper = $this->createFormHelper('openweather.search.', $data);
+        $helper->field(self::KEY_QUERY)
+            ->constraints(new Length(['min' => 2]))
+            ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
+            ->add(SearchType::class);
+        $helper->field(self::KEY_UNITS)
+            ->updateOption('choice_translation_domain', false)
+            ->addChoiceType([
+                OpenWeatherService::DEGREE_METRIC => OpenWeatherService::UNIT_METRIC,
+                OpenWeatherService::DEGREE_IMPERIAL => OpenWeatherService::UNIT_IMPERIAL,
+            ]);
+        $limits = [5, 10, 15, 25, 50];
+        $helper->field(self::KEY_LIMIT)
+            ->updateOption('choice_translation_domain', false)
+            ->addChoiceType(\array_combine($limits, $limits));
+        $helper->field(self::KEY_COUNT)
+            ->addHiddenType();
 
         return $helper->createForm();
-    }
-
-    private function getGzContent(UploadedFile $file): ?string
-    {
-        $filename = (string) $file->getRealPath();
-
-        // get size
-        if (false === $handle = \fopen($filename, 'r')) {
-            return null;
-        }
-        \fseek($handle, -4, \SEEK_END);
-        $buffer = (string) \fread($handle, 4);
-        $unpacked = (array) \unpack('V', $buffer);
-        $uncompressedSize = (int) \end($unpacked);
-        \fclose($handle);
-
-        // read the gzipped content, specifying the exact length
-        if (false === $handle = \gzopen($filename, 'rb')) {
-            return null;
-        }
-        $content = (string) \gzread($handle, $uncompressedSize);
-        \gzclose($handle);
-
-        return $content;
-    }
-
-    private function getJsonContent(string $content): ?array
-    {
-        /** @var bool|array $decoded */
-        $decoded = \json_decode($content, true);
-        if (\JSON_ERROR_NONE !== \json_last_error()) {
-            return null;
-        }
-
-        return (array) $decoded;
     }
 
     private function getRequestCityId(Request $request): int
@@ -533,14 +408,14 @@ class OpenWeatherController extends AbstractController
         return $this->getRequestInt($request, self::KEY_CITY_ID);
     }
 
-    private function getRequestCount(Request $request, int $default = 5): int
+    private function getRequestCount(Request $request): int
     {
-        return $this->getRequestInt($request, self::KEY_COUNT, $default);
+        return $this->getRequestInt($request, self::KEY_COUNT, self::DEFAULT_COUNT);
     }
 
-    private function getRequestLimit(Request $request, int $default = 25): int
+    private function getRequestLimit(Request $request): int
     {
-        return $this->getRequestInt($request, self::KEY_LIMIT, $default);
+        return $this->getRequestInt($request, self::KEY_LIMIT, self::DEFAULT_LIMIT);
     }
 
     private function getRequestQuery(Request $request): string
@@ -555,17 +430,17 @@ class OpenWeatherController extends AbstractController
 
     private function getSessionCityId(Request $request): int
     {
-        return $this->getRequestInt($request, self::KEY_CITY_ID, $this->getRequestCityId($request));
+        return (int) $this->getSessionInt(self::KEY_CITY_ID, $this->getRequestCityId($request));
     }
 
-    private function getSessionCount(Request $request, int $default = 5): int
+    private function getSessionCount(Request $request): int
     {
-        return $this->getRequestInt($request, self::KEY_COUNT, $this->getRequestCount($request, $default));
+        return (int) $this->getSessionInt(self::KEY_COUNT, $this->getRequestCount($request));
     }
 
-    private function getSessionLimit(Request $request, int $default = 25): int
+    private function getSessionLimit(Request $request): int
     {
-        return (int) $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request, $default));
+        return (int) $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request));
     }
 
     private function getSessionQuery(Request $request): string
@@ -576,13 +451,5 @@ class OpenWeatherController extends AbstractController
     private function getSessionUnits(Request $request): string
     {
         return (string) $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));
-    }
-
-    private function renderErrorResult(string $message, array $parameters = []): Response
-    {
-        return $this->renderForm('openweather/import_result.html.twig', [
-            'message' => $this->trans($message, $parameters),
-            'result' => false,
-        ]);
     }
 }

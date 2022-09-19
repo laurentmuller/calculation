@@ -15,7 +15,7 @@
                     {%- endif -%}
                     <br><span class="small text-muted">{{ data.dt_date }}</span>
                 </td>
-                <td class="ow-icon"><img src="{{ data.weather.icon_small }}" class="ow-image" alt="Daily">
+                <td class="ow-icon"><img src="{{ data.weather.icon_small }}" class="ow-image" alt="Daily Weather" title="{{ data.weather.description }}">
                 <td class="ow-temperature">
                     <span class="ow-temperature-pills ow-temperature-night" title="{{ 'openweather.fields.temp_night'|trans }}">{{ tools.value_temp(data.temp.night, units_temp) }}</span>
                     <span class="ow-temperature-pills ow-temperature-day" title="{{ 'openweather.fields.temp_day'|trans }}">{{ tools.value_temp(data.temp.day, units_temp) }}</span>

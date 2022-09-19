@@ -107,15 +107,15 @@
     'toggle-selector': '#toggle',
     'undefined-text': '&nbsp;',
     'silent-sort': false,
-    'side-pagination': "server",
+    'side-pagination': 'server',
     'show-custom-view': 'false',
     'custom-view': 'customViewFormatter',
     'show-extended-pagination': 'true',
     'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
     'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
     'pagination-parts': '["pageInfo", "pageList"]',
-    'pagination-loop': false,
-    'pagination': true,
+    'pagination-loop': 'false',
+    'pagination': 'true',
     'sortable': sortable,
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
@@ -142,7 +142,7 @@
 {# toolbar #}
 <div class="row my-2 d-print-none">
     {# search #}
-    <div class="col-auto col-search mr-auto">
+    <div class="col-auto col-search align-self-center mr-auto">
         {% if allow_search %}
         <div class="form-inline">
             <div class="btn-group btn-group-sm btn-group-search" role="group">
@@ -159,9 +159,10 @@
         {% endif %}
     </div>
     {# right toolbar #}
-    <div class="col-auto col-toolbar mt-1 mt-md-0">
+    <div class="col-auto col-toolbar align-self-center mt-1 mt-md-0">
         <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
             {# page size #}
+            {% block page_list %}
             {% if pageList is defined and pageList|length > 1 %}
             <div class="btn-group btn-group-sm" role="group">
                 {# menu is created on the prebody event #}
@@ -171,6 +172,7 @@
                 <div class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></div>
             </div>
             {% endif %}
+            {% endblock %}
             <div class="btn-group btn-group-sm" role="group">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-toggle="dropdown" title="{{ 'common.other_actions'|trans }}">
                     <i class="fa-solid fa-bars"></i>
@@ -254,7 +256,7 @@
 </div>
 {# page selection dialog #}
 <div class="modal fade" id="modal-page" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1" data-page="{{ 'datatable.dialog_page'|trans }}">
-    <div class="modal-dialog modal-lg ">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header cursor-move">
                 <h5 class="modal-title">

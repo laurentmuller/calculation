@@ -30,11 +30,6 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
 class OpenWeatherService extends AbstractHttpClientService
 {
     /**
-     * The database name.
-     */
-    final public const DATABASE_NAME = 'openweather.sqlite';
-
-    /**
      * The imperial degree.
      */
     final public const DEGREE_IMPERIAL = '°F';
@@ -98,11 +93,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * The country flag URL.
      */
     private const COUNTRY_URL = 'https://openweathermap.org/images/flags/{0}.png';
-
-    /**
-     * The relative path to data.
-     */
-    private const DATA_PATH = '/resources/data/';
 
     /**
      * The host name.
@@ -178,11 +168,6 @@ class OpenWeatherService extends AbstractHttpClientService
     ];
 
     /**
-     * The data directory.
-     */
-    private readonly string $dataDirectory;
-
-    /**
      * Constructor.
      *
      * @throws ParameterNotFoundException if the API key parameter is not defined
@@ -191,13 +176,12 @@ class OpenWeatherService extends AbstractHttpClientService
     public function __construct(
         #[Autowire('%open_weather_key%')]
         string $key,
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir,
         #[Autowire('%kernel.debug%')]
-        bool $isDebug
+        bool $isDebug,
+        #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
+        private readonly string $databaseName,
     ) {
         parent::__construct($isDebug, $key);
-        $this->dataDirectory = $projectDir . self::DATA_PATH;
     }
 
     /**
@@ -314,7 +298,7 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     public function getDatabaseName(): string
     {
-        return $this->dataDirectory . self::DATABASE_NAME;
+        return $this->databaseName;
     }
 
     /**
@@ -664,17 +648,18 @@ class OpenWeatherService extends AbstractHttpClientService
                     break;
 
                 case 'dt':
-                    $result['dt_date'] = FormatUtils::formatDate((int) $value, self::TYPE_SHORT);
-                    $result['dt_date_locale'] = FormatUtils::formatDate((int) $value, self::TYPE_SHORT, $timezone);
+                    $value = (int) $value;
+                    $result['dt_date'] = FormatUtils::formatDate($value, self::TYPE_SHORT);
+                    $result['dt_date_locale'] = FormatUtils::formatDate($value, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_time'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT);
-                    $result['dt_time_locale'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT, $timezone);
+                    $result['dt_time'] = FormatUtils::formatTime($value, self::TYPE_SHORT);
+                    $result['dt_time_locale'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_date_time'] = FormatUtils::formatDateTime((int) $value, self::TYPE_SHORT, self::TYPE_SHORT);
-                    $result['dt_date_time_locale'] = FormatUtils::formatDateTime((int) $value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
+                    $result['dt_date_time'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
+                    $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_date_time_medium'] = FormatUtils::formatDateTime((int) $value, self::TYPE_MEDIUM, self::TYPE_SHORT);
-                    $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime((int) $value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
+                    $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
+                    $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
 
                     unset($result['dt_txt']);
                     break;
@@ -690,9 +675,7 @@ class OpenWeatherService extends AbstractHttpClientService
                 case 'weather':
                     if (\is_array($value) && !empty($value)) {
                         $this->updateResult($value, $timezone);
-                        /** @psalm-var array $first */
-                        $first = $value[0];
-                        $value = $first;
+                        $value = (array) \reset($value);
                     }
                     break;
 

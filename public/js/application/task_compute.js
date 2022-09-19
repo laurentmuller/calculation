@@ -109,15 +109,22 @@ function onInputChanged() {
 function onTaskChanged() {
     'use strict';
     // toggle rows visibility
-    const id = $('#task').intVal();
-    const selector = '[task-id="' + id + '"]';
+    const $task = $('#task');
+
+    const id = $task.intVal();
+    const selector = '[data-id="' + id + '"]';
     $('.item-row' + selector).removeClass('d-none');
     $('.item-row:not(' + selector + ')').addClass('d-none');
+
 
     // task items?
     const empty = $('.item-row:not(.d-none)').length === 0;
     $('.row-table').toggleClass('d-none', empty);
     $('.row-empty').toggleClass('d-none', !empty);
+
+    // unit
+    const $selection = $task.getSelectedOption();
+    $('#unit').html($selection.data('unit')|| '&nbsp;');
 
     // submit
     if (!empty) {

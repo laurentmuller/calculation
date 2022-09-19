@@ -269,10 +269,9 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
      */
     _onTaskChanged() {
         'use strict';
-
         // toggle rows visibility
         const id = this.$task.intVal();
-        const selector = '[task-id="' + id + '"]';
+        const selector = '[data-id="' + id + '"]';
         $('.task-item-row' + selector).removeClass('d-none');
         $('.task-item-row:not(' + selector + ')').addClass('d-none');
 

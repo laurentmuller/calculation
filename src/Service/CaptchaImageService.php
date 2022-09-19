@@ -39,11 +39,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
     private const CHAR_SPACE = 3;
 
     /**
-     * The font path and name.
-     */
-    private const FONT_PATH = '/resources/fonts/captcha.ttf';
-
-    /**
      * The base 64 image data prefix.
      */
     private const IMAGE_PREFIX = 'data:image/png;base64,';
@@ -69,18 +64,12 @@ class CaptchaImageService implements ServiceSubscriberInterface
     private const MAX_TIME_OUT = 180;
 
     /**
-     * The font file name.
-     */
-    private readonly string $font;
-
-    /**
      * Constructor.
      */
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        string $project_dir
+        #[Autowire('%kernel.project_dir%/resources/fonts/captcha.ttf')]
+        private readonly string $font
     ) {
-        $this->font = $project_dir . self::FONT_PATH;
     }
 
     /**

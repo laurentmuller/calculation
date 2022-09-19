@@ -109,8 +109,9 @@
 {%- endmacro %}
 
 {% macro button_submit(text='common.button_ok', class='btn btn-form btn-primary', parameters=[]) -%}
+{% from 'macros/_attributes.html.twig' import attributes %}
 {%- set parameters = parameters|merge({'class': class}) -%}
-<button type="submit" role="button"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans }}</button>
+<button type="submit" role="button"{{ attributes(parameters) }}>{{ text|trans }}</button>
 {%- endmacro %}
 
 {% macro button_ok(href='#', text='common.button_ok', class='btn btn-ok btn-form btn-primary', autofocus=false) -%}
@@ -147,7 +148,7 @@
 {% macro button_close_modal(for_header=true, label='common.button_close') -%}
 {% set text = label|default('common.button_close')|trans %}
 {% if for_header %}
-    <button type="button" role="button" class="close" data-dismiss="modal" aria-label="{{ text }}" title="{{ text }}" >
+    <button type="button" role="button" class="close" data-dismiss="modal" aria-label="{{ text }}" title="{{ text }}">
         <span aria-hidden="true">&times;</span>
     </button>
 {% else %}

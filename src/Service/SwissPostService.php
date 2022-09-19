@@ -21,28 +21,12 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class SwissPostService
 {
     /**
-     * The database name.
-     */
-    final public const DATABASE_NAME = 'swiss.sqlite';
-
-    /**
-     * The relative path to data.
-     */
-    private const DATA_PATH = '/resources/data/';
-
-    /**
-     * The data directory.
-     */
-    private readonly string $dataDirectory;
-
-    /**
      * Constructor.
      */
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir
+        #[Autowire('%kernel.project_dir%/resources/data/swiss.sqlite')]
+        private readonly string $databaseName
     ) {
-        $this->dataDirectory = $projectDir . self::DATA_PATH;
     }
 
     /**
@@ -128,14 +112,6 @@ class SwissPostService
      */
     public function getDatabaseName(): string
     {
-        return $this->dataDirectory . self::DATABASE_NAME;
-    }
-
-    /**
-     * Gets the directory of the database.
-     */
-    public function getDataDirectory(): string
-    {
-        return $this->dataDirectory;
+        return $this->databaseName;
     }
 }

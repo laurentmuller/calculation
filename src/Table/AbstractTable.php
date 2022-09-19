@@ -366,9 +366,9 @@ abstract class AbstractTable implements SortModeInterface
             'search' => \json_encode(true),
             'search-text' => $query->search,
 
-            'page-list' => $this->implodePageList($results->pageList),
-            'page-number' => $query->page,
             'page-size' => $limit,
+            'page-number' => $query->page,
+            'page-list' => $this->implodePageList($results->pageList),
 
             'sort-name' => $query->sort,
             'sort-order' => $query->order,

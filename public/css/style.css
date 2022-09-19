@@ -71,12 +71,22 @@ td.required:after {
 }
 
 /*
- * plain text (read-only control)
+ * Read-only widget
  */
-.form-control-plaintext.border {
-    border: 1px solid #ced4da !important;
+.form-control-plaintext.form-control-readonly {
+    /* px-2 */
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;;
+    /* rounded */
+    border-radius: 0.25rem !important;;
+    /* border */
+    border: 1px solid #dee2e6 !important;;
+    /* text-muted */
+    color: #6c757d !important;
 }
-body.dark .form-control-plaintext.border {
+
+body.dark .form-control-plaintext.form-control-readonly {
+    color: inherit;
     border: 1px solid #6c757d !important;
 }
 
@@ -740,8 +750,4 @@ body.dark table.table-fixed-header th {
 }
 .context-menu-item.btn-default {
     font-weight: bolder !important;
-}
-
-body.dark .form-control-plaintext.border {
-    color: inherit;
 }

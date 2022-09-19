@@ -1,4 +1,4 @@
-{% import "macros/_icons.html.twig" as icons %}
+{% import 'macros/_icons.html.twig' as icons %}
 {# macros #}
 {% macro cardEntry(entity, count, list_path, icon) -%}
 {% set title = entity ~ '.list.title' %}
@@ -29,7 +29,7 @@
 <div class="card mb-2">
     <div class="card-header">
         <h1 class="card-title">
-            {{ icons.icon("database", "index.panel_count") }}
+            {{ icons.icon('database', 'index.panel_count') }}
         </h1>
     </div>
     <div class="card-body index-parent no-gutters p-1">

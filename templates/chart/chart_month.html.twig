@@ -23,7 +23,7 @@
     </div>
     <div class="col-auto">
         <div class="form-inline">
-            <label class="mr-2">{{ 'last_month.period'|trans }}</label>
+            <label for="months" class="mr-2">{{ 'last_month.period'|trans }}</label>
             <select id="months" name="months" data-months="{{ months }}" data-url="{{ path('chart_by_month') }}" class="form-control form-control-sm custom-select custom-select-sm">
                 {% for current in allowed_months %}
                     {{ _self.month(current, current == months) }}

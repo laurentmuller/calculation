@@ -69,7 +69,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private ?\ZipArchive $archive = null;
     private ?SwissDatabase $database = null;
     private readonly string $databaseName;
-    private readonly string $dataDirectory;
     private SwissPostUpdateResult $results;
     private ?string $sourceName = null;
 
@@ -82,7 +81,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     public function __construct(private readonly ApplicationService $application, private readonly FormFactoryInterface $factory, SwissPostService $service)
     {
-        $this->dataDirectory = $service->getDataDirectory();
         $this->databaseName = $service->getDatabaseName();
         $this->results = new SwissPostUpdateResult();
     }
@@ -330,7 +328,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      */
     private function processStates(): void
     {
-        $filename = $this->dataDirectory . self::STATE_FILE;
+        $filename = FileUtils::buildPath(\dirname($this->databaseName), self::STATE_FILE);
         if (FileUtils::exists($filename) && false !== ($handle = \fopen($filename, 'r'))) {
             /**
              * @psalm-param bool|array{

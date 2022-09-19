@@ -2,11 +2,11 @@
 {% from 'macros/_icons.html.twig' import button_cancel, homepage %}
 {# macros #}
 {% macro plain_text_input(id, class='') %}
-{%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
+{%- set class = (class ~ ' form-control-plaintext form-control-readonly text-right')|trim -%}
 <div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
 {% endmacro %}
-{% macro row_input(id, item, visible) %}
-<tr class="item-row{% if not visible %} d-none{% endif %}" task-id="{{ id }}">
+{% macro row_input(task, item, visible) %}
+<tr class="item-row{% if not visible %} d-none{% endif %}" data-id="{{ task.id }}" data-unit="{{ task.unit }}">
     <td>
         <div class="custom-control custom-switch mt-1">
             <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}" checked="checked">
@@ -27,15 +27,22 @@
 {%- set form_attr = form_attr|default({})|merge({'action': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
 {%- set submit_text = 'taskcompute.button_ok' -%}
 {%- set service = form.vars.value -%}
-{%- set selection = service.task.id -%}
-{%- set items_count = service.task.count -%}
+{%- set task = service.task -%}
+{%- set selection = task.id -%}
+{%- set items_count = task.count -%}
 {# body #}
 {% block card_body %}
 <div class="form-row">
-    <div class="col-md-8">
+    <div class="col-md-6">
         {{ form_row(form.task) }}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>{{ 'task.fields.unit'|trans }}</label>
+            <span id="unit" class="form-control-plaintext form-control-readonly">{{ task.unit|default('&nbsp;')|raw }}</span>
+        </div>
+    </div>
+    <div class="col-md-3">
         {{ form_row(form.quantity) }}
     </div>
 </div>
@@ -52,7 +59,7 @@
         {% for task in tasks %}
             {% set visible = task.id == selection %}
             {% for item in task.items|filter(item => item.count > 0) %}
-                {{ _self.row_input(task.id, item, visible) }}
+                {{ _self.row_input(task, item, visible) }}
             {% endfor %}
         {% endfor %}
         </tbody>

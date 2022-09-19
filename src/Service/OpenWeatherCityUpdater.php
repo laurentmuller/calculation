@@ -73,6 +73,7 @@ class OpenWeatherCityUpdater
     public function import(UploadedFile $file): array
     {
         $db = null;
+        $temp_name = null;
 
         try {
             // create temp file
@@ -109,6 +110,9 @@ class OpenWeatherCityUpdater
                 'message' => $this->trans('openweather.result.success'),
             ];
         } finally {
+            if (null !== $temp_name) {
+                FileUtils::remove($temp_name);
+            }
             FileUtils::remove($file);
             $db?->close();
         }
@@ -138,6 +142,9 @@ class OpenWeatherCityUpdater
      */
     private function getFileContent(UploadedFile $file): array|false
     {
+        if ($file->isValid()) {
+            return false;
+        }
         if (!$filename = $file->getRealPath()) {
             return false;
         }

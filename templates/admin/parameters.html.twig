@@ -10,9 +10,9 @@
 {{ _self.collapseLine('product', form) }}
 {{ _self.collapseLine('display', form) }}
 {{ _self.collapseLine('message', form) }}
+{{ _self.collapseLine('home', form) }}
+{{ _self.collapseLine('options', form) }}
 {% if super_admin %}
-    {{ _self.collapseLine('home', form) }}
-    {{ _self.collapseLine('options', form) }}
     {{ _self.collapseLine('security', form, false, options) }}
 {% endif %}
 {%- endblock %}

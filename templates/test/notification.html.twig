@@ -75,7 +75,7 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label for="progressHeight">{{ 'parameters.fields.message_progress'|trans }}</label>
+            <label for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
             <select id="progress" name="progress" data-default="{{ progress }}" class="form-control">
                 {% for i in 0..5 %}
                     {{ _self.progress(i, progress) }}

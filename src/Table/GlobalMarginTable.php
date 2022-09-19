@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Repository\GlobalMarginRepository;
 use App\Util\FileUtils;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * The global margins table.
@@ -28,6 +29,18 @@ class GlobalMarginTable extends AbstractEntityTable
     public function __construct(GlobalMarginRepository $repository)
     {
         parent::__construct($repository);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDataQuery(Request $request): DataQuery
+    {
+        // display always all records
+        $query = parent::getDataQuery($request);
+        $query->limit = \PHP_INT_MAX;
+
+        return $query;
     }
 
     /**
@@ -51,8 +64,10 @@ class GlobalMarginTable extends AbstractEntityTable
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
+        // hide pages list
         parent::updateResults($query, $results);
         if (!$query->callback) {
+            $results->pageList = [];
             $results->addAttribute('search', \json_encode(false));
         }
     }

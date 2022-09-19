@@ -4,7 +4,10 @@
 {# parameters #}
 {%- set title = 'openweather.search.title' -%}
 {%- set title_icon = 'search' -%}
-{%- set submit_text = submit_text|default('common.button_search') -%}
+{%- set submit_text = 'common.button_search' -%}
+{%- set city = app.session.get('openweather.city', false) -%}
+{%- set units = app.session.get('openweather.units', 'metric') -%}
+{%- set cancel_path = city ? path('openweather_weather', {'city': city, 'units': units}) : null -%}
 {# body #}
 {% block card_body %}
 <div class="form-row">
@@ -28,14 +31,14 @@
             {%- set current = city.current -%}
             <tr>
                 <td class="text-unit">
-                    <img src="{{ current.weather.icon_small }}" class="ow-image ow-image-search" alt="Image">
+                    <img src="{{ current.weather.icon_small }}" class="ow-image ow-image-search" alt="Current Weather" title="{{ current.weather.description }}">
                 </td>
                 <td class="w-75">
                     <a href="{{ path('openweather_current', {'city': city.id, 'units': units, 'count': count}) }}"><b>{{ city.name }}</b></a><br>
                     <span class="small">{{ tools.value_temp(current.main.temp, city.units.temperature) }}, {{ current.weather.description }}</span>
                 </td>
                 <td class="w-25">
-                    {{- city.country_name }} <img class="ow-flag" alt="Flag" src="{{ city.country_flag }}">
+                    {{- city.country_name }} <img src="{{ city.country_flag }}" class="ow-flag" alt="Flag" title="{{- city.country_name }}">
                 </td>
             <td>
         {% endfor %}

@@ -72,18 +72,14 @@ services:
     # used to update calculation when groups, categories or items change
     App\Listener\CalculationListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\ParentCalculationInterface'}
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\ParentCalculationInterface' }
 
     # used to update TimestampableInterface
     App\Listener\TimestampableListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\TimestampableInterface'}
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\TimestampableInterface' }
 
     # custom line formatter for monolog
     monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
-
-    App\Listener\ResponseListener:
-        arguments:
-            $file: '%kernel.project_dir%/resources/data/csp.%kernel.environment%.json'

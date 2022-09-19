@@ -42,8 +42,10 @@
 {# classes #}
 {% block card_container_class '' %}
 {% block table_responsive_class '' %}
+{#
 {% block card_class -%}{{ ' border-' ~ level_color }}{%- endblock %}
 {% block card_header_class -%}{{ ' border-' ~ level_color ~ ' text-white bg-' ~ level_color }}{%- endblock %}
+#}
 {# properties #}
 {% block property_body %}
 {{ _self.cellTemplate('log.fields.level', item, 'macros/_cell_log_level.html.twig') }}

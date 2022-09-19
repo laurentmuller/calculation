@@ -16,7 +16,7 @@ use App\Interfaces\MimeTypeInterface;
 use App\Service\NonceService;
 use App\Util\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -28,7 +28,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * For CSP violation see https://mathiasbynens.be/notes/csp-reports.
  */
-class ResponseListener implements EventSubscriberInterface
+#[AsEventListener(event: KernelEvents::RESPONSE, method: 'onKernelResponse')]
+class ResponseListener
 {
     /**
      * The CSP none directive.
@@ -60,6 +61,7 @@ class ResponseListener implements EventSubscriberInterface
     public function __construct(
         NonceService $service,
         UrlGeneratorInterface $router,
+        #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
         string $file,
         #[Autowire('%kernel.debug%')]
         private readonly bool $isDebug
@@ -67,16 +69,6 @@ class ResponseListener implements EventSubscriberInterface
         $nonce = $service->getCspNonce();
         $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $this->csp = $this->loadCSP($file, $nonce, $report);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::RESPONSE => 'onKernelResponse',
-        ];
     }
 
     /**
@@ -98,7 +90,7 @@ class ResponseListener implements EventSubscriberInterface
         // CSP
         $response = $event->getResponse();
         $headers = $response->headers;
-        if (!$this->isEdgeBrowser($request) && '' !== $csp = $this->getCSP($response)) {
+        if ('' !== $csp = $this->getCSP($response)) {
             $headers->set('Content-Security-Policy', $csp);
             $headers->set('X-Content-Security-Policy', $csp);
             $headers->set('X-WebKit-CSP', $csp);
@@ -144,16 +136,6 @@ class ResponseListener implements EventSubscriberInterface
         $context = $request->attributes->get('_firewall_context');
 
         return \is_string($context) && false !== \stripos($context, 'dev');
-    }
-
-    /**
-     * Returns if the browser is Edge.
-     */
-    private function isEdgeBrowser(Request $request): bool
-    {
-        $agent = $request->headers->get('user-agent');
-
-        return null !== $agent && false !== \stripos($agent, 'edge');
     }
 
     /**

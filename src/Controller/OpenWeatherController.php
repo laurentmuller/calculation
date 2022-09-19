@@ -287,7 +287,6 @@ class OpenWeatherController extends AbstractController
     #[Route(path: '/search', name: 'openweather_search')]
     public function search(Request $request): Response
     {
-        // get session data
         $data = [
             self::KEY_QUERY => $this->getSessionQuery($request),
             self::KEY_UNITS => $this->getSessionUnits($request),
@@ -296,7 +295,6 @@ class OpenWeatherController extends AbstractController
         ];
         $form = $this->createSearchForm($data);
 
-        // handle request
         if ($this->handleRequestForm($request, $form)) {
             /** @var array{query: string, units: string, limit: int, count: int} $data */
             $data = $form->getData();
@@ -316,12 +314,10 @@ class OpenWeatherController extends AbstractController
                     self::KEY_COUNT => $count,
                 ]);
 
-                $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
-
-                // display if only 1 city is found
-                if (1 === \count($cityIds)) {
+                // display current weather if only 1 city is found
+                if (1 === \count($cities)) {
                     return $this->redirectToRoute('openweather_current', [
-                        self::KEY_CITY_ID => \reset($cityIds),
+                        self::KEY_CITY_ID => \reset($cities)['id'],
                         self::KEY_UNITS => $units,
                         self::KEY_COUNT => $count,
                     ]);
@@ -329,6 +325,7 @@ class OpenWeatherController extends AbstractController
 
                 /** @var array{units: array, list: array<int, mixed>}|null $group */
                 $group = null;
+                $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
                 foreach (\array_keys($cities) as $index) {
                     // load current weather by chunk of 20 items
                     if (0 === $index % OpenWeatherService::MAX_GROUP) {
@@ -342,7 +339,6 @@ class OpenWeatherController extends AbstractController
                 }
             }
 
-            // display
             return $this->renderForm('openweather/search_city.html.twig', [
                 'form' => $form,
                 'cities' => $cities,
@@ -350,7 +346,7 @@ class OpenWeatherController extends AbstractController
                 'count' => $count,
             ]);
         }
-        // display
+
         return $this->renderForm('openweather/search_city.html.twig', [
             'form' => $form,
             'count' => $data[self::KEY_COUNT],

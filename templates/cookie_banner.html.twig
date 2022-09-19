@@ -1,6 +1,6 @@
 {% if not app.request.cookies.has('POLICY_ACCEPTED') %}
 {{ asset_js('js/plugins/cookie-banner.js', {
-    'id': "cookie-banner",
+    'id': 'cookie-banner',
     'data-display-banner': (displayBanner is defined ? displayBanner : true)|json_encode,
     'data-cookie-name': 'POLICY_ACCEPTED',
     'data-cookie-same-site': 'lax',

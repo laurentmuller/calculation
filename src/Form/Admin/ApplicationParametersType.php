@@ -59,9 +59,9 @@ class ApplicationParametersType extends AbstractParametersType
         $this->addDefaultProductSection($helper);
         $this->addDisplaySection($helper);
         $this->addMessageSection($helper);
+        $this->addHomePageSection($helper);
+        $this->addOptionsSection($helper);
         if ($this->isSuperAdmin()) {
-            $this->addHomePageSection($helper);
-            $this->addOptionsSection($helper);
             $this->addSecuritySection($helper);
         }
     }

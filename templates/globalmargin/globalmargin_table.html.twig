@@ -3,11 +3,12 @@
 {%- set title = 'globalmargin.list.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
-
-{% block card_container_class %} col-md-8 offset-md-2{% endblock -%}
+{% block card_container_class %}  col-md-8 offset-md-2{% endblock -%}
 
 {% block header_actions -%}
-{% if allow_edit %}<a class="add-link p-0" href="{{ path('globalmargin_edit', params) }}">{{ 'globalmargin.edit.title'|trans }}</a>{% endif %}
+{% if allow_edit -%}
+    <a href="{{ path('globalmargin_edit', params) }}">{{ 'globalmargin.edit.title'|trans }}</a>
+{%- endif %}
 {%- endblock %}
 
 {% block global_actions -%}

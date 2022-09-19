@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Util\FileUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
@@ -24,6 +25,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SimpleEditorType extends AbstractType
 {
+    /*
+     * the shared default actions.
+     */
+    private static ?array $defaultActions = null;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(
+        #[Autowire('%kernel.project_dir%/resources/data/simple_editor_actions.json')]
+        private readonly string $actionsPath
+    ) {
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -70,13 +85,16 @@ class SimpleEditorType extends AbstractType
      */
     private function getDefaultActions(): array
     {
-        $file = __DIR__ . '/simple_editor_actions.json';
-
-        try {
-            return (array) FileUtils::decodeJson($file);
-        } catch (\InvalidArgumentException) {
-            return [];
+        if (empty(self::$defaultActions)) {
+            try {
+                $file = FileUtils::buildPath($this->actionsPath);
+                self::$defaultActions = (array) FileUtils::decodeJson($file);
+            } catch (\InvalidArgumentException) {
+                self::$defaultActions = [];
+            }
         }
+
+        return self::$defaultActions;
     }
 
     /**
@@ -177,12 +195,7 @@ class SimpleEditorType extends AbstractType
             unset($action['class']);
 
             // drop-down items?
-            if (isset($action['actions'])) {
-                $action['attributes']['aria-expanded'] = 'false';
-                $action['attributes']['data-toggle'] = 'dropdown';
-                $action['attributes']['class'] .= ' dropdown-toggle';
-            }
-            if (!empty($action['actions'])) {
+            if (isset($action['actions']) && !empty($action['actions'])) {
                 $action['attributes']['aria-expanded'] = 'false';
                 $action['attributes']['data-toggle'] = 'dropdown';
                 $action['attributes']['class'] .= ' dropdown-toggle';

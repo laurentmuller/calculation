@@ -112,7 +112,7 @@ tr.text-muted td .text-danger {
 }
 .dropdown-item-checked::after {
     content: '\f00c';
-    font-family: 'FontAwesome';
+    font-family: 'FontAwesome Free';
     font-weight: 600;
     margin-left: 0.5rem;
     float: right;

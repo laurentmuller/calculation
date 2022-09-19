@@ -36,3 +36,5 @@ counters:
     pixels: '{count, plural, =0 {0 pixel} one {1 pixel} other {# pixels}}'
 index:
   menu_show:
+about:
+  expand:

@@ -24,7 +24,7 @@
         {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
     {% endfor %}
     {# add logout flashbag message if applicable #}
-    {% if app.request.get('logout') == "success" %}
+    {% if app.request.get('logout', '') == 'success' %}
         {{ _self.addFlashbag('success', 'security.logout.success'|trans({'%appname%': app_name_version})) }}
     {% endif %}
 </div>

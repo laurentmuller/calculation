@@ -40,28 +40,83 @@ td.user {
     white-space: nowrap;
 }
 
-.dropdown-level i {
-    color: white;
+/**
+ * Level icons
+ */
+.icon-level {
+    width: 1.25em;
+    text-align: center;
 }
+.icon-level:before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    padding-right: 4px;
+    content: '\f05a';
 
-.dropdown-level i.debug {
-    color: var(--secondary);
 }
-
-.dropdown-level i.info,
-.dropdown-level i.notice {
+.icon-level.info {
     color: var(--info);
 }
-
-.dropdown-level i.warning {
+.icon-level.debug {
+    color: var(--secondary);
+}
+.icon-level.warning {
     color: var(--warning);
 }
-
-.dropdown-level i.error,
-.dropdown-level i.critical,
-.dropdown-level i.alert,
-.dropdown-level i.emergency {
+.icon-level.alert,
+.icon-level.critical,
+.icon-level.emergency,
+.icon-level.error {
     color: var(--danger);
+}
+.icon-level.all:before {
+    content: "\f5fd";
+}
+.icon-level.info:before,
+.icon-level.debug:before,
+.icon-level.error:before,
+.icon-level.critical:before,
+.icon-level.alert:before,
+.icon-level.emergency:before {
+    content: "\f06a";
+}
+.icon-level.warning:before {
+    content: "\f071";
+}
+
+/**
+ * Channel icons
+ */
+.icon-channel {
+    width: 1.25em;
+    text-align: center;
+}
+.icon-channel:before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    padding-right: 4px;
+    content: '\f15b';
+}
+.icon-channel.all:before {
+    content: '\f7d9';
+}
+.icon-channel.application:before {
+    content: '\f5fc';
+}
+.icon-channel.request:before {
+    content: '\e13c';
+}
+.icon-channel.doctrine:before {
+    content: '\f1c0';
+}
+.icon-channel.cache:before {
+    content: '\f0a0';
+}
+.icon-channel.security:before {
+    content: '\f084';
+}
+.icon-channel.php:before {
+    content: '\f121';
 }
 
 /**

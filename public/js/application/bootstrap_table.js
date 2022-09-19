@@ -365,6 +365,113 @@ function formatActions(value, _row) { // jshint ignore:line
 }
 
 /**
+ * Initialize keys enablement.
+ *
+ * @param {JQuery} $table the parent table.
+ */
+function initializeKeyHandler($table) {
+    'use strict';
+    const keysSelector = 'a, input, select, .btn, .dropdown-item, .rowlink-skip';
+    $('body').on('focus', keysSelector, function () {
+        $table.disableKeys();
+    }).on('blur', keysSelector, function () {
+        $table.enableKeys();
+    });
+}
+
+/**
+ * Initialize context menus.
+ *
+ * @param {JQuery} $table the parent table.
+ */
+function initializeContextMenus($table) {
+    'use strict';
+    const selector = 'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
+    const hideMenus = function () {
+        $.hideDropDownMenus();
+        return true;
+    };
+    $table.parents('.bootstrap-table').initContextMenu(selector, hideMenus);
+}
+
+/**
+ * Initialize danger tooltips.
+ *
+ * @param {JQuery} $table the parent table.
+ */
+function initializeDangerTooltips($table) {
+    'use strict';
+    const tooltipSelector = $table.data('danger-tooltip-selector');
+    if (tooltipSelector) {
+        $table.parents('.bootstrap-table').tooltip({
+            customClass: 'tooltip-danger',
+            selector: tooltipSelector
+        });
+    }
+}
+
+/**
+ * Initialize search entity drop-down.
+ */
+function initializeCalculationStates() {
+    'use strict';
+    $('.dropdown-state').each(function () {
+        const $this = $(this);
+        $('<span />', {
+            class: 'mr-1 border',
+            css: {
+                width: '1rem',
+                height: '0.75rem',
+                display: 'inline-block',
+                background: $this.data('color') || 'transparent'
+            }
+        }).prependTo($this);
+    });
+}
+
+/**
+ * Initialize search entity drop-down
+ */
+function initializeSearchEntities() {
+    'use strict';
+    $('.dropdown-entity ').each(function () {
+        const $this = $(this);
+        const icon = $this.data('icon');
+        if (icon) {
+            $('<i />', {
+                class: ' mr-1 ' + $this.data('icon')
+            }).prependTo($this);
+        }
+    });
+}
+
+/**
+ * Initialize log channels drop-down.
+ */
+function initializeLogChannels() {
+    'use strict';
+    $('.dropdown-channel').each(function () {
+        const $this = $(this);
+        $('<span />', {
+            class: 'icon-channel ' + ($this.data('value') || 'all')
+        }).prependTo($this);
+    });
+}
+
+/**
+ * Initialize log levels drop-down.
+ */
+function initializeLogLevels() {
+    'use strict';
+    $('.dropdown-level').each(function () {
+        const $this = $(this);
+        $('<span />', {
+            class: 'icon-level ' + ($this.data('value') || 'all')
+        }).prependTo($this);
+    });
+}
+
+/**
  * jQuery extensions.
  */
 $.fn.extend({
@@ -750,62 +857,19 @@ $.fn.extend({
     }
 
     // handle keys enablement
-    const keysSelector = 'a, input, select, .btn, .dropdown-item, .rowlink-skip';
-    $('body').on('focus', keysSelector, function () {
-        // window.console.log('disableKeys', this);
-        $table.disableKeys();
-    }).on('blur', keysSelector, function () {
-        $table.enableKeys();
-        // window.console.log('enableKeys', this);
-    });
+    initializeKeyHandler($table);
 
     // initialize context menu
-    const ctxSelector = 'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
-    const hideMenus = function () {
-        $.hideDropDownMenus();
-        return true;
-    };
-    $table.parents('.bootstrap-table').initContextMenu(ctxSelector, hideMenus);
+    initializeContextMenus($table);
 
     // initialize danger tooltips
-    const tooltipSelector = $table.data('danger-tooltip-selector');
-    if (tooltipSelector) {
-        $table.parents('.bootstrap-table').tooltip({
-            customClass: 'tooltip-danger',
-            selector: tooltipSelector
-        });
-    }
+    initializeDangerTooltips($table);
 
-    // initialize calculation state drop-down
-    $('.dropdown-state').each(function () {
-        const $this = $(this);
-        $('<i />', {
-            class: 'fa-solid fa-square-full border mr-1',
-            css: {
-                color: $this.data('color')
-            }
-        }).prependTo($this);
-    });
-
-    // initialize log levels drop-down
-    $('.dropdown-level').each(function () {
-        const $this = $(this);
-        $('<i />', {
-            class: 'fa-solid fa-square-full border mr-1 ' + $this.data('value')
-        }).prependTo($this);
-    });
-
-    // initialize search entity drop-down
-    $('.dropdown-entity ').each(function () {
-        const $this = $(this);
-        const icon = $this.data('icon');
-        if (icon) {
-            $('<i />', {
-                class: ' mr-1 ' + $this.data('icon')
-            }).prependTo($this);
-        }
-    });
-
+    // initialize drop-down menus
+    initializeCalculationStates();
+    initializeSearchEntities();
+    initializeLogChannels();
+    initializeLogLevels();
 
     // update UI
     $('.card .dropdown-menu').removeSeparators();

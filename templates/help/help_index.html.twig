@@ -16,7 +16,7 @@
 {%- endmacro %}
 
 {% macro output_menus(menus, help, indent=0) -%}
-<dl{% if indent > 0 %} " style="margin-left: {{ indent }}rem;"{% endif %}>
+<dl{% if indent > 0 %} style="margin-left: {{ indent }}rem;"{% endif %}>
     {%- for menu in menus -%}{{- _self.output_menu(menu, help, indent) -}}{%- endfor -%}
 </dl>
 {%- endmacro %}

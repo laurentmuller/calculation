@@ -1,4 +1,4 @@
-{% import "macros/_icons.html.twig" as icons %}
+{% import 'macros/_icons.html.twig' as icons %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
 {% macro cardEntry(state, list_path, parameters=[], min_margin) -%}
@@ -30,7 +30,7 @@
     <div class="card-header">
         <div class="row">
             <div class="col-auto mr-auto">
-                <h1 class="card-title">{{ icons.icon(ICON_CALCULATION_STATE, "index.panel_state") }}</h1>
+                <h1 class="card-title">{{ icons.icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
             </div>
             <div class="col-auto d-print-none">
                 {%- if list_path and is_states -%}

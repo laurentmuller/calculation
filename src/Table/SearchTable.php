@@ -153,14 +153,14 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     private function getIcon(string $type): string
     {
         return match ($type) {
-            'calculation' => 'fa-fw fa-calculator fa-solid',
-            'calculationstate' => 'fa-fw fa-flag fa-regular',
-            'task' => 'fa-fw fa-tasks fa-solid',
-            'category' => 'fa-fw fa-folder fa-regular',
-            'group' => 'fa-fw fa-code-branch fa-solid',
-            'product' => 'fa-fw fa-file-alt fa-regular',
-            'customer' => 'fa-fw fa-address-card fa-regular',
-            default => 'fa-fw fa-file fa-regular',
+            'calculation' => 'fa-fw fa-solid fa-calculator',
+            'calculationstate' => 'fa-fw fa-regular fa-flag',
+            'category' => 'fa-fw fa-regular fa-folder',
+            'customer' => 'fa-fw fa-regular fa-address-card',
+            'task' => 'fa-fw fa-solid fa-tasks',
+            'group' => 'fa-fw fa-solid fa-code-branch',
+            'product' => 'fa-fw fa-regular fa-file-alt',
+            default => 'fa-fw fa-regular fa-file',
         };
     }
 

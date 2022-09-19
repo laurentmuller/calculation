@@ -32,14 +32,3 @@
     {{ link(delete_path, 'common.button_delete', 'btn btn-form btn-outline-danger') }}
 {% endif %}
 {%- endblock %}
-{# javascripts #}
-{% block javascripts -%}
-    {{ parent() }}
-    {% if cancel_path|default(false) %}
-        <script nonce="{{ csp_nonce() }}">
-            (function ($) {
-                $('.btn-ok').trigger('focus');
-            }(jQuery));
-        </script>
-    {% endif %}
-{% endblock %}

@@ -16,7 +16,7 @@ use App\Entity\User;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -27,7 +27,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class LoginListener implements EventSubscriberInterface, ServiceSubscriberInterface
+#[AsEventListener(event: LoginSuccessEvent::class, method: 'onLoginSuccess')]
+class LoginListener implements ServiceSubscriberInterface
 {
     use ServiceSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
@@ -42,14 +43,6 @@ class LoginListener implements EventSubscriberInterface, ServiceSubscriberInterf
         #[Autowire('%app_version%')]
         private readonly string $appVersion,
     ) {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [LoginSuccessEvent::class => 'onLoginSuccess'];
     }
 
     /**

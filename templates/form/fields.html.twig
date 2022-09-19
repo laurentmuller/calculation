@@ -10,7 +10,7 @@
     {%- endif -%}
     {%- set widget_attr = {} -%}
     {%- if help is not empty -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~ "_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~ '_help'}} -%}
     {%- endif -%}
     <{{ element }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
         {{- form_label(form) -}}
@@ -83,7 +83,7 @@
 {% block plain_widget -%}
 {% apply spaceless %}
 {% if expanded %}
-    {% set class = (attr.class|default('') ~ ' form-control-plaintext text-muted border rounded px-2')|trim %}
+    {% set class = (attr.class|default('') ~ ' form-control-plaintext form-control-readonly')|trim %}
     <div class="{{ class }}">
         <span>{{ display_value|default('&nbsp;')|raw }}</span>
     </div>
@@ -227,7 +227,7 @@
 <div class="input-group">
     <div class="input-group-prepend">
         <span class="input-group-text py-0 px-1 bg-white">
-            <img id="{{ id }}_image" name="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
+            <img id="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
         </span>
     </div>
     {{- block('form_widget_simple') -}}
@@ -239,7 +239,6 @@
     </div>
     {% endif %}
 </div>
-
 {%- endblock %}
 
 {# simple editor #}
@@ -247,7 +246,7 @@
     {{- block('form_row') -}}
 {%- endblock %}
 
-{% block editor_button %}
+{% block simple_editor_button %}
 {% set translation_domain = 'messages' %}
 {% set attr_translation_parameters = [] %}
 <button type="button"{% with {attr: current_action.attributes} %}{{ block('attributes') }}{% endwith %}>
@@ -259,25 +258,25 @@
 {%- set type = type|default('hidden') -%}
 {%- set editor_id = form.vars.id ~ '_editor' -%}
 {%- set actions = form.vars.actions|default([]) -%}
-<div class="simple-editor border" id="{{ editor_id }}" name="{{ editor_id }}">
+<div class="simple-editor border rounded" id="{{ editor_id }}">
     {% if groups|default([])|length -%}
-    <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar" >
+    <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar">
         {% for group, actions in groups %}
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
         {% for action in actions %}
             {% set current_action = action %}
             {% if action.actions|default([])|length %}
             <div class="btn-group btn-group-sm" role="group">
-                {{ block('editor_button') }}
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                {{ block('simple_editor_button') }}
+                <div class="dropdown-menu">
                 {% for child in action.actions %}
                     {% set current_action = child %}
-                    {{- block('editor_button') -}}
+                    {{- block('simple_editor_button') -}}
                 {% endfor %}
                 </div>
             </div>
             {% else %}
-                {{- block('editor_button') -}}
+                {{- block('simple_editor_button') -}}
             {% endif %}
         {% endfor %}
         {% if not loop.last %}<div class="border-left separator"></div>{% endif %}

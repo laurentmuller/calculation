@@ -43,6 +43,13 @@ final class FunctionExtension extends AbstractExtension
     private readonly int $version;
 
     /**
+     * The asset versions.
+     *
+     * @var array<string, int>
+     */
+    private array $versions = [];
+
+    /**
      * The real path of the public directory.
      */
     private readonly string $webDir;
@@ -75,7 +82,6 @@ final class FunctionExtension extends AbstractExtension
         return [
             new TwigFilter('trans_role', $this->translateRole(...)),
             new TwigFilter('var_export', [Utils::class, 'exportVar']),
-            new TwigFilter('normalize_whitespace', $this->normalizeWhitespace(...), ['preserves_safety' => ['html']]),
         ];
     }
 
@@ -161,12 +167,12 @@ final class FunctionExtension extends AbstractExtension
      */
     private function assetImage(string $path, array $parameters = [], ?string $packageName = null): string
     {
-        $size = $this->imageSize($path);
+        [$width, $height] = $this->imageSize($path);
         $src = $this->versionedAsset($path, $packageName);
         $parameters = \array_merge([
             'src' => $src,
-            'width' => $size[0],
-            'height' => $size[1],
+            'width' => $width,
+            'height' => $height,
         ], $parameters);
         $attributes = $this->reduceParameters($parameters);
 
@@ -227,11 +233,14 @@ final class FunctionExtension extends AbstractExtension
      */
     private function assetVersion(?string $path): int
     {
-        if (!$this->debug && null !== $file = $this->getRealPath($path)) {
-            return (int) \filemtime($file);
+        if ($this->debug || null === $realPath = $this->getRealPath($path)) {
+            return $this->version;
+        }
+        if (!isset($this->versions[$realPath])) {
+            $this->versions[$realPath] = (int) \filemtime($realPath);
         }
 
-        return $this->version;
+        return $this->versions[$realPath];
     }
 
     /**
@@ -285,7 +294,7 @@ final class FunctionExtension extends AbstractExtension
         /** @psalm-var array{0: int, 1: int} $size */
         $size = (array) \getimagesize($full_path);
 
-        return $size;
+        return [$size[0], $size[1]];
     }
 
     /**
@@ -294,20 +303,6 @@ final class FunctionExtension extends AbstractExtension
     private function isDarkTheme(Request $request): bool
     {
         return $request->cookies->getBoolean(ThemeController::KEY_DARK);
-    }
-
-    /**
-     * This filter replaces duplicated spaces and/or linebreaks with single space.
-     */
-    private function normalizeWhitespace(string $value): string
-    {
-        // attributes
-        $value = (string) \preg_replace('/\s+=\s+/u', '=', $value);
-
-        // space and new lines
-        $value = (string) \preg_replace('/\s+/u', ' ', $value);
-
-        return \trim($value);
     }
 
     /**

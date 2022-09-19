@@ -61,7 +61,7 @@
                                 {%- set style = properties.stateCss(value.state.color) -%}
                                 <tr class="bg-themed">
                                     <th class="text-border{{ border }}" colspan="4" style="{{ style }}">{{ key }}</th>
-                                    <th class="text-currency{{ border }}"colspan="2" >{{ 'counters.calculations'|trans({'count': value.calculations|length}) }}</th>
+                                    <th class="text-currency{{ border }}"colspan="2">{{ 'counters.calculations'|trans({'count': value.calculations|length}) }}</th>
                                 </tr>
                                 {% for calculation in value.calculations %}
                                 <tr>

@@ -80,7 +80,6 @@
                 const $this = $(this);
                 const $editor = $this.parents('div.simple-editor');
                 const $content = $editor.find('div.simple-editor-content');
-                $editor.addClass('rounded');
 
                 // actions
                 $editor.find('.simple-editor-toolbar button').each(function (index) {

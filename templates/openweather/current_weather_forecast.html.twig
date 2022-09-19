@@ -8,9 +8,9 @@
             {% for data in forecast.list %}
                 <tr>
                     <td class="ow-date">{{ data.dt_time_locale }}</td>
-                    <td class="ow-icon"><img src="{{ data.weather.icon_small }}" class="ow-image" alt="Forecast">
+                    <td class="ow-icon"><img src="{{ data.weather.icon_small }}" class="ow-image" alt="Forecast Weather" title="{{ data.weather.description }}">
                     <td class="ow-temperature">
-                        <span class="ow-temperature-pills ow-temperature-forecast" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</span></br>
+                        <span class="ow-temperature-pills ow-temperature-forecast" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</span><br>
                         <span title="{{ 'openweather.fields.wind'|trans }}">{{ tools.value_speed(data.wind.speed, units_speed) }}</span></td>
                     <td class="w-50">
                         <span>{{ data.weather.description }}{% if data.rain['3h']|default(false) %}, {{ tools.value_rain(data.rain['3h'], units_volume) }}{% endif %}</span><br>

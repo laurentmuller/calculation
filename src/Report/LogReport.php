@@ -15,7 +15,9 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Log;
 use App\Model\LogFile;
+use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
@@ -30,8 +32,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Util\FormatUtils;
 use App\Util\Utils;
-use Doctrine\SqlFormatter\NullHighlighter;
-use Doctrine\SqlFormatter\SqlFormatter;
 use Psr\Log\LogLevel;
 
 /**
@@ -50,6 +50,11 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
      * The half borderline width.
      */
     private const HALF_WIDTH = 0.25;
+
+    /*
+     * The total card text.
+     */
+    private const TOTAL = 'total';
 
     /**
      * The border colors.
@@ -81,7 +86,14 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
      */
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
-        parent::__construct($controller);
+        parent::__construct($controller, PdfDocumentOrientation::LANDSCAPE);
+
+        // title and description
+        $this->setTitleTrans('log.title');
+        $description = $this->trans('log.list.file', [
+            '%file%' => $this->logFile->getFile(),
+        ]);
+        $this->header->setDescription($description);
     }
 
     /**
@@ -107,9 +119,12 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
         // cards
         if ($this->drawCards) {
-            $level = $builder->getColumns()[$index]->getText();
+            $text = $builder->getColumns()[$index]->getText();
+            if (self::TOTAL === $text) {
+                return false;
+            }
 
-            return $this->drawBorder($builder, $level, $bounds, $border);
+            return $this->drawBorder($builder, $text, $bounds, $border);
         }
 
         // lines
@@ -123,15 +138,6 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     {
         $logFile = $this->logFile;
 
-        // title
-        $this->setTitleTrans('log.title');
-
-        // description
-        $description = $this->trans('log.list.file', [
-            '%file%' => $logFile->getFile(),
-        ]);
-        $this->header->setDescription($description);
-
         // new page
         $this->AddPage();
 
@@ -142,9 +148,8 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
             return true;
         }
 
-        // channels and levels
-        $this->outputCards('log.fields.channel', $logFile->getChannels());
-        $this->outputCards('log.fields.level', $logFile->getLevels());
+        // levels and channels
+        $this->outputCards();
 
         // logs
         return $this->outputLogs($logFile->getLogs());
@@ -199,59 +204,79 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
                 LogLevel::EMERGENCY,
                 LogLevel::ERROR => PdfDrawColor::create(HtmlBootstrapColors::DANGER),
                 LogLevel::WARNING => PdfDrawColor::create(HtmlBootstrapColors::WARNING),
-                LogLevel::DEBUG => PdfDrawColor::create(HtmlBootstrapColors::PRIMARY),
-                default => PdfDrawColor::create(HtmlBootstrapColors::INFO),
+                LogLevel::DEBUG => PdfDrawColor::create(HtmlBootstrapColors::SECONDARY),
+                LogLevel::INFO => PdfDrawColor::create(HtmlBootstrapColors::INFO),
+                default => null
             };
         }
 
         return $this->colors[$level];
     }
 
-    /**
-     * Output header cards.
-     *
-     * @param array<string, int> $cards the cards to output
-     */
-    private function outputCards(string $title, array $cards): void
+    private function outputCards(): void
     {
-        // title
-        $this->cellTitle($title);
-
-        // total
-        $cards['total'] = \array_sum($cards);
-
-        $this->started = true;
-        $this->drawCards = true;
+        $levels = $this->logFile->getLevels();
+        $channels = $this->logFile->getChannels();
 
         $columns = [];
-        $valCells = [];
         $textCells = [];
-
+        $valueCells = [];
+        $sepCol = PdfColumn::center(null, 3);
         $emptyCol = PdfColumn::center(null, 1);
         $emptyCell = new PdfCell(null, 1, PdfStyle::getNoBorderStyle());
 
-        // build columns and cells
-        $index = \count($cards) - 1;
-        foreach ($cards as $key => $value) {
-            $columns[] = PdfColumn::center($key, 25);
-            $valCells[] = new PdfCell(FormatUtils::formatInt($value));
-            $textCells[] = new PdfCell(Utils::capitalize($key));
+        // levels
+        $this->outputCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
+        $columns[] = $sepCol;
+        $textCells[] = $emptyCell;
+        $valueCells[] = $emptyCell;
 
-            // add separator if not last
+        // channels
+        $this->outputCardsEntries($channels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
+        $columns[] = $sepCol;
+        $textCells[] = $emptyCell;
+        $valueCells[] = $emptyCell;
+
+        // total
+        $columns[] = PdfColumn::center(self::TOTAL, 30);
+        $textCells[] = new PdfCell(Utils::capitalize(self::TOTAL));
+        $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
+
+        $this->started = true;
+        $this->drawCards = true;
+        $titleStyle = PdfStyle::getDefaultStyle()->setBorder(PdfBorder::NONE)->setFontBold();
+
+        $table = new PdfTableBuilder($this);
+        $table->addColumns(...$columns)
+            ->startRow()
+            ->add($this->trans('log.fields.level'), \count($levels) * 2, $titleStyle, PdfTextAlignment::LEFT)
+            ->add($this->trans('log.fields.channel'), \count($channels) * 2 + 1, $titleStyle, PdfTextAlignment::LEFT)
+            ->endRow()
+            ->setListener($this)
+            ->row($textCells, PdfStyle::getHeaderStyle()->resetFont())
+            ->row($valueCells, PdfStyle::getCellStyle()->setFontSize(14));
+        $this->Ln(3);
+    }
+
+    /**
+     * @param array<string, int> $values
+     * @param PdfColumn[]        $columns
+     * @param PdfCell[]          $textCells
+     * @param PdfCell[]          $valueCells
+     */
+    private function outputCardsEntries(array $values, array &$columns, array &$textCells, array &$valueCells, PdfColumn $emptyCol, PdfCell $emptyCell): void
+    {
+        $index = \count($values) - 1;
+        foreach ($values as $key => $value) {
+            $columns[] = PdfColumn::center($key, 30);
+            $textCells[] = new PdfCell(Utils::capitalize($key));
+            $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
             if ($index-- > 0) {
                 $columns[] = $emptyCol;
-                $valCells[] = $emptyCell;
                 $textCells[] = $emptyCell;
+                $valueCells[] = $emptyCell;
             }
         }
-
-        // fill
-        $table = new PdfTableBuilder($this);
-        $table->setListener($this);
-        $table->addColumns(...$columns)
-            ->row($valCells, PdfStyle::getCellStyle()->setFontSize(18))
-            ->row($textCells, PdfStyle::getHeaderStyle()->resetFont());
-        $this->Ln(3);
     }
 
     /**
@@ -269,21 +294,20 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $table = new PdfTableBuilder($this);
         $table->setListener($this)
             ->addColumns(
-                PdfColumn::left($this->trans('log.fields.createdAt'), 45),
-                PdfColumn::left($this->trans('log.fields.channel'), 30),
-                PdfColumn::left($this->trans('log.fields.level'), 30),
+                PdfColumn::left($this->trans('log.fields.level'), 20, true),
+                PdfColumn::left($this->trans('log.fields.channel'), 20, true),
+                PdfColumn::left($this->trans('log.fields.createdAt'), 34, true),
                 PdfColumn::left($this->trans('log.fields.message'), 150),
-                PdfColumn::left($this->trans('log.fields.user'), 30)
+                PdfColumn::left($this->trans('log.fields.user'), 20, true)
             )->outputHeaders();
 
-        $formatter = new SqlFormatter(new NullHighlighter());
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
             $table->addRow(
-                $log->getFormattedDate(),
-                $log->getChannel(true),
                 $log->getLevel(true),
-                $log->formatMessage($formatter),
+                $log->getChannel(true),
+                $log->getFormattedDate(),
+                $log->getMessage(),
                 $log->getUser()
             );
         }

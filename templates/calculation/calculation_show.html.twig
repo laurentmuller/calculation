@@ -100,7 +100,7 @@
             <tr>
                 <td class="text-nowrap" colspan="2">{{ 'calculation.fields.globalMargin'|trans }}</td>
                 <td class="text-percent">{{ item.globalMargin|percent }}</td>
-                <td colspan="2" class="text-currency">{{ item.globalMarginAmount|amount }}</td>
+                <td class="text-currency" colspan="2">{{ item.globalMarginAmount|amount }}</td>
             </tr>
 
             {# user margin #}
@@ -110,9 +110,9 @@
                     <td class="font-weight-bold text-currency">{{ item.totalNet|amount }}</td>
                 </tr>
                 <tr>
-                    <td class="text-nowrap " colspan="2">{{ 'calculation.fields.userMargin'|trans }}</td>
+                    <td class="text-nowrap" colspan="2">{{ 'calculation.fields.userMargin'|trans }}</td>
                     <td class="text-percent">{{ item.userMargin|percent }}</td>
-                    <td colspan="2" class="text-currency">{{ item.userMarginAmount|amount }}</td>
+                    <td class="text-currency" colspan="2">{{ item.userMarginAmount|amount }}</td>
                 </tr>
             {% endif %}
 

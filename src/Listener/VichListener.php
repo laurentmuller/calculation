@@ -17,7 +17,7 @@ use App\Interfaces\ImageExtensionInterface;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Util\FileUtils;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
@@ -28,7 +28,10 @@ use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
 /**
  * Listener to resize the profile image.
  */
-class VichListener implements EventSubscriberInterface, ImageExtensionInterface
+#[AsEventListener(event: Events::PRE_UPLOAD, method: 'onPreUpload')]
+#[AsEventListener(event: Events::PRE_REMOVE, method: 'onPreRemove')]
+#[AsEventListener(event: Events::POST_UPLOAD, method: 'onPostUpload')]
+class VichListener implements ImageExtensionInterface
 {
     use FileExtensionTrait;
 
@@ -37,18 +40,6 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
      */
     public function __construct(private readonly ImageResizer $resizer)
     {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            Events::PRE_UPLOAD => 'onPreUpload',
-            Events::PRE_REMOVE => 'onPreRemove',
-            Events::POST_UPLOAD => 'onPostUpload',
-        ];
     }
 
     /**

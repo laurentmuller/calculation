@@ -56,9 +56,9 @@
 {# body #}
 {% block card_body %}
 {% if city_id %}
-    <h2>{{ current.name }}, {{ current.sys.country_name }}<img class="ow-flag" alt="Flag" src="{{ current.sys.country_flag }}"></h2>
+    <h2>{{ current.name }}, {{ current.sys.country_name }}<img src="{{ current.sys.country_flag }}" class="ow-flag" alt="Flag" title="{{ current.sys.country_name }}"></h2>
     <h3 class="font-weight-normal">
-        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="Current">{{ tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
+        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="Current Weather" title="{{ current.weather.description }}">{{ tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
     </h3>
     <div class="row">
         <div class="col-lg-5">

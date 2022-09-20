@@ -124,6 +124,9 @@ tr.text-muted td .text-danger {
 body.dark .bootstrap-table .custom-item a {
     color: #d3d3d3;
 }
+body.dark .bootstrap-table .custom-item hr {
+    border-color: #343a40;
+}
 body.dark .bootstrap-table .custom-item.table-primary a.text-body {
     color: initial !important;
 }

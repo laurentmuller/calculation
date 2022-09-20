@@ -34,24 +34,23 @@ trait FileTrait
      */
     public function decodeJsonFile(string|\SplFileInfo $file, bool $assoc = true): mixed
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = $this->getRealPath($file);
+
         // file?
         if (!$this->isFile($file)) {
-            throw new \InvalidArgumentException("The file '$file' can not be found.");
+            throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", $file));
         }
 
         // get content
         if (false === $json = \file_get_contents($file)) {
-            throw new \InvalidArgumentException("Unable to get content of the file '$file'.");
+            throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
 
         // decode
         $content = \json_decode($json, $assoc);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             $message = \json_last_error_msg();
-            throw new \InvalidArgumentException("Unable to decode the content of the file '$file' ($message).");
+            throw new \InvalidArgumentException(\sprintf("Unable to decode the content of the file '%s' (%s).", $file, $message));
         }
 
         return $content;
@@ -68,9 +67,7 @@ trait FileTrait
      */
     public function dumpFile(string|\SplFileInfo $file, mixed $content, bool $useNative = false): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = $this->getRealPath($file);
 
         try {
             if ($useNative) {
@@ -90,16 +87,68 @@ trait FileTrait
      */
     public function fileExists(string|\SplFileInfo $file): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = $this->getRealPath($file);
 
         try {
-            return $this->getFilesystem()->exists((string) $file);
+            return $this->getFilesystem()->exists($file);
         } catch (IOException) {
         }
 
         return false;
+    }
+
+    /**
+     * Gets the size, in bytes, of the given file.
+     */
+    public function fileSize(string|\SplFileInfo $file): int
+    {
+        $file = $this->getRealPath($file);
+        if ($this->isFile($file)) {
+            return \filesize($file) ?: 0;
+        }
+
+        $size = 0;
+        $flags = \FilesystemIterator::SKIP_DOTS;
+        $innerIterator = new \RecursiveDirectoryIterator($file, $flags);
+        $outerIterator = new \RecursiveIteratorIterator($innerIterator);
+
+        /** @var \SplFileInfo $file */
+        foreach ($outerIterator as $file) {
+            if ($file->isReadable()) {
+                $size += $file->getSize();
+            }
+        }
+
+        return $size;
+    }
+
+    /**
+     * Formats the size of the given file.
+     */
+    public function formatFileSize(string|\SplFileInfo $file): string
+    {
+        $size = $this->fileSize($file);
+        if (0 === $size) {
+            return 'empty';
+        }
+
+        static $SIZES = [
+            1_073_741_824 => '%.1f GB',
+            1_048_576 => '%.1f MB',
+            1024 => '%.0f KB',
+            0 => '%.0f B',
+        ];
+
+        foreach ($SIZES as $minSize => $format) {
+            if ($size >= $minSize) {
+                $value = 0 !== $minSize ? $size / $minSize : $size;
+
+                return \sprintf($format, $value);
+            }
+        }
+
+        // must never reach
+        return 'unknown';
     }
 
     /**
@@ -119,11 +168,9 @@ trait FileTrait
      */
     public function isFile(string|\SplFileInfo $file): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = $this->getRealPath($file);
 
-        return \is_file((string) $file);
+        return \is_file($file);
     }
 
     /**
@@ -131,9 +178,7 @@ trait FileTrait
      */
     public function removeFile(string|\SplFileInfo $file): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = $this->getRealPath($file);
 
         try {
             if ($this->fileExists($file)) {
@@ -175,12 +220,17 @@ trait FileTrait
      *
      * @return string|null the new temporary file name (with path), or null on failure
      */
-    public function tempfile(string $prefix = 'tmp'): ?string
+    public function tempFile(string $prefix = 'tmp'): ?string
     {
         try {
             return $this->getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
         } catch (IOException) {
             return null;
         }
+    }
+
+    private function getRealPath(string|\SplFileInfo $file): string
+    {
+        return $file instanceof \SplFileInfo ? $file->getRealPath() : $file;
     }
 }

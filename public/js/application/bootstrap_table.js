@@ -887,8 +887,9 @@ $.fn.extend({
     // $('.card').on('click', hideMenus);
     //console.log($('.fixed-table-pagination .page-item').length);
 
-    // focus
     if ($table.isEmpty()) {
         $('input.search-input').trigger('focus');
+    } else {
+        $table.showSelection();
     }
 }(jQuery));

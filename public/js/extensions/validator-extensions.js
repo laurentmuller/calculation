@@ -348,7 +348,7 @@
             const settings = $.extend(true, {
                 parent: $this,
                 text: $this.data('save') || 'Saving data...',
-                alertClass: 'alert alert-light text-center',
+                alertClass: 'alert alert-info text-center',
                 iconClass: 'fa-solid fa-spinner fa-spin mr-2',
                 css: {
                     top: '50%',

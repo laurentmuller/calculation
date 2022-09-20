@@ -145,21 +145,21 @@
         /**
          * Check if the element is visible into area of the browser window.
          *
-         * @param {int} bottomMargin - The bottom margin (default to 60).
+         * @param {int} bottomMargin - The bottom margin (default to 50).
          * @return {boolean} true if visible, false if not.
          */
-        isInViewport: function (bottomMargin) {
+        isInViewport: function (bottomMargin = 50) {
             const $this = $(this);
             if ($this.length) {
                 if ($.isUndefined(bottomMargin)) {
-                    bottomMargin = 60;
+                    bottomMargin = 50;
                 }
                 const top = $this.offset().top;
                 const bottom = top + $this.outerHeight();
                 const $window = $(window);
                 const windowTop = $window.scrollTop();
                 const windowBottom = windowTop + $window.height() - bottomMargin;
-                return bottom > windowTop && top < windowBottom;
+                return top >= windowTop && bottom <= windowBottom;
             }
             return false;
         },
@@ -168,7 +168,7 @@
          * Scrolls the element into the visible area of the browser window.
          *
          * @param {int} delay - The scroll animation delay in milliseconds (default to 400).
-         * @param {number} bottomMargin - The bottom margin (default to 60).
+         * @param {number} bottomMargin - The bottom margin (default to 50).
          * @return {JQuery} The element for chaining.
          */
         scrollInViewport: function (delay = 400, bottomMargin = 50) {
@@ -569,5 +569,4 @@
     $(document).ajaxStop(function () {
         $('*').css('cursor', '');
     });
-
 }(jQuery));

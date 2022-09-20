@@ -142,7 +142,7 @@ class OpenWeatherCityUpdater
      */
     private function getFileContent(UploadedFile $file): array|false
     {
-        if ($file->isValid()) {
+        if (!$file->isValid()) {
             return false;
         }
         if (!$filename = $file->getRealPath()) {

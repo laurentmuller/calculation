@@ -39,7 +39,7 @@
  */
 function loadingTemplate(message) { // jshint ignore:line
     'use strict';
-    return `<div class="alert alert-light text-center w-50" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
+    return `<div class="alert alert-info text-center w-50" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
 }
 
 /**
@@ -61,34 +61,31 @@ $.fn.extend({
         'use strict';
         const $row = $(this);
         const options = $table.getOptions();
-
-        // already selected?
-        if ($row.hasClass(options.rowClass)) {
-            return true;
-        }
+        const rowClass = options.rowClass;
 
         // no data?
         if ($row.hasClass('no-records-found')) {
             return true;
         }
 
+        // already selected?
+        if ($row.hasClass(rowClass)) {
+            return true;
+        }
+
         // remove old selection
-        $table.find(options.rowSelector).removeClass(options.rowClass);
+        $table.find(options.rowSelector).removeClass(rowClass);
 
         // add selection
-        $row.addClass(options.rowClass);
+        $row.addClass(rowClass);
 
         // custom view?
         if ($table.isCustomView()) {
             const $view = $table.getCustomView();
-            $view.find('.custom-item').removeClass(options.rowClass);
-            const $selection = $view.find('.custom-item:eq(' + $row.index() + ')');
-            if ($selection.length) {
-                $selection.addClass(options.rowClass).scrollInViewport();
-            }
-        } else {
-            $row.scrollInViewport();
+            $view.find('.custom-item.' + rowClass).removeClass(rowClass);
+            $view.find('.custom-item:eq(' + $row.index() + ')').addClass(rowClass);
         }
+        $table.showSelection();
         $table.trigger('update-row.bs.table', this);
 
         return true;
@@ -424,6 +421,24 @@ $.fn.extend({
         const $this = $(this);
         const $row = $this.find($this.getOptions().rowSelector);
         return $row.length ? $row : null;
+    },
+
+    /**
+     * Scroll the selected row, if any, into the visible area of the browser window.
+     *
+     * @return {JQuery} this instance for chaining.
+     */
+    showSelection: function () {
+        'use strict';
+        const $this = $(this);
+        let $row = $this.getSelection();
+        if ($row) {
+            if ($this.isCustomView()) {
+                $row = $this.getCustomView().find('.custom-item:eq(' + $row.index() + ')');
+            }
+            $row.scrollInViewport();
+        }
+        return $this;
     },
 
     /**

@@ -14,16 +14,23 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Model\LogFile;
-use Doctrine\SqlFormatter\NullHighlighter;
-use Doctrine\SqlFormatter\SqlFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Psr\Log\LogLevel;
 
 /**
  * Spreadsheet document for application logs.
  */
 class LogsDocument extends AbstractDocument
 {
+    /**
+     * The border colors for levels.
+     *
+     * @var array<string, string>
+     */
+    private $colors = [];
+
     /**
      * Constructor.
      *
@@ -45,69 +52,66 @@ class LogsDocument extends AbstractDocument
         $logFile = $this->logFile;
 
         // initialize
-        $this->start('log.title');
+        $this->start('log.title', true);
 
         // headers
+        $alignments = [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP];
         $this->setHeaderValues([
-            'log.fields.createdAt' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
-            'log.fields.channel' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'log.fields.level' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'log.fields.message' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'log.fields.user' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
+            'log.fields.level' => $alignments,
+            'log.fields.channel' => $alignments,
+            'log.fields.createdAt' => $alignments,
+            'log.fields.message' => $alignments,
+            'log.fields.user' => $alignments,
         ]);
 
         // formats
-        $this->setFormat(1, 'dd/mm/yyyy hh:mm:ss')
-            ->setColumnWidth(4, 120, true);
+        $this->setFormat(3, 'dd/mm/yyyy hh:mm:ss')
+            ->setColumnWidth(4, 140, true);
 
+        // logs
         $row = 2;
         $logs = $logFile->getLogs();
-        $formatter = new SqlFormatter(new NullHighlighter());
+        $sheet = $this->getActiveSheet();
         foreach ($logs as $log) {
             $this->setRowValues($row, [
-                $log->getCreatedAt(),
-                $log->getChannel(true),
                 $log->getLevel(true),
-                $log->formatMessage($formatter),
+                $log->getChannel(true),
+                $log->getCreatedAt(),
+                $log->getMessage(),
                 $log->getUser(),
-            ]);
-            $this->setBorderStyle($row, $log->getLevel());
+            ])->setBorderStyle($sheet, $row, $log->getLevel());
             ++$row;
         }
-
-        // style for message
-        --$row;
-        $this->getActiveSheet()
-            ->getStyle("D2:D$row")
-            ->getFont()
-            ->setName('Courier New')
-            ->setSize(9);
-
         $this->finish();
 
         return true;
     }
 
-    /**
-     * Sets the border style depending on the log level.
-     */
-    private function setBorderStyle(int $row, ?string $level): void
+    private function getLevelColor(string $level): string
     {
-        $rgb = match ($level) {
-            'warning' => 'ffc107',
-            'error', 'critical', 'alert', 'emergency' => 'dc3545',
-            'debug' => '007bff',
-            'info', 'notice' => '17a2b8',
-            default => null,
-        };
+        if (!isset($this->colors[$level])) {
+            return $this->colors[$level] = match ($level) {
+                LogLevel::ALERT,
+                LogLevel::CRITICAL,
+                LogLevel::EMERGENCY,
+                LogLevel::ERROR => 'dc3545',
+                LogLevel::WARNING => 'ffc107',
+                LogLevel::DEBUG => '007bff',
+                default => '17a2b8',
+            };
+        }
 
-        if (null !== $rgb) {
-            $this->getActiveSheet()
-                ->getStyle("A$row")
+        return $this->colors[$level];
+    }
+
+    private function setBorderStyle(Worksheet $sheet, int $row, ?string $level): void
+    {
+        if (null !== $level && '' !== $level) {
+            $sheet->getStyle("A$row")
                 ->getBorders()
                 ->getLeft()
                 ->setBorderStyle(Border::BORDER_THICK)
-                ->getColor()->setARGB($rgb);
+                ->getColor()->setARGB($this->getLevelColor($level));
         }
     }
 }

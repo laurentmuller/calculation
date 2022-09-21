@@ -14,7 +14,6 @@ namespace App\Traits;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
@@ -24,14 +23,14 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 trait CacheAwareTrait
 {
     /**
+     * The debug state.
+     */
+    protected bool $debugCache = false;
+
+    /**
      * The cache adapter.
      */
     private ?CacheItemPoolInterface $adapter = null;
-
-    /**
-     * The debug state.
-     */
-    private bool $isDebugCache = false;
 
     /**
      * The reserved characters.
@@ -57,7 +56,7 @@ trait CacheAwareTrait
      */
     public function clearCache(): bool
     {
-        if (!$this->isDebugCache) {
+        if (!$this->debugCache) {
             return $this->adapter()->clear();
         }
 
@@ -69,7 +68,7 @@ trait CacheAwareTrait
      */
     public function commitDeferredValues(): bool
     {
-        if (!$this->isDebugCache) {
+        if (!$this->debugCache) {
             return $this->adapter()->commit();
         }
 
@@ -83,7 +82,7 @@ trait CacheAwareTrait
      */
     public function deleteCacheItem(string $key): bool
     {
-        if (!$this->isDebugCache) {
+        if (!$this->debugCache) {
             return $this->adapter()->deleteItem($this->cleanKey($key));
         }
 
@@ -97,7 +96,7 @@ trait CacheAwareTrait
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
-        return $this->isDebugCache ? null : $this->adapter()->getItem($this->cleanKey($key));
+        return $this->debugCache ? null : $this->adapter()->getItem($this->cleanKey($key));
     }
 
     /**
@@ -143,6 +142,14 @@ trait CacheAwareTrait
     }
 
     /**
+     * Returns if the debug mode is enabled.
+     */
+    public function isDebugCache(): bool
+    {
+        return $this->debugCache;
+    }
+
+    /**
      * Sets a cache item value to be persisted later.
      *
      * @param string                 $key   The key for which to save the value
@@ -156,7 +163,7 @@ trait CacheAwareTrait
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         $item = $this->getCacheItem($key);
-        if (!$this->isDebugCache && null !== $item) {
+        if (!$this->debugCache && null !== $item) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
@@ -184,7 +191,7 @@ trait CacheAwareTrait
         $key = $this->cleanKey($key);
         if (null === $value) {
             $this->deleteCacheItem($key);
-        } elseif (!$this->isDebugCache && null !== $item = $this->getCacheItem($key)) {
+        } elseif (!$this->debugCache && null !== $item = $this->getCacheItem($key)) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
@@ -196,8 +203,13 @@ trait CacheAwareTrait
     }
 
     /**
-     * @throws ContainerExceptionInterface
+     * Sets  if the debug mode is enabled.
      */
+    public function setDebugCache(bool $isDebugCache): void
+    {
+        $this->debugCache = $isDebugCache;
+    }
+
     #[SubscribedService]
     private function adapter(): CacheItemPoolInterface
     {

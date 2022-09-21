@@ -168,7 +168,7 @@ class Log extends AbstractEntity
             LogLevel::ERROR => 'danger',
             LogLevel::WARNING => 'warning',
             LogLevel::DEBUG => 'secondary',
-            default => 'info',
+            default => 'info'
         };
     }
 

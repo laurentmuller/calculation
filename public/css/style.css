@@ -9,9 +9,6 @@
 
 /**! compression tag for ftp-deployment */
 
-/*
- * add margin and override padding for Bootswatch themes
- */
 .navbar.navbar-horizontal {
     margin-bottom: 20px;
     padding-bottom: 0.5rem;
@@ -19,8 +16,14 @@
     transition: top 0.3s;
 }
 .navbar.navbar-vertical {
+    height: calc(100vh - 30px);
+}
+
+/*
+.navbar.navbar-vertical {
     padding-bottom: 30px;
 }
+
 .navbar.navbar-vertical:after {
     content: "";
     position: absolute;
@@ -33,7 +36,7 @@
 body.dark .navbar.navbar-vertical:after {
     border-right: initial;
 }
-
+*/
 
 body.dark footer .border-left,
 body.dark .navbar-vertical .dropdown-divider {

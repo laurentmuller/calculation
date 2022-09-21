@@ -8,6 +8,7 @@
     position: fixed;
     top: 0;
     left: 0;
+    padding-right: 8px;
     transition: margin-left 0.35s ease;
     overflow-y: auto;
     flex-direction: column !important;

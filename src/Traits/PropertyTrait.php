@@ -217,6 +217,13 @@ trait PropertyTrait
     }
 
     /**
+     * Update the content of the cache from the repository.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    abstract protected function updateAdapter(): void;
+
+    /**
      * Gets an item value.
      *
      * @param string $name    the item name

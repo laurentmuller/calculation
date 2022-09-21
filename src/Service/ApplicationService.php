@@ -30,6 +30,7 @@ use App\Util\RoleBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -47,10 +48,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function __construct(
         private readonly EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $isDebug,
-        CacheItemPoolInterface $applicationCache
+        private readonly bool $debug,
+        #[Target('application_cache')]
+        CacheItemPoolInterface $cache
     ) {
-        $this->setAdapter($applicationCache);
+        $this->setAdapter($cache);
     }
 
     /**
@@ -312,7 +314,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_DEFAULT_PRODUCT_QUANTITY => 0,
 
             self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
-            self::P_DISPLAY_CAPTCHA => !$this->isDebug,
+            self::P_DISPLAY_CAPTCHA => !$this->debug,
         ];
     }
 
@@ -526,7 +528,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function isDebug(): bool
     {
-        return $this->isDebug;
+        return $this->debug;
     }
 
     /**
@@ -547,7 +549,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function isDisplayCaptcha(): bool
     {
-        return $this->isPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->isDebug);
+        return $this->isPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->debug);
     }
 
     /**
@@ -709,6 +711,15 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function updateAdapter(): void
+    {
+        $properties = $this->manager->getRepository(Property::class)->findAll();
+        $this->saveProperties($properties);
+    }
+
+    /**
      * Gets the property repository.
      *
      * @psalm-suppress UnnecessaryVarAnnotation
@@ -739,16 +750,5 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             $repository->add($property, false);
         }
         $property->setValue($value);
-    }
-
-    /**
-     * Update the content of the cache from the repository.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function updateAdapter(): void
-    {
-        $properties = $this->manager->getRepository(Property::class)->findAll();
-        $this->saveProperties($properties);
     }
 }

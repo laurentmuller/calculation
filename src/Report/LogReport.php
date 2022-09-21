@@ -205,7 +205,8 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
                 LogLevel::ERROR => PdfDrawColor::create(HtmlBootstrapColors::DANGER),
                 LogLevel::WARNING => PdfDrawColor::create(HtmlBootstrapColors::WARNING),
                 LogLevel::DEBUG => PdfDrawColor::create(HtmlBootstrapColors::SECONDARY),
-                LogLevel::INFO => PdfDrawColor::create(HtmlBootstrapColors::INFO),
+                LogLevel::INFO,
+                LogLevel::NOTICE => PdfDrawColor::create(HtmlBootstrapColors::INFO),
                 default => null
             };
         }

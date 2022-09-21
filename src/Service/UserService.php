@@ -22,6 +22,7 @@ use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
 use App\Traits\PropertyTrait;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -38,9 +39,10 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         private readonly ApplicationService $service,
         private readonly UserPropertyRepository $repository,
         private readonly Security $security,
-        CacheItemPoolInterface $userCache
+        #[Target('user_cache')]
+        CacheItemPoolInterface $cache
     ) {
-        $this->setAdapter($userCache);
+        $this->setAdapter($cache);
     }
 
     /**
@@ -301,6 +303,17 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this;
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function updateAdapter(): void
+    {
+        if (null !== $user = $this->getUser()) {
+            $properties = $this->repository->findByUser($user);
+            $this->saveProperties($properties);
+        }
+    }
+
     private function getUser(): ?User
     {
         $user = $this->security->getUser();
@@ -327,18 +340,5 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
             $this->repository->add($property, false);
         }
         $property->setValue($value);
-    }
-
-    /**
-     * Update the content of the cache from the repository.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function updateAdapter(): void
-    {
-        if (null !== $user = $this->getUser()) {
-            $properties = $this->repository->findByUser($user);
-            $this->saveProperties($properties);
-        }
     }
 }

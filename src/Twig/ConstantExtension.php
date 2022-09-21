@@ -44,7 +44,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         #[Autowire('%kernel.debug%')]
         bool $isDebug
     ) {
-        $this->isDebugCache = $isDebug;
+        $this->debugCache = $isDebug;
     }
 
     /**

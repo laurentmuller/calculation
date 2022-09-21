@@ -85,7 +85,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
         if (empty($key)) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
-        $this->isDebugCache = $isDebug;
+        $this->debugCache = $isDebug;
     }
 
     /**

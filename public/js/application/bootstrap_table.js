@@ -5,19 +5,18 @@
 /**
  * Formatter for the custom view.
  *
- * @param data the data (rows) to format.
- * @returns the custom view
+ * @param {Array.<Object>} data - the rows to format.
+ * @returns {string} the custom view.
  */
 function customViewFormatter(data) { // jshint ignore:line
     'use strict';
-    let view = '';
     const $table = $('#table-edit');
     const regex = /JavaScript:(\w*)/m;
     const $template = $('#custom-view');
     const rowIndex = $table.getSelectionIndex();
     const rowClass = $table.getOptions().rowClass;
 
-    $.each(data, function (index, row) {
+    const content = data.reduce(function (carry, row, index) {
         // update class selection
         $template.find('.custom-item').toggleClass(rowClass, rowIndex === index);
 
@@ -27,7 +26,7 @@ function customViewFormatter(data) { // jshint ignore:line
             html = html.replaceAll('%' + key + '%', row[key] || '&#160;');
         });
 
-        // JS functions
+        // functions
         let match;
         while ((match = regex.exec(html)) !== null) {
             let value = '';
@@ -38,11 +37,11 @@ function customViewFormatter(data) { // jshint ignore:line
             html = html.replaceAll(match[0], value);
         }
 
-        // append
-        view += html;
-    });
+        // add
+        return carry + html;
+    }, '');
 
-    return '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0 mx-n1">' + view + '</div>';
+    return '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0 mx-n1">' + content + '</div>';
 }
 
 /**
@@ -75,6 +74,21 @@ function formatProductClass(row) { // jshint ignore:line
 }
 
 /**
+ * Format the user image in the custom view.
+ *
+ * @param {object} row - the record data.
+ * @returns {string} the formatted image (if any).
+ */
+function formatUserImage(row) { // jshint ignore:line
+    'use strict';
+    const imageName = row.imageName;
+    if (imageName) {
+        return '<span class="mr-1">' + imageName + '</span>';
+    }
+    return '<span />';
+}
+
+/**
  * Cell style for a border column (calculations, status or log).
  *
  * @param {number} _value - the field value.
@@ -83,7 +97,7 @@ function formatProductClass(row) { // jshint ignore:line
  */
 function styleBorderColor(_value, row) { // jshint ignore:line
     'use strict';
-    if (typeof row.color !== 'undefined') {
+    if (!$.isUndefined(row.color)) {
         return {
             css: {
                 'border-left-color': row.color + ' !important'

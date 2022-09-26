@@ -100,7 +100,6 @@
     {%- set type = type|default('color') -%}
     {%- set attr = attr|merge({'class': 'd-none' ~ (required ? ' must-validate' : ''), 'data-custom-text': 'color_picker.custom_text'|trans, 'data-advanced-text': 'color_picker.advanced_text'|trans}) -%}
     <div class="color-picker dropdown form-control">
-        {# <input type="color" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
         {{ block('form_widget_simple') }}
         <button type="button" class="dropdown-toggle btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="dropdown-color border" style="background-color: {{ value|default('#000000') }};"></span>
@@ -186,12 +185,12 @@
             <span class="file-input-filename">{%- if placeholder -%}{{ placeholder }}{%- endif -%}</span>
         </div>
         <span class="input-group-append">
-            <span class="input-group-text btn-file rounded-right border-right-0">
+            <span class="input-group-text btn-file btn btn-secondary rounded-right border-right-0">
                 <span class="file-input-new">{{ 'common.button_browse'|trans }}</span>
                 <span class="file-input-exists">{{ 'common.button_edit'|trans }}</span>
                 {{- block('form_widget_simple') -}}
             </span>
-            <span class="input-group-text file-input-exists" data-dismiss="file-input" title="{{ 'common.button_delete'|trans }}">
+            <span class="input-group-text file-input-exists btn btn-secondary" data-dismiss="file-input" title="{{ 'common.button_delete'|trans }}">
                 <i class="fa-solid fa-times"></i>
             </span>
         </span>

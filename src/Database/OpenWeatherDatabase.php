@@ -20,42 +20,36 @@ class OpenWeatherDatabase extends AbstractDatabase
     /**
      * SQL statement to create the city table.
      *
-     * @var string
+     * @noinspection SqlResolve
      */
-    private const CREATE_CITY = <<<'sql'
+    private const CREATE_CITY = <<<'SQL'
         CREATE TABLE city (
-            id          INTEGER NOT NULL,
+            id        INTEGER NOT NULL,
             name      TEXT NOT NULL,
             country   TEXT NOT NULL,
             latitude  REAL NOT NULL,
             longitude REAL NOT NULL,
             PRIMARY KEY("id")
         ) WITHOUT ROWID
-        sql;
+        SQL;
 
     /**
-     * SQL statement to delete cities.
-     *
-     * @var string
+     * SQL statement to delete all cities.
      */
     private const DELETE_CITIES = 'DELETE FROM city';
 
     /**
      * SQL statement to add a city into the table.
-     *
-     * @var string
      */
-    private const INSERT_CITY = <<<'sql'
+    private const INSERT_CITY = <<<'SQL'
         INSERT INTO city(id, name, country, latitude, longitude)
             VALUES(:id, :name, :country, :latitude, :longitude)
-        sql;
+        SQL;
 
     /**
      * SQL statement to find a city.
-     *
-     * @var string
      */
-    private const SEARCH_CITY = <<<'sql'
+    private const SEARCH_CITY = <<<'SQL'
         SELECT
             id,
             name,
@@ -67,13 +61,12 @@ class OpenWeatherDatabase extends AbstractDatabase
         ORDER BY
             name
         LIMIT :limit
-        sql;
+        SQL;
+
     /**
      * SQL statement to find a city.
-     *
-     * @var string
      */
-    private const SEARCH_CITY_COUNTRY = <<<'sql'
+    private const SEARCH_CITY_COUNTRY = <<<'SQL'
         SELECT
             id,
             name,
@@ -85,7 +78,7 @@ class OpenWeatherDatabase extends AbstractDatabase
         ORDER BY
             name
         LIMIT :limit
-        sql;
+        SQL;
 
     /**
      * Delete all cities.
@@ -103,20 +96,18 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param string $name  the name to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @return array an array, maybe empty, of matching cities
-     *
-     * @psalm-return array<array{
+     * @pslam-return array<int, array{
      *      id: int,
      *      name: string,
      *      country: string,
      *      latitude: float,
-     *      longitude: float}|mixed>
+     *      longitude: float}>
      */
     public function findCity(string $name, int $limit = 25): array
     {
         $values = \explode(',', $name);
         if (2 === \count($values)) {
-            return $this->findCityCountry($values[0], $values[1]);
+            return $this->findCityCountry($values[0], $values[1], $limit);
         }
 
         return $this->search(self::SEARCH_CITY, $name, $limit);
@@ -129,14 +120,12 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param string $country the country to search for
      * @param int    $limit   the maximum number of rows to return
      *
-     * @return array an array, maybe empty, of matching cities
-     *
-     * @psalm-return array<array{
+     * @pslam-return array<int, array{
      *      id: int,
      *      name: string,
      *      country: string,
      *      latitude: float,
-     *      longitude: float}|mixed>
+     *      longitude: float}>
      *
      * @psalm-suppress PossiblyNullReference
      */
@@ -144,7 +133,6 @@ class OpenWeatherDatabase extends AbstractDatabase
     {
         $city = $this->likeValue($city);
         $country = $this->likeValue($country);
-
         $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
         $stmt->bindParam(':name', $city);
         $stmt->bindParam(':country', $country);
@@ -184,10 +172,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      */
     protected function createSchema(): void
     {
-        // table
         $this->exec(self::CREATE_CITY);
-
-        // index
         $this->createIndex('city', 'name');
     }
 }

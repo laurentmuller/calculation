@@ -7,12 +7,10 @@
  */
 function updateUI() {
     'use strict';
-
     // initialize the number input formats
     $('#items input[name$="[minimum]"]').inputNumberFormat();
     $('#items input[name$="[maximum]"]').inputNumberFormat();
     $('#items input[name$="[value]"]').inputNumberFormat();
-
     // update tables
     $('#items .table-edit').each(function () {
         const $table = $(this);
@@ -23,18 +21,20 @@ function updateUI() {
     });
     const $items = $('#items .item');
     $('.empty-items').toggleClass('d-none', $items.length !== 0);
-
     // update actions, rules and positions
     let position = 0;
+    const validator = $("#edit-form").data('validator');
     $items.each(function (_index, item) {
         const $item = $(item);
         $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
         $item.find('.btn-down-item').toggleDisabled($item.is(':last-of-type'));
-        $item.find('.unique-name').rules('add', {
-            unique: '.unique-name'
-        });
         $item.find('input[name$="[position]"]').val(position++);
+        if (validator) {
+            $item.find('.unique-name').rules('add', {unique: '.unique-name'});
+        }
     });
+    // update edit message
+    $('#edit-form :input:first').trigger('input');
 }
 
 /**
@@ -43,14 +43,12 @@ function updateUI() {
 function startDragItems() {
     'use strict';
     const $items = $("#items");
-
     // destroy
     if ($items.data('sortable')) {
         $items.off('sortupdate', updateUI);
         $items.data('sortable', false);
         sortable($items, 'destroy');
     }
-
     // items?
     if ($items.find('.item').length > 1) {
         sortable($items, {
@@ -73,7 +71,6 @@ function startDragItems() {
  */
 function getMaxValue($table) {
     'use strict';
-
     let maximum = 0;
     $table.find('input[name$="[maximum]"]').each(function () {
         maximum = Math.max(maximum, $(this).floatVal());
@@ -89,7 +86,6 @@ function getMaxValue($table) {
  */
 function getMinValue($table) {
     'use strict';
-
     let minimum = Number.MAX_VALUE;
     $table.find('input[name$="[value]"]').each(function () {
         minimum = Math.min(minimum, $(this).floatVal());
@@ -104,7 +100,6 @@ function getMinValue($table) {
  */
 function getNextItemIndex() {
     'use strict';
-
     const $items = $('#items');
     const index = $items.data('item-index');
     $items.data('item-index', index + 1);
@@ -118,7 +113,6 @@ function getNextItemIndex() {
  */
 function getNextMarginIndex() {
     'use strict';
-
     const $items = $('#items');
     const index = $items.data('margin-index');
     $items.data('margin-index', index + 1);
@@ -132,31 +126,23 @@ function getNextMarginIndex() {
  */
 function addItem() {
     'use strict';
-
     // create item
     const $items = $('#items');
     const index = getNextItemIndex();
     const prototype = $items.data('prototype');
     const $item = $(prototype.replace(/__itemIndex__/g, index));
-
     // append
     $items.append($item);
-
     // update UI
     updateUI();
-
     // focus
     $item.find('input[name$="[name]"]:last').selectFocus().scrollInViewport();
-
     // hide others
     $items.find('.collapse:not(:last)').collapse('hide');
-
     // expand
     $items.find('.collapse:last').addClass('show');
-
     // drag and drop
     startDragItems();
-
     return $item;
 }
 
@@ -167,7 +153,6 @@ function addItem() {
  */
 function removeItem($caller) {
     'use strict';
-
     $caller.closest('.item').fadeOut(200, function () {
         $(this).remove();
         updateUI();
@@ -183,23 +168,19 @@ function removeItem($caller) {
  */
 function moveUpItem($caller) {
     'use strict';
-
     // first?
     const $source = $caller.closest('.item');
     if ($source.is(':first-of-type')) {
         return $source;
     }
-
     // previous?
     const $target = $source.prev('.item');
     if (0 === $target.length || $source === $target) {
         return $source;
     }
-
     // move
     $target.insertAfter($source);
     updateUI();
-
     return $source;
 }
 
@@ -211,23 +192,19 @@ function moveUpItem($caller) {
  */
 function moveDownItem($caller) {
     'use strict';
-
     // last?
     const $source = $caller.closest('.item');
     if ($source.is(':last-of-type')) {
         return $source;
     }
-
     // next?
     const $target = $source.next('.item');
     if (0 === $target.length || $source === $target) {
         return $source;
     }
-
     // move
     $target.insertBefore($source);
     updateUI();
-
     return $source;
 }
 
@@ -238,27 +215,22 @@ function moveDownItem($caller) {
  */
 function addMargin($caller) {
     'use strict';
-
     // get table
     const $table = $caller.parents('.item').find('.table-edit');
     if ($table.length === 0) {
         return;
     }
-
     // get values before inserting the row
     const value = getMinValue($table);
     const minimum = getMaxValue($table);
     const maximum = Math.max(minimum * 2, 1);
-
     // create and add margin
     const index = getNextMarginIndex();
     const prototype = $table.data('prototype');
     const $row = $(prototype.replace(/__marginIndex__/g, index));
     $table.find('tbody').append($row);
-
     // update UI
     updateUI();
-
     // set values
     $table.find('input[name$="[minimum]"]:last').floatVal(minimum).selectFocus().scrollInViewport();
     $table.find('input[name$="[maximum]"]:last').floatVal(maximum);
@@ -272,7 +244,6 @@ function addMargin($caller) {
  */
 function removeMargin($caller) {
     'use strict';
-
     $caller.closest('tr').fadeOut(200, function () {
         $(this).remove();
         updateUI();
@@ -295,7 +266,6 @@ function sortMargins($caller) {
     if ($rows.length < 2) {
         return;
     }
-
     $rows.sort(function (rowA, rowB) {
         const valueA = $(rowA).find('input[name$="[minimum]"]').floatVal();
         const valueB = $(rowB).find('input[name$="[minimum]"]').floatVal();
@@ -324,13 +294,11 @@ function updateToggle($caller, show) {
  */
 (function ($) {
     'use strict';
-
     // handle add button
     $('.btn-add-item').on('click', function (e) {
         e.preventDefault();
         addItem();
     });
-
     // handle item buttons
     $('#items').on('click', '.btn-delete-item', function (e) {
         e.preventDefault();
@@ -357,7 +325,6 @@ function updateToggle($caller, show) {
     }).on('focus', '.unique-name', function () {
         $(this).parents('.card').children('.collapse').collapse('show');
     });
-
     // initialize search
     const $form = $("#edit-form");
     $("#task_unit").initTypeahead({
@@ -368,13 +335,10 @@ function updateToggle($caller, show) {
         url: $form.data("supplier-search"),
         error: $form.data("supplier-error")
     });
-
     // start drag & drop
     startDragItems();
-
-    // initialize validation
-    $form.initValidator();
-
     // update UI
     updateUI();
+    // initialize validation
+    $form.initValidator();
 }(jQuery));

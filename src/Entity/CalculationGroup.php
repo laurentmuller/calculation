@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\ParentCalculationInterface;
+use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationGroupRepository;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
@@ -27,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: CalculationGroupRepository::class)]
 #[ORM\Table(name: 'sy_CalculationGroup')]
-class CalculationGroup extends AbstractEntity implements \Countable, ParentCalculationInterface
+class CalculationGroup extends AbstractEntity implements \Countable, ParentTimestampableInterface
 {
     use PositionTrait;
 
@@ -204,6 +205,14 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentCalcu
     public function getMarginAmount(): float
     {
         return $this->amount * ($this->margin - 1);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParentTimestampable(): ?TimestampableInterface
+    {
+        return $this->getCalculation();
     }
 
     /**

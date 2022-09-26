@@ -443,6 +443,7 @@ const Application = {
             } else {
                 $('.btn-adjust').toggleDisabled(true).addClass('cursor-default');
             }
+            $('#calculation_customer').trigger('input');
             updateErrors();
             return that;
 

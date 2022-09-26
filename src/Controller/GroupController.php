@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Group;
 use App\Form\Group\GroupType;
 use App\Interfaces\RoleInterface;
@@ -118,7 +117,6 @@ class GroupController extends AbstractEntityController
         $parameters = [
             'title' => 'group.delete.title',
             'message' => 'group.delete.message',
-            'success' => 'group.delete.success',
             'failure' => 'group.delete.failure',
         ];
 
@@ -195,17 +193,6 @@ class GroupController extends AbstractEntityController
     public function table(Request $request, GroupTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'group/group_table.html.twig', $logger);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
-    {
-        // update parameters
-        $parameters['success'] = $item->isNew() ? 'group.add.success' : 'group.edit.success';
-
-        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

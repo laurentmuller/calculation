@@ -12,18 +12,22 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Util\FileUtils;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Command to update Javascript and CSS dependencies.
  */
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
-class UpdateAssetsCommand extends AbstractAssetsCommand
+class UpdateAssetsCommand extends Command
 {
+    use LoggerTrait;
+
     /**
      * The boostrap CSS file name to update.
      */
@@ -50,19 +54,23 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
     /**
      * {@inheritdoc}
-     *
-     * @throws ExceptionInterface
-     * @throws \ReflectionException
      */
-    protected function doExecute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // to output messages
+        $this->io = new SymfonyStyle($input, $output);
+
         // public dir
         if (!$publicDir = $this->getPublicDir()) {
+            $this->writeNote('No public directory found.');
+
             return Command::SUCCESS;
         }
 
         // configuration
         if (null === ($configuration = $this->loadConfiguration($publicDir))) {
+            $this->writeNote('No configuration found.');
+
             return Command::SUCCESS;
         }
 
@@ -74,8 +82,11 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         // get values
         /** @var string $source */
         $source = $configuration->source;
-        $target = $publicDir . '/' . (string) $configuration->target;
-        $targetTemp = $this->tempDir($publicDir) . '/';
+        $target = FileUtils::buildPath($publicDir, (string) $configuration->target);
+        if (!$targetTemp = $this->getTargetTemp($publicDir)) {
+            return Command::FAILURE;
+        }
+
         /** @var string $format */
         $format = $configuration->format;
         /** @var \stdClass[] $plugins */
@@ -97,9 +108,10 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
                 $version = (string) $plugin->version;
                 $display = (string) ($plugin->display ?? $plugin->name);
                 if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
-                    $this->writeVerbose("Skipping   '$display v$version'.");
+                    $this->writeVerbose("Skipping   '$display v$version'.", 'fg=gray');
                     continue;
                 }
+
                 $this->writeVerbose("Installing '$display v$version'.");
 
                 // copy files
@@ -144,7 +156,9 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             $this->rename($targetTemp, $target);
 
             // result
-            $this->writeVerbose("Installed $countPlugins plugins and $countFiles files to the directory '$target'.");
+            $this->writeSuccess("Installed $countPlugins plugins and $countFiles files to the directory '$target'.");
+
+            return Command::SUCCESS;
         } catch (\Exception $e) {
             $this->writeError($e->getMessage());
 
@@ -153,21 +167,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             // remove temp directory
             $this->remove($targetTemp);
         }
-
-        return Command::SUCCESS;
     }
 
-    /**
-     * Checks the plugin version.
-     *
-     * @param string $url      the URL content to download
-     * @param string $name     the plugin name
-     * @param string $version  the actual version
-     * @param string ...$paths the paths to the version
-     *
-     * @throws \ReflectionException
-     * @throws ExceptionInterface
-     */
     private function checkVersion(string $url, string $name, string $version, string ...$paths): void
     {
         $content = $this->loadJson($url);
@@ -194,34 +195,12 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
     }
 
-    /**
-     * Checks if the plugin installed is the last version.
-     *
-     * This works only for 'https://api.cdnjs.com' server.
-     *
-     * @param string $name    the plugin name
-     * @param string $version the actual version
-     *
-     * @throws \ReflectionException
-     * @throws ExceptionInterface
-     */
     private function checkVersionCdnjs(string $name, string $version): void
     {
         $url = "https://api.cdnjs.com/libraries/$name?fields=version";
         $this->checkVersion($url, $name, $version, 'version');
     }
 
-    /**
-     * Checks if the plugin installed is the last version.
-     *
-     * This works only for 'https://data.jsdelivr.com' server.
-     *
-     * @param string $name    the plugin name
-     * @param string $version the actual version
-     *
-     * @throws \ReflectionException
-     * @throws ExceptionInterface
-     */
     private function checkVersionJsDelivr(string $name, string $version): void
     {
         $url = "https://data.jsdelivr.com/v1/package/npm/$name";
@@ -229,22 +208,9 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * Copy a file.
-     *
-     * @param string $sourceFile the source file
-     * @param string $targetFile the target file
-     * @param array  $prefixes   the prefixes where each key is the file extension and the value is the text to prepend
-     * @param array  $suffixes   the suffixes where each key is the file extension and the value is the text to append
-     * @param array  $renames    the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
-     *
-     * @return bool true if success
-     *
-     * @psalm-param array<string, string> $prefixes
-     * @psalm-param array<string, string> $suffixes
-     * @psalm-param array<string, string> $renames
-     *
-     * @throws \ReflectionException
-     * @throws ExceptionInterface
+     * @param array<string, string> $prefixes
+     * @param array<string, string> $suffixes
+     * @param array<string, string> $renames
      */
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -255,15 +221,6 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         return false;
     }
 
-    /**
-     * Create a copy of a style.
-     *
-     * @param string $content     the style sheet content to search in
-     * @param string $searchStyle the style name to copy
-     * @param string $newStyle    the new style name
-     *
-     * @return string the new style, if applicable; an empty string otherwise
-     */
     private function copyStyle(string $content, string $searchStyle, string $newStyle): string
     {
         $styles = $this->findStyles($content, $searchStyle);
@@ -281,14 +238,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * Copy entries of a style.
-     *
-     * @param string   $content     the style sheet content to search in
-     * @param string   $searchStyle the style name to copy
-     * @param string   $newStyle    the new style name
-     * @param string[] $entries     the style entries to copy
-     *
-     * @return string the new style, if applicable; an empty string otherwise
+     * @param string[] $entries the style entries to copy
      */
     private function copyStyleEntries(string $content, string $searchStyle, string $newStyle, array $entries): string
     {
@@ -316,21 +266,9 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * Writes the given content to the target file.
-     *
-     * @param string $content    the content of the file
-     * @param string $targetFile the file to write to
-     * @param array  $prefixes   the prefixes where each key is the file extension and the value is the text to prepend
-     * @param array  $suffixes   the suffixes where each key is the file extension and the value is the text to append
-     * @param array  $renames    the regular expression to renames the target file where each key is the pattern and the value is the text to replace with
-     *
-     * @return bool true if success
-     *
-     * @psalm-param array<string, string> $prefixes
-     * @psalm-param array<string, string> $suffixes
-     * @psalm-param array<string, string> $renames
-     *
-     * @throws \ReflectionException
+     * @param array<string, string> $prefixes
+     * @param array<string, string> $suffixes
+     * @param array<string, string> $renames
      */
     private function dumpFile(string $content, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -368,18 +306,15 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $this->writeFile($targetFile, $content);
 
         // set read-only
-        $this->chmod($targetFile, 0o644, false);
+        FileUtils::chmod($targetFile, 0o644, false);
 
         return true;
     }
 
     /**
-     * Find style entries.
+     * @param string[] $entries
      *
-     * @param string   $style   the style to search in
-     * @param string[] $entries the style entries to search for
-     *
-     * @return string[]|false the style entries, if found; false otherwise
+     * @return string[]|false
      */
     private function findStyleEntries(string $style, array $entries): array|false
     {
@@ -399,12 +334,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     }
 
     /**
-     * Find styles.
-     *
-     * @param string $content the style sheet content to search in
-     * @param string $style   the style name to search for
-     *
-     * @return string[]|false the styles, if found; false otherwise
+     * @return string[]|false
      */
     private function findStyles(string $content, string $style): array|false
     {
@@ -417,16 +347,6 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         return false;
     }
 
-    /**
-     * Gets an array from the configuration for the given name.
-     *
-     * @param \stdClass $configuration the configuration
-     * @param string    $name          the entry name to search for
-     *
-     * @return array the array, maybe empty if not found
-     *
-     * @throws \ReflectionException
-     */
     private function getConfigArray(\stdClass $configuration, string $name): array
     {
         if ($this->propertyExists($configuration, $name)) {
@@ -436,16 +356,27 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         return [];
     }
 
-    /**
-     * Gets the plugin source file to copy.
-     *
-     * @param string    $source the base URL
-     * @param string    $format the URL format
-     * @param \stdClass $plugin the plugin definition
-     * @param string    $file   the file name
-     *
-     * @return string the source file
-     */
+    private function getProjectDir(): ?string
+    {
+        $application = $this->getApplication();
+        if (!$application instanceof Application) {
+            $this->writeError('The Application is not defined.');
+
+            return null;
+        }
+
+        return $application->getKernel()->getProjectDir();
+    }
+
+    private function getPublicDir(): ?string
+    {
+        if ($projectDir = $this->getProjectDir()) {
+            return FileUtils::buildPath($projectDir, 'public');
+        }
+
+        return null;
+    }
+
     private function getSourceFile(string $source, string $format, \stdClass $plugin, string $file): string
     {
         $name = (string) $plugin->name;
@@ -461,39 +392,36 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             $format = (string) $plugin->format;
         }
 
-        // build
-        $format = \str_ireplace('{source}', $source, $format);
-        $format = \str_ireplace('{name}', $name, $format);
-        $format = \str_ireplace('{version}', $version, $format);
+        // replace
+        $search = ['{source}', '{name}', '{version}', '{file}'];
+        $replace = [$source, $name, $version, $file];
 
-        return \str_ireplace('{file}', $file, $format);
+        return \str_ireplace($search, $replace, $format);
     }
 
-    /**
-     * Gets the plugin target file to write to.
-     *
-     * @param string    $target the target directory
-     * @param \stdClass $plugin the plugin definition
-     * @param string    $file   the file name
-     *
-     * @return string the target file
-     */
     private function getTargetFile(string $target, \stdClass $plugin, string $file): string
     {
         $name = (string) ($plugin->target ?? $plugin->name);
 
-        return $target . $name . '/' . $file;
+        return FileUtils::buildPath($target, $name, $file);
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws ExceptionInterface
-     */
+    private function getTargetTemp(string $publicDir): string|false
+    {
+        if (!$targetTemp = FileUtils::tempdir($publicDir)) {
+            $this->writeError('Unable to create a temporary directory.');
+
+            return false;
+        }
+
+        return $targetTemp . '/';
+    }
+
     private function loadConfiguration(string $publicDir): ?\stdClass
     {
         // check file
-        $vendorFile = $publicDir . '/' . self::VENDOR_FILE_NAME;
-        if (!$this->exists($publicDir) || !$this->exists($vendorFile)) {
+        $vendorFile = FileUtils::buildPath($publicDir, self::VENDOR_FILE_NAME);
+        if (!FileUtils::exists($publicDir) || !FileUtils::exists($vendorFile)) {
             $this->writeVerbose("The file '$vendorFile' does not exist.");
 
             return null;
@@ -507,13 +435,80 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         return $configuration;
     }
 
+    private function loadJson(string $filename): \stdClass|false
+    {
+        if (!$content = $this->readFile($filename)) {
+            return false;
+        }
+
+        $data = \json_decode($content, false);
+        if (\JSON_ERROR_NONE !== \json_last_error()) {
+            $this->writeError(\json_last_error_msg());
+            $this->writeError("Unable to decode file '$filename'.");
+
+            return false;
+        }
+        if (!($data instanceof \stdClass)) {
+            $this->writeError("Unable to decode file '$filename'.");
+
+            return false;
+        }
+
+        return $data;
+    }
+
     /**
-     * Update style sheet.
-     *
-     * @param string $content the style sheet content to update
-     *
-     * @return string the updated style sheet content
+     * @param string[]|string $properties
      */
+    private function propertyExists(\stdClass $var, array|string $properties, bool $log = false): bool
+    {
+        $properties = (array) $properties;
+        foreach ($properties as $property) {
+            if (!\property_exists($var, $property) || empty($var->{$property})) {
+                if ($log) {
+                    $this->writeError("Unable to find the '$property' property.");
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function readFile(string $filename): string|false
+    {
+        $this->writeVeryVerbose("Load '$filename'");
+        $content = \file_get_contents($filename);
+
+        if (!\is_string($content)) {
+            $this->writeError("Unable to get content of '$filename'.");
+
+            return false;
+        }
+        if (empty($content)) {
+            $this->writeError("The content of '$filename' is empty.");
+
+            return false;
+        }
+
+        return $content;
+    }
+
+    private function remove(string $file): void
+    {
+        if (FileUtils::exists($file)) {
+            $this->writeVeryVerbose("Remove '$file'.");
+            FileUtils::remove($file);
+        }
+    }
+
+    private function rename(string $origin, string $target, bool $overwrite = true): void
+    {
+        $this->writeVeryVerbose("Rename '$origin' to '$target'.");
+        FileUtils::rename($origin, $target, $overwrite);
+    }
+
     private function updateStyle(string $content): string
     {
         $styles = [
@@ -582,5 +577,11 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
 
         return $content . self::CSS_COMMENTS . $toAppend;
+    }
+
+    private function writeFile(string $filename, string $content): void
+    {
+        $this->writeVeryVerbose("Save '$filename'");
+        FileUtils::dumpFile($filename, $content);
     }
 }

@@ -132,7 +132,6 @@ class TaskController extends AbstractEntityController
         $parameters = [
             'title' => 'task.delete.title',
             'message' => 'task.delete.message',
-            'success' => 'task.delete.success',
             'failure' => 'task.delete.failure',
         ];
 
@@ -223,7 +222,6 @@ class TaskController extends AbstractEntityController
     {
         $parameters['item_index'] = $item->count();
         $parameters['margin_index'] = $item->countMargins();
-        $parameters['success'] = $item->isNew() ? 'task.add.success' : 'task.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
     }

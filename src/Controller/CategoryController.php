@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\Category\CategoryType;
 use App\Interfaces\RoleInterface;
@@ -125,7 +124,6 @@ class CategoryController extends AbstractEntityController
         $parameters = [
             'title' => 'category.delete.title',
             'message' => 'category.delete.message',
-            'success' => 'category.delete.success',
             'failure' => 'category.delete.failure',
         ];
 
@@ -202,17 +200,6 @@ class CategoryController extends AbstractEntityController
     public function table(Request $request, CategoryTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'category/category_table.html.twig', $logger);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
-    {
-        // update parameters
-        $parameters['success'] = $item->isNew() ? 'category.add.success' : 'category.edit.success';
-
-        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

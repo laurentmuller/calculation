@@ -26,6 +26,7 @@ class RequestChangePasswordType extends AbstractUserCaptchaType
     {
         $helper->field('user')
             ->label('resetting.request.user')
+            ->updateAttribute('autocomplete', 'username')
             ->widgetClass('user-name')
             ->add(UserNameType::class);
 

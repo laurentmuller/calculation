@@ -10,5 +10,14 @@
     $('#captcha').initCaptcha();
 
     // initialize validator
-    $('#edit-form').initValidator();
+    $('#edit-form').initValidator(
+        {
+            spinner: {
+                text: $('.card-title').text() + '...',
+                css: {
+                    top: '25%',
+                }
+            }
+        }
+    );
 }(jQuery));

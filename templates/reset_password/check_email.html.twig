@@ -3,10 +3,11 @@
 {# parameters #}
 {%- set title = 'resetting.request.title' -%}
 {%- set title_icon = 'eraser' -%}
+{% set theme_class = 'light' %}
+{%- set status_bar = false -%}
 {# hide navigation and footer #}
 {% block navigation_horizontal %}{% endblock %}
 {% block navigation_vertical -%}{% endblock %}
-{% block footer %}{% endblock %}
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
 {# body #}

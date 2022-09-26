@@ -90,21 +90,18 @@
             that.changeProxy = function (e) {
                 that._change(e);
             };
-            that.$input.on('change.bs.file-input', that.changeProxy);
-
             that.clearProxy = function (e) {
                 that._clear(e);
             };
-            that.$element.find('[data-dismiss="file-input"]').on('click.bs.file-input', that.clearProxy);
-
             that.clickProxy = function (e) {
                 that.selectFile(e);
             };
-            that.$element.find('[data-trigger="file-input"]').on('click.bs.file-input', that.clickProxy);
-
             that.resetProxy = function (e) {
                 that._reset(e);
             };
+            that.$input.on('change.bs.file-input', that.changeProxy);
+            that.$element.find('[data-dismiss="file-input"]').on('click.bs.file-input', that.clearProxy);
+            that.$element.find('[data-trigger="file-input"]').on('click.bs.file-input', that.clickProxy);
             $(that.$input[0].form).on('reset.bs.file-input', that.resetProxy);
 
             return that;

@@ -22,8 +22,8 @@
 {% if app.debug %}
 {{ parent() }}
 {{- asset_js('js/plugins/plugin-input.js') }}
-{{- asset_js('js/application/globalmargin_edit.js') }}
+{{- asset_js('js/application/margins_edit.js') }}
 {% else %}
-{{- asset_js('js/globalmargin_edit.js') }}
+{{- asset_js('js/margins_edit.js') }}
 {% endif %}
 {% endblock %}

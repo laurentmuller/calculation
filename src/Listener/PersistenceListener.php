@@ -22,23 +22,25 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Entity\User;
+use App\Interfaces\DisableListenerInterface;
+use App\Traits\DisableListenerTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
- * Entity modifications listener.
+ * Listener to display flash messages when entities are updated.
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
+class PersistenceListener implements DisableListenerInterface, EventSubscriber, ServiceSubscriberInterface
 {
+    use DisableListenerTrait;
     use ServiceSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
@@ -58,92 +60,54 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
     ];
 
     /**
-     * Constructor.
-     */
-    public function __construct(
-        #[Autowire('%app_name%')]
-        private readonly string $appName,
-        #[Autowire('%kernel.debug%')]
-        private readonly bool $isDebug
-    ) {
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getSubscribedEvents(): array
     {
-        if ($this->isDebug) {
-            return [
-                Events::postUpdate,
-                Events::postPersist,
-                Events::postRemove,
-            ];
-        } else {
-            return [];
-        }
+        return [
+            Events::postPersist,
+            Events::postRemove,
+            Events::postUpdate,
+        ];
     }
 
     /**
-     * Handles the post persist event.
-     *
      * @param LifecycleEventArgs<EntityManagerInterface> $args
-     *
-     * @throws \ReflectionException
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
-        if (null !== ($entity = $this->getEntity($args))) {
-            $id = $this->getId($entity, '.add.success');
+        if (null !== $entity = $this->getEntity($args)) {
+            $id = $this->getId($entity, '.add.success', 'common.add_success');
             $params = $this->getParameters($entity);
             $this->successTrans($id, $params);
         }
     }
 
     /**
-     * Handles the post remove event.
-     *
      * @param LifecycleEventArgs<EntityManagerInterface> $args
-     *
-     * @throws \ReflectionException
      */
     public function postRemove(LifecycleEventArgs $args): void
     {
-        if (null !== ($entity = $this->getEntity($args))) {
-            $id = $this->getId($entity, '.delete.success');
+        if (null !== $entity = $this->getEntity($args)) {
+            $id = $this->getId($entity, '.delete.success', 'common.delete_success');
             $params = $this->getParameters($entity);
             $this->warningTrans($id, $params);
         }
     }
 
     /**
-     * Handles the post update event.
-     *
      * @param LifecycleEventArgs<EntityManagerInterface> $args
-     *
-     * @throws \ReflectionException
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
-        if (null !== ($entity = $this->getEntity($args))) {
-            // special case for user entity when last login change
-            if ($entity instanceof User && $this->isLastLogin($args, $entity)) {
-                $id = 'security.login.success';
-                $params = [
-                    '%username%' => $entity->getUserIdentifier(),
-                    '%appname%' => $this->appName,
-                ];
-            } else {
-                $id = $this->getId($entity, '.edit.success');
-                $params = $this->getParameters($entity);
-            }
+        if (null !== ($entity = $this->getEntity($args)) && !$this->isLastLogin($args, $entity)) {
+            $id = $this->getId($entity, '.edit.success', 'common.edit_success');
+            $params = $this->getParameters($entity);
             $this->successTrans($id, $params);
         }
     }
 
     /**
-     * Gets the entity from the given arguments.
-     *
      * @param LifecycleEventArgs<EntityManagerInterface> $args
      */
     private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
@@ -157,39 +121,31 @@ class PersistenceListener implements EventSubscriber, ServiceSubscriberInterface
         return null;
     }
 
-    /**
-     * Gets the message identifier to translate.
-     *
-     * @throws \ReflectionException
-     */
-    private function getId(AbstractEntity $entity, string $suffix): string
+    private function getId(AbstractEntity $entity, string $suffix, string $default): string
     {
-        $name = \strtolower(Utils::getShortName($entity));
+        $id = \strtolower(Utils::getShortName($entity)) . $suffix;
 
-        return $name . $suffix;
+        return $this->isTransDefined($id) ? $id : $default;
     }
 
-    /**
-     * Gets the message parameters.
-     */
     private function getParameters(AbstractEntity $entity): array
     {
         return ['%name%' => $entity->getDisplay()];
     }
 
     /**
-     * Checks if the last login field is updated.
-     *
      * @param LifecycleEventArgs<EntityManagerInterface> $args
-     *
-     * @return bool true if updated
      */
-    private function isLastLogin(LifecycleEventArgs $args, User $user): bool
+    private function isLastLogin(LifecycleEventArgs $args, AbstractEntity $entity): bool
     {
-        $manager = $args->getObjectManager();
-        $unitOfWork = $manager->getUnitOfWork();
-        $changeSet = $unitOfWork->getEntityChangeSet($user);
+        if ($entity instanceof User) {
+            $manager = $args->getObjectManager();
+            $unitOfWork = $manager->getUnitOfWork();
+            $changeSet = $unitOfWork->getEntityChangeSet($entity);
 
-        return \array_key_exists('lastLogin', $changeSet);
+            return \array_key_exists('lastLogin', $changeSet);
+        }
+
+        return false;
     }
 }

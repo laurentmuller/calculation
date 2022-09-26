@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Enums\EntityPermission;
 use App\Form\User\UserChangePasswordType;
@@ -100,7 +99,6 @@ class UserController extends AbstractEntityController
         $parameters = [
             'title' => 'user.delete.title',
             'message' => 'user.delete.message',
-            'success' => 'user.delete.success',
             'failure' => 'user.delete.failure',
         ];
 
@@ -353,6 +351,7 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/excel', name: 'user_rights_excel')]
     public function rightsExcel(): SpreadsheetResponse
@@ -408,19 +407,6 @@ class UserController extends AbstractEntityController
     public function table(Request $request, UserTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'user/user_table.html.twig', $logger);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
-    {
-        // update parameters
-        $parameters['success'] = $item->isNew() ? 'user.add.success' : 'user.edit.success';
-
-        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

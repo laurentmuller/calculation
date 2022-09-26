@@ -6,7 +6,7 @@
 {%- set submit_params = submit_params|default({}) -%}
 {%- set form_attr = form_attr|default({})|merge({'id': 'edit-form', 'data-save': 'common.save_data'|trans}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
-{%- if cancel_path is not defined or not cancel_path -%}
+{%- if cancel_path is not defined -%}
     {%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
 {%- endif -%}
 {# container #}
@@ -43,6 +43,9 @@
             </div>
         {%- endif %}
     </div>
+    {#
+    <div id="data-changed" class="text-muted pt-1" style="display: none">{{ 'common.data_changed'|trans|raw }}</div>
+    #}
 {%- endblock %}
 {# end container #}
 {% block end_card_container -%}

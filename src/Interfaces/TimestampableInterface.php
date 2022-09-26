@@ -28,6 +28,11 @@ interface TimestampableInterface
     public function getCreatedBy(): ?string;
 
     /**
+     * Gets the entity identifier.
+     */
+    public function getId(): ?int;
+
+    /**
      * Gets the updated date.
      */
     public function getUpdatedAt(): ?\DateTimeInterface;

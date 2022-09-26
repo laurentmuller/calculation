@@ -302,6 +302,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_MESSAGE_ICON => self::DEFAULT_MESSAGE_ICON,
             self::P_MESSAGE_CLOSE => self::DEFAULT_MESSAGE_CLOSE,
 
+            self::P_STATUS_BAR => true,
+
             self::P_PANEL_STATE => true,
             self::P_PANEL_MONTH => true,
             self::P_PANEL_CATALOG => true,
@@ -454,6 +456,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_PANEL_STATE => $this->isPanelState(),
             self::P_PANEL_MONTH => $this->isPanelMonth(),
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
+            self::P_STATUS_BAR => $this->isStatusBar(),
             // las update dates
             self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
             self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
@@ -656,6 +659,16 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function isQrCode(): bool
     {
         return $this->isPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function isStatusBar(): bool
+    {
+        return $this->isPropertyBoolean(self::P_STATUS_BAR, true);
     }
 
     /**

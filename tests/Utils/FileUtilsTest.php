@@ -24,9 +24,14 @@ class FileUtilsTest extends TestCase
     {
         return [
             ['', ''],
+            ['/', '/'],
+            ['c:/', 'c:'],
+            ['c:/home', 'c:', 'home'],
             ['home', 'home'],
-            ['home' . \DIRECTORY_SEPARATOR . 'test', 'home', 'test'],
-            ['home' . \DIRECTORY_SEPARATOR . 'test' . \DIRECTORY_SEPARATOR . 'value', 'home', 'test', 'value'],
+            ['home', '', 'home', ''],
+            ['home/test', 'home', 'test'],
+            ['home/test/value', 'home', 'test', 'value'],
+            ['home/test/value', 'home', 'test', 'value/'],
         ];
     }
 
@@ -35,24 +40,13 @@ class FileUtilsTest extends TestCase
      */
     public function testBuildPath(string $expected, string ...$segments): void
     {
-        switch (\count($segments)) {
-            case 1:
-                $actual = FileUtils::buildPath($segments[0]);
-                self::assertSame($expected, $actual);
-                break;
-            case 2:
-                $actual = FileUtils::buildPath($segments[0], $segments[1]);
-                self::assertSame($expected, $actual);
-                break;
-            case 3:
-                $actual = FileUtils::buildPath($segments[0], $segments[1], $segments[2]);
-                self::assertSame($expected, $actual);
-                break;
-        }
+        $actual = FileUtils::buildPath(...$segments);
+        self::assertSame($expected, $actual);
     }
 
     public function testExist(): void
     {
+        self::assertTrue(FileUtils::exists(__DIR__));
         self::assertTrue(FileUtils::exists(__FILE__));
     }
 
@@ -63,9 +57,10 @@ class FileUtilsTest extends TestCase
 
     public function testFormatSize(): void
     {
-        $file = $this->getReaderFile();
+        $file = $this->getLinesFile();
+        $size = \filesize($file);
         self::assertTrue(FileUtils::exists($file));
-        self::assertSame('21 B', FileUtils::formatSize($file));
+        self::assertSame($size . ' B', FileUtils::formatSize($file));
     }
 
     public function testIsFile(): void
@@ -75,13 +70,22 @@ class FileUtilsTest extends TestCase
 
     public function testLineCount(): void
     {
-        $file = $this->getReaderFile();
-        self::assertTrue(FileUtils::exists($file));
-        self::assertSame(4, FileUtils::getLinesCount($file));
+        $empty = $this->getEmptyFile();
+        self::assertEquals(0, FileUtils::getLinesCount($empty));
+        self::assertEquals(0, FileUtils::getLinesCount($empty, false));
+
+        $lines = $this->getLinesFile();
+        self::assertEquals(3, FileUtils::getLinesCount($lines));
+        self::assertEquals(6, FileUtils::getLinesCount($lines, false));
     }
 
-    private function getReaderFile(): string
+    private function getEmptyFile(): string
     {
-        return __DIR__ . '/../Data/reverse_reader.txt';
+        return __DIR__ . '/../Data/empty.txt';
+    }
+
+    private function getLinesFile(): string
+    {
+        return __DIR__ . '/../Data/lines_count.txt';
     }
 }

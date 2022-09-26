@@ -133,7 +133,9 @@
         },
         {
             "name": "bootstrap-table",
-            "version": "1.21.0",
+            "version": "1.21.1",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "target": "bootstrap-table",
             "files": [
                 "bootstrap-table.js",
@@ -143,7 +145,7 @@
         {
             "display": "bootstrap-table-defer-url",
             "name": "bootstrap-table",
-            "version": "1.21.0",
+            "version": "1.21.1",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/extensions/defer-url/{file}",
             "target": "bootstrap-table",
@@ -154,7 +156,7 @@
         {
             "display": "bootstrap-table-custom-view",
             "name": "bootstrap-table",
-            "version": "1.21.0",
+            "version": "1.21.1",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/extensions/custom-view/{file}",
             "target": "bootstrap-table",

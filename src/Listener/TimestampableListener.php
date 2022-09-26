@@ -14,6 +14,7 @@ namespace App\Listener;
 
 use App\Entity\AbstractEntity;
 use App\Interfaces\DisableListenerInterface;
+use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Traits\DisableListenerTrait;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -25,6 +26,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Listener to update timestampable entities.
  *
  * @see TimestampableInterface
+ * @see ParentTimestampableInterface
  */
 class TimestampableListener implements DisableListenerInterface
 {
@@ -45,31 +47,22 @@ class TimestampableListener implements DisableListenerInterface
      */
     public function onFlush(OnFlushEventArgs $args): void
     {
-        // enabled?
         if (!$this->isEnabled()) {
             return;
         }
 
         $em = $args->getObjectManager();
         $unitOfWork = $em->getUnitOfWork();
-
-        // get entities
         $entities = $this->getEntities($unitOfWork);
         if ([] === $entities) {
             return;
         }
 
-        // get update values
         $user = $this->getUserName();
         $date = new \DateTimeImmutable();
-
         foreach ($entities as $entity) {
-            // update?
             if ($this->updateEntity($entity, $user, $date)) {
-                // persist
                 $em->persist($entity);
-
-                // recompute
                 $class_name = $entity::class;
                 $metadata = $em->getClassMetadata($class_name);
                 $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
@@ -78,28 +71,44 @@ class TimestampableListener implements DisableListenerInterface
     }
 
     /**
-     * Gets the entities to update.
-     *
      * @return TimestampableInterface[]
      */
-    protected function getEntities(UnitOfWork $unitOfWork): array
+    private function getEntities(UnitOfWork $unitOfWork): array
     {
         /** @var AbstractEntity[] $entities */
         $entities = [
-            ...$unitOfWork->getScheduledEntityInsertions(),
             ...$unitOfWork->getScheduledEntityUpdates(),
+            ...$unitOfWork->getScheduledEntityDeletions(),
+            ...$unitOfWork->getScheduledEntityInsertions(),
         ];
 
         if ([] === $entities) {
             return [];
         }
 
-        return \array_filter($entities, static fn (AbstractEntity $entity): bool => $entity instanceof TimestampableInterface);
+        $result = [];
+        foreach ($entities as $entity) {
+            if (null !== $timestampable = $this->getTimestampable($entity)) {
+                $result[(int) $timestampable->getId()] = $timestampable;
+            }
+        }
+
+        return $result;
     }
 
-    /**
-     * Gets the connected username.
-     */
+    private function getTimestampable(AbstractEntity $entity): ?TimestampableInterface
+    {
+        if ($entity instanceof TimestampableInterface) {
+            return $entity;
+        }
+
+        if ($entity instanceof ParentTimestampableInterface) {
+            return $entity->getParentTimestampable();
+        }
+
+        return null;
+    }
+
     private function getUserName(): string
     {
         if (null !== ($user = $this->security->getUser())) {
@@ -109,9 +118,6 @@ class TimestampableListener implements DisableListenerInterface
         return $this->emptyUser;
     }
 
-    /**
-     * Update the given entity.
-     */
     private function updateEntity(TimestampableInterface $entity, string $user, \DateTimeImmutable $date): bool
     {
         $changed = false;

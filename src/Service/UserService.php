@@ -281,6 +281,18 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function isStatusBar(): bool
+    {
+        $default = $this->service->isStatusBar();
+
+        return $this->isPropertyBoolean(self::P_STATUS_BAR, $default);
+    }
+
+    /**
      * Save the given properties to the database and to the cache.
      *
      * @param array<string, mixed> $properties the properties to set

@@ -25,12 +25,3 @@
 {% macro value_rain(value, unit='') %}
 {{ _self.value_unit(value|number_format(1), unit, ' ') }}
 {% endmacro %}
-
-{% macro direction(text) -%}
-{{ text|replace({
-        'N': 'openweather.direction.N'|trans,
-        'S': 'openweather.direction.S'|trans,
-        'E': 'openweather.direction.E'|trans,
-        'W': 'openweather.direction.W'|trans
-    }) }}
-{%- endmacro %}

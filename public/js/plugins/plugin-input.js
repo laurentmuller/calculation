@@ -49,7 +49,7 @@
         _init() {
             const that = this;
             const options = that.options;
-            const separators = '[' +  options.separatorAuthorized.join('') + ']';
+            const separators = '[' + options.separatorAuthorized.join('') + ']';
 
             // regex for input event
             that.inputRegex = new RegExp(separators);
@@ -136,7 +136,6 @@
             if (!value) {
                 return value;
             }
-
             const options = this.options;
             const decimal = options.decimal;
             value = value.replace(',', options.separator);

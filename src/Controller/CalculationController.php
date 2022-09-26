@@ -122,7 +122,6 @@ class CalculationController extends AbstractEntityController
         $parameters = [
             'title' => 'calculation.delete.title',
             'message' => 'calculation.delete.message',
-            'success' => 'calculation.delete.success',
             'failure' => 'calculation.delete.failure',
         ];
         // delete
@@ -289,7 +288,6 @@ class CalculationController extends AbstractEntityController
         $translator = $this->getTranslator();
 
         /* @var Calculation $item */
-        $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
         $parameters['created_item'] = $item->getCreatedText($translator, true);
         $parameters['updated_item'] = $item->getUpdatedText($translator, true);
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);

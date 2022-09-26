@@ -13,12 +13,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
+use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to get weather from OpenWeatherMap.
@@ -29,6 +31,8 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
+    use TranslatorTrait;
+
     /**
      * The imperial degree.
      */
@@ -180,6 +184,7 @@ class OpenWeatherService extends AbstractHttpClientService
         bool $isDebug,
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
         private readonly string $databaseName,
+        private readonly TranslatorInterface $translator
     ) {
         parent::__construct($isDebug, $key);
     }
@@ -188,9 +193,9 @@ class OpenWeatherService extends AbstractHttpClientService
      * Returns the current, the 5 days/3 hours forecast and 16 day/daily forecast
      * conditions data for a specific location.
      *
-     * @param int    $cityId the city identifier
-     * @param int    $count  the number of result to return or -1 for all
-     * @param string $units  the units to use
+     * @param int    $id    the city identifier
+     * @param int    $count the number of result to return or -1 for all
+     * @param string $units the units to use
      *
      * @return array{current: array|false, forecast: array|false, daily: array|false}
      *
@@ -198,20 +203,20 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws \ReflectionException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function all(int $cityId, int $count = -1, string $units = self::UNIT_METRIC): array
+    public function all(int $id, int $count = -1, string $units = self::UNIT_METRIC): array
     {
         return [
-            'current' => $this->current($cityId, $units),
-            'forecast' => $this->forecast($cityId, $count, $units),
-            'daily' => $this->daily($cityId, $count, $units),
+            'current' => $this->current($id, $units),
+            'forecast' => $this->forecast($id, $count, $units),
+            'daily' => $this->daily($id, $count, $units),
         ];
     }
 
     /**
      * Returns current conditions data for a specific location.
      *
-     * @param int    $cityId the city identifier
-     * @param string $units  the units to use
+     * @param int    $id    the city identifier
+     * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
      *
@@ -219,10 +224,10 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
-    public function current(int $cityId, string $units = self::UNIT_METRIC): array|false
+    public function current(int $id, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
-            'id' => $cityId,
+            'id' => $id,
             'units' => $units,
         ];
 
@@ -232,9 +237,9 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns 16 day / daily forecast conditions data for a specific location.
      *
-     * @param int    $cityId the city identifier
-     * @param int    $count  the number of result to return or -1 for all
-     * @param string $units  the units to use
+     * @param int    $id    the city identifier
+     * @param int    $count the number of result to return or -1 for all
+     * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
      *
@@ -242,10 +247,10 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \ReflectionException
      */
-    public function daily(int $cityId, int $count = -1, string $units = self::UNIT_METRIC): array|false
+    public function daily(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
-            'id' => $cityId,
+            'id' => $id,
             'units' => $units,
         ];
         if ($count > 0) {
@@ -258,9 +263,9 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns 5 days / 3 hours forecast conditions data for a specific location.
      *
-     * @param int    $cityId the city identifier
-     * @param int    $count  the number of result to return or -1 for all
-     * @param string $units  the units to use
+     * @param int    $id    the city identifier
+     * @param int    $count the number of result to return or -1 for all
+     * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
      *
@@ -268,10 +273,10 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws \ReflectionException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function forecast(int $cityId, int $count = -1, string $units = self::UNIT_METRIC): array|false
+    public function forecast(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
-            'id' => $cityId,
+            'id' => $id,
             'units' => $units,
         ];
         if ($count > 0) {
@@ -315,6 +320,11 @@ class OpenWeatherService extends AbstractHttpClientService
     public function getSpeedUnit(string $units): string
     {
         return self::UNIT_METRIC === $units ? self::SPEED_METRIC : self::SPEED_IMPERIAL;
+    }
+
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**
@@ -392,66 +402,53 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns information for an array of cities that match the search text.
+     * Search for cities.
      *
      * @param string $name  the name of the city to search for
      * @param string $units the units to use
      * @param int    $limit the maximum number of cities to return
      *
-     * @return array|false the search result if success; false on error
-     *
-     * @psalm-return array<array{
+     * @pslam-return array<int, array{
      *      id: int,
      *      name: string,
      *      country: string,
      *      latitude: float,
-     *      longitude: float}>|false
+     *      longitude: float}>
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array|false
+    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array
     {
         // find from cache
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units]);
 
         /**
-         *  @psalm-var bool|array<array{
+         *  @psalm-var array<int, array{
          *      id: int,
          *      name: string,
          *      country: string,
          *      latitude: float,
-         *      longitude: float}> $result
+         *      longitude: float}>|false $result
          */
-        $result = $this->getCacheValue($key);
+        $result = $this->getCacheValue($key, false);
         if (\is_array($result)) {
             return $result;
         }
 
-        // search
-        $db = $this->getDatabase(true);
-        $result = $db->findCity($name, $limit);
-        $db->close();
+        $db = null;
 
-        // found?
-        if (empty($result)) {
-            return false;
+        try {
+            $db = $this->getDatabase(true);
+            $result = $db->findCity($name, $limit);
+        } finally {
+            $db?->close();
         }
 
         // update and cache
         $this->updateResult($result);
         $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
 
-        /**
-         *  @psalm-var array<array{
-         *      id: int,
-         *      name: string,
-         *      country: string,
-         *      latitude: float,
-         *      longitude: float}> $cities
-         */
-        $cities = $result;
-
-        return $cities;
+        return $result;
     }
 
     /**
@@ -588,6 +585,28 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
+     * Gets the wind description for the given degrees.
+     */
+    private function getWindDescription(int $deg): string
+    {
+        $direction = $this->getWindDirection($deg);
+        $search = [
+            'N',
+            'S',
+            'E',
+            'W',
+        ];
+        $replace = [
+            $this->trans('openweather.direction.N'),
+            $this->trans('openweather.direction.S'),
+            $this->trans('openweather.direction.E'),
+            $this->trans('openweather.direction.W'),
+        ];
+
+        return \str_replace($search, $replace, $direction);
+    }
+
+    /**
      * Gets the wind direction for the given degrees.
      */
     private function getWindDirection(int $deg): string
@@ -620,6 +639,28 @@ class OpenWeatherService extends AbstractHttpClientService
         return \str_replace('{0}', $value, $url);
     }
 
+    private function updateDates(array &$result, int $value, \DateTimeZone|\IntlTimeZone|string $timezone = null): void
+    {
+        // already set?
+        if (isset($result['dt_date'])) {
+            return;
+        }
+
+        $result['dt_date'] = FormatUtils::formatDate($value, self::TYPE_SHORT);
+        $result['dt_date_locale'] = FormatUtils::formatDate($value, self::TYPE_SHORT, $timezone);
+
+        $result['dt_time'] = FormatUtils::formatTime($value, self::TYPE_SHORT);
+        $result['dt_time_locale'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
+
+        $result['dt_date_time'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
+        $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
+
+        $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
+        $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
+
+        unset($result['dt_txt']);
+    }
+
     /**
      * Update result.
      *
@@ -641,27 +682,12 @@ class OpenWeatherService extends AbstractHttpClientService
                     break;
 
                 case 'country':
-                    if ($name = $this->getCountryName((string) $value)) {
-                        $result['country_name'] = $name;
-                    }
+                    $result['country_name'] = $this->getCountryName((string) $value) ?? '';
                     $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower((string) $value));
                     break;
 
                 case 'dt':
-                    $value = (int) $value;
-                    $result['dt_date'] = FormatUtils::formatDate($value, self::TYPE_SHORT);
-                    $result['dt_date_locale'] = FormatUtils::formatDate($value, self::TYPE_SHORT, $timezone);
-
-                    $result['dt_time'] = FormatUtils::formatTime($value, self::TYPE_SHORT);
-                    $result['dt_time_locale'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
-
-                    $result['dt_date_time'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
-                    $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
-
-                    $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
-                    $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
-
-                    unset($result['dt_txt']);
+                    $this->updateDates($result, (int) $value, $timezone);
                     break;
 
                 case 'sunrise':
@@ -680,7 +706,9 @@ class OpenWeatherService extends AbstractHttpClientService
                     break;
 
                 case 'deg':
-                    $result['deg_text'] = $this->getWindDirection((int) $value);
+                    $deg = (int) $value;
+                    $result['deg_direction'] = $this->getWindDirection($deg);
+                    $result['deg_description'] = $this->getWindDescription($deg);
                     break;
 
                 default:

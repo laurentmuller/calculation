@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Util\Utils;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -21,49 +20,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 trait LoggerTrait
 {
     /**
-     * The installer name.
-     */
-    protected ?string $installerName = null;
-
-    /**
      * The symfony style.
      */
-    protected ?SymfonyStyle $io = null;
-
-    /**
-     * Concat this installer name and the message.
-     *
-     * @param string $message the message to output
-     *
-     * @return string the concat message
-     *
-     * @throws \ReflectionException
-     */
-    protected function concat(string $message): string
-    {
-        return $this->getInstallerName() . ': ' . $message;
-    }
-
-    /**
-     * Gets the installer name.
-     *
-     * @return string the installer name
-     *
-     * @throws \ReflectionException
-     */
-    protected function getInstallerName(): string
-    {
-        if (null === $this->installerName) {
-            $this->installerName = Utils::getShortName(static::class);
-        }
-
-        return $this->installerName;
-    }
+    private ?SymfonyStyle $io = null;
 
     /**
      * Returns whether verbosity is verbose (-v).
-     *
-     * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
      */
     protected function isVerbose(): bool
     {
@@ -72,8 +34,6 @@ trait LoggerTrait
 
     /**
      * Returns whether verbosity is very verbose (-vv).
-     *
-     * @return bool true if verbosity is set to VERBOSITY_VERY_VERBOSE, false otherwise
      */
     protected function isVeryVerbose(): bool
     {
@@ -81,90 +41,66 @@ trait LoggerTrait
     }
 
     /**
-     * Writes the given message.
-     *
-     * @param string $message the message to write
-     *
-     * @throws \ReflectionException
+     * Writes the given information message.
      */
-    protected function write(string $message): void
+    protected function write(string $message, string $style = ''): void
     {
         if (null !== $this->io) {
-            $concat = $this->concat($message);
-            $this->io->writeln("<info>$concat</info>");
+            if ('' !== $style) {
+                $this->io->writeln("<$style>$message</>");
+            } else {
+                $this->io->writeln("<info>$message</info>");
+            }
         }
     }
 
     /**
      * Writes the given error message.
-     *
-     * @param string $message the message to write
-     *
-     * @throws \ReflectionException
      */
     protected function writeError(string $message): void
     {
         if (null !== $this->io) {
-            $concat = $this->concat($message);
-            $this->io->error($concat);
+            $this->io->error($message);
         }
     }
 
     /**
-     * Writes the given error message.
-     *
-     * @param string $message the message to write
-     *
-     * @throws \ReflectionException
+     * Writes the given note message.
      */
     protected function writeNote(string $message): void
     {
         if (null !== $this->io) {
-            $concat = $this->concat($message);
-            $this->io->note($concat);
+            $this->io->note($message);
         }
     }
 
     /**
      * Writes the given success message.
-     *
-     * @param string $message the message to write
-     *
-     * @throws \ReflectionException
      */
     protected function writeSuccess(string $message): void
     {
         if (null !== $this->io) {
-            $concat = $this->concat($message);
-            $this->io->success($concat);
+            $this->io->success($message);
         }
     }
 
     /**
-     * Writes the given message.
-     *
-     * @param string $message the message to write with information style
-     *
-     * @throws \ReflectionException
+     * Writes the given information message whether verbosity is verbose (-v).
      */
-    protected function writeVerbose(string $message): void
+    protected function writeVerbose(string $message, string $style = ''): void
     {
         if ($this->isVerbose()) {
-            $this->write($message);
+            $this->write($message, $style);
         }
     }
 
     /**
-     * Writes the given message.
-     *
-     * @param string $message the message to write
-     *
-     * @throws \ReflectionException
+     * Writes the given information message whether verbosity is very verbose (-vv).
      */
-    protected function writeVeryVerbose(string $message): void
+    protected function writeVeryVerbose(string $message, string $style = ''): void
     {
         if ($this->isVeryVerbose()) {
-            $this->write($message);
+            $this->write($message, $style);
         }
     }
 }

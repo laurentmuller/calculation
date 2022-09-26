@@ -252,7 +252,6 @@ clear_cache:
   title: Vider le cache
 common:
   actions: Actions
-  add_success: L'objet <b>%name%</b> a été ajouté avec succès.
   button_add: Nouveau
   button_back: Retour
   button_back_list: Retour à la liste
@@ -277,11 +276,12 @@ common:
   button_table: Mode tabulaire
   clone_description: '%description% - Copie'
   count: 'Nombre d''éléments : %count%'
-  delete_failure: Impossible de supprimer l'objet <b>%name%</b> de la base de données.
-  delete_message: Êtes-vous sûr de vouloir supprimer l'objet <b>%name%</b> ?
+  add_success: L'objet <b>%name%</b> a été ajouté avec succès.
+  edit_success: L'objet <b>%name%</b> a été mis à jour avec succès.
   delete_success: L'objet <b>%name%</b> a été supprimé avec succès.
   delete_title: Supprimer un objet
-  edit_success: L'objet <b>%name%</b> a été mis à jour avec succès.
+  delete_message: Êtes-vous sûr de vouloir supprimer l'objet <b>%name%</b> ?
+  delete_failure: Impossible de supprimer l'objet <b>%name%</b> de la base de données.
   empty: ''
   empty_date: Inconnue
   empty_user: Système
@@ -307,6 +307,7 @@ common:
   value_true: Oui
   value_unknown: Inconnu
   save_data: Sauvegarde des données...
+  data_changed: Les données sont en cours de modification.
   simulate:
     label: Simuler la mise à jour
     help: Simule une mise à jour sans enregistrer les changements dans la base de données.
@@ -706,7 +707,7 @@ openweather:
     wind_gust: Rafales
     wind_speed: Vitesse
   import:
-    description: Permet de mettre à jour la liste des localités.
+    description: Permet de mettre à jour la liste de recherche des localités.
     file: Fichier d'archive
     link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank"
       rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank"
@@ -778,6 +779,7 @@ parameters:
     print_address: Imprimer l'adresse
     qr_code: Code QR sur les calculations
     time_format: Format des heures
+    status_bar: Barre d'état
   group_customer: Client
   group_customer_help: Données du client utilisées pour l'impression des documents.
   group_default: Valeurs par défaut
@@ -801,6 +803,7 @@ parameters:
     panel_state: Afficher la liste des calculations regroupées par status.
     print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
     qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
+    status_bar: Afficher la barre d'état au bas de l'application.
   placeholders:
     default_product: <Aucun article sélectionné>
   success: Les paramètres de l'application ont été mis à jour avec succès.

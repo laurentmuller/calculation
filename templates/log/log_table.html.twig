@@ -56,7 +56,6 @@
 {% block show_actions -%}
 {{- _self.item_path(path('log_show', params), 'log.show.title', ICON_SHOW, 'btn-show btn-default') }}
 {%- endblock %}
-{% block custom_view_card_class ' text-border' %}
 {% block custom_view_header -%}
 {%- if allow_show -%}
     <a href="{{ path('log_show', params) }}" class="item-link text-body" title="{{ 'log.show.title'|trans }}">%createdAt%</a>
@@ -73,5 +72,5 @@
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets %}
-    {{ asset_css('css/table_log.css') }}
+{{ asset_css('css/table_log.css') }}
 {% endblock %}

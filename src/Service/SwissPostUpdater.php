@@ -137,14 +137,14 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             return $this->setError('file_not_exist');
         }
 
-        // create a temporary file
-        if (null === $temp_name = FileUtils::tempfile('sql')) {
-            return $this->setError('temp_file');
-        }
-
         // same as current database?
         if (0 === \strcasecmp($sourceFile, $this->databaseName)) {
             return $this->setError('open_database');
+        }
+
+        // create a temporary file
+        if (null === $temp_name = FileUtils::tempfile('sql')) {
+            return $this->setError('temp_file');
         }
 
         try {

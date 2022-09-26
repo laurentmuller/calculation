@@ -14,6 +14,7 @@ namespace App\Util;
 
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * Utility class for files.
@@ -34,11 +35,33 @@ final class FileUtils
     }
 
     /**
-     * Concat all given segments with the directory separator.
+     *  Joins two or more path strings into a canonical path.
      */
-    public static function buildPath(string ...$segments): string
+    public static function buildPath(string ...$paths): string
     {
-        return \implode(\DIRECTORY_SEPARATOR, $segments);
+        return Path::join(...$paths);
+    }
+
+    /**
+     * Change mode for a file or a directory.
+     *
+     * @param string $filename  A file name to change mode
+     * @param int    $mode      The new mode (octal)
+     * @param bool   $recursive whether change the mod recursively or not
+     *
+     * @return bool true on success, false on error
+     */
+    public static function chmod(string $filename, int $mode, bool $recursive = true): bool
+    {
+        try {
+            self::getFilesystem()->chmod($filename, $mode, 0, $recursive);
+
+            return true;
+        } catch (IOException) {
+            // ignore
+        }
+
+        return false;
     }
 
     /**
@@ -55,13 +78,13 @@ final class FileUtils
     {
         // file?
         if (!self::isFile($file)) {
-            throw new \InvalidArgumentException("The file '$file' can not be found.");
+            throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", self::getRealPath($file)));
         }
 
         // get content
         $file = self::getRealPath($file);
         if (false === $json = \file_get_contents($file)) {
-            throw new \InvalidArgumentException("Unable to get content of the file '$file'.");
+            throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", self::getRealPath($file)));
         }
 
         // decode
@@ -69,7 +92,7 @@ final class FileUtils
         $content = \json_decode($json, $assoc);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             $message = \json_last_error_msg();
-            throw new \InvalidArgumentException("Unable to decode the content of the file '$file' ($message).");
+            throw new \InvalidArgumentException(\sprintf("Unable to decode the content of the file '%s' (%s).", self::getRealPath($file), $message));
         }
 
         return $content;
@@ -79,7 +102,7 @@ final class FileUtils
      * Atomically dumps content into a file.
      *
      * @param \SplFileInfo|string $file    the file to write to
-     * @param string|resource     $content the data to write into the file
+     * @param resource|string     $content the data to write into the file
      *
      * @return bool true on success, false on failure
      */
@@ -154,13 +177,14 @@ final class FileUtils
      */
     public static function getLinesCount(string $filename, bool $skipEmpty = true): int
     {
-        if (!self::isFile($filename)) {
+        if (!self::isFile($filename) || 0 === self::size($filename)) {
             return 0;
         }
 
+        // $flags = \SplFileObject::DROP_NEW_LINE;
         $flags = \SplFileObject::DROP_NEW_LINE;
         if ($skipEmpty) {
-            $flags |= \SplFileObject::DROP_NEW_LINE | \SplFileObject::READ_AHEAD;
+            $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;
         }
 
         try {
@@ -168,7 +192,7 @@ final class FileUtils
             $file->setFlags($flags);
             $file->seek(\PHP_INT_MAX);
 
-            return $file->key() + 1;
+            return $file->key();
         } catch (\Exception) {
             // ignore
             return 0;
@@ -254,21 +278,20 @@ final class FileUtils
     }
 
     /**
-     * Create temporary file with a unique name.
+     * Create temporary file in the given directory with a unique name.
      *
-     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first three characters of prefix.
+     * @param string $dir          The directory where the temporary filename will be created
+     * @param string $prefix       The prefix of the generated temporary filename
      * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
      *
-     * @return string|null the new temporary file name (with path); null on failure
+     * @return string|null the new temporary directory; null on failure
      */
-    public static function tempfile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
+    public static function tempdir(string $dir, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         try {
-            $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
+            $file = self::getFilesystem()->tempnam($dir, $prefix);
             if ($deleteOnExit) {
-                \register_shutdown_function(function () use ($file): void {
-                    self::remove($file);
-                });
+                \register_shutdown_function(fn () => self::remove($file));
             }
 
             return $file;
@@ -277,6 +300,19 @@ final class FileUtils
         }
 
         return null;
+    }
+
+    /**
+     * Create temporary file in the temporary directory with a unique name.
+     *
+     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first three characters of prefix.
+     * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
+     *
+     * @return string|null the new temporary file name (with path); null on failure
+     */
+    public static function tempfile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
+    {
+        return self::tempdir(\sys_get_temp_dir(), $prefix, $deleteOnExit);
     }
 
     /**

@@ -256,6 +256,19 @@
                 $that.initFocus();
             }
 
+            // display message on modification
+            const $message = $('#footer-message');
+            if ($message.length) {
+                const data = $that.serialize();
+                $that.find(':input').on('change input', function () {
+                    if ($that.serialize() === data) {
+                        $message.hide(300);
+                    } else {
+                        $message.show(300);
+                    }
+                });
+            }
+
             return validator;
         },
 
@@ -384,11 +397,13 @@
                 css: settings.css,
                 role: 'alert',
             });
-            const $icon = $('<i />', {
-                class: settings.iconClass
-            });
-
-            $alert.prepend($icon).appendTo(settings.parent).show(settings.show, function () {
+            if (settings.iconClass) {
+                const $icon = $('<i />', {
+                    class: settings.iconClass
+                });
+                $alert.prepend($icon);
+            }
+            $alert.appendTo($(settings.parent)).show(settings.show, function () {
                 $alert.createTimer(function () {
                     $alert.hide(settings.hide, function () {
                         $alert.removeTimer().remove();

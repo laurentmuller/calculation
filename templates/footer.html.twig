@@ -1,12 +1,15 @@
 {% from 'macros/_icons.html.twig' import copyright_link %}
-<footer class="navbar navbar-footer navbar-themed py-1 px-2 justify-content-md-end fixed-bottom small d-print-none border-top">
+<footer class="navbar navbar-footer navbar-themed py-1 justify-content-md-end fixed-bottom small d-print-none border-top">
     <div class="navbar-nav flex-row">
-        <a class="nav-link py-0 pr-2 text-truncate" href="{{ path('about') }}" title="{{ 'footer.about_title'|trans }}">
+        <span class="navbar-text text-truncate text-danger border-right" id="footer-message" style="display: none;">
+            {{- 'common.data_changed'|trans -}}
+        </span>
+        <a class="nav-link text-truncate border-right" href="{{ path('about') }}" title="{{ 'footer.about_title'|trans }}">
             {{- app_name_version -}}
         </a>
-        <span class="navbar-text py-0 px-2 border-left" title="{{ 'footer.environment_title'|trans }}">
+        <span class="navbar-text text-truncate border-right" title="{{ 'footer.environment_title'|trans }}">
             {{- ('environment.' ~ app_mode)|trans -}}
         </span>
-        {{- copyright_link('nav-link py-0 pl-2 border-left text-truncate') -}}
+        {{- copyright_link('nav-link text-truncate') -}}
     </div>
 </footer>

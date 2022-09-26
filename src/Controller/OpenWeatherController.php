@@ -48,19 +48,34 @@ class OpenWeatherController extends AbstractController
     private const DEFAULT_LIMIT = 25;
 
     /**
-     * The city identifier key name.
-     */
-    private const KEY_CITY_ID = 'city';
-
-    /**
      * The count key name.
      */
     private const KEY_COUNT = 'count';
 
     /**
+     * The exclude key name.
+     */
+    private const KEY_EXCLUDE = 'exclude';
+
+    /**
+     * The city identifier key name.
+     */
+    private const KEY_ID = 'id';
+
+    /**
+     * The latitude key name.
+     */
+    private const KEY_LATITUDE = 'latitude';
+
+    /**
      * The limit key name.
      */
     private const KEY_LIMIT = 'limit';
+
+    /**
+     * The latitude key name.
+     */
+    private const KEY_LONGITUDE = 'longitude';
 
     /**
      * The query key name.
@@ -95,9 +110,9 @@ class OpenWeatherController extends AbstractController
     public function apiCurrent(Request $request): JsonResponse
     {
         try {
-            $cityId = $this->getRequestCityId($request);
+            $id = $this->getRequestId($request);
             $units = $this->getRequestUnits($request);
-            if (false === $response = $this->service->current($cityId, $units)) {
+            if (false === $response = $this->service->current($id, $units)) {
                 $response = $this->service->getLastError();
             }
 
@@ -118,7 +133,7 @@ class OpenWeatherController extends AbstractController
     public function apiDaily(Request $request): JsonResponse
     {
         try {
-            $cityId = $this->getRequestCityId($request);
+            $cityId = $this->getRequestId($request);
             $units = $this->getRequestUnits($request);
             $count = $this->getRequestCount($request);
             if (false === $response = $this->service->daily($cityId, $count, $units)) {
@@ -143,7 +158,7 @@ class OpenWeatherController extends AbstractController
     public function apiForecast(Request $request): JsonResponse
     {
         try {
-            $cityId = $this->getRequestCityId($request);
+            $cityId = $this->getRequestId($request);
             $units = $this->getRequestUnits($request);
             $count = $this->getRequestCount($request);
             if (false === $response = $this->service->forecast($cityId, $count, $units)) {
@@ -169,9 +184,9 @@ class OpenWeatherController extends AbstractController
     {
         try {
             $units = $this->getRequestUnits($request);
-            $latitude = $this->getRequestFloat($request, 'latitude');
-            $longitude = $this->getRequestFloat($request, 'longitude');
-            $exclude = (string) $this->getRequestString($request, 'exclude');
+            $latitude = $this->getRequestFloat($request, self::KEY_LATITUDE);
+            $longitude = $this->getRequestFloat($request, self::KEY_LONGITUDE);
+            $exclude = (string) $this->getRequestString($request, self::KEY_EXCLUDE);
             $exclude = \explode(',', $exclude);
             $response = $this->service->oneCall($latitude, $longitude, $units, $exclude);
             if (false === $response) {
@@ -196,30 +211,33 @@ class OpenWeatherController extends AbstractController
         try {
             $query = $this->getRequestQuery($request);
             $units = $this->getRequestUnits($request);
-            $response = $this->service->search($query, $units);
+            $cities = $this->service->search($query, $units);
             if ($lastError = $this->service->getLastError()) {
                 return $this->json($lastError);
             }
-            if (!\is_array($response)) {
+            if (empty($cities)) {
                 return $this->jsonFalse();
             }
 
-            // add urls
-            $parameters = ['units' => $units];
-            foreach ($response as &$city) {
-                $parameters['latitude'] = $city['latitude'];
-                $parameters['longitude'] = $city['longitude'];
+            /**  @psalm-var array{id: int, latitude: float, longitude: float} $city */
+            foreach ($cities as $city) {
+                $parameters = [
+                    self::KEY_UNITS => $units,
+                    self::KEY_LATITUDE => $city[self::KEY_LATITUDE],
+                    self::KEY_LONGITUDE => $city[self::KEY_LONGITUDE],
+                ];
                 $city['onecall_url'] = $generator->generate('openweather_api_onecall', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                unset($parameters['latitude'], $parameters['longitude']);
 
-                $parameters['cityId'] = $city['id'];
+                $parameters = [
+                    self::KEY_UNITS => $units,
+                    self::KEY_ID => $city['id'],
+                ];
                 $city['current_url'] = $generator->generate('openweather_api_current', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
                 $city['forecast_url'] = $generator->generate('openweather_api_forecast', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
                 $city['daily_url'] = $generator->generate('openweather_api_daily', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                unset($parameters['cityId']);
             }
 
-            return $this->json($response);
+            return $this->json($cities);
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
@@ -235,14 +253,13 @@ class OpenWeatherController extends AbstractController
     #[Route(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response
     {
-        $cityId = $this->getRequestCityId($request);
+        $id = $this->getRequestId($request);
         $units = $this->getRequestUnits($request);
         $count = $this->getRequestCount($request);
-
-        $values = $this->service->all($cityId, $count, $units);
+        $values = $this->service->all($id, $count, $units);
         if (false !== $values['current']) {
             $this->setSessionValues([
-                self::KEY_CITY_ID => $cityId,
+                self::KEY_ID => $id,
                 self::KEY_UNITS => $units,
                 self::KEY_COUNT => $count,
             ]);
@@ -303,7 +320,7 @@ class OpenWeatherController extends AbstractController
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
 
-            /** @var array<int, array{id: int, units: array, current: array}>|false $cities */
+            /** @var array<int, array{id: int}>|false $cities */
             $cities = $this->service->search($query, $units, $limit);
             if (false !== $cities) {
                 // save
@@ -317,7 +334,7 @@ class OpenWeatherController extends AbstractController
                 // display current weather if only 1 city is found
                 if (1 === \count($cities)) {
                     return $this->redirectToRoute('openweather_current', [
-                        self::KEY_CITY_ID => \reset($cities)['id'],
+                        self::KEY_ID => \reset($cities)['id'],
                         self::KEY_UNITS => $units,
                         self::KEY_COUNT => $count,
                     ]);
@@ -359,10 +376,10 @@ class OpenWeatherController extends AbstractController
     #[Route(path: '/weather', name: 'openweather_weather')]
     public function weather(Request $request): Response
     {
-        $cityId = $this->getSessionCityId($request);
-        if (0 !== $cityId) {
+        $id = $this->getSessionId($request);
+        if (0 !== $id) {
             return $this->redirectToRoute('openweather_current', [
-                self::KEY_CITY_ID => $cityId,
+                self::KEY_ID => $id,
                 self::KEY_UNITS => $this->getSessionUnits($request),
                 self::KEY_COUNT => $this->getSessionCount($request),
             ]);
@@ -399,14 +416,14 @@ class OpenWeatherController extends AbstractController
         return $helper->createForm();
     }
 
-    private function getRequestCityId(Request $request): int
-    {
-        return $this->getRequestInt($request, self::KEY_CITY_ID);
-    }
-
     private function getRequestCount(Request $request): int
     {
         return $this->getRequestInt($request, self::KEY_COUNT, self::DEFAULT_COUNT);
+    }
+
+    private function getRequestId(Request $request): int
+    {
+        return $this->getRequestInt($request, self::KEY_ID);
     }
 
     private function getRequestLimit(Request $request): int
@@ -424,14 +441,14 @@ class OpenWeatherController extends AbstractController
         return (string) $this->getRequestString($request, self::KEY_UNITS, OpenWeatherService::UNIT_METRIC);
     }
 
-    private function getSessionCityId(Request $request): int
-    {
-        return (int) $this->getSessionInt(self::KEY_CITY_ID, $this->getRequestCityId($request));
-    }
-
     private function getSessionCount(Request $request): int
     {
         return (int) $this->getSessionInt(self::KEY_COUNT, $this->getRequestCount($request));
+    }
+
+    private function getSessionId(Request $request): int
+    {
+        return (int) $this->getSessionInt(self::KEY_ID, $this->getRequestId($request));
     }
 
     private function getSessionLimit(Request $request): int

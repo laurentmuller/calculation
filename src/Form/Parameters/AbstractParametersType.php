@@ -112,17 +112,23 @@ abstract class AbstractParametersType extends AbstractType
             ->addCheckboxType();
 
         $key = PropertyServiceInterface::P_PANEL_CALCULATION;
-        /** @psalm-var int $default */
-        $default = $this->getDefaultValue($key);
         $helper->field($key)
             ->help('parameters.helps.' . $key)
-            ->updateRowAttribute('data-default', $default)
+            ->updateRowAttribute('data-default', $this->getDefaultValue($key))
             ->labelClass('radio-inline')
             ->updateOptions([
                 'choice_translation_domain' => false,
                 'expanded' => true,
             ])
             ->addChoiceType($this->getCalculationChoices());
+
+        $key = PropertyServiceInterface::P_STATUS_BAR;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
+            ->rowClass('mb-1')
+            ->notRequired()
+            ->addCheckboxType();
     }
 
     protected function addMessageSection(FormHelper $helper): void

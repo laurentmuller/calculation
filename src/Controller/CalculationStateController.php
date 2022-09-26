@@ -109,7 +109,6 @@ class CalculationStateController extends AbstractEntityController
         $parameters = [
             'title' => 'calculationstate.delete.title',
             'message' => 'calculationstate.delete.message',
-            'success' => 'calculationstate.delete.success',
             'failure' => 'calculationstate.delete.failure',
         ];
 
@@ -203,17 +202,6 @@ class CalculationStateController extends AbstractEntityController
             $application->setProperty(PropertyServiceInterface::P_DEFAULT_STATE, null);
         }
         parent::deleteFromDatabase($item);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
-    {
-        // update parameters
-        $parameters['success'] = $item->isNew() ? 'calculationstate.add.success' : 'calculationstate.edit.success';
-
-        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

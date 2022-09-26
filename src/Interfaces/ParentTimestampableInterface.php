@@ -12,15 +12,13 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
-use App\Entity\Calculation;
-
 /**
- * Class implementing this interface deals with a parent calculation.
+ * Class implementing this interface deals with the parent's timestampable.
  */
-interface ParentCalculationInterface
+interface ParentTimestampableInterface
 {
     /**
-     * Gets the parent's calculation.
+     * Gets the parent's timestampable interface.
      */
-    public function getCalculation(): ?Calculation;
+    public function getParentTimestampable(): ?TimestampableInterface;
 }

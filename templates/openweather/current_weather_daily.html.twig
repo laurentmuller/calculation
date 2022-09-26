@@ -15,16 +15,23 @@
                     {%- endif -%}
                     <br><span class="small text-muted">{{ data.dt_date }}</span>
                 </td>
-                <td class="ow-icon"><img src="{{ data.weather.icon_small }}" class="ow-image" alt="Daily Weather" title="{{ data.weather.description }}">
+                <td class="ow-icon">
+                    <img src="{{ data.weather.icon_small }}" class="ow-image" alt="Daily Weather" title="{{ data.weather.description }}">
+                </td>
                 <td class="ow-temperature">
                     <span class="ow-temperature-pills ow-temperature-night" title="{{ 'openweather.fields.temp_night'|trans }}">{{ tools.value_temp(data.temp.night, units_temp) }}</span>
-                    <span class="ow-temperature-pills ow-temperature-day" title="{{ 'openweather.fields.temp_day'|trans }}">{{ tools.value_temp(data.temp.day, units_temp) }}</span>
-                    <br>
-                    <span title={{ 'openweather.fields.wind'|trans }}>{{ tools.value_speed(data.speed, units_speed) }}</span>
+                    <span class="ow-temperature-pills ow-temperature-day" title="{{ 'openweather.fields.temp_day'|trans }}">{{ tools.value_temp(data.temp.day, units_temp) }}</span><br>
                 </td>
                 <td class="w-50">
                     <span>{{ data.weather.description }}{% if data.rain|default(false) %}, {{ tools.value_rain(data.rain, units_volume) }}{% endif %}</span><br>
-                    <span title="{{ 'openweather.fields.pressure'|trans }}">{{ tools.value_pressure(data.pressure, units_pressure) }}</span>, <span title="{{ 'openweather.fields.humidity'|trans }}">{{ tools.value_humidity(data.humidity, units_percent) }}</span>
+
+                    <span title={{ 'openweather.fields.wind'|trans }}>{{ tools.value_speed(data.speed, units_speed) }}</span>
+                    <span>, </span>
+                    <span title="{{ 'openweather.fields.wind_deg'|trans }}">{{ data.deg_description }}</span><br>
+
+                    <span title="{{ 'openweather.fields.pressure'|trans }}">{{ tools.value_pressure(data.pressure, units_pressure) }}</span>
+                    <span> - </span>
+                    <span title="{{ 'openweather.fields.humidity'|trans }}">{{ tools.value_humidity(data.humidity, units_percent) }}</span>
                 </td>
             </tr>
             {% endfor %}

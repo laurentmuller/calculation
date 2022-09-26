@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
 use App\Interfaces\RoleInterface;
@@ -76,7 +75,6 @@ class CustomerController extends AbstractEntityController
         $parameters = [
             'title' => 'customer.delete.title',
             'message' => 'customer.delete.message',
-            'success' => 'customer.delete.success',
             'failure' => 'customer.delete.failure',
         ];
 
@@ -152,17 +150,6 @@ class CustomerController extends AbstractEntityController
     public function table(Request $request, CustomerTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'customer/customer_table.html.twig', $logger);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
-    {
-        // update parameters
-        $parameters['success'] = $item->isNew() ? 'customer.add.success' : 'customer.edit.success';
-
-        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

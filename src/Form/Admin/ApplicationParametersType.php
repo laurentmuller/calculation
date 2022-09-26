@@ -43,9 +43,9 @@ class ApplicationParametersType extends AbstractParametersType
     /**
      * Constructor.
      */
-    public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $application)
+    public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $service)
     {
-        $defaultValues = $application->getDefaultValues();
+        $defaultValues = $service->getDefaultValues();
         foreach (self::PASSWORD_OPTIONS as $option) {
             $defaultValues[$option] = false;
         }

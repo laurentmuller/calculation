@@ -8,9 +8,10 @@
 
 {# add flashbag messages #}
 {% apply spaceless %}
+{% set bottom = user_service.statusBar ? '45px' : '15px' %}
 <div id=flashbags class="d-none"
      data-margin-top="85px"
-     data-margin-bottom="45px"
+     data-margin-bottom="{{ bottom }}"
      data-timeout="{{ user_service.messageTimeout }}"
      data-position="{{ user_service.messagePosition.value }}"
      data-progress="{{ user_service.messageProgress }}"

@@ -288,6 +288,11 @@ interface PropertyServiceInterface
     /**
      * The property name for the password strength level (int).
      */
+    final public const P_STATUS_BAR = 'status_bar';
+
+    /**
+     * The property name for the password strength level (int).
+     */
     final public const P_STRENGTH_LEVEL = 'strength_level';
 
     /**
@@ -402,4 +407,9 @@ interface PropertyServiceInterface
      * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
      */
     public function isQrCode(): bool;
+
+    /**
+     * Returns a value indicating if the status bar is displayed.
+     */
+    public function isStatusBar(): bool;
 }

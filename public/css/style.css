@@ -15,15 +15,17 @@
     padding-top: 0.5rem;
     transition: top 0.3s;
 }
+
+body.status-bar .navbar.navbar-vertical {
+    height: calc(100vh - 30px);
+}
+/*
 .navbar.navbar-vertical {
     height: calc(100vh - 30px);
 }
-
-/*
 .navbar.navbar-vertical {
     padding-bottom: 30px;
 }
-
 .navbar.navbar-vertical:after {
     content: "";
     position: absolute;
@@ -38,7 +40,20 @@ body.dark .navbar.navbar-vertical:after {
 }
 */
 
+/**
+ * Update bottom margin when the status-bar is visible.
+ */
+body.status-bar {
+    margin-bottom: 30px;
+}
+
+footer a,
+footer span {
+    padding: 0 0.5rem !important;
+}
+
 body.dark footer .border-left,
+body.dark footer .border-right,
 body.dark .navbar-vertical .dropdown-divider {
     border-color: #6c757d !important;
 }
@@ -451,13 +466,6 @@ input[type="number"] {
 }
 .custom-file-input {
     cursor: pointer;
-}
-
-/**
- * Fixed Footer
- */
-body {
-    margin-bottom: 30px;
 }
 
 /*

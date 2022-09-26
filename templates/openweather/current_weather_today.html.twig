@@ -36,7 +36,7 @@
 
         {{ _self.row_title('openweather.fields.wind') }}
         {{ _self.row_unit('openweather.fields.wind_speed', current.wind.speed, units_speed) }}
-        {{ _self.row_text('openweather.fields.wind_deg', tools.direction(current.wind.deg_text) ~ ' (' ~ tools.value_no_sep(current.wind.deg, units_degree) ~ ')') }}
+        {{ _self.row_text('openweather.fields.wind_deg', current.wind.deg_description ~ ' (' ~ tools.value_no_sep(current.wind.deg, units_degree) ~ ')') }}
 
         {% if current.wind.gust|default(false) %}
             {{ _self.row_unit('openweather.fields.wind_gust', current.wind.gust, units_speed) }}

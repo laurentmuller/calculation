@@ -110,10 +110,6 @@ abstract class AbstractEntityController extends AbstractController
             try {
                 // remove
                 $this->deleteFromDatabase($item);
-                // message
-                $message = (string) ($parameters['success'] ?? 'common.delete_success');
-                $message = $this->trans($message, ['%name%' => $display]);
-                $this->warning($message);
             } catch (Exception $e) {
                 $failure = (string) ($parameters['failure'] ?? 'common.delete_failure');
                 $message = $this->trans($failure, ['%name%' => $display]);
@@ -189,21 +185,12 @@ abstract class AbstractEntityController extends AbstractController
             // save
             $this->saveToDatabase($item);
 
-            // message
-            /** @psalm-var string $key */
-            $key = $isNew ? $parameters['success'] ?? 'common.add_success' : $parameters['success'] ?? 'common.edit_success';
-            $message = $this->trans($key, ['%name%' => $item->getDisplay()]);
-            $this->success($message);
-
             // redirect
             $id = $item->getId();
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
-
-        // remove unused parameters
-        unset($parameters['success'], $parameters['route']);
 
         // update parameters
         $parameters['new'] = $isNew;

@@ -637,7 +637,7 @@ class TestController extends AbstractController
      */
     private function getCurrencies(): array
     {
-        /** @var array<int, array{code: string, name: string}> */
+        /** @var array<int, array{code: string, name: string}> $currencies */
         $currencies = \array_map(function (string $code): array {
             $name = \ucfirst(Currencies::getName($code));
             $symbol = Currencies::getSymbol($code);

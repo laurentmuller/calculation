@@ -5,17 +5,17 @@
 {%- set title_icon = 'sign-in-alt' -%}
 {%- set submit_text = 'security.login.submit' -%}
 {%- set cancel_path = false -%}
-
+{# footer #}
 {% block card_footer -%}
 {{ parent() }}
 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 {% endblock %}
-
+{# actions #}
 {% block actions_form %}
 {{ parent() }}
 <a href="{{ path('app_forgot_password_request') }}" class="ml-md-2" title="{{ 'resetting.request.description'|trans }}">{{ 'resetting.link'|trans }}</a>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}

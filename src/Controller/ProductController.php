@@ -96,7 +96,6 @@ class ProductController extends AbstractEntityController
         $parameters = [
             'title' => 'product.delete.title',
             'message' => 'product.delete.message',
-            'success' => 'product.delete.success',
             'failure' => 'product.delete.failure',
         ];
 
@@ -189,17 +188,6 @@ class ProductController extends AbstractEntityController
         }
 
         parent::deleteFromDatabase($item);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
-    {
-        // update parameters
-        $parameters['success'] = $item->isNew() ? 'product.add.success' : 'product.edit.success';
-
-        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

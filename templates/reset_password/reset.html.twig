@@ -5,12 +5,12 @@
 {%- set submit_text = 'resetting.request.submit' -%}
 {%- set cancel_path = false -%}
 {%- set form_attr = form_attr|default({})|merge({'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
-
+{# actions #}
 {% block actions_form %}
 {{ parent() }}
 <a href="{{ path('app_login') }}" class="ml-md-2">{{ 'security.link'|trans }}</a>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}

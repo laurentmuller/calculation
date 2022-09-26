@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\ParentCalculationInterface;
+use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationCategoryRepository;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
@@ -27,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: CalculationCategoryRepository::class)]
 #[ORM\Table(name: 'sy_CalculationCategory')]
-class CalculationCategory extends AbstractEntity implements \Countable, ParentCalculationInterface
+class CalculationCategory extends AbstractEntity implements \Countable, ParentTimestampableInterface
 {
     use PositionTrait;
 
@@ -190,6 +191,14 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentCa
     public function getItems(): Collection
     {
         return $this->items;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParentTimestampable(): ?TimestampableInterface
+    {
+        return $this->getCalculation();
     }
 
     /**

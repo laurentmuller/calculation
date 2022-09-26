@@ -118,11 +118,12 @@ tr.text-muted td .text-danger {
     float: right;
 }
 
+
 /**
  * dark theme
  */
 body.dark .bootstrap-table .custom-item a {
-    color: #d3d3d3;
+    color: #adadad;
 }
 body.dark .bootstrap-table .custom-item hr {
     border-color: #343a40;

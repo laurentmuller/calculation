@@ -49,8 +49,8 @@ services:
     App\:
         resource: '../src/*'
         exclude:
-            - '../src/DependencyInjection'
             - '../src/Entity'
+            - '../src/Enums'
             - '../src/Faker'
             - '../src/Migrations'
             - '../src/Pdf'
@@ -65,19 +65,17 @@ services:
         public: true
 
     # used to display flash message when entities change
-    #    App\Listener\PersistenceListener:
-    #        tags:
-    #            - { name: 'doctrine.event_subscriber' }
-
-    # used to update calculation when groups, categories or items change
-    App\Listener\CalculationListener:
+    App\Listener\PersistenceListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\ParentCalculationInterface' }
+            - { name: 'doctrine.event_subscriber', event: 'postPersist', lazy: true, entity: 'App\Entity\AbstractEntity' }
+            - { name: 'doctrine.event_subscriber', event: 'postRemove', lazy: true, entity: 'App\Entity\AbstractEntity' }
+            - { name: 'doctrine.event_subscriber', event: 'postUpdate', lazy: true, entity: 'App\Entity\AbstractEntity' }
 
     # used to update TimestampableInterface
     App\Listener\TimestampableListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Interfaces\TimestampableInterface' }
+            - { name: 'doctrine.event_listener', event: 'onFlush', lazy: true, entity: 'App\Interfaces\TimestampableInterface' }
+            - { name: 'doctrine.event_listener', event: 'onFlush', lazy: true, entity: 'App\Interfaces\ParentTimestampableInterface' }
 
     # custom line formatter for monolog
     monolog.custom_formatter:

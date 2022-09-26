@@ -1,17 +1,14 @@
 {% extends 'cards/card_show.html.twig' %}
 {% import 'macros/_properties.html.twig' as properties %}
-
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'group.show.title' -%}
 {%- set params = route_params(app.request, id) -%}
 {%- set has_margins = item.hasMargins -%}
-
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('group_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'group_table') -%}
-
 {# properties #}
 {% block property_body %}
 {{ properties.property('group.fields.code', item.code) }}
@@ -20,11 +17,10 @@
 {{- properties.property('group.fields.margins', item.countMargins|integer) }}
 {% endif -%}
 {%- if item.hasCategories -%}
-{%- set categories = item.categories|map(p => p.code)|sort((a, b) => a <=> b)|join(', ') -%}
-{{- properties.property('group.fields.categories', categories) }}
+{{- properties.property('group.fields.categories', item.countCategories|integer) }}
 {% endif -%}
 {% endblock %}
-
+{# body #}
 {% block card_body %}
 {{ parent() }}
 {%- if has_margins -%}

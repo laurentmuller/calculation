@@ -8,13 +8,18 @@ function updateUI() {
     // initialize the number input formats
     $("input[name$='[minimum]']").inputNumberFormat();
     $("input[name$='[maximum]']").inputNumberFormat();
-
+    $("input[name$='[margin]']").inputNumberFormat({
+        decimal: 0,
+        decimalAuto: 0
+    });
     // show / hide elements
     const $table = $('#data-table-edit');
     const rows = $table.find('tbody > tr').length;
     $table.toggleClass('d-none', rows === 0);
     $('.btn-sort').toggleDisabled(rows < 2);
     $('#empty_margins').toggleClass('d-none', rows > 0);
+    // update edit message
+    $('#edit-form :input:first').trigger('input');
 }
 
 /**
@@ -56,21 +61,16 @@ function addMargin($table) {
     const margin = getMinMargin();
     const minimum = getMaxValue();
     const maximum = Math.max(minimum * 2, 100);
-
     // get prototype and update index
     const prototype = $table.data('prototype');
     const index = $table.data('index');
     $table.data('index', index + 1);
-
     // replace name
     const $row = $(prototype.replace(/__name__/g, index));
-
     // add
     $table.find('tbody').append($row);
-
     // update UI
     updateUI();
-
     // set values
     $("input[name$='[minimum]']:last").floatVal(minimum).selectFocus();
     $("input[name$='[maximum]']:last").floatVal(maximum);
@@ -102,7 +102,6 @@ function sortMargins($table) {
     if ($rows.length < 2) {
         return $rows;
     }
-
     $rows = $rows.sort(function (rowA, rowB) {
         const valueA = $(rowA).find("input[name$='[minimum]']").floatVal();
         const valueB = $(rowB).find("input[name$='[minimum]']").floatVal();
@@ -127,22 +126,18 @@ function sortMargins($table) {
         e.preventDefault();
         removeMargin($(this));
     });
-
     // handle add button
     $('.btn-add').on('click', function (e) {
         e.preventDefault();
         addMargin($table);
     });
-
     // handle sort button
     $('.btn-sort').on('click', function (e) {
         e.preventDefault();
         sortMargins($table, true);
     });
-
     // update UI
     updateUI();
-
     // validation
     $('form').initValidator();
 }(jQuery));

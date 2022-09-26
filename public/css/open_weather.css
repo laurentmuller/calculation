@@ -3,7 +3,7 @@
 /**! compression tag for ftp-deployment */
 
 .ow-date {
-    width: 100px;
+    width: 80px;
     white-space: nowrap;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .ow-temperature {
-    width: 110px;
+    width: 100px;
 }
 
 .ow-temperature-pills {

@@ -142,14 +142,7 @@ class TestController extends AbstractController
 
                     return $this->redirectToHomePage();
                 } catch (TransportExceptionInterface $e) {
-                    $message = $this->trans('user.comment.error');
-                    $context = Utils::getExceptionContext($e);
-                    $logger->error($message, $context);
-
-                    return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                        'message' => $message,
-                        'exception' => $e,
-                    ]);
+                    return $this->renderFormException('user.comment.error', $e, $logger);
                 }
             }
         }

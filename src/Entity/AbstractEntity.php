@@ -38,8 +38,8 @@ abstract class AbstractEntity implements \Stringable
      * The primary key identifier.
      */
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
     /**
@@ -60,7 +60,7 @@ abstract class AbstractEntity implements \Stringable
      */
     public function getDisplay(): string
     {
-        return (string) ($this->getId() ?? 0);
+        return \sprintf('%d', (int) $this->id);
     }
 
     /**

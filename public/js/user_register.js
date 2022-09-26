@@ -13,7 +13,7 @@
 /**
  * Plugin and Common Files
  */
-<!--#include file="plugins/password-strength.js" -->
+<!--#include file="plugins/plugin-password-strength.js" -->
 
 /**
  * Extensions

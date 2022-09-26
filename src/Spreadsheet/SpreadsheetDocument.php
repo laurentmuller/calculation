@@ -406,7 +406,7 @@ class SpreadsheetDocument extends Spreadsheet
      * Sets the foreground color for the given column.
      *
      * @param int    $columnIndex   the column index (A = 1)
-     * @param string $color         the hexadecimal color or an empty string ('') for black color
+     * @param string $color         the hexadecimal color or an empty string ("") for black color
      * @param bool   $includeHeader true to set color for all rows; false to skip the first row
      */
     public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): static

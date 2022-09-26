@@ -236,7 +236,7 @@ function formatProduct(product) {
 
     // drag modal
     $('#dragModal').draggableModal({
-        marginBottom: $('footer').outerHeight(),
+        marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0,
         focusOnShow: true
     }).on('shown.bs.modal', function () {
         $('#text').trigger('focus');

@@ -23,13 +23,13 @@ function updateUI() {
     $('.empty-items').toggleClass('d-none', $items.length !== 0);
     // update actions, rules and positions
     let position = 0;
-    const validator = $("#edit-form").data('validator');
+    const isValidator = $("#edit-form").data('validator') || false;
     $items.each(function (_index, item) {
         const $item = $(item);
         $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
         $item.find('.btn-down-item').toggleDisabled($item.is(':last-of-type'));
         $item.find('input[name$="[position]"]').val(position++);
-        if (validator) {
+        if (isValidator) {
             $item.find('.unique-name').rules('add', {unique: '.unique-name'});
         }
     });
@@ -52,11 +52,8 @@ function startDragItems() {
     // items?
     if ($items.find('.item').length > 1) {
         sortable($items, {
-            items: '.item',
-            //handle: '.stretched-link',
-            handle: '.card-header-item',
-            forcePlaceholderSize: true,
-            placeholderClass: 'border border-primary rounded'
+            items: '.item', //handle: '.stretched-link',
+            handle: '.card-header-item', forcePlaceholderSize: true, placeholderClass: 'border border-primary rounded'
         });
         $items.on('sortupdate', updateUI);
         $items.data('sortable', true);
@@ -281,12 +278,10 @@ function sortMargins($caller) {
 
 function updateToggle($caller, show) {
     'use strict';
-    // const $link = $(this).parents('.item').find('.stretched-link');
     const $form = $('#edit-form');
     const $link = $caller.parents('.item').find('.btn-toggle');
     const title = show ? $form.data('show') : $form.data('hide');
-    $link.attr('title', title);
-    $link.find('i').toggleClass('fa-caret-down fa-caret-right');
+    $link.attr('title', title).find('i').toggleClass('fa-caret-down fa-caret-right');
 }
 
 /**
@@ -328,12 +323,10 @@ function updateToggle($caller, show) {
     // initialize search
     const $form = $("#edit-form");
     $("#task_unit").initTypeahead({
-        url: $form.data("unit-search"),
-        error: $form.data("unit-error")
+        url: $form.data("unit-search"), error: $form.data("unit-error")
     });
     $("#task_supplier").initTypeahead({
-        url: $form.data("supplier-search"),
-        error: $form.data("supplier-error")
+        url: $form.data("supplier-search"), error: $form.data("supplier-error")
     });
     // start drag & drop
     startDragItems();

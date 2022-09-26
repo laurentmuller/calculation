@@ -13,8 +13,8 @@
 /**
  * Plugin Files
  */
-<!--#include file="plugins/password-strength.js" -->
-<!--#include file="plugins/plugin-fileinput.js" -->
+<!--#include file="plugins/plugin-password-strength.js" -->
+<!--#include file="plugins/plugin-input-file.js" -->
 
 /**
  * Extensions
@@ -26,4 +26,3 @@
  * Specific Files
  */
 <!--#include file="application/user_edit.js" -->
- 

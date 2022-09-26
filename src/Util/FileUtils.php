@@ -181,7 +181,6 @@ final class FileUtils
             return 0;
         }
 
-        // $flags = \SplFileObject::DROP_NEW_LINE;
         $flags = \SplFileObject::DROP_NEW_LINE;
         if ($skipEmpty) {
             $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;

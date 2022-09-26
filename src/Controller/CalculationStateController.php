@@ -106,13 +106,8 @@ class CalculationStateController extends AbstractEntityController
 
             return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
-        $parameters = [
-            'title' => 'calculationstate.delete.title',
-            'message' => 'calculationstate.delete.message',
-            'failure' => 'calculationstate.delete.failure',
-        ];
 
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**

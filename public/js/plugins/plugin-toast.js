@@ -591,11 +591,11 @@
                 autohide: options.autohide
             }).on('show.bs.toast', function () {
                 if (options.progress) {
-                    const timeout = options.timeout;
-                    const endTime = new Date().getTime() + timeout;
                     const $progress = $toast.find('.progress-bar');
                     if ($progress.length) {
-                        $toast.createInterval(that._updateProgress, 10, $progress, endTime, timeout);
+                        const timeout = options.timeout;
+                        const endTime = new Date().getTime() + timeout;
+                        $toast.createInterval(that._updateProgress, 100, $progress, endTime, timeout);
                     }
                 }
             }).on('hide.bs.toast', function () {
@@ -617,15 +617,14 @@
          *
          * @param {JQuery} $progress - The progress bar to update.
          * @param {Number} endTime - The end time.
-         * @param {Number} timeout - The time-out.
+         * @param {Number} timeout - The timeout in milliseconds.
          * @private
          */
         _updateProgress: function ($progress, endTime, timeout) {
             const time = new Date().getTime();
             const delta = (endTime - time) / timeout;
             const percent = Math.min(100 - delta * 100, 100);
-            $progress.css('width', `${percent}%`);
-            $progress.attr('aria-valuenow', percent);
+            $progress.css('width', percent + '%').attr('aria-valuenow', percent);
             if (percent >= 100) {
                 $progress.parents('.toast').removeInterval();
             }

@@ -129,13 +129,7 @@ class TaskController extends AbstractEntityController
     #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
-        $parameters = [
-            'title' => 'task.delete.title',
-            'message' => 'task.delete.message',
-            'failure' => 'task.delete.failure',
-        ];
-
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**

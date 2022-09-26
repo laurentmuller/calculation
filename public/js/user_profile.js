@@ -8,7 +8,7 @@
 /**
  * Plugin and Common Files
  */
-<!--#include file="plugins/plugin-fileinput.js" -->
+<!--#include file="plugins/plugin-input-file.js" -->
 
 /**
  * Extensions

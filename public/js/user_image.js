@@ -8,7 +8,7 @@
 /**
  * Plugin Files
  */
-<!--#include file="plugins/plugin-fileinput.js" -->
+<!--#include file="plugins/plugin-input-file.js" -->
 
 /**
  * Extensions
@@ -19,4 +19,3 @@
  * Specific Files
  */
 <!--#include file="application/user_image.js" -->
- 

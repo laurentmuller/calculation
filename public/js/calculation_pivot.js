@@ -8,7 +8,7 @@
 /**
  * Plugin Files
  */
-<!--#include file="plugins/cell-highlight.js" -->
+<!--#include file="plugins/plugin-cell-highlight.js" -->
 
 /**
  * Specific Files

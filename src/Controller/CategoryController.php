@@ -121,13 +121,8 @@ class CategoryController extends AbstractEntityController
 
             return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
-        $parameters = [
-            'title' => 'category.delete.title',
-            'message' => 'category.delete.message',
-            'failure' => 'category.delete.failure',
-        ];
 
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**

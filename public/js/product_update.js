@@ -9,7 +9,7 @@
  * Plugins
  */
 <!--#include file="plugins/plugin-simulate.js" -->
-<!--#include file="plugins/plugin-input.js" -->
+<!--#include file="plugins/plugin-input-number.js" -->
 
 /**
  * Specific Files

@@ -17,7 +17,6 @@ use App\Form\User\UserCommentType;
 use App\Interfaces\RoleInterface;
 use App\Model\Comment;
 use App\Service\MailerService;
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,14 +57,7 @@ class CommentController extends AbstractController
 
                 return $this->redirectToHomePage();
             } catch (TransportExceptionInterface $e) {
-                $message = $this->trans('user.comment.error');
-                $context = Utils::getExceptionContext($e);
-                $logger->error($message, $context);
-
-                return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
+                return $this->renderFormException('user.comment.error', $e, $logger);
             }
         }
         // render

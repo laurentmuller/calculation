@@ -19,7 +19,6 @@ use App\Spreadsheet\LogsDocument;
 use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Util\FileUtils;
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,14 +59,7 @@ class LogController extends AbstractController
                 // delete file
                 FileUtils::remove($file);
             } catch (\Exception $e) {
-                $message = $this->trans('log.delete.error');
-                $context = Utils::getExceptionContext($e);
-                $logger->error($message, $context);
-
-                return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
+                return $this->renderFormException('log.delete.error', $e, $logger);
             } finally {
                 $service->clearCache();
             }

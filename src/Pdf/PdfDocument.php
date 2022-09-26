@@ -121,8 +121,8 @@ class PdfDocument extends FPDF
     /**
      * Adds a new page to the document.
      *
-     * @param PdfDocumentOrientation|string $orientation the page orientation or an empty string ('') to use the current orientation
-     * @param PdfDocumentSize|int[]|string  $size        the page size or an empty string ('') to use the current size
+     * @param PdfDocumentOrientation|string $orientation the page orientation or an empty string ("") to use the current orientation
+     * @param PdfDocumentSize|int[]|string  $size        the page size or an empty string ("") to use the current size
      * @param int                           $rotation    the angle by which to rotate the page or 0 to use the current orientation.
      *                                                   It must be a multiple of 90; positive values mean clockwise rotation.
      */
@@ -543,7 +543,7 @@ class PdfDocument extends FPDF
      * Send the document to a given destination.
      *
      * @param PdfDocumentOutput|string $dest   the destination where to send the document or an empty
-     *                                         string ('') to send the file inline to the browser
+     *                                         string ("") to send the file inline to the browser
      * @param string                   $name   the name of the file. It is ignored in case of string destination.
      * @param bool                     $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
      *

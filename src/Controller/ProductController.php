@@ -93,13 +93,7 @@ class ProductController extends AbstractEntityController
     #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
-        $parameters = [
-            'title' => 'product.delete.title',
-            'message' => 'product.delete.message',
-            'failure' => 'product.delete.failure',
-        ];
-
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**

@@ -51,7 +51,7 @@ abstract class AbstractTable implements SortModeInterface
      */
     public function checkEmpty(): ?string
     {
-        if (!$this->isEmptyAllowed() && \is_countable($this) && 0 === \count($this)) {
+        if (\is_countable($this) && (!$this->isEmptyAllowed() && 0 === \count($this))) {
             return $this->getEmptyMessage();
         }
 

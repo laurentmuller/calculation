@@ -72,13 +72,7 @@ class CustomerController extends AbstractEntityController
     #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
-        $parameters = [
-            'title' => 'customer.delete.title',
-            'message' => 'customer.delete.message',
-            'failure' => 'customer.delete.failure',
-        ];
-
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**

@@ -14,7 +14,7 @@
  * Plugin Files
  */
 <!--#include file="plugins/plugin-typeahead.js" -->
-<!--#include file="plugins/plugin-input.js" -->
+<!--#include file="plugins/plugin-input-number.js" -->
 
 /**
  * Extensions

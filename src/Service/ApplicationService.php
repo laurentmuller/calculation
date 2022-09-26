@@ -289,11 +289,14 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getDefaultValues(): array
     {
         return [
+            // margin
             self::P_MIN_MARGIN => self::DEFAULT_MIN_MARGIN,
 
+            // edit entities
             self::P_DISPLAY_MODE => self::DEFAULT_DISPLAY_MODE,
             self::P_EDIT_ACTION => self::DEFAULT_ACTION,
 
+            // notification
             self::P_MESSAGE_POSITION => self::DEFAULT_MESSAGE_POSITION,
             self::P_MESSAGE_TIMEOUT => self::DEFAULT_MESSAGE_TIMEOUT,
             self::P_MESSAGE_TITLE => self::DEFAULT_MESSAGE_TITLE,
@@ -302,19 +305,22 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_MESSAGE_ICON => self::DEFAULT_MESSAGE_ICON,
             self::P_MESSAGE_CLOSE => self::DEFAULT_MESSAGE_CLOSE,
 
-            self::P_STATUS_BAR => true,
-
+            // home page
+            self::P_PANEL_CALCULATION => self::DEFAULT_PANEL_CALCULATION,
+            self::P_PANEL_CATALOG => true,
             self::P_PANEL_STATE => true,
             self::P_PANEL_MONTH => true,
-            self::P_PANEL_CATALOG => true,
-            self::P_PANEL_CALCULATION => self::DEFAULT_PANEL_CALCULATION,
+            self::P_STATUS_BAR => true,
 
+            // document options
             self::P_QR_CODE => self::DEFAULT_QR_CODE,
             self::P_PRINT_ADDRESS => self::DEFAULT_PRINT_ADDRESS,
 
+            // product
             self::P_DEFAULT_PRODUCT_EDIT => true,
             self::P_DEFAULT_PRODUCT_QUANTITY => 0,
 
+            // security
             self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
             self::P_DISPLAY_CAPTCHA => !$this->debug,
         ];
@@ -432,17 +438,21 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_CUSTOMER_FAX => $this->getCustomerFax(),
             self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
             self::P_CUSTOMER_URL => $this->getCustomerUrl(),
+
             // default state, category and margin
             self::P_DEFAULT_STATE => $this->getDefaultState(),
             self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
             self::P_MIN_MARGIN => $this->getMinMargin(),
-            // default edit product
+
+            // default product
             self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
             self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
             self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
+
             // display
             self::P_DISPLAY_MODE => $this->getDisplayMode(),
             self::P_EDIT_ACTION => $this->getEditAction(),
+
             // notification
             self::P_MESSAGE_ICON => $this->isMessageIcon(),
             self::P_MESSAGE_TITLE => $this->isMessageTitle(),
@@ -451,19 +461,23 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_MESSAGE_PROGRESS => $this->getMessageProgress(),
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
+
             // home page
             self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
             self::P_PANEL_STATE => $this->isPanelState(),
             self::P_PANEL_MONTH => $this->isPanelMonth(),
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
             self::P_STATUS_BAR => $this->isStatusBar(),
+
             // las update dates
             self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
             self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
             self::P_LAST_IMPORT => $this->getLastImport(),
+
             // document options
             self::P_QR_CODE => $this->isQrCode(),
             self::P_PRINT_ADDRESS => $this->isPrintAddress(),
+
             // security
             self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
             self::P_STRENGTH_LEVEL => $this->getStrengthLevel(),

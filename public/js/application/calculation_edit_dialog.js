@@ -143,7 +143,7 @@ class EditDialog {
         }).on('hide.bs.modal', function () {
             that._onDialogHide();
         }).draggableModal({
-            marginBottom: $('footer').outerHeight(),
+            marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0,
             focusOnShow: true
         });
 

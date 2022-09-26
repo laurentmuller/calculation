@@ -114,13 +114,8 @@ class GroupController extends AbstractEntityController
 
             return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
-        $parameters = [
-            'title' => 'group.delete.title',
-            'message' => 'group.delete.message',
-            'failure' => 'group.delete.failure',
-        ];
 
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**

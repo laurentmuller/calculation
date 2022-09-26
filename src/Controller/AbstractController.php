@@ -27,6 +27,7 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Util\Utils;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
@@ -34,6 +35,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -346,6 +348,23 @@ abstract class AbstractController extends BaseController
     protected function jsonTrue(array $data = []): JsonResponse
     {
         return $this->json(\array_merge_recursive(['result' => true], $data));
+    }
+
+    /**
+     * Render the template exception.
+     *
+     * @throws \ReflectionException
+     */
+    protected function renderFormException(string $id, \Throwable $e, LoggerInterface $logger = null): Response
+    {
+        $message = $this->trans($id);
+        $context = Utils::getExceptionContext($e);
+        $logger?->error($message, $context);
+
+        return $this->renderForm('@Twig/Exception/exception.html.twig', [
+            'message' => $message,
+            'exception' => $e,
+        ]);
     }
 
     /**

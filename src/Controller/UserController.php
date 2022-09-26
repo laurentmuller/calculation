@@ -32,7 +32,6 @@ use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\UserTable;
 use App\Util\RoleBuilder;
-use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -96,13 +95,7 @@ class UserController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        $parameters = [
-            'title' => 'user.delete.title',
-            'message' => 'user.delete.message',
-            'failure' => 'user.delete.failure',
-        ];
-
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**
@@ -201,14 +194,7 @@ class UserController extends AbstractEntityController
 
                 return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
             } catch (TransportExceptionInterface $e) {
-                $message = $this->trans('user.message.error');
-                $context = Utils::getExceptionContext($e);
-                $logger->error($message, $context);
-
-                return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
+                return $this->renderFormException('user.message.error', $e, $logger);
             }
         }
 

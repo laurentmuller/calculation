@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Entity\AbstractEntity;
 use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\TimestampableInterface;
@@ -63,8 +62,7 @@ class TimestampableListener implements DisableListenerInterface
         foreach ($entities as $entity) {
             if ($this->updateEntity($entity, $user, $date)) {
                 $em->persist($entity);
-                $class_name = $entity::class;
-                $metadata = $em->getClassMetadata($class_name);
+                $metadata = $em->getClassMetadata($entity::class);
                 $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
             }
         }
@@ -75,34 +73,45 @@ class TimestampableListener implements DisableListenerInterface
      */
     private function getEntities(UnitOfWork $unitOfWork): array
     {
-        /** @var AbstractEntity[] $entities */
+        /** @var object[] $entities */
         $entities = [
             ...$unitOfWork->getScheduledEntityUpdates(),
             ...$unitOfWork->getScheduledEntityDeletions(),
             ...$unitOfWork->getScheduledEntityInsertions(),
         ];
-
         if ([] === $entities) {
             return [];
         }
 
+        // get all entities include from ParentTimestampableInterface
         $result = [];
         foreach ($entities as $entity) {
-            if (null !== $timestampable = $this->getTimestampable($entity)) {
+            if (null !== $timestampable = $this->getTimestampable($entity, true)) {
                 $result[(int) $timestampable->getId()] = $timestampable;
+            }
+        }
+        if ([] === $result) {
+            return [];
+        }
+
+        // exclude deleted TimestampableInterface
+        $entities = $unitOfWork->getScheduledEntityDeletions();
+        foreach ($entities as $entity) {
+            if (null !== $timestampable = $this->getTimestampable($entity, false)) {
+                unset($result[(int) $timestampable->getId()]);
             }
         }
 
         return $result;
     }
 
-    private function getTimestampable(AbstractEntity $entity): ?TimestampableInterface
+    private function getTimestampable(object $entity, bool $includeChildren): ?TimestampableInterface
     {
         if ($entity instanceof TimestampableInterface) {
             return $entity;
         }
 
-        if ($entity instanceof ParentTimestampableInterface) {
+        if ($includeChildren && $entity instanceof ParentTimestampableInterface) {
             return $entity->getParentTimestampable();
         }
 

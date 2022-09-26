@@ -118,14 +118,7 @@ class CalculationController extends AbstractEntityController
     #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => self::DIGITS])]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
-        // parameters
-        $parameters = [
-            'title' => 'calculation.delete.title',
-            'message' => 'calculation.delete.message',
-            'failure' => 'calculation.delete.failure',
-        ];
-        // delete
-        return $this->deleteEntity($request, $item, $logger, $parameters);
+        return $this->deleteEntity($request, $item, $logger);
     }
 
     /**

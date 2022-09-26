@@ -21,7 +21,6 @@ use App\Model\Role;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\RoleBuilder;
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -87,14 +86,7 @@ class AdminController extends AbstractController
 
                 return $this->redirectToHomePage();
             } catch (\Exception $e) {
-                $message = $this->trans('clear_cache.failure');
-                $context = Utils::getExceptionContext($e);
-                $logger->error($message, $context);
-
-                return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
+                return $this->renderFormException('clear_cache.failure', $e, $logger);
             }
         }
         // display

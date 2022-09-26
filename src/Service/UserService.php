@@ -152,6 +152,11 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         $this->updateAdapter();
 
         return [
+            // display
+            self::P_DISPLAY_MODE => $this->getDisplayMode(),
+            self::P_EDIT_ACTION => $this->getEditAction(),
+
+            // notification
             self::P_MESSAGE_ICON => $this->isMessageIcon(),
             self::P_MESSAGE_TITLE => $this->isMessageTitle(),
             self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
@@ -160,13 +165,14 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
 
-            self::P_DISPLAY_MODE => $this->getDisplayMode(),
-
+            // home page
+            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
             self::P_PANEL_STATE => $this->isPanelState(),
             self::P_PANEL_MONTH => $this->isPanelMonth(),
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
-            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
+            self::P_STATUS_BAR => $this->isStatusBar(),
 
+            // document options
             self::P_QR_CODE => $this->isQrCode(),
             self::P_PRINT_ADDRESS => $this->isPrintAddress(),
         ];

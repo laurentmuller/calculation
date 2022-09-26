@@ -29,7 +29,7 @@ class LogsDocument extends AbstractDocument
      *
      * @var array<string, string>
      */
-    private $colors = [];
+    private array $colors = [];
 
     /**
      * Constructor.

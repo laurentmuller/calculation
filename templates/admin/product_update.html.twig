@@ -111,7 +111,7 @@
     {% if app.debug %}
         {{ parent() }}
         {{ asset_js('js/plugins/plugin-simulate.js') }}
-        {{ asset_js('js/plugins/plugin-input.js') }}
+        {{ asset_js('js/plugins/plugin-input-number.js') }}
         {{ asset_js('js/application/product_update.js') }}
     {% else %}
         {{ asset_js('js/product_update.js') }}

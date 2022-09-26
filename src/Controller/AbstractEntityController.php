@@ -23,7 +23,6 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TableTrait;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -80,13 +79,7 @@ abstract class AbstractEntityController extends AbstractController
      * @param request         $request    the request
      * @param AbstractEntity  $item       the entity to delete
      * @param LoggerInterface $logger     the logger to log any exception
-     * @param array           $parameters the delete parameters. The following optional keys may be added:
-     *                                    <ul>
-     *                                    <li><code>title</code> : the dialog title.</li>
-     *                                    <li><code>message</code> : the dialog message.</li>
-     *                                    <li><code>success</code> : the message to display on success.</li>
-     *                                    <li><code>failure</code> : the message to display on failure.</li>
-     *                                    </ul>
+     * @param array           $parameters the optional parameters
      *
      * @psalm-param T $item
      *
@@ -98,9 +91,6 @@ abstract class AbstractEntityController extends AbstractController
         // check permission
         $this->checkPermission(EntityPermission::DELETE);
 
-        // save display
-        $display = $item->getDisplay();
-
         // add item as parameter
         $parameters['item'] = $item;
 
@@ -110,16 +100,13 @@ abstract class AbstractEntityController extends AbstractController
             try {
                 // remove
                 $this->deleteFromDatabase($item);
-            } catch (Exception $e) {
-                $failure = (string) ($parameters['failure'] ?? 'common.delete_failure');
-                $message = $this->trans($failure, ['%name%' => $display]);
-                $context = Utils::getExceptionContext($e);
-                $logger->error($message, $context);
+                // message
+                $message = $this->getMessageTrans($item, '.delete.success', 'common.delete_success');
+                $this->warning($message);
+            } catch (\Exception $e) {
+                $id = $this->getMessageId('.delete.failure', 'common.delete_failure');
 
-                return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
+                return $this->renderFormException($id, $e, $logger);
             }
 
             // redirect
@@ -129,15 +116,10 @@ abstract class AbstractEntityController extends AbstractController
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
-        // get parameters
-        $title = (string) ($parameters['title'] ?? 'common.delete_title');
-        $message = (string) ($parameters['message'] ?? 'common.delete_message');
-        $message = $this->trans($message, ['%name%' => $display]);
-
         // update parameters
-        $parameters['title'] = $title;
-        $parameters['message'] = $message;
         $parameters['form'] = $form;
+        $parameters['title'] = $this->getMessageId('.delete.title', 'common.delete_title');
+        $parameters['message'] = $this->getMessageTrans($item, '.delete.message', 'common.delete_message');
         $this->updateQueryParameters($request, $parameters, $item->getId());
 
         // show page
@@ -161,11 +143,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @param request        $request    the request
      * @param AbstractEntity $item       the entity to edit
-     * @param array          $parameters the edit parameters. The following keys may be added:
-     *                                   <ul>
-     *                                   <li><code>success</code> : the message to display on success (optional).</li>
-     *                                   <li><code>route</code> : the route to display on success (optional).</li>
-     *                                   </ul>
+     * @param array          $parameters the optional parameters
      *
      * @psalm-param T $item
      *
@@ -184,7 +162,13 @@ abstract class AbstractEntityController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             // save
             $this->saveToDatabase($item);
-
+            // message
+            if ($isNew) {
+                $message = $this->getMessageTrans($item, '.add.success', 'common.add_success');
+            } else {
+                $message = $this->getMessageTrans($item, '.edit.success', 'common.edit_success');
+            }
+            $this->success($message);
             // redirect
             $id = $item->getId();
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
@@ -338,5 +322,20 @@ abstract class AbstractEntityController extends AbstractController
         if (!empty($id) && !isset($parameters['params']['id'])) {
             $parameters['params']['id'] = $id;
         }
+    }
+
+    private function getMessageId(string $suffix, string $default): string
+    {
+        $id = $this->lowerName . $suffix;
+
+        return $this->isTransDefined($id) ? $id : $default;
+    }
+
+    private function getMessageTrans(AbstractEntity $entity, string $suffix, string $default): string
+    {
+        $id = $this->getMessageId($suffix, $default);
+        $params = ['%name%' => $entity->getDisplay()];
+
+        return $this->trans($id, $params);
     }
 }

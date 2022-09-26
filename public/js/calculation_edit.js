@@ -21,7 +21,7 @@
  * Plugin Files
  */
 <!--#include file="plugins/plugin-rowlink.js" -->
-<!--#include file="plugins/plugin-input.js" -->
+<!--#include file="plugins/plugin-input-number.js" -->
 <!--#include file="plugins/plugin-typeahead.js" -->
 <!--#include file="plugins/plugin-cell-edit.js" -->
 <!--#include file="plugins/plugin-drag-modal.js" -->

@@ -65,11 +65,11 @@ services:
         public: true
 
     # used to display flash message when entities change
-    App\Listener\PersistenceListener:
-        tags:
-            - { name: 'doctrine.event_subscriber', event: 'postPersist', lazy: true, entity: 'App\Entity\AbstractEntity' }
-            - { name: 'doctrine.event_subscriber', event: 'postRemove', lazy: true, entity: 'App\Entity\AbstractEntity' }
-            - { name: 'doctrine.event_subscriber', event: 'postUpdate', lazy: true, entity: 'App\Entity\AbstractEntity' }
+    #    App\Listener\PersistenceListener:
+    #        tags:
+    #            - { name: 'doctrine.event_subscriber', event: 'postPersist', lazy: true, entity: 'App\Entity\AbstractEntity' }
+    #            - { name: 'doctrine.event_subscriber', event: 'postRemove', lazy: true, entity: 'App\Entity\AbstractEntity' }
+    #            - { name: 'doctrine.event_subscriber', event: 'postUpdate', lazy: true, entity: 'App\Entity\AbstractEntity' }
 
     # used to update TimestampableInterface
     App\Listener\TimestampableListener:

@@ -59,9 +59,7 @@ trait LoggerTrait
      */
     protected function writeError(string $message): void
     {
-        if (null !== $this->io) {
-            $this->io->error($message);
-        }
+        $this->io?->error($message);
     }
 
     /**
@@ -69,9 +67,7 @@ trait LoggerTrait
      */
     protected function writeNote(string $message): void
     {
-        if (null !== $this->io) {
-            $this->io->note($message);
-        }
+        $this->io?->note($message);
     }
 
     /**
@@ -79,9 +75,7 @@ trait LoggerTrait
      */
     protected function writeSuccess(string $message): void
     {
-        if (null !== $this->io) {
-            $this->io->success($message);
-        }
+        $this->io?->success($message);
     }
 
     /**

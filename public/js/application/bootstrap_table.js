@@ -598,7 +598,7 @@ $.fn.extend({
     // initialize table
     const options = {
         draggableModal: {
-            marginBottom: $('footer').outerHeight(),
+            marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0,
             focusOnShow: true
         },
 

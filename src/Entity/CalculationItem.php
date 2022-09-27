@@ -82,14 +82,6 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function getCalculation(): ?Calculation
-    {
-        return $this->category?->getCalculation();
-    }
-
-    /**
      * Get the parent's category.
      */
     public function getCategory(): ?CalculationCategory
@@ -117,10 +109,12 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
 
     /**
      * {@inheritDoc}
+     *
+     * @return Calculation|null
      */
     public function getParentTimestampable(): ?TimestampableInterface
     {
-        return $this->getCalculation();
+        return $this->category?->getParentTimestampable();
     }
 
     /**

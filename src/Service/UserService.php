@@ -152,7 +152,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         $this->updateAdapter();
 
         return [
-            // display
+            // display and edit entities
             self::P_DISPLAY_MODE => $this->getDisplayMode(),
             self::P_EDIT_ACTION => $this->getEditAction(),
 

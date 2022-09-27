@@ -144,14 +144,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function getCalculation(): ?Calculation
-    {
-        return $this->group?->getCalculation();
-    }
-
-    /**
      * Get the category.
      */
     public function getCategory(): ?Category
@@ -195,10 +187,12 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
 
     /**
      * {@inheritDoc}
+     *
+     * @return Calculation|null
      */
     public function getParentTimestampable(): ?TimestampableInterface
     {
-        return $this->getCalculation();
+        return $this->group?->getParentTimestampable();
     }
 
     /**

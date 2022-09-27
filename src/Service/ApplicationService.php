@@ -292,7 +292,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             // margin
             self::P_MIN_MARGIN => self::DEFAULT_MIN_MARGIN,
 
-            // edit entities
+            // default product
+            self::P_DEFAULT_PRODUCT_EDIT => true,
+            self::P_DEFAULT_PRODUCT_QUANTITY => 0,
+
+            // display and edit entities
             self::P_DISPLAY_MODE => self::DEFAULT_DISPLAY_MODE,
             self::P_EDIT_ACTION => self::DEFAULT_ACTION,
 
@@ -315,10 +319,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             // document options
             self::P_QR_CODE => self::DEFAULT_QR_CODE,
             self::P_PRINT_ADDRESS => self::DEFAULT_PRINT_ADDRESS,
-
-            // product
-            self::P_DEFAULT_PRODUCT_EDIT => true,
-            self::P_DEFAULT_PRODUCT_QUANTITY => 0,
 
             // security
             self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
@@ -430,26 +430,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         $this->updateAdapter();
 
         $result = [
-            // customer
-            self::P_CUSTOMER_NAME => $this->getCustomerName(),
-            self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
-            self::P_CUSTOMER_ZIP_CITY => $this->getCustomerZipCity(),
-            self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
-            self::P_CUSTOMER_FAX => $this->getCustomerFax(),
-            self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
-            self::P_CUSTOMER_URL => $this->getCustomerUrl(),
-
-            // default state, category and margin
-            self::P_DEFAULT_STATE => $this->getDefaultState(),
-            self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
-            self::P_MIN_MARGIN => $this->getMinMargin(),
-
-            // default product
-            self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
-            self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
-            self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
-
-            // display
+            // display and edit entities
             self::P_DISPLAY_MODE => $this->getDisplayMode(),
             self::P_EDIT_ACTION => $this->getEditAction(),
 
@@ -469,11 +450,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
             self::P_STATUS_BAR => $this->isStatusBar(),
 
-            // las update dates
-            self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
-            self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
-            self::P_LAST_IMPORT => $this->getLastImport(),
-
             // document options
             self::P_QR_CODE => $this->isQrCode(),
             self::P_PRINT_ADDRESS => $this->isPrintAddress(),
@@ -481,6 +457,30 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             // security
             self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
             self::P_STRENGTH_LEVEL => $this->getStrengthLevel(),
+
+            // last update dates
+            self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
+            self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
+            self::P_LAST_IMPORT => $this->getLastImport(),
+
+            // customer
+            self::P_CUSTOMER_NAME => $this->getCustomerName(),
+            self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
+            self::P_CUSTOMER_ZIP_CITY => $this->getCustomerZipCity(),
+            self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
+            self::P_CUSTOMER_FAX => $this->getCustomerFax(),
+            self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
+            self::P_CUSTOMER_URL => $this->getCustomerUrl(),
+
+            // default state, category and margin
+            self::P_DEFAULT_STATE => $this->getDefaultState(),
+            self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
+            self::P_MIN_MARGIN => $this->getMinMargin(),
+
+            // default product
+            self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
+            self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
+            self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
         ];
 
         // exclude keys

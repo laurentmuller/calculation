@@ -53,20 +53,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     public function getGlobals(): array
     {
-        return (array) $this->getCacheValue(self::CACHE_KEY, $this->callback());
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    private function callback(): array
-    {
-        return \array_merge(
-            $this->getIcons(),
-            EntityName::constants(),
-            EntityPermission::constants(),
-            $this->getConstants(CalculationService::class)
-        );
+        return (array) $this->getCacheValue(self::CACHE_KEY, $this->getValues());
     }
 
     /**
@@ -112,5 +99,18 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
             'ICON_PDF' => 'file-pdf far',
             'ICON_EXCEL' => 'file-excel far',
         ];
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function getValues(): array
+    {
+        return \array_merge(
+            $this->getIcons(),
+            EntityName::constants(),
+            EntityPermission::constants(),
+            $this->getConstants(CalculationService::class)
+        );
     }
 }

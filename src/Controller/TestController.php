@@ -21,10 +21,10 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
-use App\Form\Admin\ApplicationParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\SimpleEditorType;
+use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
@@ -209,7 +209,7 @@ class TestController extends AbstractController
     #[Route(path: '/password', name: 'test_password')]
     public function password(Request $request, CaptchaImageService $service): Response
     {
-        $options = ApplicationParametersType::PASSWORD_OPTIONS;
+        $options = PropertyServiceInterface::PASSWORD_OPTIONS;
         $passwordConstraint = new Password(['all' => true]);
         $strengthConstraint = new Strength(StrengthLevel::MEDIUM);
         $listener = function (FormEvent $event) use ($options, $passwordConstraint, $strengthConstraint): void {

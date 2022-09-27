@@ -49,7 +49,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
 
         try {
             $this->saveEntity($expected);
-            $actual = $this->getRepository()->findByName($user, 'name');
+            $actual = $this->getRepository()->findOneByUserAndName($user, 'name');
             self::assertNotNull($actual);
             self::assertEquals($expected->getName(), $actual->getName());
             self::assertEquals($expected->getString(), $actual->getString());

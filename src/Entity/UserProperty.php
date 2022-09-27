@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Repository\UserPropertyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -37,17 +38,25 @@ class UserProperty extends AbstractProperty
     /**
      * Gets the parent's user.
      */
-    public function getUser(): ?User
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
 
     /**
+     * Create a new instance for the given name and user.
+     */
+    public static function instance(string $name, UserInterface $user): self
+    {
+        return (new self($name))->setUser($user);
+    }
+
+    /**
      * Sets the parent's user.
      */
-    public function setUser(?User $user): self
+    public function setUser(?UserInterface $user): self
     {
-        $this->user = $user;
+        $this->user = $user instanceof User ? $user : null;
 
         return $this;
     }

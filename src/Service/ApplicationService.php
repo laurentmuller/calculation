@@ -288,18 +288,15 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getDefaultValues(): array
     {
-        return [
+        $properties = [
             // margin
             self::P_MIN_MARGIN => self::DEFAULT_MIN_MARGIN,
-
             // default product
             self::P_DEFAULT_PRODUCT_EDIT => true,
             self::P_DEFAULT_PRODUCT_QUANTITY => 0,
-
             // display and edit entities
             self::P_DISPLAY_MODE => self::DEFAULT_DISPLAY_MODE,
             self::P_EDIT_ACTION => self::DEFAULT_ACTION,
-
             // notification
             self::P_MESSAGE_POSITION => self::DEFAULT_MESSAGE_POSITION,
             self::P_MESSAGE_TIMEOUT => self::DEFAULT_MESSAGE_TIMEOUT,
@@ -308,22 +305,25 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_MESSAGE_PROGRESS => self::DEFAULT_MESSAGE_PROGRESS,
             self::P_MESSAGE_ICON => self::DEFAULT_MESSAGE_ICON,
             self::P_MESSAGE_CLOSE => self::DEFAULT_MESSAGE_CLOSE,
-
             // home page
             self::P_PANEL_CALCULATION => self::DEFAULT_PANEL_CALCULATION,
             self::P_PANEL_CATALOG => true,
             self::P_PANEL_STATE => true,
             self::P_PANEL_MONTH => true,
             self::P_STATUS_BAR => true,
-
             // document options
             self::P_QR_CODE => self::DEFAULT_QR_CODE,
             self::P_PRINT_ADDRESS => self::DEFAULT_PRINT_ADDRESS,
-
             // security
             self::P_STRENGTH_LEVEL => StrengthLevel::NONE,
             self::P_DISPLAY_CAPTCHA => !$this->debug,
         ];
+        // password options
+        foreach (self::PASSWORD_OPTIONS as $option) {
+            $properties[$option] = false;
+        }
+
+        return $properties;
     }
 
     /**
@@ -426,69 +426,44 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getProperties(array $excluded = []): array
     {
-        // reload data
-        $this->updateAdapter();
-
-        $result = [
-            // display and edit entities
-            self::P_DISPLAY_MODE => $this->getDisplayMode(),
-            self::P_EDIT_ACTION => $this->getEditAction(),
-
-            // notification
-            self::P_MESSAGE_ICON => $this->isMessageIcon(),
-            self::P_MESSAGE_TITLE => $this->isMessageTitle(),
-            self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
-            self::P_MESSAGE_CLOSE => $this->isMessageClose(),
-            self::P_MESSAGE_PROGRESS => $this->getMessageProgress(),
-            self::P_MESSAGE_POSITION => $this->getMessagePosition(),
-            self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
-
-            // home page
-            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
-            self::P_PANEL_STATE => $this->isPanelState(),
-            self::P_PANEL_MONTH => $this->isPanelMonth(),
-            self::P_PANEL_CATALOG => $this->isPanelCatalog(),
-            self::P_STATUS_BAR => $this->isStatusBar(),
-
-            // document options
-            self::P_QR_CODE => $this->isQrCode(),
-            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
-
-            // security
-            self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
-            self::P_STRENGTH_LEVEL => $this->getStrengthLevel(),
-
-            // last update dates
-            self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
-            self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
-            self::P_LAST_IMPORT => $this->getLastImport(),
-
-            // customer
-            self::P_CUSTOMER_NAME => $this->getCustomerName(),
-            self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
-            self::P_CUSTOMER_ZIP_CITY => $this->getCustomerZipCity(),
-            self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
-            self::P_CUSTOMER_FAX => $this->getCustomerFax(),
-            self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
-            self::P_CUSTOMER_URL => $this->getCustomerUrl(),
-
-            // default state, category and margin
-            self::P_DEFAULT_STATE => $this->getDefaultState(),
-            self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
-            self::P_MIN_MARGIN => $this->getMinMargin(),
-
-            // default product
-            self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
-            self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
-            self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
-        ];
-
+        $properties = \array_merge(
+            $this->loadProperties(),
+            [
+                // customer
+                self::P_CUSTOMER_NAME => $this->getCustomerName(),
+                self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
+                self::P_CUSTOMER_ZIP_CITY => $this->getCustomerZipCity(),
+                self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
+                self::P_CUSTOMER_FAX => $this->getCustomerFax(),
+                self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
+                self::P_CUSTOMER_URL => $this->getCustomerUrl(),
+                // security
+                self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
+                self::P_STRENGTH_LEVEL => $this->getStrengthLevel(),
+                // default state, category and margin
+                self::P_DEFAULT_STATE => $this->getDefaultState(),
+                self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
+                self::P_MIN_MARGIN => $this->getMinMargin(),
+                // default product
+                self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
+                self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
+                self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
+                // last update dates
+                self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
+                self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
+                self::P_LAST_IMPORT => $this->getLastImport(),
+            ]
+        );
+        // password options
+        foreach (self::PASSWORD_OPTIONS as $option) {
+            $properties[$option] = $this->isPropertyBoolean($option);
+        }
         // exclude keys
         if (!empty($excluded)) {
-            return \array_diff_key($result, \array_flip($excluded));
+            return \array_diff_key($properties, \array_flip($excluded));
         }
 
-        return $result;
+        return $properties;
     }
 
     /**
@@ -728,25 +703,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * Sets a single property value.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function setProperty(string $name, mixed $value): self
-    {
-        return $this->setProperties([$name => $value]);
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    protected function updateAdapter(): void
-    {
-        $properties = $this->manager->getRepository(Property::class)->findAll();
-        $this->saveProperties($properties);
-    }
-
-    /**
      * Gets the property repository.
      *
      * @psalm-suppress UnnecessaryVarAnnotation
@@ -760,22 +716,32 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * Update a property without saving changes.
+     * Update a property without saving changes to database.
      */
     private function saveProperty(PropertyRepository $repository, array $defaultProperties, string $name, mixed $value): void
     {
         $property = $repository->findOneByName($name);
         if ($this->isDefaultValue($defaultProperties, $name, $value)) {
+            // remove if present
             if ($property instanceof Property) {
                 $repository->remove($property, false);
             }
+        } else {
+            // create if needed
+            if (!$property instanceof Property) {
+                $property = Property::instance($name);
+                $repository->add($property, false);
+            }
+            $property->setValue($value);
+        }
+    }
 
-            return;
-        }
-        if (!$property instanceof Property) {
-            $property = new Property($name);
-            $repository->add($property, false);
-        }
-        $property->setValue($value);
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function updateAdapter(): void
+    {
+        $properties = $this->manager->getRepository(Property::class)->findAll();
+        $this->saveProperties($properties);
     }
 }

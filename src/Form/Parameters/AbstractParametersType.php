@@ -113,8 +113,8 @@ abstract class AbstractParametersType extends AbstractType
 
         $key = PropertyServiceInterface::P_PANEL_CALCULATION;
         $helper->field($key)
-            ->help('parameters.helps.' . $key)
             ->updateRowAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
             ->labelClass('radio-inline')
             ->updateOptions([
                 'choice_translation_domain' => false,
@@ -142,13 +142,13 @@ abstract class AbstractParametersType extends AbstractType
         $helper->field($key)
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->updateOption('choice_translation_domain', false)
-            ->addChoiceType($this->getTimeouts());
+            ->addChoiceType($this->getTimeoutChoice());
 
         $key = PropertyServiceInterface::P_MESSAGE_PROGRESS;
         $helper->field($key)
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->updateOption('choice_translation_domain', false)
-            ->addChoiceType($this->getProgress());
+            ->addChoiceType($this->getProgressChoice());
 
         $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_TITLE);
         $this->addCheckBox($helper, PropertyServiceInterface::P_MESSAGE_SUB_TITLE);
@@ -228,7 +228,7 @@ abstract class AbstractParametersType extends AbstractType
     /**
      * Gets the message progress height choices.
      */
-    private function getProgress(): array
+    private function getProgressChoice(): array
     {
         $result = [];
         foreach (\range(0, 5) as $pixel) {
@@ -242,7 +242,7 @@ abstract class AbstractParametersType extends AbstractType
     /**
      * Gets the message timeout choices.
      */
-    private function getTimeouts(): array
+    private function getTimeoutChoice(): array
     {
         $result = [];
         foreach (\range(1, 5) as $second) {

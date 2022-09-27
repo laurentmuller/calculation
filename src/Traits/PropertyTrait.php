@@ -37,14 +37,11 @@ trait PropertyTrait
     public function clearCache(): bool
     {
         if ($this->parentClearCache()) {
-            $this->logInfo($this->trans('application_service.clear_success'));
-
             return true;
-        } else {
-            $this->logWarning($this->trans('application_service.clear_error'));
-
-            return false;
         }
+        $this->logWarning($this->trans('application_service.clear_error'));
+
+        return false;
     }
 
     /**
@@ -217,13 +214,6 @@ trait PropertyTrait
     }
 
     /**
-     * Update the content of the cache from the repository.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    abstract protected function updateAdapter(): void;
-
-    /**
      * Gets an item value.
      *
      * @param string $name    the item name
@@ -242,7 +232,7 @@ trait PropertyTrait
      * Returns if the given value is the default value.
      *
      * @param array  $defaultProperties the default properties to get default value from
-     * @param string $name              the item name
+     * @param string $name              the property name
      * @param mixed  $value             the value to compare to
      *
      * @return bool true if default
@@ -250,6 +240,42 @@ trait PropertyTrait
     private function isDefaultValue(array $defaultProperties, string $name, mixed $value): bool
     {
         return \array_key_exists($name, $defaultProperties) && $defaultProperties[$name] === $value;
+    }
+
+    /**
+     * Load the properties.
+     *
+     * @return array<string, mixed>
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function loadProperties(): array
+    {
+        // reload data
+        $this->updateAdapter();
+
+        return [
+            // display and edit entities
+            self::P_DISPLAY_MODE => $this->getDisplayMode(),
+            self::P_EDIT_ACTION => $this->getEditAction(),
+            // notification
+            self::P_MESSAGE_ICON => $this->isMessageIcon(),
+            self::P_MESSAGE_TITLE => $this->isMessageTitle(),
+            self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
+            self::P_MESSAGE_CLOSE => $this->isMessageClose(),
+            self::P_MESSAGE_PROGRESS => $this->getMessageProgress(),
+            self::P_MESSAGE_POSITION => $this->getMessagePosition(),
+            self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
+            // home page
+            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
+            self::P_PANEL_STATE => $this->isPanelState(),
+            self::P_PANEL_MONTH => $this->isPanelMonth(),
+            self::P_PANEL_CATALOG => $this->isPanelCatalog(),
+            self::P_STATUS_BAR => $this->isStatusBar(),
+            // document options
+            self::P_QR_CODE => $this->isQrCode(),
+            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
+        ];
     }
 
     /**
@@ -264,9 +290,7 @@ trait PropertyTrait
             $this->saveDeferredCacheValue($property->getName(), $property->getString());
         }
         $this->saveDeferredCacheValue('cache_saved', true);
-        if ($this->commitDeferredValues()) {
-            $this->logInfo($this->trans('application_service.commit_success'));
-        } else {
+        if (!$this->commitDeferredValues()) {
             $this->logWarning($this->trans('application_service.commit_error'));
         }
     }

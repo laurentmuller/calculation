@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
@@ -24,6 +23,7 @@ use App\Traits\PropertyTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -112,9 +112,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function getMessageProgress(): int
     {
-        $default = $this->service->getMessageProgress();
-
-        return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, $default);
+        return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, $this->service->getMessageProgress());
     }
 
     /**
@@ -124,9 +122,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function getMessageTimeout(): int
     {
-        $default = $this->service->getMessageTimeout();
-
-        return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, $default);
+        return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, $this->service->getMessageTimeout());
     }
 
     /**
@@ -136,46 +132,19 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function getPanelCalculation(): int
     {
-        $default = $this->service->getPanelCalculation();
-
-        return $this->getPropertyInteger(self::P_PANEL_CALCULATION, $default);
+        return $this->getPropertyInteger(self::P_PANEL_CALCULATION, $this->service->getPanelCalculation());
     }
 
     /**
      * Gets all properties.
      *
+     * @return array<string, mixed>
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getProperties(): array
     {
-        // reload data
-        $this->updateAdapter();
-
-        return [
-            // display and edit entities
-            self::P_DISPLAY_MODE => $this->getDisplayMode(),
-            self::P_EDIT_ACTION => $this->getEditAction(),
-
-            // notification
-            self::P_MESSAGE_ICON => $this->isMessageIcon(),
-            self::P_MESSAGE_TITLE => $this->isMessageTitle(),
-            self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
-            self::P_MESSAGE_CLOSE => $this->isMessageClose(),
-            self::P_MESSAGE_PROGRESS => $this->getMessageProgress(),
-            self::P_MESSAGE_POSITION => $this->getMessagePosition(),
-            self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
-
-            // home page
-            self::P_PANEL_CALCULATION => $this->getPanelCalculation(),
-            self::P_PANEL_STATE => $this->isPanelState(),
-            self::P_PANEL_MONTH => $this->isPanelMonth(),
-            self::P_PANEL_CATALOG => $this->isPanelCatalog(),
-            self::P_STATUS_BAR => $this->isStatusBar(),
-
-            // document options
-            self::P_QR_CODE => $this->isQrCode(),
-            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
-        ];
+        return $this->loadProperties();
     }
 
     /**
@@ -185,9 +154,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isMessageClose(): bool
     {
-        $default = $this->service->isMessageClose();
-
-        return $this->isPropertyBoolean(self::P_MESSAGE_CLOSE, $default);
+        return $this->isPropertyBoolean(self::P_MESSAGE_CLOSE, $this->service->isMessageClose());
     }
 
     /**
@@ -197,9 +164,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isMessageIcon(): bool
     {
-        $default = $this->service->isMessageIcon();
-
-        return $this->isPropertyBoolean(self::P_MESSAGE_ICON, $default);
+        return $this->isPropertyBoolean(self::P_MESSAGE_ICON, $this->service->isMessageIcon());
     }
 
     /**
@@ -209,9 +174,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isMessageSubTitle(): bool
     {
-        $default = $this->service->isMessageSubTitle();
-
-        return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, $default);
+        return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, $this->service->isMessageSubTitle());
     }
 
     /**
@@ -221,9 +184,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isMessageTitle(): bool
     {
-        $default = $this->service->isMessageTitle();
-
-        return $this->isPropertyBoolean(self::P_MESSAGE_TITLE, $default);
+        return $this->isPropertyBoolean(self::P_MESSAGE_TITLE, $this->service->isMessageTitle());
     }
 
     /**
@@ -233,9 +194,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isPanelCatalog(): bool
     {
-        $default = $this->service->isPanelCatalog();
-
-        return $this->isPropertyBoolean(self::P_PANEL_CATALOG, $default);
+        return $this->isPropertyBoolean(self::P_PANEL_CATALOG, $this->service->isPanelCatalog());
     }
 
     /**
@@ -245,9 +204,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isPanelMonth(): bool
     {
-        $default = $this->service->isPanelMonth();
-
-        return $this->isPropertyBoolean(self::P_PANEL_MONTH, $default);
+        return $this->isPropertyBoolean(self::P_PANEL_MONTH, $this->service->isPanelMonth());
     }
 
     /**
@@ -257,9 +214,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isPanelState(): bool
     {
-        $default = $this->service->isPanelState();
-
-        return $this->isPropertyBoolean(self::P_PANEL_STATE, $default);
+        return $this->isPropertyBoolean(self::P_PANEL_STATE, $this->service->isPanelState());
     }
 
     /**
@@ -269,9 +224,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isPrintAddress(): bool
     {
-        $default = $this->service->isPrintAddress();
-
-        return $this->isPropertyBoolean(self::P_PRINT_ADDRESS, $default);
+        return $this->isPropertyBoolean(self::P_PRINT_ADDRESS, $this->service->isPrintAddress());
     }
 
     /**
@@ -281,9 +234,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isQrCode(): bool
     {
-        $default = $this->service->isQrCode();
-
-        return $this->isPropertyBoolean(self::P_QR_CODE, $default);
+        return $this->isPropertyBoolean(self::P_QR_CODE, $this->service->isQrCode());
     }
 
     /**
@@ -293,9 +244,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      */
     public function isStatusBar(): bool
     {
-        $default = $this->service->isStatusBar();
-
-        return $this->isPropertyBoolean(self::P_STATUS_BAR, $default);
+        return $this->isPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());
     }
 
     /**
@@ -321,42 +270,40 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this;
     }
 
+    private function getUser(): ?UserInterface
+    {
+        return $this->security->getUser();
+    }
+
+    /**
+     * Update a property without saving changes to database.
+     */
+    private function saveProperty(array $defaultProperties, UserInterface $user, string $name, mixed $value): void
+    {
+        $property = $this->repository->findOneByUserAndName($user, $name);
+        if ($this->isDefaultValue($defaultProperties, $name, $value)) {
+            // remove if present
+            if ($property instanceof UserProperty) {
+                $this->repository->remove($property, false);
+            }
+        } else {
+            // create if needed
+            if (!$property instanceof UserProperty) {
+                $property = UserProperty::instance($name, $user);
+                $this->repository->add($property, false);
+            }
+            $property->setValue($value);
+        }
+    }
+
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function updateAdapter(): void
+    private function updateAdapter(): void
     {
         if (null !== $user = $this->getUser()) {
             $properties = $this->repository->findByUser($user);
             $this->saveProperties($properties);
         }
-    }
-
-    private function getUser(): ?User
-    {
-        $user = $this->security->getUser();
-
-        return $user instanceof User ? $user : null;
-    }
-
-    /**
-     * Update a property without saving changes.
-     */
-    private function saveProperty(array $defaultProperties, User $user, string $name, mixed $value): void
-    {
-        $property = $this->repository->findByName($user, $name);
-        if ($this->isDefaultValue($defaultProperties, $name, $value)) {
-            if ($property instanceof UserProperty) {
-                $this->repository->remove($property, false);
-            }
-
-            return;
-        }
-        if (!$property instanceof UserProperty) {
-            $property = new UserProperty($name);
-            $property->setUser($user);
-            $this->repository->add($property, false);
-        }
-        $property->setValue($value);
     }
 }

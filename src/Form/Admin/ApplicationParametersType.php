@@ -29,27 +29,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ApplicationParametersType extends AbstractParametersType
 {
     /**
-     * The password options.
-     */
-    final public const PASSWORD_OPTIONS = [
-        'letters',
-        'numbers',
-        'special_char',
-        'case_diff',
-        'email',
-        'pwned',
-    ];
-
-    /**
      * Constructor.
      */
     public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $service)
     {
-        $defaultValues = $service->getDefaultValues();
-        foreach (self::PASSWORD_OPTIONS as $option) {
-            $defaultValues[$option] = false;
-        }
-        parent::__construct($security, $translator, $defaultValues);
+        parent::__construct($security, $translator, $service->getDefaultValues());
     }
 
     protected function addSections(FormHelper $helper): void
@@ -99,18 +83,21 @@ class ApplicationParametersType extends AbstractParametersType
 
     private function addDefaultProductSection(FormHelper $helper): void
     {
-        $helper->field(PropertyServiceInterface::P_DEFAULT_PRODUCT)
+        $key = PropertyServiceInterface::P_DEFAULT_PRODUCT;
+        $helper->field($key)
             ->notRequired()
-            ->updateOption('placeholder', 'parameters.placeholders.' . PropertyServiceInterface::P_DEFAULT_PRODUCT)
+            ->updateOption('placeholder', 'parameters.placeholders.' . $key)
             ->updateAttribute('data-default', '')
             ->add(ProductListType::class);
 
-        $helper->field(PropertyServiceInterface::P_DEFAULT_PRODUCT_QUANTITY)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DEFAULT_PRODUCT_QUANTITY))
+        $key = PropertyServiceInterface::P_DEFAULT_PRODUCT_QUANTITY;
+        $helper->field($key)
+            ->updateAttribute('data-default', (float) $this->getDefaultValue($key))
             ->addNumberType();
 
-        $helper->field(PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT))
+        $key = PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->notRequired()
             ->addCheckboxType();
     }
@@ -123,27 +110,30 @@ class ApplicationParametersType extends AbstractParametersType
         $helper->field(PropertyServiceInterface::P_DEFAULT_CATEGORY)
             ->add(CategoryListType::class);
 
-        $helper->field(PropertyServiceInterface::P_MIN_MARGIN)
-            ->updateAttribute('data-default', (float) $this->getDefaultValue(PropertyServiceInterface::P_MIN_MARGIN) * 100)
+        $key = PropertyServiceInterface::P_MIN_MARGIN;
+        $helper->field($key)
+            ->updateAttribute('data-default', (float) $this->getDefaultValue($key) * 100)
             ->percent(true)
             ->addPercentType(0);
     }
 
     private function addSecuritySection(FormHelper $helper): void
     {
-        $helper->field(PropertyServiceInterface::P_DISPLAY_CAPTCHA)
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_DISPLAY_CAPTCHA))
+        $key = PropertyServiceInterface::P_DISPLAY_CAPTCHA;
+        $helper->field($key)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addChoiceType([
                 'parameters.display.show' => true,
                 'parameters.display.hide' => false,
             ]);
 
-        $helper->field(PropertyServiceInterface::P_STRENGTH_LEVEL)
+        $key = PropertyServiceInterface::P_STRENGTH_LEVEL;
+        $helper->field($key)
             ->label('password.strength_level')
-            ->updateAttribute('data-default', $this->getDefaultValue(PropertyServiceInterface::P_STRENGTH_LEVEL))
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(StrengthLevel::class);
 
-        foreach (self::PASSWORD_OPTIONS as $option) {
+        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
             $helper->field($option)
                 ->label("password.$option")
                 ->updateAttribute('data-default', $this->getDefaultValue($option))

@@ -25,4 +25,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(fields: 'name', message: 'property.unique_name')]
 class Property extends AbstractProperty
 {
+    /**
+     * Create a new instance for the given.
+     */
+    public static function instance(string $name): self
+    {
+        return new self($name);
+    }
 }

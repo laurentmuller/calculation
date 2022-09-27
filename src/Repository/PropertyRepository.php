@@ -33,7 +33,7 @@ class PropertyRepository extends AbstractRepository
     }
 
     /**
-     * Gets a property by its name.
+     * Gets a property for the given name.
      */
     public function findOneByName(string $name): ?Property
     {

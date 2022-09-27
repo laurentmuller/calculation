@@ -306,6 +306,18 @@ interface PropertyServiceInterface
     public const P_USER_RIGHTS = 'user_rights';
 
     /**
+     * The password options.
+     */
+    final public const PASSWORD_OPTIONS = [
+        'letters',
+        'numbers',
+        'special_char',
+        'case_diff',
+        'email',
+        'pwned',
+    ];
+
+    /**
      * Gets the customer information.
      *
      * @throws \Psr\Cache\InvalidArgumentException

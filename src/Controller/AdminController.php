@@ -113,11 +113,6 @@ class AdminController extends AbstractController
             PropertyServiceInterface::P_UPDATE_PRODUCTS,
             PropertyServiceInterface::P_LAST_IMPORT,
         ]);
-        // password options
-        $options = ApplicationParametersType::PASSWORD_OPTIONS;
-        foreach ($options as $option) {
-            $data[$option] = $application->isPropertyBoolean($option);
-        }
 
         // form
         $form = $this->createForm(ApplicationParametersType::class, $data);
@@ -125,17 +120,15 @@ class AdminController extends AbstractController
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $defaultProperties = $application->getDefaultValues();
-            foreach ($options as $option) {
-                $defaultProperties[$option] = false;
-            }
             $application->setProperties($data, $defaultProperties);
             $this->successTrans('parameters.success');
 
             return $this->redirectToHomePage();
         }
+
         // display
         return $this->renderForm('admin/parameters.html.twig', [
-            'options' => $options,
+            'options' => PropertyServiceInterface::PASSWORD_OPTIONS,
             'form' => $form,
         ]);
     }

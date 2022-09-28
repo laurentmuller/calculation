@@ -1,40 +1,50 @@
 {# admin menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal %}
-{% if is_test -%}
-    {% set id = 'menu_test' %}
-    {% set expanded = app.session.get(id, false) %}
-    {% set toggle_class = expanded ? ' active' : '' %}
-    {% set display_style = expanded ? 'block' : 'none' %}
-    {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
-    <li class="nav-item nav-item-dropdown" id="{{ id }}">
-        <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
-            {{- icon('bug fa-fw', 'index.menu_test') -}}
-        </a>
-        <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
-            {{ navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
-            {{ navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
-            {{ dropdownSeparator() }}
-            {{ navItem(path('test_notifications'), 'test.notification', 'bell far') }}
-            {{ navItem(path('test_editor'), 'test.editor', 'edit') }}
-            {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
-            {{ navItem(path('test_timeline'), 'timeline.title', 'stream') }}
-            {{ navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
-            {{ navItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
-            {{ dropdownSeparator() }}
-            {{ navItem(path('exchange_display'), 'exchangerate.title', 'comments-dollar') }}
-            {{ navItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
-            {{ navItem(path('test_translate'), 'translator.title', 'globe') }}
-            {{ dropdownSeparator() }}
-            {{ navItemExternal(path('test_html'), 'test.html', 'code') }}
-            {{ navItem(path('test_password'), 'password.title', 'lock') }}
-            {{ dropdownSeparator() }}
-            {{ navItem(path('admin_import'), 'swisspost.title', 'download') }}
-            {{ dropdownSeparator() }}
-            {{ navItem(path('generate'), 'generate.title', 'random') }}
-            {{ navItem(path('update'), 'update.title', 'edit') }}
-            {{ navItem(path('schema'), 'schema.index.title', 'table') }}
-            {{ dropdownSeparator() }}
-            {{ navItem(path('help'), 'help.title', 'question-circle') }}
-        </ul>
-    </li>
-{% endif %}
+{% set id = 'menu_service' %}
+{% set expanded = app.session.get(id, false) %}
+{% set toggle_class = expanded ? ' active' : '' %}
+{% set display_style = expanded ? 'block' : 'none' %}
+{% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+<li class="nav-item nav-item-dropdown" id="{{ id }}">
+    <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+        {{- icon('bell-concierge fa-fw', 'index.menu_service') -}}
+    </a>
+    <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+        {{ navItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
+        {{ navItem(path('exchange_display'), 'exchangerate.title', 'comments-dollar') }}
+        {{ navItem(path('test_translate'), 'translator.title', 'globe') }}
+
+    </ul>
+</li>
+{% set id = 'menu_test' %}
+{% set expanded = app.session.get(id, false) %}
+{% set toggle_class = expanded ? ' active' : '' %}
+{% set display_style = expanded ? 'block' : 'none' %}
+{% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+<li class="nav-item nav-item-dropdown" id="{{ id }}">
+    <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+        {{- icon('bug fa-fw', 'index.menu_test') -}}
+    </a>
+    <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+        {{ navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
+        {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
+        {{ navItem(path('test_timeline'), 'timeline.title', 'stream') }}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('test_notifications'), 'test.notification', 'bell far') }}
+        {{ navItem(path('test_editor'), 'test.editor', 'edit') }}
+        {{ navItem(path('test_password'), 'password.title', 'lock') }}
+        {{ navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
+        {{ navItemExternal(path('test_html'), 'test.html', 'code') }}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('admin_import'), 'swisspost.title', 'download') }}
+        {{ navItem(path('generate'), 'generate.title', 'random') }}
+        {{ navItem(path('update'), 'update.title', 'edit') }}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('schema'), 'schema.index.title', 'table') }}
+        {{ navItem(path('help'), 'help.title', 'question-circle') }}
+    </ul>
+</li>

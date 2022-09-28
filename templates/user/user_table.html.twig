@@ -50,13 +50,17 @@
 {%- endblock %}
 
 {% block custom_view_header -%}
-JavaScript:formatUserImage
+%imageName%
 {%- if row_edit -%}
-    <a href="{{ path('user_edit', params) }}" class="item-link text-body" title="{{ 'user.edit.title'|trans }}">%username%</a>
+    <span class="align-top">
+        <a href="{{ path('user_edit', params) }}" class="item-link text-body" title="{{ 'user.edit.title'|trans }}">%username%</a>
+    </span>
 {%- elseif row_show -%}
-    <a href="{{ path('user_show', params) }}" class="item-link text-body" title="{{ 'user.show.title'|trans }}">%username%</a>
+    <span class="align-top">
+        <a href="{{ path('user_show', params) }}" class="item-link text-body" title="{{ 'user.show.title'|trans }}">%username%</a>
+    </span>
 {%- else -%}
-    <span>%username%</span>
+    <span class="align-top">%username%</span>
 {%- endif -%}
 {%- endblock %}
 

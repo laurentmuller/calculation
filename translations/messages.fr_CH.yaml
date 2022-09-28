@@ -304,8 +304,8 @@ common:
   value_null: Vide
   value_true: Oui
   value_unknown: Inconnu
-  save_data: Sauvegarde des données...
-  data_changed: Les données sont en cours de modification.
+  save_data: Mise à des données...
+  data_changed: Données modifiées
   simulate:
     label: Simuler la mise à jour
     help: Simule une mise à jour sans enregistrer les changements dans la base de données.
@@ -577,6 +577,7 @@ index:
   menu_site_map: Plan du site
   menu_table: Tables
   menu_test: Tests
+  menu_service: Services
   menu_theme: Thème (%name%)
   menu_tools: Outils
   menu_admin: Administration

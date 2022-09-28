@@ -1,33 +1,31 @@
 {# admin menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownItem, dropdownSeparator, navItem %}
-{% if is_admin -%}
-    {% set id = 'menu_admin' %}
-    {% set expanded = app.session.get(id, false) %}
-    {% set toggle_class = expanded ? ' active' : '' %}
-    {% set display_style = expanded ? 'block' : 'none' %}
-    {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
-    <li class="nav-item nav-item-dropdown" id="{{ id }}">
-        <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
-            {{- icon('gear fa-solid fa-fw', 'index.menu_admin') -}}
-        </a>
-        <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
-            {{ navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
-            {{ navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
+{% set id = 'menu_admin' %}
+{% set expanded = app.session.get(id, false) %}
+{% set toggle_class = expanded ? ' active' : '' %}
+{% set display_style = expanded ? 'block' : 'none' %}
+{% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+<li class="nav-item nav-item-dropdown" id="{{ id }}">
+    <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+        {{- icon('gear fa-solid fa-fw', 'index.menu_admin') -}}
+    </a>
+    <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+        {{ navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
+        {{ navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('user_table'), 'user.list.title', ICON_USER) }}
+        {{ navItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
+        {% if is_super_admin -%}
+            {{ navItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
+        {% endif %}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
+        {{ dropdownSeparator() }}
+        {{ navItem(path('log_table'), 'log.title', ICON_LOG) }}
+        {{ navItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
+        {% if is_previous_admin -%}
             {{ dropdownSeparator() }}
-            {{ navItem(path('user_table'), 'user.list.title', ICON_USER) }}
-            {{ navItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
-            {% if is_super_admin -%}
-                {{ navItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
-            {% endif %}
-            {{ dropdownSeparator() }}
-            {{ navItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
-            {{ dropdownSeparator() }}
-            {{ navItem(path('log_table'), 'log.title', ICON_LOG) }}
-            {{ navItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
-            {% if is_previous_admin -%}
-                {{ dropdownSeparator() }}
-                {{ navItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
-            {% endif %}
-        </ul>
-    </li>
-{% endif %}
+            {{ navItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
+        {% endif %}
+    </ul>
+</li>

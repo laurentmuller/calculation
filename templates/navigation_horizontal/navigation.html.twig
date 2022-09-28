@@ -21,13 +21,21 @@
                     </a>
                 </li>
             {% endif %}
-            {% include 'navigation_horizontal/navigation_data.html.twig' %}
+            {% if is_granted_data -%}
+                {% include 'navigation_horizontal/navigation_data.html.twig' %}
+            {% endif %}
             {% include 'navigation_horizontal/navigation_tools.html.twig' %}
-            {% include 'navigation_horizontal/navigation_chart.html.twig' %}
+            {% if is_granted_calculation %}
+                {% include 'navigation_horizontal/navigation_chart.html.twig' %}
+            {% endif %}
         </ul>
         <ul class="navbar-nav">
-            {% include 'navigation_horizontal/navigation_search.html.twig' %}
-            {% include 'navigation_horizontal/navigation_user.html.twig' %}
+            {% if is_granted_data and show_navigation_search ?? false -%}
+                {% include 'navigation_horizontal/navigation_search.html.twig' %}
+            {% endif %}
+            {% if is_remembered -%}
+                {% include 'navigation_horizontal/navigation_user.html.twig' %}
+            {% endif %}
         </ul>
     </div>
 </nav>

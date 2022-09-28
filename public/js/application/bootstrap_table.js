@@ -23,7 +23,7 @@ function customViewFormatter(data) { // jshint ignore:line
         // fields
         let html = $template.html();
         Object.keys(row).forEach(function (key) {
-            html = html.replaceAll('%' + key + '%', row[key] || '&#160;');
+            html = html.replaceAll('%' + key + '%', row[key] || '');
         });
 
         // functions
@@ -71,21 +71,6 @@ function formatProductClass(row) { // jshint ignore:line
         return ' text-danger';
     }
     return '';
-}
-
-/**
- * Format the user image in the custom view.
- *
- * @param {object} row - the record data.
- * @returns {string} the formatted image (if any).
- */
-function formatUserImage(row) { // jshint ignore:line
-    'use strict';
-    const imageName = row.imageName;
-    if (imageName) {
-        return '<span class="mr-1">' + imageName + '</span>';
-    }
-    return '<span />';
 }
 
 /**

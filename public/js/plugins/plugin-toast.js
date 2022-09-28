@@ -475,7 +475,7 @@
         _createSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
                 return $('<small/>', {
-                    'class': 'mt-1 ml-2',
+                    'class': 'ml-2',
                     'html': options.subtitle
                 });
             }
@@ -500,10 +500,10 @@
                     'class': 'close ml-2 mb-1',
                     'data-dismiss': 'toast',
                     'aria-label': title,
-                    'title': title,
                     'type': 'button',
+                    'title': title,
                     'css': {
-                        'color': 'inherit'
+                         'color': 'inherit'
                     }
                 });
                 return $button.append($span);

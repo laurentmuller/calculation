@@ -90,10 +90,10 @@
     </div>
 </div>
 <div class="form-row flex-column flex-md-row justify-content-start px-2">
-    {{ _self.checkbox('title', 'parameters.fields.message_title') }}
-    {{ _self.checkbox('icon', 'parameters.fields.message_icon') }}
+    {{ _self.checkbox('title', 'parameters.fields.message_title', user_service.messageTitle) }}
+    {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_service.messageIcon) }}
     {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}
-    {{ _self.checkbox('close', 'parameters.fields.message_close') }}
+    {{ _self.checkbox('close', 'parameters.fields.message_close', user_service.messageClose) }}
     {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
 </div>
 {% endblock %}

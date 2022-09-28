@@ -55,10 +55,20 @@
     #}
     {# pages #}
     <ul class="navbar-nav">
-        {{ include('navigation_vertical/navigation_data.html.twig') }}
-        {{ include('navigation_vertical/navigation_chart.html.twig') }}
-        {{ include('navigation_vertical/navigation_tools.html.twig') }}
-        {{ include('navigation_vertical/navigation_admin.html.twig') }}
-        {{ include('navigation_vertical/navigation_test.html.twig') }}
+        {% if is_granted_data %}
+            {{ include('navigation_vertical/navigation_data.html.twig') }}
+        {% endif %}
+        {% if is_granted_calculation %}
+            {{ include('navigation_vertical/navigation_chart.html.twig') }}
+        {% endif %}
+        {% if is_granted_data or is_admin %}
+            {{ include('navigation_vertical/navigation_tools.html.twig') }}
+        {% endif %}
+        {% if is_admin -%}
+            {{ include('navigation_vertical/navigation_admin.html.twig') }}
+        {% endif %}
+        {% if is_test -%}
+            {{ include('navigation_vertical/navigation_test.html.twig') }}
+        {% endif %}
     </ul>
 </div>

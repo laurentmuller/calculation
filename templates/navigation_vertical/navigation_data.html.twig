@@ -1,37 +1,35 @@
 {# data menu #}
 {% from 'macros/_icons.html.twig' import icon, navItem %}
-{% if is_granted_data -%}
-    {% set id = 'menu_data' %}
-    {% set expanded = app.session.get(id, true) %}
-    {% set toggle_class = expanded ? ' active' : '' %}
-    {% set display_style = expanded ? 'block' : 'none' %}
-    {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
-    <li class="nav-item nav-item-dropdown" id="{{ id }}">
-        <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
-            {{- icon('database fa-fw', 'index.menu_data') -}}
-        </a>
-        <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
-            {% if is_granted_calculation -%}
-                {{ navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
-            {% endif %}
-            {% if is_granted_product -%}
-                {{ navItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}
-            {% endif -%}
-            {% if is_granted_task -%}
-                {{ navItem(path('task_table'), 'task.list.title', ICON_TASK) }}
-            {% endif -%}
-            {% if is_granted_category -%}
-                {{ navItem(path('category_table'), 'category.list.title', ICON_CATEGORY) }}
-            {% endif -%}
-            {% if is_granted_group -%}
-                {{ navItem(path('group_table'), 'group.list.title', ICON_GROUP) }}
-            {% endif -%}
-            {% if is_granted_calculation_state -%}
-                {{ navItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATION_STATE) }}
-            {% endif -%}
-            {% if is_granted_global_margin -%}
-                {{ navItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
-            {% endif -%}
-        </ul>
-    </li>
-{% endif %}
+{% set id = 'menu_data' %}
+{% set expanded = app.session.get(id, true) %}
+{% set toggle_class = expanded ? ' active' : '' %}
+{% set display_style = expanded ? 'block' : 'none' %}
+{% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+<li class="nav-item nav-item-dropdown" id="{{ id }}">
+    <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+        {{- icon('database fa-fw', 'index.menu_data') -}}
+    </a>
+    <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+        {% if is_granted_calculation -%}
+            {{ navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
+        {% endif %}
+        {% if is_granted_product -%}
+            {{ navItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}
+        {% endif -%}
+        {% if is_granted_task -%}
+            {{ navItem(path('task_table'), 'task.list.title', ICON_TASK) }}
+        {% endif -%}
+        {% if is_granted_category -%}
+            {{ navItem(path('category_table'), 'category.list.title', ICON_CATEGORY) }}
+        {% endif -%}
+        {% if is_granted_group -%}
+            {{ navItem(path('group_table'), 'group.list.title', ICON_GROUP) }}
+        {% endif -%}
+        {% if is_granted_calculation_state -%}
+            {{ navItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATION_STATE) }}
+        {% endif -%}
+        {% if is_granted_global_margin -%}
+            {{ navItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
+        {% endif -%}
+    </ul>
+</li>

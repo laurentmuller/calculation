@@ -1,15 +1,13 @@
 {# chart menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownItem %}
-{% if is_granted_calculation %}
-    {% set id = 'dropdown_chart' %}
-    {% set display_style = sidebar_hide ? 'block' : 'none' %}
-    <li class="nav-item dropdown nav-sidebar-horizontal" style="display: {{ display_style }}">
-        <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ icon('chart-area', 'menu_graphics', 'chart') }}
-        </a>
-        <div class="dropdown-menu" aria-labelledby="{{ id }}">
-            {{ dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
-            {{ dropdownItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
-        </div>
-    </li>
-{% endif %}
+{% set id = 'dropdown_chart' %}
+{% set display_style = sidebar_hide ? 'block' : 'none' %}
+<li class="nav-item dropdown nav-sidebar-horizontal" style="display: {{ display_style }}">
+    <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ icon('chart-area', 'menu_graphics', 'chart') }}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="{{ id }}">
+        {{ dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
+        {{ dropdownItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
+    </div>
+</li>

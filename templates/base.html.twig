@@ -26,7 +26,7 @@
 {%- set is_granted_calculation_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
 {%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
-{%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
+{%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin -%}
 {# head #}
 <head>
 <meta charset="utf-8" />

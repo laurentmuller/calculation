@@ -44,9 +44,10 @@ function random() {
     // default options
     const options = $('#flashbags').data();
     options.onHide = function (settings) {
-        window.console.log(settings);
+        window.console.log(JSON.stringify(settings, null, '   '));
     };
 
+    // handle notify button click
     $('.btn-notify').on('click', function () {
         // options
         options.icon = $('#icon').isChecked();
@@ -75,27 +76,38 @@ function random() {
         $(":checkbox.custom-control-input").attr('class', className);
     });
 
-    // default values
+    // set default values
     $('.btn-default').on('click', function () {
+        let changed = false;
         $('.card-body [data-default]').each(function () {
             const $this = $(this);
             const value = $this.data('default');
             if ($this.is(':checkbox')) {
-                $this.setChecked(value);
+                if ($this.isChecked() !== value) {
+                    $this.setChecked(value);
+                    changed = true;
+                }
             } else {
-                $this.val(value);
+                if ($this.val() !== String(value)) {
+                    $this.val(value);
+                    changed = true;
+                }
             }
         });
-        random();
+        if (changed) {
+            random();
+        }
     });
 
-    $('#position, #timeout, #progress').on('input', function () {
+    // display a notification when a value change
+    $('#position, #timeout, #progress, .control-option').on('input', function () {
         random();
-    });
-    $('.control-option').on('click', function () {
-        random();
+        const $this = $(this);
+        if ($this.is(('#autohide'))) {
+            $('#close').toggleDisabled(!$this.isChecked());
+        }
     });
 
-    // random notification
+    // first notification
     random();
 }(jQuery));

@@ -1,4 +1,8 @@
 {% apply spaceless %}
     {% set image = asset_image_user(user, '032', {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans}) %}
-    {% if image %}{{ image|raw }}{% endif %}
+    {% if image %}
+        <span class="user-image bg-white rounded">{{ image|raw }}</span>
+    {% else %}
+        <span />
+    {% endif %}
 {% endapply %}

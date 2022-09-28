@@ -85,9 +85,43 @@
     width: 75px;
     text-align: center;
 }
+.text-image span.user-image {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}
+.text-image span.user-image img {
+    margin-left: auto;
+    margin-right: auto;
+}
 
-.text-image img {
-    mix-blend-mode: multiply;
+.card-view-value span.user-image {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    margin-left: 0;
+    margin-right: auto;
+    align-items: center;
+}
+.card-view-value span.user-image img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.custom-item span.user-image {
+    display: inline-flex;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    margin-right: 0.25rem;
+}
+.custom-item span.user-image img {
+    margin-left: auto;
+    margin-right: auto;
+    align-content: center;
 }
 
 .text-user-name {

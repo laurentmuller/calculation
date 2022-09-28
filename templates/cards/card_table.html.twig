@@ -247,7 +247,9 @@
     <div class="col mb-2 px-1">
         <div class="custom-item border rounded h-100 px-2 py-1{% block custom_view_card_class %}{%- endblock %}">
             <div class="row rowlink-skip no-gutters">
-                <div class="col-11 text-truncate font-weight-bold text-themed{% if row_edit or row_show %} rowlink-skip{% endif %}">{% block custom_view_header -%}{%- endblock %}</div>
+                <div class="col-11 text-truncate font-weight-bold text-themed{% if row_edit or row_show %} rowlink-skip{% endif %}">
+                    {%- apply spaceless %}{% block custom_view_header -%}{%- endblock %}{% endapply -%}
+                </div>
                 <div class="col-1 text-right rowlink-skip d-print-none custom-view-actions"></div>
             </div>
             {% block custom_view_body -%}{%- endblock %}

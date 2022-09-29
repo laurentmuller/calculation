@@ -45,7 +45,7 @@ class ApplicationParametersType extends AbstractParametersType
         $this->addMessageSection($helper);
         $this->addHomePageSection($helper);
         $this->addOptionsSection($helper);
-        if ($this->isSuperAdmin()) {
+        if ($this->superAdmin) {
             $this->addSecuritySection($helper);
         }
     }
@@ -96,10 +96,7 @@ class ApplicationParametersType extends AbstractParametersType
             ->addNumberType();
 
         $key = PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT;
-        $helper->field($key)
-            ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->notRequired()
-            ->addCheckboxType();
+        $this->addCheckBox($helper, $key, '');
     }
 
     private function addDefaultValueSection(FormHelper $helper): void

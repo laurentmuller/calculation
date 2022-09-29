@@ -53,7 +53,7 @@ class ArchiveCalculationController extends AbstractController
 
                 // update last date
                 if (!$query->isSimulate() && $result->isValid()) {
-                    $application->setProperty(PropertyServiceInterface::P_ARCHIVE_CALCULATION, new \DateTime());
+                    $application->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, new \DateTime());
                 }
 
                 return $this->renderForm('admin/archive_result.html.twig', [

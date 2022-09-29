@@ -502,7 +502,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function updateValidity(): void
     {
         if ($this->results->isValid() && null !== $validity = $this->results->getValidity()) {
-            $this->application->setProperty(PropertyServiceInterface::P_LAST_IMPORT, $validity);
+            $this->application->setProperty(PropertyServiceInterface::P_DATE_IMPORT, $validity);
         }
     }
 

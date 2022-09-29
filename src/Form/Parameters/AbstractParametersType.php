@@ -31,7 +31,10 @@ abstract class AbstractParametersType extends AbstractType
 {
     use TranslatorTrait;
 
-    private bool $superAdmin = false;
+    /**
+     * The current logged user has the super administrator role.
+     */
+    protected bool $superAdmin = false;
 
     /**
      * Constructor.
@@ -69,6 +72,18 @@ abstract class AbstractParametersType extends AbstractType
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
+    }
+
+    /**
+     * Adds a checkbox type for message option.
+     */
+    protected function addCheckBox(FormHelper $helper, string $key, string $rowClass = 'custom-control-inline'): void
+    {
+        $helper->field($key)
+            ->rowClass($rowClass)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->notRequired()
+            ->addCheckboxType();
     }
 
     protected function addDisplaySection(FormHelper $helper): void
@@ -189,30 +204,10 @@ abstract class AbstractParametersType extends AbstractType
             return $value->value;
         }
         if (\is_bool($value)) {
-            return \json_encode($value);
+            return $value ? 1 : 0;
         }
 
         return $value;
-    }
-
-    /**
-     * Returns if the current logged user has the super administrator role.
-     */
-    protected function isSuperAdmin(): bool
-    {
-        return $this->superAdmin;
-    }
-
-    /**
-     * Adds a checkbox type for message option.
-     */
-    private function addCheckBox(FormHelper $helper, string $key): void
-    {
-        $helper->field($key)
-            ->rowClass('custom-control-inline')
-            ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->notRequired()
-            ->addCheckboxType();
     }
 
     /**

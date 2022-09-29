@@ -257,11 +257,11 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
     public function setProperties(array $properties): self
     {
         if (!empty($properties) && null !== $user = $this->getUser()) {
-            $defaultProperties = $this->service->getProperties();
+            $defaultValues = $this->service->getProperties();
 
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
-                $this->saveProperty($defaultProperties, $user, $key, $value);
+                $this->saveProperty($key, $value, $defaultValues, $user);
             }
             $this->repository->flush();
             $this->updateAdapter();
@@ -278,10 +278,10 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
     /**
      * Update a property without saving changes to database.
      */
-    private function saveProperty(array $defaultProperties, UserInterface $user, string $name, mixed $value): void
+    private function saveProperty(string $name, mixed $value, array $defaultValues, UserInterface $user): void
     {
         $property = $this->repository->findOneByUserAndName($user, $name);
-        if ($this->isDefaultValue($defaultProperties, $name, $value)) {
+        if ($this->isDefaultValue($defaultValues, $name, $value)) {
             // remove if present
             if ($property instanceof UserProperty) {
                 $this->repository->remove($property, false);

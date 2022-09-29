@@ -109,9 +109,9 @@ class AdminController extends AbstractController
         // properties
         $application = $this->getApplication();
         $data = $application->getProperties([
-            PropertyServiceInterface::P_ARCHIVE_CALCULATION,
-            PropertyServiceInterface::P_UPDATE_PRODUCTS,
-            PropertyServiceInterface::P_LAST_IMPORT,
+            PropertyServiceInterface::P_DATE_CALCULATION,
+            PropertyServiceInterface::P_DATE_PRODUCT,
+            PropertyServiceInterface::P_DATE_IMPORT,
         ]);
 
         // form
@@ -119,8 +119,7 @@ class AdminController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
-            $defaultProperties = $application->getDefaultValues();
-            $application->setProperties($data, $defaultProperties);
+            $application->setProperties($data);
             $this->successTrans('parameters.success');
 
             return $this->redirectToHomePage();

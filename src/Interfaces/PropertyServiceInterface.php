@@ -107,11 +107,6 @@ interface PropertyServiceInterface
     final public const P_ADMIN_RIGHTS = 'admin_rights';
 
     /**
-     * The property name for the last calculations archive (date).
-     */
-    final public const P_ARCHIVE_CALCULATION = 'archive_calculation';
-
-    /**
      * The property name for the customer address (string).
      */
     final public const P_CUSTOMER_ADDRESS = 'customer_address';
@@ -145,6 +140,21 @@ interface PropertyServiceInterface
      * The property name for the customer zip code and city (string).
      */
     final public const P_CUSTOMER_ZIP_CITY = 'customer_zip_city';
+
+    /**
+     * The property name for the date of the last archiving calculations (date).
+     */
+    final public const P_DATE_CALCULATION = 'archive_calculation';
+
+    /**
+     * The property name for the last date of import of Swiss cities (date).
+     */
+    final public const P_DATE_IMPORT = 'last_import';
+
+    /**
+     * The property name for the date of the last updating prices of products (date).
+     */
+    final public const P_DATE_PRODUCT = 'update_products';
 
     /**
      * The property name for the default category (integer).
@@ -204,11 +214,6 @@ interface PropertyServiceInterface
      * </p>
      */
     final public const P_EDIT_ACTION = 'edit_action';
-
-    /**
-     * The property name for the last import of Swiss cities (date).
-     */
-    final public const P_LAST_IMPORT = 'last_import';
 
     /**
      * The property name for displaying close button (default = true) of the flash bag messages (boolean).
@@ -294,11 +299,6 @@ interface PropertyServiceInterface
      * The property name for the password strength level (int).
      */
     final public const P_STRENGTH_LEVEL = 'strength_level';
-
-    /**
-     * The property name for the last products update (date).
-     */
-    final public const P_UPDATE_PRODUCTS = 'update_products';
 
     /**
      * The property name for the user role rights (string).

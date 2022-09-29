@@ -88,7 +88,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getArchiveCalculation(): ?\DateTimeInterface
     {
-        return $this->getPropertyDate(self::P_ARCHIVE_CALCULATION);
+        return $this->getPropertyDate(self::P_DATE_CALCULATION);
     }
 
     /**
@@ -359,7 +359,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getLastImport(): ?\DateTimeInterface
     {
-        return $this->getPropertyDate(self::P_LAST_IMPORT);
+        return $this->getPropertyDate(self::P_DATE_IMPORT);
     }
 
     /**
@@ -449,9 +449,9 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
                 self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
                 self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
                 // last update dates
-                self::P_ARCHIVE_CALCULATION => $this->getArchiveCalculation(),
-                self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
-                self::P_LAST_IMPORT => $this->getLastImport(),
+                self::P_DATE_CALCULATION => $this->getArchiveCalculation(),
+                self::P_DATE_PRODUCT => $this->getUpdateProducts(),
+                self::P_DATE_IMPORT => $this->getLastImport(),
             ]
         );
         // password options
@@ -486,7 +486,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getUpdateProducts(): ?\DateTimeInterface
     {
-        return $this->getPropertyDate(self::P_UPDATE_PRODUCTS);
+        return $this->getPropertyDate(self::P_DATE_PRODUCT);
     }
 
     /**
@@ -680,20 +680,20 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Save the given properties to the database and to the cache.
      *
-     * @param array<string, mixed> $properties        the properties to set
-     * @param array<string, mixed> $defaultProperties the default properties
+     * @param array<string, mixed>      $properties    the properties to set
+     * @param array<string, mixed>|null $defaultValues the default values
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function setProperties(array $properties, ?array $defaultProperties = null): self
+    public function setProperties(array $properties, ?array $defaultValues = null): self
     {
         if (!empty($properties)) {
             $repository = $this->getRepository();
-            $defaultProperties ??= $this->getDefaultValues();
+            $defaultValues ??= $this->getDefaultValues();
 
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
-                $this->saveProperty($repository, $defaultProperties, $key, $value);
+                $this->saveProperty($key, $value, $defaultValues, $repository);
             }
             $this->manager->flush();
             $this->updateAdapter();
@@ -718,10 +718,10 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Update a property without saving changes to database.
      */
-    private function saveProperty(PropertyRepository $repository, array $defaultProperties, string $name, mixed $value): void
+    private function saveProperty(string $name, mixed $value, array $defaultValues, PropertyRepository $repository): void
     {
         $property = $repository->findOneByName($name);
-        if ($this->isDefaultValue($defaultProperties, $name, $value)) {
+        if ($this->isDefaultValue($defaultValues, $name, $value)) {
             // remove if present
             if ($property instanceof Property) {
                 $repository->remove($property, false);

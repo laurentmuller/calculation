@@ -51,7 +51,7 @@ class ProductUpdateController extends AbstractController
 
             // update last date
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setProperty(PropertyServiceInterface::P_UPDATE_PRODUCTS, new \DateTime());
+                $application->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, new \DateTime());
             }
 
             return $this->renderForm('admin/product_result.html.twig', [

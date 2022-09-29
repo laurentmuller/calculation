@@ -36,27 +36,26 @@ trait PropertyTrait
      */
     public function clearCache(): bool
     {
-        if ($this->parentClearCache()) {
-            return true;
-        }
-        $this->logWarning($this->trans('application_service.clear_error'));
+        if (!$this->parentClearCache()) {
+            $this->logWarning($this->trans('application_service.clear_error'));
 
-        return false;
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Gets an array property.
      *
+     * @template T
+     *
      * @param string $name    the property name to search for
-     * @param array  $default the default array if the property is not found
+     * @param T[]    $default the default array if the property is not found or is not valid
+     *
+     * @return T[]
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     *
-     * @psalm-template T
-     *
-     * @psalm-param T[] $default
-     *
-     * @psalm-return T[]
      */
     public function getPropertyArray(string $name, array $default): array
     {

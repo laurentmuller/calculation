@@ -304,7 +304,7 @@ common:
   value_null: Vide
   value_true: Oui
   value_unknown: Inconnu
-  save_data: Mise à des données...
+  save_data: Mise à jour des données...
   data_changed: Données modifiées
   simulate:
     label: Simuler la mise à jour

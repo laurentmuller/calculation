@@ -5,6 +5,7 @@
  */
 .toast-plugin {
     position: fixed;
+    transition: all 0.35s ease;
 }
 
 .toast-plugin.top-left {
@@ -58,16 +59,18 @@
 }
 
 @media only screen and (max-width: 576px) {
-    .toast-plugin.top-left,
-    .toast-plugin.center-left,
-    .toast-plugin.bottom-left,
-    .toast-plugin.top-right,
-    .toast-plugin.center-right,
-    .toast-plugin.bottom-right {
+    .toast-plugin {
         left: 0 !important;
         right: 0 !important;
         margin-left: auto !important;
         margin-right: auto !important;
-        max-width: fit-content !important;
+        max-width: calc(100vw - 20px) !important;
+        transform: none !important;
+    }
+    .toast-plugin .toast {
+        width: auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        transform: none !important;
     }
 }

@@ -3,7 +3,7 @@
 /* globals Toaster */
 
 /**
- * Show the flashbag messages.
+ * Show the flash bag messages.
  */
 function showFlashbag() {
     'use strict';
@@ -124,7 +124,10 @@ function initBackToTop() {
  */
 function initSidebar() {
     'use strict';
-    $('.navbar-vertical').sidebar();
+    $('.navbar-vertical').sidebar().on('toggle.sidebar', function () {
+        const left = $(this).hasClass('sidebar-hide') ? "20px" : "292px";
+        $('.toast-plugin').css('margin-left', left);
+    });
 }
 
 /**

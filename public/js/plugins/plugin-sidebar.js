@@ -164,6 +164,9 @@
             }
             this._updateSidebar();
             this._saveState();
+
+            // notify
+            this.$element.trigger('toggle.sidebar');
         }
 
         /**

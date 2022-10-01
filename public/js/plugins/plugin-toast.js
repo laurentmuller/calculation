@@ -351,7 +351,7 @@
                 'z-index': options.zIndex
             };
 
-            // margins
+            // margin styles
             options.position.split('-').forEach(function (edge) {
                 const key = 'margin-' + edge;
                 const value = options[key.camelize()];
@@ -491,10 +491,6 @@
          */
         _createCloseButton: function (options) {
             if (options.displayClose) {
-                const $span = $('<span />', {
-                    'aria-hidden': 'true',
-                    'html': '&times;'
-                });
                 const title = options.closeTitle || 'Close';
                 const $button = $('<button/>', {
                     'class': 'close ml-2 mb-1',
@@ -505,6 +501,10 @@
                     'css': {
                          'color': 'inherit'
                     }
+                });
+                const $span = $('<span />', {
+                    'aria-hidden': 'true',
+                    'html': '&times;'
                 });
                 return $button.append($span);
             }
@@ -589,7 +589,8 @@
             $toast.toast({
                 delay: options.timeout,
                 autohide: options.autohide
-            }).on('show.bs.toast', function () {
+            });
+            $toast.on('show.bs.toast', function () {
                 if (options.progress) {
                     const $progress = $toast.find('.progress-bar');
                     if ($progress.length) {

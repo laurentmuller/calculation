@@ -2,11 +2,11 @@
 {% from 'macros/_icons.html.twig' import link %}
 {% import 'openweather/_weather_macro.html.twig' as tools %}
 {# macros #}
-{% macro system(units, route, city_id, count) -%}
+{% macro system(units, route, id, count) -%}
 {% set text = units == 'metric' ? '°C' : '°F' %}
 {% set title = ('openweather.current.' ~ units)|trans %}
 {% if route %}
-    {% set href = path(route, {'city': city_id, 'units': units, 'count': count}) %}
+    {% set href = path(route, {'id': id, 'units': units, 'count': count}) %}
     <a href="{{ href }}" class="small" title="{{ title }}">{{ text }}</a>
 {% else %}
     <span class="small" title="{{ title }}">{{ text }}</span>
@@ -15,10 +15,10 @@
 {# parameters #}
 {%- set title = 'openweather.current.title' -%}
 {%- set title_icon = 'cloud-sun' -%}
-{%- set city_id = current.id|default(false) -%}
+{%- set id = current.id|default(false) -%}
 {%- set route = app.request.get('_route') -%}
 {# units #}
-{% if city_id %}
+{% if id %}
     {%- set units_system = current.units.system -%}
     {%- set units_temp = current.units.temperature -%}
     {%- set units_pressure = current.units.pressure -%}
@@ -28,13 +28,13 @@
     {%- set units_volume = current.units.volume -%}
 {% endif %}
 {# class #}
-{%- block card_container_class city_id ? '' : parent() -%}
-{%- block card_class city_id ? parent() : ' border-danger' -%}
-{%- block card_header_class city_id ? parent() : ' bg-danger text-white' -%}
+{%- block card_container_class id ? '' : parent() -%}
+{%- block card_class id ? parent() : ' border-danger' -%}
+{%- block card_header_class id ? parent() : ' bg-danger text-white' -%}
 {%- block card_footer_class ' d-none' -%}
 {# header #}
 {% block card_header %}
-{% if city_id %}
+{% if id %}
     <div class="row">
         <div class="col-md-6">
             {{ parent() }}
@@ -42,9 +42,9 @@
         </div>
         <div class="col-md-6 text-md-right d-print-none">
             {% if units_system == 'metric' %}
-                {{ _self.system(units_system) }}<span class="small"> / </span>{{ _self.system('imperial', route, city_id, count) }}
+                {{ _self.system(units_system) }}<span class="small"> / </span>{{ _self.system('imperial', route, id, count) }}
             {% else %}
-                {{ _self.system('metric', route, city_id, count) }}<span class="small"> / </span>{{ _self.system(units_system) }}
+                {{ _self.system('metric', route, id, count) }}<span class="small"> / </span>{{ _self.system(units_system) }}
             {% endif %}
             {{ link(path('openweather_search'), 'common.button_search', 'btn btn-link btn-sm') }}
         </div>
@@ -55,7 +55,7 @@
 {% endblock %}
 {# body #}
 {% block card_body %}
-{% if city_id %}
+{% if id %}
     <h2>{{ current.name }}, {{ current.sys.country_name }}<img src="{{ current.sys.country_flag }}" class="ow-flag" alt="Flag" title="{{ current.sys.country_name }}"></h2>
     <h3 class="font-weight-normal">
         <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="Current Weather" title="{{ current.weather.description }}">{{ tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}

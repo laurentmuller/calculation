@@ -15,7 +15,7 @@
     text-align: left !important;
     justify-content: initial;
     display: block;
-    z-index: 1031;
+    /*z-index: 1031;*/
 }
 
 .navbar-vertical.sidebar-hide {

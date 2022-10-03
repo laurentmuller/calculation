@@ -17,12 +17,10 @@
 }
 
 body.status-bar .navbar.navbar-vertical {
-    height: calc(100vh - 30px);
+    height: calc(100vh - 29px);
 }
+
 /*
-.navbar.navbar-vertical {
-    height: calc(100vh - 30px);
-}
 .navbar.navbar-vertical {
     padding-bottom: 30px;
 }
@@ -704,8 +702,8 @@ table.table-fixed-header th {
     position: sticky;
     border-top-width: 0;
     font-weight: normal;
-
 }
+
 table.table-fixed-header th {
     background-color: #f8f9fa !important;
     border-bottom-width: 1px !important;;
@@ -761,4 +759,24 @@ body.dark table.table-fixed-header th {
 }
 .context-menu-item.btn-default {
     font-weight: bolder !important;
+}
+
+/**
+ * small scrollbar
+ */
+.small-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.small-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+body.dark .small-scrollbar::-webkit-scrollbar-track {
+    background-color: #343a40;
+}
+body.dark .small-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .1);
+}
+body.dark .small-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(128, 135, 139, .8)
 }

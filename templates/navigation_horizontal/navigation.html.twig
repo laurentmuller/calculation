@@ -1,7 +1,7 @@
 {# horizontal toolbar #}
 {% from 'macros/_icons.html.twig' import icon %}
 {# horizontal navigation #}
-<nav id="navigation" class="navbar navbar-horizontal navbar-themed navbar-expand-md border-bottom" data-show="{{ 'index.sidebar_show'|trans }}" data-hide="{{ 'index.sidebar_hide'|trans }}">
+<nav id="navigation" class="navbar navbar-horizontal navbar-themed navbar-expand-md" data-show="{{ 'index.sidebar_show'|trans }}" data-hide="{{ 'index.sidebar_hide'|trans }}">
     <button class="navbar-toggler sidebar-toggle py-1" aria-expanded="{{ (not sidebar_hide)|json_encode }}" title="{{ (sidebar_hide ? 'index.sidebar_show' : 'index.sidebar_hide')|trans }}">
         <i class="fa-solid fa-angle-left"></i>
     </button>

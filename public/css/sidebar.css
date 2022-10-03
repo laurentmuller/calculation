@@ -90,44 +90,6 @@
     }
 }
 
-/* horizontal toolbar
-.page-content .navbar-horizontal  {
-    padding-left: 0;
-}
-.page-content.sidebar-hide .navbar-horizontal  {
-    padding-left: 16px;
-}
-
-/* hide side bar on small resolution
-@media (max-width: 768px) {
-    .navbar-vertical {
-        margin-left: -17rem;
-    }
-
-    .navbar-vertical.sidebar-hide {
-        margin-left: 0;
-    }
-
-    .page-content {
-        width: 100%;
-        margin: 0;
-    }
-
-    .page-content.sidebar-hide {
-        margin-left: 17rem;
-        width: calc(100% - 17rem);
-    }
-
-    .page-content .sidebar-toggle {
-        display: none !important;
-    }
-
-    .page-content .nav-sidebar-horizontal {
-        display: block !important;
-    }
-}
-*/
-
 /* scrollbar */
 .navbar-vertical::-webkit-scrollbar {
     width: 8px;

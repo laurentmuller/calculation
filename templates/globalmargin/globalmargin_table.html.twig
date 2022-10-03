@@ -11,6 +11,14 @@
 {%- endif %}
 {%- endblock %}
 
+{% block display_mode %}
+{% if allow_edit -%}
+    {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
+    {{ _self.item_separator() }}
+{% endif %}
+{{ parent() }}
+{%- endblock %}
+
 {% block global_actions -%}
 {{- _self.item_external(path('globalmargin_pdf'), 'globalmargin.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('globalmargin_excel'), 'globalmargin.list.excel_title', ICON_EXCEL) }}

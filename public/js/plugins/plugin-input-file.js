@@ -46,7 +46,7 @@
             this.$element.find('[data-dismiss="file-input"]').off('click.bs.file-input', this.clearProxy);
             this.$element.find('[data-trigger="file-input"]').off('click.bs.file-input', this.clickProxy);
             $(this.$input[0].form).off('reset.bs.file-input', this.resetProxy);
-            this.$element.removeData('bs.file-input');
+            this.$element.removeData(FileInput.NAME);
         }
 
 
@@ -406,6 +406,11 @@
     };
 
 
+    /**
+     * The plugin name.
+     */
+    FileInput.NAME = 'bs.file-input';
+
     // ------------------------------------
     // FileInput plugin definition
     // ------------------------------------
@@ -414,10 +419,10 @@
     $.fn.fileinput = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            const data = $this.data('bs.file-input');
+            const data = $this.data(FileInput.NAME);
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('bs.file-input', new FileInput(this, settings));
+                $this.data(FileInput.NAME, new FileInput(this, settings));
             }
         });
     };

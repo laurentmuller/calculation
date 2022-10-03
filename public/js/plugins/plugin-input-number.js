@@ -35,7 +35,7 @@
             $element.off('change', this.updateProxy);
             $element.off('input', this.inputProxy);
             $element.off('keypress', this.keyPressProxy);
-            $element.removeData('input-number-format');
+            $element.removeData(InputNumberFormat.NAME);
         }
 
         // -----------------------------
@@ -166,6 +166,11 @@
         'separatorAuthorized': ['.', ',']
     };
 
+    /**
+     * The plugin name.
+     */
+    InputNumberFormat.NAME = 'bs.input-number-format';
+
     // ------------------------------------
     // InputNumberFormat plugin definition
     // ------------------------------------
@@ -174,9 +179,9 @@
     $.fn.inputNumberFormat = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('input-number-format')) {
+            if (!$this.data(InputNumberFormat.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('input-number-format', new InputNumberFormat(this, settings));
+                $this.data(InputNumberFormat.NAME, new InputNumberFormat(this, settings));
             }
         });
     };

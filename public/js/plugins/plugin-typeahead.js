@@ -50,7 +50,7 @@
             $menu.off('mouseleave', selector, that.mouseLeaveProxy);
 
             // remove data
-            $element.removeData('typeahead');
+            $element.removeData(Typeahead.NAME);
         }
 
         /**
@@ -772,6 +772,11 @@
         }
     };
 
+    /**
+     * The plugin name.
+     */
+    Typeahead.NAME = 'bs.typeahead';
+
     // -----------------------------
     // Typeahead plugin definition
     // -----------------------------
@@ -780,10 +785,10 @@
     $.fn.typeahead = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data('typeahead');
+            let data = $this.data(Typeahead.NAME);
             if (!data) {
                 const settings = typeof options === 'object' && options;
-                $this.data('typeahead', data = new Typeahead(this, settings));
+                $this.data(Typeahead.NAME, data = new Typeahead(this, settings));
             }
             if (data._isString(options)) {
                 data[options]();

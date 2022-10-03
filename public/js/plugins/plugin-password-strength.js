@@ -39,7 +39,7 @@
                 this.$label.remove();
             }
             this.$element.off('keyup', this.keyupProxy);
-            this.$element.removeData('password-strength');
+            this.$element.removeData(PasswordStrength.NAME);
         }
 
         // -----------------------------
@@ -359,6 +359,11 @@
         progressClasses: ['bg-danger', 'bg-danger', 'bg-warning', 'bg-success', 'bg-primary'],
     };
 
+    /**
+     * The plugin name.
+     */
+    PasswordStrength.NAME = 'bs.password-strength';
+
     // -----------------------------------
     // PasswordStrength plugin definition
     // -----------------------------------
@@ -367,9 +372,9 @@
     $.fn.passwordStrength = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('password-strength')) {
+            if (!$this.data(PasswordStrength.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('password-strength', new PasswordStrength(this, settings));
+                $this.data(PasswordStrength.NAME, new PasswordStrength(this, settings));
             }
         });
     };

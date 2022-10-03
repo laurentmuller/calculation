@@ -41,7 +41,7 @@
             this.$element.off('blur', options.dotInputClass, this.blurProxy);
 
             // remove
-            this.$element.removeData('tableEditor');
+            this.$element.removeData(TableEditor.NAME);
         }
 
         // -----------------------------
@@ -227,6 +227,11 @@
         'onSave': $.noop,
     };
 
+    /**
+     * The plugin name.
+     */
+    TableEditor.NAME = 'bs.table-editor';
+
     // -----------------------------------
     // TableEditor plugin definition
     // -----------------------------------
@@ -235,9 +240,9 @@
     $.fn.tableEditor = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('tableEditor')) {
+            if (!$this.data(TableEditor.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('tableEditor', new TableEditor(this, settings));
+                $this.data(TableEditor.NAME, new TableEditor(this, settings));
             }
         });
     };

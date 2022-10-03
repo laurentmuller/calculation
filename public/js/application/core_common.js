@@ -136,7 +136,7 @@ function initSidebar() {
 function initSwitchTheme() {
     'use strict';
     const $theme = $('#theme');
-    const $button = $('.dropdown-item-theme');
+    const $button = $('.item-theme');
     if ($theme.length === 0 || $button.length === 0) {
         return;
     }

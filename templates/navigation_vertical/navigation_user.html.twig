@@ -1,0 +1,62 @@
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem %}
+{% set id = 'menu_user' %}
+{% set expanded = app.session.get(id, false) %}
+{% set toggle_class = expanded ? ' active' : '' %}
+{% set display_style = expanded ? 'block' : 'none' %}
+{% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+<li class="nav-item nav-item-dropdown" id="{{ id }}">
+    <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+        {% apply spaceless %}
+            {% set image = asset_image_user(app.user, '032', {'alt': 'user.fields.imageFile'|trans, 'title': app.user.userIdentifier, 'class': 'avatar rounded-circle'}) %}
+            {% if image %}
+                {{ image|raw }}&nbsp;{{ app.user.userIdentifier }}
+            {% else -%}
+                {{ icon('user fa-lg far') }}&nbsp;{{ app.user.userIdentifier }}
+            {% endif -%}
+        {% endapply %}
+    </a>
+    <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+        {{ navItem(path('app_logout'), 'index.logout', 'sign-out-alt') }}
+        {{ navItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
+        {{ navItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
+        {{ dropdownSeparator() }}
+        {% set is_dark = theme_dark(app.request) %}
+        {% set theme_dark = enum('App\\Enums\\Theme::DARK') %}
+        {% set theme_light = enum('App\\Enums\\Theme::LIGHT') %}
+        {% set theme_icon = is_dark ? theme_light.icon : theme_dark.icon %}
+        {% set theme_text = is_dark ? theme_light.readable : theme_dark.readable %}
+        <li class="nav-item">
+            <a class="nav-link item-theme" href="#"
+               data-title="{{ 'theme.title'|trans }}"
+               data-path="{{ path('theme_save') }}"
+               data-light-css="{{ asset_versioned(theme_light.css) }}"
+               data-light-text="{{ theme_light.readable|trans }}"
+               data-light-icon="{{ theme_light.icon }}"
+               data-dark-css="{{ asset_versioned(theme_dark.css) }}"
+               data-dark-text="{{ theme_dark.readable|trans }}"
+               data-dark-icon="{{ theme_dark.icon }}"
+               data-error="{{ 'theme.error'|trans }}">
+                    {{- icon(theme_icon, theme_text) -}}
+            </a>
+        </li>
+        {{ navItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
+        {% if is_previous_admin -%}
+            {{ dropdownSeparator() }}
+            {{ navItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
+        {% endif %}
+        {# switch environment #}
+        {% if is_env_dev -%}
+            {{ dropdownSeparator() }}
+            {{ navItem(link_prod, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) }}
+        {% elseif is_env_prod or is_env_local -%}
+            {{ dropdownSeparator() }}
+            {{ navItem(link_dev, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) }}
+        {% endif %}
+        {{ dropdownSeparator() }}
+        {% if is_granted_data %}
+            {{ navItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
+        {% endif %}
+        {{ navItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
+        {{ navItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
+    </ul>
+</li>

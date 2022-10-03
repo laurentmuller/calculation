@@ -7,6 +7,8 @@ about:
   app_name: Application
   app_owner: Concepteur
   app_version: Version
+  app_github: Code source
+  app_github_url: GitHub
   error: Erreur lors du chargement des informations.
   extern_link: Lien externe
   licence: Accord de licence

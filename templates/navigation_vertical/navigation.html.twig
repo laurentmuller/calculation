@@ -1,5 +1,5 @@
 {# imports #}
-{% from 'macros/_icons.html.twig' import icon %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 <!-- vertical navigation -->
 {%- set sidebar_attributes = {
@@ -22,10 +22,7 @@
         </div>
     </div>
     #}
-    <div class="mb-2">
-
-    </div>
-    <div class="mb-2">
+    <div class="mb-1">
         <div class="media position-relative">
             <img src="{{ asset_icon(57) }}" width="57" height="57" alt="{{ app_name }}" class="rounded-lg mr-2 align-self-end">
             <div class="media-body">
@@ -36,7 +33,7 @@
         </div>
     </div>
     {# home page #}
-    <a class="navbar-brand mt-1" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
+    <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
         {{- icon('home', 'index.title') -}}
     </a>
     {# search
@@ -69,6 +66,10 @@
         {% endif %}
         {% if is_test -%}
             {{ include('navigation_vertical/navigation_test.html.twig') }}
+        {% endif %}
+        {% if is_test -%}
+            {{ dropdownSeparator() }}
+            {{ include('navigation_vertical/navigation_user.html.twig') }}
         {% endif %}
     </ul>
 </div>

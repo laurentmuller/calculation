@@ -65,7 +65,7 @@
                 this._cancel(null, false);
             }
             this.$element.off('click', this.clickProxy)
-                .removeData('cell-edit');
+                .removeData(CellEdit.NAME);
         }
 
         /**
@@ -278,6 +278,11 @@
         'onCancelEdit': null, // the function on the cancel edit event
     };
 
+    /**
+     * The plugin name.
+     */
+    CellEdit.NAME = 'cell-edit';
+
     // -------------------------------
     // CellEdit plugin definition
     // -------------------------------
@@ -285,9 +290,9 @@
     $.fn.celledit = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('cell-edit')) {
+            if (!$this.data(CellEdit.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('cell-edit', new CellEdit(this, settings));
+                $this.data(CellEdit.NAME, new CellEdit(this, settings));
             }
         });
     };

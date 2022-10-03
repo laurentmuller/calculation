@@ -30,6 +30,13 @@
         // -----------------------------
         // public functions
         // -----------------------------
+
+        /**
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} options - the plugin options.
+         */
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, {}, BoostrapTreeView.DEFAULTS, this.$element.data(), options);
@@ -41,7 +48,7 @@
          */
         destroy() {
             this._removeProxies();
-            this.$element.removeData('boostrap-tree-view');
+            this.$element.removeData(BoostrapTreeView.NAME);
         }
 
         /**
@@ -622,6 +629,11 @@
         }
     };
 
+    /**
+     * The plugin name.
+     */
+    BoostrapTreeView.NAME = 'bs.tree-view';
+
     // -----------------------------------
     // BoostrapTreeView plugin definition
     // -----------------------------------
@@ -630,9 +642,9 @@
     $.fn.boostrapTreeView = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('boostrap-tree-view')) {
+            if (!$this.data(BoostrapTreeView.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('boostrap-tree-view', new BoostrapTreeView(this, settings));
+                $this.data(BoostrapTreeView.NAME, new BoostrapTreeView(this, settings));
             }
         });
     };

@@ -32,7 +32,7 @@
          */
         destroy() {
             this.$dropdown.before(this.$dropdown).remove();
-            this.$element.removeClass('d-none').removeData('color-picker');
+            this.$element.removeClass('d-none').removeData(ColorPicker.NAME);
         }
 
         // -----------------------------
@@ -568,6 +568,11 @@
         }
     };
 
+    /**
+     * The plugin name.
+     */
+    ColorPicker.NAME = 'color-picker';
+
     // -----------------------------------
     // ColorPicker plugin definition
     // -----------------------------------
@@ -576,9 +581,9 @@
     $.fn.colorpicker = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('color-picker')) {
+            if (!$this.data(ColorPicker.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('color-picker', new ColorPicker(this, settings));
+                $this.data(ColorPicker.NAME, new ColorPicker(this, settings));
             }
         });
     };

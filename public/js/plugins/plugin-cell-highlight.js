@@ -26,6 +26,13 @@
         // -----------------------------
         // public functions
         // -----------------------------
+
+        /**
+         * Constructor
+         *
+         * @param {HTMLElement} element - the element to handle.
+         * @param {Object|string} options - the plugin options.
+         */
         constructor(element, options) {
             const that = this;
             that.$element = $(element);
@@ -68,7 +75,7 @@
 
         destroy() {
             this.disable();
-            this.$element.removeData('cellHighlight');
+            this.$element.removeData(CellHighlight.NAME);
         }
 
         // -----------------------------
@@ -241,6 +248,11 @@
         highlightHorizontal: null
     };
 
+    /**
+     * The plugin name.
+     */
+    CellHighlight.NAME = 'cell-highlight';
+
     // -------------------------------
     // CellHighlight plugin definition
     // -------------------------------
@@ -249,9 +261,9 @@
     $.fn.cellhighlight = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('cellHighlight')) {
+            if (!$this.data(CellHighlight.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('cellHighlight', new CellHighlight(this, settings));
+                $this.data(CellHighlight.NAME, new CellHighlight(this, settings));
             }
         });
     };

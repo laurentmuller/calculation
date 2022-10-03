@@ -32,7 +32,7 @@
             if (this.inputProxy) {
                 this.$simulate.off('input', this.inputProxy);
             }
-            $element.removeData('simulate');
+            $element.removeData(Simulate.NAME);
         }
 
         // -----------------------------
@@ -69,6 +69,11 @@
         uncheck: true
     };
 
+    /**
+     * The plugin name.
+     */
+    Simulate.NAME = 'bs.simulate';
+
     // -----------------------------------
     // Simulate plugin definition
     // -----------------------------------
@@ -77,9 +82,9 @@
     $.fn.simulate = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('simulate')) {
+            if (!$this.data(Simulate.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('simulate', new Simulate(this, settings));
+                $this.data(Simulate.NAME, new Simulate(this, settings));
             }
         });
     };

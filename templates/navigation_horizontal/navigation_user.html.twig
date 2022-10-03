@@ -21,7 +21,7 @@
     {% set theme_light = enum('App\\Enums\\Theme::LIGHT') %}
     {% set theme_icon = is_dark ? theme_light.icon : theme_dark.icon %}
     {% set theme_text = is_dark ? theme_light.readable : theme_dark.readable %}
-    <button class="dropdown-item dropdown-item-theme" type="button"
+    <button class="dropdown-item item-theme" type="button"
             data-title="{{ 'theme.title'|trans }}"
             data-path="{{ path('theme_save') }}"
             data-light-css="{{ asset_versioned(theme_light.css) }}"

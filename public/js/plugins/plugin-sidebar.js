@@ -301,11 +301,10 @@
         minWidth: 960
     };
 
-
     /**
      * The plugin name.
      */
-    Sidebar.NAME = 'sidebar-boostrap';
+    Sidebar.NAME = 'bs.sidebar';
 
     // -----------------------------
     // sidebar plugin definition

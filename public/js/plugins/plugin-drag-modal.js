@@ -224,7 +224,7 @@
     /**
      * The plugin name.
      */
-    DraggableModal.NAME = 'draggable-modal-boostrap';
+    DraggableModal.NAME = 'bs.draggable-modal';
 
     // -----------------------------
     // sidebar plugin definition

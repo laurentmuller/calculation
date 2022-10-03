@@ -66,7 +66,7 @@
 
         destroy() {
             this.disable();
-            this.$element.removeData('bs.rowlink');
+            this.$element.removeData(Rowlink.NAME);
         }
 
         // -----------------------------
@@ -105,6 +105,11 @@
         target: 'a'
     };
 
+    /**
+     * The plugin name.
+     */
+    Rowlink.NAME = 'bs.rowlink';
+
     // ------------------------------------
     // Rowlink plugin definition
     // ------------------------------------
@@ -113,9 +118,9 @@
     $.fn.rowlink = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data('bs.rowlink')) {
+            if (!$this.data(Rowlink.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data('bs.rowlink', new Rowlink(this, settings));
+                $this.data(Rowlink.NAME, new Rowlink(this, settings));
             }
         });
     };

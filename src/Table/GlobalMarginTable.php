@@ -64,11 +64,12 @@ class GlobalMarginTable extends AbstractEntityTable
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        // hide pages list
         parent::updateResults($query, $results);
         if (!$query->callback) {
+            // hide pages list and search
             $results->pageList = [];
-            $results->addAttribute('search', \json_encode(false));
+            $results->addAttribute('search', false);
+            $results->addAttribute('pagination', false);
         }
     }
 }

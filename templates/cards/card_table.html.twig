@@ -91,7 +91,7 @@
 {# parameters #}
 {%- set sortable_columns = columns|filter(c => c.sortable and c.visible) -%}
 {%- set sortable = sortable_columns|length -%}
-{%- set allow_search = attributes.search|default(true|json_encode) == true|json_encode -%}
+{%- set allow_search = attributes.search is defined ? attributes.search : true -%}
 {%- set allow_global = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {%- set row_selector = 'table-primary' -%}
 {%- set caller = path(app.request.get('_route')) -%}

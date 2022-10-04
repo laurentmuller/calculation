@@ -25,7 +25,7 @@
 {%- endblock %}
 
 {% block show_actions -%}
-{{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class) }}
+{{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class ~ ' btn-default') }}
 {%- endblock %}
 
 {% block edit_actions -%}

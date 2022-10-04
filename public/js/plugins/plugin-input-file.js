@@ -442,7 +442,7 @@
     $(document).on('click.bs.file-input.data-api', '[data-provider="file-input"]', function (e) {
         // already initialized?
         const $this = $(this);
-        if ($this.data('bs.file-input')) {
+        if ($this.data(FileInput.NAME)) {
             return;
         }
 
@@ -450,7 +450,7 @@
         $this.fileinput($this.data());
         const $target = $(e.target);
         if ($target.is('img')) {
-            $this.data('bs.file-input').selectFile(e);
+            $this.data(FileInput.NAME).selectFile(e);
         } else {
             const $closest = $target.closest('[data-dismiss="file-input"],[data-trigger="file-input"]');
             if ($closest.length > 0) {

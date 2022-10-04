@@ -149,7 +149,7 @@
 
         // already initialized?
         const $this = $(this);
-        if ($this.data('bs.rowlink')) {
+        if ($this.data(Rowlink.NAME)) {
             return;
         }
 

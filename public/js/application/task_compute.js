@@ -150,6 +150,7 @@ function onTaskChanged() {
 
     // validation
     const options = {
+        showModification: false,
         submitHandler: function (form) {
             update(form);
         },

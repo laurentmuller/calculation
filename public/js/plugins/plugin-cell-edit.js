@@ -208,7 +208,7 @@
             const options = this.options;
             if (this.$input) {
                 if (options.useNumberFormat) {
-                    this.$input.data('input-number-format').destroy();
+                    this.$input.data('bs.input-number-format').destroy();
                 }
                 this.$input.off('blur', this.blurProxy)
                     .off('input', this.inputProxy)

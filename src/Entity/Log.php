@@ -98,9 +98,10 @@ class Log extends AbstractEntity
     public function getChannelIcon(): string
     {
         return match ($this->channel) {
-            'application' => 'fa-fw fa-solid fa-laptop-code',
             'request' => 'fa-fw fa-solid fa-code-pull-request',
+            'application' => 'fa-fw fa-solid fa-laptop-code',
             'doctrine' => 'fa-fw fa-solid fa-database',
+            'mailer' => 'fa-fw fa-regular fa-envelope',
             'cache' => 'fa-fw fa-solid fa-hard-drive',
             'security' => 'fa-fw fa-solid fa-key',
             'php' => 'fa-fw fa-solid fa-code',

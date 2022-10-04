@@ -65,6 +65,7 @@
             {{ include('navigation_vertical/navigation_admin.html.twig') }}
         {% endif %}
         {% if is_test -%}
+            {{ dropdownSeparator() }}
             {{ include('navigation_vertical/navigation_test.html.twig') }}
         {% endif %}
         {% if is_test -%}

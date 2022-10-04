@@ -168,7 +168,7 @@ function formatProduct(product) {
             expand: 'Développer',
             collapse: 'Réduire'
         }
-    }).data('boostrapTreeView');
+    }).data('bs.tree-view');
     $('.btn-expand-all').on('click', function () {
         treeView.expandAll().focus();
     });

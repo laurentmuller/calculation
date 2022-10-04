@@ -195,6 +195,7 @@
             // default options
             let defaults = {
                 focus: true,
+                showModification: true,
                 errorElement: 'small',
                 errorClass: 'is-invalid d-inline-block',
                 ignore: ':hidden:not(".must-validate")',
@@ -257,16 +258,18 @@
             }
 
             // display message on modification
-            const $message = $('#footer-message');
-            if ($message.length) {
-                const data = $that.serialize();
-                $that.find(':input').on('change input', function () {
-                    if ($that.serialize() === data) {
-                        $message.hide(300);
-                    } else {
-                        $message.show(300);
-                    }
-                });
+            if (settings.showModification) {
+                const $message = $('#footer-message');
+                if ($message.length) {
+                    const data = $that.serialize();
+                    $that.find(':input').on('change input', function () {
+                        if ($that.serialize() === data) {
+                            $message.hide(300);
+                        } else {
+                            $message.show(300);
+                        }
+                    });
+                }
             }
 
             return validator;

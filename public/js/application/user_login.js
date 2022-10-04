@@ -12,6 +12,7 @@
     // initialize validator
     $('#edit-form').initValidator(
         {
+            showModification: false,
             spinner: {
                 text: $('.card-title').text() + '...',
                 css: {

@@ -809,14 +809,12 @@
     // --------------------------------
     // Typeahead data-api
     // --------------------------------
-    (function ($) {
-        $('body').on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
-            const $this = $(this);
-            if (!$this.data('typeahead')) {
-                $this.typeahead($this.data());
-                e.preventDefault();
-            }
-        });
-    }(jQuery));
+    $('document').on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
+        const $this = $(this);
+        if (!$this.data(Typeahead.NAME)) {
+            $this.typeahead($this.data());
+            e.preventDefault();
+        }
+    });
 
 }(jQuery));

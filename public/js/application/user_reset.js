@@ -16,6 +16,7 @@
     const $form = $("#edit-form");
     const message = $form.data("equal_to");
     const options = {
+        showModification: false,
         rules: {
             "plainPassword[first]": {
                 password: 3,

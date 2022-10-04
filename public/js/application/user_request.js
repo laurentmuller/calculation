@@ -13,6 +13,7 @@
     const $form = $("#edit-form");
     const url = $form.data('check-user');
     const options = {
+        showModification: false,
         rules: {
             'user': {
                 remote: {

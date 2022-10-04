@@ -115,6 +115,10 @@ td.user {
 .icon-channel.security:before {
     content: '\f084';
 }
+.icon-channel.mailer:before {
+    font-weight: 400;
+    content: '\f0e0';
+}
 .icon-channel.php:before {
     content: '\f121';
 }

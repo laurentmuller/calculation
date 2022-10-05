@@ -132,9 +132,10 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a Spreadsheet document.
      *
-     * @throws NotFoundHttpException                if no group is found
+     * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'group_excel')]
     public function excel(): SpreadsheetResponse

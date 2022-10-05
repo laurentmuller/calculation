@@ -152,7 +152,8 @@ abstract class AbstractController extends BaseController
     public function getTranslator(): TranslatorInterface
     {
         if (null === $this->translator) {
-            $this->translator = $this->getService(TranslatorInterface::class);
+            $this->translator = $this->container->get(TranslatorInterface::class);
+            // $this->translator = $this->getService(TranslatorInterface::class);
         }
 
         return $this->translator;
@@ -166,7 +167,7 @@ abstract class AbstractController extends BaseController
     public function getUrlGenerator(): UrlGeneratorService
     {
         if (null === $this->generatorService) {
-            $this->generatorService = $this->getService(UrlGeneratorService::class);
+            $this->generatorService = $this->container->get(UrlGeneratorService::class);
         }
 
         return $this->generatorService;
@@ -208,7 +209,7 @@ abstract class AbstractController extends BaseController
     public function getUserService(): UserService
     {
         if (null === $this->userService) {
-            $this->userService = $this->getService(UserService::class);
+            $this->userService = $this->container->get(UserService::class);
         }
 
         return $this->userService;
@@ -269,29 +270,6 @@ abstract class AbstractController extends BaseController
         $value = $this->getParameter($name);
 
         return $value;
-    }
-
-    /**
-     * Gets the service of the given class name.
-     *
-     * @param string $id the service identifier to get for
-     *
-     * @return mixed|null the service, if found; null otherwise
-     *
-     * @template T
-     *
-     * @psalm-param class-string<T> $id
-     *
-     * @psalm-return T
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    protected function getService(string $id): mixed
-    {
-        /** @psalm-var T $service */
-        $service = $this->container->get($id);
-
-        return $service;
     }
 
     /**

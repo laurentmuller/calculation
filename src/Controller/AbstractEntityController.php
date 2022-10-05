@@ -55,7 +55,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     public function __construct(protected readonly AbstractRepository $repository)
     {
-        $this->className = $repository->getClassName();
+        $this->className = $this->repository->getClassName();
         $this->lowerName = \strtolower(Utils::getShortName($this->className));
     }
 

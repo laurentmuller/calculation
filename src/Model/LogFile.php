@@ -100,6 +100,9 @@ class LogFile implements \Countable
         return empty($this->logs);
     }
 
+    /**
+     * Sorts levels, channels and logs by date descending.
+     */
     public function sort(): self
     {
         if (!$this->isEmpty()) {

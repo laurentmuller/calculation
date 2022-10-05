@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Log;
-use App\Util\Utils;
 
 /**
  * Class to filter logs.
@@ -74,6 +73,6 @@ class LogFilter
 
     private function acceptValue(?string $haystack): bool
     {
-        return null !== $haystack && Utils::contains($haystack, $this->value, true);
+        return null !== $haystack && false !== \stripos($haystack, $this->value);
     }
 }

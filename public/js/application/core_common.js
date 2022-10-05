@@ -15,15 +15,12 @@ function showFlashbag() {
         const title = options.title ? $element.data('title') : null;
         const text = $element.text();
         const type = $element.data('type');
-
         // remove
         $element.remove();
-
         // display
         if (text) {
             Toaster.notify(type, text, title, options);
         }
-
         // show next
         if ($('.flashbag').length) {
             setTimeout(function () {
@@ -34,23 +31,19 @@ function showFlashbag() {
 }
 
 /**
- * Handle toolbar search.
+ * Handle horizontal search form.
  */
-function initSearchToolbar() {
+function initHorizontalSearchToolbar() {
     'use strict';
-    // search form?
-    const $form = $("#navigation-search-form");
+    const $form = $("#search-form-horizontal");
     if ($form.length === 0) {
         return;
     }
-
-    const $button = $('#navigation-search-button');
-    const $input = $('#navigation-search-form #search');
-
+    const $button = $('#search-button-horizontal');
+    const $input = $('#search-form-horizontal #search');
     const hideInvalid = function () {
         $input.removeClass('is-invalid').tooltip('dispose');
     };
-
     const hideForm = function () {
         $input.val("");
         hideInvalid();
@@ -61,7 +54,6 @@ function initSearchToolbar() {
             $button.show().trigger('focus');
         });
     };
-
     $button.on("click", function () {
         $button.hide();
         $form.show().animate({
@@ -70,12 +62,10 @@ function initSearchToolbar() {
             $input.trigger('focus');
         });
     });
-
     $input.on("keyup", function (e) {
         if (e.which === 27) { // escape
             hideForm();
         } else {
-            // validate
             if ($input.val().trim().length < 2) {
                 $input.addClass('is-invalid').tooltip({
                     customClass: 'tooltip-danger'
@@ -87,13 +77,51 @@ function initSearchToolbar() {
     }).on("blur", function () {
         hideForm();
     });
-
     $form.on('submit', function (e) {
         if ($input.hasClass('is-invalid')) {
             e.preventDefault();
         }
     });
 }
+
+
+/**
+ * Handle vertical search form.
+ */
+function initVerticalSearchToolbar() {
+    'use strict';
+    const $form = $("#search-form-vertical");
+    if ($form.length === 0) {
+        return;
+    }
+    const $input = $('#search-form-vertical #search');
+    const $label = $('#search-form-vertical #invalid');
+    const hideInvalid = function () {
+        $input.removeClass('is-invalid');
+        $label.hide();
+    };
+    const showInvalid = function () {
+        $input.addClass('is-invalid');
+        $label.show();
+    };
+    $input.on("input", function (e) {
+        if ($input.val().trim().length < 2) {
+            showInvalid();
+        } else {
+            hideInvalid();
+        }
+    }).on("blur", function () {
+        $input.val("");
+        hideInvalid();
+    });
+    $form.on('submit', function (e) {
+        if ($input.val().trim().length < 2) {
+            $input.trigger('select').trigger('focus');
+            e.preventDefault();
+        }
+    });
+}
+
 
 /**
  * Handle back to top button.
@@ -190,11 +218,12 @@ function initSwitchTheme() {
 /**
  * Ready function
  */
-(function ($) { // jshint ignore:line
+(function ($) {
     'use strict';
-    initSidebar();
-    initBackToTop();
-    initSearchToolbar();
+    initHorizontalSearchToolbar();
+    initVerticalSearchToolbar();
     initSwitchTheme();
+    initBackToTop();
+    initSidebar();
     showFlashbag();
 }(jQuery));

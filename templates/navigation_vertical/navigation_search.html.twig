@@ -1,0 +1,23 @@
+{% from 'macros/_icons.html.twig' import icon %}
+<form id="search-form-vertical" action="{{ path('search') }}" role="search" autocomplete="off" novalidate="novalidate">
+    <div class="form-group mb-0">
+        <div class="input-group input-group-sm">
+            <input type="text"
+                   id="search"
+                   name="search"
+                   class="form-control"
+                   required="required"
+                   minlength="2"
+                   autocomplete="off"
+                   title="{{ 'search.minimum'|trans }}"
+                   placeholder="{{ 'search.placeholder'|trans }}"
+                   data-title="{{ 'search.minimum'|trans }}">
+            <div class="input-group-append">
+                <a class="btn btn-outline-secondary" href="{{ path('search') }}" title="{{ 'search.link'|trans }}">
+                    {{- icon('link') -}}
+                </a>
+            </div>
+        </div>
+        <small id="invalid" class="invalid-feedback">{{ 'search.minimum'|trans }}</small>
+    </div>
+</form>

@@ -37,7 +37,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
-use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -119,14 +118,12 @@ abstract class AbstractController extends BaseController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[SubscribedService]
     public function getRequestStack(): RequestStack
     {
         if (null === $this->requestStack) {
-            /** @psalm-var RequestStack $requestStack */
-            $requestStack = $this->container->get('request_stack');
-
-            return $this->requestStack = $requestStack;
+            /** @psalm-var RequestStack $stack */
+            $stack = $this->container->get('request_stack');
+            $this->requestStack = $stack;
         }
 
         return $this->requestStack;
@@ -153,7 +150,6 @@ abstract class AbstractController extends BaseController
     {
         if (null === $this->translator) {
             $this->translator = $this->container->get(TranslatorInterface::class);
-            // $this->translator = $this->getService(TranslatorInterface::class);
         }
 
         return $this->translator;

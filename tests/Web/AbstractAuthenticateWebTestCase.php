@@ -20,6 +20,9 @@ use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use App\Util\RoleBuilder;
+
+use function PHPUnit\Framework\throwException;
+
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -46,6 +49,8 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function setUp(): void
     {
@@ -71,25 +76,28 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      * @param string $url      the URL to be tested
      * @param string $username the username to login
      * @param int    $expected the expected result
+     *
+     * @throws \InvalidArgumentException if the response cannot be found
      */
     protected function checkResponse(string $url, string $username, int $expected): void
     {
-        $response = $this->client->getResponse();
-        $statusCode = $response->getStatusCode();
-        self::assertEquals($expected, $statusCode, "Invalid status code for '{$url}' and '{$username}'.");
+        $response = $this->client?->getResponse();
+        if (null !== $response) {
+            $statusCode = $response->getStatusCode();
+            self::assertEquals($expected, $statusCode, "Invalid status code for '$url' and '$username'.");
+        } else {
+            throwException(new \InvalidArgumentException('Unable to get the client response.'));
+        }
     }
 
-    /**
-     * @param mixed $value
-     */
-    protected function doEcho(string $name, $value, bool $newLine = false): void
+    protected function doEcho(string $name, mixed $value, bool $newLine = false): void
     {
         $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
         \printf($format, \htmlspecialchars($name), $value);
     }
 
     /**
-     * Loads an user from the database.
+     * Loads a user from the database.
      *
      * @param string $username the username to search for
      * @param bool   $verify   true to check if the user is not null
@@ -100,7 +108,6 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     {
         $repository = $this->getService(UserRepository::class);
 
-        /** @var User|null $user */
         $user = $repository->findByUsername($username);
 
         if ($verify) {
@@ -118,21 +125,25 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      */
     protected function loginUser(User $user, string $firewall = 'main'): void
     {
-        $this->client->loginUser($user, $firewall);
+        $this->client?->loginUser($user, $firewall);
     }
 
     /**
-     * Login the given user name.
+     * Login the given username.
      *
-     * @param string $username the user name to login
+     * @param string $username the username to login
      * @param bool   $verify   true to check if the user is not null
      * @param string $firewall the firewall name
+     *
+     * @throws \InvalidArgumentException if the given username cannot be found
      */
-    protected function loginUserName(string $username, bool $verify = true, string $firewall = 'main'): User
+    protected function loginUserName(string $username, bool $verify = true, string $firewall = 'main'): void
     {
         $user = $this->loadUser($username, $verify);
-        $this->loginUser($user, $firewall);
-
-        return $user;
+        if (null !== $user) {
+            $this->loginUser($user, $firewall);
+        } else {
+            throwException(new \InvalidArgumentException("Unable to find the user '$username'."));
+        }
     }
 }

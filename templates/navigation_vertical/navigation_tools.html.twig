@@ -10,23 +10,11 @@
         {{- icon('tools fa-fw', 'index.menu_tools') -}}
     </a>
     <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
-        {# search form
-        {% if is_granted_data and app.request.get('_route') != 'search' -%}
-            <form role="search" action="{{ path('search') }}" autocomplete="off" novalidate="novalidate">
-                <div class="input-group input-group-sm">
-                    <input id="search" name="search" type="text" class="form-control" required="required" minlength="2" placeholder="{{ 'search.placeholder'|trans }}">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit" role="button">
-                            {{- icon('search fa-fw') -}}
-                        </button>
-                    </div>
-                </div>
-            </form>
-        {% endif %}
-        #}
-        {{ navItem(path('search'), 'search.title', 'search') }}
-        {% if is_admin %}
+        {% if not is_test and is_granted_data and show_navigation_search ?? false -%}
+            {{ navItem(path('search'), 'search.title', 'search') }}
             {{ dropdownSeparator() }}
+        {% endif %}
+        {% if is_admin %}
             {{ navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
             {{ navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
             {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}
@@ -34,6 +22,10 @@
                 {{ dropdownSeparator() }}
                 {{ navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
             {% endif -%}
+        {% endif %}
+        {% if is_test and is_granted_data and show_navigation_search ?? false -%}
+            {{ dropdownSeparator() }}
+            {{ include('navigation_vertical/navigation_search.html.twig') }}
         {% endif %}
     </ul>
 </li>

@@ -135,7 +135,7 @@ function styleTextMuted(row, index) { // jshint ignore:line
 /**
  * Returns if the current row is rendered for the connected user
  *
- * @param {JQuery} $table - the parent table.
+ * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -149,7 +149,7 @@ function isConnectedUser($table, row) {
 /**
  * Returns if the current row is rendered for the original connected user
  *
- * @param {JQuery} $table - the parent table.
+ * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -163,7 +163,7 @@ function isOrignalUser($table, row) {
 /**
  * Update the user message action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {JQuery} _$element - the table row.
  * @param {JQuery} $action - the action to update
@@ -179,7 +179,7 @@ function updateUserMessageAction($table, row, _$element, $action) {
 /**
  * Update the user delete action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {JQuery} _$element - the table row.
  * @param {JQuery} $action - the action to update
@@ -195,7 +195,7 @@ function updateUserDeleteAction($table, row, _$element, $action) {
 /**
  * Update the switch user action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {JQuery} _$element - the table row.
  * @param {JQuery} $action - the action to update
@@ -218,7 +218,7 @@ function updateUserSwitchAction($table, row, _$element, $action) {
 /**
  * Update the reset request password user action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {string} row.resetPassword - the reset password value
  * @param {JQuery} _$element - the table row.
@@ -236,7 +236,7 @@ function updateUserResetAction($table, row, _$element, $action) {
 /**
  * Update the search action.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {number} row.id - the row identifier.
  * @param {string} row.type - the entity type.
@@ -307,7 +307,7 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 /**
  * Update the task compute action.
  *
- * @param {JQuery} _$table - the parent table.
+ * @param {JQueryTable} _$table - the parent table.
  * @param {Object} row - the row data.
  * @param {JQuery} _$element - the table row.
  * @param {JQuery} $action - the action to update
@@ -366,14 +366,14 @@ function formatActions(value, _row) { // jshint ignore:line
 /**
  * Initialize keys enablement.
  *
- * @param {JQuery} $table the parent table.
+ * @param {JQueryTable} $table the parent table.
  */
 function initializeKeyHandler($table) {
     'use strict';
-    const keysSelector = 'a, input, select, .btn, .dropdown-item, .rowlink-skip';
-    $('body').on('focus', keysSelector, function () {
+    const selector = 'a, input, select, .btn, .dropdown-item, .rowlink-skip';
+    $('body').on('focus', selector, function () {
         $table.disableKeys();
-    }).on('blur', keysSelector, function () {
+    }).on('blur', selector, function () {
         $table.enableKeys();
     });
 }
@@ -381,7 +381,7 @@ function initializeKeyHandler($table) {
 /**
  * Initialize context menus.
  *
- * @param {JQuery} $table the parent table.
+ * @param {JQueryTable} $table the parent table.
  */
 function initializeContextMenus($table) {
     'use strict';
@@ -396,15 +396,15 @@ function initializeContextMenus($table) {
 /**
  * Initialize danger tooltips.
  *
- * @param {JQuery} $table the parent table.
+ * @param {JQueryTable} $table the parent table.
  */
 function initializeDangerTooltips($table) {
     'use strict';
-    const tooltipSelector = $table.data('danger-tooltip-selector');
-    if (tooltipSelector) {
+    const selector = $table.data('danger-tooltip-selector');
+    if (selector) {
         $table.parents('.bootstrap-table').tooltip({
             customClass: 'tooltip-danger',
-            selector: tooltipSelector
+            selector: selector
         });
     }
 }

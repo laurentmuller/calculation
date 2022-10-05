@@ -991,6 +991,7 @@ search:
     query: Rechercher
   minimum: Saisir 2 caractères au minimum.
   placeholder: Tapez un texte à rechercher
+  link: Afficher la page de recherche
   search: Lancer la recherche
 security:
   link: Déjà un compte ?

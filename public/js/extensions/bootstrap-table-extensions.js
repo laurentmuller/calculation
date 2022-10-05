@@ -120,7 +120,7 @@ $.fn.extend({
      * Initialize the table-boostrap.
      *
      * @param {object} options - the options to merge with default.
-     * @return {JQuery} this instance for chaining.
+     * @return {JQueryTable} this instance for chaining.
      */
     initBootstrapTable: function (options) {
         'use strict';

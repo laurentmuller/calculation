@@ -221,7 +221,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @psalm-suppress MixedReturnTypeCoercion
      *
-     * @psalm-param literal-string $alias
+     * @phpstan-param literal-string $alias
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */

@@ -39,7 +39,7 @@
  */
 function loadingTemplate(message) { // jshint ignore:line
     'use strict';
-    return `<div class="alert alert-info text-center w-50" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
+    return `<div class="alert alert-info text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
 }
 
 /**

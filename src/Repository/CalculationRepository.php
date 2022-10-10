@@ -124,13 +124,13 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
 
         // main query
-        /** @var literal-string $where */
+        /** @phpstan-var literal-string $where */
         $where = "r.id in($dql)";
         $builder = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where($where);
 
-        /** @var int<0, max> $count */
+        /** @phpstan-var int<0, max> $count */
         $count = (int) $builder->getQuery()->getSingleScalarResult();
 
         return $count;
@@ -141,7 +141,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return int the number of calculations
      *
-     * @psalm-return  int<0, max>
+     * @psalm-return int<0, max>
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -158,13 +158,13 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
 
         // main query
-        /** @var literal-string $where */
+        /** @phpstan-var literal-string $where */
         $where = "r.id in($dql)";
         $builder = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where($where);
 
-        /** @var int<0, max> $count */
+        /** @phpstan-var int<0, max> $count */
         $count = (int) $builder->getQuery()->getSingleScalarResult();
 
         return $count;

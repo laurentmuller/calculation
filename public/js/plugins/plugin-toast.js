@@ -212,7 +212,7 @@
             target: 'body',
 
             // the container identifier prefix
-            id: 'div_toaster_container',
+            id: 'div_toast_container',
 
             // the toasts width
             containerWidth: '350px',

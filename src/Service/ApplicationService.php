@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -707,9 +708,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function updateDeletedCategory(Category $category): void
     {
-        if ($category->getId() === $this->getDefaultCategoryId()) {
-            $this->setProperty(self::P_DEFAULT_CATEGORY, null);
-        }
+        $this->updateDeletedEntity(self::P_DEFAULT_CATEGORY, $category);
     }
 
     /**
@@ -719,9 +718,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function updateDeletedProduct(Product $product): void
     {
-        if ($product->getId() === $this->getDefaultProductId()) {
-            $this->setProperty(self::P_DEFAULT_STATE, null);
-        }
+        $this->updateDeletedEntity(self::P_DEFAULT_PRODUCT, $product);
     }
 
     /**
@@ -731,9 +728,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function updateDeletedState(CalculationState $state): void
     {
-        if ($state->getId() === $this->getDefaultStateId()) {
-            $this->setProperty(self::P_DEFAULT_STATE, null);
-        }
+        $this->updateDeletedEntity(self::P_DEFAULT_STATE, $state);
     }
 
     /**
@@ -777,5 +772,15 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $properties = $this->manager->getRepository(Property::class)->findAll();
         $this->saveProperties($properties);
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function updateDeletedEntity(string $name, AbstractEntity $entity): void
+    {
+        if ($this->getPropertyInteger($name) === $entity->getId()) {
+            $this->setProperty($name, null);
+        }
     }
 }

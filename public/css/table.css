@@ -118,6 +118,23 @@ tr.text-muted td .text-danger {
     float: right;
 }
 
+/*
+ * Loading message
+ */
+.loading-message {
+    width: 50%;
+}
+@media (max-width: 992px) {
+    .loading-message {
+        width: 70%;
+    }
+}
+@media (max-width: 768px) {
+    .loading-message {
+        width: 100%;
+    }
+}
+
 /**
  * dark theme
  */

@@ -40,14 +40,11 @@
         // -----------------------------
 
         _init() {
-            const that = this;
-            that.$simulate = that.$element.find(that.options.simulateSelector);
-            that.$confirm = that.$element.find(that.options.confirmSelector);
-            if (that.$simulate.length && that.$confirm.length) {
-                that.inputProxy = function () {
-                    that._onInput();
-                };
-                that.$simulate.on('input', that.inputProxy);
+            this.$simulate = this.$element.find(this.options.simulateSelector);
+            this.$confirm = this.$element.find(this.options.confirmSelector);
+            if (this.$simulate.length && this.$confirm.length) {
+                this.inputProxy = () => this._onInput();
+                this.$simulate.on('input', this.inputProxy);
             }
         }
 

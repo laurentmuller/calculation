@@ -38,7 +38,7 @@
             $element.off('blur', that.blurProxy);
             $element.off('keypress', that.keyPressProxy);
             $element.off('keyup', that.keyUpProxy);
-            if (this._eventSupported('keydown')) {
+            if (this.keyDownProxy) {
                 $element.off('keydown', that.keyDownProxy);
             }
 
@@ -299,15 +299,9 @@
                 }
 
                 if (that.ajax) {
-                    that.ajaxExecuteProxy = function () {
-                        that._ajaxExecute();
-                    };
-                    that.ajaxSuccessProxy = function (data) {
-                        that._ajaxSuccess(data);
-                    };
-                    that.ajaxErrorProxy = function (jqXHR, textStatus, errorThrown) {
-                        that._ajaxError(jqXHR, textStatus, errorThrown);
-                    };
+                    that.ajaxExecuteProxy = () => that._ajaxExecute();
+                    that.ajaxSuccessProxy = (data) => that._ajaxSuccess(data);
+                    that.ajaxErrorProxy = (jqXHR, textStatus, errorThrown) => that._ajaxError(jqXHR, textStatus, errorThrown);
                 }
                 that.query = '';
             } else {
@@ -693,47 +687,32 @@
          * @private
          */
         _listen() {
-            const that = this;
             // add element handlers
-            const $element = that.$element;
-            that.focusProxy = function () {
-                that._focus();
-            };
-            that.blurProxy = function () {
-                that._blur();
-            };
-            that.keyPressProxy = function (e) {
-                that._keypress(e);
-            };
-            that.keyUpProxy = function (e) {
-                that._keyup(e);
-            };
-            $element.on('focus', that.focusProxy);
-            $element.on('blur', that.blurProxy);
-            $element.on('keypress', that.keyPressProxy);
-            $element.on('keyup', that.keyUpProxy);
-            if (that._eventSupported('keydown')) {
-                that.keyDownProxy = function (e) {
-                    that._keydown(e);
-                };
-                $element.on('keydown', that.keyPressProxy);
+            const $element = this.$element;
+            this.focusProxy = () => this._focus();
+            this.blurProxy = () => this._blur();
+            this.keyPressProxy = (e) => this._keypress(e);
+            this.keyUpProxy = (e) => this._keyup(e);
+
+            $element.on('focus', this.focusProxy);
+            $element.on('blur', this.blurProxy);
+            $element.on('keypress', this.keyPressProxy);
+            $element.on('keyup', this.keyUpProxy);
+            if (this._eventSupported('keydown')) {
+                this.keyDownProxy = (e) => this._keydown(e);
+                $element.on('keydown', this.keyPressProxy);
             }
 
             // add menu handlers
-            const $menu = that.$menu;
-            const selector = that.options.selector;
-            that.clickProxy = function (e) {
-                that._click(e);
-            };
-            that.mouseEnterProxy = function (e) {
-                that._mouseenter(e);
-            };
-            that.mouseLeaveProxy = function () {
-                that._mouseleave();
-            };
-            $menu.on('click', that.clickProxy);
-            $menu.on('mouseenter', selector, that.mouseEnterProxy);
-            $menu.on('mouseleave', selector, that.mouseLeaveProxy);
+            const $menu = this.$menu;
+            const selector = this.options.selector;
+            this.clickProxy = (e) => this._click(e);
+            this.mouseEnterProxy = (e) => this._mouseenter(e);
+            this.mouseLeaveProxy = () => this._mouseleave();
+
+            $menu.on('click', this.clickProxy);
+            $menu.on('mouseenter', selector, this.mouseEnterProxy);
+            $menu.on('mouseleave', selector, this.mouseLeaveProxy);
         }
     };
 

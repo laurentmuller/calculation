@@ -33,7 +33,7 @@ function showFlashbag() {
 /**
  * Handle horizontal search form.
  */
-function initHorizontalSearchToolbar() {
+function initHorizontalSearch() {
     'use strict';
     const $form = $("#search-form-horizontal");
     if ($form.length === 0) {
@@ -78,7 +78,7 @@ function initHorizontalSearchToolbar() {
         hideForm();
     });
     $form.on('submit', function (e) {
-        if ($input.hasClass('is-invalid')) {
+        if ($input.val().trim().length < 2 || $input.hasClass('is-invalid')) {
             e.preventDefault();
         }
     });
@@ -88,7 +88,7 @@ function initHorizontalSearchToolbar() {
 /**
  * Handle vertical search form.
  */
-function initVerticalSearchToolbar() {
+function initVerticalSearch() {
     'use strict';
     const $form = $("#search-form-vertical");
     if ($form.length === 0) {
@@ -122,7 +122,6 @@ function initVerticalSearchToolbar() {
     });
 }
 
-
 /**
  * Handle back to top button.
  */
@@ -152,10 +151,7 @@ function initBackToTop() {
  */
 function initSidebar() {
     'use strict';
-    $('.navbar-vertical').sidebar().on('toggle.sidebar', function () {
-        const left = $(this).hasClass('sidebar-hide') ? "20px" : "292px";
-        $('.toast-plugin').css('margin-left', left);
-    });
+    $('.navbar-vertical').sidebar();
 }
 
 /**
@@ -220,8 +216,8 @@ function initSwitchTheme() {
  */
 (function ($) {
     'use strict';
-    initHorizontalSearchToolbar();
-    initVerticalSearchToolbar();
+    initHorizontalSearch();
+    initVerticalSearch();
     initSwitchTheme();
     initBackToTop();
     initSidebar();

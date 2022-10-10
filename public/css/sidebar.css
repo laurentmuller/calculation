@@ -2,12 +2,12 @@
 
 /* navigation bar */
 .navbar-vertical {
-    min-width: 17rem;
-    width: 17rem;
-    height: 100vh;
-    position: fixed;
     top: 0;
     left: 0;
+    position: fixed;
+    height: 100vh;
+    min-width: 17rem;
+    max-width: 17rem;
     padding-right: 8px;
     transition: margin-left 0.35s ease;
     overflow-y: auto;
@@ -15,7 +15,6 @@
     text-align: left !important;
     justify-content: initial;
     display: block;
-    /*z-index: 1031;*/
 }
 
 .navbar-vertical.sidebar-hide {
@@ -25,25 +24,13 @@
 /* content */
 .page-content {
     width: calc(100% - 17rem);
+    margin-top: 20px;
     margin-left: 17rem;
-    transition: margin-left 0.35s ease;
+    transition: margin-left .35s;
 }
-
 .page-content.sidebar-hide {
     width: 100%;
     margin: 0;
-}
-
-/* toggle button */
-.page-content .sidebar-toggle {
-    display: block;
-    transition: all 0.35s;
-    margin-left: -10px !important;
-}
-
-.page-content.sidebar-hide .sidebar-toggle {
-    transform: rotate(180deg);
-    margin-left: inherit !important;
 }
 
 /* menus */
@@ -63,7 +50,9 @@
 .navbar-vertical ul ul {
     padding-left: 1.5rem;
 }
-
+/*
+ * Arrow for menus
+ */
 .navbar-vertical .nav-link-toggle::after {
     display: inline-block;
     content: "";
@@ -77,7 +66,6 @@
     border-bottom: 0.3em solid transparent;
     border-left: 0;
 }
-
 .navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {
     /* down arrow */
     transform: rotate(-90deg);

@@ -64,29 +64,27 @@
 {% endblock %}
 </head>
 <body class="{{ theme_class }}{% if status_bar %} status-bar{% endif %}">
-{# vertical navigation #}
-{%- block navigation_vertical -%}
-    {{- include('navigation_vertical/navigation.html.twig') }}
-{%- endblock %}
-{# main content #}
-<div class="page-content{{ sidebar_class }}">
-    {# horizontal navigation #}
-    {%- block navigation_horizontal -%}
-        {%- include 'navigation_horizontal/navigation.html.twig' %}
+    {# vertical navigation #}
+    {%- block navigation_vertical -%}
+        {{- include('navigation_vertical/navigation.html.twig') }}
     {%- endblock %}
-    {# container #}
-    <div role="main" class="{% block container_class 'container' %}">
-        {% block body -%}{%- endblock %}
+    {# main content #}
+    <div class="page-content{{ sidebar_class }}">
+        {# horizontal navigation #}
+        {%- block navigation_horizontal -%}
+            {%- include 'navigation_horizontal/navigation.html.twig' %}
+        {%- endblock %}
+        {# container #}
+        <div role="main" class="{% block container_class 'container' %}">
+            {% block body -%}{%- endblock %}
+        </div>
     </div>
-</div>
-{# messages #}
-{% block flashbag -%}{% include 'flashbag.html.twig' %}{%- endblock %}
-{# back to top #}
-{% block back_to_top -%}{% include 'back_to_top.html.twig' %}{%- endblock %}
-{# footer #}
-{% block footer -%}
-    {%- if status_bar %}{% include 'footer.html.twig' %}{% endif %}
-{%- endblock %}
+    {# messages #}
+    {% block flashbag -%}{% include 'flashbag.html.twig' %}{%- endblock %}
+    {# back to top #}
+    {% block back_to_top -%}{% include 'back_to_top.html.twig' %}{%- endblock %}
+    {# footer #}
+    {% block footer -%}{% if status_bar %}{% include 'footer.html.twig' %}{% endif %}{%- endblock %}
 {# java scripts #}
 {% block javascripts %}
 {% if app.debug %}

@@ -7,18 +7,18 @@
         "field": "nameAndCompany",
         "title": "customer.fields.nameAndCompany",
         "default": true,
-        "class": "w-35 text-cell",
+        "class": "w-35 text-ellipsis",
         "cardClass": "font-weight-bold"
     },
     {
         "field": "address",
         "title": "customer.fields.address",
-        "class": "w-auto text-cell"
+        "class": "w-auto text-ellipsis"
     },
     {
         "field": "zipCity",
         "title": "customer.fields.zipCity",
-        "class": "w-20 text-cell"
+        "class": "w-20 text-ellipsis"
     },
     {
         "field": "id",

@@ -32,7 +32,8 @@
          */
         destroy() {
             this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
-            this.$sidebarToggle.off('click', this.toggleSidebarProxy);
+            this.$showSidebarButton.off('click', this.showSidebarProxy);
+            this.$hideSidebarButton.off('click', this.hideSidebarProxy);
             $(window).off('resize', this.resizeProxy);
             this.$element.removeData(Sidebar.NAME);
         }
@@ -46,50 +47,69 @@
          * @private
          */
         _init() {
+            const options = this.options;
+            // this.wasHidden = false;
+
             // get elements
-            const that = this;
-            that.wasHidden = false;
-            that.$pageContent = $(that.options.pageContent);
-            that.$sidebarToggle = $(that.options.sidebarToggle);
-            that.$sidebarHorizontal = $(that.options.sidebarHorizontal);
+            this.$showSidebarButton = $(options.showSidebarButton);
+            this.$hideSidebarButton = $(options.hideSidebarButton);
+            this.$navbarHorizontal = $(options.navbarHorizontal);
+            this.$pageContent = $(options.pageContent);
 
             // create and add proxies
-            that.toggleSidebarProxy = function (e) {
-                that._toggleSidebar(e);
-            };
-            that.toggleMenuProxy = function (e) {
-                that._toggleMenu(e);
-            };
-            that.resizeProxy = function (e) {
-                that._validateSize(e);
-            };
+            this.showSidebarProxy = e => this._showSidebar(e);
+            this.hideSidebarProxy = e => this._hideSidebar(e);
+            this.toggleMenuProxy = e => this._toggleMenu(e);
+            this.resizeProxy = e => this._resize(e);
 
-            that.$element.on('click', '.nav-link-toggle', that.toggleMenuProxy);
-            that.$sidebarToggle.on('click', that.toggleSidebarProxy);
-            $(window).on('resize', that.resizeProxy);
+            this.$element.on('click', '.nav-link-toggle', this.toggleMenuProxy);
+            this.$showSidebarButton.on('click', this.showSidebarProxy);
+            this.$hideSidebarButton.on('click', this.hideSidebarProxy);
+            $(window).on('resize', this.resizeProxy);
 
-            // update titles
-            that._updateSidebar();
-            that._updateMenus();
+            // update menus
+            this._updateMenus();
 
             // toggle sidebar if too small
-            if (that._isClientTooSmall() && !that._isSideBarHidden()) {
+            if (this._isClientTooSmall() && !this._isSideBarHidden()) {
                 $(window).trigger('resize');
             }
 
-            // show the sidebar, if hidden, after 1 second
-            that.$sidebarToggle.hover(function (e) {
+            // toggle sidebar, if after 1.5 seconds
+            if (options.timeout > 0) {
+                this._initTimeout();
+            }
+        }
+
+        /**
+         * Initialize the timeout to display/hide sidebar automatically.
+         * @private
+         */
+        _initTimeout() {
+            const that = this;
+            const removeTimer = () => that.$element.removeTimer();
+            const showSidebar = e => {
                 if (that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
-                        that.$element.removeTimer();
+                        removeTimer();
                         if (that._isSideBarHidden()) {
-                            that._toggleSidebar(e);
+                            that._showSidebar(e);
                         }
-                    }, 1000);
+                    }, 1500);
                 }
-            }, function () {
-                that.$element.removeTimer();
-            });
+            };
+            const hideSidebar = e => {
+                if (!that._isSideBarHidden()) {
+                    that.$element.createTimer(function () {
+                        removeTimer();
+                        if (!that._isSideBarHidden()) {
+                            that._hideSidebar(e);
+                        }
+                    }, 1500);
+                }
+            };
+            that.$showSidebarButton.hover(showSidebar, removeTimer);
+            that.$hideSidebarButton.hover(hideSidebar, removeTimer);
         }
 
         /**
@@ -109,11 +129,11 @@
          * @param {Event} e - the event.
          * @private
          */
-        _validateSize(e) {
+        _resize(e) {
             if (this._isClientTooSmall()) {
                 this._hideSidebar(e);
-            } else if (this.wasHidden) {
-                this._showSidebar(e);
+                // } else if (this.wasHidden) {
+                //     this._showSidebar(e);
             }
         }
 
@@ -125,8 +145,9 @@
          */
         _hideSidebar(e) {
             if (!this._isSideBarHidden()) {
+                this.$hideSidebarButton.trigger('blur');
                 this._toggleSidebar(e);
-                this.wasHidden = true;
+                //this.wasHidden = true;
             }
         }
 
@@ -138,8 +159,9 @@
          */
         _showSidebar(e) {
             if (this._isSideBarHidden()) {
+                this.$showSidebarButton.trigger('blur');
                 this._toggleSidebar(e);
-                this.wasHidden = false;
+                // this.wasHidden = false;
             }
         }
 
@@ -155,14 +177,11 @@
             }
             $.hideDropDownMenus();
             this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
-            const isHidden = this._isSideBarHidden();
-            const $toggle = this.$sidebarHorizontal.find('.nav-sidebar-horizontal');
-            if (isHidden) {
-                $toggle.show(350);
+            if (this._isSideBarHidden()) {
+                this.$navbarHorizontal.show(350);
             } else {
-                $toggle.hide(350);
+                this.$navbarHorizontal.hide(350);
             }
-            this._updateSidebar();
             this._saveState();
 
             // notify
@@ -188,19 +207,6 @@
                 $link.addClass('active');
                 that._updateMenus();
                 that._saveState();
-            });
-        }
-
-        /**
-         * Update the sidebar content.
-         * @private
-         */
-        _updateSidebar() {
-            const isHidden = this._isSideBarHidden();
-            const title = isHidden ? this.options.showSidebar : this.options.hideSidebar;
-            this.$sidebarToggle.attr({
-                'aria-expanded': String(!isHidden),
-                'title': title,
             });
         }
 
@@ -290,15 +296,29 @@
     // Default options
     // -----------------------------------
     Sidebar.DEFAULTS = {
+        // url to save menus state
         url: null,
-        sidebarHorizontal: '.navbar-horizontal',
-        sidebarToggle: '.sidebar-toggle',
+        // show sidebar button
+        showSidebarButton: '.show-sidebar',
+        // hide sidebar button
+        hideSidebarButton: '.hide-sidebar',
+
+        // horizontal navigation bar
+        navbarHorizontal: '.navbar-horizontal',
+        // page content
         pageContent: '.page-content',
+
+        // the timeout to display/hide sidebar automatically (0 = disabled)
+        timeout: 1500,
+
+        // the minimum width to hide sidebar
+        minWidth: 1200,
+
+        // texts
         showSidebar: 'Show Sidebar',
         hideSidebar: 'Hide Sidebar',
         showMenu: 'Expand',
-        hideMenu: 'Collapse',
-        minWidth: 960
+        hideMenu: 'Collapse'
     };
 
     /**

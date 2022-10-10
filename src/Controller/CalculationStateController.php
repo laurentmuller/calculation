@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
@@ -191,12 +190,7 @@ class CalculationStateController extends AbstractEntityController
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {
-        // update default state (if applicable)
-        $application = $this->getApplication();
-        $id = $application->getDefaultStateId();
-        if ($id === $item->getId()) {
-            $application->setProperty(PropertyServiceInterface::P_DEFAULT_STATE, null);
-        }
+        $this->getApplication()->updateDeletedState($item);
         parent::deleteFromDatabase($item);
     }
 

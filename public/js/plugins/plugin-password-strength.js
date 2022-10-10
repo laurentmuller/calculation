@@ -51,13 +51,10 @@
          * @private
          */
         _init() {
-            const that = this;
-            that.keyupProxy = function () {
-                that._onKeyup();
-            };
-            that.$element.on('keyup', that.keyupProxy);
-            if (that.$element.val()) {
-                that._onKeyup();
+            this.keyupProxy = e => this._onKeyup();
+            this.$element.on('keyup', this.keyupProxy);
+            if (this.$element.val()) {
+                this._onKeyup();
             }
         }
 
@@ -236,7 +233,7 @@
 
             // progress
             that.$progress = that._createControl('div', 'progress bg-transparent').css({
-                'height': options.height + 'px',
+                'height': options.height,
                 'border-radius': 0
             }).appendTo($progressContainer);
 
@@ -245,7 +242,7 @@
                 const className = 'progress-bar d-none ' + options.progressClasses[i];
                 that._createControl('div', className).css({
                     'width': '20%',
-                    'margin-right': i < 4 ? '2px' : 0
+                    'margin-right': i < 4 ? 2 : 0
                 }).appendTo(that.$progress);
             }
 

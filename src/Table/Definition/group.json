@@ -13,7 +13,7 @@
     {
         "field": "description",
         "title": "group.fields.description",
-        "class": "f-400 w-100 text-cell"
+        "class": "f-400 text-ellipsis"
     },
     {
         "field": "margins",

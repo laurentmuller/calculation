@@ -1,3 +1,4 @@
+{% from 'macros/_attributes.html.twig' import attributes %}
 {# add a flashbag message #}
 {% macro addFlashbag(key, message) -%}
 {%- set values = message|split('|') -%}
@@ -5,25 +6,15 @@
 {%- set content = (values|length == 2) ? values[1] : message -%}
 <p class="flashbag d-none" data-type="{{ key }}" data-title="{{ title }}">{{ content }}</p>
 {%- endmacro %}
-
 {# add flashbag messages #}
 {% apply spaceless %}
-{% set left = sidebar_hide ? '20px' : '292px' %}
-{% set bottom = user_service.statusBar ? '45px' : '15px' %}
-<div id=flashbags class="d-none"
-     data-target=".page-content"
-     data-margin-top="85px"
-     data-margin-left="{{ left }}"
-     data-margin-bottom="{{ bottom }}"
-     data-timeout="{{ user_service.messageTimeout }}"
-     data-position="{{ user_service.messagePosition.value }}"
-     data-progress="{{ user_service.messageProgress }}"
-     data-icon="{{ user_service.messageIcon|json_encode() }}"
-     data-title="{{ user_service.messageTitle|json_encode() }}"
-     data-subtitle="{{ app_name_version }}"
-     data-display-subtitle="{{ user_service.messageSubTitle|json_encode() }}"
-     data-close-title="{{ 'common.button_close'|trans }}"
-     data-display-close="{{ user_service.messageClose|json_encode() }}">
+{% set flash_attributes = user_service.messageAttributes|merge({
+    'target': '.page-content',
+    'subtitle': app_name_version,
+    'close-title': 'common.button_close'|trans,
+    'margin-bottom': user_service.statusBar ? 49 : 20,
+}) %}
+<div id=flashbags class="d-none"{{ attributes(flash_attributes, 'data-') }}>
     {% for key, messages in app.flashes %}
         {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
     {% endfor %}

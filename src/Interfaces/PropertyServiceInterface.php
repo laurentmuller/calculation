@@ -107,6 +107,11 @@ interface PropertyServiceInterface
     final public const P_ADMIN_RIGHTS = 'admin_rights';
 
     /**
+     * The saved cache property.
+     */
+    public const P_CACHE_SAVED = 'cache_saved';
+
+    /**
      * The property name for the customer address (string).
      */
     final public const P_CUSTOMER_ADDRESS = 'customer_address';

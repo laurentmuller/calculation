@@ -25,12 +25,12 @@
     {
         "field": "customer",
         "title": "calculation.fields.customer",
-        "class": "f-200 w-100 text-cell"
+        "class": "f-200 text-ellipsis"
     },
     {
         "field": "description",
         "title": "calculation.fields.description",
-        "class": "f-200 w-100 text-cell"
+        "class": "f-200 text-ellipsis"
     },
     {
         "field": "overallMargin",

@@ -20,23 +20,11 @@ body.status-bar .navbar.navbar-vertical {
     height: calc(100vh - 29px);
 }
 
-/*
-.navbar.navbar-vertical {
-    padding-bottom: 30px;
-}
-.navbar.navbar-vertical:after {
-    content: "";
+.navbar.navbar-vertical .hide-sidebar {
     position: absolute;
-    top: 65px;
-    right: 0;
-    height: calc(100% - 65px - 30px);
-    width: 1px;
-    border-right: 1px solid #dee2e6;
+    top: 1.25rem;
+    right: 0.5rem;
 }
-body.dark .navbar.navbar-vertical:after {
-    border-right: initial;
-}
-*/
 
 /**
  * Update bottom margin when the status-bar is visible.
@@ -779,4 +767,26 @@ body.dark .small-scrollbar::-webkit-scrollbar-thumb {
 }
 body.dark .small-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(128, 135, 139, .8)
+}
+
+/*
+ * toast
+ */
+.page-content.sidebar-hide .toast-plugin.top-left,
+.page-content.sidebar-hide .toast-plugin.top-center,
+.page-content.sidebar-hide .toast-plugin.top-right {
+    margin-top: 80px !important;
+}
+
+.page-content:not(.sidebar-hide) .toast-plugin.top-left,
+.page-content:not(.sidebar-hide) .toast-plugin.center-left,
+.page-content:not(.sidebar-hide) .toast-plugin.bottom-left
+{
+    margin-left: 292px !important;
+}
+.page-content:not(.sidebar-hide) .toast-plugin.top-center,
+.page-content:not(.sidebar-hide) .toast-plugin.center-center,
+.page-content:not(.sidebar-hide) .toast-plugin.bottom-center
+{
+    margin-left: 136px;
 }

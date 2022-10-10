@@ -86,25 +86,16 @@
          * @private
          */
         _listen() {
-            const that = this;
-            that.changeProxy = function (e) {
-                that._change(e);
-            };
-            that.clearProxy = function (e) {
-                that._clear(e);
-            };
-            that.clickProxy = function (e) {
-                that.selectFile(e);
-            };
-            that.resetProxy = function (e) {
-                that._reset(e);
-            };
-            that.$input.on('change.bs.file-input', that.changeProxy);
-            that.$element.find('[data-dismiss="file-input"]').on('click.bs.file-input', that.clearProxy);
-            that.$element.find('[data-trigger="file-input"]').on('click.bs.file-input', that.clickProxy);
-            $(that.$input[0].form).on('reset.bs.file-input', that.resetProxy);
+            this.changeProxy = e => this._change(e);
+            this.clearProxy = e => this._clear(e);
+            this.clickProxy = e => this.selectFile(e);
+            this.resetProxy = e => this._reset(e);
+            this.$input.on('change.bs.file-input', this.changeProxy);
+            this.$element.find('[data-dismiss="file-input"]').on('click.bs.file-input', this.clearProxy);
+            this.$element.find('[data-trigger="file-input"]').on('click.bs.file-input', this.clickProxy);
+            $(this.$input[0].form).on('reset.bs.file-input', this.resetProxy);
 
-            return that;
+            return this;
         }
 
         /**

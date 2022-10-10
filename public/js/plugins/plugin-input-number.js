@@ -47,12 +47,11 @@
          * @private
          */
         _init() {
-            const that = this;
-            const options = that.options;
+            const options = this.options;
             const separators = '[' + options.separatorAuthorized.join('') + ']';
 
             // regex for input event
-            that.inputRegex = new RegExp(separators);
+            this.inputRegex = new RegExp(separators);
 
             // regex for keypress event
             let pattern = '^[0-9]+';
@@ -60,31 +59,25 @@
                 pattern += separators + '?[0-9]{0,' + options.decimal + '}';
             }
             pattern += '$';
-            that.keypressRegex = new RegExp(pattern);
+            this.keypressRegex = new RegExp(pattern);
 
             // create proxies
-            that.keyPressProxy = function (e) {
-                that._keypress(e);
-            };
-            that.updateProxy = function () {
-                that._update();
-            };
-            that.inputProxy = function (e) {
-                that._input(e);
-            };
+            this.keyPressProxy = e => this._keypress(e);
+            this.updateProxy = e => this._update();
+            this.inputProxy = e => this._input(e);
 
             // add handlers
             const $element = this.$element;
-            $element.on('blur', that.updateProxy);
-            $element.on('change', that.updateProxy);
+            $element.on('blur', this.updateProxy);
+            $element.on('change', this.updateProxy);
             if ($element[0].selectionStart === null) {
-                $element.on('input', that.inputProxy);
+                $element.on('input', this.inputProxy);
             } else {
-                $element.on('keypress', that.keyPressProxy);
+                $element.on('keypress', this.keyPressProxy);
             }
 
             // format
-            that._update();
+            this._update();
         }
 
         _keypress(e) {

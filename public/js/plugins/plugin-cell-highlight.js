@@ -34,40 +34,33 @@
          * @param {Object|string} options - the plugin options.
          */
         constructor(element, options) {
-            const that = this;
-            that.$element = $(element);
-            that.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
-            that.tableIndex = this.indexTable();
-            that.enabled = false;
-            that.mouseEnterProxy = function (e) {
-                that.mouseenter(e);
-            };
-            that.mouseLeaveProxy = function () {
-                that.mouseleave();
-            };
+            this.$element = $(element);
+            this.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
+            this.tableIndex = this.indexTable();
+            this.enabled = false;
+            this.mouseEnterProxy = e => this.mouseenter(e);
+            this.mouseLeaveProxy = () => this.mouseleave();
 
             // update enablement
-            const enabled = that.isUndefined(that.options.enabled) ? true : that.options.enabled;
+            const enabled = this.isUndefined(this.options.enabled) ? true : this.options.enabled;
             if (enabled) {
-                that.enable();
+                this.enable();
             }
         }
 
         enable() {
-            const that = this;
-            if (!that.enabled) {
-                const selector = that.options.cellSelector;
-                this.$element.on('mouseenter', selector, that.mouseEnterProxy);
-                this.$element.on('mouseleave', selector, that.mouseLeaveProxy);
+            if (!this.enabled) {
+                const selector = this.options.cellSelector;
+                this.$element.on('mouseenter', selector, this.mouseEnterProxy);
+                this.$element.on('mouseleave', selector, this.mouseLeaveProxy);
                 this.enabled = true;
             }
         }
 
         disable() {
-            const that = this;
-            if (that.enabled) {
-                const selector = that.options.cellSelector;
-                this.$element.off('mouseenter', selector, that.mouseEnterProxy);
+            if (this.enabled) {
+                const selector = this.options.cellSelector;
+                this.$element.off('mouseenter', selector, this.mouseEnterProxy);
                 this.$element.off('mouseleave', selector, that.mouseLeaveProxy);
                 this.enabled = false;
             }
@@ -87,7 +80,7 @@
             const rowspan = $target.rowspan();
             const colspan = $target.colspan();
             const offsetInMatrix = $target.data('cellHighlight.offsetInMatrix');
-            const tableIndex = that.tableIndex;
+            const tableIndex = this.tableIndex;
             const options = that.options;
 
             // add horizontal cells

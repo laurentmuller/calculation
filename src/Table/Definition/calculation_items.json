@@ -25,17 +25,17 @@
     {
         "field": "customer",
         "title": "calculation.fields.customer",
-        "class": "w-25 text-cell"
+        "class": "f-200 text-ellipsis"
     },
     {
         "field": "description",
         "title": "calculation.fields.description",
-        "class": "w-25 text-cell"
+        "class": "f-200 text-ellipsis"
     },
     {
         "field": "items",
         "title": "calculation.fields.items",
-        "class": "w-25 text-cell text-danger",
+        "class": "f-200 text-ellipsis text-danger",
         "cardClass": "text-danger",
         "sortable": false,
         "searchable": false,

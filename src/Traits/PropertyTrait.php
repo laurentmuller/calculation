@@ -207,7 +207,7 @@ trait PropertyTrait
      */
     public function updateCache(): void
     {
-        if (!$this->getCacheValue('cache_saved', false)) {
+        if (!$this->getCacheValue(self::P_CACHE_SAVED, false)) {
             $this->updateAdapter();
         }
     }
@@ -288,7 +288,7 @@ trait PropertyTrait
         foreach ($properties as $property) {
             $this->saveDeferredCacheValue($property->getName(), $property->getString());
         }
-        $this->saveDeferredCacheValue('cache_saved', true);
+        $this->saveDeferredCacheValue(self::P_CACHE_SAVED, true);
         if (!$this->commitDeferredValues()) {
             $this->logWarning($this->trans('application_service.commit_error'));
         }

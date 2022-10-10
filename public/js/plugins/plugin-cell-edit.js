@@ -38,19 +38,10 @@
             this.options.formatter = this._checkFunction(this.options.formatter);
 
             // proxies
-            const that = this;
-            this.clickProxy = function (e) {
-                that._click(e);
-            };
-            this.blurProxy = function (e) {
-                that._blur(e);
-            };
-            this.inputProxy = function () {
-                that._input();
-            };
-            this.keydownProxy = function (e) {
-                that._keydown(e);
-            };
+            this.clickProxy = e => this._click(e);
+            this.blurProxy = e => this._blur(e);
+            this.inputProxy = () => this._input();
+            this.keydownProxy = e => this._keydown(e);
             this.$element.on('click', this.clickProxy);
             if (this.options.autoEdit) {
                 this.$element.trigger('click');

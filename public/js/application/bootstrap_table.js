@@ -874,7 +874,7 @@ $.fn.extend({
     $('.card .dropdown-menu').removeSeparators();
     $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
     $('.fixed-table-toolbar input.search-input').prependTo('.input-group-search')
-        .attr('type', 'text').css('width', '130px');
+        .attr('type', 'text').css('width', 130);
     $('.fixed-table-toolbar').appendTo('.col-search');
     $('.fixed-table-toolbar .search').remove();
     $('.btn-group-search').appendTo('.fixed-table-toolbar');

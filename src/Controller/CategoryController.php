@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\Category\CategoryType;
 use App\Interfaces\RoleInterface;
@@ -197,6 +198,18 @@ class CategoryController extends AbstractEntityController
     public function table(Request $request, CategoryTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'category/category_table.html.twig', $logger);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function deleteFromDatabase(AbstractEntity $item): void
+    {
+        $this->getApplication()->updateDeletedCategory($item);
+        parent::deleteFromDatabase($item);
     }
 
     /**

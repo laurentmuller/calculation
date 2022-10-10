@@ -50,26 +50,17 @@
 
         _init() {
             // proxies
-            const that = this;
-            that.clickProxy = function (e) {
-                that._click(e);
-            };
-            that.keydownProxy = function (e) {
-                that._keydown(e);
-            };
-            that.inputProxy = function (e) {
-                that._input(e);
-            };
-            that.blurProxy = function (e) {
-                that._blur(e);
-            };
+            this.clickProxy = e => this._click(e);
+            this.keydownProxy = e => this._keydown(e);
+            this.inputProxy = e => this._input(e);
+            this.blurProxy = e => this._blur(e);
 
             // add handlers
             const options = this.options;
-            that.$element.on('click', options.dotCellClass, that.clickProxy);
-            that.$element.on('keydown', options.dotInputClass, that.keydownProxy);
-            that.$element.on('input', options.dotInputClass, that.inputProxy);
-            that.$element.on('blur', options.dotInputClass, that.blurProxy);
+            this.$element.on('click', options.dotCellClass, this.clickProxy);
+            this.$element.on('keydown', options.dotInputClass, this.keydownProxy);
+            this.$element.on('input', options.dotInputClass, this.inputProxy);
+            this.$element.on('blur', options.dotInputClass, this.blurProxy);
         }
 
         /**

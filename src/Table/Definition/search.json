@@ -7,19 +7,19 @@
         "field": "entityname",
         "title": "search.fields.entity",
         "searchable": false,
-        "class": "text-cell w-20"
+        "class": "text-code text-ellipsis"
     },
     {
         "field": "fieldname",
         "title": "search.fields.field",
         "searchable": false,
-        "class": "text-cell w-20"
+        "class": "text-code text-ellipsis"
     },
     {
         "field": "content",
         "title": "search.fields.content",
         "searchable": false,
-        "class": "text-cell w-auto",
+        "class": "w-auto text-ellipsis",
         "cardClass": "font-weight-bold",
         "default": true
     },

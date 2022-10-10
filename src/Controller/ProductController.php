@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\ProductsReport;
 use App\Repository\ProductRepository;
@@ -175,13 +174,7 @@ class ProductController extends AbstractEntityController
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {
-        // update default product (if applicable)
-        $application = $this->getApplication();
-        $id = $application->getDefaultProductId();
-        if ($id === $item->getId()) {
-            $application->setProperty(PropertyServiceInterface::P_DEFAULT_PRODUCT, null);
-        }
-
+        $this->getApplication()->updateDeletedProduct($item);
         parent::deleteFromDatabase($item);
     }
 

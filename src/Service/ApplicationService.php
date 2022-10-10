@@ -43,7 +43,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     use PropertyTrait;
 
     /**
-     * Constructor.
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(
         private readonly EntityManagerInterface $manager,
@@ -53,6 +53,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         CacheItemPoolInterface $cache
     ) {
         $this->setAdapter($cache);
+        $this->updateCache();
     }
 
     /**
@@ -700,6 +701,42 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         }
 
         return $this;
+    }
+
+    /**
+     * Remove the default category if deleted from the database.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function updateDeletedCategory(Category $category): void
+    {
+        if ($category->getId() === $this->getDefaultCategoryId()) {
+            $this->setProperty(self::P_DEFAULT_CATEGORY, null);
+        }
+    }
+
+    /**
+     * Remove the default product if deleted from the database.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function updateDeletedProduct(Product $product): void
+    {
+        if ($product->getId() === $this->getDefaultProductId()) {
+            $this->setProperty(self::P_DEFAULT_STATE, null);
+        }
+    }
+
+    /**
+     * Remove the default calculation state if deleted from the database.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function updateDeletedState(CalculationState $state): void
+    {
+        if ($state->getId() === $this->getDefaultStateId()) {
+            $this->setProperty(self::P_DEFAULT_STATE, null);
+        }
     }
 
     /**

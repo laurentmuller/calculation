@@ -180,24 +180,18 @@
          * @private
          */
         _init() {
-            const that = this;
-            const options = that.options;
-            const $element = that.$element;
+            const options = this.options;
+            const $element = this.$element;
 
-            that.tree = [];
-            that.nodes = [];
-            that.clickProxy = function (e) {
-                that._click(e);
-            };
-            that.doubleClickProxy = function (e) {
-                that._doubleClick(e);
-            };
-            that.keyDownProxy = function (e) {
-                that._keydown(e);
-            };
-            that.toggling = false;
+            this.tree = [];
+            this.nodes = [];
+            this.clickProxy = e => this._click(e);
+            this.doubleClickProxy = e => this._doubleClick(e);
+            this.keyDownProxy = e => this._keydown(e);
+            this.toggling = false;
 
             // retrieve Json Data.
+            const that = this;
             if (options.data) {
                 // get data
                 if (options.data.isPrototypeOf(String)) {

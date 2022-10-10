@@ -133,7 +133,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
             $lines += 2;
         }
 
-        // overall margin + overall total + time stampable
+        // overall margin + overall total + timestamp
         $lines += 3;
 
         // total height
@@ -214,7 +214,12 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
         if (null !== $this->qrcode) {
             try {
                 // temp file
-                $path = (string) FileUtils::tempfile('qr_code');
+                $path = FileUtils::tempfile('qr_code');
+                if (!\is_string($path)) {
+                    $this->logWarning($this->trans('generate.error.failed'));
+
+                    return;
+                }
 
                 // build and save
                 Builder::create()

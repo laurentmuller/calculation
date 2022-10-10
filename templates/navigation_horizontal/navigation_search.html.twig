@@ -1,7 +1,6 @@
 {# search form #}
 {% from 'macros/_icons.html.twig' import icon %}
-{% set display_style = is_test and not sidebar_hide ? 'none' : 'block' %}
-<li class="nav-item mx-2 my-auto{% if is_test %} nav-sidebar-horizontal{% endif %}" style="display: {{ display_style }}">
+<li class="nav-item mx-2 my-auto">
     <a href="#" id="search-button-horizontal" class="nav-link" title="{{ 'search.title'|trans }}">
         {{- icon('search fa-fw') -}}
     </a>
@@ -10,7 +9,7 @@
           class="form-inline mx-2 my-auto"
           role="search"
           novalidate="novalidate"
-          style="display: none; width: 0">
+          style="display: none; width: 0;">
         <input type="text"
                id="search"
                name="search"

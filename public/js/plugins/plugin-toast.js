@@ -46,7 +46,7 @@
             const $toast = this._createToast(settings);
 
             // save identifier
-            this.containerId = $container.attr('id');
+            this.id = $container.attr('id');
 
             // add children
             if ($title) {
@@ -167,9 +167,9 @@
          * @returns {JQuery} this instance.
          */
         removeContainer: function () {
-            if (this.containerId) {
-                $('#' + this.containerId).remove();
-                this.containerId = null;
+            if (this.id) {
+                $('#' + this.id).remove();
+                this.id = null;
             }
             return this;
         },
@@ -212,7 +212,7 @@
             target: 'body',
 
             // the container identifier prefix
-            containerId: 'div_toaster_',
+            id: 'div_toaster_container',
 
             // the toasts width
             containerWidth: '350px',
@@ -340,7 +340,7 @@
          */
         _getContainer: function (options) {
             // check if div is already created
-            const id = options.containerId + options.position;
+            const id = options.id;
             const $div = $('#' + id);
             if ($div.length) {
                 return $div;

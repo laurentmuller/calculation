@@ -110,7 +110,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             'mi' => 1 << 20,
         ];
 
-        if (\ctype_digit((string) $size)) {
+        if (\is_string($size) && \ctype_digit($size)) {
             return (int) $size;
         }
 

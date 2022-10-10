@@ -151,6 +151,12 @@
     max-width: 0;
 }
 
+.text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .text-operation {
     text-align: right;
     width: 95px;

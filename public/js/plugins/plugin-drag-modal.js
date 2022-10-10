@@ -54,43 +54,28 @@
          * @private
          */
         _init() {
-            const that = this;
-            that.$body = $('body');
-            that.$header = that.$element.find('.modal-header');
-            that.$dialog = that.$element.find('.modal-dialog');
-            that.$content = that.$element.find('.modal-content');
-            that.$closeButton = that.$element.find('.close');
-            that.margin = $.parseInt(that.$dialog.css('margin-top'));
+            this.$body = $('body');
+            this.$header = this.$element.find('.modal-header');
+            this.$dialog = this.$element.find('.modal-dialog');
+            this.$content = this.$element.find('.modal-content');
+            this.$closeButton = this.$element.find('.close');
+            this.margin = $.parseInt(this.$dialog.css('margin-top'));
 
             // proxies
-            that.headerMouseDownProxy = function (e) {
-                that._headerMouseDown(e);
-            };
-            that.bodyMouseMoveProxy = function (e) {
-                that._bodyMouseMove(e);
-            };
-            that.bodyMouseUpProxy = function (e) {
-                that._bodyMouseUp(e);
-            };
-            that.elementShowProxy = function () {
-                that._elementShow();
-            };
-            that.elementShownProxy = function () {
-                that._elementShown();
-            };
-            that.elementHideProxy = function () {
-                that._elementHide();
-            };
-            that.elementHiddenProxy = function () {
-                that._elementHidden();
-            };
+            this.headerMouseDownProxy = e => this._headerMouseDown(e);
+            this.bodyMouseMoveProxy = e => this._bodyMouseMove(e);
+            this.bodyMouseUpProxy = e => this._bodyMouseUp(e);
+            this.elementShowProxy = () => this._elementShow();
+            this.elementShownProxy = () => this._elementShown();
+            this.elementHideProxy = () => this._elementHide();
+            this.elementHiddenProxy = () => this._elementHidden();
 
             // start listening
-            that.$element.on('show.bs.modal', this.elementShowProxy)
+            this.$element.on('show.bs.modal', this.elementShowProxy)
                 .on('shown.bs.modal', this.elementShownProxy)
                 .on('hide.bs.modal', this.elementHideProxy)
                 .on('hidden.bs.modal', this.elementHiddenProxy);
-            that.$header.on('mousedown.drag.header', that.headerMouseDownProxy);
+            this.$header.on('mousedown.drag.header', this.headerMouseDownProxy);
         }
 
         /**
@@ -110,23 +95,22 @@
             }
 
             // save values
-            const that = this;
-            const options = that.options;
-            that.startX = e.pageX - that.$header.offset().left;
-            that.startY = e.pageY - that.$header.offset().top;
-            that.right = window.innerWidth - that.margin - that.$content.width();
-            that.bottom = window.innerHeight - that.margin - that.$content.height() - options.marginBottom;
+            const options = this.options;
+            this.startX = e.pageX - this.$header.offset().left;
+            this.startY = e.pageY - this.$header.offset().top;
+            this.right = window.innerWidth - this.margin - this.$content.width();
+            this.bottom = window.innerHeight - this.margin - this.$content.height() - options.marginBottom;
             if (this.options.focusOnShow) {
                 this.$focused = $(':focus');
             }
 
             // update style
-            that.$header.toggleClass(options.className);
-            that.$closeButton.toggleClass(options.className);
+            this.$header.toggleClass(options.className);
+            this.$closeButton.toggleClass(options.className);
 
             // handle events
-            that.$body.on('mousemove.drag.body', that.bodyMouseMoveProxy)
-                .one('mouseup.drag.body', that.bodyMouseUpProxy);
+            this.$body.on('mousemove.drag.body', this.bodyMouseMoveProxy)
+                .one('mouseup.drag.body', this.bodyMouseUpProxy);
         }
 
         /**

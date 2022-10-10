@@ -35,6 +35,9 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 {
     use PropertyTrait;
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function __construct(
         private readonly ApplicationService $service,
         private readonly UserPropertyRepository $repository,
@@ -43,6 +46,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         CacheItemPoolInterface $cache
     ) {
         $this->setAdapter($cache);
+        $this->updateCache();
     }
 
     /**
@@ -90,6 +94,24 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         $value = $this->getPropertyString(self::P_EDIT_ACTION, $default->value);
 
         return EntityAction::tryFrom((string) $value) ?? $default;
+    }
+
+    /**
+     * Gets the message attributes.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function getMessageAttributes(): array
+    {
+        return [
+            'icon' => $this->isMessageIcon(),
+            'title' => $this->isMessageTitle(),
+            'display-close' => $this->isMessageClose(),
+            'display-subtitle' => $this->isMessageSubTitle(),
+            'timeout' => $this->getMessageTimeout(),
+            'progress' => $this->getMessageProgress(),
+            'position' => $this->getMessagePosition()->value,
+        ];
     }
 
     /**

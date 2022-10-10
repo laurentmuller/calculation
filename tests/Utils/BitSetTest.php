@@ -311,7 +311,7 @@ class BitSetTest extends TestCase
         $bs = new BitSet();
         $bs->sets([1, 5]);
         $result = (string) $bs;
-        self::assertSame('BitSet{1,5}', $result);
+        self::assertEquals('BitSet{1,5}', $result);
     }
 
     public function testTrim(): void

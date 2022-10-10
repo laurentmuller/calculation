@@ -23,11 +23,6 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 trait CacheAwareTrait
 {
     /**
-     * The debug state.
-     */
-    protected bool $debugCache = false;
-
-    /**
      * The cache adapter.
      */
     private ?CacheItemPoolInterface $adapter = null;
@@ -56,11 +51,7 @@ trait CacheAwareTrait
      */
     public function clearCache(): bool
     {
-        if (!$this->debugCache) {
-            return $this->adapter()->clear();
-        }
-
-        return false;
+        return $this->adapter()->clear();
     }
 
     /**
@@ -68,11 +59,7 @@ trait CacheAwareTrait
      */
     public function commitDeferredValues(): bool
     {
-        if (!$this->debugCache) {
-            return $this->adapter()->commit();
-        }
-
-        return false;
+        return $this->adapter()->commit();
     }
 
     /**
@@ -82,11 +69,7 @@ trait CacheAwareTrait
      */
     public function deleteCacheItem(string $key): bool
     {
-        if (!$this->debugCache) {
-            return $this->adapter()->deleteItem($this->cleanKey($key));
-        }
-
-        return false;
+        return $this->adapter()->deleteItem($this->cleanKey($key));
     }
 
     /**
@@ -96,7 +79,7 @@ trait CacheAwareTrait
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
-        return $this->debugCache ? null : $this->adapter()->getItem($this->cleanKey($key));
+        return $this->adapter()->getItem($this->cleanKey($key));
     }
 
     /**
@@ -142,14 +125,6 @@ trait CacheAwareTrait
     }
 
     /**
-     * Returns if the debug mode is enabled.
-     */
-    public function isDebugCache(): bool
-    {
-        return $this->debugCache;
-    }
-
-    /**
      * Sets a cache item value to be persisted later.
      *
      * @param string                 $key   The key for which to save the value
@@ -162,8 +137,7 @@ trait CacheAwareTrait
      */
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        $item = $this->getCacheItem($key);
-        if (!$this->debugCache && null !== $item) {
+        if (null !== $item = $this->getCacheItem($key)) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
@@ -191,7 +165,7 @@ trait CacheAwareTrait
         $key = $this->cleanKey($key);
         if (null === $value) {
             $this->deleteCacheItem($key);
-        } elseif (!$this->debugCache && null !== $item = $this->getCacheItem($key)) {
+        } elseif (null !== $item = $this->getCacheItem($key)) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
@@ -200,14 +174,6 @@ trait CacheAwareTrait
         }
 
         return $this;
-    }
-
-    /**
-     * Sets  if the debug mode is enabled.
-     */
-    public function setDebugCache(bool $isDebugCache): void
-    {
-        $this->debugCache = $isDebugCache;
     }
 
     #[SubscribedService]

@@ -16,7 +16,6 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\CalculationService;
 use App\Traits\CacheAwareTrait;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Extension\AbstractExtension;
@@ -36,16 +35,6 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      * The key name to cache constants.
      */
     private const CACHE_KEY = 'twig_constant_extension';
-
-    /**
-     * Constructor.
-     */
-    public function __construct(
-        #[Autowire('%kernel.debug%')]
-        bool $isDebug
-    ) {
-        $this->debugCache = $isDebug;
-    }
 
     /**
      * @throws \Psr\Cache\InvalidArgumentException

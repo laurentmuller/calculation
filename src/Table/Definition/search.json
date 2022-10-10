@@ -4,13 +4,13 @@
         "visible": false
     },
     {
-        "field": "entityname",
+        "field": "entityName",
         "title": "search.fields.entity",
         "searchable": false,
         "class": "text-code text-ellipsis"
     },
     {
-        "field": "fieldname",
+        "field": "fieldName",
         "title": "search.fields.field",
         "searchable": false,
         "class": "text-code text-ellipsis"

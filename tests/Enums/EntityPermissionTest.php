@@ -107,7 +107,7 @@ class EntityPermissionTest extends TestCase
     public function testTryFromName(mixed $expected, string $value): void
     {
         $result = EntityPermission::tryFromName($value);
-        self::assertSame($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     public function testValue(): void

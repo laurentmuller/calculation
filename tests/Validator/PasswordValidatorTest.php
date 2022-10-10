@@ -117,8 +117,8 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             $violations = $this->context->getViolations();
             self::assertCount(1, $violations);
             $first = $violations[0];
-            self::assertSame('password.pwned', $first->getMessageTemplate());
-            self::assertSame($value, $first->getInvalidValue());
+            self::assertEquals('password.pwned', $first->getMessageTemplate());
+            self::assertEquals($value, $first->getInvalidValue());
         } else {
             self::assertNoViolation();
         }

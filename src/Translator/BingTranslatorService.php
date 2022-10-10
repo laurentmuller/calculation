@@ -57,11 +57,9 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     public function __construct(
         #[Autowire('%bing_translator_key%')]
-        string $key,
-        #[Autowire('%kernel.debug%')]
-        bool $isDebug
+        string $key
     ) {
-        parent::__construct($isDebug, $key);
+        parent::__construct($key);
     }
 
     /**

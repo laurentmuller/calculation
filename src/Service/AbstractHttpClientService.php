@@ -78,14 +78,12 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      * @throws \InvalidArgumentException if the API key is null or empty
      */
     public function __construct(
-        bool $isDebug,
         protected readonly string $key
     ) {
         // check key
         if (empty($key)) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
-        $this->debugCache = $isDebug;
     }
 
     /**

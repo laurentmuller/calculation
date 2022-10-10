@@ -4,10 +4,12 @@
 
 /**
  * Reset widgets to default values (if any).
+ * @param {JQuery} [$source] the active page or null to reset all values.
  */
-function setDefaultValues() {
+function setDefaultValues($source) {
     'use strict';
-    $('#edit-form :input:not(button)[data-default], :checkbox[data-default]').each(function () {
+    $source = $source || $('#edit-form');
+    $source.find(':input:not(button)[data-default], :checkbox[data-default]').each(function () {
         const $this = $(this);
         const value = $this.data('default');
         if ($this.is(':checkbox')) {
@@ -18,7 +20,7 @@ function setDefaultValues() {
     });
 
     // special case for radio inputs
-    $('#edit-form .form-group[data-default]:has(:radio)').each(function () {
+    $source.find('.form-group[data-default]:has(:radio)').each(function () {
         const $this = $(this);
         const value = $this.data('default');
         $this.find(`:radio[value="${value}"]`).setChecked(true);
@@ -134,9 +136,16 @@ function displayEmail($email) {
     });
 
     // add handlers
-    $('.btn-default').on('click', function (e) {
+    $('.btn-default-all').on('click', function (e) {
         e.preventDefault();
         setDefaultValues();
+    });
+    $('.btn-default-visible').on('click', function (e) {
+        e.preventDefault();
+        const $source = $('#parent_accordion .collapse.show');
+        if ($source.length) {
+            setDefaultValues($source);
+        }
     });
     $('.btn-notify').on('click', function (e) {
         e.preventDefault();

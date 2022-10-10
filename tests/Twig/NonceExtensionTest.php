@@ -44,14 +44,12 @@ class NonceExtensionTest extends KernelTestCase
     public function testLength32(): void
     {
         $nonce = $this->extension->getNonce(32);
-        self::assertIsString($nonce);
-        self::assertSame(64, \strlen($nonce));
+        self::assertEquals(64, \strlen($nonce));
     }
 
     public function testLengthDefault(): void
     {
         $nonce = $this->extension->getNonce();
-        self::assertIsString($nonce);
-        self::assertSame(32, \strlen($nonce));
+        self::assertEquals(32, \strlen($nonce));
     }
 }

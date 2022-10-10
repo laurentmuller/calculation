@@ -24,8 +24,6 @@ trait TranslatorAwareTrait
     use TranslatorTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @throws ContainerExceptionInterface
      */
     #[SubscribedService]

@@ -69,11 +69,9 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     public function __construct(
         #[Autowire('%exchange_rate_key%')]
-        string $key,
-        #[Autowire('%kernel.debug%')]
-        bool $isDebug
+        string $key
     ) {
-        parent::__construct($isDebug, $key);
+        parent::__construct($key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
     }
 

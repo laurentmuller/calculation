@@ -64,7 +64,7 @@ class ResponseListener
         #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
         string $file,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $isDebug
+        private readonly bool $debug
     ) {
         $nonce = $service->getCspNonce();
         $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -83,7 +83,7 @@ class ResponseListener
 
         // development firewall ?
         $request = $event->getRequest();
-        if ($this->isDebug && $this->isDevFirewall($request)) {
+        if ($this->debug && $this->isDevFirewall($request)) {
             return;
         }
 

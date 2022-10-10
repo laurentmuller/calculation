@@ -53,7 +53,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         CacheItemPoolInterface $cache
     ) {
         $this->setAdapter($cache);
-        $this->updateCache();
+        $this->updateAdapter();
     }
 
     /**
@@ -516,9 +516,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $role;
     }
 
-    /**
-     * Return if the debug mode is enabled.
-     */
     public function isDebug(): bool
     {
         return $this->debug;

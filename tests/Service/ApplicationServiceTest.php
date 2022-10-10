@@ -58,7 +58,7 @@ class ApplicationServiceTest extends KernelTestCase
         $service = $this->getApplicationService();
         $role = $service->getAdminRole();
         $rights = $service->getAdminRights();
-        self::assertSame('ROLE_ADMIN', $role->getName());
+        self::assertEquals('ROLE_ADMIN', $role->getName());
         self::assertEquals($role->getRights(), $rights);
     }
 
@@ -203,7 +203,7 @@ class ApplicationServiceTest extends KernelTestCase
         $service = $this->getApplicationService();
         $role = $service->getUserRole();
         $rights = $service->getUserRights();
-        self::assertSame('ROLE_USER', $role->getName());
+        self::assertEquals('ROLE_USER', $role->getName());
         self::assertEquals($role->getRights(), $rights);
     }
 

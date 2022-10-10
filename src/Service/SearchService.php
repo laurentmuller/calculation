@@ -33,6 +33,15 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to search data in all entities.
  *
+ * @psalm-type SearchType = array{
+ *     id: int,
+ *     type: string,
+ *     field: string,
+ *     content: string,
+ *     entityName: string,
+ *     fieldName: string
+ * }
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class SearchService implements ServiceSubscriberInterface
@@ -53,7 +62,7 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * The entity column name.
      */
-    final public const COLUMN_ENTITY_NAME = 'entityname';
+    final public const COLUMN_ENTITY_NAME = 'entityName';
 
     /**
      * The field column name.
@@ -63,7 +72,7 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * The field column name.
      */
-    final public const COLUMN_FIELD_NAME = 'fieldname';
+    final public const COLUMN_FIELD_NAME = 'fieldName';
 
     /**
      * The delete granted column name.
@@ -130,7 +139,7 @@ class SearchService implements ServiceSubscriberInterface
     public function __construct(
         private readonly EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $isDebug
+        private readonly bool $debug
     ) {
     }
 
@@ -188,7 +197,7 @@ class SearchService implements ServiceSubscriberInterface
             $this->getEntityName(Group::class) => 'group.name',
             $this->getEntityName(CalculationState::class) => 'calculationstate.name',
         ];
-        if ($this->isDebug) {
+        if ($this->debug) {
             $entities[$this->getEntityName(Customer::class)] = 'customer.name';
         }
 
@@ -207,14 +216,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @return array the array of results for the given search (can be empty)
      *
-     * @psalm-return array<array{
-     *      id: int,
-     *      type: string,
-     *      field: string,
-     *      content: string,
-     *      entityname: string,
-     *      fieldname: string
-     *  }>
+     * @psalm-return SearchType[]
      *
      * @throws \ReflectionException
      */
@@ -388,14 +390,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param ?string $entity the entity to search in or null for all
      * @param string  $extra  a SQL statement to add to the default native SELECT SQL statement
      *
-     * @psalm-return array<array{
-     *      id: int,
-     *      type: string,
-     *      field: string,
-     *      content: string,
-     *      entityname: string,
-     *      fieldname: string
-     *  }>
+     * @psalm-return SearchType[]
      *
      * @throws \ReflectionException
      */
@@ -423,16 +418,7 @@ class SearchService implements ServiceSubscriberInterface
         // set parameter
         $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
 
-        /**
-         * @var array<array{
-         *      id: int,
-         *      type: string,
-         *      field: string,
-         *      content: string,
-         *      entityname: string,
-         *      fieldname: string
-         *  }> $result
-         */
+        /** @psalm-var SearchType[] $result */
         $result = $query->getArrayResult();
 
         return $result;
@@ -498,7 +484,7 @@ class SearchService implements ServiceSubscriberInterface
                 ->createCalculationItemQuery();
 
             // debug queries
-            if ($this->isDebug) {
+            if ($this->debug) {
                 $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company', 'address', 'zipCode', 'city'])
                     ->createCalculationGroupQuery();
             }

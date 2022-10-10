@@ -25,6 +25,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * The search table.
  *
+ * @psalm-import-type SearchType from SearchService
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class SearchTable extends AbstractTable implements ServiceSubscriberInterface
@@ -106,7 +108,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        /** array<array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string}> $items */
+        /** SearchType[] $items */
         $items = [];
         $search = $query->search;
         $entity = (string) $query->customData[self::PARAM_ENTITY];
@@ -116,7 +118,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
             $results->totalNotFiltered = $results->filtered = \count($items);
-
             if (0 !== $results->totalNotFiltered) {
                 $this->processItems($items);
                 $this->sortItems($items, $query->sort, $query->order);
@@ -167,7 +168,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     /**
      * Update items.
      *
-     * @param array<array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string}> $items
+     * @param SearchType[] $items
      */
     private function processItems(array &$items): void
     {
@@ -191,11 +192,10 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     /**
      * Sorts items.
      *
-     * @param array<array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string}> $items
+     * @param SearchType[] $items
      */
     private function sortItems(array &$items, string $sort, string $order): void
     {
-        /** @var array<string, int> */
         $columns = [$sort => self::SORT_ASC === $order ? 1 : -1];
         foreach (self::SORT_COLUMNS as $field) {
             if (!\array_key_exists($field, $columns)) {
@@ -218,9 +218,9 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     /**
      * Update the item.
      *
-     * @param array{id: int, type: string, field: string, content: string, entityname: string, fieldname: string} $item
+     * @psalm-param SearchType $item
      *
-     * @param-out  array<"content"|"entityname"|"field"|"fieldname"|"id"|"type", int|string> $item
+     * @psalm-param-out  array<"id"|"type"|"field"|"content"|"entityName"|"fieldName", int|string> $item
      */
     private function updateItem(array &$item): void
     {

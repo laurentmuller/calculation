@@ -180,13 +180,11 @@ class OpenWeatherService extends AbstractHttpClientService
     public function __construct(
         #[Autowire('%open_weather_key%')]
         string $key,
-        #[Autowire('%kernel.debug%')]
-        bool $isDebug,
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
         private readonly string $databaseName,
         private readonly TranslatorInterface $translator
     ) {
-        parent::__construct($isDebug, $key);
+        parent::__construct($key);
     }
 
     /**

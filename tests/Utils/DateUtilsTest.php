@@ -154,7 +154,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getMonths($locale);
         self::assertArrayHasKey($index, $values);
-        self::assertSame($name, $values[$index]);
+        self::assertEquals($name, $values[$index]);
     }
 
     public function testMonthsCount(): void
@@ -170,7 +170,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getShortMonths($locale);
         self::assertArrayHasKey($index, $values);
-        self::assertSame($name, $values[$index]);
+        self::assertEquals($name, $values[$index]);
     }
 
     public function testShortMonthsCount(): void
@@ -186,7 +186,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getShortWeekdays($firstday, $locale);
         self::assertArrayHasKey($index, $values);
-        self::assertSame($name, $values[$index]);
+        self::assertEquals($name, $values[$index]);
     }
 
     public function testShortWeekdaysCount(): void
@@ -217,7 +217,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getWeekdays($firstday, $locale);
         self::assertArrayHasKey($index, $values);
-        self::assertSame($name, $values[$index]);
+        self::assertEquals($name, $values[$index]);
     }
 
     public function testWeekdaysCount(): void

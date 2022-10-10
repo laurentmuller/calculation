@@ -6,7 +6,7 @@
     'show-menu': 'index.menu_show'|trans,
     'hide-menu': 'index.menu_hide'|trans
 } -%}
-<div id="sidebar" class="navbar navbar-vertical navbar-themed d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
+<div id="sidebar" class="navbar navbar-vertical navbar-themed border-right d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
     {# logo
     <div class="p-2 mb-1">
         <div class="media position-relative d-flex align-items-center">
@@ -19,7 +19,7 @@
         </div>
     </div>
     #}
-    <button class="btn btn-outline-secondary py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
+    <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
         <i class="fa-solid fa-angle-left"></i>
     </button>
     <div class="mb-1">

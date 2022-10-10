@@ -15,29 +15,21 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\FormHelper;
 use App\Traits\RoleTranslatorTrait;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * User rights type.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-class UserRightsType extends RightsType
+class UserRightsType extends RightsType implements ServiceSubscriberInterface
 {
     use RoleTranslatorTrait;
-
-    /**
-     * Constructor.
-     */
-    public function __construct(
-        private readonly TranslatorInterface $translator,
-        RoleHierarchyInterface $roleHierarchy,
-        #[Autowire('%kernel.debug%')]
-        bool $isDebug
-    ) {
-        parent::__construct($roleHierarchy, $isDebug);
-    }
+    use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -45,16 +37,7 @@ class UserRightsType extends RightsType
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-
         $resolver->setDefaults(['data_class' => User::class]);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -77,18 +60,14 @@ class UserRightsType extends RightsType
     protected function addFormFields(FormHelper $helper): void
     {
         parent::addFormFields($helper);
-
         $helper->field('username')
             ->addPlainType(true);
-
         $helper->field('role')
             ->updateOption('value_transformer', fn (string $role) => $this->translateRole($role))
             ->addPlainType(true);
-
         $helper->field('enabled')
             ->updateOption('value_transformer', fn (string $enabled) => $this->translateEnabled($enabled))
             ->addPlainType(true);
-
         $helper->field('overwrite')
             ->notRequired()
             ->addCheckboxType();

@@ -67,6 +67,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Controller for tests.
+ *
+ * @psalm-import-type SearchType from SearchService
  */
 #[AsController]
 #[Route(path: '/test')]
@@ -232,6 +234,7 @@ class TestController extends AbstractController
 
         $helper = $this->createFormHelper('password.', $data);
         $helper->addPreSubmitListener($listener);
+
         $helper->field('input')
             ->widgetClass('password-strength')
             ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
@@ -299,7 +302,7 @@ class TestController extends AbstractController
         #[Autowire('%google_recaptcha_secret_key%')]
         string $secretKey,
         #[Autowire('%kernel.debug%')]
-        bool $isDebug
+        bool $debug
     ): Response {
         $data = [
             'subject' => 'My subject',
@@ -325,7 +328,7 @@ class TestController extends AbstractController
             $response = (string) $data['recaptcha'];
             $hostname = (string) $request->server->get('SERVER_NAME');
             $remoteIp = (string) $request->server->get('REMOTE_ADDR');
-            $expectedHostName = $isDebug ? $remoteIp : $hostname;
+            $expectedHostName = $debug ? $remoteIp : $hostname;
 
             // verify
             $recaptcha = new ReCaptcha($secretKey);
@@ -553,15 +556,12 @@ class TestController extends AbstractController
         $entity = $this->getRequestString($request, 'entity');
         $limit = $this->getRequestInt($request, 'limit', 25);
         $offset = $this->getRequestInt($request, 'offset');
-
         $count = $service->count($query, $entity);
         $results = $service->search($query, $entity, $limit, $offset);
-
         foreach ($results as &$row) {
             $type = $row[SearchService::COLUMN_TYPE];
             $field = $row[SearchService::COLUMN_FIELD];
             $lowerType = \strtolower($type);
-
             $row[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
             $row[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
             $row[SearchService::COLUMN_CONTENT] = $service->formatContent("$type.$field", $row[SearchService::COLUMN_CONTENT]);

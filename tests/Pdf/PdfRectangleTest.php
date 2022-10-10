@@ -23,7 +23,7 @@ class PdfRectangleTest extends TestCase
     public function testBottom(): void
     {
         $r = new PdfRectangle(10, 10, 20, 20);
-        self::assertSame(30.0, $r->bottom());
+        self::assertEquals(30.0, $r->bottom());
     }
 
     public function testContains(): void
@@ -96,7 +96,7 @@ class PdfRectangleTest extends TestCase
     public function testRight(): void
     {
         $r = new PdfRectangle(10, 10, 20, 20);
-        self::assertSame(30.0, $r->right());
+        self::assertEquals(30.0, $r->right());
     }
 
     public function testSetBottom(): void
@@ -130,9 +130,9 @@ class PdfRectangleTest extends TestCase
 
     private function validate(PdfRectangle $r, float $x, float $y, float $w, float $h): void
     {
-        self::assertSame($x, $r->x());
-        self::assertSame($y, $r->y());
-        self::assertSame($w, $r->width());
-        self::assertSame($h, $r->height());
+        self::assertEquals($x, $r->x());
+        self::assertEquals($y, $r->y());
+        self::assertEquals($w, $r->width());
+        self::assertEquals($h, $r->height());
     }
 }

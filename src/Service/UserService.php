@@ -39,14 +39,14 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(
-        private readonly ApplicationService $service,
         private readonly UserPropertyRepository $repository,
+        private readonly ApplicationService $service,
         private readonly Security $security,
         #[Target('user_cache')]
         CacheItemPoolInterface $cache
     ) {
         $this->setAdapter($cache);
-        $this->updateCache();
+        $this->updateAdapter();
     }
 
     /**

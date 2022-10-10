@@ -29,7 +29,21 @@
 {# form #}
 {% block actions_form -%}
 {{ parent() }}
-<button type="button" class="btn btn-form btn-default btn-outline-success">{{ 'parameters.default'|trans }}</button>
+<div class="btn-group">
+    <div class="dropdown">
+        <button class="btn btn-form btn-outline-success dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+            {{- 'parameters.default'|trans -}}
+        </button>
+        <div class="dropdown-menu">
+            <a class="btn-default-all dropdown-item" href="#">
+                {{- 'parameters.default_all'|trans -}}
+            </a>
+            <a class="btn-default-visible dropdown-item" href="#">
+                {{- 'parameters.default_visible'|trans -}}
+            </a>
+        </div>
+    </div>
+</div>
 {%- endblock %}
 {# body #}
 {% block card_body -%}

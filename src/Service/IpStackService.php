@@ -49,11 +49,9 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      */
     public function __construct(
         #[Autowire('%ip_stack_key%')]
-        string $key,
-        #[Autowire('%kernel.debug%')]
-        bool $isDebug
+        string $key
     ) {
-        parent::__construct($isDebug, $key);
+        parent::__construct($key);
     }
 
     /**

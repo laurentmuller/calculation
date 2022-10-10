@@ -742,6 +742,8 @@ parameters:
   customize: Personnaliser
   description: Définition des paramètres de l'application.
   default: Valeurs par défaut
+  default_all: Toutes les options
+  default_visible: Uniquement les options visibles
   display:
     hide: Masquer
     show: Afficher

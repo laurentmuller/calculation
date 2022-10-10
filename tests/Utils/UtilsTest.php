@@ -192,7 +192,7 @@ class UtilsTest extends TestCase
     public function testAscii(string $value, string $expected): void
     {
         $result = Utils::ascii($value);
-        self::assertSame($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -248,9 +248,9 @@ class UtilsTest extends TestCase
         self::assertArrayHasKey('line', $result);
         self::assertArrayHasKey('trace', $result);
 
-        self::assertSame($message, $result['message']);
-        self::assertSame($code, $result['code']);
-        self::assertSame(__FILE__, $result['file']);
+        self::assertEquals($message, $result['message']);
+        self::assertEquals($code, $result['code']);
+        self::assertEquals(__FILE__, $result['file']);
     }
 
     /**

@@ -41,7 +41,7 @@ class FileUtilsTest extends TestCase
     public function testBuildPath(string $expected, string ...$segments): void
     {
         $actual = FileUtils::buildPath(...$segments);
-        self::assertSame($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testExist(): void
@@ -60,7 +60,7 @@ class FileUtilsTest extends TestCase
         $file = $this->getLinesFile();
         $size = \filesize($file);
         self::assertTrue(FileUtils::exists($file));
-        self::assertSame($size . ' B', FileUtils::formatSize($file));
+        self::assertEquals($size . ' B', FileUtils::formatSize($file));
     }
 
     public function testIsFile(): void

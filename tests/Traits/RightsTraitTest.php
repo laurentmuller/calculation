@@ -85,7 +85,7 @@ class RightsTraitTest extends TestCase
     {
         /** @psalm-var FlagBag<EntityPermission> $entity */
         $entity = $this->$entity;
-        self::assertSame(0, $entity->getValue());
+        self::assertEquals(0, $entity->getValue());
     }
 
     public function testInvalidAttribute(): void
@@ -111,7 +111,7 @@ class RightsTraitTest extends TestCase
         /** @psalm-var FlagBag<EntityPermission> $entity */
         $entity = $this->$entity;
         self::assertInstanceOf(FlagBag::class, $entity);
-        self::assertSame(0, $entity->getValue());
+        self::assertEquals(0, $entity->getValue());
     }
 
     private function checkAttribute(string $entity, string $key): void

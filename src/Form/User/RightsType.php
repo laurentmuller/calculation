@@ -31,7 +31,7 @@ class RightsType extends AbstractHelperType
     public function __construct(
         private readonly RoleHierarchyInterface $roleHierarchy,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $isDebug
+        private readonly bool $debug
     ) {
     }
 
@@ -40,14 +40,17 @@ class RightsType extends AbstractHelperType
      */
     public function onPreSetData(FormEvent $event): void
     {
-        if (!$this->hasRole($event->getData(), RoleInterface::ROLE_SUPER_ADMIN)) {
-            $event->getForm()->remove(EntityName::LOG->value);
+        /** @psalm-var mixed $data */
+        $data = $event->getData();
+        $form = $event->getForm();
+        if (!$this->hasRole($data, RoleInterface::ROLE_SUPER_ADMIN)) {
+            $form->remove(EntityName::LOG->value);
         }
-        if (!$this->hasRole($event->getData(), RoleInterface::ROLE_ADMIN)) {
-            $event->getForm()->remove(EntityName::USER->value);
+        if (!$this->hasRole($data, RoleInterface::ROLE_ADMIN)) {
+            $form->remove(EntityName::USER->value);
         }
-        if (!$this->isDebug) {
-            $event->getForm()->remove(EntityName::CUSTOMER->value);
+        if (!$this->debug) {
+            $form->remove(EntityName::CUSTOMER->value);
         }
     }
 
@@ -56,20 +59,13 @@ class RightsType extends AbstractHelperType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        // add listener
-        $helper->addPreSetDataListener(function (FormEvent $event): void {
-            $this->onPreSetData($event);
-        });
-
         $entities = EntityName::sorted();
         foreach ($entities as $entity) {
             $this->addRightType($helper, $entity);
         }
+        $helper->addPreSetDataListener(fn (FormEvent $event) => $this->onPreSetData($event));
     }
 
-    /**
-     * Adds an attribute rights type.
-     */
     private function addRightType(FormHelper $helper, EntityName $entity): void
     {
         $helper->field($entity->value)

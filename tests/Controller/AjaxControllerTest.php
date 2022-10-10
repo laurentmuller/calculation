@@ -123,6 +123,6 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
             self::assertNotNull($this->translator);
             $expected = $this->translator->trans($expected, [], 'validators');
         }
-        self::assertSame($expected, $result);
+        self::assertEquals($expected, $result);
     }
 }

@@ -2,8 +2,8 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# horizontal navigation #}
 {% set display_style = sidebar_hide ? 'flex' : 'none' %}
-<nav id="navigation" class="navbar navbar-horizontal navbar-themed navbar-expand-md" style="display: {{ display_style }}">
-    <button class="btn btn-outline-secondary show-sidebar py-0 px-2 mt-1" title="{{ 'index.sidebar_show'|trans }}">
+<nav id="navigation" class="navbar navbar-horizontal navbar-themed navbar-expand-md border-bottom " style="display: {{ display_style }}">
+    <button class="btn btn-outline-secondary rounded-circle show-sidebar py-0 px-2 mt-1" title="{{ 'index.sidebar_show'|trans }}">
         <i class="fa-solid fa-angle-right"></i>
     </button>
     <a class="navbar-brand nav-sidebar-horizontal ml-3" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">

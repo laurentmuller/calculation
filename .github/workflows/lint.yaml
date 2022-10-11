@@ -43,11 +43,11 @@ jobs:
 
       - name: Clear cache
         if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console cache:clear'
+        run: 'php bin/console cache:clear --env=prod'
       
       - name: Lint Twig
         if: always() && steps.install.outcome == 'success'        
-        run: 'php bin/console lint:twig templates'
+        run: 'php bin/console lint:twig templates --env=prod'
 
       - name: Lint XLIFF
         if: always() && steps.install.outcome == 'success'

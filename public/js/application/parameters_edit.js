@@ -3,6 +3,16 @@
 /* globals Toaster */
 
 /**
+ * Gets the active page.
+ * @return {JQuery<HTMLElement>|null} the active page or null if none.
+ */
+function getActivePage() {
+    'use strict';
+    const $source = $('#parent_accordion .collapse.show');
+    return $source.length ? $source : null;
+}
+
+/**
  * Reset widgets to default values (if any).
  * @param {JQuery} [$source] the active page or null to reset all values.
  */
@@ -28,52 +38,57 @@ function setDefaultValues($source) {
 }
 
 /**
+ * Update default button state.
+ */
+function updateVisibleButton() {
+    'use strict';
+    let disabled = true;
+    const $button = $('.btn-default-visible');
+    const $source = getActivePage();
+    if ($source) {
+        const selector = '[data-default]:not([data-default=""])';
+        disabled = $source.find(selector).length === 0;
+    }
+    $button.toggleDisabled(disabled);
+}
+
+/**
  * Display a notification.
  */
 function displayNotification() {
     'use strict';
     // get random text
     let title = $('.card-title').text();
+    const data = $("#flashbags").data();
     const url = $("form").data("random");
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
             // content
             const content = '<p class="m-0 p-0">' + response.content + '</p>';
-            // position
-            const $position = $("#message_position");
-            const oldPosition = $position.data('position');
-            const newPosition = $position.val();
-            $position.data('position', newPosition);
             // type
-            const last = $position.data('type');
             const types = Object.values(Toaster.NotificationTypes);
-            const type = types.randomElement(last);
-            $position.data('type', type);
+            const type = types.randomElement();
             // title
             if (!$('#message_title').isChecked()) {
                 title = null;
             }
             // options
-            const options = $.extend({}, $("#flashbags").data(), {
-                position: newPosition,
+            const options = $.extend({}, data, {
                 icon: $('#message_icon').isChecked(),
+                position: $("#message_position").val(),
                 timeout: $('#message_timeout').intVal(),
                 progress: $('#message_progress').intVal(),
                 displayClose: $('#message_close').isChecked(),
                 displaySubtitle: $('#message_sub_title').isChecked(),
             });
-            // remove container if needed
-            if (oldPosition && oldPosition !== newPosition) {
-                Toaster.removeContainer();
-            }
             Toaster.notify(type, content, title, options);
         } else {
             const message = $('form').data('failure');
-            Toaster.danger(message, title, $("#flashbags").data());
+            Toaster.danger(message, title, data);
         }
     }).fail(function () {
         const message = $('form').data('failure');
-        Toaster.danger(message, title, $("#flashbags").data());
+        Toaster.danger(message, title, data);
     });
 }
 
@@ -103,6 +118,7 @@ function displayEmail($email) {
     }
 }
 
+
 /**
  * Ready function
  */
@@ -121,6 +137,23 @@ function displayEmail($email) {
         }
     });
 
+    // add handlers
+    $('.btn-default-all').on('click', function (e) {
+        e.preventDefault();
+        setDefaultValues();
+    });
+    $('.btn-default-visible').on('click', function (e) {
+        e.preventDefault();
+        const $source = getActivePage();
+        if ($source) {
+            setDefaultValues($source);
+        }
+    });
+    $('.btn-notify').on('click', function (e) {
+        e.preventDefault();
+        displayNotification();
+    });
+
     // toggle titles
     $('.toggle-icon').on('show.bs.collapse', function () {
         const $link = $(this).prev();
@@ -133,24 +166,9 @@ function displayEmail($email) {
         if ($this.find('.is-invalid').length === 0) {
             $this.find(':input:first').trigger('focus');
         }
+        updateVisibleButton();
     });
-
-    // add handlers
-    $('.btn-default-all').on('click', function (e) {
-        e.preventDefault();
-        setDefaultValues();
-    });
-    $('.btn-default-visible').on('click', function (e) {
-        e.preventDefault();
-        const $source = $('#parent_accordion .collapse.show');
-        if ($source.length) {
-            setDefaultValues($source);
-        }
-    });
-    $('.btn-notify').on('click', function (e) {
-        e.preventDefault();
-        displayNotification();
-    });
+    updateVisibleButton();
 
     const $url = $('#customer_url');
     const $urlGroup = $url.parents('.input-group').find('.input-group-url');

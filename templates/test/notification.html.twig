@@ -56,7 +56,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="position">{{ 'parameters.fields.message_position'|trans }}</label>
-            <select id="position" name="position" class="form-control" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
+            <select id="position" name="position" class="form-control" data-failure="{{ 'parameters.failure'|trans }}" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
             {% for current in positions %}
                 {{ _self.position(current, position) }}
             {% endfor %}

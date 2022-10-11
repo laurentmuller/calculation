@@ -191,7 +191,6 @@ function initSwitchTheme() {
         const url = $button.data('path');
         const options = $("#flashbags").data();
         const title = options.title ? $button.data('title') : '';
-        Toaster.removeContainer();
         if (url) {
             $.getJSON(url, {
                 dark: dark

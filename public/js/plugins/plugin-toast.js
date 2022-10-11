@@ -211,8 +211,8 @@
             // the target to append toasts container to
             target: 'body',
 
-            // the container identifier prefix
-            id: 'div_toast_container',
+            // the container identifier
+            id: 'div_toast_container_div',
 
             // the toasts width
             containerWidth: '350px',
@@ -332,6 +332,18 @@
         },
 
         /**
+         * Gets target container.
+         *
+         * @param {Object} options - The toast options.
+         * @returns {JQuery} The target container.
+         * @private
+         */
+        _getTarget: function (options) {
+            const $target = $(options.target);
+            return $target.length ? $target : $('body');
+        },
+
+        /**
          * Gets or creates the toast container div.
          *
          * @param {Object} options - The toast options.
@@ -339,19 +351,17 @@
          * @private
          */
         _getContainer: function (options) {
-            // check if div is already created
+            // get div
             const id = options.id;
             const $div = $('#' + id);
-            if ($div.length) {
-                return $div;
-            }
 
-            // global style
+            // class
+            const className = 'toast-plugin ' + options.position;
+
+            // style
             const css = {
                 'z-index': options.zIndex
             };
-
-            // margin styles
             options.position.split('-').forEach(function (edge) {
                 const key = 'margin-' + edge;
                 const value = options[key.camelize()];
@@ -360,18 +370,17 @@
                 }
             });
 
-            // target
-            let $target = $(options.target);
-            if ($target.length === 0) {
-                $target = $('body');
+            // exist?
+            if ($div.length === 0) {
+                const $target = this._getTarget(options);
+                return $('<div/>', {
+                    id: id,
+                    css: css,
+                    class: className
+                }).appendTo($target);
             }
 
-            // create and append
-            return $('<div/>', {
-                id: id,
-                css: css,
-                class: 'toast-plugin ' + options.position
-            }).appendTo($target);
+            return $div.css(css).attr('class', className);
         },
 
         /**
@@ -499,7 +508,7 @@
                     'type': 'button',
                     'title': title,
                     'css': {
-                         'color': 'inherit'
+                        'color': 'inherit'
                     }
                 });
                 const $span = $('<span />', {

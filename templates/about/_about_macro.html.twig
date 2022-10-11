@@ -38,7 +38,7 @@
 {% from 'macros/_icons.html.twig' import linkExternal %}
 <tr>
     <td class="e pl-3">
-        {{- package.name -}}{%- if package.homepage %}&nbsp;{{- linkExternal(package.homepage, '', 'd-print-none', 'link', 'about.extern_link') -}}{%- endif -%}
+        {{- package.name -}}{%- if package.homepage %}&nbsp;{{- linkExternal(package.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="f text-nowrap">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>

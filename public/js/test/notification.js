@@ -11,18 +11,20 @@
  */
 function notify(type, title, options) {
     'use strict';
-
     // get random text
-    const url = $('#position').data('random');
+    const $position = $('#position');
+    const url = $position.data('random');
     $.getJSON(url, function (response) {
         if (response.result) {
             const message = '<p class="m-0 p-0">{0}</p>'.format(response.content);
-            Toaster[type](message, title, options);
+            Toaster.notify(type, message, title, options);
         } else {
-            Toaster.danger("Impossible d'afficher une notification.", $('.card-title').text(), options);
+            const message = $position.data('failure');
+            Toaster.danger(message, $('.card-title').text(), options);
         }
     }).fail(function () {
-        Toaster.danger("Impossible d'afficher une notification.", $('.card-title').text(), options);
+        const message = $position.data('failure');
+        Toaster.danger(message, $('.card-title').text(), options);
     });
 }
 
@@ -32,7 +34,7 @@ function notify(type, title, options) {
 function random() {
     'use strict';
     const button = $('.btn-notify').toArray().randomElement();
-    $(button).trigger('click'); //.focus();
+    $(button).trigger('click');
 }
 
 /**
@@ -40,7 +42,6 @@ function random() {
  */
 (function ($) {
     'use strict';
-
     // default options
     const options = $('#flashbags').data();
     options.onHide = function (settings) {
@@ -58,13 +59,6 @@ function random() {
         options.autohide = $('#autohide').isChecked();
         options.displayClose = $('#close').isChecked();
         options.displaySubtitle = $('#subtitle').isChecked();
-
-        // moved position ?
-        const oldPosition = $('#position').data('position');
-        if (oldPosition && oldPosition !== options.position) {
-            Toaster.removeContainer();
-        }
-        $('#position').data('position', options.position);
 
         // notify
         const type = $(this).data('type');

@@ -55,8 +55,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomer(): CustomerInformation
     {
@@ -68,8 +66,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDisplayMode(): TableView
     {
@@ -81,8 +77,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEditAction(): EntityAction
     {
@@ -112,8 +106,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessagePosition(): MessagePosition
     {
@@ -125,8 +117,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageProgress(): int
     {
@@ -135,8 +125,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageTimeout(): int
     {
@@ -145,8 +133,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPanelCalculation(): int
     {
@@ -167,102 +153,82 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageClose(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_CLOSE, $this->service->isMessageClose());
+        return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, $this->service->isMessageClose());
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageIcon(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_ICON, $this->service->isMessageIcon());
+        return $this->getPropertyBoolean(self::P_MESSAGE_ICON, $this->service->isMessageIcon());
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageSubTitle(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, $this->service->isMessageSubTitle());
+        return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, $this->service->isMessageSubTitle());
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageTitle(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_TITLE, $this->service->isMessageTitle());
-    }
-
-    /**
-     * Returns a value indicating if the catalog panel is displayed in the home page.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isPanelCatalog(): bool
-    {
-        return $this->isPropertyBoolean(self::P_PANEL_CATALOG, $this->service->isPanelCatalog());
-    }
-
-    /**
-     * Returns a value indicating if the month panel is displayed in the home page.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isPanelMonth(): bool
-    {
-        return $this->isPropertyBoolean(self::P_PANEL_MONTH, $this->service->isPanelMonth());
-    }
-
-    /**
-     * Returns a value indicating if the state panel is displayed in the home page.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isPanelState(): bool
-    {
-        return $this->isPropertyBoolean(self::P_PANEL_STATE, $this->service->isPanelState());
-    }
-
-    /**
-     * Gets a value indicating if the customer address is output within the PDF documents.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isPrintAddress(): bool
-    {
-        return $this->isPropertyBoolean(self::P_PRINT_ADDRESS, $this->service->isPrintAddress());
-    }
-
-    /**
-     * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isQrCode(): bool
-    {
-        return $this->isPropertyBoolean(self::P_QR_CODE, $this->service->isQrCode());
+        return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, $this->service->isMessageTitle());
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function isPanelCatalog(): bool
+    {
+        return $this->getPropertyBoolean(self::P_PANEL_CATALOG, $this->service->isPanelCatalog());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isPanelMonth(): bool
+    {
+        return $this->getPropertyBoolean(self::P_PANEL_MONTH, $this->service->isPanelMonth());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isPanelState(): bool
+    {
+        return $this->getPropertyBoolean(self::P_PANEL_STATE, $this->service->isPanelState());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isPrintAddress(): bool
+    {
+        return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, $this->service->isPrintAddress());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isQrCode(): bool
+    {
+        return $this->getPropertyBoolean(self::P_QR_CODE, $this->service->isQrCode());
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function isStatusBar(): bool
     {
-        return $this->isPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());
+        return $this->getPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());
     }
 
     /**

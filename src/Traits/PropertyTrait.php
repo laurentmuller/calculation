@@ -49,100 +49,7 @@ trait PropertyTrait
     }
 
     /**
-     * Gets an array property.
-     *
-     * @template T
-     *
-     * @param string $name    the property name to search for
-     * @param T[]    $default the default array if the property is not found or is not valid
-     *
-     * @return T[]
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyArray(string $name, array $default): array
-    {
-        $value = $this->getPropertyString($name);
-        if (!\is_string($value)) {
-            return $default;
-        }
-
-        /** @psalm-var mixed $array */
-        $array = \json_decode($value, true);
-        if (\JSON_ERROR_NONE !== \json_last_error() || !\is_array($array) || \count($array) !== \count($default)) {
-            return $default;
-        }
-
-        return $array;
-    }
-
-    /**
-     * Gets a date property.
-     *
-     * @param string              $name    the property name to search for
-     * @param ?\DateTimeInterface $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
-    {
-        $timestamp = $this->getPropertyInteger($name);
-        if (AbstractProperty::FALSE_VALUE !== $timestamp) {
-            $date = \DateTime::createFromFormat('U', (string) $timestamp);
-            if ($date instanceof \DateTime) {
-                return $date;
-            }
-        }
-
-        return $default;
-    }
-
-    /**
-     * Gets a float property.
-     *
-     * @param string $name    the property name to search for
-     * @param float  $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyFloat(string $name, float $default = 0.0): float
-    {
-        return (float) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets an integer property.
-     *
-     * @param string $name    the property name to search for
-     * @param int    $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyInteger(string $name, int $default = 0): int
-    {
-        return (int) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets a string property.
-     *
-     * @param string  $name    the property name to search for
-     * @param ?string $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getPropertyString(string $name, ?string $default = null): ?string
-    {
-        /** @psalm-var mixed $value */
-        $value = $this->getItemValue($name, $default);
-
-        return \is_string($value) ? $value : $default;
-    }
-
-    /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionEdit(): bool
     {
@@ -151,8 +58,6 @@ trait PropertyTrait
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionNone(): bool
     {
@@ -161,25 +66,10 @@ trait PropertyTrait
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionShow(): bool
     {
         return EntityAction::SHOW === $this->getEditAction();
-    }
-
-    /**
-     * Gets a boolean property.
-     *
-     * @param string $name    the property name to search for
-     * @param bool   $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function isPropertyBoolean(string $name, bool $default = false): bool
-    {
-        return (bool) $this->getItemValue($name, $default);
     }
 
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
@@ -225,23 +115,107 @@ trait PropertyTrait
     }
 
     /**
+     * Gets an array property.
+     *
+     * @template T
+     *
+     * @param string $name    the property name to search for
+     * @param T[]    $default the default array if the property is not found or is not valid
+     *
+     * @return T[]
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    abstract protected function updateAdapter(): void;
+    protected function getPropertyArray(string $name, array $default): array
+    {
+        $value = $this->getPropertyString($name);
+        if (!\is_string($value)) {
+            return $default;
+        }
+
+        /** @psalm-var mixed $array */
+        $array = \json_decode($value, true);
+        if (\JSON_ERROR_NONE !== \json_last_error() || !\is_array($array) || \count($array) !== \count($default)) {
+            return $default;
+        }
+
+        return $array;
+    }
 
     /**
-     * Gets an item value.
+     * Gets a boolean property.
      *
-     * @param string $name    the item name
-     * @param mixed  $default the default value if the item is not found
-     *
-     * @return mixed the value, if hit; the default value otherwise
+     * @param string $name    the property name to search for
+     * @param bool   $default the default value if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function getItemValue(string $name, mixed $default): mixed
+    protected function getPropertyBoolean(string $name, bool $default = false): bool
     {
-        return $this->getCacheValue($name, $default);
+        return (bool) $this->getCacheValue($name, $default);
+    }
+
+    /**
+     * Gets a date property.
+     *
+     * @param string              $name    the property name to search for
+     * @param ?\DateTimeInterface $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
+    {
+        $timestamp = $this->getPropertyInteger($name);
+        if (AbstractProperty::FALSE_VALUE !== $timestamp) {
+            $date = \DateTime::createFromFormat('U', (string) $timestamp);
+            if ($date instanceof \DateTime) {
+                return $date;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
+     * Gets a float property.
+     *
+     * @param string $name    the property name to search for
+     * @param float  $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function getPropertyFloat(string $name, float $default = 0.0): float
+    {
+        return (float) $this->getCacheValue($name, $default);
+    }
+
+    /**
+     * Gets an integer property.
+     *
+     * @param string $name    the property name to search for
+     * @param int    $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function getPropertyInteger(string $name, int $default = 0): int
+    {
+        return (int) $this->getCacheValue($name, $default);
+    }
+
+    /**
+     * Gets a string property.
+     *
+     * @param string  $name    the property name to search for
+     * @param ?string $default the default value if the property is not found
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    protected function getPropertyString(string $name, ?string $default = null): ?string
+    {
+        /** @psalm-var mixed $value */
+        $value = $this->getCacheValue($name, $default);
+
+        return \is_string($value) ? $value : $default;
     }
 
     /**
@@ -253,7 +227,7 @@ trait PropertyTrait
      *
      * @return bool true if default
      */
-    private function isDefaultValue(array $defaultProperties, string $name, mixed $value): bool
+    protected function isDefaultValue(array $defaultProperties, string $name, mixed $value): bool
     {
         return \array_key_exists($name, $defaultProperties) && $defaultProperties[$name] === $value;
     }
@@ -265,7 +239,7 @@ trait PropertyTrait
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function loadProperties(): array
+    protected function loadProperties(): array
     {
         $this->updateAdapter();
 
@@ -298,7 +272,7 @@ trait PropertyTrait
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function saveProperties(array $properties): void
+    protected function saveProperties(array $properties): void
     {
         $this->clearCache();
         foreach ($properties as $property) {
@@ -309,4 +283,9 @@ trait PropertyTrait
             $this->logWarning($this->trans('application_service.commit_error'));
         }
     }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    abstract protected function updateAdapter(): void;
 }

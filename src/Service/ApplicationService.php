@@ -91,8 +91,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomer(): CustomerInformation
     {
@@ -326,8 +324,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDisplayMode(): TableView
     {
@@ -339,8 +335,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEditAction(): EntityAction
     {
@@ -362,8 +356,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessagePosition(): MessagePosition
     {
@@ -375,8 +367,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageProgress(): int
     {
@@ -385,8 +375,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageTimeout(): int
     {
@@ -405,8 +393,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPanelCalculation(): int
     {
@@ -448,7 +434,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         );
         // password options
         foreach (self::PASSWORD_OPTIONS as $option) {
-            $properties[$option] = $this->isPropertyBoolean($option);
+            $properties[$option] = $this->getPropertyBoolean($option);
         }
 
         return $properties;
@@ -519,7 +505,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function isDefaultEdit(): bool
     {
-        return $this->isPropertyBoolean(self::P_DEFAULT_PRODUCT_EDIT, self::DEFAULT_PRODUCT_EDIT);
+        return $this->getPropertyBoolean(self::P_DEFAULT_PRODUCT_EDIT, self::DEFAULT_PRODUCT_EDIT);
     }
 
     /**
@@ -529,7 +515,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function isDisplayCaptcha(): bool
     {
-        return $this->isPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->debug);
+        return $this->getPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->debug);
     }
 
     /**
@@ -550,102 +536,82 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageClose(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_CLOSE, self::DEFAULT_MESSAGE_CLOSE);
+        return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, self::DEFAULT_MESSAGE_CLOSE);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageIcon(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_MESSAGE_ICON);
+        return $this->getPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_MESSAGE_ICON);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageSubTitle(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_MESSAGE_SUB_TITLE);
+        return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_MESSAGE_SUB_TITLE);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageTitle(): bool
     {
-        return $this->isPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_MESSAGE_TITLE);
+        return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_MESSAGE_TITLE);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelCatalog(): bool
     {
-        return $this->isPropertyBoolean(self::P_PANEL_CATALOG, true);
+        return $this->getPropertyBoolean(self::P_PANEL_CATALOG, true);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelMonth(): bool
     {
-        return $this->isPropertyBoolean(self::P_PANEL_MONTH, true);
+        return $this->getPropertyBoolean(self::P_PANEL_MONTH, true);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelState(): bool
     {
-        return $this->isPropertyBoolean(self::P_PANEL_STATE, true);
+        return $this->getPropertyBoolean(self::P_PANEL_STATE, true);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPrintAddress(): bool
     {
-        return $this->isPropertyBoolean(self::P_PRINT_ADDRESS, self::DEFAULT_PRINT_ADDRESS);
+        return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, self::DEFAULT_PRINT_ADDRESS);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isQrCode(): bool
     {
-        return $this->isPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
+        return $this->getPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isStatusBar(): bool
     {
-        return $this->isPropertyBoolean(self::P_STATUS_BAR, true);
+        return $this->getPropertyBoolean(self::P_STATUS_BAR, true);
     }
 
     /**

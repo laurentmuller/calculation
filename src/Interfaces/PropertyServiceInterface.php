@@ -331,61 +331,85 @@ interface PropertyServiceInterface
 
     /**
      * Gets the display mode for table.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDisplayMode(): TableView;
 
     /**
      * Gets the action to trigger within the entities.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEditAction(): EntityAction;
 
     /**
      * Gets the position of the flash bag messages (default: 'bottom-right').
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessagePosition(): MessagePosition;
 
     /**
      * Gets the message progress bar height (default: 1 pixel).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageProgress(): int;
 
     /**
      * Gets the timeout, in milliseconds, of the flash bag messages (default: 4000 ms).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageTimeout(): int;
 
     /**
      * Returns a value indicating number of displayed calculation in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPanelCalculation(): int;
 
     /**
      * Returns a value indicating if the default action is to edit the entity.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionEdit(): bool;
 
     /**
      * Returns a value indicating if the default action is to do nothing.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionNone(): bool;
 
     /**
      * Returns a value indicating if the default action is to show the entity.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isActionShow(): bool;
 
     /**
      * Returns if the flash bag message icon is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageClose(): bool;
 
     /**
      * Returns if the flash bag message icon is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageIcon(): bool;
 
     /**
      * Returns if the flash bag message subtitle is displayed (default: true).
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMessageSubTitle(): bool;
 
@@ -412,21 +436,29 @@ interface PropertyServiceInterface
 
     /**
      * Returns a value indicating if the state panel is displayed in the home page.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPanelState(): bool;
 
     /**
      * Gets a value indicating if the customer address is output within the PDF documents.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isPrintAddress(): bool;
 
     /**
      * Gets a value indicating if a QR-Code is output at the end of the PDF documents.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isQrCode(): bool;
 
     /**
      * Returns a value indicating if the status bar is displayed.
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isStatusBar(): bool;
 }

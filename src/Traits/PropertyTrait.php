@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
+use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
@@ -24,11 +25,13 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 trait PropertyTrait
 {
     use CacheAwareTrait {
-        clearCache as parentClearCache;
-        saveDeferredCacheValue as parentSaveDeferredCacheValue;
+        clearCache as traitClearCache;
+        saveDeferredCacheValue as traitSaveDeferredCacheValue;
     }
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceSubscriberTrait {
+        setContainer as traitSetContainer;
+    }
     use TranslatorAwareTrait;
 
     /**
@@ -36,7 +39,7 @@ trait PropertyTrait
      */
     public function clearCache(): bool
     {
-        if (!$this->parentClearCache()) {
+        if (!$this->traitClearCache()) {
             $this->logWarning($this->trans('application_service.clear_error'));
 
             return false;
@@ -181,13 +184,22 @@ trait PropertyTrait
 
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        if (!$this->parentSaveDeferredCacheValue($this->cleanKey($key), $value, $time)) {
+        if (!$this->traitSaveDeferredCacheValue($this->cleanKey($key), $value, $time)) {
             $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
 
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function setContainer(ContainerInterface $container): void
+    {
+        $this->traitSetContainer($container);
+        $this->updateAdapter();
     }
 
     /**
@@ -211,6 +223,11 @@ trait PropertyTrait
             $this->updateAdapter();
         }
     }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    abstract protected function updateAdapter(): void;
 
     /**
      * Gets an item value.
@@ -250,7 +267,6 @@ trait PropertyTrait
      */
     private function loadProperties(): array
     {
-        // reload data
         $this->updateAdapter();
 
         return [

@@ -108,11 +108,7 @@ class AdminController extends AbstractController
     {
         // properties
         $application = $this->getApplication();
-        $data = $application->getProperties([
-            PropertyServiceInterface::P_DATE_CALCULATION,
-            PropertyServiceInterface::P_DATE_PRODUCT,
-            PropertyServiceInterface::P_DATE_IMPORT,
-        ]);
+        $data = $application->getProperties();
 
         // form
         $form = $this->createForm(ApplicationParametersType::class, $data);

@@ -41,13 +41,9 @@ jobs:
         if: always() && steps.install.outcome == 'success'
         run: 'php bin/console lint:yaml translations config .github/workflows --parse-tags'
 
-      - name: Clear cache
-        if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console cache:clear --env=prod'
-      
       - name: Lint Twig
         if: always() && steps.install.outcome == 'success'        
-        run: 'php bin/console lint:twig templates --env=prod'
+        run: 'php bin/console lint:twig --env=prod templates'
 
       - name: Lint XLIFF
         if: always() && steps.install.outcome == 'success'

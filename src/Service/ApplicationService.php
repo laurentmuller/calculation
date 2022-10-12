@@ -43,9 +43,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 {
     use PropertyTrait;
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function __construct(
         private readonly EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]
@@ -54,7 +51,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         CacheItemPoolInterface $cache
     ) {
         $this->setAdapter($cache);
-        $this->updateAdapter();
     }
 
     /**
@@ -418,15 +414,13 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * Gets all properties.
-     *
-     * @param string[] $excluded the property keys to exclude
+     * Gets all properties except date values.
      *
      * @return array<string, mixed>
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getProperties(array $excluded = []): array
+    public function getProperties(): array
     {
         $properties = \array_merge(
             $this->loadProperties(),
@@ -450,19 +444,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
                 self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
                 self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
                 self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
-                // last update dates
-                self::P_DATE_CALCULATION => $this->getArchiveCalculation(),
-                self::P_DATE_PRODUCT => $this->getUpdateProducts(),
-                self::P_DATE_IMPORT => $this->getLastImport(),
             ]
         );
         // password options
         foreach (self::PASSWORD_OPTIONS as $option) {
             $properties[$option] = $this->isPropertyBoolean($option);
-        }
-        // exclude keys
-        if (!empty($excluded)) {
-            return \array_diff_key($properties, \array_flip($excluded));
         }
 
         return $properties;
@@ -517,6 +503,9 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $role;
     }
 
+    /**
+     * Return the debug state.
+     */
     public function isDebug(): bool
     {
         return $this->debug;
@@ -731,6 +720,12 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         $this->updateDeletedEntity(self::P_DEFAULT_STATE, $state);
     }
 
+    protected function updateAdapter(): void
+    {
+        $properties = $this->manager->getRepository(Property::class)->findAll();
+        $this->saveProperties($properties);
+    }
+
     /**
      * Gets the property repository.
      *
@@ -763,15 +758,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             }
             $property->setValue($value);
         }
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function updateAdapter(): void
-    {
-        $properties = $this->manager->getRepository(Property::class)->findAll();
-        $this->saveProperties($properties);
     }
 
     /**

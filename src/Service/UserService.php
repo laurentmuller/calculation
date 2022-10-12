@@ -35,9 +35,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 {
     use PropertyTrait;
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function __construct(
         private readonly UserPropertyRepository $repository,
         private readonly ApplicationService $service,
@@ -46,7 +43,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         CacheItemPoolInterface $cache
     ) {
         $this->setAdapter($cache);
-        $this->updateAdapter();
     }
 
     /**
@@ -292,6 +288,14 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this;
     }
 
+    protected function updateAdapter(): void
+    {
+        if (null !== $user = $this->getUser()) {
+            $properties = $this->repository->findByUser($user);
+            $this->saveProperties($properties);
+        }
+    }
+
     private function getUser(): ?UserInterface
     {
         return $this->security->getUser();
@@ -315,17 +319,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
                 $this->repository->add($property, false);
             }
             $property->setValue($value);
-        }
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function updateAdapter(): void
-    {
-        if (null !== $user = $this->getUser()) {
-            $properties = $this->repository->findByUser($user);
-            $this->saveProperties($properties);
         }
     }
 }

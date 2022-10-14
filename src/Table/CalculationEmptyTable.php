@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Repository\CalculationRepository;
+use App\Traits\EmptyItemsTrait;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -21,6 +22,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationEmptyTable extends AbstractCalculationItemsTable
 {
+    use EmptyItemsTrait;
+
     /**
      * The price label.
      */
@@ -52,26 +55,6 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function formatItems(array $items): string
-    {
-        $result = \array_map(function (array $item): string {
-            $founds = [];
-            if ($this->isFloatZero($item['price'])) {
-                $founds[] = $this->priceLabel;
-            }
-            if ($this->isFloatZero($item['quantity'])) {
-                $founds[] = $this->quantityLabel;
-            }
-
-            return \sprintf('%s (%s)', $item['description'], \implode(', ', $founds));
-        }, $items);
-
-        return \implode('<br>', $result);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getEmptyMessage(): string
@@ -93,5 +76,20 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     protected function getItemsCount(array $items): int
     {
         return \array_reduce($items, fn (int $carry, array $item) => $carry + \count((array) $item['items']), 0);
+    }
+
+    protected function getItemsSeparator(): string
+    {
+        return '<br>';
+    }
+
+    protected function getPriceLabel(): string
+    {
+        return $this->priceLabel;
+    }
+
+    protected function getQuantityLabel(): string
+    {
+        return $this->quantityLabel;
     }
 }

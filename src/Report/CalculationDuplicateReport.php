@@ -13,17 +13,30 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Traits\DuplicateItemsTrait;
 
 /**
  * Report for calculations with duplicate items.
  */
 class CalculationDuplicateReport extends AbstractCalculationItemsReport
 {
+    use DuplicateItemsTrait;
+
     /**
      * Constructor.
      *
-     * @param AbstractController $controller the parent controller
-     * @param array              $items      the items to render
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}>
+     *      }> $items
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -46,16 +59,6 @@ class CalculationDuplicateReport extends AbstractCalculationItemsReport
 
             return $carry;
         }, 0);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function formatItems(array $items): string
-    {
-        $result = \array_map(fn (array $item): string => \sprintf('%s (%d)', (string) $item['description'], (int) $item['count']), $items);
-
-        return \implode("\n", $result);
     }
 
     /**

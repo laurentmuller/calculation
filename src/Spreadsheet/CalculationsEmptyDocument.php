@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use App\Traits\EmptyItemsTrait;
 use App\Traits\MathTrait;
 
 /**
@@ -20,6 +21,7 @@ use App\Traits\MathTrait;
  */
 class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
 {
+    use EmptyItemsTrait;
     use MathTrait;
 
     /**
@@ -41,11 +43,11 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
      *      stateCode: string,
      *      customer: string,
      *      description: string,
-     *      items: array{
+     *      items: array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,
-     *          count: int}
+     *          count: int}>
      *      }> $entities
      */
     public function __construct(AbstractController $controller, array $entities)
@@ -55,23 +57,13 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
         $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function formatItems(array $items): string
+    protected function getPriceLabel(): string
     {
-        $result = \array_map(function (array $item): string {
-            $founds = [];
-            if ($this->isFloatZero((float) $item['price'])) {
-                $founds[] = $this->priceLabel;
-            }
-            if ($this->isFloatZero((float) $item['quantity'])) {
-                $founds[] = $this->quantityLabel;
-            }
+        return $this->priceLabel;
+    }
 
-            return \sprintf('%s (%s)', (string) $item['description'], \implode(', ', $founds));
-        }, $items);
-
-        return \implode("\n", $result);
+    protected function getQuantityLabel(): string
+    {
+        return $this->quantityLabel;
     }
 }

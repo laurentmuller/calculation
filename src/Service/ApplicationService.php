@@ -432,7 +432,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
                 self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
             ]
         );
-        // password options
         foreach (self::PASSWORD_OPTIONS as $option) {
             $properties[$option] = $this->getPropertyBoolean($option);
         }
@@ -631,15 +630,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $this;
     }
 
-    /**
-     * Save the given properties to the database and to the cache.
-     *
-     * @param array<string, mixed>      $properties    the properties to set
-     * @param array<string, mixed>|null $defaultValues the default values
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function setProperties(array $properties, ?array $defaultValues = null): self
+    public function setProperties(array $properties, ?array $defaultValues = null): static
     {
         if (!empty($properties)) {
             $repository = $this->getRepository();

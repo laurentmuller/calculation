@@ -96,11 +96,11 @@ class CalculationEmptyController extends AbstractController
      *      stateCode: string,
      *      customer: string,
      *      description: string,
-     *      items: array{
+     *      items: array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,
-     *          count: int}
+     *          count: int}>
      *      }>
      */
     private function getItems(CalculationRepository $repository): array

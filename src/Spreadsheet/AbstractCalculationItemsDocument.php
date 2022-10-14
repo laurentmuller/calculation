@@ -25,8 +25,12 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
  *      stateCode: string,
  *      customer: string,
  *      description: string,
- *      items: array
- * }>
+ *      items: array<array{
+ *          description: string,
+ *          quantity: float,
+ *          price: float,
+ *          count: int}>
+ *      }>
  */
 abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
 {
@@ -39,11 +43,11 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      *      stateCode: string,
      *      customer: string,
      *      description: string,
-     *      items: array{
+     *      items: array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,
-     *          count: int}
+     *          count: int}>
      *      }> $entities
      */
     public function __construct(AbstractController $controller, array $entities, string $title)
@@ -105,6 +109,12 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      * @param array $items the calculation items
      *
      * @return string the formatted items
+     *
+     * @psalm-param array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}> $items
      */
     abstract protected function formatItems(array $items): string;
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Traits\DuplicateItemsTrait;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -19,6 +20,8 @@ use Doctrine\Common\Collections\Criteria;
  */
 class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {
+    use DuplicateItemsTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -27,16 +30,6 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     public function count(): int
     {
         return $this->repository->countDuplicateItems();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function formatItems(array $items): string
-    {
-        $result = \array_map(fn (array $item): string => \sprintf('%s (%d)', $item['description'], $item['count']), $items);
-
-        return \implode('<br>', $result);
     }
 
     /**
@@ -68,5 +61,10 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
 
             return $carry;
         }, 0);
+    }
+
+    protected function getItemsSeparator(): string
+    {
+        return '<br>';
     }
 }

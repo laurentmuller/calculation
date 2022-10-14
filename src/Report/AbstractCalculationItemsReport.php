@@ -25,17 +25,36 @@ use App\Util\FormatUtils;
 /**
  * Report for calculations with invalid items.
  *
- * @extends AbstractArrayReport<mixed>
+ * @extends AbstractArrayReport<array{
+ *      id: int,
+ *      date: \DateTimeInterface,
+ *      stateCode: string,
+ *      customer: string,
+ *      description: string,
+ *      items: array<array{
+ *          description: string,
+ *          quantity: float,
+ *          price: float,
+ *          count: int}>
+ *      }>
  */
 abstract class AbstractCalculationItemsReport extends AbstractArrayReport
 {
     /**
      * Constructor.
      *
-     * @param AbstractController $controller  the parent controller
-     * @param array              $items       the items to render
-     * @param string             $title       the title to translate
-     * @param string             $description the description to translate
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}>
+     *      }> $items
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -71,16 +90,6 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
         $style = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
 
-        /**
-         * @var array{
-         *      id: int,
-         *      date: \DateTimeInterface,
-         *      stateCode: string,
-         *      customer: string,
-         *      description: string,
-         *      items: array
-         *      } $entity
-         */
         foreach ($entities as $entity) {
             $table->startRow()
                 ->add(FormatUtils::formatId($entity['id']))
@@ -113,6 +122,12 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      * @param array $items the calculation items
      *
      * @return string the formatted items
+     *
+     * @psalm-param array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}> $items
      */
     abstract protected function formatItems(array $items): string;
 

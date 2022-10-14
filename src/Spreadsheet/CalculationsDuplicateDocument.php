@@ -13,12 +13,15 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use App\Traits\DuplicateItemsTrait;
 
 /**
  * Spreadsheet document for the list of calculations with duplicate items.
  */
 class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
 {
+    use DuplicateItemsTrait;
+
     /**
      * Constructor.
      *
@@ -28,25 +31,15 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
      *      stateCode: string,
      *      customer: string,
      *      description: string,
-     *      items: array{
+     *      items: array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,
-     *          count: int}
+     *          count: int}>
      *      }> $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities, 'duplicate.title');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function formatItems(array $items): string
-    {
-        $result = \array_map(fn (array $item): string => \sprintf('%s (%d)', (string) $item['description'], (int) $item['count']), $items);
-
-        return \implode("\n", $result);
     }
 }

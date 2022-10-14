@@ -30,17 +30,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     }
 
     /**
-     * Formats the invalid calculation items.
-     *
-     * @param array $items the invalid calculation items
-     *
-     * @return string the formatted items
-     *
-     * @psalm-param array<array{description: string, quantity: float, price: float, count: int}> $items
-     */
-    abstract public function formatItems(array $items): string;
-
-    /**
      * {@inheritdoc}
      */
     public function getEntityClassName(): ?string
@@ -75,6 +64,21 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     }
 
     /**
+     * Formats the invalid calculation items.
+     *
+     * @param array $items the invalid calculation items
+     *
+     * @return string the formatted items
+     *
+     * @psalm-param array<array{
+     *     description: string,
+     *     quantity: float,
+     *     price: float,
+     *     count: int}> $items
+     */
+    abstract protected function formatItems(array $items): string;
+
+    /**
      * {@inheritdoc}
      */
     protected function getColumnDefinitions(): string
@@ -96,7 +100,18 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-return array<int, array{id: int, date: \DateTimeInterface, stateCode: string, customer: string, description: string, items: array{description: string, quantity: float, price: float, count: int}}>
+     * @psalm-return array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}>
+     *      }>
      */
     abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array;
 
@@ -105,7 +120,18 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @param array $items the invalid calculation items
      *
-     * @psalm-param array<int, array{id: int, date: \DateTimeInterface, stateCode: string, customer: string, description: string, items: array{description: string, quantity: float, price: float, count: int}}> $items
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}>
+     *      }> $items
      */
     abstract protected function getItemsCount(array $items): int;
 

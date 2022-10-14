@@ -96,13 +96,24 @@ trait PropertyTrait
         $result = $this->traitSetContainer($container);
 
         try {
-            $this->updateAdapter();
+            if (!$this->getPropertyBoolean(self::P_CACHE_SAVED)) {
+                $this->updateAdapter();
+            }
         } catch (\Exception $e) {
             $this->logException($e);
         }
 
         return $result;
     }
+
+    /**
+     * Save the given properties to the database and to the cache.
+     *
+     * @param array<string, mixed> $properties the properties to set
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    abstract public function setProperties(array $properties): static;
 
     /**
      * Sets a single property value.
@@ -112,18 +123,6 @@ trait PropertyTrait
     public function setProperty(string $name, mixed $value): self
     {
         return $this->setProperties([$name => $value]);
-    }
-
-    /**
-     * Update the cache if needed.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function updateCache(): void
-    {
-        if (!$this->getCacheValue(self::P_CACHE_SAVED, false)) {
-            $this->updateAdapter();
-        }
     }
 
     /**

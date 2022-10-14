@@ -231,14 +231,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this->getPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());
     }
 
-    /**
-     * Save the given properties to the database and to the cache.
-     *
-     * @param array<string, mixed> $properties the properties to set
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function setProperties(array $properties): self
+    public function setProperties(array $properties): static
     {
         if (!empty($properties) && null !== $user = $this->getUser()) {
             $defaultValues = $this->service->getProperties();

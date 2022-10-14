@@ -392,11 +392,11 @@ class CalculationRepository extends AbstractRepository
      *      stateCode: string,
      *      customer: string,
      *      description: string,
-     *      items: array{
+     *      items: array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,
-     *          count: int}
+     *          count: int}>
      *      }>
      */
     public function getDuplicateItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
@@ -443,11 +443,11 @@ class CalculationRepository extends AbstractRepository
          *      stateCode: string,
          *      customer: string,
          *      description: string,
-         *      items: array{
+         *      items: array<array{
          *          description: string,
          *          quantity: float,
          *          price: float,
-         *          count: int}
+         *          count: int}>
          *      }> $result
          */
         $result = [];
@@ -484,11 +484,11 @@ class CalculationRepository extends AbstractRepository
      *      stateCode: string,
      *      customer: string,
      *      description: string,
-     *      items: array{
+     *      items: array<array{
      *          description: string,
      *          quantity: float,
      *          price: float,
-     *          count: int}
+     *          count: int}>
      *      }>
      */
     public function getEmptyItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
@@ -537,11 +537,11 @@ class CalculationRepository extends AbstractRepository
          *      stateCode: string,
          *      customer: string,
          *      description: string,
-         *      items: array{
+         *      items: array<array{
          *          description: string,
          *          quantity: float,
          *          price: float,
-         *          count: int}
+         *          count: int}>
          *      }> $result
          */
         $result = [];

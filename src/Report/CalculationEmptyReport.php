@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Traits\EmptyItemsTrait;
 use App\Traits\MathTrait;
 
 /**
@@ -20,6 +21,7 @@ use App\Traits\MathTrait;
  */
 class CalculationEmptyReport extends AbstractCalculationItemsReport
 {
+    use EmptyItemsTrait;
     use MathTrait;
 
     /**
@@ -35,8 +37,18 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
     /**
      * Constructor.
      *
-     * @param AbstractController $controller the parent controller
-     * @param array              $items      the items to render
+     * @psalm-param array<int, array{
+     *      id: int,
+     *      date: \DateTimeInterface,
+     *      stateCode: string,
+     *      customer: string,
+     *      description: string,
+     *      items: array<array{
+     *          description: string,
+     *          quantity: float,
+     *          price: float,
+     *          count: int}>
+     *      }> $items
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -56,24 +68,14 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
         return \array_reduce($items, fn (int $carry, array $item) => $carry + \count((array) $item['items']), 0);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function formatItems(array $items): string
+    protected function getPriceLabel(): string
     {
-        $result = \array_map(function (array $item): string {
-            $founds = [];
-            if ($this->isFloatZero((float) $item['price'])) {
-                $founds[] = $this->priceLabel;
-            }
-            if ($this->isFloatZero((float) $item['quantity'])) {
-                $founds[] = $this->quantityLabel;
-            }
+        return $this->priceLabel;
+    }
 
-            return \sprintf('%s (%s)', (string) $item['description'], \implode(', ', $founds));
-        }, $items);
-
-        return \implode("\n", $result);
+    protected function getQuantityLabel(): string
+    {
+        return $this->quantityLabel;
     }
 
     /**

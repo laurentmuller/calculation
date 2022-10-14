@@ -1,4 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
+{% from 'macros/_timestampable.html.twig' import timestampable %}
 {% from 'macros/_icons.html.twig' import link %}
 {% form_theme form with _self %}
 {# item label #}
@@ -138,6 +139,15 @@
     {% endfor -%}
 </div>
 <small class="text-muted empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>
+{% endblock %}
+{# footer #}
+
+{% block card_footer -%}
+    {{ parent() }}
+    {% if not item.new %}
+        <hr class="card-footer-line">
+        {{ timestampable(item) }}
+    {% endif %}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}

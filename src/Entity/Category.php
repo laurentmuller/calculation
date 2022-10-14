@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
 use App\Repository\CategoryRepository;
+use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,8 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'sy_Category')]
 #[ORM\UniqueConstraint(name: 'unique_category_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'category.unique_code')]
-class Category extends AbstractEntity
+class Category extends AbstractEntity implements TimestampableInterface
 {
+    use TimestampableTrait;
+
     /**
      * The unique code.
      */

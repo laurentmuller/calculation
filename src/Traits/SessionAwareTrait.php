@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -23,16 +22,25 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  */
 trait SessionAwareTrait
 {
-    /**
-     * @throws ContainerExceptionInterface
-     */
+    private ?RequestStack $requestStack = null;
+
     #[SubscribedService]
     public function getRequestStack(): RequestStack
     {
-        /** @psalm-var RequestStack $result */
-        $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+        if (null === $this->requestStack) {
+            /** @phpstan-var RequestStack $result */
+            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+            $this->requestStack = $result;
+        }
 
-        return $result;
+        return $this->requestStack;
+    }
+
+    public function setRequestStack(RequestStack $requestStack): static
+    {
+        $this->requestStack = $requestStack;
+
+        return $this;
     }
 
     /**
@@ -128,13 +136,7 @@ trait SessionAwareTrait
      */
     protected function getSessionValue(string $key, mixed $default = null): mixed
     {
-        if ($session = $this->getSession()) {
-            $sessionKey = $this->getSessionKey($key);
-
-            return $session->get($sessionKey, $default);
-        }
-
-        return $default;
+        return $this->getSession()?->get($this->getSessionKey($key), $default) ?? $default;
     }
 
     /**
@@ -146,13 +148,7 @@ trait SessionAwareTrait
      */
     protected function hasSessionValue(string $key): bool
     {
-        if ($session = $this->getSession()) {
-            $sessionKey = $this->getSessionKey($key);
-
-            return $session->has($sessionKey);
-        }
-
-        return false;
+        return $this->getSession()?->has($this->getSessionKey($key)) ?? false;
     }
 
     /**
@@ -177,13 +173,7 @@ trait SessionAwareTrait
      */
     protected function removeSessionValue(string $key): mixed
     {
-        if ($session = $this->getSession()) {
-            $sessionKey = $this->getSessionKey($key);
-
-            return $session->remove($sessionKey);
-        }
-
-        return null;
+        return $this->getSession()?->remove($this->getSessionKey($key)) ?? null;
     }
 
     /**
@@ -206,13 +196,10 @@ trait SessionAwareTrait
      */
     protected function setSessionValue(string $key, mixed $value): static
     {
-        if ($session = $this->getSession()) {
-            $sessionKey = $this->getSessionKey($key);
-            if (null === $value) {
-                $session->remove($key);
-            } else {
-                $session->set($sessionKey, $value);
-            }
+        if (null === $value) {
+            $this->removeSessionValue($key);
+        } else {
+            $this->getSession()?->set($this->getSessionKey($key), $value);
         }
 
         return $this;

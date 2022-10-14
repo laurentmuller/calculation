@@ -15,7 +15,7 @@ namespace App\Table;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\GroupRepository;
-use App\Traits\CheckerAwareTrait;
+use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Util\FileUtils;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -30,7 +30,7 @@ use Twig\Environment;
  */
 class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
-    use CheckerAwareTrait;
+    use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
 
     /**

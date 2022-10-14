@@ -54,12 +54,11 @@ class MySqlDocument extends AbstractDocument
         }
         $this->start($title);
 
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Value' => Alignment::HORIZONTAL_LEFT,
         ]);
 
-        $row = 2;
         if (!empty($database)) {
             $row = $this->outputArray($row, $database);
         }

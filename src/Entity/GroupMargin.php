@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\TimestampableInterface;
 use App\Repository\GroupMarginRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: GroupMarginRepository::class)]
 #[ORM\Table(name: 'sy_GroupMargin')]
-class GroupMargin extends AbstractMargin
+class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
 {
     /**
      * The parent's group.
@@ -32,9 +34,11 @@ class GroupMargin extends AbstractMargin
     protected ?Group $group = null;
 
     /**
-     * Get the group.
+     * {@inheritDoc}
+     *
+     * @return Group|null
      */
-    public function getGroup(): ?Group
+    public function getParentTimestampable(): ?TimestampableInterface
     {
         return $this->group;
     }

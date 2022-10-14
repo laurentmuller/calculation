@@ -15,7 +15,7 @@ namespace App\Table;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
-use App\Traits\CheckerAwareTrait;
+use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -31,7 +31,7 @@ use Twig\Environment;
  */
 class CalculationStateTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
-    use CheckerAwareTrait;
+    use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 

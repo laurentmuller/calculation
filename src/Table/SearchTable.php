@@ -15,7 +15,7 @@ namespace App\Table;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Service\SearchService;
-use App\Traits\CheckerAwareTrait;
+use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  */
 class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 {
-    use CheckerAwareTrait;
+    use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 

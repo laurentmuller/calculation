@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-
+{% from 'macros/_timestampable.html.twig' import timestampable %}
 {# parameters #}
 {%- set title = new ? 'category.add.title' : 'category.edit.title' -%}
 {%- set title_icon = ICON_CATEGORY -%}
@@ -15,6 +15,14 @@
     </div>
 </div>
 {{ form_row(form.description) }}
+{% endblock %}
+
+{% block card_footer -%}
+    {{ parent() }}
+    {% if not item.new %}
+        <hr class="card-footer-line">
+        {{ timestampable(item) }}
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

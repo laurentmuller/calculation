@@ -13,8 +13,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
+use App\Interfaces\TimestampableInterface;
 use App\Repository\UserRepository;
 use App\Traits\RoleTrait;
+use App\Traits\TimestampableTrait;
 use App\Util\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -41,9 +43,10 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[UniqueEntity(fields: ['email'], message: 'email.already_used')]
 #[UniqueEntity(fields: ['username'], message: 'username.already_used')]
 #[Vich\Uploadable]
-class User extends AbstractEntity implements PasswordAuthenticatedUserInterface, ResetPasswordRequestInterface, RoleInterface, UserInterface
+class User extends AbstractEntity implements PasswordAuthenticatedUserInterface, ResetPasswordRequestInterface, RoleInterface, TimestampableInterface, UserInterface
 {
     use RoleTrait;
+    use TimestampableTrait;
 
     #[Assert\Email]
     #[Assert\NotBlank]
@@ -95,9 +98,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     #[Assert\Length(max: 20)]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $selector = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 180)]

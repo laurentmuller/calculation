@@ -93,7 +93,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the text for the updated date and user me.
+     * Gets the text for the updated date and username.
      */
     public function getUpdatedText(TranslatorInterface $translator, bool $short = false): string
     {

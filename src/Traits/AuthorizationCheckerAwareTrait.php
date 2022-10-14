@@ -14,21 +14,37 @@ namespace App\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
  * Trait to check grant actions.
  */
-trait CheckerAwareTrait
+trait AuthorizationCheckerAwareTrait
 {
-    /**
-     * The granted values.
-     *
-     * @var bool[]
-     */
+    private ?AuthorizationCheckerInterface $authorizationChecker = null;
+
+    /** @var bool[] */
     private array $rights = [];
+
+    #[SubscribedService]
+    public function getAuthorizationChecker(): AuthorizationCheckerInterface
+    {
+        if (null === $this->authorizationChecker) {
+            /** @psalm-var AuthorizationCheckerInterface $result */
+            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+            $this->authorizationChecker = $result;
+        }
+
+        return $this->authorizationChecker;
+    }
+
+    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): static
+    {
+        $this->authorizationChecker = $authorizationChecker;
+
+        return $this;
+    }
 
     /**
      * Returns if the given action for the given subject (entity name) is granted.
@@ -37,7 +53,7 @@ trait CheckerAwareTrait
     {
         $key = \sprintf('%s.%s', $this->asString($action), $this->asString($subject));
         if (!isset($this->rights[$key])) {
-            return $this->rights[$key] = $this->checker()->isGranted($action, $subject);
+            return $this->rights[$key] = $this->getAuthorizationChecker()->isGranted($action, $subject);
         }
 
         return $this->rights[$key];
@@ -91,20 +107,8 @@ trait CheckerAwareTrait
         return $this->isGranted(EntityPermission::SHOW, $subject);
     }
 
-    private function asString(mixed $value): string
+    private function asString(string|\UnitEnum $value): string
     {
-        return $value instanceof \UnitEnum ? $value->name : (string) $value;
-    }
-
-    /**
-     * @throws ContainerExceptionInterface
-     */
-    #[SubscribedService]
-    private function checker(): AuthorizationCheckerInterface
-    {
-        /** @psalm-var AuthorizationCheckerInterface $result */
-        $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
-
-        return $result;
+        return $value instanceof \UnitEnum ? $value->name : $value;
     }
 }

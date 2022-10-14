@@ -34,7 +34,7 @@ class GlobalMarginsDocument extends AbstractArrayDocument
         $this->start('globalmargin.list.title');
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'globalmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.margin' => Alignment::HORIZONTAL_RIGHT,
@@ -46,7 +46,6 @@ class GlobalMarginsDocument extends AbstractArrayDocument
             ->setFormatPercent(3);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                     $entity->getMinimum(),

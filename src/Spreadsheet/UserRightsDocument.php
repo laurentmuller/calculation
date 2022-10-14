@@ -88,10 +88,7 @@ class UserRightsDocument extends AbstractArrayDocument
         foreach ($permissions as $permission) {
             $headers[$permission->getReadable()] = Alignment::HORIZONTAL_CENTER;
         }
-        $this->setHeaderValues($headers);
-
-        // rows
-        $row = 2;
+        $row = $this->setHeaderValues($headers);
 
         // admin role
         $this->outputRole($service->getAdminRole(), $row);

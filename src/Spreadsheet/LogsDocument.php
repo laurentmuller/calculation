@@ -56,7 +56,7 @@ class LogsDocument extends AbstractDocument
 
         // headers
         $alignments = [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP];
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'log.fields.level' => $alignments,
             'log.fields.channel' => $alignments,
             'log.fields.createdAt' => $alignments,
@@ -69,7 +69,6 @@ class LogsDocument extends AbstractDocument
             ->setColumnWidth(4, 140, true);
 
         // logs
-        $row = 2;
         $logs = $logFile->getLogs();
         $sheet = $this->getActiveSheet();
         foreach ($logs as $log) {

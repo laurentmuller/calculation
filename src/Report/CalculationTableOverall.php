@@ -120,9 +120,11 @@ class CalculationTableOverall extends PdfTableBuilder
             ->setFontItalic()
             ->setFontSize(7);
         $oldMargins = $this->parent->setCellMargin(0);
+        $created = $calculation->getCreatedText($this->translator);
+        $updated = $calculation->getUpdatedText($this->translator);
         $this->startRow()
-            ->add($calculation->getCreatedText($this->translator), 1, $style, PdfTextAlignment::LEFT)
-            ->add($calculation->getUpdatedText($this->translator), 4, $style, PdfTextAlignment::RIGHT)
+            ->add($created, 1, $style, PdfTextAlignment::LEFT)
+            ->add($updated, 4, $style, PdfTextAlignment::RIGHT)
             ->endRow();
         $this->parent->setCellMargin($oldMargins);
     }

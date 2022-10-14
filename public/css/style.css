@@ -790,3 +790,9 @@ body.dark .small-scrollbar::-webkit-scrollbar-thumb:hover {
 {
     margin-left: 136px;
 }
+
+.card-footer hr.card-footer-line {
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    margin-bottom: 0.75rem;
+}

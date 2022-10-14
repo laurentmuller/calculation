@@ -287,10 +287,10 @@ common:
   empty_user: Système
   entity_created: 'Création : %date% - %user%'
   entity_created_short: '%date% - %user%'
-  entity_created_tooltip: Date de création - Nom de l'utilisateur
+  entity_created_tooltip: Date de création et nom de l'utilisateur
   entity_updated: 'Mise à jour : %date% - %user%'
   entity_updated_short: '%date% - %user%'
-  entity_updated_tooltip: Date de mise à jour - Nom de l'utilisateur
+  entity_updated_tooltip: Date de mise à jour et nom de l'utilisateur
   hide_password: Masquer le mot de passe
   id: Numéro
   no_script_support: Votre navigateur ne supporte pas JavaScript !

@@ -203,8 +203,7 @@ class CalculationController extends AbstractEntityController
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
         $qrcode = $this->getQrCode($generator, $calculation);
-        $doc = new CalculationReport($this, $calculation, $qrcode);
-        $doc->setLogger($logger);
+        $doc = new CalculationReport($this, $logger, $calculation, $qrcode);
 
         return $this->renderPdfDocument($doc);
     }
@@ -280,11 +279,7 @@ class CalculationController extends AbstractEntityController
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
-        $translator = $this->getTranslator();
-
         /* @var Calculation $item */
-        $parameters['created_item'] = $item->getCreatedText($translator, true);
-        $parameters['updated_item'] = $item->getUpdatedText($translator, true);
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();

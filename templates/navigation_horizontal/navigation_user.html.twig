@@ -1,5 +1,5 @@
 {# user menu #}
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_switcher %}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {% apply spaceless %}
@@ -16,23 +16,7 @@
     {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
     {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
     {{ dropdownSeparator() }}
-    {% set is_dark = theme_dark(app.request) %}
-    {% set theme_dark = enum('App\\Enums\\Theme::DARK') %}
-    {% set theme_light = enum('App\\Enums\\Theme::LIGHT') %}
-    {% set theme_icon = is_dark ? theme_light.icon : theme_dark.icon %}
-    {% set theme_text = is_dark ? theme_light.readable : theme_dark.readable %}
-    <button class="dropdown-item item-theme" type="button"
-            data-title="{{ 'theme.title'|trans }}"
-            data-path="{{ path('theme_save') }}"
-            data-light-css="{{ asset_versioned(theme_light.css) }}"
-            data-light-text="{{ theme_light.readable|trans }}"
-            data-light-icon="{{ theme_light.icon }}"
-            data-dark-css="{{ asset_versioned(theme_dark.css) }}"
-            data-dark-text="{{ theme_dark.readable|trans }}"
-            data-dark-icon="{{ theme_dark.icon }}"
-            data-error="{{ 'theme.error'|trans }}">
-        {{- icon(theme_icon, theme_text) -}}
-    </button>
+    {{ theme_switcher('button', 'dropdown-item', {'type': 'button'}) }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
     {% if is_previous_admin -%}
         {{ dropdownSeparator() }}

@@ -34,7 +34,7 @@ class GroupsDocument extends AbstractArrayDocument
         $this->start('group.list.title');
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'group.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'group.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'group.fields.margins' => Alignment::HORIZONTAL_RIGHT,
@@ -46,7 +46,6 @@ class GroupsDocument extends AbstractArrayDocument
             ->setFormatInt(4);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getCode(),

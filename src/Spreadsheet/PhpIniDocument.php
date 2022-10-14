@@ -62,13 +62,12 @@ class PhpIniDocument extends AbstractDocument
         }
 
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'Directive' => Alignment::HORIZONTAL_LEFT,
             'Local Value' => Alignment::HORIZONTAL_LEFT,
             'Master Value' => Alignment::HORIZONTAL_LEFT,
         ]);
 
-        $row = 2;
         foreach ($content as $key => $value) {
             if ($this->outputGroup($row, $key)) {
                 ++$row;

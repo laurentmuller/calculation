@@ -316,7 +316,7 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
-     *  @psalm-param array<array{entity: null|string, id: string}> $values
+     * @psalm-param array<array{entity: string|null, id: string}> $values
      */
     private function sortDialogs(array &$values): void
     {

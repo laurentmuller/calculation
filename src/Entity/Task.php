@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskRepository;
+use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -27,8 +29,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'sy_Task')]
 #[ORM\UniqueConstraint(name: 'unique_task_name', columns: ['name'])]
 #[UniqueEntity(fields: 'name', message: 'task.unique_name')]
-class Task extends AbstractCategoryItemEntity implements \Countable
+class Task extends AbstractCategoryItemEntity implements \Countable, TimestampableInterface
 {
+    use TimestampableTrait;
+
     /**
      * The parent's category.
      */
@@ -172,7 +176,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
     public function removeItem(TaskItem $item): self
     {
         if ($this->items->removeElement($item)) {
-            if ($item->getTask() === $this) {
+            if ($item->getParentTimestampable() === $this) {
                 $item->setTask(null);
             }
 

@@ -23,9 +23,9 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 trait CacheAwareTrait
 {
     /**
-     * The cache adapter.
+     * The cache.
      */
-    private ?CacheItemPoolInterface $adapter = null;
+    private ?CacheItemPoolInterface $cacheAdapter = null;
 
     /**
      * The reserved characters.
@@ -35,23 +35,11 @@ trait CacheAwareTrait
     private static ?array $reservedCharacters = null;
 
     /**
-     * Remove all reserved characters that cannot be used in a key.
-     */
-    public function cleanKey(string $key): string
-    {
-        if (null === self::$reservedCharacters) {
-            self::$reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
-        }
-
-        return \str_replace(self::$reservedCharacters, '_', $key);
-    }
-
-    /**
      * Clear this cache adapter.
      */
     public function clearCache(): bool
     {
-        return $this->adapter()->clear();
+        return $this->getCacheAdapter()->clear();
     }
 
     /**
@@ -59,7 +47,7 @@ trait CacheAwareTrait
      */
     public function commitDeferredValues(): bool
     {
-        return $this->adapter()->commit();
+        return $this->getCacheAdapter()->commit();
     }
 
     /**
@@ -69,7 +57,19 @@ trait CacheAwareTrait
      */
     public function deleteCacheItem(string $key): bool
     {
-        return $this->adapter()->deleteItem($this->cleanKey($key));
+        return $this->getCacheAdapter()->deleteItem(self::cleanKey($key));
+    }
+
+    #[SubscribedService]
+    public function getCacheAdapter(): CacheItemPoolInterface
+    {
+        if (null === $this->cacheAdapter) {
+            /** @psalm-var CacheItemPoolInterface $result */
+            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+            $this->cacheAdapter = $result;
+        }
+
+        return $this->cacheAdapter;
     }
 
     /**
@@ -79,7 +79,7 @@ trait CacheAwareTrait
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
-        return $this->adapter()->getItem($this->cleanKey($key));
+        return $this->getCacheAdapter()->getItem(self::cleanKey($key));
     }
 
     /**
@@ -95,7 +95,7 @@ trait CacheAwareTrait
      */
     public function getCacheValue(string $key, mixed $default = null): mixed
     {
-        $key = $this->cleanKey($key);
+        $key = self::cleanKey($key);
         if (($item = $this->getCacheItem($key)) && $item->isHit()) {
             return $item->get();
         }
@@ -121,7 +121,7 @@ trait CacheAwareTrait
      */
     public function hasCacheItem(string $key): bool
     {
-        return $this->adapter()->hasItem($this->cleanKey($key));
+        return $this->getCacheAdapter()->hasItem(self::cleanKey($key));
     }
 
     /**
@@ -143,14 +143,21 @@ trait CacheAwareTrait
                 $item->expiresAfter($time);
             }
 
-            return $this->adapter()->saveDeferred($item);
+            return $this->getCacheAdapter()->saveDeferred($item);
         }
 
         return false;
     }
 
+    public function setCacheAdapter(CacheItemPoolInterface $cacheAdapter): static
+    {
+        $this->cacheAdapter = $cacheAdapter;
+
+        return $this;
+    }
+
     /**
-     * Save the given value to the cache.
+     * Save the given value to the cache. If the value is null, the item is removed from the cache.
      *
      * @param string                 $key   The key for which to save the value
      * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
@@ -162,7 +169,7 @@ trait CacheAwareTrait
      */
     public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): static
     {
-        $key = $this->cleanKey($key);
+        $key = self::cleanKey($key);
         if (null === $value) {
             $this->deleteCacheItem($key);
         } elseif (null !== $item = $this->getCacheItem($key)) {
@@ -170,28 +177,21 @@ trait CacheAwareTrait
             if (null !== $time) {
                 $item->expiresAfter($time);
             }
-            $this->adapter()->save($item);
+            $this->getCacheAdapter()->save($item);
         }
 
         return $this;
     }
 
-    #[SubscribedService]
-    private function adapter(): CacheItemPoolInterface
+    /**
+     * Remove all reserved characters that cannot be used in a key.
+     */
+    private static function cleanKey(string $key): string
     {
-        if (null === $this->adapter) {
-            /** @psalm-var CacheItemPoolInterface $result */
-            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
-            $this->adapter = $result;
+        if (null === self::$reservedCharacters) {
+            self::$reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
         }
 
-        return $this->adapter;
-    }
-
-    private function setAdapter(CacheItemPoolInterface $adapter): static
-    {
-        $this->adapter = $adapter;
-
-        return $this;
+        return \str_replace(self::$reservedCharacters, '_', $key);
     }
 }

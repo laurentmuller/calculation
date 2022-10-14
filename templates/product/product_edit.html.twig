@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-
+{% from 'macros/_timestampable.html.twig' import timestampable %}
 {# parameters #}
 {%- set title = new ? 'product.add.title' : 'product.edit.title' -%}
 {%- set title_icon = ICON_PRODUCT -%}
@@ -10,7 +10,6 @@
                      'data-unit-error': 'product.edit.error_search_unit'|trans,
                      'data-supplier-search': url('ajax_search_supplier'),
                      'data-supplier-error': 'product.edit.error_search_supplier'|trans}) -%}
-
 {% block card_body %}
 {{ form_row(form.description) }}
 <div class="form-row">
@@ -25,6 +24,14 @@
     </div>
 </div>
 {{ form_row(form.supplier) }}
+{% endblock %}
+
+{% block card_footer -%}
+    {{ parent() }}
+    {% if not item.new %}
+        <hr class="card-footer-line">
+        {{ timestampable(item) }}
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

@@ -34,7 +34,7 @@ class CustomersDocument extends AbstractArrayDocument
         $this->start('customer.list.title');
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'customer.fields.lastName' => Alignment::HORIZONTAL_GENERAL,
             'customer.fields.firstName' => Alignment::HORIZONTAL_GENERAL,
             'customer.fields.company' => Alignment::HORIZONTAL_GENERAL,
@@ -44,7 +44,6 @@ class CustomersDocument extends AbstractArrayDocument
         ]);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getLastName(),

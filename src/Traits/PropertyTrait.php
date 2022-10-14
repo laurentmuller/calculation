@@ -15,6 +15,7 @@ namespace App\Traits;
 use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
 use Psr\Container\ContainerInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
@@ -25,8 +26,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 trait PropertyTrait
 {
     use CacheAwareTrait {
-        clearCache as traitClearCache;
-        saveDeferredCacheValue as traitSaveDeferredCacheValue;
+        clearCache as private traitClearCache;
+        saveDeferredCacheValue as private traitSaveDeferredCacheValue;
     }
     use LoggerAwareTrait;
     use ServiceSubscriberTrait {
@@ -74,7 +75,7 @@ trait PropertyTrait
 
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        if (!$this->traitSaveDeferredCacheValue($this->cleanKey($key), $value, $time)) {
+        if (!$this->traitSaveDeferredCacheValue($key, $value, $time)) {
             $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
 
             return false;
@@ -84,12 +85,17 @@ trait PropertyTrait
     }
 
     /**
+     * Override to update cached values.
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function setContainer(ContainerInterface $container): void
+    #[Required]
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
-        $this->traitSetContainer($container);
+        $result = $this->traitSetContainer($container);
         $this->updateAdapter();
+
+        return $result;
     }
 
     /**

@@ -13,14 +13,17 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Util\Utils;
-use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Trait to log messages within a LoggerInterface instance.
  */
 trait LoggerTrait
 {
-    use LoggerAwareTrait;
+    /**
+     * Gets the logger.
+     */
+    abstract public function getLogger(): LoggerInterface;
 
     /**
      * Logs with an arbitrary level message.
@@ -29,7 +32,7 @@ trait LoggerTrait
      */
     public function log(mixed $level, string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->log($level, $message, $context);
+        $this->getLogger()->log($level, $message, $context);
     }
 
     /**
@@ -37,7 +40,7 @@ trait LoggerTrait
      */
     public function logAlert(string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->alert($message, $context);
+        $this->getLogger()->alert($message, $context);
     }
 
     /**
@@ -45,7 +48,7 @@ trait LoggerTrait
      */
     public function logCritical(string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->critical($message, $context);
+        $this->getLogger()->critical($message, $context);
     }
 
     /**
@@ -53,7 +56,7 @@ trait LoggerTrait
      */
     public function logEmergency(string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->emergency($message, $context);
+        $this->getLogger()->emergency($message, $context);
     }
 
     /**
@@ -61,7 +64,7 @@ trait LoggerTrait
      */
     public function logError(string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->error($message, $context);
+        $this->getLogger()->error($message, $context);
     }
 
     /**
@@ -80,7 +83,7 @@ trait LoggerTrait
      */
     public function logInfo(string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->info($message, $context);
+        $this->getLogger()->info($message, $context);
     }
 
     /**
@@ -88,7 +91,7 @@ trait LoggerTrait
      */
     public function logNotice(string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->notice($message, $context);
+        $this->getLogger()->notice($message, $context);
     }
 
     /**
@@ -96,6 +99,6 @@ trait LoggerTrait
      */
     public function logWarning(string|\Stringable $message, array $context = []): void
     {
-        $this->logger?->warning($message, $context);
+        $this->getLogger()->warning($message, $context);
     }
 }

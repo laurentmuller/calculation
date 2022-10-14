@@ -19,7 +19,6 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
@@ -82,7 +81,7 @@ class SpreadsheetDocument extends Spreadsheet
     public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct();
-        $this->setPageSize(PageSetup::PAPERSIZE_A4);
+        $this->setPageSizeA4()->setPagePortrait();
     }
 
     /**
@@ -128,7 +127,7 @@ class SpreadsheetDocument extends Spreadsheet
         $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
         $customer = $controller->getUserService()->getCustomer();
         $this->setHeaderFooter($title, $customer)
-            ->setPrintGridlines(true);
+            ->setPrintGridlines();
 
         return $sheet;
     }
@@ -194,7 +193,7 @@ class SpreadsheetDocument extends Spreadsheet
             ->setCompany($customer->getName())
             ->setUserName($username)
             ->setCategory($application)
-            ->setPrintGridlines(true);
+            ->setPrintGridlines();
 
         if ($landscape) {
             return $this->setPageLandscape();
@@ -240,16 +239,17 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Set the auto-sizing behavior for the given column.
+     * Set the auto-size for the given columns.
      *
-     * @param int  $columnIndex the column index (A = 1)
-     * @param bool $autoSize    true to auto-sizing; false if not
+     * @param int ...$columnIndexes the columns indexes (A = 1)
      */
-    public function setAutoSize(int $columnIndex, bool $autoSize = true): static
+    public function setAutoSize(int ...$columnIndexes): static
     {
         $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $sheet->getColumnDimension($name)->setAutoSize($autoSize);
+        foreach ($columnIndexes as $columnIndex) {
+            $name = $this->stringFromColumnIndex($columnIndex);
+            $sheet->getColumnDimension($name)->setAutoSize(true);
+        }
 
         return $this;
     }
@@ -356,8 +356,8 @@ class SpreadsheetDocument extends Spreadsheet
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
         $style = $sheet->getStyle($name);
-        $existingConditionals = \array_merge($style->getConditionalStyles(), $conditionals);
-        $style->setConditionalStyles($existingConditionals);
+        $conditionals = \array_merge($style->getConditionalStyles(), $conditionals);
+        $style->setConditionalStyles($conditionals);
 
         return $this;
     }
@@ -533,7 +533,8 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the price format ('#,##0.00') for the given column and with the red color when value is equal to 0.
+     * Sets the price format ('#,##0.00') for the given column and with the red color
+     * when value is smaller than or equal to 0.
      *
      * @param int $columnIndex the column index (A = 1)
      */
@@ -596,11 +597,13 @@ class SpreadsheetDocument extends Spreadsheet
      * @param int   $columnIndex the starting column index (A = 1)
      * @param int   $rowIndex    the row index (1 = First row)
      *
+     * @return int this function return always 2
+     *
      * @psalm-param array<string, string|string[]> $headers
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): static
+    public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): int
     {
         $sheet = $this->getActiveSheet();
 
@@ -632,7 +635,7 @@ class SpreadsheetDocument extends Spreadsheet
             ->setHorizontalCentered(true)
             ->setRowsToRepeatAtTopByStartAndEnd($rowIndex, $rowIndex);
 
-        return $this;
+        return 2;
     }
 
     /**
@@ -680,7 +683,23 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setPageLandscape(): static
     {
-        $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+        return $this->setPageOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+    }
+
+    /**
+     * Set the page orientation (default, portait or landscape).
+     *
+     * @psalm-param PageSetup::ORIENTATION_* $orientation
+     */
+    public function setPageOrientation(string $orientation): static
+    {
+        switch ($orientation) {
+            case PageSetup::ORIENTATION_DEFAULT:
+            case PageSetup::ORIENTATION_PORTRAIT:
+            case PageSetup::ORIENTATION_LANDSCAPE:
+                $this->getPageSetup()->setOrientation($orientation);
+                break;
+        }
 
         return $this;
     }
@@ -690,9 +709,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setPagePortrait(): static
     {
-        $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_PORTRAIT);
-
-        return $this;
+        return $this->setPageOrientation(PageSetup::ORIENTATION_PORTRAIT);
     }
 
     /**
@@ -719,10 +736,8 @@ class SpreadsheetDocument extends Spreadsheet
 
     /**
      * Set a value indicating if the gridlines are printed.
-     *
-     * @param bool $printGridlines true to print the gridlines
      */
-    public function setPrintGridlines(bool $printGridlines): static
+    public function setPrintGridlines(bool $printGridlines = true): static
     {
         $this->getActiveSheet()->setPrintGridlines($printGridlines);
 

@@ -1,0 +1,25 @@
+{# create timestampable row #}
+{% macro timestampable(item, short=false) %}
+{# created date and user #}
+{% set date = item.createdAt ? item.createdAt|locale_datetime : 'common.empty_date'|trans %}
+{% set user = item.createdBy|default('common.empty_user'|trans) %}
+{% set label = short ? 'common.entity_created_short' : 'common.entity_created' %}
+{% set created_text = label|trans({'%date%': date, '%user%': user}) %}
+{# updated date and user #}
+{% set date = item.updatedAt ? item.updatedAt|locale_datetime : 'common.empty_date'|trans %}
+{% set user = item.updatedBy|default('common.empty_user'|trans) %}
+{% set label = short ? 'common.entity_updated_short' : 'common.entity_updated' %}
+{% set updated_text = label|trans({'%date%': date, '%user%': user}) %}
+<div class="row">
+    <div class="col-sm-6 small text-muted my-sm-1">
+        <span{% if short %} title="{{ 'common.entity_created_tooltip'|trans }}"{% endif %}>
+            {{ created_text|raw }}
+        </span>
+    </div>
+    <div class="col-sm-6 small text-muted my-sm-1 text-sm-right">
+        <span{% if short %} title="{{ 'common.entity_updated_tooltip'|trans }}"{% endif %}>
+            {{ updated_text|raw }}
+        </span>
+    </div>
+</div>
+{% endmacro %}

@@ -234,7 +234,7 @@ class TaskService implements \JsonSerializable
         $task = $this->task;
 
         /** @psalm-var int[] $items */
-        $items = $items->filter(fn (TaskItem $item) => $task === $item->getTask())->map(fn (TaskItem $item) => (int) $item->getId())->toArray();
+        $items = $items->filter(fn (TaskItem $item) => $task === $item->getParentTimestampable())->map(fn (TaskItem $item) => (int) $item->getId())->toArray();
         $this->items = $items;
 
         return $this;

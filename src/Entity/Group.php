@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
 use App\Repository\GroupRepository;
+use App\Traits\TimestampableTrait;
 use App\Traits\ValidateMarginsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -28,8 +30,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'sy_Group')]
 #[ORM\UniqueConstraint(name: 'unique_group_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
-class Group extends AbstractEntity
+class Group extends AbstractEntity implements TimestampableInterface
 {
+    use TimestampableTrait;
     use ValidateMarginsTrait;
 
     /**
@@ -267,7 +270,7 @@ class Group extends AbstractEntity
      */
     public function removeMargin(GroupMargin $margin): self
     {
-        if ($this->margins->removeElement($margin) && $margin->getGroup() === $this) {
+        if ($this->margins->removeElement($margin) && $margin->getParentTimestampable() === $this) {
             $margin->setGroup(null);
         }
 

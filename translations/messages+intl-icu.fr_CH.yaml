@@ -34,7 +34,3 @@ counters:
     states_lower: '{count, plural, =0 {aucun statut} one {1 statut} other {# status}}'
     users: '{count, plural, =0 {Aucun utilisateur} one {1 utilisateur} other {# utilisateurs}}'
     pixels: '{count, plural, =0 {0 pixel} one {1 pixel} other {# pixels}}'
-index:
-  menu_show:
-about:
-  expand:

@@ -36,7 +36,7 @@ class CalculationStatesDocument extends AbstractArrayDocument
         $this->start('calculationstate.list.title', true);
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'calculationstate.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'calculationstate.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'calculationstate.fields.editable' => Alignment::HORIZONTAL_RIGHT,
@@ -49,7 +49,6 @@ class CalculationStatesDocument extends AbstractArrayDocument
             ->setFormatInt(4);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 $entity->getCode(),

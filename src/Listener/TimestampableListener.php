@@ -87,7 +87,7 @@ class TimestampableListener implements DisableListenerInterface
         $result = [];
         foreach ($entities as $entity) {
             if (null !== $timestampable = $this->getTimestampable($entity, true)) {
-                $result[(int) $timestampable->getId()] = $timestampable;
+                $result[\spl_object_id($timestampable)] = $timestampable;
             }
         }
         if ([] === $result) {
@@ -98,7 +98,7 @@ class TimestampableListener implements DisableListenerInterface
         $entities = $unitOfWork->getScheduledEntityDeletions();
         foreach ($entities as $entity) {
             if (null !== $timestampable = $this->getTimestampable($entity, false)) {
-                unset($result[(int) $timestampable->getId()]);
+                unset($result[\spl_object_id($timestampable)]);
             }
         }
 

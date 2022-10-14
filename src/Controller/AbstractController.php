@@ -61,7 +61,6 @@ abstract class AbstractController extends BaseController
 
     // services
     private ?UrlGeneratorService $generatorService = null;
-    private ?RequestStack $requestStack = null;
     private ?TranslatorInterface $translator = null;
     private ?UserService $userService = null;
 
@@ -113,17 +112,12 @@ abstract class AbstractController extends BaseController
         return $this->getParameterString('app_owner_url');
     }
 
-    /**
-     * Gets the request stack.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     public function getRequestStack(): RequestStack
     {
         if (null === $this->requestStack) {
-            /** @psalm-var RequestStack $stack */
-            $stack = $this->container->get('request_stack');
-            $this->requestStack = $stack;
+            /** @psalm-var RequestStack $result */
+            $result = $this->container->get('request_stack');
+            $this->requestStack = $result;
         }
 
         return $this->requestStack;

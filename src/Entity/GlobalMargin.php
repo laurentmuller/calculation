@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
 use App\Repository\GlobalMarginRepository;
+use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Entity(repositoryClass: GlobalMarginRepository::class)]
 #[ORM\Table(name: 'sy_GlobalMargin')]
-class GlobalMargin extends AbstractMargin
+class GlobalMargin extends AbstractMargin implements TimestampableInterface
 {
+    use TimestampableTrait;
 }

@@ -18,7 +18,7 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
-use App\Traits\CheckerAwareTrait;
+use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Util\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -36,7 +36,7 @@ use Twig\Environment;
  */
 class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
-    use CheckerAwareTrait;
+    use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
 
     /**

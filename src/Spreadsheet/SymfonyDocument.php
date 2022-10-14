@@ -101,19 +101,16 @@ class SymfonyDocument extends AbstractDocument
     {
         $this->createSheetAndTitle($this->controller, 'Bundles');
 
-        $row = 1;
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Path' => Alignment::HORIZONTAL_LEFT,
-        ], 1, $row++);
+        ]);
 
         foreach ($bundles as $bundle) {
             $this->outputRow($row++, $bundle['name'], $bundle['path']);
         }
 
-        $this->setAutoSize(1)
-            ->setAutoSize(2)
-            ->finish();
+        $this->setAutoSize(1, 2)->finish();
     }
 
     /**
@@ -162,9 +159,7 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($row++, 'Logs', $info->getLogInfo())
             ->outputRow($row, 'Cache', $info->getCacheInfo());
 
-        $this->setAutoSize(1)
-            ->setAutoSize(2)
-            ->finish();
+        $this->setAutoSize(1, 2)->finish();
     }
 
     /**
@@ -199,8 +194,7 @@ class SymfonyDocument extends AbstractDocument
             ->getAlignment()
             ->setVertical(Alignment::VERTICAL_TOP);
 
-        $this->setAutoSize(1)
-            ->setAutoSize(2)
+        $this->setAutoSize(1, 2)
             ->setColumnWidth(3, 70, true)
             ->finish();
     }
@@ -226,9 +220,7 @@ class SymfonyDocument extends AbstractDocument
             $this->outputRow($row++, $route['name'], $route['path']);
         }
 
-        $this->setAutoSize(1)
-            ->setAutoSize(2)
-            ->finish();
+        $this->setAutoSize(1, 2)->finish();
     }
 
     private function outputRow(int $row, string ...$values): self

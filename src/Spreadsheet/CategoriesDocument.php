@@ -34,7 +34,7 @@ class CategoriesDocument extends AbstractArrayDocument
         $this->start('category.list.title');
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'category.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.group' => Alignment::HORIZONTAL_GENERAL,
@@ -46,7 +46,6 @@ class CategoriesDocument extends AbstractArrayDocument
         $this->setFormatInt(4);
 
         // rows
-        $row = 2;
         $default = $this->trans('report.other');
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [

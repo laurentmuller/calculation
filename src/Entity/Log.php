@@ -201,11 +201,7 @@ class Log extends AbstractEntity
      */
     public function getUser(): ?string
     {
-        if ($this->isExtra() && isset($this->extra['user'])) {
-            return (string) $this->extra['user'];
-        }
-
-        return null;
+        return isset($this->extra['user']) ? (string) $this->extra['user'] : null;
     }
 
     /**

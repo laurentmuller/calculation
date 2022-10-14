@@ -42,7 +42,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         #[Target('user_cache')]
         CacheItemPoolInterface $cache
     ) {
-        $this->setAdapter($cache);
+        $this->setCacheAdapter($cache);
     }
 
     /**

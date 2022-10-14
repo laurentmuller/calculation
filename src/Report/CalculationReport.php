@@ -26,12 +26,12 @@ use App\Util\FileUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
 use Endroid\QrCode\Writer\PngWriter;
-use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Report for a calculation.
  */
-class CalculationReport extends AbstractReport implements LoggerAwareInterface
+class CalculationReport extends AbstractReport
 {
     use LoggerTrait;
 
@@ -43,7 +43,7 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function __construct(AbstractController $controller, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
+    public function __construct(AbstractController $controller, private readonly LoggerInterface $logger, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
     {
         parent::__construct($controller);
         $this->minMargin = $controller->getApplication()->getMinMargin();
@@ -55,6 +55,11 @@ class CalculationReport extends AbstractReport implements LoggerAwareInterface
     public function getCalculation(): Calculation
     {
         return $this->calculation;
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 
     /**

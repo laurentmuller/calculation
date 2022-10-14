@@ -57,7 +57,7 @@ class UsersDocument extends AbstractArrayDocument
         $this->createEnabledConditionals();
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'user.fields.imageFile' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
             'user.fields.username' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'user.fields.email' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
@@ -70,7 +70,6 @@ class UsersDocument extends AbstractArrayDocument
         $this->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 null,

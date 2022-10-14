@@ -3,7 +3,11 @@ BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "sy_Group" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "code"              varchar(30)  NOT NULL,
-    "description"       varchar(255) DEFAULT NULL
+    "description"       varchar(255) DEFAULT NULL,
+    "created_at"        datetime     DEFAULT NULL,
+    "created_by"        varchar(255) DEFAULT NULL,
+    "updated_at"        datetime     DEFAULT NULL,
+    "updated_by"        varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_Category" (
@@ -11,6 +15,10 @@ CREATE TABLE IF NOT EXISTS "sy_Category" (
     "code"              varchar(30)  NOT NULL,
     "description"       varchar(255) DEFAULT NULL,
     "group_id"          integer NOT NULL,
+    "created_at"        datetime     DEFAULT NULL,
+    "created_by"        varchar(255) DEFAULT NULL,
+    "updated_at"        datetime     DEFAULT NULL,
+    "updated_by"        varchar(255) DEFAULT NULL,
     FOREIGN KEY(group_id) REFERENCES sy_Group(id)
 );
 
@@ -30,6 +38,10 @@ CREATE TABLE IF NOT EXISTS "sy_Product" (
     "unit"              varchar(15)  DEFAULT NULL,
     "price"             double       NOT NULL DEFAULT '0',
     "supplier"          varchar(255) DEFAULT NULL,
+    "created_at"        datetime     DEFAULT NULL,
+    "created_by"        varchar(255) DEFAULT NULL,
+    "updated_at"        datetime     DEFAULT NULL,
+    "updated_by"        varchar(255) DEFAULT NULL,
     FOREIGN KEY(category_id) REFERENCES sy_Category(id)
 );
 
@@ -38,6 +50,10 @@ CREATE TABLE IF NOT EXISTS "sy_CalculationState" (
     "code"              varchar(30)  NOT NULL,
     "description"       varchar(255) DEFAULT NULL,
     "editable"          tinyint(1)   DEFAULT '1',
+    "created_at"        datetime     DEFAULT NULL,
+    "created_by"        varchar(255) DEFAULT NULL,
+    "updated_at"        datetime     DEFAULT NULL,
+    "updated_by"        varchar(255) DEFAULT NULL,
     "color"             varchar(10)  DEFAULT '#000000'
 );
 
@@ -96,7 +112,11 @@ CREATE TABLE IF NOT EXISTS "sy_GlobalMargin" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "minimum"           double NOT NULL DEFAULT '0',
     "maximum"           double NOT NULL DEFAULT '0',
-    "margin"            double NOT NULL DEFAULT '0'
+    "margin"            double NOT NULL DEFAULT '0',
+    "created_at"        datetime     DEFAULT NULL,
+    "created_by"        varchar(255) DEFAULT NULL,
+    "updated_at"        datetime     DEFAULT NULL,
+    "updated_by"        varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_Customer" (
@@ -131,12 +151,15 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
     "overwrite"         tinyint(1)   DEFAULT '0',
     "enabled"           tinyint(1)   DEFAULT '1',
     "last_login"        datetime     DEFAULT NULL,
-    "updated_at"        datetime     DEFAULT NULL,
     "selector"          varchar(20)  DEFAULT NULL,
     "hashed_token"      varchar(100) DEFAULT NULL,
     "requested_at"      datetime     DEFAULT NULL,
     "expires_at"        datetime     DEFAULT NULL,
-    "verified"          tinyint(1)   DEFAULT '0'
+    "verified"          tinyint(1)   DEFAULT '0',
+    "created_at"        datetime     DEFAULT NULL,
+    "created_by"        varchar(255) DEFAULT NULL,
+    "updated_at"        datetime     DEFAULT NULL,
+    "updated_by"        varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_UserProperty" (
@@ -152,7 +175,11 @@ CREATE TABLE IF NOT EXISTS "sy_Task" (
     "category_id"       integer NOT NULL,
     "name"              varchar(255) NOT NULL,
     "unit"              varchar(15)  DEFAULT NULL,
-    "supplier"          varchar(255) DEFAULT NULL
+    "supplier"          varchar(255) DEFAULT NULL,
+    "created_at"        datetime     DEFAULT NULL,
+    "created_by"        varchar(255) DEFAULT NULL,
+    "updated_at"        datetime     DEFAULT NULL,
+    "updated_by"        varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_TaskItem" (

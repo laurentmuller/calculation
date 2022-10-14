@@ -1,5 +1,6 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon %}
+{% from 'macros/_timestampable.html.twig' import timestampable %}
 <div id="totals-panel" class="card mb-3">
     <div class="card-header">
         <h1 class="card-title">{{ icon('list-ul', 'calculation.edit.panel_resume') }}</h1>
@@ -14,13 +15,6 @@
         </div>
     </div>
     <div class="card-footer py-1 px-3{% if new %} d-none{% endif %}">
-        <div class="row">
-            <div class="col-sm-6 small text-muted my-sm-1">
-               <span title="{{ 'common.entity_created_tooltip'|trans }}">{{ created_item|raw }}</span>
-            </div>
-            <div class="col-sm-6 small text-muted my-sm-1 text-sm-right">
-                <span title="{{ 'common.entity_updated_tooltip'|trans }}">{{ updated_item|raw }}</span>
-            </div>
-        </div>
+        {{ timestampable(item) }}
     </div>
 </div>

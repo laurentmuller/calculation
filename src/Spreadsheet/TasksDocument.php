@@ -60,7 +60,7 @@ class TasksDocument extends AbstractArrayDocument
         $this->writeTask = $this->writeItem = false;
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'task.fields.name' => Alignment::HORIZONTAL_GENERAL,
             'task.fields.group' => Alignment::HORIZONTAL_GENERAL,
             'task.fields.category' => Alignment::HORIZONTAL_GENERAL,
@@ -77,7 +77,6 @@ class TasksDocument extends AbstractArrayDocument
             ->setFormatPrice(8);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->writeTask = true;
             if ($entity->isEmpty()) {

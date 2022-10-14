@@ -50,7 +50,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         #[Target('application_cache')]
         CacheItemPoolInterface $cache
     ) {
-        $this->setAdapter($cache);
+        $this->setCacheAdapter($cache);
     }
 
     /**

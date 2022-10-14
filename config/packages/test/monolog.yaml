@@ -6,4 +6,3 @@ monolog:
             formatter: monolog.custom_formatter
             channels:
             - 'app'
-

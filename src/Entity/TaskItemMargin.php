@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\MarginInterface;
+use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskItemMarginRepository;
 use App\Types\FixedFloatType;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: TaskItemMarginRepository::class)]
 #[ORM\Table(name: 'sy_TaskItemMargin')]
-class TaskItemMargin extends AbstractEntity implements MarginInterface
+class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTimestampableInterface
 {
     /**
      * The maximum quantity (exclusive) to apply within this value.
@@ -77,6 +79,16 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface
     public function getMinimum(): float
     {
         return $this->minimum;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return Task|null
+     */
+    public function getParentTimestampable(): ?TimestampableInterface
+    {
+        return $this->taskItem?->getParentTimestampable();
     }
 
     /**

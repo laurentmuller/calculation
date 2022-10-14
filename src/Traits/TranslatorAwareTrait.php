@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -23,15 +22,24 @@ trait TranslatorAwareTrait
 {
     use TranslatorTrait;
 
-    /**
-     * @throws ContainerExceptionInterface
-     */
+    private ?TranslatorInterface $translator = null;
+
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {
-        /** @psalm-var TranslatorInterface $result */
-        $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+        if (null === $this->translator) {
+            /** @psalm-var TranslatorInterface $result */
+            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+            $this->translator = $result;
+        }
 
-        return $result;
+        return $this->translator;
+    }
+
+    public function setTranslator(?TranslatorInterface $translator): static
+    {
+        $this->translator = $translator;
+
+        return $this;
     }
 }

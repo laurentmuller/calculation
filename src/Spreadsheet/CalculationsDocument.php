@@ -35,7 +35,7 @@ class CalculationsDocument extends AbstractArrayDocument
         $this->start($title, true);
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'calculation.fields.id' => Alignment::HORIZONTAL_CENTER,
             'calculation.fields.date' => Alignment::HORIZONTAL_CENTER,
             'calculation.fields.state' => Alignment::HORIZONTAL_GENERAL,
@@ -54,7 +54,6 @@ class CalculationsDocument extends AbstractArrayDocument
             ->setFormatAmount(8);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getId(),

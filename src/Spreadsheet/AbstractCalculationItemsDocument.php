@@ -69,7 +69,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
             ->setWrapText(6);
 
         // headers
-        $this->setHeaderValues([
+        $row = $this->setHeaderValues([
             'calculation.fields.id' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
             'calculation.fields.date' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
             'calculation.fields.state' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
@@ -83,7 +83,6 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
             ->setFormatDate(2);
 
         // rows
-        $row = 2;
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity['id'],

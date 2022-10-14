@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
 use App\Repository\ProductRepository;
+use App\Traits\TimestampableTrait;
 use App\Types\FixedFloatType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -25,8 +27,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'sy_Product')]
 #[ORM\UniqueConstraint(name: 'unique_product_description', columns: ['description'])]
 #[UniqueEntity(fields: 'description', message: 'product.unique_description')]
-class Product extends AbstractCategoryItemEntity
+class Product extends AbstractCategoryItemEntity implements TimestampableInterface
 {
+    use TimestampableTrait;
+
     /**
      * The parent's category.
      */

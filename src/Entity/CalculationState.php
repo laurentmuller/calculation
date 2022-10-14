@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationStateRepository;
+use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,8 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'sy_CalculationState')]
 #[ORM\UniqueConstraint(name: 'unique_calculation_state_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'state.unique_code')]
-class CalculationState extends AbstractEntity
+class CalculationState extends AbstractEntity implements TimestampableInterface
 {
+    use TimestampableTrait;
+
     /**
      * The default color (black).
      */

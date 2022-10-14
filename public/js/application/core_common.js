@@ -116,6 +116,7 @@ function initVerticalSearch() {
     });
     $form.on('submit', function (e) {
         if ($input.val().trim().length < 2) {
+            showInvalid();
             $input.trigger('select').trigger('focus');
             e.preventDefault();
         }

@@ -19,7 +19,7 @@ use App\Entity\Customer;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Traits\CheckerAwareTrait;
+use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\DBAL\Types\Types;
@@ -46,7 +46,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  */
 class SearchService implements ServiceSubscriberInterface
 {
-    use CheckerAwareTrait;
+    use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
 
     /**

@@ -107,7 +107,7 @@ interface PropertyServiceInterface
     final public const P_ADMIN_RIGHTS = 'admin_rights';
 
     /**
-     * The saved cache property.
+     * The saved cache state property (bool).
      */
     public const P_CACHE_SAVED = 'cache_saved';
 

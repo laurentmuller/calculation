@@ -32,7 +32,7 @@ jobs:
       - name: Download dependencies
         id: install
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        
+
       - name: Download Symfony CLI
         if: always() && steps.install.outcome == 'success'
         run: wget https://get.symfony.com/cli/installer -O - | bash
@@ -42,7 +42,7 @@ jobs:
         run: 'php bin/console lint:yaml translations config .github/workflows --parse-tags'
 
       - name: Lint Twig
-        if: always() && steps.install.outcome == 'success'        
+        if: always() && steps.install.outcome == 'success'
         run: 'php bin/console lint:twig --env=prod templates'
 
       - name: Lint XLIFF

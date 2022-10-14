@@ -88,12 +88,18 @@ trait PropertyTrait
      * Override to update cached values.
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      */
     #[Required]
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $result = $this->traitSetContainer($container);
-        $this->updateAdapter();
+
+        try {
+            $this->updateAdapter();
+        } catch (\Exception $e) {
+            $this->logException($e);
+        }
 
         return $result;
     }

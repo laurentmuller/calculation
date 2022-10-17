@@ -74,5 +74,5 @@
 
 {% block body %}
 {{ parent() }}
-{%- include 'user/user_switch.html.twig' -%}
+{{ include('user/user_switch.html.twig') }}
 {% endblock %}

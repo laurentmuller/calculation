@@ -47,8 +47,8 @@ class ThemeTest extends TypeTestCase
 
     public function testLabel(): void
     {
-        self::assertEquals('theme.dark', Theme::DARK->getReadable());
-        self::assertEquals('theme.light', Theme::LIGHT->getReadable());
+        self::assertEquals('theme.dark.name', Theme::DARK->getReadable());
+        self::assertEquals('theme.light.name', Theme::LIGHT->getReadable());
     }
 
     public function testSorted(): void

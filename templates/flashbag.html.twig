@@ -9,18 +9,20 @@
 {# add all flash messages #}
 {% apply spaceless %}
     {% set is_logout = app.request.get('logout', '') == 'success' %}
-    {% set flash_attributes = user_service.messageAttributes|merge({
+    {% set flashes_attributes = user_service.messageAttributes|default([])|merge({
         'target': '.page-content',
         'subtitle': app_name_version,
         'close-title': 'common.button_close'|trans,
-        'margin-bottom': user_service.statusBar ? 49 : 20,
+        'margin-bottom': user_service.statusBar ? 49 : 20
     }) %}
     {% if is_logout %}
-        {% set flash_attributes = flash_attributes|filter((value, key) => key != 'margin-bottom' and  key != 'margin-left') %}
+        {% set flash_attributes = flashes_attributes|filter((value, key) => key != 'margin-bottom' and key != 'margin-left') %}
     {% endif %}
-    <div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
+    <div id="flashes" class="d-none"{{ attributes(flashes_attributes, 'data-') }}>
         {% for key, messages in app.flashes %}
-            {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
+            {% for message in messages %}
+                {{ _self.addFlashbag(key, message) }}
+            {% endfor %}
         {% endfor %}
         {# add logout flashbag message if applicable #}
         {% if is_logout %}

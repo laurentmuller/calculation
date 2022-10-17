@@ -64,10 +64,6 @@ function random() {
         const type = $(this).data('type');
         const title = options.title ? $(this).text() : null;
         notify(type, title, options);
-
-        // update checkbox style
-        const className = 'custom-control-input control-option custom-control-' + type;
-        $(":checkbox.custom-control-input").attr('class', className);
     });
 
     // set default values

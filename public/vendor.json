@@ -14,7 +14,8 @@
             "name": "jquery",
             "version": "3.6.1",
             "files": [
-                "jquery.js"
+                "jquery.js",
+                "jquery.min.map"
             ]
         },
         {
@@ -214,6 +215,16 @@
                 "js/bootstrap.bundle.js.map",
                 "css/bootstrap-dark.css",
                 "css/bootstrap-light.css"
+            ]
+        },
+        {
+            "name": "admin-lte",
+            "version": "3.2.0",
+            "files": [
+                "js/adminlte.js",
+                "js/adminlte.js.map",
+                "css/adminlte.css",
+                "css/adminlte.css.map"
             ]
         }
     ]

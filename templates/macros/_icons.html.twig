@@ -176,23 +176,27 @@
 </h6>
 {% endmacro %}
 
-{% macro theme_switcher(element, class, parameters=[]) %}
+{% macro theme_switcher(element, class='', parameters=[]) %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {% set is_dark = theme_dark(app.request) %}
 {% set theme_dark = enum('App\\Enums\\Theme::DARK') %}
 {% set theme_light = enum('App\\Enums\\Theme::LIGHT') %}
 {% set theme_icon = is_dark ? theme_light.icon : theme_dark.icon %}
 {% set theme_text = is_dark ? theme_light.readable : theme_dark.readable %}
+{% set theme_title = is_dark ? 'theme_light.title' : 'theme_dark.title' %}
 {% set parameters = parameters|merge({
-    'class': class ~ ' item-theme',
+    'class': (class ~ ' item-theme')|trim,
+    'title': theme_title|trans,
     'data-title': 'theme.title'|trans,
     'data-path': path('theme_save'),
     'data-light-css': asset_versioned(theme_light.css),
     'data-light-text': theme_light.readable|trans,
     'data-light-icon': theme_light.icon,
+    'data-light-title': 'theme.light_title'|trans,
     'data-dark-css': asset_versioned(theme_dark.css),
     'data-dark-text': theme_dark.readable|trans,
     'data-dark-icon': theme_dark.icon,
+    'data-dark-title': 'theme.dark_title'|trans,
     'data-error': 'theme.error'|trans})
 %}
 <{{ element }}{{ attributes(parameters) }}>

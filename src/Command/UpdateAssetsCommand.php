@@ -64,19 +64,19 @@ class UpdateAssetsCommand extends Command
         if (!$publicDir = $this->getPublicDir()) {
             $this->writeNote('No public directory found.');
 
-            return Command::SUCCESS;
+            return Command::INVALID;
         }
 
         // configuration
         if (null === ($configuration = $this->loadConfiguration($publicDir))) {
             $this->writeNote('No configuration found.');
 
-            return Command::SUCCESS;
+            return Command::INVALID;
         }
 
         // check values
         if (!$this->propertyExists($configuration, ['source', 'target', 'format', 'plugins'], true)) {
-            return Command::SUCCESS;
+            return Command::INVALID;
         }
 
         // get values

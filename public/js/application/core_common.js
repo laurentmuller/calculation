@@ -167,45 +167,44 @@ function initSwitchTheme() {
     }
     $button.on('click', function () {
         // update CSS
+        let themeTitle = '';
+        const options = $button.data();
         let href = $theme.attr('href');
-        const lightCss = $button.data('light-css');
-        const darkCss = $button.data('dark-css');
-        if (href === lightCss) {
-            href = darkCss;
+        if (href === options.lightCss) {
+            href = options.darkCss;
+            themeTitle = options.lightTitle;
             $('body').removeClass('light').addClass('dark');
         } else {
-            href = lightCss;
+            href = options.lightCss;
+            themeTitle = options.darkTitle;
             $('body').removeClass('dark').addClass('light');
         }
+        $button.attr('title', themeTitle);
         $theme.attr('href', href);
 
         // update button
-        const dark = href === darkCss;
-        const text = dark ? $button.data('light-text') : $button.data('dark-text');
-        const icon = dark ? $button.data('light-icon') : $button.data('dark-icon');
+        const dark = href === options.darkCss;
+        const text = dark ? options.lightText : options.darkText;
+        const icon = dark ? options.lightIcon : options.darkIcon;
         const $icon = $('<i/>', {
             'class': icon
         });
         $button.text(' ' + text).prepend($icon);
 
         // save
-        const url = $button.data('path');
-        const options = $("#flashbags").data();
-        const title = options.title ? $button.data('title') : '';
-        if (url) {
-            $.getJSON(url, {
+        const flashBag = $("#flashbags").data();
+        const title = flashBag.title ? options.title : '';
+        if (options.path) {
+            $.getJSON(options.path, {
                 dark: dark
-            }, function (data) {
-                if (data.result && data.message) {
-
-                    Toaster.success(data.message, title, options);
+            }, function (response) {
+                if (response.result && response.message) {
+                    Toaster.success(response.message, title, flashBag);
                 } else {
-                    const message = $button.data('error');
-                    Toaster.danger(message, title, options);
+                    Toaster.danger(options.error, title, flashBag);
                 }
             }).fail(function () {
-                const message = $button.data('error');
-                Toaster.danger(message, title, options);
+                Toaster.danger(options.error, title, flashBag);
             });
         }
     });

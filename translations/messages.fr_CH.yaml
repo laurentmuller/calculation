@@ -1189,8 +1189,10 @@ theme:
   title: Thème
   dark: Thème sombre
   dark_success: Le <b>thème sombre</b> a été sélectionné avec succès.
+  dark_title: Appliquer le thème sombre sur le site.
   light: Thème claire
   light_success: Le <b>thème claire</b> a été sélectionné avec succès.
+  light_title: Appliquer le thème claire sur le site.
 timeline:
   date: Date
   interval: Période

@@ -44,6 +44,21 @@ body.dark .navbar-vertical .dropdown-divider {
     border-color: #6c757d !important;
 }
 
+body.light footer:before {
+    content: "";
+    position: absolute;
+    left: 17rem;
+    top: 0;
+    width: calc(100% - 17rem);;
+    border-bottom: 1px solid #dee2e6;
+}
+
+body.light .page-content.sidebar-hide footer:before {
+    left: 0;
+    width: 100%;
+}
+
+
 /*
  * Example button for theme example
  */
@@ -248,6 +263,9 @@ span.state-color {
 }
 .btn-back-to-top:hover {
     opacity: 1;
+}
+body:not(.status-bar) .btn-back-to-top {
+    bottom: 15px;
 }
 
 /*

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Theme;
 use App\Interfaces\RoleInterface;
 use App\Traits\CookieTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -43,7 +44,7 @@ class ThemeController extends AbstractController
     {
         $dark = $this->getRequestBoolean($request, 'dark');
         $response = $this->jsonTrue([
-            'message' => $this->trans($dark ? 'theme.dark_success' : 'theme.light_success'),
+            'message' => $this->trans($dark ? 'theme.dark.success' : 'theme.light.success'),
         ]);
         $path = $this->getParameterString('cookie_path');
         $this->updateCookie($response, self::KEY_DARK, $dark ? 1 : null, '', $path);

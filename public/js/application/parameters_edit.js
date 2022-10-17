@@ -59,7 +59,7 @@ function displayNotification() {
     'use strict';
     // get random text
     let title = $('.card-title').text();
-    const data = $("#flashbags").data();
+    const data = $("#flashes").data();
     const url = $("form").data("random");
     $.getJSON(url, function (response) {
         if (response.result && response.content) {

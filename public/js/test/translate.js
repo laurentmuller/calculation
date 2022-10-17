@@ -10,8 +10,8 @@
  */
 function notify(type, message) {
     'use strict';
+    const options = $('#flashes').data();
     const title = $('#edit-form').data('title');
-    const options = $('#flashbags').data();
     Toaster.notify(type, message, title, options);
 }
 

@@ -1,26 +1,30 @@
 {% from 'macros/_attributes.html.twig' import attributes %}
-{# add a flashbag message #}
+{# add a single flash message #}
 {% macro addFlashbag(key, message) -%}
-{%- set values = message|split('|') -%}
-{%- set title = (values|length == 2) ? values[0] : ('flashbag.' ~ key)|trans -%}
-{%- set content = (values|length == 2) ? values[1] : message -%}
-<p class="flashbag d-none" data-type="{{ key }}" data-title="{{ title }}">{{ content }}</p>
+    {% set values = message|split('|') %}
+    {% set title = (values|length == 2) ? values[0] : ('flashbag.' ~ key)|trans %}
+    {% set content = (values|length == 2) ? values[1] : message %}
+    <p class="flash" data-type="{{ key }}" data-title="{{ title }}">{{ content }}</p>
 {%- endmacro %}
-{# add flashbag messages #}
+{# add all flash messages #}
 {% apply spaceless %}
-{% set flash_attributes = user_service.messageAttributes|merge({
-    'target': '.page-content',
-    'subtitle': app_name_version,
-    'close-title': 'common.button_close'|trans,
-    'margin-bottom': user_service.statusBar ? 49 : 20,
-}) %}
-<div id=flashbags class="d-none"{{ attributes(flash_attributes, 'data-') }}>
-    {% for key, messages in app.flashes %}
-        {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
-    {% endfor %}
-    {# add logout flashbag message if applicable #}
-    {% if app.request.get('logout', '') == 'success' %}
-        {{ _self.addFlashbag('success', 'security.logout.success'|trans({'%appname%': app_name_version})) }}
+    {% set is_logout = app.request.get('logout', '') == 'success' %}
+    {% set flash_attributes = user_service.messageAttributes|merge({
+        'target': '.page-content',
+        'subtitle': app_name_version,
+        'close-title': 'common.button_close'|trans,
+        'margin-bottom': user_service.statusBar ? 49 : 20,
+    }) %}
+    {% if is_logout %}
+        {% set flash_attributes = flash_attributes|filter((value, key) => key != 'margin-bottom' and  key != 'margin-left') %}
     {% endif %}
-</div>
+    <div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
+        {% for key, messages in app.flashes %}
+            {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
+        {% endfor %}
+        {# add logout flashbag message if applicable #}
+        {% if is_logout %}
+            {{ _self.addFlashbag('success', 'security.logout.success'|trans({'%appname%': app_name_version})) }}
+        {% endif %}
+    </div>
 {% endapply %}

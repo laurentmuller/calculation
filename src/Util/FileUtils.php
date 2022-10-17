@@ -209,6 +209,20 @@ final class FileUtils
     }
 
     /**
+     * Creates a directory recursively.
+     */
+    public static function mkdir(string|iterable $dirs, int $mode = 0o777): bool
+    {
+        try {
+            self::getFilesystem()->mkdir($dirs, $mode);
+
+            return true;
+        } catch (IOException) {
+            return false;
+        }
+    }
+
+    /**
      * Deletes a file or a directory.
      */
     public static function remove(string|\SplFileInfo $file): bool
@@ -277,18 +291,47 @@ final class FileUtils
     }
 
     /**
-     * Create temporary file in the given directory with a unique name.
+     * Create temporary directory in the given directory with a unique name.
      *
-     * @param string $dir          The directory where the temporary filename will be created
-     * @param string $prefix       The prefix of the generated temporary filename
-     * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
+     * @param string $dir          The directory where the temporary directory will be created
+     * @param string $prefix       The prefix of the generated temporary directory
+     * @param bool   $deleteOnExit if true, the directory is deleted at the end of the script
      *
      * @return string|null the new temporary directory; null on failure
      */
     public static function tempdir(string $dir, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         try {
-            $file = self::getFilesystem()->tempnam($dir, $prefix);
+            $base = "$dir/$prefix";
+            for ($i = 0; $i < 10; ++$i) {
+                $result = $base . \uniqid((string) \mt_rand(), true);
+                if (!self::exists($result) && self::mkdir($result)) {
+                    if ($deleteOnExit) {
+                        \register_shutdown_function(fn () => self::remove($result));
+                    }
+
+                    return $result;
+                }
+            }
+        } catch (IOException) {
+            // ignore
+        }
+
+        return null;
+    }
+
+    /**
+     * Create temporary file in the given directory with a unique name.
+     *
+     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first three characters of prefix.
+     * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
+     *
+     * @return string|null the new temporary file name (with path); null on failure
+     */
+    public static function tempfile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
+    {
+        try {
+            $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
             if ($deleteOnExit) {
                 \register_shutdown_function(fn () => self::remove($file));
             }
@@ -299,19 +342,6 @@ final class FileUtils
         }
 
         return null;
-    }
-
-    /**
-     * Create temporary file in the temporary directory with a unique name.
-     *
-     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first three characters of prefix.
-     * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
-     *
-     * @return string|null the new temporary file name (with path); null on failure
-     */
-    public static function tempfile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
-    {
-        return self::tempdir(\sys_get_temp_dir(), $prefix, $deleteOnExit);
     }
 
     /**

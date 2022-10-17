@@ -32,12 +32,21 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
     /*
      * The dark theme.
      */
-    #[EnumCase(label: 'theme.dark', extras: ['icon' => 'fa-solid fa-moon', 'css' => 'js/vendor/bootstrap/css/bootstrap-dark.css'])]
+    #[EnumCase(label: 'theme.dark.name', extras: [
+        'icon' => 'fa-solid fa-moon',
+        'title' => 'theme.dark.title',
+        'success' => 'theme.dark.success',
+        'css' => 'js/vendor/bootstrap/css/bootstrap-dark.css', ])]
     case DARK = 'dark';
     /*
      * The light theme.
      */
-    #[EnumCase(label: 'theme.light', extras: ['default' => true, 'icon' => 'fa-regular fa-sun', 'css' => 'js/vendor/bootstrap/css/bootstrap-light.css'])]
+    #[EnumCase(label: 'theme.light.name', extras: [
+        'default' => true,
+        'icon' => 'fa-regular fa-sun',
+        'title' => 'theme.light.title',
+        'success' => 'theme.light.success',
+        'css' => 'js/vendor/bootstrap/css/bootstrap-light.css', ])]
     case LIGHT = 'light';
 
     /**
@@ -54,6 +63,22 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
     public function getIcon(): string
     {
         return (string) $this->getExtra('icon');
+    }
+
+    /**
+     * Gets the success message (to be translated).
+     */
+    public function getSuccess(): string
+    {
+        return (string) $this->getExtra('success');
+    }
+
+    /**
+     * Gets the title (to be translated).
+     */
+    public function getTitle(): string
+    {
+        return (string) $this->getExtra('title');
     }
 
     /**

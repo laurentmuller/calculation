@@ -12,7 +12,7 @@ function showError($form, message) {
     'use strict';
     message = message || $form.data('error');
     const title = $form.find('.card-title').text();
-    Toaster.danger(message, title, $('#flashbags').data());
+    Toaster.danger(message, title, $('#flashes').data());
 }
 
 /**

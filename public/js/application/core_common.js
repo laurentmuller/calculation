@@ -7,22 +7,18 @@
  */
 function showFlashbag() {
     'use strict';
-    // get first element (if any)
-    const $element = $('.flashbag:first');
+    const $element = $('.flash:first');
     if ($element.length) {
         // options
-        const options = $("#flashbags").data();
+        const options = $("#flashes").data();
         const title = options.title ? $element.data('title') : null;
         const text = $element.text();
         const type = $element.data('type');
-        // remove
         $element.remove();
-        // display
         if (text) {
             Toaster.notify(type, text, title, options);
         }
-        // show next
-        if ($('.flashbag').length) {
+        if ($('.flash').length) {
             setTimeout(function () {
                 showFlashbag();
             }, 1500);
@@ -104,7 +100,7 @@ function initVerticalSearch() {
         $input.addClass('is-invalid');
         $label.show();
     };
-    $input.on("input", function (e) {
+    $input.on("input", function () {
         if ($input.val().trim().length < 2) {
             showInvalid();
         } else {
@@ -165,38 +161,29 @@ function initSwitchTheme() {
     if ($theme.length === 0 || $button.length === 0) {
         return;
     }
-    $button.on('click', function () {
-        // update CSS
-        let themeTitle = '';
+    $button.on('click', function (e) {
+        // get values
+        e.preventDefault();
         const options = $button.data();
-        let href = $theme.attr('href');
-        if (href === options.lightCss) {
-            href = options.darkCss;
-            themeTitle = options.lightTitle;
-            $('body').removeClass('light').addClass('dark');
-        } else {
-            href = options.lightCss;
-            themeTitle = options.darkTitle;
-            $('body').removeClass('dark').addClass('light');
-        }
-        $button.attr('title', themeTitle);
-        $theme.attr('href', href);
+        const wasDark = $theme.attr('href') === options.darkCss;
+        const href = wasDark ? options.lightCss : options.darkCss;
+        const text = wasDark ? options.darkText : options.lightText;
+        const icon = wasDark ? options.darkIcon : options.lightIcon;
+        const themeTitle = wasDark ? options.darkTitle : options.lightTitle;
 
-        // update button
-        const dark = href === options.darkCss;
-        const text = dark ? options.lightText : options.darkText;
-        const icon = dark ? options.lightIcon : options.darkIcon;
-        const $icon = $('<i/>', {
+        // update
+        $theme.attr('href', href);
+        $('body').toggleClass('light dark');
+        $button.attr('title', themeTitle).text(' ' + text).prepend($('<i/>', {
             'class': icon
-        });
-        $button.text(' ' + text).prepend($icon);
+        }));
 
         // save
-        const flashBag = $("#flashbags").data();
-        const title = flashBag.title ? options.title : '';
         if (options.path) {
+            const flashBag = $("#flashes").data();
+            const title = flashBag.title ? options.title : '';
             $.getJSON(options.path, {
-                dark: dark
+                dark: !wasDark
             }, function (response) {
                 if (response.result && response.message) {
                     Toaster.success(response.message, title, flashBag);

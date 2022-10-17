@@ -1159,40 +1159,17 @@ test:
   tree_view: Tree View
   use_notification: Utiliser une notification.
 theme:
-  background:
-    danger: Danger
-    dark: Foncé
-    info: Information
-    light: Clair
-    primary: Primaire
-    secondary: Secondaire
-    success: Succès
-    warning: Avertissement
-    white: Blanc
-  button:
-    danger: Danger
-    primary: Accepter
-    secondary: Refuser
-    success: Succès
-    warning: Alerte
-  default: Thème par défaut
-  description: Sélection du thème à appliquer sur le site.
-  error: Impossible de sélectionné le thème.
-  fields:
-    background: Barre d'outils
-    example: Example
-    theme: Nom
-  foreground:
-    dark: Clair
-    light: Foncé
-  success: Le thème <b>%name%</b> a été sélectionné avec succès.
   title: Thème
-  dark: Thème sombre
-  dark_success: Le <b>thème sombre</b> a été sélectionné avec succès.
-  dark_title: Appliquer le thème sombre sur le site.
-  light: Thème claire
-  light_success: Le <b>thème claire</b> a été sélectionné avec succès.
-  light_title: Appliquer le thème claire sur le site.
+  success: Le thème <b>%name%</b> a été sélectionné avec succès.
+  error: Impossible de sélectionné le thème.
+  dark:
+    name: Thème sombre
+    title: Appliquer le thème sombre sur le site.
+    success: Le <b>thème sombre</b> a été sélectionné avec succès.
+  light:
+    name: Thème claire
+    title: Appliquer le thème claire sur le site.
+    success: Le <b>thème claire</b> a été sélectionné avec succès.
 timeline:
   date: Date
   interval: Période
@@ -1403,3 +1380,13 @@ importance:
   high_full: Importance haute
   urgent: Urgente
   urgent_full: Urgent !
+background:
+  danger: Danger
+  dark: Foncé
+  info: Information
+  light: Clair
+  primary: Primaire
+  secondary: Secondaire
+  success: Succès
+  warning: Avertissement
+  white: Blanc

@@ -3,7 +3,7 @@
 {# macros #}
 {% macro button(type, icon) -%}
 <button type="button" data-type="{{ type }}" class="mx-2 mb-2 btn btn-notify btn-form btn-{{ type }}">
-    {{- ('theme.background.' ~ type)|trans -}}
+    {{- ('background.' ~ type)|trans -}}
 </button>
 {%- endmacro %}
 

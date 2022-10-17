@@ -771,7 +771,7 @@ $.fn.extend({
             if ('abort' !== jqXHR.statusText) {
                 const title = $('.card-title').text();
                 const message = $table.data('errorMessage');
-                Toaster.danger(message, title, $('#flashbags').data());
+                Toaster.danger(message, title, $('#flashes').data());
             }
         },
 

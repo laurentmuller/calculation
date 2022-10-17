@@ -31,7 +31,7 @@ function showError(message) {
     'use strict';
     resetValues();
     const title = $('.card-title').text();
-    Toaster.danger(message, title, $('#flashbags').data());
+    Toaster.danger(message, title, $('#flashes').data());
 }
 
 /**

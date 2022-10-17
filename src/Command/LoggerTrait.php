@@ -22,14 +22,14 @@ trait LoggerTrait
     /**
      * The symfony style.
      */
-    private ?SymfonyStyle $io = null;
+    protected ?SymfonyStyle $io = null;
 
     /**
      * Returns whether verbosity is verbose (-v).
      */
     protected function isVerbose(): bool
     {
-        return $this->io && $this->io->isVerbose();
+        return $this->io?->isVerbose() ?? false;
     }
 
     /**
@@ -37,21 +37,15 @@ trait LoggerTrait
      */
     protected function isVeryVerbose(): bool
     {
-        return $this->io && $this->io->isVeryVerbose();
+        return $this->io?->isVeryVerbose() ?? false;
     }
 
     /**
      * Writes the given information message.
      */
-    protected function write(string $message, string $style = ''): void
+    protected function write(string $message, string $style = 'info'): void
     {
-        if (null !== $this->io) {
-            if ('' !== $style) {
-                $this->io->writeln("<$style>$message</>");
-            } else {
-                $this->io->writeln("<info>$message</info>");
-            }
-        }
+        $this->io?->writeln("<$style>$message</>");
     }
 
     /**
@@ -81,7 +75,7 @@ trait LoggerTrait
     /**
      * Writes the given information message whether verbosity is verbose (-v).
      */
-    protected function writeVerbose(string $message, string $style = ''): void
+    protected function writeVerbose(string $message, string $style = 'info'): void
     {
         if ($this->isVerbose()) {
             $this->write($message, $style);
@@ -91,7 +85,7 @@ trait LoggerTrait
     /**
      * Writes the given information message whether verbosity is very verbose (-vv).
      */
-    protected function writeVeryVerbose(string $message, string $style = ''): void
+    protected function writeVeryVerbose(string $message, string $style = 'info'): void
     {
         if ($this->isVeryVerbose()) {
             $this->write($message, $style);

@@ -124,7 +124,7 @@ function enableButtons() {
 function notifyMessage(type, message) {
     'use strict';
     const title = $(".card-title").text();
-    Toaster.notify(type, message, title, $("#flashbags").data());
+    Toaster.notify(type, message, title, $("#flashes").data());
 }
 
 /**

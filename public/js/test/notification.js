@@ -43,7 +43,7 @@ function random() {
 (function ($) {
     'use strict';
     // default options
-    const options = $('#flashbags').data();
+    const options = $('#flashes').data();
     options.onHide = function (settings) {
         window.console.log(JSON.stringify(settings, null, '   '));
     };

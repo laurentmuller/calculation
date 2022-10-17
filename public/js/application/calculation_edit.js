@@ -483,7 +483,7 @@ const Application = {
         const $form = $('#edit-form');
         const title = $form.data('title');
         message = message || $form.data('error-update');
-        const options = $.extend({}, $('#flashbags').data(), {
+        const options = $.extend({}, $('#flashes').data(), {
             onHide: function () {
                 const html = message.replace('<br><br>', ' ');
                 $('#error-all > p').addClass('text-danger text-center').html(html);

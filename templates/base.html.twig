@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|replace({'_': '-'}) }}">
 {# parameters #}
-{%- set title_parameters = title_parameters|default({}) -%}
-{%- set title_domain = title_domain|default(null) -%}
-{%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{%- set sidebar_hide = app.request.cookies.get('SIDEBAR_HIDE', true) -%}
-{%- set sidebar_class = sidebar_hide ? ' sidebar-hide' : '' -%}
-{%- set status_bar = user_service.statusBar -%}
-{%- set theme_class = theme_class|default(theme_dark(app.request) ? 'dark' : 'light') -%}
 {%- set is_env_dev = app_mode == 'dev' -%}
 {%- set is_env_prod = app_mode == 'prod' -%}
 {%- set is_env_local = app_mode == 'local' -%}
@@ -16,7 +9,15 @@
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
 {%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+{%- set is_actived = is_remembered and app.user.enabled|default(false)  -%}
 {%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
+{%- set title_parameters = title_parameters|default({}) -%}
+{%- set title_domain = title_domain|default(null) -%}
+{%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
+{%- set sidebar_hide = is_remembered and is_actived ? app.request.cookies.get('SIDEBAR_HIDE', true) : true -%}
+{%- set sidebar_class = sidebar_hide ? ' sidebar-hide' : '' -%}
+{%- set status_bar = user_service.statusBar and is_remembered and is_actived -%}
+{%- set theme_class = theme_class|default(theme_dark(app.request) and is_remembered and is_actived ? 'dark' : 'light') -%}
 {# rights #}
 {%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}

@@ -241,7 +241,7 @@ class EditTaskDialog extends EditDialog { // jshint ignore:line
         this.$submit.toggleDisabled(true);
         this.$modal.modal('hide');
         const title = this.$modal.find('.dialog-title').text();
-        Toaster.danger(message || this.$form.data('failed'), title, $('#flashbags').data());
+        Toaster.danger(message || this.$form.data('failed'), title, $('#flashes').data());
         return this;
     }
 

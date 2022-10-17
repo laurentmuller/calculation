@@ -12,9 +12,9 @@
     <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
         {% if not is_test and is_granted_data and show_navigation_search ?? false -%}
             {{ navItem(path('search'), 'search.title', 'search') }}
-            {{ dropdownSeparator() }}
         {% endif %}
         {% if is_admin %}
+            {{ dropdownSeparator() }}
             {{ navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
             {{ navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
             {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}

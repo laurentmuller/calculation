@@ -19,6 +19,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Command to update Javascript and CSS dependencies.
@@ -86,6 +88,7 @@ class UpdateAssetsCommand extends Command
         if (!$targetTemp = $this->getTargetTemp($publicDir)) {
             return Command::FAILURE;
         }
+        $this->writeVerbose("Created temporary directory '$targetTemp'.");
 
         /** @var string $format */
         $format = $configuration->format;
@@ -153,7 +156,12 @@ class UpdateAssetsCommand extends Command
             }
 
             // rename directory
-            $this->rename($targetTemp, $target);
+            $this->writeVerbose("Rename directory '$targetTemp' to '$target'.");
+            if (!$this->rename($targetTemp, $target)) {
+                $this->writeError("Unable rename directory '$targetTemp' to '$target'.");
+
+                return Command::FAILURE;
+            }
 
             // result
             $this->writeSuccess("Installed $countPlugins plugins and $countFiles files to the directory '$target'.");
@@ -408,13 +416,13 @@ class UpdateAssetsCommand extends Command
 
     private function getTargetTemp(string $publicDir): string|false
     {
-        if (!$targetTemp = FileUtils::tempdir($publicDir)) {
+        if (!$dir = FileUtils::tempdir($publicDir)) {
             $this->writeError('Unable to create a temporary directory.');
 
             return false;
         }
 
-        return $targetTemp . '/';
+        return $dir . \DIRECTORY_SEPARATOR;
     }
 
     private function loadConfiguration(string $publicDir): ?\stdClass
@@ -503,10 +511,20 @@ class UpdateAssetsCommand extends Command
         }
     }
 
-    private function rename(string $origin, string $target, bool $overwrite = true): void
+    private function rename(string $origin, string $target): bool
     {
         $this->writeVeryVerbose("Rename '$origin' to '$target'.");
-        FileUtils::rename($origin, $target, $overwrite);
+
+        try {
+            (new Filesystem())->rename($origin, $target, true);
+
+            return true;
+        } catch (IOException $e) {
+            $this->writeError($e->getMessage());
+
+            return false;
+        }
+        // return FileUtils::rename($origin, $target, true);
     }
 
     private function updateStyle(string $content): string

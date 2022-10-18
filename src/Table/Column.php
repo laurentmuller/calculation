@@ -174,10 +174,10 @@ class Column implements \Stringable, SortModeInterface
             'class' => $this->getClass(),
             'field' => $this->getAlias(),
             'sort-order' => $this->getOrder(),
-            'visible' => \json_encode($this->isVisible()),
-            'numeric' => \json_encode($this->isNumeric()),
-            'sortable' => \json_encode($this->isSortable()),
-            'card-visible' => \json_encode($this->isCardVisible()),
+            'visible' => $this->isVisible(),
+            'numeric' => $this->isNumeric(),
+            'sortable' => $this->isSortable(),
+            'card-visible' => $this->isCardVisible(),
         ];
 
         // optional

@@ -1,9 +1,9 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal, dropdownItem, dropdownSeparator, dropdownEllipsis, button_close_modal %}
-{% import 'macros/_attributes.html.twig' as tools %}
+{% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
 {# macros #}
 {% macro output_column(column) -%}
-<th{{ tools.attributes(column.attributes, 'data-') }}>
+<th{{ output_attributes(column.attributes, 'data-') }}>
     {{- column.title ? column.title|trans : '&nbsp;'|raw -}}
 </th>
 {%- endmacro %}
@@ -15,7 +15,7 @@
     'data-value': value,
     'class': 'dropdown-item dropdown-' ~ suffix ~ active
 }) %}
-<button{{ tools.attributes(attributes) }}>
+<button{{ output_attributes(attributes) }}>
     {{- text|default(value)|capitalize -}}
 </button>
 {%- endmacro %}
@@ -108,19 +108,18 @@
     'undefined-text': '&nbsp;',
     'silent-sort': false,
     'side-pagination': 'server',
-    'show-custom-view': 'false',
+    'show-custom-view': false,
     'custom-view': 'customViewFormatter',
-    'show-extended-pagination': 'true',
+    'pagination': true,
+    'pagination-loop': false,
+    'pagination-parts': '["pageInfo", "pageList"]',
     'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
     'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
-    'pagination-parts': '["pageInfo", "pageList"]',
-    'pagination-loop': 'false',
-    'pagination': 'true',
+    'show-extended-pagination': true,
     'sortable': sortable,
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
     'no-action-title': 'datatable.no_action'|trans,
-    'dialog_title': 'datatable.dialog_title'|trans,
     'default-action': user_service.editAction.value,
     'defer-url': url(app.request.get('_route')),
     'save-url': url('ajax_save_table'),
@@ -203,7 +202,7 @@
     </div>
 </div>
 {# table #}
-<table id="table-edit"{{ tools.attributes(attributes, 'data-') }}>
+<table id="table-edit"{{ output_attributes(attributes, 'data-') }}>
     <thead>
         <tr>
             {% for column in columns %}

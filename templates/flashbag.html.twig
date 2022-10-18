@@ -16,7 +16,7 @@
         'margin-bottom': user_service.statusBar ? 49 : 20,
     }) %}
     {% if is_logout %}
-        {% set flash_attributes = flash_attributes|filter((value, key) => key != 'margin-bottom' and  key != 'margin-left') %}
+        {% set flash_attributes = flash_attributes|filter((value, key) => key != 'margin-bottom' and key != 'margin-left') %}
     {% endif %}
     <div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
         {% for key, messages in app.flashes %}

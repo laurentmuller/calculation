@@ -60,7 +60,7 @@ class TimestampableListener implements DisableListenerInterface
         $user = $this->getUserName();
         $date = new \DateTimeImmutable();
         foreach ($entities as $entity) {
-            if ($this->updateEntity($entity, $user, $date)) {
+            if ($entity->updateTimestampable($date, $user)) {
                 $em->persist($entity);
                 $metadata = $em->getClassMetadata($entity::class);
                 $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
@@ -125,28 +125,5 @@ class TimestampableListener implements DisableListenerInterface
         }
 
         return $this->emptyUser;
-    }
-
-    private function updateEntity(TimestampableInterface $entity, string $user, \DateTimeImmutable $date): bool
-    {
-        $changed = false;
-        if (null === $entity->getCreatedAt()) {
-            $entity->setCreatedAt($date);
-            $changed = true;
-        }
-        if (null === $entity->getCreatedBy()) {
-            $entity->setCreatedBy($user);
-            $changed = true;
-        }
-        if ($date !== $entity->getUpdatedAt()) {
-            $entity->setUpdatedAt($date);
-            $changed = true;
-        }
-        if ($user !== $entity->getUpdatedBy()) {
-            $entity->setUpdatedBy($user);
-            $changed = true;
-        }
-
-        return $changed;
     }
 }

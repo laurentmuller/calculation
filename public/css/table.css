@@ -138,12 +138,15 @@ tr.text-muted td .text-danger {
 /**
  * dark theme
  */
-body.dark .bootstrap-table .custom-item a {
-    color: #adadad;
-}
 body.dark .bootstrap-table .custom-item hr {
     border-color: #343a40;
 }
 body.dark .bootstrap-table .custom-item.table-primary a.text-body {
     color: initial !important;
 }
+body.dark tr.table-primary a,
+body.dark tr.table-primary .card-view-value a,
+body.dark .custom-item.table-primary a{
+    color: #007bff;
+}
+

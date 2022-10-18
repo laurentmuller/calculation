@@ -50,24 +50,18 @@ trait TimestampableTrait
     #[ORM\Column(type: 'string', length: 180, nullable: true)]
     protected ?string $updatedBy = null;
 
-    /**
-     * Gets the creation date.
-     */
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    /**
-     * Gets the creation username.
-     */
     public function getCreatedBy(): ?string
     {
         return $this->createdBy;
     }
 
     /**
-     * Gets the text for the created date and username.
+     * Gets the formatted text for the created date and username.
      */
     public function getCreatedText(TranslatorInterface $translator, bool $short = false): string
     {
@@ -76,24 +70,18 @@ trait TimestampableTrait
         return $this->formatDateAndUser($this->createdAt, $this->createdBy, $translator, $id);
     }
 
-    /**
-     * Gets the updated date.
-     */
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    /**
-     * Gets the updated username.
-     */
     public function getUpdatedBy(): ?string
     {
         return $this->updatedBy;
     }
 
     /**
-     * Gets the text for the updated date and username.
+     * Gets the formatted text for the updated date and username.
      */
     public function getUpdatedText(TranslatorInterface $translator, bool $short = false): string
     {
@@ -102,52 +90,27 @@ trait TimestampableTrait
         return $this->formatDateAndUser($this->updatedAt, $this->updatedBy, $translator, $id);
     }
 
-    /**
-     * Sets the creation date.
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    public function updateTimestampable(\DateTimeImmutable $date, string $user): bool
     {
-        $this->createdAt = $createdAt;
+        $changed = false;
+        if (null === $this->createdAt) {
+            $this->createdAt = $date;
+            $changed = true;
+        }
+        if (null === $this->createdBy) {
+            $this->createdBy = $user;
+            $changed = true;
+        }
+        if ($this->updatedAt !== $date) {
+            $this->updatedAt = $date;
+            $changed = true;
+        }
+        if ($this->updatedBy !== $user) {
+            $this->updatedBy = $user;
+            $changed = true;
+        }
 
-        return $this;
-    }
-
-    /**
-     * Sets the creation username.
-     */
-    public function setCreatedBy(string $createdBy): static
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Sets the updated date and username.
-     */
-    public function setUpdated(\DateTimeInterface $updatedAt, string $updatedBy): static
-    {
-        return $this->setUpdatedAt($updatedAt)->setUpdatedBy($updatedBy);
-    }
-
-    /**
-     * Sets the updated date.
-     */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Sets the updated username.
-     */
-    public function setUpdatedBy(string $updatedBy): static
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
+        return $changed;
     }
 
     /**

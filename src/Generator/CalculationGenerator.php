@@ -15,7 +15,6 @@ namespace App\Generator;
 use App\Entity\Calculation;
 use App\Entity\CalculationItem;
 use App\Faker\Generator;
-use App\Repository\CalculationRepository;
 use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Util\FormatUtils;
@@ -32,7 +31,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, private readonly CalculationService $service, private readonly CalculationRepository $repository)
+    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, private readonly CalculationService $service)
     {
         parent::__construct($manager, $fakerService);
     }
@@ -45,7 +44,7 @@ class CalculationGenerator extends AbstractEntityGenerator
     protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
     {
         $calculations = [];
-        $id = $simulate ? $this->repository->getNextId() : 0;
+        $id = $simulate ? $manager->getRepository(Calculation::class)->getNextId() : 0;
 
         // products range
         $productsCount = $generator->productsCount();
@@ -54,14 +53,12 @@ class CalculationGenerator extends AbstractEntityGenerator
 
         for ($i = 0; $i < $count; ++$i) {
             $date = $generator->dateTimeBetween('first day of previous month', 'last day of next month');
-
             $calculation = new Calculation();
             $calculation->setDate($date)
                 ->setDescription($generator->catchPhrase())
                 ->setUserMargin($generator->randomFloat(2, 0, 0.1))
                 ->setState($generator->state())
-                ->setCustomer($generator->name())
-                ->setCreatedBy((string) $generator->userName());
+                ->setCustomer($generator->name());
 
             // add products
             $products = $generator->products($generator->numberBetween($min, $max));

@@ -363,7 +363,7 @@ abstract class AbstractTable implements SortModeInterface
             'total-not-filtered' => $results->totalNotFiltered,
             'total-rows' => $results->filtered,
 
-            'search' => \json_encode(true),
+            'search' => true,
             'search-text' => $query->search,
 
             'page-size' => $limit,
@@ -373,8 +373,8 @@ abstract class AbstractTable implements SortModeInterface
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
 
-            'card-view' => \json_encode($query->isViewCard()),
-            'custom-view-default-view' => \json_encode($query->isViewCustom()),
+            'card-view' => $query->isViewCard(),
+            'custom-view-default-view' => $query->isViewCustom(),
         ], $results->attributes);
     }
 }

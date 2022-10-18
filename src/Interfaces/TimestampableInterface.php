@@ -43,22 +43,9 @@ interface TimestampableInterface
     public function getUpdatedBy(): ?string;
 
     /**
-     * Sets the creation date.
+     * Update the created and updated values.
+     *
+     * @return bool true if the existing values are modified
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): static;
-
-    /**
-     * Sets the creation username.
-     */
-    public function setCreatedBy(string $createdBy): static;
-
-    /**
-     * Sets the updated date.
-     */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static;
-
-    /**
-     * Sets the updated username.
-     */
-    public function setUpdatedBy(string $updatedBy): static;
+    public function updateTimestampable(\DateTimeImmutable $date, string $user): bool;
 }

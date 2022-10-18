@@ -9,7 +9,7 @@
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
 {%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
-{%- set is_actived = is_remembered and app.user.enabled|default(false)  -%}
+{%- set is_actived = is_remembered and app.user.enabled|default(false) -%}
 {%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}

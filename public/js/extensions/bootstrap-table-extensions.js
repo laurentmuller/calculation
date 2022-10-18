@@ -158,11 +158,13 @@ function loadingTemplate(message) { // jshint ignore:line
 
                     // update pagination links
                     let foundPages = false;
-                    $('.fixed-table-pagination .page-link').each(function (_index, element) {
-                        const $link = $(element);
-                        const $item = $link.closest('.page-item');
-                        const isModal = $item.hasClass('disabled');// || $item.hasClass('active');
-                        const title = isModal ? $this.data('dialog_title') : $link.attr('aria-label');
+                    const $modalPage = $('#modal-page');
+                    const modalTitle = $('#modal-page .modal-title').text();
+                    $('.fixed-table-pagination .page-item').each(function (_index, element) {
+                        const $item = $(element);
+                        const $link = $item.children('.page-link:first');
+                        const isModal = $item.hasClass('page-first-separator') || $item.hasClass('page-last-separator');
+                        const title = isModal ? modalTitle : $link.attr('aria-label');
                         $link.attr({
                             'href': '#',
                             'title': title,
@@ -172,7 +174,7 @@ function loadingTemplate(message) { // jshint ignore:line
                             foundPages = true;
                             $item.removeClass('disabled');
                             $link.on('click', function () {
-                                $('#modal-page').data('source', $link).modal('show');
+                                $modalPage.data('source', $link).modal('show');
                             });
                         }
                     });

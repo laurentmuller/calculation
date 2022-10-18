@@ -47,8 +47,8 @@ class ThemeTest extends TypeTestCase
 
     public function testLabel(): void
     {
-        self::assertEquals('theme.dark', Theme::DARK->getReadable());
-        self::assertEquals('theme.light', Theme::LIGHT->getReadable());
+        self::assertEquals('theme.dark.name', Theme::DARK->getReadable());
+        self::assertEquals('theme.light.name', Theme::LIGHT->getReadable());
     }
 
     public function testSorted(): void
@@ -58,7 +58,20 @@ class ThemeTest extends TypeTestCase
             Theme::DARK,
         ];
         $sorted = Theme::sorted();
+        self::assertCount(2, $sorted);
         self::assertEquals($expected, $sorted);
+    }
+
+    public function testSuccess(): void
+    {
+        self::assertEquals('theme.dark.success', Theme::DARK->getSuccess());
+        self::assertEquals('theme.light.success', Theme::LIGHT->getSuccess());
+    }
+
+    public function testTitle(): void
+    {
+        self::assertEquals('theme.dark.title', Theme::DARK->getTitle());
+        self::assertEquals('theme.light.title', Theme::LIGHT->getTitle());
     }
 
     public function testValue(): void

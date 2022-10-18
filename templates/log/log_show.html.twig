@@ -28,7 +28,7 @@
 {% macro cellTemplate(name, value, template) %}
 <tr>
     <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75">{% include template with {'log': value} %}</td>
+    <td class="w-75">{{ include(template, {'log': value}) }}</td>
 </tr>
 {% endmacro %}
 {# parameters #}

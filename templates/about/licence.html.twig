@@ -11,7 +11,7 @@
 {% block navigation_vertical -%}{% if authenticate %}{{ parent() }}{% endif %}{%- endblock %}
 {# body #}
 {% block card_body %}
-{% include 'about/licence_content.html.twig' %}
+{{ include('about/licence_content.html.twig') }}
 {% endblock %}
 {# footer #}
 {% block card_footer %}
@@ -32,7 +32,7 @@
 {# cookie_banner #}
 {% block cookie_banner -%}
 {% if not accepted %}
-    {% include 'cookie_banner.html.twig' with {'displayBanner': false} %}
+    {{ include('cookie_banner.html.twig', {'displayBanner': false}) }}
     {{ asset_js('js/application/about_accept.js') }}
 {% endif %}
 {%- endblock %}

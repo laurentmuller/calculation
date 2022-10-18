@@ -26,12 +26,6 @@
 {% block form_errors -%}
 {%- if errors|length > 0 -%}
     {%- set messages = [] -%}
-    {#%- for error in errors -%}
-        {%- if error.message not in messages -%}
-            <small class="is-invalid invalid-feedback">{{ error.message }}</small>
-        {%- endif -%}
-        {%- set messages = messages|merge([error.message]) -%}
-    {%- endfor -%#}
     <span class="invalid-feedback d-block">
         {%- for error in errors -%}
             {%- if error.message not in messages -%}

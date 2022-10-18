@@ -10,7 +10,7 @@
     <a href="#{{ href }}" class="drop-down-icon-left horizontal-line" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
         {{- name -}}
     </a>
-    {% include 'parameters/_parameters_' ~ href ~ '.html.twig' with {'form': form, expanded: expanded, options: options} %}
+    {{ include('parameters/_parameters_' ~ href ~ '.html.twig', {'form': form, expanded: expanded, options: options}) }}
 </div>
 {% endmacro %}
 {# customized fields #}

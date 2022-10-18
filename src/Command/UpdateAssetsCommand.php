@@ -88,7 +88,6 @@ class UpdateAssetsCommand extends Command
         if (!$targetTemp = $this->getTargetTemp($publicDir)) {
             return Command::FAILURE;
         }
-        $this->writeVerbose("Created temporary directory '$targetTemp'.");
 
         /** @var string $format */
         $format = $configuration->format;
@@ -524,7 +523,6 @@ class UpdateAssetsCommand extends Command
 
             return false;
         }
-        // return FileUtils::rename($origin, $target, true);
     }
 
     private function updateStyle(string $content): string

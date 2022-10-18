@@ -49,18 +49,18 @@
 {{ form_start(form, {attr: form_attr}) }}
 <div id="main-content" class="row">
     <div class="col-xl-5 pr-xl-0">
-        {% include 'calculation/calculation_edit_panel_main.html.twig' %}
-        {% include 'calculation/calculation_edit_panel_totals.html.twig' %}
+        {{ include('calculation/calculation_edit_panel_main.html.twig') }}
+        {{ include('calculation/calculation_edit_panel_totals.html.twig') }}
     </div>
     <div class="col-xl-7">
-        {% include 'calculation/calculation_edit_panel_items.html.twig' %}
+        {{ include('calculation/calculation_edit_panel_items.html.twig') }}
     </div>
 </div>
 {{ form_end(form) }}
 {# dialogs #}
 {% if editable -%}
-    {%- include 'dialog/edit_item_dialog.html.twig' with {'form': item_dialog} only %}
-    {%- include 'dialog/edit_task_dialog.html.twig' with {'form': task_dialog, 'tasks': tasks} only %}
+    {{ include('dialog/edit_item_dialog.html.twig', {'form': item_dialog}, with_context=false) }}
+    {{ include('dialog/edit_task_dialog.html.twig', {'form': task_dialog, 'tasks': tasks}, with_context=false) }}
 {%- endif %}
 {%- endblock %}
 {# stylesheets #}

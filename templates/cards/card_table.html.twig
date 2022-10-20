@@ -52,12 +52,12 @@
 {% set class = ('text-truncate user-select-none ' ~ class)|trim %}
 <div class="{{ class }}">{{ value|raw }}</div>
 {%- endmacro %}
-{% macro property_both(leftValue, rightValue, left_class='', right_class='') -%}
+{% macro property_both(left_value, right_value, left_class='', right_class='') -%}
 {% set left_class = ('col-4 user-select-none ' ~ left_class)|trim %}
 {% set right_class = ('col-8 user-select-none ' ~ right_class)|trim %}
 <div class="row rowlink-skip no-gutters">
-    <div class="{{ left_class }}">{{ leftValue|raw }}</div>
-    <div class="{{ right_class }}">{{ rightValue|raw }}</div>
+    <div class="{{ left_class }}">{{ left_value|raw }}</div>
+    <div class="{{ right_class }}">{{ right_value|raw }}</div>
 </div>
 {%- endmacro %}
 {% macro property_line() -%}
@@ -105,14 +105,14 @@
     'row-class': row_selector,
     'single-select': true,
     'toggle-selector': '#toggle',
-    'undefined-text': '&nbsp;',
+    'undefined-text': '&#160;',
     'silent-sort': false,
     'side-pagination': 'server',
     'show-custom-view': false,
     'custom-view': 'customViewFormatter',
     'pagination': true,
     'pagination-loop': false,
-    'pagination-parts': '["pageInfo", "pageList"]',
+    'pagination-parts': "['pageInfo', 'pageList']",
     'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
     'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
     'show-extended-pagination': true,

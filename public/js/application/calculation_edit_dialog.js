@@ -157,7 +157,7 @@ class EditDialog {
      *
      * @return {EditDialog} This instance for chaining.
      */
-    _initAdd(_$row) { // jshint ignore:line
+    _initAdd(_$row) { 
         'use strict';
         return this;
     }
@@ -169,7 +169,7 @@ class EditDialog {
      *
      * @return {EditDialog} This instance for chaining.
      */
-    _initEdit(_$row) { // jshint ignore:line
+    _initEdit(_$row) { 
         'use strict';
         return this;
     }

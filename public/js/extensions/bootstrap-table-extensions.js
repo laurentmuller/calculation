@@ -37,7 +37,7 @@
  * @param {string} message - the loading message.
  * @returns {string} the loading template.
  */
-function loadingTemplate(message) { // jshint ignore:line
+function loadingTemplate(message) { 
     'use strict';
     return `<div class="alert alert-info text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
 }

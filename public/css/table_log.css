@@ -50,9 +50,9 @@ td.user {
 .icon-level:before {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
+    font-style: normal;
     padding-right: 4px;
     content: '\f05a';
-
 }
 .icon-level.info {
     color: var(--info);
@@ -94,6 +94,7 @@ td.user {
 .icon-channel:before {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
+    font-style: normal;
     padding-right: 4px;
     content: '\f15b';
 }

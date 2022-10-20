@@ -1110,7 +1110,7 @@ task:
   name: Tâche
   show:
     title: Propriétés de la tâche
-taskcompute:
+task_compute:
   add: Nouvelle tâche
   button_ok: Calculer
   edit: Edition d'une tâche

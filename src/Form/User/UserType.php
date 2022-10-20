@@ -77,11 +77,10 @@ class UserType extends AbstractEntityType
 
         $helper->field('username')
             ->minLength(2)
-            ->maxLength(180)
+            ->maxLength(User::MAX_USERNAME_LENGTH)
             ->add(UserNameType::class);
 
         $helper->field('email')
-            ->maxLength(180)
             ->addEmailType();
 
         $helper->field('plainPassword')

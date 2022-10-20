@@ -55,6 +55,6 @@ class EditTaskDialogType extends AbstractHelperType
      */
     protected function getLabelPrefix(): string
     {
-        return 'taskcompute.fields.';
+        return 'task_compute.fields.';
     }
 }

@@ -5,11 +5,11 @@
 {%- set class = (class ~ ' form-control-plaintext form-control-readonly text-right')|trim -%}
 <div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
 {% endmacro %}
-{% macro row_input(task, item, visible) %}
+{% macro row_input(task, item, visible, disabled) %}
 <tr class="item-row{% if not visible %} d-none{% endif %}" data-id="{{ task.id }}" data-unit="{{ task.unit }}">
     <td>
         <div class="custom-control custom-switch mt-1">
-            <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}" checked="checked">
+            <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}" checked="checked"{% if disabled %} disabled="disabled"{% endif %}>
             <label class="custom-control-label" for="item_{{ item.id }}">{{ item.name }}</label>
         </div>
     </td>
@@ -22,10 +22,10 @@
 </tr>
 {% endmacro %}
 {# parameters #}
-{%- set title = 'taskcompute.title' -%}
+{%- set title = 'task_compute.title' -%}
 {%- set title_icon = 'keyboard' -%}
-{%- set form_attr = form_attr|default({})|merge({'action': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
-{%- set submit_text = 'taskcompute.button_ok' -%}
+{%- set form_attr = form_attr|default({})|merge({'action': path('ajax_task'), 'data-failed': 'task_compute.failed'|trans}) -%}
+{%- set submit_text = 'task_compute.button_ok' -%}
 {%- set service = form.vars.value -%}
 {%- set task = service.task -%}
 {%- set selection = task.id -%}
@@ -39,7 +39,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label>{{ 'task.fields.unit'|trans }}</label>
-            <span id="unit" class="form-control-plaintext form-control-readonly">{{ task.unit|default('&nbsp;')|raw }}</span>
+            <span id="unit" class="form-control-plaintext form-control-readonly skip-reset">{{ task.unit|default('&nbsp;')|raw }}</span>
         </div>
     </div>
     <div class="col-md-3">
@@ -51,15 +51,17 @@
         <thead>
             <tr>
                 <td class="required">{{ 'task.fields.items'|trans }}</td>
-                <td class="w-25">{{ 'taskcompute.fields.price'|trans }}</td>
-                <td class="w-25">{{ 'taskcompute.fields.total'|trans }}</td>
+                <td class="w-25">{{ 'task_compute.fields.price'|trans }}</td>
+                <td class="w-25">{{ 'task_compute.fields.total'|trans }}</td>
             </tr>
         </thead>
         <tbody>
         {% for task in tasks %}
             {% set visible = task.id == selection %}
-            {% for item in task.items|filter(item => item.count > 0) %}
-                {{ _self.row_input(task, item, visible) }}
+            {% set items = task.items|filter(item => item.count > 0) %}
+            {% set disabled = items|length == 1 %}
+            {% for item in items %}
+                {{ _self.row_input(task, item, visible, disabled) }}
             {% endfor %}
         {% endfor %}
         </tbody>
@@ -68,8 +70,8 @@
                 <td colspan="3"><hr class="my-1"></td>
             </tr>
             <tr>
-                <td><span class="task-items-empty text-danger small d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
-                <td class="w-25 text-right pt-2">{{ 'taskcompute.fields.overall_total'|trans }}</td>
+                <td><span class="task-items-empty text-danger small d-none">{{ 'task_compute.error.items'|trans }}</span></td>
+                <td class="w-25 text-right pt-2">{{ 'task_compute.fields.overall_total'|trans }}</td>
                 <td class="w-25 text-right">{{ _self.plain_text_input('overall') }}</td>
             </tr>
         </tfoot>

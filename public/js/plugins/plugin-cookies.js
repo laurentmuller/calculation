@@ -9,7 +9,7 @@
     /**
      * Cookies functions
      */
-    const Cookies = { // jshint ignore:line
+    const Cookies = { 
 
         /**
          * Gets the cookie value.

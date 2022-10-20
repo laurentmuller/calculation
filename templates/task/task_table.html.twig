@@ -56,7 +56,7 @@
 {% block other_actions -%}
 {% if allow_show %}
     {{- _self.item_separator() }}
-    {{- _self.item_path(path('task_compute', params), 'taskcompute.title', 'keyboard', 'btn-task-compute') }}
+    {{- _self.item_path(path('task_compute', params), 'task_compute.title', 'keyboard', 'btn-task-compute') }}
 {% endif %}
 {%- endblock %}
 

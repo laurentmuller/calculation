@@ -44,7 +44,7 @@ function update(form) {
     // get items
     const $itemsEmpty = $('.task-items-empty');
     const items = $('#table-edit .item-row:not(.d-none) :checkbox:checked').map(function () {
-        return $.parseInt($(this).attr('value'));
+        return $(this).intVal();
     }).get();
     if (items.length === 0) {
         $('#table-edit .item-row:not(.d-none) :checkbox:first').trigger('focus');
@@ -52,15 +52,16 @@ function update(form) {
         resetValues();
         return;
     }
+
+    // update UI
+    $('#quantity-error').remove();
     $itemsEmpty.addClass('d-none');
 
     // get data
     const $form = $(form);
     const url = $form.prop('action');
     const data = {
-        'id': $('#task').intVal(),
-        'quantity': $('#quantity').floatVal(),
-        'items': items
+        'id': $('#task').intVal(), 'quantity': $('#quantity').floatVal(), 'items': items
     };
 
     // cancel send
@@ -110,21 +111,19 @@ function onTaskChanged() {
     'use strict';
     // toggle rows visibility
     const $task = $('#task');
-
     const id = $task.intVal();
     const selector = '[data-id="' + id + '"]';
-    $('.item-row' + selector).removeClass('d-none');
     $('.item-row:not(' + selector + ')').addClass('d-none');
-
+    const $rows = $('.item-row' + selector).removeClass('d-none');
 
     // task items?
-    const empty = $('.item-row:not(.d-none)').length === 0;
+    const empty = $rows.length === 0;
     $('.row-table').toggleClass('d-none', empty);
     $('.row-empty').toggleClass('d-none', !empty);
 
     // unit
     const $selection = $task.getSelectedOption();
-    $('#unit').html($selection.data('unit')|| '&nbsp;');
+    $('#unit').html($selection.data('unit') || '&nbsp;');
 
     // submit
     if (!empty) {
@@ -150,11 +149,9 @@ function onTaskChanged() {
 
     // validation
     const options = {
-        showModification: false,
-        submitHandler: function (form) {
+        showModification: false, submitHandler: function (form) {
             update(form);
-        },
-        rules: {
+        }, rules: {
             quantity: {
                 greaterThanValue: 0
             }

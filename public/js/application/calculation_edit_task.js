@@ -8,7 +8,7 @@
  * @class EditTaskDialog
  * @extends {EditDialog}
  */
-class EditTaskDialog extends EditDialog { // jshint ignore:line
+class EditTaskDialog extends EditDialog { 
 
     /**
      * Gets the selected items.

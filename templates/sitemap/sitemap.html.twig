@@ -134,7 +134,7 @@
                     <li>{{ _self.link('duplicate_table', 'duplicate.title', ICON_COPY) }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
                     {% if is_granted_task %}
-                    <li>{{ _self.link('task_compute', 'taskcompute.title', 'keyboard', null, route_params|merge({'id': 0})) }}</li>
+                    <li>{{ _self.link('task_compute', 'task_compute.title', 'keyboard', null, route_params|merge({'id': 0})) }}</li>
                     {% endif %}
                 </ul>
             </li>

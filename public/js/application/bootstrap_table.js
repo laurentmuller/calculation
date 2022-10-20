@@ -8,14 +8,14 @@
  * @param {Array.<Object>} data - the rows to format.
  * @returns {string} the custom view.
  */
-function customViewFormatter(data) { // jshint ignore:line
+function customViewFormatter(data) {
     'use strict';
     const $table = $('#table-edit');
     const regex = /JavaScript:(\w*)/m;
     const $template = $('#custom-view');
     const rowIndex = $table.getSelectionIndex();
     const rowClass = $table.getOptions().rowClass;
-
+    const undefinedText = $table.data('undefined-text') || '&#160;';
     const content = data.reduce(function (carry, row, index) {
         // update class selection
         $template.find('.custom-item').toggleClass(rowClass, rowIndex === index);
@@ -23,16 +23,16 @@ function customViewFormatter(data) { // jshint ignore:line
         // fields
         let html = $template.html();
         Object.keys(row).forEach(function (key) {
-            html = html.replaceAll('%' + key + '%', row[key] || '');
+            html = html.replaceAll('%' + key + '%', row[key] || undefinedText);
         });
 
         // functions
         let match;
         while ((match = regex.exec(html)) !== null) {
-            let value = '';
+            let value = undefinedText;
             const callback = match[1];
             if (typeof window[callback] !== 'undefined') {
-                value = window[callback](row) || '&#160;';
+                value = window[callback](row) || undefinedText;
             }
             html = html.replaceAll(match[0], value);
         }
@@ -50,7 +50,7 @@ function customViewFormatter(data) { // jshint ignore:line
  * @param {object} row - the record data.
  * @returns {string} the formatted product unit.
  */
-function formatProductUnit(row) { // jshint ignore:line
+function formatProductUnit(row) {
     'use strict';
     if (row.unit) {
         return ' / ' + row.unit;
@@ -64,7 +64,7 @@ function formatProductUnit(row) { // jshint ignore:line
  * @param {object} row - the record data.
  * @returns {string} the class.
  */
-function formatProductClass(row) { // jshint ignore:line
+function formatProductClass(row) {
     'use strict';
     const price = $.parseFloat(row.price);
     if (price === 0) {
@@ -80,7 +80,7 @@ function formatProductClass(row) { // jshint ignore:line
  * @param {object} row - the record data.
  * @returns {object} the cell style.
  */
-function styleBorderColor(_value, row) { // jshint ignore:line
+function styleBorderColor(_value, row) {
     'use strict';
     if (!$.isUndefined(row.color)) {
         return {
@@ -98,7 +98,7 @@ function styleBorderColor(_value, row) { // jshint ignore:line
  * @param {string} value - the product price.
  * @returns {object} the cell classes.
  */
-function styleProductPrice(value) { // jshint ignore:line
+function styleProductPrice(value) {
     'use strict';
     const price = $.parseFloat(value);
     if (price === 0) {
@@ -119,7 +119,7 @@ function styleProductPrice(value) { // jshint ignore:line
  * @param {int} index - the row index.
  * @returns {object} the row classes.
  */
-function styleTextMuted(row, index) { // jshint ignore:line
+function styleTextMuted(row, index) {
     'use strict';
     const value = $.parseInt(row.textMuted);
     if (!Number.isNaN(value) && value === 0) {
@@ -238,7 +238,7 @@ function updateUserResetAction($table, row, _$element, $action) {
  *
  * @param {JQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {number} row.id - the row identifier.
+ * @param {string} row.id - the row identifier.
  * @param {string} row.type - the entity type.
  * @param {boolean} row.allowShow - the show granted.
  * @param {boolean} row.allowEdit - the  edit granted.
@@ -349,7 +349,7 @@ function updateShowEntityAction(row, $action, propertyName) {
  * @param {object} _row - the row record data.
  * @returns {string} the rendered cell.
  */
-function formatActions(value, _row) { // jshint ignore:line
+function formatActions(value, _row) {
     'use strict';
     const substr = '$1' + value;
     const regex = /(\/|\bid=)(\d+)/;
@@ -410,7 +410,7 @@ function initializeDangerTooltips($table) {
 }
 
 /**
- * Initialize search entity drop-down.
+ * Initialize calculation state drop-down.
  */
 function initializeCalculationStates() {
     'use strict';
@@ -438,7 +438,7 @@ function initializeSearchEntities() {
         const icon = $this.data('icon');
         if (icon) {
             $('<i />', {
-                class: ' mr-1 ' + $this.data('icon')
+                class: ' mr-1 ' + icon
             }).prependTo($this);
         }
     });
@@ -451,7 +451,7 @@ function initializeLogChannels() {
     'use strict';
     $('.dropdown-channel').each(function () {
         const $this = $(this);
-        $('<span />', {
+        $('<i />', {
             class: 'icon-channel ' + ($this.data('value') || 'all')
         }).prependTo($this);
     });
@@ -464,7 +464,7 @@ function initializeLogLevels() {
     'use strict';
     $('.dropdown-level').each(function () {
         const $this = $(this);
-        $('<span />', {
+        $('<i />', {
             class: 'icon-level ' + ($this.data('value') || 'all')
         }).prependTo($this);
     });
@@ -473,98 +473,101 @@ function initializeLogLevels() {
 /**
  * jQuery extensions.
  */
-$.fn.extend({
 
-    getDataValue: function () {
-        'use strict';
-        return $(this).data('value') || null;
-    },
+(function ($) {
+    'use strict';
 
-    setDataValue(value, $selection, copyText, copyIcon) {
-        'use strict';
-        const $this = $(this);
-        const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
-        if ($.isUndefined(copyText) || copyText === null) {
-            copyText = true;
-        }
-        if ($.isUndefined(copyIcon) || copyIcon === null) {
-            copyIcon = false;
-        }
+    $.fn.extend({
+        getDataValue: function () {
+            return $(this).data('value') || null;
+        },
 
-        let $icon = $this.find('i');
-        let text = $this.text().trim();
-        if (value) {
-            $selection.addClass('active');
-            if (copyIcon) {
-                $icon = $selection.find('i') || $icon;
+        setDataValue(value, $selection, copyText, copyIcon) {
+            const $this = $(this);
+            const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
+            if ($.isUndefined(copyText) || copyText === null) {
+                copyText = true;
             }
-            if (copyText) {
-                text = $selection.text().trim() || text;
+            if ($.isUndefined(copyIcon) || copyIcon === null) {
+                copyIcon = false;
             }
-        } else {
-            $items.first().addClass('active');
-            if (copyIcon) {
-                $icon = $this.data('icon') || $icon;
-            }
-            if (copyText) {
-                text = $this.data('default') || text;
-            }
-        }
-        if ($icon.length) {
-            $this.text(' ' + text);
-            $this.prepend($icon.clone());
-        } else {
-            $this.text(text);
-        }
-        return $this.data('value', value);
-    },
 
-    initDropdown: function (copyText, copyIcon) {
-        'use strict';
-        const $this = $(this);
-        const $menu = $this.next('.dropdown-menu');
-        if ($.isUndefined(copyText) || copyText === null) {
-            copyText = true;
-        }
-        if ($.isUndefined(copyIcon) || copyIcon === null) {
-            copyIcon = false;
-        }
-        $menu.on('click', '.dropdown-item', function () {
-            const $item = $(this);
-            const newValue = $item.getDataValue();
-            const oldValue = $this.getDataValue();
-            if (newValue !== oldValue) {
-                $this.setDataValue(newValue || '', $item, copyText, copyIcon).trigger('input');
+            let $icon = $this.find('i');
+            let text = $this.text().trim();
+            if (value) {
+                $selection.addClass('active');
+                if (copyIcon) {
+                    // const $newIcon = $selection.find(':first-child');
+                    const $newIcon = $selection.find('i');
+                    $icon = $newIcon.length ? $newIcon : $icon;
+                }
+                if (copyText) {
+                    text = $selection.text().trim() || text;
+                }
+            } else {
+                const $first = $items.first().addClass('active');
+                text = $first.text().trim();
+                $icon = $first.find('i');
+                if (copyIcon) {
+                    $icon = $this.data('icon') || $icon;
+                }
+                if (copyText) {
+                    text = $this.data('default') || text;
+                }
             }
-            $this.focus();
-        });
-        $this.parent().on('shown.bs.dropdown', function () {
-            $menu.find('.active').focus();
-        });
-        return $this;
-    },
+            if ($icon.length) {
+                $this.text(' ' + text).prepend($icon.clone());
+            } else {
+                $this.text(text);
+            }
+            return $this.data('value', value);
+        },
 
-    /**
-     * Gets the context menu items for the selected cell.
-     *
-     * @return {object} the context menu items.
-     */
-    getContextMenuItems: function () {
-        'use strict';
-        let $parent;
-        const $this = $(this);
-        if ($this.is('div')) {
-            $parent = $this.parents('.custom-item');
-        } else {
-            $parent = $this.parents('tr');
+        initDropdown: function (copyText, copyIcon) {
+            const $this = $(this);
+            const $menu = $this.next('.dropdown-menu');
+            if ($.isUndefined(copyText) || copyText === null) {
+                copyText = true;
+            }
+            if ($.isUndefined(copyIcon) || copyIcon === null) {
+                copyIcon = false;
+            }
+            $menu.on('click', '.dropdown-item', function () {
+                const $item = $(this);
+                const newValue = $item.getDataValue();
+                const oldValue = $this.getDataValue();
+                if (newValue !== oldValue) {
+                    $this.setDataValue(newValue || '', $item, copyText, copyIcon).trigger('input');
+                }
+                $this.focus();
+            });
+            $this.parent().on('shown.bs.dropdown', function () {
+                $menu.find('.active').focus();
+            });
+            return $this;
+        },
+
+        /**
+         * Gets the context menu items for the selected cell.
+         *
+         * @return {object} the context menu items.
+         */
+        getContextMenuItems: function () {
+            let $parent;
+            const $this = $(this);
+            if ($this.is('div')) {
+                $parent = $this.parents('.custom-item');
+            } else {
+                $parent = $this.parents('tr');
+            }
+            const $elements = $parent.find('.dropdown-menu').children();
+            const builder = new MenuBuilder({
+                classSelector: 'btn-default'
+            });
+            return builder.fill($elements).getItems();
         }
-        const $elements = $parent.find('.dropdown-menu').children();
-        const builder = new MenuBuilder({
-            classSelector: 'btn-default'
-        });
-        return builder.fill($elements).getItems();
-    }
-});
+    });
+}(jQuery));
 
 /**
  * Ready function
@@ -796,7 +799,9 @@ $.fn.extend({
 
     // handle drop-down input buttons
     $inputs.each(function () {
-        $(this).initDropdown().on('input', function () {
+        const copyText = $(this).data('copy-text') || true;
+        const copyIcon = $(this).data('copy-icon') || false;
+        $(this).initDropdown(copyText, copyIcon).on('input', function () {
             $table.refresh({
                 pageNumber: 1
             });

@@ -186,7 +186,7 @@ class AjaxController extends AbstractController
         $task = $repository->find($id);
         if (!$task instanceof Task) {
             return $this->jsonFalse([
-                'message' => $this->trans('taskcompute.error.task'),
+                'message' => $this->trans('task_compute.error.task'),
             ]);
         }
         // update service and compute
@@ -195,7 +195,7 @@ class AjaxController extends AbstractController
             ->compute($request);
         /** @psalm-var array $data */
         $data = \array_merge($service->jsonSerialize(), [
-            'message' => $this->trans('taskcompute.success'),
+            'message' => $this->trans('task_compute.success'),
         ]);
 
         return $this->jsonTrue($data);

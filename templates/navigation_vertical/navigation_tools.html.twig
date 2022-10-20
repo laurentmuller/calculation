@@ -20,7 +20,7 @@
             {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}
             {%- if is_granted_task -%}
                 {{ dropdownSeparator() }}
-                {{ navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'taskcompute.title', 'keyboard') }}
+                {{ navItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'task_compute.title', 'keyboard') }}
             {% endif -%}
         {% endif %}
         {% if is_test and is_granted_data and show_navigation_search ?? false -%}

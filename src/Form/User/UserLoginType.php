@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Entity\AbstractEntity;
+use App\Entity\User;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
@@ -51,7 +52,7 @@ class UserLoginType extends AbstractUserCaptchaType
     {
         $helper->field('username')
             ->autocomplete('username')
-            ->maxLength(180)
+            ->maxLength(User::MAX_USERNAME_LENGTH)
             ->add(UserNameType::class);
 
         $helper->field('password')

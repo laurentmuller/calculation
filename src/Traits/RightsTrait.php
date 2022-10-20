@@ -15,6 +15,7 @@ namespace App\Traits;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Util\RoleBuilder;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Elao\Enum\FlagBag;
 
@@ -47,7 +48,7 @@ trait RightsTrait
      *
      * @var ?int[]
      */
-    #[ORM\Column(type: 'json', nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $rights = null;
 
     /**

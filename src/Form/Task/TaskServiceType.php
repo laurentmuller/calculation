@@ -73,7 +73,7 @@ class TaskServiceType extends AbstractHelperType
      */
     protected function getLabelPrefix(): string
     {
-        return 'taskcompute.fields.';
+        return 'task_compute.fields.';
     }
 
     private function getPlainTypeOptions(): array
@@ -82,7 +82,7 @@ class TaskServiceType extends AbstractHelperType
             'expanded' => true,
             'hidden_input' => true,
             'attr' => ['class' => 'skip-reset'],
-            'label' => 'taskcompute.fields.task',
+            'label' => 'task_compute.fields.task',
             'value_transformer' => fn (Task $task): ?int => $task->getId(),
             'display_transformer' => fn (Task $task): ?string => $task->getName(),
         ];

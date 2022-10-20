@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Entity\User;
 use App\Util\FormatUtils;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,27 +29,27 @@ trait TimestampableTrait
     /**
      * The creation date.
      */
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     protected ?\DateTimeInterface $createdAt = null;
 
     /**
      * The creation username.
      */
-    #[Assert\Length(max: 180)]
-    #[ORM\Column(type: 'string', length: 180, nullable: true)]
+    #[Assert\Length(max: User::MAX_USERNAME_LENGTH)]
+    #[ORM\Column(length: User::MAX_USERNAME_LENGTH, nullable: true)]
     protected ?string $createdBy = null;
 
     /**
      * The updated date.
      */
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
 
     /**
      * The updated username.
      */
-    #[Assert\Length(max: 180)]
-    #[ORM\Column(type: 'string', length: 180, nullable: true)]
+    #[Assert\Length(max: User::MAX_USERNAME_LENGTH)]
+    #[ORM\Column(length: User::MAX_USERNAME_LENGTH, nullable: true)]
     protected ?string $updatedBy = null;
 
     public function getCreatedAt(): ?\DateTimeInterface

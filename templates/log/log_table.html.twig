@@ -15,9 +15,10 @@
 
 {% block toolbar_actions -%}
 {% if customData.levels|length > 1 %}
+    {% set data_default = 'log.fields.level'|trans %}
     <div class="input-group-append">
-        <button id="level" data-value="{{ level }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
-            <i class="fa-solid fa-layer-group"></i>&nbsp;{{- level|length ? level|capitalize : 'log.fields.level'|trans -}}
+        <button id="level" data-value="{{ level }}" data-copy-icon="true" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ data_default }}" title="{{ 'log.list.level_help'|trans }}">
+            <i class="fa-solid fa-layer-group"></i>&nbsp;{{- level|length ? level|capitalize : data_default -}}
         </button>
         <div class="dropdown-menu" aria-labelledby="level">
             {{ _self.output_dropdown('level', '', level, 'datatable.all'|trans) }}
@@ -29,18 +30,19 @@
     </div>
 {% endif %}
 {% if customData.channels|length > 1 %}
-<div class="input-group-append">
-    <button id="channel" data-value="{{ channel }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
-        <i class="fa-solid fa-tools"></i>&nbsp;{{- channel|length ? channel|capitalize : 'log.fields.channel'|trans -}}
-    </button>
-    <div class="dropdown-menu" aria-labelledby="channel">
-        {{ _self.output_dropdown('channel', '', channel, 'datatable.all'|trans) }}
-        {{ _self.item_separator() }}
-        {% for key in customData.channels %}
-        {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
-        {% endfor %}
+    {% set data_default = 'log.fields.channel'|trans %}
+    <div class="input-group-append">
+        <button id="channel" data-value="{{ channel }}" data-copy-icon="true" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ data_default }}" title="{{ 'log.list.channel_help'|trans }}">
+            <i class="fa-solid fa-tools"></i>&nbsp;{{- channel|length ? channel|capitalize : data_default -}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="channel">
+            {{ _self.output_dropdown('channel', '', channel, 'datatable.all'|trans) }}
+            {{ _self.item_separator() }}
+            {% for key in customData.channels %}
+                {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endif %}
 {%- endblock %}
 

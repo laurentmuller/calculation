@@ -5,6 +5,7 @@
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set display_style = expanded ? 'block' : 'none' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+{{ dropdownSeparator() }}
 <li class="nav-item nav-item-dropdown" id="{{ id }}">
     <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
         {{- icon('bell-concierge fa-fw', 'index.menu_service') -}}

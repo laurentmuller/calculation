@@ -267,9 +267,9 @@
          * @param {int} _timeout - The number of milliseconds to wait before executing the callback.
          * @return {JQuery} The element for chaining.
          */
-        updateTimer: function (_callback, _timeout) {// jshint ignore:line
-            $(this).removeTimer();
-            return $.fn.createTimer.apply(this, arguments);
+        updateTimer: function (_callback, _timeout) {
+            const args = Array.prototype.slice.call(arguments, 2);
+            $(this).removeTimer().createTimer(_callback, _timeout, ...args);
         },
 
         /**
@@ -312,9 +312,9 @@
          * @param {int} _timeout - The intervals (in milliseconds) on how often to execute the callback.
          * @return {JQuery} The element for chaining.
          */
-        updateInterval: function (_callback, _timeout) { // jshint ignore:line
-            $(this).removeInterval();
-            return $.fn.createInterval.apply(this, arguments);
+        updateInterval: function (_callback, _timeout) { 
+            const args = Array.prototype.slice.call(arguments, 2);
+            $(this).removeInterval().createInterval(_callback, _timeout, ...args);
         },
 
         /**

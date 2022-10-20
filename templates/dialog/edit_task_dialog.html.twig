@@ -26,9 +26,9 @@
 {# parameters #}
 {%- set icon = ICON_TASK -%}
 {%- set form_prefix = 'task' -%}
-{%- set add_title = 'taskcompute.add'|trans -%}
-{%- set edit_title = 'taskcompute.edit'|trans -%}
-{%- set form_attr = form_attr|default({})|merge({'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
+{%- set add_title = 'task_compute.add'|trans -%}
+{%- set edit_title = 'task_compute.edit'|trans -%}
+{%- set form_attr = form_attr|default({})|merge({'data-url': path('ajax_task'), 'data-failed': 'task_compute.failed'|trans}) -%}
 
 {% block modal_body %}
 <div class="form-row">
@@ -51,9 +51,9 @@
     <table class="table table-sm table-borderless mb-0" id="table-task-edit">
         <thead>
             <tr>
-                <td><span class="task-items-empty text-danger d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
-                <td class="w-25">{{ 'taskcompute.fields.price'|trans }}</td>
-                <td class="w-25">{{ 'taskcompute.fields.total'|trans }}</td>
+                <td><span class="task-items-empty text-danger d-none">{{ 'task_compute.error.items'|trans }}</span></td>
+                <td class="w-25">{{ 'task_compute.fields.price'|trans }}</td>
+                <td class="w-25">{{ 'task_compute.fields.total'|trans }}</td>
             </tr>
         </thead>
         <tbody>
@@ -69,7 +69,7 @@
                 <td colspan="3"><hr class="my-1"></td>
             </tr>
             <tr>
-                <td class="text-right pt-2" colspan="2">{{ 'taskcompute.fields.overall_total'|trans }}</td>
+                <td class="text-right pt-2" colspan="2">{{ 'task_compute.fields.overall_total'|trans }}</td>
                 <td class="text-right">{{ _self.plain_text_input('task_overall') }}</td>
             </tr>
         </tfoot>

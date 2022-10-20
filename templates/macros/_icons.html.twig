@@ -187,17 +187,17 @@
 {% set parameters = parameters|merge({
     'class': (class ~ ' item-theme')|trim,
     'title': theme_title|trans,
-    'data-title': 'theme.title'|trans,
     'data-path': path('theme_save'),
+    'data-error': 'theme.error'|trans,
+    'data-title': 'theme.title'|trans,
     'data-light-css': asset_versioned(theme_light.css),
     'data-light-text': theme_light.readable|trans,
-    'data-light-icon': theme_light.icon,
     'data-light-title': theme_light.title|trans,
+    'data-light-icon': theme_light.icon,
     'data-dark-css': asset_versioned(theme_dark.css),
     'data-dark-text': theme_dark.readable|trans,
-    'data-dark-icon': theme_dark.icon,
     'data-dark-title': theme_dark.title|trans,
-    'data-error': 'theme.error'|trans})
+    'data-dark-icon': theme_dark.icon})
 %}
 <{{ element }}{{ attributes(parameters) }}>
     {{- _self.icon(theme_icon, theme_text) -}}

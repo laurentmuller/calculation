@@ -179,7 +179,7 @@ class SchemaController extends AbstractController
      */
     private function getColumns(string $name): array
     {
-        $table = $this->getManager()->listTableDetails($name);
+        $table = $this->getManager()->introspectTable($name);
         $indexes = $table->getIndexes();
         $foreignKeys = $table->getForeignKeys();
         $primaryKeys = $this->getPrimaryKeys($table);
@@ -235,16 +235,10 @@ class SchemaController extends AbstractController
 
     /**
      * @return string[]
-     *
-     * @throws \Doctrine\DBAL\Exception
      */
     private function getPrimaryKeys(Table $table): array
     {
-        if ($table->hasPrimaryKey()) {
-            return \array_map(static fn (Column $c): string => $c->getName(), $table->getPrimaryKeyColumns());
-        }
-
-        return [];
+        return $table->getPrimaryKey()?->getColumns() ?? [];
     }
 
     /**

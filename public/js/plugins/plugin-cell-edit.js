@@ -24,28 +24,7 @@
         constructor(element, options) {
             this.$element = $(element);
             this.options = $.extend(true, CellEdit.DEFAULTS, this.$element.data(), options);
-            this.$target = $(this.options.target);
-            if (this.$target && this.$target.length === 0) {
-                this.$target = null;
-            }
-
-            // check functions
-            this.options.onStartEdit = this._checkFunction(this.options.onStartEdit);
-            this.options.onCancelEdit = this._checkFunction(this.options.onCancelEdit);
-            this.options.onEndEdit = this._checkFunction(this.options.onEndEdit);
-
-            this.options.parser = this._checkFunction(this.options.parser);
-            this.options.formatter = this._checkFunction(this.options.formatter);
-
-            // proxies
-            this.clickProxy = e => this._click(e);
-            this.blurProxy = e => this._blur(e);
-            this.inputProxy = () => this._input();
-            this.keydownProxy = e => this._keydown(e);
-            this.$element.on('click', this.clickProxy);
-            if (this.options.autoEdit) {
-                this.$element.trigger('click');
-            }
+            this._init();
         }
 
         /**
@@ -71,8 +50,38 @@
         // -----------------------------
         // private functions
         // -----------------------------
+
+        _init() {
+            const options = this.options;
+            this.$target = $(options.target);
+            if (this.$target && this.$target.length === 0) {
+                this.$target = null;
+            }
+
+            // check functions
+            options.onStartEdit = this._checkFunction(options.onStartEdit);
+            options.onCancelEdit = this._checkFunction(options.onCancelEdit);
+            options.onEndEdit = this._checkFunction(options.onEndEdit);
+
+            options.parser = this._checkFunction(options.parser);
+            options.formatter = this._checkFunction(options.formatter);
+
+            // proxies
+            this.clickProxy = e => this._click(e);
+            this.blurProxy = e => this._blur(e);
+            this.inputProxy = () => this._input();
+            this.keydownProxy = e => this._keydown(e);
+
+            this.$element.on('click', this.clickProxy);
+            if (options.autoEdit) {
+                this.$element.trigger('click');
+            }
+        }
+
         _click(e) {
-            e.stopPropagation();
+            if (e) {
+                e.stopPropagation();
+            }
             if (this.$input && this.$input.is(':focus')) {
                 return this;
             }
@@ -89,8 +98,6 @@
             const className = valid ? options.inputClass : options.inputClass + ' is-invalid';
             const customClass = valid ? options.tooltipEditClass : options.tooltipErrorClass;
             const title = valid ? options.tooltipEdit : options.tooltipError;
-
-            //$.extend({}, object1, object2);
 
             const attributes = $.extend(true, {
                 'data-custom-class': customClass,
@@ -243,30 +250,44 @@
     // CellEdit default options
     // -----------------------------
     CellEdit.DEFAULTS = {
-        'type': 'text', // the input type
-        'required': false, // the required input attribute
-        'inputClass': 'form-control form-control-sm m-0', // the input class
-        'cellClass': 'pt-1 pb-1', // the cell class to add when editing
-        'rowClass': 'table-primary', // the row class to add when editing
-        'attributes': {}, // the input attributes to merge
-
-        'useNumberFormat': false, // true to use the input number plugin
-        'numberFormatOptions': {}, // the options to use with the input number plugin
-
-        'tooltipEdit': 'Enter the value', // the edit tooltip
-        'tooltipError': 'The value can not be empty.', // the error tooltip
-        'tooltipEditClass': 'tooltip-secondary', // the edit tooltip class
-        'tooltipErrorClass': 'tooltip-danger', // the error tooltip class
-
-        'autoEdit': false, // start edit on create
-        'autoDispose': false, // destroy on end edit or on cancel
-
-        'parser': null, // the function to parser value
-        'formatter': null, // the function to format value
-
-        'onStartEdit': null, // the function on start edit event
-        'onEndEdit': null, // the function on end edit event
-        'onCancelEdit': null, // the function on the cancel edit event
+        // the input type
+        'type': 'text',
+        // the required input attribute
+        'required': false,
+        // the input class
+        'inputClass': 'form-control form-control-sm m-0',
+        // the cell class to add when editing
+        'cellClass': 'pt-1 pb-1',
+        // the row class to add when editing
+        'rowClass': 'table-primary',
+        // the input attributes to merge
+        'attributes': {},
+        // true to use the input number plugin
+        'useNumberFormat': false,
+        // the options to use with the input number plugin
+        'numberFormatOptions': {},
+        // the edit tooltip
+        'tooltipEdit': 'Enter the value',
+        // the error tooltip
+        'tooltipError': 'The value can not be empty.',
+        // the edit tooltip class
+        'tooltipEditClass': 'tooltip-secondary',
+        // the error tooltip class
+        'tooltipErrorClass': 'tooltip-danger',
+        // start edit on create
+        'autoEdit': false,
+        // destroy on end edit or on cancel
+        'autoDispose': false,
+        // the function to parse the value
+        'parser': null,
+        // the  function to format the value
+        'formatter': null,
+        // the function on start edit event
+        'onStartEdit': null,
+        // the function on end edit event
+        'onEndEdit': null,
+        // the function on the cancel edit event
+        'onCancelEdit': null,
     };
 
     /**

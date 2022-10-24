@@ -47,10 +47,8 @@ class AboutController extends AbstractController
      *
      * @param string $appMode the application mode
      */
-    public function __construct(
-        #[Autowire('%app_mode%')]
-        private readonly string $appMode
-    ) {
+    public function __construct(#[Autowire('%app_mode%')] private readonly string $appMode)
+    {
     }
 
     /**
@@ -71,11 +69,9 @@ class AboutController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/pdf', name: 'about_pdf')]
-    public function aboutPdf(
-        #[Autowire('%app_name%')]
-        string $appName
-    ): PdfResponse {
-        $templateParameters = [
+    public function aboutPdf(#[Autowire('%app_name%')] string $appName): PdfResponse
+    {
+        $parameters = [
             'comments' => false,
             'link' => false,
         ];
@@ -83,7 +79,7 @@ class AboutController extends AbstractController
             '%app_name%' => $appName,
         ];
 
-        return $this->outputReport('about/about_content.html.twig', $templateParameters, 'index.menu_info', $titleParameters);
+        return $this->outputReport('about/about_content.html.twig', $parameters, 'index.menu_info', $titleParameters);
     }
 
     /**
@@ -93,9 +89,9 @@ class AboutController extends AbstractController
     #[Route(path: '/licence ', name: 'about_licence')]
     public function licence(): Response
     {
-        return $this->renderForm('about/licence.html.twig', [
-            'link' => true,
-        ]);
+        $parameters = ['link' => true];
+
+        return $this->renderForm('about/licence.html.twig', $parameters);
     }
 
     /**
@@ -122,11 +118,9 @@ class AboutController extends AbstractController
     #[Route(path: '/licence/pdf', name: 'about_licence_pdf')]
     public function licencePdf(): PdfResponse
     {
-        $templateParameters = [
-            'link' => false,
-        ];
+        $parameters = ['link' => false];
 
-        return $this->outputReport('about/licence_content.html.twig', $templateParameters, 'about.licence');
+        return $this->outputReport('about/licence_content.html.twig', $parameters, 'about.licence');
     }
 
     /**
@@ -239,10 +233,12 @@ class AboutController extends AbstractController
     #[Route(path: '/policy', name: 'about_policy')]
     public function policy(): Response
     {
-        return $this->renderForm('about/policy.html.twig', [
+        $parameters = [
             'comments' => false,
             'link' => true,
-        ]);
+        ];
+
+        return $this->renderForm('about/policy.html.twig', $parameters);
     }
 
     /**
@@ -252,10 +248,11 @@ class AboutController extends AbstractController
     #[Route(path: '/policy/content', name: 'about_policy_content')]
     public function policyContent(): JsonResponse
     {
-        $content = $this->renderView('about/policy_content.html.twig', [
+        $parameters = [
             'comments' => true,
             'link' => false,
-        ]);
+        ];
+        $content = $this->renderView('about/policy_content.html.twig', $parameters);
 
         return $this->jsonTrue(['content' => $content]);
     }
@@ -270,12 +267,12 @@ class AboutController extends AbstractController
     #[Route(path: '/policy/pdf', name: 'about_policy_pdf')]
     public function policyPdf(): PdfResponse
     {
-        $templateParameters = [
+        $parameters = [
             'comments' => false,
             'link' => false,
         ];
 
-        return $this->outputReport('about/policy_content.html.twig', $templateParameters, 'about.policy');
+        return $this->outputReport('about/policy_content.html.twig', $parameters, 'about.policy');
     }
 
     /**
@@ -375,10 +372,10 @@ class AboutController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    private function outputReport(string $template, array $templateParameters, ?string $title = null, array $titleParameters = []): PdfResponse
+    private function outputReport(string $template, array $parameters, ?string $title = null, array $titleParameters = []): PdfResponse
     {
         // get content
-        $content = $this->renderView($template, $templateParameters);
+        $content = $this->renderView($template, $parameters);
 
         // create report
         $report = new HtmlReport($this);

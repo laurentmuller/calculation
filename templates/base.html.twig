@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="{{ app.request.locale|replace({'_': '-'}) }}">
 {# parameters #}
 {%- set is_env_dev = app_mode == 'dev' -%}
 {%- set is_env_prod = app_mode == 'prod' -%}
@@ -28,6 +26,8 @@
 {%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin -%}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|replace({'_': '-'}) }}">
 {# head #}
 <head>
 <meta charset="utf-8" />

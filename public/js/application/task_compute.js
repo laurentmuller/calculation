@@ -25,22 +25,32 @@ function resetValues() {
 /**
  * Display an error message.
  *
- * @param {string} message - the message to display.
+ * @param {string} [message] - the message to display.
  */
 function showError(message) {
     'use strict';
     resetValues();
     const title = $('.card-title').text();
+    message = message || $('#edit-form').data('failed');
     Toaster.danger(message, title, $('#flashes').data());
 }
 
 /**
  * Send form to server and update UI.
  *
- * @param form form - the submitted form.
+ * @param {HTMLFormElement} form - the submitted form.
  */
-function update(form) {
+function submitForm(form) {
     'use strict';
+    // same?
+    const $form = $(form);
+    const oldValue = $form.data('value');
+    const newValue = $form.serialize();
+    if (oldValue && oldValue === newValue) {
+        return;
+    }
+    $form.data('value', newValue);
+
     // get items
     const $itemsEmpty = $('.task-items-empty');
     const items = $('#table-edit .item-row:not(.d-none) :checkbox:checked').map(function () {
@@ -58,10 +68,11 @@ function update(form) {
     $itemsEmpty.addClass('d-none');
 
     // get data
-    const $form = $(form);
     const url = $form.prop('action');
     const data = {
-        'id': $('#task').intVal(), 'quantity': $('#quantity').floatVal(), 'items': items
+        'id': $('#task').intVal(),
+        'quantity': $('#quantity').floatVal(),
+        'items': items
     };
 
     // cancel send
@@ -77,6 +88,7 @@ function update(form) {
          * @param {boolean} response.result
          * @param {string} response.message
          * @param {number} response.overall
+         * @param {Array.<{id: Number, value: number, amount: number}>}  response.results
          */
         if (response.result) {
             // update
@@ -86,11 +98,11 @@ function update(form) {
             });
             updateValue('overall', response.overall);
         } else {
-            showError(response.message || $form.data('failed'));
+            showError(response.message);
         }
     }).fail(function (_jqXHR, textStatus) {
         if (textStatus !== 'abort') {
-            showError($form.data('failed'));
+            showError();
         }
     });
 }
@@ -100,7 +112,6 @@ function update(form) {
  */
 function onInputChanged() {
     'use strict';
-    // submit
     $("#edit-form").trigger('submit');
 }
 
@@ -137,21 +148,21 @@ function onTaskChanged() {
 (function ($) {
     'use strict';
     // attach handlers
-    $('#task').on('input', function () {
+    $('#task').on('input', () => {
         $(this).updateTimer(onTaskChanged, 250);
     });
-    $('#quantity').on('input', function () {
+    $('#quantity').on('input', () => {
         $(this).updateTimer(onInputChanged, 250);
     }).inputNumberFormat();
-    $('.item-input').on('change', function () {
+    $('.item-input').on('change', () => {
         $(this).updateTimer(onInputChanged, 250);
     });
 
     // validation
     const options = {
-        showModification: false, submitHandler: function (form) {
-            update(form);
-        }, rules: {
+        showModification: false,
+        submitHandler: form => submitForm(form),
+        rules: {
             quantity: {
                 greaterThanValue: 0
             }

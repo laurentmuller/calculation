@@ -28,7 +28,6 @@
 </li>
 {% endif %}
 {%- endmacro %}
-
 {# parameters #}
 {%- set title = 'index.menu_site_map' -%}
 {%- set title_icon = 'sitemap' -%}
@@ -38,35 +37,26 @@
 {%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
 {%- set route_params = {'caller': path('site_map')} -%}
-
 {# rights #}
 {%- set is_add_calculation = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION) -%}
 {%- set is_export_calculation = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
-
 {%- set is_add_product = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
 {%- set is_export_product = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
-
 {%- set is_add_task = is_granted(ATTRIBUTE_ADD, ENTITY_TASK) -%}
 {%- set is_export_task = is_granted(ATTRIBUTE_EXPORT, ENTITY_TASK) -%}
-
 {%- set is_add_category = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
 {%- set is_export_category = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
-
 {%- set is_add_group = is_granted(ATTRIBUTE_ADD, ENTITY_GROUP) -%}
 {%- set is_export_group = is_granted(ATTRIBUTE_EXPORT, ENTITY_GROUP) -%}
-
 {%- set is_add_state = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
 {%- set is_export_state = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
-
 {%- set is_add_margin = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_export_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
-
 {%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_test -%}
-
 {# class #}
 {% block container_class 'container-fluid' %}
-
+{# body #}
 {% block body -%}
 <div class="sitemap">
     <nav class="utilityNav">
@@ -161,7 +151,7 @@
     </nav>
 </div>
 {%- endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/sitemap.css') }}
 {% endblock %}

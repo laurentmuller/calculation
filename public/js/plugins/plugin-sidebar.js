@@ -302,18 +302,14 @@
         showSidebarButton: '.show-sidebar',
         // hide sidebar button
         hideSidebarButton: '.hide-sidebar',
-
         // horizontal navigation bar
         navbarHorizontal: '.navbar-horizontal',
         // page content
         pageContent: '.page-content',
-
         // the timeout to display/hide sidebar automatically (0 = disabled)
         timeout: 1500,
-
         // the minimum width to hide sidebar
         minWidth: 1200,
-
         // texts
         showSidebar: 'Show Sidebar',
         hideSidebar: 'Hide Sidebar',

@@ -1,10 +1,7 @@
 security:
-    enable_authenticator_manager: true
-
     password_hashers:
+        App\Entity\User: 'auto'
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-        App\Entity\User:
-            algorithm: auto
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER

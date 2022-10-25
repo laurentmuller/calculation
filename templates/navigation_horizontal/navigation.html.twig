@@ -15,19 +15,23 @@
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
             {% if is_granted_calculation -%}
-                {% set display_style = sidebar_hide ? 'block' : 'none' %}
                 <li class="nav-item">
-                    <a href="{{ path('calculation_table') }}" class="nav-link nav-sidebar-horizontal" style="display: {{ display_style }};">
+                    <a href="{{ path('calculation_table') }}" class="nav-link">
                         {{- icon(ICON_CALCULATION, 'calculation.list.title') -}}
                     </a>
                 </li>
             {% endif %}
             {% if is_granted_data -%}
-                {{ include('navigation_horizontal/navigation_data.html.twig') }}
+               {{ include('navigation_horizontal/navigation_data.html.twig') }}
             {% endif %}
-                {{ include('navigation_horizontal/navigation_tools.html.twig') }}
             {% if is_granted_calculation %}
                 {{ include('navigation_horizontal/navigation_chart.html.twig') }}
+            {% endif %}
+            {% if is_granted_data or is_admin %}
+                {{ include('navigation_horizontal/navigation_tools.html.twig') }}
+            {% endif %}
+            {% if is_admin -%}
+                {{ include('navigation_horizontal/navigation_admin.html.twig') }}
             {% endif %}
         </ul>
         <ul class="navbar-nav">

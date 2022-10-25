@@ -54,7 +54,7 @@ class PdfHeader
     /**
      * Constructor.
      */
-    public function __construct(protected PdfDocument $parent)
+    public function __construct(protected readonly PdfDocument $parent)
     {
     }
 
@@ -64,11 +64,12 @@ class PdfHeader
     public function output(): void
     {
         // margins
-        $margins = $this->parent->setCellMargin(0);
+        $parent = $this->parent;
+        $margins = $parent->setCellMargin(0);
 
         // lines
         $isAddress = $this->isPrintAddress();
-        $printableWidth = $this->parent->getPrintableWidth();
+        $printableWidth = $parent->getPrintableWidth();
         $this->line1($printableWidth, $isAddress);
         if ($isAddress) {
             $this->line2($printableWidth);
@@ -76,8 +77,8 @@ class PdfHeader
         }
 
         // reset
-        $this->parent->setCellMargin($margins);
-        $this->parent->resetStyle()->Ln(2);
+        $parent->resetStyle()->setCellMargin($margins);
+        $parent->Ln(2);
     }
 
     /**
@@ -213,7 +214,7 @@ class PdfHeader
     {
         $this->applySmallStyle();
         $text = $this->getAddress();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfMove::RIGHT, PdfTextAlignment::LEFT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::LEFT);
     }
 
     private function outputDescription(float $width, bool $isAddress): void
@@ -222,7 +223,7 @@ class PdfHeader
             $this->applySmallStyle();
             $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
             $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
-            $this->outputText($width, PdfDocument::LINE_HEIGHT, $this->description, PdfBorder::none(), $move, $align);
+            $this->outputText($width, PdfDocument::LINE_HEIGHT, $this->description, PdfBorder::none(), $align, $move);
         }
     }
 
@@ -231,14 +232,14 @@ class PdfHeader
         $this->applySmallStyle();
         $text = $this->getEmail();
         $link = empty($text) ? '' : "mailto:$text";
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfMove::NEW_LINE, PdfTextAlignment::RIGHT, $link);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE, $link);
     }
 
     private function outputFax(float $width): void
     {
         $this->applySmallStyle();
         $text = $this->getFax();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE, PdfTextAlignment::RIGHT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE);
     }
 
     private function outputName(float $width, bool $isAddress): void
@@ -248,17 +249,17 @@ class PdfHeader
         $align = $isAddress ? PdfTextAlignment::LEFT : PdfTextAlignment::RIGHT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
-        $this->outputText($width, PdfDocument::LINE_HEIGHT, $name, $border, $move, $align, $this->getUrl());
+        $this->outputText($width, PdfDocument::LINE_HEIGHT, $name, $border, $align, $move, $this->getUrl());
     }
 
     private function outputPhone(float $width): void
     {
         $this->applySmallStyle();
         $text = $this->getPhone();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE, PdfTextAlignment::RIGHT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE);
     }
 
-    private function outputText(float $width, float $height, string $text, PdfBorder $border, PdfMove $move, PdfTextAlignment $align, string $link = ''): void
+    private function outputText(float $width, float $height, string $text, PdfBorder $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
     {
         $this->parent->Cell($width, $height, $text, $border, $move, $align, false, $link);
     }
@@ -269,14 +270,14 @@ class PdfHeader
         $title = $this->toEmpty($this->parent->getTitle());
         $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
-        $this->outputText($width, PdfDocument::LINE_HEIGHT, $title, $border, PdfMove::RIGHT, $align);
+        $this->outputText($width, PdfDocument::LINE_HEIGHT, $title, $border, $align);
     }
 
     private function outputZipCity(float $width): void
     {
         $this->applySmallStyle();
         $text = $this->getZipCity();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfMove::RIGHT, PdfTextAlignment::LEFT);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfTextAlignment::LEFT);
     }
 
     private function toEmpty(?string $value): string

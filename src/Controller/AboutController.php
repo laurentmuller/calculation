@@ -43,15 +43,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 class AboutController extends AbstractController
 {
     /**
-     * Constructor.
-     *
-     * @param string $appMode the application mode
-     */
-    public function __construct(#[Autowire('%app_mode%')] private readonly string $appMode)
-    {
-    }
-
-    /**
      * Display information about the application.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
@@ -79,7 +70,7 @@ class AboutController extends AbstractController
             '%app_name%' => $appName,
         ];
 
-        return $this->outputReport('about/about_content.html.twig', $parameters, 'index.menu_info', $titleParameters);
+        return $this->renderHtmlReport('about/about_content.html.twig', $parameters, 'index.menu_info', $titleParameters);
     }
 
     /**
@@ -101,11 +92,7 @@ class AboutController extends AbstractController
     #[Route(path: '/licence/content', name: 'about_licence_content')]
     public function licenceContent(): JsonResponse
     {
-        $content = $this->renderView('about/licence_content.html.twig');
-
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
+        return $this->renderJsonContent('about/licence_content.html.twig');
     }
 
     /**
@@ -120,7 +107,7 @@ class AboutController extends AbstractController
     {
         $parameters = ['link' => false];
 
-        return $this->outputReport('about/licence_content.html.twig', $parameters, 'about.licence');
+        return $this->renderHtmlReport('about/licence_content.html.twig', $parameters, 'about.licence');
     }
 
     /**
@@ -135,11 +122,8 @@ class AboutController extends AbstractController
             'database' => $info->getDatabase(),
             'configuration' => $info->getConfiguration(),
         ];
-        $content = $this->renderView('about/mysql_content.html.twig', $parameters);
 
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
+        return $this->renderJsonContent('about/mysql_content.html.twig', $parameters);
     }
 
     /**
@@ -185,11 +169,8 @@ class AboutController extends AbstractController
             'extensions' => $this->getLoadedExtensions(),
             'apache' => $this->getApacheVersion($request),
         ];
-        $content = $this->renderView('about/php_content.html.twig', $parameters);
 
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
+        return $this->renderJsonContent('about/php_content.html.twig', $parameters);
     }
 
     /**
@@ -252,9 +233,8 @@ class AboutController extends AbstractController
             'comments' => true,
             'link' => false,
         ];
-        $content = $this->renderView('about/policy_content.html.twig', $parameters);
 
-        return $this->jsonTrue(['content' => $content]);
+        return $this->renderJsonContent('about/policy_content.html.twig', $parameters);
     }
 
     /**
@@ -272,7 +252,7 @@ class AboutController extends AbstractController
             'link' => false,
         ];
 
-        return $this->outputReport('about/policy_content.html.twig', $parameters, 'about.policy');
+        return $this->renderHtmlReport('about/policy_content.html.twig', $parameters, 'about.policy');
     }
 
     /**
@@ -286,11 +266,8 @@ class AboutController extends AbstractController
             'info' => $info,
             'locale' => $this->getLocaleName(),
         ];
-        $content = $this->renderView('about/symfony_content.html.twig', $parameters);
 
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
+        return $this->renderJsonContent('about/symfony_content.html.twig', $parameters);
     }
 
     /**
@@ -301,10 +278,10 @@ class AboutController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/symfony/excel', name: 'about_symfony_excel')]
-    public function symfonyExcel(SymfonyInfoService $info): SpreadsheetResponse
+    public function symfonyExcel(SymfonyInfoService $info, #[Autowire('%app_mode%')] string $appMode): SpreadsheetResponse
     {
         $locale = $this->getLocaleName();
-        $doc = new SymfonyDocument($this, $info, $locale, $this->appMode);
+        $doc = new SymfonyDocument($this, $info, $locale, $appMode);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -317,10 +294,10 @@ class AboutController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/symfony/pdf', name: 'about_symfony_pdf')]
-    public function symfonyPdf(SymfonyInfoService $info): PdfResponse
+    public function symfonyPdf(SymfonyInfoService $info, #[Autowire('%app_mode%')] string $appMode): PdfResponse
     {
         $locale = $this->getLocaleName();
-        $report = new SymfonyReport($this, $info, $locale, $this->appMode);
+        $report = new SymfonyReport($this, $info, $locale, $appMode);
 
         return $this->renderPdfDocument($report);
     }
@@ -372,20 +349,22 @@ class AboutController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    private function outputReport(string $template, array $parameters, ?string $title = null, array $titleParameters = []): PdfResponse
+    private function renderHtmlReport(string $template, array $parameters, ?string $title = null, array $titleParameters = []): PdfResponse
     {
-        // get content
         $content = $this->renderView($template, $parameters);
-
-        // create report
         $report = new HtmlReport($this);
         $report->setContent($content);
-
-        // title
         if ($title) {
             $report->setTitleTrans($title, $titleParameters, true);
         }
 
         return $this->renderPdfDocument($report);
+    }
+
+    private function renderJsonContent(string $template, array $parameters = []): JsonResponse
+    {
+        $content = $this->renderView($template, $parameters);
+
+        return $this->jsonTrue(['content' => $content]);
     }
 }

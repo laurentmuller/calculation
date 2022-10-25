@@ -40,7 +40,7 @@ class PdfFooter
     /**
      * Constructor.
      */
-    public function __construct(protected PdfDocument $parent)
+    public function __construct(protected readonly PdfDocument $parent)
     {
         $this->border = PdfBorder::top();
     }
@@ -51,14 +51,15 @@ class PdfFooter
     public function output(): void
     {
         // margins
-        $margins = $this->parent->setCellMargin(0);
+        $parent = $this->parent;
+        $margins = $parent->setCellMargin(0);
 
         // position and cells width
-        $this->parent->SetY(PdfDocument::FOOTER_OFFSET);
-        $cellWidth = $this->parent->getPrintableWidth() / 3;
+        $parent->SetY(PdfDocument::FOOTER_OFFSET);
+        $cellWidth = $parent->getPrintableWidth() / 3;
 
         // style and line color
-        PdfStyle::getDefaultStyle()->setFontSize(8)->apply($this->parent);
+        PdfStyle::getDefaultStyle()->setFontSize(8)->apply($parent);
 
         // pages (left) +  text and url (center) + date (right)
         $this->outputText($this->getPage(), $cellWidth, PdfTextAlignment::LEFT)
@@ -66,14 +67,13 @@ class PdfFooter
             ->outputText($this->getDate(), $cellWidth, PdfTextAlignment::RIGHT);
 
         // reset
-        $this->parent->setCellMargin($margins);
-        $this->parent->resetStyle();
+        $parent->resetStyle()->setCellMargin($margins);
     }
 
     /**
      * Sets the content.
      */
-    public function setContent(string $text, ?string $url): self
+    public function setContent(string $text, ?string $url = null): self
     {
         $this->text = $text;
         $this->url = $url;
@@ -94,9 +94,10 @@ class PdfFooter
      */
     private function getPage(): string
     {
-        $page = $this->parent->PageNo();
-        if ($this->parent instanceof AbstractReport) {
-            return $this->parent->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
+        $parent = $this->parent;
+        $page = $parent->PageNo();
+        if ($parent instanceof AbstractReport) {
+            return $parent->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
         }
 
         return "Page $page / {nb}";

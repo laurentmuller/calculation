@@ -61,13 +61,7 @@
 <div class="sitemap">
     <nav class="utilityNav">
         <ul>
-            {% if is_admin %}
-            <li>{{ _self.link('admin_parameters', 'parameters.title', 'cogs') }}</li>
-            <li>{{ _self.link('user_table', 'user.list.title', ICON_USER) -}}</li>
-            {% endif %}
-            {% if is_super_admin %}
-            <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
-            {% endif %}
+            <li>{{ _self.link('user_parameters', 'user.parameters.title', 'user-gear') }}</li>
             <li>{{ _self.link('user_profile_edit', 'profile.edit.title', ICON_EDIT) }}</li>
             {% if is_remembered %}
             <li>{{ _self.link('app_logout', 'index.logout', 'sign-out-alt') }}</li>
@@ -100,7 +94,7 @@
             {% endif %}
             {%- if is_granted_data -%}
             <li>
-                <span class="rounded">{{- icon('database', 'index.menu_data') -}}</span>
+                <span>{{- icon('database', 'index.menu_data') -}}</span>
                 <ul>
                     {{ _self.add_entity_entry('product', ICON_PRODUCT, is_granted_product, is_add_product, is_export_product, route_params) }}
                     {{ _self.add_entity_entry('task', ICON_TASK, is_granted_task, is_add_task, is_export_task, route_params) }}
@@ -108,7 +102,6 @@
                     {{ _self.add_entity_entry('group', ICON_GROUP, is_granted_group, is_add_group, is_export_group, route_params) }}
                     {{ _self.add_entity_entry('calculationstate', ICON_CALCULATION_STATE, is_granted_calculation_state, is_add_state, is_export_state, route_params) }}
                     {{ _self.add_entity_entry('globalmargin', ICON_GLOBAL_MARGIN, is_granted_global_margin, false, is_export_margin, route_params) }}
-
                 </ul>
             </li>
             {% endif %}
@@ -116,10 +109,6 @@
                 <span>{{- icon('tools', 'index.menu_tools') -}}</span>
                 <ul>
                     <li>{{ _self.link('search', 'search.title', 'search') }}</li>
-                    {% if is_admin %}
-                    <li>{{ _self.link('admin_product', 'product.update.title', ICON_PRODUCT) }}</li>
-                    <li>{{ _self.link('admin_archive', 'archive.title', 'calendar-xmark far') }}</li>
-                    {% endif %}
                     <li>{{ _self.link('below_table', 'below.title', ICON_GLOBAL_MARGIN) }}</li>
                     <li>{{ _self.link('duplicate_table', 'duplicate.title', ICON_COPY) }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
@@ -139,11 +128,31 @@
                     {% endif %}
                 </ul>
             {% endif %}
+            {% if is_admin %}
+            <li>
+                <span>{{- icon('gear', 'index.menu_admin') -}}</span>
+                <ul>
+                    <li>{{ _self.link('admin_product', 'product.update.title', ICON_PRODUCT) }}</li>
+                    <li>{{ _self.link('admin_archive', 'archive.title', 'calendar-xmark far') }}</li>
+                    <li>{{ _self.link('user_table', 'user.list.title', ICON_USER) -}}</li>
+                    <li>{{ _self.link('admin_rights_user', 'index.menu_rights_user', 'user-check') }}</li>
+                    {% if is_super_admin -%}
+                    <li>{{ _self.link('admin_rights_admin', 'index.menu_rights_admin', 'user-shield') }}</li>
+                    {% endif %}
+                    <li>{{ _self.link('admin_parameters', 'parameters.title', 'cogs') }}</li>
+                    <li>{{ _self.link('log_table', 'log.title', ICON_LOG) }}</li>
+                    <li>{{ _self.link('admin_clear', 'clear_cache.title', ICON_DELETE) }}</li>
+                    {% if is_super_admin %}
+                    <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
             <li>
                 {{ _self.link('about', 'about.title', 'info-circle') }}
                 <ul>
-                    <li>{{ _self.link('about_licence', 'about.licence_short', 'info-circle') }}</li>
-                    <li>{{ _self.link('about_policy', 'about.policy_short', 'info-circle') }}</li>
+                    <li>{{ _self.link('about_licence', 'about.licence', 'info-circle') }}</li>
+                    <li>{{ _self.link('about_policy', 'about.policy', 'info-circle') }}</li>
                     <li>{{ _self.link('user_comment', 'user.comment.title', 'envelope far') }}</li>
                 </ul>
             </li>

@@ -88,11 +88,6 @@ class SymfonyReport extends AbstractReport
         return true;
     }
 
-    private function outputBoolRow(PdfGroupTableBuilder $table, string $key, bool $value): self
-    {
-        return $this->outputRow($table, $key, $value ? 'enabled' : 'disabled');
-    }
-
     /**
      * @param array<array{name: string, path: string}> $bundles
      */
@@ -103,7 +98,8 @@ class SymfonyReport extends AbstractReport
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Path', 70)
-            )->setGroupBeforeHeader(true)
+            )
+            ->setGroupBeforeHeader(true)
             ->setGroupKey('Bundles')
             ->outputHeaders();
 
@@ -124,7 +120,8 @@ class SymfonyReport extends AbstractReport
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Value', 70)
-            )->setGroupKey('Kernel')
+            )
+            ->setGroupKey('Kernel')
             ->outputHeaders();
 
         $this->outputRow($table, 'Environment', $info->getEnvironment())
@@ -132,10 +129,10 @@ class SymfonyReport extends AbstractReport
             ->outputRow($table, 'Intl Locale', $this->locale)
             ->outputRow($table, 'Timezone', $info->getTimeZone())
             ->outputRow($table, 'Charset', $info->getCharset())
-            ->outputBoolRow($table, 'Debug', $app->isDebug())
-            ->outputBoolRow($table, 'OP Cache', $info->isZendCacheLoaded())
-            ->outputBoolRow($table, 'APCu', $info->isApcuLoaded())
-            ->outputBoolRow($table, 'Xdebug', $info->isXdebugLoaded())
+            ->outputRowBool($table, 'Debug', $app->isDebug())
+            ->outputRowBool($table, 'OP Cache', $info->isZendCacheLoaded())
+            ->outputRowBool($table, 'APCu', $info->isApcuLoaded())
+            ->outputRowBool($table, 'Xdebug', $info->isXdebugLoaded())
             ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenanceInfo())
             ->outputRow($table, 'End of product life', $info->getEndOfLifeInfo());
 
@@ -155,8 +152,9 @@ class SymfonyReport extends AbstractReport
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Version', 10),
-                PdfColumn::left('Description', 62)
-            )->setGroupBeforeHeader(true)
+                PdfColumn::left('Description', 60)
+            )
+            ->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
 
@@ -180,15 +178,13 @@ class SymfonyReport extends AbstractReport
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Path', 70)
-            )->setGroupBeforeHeader(true)
+            )
+            ->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
 
         foreach ($routes as $route) {
-            $table->addRow(
-                $route['name'],
-                $route['path']
-            );
+            $this->outputRow($table, $route['name'], $route['path']);
         }
     }
 
@@ -197,5 +193,10 @@ class SymfonyReport extends AbstractReport
         $table->addRow($key, $value);
 
         return $this;
+    }
+
+    private function outputRowBool(PdfGroupTableBuilder $table, string $key, bool $value): self
+    {
+        return $this->outputRow($table, $key, $value ? 'enabled' : 'disabled');
     }
 }

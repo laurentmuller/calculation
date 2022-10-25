@@ -12,19 +12,11 @@
 	padding: 0;
 	border: 0;
 	outline: 0;
-	font-weight: inherit;
-	font-style: inherit;
 	font-size: 100%;
+	font-style: inherit;
+	font-weight: inherit;
 	font-family: inherit;
 	vertical-align: baseline;
-}
-
-/* ------------------------------------------------------------
-	Rounded Styles
------------------------------------------------------------- */
-.sitemap li a,
-.sitemap span {
-    border-radius: .25rem;
 }
 
 /* ------------------------------------------------------------
@@ -113,7 +105,7 @@
 	margin: 0;
 	padding: .875em .9375em .9375em .9375em;
 	display: block;
-	font-size: .9375em;
+	font-size: .95em;
 	font-weight: bold;
 	color: white;
 	background-color: #0090ff;
@@ -153,7 +145,7 @@
 }
 .primaryNav ul ul ul li a {
 	background-color: #ff9d00;
-	font-size: .75em;
+	font-size: .9em;
 	padding: .75em;
 	width: 90%;
 	margin-right: 0;

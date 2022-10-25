@@ -4,7 +4,7 @@
  * Toast plugin
  */
 .toast-plugin {
-    position: absolute;
+    position: fixed;
     transition: all 0.35s ease;
 }
 

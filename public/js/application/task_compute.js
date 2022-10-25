@@ -161,7 +161,7 @@ function onTaskChanged() {
     // validation
     const options = {
         showModification: false,
-        submitHandler: form => submitForm(form),
+        submitHandler: (form) => submitForm(form),
         rules: {
             quantity: {
                 greaterThanValue: 0

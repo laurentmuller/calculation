@@ -116,7 +116,7 @@ class ExchangeRateController extends AbstractController
         }
 
         return $this->jsonFalse([
-            'code' => 404,
+            'code' => Response::HTTP_NOT_FOUND,
             'message' => $this->trans('unknown', [], 'exchangerate'),
         ]);
     }

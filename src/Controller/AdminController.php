@@ -18,18 +18,16 @@ use App\Form\User\RoleRightsType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
+use App\Service\ClearCacheService;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\RoleBuilder;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -49,9 +47,8 @@ class AdminController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/clear', name: 'admin_clear')]
-    public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger, SymfonyInfoService $info): Response
+    public function clearCache(Request $request, SymfonyInfoService $info, ClearCacheService $service, LoggerInterface $logger): Response
     {
-        // handle request
         $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // first clear user and application caches
@@ -59,37 +56,18 @@ class AdminController extends AbstractController
             $this->getApplication()->clearCache();
 
             try {
-                // new command
-                $options = [
-                    'command' => 'cache:pool:clear',
-                    'pools' => ['cache.global_clearer'],
-                    '--env' => $kernel->getEnvironment(),
-                ];
-
-                $input = new ArrayInput($options);
-                $output = new BufferedOutput();
-
-                $application = new Application($kernel);
-                $application->setCatchExceptions(false);
-                $application->setAutoExit(false);
-
-                $result = $application->run($input, $output);
-                $content = $output->fetch();
-
-                $context = [
-                    'result' => $result,
-                    'options' => $options,
-                    'content' => $content,
-                ];
-                $message = $this->successTrans('clear_cache.success');
-                $logger->info($message, $context);
+                if ($service->execute()) {
+                    $this->successTrans('clear_cache.success');
+                } else {
+                    $this->errorTrans('clear_cache.failure');
+                }
 
                 return $this->redirectToHomePage();
             } catch (\Exception $e) {
                 return $this->renderFormException('clear_cache.failure', $e, $logger);
             }
         }
-        // display
+
         return $this->renderForm('admin/clear_cache.html.twig', [
             'size' => $info->getCacheSize(),
             'form' => $form,

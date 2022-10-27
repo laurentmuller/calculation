@@ -100,6 +100,18 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
         return $this;
     }
 
+    /**
+     * Update the footer text.
+     *
+     * @param string $appName the application name and version
+     */
+    public function updateFooterText(string $appName): static
+    {
+        $text = $this->trans('notification.footer', ['%app_name%' => $appName]);
+
+        return $this->setFooterText($text);
+    }
+
     private function translateImportance(): string
     {
         $importance = Importance::tryFrom((string) $this->getContext()['importance']) ?? Importance::LOW;

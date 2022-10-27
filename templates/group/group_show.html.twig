@@ -1,5 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'group.show.title' -%}
@@ -11,14 +12,15 @@
 {%- set cancel_path = cancel_url(app.request, id, 'group_table') -%}
 {# properties #}
 {% block property_body %}
-{{ properties.property('group.fields.code', item.code) }}
-{{ properties.property('group.fields.description', item.description) }}
+{{ property('group.fields.code', item.code) }}
+{{ property('group.fields.description', item.description) }}
 {%- if not has_margins -%}
-{{- properties.property('group.fields.margins', item.countMargins|integer) }}
+{{- property('group.fields.margins', item.countMargins|integer) }}
 {% endif -%}
 {%- if item.hasCategories -%}
-{{- properties.property('group.fields.categories', item.countCategories|integer) }}
+{{- property('group.fields.categories', item.countCategories|integer) }}
 {% endif -%}
+{{ properties(item) }}
 {% endblock %}
 {# body #}
 {% block card_body %}

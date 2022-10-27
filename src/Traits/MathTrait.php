@@ -61,7 +61,7 @@ trait MathTrait
      * Returns the rounded value to the specified precision.
      *
      * @param ?float $val       the value to round
-     * @param int    $precision the optional number of decimal digits to round to
+     * @param int    $precision the number of decimal digits to round to
      *
      * @return float the rounded value or 0 if value is empty
      */

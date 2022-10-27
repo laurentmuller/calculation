@@ -19,7 +19,6 @@ use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
-use App\Traits\FooterTextTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,8 +36,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route(path: '/register')]
 class RegistrationController extends AbstractController
 {
-    use FooterTextTrait;
-
     private const ROUTE_REGISTER = 'user_register';
     private const ROUTE_VERIFY = 'user_verify';
 
@@ -114,7 +111,7 @@ class RegistrationController extends AbstractController
             ->from($this->getAddressFrom())
             ->to((string) $user->getEmail())
             ->importance(Importance::MEDIUM)
-            ->setFooterText($this->getFooterValue());
+            ->updateFooterText($this->getApplicationName());
 
         return $email;
     }
@@ -126,13 +123,5 @@ class RegistrationController extends AbstractController
         }
 
         return null;
-    }
-
-    private function getFooterValue(): string
-    {
-        $appName = $this->getParameterString('app_name');
-        $appVersion = $this->getParameterString('app_version');
-
-        return $this->getFooterText($appName, $appVersion);
     }
 }

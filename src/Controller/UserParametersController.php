@@ -35,7 +35,6 @@ class UserParametersController extends AbstractController
     #[Route(path: '/parameters', name: 'user_parameters')]
     public function invoke(Request $request, UserService $service): Response
     {
-        // form
         $form = $this->createForm(UserParametersType::class, $service->getProperties());
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
@@ -46,7 +45,6 @@ class UserParametersController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        // display
         return $this->renderForm('user/user_parameters.html.twig', [
             'form' => $form,
         ]);

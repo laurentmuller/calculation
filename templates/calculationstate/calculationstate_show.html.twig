@@ -1,5 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'calculationstate.show.title' -%}
@@ -10,12 +11,13 @@
 {%- set cancel_path = cancel_url(app.request, id, 'calculationstate_table') -%}
 {# properties #}
 {% block property_body %}
-{{ properties.property('calculationstate.fields.code', item.code) }}
-{{ properties.property('calculationstate.fields.description', item.description) }}
-{{ properties.property('calculationstate.fields.editable', item.editable|boolean) }}
-{{ properties.property('calculationstate.fields.calculations', item.countCalculations|integer) }}
+{{ property('calculationstate.fields.code', item.code) }}
+{{ property('calculationstate.fields.description', item.description) }}
+{{ property('calculationstate.fields.editable', item.editable|boolean) }}
+{{ property('calculationstate.fields.calculations', item.countCalculations|integer) }}
 <tr>
-    <td>{{ 'calculationstate.fields.color'|trans }}</td>
-    <td><span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span></td>
+    <td class="w-25">{{ 'calculationstate.fields.color'|trans }}</td>
+    <td class="w-75"><span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span></td>
 </tr>
+{{ properties(item) }}
 {% endblock %}

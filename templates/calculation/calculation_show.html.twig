@@ -1,18 +1,11 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_icons.html.twig' import link, button_pdf %}
-{% import 'macros/_properties.html.twig' as properties %}
-{# macro #}
-{% macro propertyDateUser(name, date, user) -%}
-{% set created_date = date ? date|locale_datetime : 'common.empty_date'|trans %}
-{% set created_user = user|default('common.empty_user'|trans) -%}
-{{ properties.property(name, created_date ~ ' - ' ~ created_user) }}
-{%- endmacro %}
-
+{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'calculation.show.title' -%}
 {%- set params = route_params(app.request, id) %}
-
 {# actions #}
 {%- set list_path = 'calculation_table' -%}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) and item.editable ? path('calculation_edit', params) : null -%}
@@ -20,13 +13,13 @@
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, list_path) -%}
 {%- set pdf_export = is_granted(ATTRIBUTE_EXPORT, item) -%}
-
+{# class #}
 {% block card_header_class ' d-print-none' %}
 {% block card_container_class '' %}
 {% block card_body_class '' %}
-
-{% block property_header %}{# no header #}{% endblock %}
-
+{# no header #}
+{% block property_header %}{% endblock %}
+{# body #}
 {% block card_body %}
 {{ parent() }}
 {% if not item.empty %}
@@ -137,18 +130,20 @@
 
 {# properties #}
 {% block property_body %}
-{{ properties.property('calculation.fields.id', id|identifier, 'font-weight-bold') }}
-{{ properties.property('calculation.fields.customer', item.customer) }}
-{{ properties.property('calculation.fields.description', item.description) }}
-{{ properties.property('calculation.fields.date', item.date|locale_date) }}
-{{ properties.property('calculation.fields.state', item.stateCode|default('')) }}
-{{ _self.propertyDateUser('calculation.fields.created', item.createdAt, item.createdBy) }}
-{{ _self.propertyDateUser('calculation.fields.updated', item.updatedAt, item.updatedBy) }}
+{{ property('calculation.fields.id', id|identifier, 'font-weight-bold') }}
+{{ property('calculation.fields.customer', item.customer) }}
+{{ property('calculation.fields.description', item.description) }}
+{{ property('calculation.fields.date', item.date|locale_date) }}
+<tr>
+    <td class="w-25">{{ 'calculation.fields.state'|trans }}</td>
+    <td class="w-75"><span class="state-color border border-secondary" style="background-color: {{ item.state.color|default('transparent') }};"></span> {{ item.stateCode }}</td>
+</tr>
+{{ properties(item) }}
 {% if item.empty %}
-    {{ properties.property('calculation.edit.panel_items', 'calculation.edit.empty'|trans) }}
+    {{ property('calculation.edit.panel_items', 'calculation.edit.empty'|trans) }}
 {% endif %}
 {% endblock %}
-
+{# footer #}
 {% block card_footer %}
 <div class="row">
     <div class="col-md-8">
@@ -168,7 +163,7 @@
     </div>
 </div>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

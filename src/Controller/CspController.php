@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
-use App\Traits\FooterTextTrait;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -33,10 +32,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CspController extends AbstractController
 {
-    use FooterTextTrait;
-
     /**
      * @throws \ReflectionException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/csp', name: 'log_csp')]
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
@@ -44,7 +42,7 @@ class CspController extends AbstractController
         if (false !== $context = $this->getContext()) {
             try {
                 $title = $this->trans('notification.csp_title');
-                $this->logContext($title, $context, $logger);
+                $logger->error($title, $context);
                 $this->sendNotification($title, $context, $mailer);
             } catch (TransportExceptionInterface $e) {
                 $context = Utils::getExceptionContext($e);
@@ -94,21 +92,9 @@ class CspController extends AbstractController
         return false;
     }
 
-    private function getFooterValue(): string
-    {
-        $appName = $this->getParameterString('app_name');
-        $appVersion = $this->getParameterString('app_version');
-
-        return $this->getFooterText($appName, $appVersion);
-    }
-
-    private function logContext(string $title, array $context, LoggerInterface $logger): void
-    {
-        $logger->error($title, $context);
-    }
-
     /**
      * @throws TransportExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function sendNotification(string $title, array $context, MailerInterface $mailer): void
     {
@@ -117,7 +103,7 @@ class CspController extends AbstractController
             ->to($this->getAddressFrom())
             ->from($this->getAddressFrom())
             ->importance(Importance::HIGH)
-            ->setFooterText($this->getFooterValue())
+            ->updateFooterText($this->getApplicationName())
             ->action($this->trans('index.title'), $this->getActionUrl())
             ->context([
                 'context' => $context,

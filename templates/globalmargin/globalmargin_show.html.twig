@@ -1,17 +1,15 @@
 {% extends 'cards/card_show.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'globalmargin.show.title' -%}
 {%- set params = route_params(app.request, id) %}
 {%- set cancel_path = cancel_url(app.request, id, 'globalmargin_table') -%}
-{# actions
-{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('globalmargin_edit', params) : null -%}
-{%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('globalmargin_delete', params) : null -%}
-#}
 {# properties #}
 {% block property_body %}
-{{ properties.property('globalmargin.fields.minimum', item.minimum|amount) }}
-{{ properties.property('globalmargin.fields.maximum', item.maximum|amount) }}
-{{ properties.property('globalmargin.fields.margin', item.margin|percent) }}
+{{ property('globalmargin.fields.minimum', item.minimum|amount) }}
+{{ property('globalmargin.fields.maximum', item.maximum|amount) }}
+{{ property('globalmargin.fields.margin', item.margin|percent) }}
+{{ properties(item) }}
 {% endblock %}

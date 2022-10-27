@@ -23,3 +23,15 @@
     </div>
 </div>
 {% endmacro %}
+
+{% macro timestampable_properties(item) -%}
+{# created #}
+{% from 'macros/_properties.html.twig' import property %}
+{% set date = item.createdAt ? item.createdAt|locale_datetime : 'common.empty_date'|trans %}
+{% set user = item.createdBy|default('common.empty_user'|trans) -%}
+{{ property('calculation.fields.created', date ~ ' - ' ~ user) }}
+{# updated #}
+{% set date = item.updatedAt ? item.updatedAt|locale_datetime : 'common.empty_date'|trans %}
+{% set user = item.updatedBy|default('common.empty_user'|trans) -%}
+{{ property('calculation.fields.updated', date ~ ' - ' ~ user) }}
+{%- endmacro %}

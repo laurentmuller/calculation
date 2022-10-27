@@ -192,42 +192,69 @@ class MonthChart extends BaseChart
         $total = $this->transChart('fields.total');
         $marginAmount = $this->transChart('fields.margin_amount');
         $marginPercent = $this->transChart('fields.margin_percent');
+        $sep = '&nbsp:&nbsp';
 
-        $function = <<<FUNCTION
+        $function = <<<JAVA_SCRIPT
             function () {
                 const ptMargin = this.points[0];
                 const ptAmount = this.points[1];
-                var html = '<table class="m-1">';
+                // start table
+                let html = '<table class="m-1">';
 
                 // month
-                html += '<tr class="border-bottom border-dark"><th>$month</th><th>&nbsp:&nbsp</th class="text-calculation"><th>' + Highcharts.dateFormat("%B %Y", this.x) + '</th></tr>';
+                html += '<tr class="border-bottom border-dark">' +
+                            '<th>$month</th>' +
+                            '<th>$sep</th>' +
+                            '<th class="text-calculation">' + Highcharts.dateFormat("%B %Y", this.x) + '</th>' +
+                        '</tr>';
 
                 // count (calculations)
                 let value = Highcharts.numberFormat(ptAmount.point.custom.count, 0);
-                html += '<tr><td class="text-category">$count</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr>' +
+                            '<td class="text-category">$count</td>' +
+                            '<td>$sep</td>' +
+                            '<td class="text-calculation">' + value + '</td>' +
+                        '</tr>';
 
                 // amount
                 let color = 'color:' + ptAmount.color + ';';
                 value = Highcharts.numberFormat(ptAmount.y, 0);
-                html += '<tr><td class="text-category" style="' + color + '">$amount</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr>' +
+                            '<td class="text-category" style="' + color + '">$amount</td>' +
+                            '<td>$sep</td>' +
+                            '<td class="text-calculation">' + value + '</td>' +
+                        '</tr>';
 
                 // margin amount
                 color = 'color:' + ptMargin.color + ';';
                 value = Highcharts.numberFormat(ptMargin.y, 0);
-                html += '<tr><td class="text-category" style="' + color + '">$marginAmount</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr>' +
+                            '<td class="text-category" style="' + color + '">$marginAmount</td>' +
+                            '<td>$sep</td>' +
+                            '<td class="text-calculation">' + value + '</td>' +
+                        '</tr>';
 
                 // margin percent
                 value =  Highcharts.numberFormat(100 + Math.floor(ptMargin.y * 100 / ptAmount.y), 0);
-                html += '<tr><td class="text-category">$marginPercent</td><td>&nbsp:&nbsp</td><td class="text-calculation">' + value + '</td></tr>';
+                html += '<tr>' +
+                            '<td class="text-category">$marginPercent</td>' +
+                            '<td>$sep</td>' +
+                            '<td class="text-calculation">' + value + '</td>' +
+                        '</tr>';
 
                 // total
                 value = Highcharts.numberFormat(ptAmount.y + ptMargin.y, 0);
-                html += '<tr class="border-top border-dark"><th>$total</th><th>&nbsp:&nbsp</th><th class="text-calculation">' + value + '</th></tr>';
+                html += '<tr class="border-top border-dark">' +
+                            '<th>$total</th>' +
+                            '<th>$sep</th>' +
+                            '<th class="text-calculation">' + value + '</th>' +
+                        '</tr>';
 
+                // end table
                 html += '</table>';
                 return html;
             }
-            FUNCTION;
+            JAVA_SCRIPT;
 
         return $this->createExpression($function);
     }

@@ -1,22 +1,19 @@
 {% extends 'cards/card_show.html.twig' %}
-
-{# imports #}
-{% import 'macros/_properties.html.twig' as properties %}
-
+{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'category.show.title' -%}
 {%- set params = route_params(app.request, id) %}
-
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('category_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('category_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'category_table') -%}
-
 {# properties #}
 {% block property_body %}
-{{ properties.property('category.fields.code', item.code) }}
-{{ properties.property('category.fields.description', item.description) }}
-{{ properties.property('category.fields.products', item.countProducts|integer) }}
-{{ properties.property('category.fields.tasks', item.countTasks|integer) }}
+{{ property('category.fields.code', item.code) }}
+{{ property('category.fields.description', item.description) }}
+{{ property('category.fields.products', item.countProducts|integer) }}
+{{ property('category.fields.tasks', item.countTasks|integer) }}
+{{ properties(item) }}
 {% endblock %}

@@ -1,5 +1,5 @@
 {% extends 'cards/card_show.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property %}
 {# macros #}
 {% macro format_var(value) -%}
 {{- value|var_export|replace({
@@ -42,22 +42,18 @@
 {# classes #}
 {% block card_container_class '' %}
 {% block table_responsive_class '' %}
-{#
-{% block card_class -%}{{ ' border-' ~ level_color }}{%- endblock %}
-{% block card_header_class -%}{{ ' border-' ~ level_color ~ ' text-white bg-' ~ level_color }}{%- endblock %}
-#}
 {# properties #}
 {% block property_body %}
 {{ _self.cellTemplate('log.fields.level', item, 'macros/_cell_log_level.html.twig') }}
 {{ _self.cellTemplate('log.fields.channel', item, 'macros/_cell_log_channel.html.twig') }}
-{{ properties.property('log.fields.createdAt', item.formattedDate) }}
+{{ property('log.fields.createdAt', item.formattedDate) }}
 {%- if item.channel == 'doctrine' -%}
 {{ _self.formatSql('log.fields.message', item.message) }}
 {%- else -%}
-{{ properties.property('log.fields.message', item.message, 'text-break') }}
+{{ property('log.fields.message', item.message, 'text-break') }}
 {%- endif -%}
 {% if item.user %}
-{{ properties.property('log.fields.user', item.user) }}
+{{ property('log.fields.user', item.user) }}
 {% endif %}
 {{ _self.formatArray('log.fields.context', item.context) }}
 {{ _self.formatArray('log.fields.extra', item.extra) }}

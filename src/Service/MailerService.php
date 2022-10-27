@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
-use App\Traits\FooterTextTrait;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -34,9 +33,10 @@ use Twig\Extra\Markdown\MarkdownInterface;
  */
 class MailerService implements ServiceSubscriberInterface
 {
-    use FooterTextTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
+
+    private readonly string $appName;
 
     /**
      * Constructor.
@@ -46,10 +46,11 @@ class MailerService implements ServiceSubscriberInterface
         private readonly MarkdownInterface $markdown,
         private readonly MailerInterface $mailer,
         #[Autowire('%app_name%')]
-        private readonly string $appName,
+        string $appName,
         #[Autowire('%app_version%')]
-        private readonly string $appVersion,
+        string $appVersion,
     ) {
+        $this->appName = \sprintf('%s v%s', $appName, $appVersion);
     }
 
     /**
@@ -106,7 +107,7 @@ class MailerService implements ServiceSubscriberInterface
     private function createNotification(): NotificationEmail
     {
         $email = new NotificationEmail($this->getTranslator());
-        $email->setFooterText($this->getFooterText($this->appName, $this->appVersion))
+        $email->updateFooterText($this->appName)
             ->action($this->trans('index.title'), $this->getHomeUrl());
 
         return $email;

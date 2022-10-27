@@ -1,5 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'task.show.title' -%}
@@ -10,10 +11,11 @@
 {%- set cancel_path = cancel_url(app.request, id, 'task_table') -%}
 {# properties #}
 {% block property_body %}
-{{ properties.property('task.fields.name', item.name) }}
-{{ properties.property('task.fields.category', item.categoryCode) }}
-{{ properties.property('task.fields.unit', item.unit) }}
-{{ properties.property('task.fields.items', item.count ? item.count|integer : 'task.edit.empty_items'|trans) }}
+{{ property('task.fields.name', item.name) }}
+{{ property('task.fields.category', item.categoryCode) }}
+{{ property('task.fields.unit', item.unit) }}
+{{ property('task.fields.items', item.count ? item.count|integer : 'task.edit.empty_items'|trans) }}
+{{ properties(item) }}
 {% endblock %}
 {# body #}
 {% block card_body %}

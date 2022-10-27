@@ -1,5 +1,6 @@
 {% extends 'cards/card_show.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set title = 'product.show.title' -%}
 {%- set id = item.id -%}
@@ -10,10 +11,11 @@
 {%- set cancel_path = cancel_url(app.request, id, 'product_table') -%}
 {# properties #}
 {% block property_body %}
-{{ properties.property('product.fields.description', item.description) }}
-{{ properties.property('product.fields.category', item.categoryCode) }}
-{{ properties.property('product.fields.group', item.groupCode) }}
-{{ properties.property('product.fields.supplier', item.supplier) }}
-{{ properties.property('product.fields.price', item.price|amount) }}
-{{ properties.property('product.fields.unit', item.unit) }}
+{{ property('product.fields.description', item.description) }}
+{{ property('product.fields.category', item.categoryCode) }}
+{{ property('product.fields.group', item.groupCode) }}
+{{ property('product.fields.supplier', item.supplier) }}
+{{ property('product.fields.price', item.price|amount) }}
+{{ property('product.fields.unit', item.unit) }}
+{{ properties(item) }}
 {% endblock %}

@@ -219,9 +219,10 @@ class CalculationReport extends AbstractReport
         if (null !== $this->qrcode) {
             try {
                 // temp file
-                $path = FileUtils::tempfile('qr_code');
-                if (!\is_string($path)) {
-                    $this->logWarning($this->trans('generate.error.failed'));
+                if (null === $path = FileUtils::tempfile('qr_code')) {
+                    $this->logWarning($this->trans('report.calculation.error_qr_code'), [
+                        'calculation' => $this->calculation->getDisplay(),
+                    ]);
 
                     return;
                 }
@@ -243,7 +244,7 @@ class CalculationReport extends AbstractReport
                 // render
                 $this->Image($path, $x, $y, $size, $size, PdfImageType::PNG, $this->getQrCodeLink());
             } catch (\Exception $e) {
-                $this->logException($e, $this->trans('generate.error.failed'));
+                $this->logException($e, $this->trans('report.calculation.error_qr_code'));
             }
         }
     }

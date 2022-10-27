@@ -1,6 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import link %}
-{% import 'openweather/_weather_macro.html.twig' as tools %}
+{% from 'openweather/_weather_macro.html.twig' import value_temp %}
 {# macros #}
 {% macro system(units, route, id, count) -%}
 {% set text = units == 'metric' ? '°C' : '°F' %}
@@ -58,7 +58,7 @@
 {% if id %}
     <h2>{{ current.name }}, {{ current.sys.country_name }}<img src="{{ current.sys.country_flag }}" class="ow-flag" alt="Flag" title="{{ current.sys.country_name }}"></h2>
     <h3 class="font-weight-normal">
-        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="Current Weather" title="{{ current.weather.description }}">{{ tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
+        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="Current Weather" title="{{ current.weather.description }}">{{ value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
     </h3>
     <div class="row">
         <div class="col-lg-5">

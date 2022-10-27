@@ -1,9 +1,9 @@
 {# Macro for a calculation categories #}
 {% macro printCategoryRow(category, editable, first, last) -%}
 {% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemWithClass, dropdownSeparator, button_pdf %}
-{% import 'calculation/_macro_items.html.twig' as macroItems %}
+{% from 'calculation/_macro_items.html.twig' import printItemRow %}
 {# body #}
-<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ macroItems.printItemRow(category.items.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
+<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ printItemRow(category.items.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
     <tr class="drag-skip category">
         {{ form_widget(category.category) }}
         {{ form_widget(category.code) }}
@@ -31,7 +31,7 @@
         {%- endif %}
     </tr>
     {% for item in category.items %}
-        {{ macroItems.printItemRow(item, editable, loop.first, loop.last) }}
+        {{ printItemRow(item, editable, loop.first, loop.last) }}
     {% endfor %}
 </tbody>
 {%- endmacro %}

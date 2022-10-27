@@ -18,7 +18,6 @@ use App\Form\User\ResetChangePasswordType;
 use App\Mime\ResetPasswordEmail;
 use App\Repository\UserRepository;
 use App\Service\UserExceptionService;
-use App\Traits\FooterTextTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +43,6 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
 class ResetPasswordController extends AbstractController
 {
-    use FooterTextTrait;
     use ResetPasswordControllerTrait;
 
     private const ROUTE_CHECK = 'app_check_email';
@@ -83,6 +81,8 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Display and process form to request a password reset.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '', name: self::ROUTE_FORGET)]
     public function request(Request $request, MailerInterface $mailer, AuthenticationUtils $utils): Response
@@ -154,12 +154,15 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
     private function createEmail(User $user, ResetPasswordToken $resetToken): ResetPasswordEmail
     {
         $email = new ResetPasswordEmail($this->getTranslator());
         $email->to($user->getAddress())
             ->from($this->getAddressFrom())
-            ->setFooterText($this->getFooterValue())
+            ->updateFooterText($this->getApplicationName())
             ->subject($this->trans('resetting.request.title'))
             ->action($this->trans('resetting.request.submit'), $this->getResetAction($resetToken))
             ->context([
@@ -183,14 +186,6 @@ class ResetPasswordController extends AbstractController
         );
     }
 
-    private function getFooterValue(): string
-    {
-        $appName = $this->getParameterString('app_name');
-        $appVersion = $this->getParameterString('app_version');
-
-        return $this->getFooterText($appName, $appVersion);
-    }
-
     private function getResetAction(ResetPasswordToken $resetToken): string
     {
         return $this->generateUrl(self::ROUTE_RESET, ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -212,6 +207,8 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Send email to the user for resetting the password.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer): RedirectResponse
     {

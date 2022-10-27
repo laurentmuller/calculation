@@ -45,6 +45,7 @@ class ProfileController extends AbstractController
 
             return $this->redirectToHomePage();
         }
+
         // create and validate form
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
@@ -57,6 +58,7 @@ class ProfileController extends AbstractController
 
             return $this->redirectToHomePage();
         }
+
         // display
         return $this->renderForm('profile/profile_change_password.html.twig', [
             'form' => $form,

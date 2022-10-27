@@ -45,6 +45,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -422,9 +423,7 @@ class UserController extends AbstractEntityController
      */
     private function isConnectedUser(User $user): bool
     {
-        $connectedUser = $this->getUser();
-
-        return $connectedUser instanceof User && $connectedUser->getId() === $user->getId();
+        return $this->isSameUser($user, $this->getUser());
     }
 
     /**
@@ -434,12 +433,17 @@ class UserController extends AbstractEntityController
     {
         $token = $security->getToken();
         if ($token instanceof SwitchUserToken) {
-            $originalUser = $token->getOriginalToken()->getUser();
-
-            return $originalUser instanceof User &&
-                $originalUser->getId() === $user->getId();
+            return $this->isSameUser($user, $token->getOriginalToken()->getUser());
         }
 
         return false;
+    }
+
+    /**
+     * Returns if the given users are equal.
+     */
+    private function isSameUser(User $user, ?UserInterface $value): bool
+    {
+        return $value instanceof User && $value->getId() === $user->getId();
     }
 }

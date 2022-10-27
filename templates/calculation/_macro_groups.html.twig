@@ -1,9 +1,9 @@
 {# Macro for calculation groups #}
 {% macro printGroupRow(group, editable, first, last) -%}
 {% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownSeparator, dropdownItemWithClass %}
-{% import 'calculation/_macro_categories.html.twig' as macroCategories %}
+{% from 'calculation/_macro_categories.html.twig' import printCategoryRow %}
 {# head #}
-<thead class="group"{% if editable %} data-prototype="{{ macroCategories.printCategoryRow(group.categories.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
+<thead class="group"{% if editable %} data-prototype="{{ printCategoryRow(group.categories.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
     <tr class="drag-skip border-left border-right bg-themed">
         {{ form_widget(group.group) }}
         {{ form_widget(group.code) }}
@@ -32,6 +32,6 @@
     </tr>
 </thead>
 {% for category in group.categories %}
-    {{ macroCategories.printCategoryRow(category, editable, loop.first, loop.last) }}
+    {{ printCategoryRow(category, editable, loop.first, loop.last) }}
 {% endfor %}
 {%- endmacro %}

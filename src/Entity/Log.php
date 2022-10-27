@@ -74,10 +74,10 @@ class Log extends AbstractEntity
         if (self::DOCTRINE_CHANNEL === $this->getChannel()) {
             $message = $formatter->format($message);
         }
-        if ($this->isContext()) {
+        if (!empty($this->context)) {
             $message .= "\nContext:\n" . Utils::exportVar($this->getContext());
         }
-        if ($this->isExtra()) {
+        if (!empty($this->extra)) {
             $message .= "\nExtra:\n" . Utils::exportVar($this->getExtra());
         }
 
@@ -130,7 +130,7 @@ class Log extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return $this->isMessage() ? $this->getMessage() : parent::getDisplay();
+        return $this->getMessage();
     }
 
     /**
@@ -293,20 +293,5 @@ class Log extends AbstractEntity
         $this->message = \trim($message);
 
         return $this;
-    }
-
-    private function isContext(): bool
-    {
-        return !empty($this->context);
-    }
-
-    private function isExtra(): bool
-    {
-        return !empty($this->extra);
-    }
-
-    private function isMessage(): bool
-    {
-        return !empty($this->message);
     }
 }

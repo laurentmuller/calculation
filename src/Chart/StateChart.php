@@ -166,8 +166,11 @@ class StateChart extends BaseChart
     {
         // @phpstan-ignore-next-line
         $this->tooltip
-            ->style($this->getFontStyle(12))
             ->headerFormat('')
+            ->borderColor('rgba(255, 255, 255, 0.125)')
+            ->style($this->getFontStyle(12))
+            ->backgroundColor('white')
+            ->borderRadius(4)
             ->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>');
 
         return $this;

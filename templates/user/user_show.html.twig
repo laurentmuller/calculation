@@ -1,6 +1,7 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_icons.html.twig' import link %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property, email %}
+{% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set id = item.id -%}
 {%- set title = 'user.show.title' -%}
@@ -10,25 +11,23 @@
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('user_delete', params) : null -%}
 {%- set rights_path = is_granted(ATTRIBUTE_EDIT, item) ? path('user_rights', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'user_table') -%}
-{%- if item.username == app.user.userIdentifier -%}
+{%- if item.userIdentifier == app.user.userIdentifier -%}
     {%- set delete_path = null -%}
 {%- endif -%}
 {# properties #}
 {% block property_body %}
-{{ properties.property('user.fields.username', item.username) }}
-{{ properties.email(item.email, null, 'user.fields.email') }}
-{{ properties.property('user.fields.role', item.role|trans_role) }}
+{{ property('user.fields.username', item.username) }}
+{{ email(item.email, null, 'user.fields.email') }}
+{{ property('user.fields.role', item.role|trans_role) }}
 {%- set value = (item.enabled ? 'common.value_enabled' : 'common.value_disabled')|trans -%}
 {%- set class = item.enabled ? 'text-success' : 'text-danger' -%}
-{{ properties.property('user.fields.enabled', value, class) }}
-{{ properties.property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|locale_datetime : 'common.value_none'|trans) }}
+{{ property('user.fields.enabled', value, class) }}
+{{ property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|locale_datetime : 'common.value_none'|trans) }}
 {%- set image = asset_image_user(item, '096', {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans, 'class': 'img-thumbnail avatar-lg'}) -%}
 {%- if image -%}
-<tr>
-    <td class="w-25">{{ 'user.fields.imageFile'|trans }}</td>
-    <td class="w-75">{{ image|raw }}</td>
-</tr>
+    {{ property('user.fields.imageFile', image) }}
 {%- endif -%}
+{{ properties(item) }}
 {% endblock %}
 
 {% block card_footer %}

@@ -1,6 +1,6 @@
 {% import 'openweather/_weather_macro.html.twig' as tools %}
 {# title #}
-<h6 class="border-top pt-1">{{ 'counters.weather_forecast'|trans({count: forecast.cnt * 3}) }}</h6>
+<h6 class="p-2 mb-2 bg-primary text-white">{{ 'counters.weather_forecast'|trans({count: forecast.cnt * 3}) }}</h6>
 {# table #}
 <div class="table-responsive">
     <table class="table table-sm mb-0">
@@ -11,13 +11,13 @@
                         {{ data.dt_time_locale }}
                     </td>
                     <td class="ow-icon">
-                        <img src="{{ data.weather.icon_small }}" class="ow-image" alt="Forecast Weather" title="{{ data.weather.description }}">
+                        <img src="{{ data.weather.icon_small }}" class="ow-image" alt="{{ 'openweather.fields.forecast_weather'|trans }}" title="{{ data.weather.description }}">
                     </td>
                     <td class="ow-temperature">
                         <span class="ow-temperature-pills ow-temperature-forecast" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</span>
                     </td>
                     <td class="w-50">
-                        <span>{{ data.weather.description }}{% if data.rain['3h']|default(false) %}, {{ tools.value_rain(data.rain['3h'], units_volume) }}{% endif %}</span><br>
+                        <span>{{ data.weather.description }}</span>{% if data.rain['3h']|default(false) %}<span title="{{ 'openweather.fields.rain'|trans }}">, {{ tools.value_rain(data.rain['3h'], units_volume) }}</span>{% endif %}<br>
                         <span title="{{ 'openweather.fields.wind'|trans }}">{{ tools.value_speed(data.wind.speed, units_speed) }}
                         </span><span>, </span>
                         <span title="{{ 'openweather.fields.wind_deg'|trans }}">{{ data.wind.deg_description }}</span><br>

@@ -79,8 +79,8 @@
     <div class="col-md-6">
         <span id="detected" class="text-muted"></span>
     </div>
-    <div class="col-md-6 text-md-right">
-        <a id="api-url" href="{{ service.apiUrl }}" target="_blank" rel="noopener noreferrer">Documentation (API)</a>
+    <div class="col-md-6 text-md-right d-print-none">
+        <a class="small" id="api-url" href="{{ service.apiUrl }}" target="_blank" rel="noopener noreferrer">{{ 'common.api_documentation'|trans }}</a>
     </div>
 </div>
 {% endblock %}

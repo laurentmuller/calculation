@@ -39,6 +39,10 @@
         // private functions
         // -----------------------------
 
+        /**
+         * Initialize the plugin.
+         * @private
+         */
         _init() {
             this.$simulate = this.$element.find(this.options.simulateSelector);
             this.$confirm = this.$element.find(this.options.confirmSelector);
@@ -48,6 +52,10 @@
             }
         }
 
+        /**
+         * Handle the input event.
+         * @private
+         */
         _onInput() {
             if (this.$simulate.isChecked()) {
                 this.$confirm.toggleDisabled(true).removeValidation();
@@ -75,7 +83,6 @@
     // Simulate plugin definition
     // -----------------------------------
     const oldSimulate = $.fn.simulate;
-
     $.fn.simulate = function (options) {
         return this.each(function () {
             const $this = $(this);
@@ -85,10 +92,11 @@
             }
         });
     };
-
     $.fn.simulate.Constructor = Simulate;
 
+    // ------------------------------------
     // Simulate no conflict
+    // ------------------------------------
     $.fn.simulate.noConflict = function () {
         $.fn.simulate = oldSimulate;
         return this;

@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import link, linkExternal %}
 {% from 'openweather/_weather_macro.html.twig' import value_temp %}
 {# macros #}
 {% macro system(units, route, id, count) -%}
@@ -58,20 +58,24 @@
 {% if id %}
     <h2>{{ current.name }}, {{ current.sys.country_name }}<img src="{{ current.sys.country_flag }}" class="ow-flag" alt="Flag" title="{{ current.sys.country_name }}"></h2>
     <h3 class="font-weight-normal">
-        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="Current Weather" title="{{ current.weather.description }}">{{ value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
+        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="{{ 'openweather.fields.current_weather'|trans }}" title="{{ current.weather.description }}">{{ value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
     </h3>
     <div class="row">
         <div class="col-lg-5">
-            {{ include('openweather/current_weather_today.html.twig') }}
+            {{ include('openweather/weather_today.html.twig') }}
         </div>
         <div class="col-lg-7">
-            {{ include('openweather/current_weather_forecast.html.twig') }}
-            {{ include('openweather/current_weather_daily.html.twig') }}
+            {{ include('openweather/weather_forecast.html.twig') }}
+            {{ include('openweather/weather_daily.html.twig') }}
         </div>
     </div>
 {% else %}
     <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
 {% endif %}
+<hr class="my-1 d-print-none">
+<p class="small text-right mb-0 d-print-none">
+    {{ linkExternal(api_url, 'common.api_documentation') }}
+</p>
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}

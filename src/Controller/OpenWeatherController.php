@@ -265,8 +265,9 @@ class OpenWeatherController extends AbstractController
             ]);
         }
         $values['count'] = $count;
+        $values['api_url'] = 'https://openweathermap.org/api';
 
-        return $this->renderForm('openweather/current_weather.htm.twig', $values);
+        return $this->renderForm('openweather/weather.htm.twig', $values);
     }
 
     /**

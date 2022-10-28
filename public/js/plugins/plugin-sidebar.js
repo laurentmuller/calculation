@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Ready function
+ * Plugin to handle a sidebar.
  */
 (function ($) {
     'use strict';
@@ -47,10 +47,8 @@
          * @private
          */
         _init() {
-            const options = this.options;
-            // this.wasHidden = false;
-
             // get elements
+            const options = this.options;
             this.$showSidebarButton = $(options.showSidebarButton);
             this.$hideSidebarButton = $(options.hideSidebarButton);
             this.$navbarHorizontal = $(options.navbarHorizontal);
@@ -87,29 +85,28 @@
          */
         _initTimeout() {
             const that = this;
+            const timeout = this.options.timeout;
             const removeTimer = () => that.$element.removeTimer();
-            const showSidebar = e => {
+            that.$showSidebarButton.hover(e => {
                 if (that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
                         removeTimer();
                         if (that._isSideBarHidden()) {
                             that._showSidebar(e);
                         }
-                    }, 1500);
+                    }, timeout);
                 }
-            };
-            const hideSidebar = e => {
+            }, removeTimer);
+            that.$hideSidebarButton.hover(e => {
                 if (!that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
                         removeTimer();
                         if (!that._isSideBarHidden()) {
                             that._hideSidebar(e);
                         }
-                    }, 1500);
+                    }, timeout);
                 }
-            };
-            that.$showSidebarButton.hover(showSidebar, removeTimer);
-            that.$hideSidebarButton.hover(hideSidebar, removeTimer);
+            }, removeTimer);
         }
 
         /**
@@ -132,8 +129,6 @@
         _resize(e) {
             if (this._isClientTooSmall()) {
                 this._hideSidebar(e);
-                // } else if (this.wasHidden) {
-                //     this._showSidebar(e);
             }
         }
 
@@ -145,9 +140,8 @@
          */
         _hideSidebar(e) {
             if (!this._isSideBarHidden()) {
-                this.$hideSidebarButton.trigger('blur');
+                this.$element.removeTimer();
                 this._toggleSidebar(e);
-                //this.wasHidden = true;
             }
         }
 
@@ -159,9 +153,8 @@
          */
         _showSidebar(e) {
             if (this._isSideBarHidden()) {
-                this.$showSidebarButton.trigger('blur');
+                this.$element.removeTimer();
                 this._toggleSidebar(e);
-                // this.wasHidden = false;
             }
         }
 
@@ -176,16 +169,17 @@
                 e.preventDefault();
             }
             $.hideDropDownMenus();
+            const duration = this.options.duration;
             this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
             if (this._isSideBarHidden()) {
-                this.$navbarHorizontal.show(350);
+                this.$navbarHorizontal.show(duration);
             } else {
-                this.$navbarHorizontal.hide(350);
+                this.$navbarHorizontal.hide(duration);
             }
             this._saveState();
 
             // notify
-            this.$element.trigger('toggle.sidebar');
+            this.$element.trigger('toggle.' + Sidebar.NAME);
         }
 
         /**
@@ -198,12 +192,14 @@
             e.preventDefault();
             const that = this;
             const $link = $(e.currentTarget);
-            const $parent = $link.parents('.nav-item-dropdown');
-            const $menu = $parent.find('.navbar-menu');
-            if (!$menu.is(':visible')) {
-                that._collapseMenus();
+            const $parent = $link.closest('.nav-item-dropdown');
+            const $menu = $parent.find('.navbar-menu:first');
+            if ($menu.is(':visible')) {
+                that._collapseChildrenMenus($menu);
+            } else {
+                that._collapseSiblingMenus($menu);
             }
-            $menu.toggle(350, function () {
+            $menu.toggle(this.options.duration, function () {
                 $link.addClass('active');
                 that._updateMenus();
                 that._saveState();
@@ -217,10 +213,10 @@
         _updateMenus() {
             const options = this.options;
             this.$element.find('.nav-item-dropdown .nav-link-toggle').each(function () {
-                const $menu = $(this);
-                const visible = $menu.parents('.nav-item-dropdown').find('.navbar-menu').is(':visible');
+                const $link = $(this);
+                const visible = $link.closest('.nav-item-dropdown').find('.navbar-menu').is(':visible');
                 const title = visible ? options.hideMenu : options.showMenu;
-                $menu.attr({
+                $link.attr({
                     'aria-expanded': String(visible),
                     'title': title
                 });
@@ -228,18 +224,41 @@
         }
 
         /**
-         * Collapse all expanded menus
+         * Collapse expanded sibling menus
+         * @param {JQuery} $menu - the selected menu.
          * @private
          */
-        _collapseMenus() {
-            const $toggle = this.$element.find('.nav-item-dropdown .nav-link-toggle[aria-expanded="true"]');
-            if ($toggle.length) {
-                $toggle.removeClass('active').attr({
-                    'title': this.options.showMenu,
-                    'aria-expanded': 'false'
-                });
-                this.$element.find('.navbar-menu:visible').hide(350);
-            }
+        _collapseSiblingMenus($menu) {
+            const $parent = $menu.closest('.nav-item-dropdown');
+            const $siblings = $parent.siblings('.nav-item-dropdown');
+            const $links = $siblings.find('.nav-link-toggle[aria-expanded="true"]');
+            const $menus = $siblings.find('.navbar-menu:visible');
+            this._hideMenus($links, $menus);
+        }
+
+        /**
+         * Collapse expanded children menus.
+         * @param {JQuery} $menu - the selected menu.
+         * @private
+         */
+        _collapseChildrenMenus($menu) {
+            const $links = $menu.find('.nav-item-dropdown .nav-link-toggle[aria-expanded="true"]');
+            const $menus = $menu.find('.navbar-menu:visible');
+            this._hideMenus($links, $menus);
+        }
+
+        /**
+         * Hide the given menus.
+         * @param {JQuery} $links - the menu links to update.
+         * @param {JQuery} $menus - the menus to hide.
+         * @private
+         */
+        _hideMenus($links, $menus) {
+            $links.removeClass('active').attr({
+                'title': this.options.showMenu,
+                'aria-expanded': 'false'
+            });
+            $menus.hide(this.options.duration);
         }
 
         /**
@@ -260,17 +279,9 @@
             const menus = {
                 'menu_sidebar_hide': this._isSideBarHidden()
             };
-            let visible;
-            let wasVisible = false;
-            this.$element.find('.nav-item-dropdown[id]').each(function () {
-                const $element = $(this);
-                visible = $element.find('.navbar-menu').is(':visible');
-                // check that only one menu is visible
-                if (wasVisible && visible) {
-                    visible = false;
-                } else if (!wasVisible && visible) {
-                    wasVisible = true;
-                }
+            this.$element.find('.nav-item-dropdown[id]').each(function (index, element) {
+                const $element = $(element);
+                const visible = $element.find('.navbar-menu').is(':visible');
                 menus[$element.attr('id')] = visible;
             });
 
@@ -308,6 +319,8 @@
         pageContent: '.page-content',
         // the timeout to display/hide sidebar automatically (0 = disabled)
         timeout: 1500,
+        // the duration to show / hide menus
+        duration: 350,
         // the minimum width to hide sidebar
         minWidth: 1200,
         // texts
@@ -326,7 +339,6 @@
     // sidebar plugin definition
     // -----------------------------
     const oldSidebar = $.fn.sidebar;
-
     $.fn.sidebar = function (options) {
         return this.each(function () {
             const $this = $(this);
@@ -336,7 +348,6 @@
             }
         });
     };
-
     $.fn.sidebar.Constructor = Sidebar;
 
     // ------------------------------------

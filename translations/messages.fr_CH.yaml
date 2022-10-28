@@ -308,6 +308,7 @@ common:
   value_unknown: Inconnu
   save_data: Mise à jour des données...
   data_changed: Données modifiées
+  api_documentation: Documentation (API)
   simulate:
     label: Simuler la mise à jour
     help: Simule une mise à jour sans enregistrer les changements dans la base de données.
@@ -691,7 +692,7 @@ openweather:
     position_lat: Latitude
     position_lon: Longitude
     pressure: Pression
-    rain: Pluie
+    rain: Précipitations
     snow: Neige
     sun: Soleil
     sunrise: Levé
@@ -707,6 +708,9 @@ openweather:
     wind_deg: Direction
     wind_gust: Rafales
     wind_speed: Vitesse
+    current_weather: Prévision actuelle
+    daily_weather: Prévision quotidienne
+    forecast_weather: Prévision horaire
   import:
     description: Permet de mettre à jour la liste de recherche des localités.
     file: Fichier d'archive
@@ -1065,8 +1069,7 @@ swisspost:
     total: Total
     valids: Valides
   import:
-    description: Permet de mettre à jour la liste des localités et des noms de rue
-      de Suisse.
+    description: Permet de mettre à jour la liste des localités et des noms de rue de la Suisse.
     last_import: 'Date de validité de la dernière importation : %date%.'
   result:
     description: Résultat de l'importation.

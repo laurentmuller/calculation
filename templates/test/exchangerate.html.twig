@@ -6,13 +6,11 @@
     <option value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected="selected"{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
 {% endfor -%}
 {% endmacro %}
-
 {% macro fillEntries(codes, selection='') %}
 {% for key, code in codes -%}
     <button class="dropdown-item{% if key == selection %} active{% endif %}" type="button" data-value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}">{{ code.name ~ ' - ' ~ code.symbol }}</button>
 {% endfor -%}
 {% endmacro %}
-
 {# parameters #}
 {%- set title = 'exchangerate.title' -%}
 {%- set title_icon = 'comments-dollar' -%}
@@ -21,7 +19,7 @@
     'action': url('exchange_rate'),
     'data-error': 'unknown'|trans({}, 'exchangerate'),
     'data-rate': 'exchangerate.rate'|trans}) -%}
-
+{# body #}
 {% block card_body %}
 {{ parent() }}
 <div class="row">
@@ -75,16 +73,16 @@
     </div>
 </div>
 {% endblock %}
-
+{# actions #}
 {% block actions_form -%}
 {{ homepage() }}
 {%- endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('js/vendor/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {%- endblock -%}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/vendor/select2/js/select2.js') }}

@@ -231,9 +231,14 @@
         _collapseSiblingMenus($menu) {
             const $parent = $menu.closest('.nav-item-dropdown');
             const $siblings = $parent.siblings('.nav-item-dropdown');
-            const $links = $siblings.find('.nav-link-toggle[aria-expanded="true"]');
-            const $menus = $siblings.find('.navbar-menu:visible');
+            const $links = $siblings.children('.nav-link-toggle[aria-expanded="true"]');
+            const $menus = $siblings.children('.navbar-menu:visible');
             this._hideMenus($links, $menus);
+            // hide children
+            const that = this;
+            $menus.each(function () {
+                that._collapseChildrenMenus($(this));
+            });
         }
 
         /**
@@ -281,8 +286,7 @@
             };
             this.$element.find('.nav-item-dropdown[id]').each(function (index, element) {
                 const $element = $(element);
-                const visible = $element.find('.navbar-menu').is(':visible');
-                menus[$element.attr('id')] = visible;
+                menus[$element.attr('id')] = $element.find('.navbar-menu').is(':visible');
             });
 
             return menus;

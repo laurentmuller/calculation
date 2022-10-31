@@ -2,10 +2,10 @@
 {{ asset_js('js/plugins/plugin-cookie-banner.js', {
     'id': 'cookie-banner',
     'data-display-banner': (displayBanner is defined ? displayBanner : true)|json_encode,
-    'data-cookie-name': 'POLICY_ACCEPTED',
+    'data-cookie-name': constant('App\\Controller\\AboutController::POLICY_ACCEPTED'),
     'data-cookie-same-site': 'lax',
     'data-cookie-path': cookie_path,
-    'data-cookie-expire': 'now'|date_modify('+1 month')|date('r'),
+    'data-cookie-expire': 'now'|date_modify('+1 year')|date('r'),
     'data-message': 'cookie_banner.message'|trans,
     'data-link-message': 'cookie_banner.link'|trans,
     'data-link-title': 'cookie_banner.link_title'|trans,

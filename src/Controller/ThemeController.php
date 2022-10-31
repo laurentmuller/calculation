@@ -46,7 +46,7 @@ class ThemeController extends AbstractController
         $response = $this->jsonTrue([
             'message' => $this->trans($dark ? 'theme.dark.success' : 'theme.light.success'),
         ]);
-        $path = $this->getParameterString('cookie_path');
+        $path = $this->getCookiePath();
         $this->updateCookie($response, self::KEY_DARK, $dark ? 1 : null, '', $path);
 
         return $response;

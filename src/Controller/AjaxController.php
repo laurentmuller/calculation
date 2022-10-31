@@ -295,7 +295,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Save horizontal navigation state.
+     * Save the state of the sidebar.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/navigation', name: 'ajax_save_navigation')]
@@ -313,8 +313,8 @@ class AjaxController extends AbstractController
 
             // save hidden menu state to cookie
             $response = $this->json(true);
+            $path = $this->getCookiePath();
             $isHidden = $menus['menu_sidebar_hide'] ?? true;
-            $path = $this->getParameterString('cookie_path');
             $this->updateCookie($response, 'SIDEBAR_HIDE', $isHidden ? 1 : 0, '', $path);
 
             return $response;
@@ -354,7 +354,7 @@ class AjaxController extends AbstractController
         $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
 
         $response = $this->json(true);
-        $path = $this->getParameterString('cookie_path');
+        $path = $this->getCookiePath();
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $path);
 
         return $response;

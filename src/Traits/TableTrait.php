@@ -104,7 +104,7 @@ trait TableTrait
     {
         /** @psalm-var mixed $value */
         $value = $results->getParams($key, $default);
-        $path = $this->getParameterString('cookie_path');
+        $path = $this->getCookiePath();
         $this->updateCookie($response, $key, $value, $prefix, $path);
     }
 }

@@ -252,6 +252,14 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Gets the cookie path.
+     */
+    protected function getCookiePath(): string
+    {
+        return $this->getParameterString('cookie_path');
+    }
+
+    /**
      * Gets a string container parameter by its name.
      */
     protected function getParameterString(string $name): string

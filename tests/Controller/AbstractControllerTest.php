@@ -82,7 +82,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
         if ($isExcel) {
             \ob_start();
         }
-        $this->client->request($method, $url);
+        $this->client?->request($method, $url);
         if ($isExcel) {
             \ob_get_clean();
         }

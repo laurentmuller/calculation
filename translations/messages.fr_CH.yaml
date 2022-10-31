@@ -70,9 +70,7 @@ calculation:
       search_customer: Erreur lors de la recherche des clients.
       search_product: Erreur lors de la recherche des articles.
       search_unit: Erreur lors de la recherche des unités.
-      update_total: Une erreur s'est produite lors de la mise à jour des totaux de
-        la calculation.<br><br>Veuillez ne plus modifier cette calculation et cliquer
-        sur le bouton <b>Annuler</b>.
+      update_total: Une erreur s'est produite lors de la mise à jour des totaux de la calculation.<br><br>Veuillez ne plus modifier cette calculation et cliquer sur le bouton <b>Annuler</b>.
       user_margin: La marge utilisateur doit être valide.
     move_down: Déplacer vers le bas
     move_first: Déplacer à la première place
@@ -317,12 +315,11 @@ common:
     message: La mise à jour a été simulée. Aucun changement n'a été effectué dans la base de données.
 cookie_banner:
   accept: Accepter
-  close: J'accepte
-  close_title: Accepter la politique de confidentialité
+  accept_title: Accepter la politique de confidentialité
   link: En savoir plus
   link_title: Afficher la politique de confidentialité
-  message: Afin de vous proposer le meilleur service possible, ce site utilise des
-    cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
+  success: Merci d'avoir accepté notre politique de confidentialité.
+  message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
 customer:
   add:
     success: Le client <b>%name%</b> a été créé avec succès.
@@ -527,8 +524,7 @@ help:
     entity_actions: 'Les actions possibles sur l''objet sont les suivantes :'
     entity_empty: Cet objet ne contient aucun champ.
     entity_fields: 'Les champs sont définis comme suit :'
-    forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement
-      ci-dessous est affiché.
+    forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
     global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
     screenshot: 'Capture d''écran :'
     see_also: 'Voir aussi :'
@@ -566,10 +562,7 @@ color_picker:
   custom_text: Personnalisé
 index:
   change_password: Modifier le mot de passe
-  disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profile
-    a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous
-    octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre
-    compte.
+  disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profile a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
   login: Connexion
   logout: Déconnexion
   menu_chart_title: Afficher le graphique
@@ -714,9 +707,7 @@ openweather:
   import:
     description: Permet de mettre à jour la liste de recherche des localités.
     file: Fichier d'archive
-    link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank"
-      rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank"
-      rel="noopener noreferrer">OpenWeather</a>.
+    link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
     title: Importer les localités
   result:
     description: Résultats de l'importation.
@@ -944,8 +935,7 @@ resetting:
   not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été
     trouvé dans l'URL ou dans la session.
   request:
-    description: Entrez votre nom d'utilisateur ou votre adresse e-mail pour demander
-      une réinitialisation du mot de passe.
+    description: Entrez votre nom d'utilisateur ou votre adresse e-mail pour demander une réinitialisation du mot de passe.
     submit: Réinitialiser
     title: Réinitialiser le mot de passe
     user: Nom d'utilisateur ou adresse e-mail
@@ -1010,8 +1000,7 @@ security:
     password: Mot de passe
     remember_me: Se souvenir de moi
     submit: Connexion
-    success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application
-      <b>%app_name% v%app_version%</b> avec succès.
+    success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name% v%app_version%</b> avec succès.
     error: Le nom de l'utilisateur ou le mot de passe est invalide.
   logout:
     success: Vous vous êtes déconnecté de l'application <b>%appname%</b> avec succès.
@@ -1057,8 +1046,7 @@ swisspost:
     open_stream: Impossible d'ouvrir le flux de données '%stream%' de l'archive '%name%'.
     rename_database: Impossible de renommer la base de données.
     temp_file: Impossible de créer un fichier temporaire.
-    validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure
-      ou égale à la date de la dernière importation (%import%).
+    validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
   fields:
     cities: Localités
     errors: Erreurs
@@ -1073,11 +1061,9 @@ swisspost:
     last_import: 'Date de validité de la dernière importation : %date%.'
   result:
     description: Résultat de l'importation.
-    failure: Une erreur s'est produite lors de l'importation des localités et des
-      noms de rue.
+    failure: Une erreur s'est produite lors de l'importation des localités et des noms de rue.
     new_import: Nouvelle importation
-    success: L'importation des localités et des noms de rue a été réalisée avec succès.
-      La nouvelle date de validité est le %date%.
+    success: L'importation des localités et des noms de rue a été réalisée avec succès. La nouvelle date de validité est le %date%.
   title: Importer les localités
 task:
   add:
@@ -1201,8 +1187,7 @@ translator:
   to_error: La langue de destination est absente ou vide.
   to_label: Vers
   translate_error: Une erreur s'est produite lors de la traduction du texte.
-  translate_success: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service
-    <b>%service%</b> a été réalisée avec succès.
+  translate_success: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service <b>%service%</b> a été réalisée avec succès.
 update:
   description: Cet outil permet de mettre à jour les objets sélectionnés avec des
     données aléatoires.
@@ -1223,10 +1208,8 @@ user:
     title: Modifier le mot de passe
   comment:
     description: Envoyer vos commentaires au responsable du site.
-    error: Une erreur s'est produite lors de l'envoi de vos commentaires. Veuillez
-      de nouveau tenter cette action plus tard.
-    success: Vos commentaires ont été envoyé avec succès au responsable du site et
-      vous allez être contacté bientôt.
+    error: Une erreur s'est produite lors de l'envoi de vos commentaires. Veuillez de nouveau tenter cette action plus tard.
+    success: Vos commentaires ont été envoyé avec succès au responsable du site et vous allez être contacté bientôt.
     title: Commentaires
   delete:
     connected: Impossible de supprimer l'utilisateur actuellement connecté !
@@ -1256,8 +1239,7 @@ user:
     password: Mot de passe
   image:
     failure: Une erreur s'est produite lors du redimensionnement de l'image.
-    success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec
-      succès.
+    success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.
     title: Image du profil
     action: Modifier l'image du profil
   list:
@@ -1274,8 +1256,7 @@ user:
   message:
     connected: Le nom de l'expéditeur et du destinataire sont les mêmes.
     description: Envoyer vos commentaires à l'utilisateur sélectionné.
-    error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de
-      nouveau tenter cette action plus tard.
+    error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de nouveau tenter cette action plus tard.
     success: Votre message ont été envoyé avec succès à l'utilisateur <b>%name%</b>.
     title: Envoyer un message
   name: Utilisateur
@@ -1292,14 +1273,12 @@ user:
   rights:
     all_title: Tous les droits
     col_title: Activer ou désactiver tous les droits d'accès pour cette action
-    connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement
-      connecté !
+    connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
     default_title: Valeurs par défaut
     description: Définition des droits d'accès à l'application.
     none_title: Aucun droit
     row_title: Activer ou désactiver tous les droits d'accès pour cet objet
-    success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour
-      avec succès.
+    success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
     table_title: Objet / Action
     title: Droits d'accès
     toggle_title: Inverser les droits
@@ -1321,8 +1300,7 @@ user:
       title: Reprendre son identité
     take:
       default: Vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
-      success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b>
-        avec succès.
+      success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
       title: Prendre l'identité de l'utilisateur
 archive:
   title: Archiver des calculations

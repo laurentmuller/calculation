@@ -220,6 +220,7 @@
         {
             "name": "admin-lte",
             "version": "3.2.0",
+            "disabled": true,
             "files": [
                 "js/adminlte.js",
                 "js/adminlte.js.map",

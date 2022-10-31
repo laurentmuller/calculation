@@ -12,7 +12,7 @@ Nous utilisons vos données pour fournir et améliorer l'application. En utilisa
 
 <p class="text-justify">
 Sauf définition contraire, les termes utilisés dans la présente politique de confidentialité ont la même signification que dans
- notre {% if link %}<a href="{{ path('about_licence') }}">Accord de licence</a>{% else %}accord de licence{% endif %}.</p>
+ notre {% if link is defined and link %}<a href="{{ path('about_licence') }}">Accord de licence</a>{% else %}accord de licence{% endif %}.</p>
 
 <h4>Définitions</h4>
 <ul>
@@ -152,5 +152,5 @@ Sauf définition contraire, les termes utilisés dans la présente politique de 
  modification. Les modifications apportées à la présente politique de confidentialité prennent effet lorsqu'elles sont publiées sur cette page.</p>
 
 <h4>Nous contacter</h4>
-<p class="text-justify">Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par {% if comments %}<a href="{{ path('user_comment') }}">courrier électronique</a>{% else %}courrier électronique{% endif %}.</p>
+<p class="text-justify">Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par {% if comments is defined and comments %}<a href="{{ path('user_comment') }}">courrier électronique</a>{% else %}courrier électronique{% endif %}.</p>
 <p class="mb-0 text-right">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y')|capitalize }}</p>

@@ -25,7 +25,6 @@ use App\Service\SymfonyInfoService;
 use App\Spreadsheet\MySqlDocument;
 use App\Spreadsheet\PhpIniDocument;
 use App\Spreadsheet\SymfonyDocument;
-use App\Traits\CookieTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,10 +42,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 #[Route(path: '/about')]
 class AboutController extends AbstractController
 {
-    use CookieTrait;
-
-    final public const POLICY_ACCEPTED = 'POLICY_ACCEPTED';
-
     /**
      * Display information about the application.
      */
@@ -79,29 +74,13 @@ class AboutController extends AbstractController
     }
 
     /**
-     * Accept the license agreement.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: 'accept', name: 'about_accept')]
-    public function accept(): Response
-    {
-        $path = $this->getCookiePath();
-        $response = $this->redirectToHomePage();
-        $this->updateCookie($response, self::POLICY_ACCEPTED, 1, '', $path);
-
-        return $response;
-    }
-
-    /**
      * Display the licence page.
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/licence ', name: 'about_licence')]
+    #[Route(path: '/licence', name: 'about_licence')]
     public function licence(): Response
     {
-        $parameters = ['link' => true];
-
-        return $this->renderForm('about/licence.html.twig', $parameters);
+        return $this->renderForm('about/licence.html.twig', ['link' => true]);
     }
 
     /**

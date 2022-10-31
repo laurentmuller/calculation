@@ -1,18 +1,9 @@
-{% if not app.request.cookies.has('POLICY_ACCEPTED') %}
-{{ asset_js('js/plugins/plugin-cookie-banner.js', {
-    'id': 'cookie-banner',
-    'data-display-banner': (displayBanner is defined ? displayBanner : true)|json_encode,
-    'data-cookie-name': constant('App\\Controller\\AboutController::POLICY_ACCEPTED'),
-    'data-cookie-same-site': 'lax',
-    'data-cookie-path': cookie_path,
-    'data-cookie-expire': 'now'|date_modify('+1 year')|date('r'),
-    'data-message': 'cookie_banner.message'|trans,
-    'data-link-message': 'cookie_banner.link'|trans,
-    'data-link-title': 'cookie_banner.link_title'|trans,
-    'data-close-message': 'cookie_banner.close'|trans,
-    'data-close-title': 'cookie_banner.close_title'|trans,
-    'data-link-url': path('about_policy'),
-    'data-link-target': '_self',
-    'data-link-rel': 'license'
-    }) }}
+{% if app.user and not app.request.cookies.get(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) %}
+{% from 'macros/_icons.html.twig' import link %}
+<div class="navbar navbar-themed p-1 align-items-center fixed-bottom small d-print-none" style="z-index: 1031;">
+    <div class="flex-fill text-left">
+        {{- 'cookie_banner.message'|trans }}{{ link(path('about_policy'), 'cookie_banner.link', 'mx-1', null, 'cookie_banner.link_title') }}
+    </div>
+    {{ link(path('policy_accept'), 'cookie_banner.accept', 'mx-2', null, 'cookie_banner.accept_title') }}
+</div>
 {% endif %}

@@ -15,10 +15,10 @@
 {{ property('group.fields.code', item.code) }}
 {{ property('group.fields.description', item.description) }}
 {%- if not has_margins -%}
-{{- property('group.fields.margins', item.countMargins|integer) }}
+{{- property('group.fields.margins', 'counters.margins'|trans({'count': item.countMargins})) }}
 {% endif -%}
 {%- if item.hasCategories -%}
-{{- property('group.fields.categories', item.countCategories|integer) }}
+{{- property('group.fields.categories', 'counters.categories'|trans({'count': item.countCategories})) }}
 {% endif -%}
 {{ properties(item) }}
 {% endblock %}
@@ -30,19 +30,19 @@
     <table class="table table-sm table-hover table-list">
         <thead>
             <tr>
-                <th class="font-weight-normal">{{ 'group.fields.margins'|trans }}</th>
-                <th class="font-weight-normal text-right">{{ 'groupmargin.fields.minimum'|trans }}</th>
-                <th class="font-weight-normal text-right">{{ 'groupmargin.fields.maximum'|trans }}</th>
-                <th class="font-weight-normal text-right">{{ 'groupmargin.fields.margin'|trans }}</th>
+                <th class="font-weight-normal w-25">{{ 'group.fields.margins'|trans }}</th>
+                <th class="font-weight-normal text-right w-25">{{ 'groupmargin.fields.minimum'|trans }}</th>
+                <th class="font-weight-normal text-right w-25">{{ 'groupmargin.fields.maximum'|trans }}</th>
+                <th class="font-weight-normal text-right w-25">{{ 'groupmargin.fields.margin'|trans }}</th>
             </tr>
         </thead>
         <tbody>
         {% for margin in item.margins -%}
             <tr>
-                <td>&nbsp;</td>
-                <td class="text-right">{{ margin.minimum|amount }}</td>
-                <td class="text-right">{{ margin.maximum|amount }}</td>
-                <td class="text-right">{{ margin.margin|percent }}</td>
+                <td class="w-25">&nbsp;</td>
+                <td class="text-right w-25">{{ margin.minimum|amount }}</td>
+                <td class="text-right w-25">{{ margin.maximum|amount }}</td>
+                <td class="text-right w-25">{{ margin.margin|percent }}</td>
             </tr>
         {% endfor %}
         </tbody>

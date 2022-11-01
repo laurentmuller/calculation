@@ -142,7 +142,7 @@
                         if (recaptcha) {
                             const $recaptcha = $elements.findReCaptcha();
                             if ($recaptcha) {
-                                $recaptcha.focus();
+                                $recaptcha.trigger('focus');
                                 $elements.trigger('focusin');
                                 return;
                             }
@@ -152,7 +152,7 @@
                         if (colorPicker) {
                             const $colorPicker = $elements.findColorPicker();
                             if ($colorPicker) {
-                                $colorPicker.focus();
+                                $colorPicker.trigger('focus');
                                 return;
                             }
                         }

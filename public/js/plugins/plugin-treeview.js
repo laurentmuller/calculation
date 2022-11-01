@@ -185,9 +185,9 @@
 
             this.tree = [];
             this.nodes = [];
-            this.clickProxy = e => this._click(e);
-            this.doubleClickProxy = e => this._doubleClick(e);
-            this.keyDownProxy = e => this._keydown(e);
+            this.clickProxy = (e) => this._click(e);
+            this.doubleClickProxy = (e) => this._doubleClick(e);
+            this.keyDownProxy = (e) => this._keydown(e);
             this.toggling = false;
 
             // retrieve Json Data.

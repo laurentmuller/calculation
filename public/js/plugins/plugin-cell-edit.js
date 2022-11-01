@@ -67,10 +67,10 @@
             options.formatter = this._checkFunction(options.formatter);
 
             // proxies
-            this.clickProxy = e => this._click(e);
-            this.blurProxy = e => this._blur(e);
+            this.clickProxy = (e) => this._click(e);
+            this.blurProxy = (e) => this._blur(e);
             this.inputProxy = () => this._input();
-            this.keydownProxy = e => this._keydown(e);
+            this.keydownProxy = (e) => this._keydown(e);
 
             this.$element.on('click', this.clickProxy);
             if (options.autoEdit) {

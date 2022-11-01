@@ -50,10 +50,10 @@
 
         _init() {
             // proxies
-            this.clickProxy = e => this._click(e);
-            this.keydownProxy = e => this._keydown(e);
-            this.inputProxy = e => this._input(e);
-            this.blurProxy = e => this._blur(e);
+            this.clickProxy = (e) => this._click(e);
+            this.keydownProxy = (e) => this._keydown(e);
+            this.inputProxy = (e) => this._input(e);
+            this.blurProxy = (e) => this._blur(e);
 
             // add handlers
             const options = this.options;
@@ -117,19 +117,19 @@
         _keydown(e) {
             const $input = $(e.currentTarget);
             switch (e.which) {
-            case 13: // enter
-                e.preventDefault();
-                this._save(e, $input);
-                break;
-            case 27:// escape
-                e.preventDefault();
-                this._update(e, $input);
-                break;
-            default:
-                if (this._isFunction(this.options.onKeyDown)) {
-                    this.options.onKeyDown(e, $input);
-                }
-                break;
+                case 13: // enter
+                    e.preventDefault();
+                    this._save(e, $input);
+                    break;
+                case 27:// escape
+                    e.preventDefault();
+                    this._update(e, $input);
+                    break;
+                default:
+                    if (this._isFunction(this.options.onKeyDown)) {
+                        this.options.onKeyDown(e, $input);
+                    }
+                    break;
             }
         }
 
@@ -202,7 +202,7 @@
          * @private
          */
         _isFunction(value) {
-            return typeof value === 'function' &&  value !== $.noop;
+            return typeof value === 'function' && value !== $.noop;
         }
     };
 

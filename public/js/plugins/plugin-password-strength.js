@@ -51,7 +51,7 @@
          * @private
          */
         _init() {
-            this.keyupProxy = e => this._onKeyup();
+            this.keyupProxy = (e) => this._onKeyup();
             this.$element.on('keyup', this.keyupProxy);
             if (this.$element.val()) {
                 this._onKeyup();

@@ -62,9 +62,9 @@
             this.margin = $.parseInt(this.$dialog.css('margin-top'));
 
             // proxies
-            this.headerMouseDownProxy = e => this._headerMouseDown(e);
-            this.bodyMouseMoveProxy = e => this._bodyMouseMove(e);
-            this.bodyMouseUpProxy = e => this._bodyMouseUp(e);
+            this.headerMouseDownProxy = (e) => this._headerMouseDown(e);
+            this.bodyMouseMoveProxy = (e) => this._bodyMouseMove(e);
+            this.bodyMouseUpProxy = (e) => this._bodyMouseUp(e);
             this.elementShowProxy = () => this._elementShow();
             this.elementShownProxy = () => this._elementShown();
             this.elementHideProxy = () => this._elementHide();

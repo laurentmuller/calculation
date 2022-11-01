@@ -1029,7 +1029,7 @@ function loadingTemplate(message) {
                 if (0 === $link.length) {
                     $link = $('.fixed-table-pagination li.active .page-link');
                 }
-                $link.focus();
+                $link.trigger('focus');
             }
             $this.removeData('focusPageItem');
             return $this;
@@ -1067,7 +1067,7 @@ function loadingTemplate(message) {
             if (result !== null && result.length === 2) {
                 const colors = result[1].split(',', 3);
                 if (colors.length === 3) {
-                    const newColor = colors.map(color => {
+                    const newColor = colors.map((color) => {
                         return color.trim();
                     }).join(',');
                     return 'rgb(' + newColor + ')';
@@ -1085,8 +1085,7 @@ function loadingTemplate(message) {
          */
         formatPages: function (options, pageNumber) {
             const $this = $(this);
-            /** @type {Options} options */
-            options = options || $this.getOptions();
+            options = options ? options : $this.getOptions();
             pageNumber = pageNumber || options.pageNumber;
             const text = $('#modal-page').data('page');
             return text.replace('%page%', pageNumber)

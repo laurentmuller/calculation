@@ -27,14 +27,15 @@ function customViewFormatter(data) {
         });
 
         // functions
-        let match;
-        while ((match = regex.exec(html)) !== null) {
+        let match = regex.exec(html);
+        while (match !== null) {
             let value = undefinedText;
             const callback = match[1];
             if (typeof window[callback] !== 'undefined') {
                 value = window[callback](row) || undefinedText;
             }
             html = html.replaceAll(match[0], value);
+            match = regex.exec(html);
         }
 
         // add

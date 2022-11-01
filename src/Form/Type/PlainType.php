@@ -291,7 +291,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
             case self::NUMBER_INTEGER:
                 return FormatUtils::formatInt((int) $value);
             case self::NUMBER_PERCENT:
-                $includeSign = $this->getOptionBool($options, 'percent_sign', true);
+                $includeSign = $this->isOptionBool($options, 'percent_sign', true);
                 $decimals = $this->getOptionInt($options, 'percent_decimals', 2);
                 $roundingMode = $this->getOptionInt($options, 'percent_rounding_mode', \NumberFormatter::ROUND_HALFEVEN);
 
@@ -385,24 +385,6 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the boolean value from the array options.
-     *
-     * @param array  $options      the array options
-     * @param string $name         the option name
-     * @param bool   $defaultValue the default value if option is not set
-     *
-     * @return bool the option value
-     */
-    private function getOptionBool(array $options, string $name, bool $defaultValue): bool
-    {
-        if (isset($options[$name]) && \is_bool($options[$name])) {
-            return $options[$name];
-        }
-
-        return $defaultValue;
-    }
-
-    /**
      * Gets the integer value from the array options.
      *
      * @param array  $options      the array options
@@ -435,5 +417,23 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
 
         return $translate ? $this->trans((string) $value) : $value;
+    }
+
+    /**
+     * Gets the boolean value from the array options.
+     *
+     * @param array  $options      the array options
+     * @param string $name         the option name
+     * @param bool   $defaultValue the default value if option is not set
+     *
+     * @return bool the option value
+     */
+    private function isOptionBool(array $options, string $name, bool $defaultValue): bool
+    {
+        if (isset($options[$name]) && \is_bool($options[$name])) {
+            return $options[$name];
+        }
+
+        return $defaultValue;
     }
 }

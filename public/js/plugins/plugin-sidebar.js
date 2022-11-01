@@ -55,10 +55,10 @@
             this.$pageContent = $(options.pageContent);
 
             // create and add proxies
-            this.showSidebarProxy = e => this._showSidebar(e);
-            this.hideSidebarProxy = e => this._hideSidebar(e);
-            this.toggleMenuProxy = e => this._toggleMenu(e);
-            this.resizeProxy = e => this._resize(e);
+            this.showSidebarProxy = (e) => this._showSidebar(e);
+            this.hideSidebarProxy = (e) => this._hideSidebar(e);
+            this.toggleMenuProxy = (e) => this._toggleMenu(e);
+            this.resizeProxy = (e) => this._resize(e);
 
             this.$element.on('click', '.nav-link-toggle', this.toggleMenuProxy);
             this.$showSidebarButton.on('click', this.showSidebarProxy);

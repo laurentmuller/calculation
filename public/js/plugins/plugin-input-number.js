@@ -62,9 +62,9 @@
             this.keypressRegex = new RegExp(pattern);
 
             // create proxies
-            this.keyPressProxy = e => this._keypress(e);
-            this.updateProxy = e => this._update();
-            this.inputProxy = e => this._input(e);
+            this.keyPressProxy = (e) => this._keypress(e);
+            this.updateProxy = () => this._update();
+            this.inputProxy = (e) => this._input(e);
 
             // add handlers
             const $element = this.$element;

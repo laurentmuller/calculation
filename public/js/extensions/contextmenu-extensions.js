@@ -179,67 +179,73 @@ const MenuBuilder = class { /* exported MenuBuilder */
 /**
  * -------------- JQuery extensions --------------
  */
-$.fn.extend({
-    /**
-     * Returns if this element is selectable.
-     *
-     * @returns {boolean} true if selectable.
-     */
-    isSelectable: function () {
-        'use strict';
-        const $this = $(this);
-        return !($this.hasClass('disabled') || $this.hasClass('d-none'));
-    },
 
-    /**
-     * Initialize the context menu.
-     *
-     * @param {string}  selector - the selector matching the elements to trigger on.
-     * @param {function} [fnShow] - the function called when the context menu is shown.
-     * @param {function} [fnHide] - the function called when the context menu is hidden.
-     * @param {Object} [options] - the context menu options to override.
-     * @return {JQuery} The JQuery element for chaining.
-     */
-    initContextMenu: function (selector, fnShow, fnHide, options) {
-        'use strict';
-        return this.each(function () {
-            //const $this = $(this);
-            // build callback
-            const build = function ($element) {
-                // get items
-                const items = $element.getContextMenuItems();
-                if ($.isEmptyObject(items)) {
-                    return false;
-                }
+/**
+ * JQuery's extension for Bootstrap tables, rows and cells.
+ */
+(function ($) {
+    'use strict';
 
-                // default options
-                const settings = {
-                    items: items,
-                    zIndex: 1000,
-                    autoHide: true,
-                    callback: function (key, options, e) {
-                        const item = options.items[key];
-                        if (item && item.link && item.link.length) {
-                            e.preventDefault();
-                            item.link.get(0).click();
-                            return true;
-                        }
+    $.fn.extend({
+        /**
+         * Returns if this element is selectable.
+         *
+         * @returns {boolean} true if selectable.
+         */
+        isSelectable: function () {
+            const $this = $(this);
+            return !($this.hasClass('disabled') || $this.hasClass('d-none'));
+        },
+
+        /**
+         * Initialize the context menu.
+         *
+         * @param {string}  selector - the selector matching the elements to trigger on.
+         * @param {function} [fnShow] - the function called when the context menu is shown.
+         * @param {function} [fnHide] - the function called when the context menu is hidden.
+         * @param {Object} [options] - the context menu options to override.
+         * @return {JQuery} The JQuery element for chaining.
+         */
+        initContextMenu: function (selector, fnShow, fnHide, options) {
+            return this.each(function () {
+                //const $this = $(this);
+                // build callback
+                const build = function ($element) {
+                    // get items
+                    const items = $element.getContextMenuItems();
+                    if ($.isEmptyObject(items)) {
                         return false;
-                    },
-                    events: {
-                        show: fnShow || $.noop,
-                        hide: fnHide || $.noop
                     }
+
+                    // default options
+                    const settings = {
+                        items: items,
+                        zIndex: 1000,
+                        autoHide: true,
+                        callback: function (key, options, e) {
+                            const item = options.items[key];
+                            if (item && item.link && item.link.length) {
+                                e.preventDefault();
+                                item.link.get(0).click();
+                                return true;
+                            }
+                            return false;
+                        },
+                        events: {
+                            show: fnShow || $.noop,
+                            hide: fnHide || $.noop
+                        }
+                    };
+
+                    return $.extend(true, settings, options);
                 };
 
-                return $.extend(true, settings, options);
-            };
-
-            // create
-            $.contextMenu({
-                build: build,
-                selector: selector
+                // create
+                $.contextMenu({
+                    build: build,
+                    selector: selector
+                });
             });
-        });
-    }
-});
+        }
+    });
+}(jQuery));

@@ -86,10 +86,10 @@
          * @private
          */
         _listen() {
-            this.changeProxy = e => this._change(e);
-            this.clearProxy = e => this._clear(e);
-            this.clickProxy = e => this.selectFile(e);
-            this.resetProxy = e => this._reset(e);
+            this.changeProxy = (e) => this._change(e);
+            this.clearProxy = (e) => this._clear(e);
+            this.clickProxy = (e) => this.selectFile(e);
+            this.resetProxy = (e) => this._reset(e);
             this.$input.on('change.bs.file-input', this.changeProxy);
             this.$element.find('[data-dismiss="file-input"]').on('click.bs.file-input', this.clearProxy);
             this.$element.find('[data-trigger="file-input"]').on('click.bs.file-input', this.clickProxy);

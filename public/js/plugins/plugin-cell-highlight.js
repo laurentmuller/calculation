@@ -38,7 +38,7 @@
             this.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
             this.tableIndex = this.indexTable();
             this.enabled = false;
-            this.mouseEnterProxy = e => this.mouseenter(e);
+            this.mouseEnterProxy = (e) => this.mouseenter(e);
             this.mouseLeaveProxy = () => this.mouseleave();
 
             // update enablement
@@ -61,7 +61,7 @@
             if (this.enabled) {
                 const selector = this.options.cellSelector;
                 this.$element.off('mouseenter', selector, this.mouseEnterProxy);
-                this.$element.off('mouseleave', selector, that.mouseLeaveProxy);
+                this.$element.off('mouseleave', selector, this.mouseLeaveProxy);
                 this.enabled = false;
             }
         }

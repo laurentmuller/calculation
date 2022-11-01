@@ -23,7 +23,6 @@ use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
-use FPDF;
 
 /**
  * PDF document with default header and footer.
@@ -57,7 +56,7 @@ use FPDF;
  * @method float GetPageWidth()  The width of current page in user unit.
  * @method float GetPageHeight() The height of current page in user unit.
  */
-class PdfDocument extends FPDF
+class PdfDocument extends \FPDF
 {
     use MathTrait;
 

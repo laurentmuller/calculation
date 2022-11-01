@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\PolicyController;
-use Generator;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -23,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PolicyControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array|Generator
+    public function getRoutes(): array|\Generator
     {
         return [
             ['/policy/accept', '', Response::HTTP_FOUND],

@@ -14,7 +14,7 @@ Versions
 
 Qualité du code
 ----------------
-[![SymfonyInsight](https://insight.symfony.com/projects/b3a90438-77e0-4811-a8df-7ad782a9b62a/mini.svg)](https://insight.symfony.com/projects/b3a90438-77e0-4811-a8df-7ad782a9b62a) [![Codacy](https://app.codacy.com/project/badge/Grade/47008d380fac4a3ea891c7bd72bddd58)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=laurentmuller/calculation&amp;utm_campaign=Badge_Grade) [![PHP-Stan](https://img.shields.io/badge/PHPStan-Level%207-brightgreen.svg?style=flat&logo=php)](https://phpstan.org/blog/find-bugs-in-your-code-without-writing-tests)  [![Psalm](https://img.shields.io/badge/Psalm-Level%201-brightgreen.svg?style=flat)](https://psalm.dev/docs/running_psalm/installation/)
+[![SymfonyInsight](https://insight.symfony.com/projects/b3a90438-77e0-4811-a8df-7ad782a9b62a/mini.svg)](https://insight.symfony.com/projects/b3a90438-77e0-4811-a8df-7ad782a9b62a) [![Codacy](https://app.codacy.com/project/badge/Grade/47008d380fac4a3ea891c7bd72bddd58)](https://www.codacy.com/gh/laurentmuller/calculation/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=laurentmuller/calculation&amp;utm_campaign=Badge_Grade) [![PHP-Stan](https://img.shields.io/badge/PHPStan-Level%207-brightgreen.svg?style=flat&logo=php)](https://phpstan.org/blog/find-bugs-in-your-code-without-writing-tests)  [![Psalm](https://img.shields.io/badge/Psalm-Level%201-brightgreen.svg?style=flat)](https://psalm.dev/docs/running_psalm/installation/)
 
 Actions
 -------

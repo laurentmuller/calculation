@@ -62,6 +62,8 @@ class LogTable extends AbstractTable implements \Countable
      * Formats the channel.
      *
      * @throws \Twig\Error\Error
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function formatChannel(string $value, Log $log): string
     {
@@ -70,6 +72,8 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * Formats the date.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function formatCreatedAt(\DateTimeInterface $value, Log $log): string
     {
@@ -80,6 +84,8 @@ class LogTable extends AbstractTable implements \Countable
      * Format the level.
      *
      * @throws \Twig\Error\Error
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function formatLevel(string $value, Log $log): string
     {

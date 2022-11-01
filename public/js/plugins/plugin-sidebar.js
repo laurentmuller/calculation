@@ -87,7 +87,7 @@
             const that = this;
             const timeout = this.options.timeout;
             const removeTimer = () => that.$element.removeTimer();
-            that.$showSidebarButton.hover(e => {
+            that.$showSidebarButton.hover((e) => {
                 if (that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
                         removeTimer();
@@ -97,7 +97,7 @@
                     }, timeout);
                 }
             }, removeTimer);
-            that.$hideSidebarButton.hover(e => {
+            that.$hideSidebarButton.hover((e) => {
                 if (!that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
                         removeTimer();

@@ -337,23 +337,6 @@ class MonthChart extends BaseChart
      *      margin: float,
      *      date: \DateTimeInterface}> $data
      *
-     * @return float[]
-     */
-    private function getMargins(array $data): array
-    {
-        return \array_map(fn (array $item): float => $item['total'] - $item['items'], $data);
-    }
-
-    /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
-     *
      * @return array<array-key, array{float, int}>
      */
     private function getMarginsSeries(array $data): array

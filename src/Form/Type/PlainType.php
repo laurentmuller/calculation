@@ -257,12 +257,102 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     }
 
     /**
-     * Formats the given value as date.
-     *
-     * @param \DateTimeInterface|int|null $value   the value to transform
-     * @param array                       $options the options
+     * @throws TransformationFailedException if the value can not be mapped to a string
      */
-    private function formatDate(\DateTimeInterface|int|null $value, array $options): string
+    private function getDataValue(mixed $value, array $options): string
+    {
+        // transform callback
+        /** @psalm-var mixed $value */
+        $value = $this->transformValue($value, $options);
+
+        // boolean?
+        if (\is_bool($value)) {
+            return $this->transformBool($value);
+        }
+
+        // empty?
+        if (null === $value || '' === $value) {
+            return $this->transformEmpty($value, $options);
+        }
+
+        // array?
+        if (\is_array($value)) {
+            return $this->transformArray($value, $options);
+        }
+
+        // entity?
+        if ($value instanceof AbstractEntity) {
+            return $value->getDisplay();
+        }
+
+        // date?
+        if ($value instanceof \DateTimeInterface) {
+            return $this->transformDate($value, $options);
+        }
+
+        // numeric?
+        if (\is_numeric($value)) {
+            return $this->transformNumber($value, $options);
+        }
+
+        // to string?
+        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
+            return (string) $value;
+        }
+
+        // error
+        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \get_debug_type($value)));
+    }
+
+    private function getDisplayValue(mixed $value, array $options): ?string
+    {
+        if (\is_callable($options['display_transformer'])) {
+            return (string) \call_user_func($options['display_transformer'], $value);
+        }
+
+        return null;
+    }
+
+    private function getOptionInt(array $options, string $name, int $defaultValue): int
+    {
+        if (isset($options[$name]) && \is_int($options[$name])) {
+            return $options[$name];
+        }
+
+        return $defaultValue;
+    }
+
+    private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
+    {
+        $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
+
+        return $translate ? $this->trans((string) $value) : $value;
+    }
+
+    private function isOptionBool(array $options, string $name, bool $defaultValue): bool
+    {
+        if (isset($options[$name]) && \is_bool($options[$name])) {
+            return $options[$name];
+        }
+
+        return $defaultValue;
+    }
+
+    private function transformArray(array $value, array $options): string
+    {
+        $callback = fn (mixed $item): string => $this->getDataValue($item, $options);
+        $values = \array_map($callback, $value);
+        $separator = $this->getOptionString($options, 'separator', ', ');
+
+        return \implode((string) $separator, $values);
+    }
+
+    private function transformBool(bool $value): string
+    {
+        return $value ? $this->trans('common.value_true') : $this->trans('common.value_false');
+    }
+
+    private function transformDate(\DateTimeInterface|int|null $value, array $options): string
     {
         $timezone = $this->getOptionString($options, 'time_zone');
         $pattern = $this->getOptionString($options, 'date_pattern');
@@ -273,6 +363,15 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         return (string) FormatUtils::formatDateTime($value, $date_type, $time_type, $timezone, $calendar, $pattern);
     }
 
+    private function transformEmpty(mixed $value, array $options): string
+    {
+        if (\is_callable($options['empty_value'])) {
+            return (string) \call_user_func($options['empty_value'], $value);
+        }
+
+        return (string) $this->getOptionString($options, 'empty_value', 'common.value_null', true);
+    }
+
     /**
      * Formats the given value as number.
      *
@@ -281,7 +380,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
      *
      * @return string the formatted number
      */
-    private function formatNumber(float|int|string $value, array $options): string
+    private function transformNumber(float|int|string $value, array $options): string
     {
         $type = $this->getOptionString($options, 'number_pattern', '');
 
@@ -303,137 +402,12 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         }
     }
 
-    /**
-     * Transform the given value as string.
-     *
-     * @param mixed $value   the value to transform
-     * @param array $options the options
-     *
-     * @throws TransformationFailedException if the value can not be mapped to a string
-     */
-    private function getDataValue(mixed $value, array $options): string
+    private function transformValue(mixed $value, array $options): mixed
     {
-        // transformer?
-        /** @var callable|null $callback */
-        $callback = $options['value_transformer'] ?? null;
-        if (\is_callable($callback)) {
-            /** @var mixed $value */
-            $value = \call_user_func($callback, $value);
+        if (\is_callable($options['value_transformer'])) {
+            return \call_user_func($options['value_transformer'], $value);
         }
 
-        // boolean?
-        if (true === $value) {
-            return $this->trans('common.value_true');
-        }
-        if (false === $value) {
-            return $this->trans('common.value_false');
-        }
-
-        // value?
-        if (null === $value || '' === $value) {
-            /** @var callable|null $callback */
-            $callback = $options['empty_value'] ?? null;
-            if (\is_callable($callback)) {
-                return (string) \call_user_func($callback, $value);
-            }
-
-            return (string) $this->getOptionString($options, 'empty_value', 'common.value_null', true);
-        }
-
-        // array?
-        if (\is_array($value)) {
-            $callback = fn (mixed $item): string => $this->getDataValue($item, $options);
-            $values = \array_map($callback, $value);
-            $separator = $this->getOptionString($options, 'separator', ', ');
-
-            return \implode((string) $separator, $values);
-        }
-
-        // entity?
-        if ($value instanceof AbstractEntity) {
-            return $value->getDisplay();
-        }
-
-        // date?
-        if ($value instanceof \DateTimeInterface) {
-            return $this->formatDate($value, $options);
-        }
-
-        // numeric?
-        if (\is_numeric($value)) {
-            return $this->formatNumber($value, $options);
-        }
-
-        // to string?
-        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
-            return (string) $value;
-        }
-
-        // error
-        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \get_debug_type($value)));
-    }
-
-    private function getDisplayValue(mixed $value, array $options): ?string
-    {
-        /** @var callable|null $callback */
-        $callback = $options['display_transformer'] ?? null;
-        if (\is_callable($callback)) {
-            return (string) \call_user_func($callback, $value);
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the integer value from the array options.
-     *
-     * @param array  $options      the array options
-     * @param string $name         the option name
-     * @param int    $defaultValue the default value if option is not set
-     *
-     * @return int the option value
-     */
-    private function getOptionInt(array $options, string $name, int $defaultValue): int
-    {
-        if (isset($options[$name]) && \is_int($options[$name])) {
-            return $options[$name];
-        }
-
-        return $defaultValue;
-    }
-
-    /**
-     * Gets the string value from the array options.
-     *
-     * @param array   $options      the array options
-     * @param string  $name         the option name
-     * @param ?string $defaultValue the default value if option is not set
-     * @param bool    $translate    true to translate the default value
-     *
-     * @return string|null the option value
-     */
-    private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
-    {
-        $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
-
-        return $translate ? $this->trans((string) $value) : $value;
-    }
-
-    /**
-     * Gets the boolean value from the array options.
-     *
-     * @param array  $options      the array options
-     * @param string $name         the option name
-     * @param bool   $defaultValue the default value if option is not set
-     *
-     * @return bool the option value
-     */
-    private function isOptionBool(array $options, string $name, bool $defaultValue): bool
-    {
-        if (isset($options[$name]) && \is_bool($options[$name])) {
-            return $options[$name];
-        }
-
-        return $defaultValue;
+        return $value;
     }
 }

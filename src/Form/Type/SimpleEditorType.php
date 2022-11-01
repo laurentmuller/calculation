@@ -22,6 +22,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * The Simple editor type.
+ *
+ * @psalm-type SimpleEditorAction = array{
+ *      title: ?string,
+ *      group: ?string,
+ *      icon: ?string,
+ *      text: string,
+ *      exec: string,
+ *      parameter: string,
+ *      state: string,
+ *      enabled: string,
+ *      class: string,
+ *      attributes: array<string, string>,
+ *      actions: ?array}
  */
 class SimpleEditorType extends AbstractType
 {
@@ -42,18 +55,11 @@ class SimpleEditorType extends AbstractType
     /**
      * {@inheritdoc}
      *
-     * @param array{
-     *      required:bool
-     * } $options
+     * @psalm-param array{required:bool} $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        /**
-         * @var array{
-         *      attr: array,
-         *      groups: array
-         * } $vars
-         */
+        /** @var array{attr: array, groups: array} $vars */
         $vars = &$view->vars;
         if ($options['required']) {
             $vars['attr']['class'] = $this->getWidgetClass($view);
@@ -102,29 +108,16 @@ class SimpleEditorType extends AbstractType
      */
     private function getGroupedActions(array $options): array
     {
-        /** @var array $existing */
+        /** @psalm-var array $existing */
         $existing = $options['actions'] ?? [];
 
-        /**
-         * @var array<array{
-         *      title: null|string,
-         *      group: string,
-         *      icon: null|string,
-         *      text: string,
-         *      exec: string,
-         *      parameter: string,
-         *      state: string,
-         *      enabled: string,
-         *      class: string,
-         *      attributes: array<string, string>,
-         *      actions: array}> $actions
-         */
+        /** @psalm-var SimpleEditorAction[] $actions */
         $actions = \array_filter($existing, static fn (array $action): bool => !empty($action['exec']) || !empty($action['actions']));
         $this->updateActions($actions);
 
         $groups = [];
         foreach ($actions as $action) {
-            $groups[$action['group']][] = $action;
+            $groups[$action['group'] ?? 'default'][] = $action;
         }
 
         return $groups;
@@ -135,7 +128,7 @@ class SimpleEditorType extends AbstractType
      */
     private function getWidgetClass(FormView $view): string
     {
-        /** @var string $class */
+        /** @psalm-var string $class */
         $class = $view->vars['attr']['class'] ?? '';
         $values = \array_filter(\explode(' ', $class));
         $values[] = 'must-validate';
@@ -144,63 +137,110 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @param array<array{
-     *      title: null|string,
-     *      group: string,
-     *      icon: null|string,
-     *      text: string,
-     *      exec: string,
-     *      parameter: string,
-     *      state: string,
-     *      enabled: string,
-     *      class: string,
-     *      attributes: array<string, string>,
-     *      actions: null|array}> $actions
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
+     * @psalm-param SimpleEditorAction[] $actions
      */
     private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): void
     {
         foreach ($actions as &$action) {
-            if (empty($action['group'])) {
-                $action['group'] = 'default';
-            }
             $action['icon'] ??= $action['exec'];
             $action['attributes']['class'] = $class;
             $action['attributes']['title'] = 'simple_editor.' . ($action['title'] ?? $action['exec']);
 
-            if (!empty($action['text'])) {
-                $action['text'] = 'simple_editor.' . $action['text'];
-                unset($action['icon']);
-            }
-            if (!empty($action['exec'])) {
-                $action['attributes']['data-exec'] = $action['exec'];
-                unset($action['exec']);
-            }
-            if (!empty($action['parameter'])) {
-                $action['attributes']['data-parameter'] = $action['parameter'];
-                unset($action['parameter']);
-            }
-            if (!empty($action['state'])) {
-                $action['attributes']['data-state'] = $action['state'];
-                unset($action['state']);
-            }
-            if (!empty($action['enabled'])) {
-                $action['attributes']['data-enabled'] = $action['enabled'];
-                unset($action['enabled']);
-            }
-            if (!empty($action['class'])) {
-                $action['attributes']['class'] .= ' ' . $action['class'];
-            }
-            unset($action['class']);
-
-            // drop-down items?
-            if (isset($action['actions']) && !empty($action['actions'])) {
-                $action['attributes']['aria-expanded'] = 'false';
-                $action['attributes']['data-toggle'] = 'dropdown';
-                $action['attributes']['class'] .= ' dropdown-toggle';
-                $this->updateActions($action['actions'], 'dropdown-item');
-            }
+            $this->updateExec($action)
+                ->updateText($action)
+                ->updateState($action)
+                ->updateClass($action)
+                ->updateEnabled($action)
+                ->updateParameter($action)
+                ->updateDropDown($action);
         }
+    }
+
+    /**
+     * @psalm-param SimpleEditorAction $action
+     */
+    private function updateClass(array &$action): self
+    {
+        if (!empty($action['class'])) {
+            $action['attributes']['class'] .= ' ' . $action['class'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorAction $action
+     */
+    private function updateDropDown(array &$action): void
+    {
+        if (isset($action['actions']) && !empty($action['actions'])) {
+            $action['attributes']['aria-expanded'] = 'false';
+            $action['attributes']['data-toggle'] = 'dropdown';
+            $action['attributes']['class'] .= ' dropdown-toggle';
+
+            /** @psalm-var SimpleEditorAction[] $_children */
+            $_children = &$action['actions'];
+            $this->updateActions($_children, 'dropdown-item');
+        }
+    }
+
+    /**
+     * @psalm-param SimpleEditorAction $action
+     */
+    private function updateEnabled(array &$action): self
+    {
+        if (!empty($action['enabled'])) {
+            $action['attributes']['data-enabled'] = $action['enabled'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorAction $action
+     */
+    private function updateExec(array &$action): self
+    {
+        if (!empty($action['exec'])) {
+            $action['attributes']['data-exec'] = $action['exec'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorAction $action
+     */
+    private function updateParameter(array &$action): self
+    {
+        if (!empty($action['parameter'])) {
+            $action['attributes']['data-parameter'] = $action['parameter'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorAction $action
+     */
+    private function updateState(array &$action): self
+    {
+        if (!empty($action['state'])) {
+            $action['attributes']['data-state'] = $action['state'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorAction $action
+     */
+    private function updateText(array &$action): self
+    {
+        if (!empty($action['text'])) {
+            $action['text'] = 'simple_editor.' . $action['text'];
+        }
+
+        return $this;
     }
 }

@@ -16,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
@@ -81,21 +82,11 @@ class CellBuilder
     public function apply(string $coordinate, mixed $value): self
     {
         $style = $this->sheet->getStyle($coordinate);
-        if ($this->bold) {
-            $style->getFont()->setBold(true);
-        }
-        if ($this->indent > 0) {
-            $style->getAlignment()->setIndent($this->indent);
-        }
-        if (!empty($this->horizontal)) {
-            $style->getAlignment()->setHorizontal($this->horizontal);
-        }
-        if (!empty($this->vertical)) {
-            $style->getAlignment()->setVertical($this->vertical);
-        }
-        if (!empty($this->format)) {
-            $style->getNumberFormat()->setFormatCode($this->format);
-        }
+        $this->updateBold($style)
+            ->updateIndent($style)
+            ->updateAlignment($style)
+            ->updateFormat($style);
+
         if (null !== $value) {
             if ($value instanceof \DateTimeInterface) {
                 $value = Date::PHPToExcel($value);
@@ -227,5 +218,42 @@ class CellBuilder
     public function verticalTop(): self
     {
         return $this->vertical(Alignment::VERTICAL_TOP);
+    }
+
+    private function updateAlignment(Style $style): self
+    {
+        if (!empty($this->horizontal)) {
+            $style->getAlignment()->setHorizontal($this->horizontal);
+        }
+        if (!empty($this->vertical)) {
+            $style->getAlignment()->setVertical($this->vertical);
+        }
+
+        return $this;
+    }
+
+    private function updateBold(Style $style): self
+    {
+        if ($this->bold) {
+            $style->getFont()->setBold(true);
+        }
+
+        return $this;
+    }
+
+    private function updateFormat(Style $style): void
+    {
+        if (!empty($this->format)) {
+            $style->getNumberFormat()->setFormatCode($this->format);
+        }
+    }
+
+    private function updateIndent(Style $style): self
+    {
+        if ($this->indent > 0) {
+            $style->getAlignment()->setIndent($this->indent);
+        }
+
+        return $this;
     }
 }

@@ -35,6 +35,7 @@ use App\Service\CaptchaImageService;
 use App\Service\FakerService;
 use App\Service\IpStackService;
 use App\Service\MailerService;
+use App\Service\RecaptchaService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Traits\StrengthLevelTranslatorTrait;
@@ -49,7 +50,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -295,24 +295,14 @@ class TestController extends AbstractController
      * Display the reCaptcha.
      */
     #[Route(path: '/recaptcha', name: 'test_recaptcha')]
-    public function recaptcha(
-        Request $request,
-        #[Autowire('%google_recaptcha_site_key%')]
-        string $siteKey,
-        #[Autowire('%google_recaptcha_secret_key%')]
-        string $secretKey,
-        #[Autowire('%kernel.debug%')]
-        bool $debug
-    ): Response {
+    public function recaptcha(Request $request, RecaptchaService $service): Response
+    {
         $data = [
             'subject' => 'My subject',
             'message' => 'My message',
         ];
-
-        $action = 'login';
         $helper = $this->createFormHelper('user.fields.', $data);
         $helper->getBuilder()->setAttribute('block_name', '');
-
         $helper->field('subject')
             ->addTextType();
         $helper->field('message')
@@ -323,20 +313,8 @@ class TestController extends AbstractController
         // render
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array $data */
-            $data = $form->getData();
-            $response = (string) $data['recaptcha'];
-            $hostname = (string) $request->server->get('SERVER_NAME');
-            $remoteIp = (string) $request->server->get('REMOTE_ADDR');
-            $expectedHostName = $debug ? $remoteIp : $hostname;
-
-            // verify
-            $recaptcha = new ReCaptcha($secretKey);
-            $recaptcha->setExpectedHostname($expectedHostName)
-                ->setExpectedAction($action)
-                ->setChallengeTimeout(60)
-                ->setScoreThreshold(0.5);
-            $result = $recaptcha->verify($response, $remoteIp);
+            $response = (string) $form->get('recaptcha')->getData();
+            $result = $service->verify($request, $response);
 
             // OK?
             if ($result->isSuccess()) {
@@ -373,8 +351,8 @@ class TestController extends AbstractController
         }
 
         return $this->renderForm('test/recaptcha.html.twig', [
-            'google_recaptcha_site_key' => $siteKey,
-            'google_recaptcha_action' => $action,
+            'action' => $service->getAction(),
+            'key' => $service->getSiteKey(),
             'form' => $form,
         ]);
     }

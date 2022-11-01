@@ -352,29 +352,20 @@ class HelpReport extends AbstractReport
         }
 
         // edit actions
-        /** @psalm-var null|array<array{
-         *      id: string,
-         *      description: string}> $actions */
+        /** @psalm-var null|array<array{id: string, description: string}> $actions */
         $actions = $item['editActions'] ?? null;
         if (null !== $actions) {
             $this->outputActions($actions, 'help.labels.edit_actions');
         }
 
         // global actions
-        /** @psalm-var null|array<array{
-         *      id: string,
-         *      description: string}> $actions */
+        /** @psalm-var null|array<array{id: string, description: string}> $actions */
         $actions = $item['globalActions'] ?? null;
         if (null !== $actions) {
             $this->outputActions($actions, 'help.labels.global_actions');
         }
 
-        /**
-         * @psalm-var null|array{
-         *      image: string|null,
-         *      text:string|null,
-         *      action: array|null} $forbidden
-         */
+        /** @psalm-var null|array{image: string|null, text:string|null, action: array|null} $forbidden */
         $forbidden = $item['forbidden'] ?? null;
         if (null !== $forbidden) {
             $this->Ln(3);

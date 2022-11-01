@@ -248,66 +248,16 @@ class PdfTableBuilder
             throw new \OutOfRangeException('Invalid spanned cells.');
         }
 
-        $texts = [];
-        $styles = [];
-        $aligns = [];
-        $widths = [];
-        $fixeds = [];
-
-        // copy
         $cells = $this->cells;
         $parent = $this->parent;
         $columns = $this->columns;
 
-        $index = 0;
-        foreach ($cells as $cell) {
-            $texts[] = $cell->getText() ?? '';
-            $styles[] = $cell->getStyle() ?? $this->rowStyle ?? PdfStyle::getCellStyle();
-            $aligns[] = $cell->getAlignment() ?? $columns[$index]->getAlignment() ?? PdfTextAlignment::LEFT;
-
-            $width = 0.0;
-            $fixed = $columns[$index]->isFixed();
-            for ($i = 0, $count = $cell->getCols(); $i < $count; ++$i) {
-                // check if one of the columns is not fixed
-                if ($fixed && !$columns[$index]->isFixed()) {
-                    $fixed = false;
-                }
-                $width += $columns[$index]->getWidth();
-                ++$index;
-            }
-            $widths[] = $width;
-            $fixeds[] = $fixed;
-        }
+        // compute
+        [$texts, $styles, $aligns, $widths, $fixeds] = $this->computeCells($cells, $columns);
 
         // update widths
         if ($this->fullWidth) {
-            $count = \count($cells);
-            if (1 === $count) {
-                // only one cell
-                $widths[0] = $parent->getPrintableWidth();
-            } else {
-                // get fixed and resizable widths
-                $fixedWidth = 0.0;
-                $resizableWidth = 0.0;
-                for ($i = 0; $i < $count; ++$i) {
-                    if ($fixeds[$i]) {
-                        $fixedWidth += $widths[$i];
-                    } else {
-                        $resizableWidth += $widths[$i];
-                    }
-                }
-
-                // update resizable widths
-                $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
-                if (!$this->isFloatZero($resizableWidth) && !$this->isFloatZero($remainingWidth) && $resizableWidth !== $remainingWidth) {
-                    $factor = $remainingWidth / $resizableWidth;
-                    for ($i = 0; $i < $count; ++$i) {
-                        if (!$fixeds[$i]) {
-                            $widths[$i] *= $factor;
-                        }
-                    }
-                }
-            }
+            $this->adjustCellWidths($cells, $fixeds, $widths);
         }
 
         // clear before adding new page
@@ -826,5 +776,96 @@ class PdfTableBuilder
         }
 
         return $height;
+    }
+
+    /**
+     * @param float[]   $widths
+     * @param bool[]    $fixeds
+     * @param PdfCell[] $cells
+     */
+    private function adjustCellWidths(array $cells, array $fixeds, array &$widths): void
+    {
+        if (!$this->fullWidth) {
+            return;
+        }
+
+        $count = \count($cells);
+        $parent = $this->parent;
+        if (1 === $count) {
+            $widths[0] = $parent->getPrintableWidth();
+
+            return;
+        }
+
+        // get fixed and resizable widths
+        $fixedWidth = 0.0;
+        $resizableWidth = 0.0;
+        for ($i = 0; $i < $count; ++$i) {
+            if ($fixeds[$i]) {
+                $fixedWidth += $widths[$i];
+            } else {
+                $resizableWidth += $widths[$i];
+            }
+        }
+
+        // update resizable widths
+        $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
+        if (!$this->isFloatZero($resizableWidth) && !$this->isFloatZero($remainingWidth) && $resizableWidth !== $remainingWidth) {
+            $factor = $remainingWidth / $resizableWidth;
+            for ($i = 0; $i < $count; ++$i) {
+                if (!$fixeds[$i]) {
+                    $widths[$i] *= $factor;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param PdfCell[]   $cells
+     * @param PdfColumn[] $columns
+     *
+     * @return array{
+     *     0: string[],
+     *     1: PdfStyle[],
+     *     2: PdfTextAlignment[],
+     *     3: float[],
+     *     4: bool[]
+     * }
+     */
+    private function computeCells(array $cells, array $columns): array
+    {
+        $texts = [];
+        $styles = [];
+        $aligns = [];
+        $widths = [];
+        $fixeds = [];
+
+        $index = 0;
+        foreach ($cells as $cell) {
+            $texts[] = $cell->getText() ?? '';
+            $styles[] = $cell->getStyle() ?? $this->rowStyle ?? PdfStyle::getCellStyle();
+            $aligns[] = $cell->getAlignment() ?? $columns[$index]->getAlignment() ?? PdfTextAlignment::LEFT;
+
+            $width = 0.0;
+            $fixed = $columns[$index]->isFixed();
+            for ($i = 0, $count = $cell->getCols(); $i < $count; ++$i) {
+                // check if one of the columns is not fixed
+                if ($fixed && !$columns[$index]->isFixed()) {
+                    $fixed = false;
+                }
+                $width += $columns[$index]->getWidth();
+                ++$index;
+            }
+            $widths[] = $width;
+            $fixeds[] = $fixed;
+        }
+
+        return [
+            $texts,
+            $styles,
+            $aligns,
+            $widths,
+            $fixeds,
+        ];
     }
 }

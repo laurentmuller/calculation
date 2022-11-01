@@ -88,6 +88,42 @@ final class FormatExtension extends AbstractExtension
     }
 
     /**
+     * Check the calendar.
+     *
+     * @throws SyntaxError
+     */
+    private function checkCalendar(?string $calendar, array $calendars): void
+    {
+        if (null !== $calendar && !isset($calendars[$calendar])) {
+            throw new SyntaxError(\sprintf('The calendar "%s" does not exist. Known calendars are: "%s"', $calendar, \implode('", "', \array_keys($calendars))));
+        }
+    }
+
+    /**
+     * Check the date format.
+     *
+     * @throws SyntaxError
+     */
+    private function checkDateFormat(?string $dateFormat, array $formats): void
+    {
+        if (null !== $dateFormat && !isset($formats[$dateFormat])) {
+            throw new SyntaxError(\sprintf('The date format "%s" does not exist. Known formats are: "%s"', $dateFormat, \implode('", "', \array_keys($formats))));
+        }
+    }
+
+    /**
+     * Check the time format.
+     *
+     * @throws SyntaxError
+     */
+    private function checkTimeFormat(?string $timeFormat, array $formats): void
+    {
+        if (null !== $timeFormat && !isset($formats[$timeFormat])) {
+            throw new SyntaxError(\sprintf('The time format "%s" does not exist. Known formats are: "%s"', $timeFormat, \implode('", "', \array_keys($formats))));
+        }
+    }
+
+    /**
      * Formats a date for the current locale; ignoring the time part.
      *
      * @param Environment                    $env        the Twig environment
@@ -141,15 +177,9 @@ final class FormatExtension extends AbstractExtension
         ];
 
         // check formats and calendar
-        if (null !== $dateFormat && !isset($formats[$dateFormat])) {
-            throw new SyntaxError(\sprintf('The date format "%s" does not exist. Known formats are: "%s"', $dateFormat, \implode('", "', \array_keys($formats))));
-        }
-        if (null !== $timeFormat && !isset($formats[$timeFormat])) {
-            throw new SyntaxError(\sprintf('The time format "%s" does not exist. Known formats are: "%s"', $timeFormat, \implode('", "', \array_keys($formats))));
-        }
-        if (null !== $calendar && !isset($calendars[$calendar])) {
-            throw new SyntaxError(\sprintf('The calendar "%s" does not exist. Known calendars are: "%s"', $calendar, \implode('", "', \array_keys($calendars))));
-        }
+        $this->checkDateFormat($dateFormat, $formats);
+        $this->checkTimeFormat($timeFormat, $formats);
+        $this->checkCalendar($calendar, $calendars);
 
         // get types and calendar
         $date_type = $dateFormat ? $formats[$dateFormat] : null;

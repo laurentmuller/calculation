@@ -122,19 +122,11 @@ class PivotTableFactory
             $table->addValue($value);
         }
 
-        // fields
-        if (null !== $keyField) {
-            $table->setKeyField($keyField);
-        }
-        if (null !== $dataField) {
-            $table->setDataField($dataField);
-        }
-        if ([] !== $columnFields) {
-            $table->setColumnFields($columnFields);
-        }
-        if ([] !== $rowFields) {
-            $table->setRowFields($rowFields);
-        }
+        // update fields
+        $this->updateKeyField($table, $keyField)
+            ->updateDataField($table, $dataField)
+            ->updateRowFields($table, $rowFields)
+            ->updateColumnFields($table, $columnFields);
 
         // titles
         $table->getColumn()->setTitle($this->buildFieldsTitle($columnFields));
@@ -208,11 +200,11 @@ class PivotTableFactory
     /**
      * Creates a new instance.
      *
-     * @template E of AbstractAggregator
+     * @psalm-template E of AbstractAggregator
      *
-     * @param class-string<E>|null $aggregatorClass
+     * @psalm-param class-string<E>|null $aggregatorClass
      *
-     * @return PivotTableFactory<E>
+     * @psalm-return PivotTableFactory<E>
      */
     public static function instance(array $dataset, ?string $title = null, ?string $aggregatorClass = null): self
     {
@@ -366,15 +358,13 @@ class PivotTableFactory
 
     /**
      * Creates an aggregator.
-     *
-     * @param mixed $value the initial value
      */
-    private function createAggregator(mixed $value = null): AbstractAggregator
+    private function createAggregator(): AbstractAggregator
     {
         /** @psalm-var class-string<AbstractAggregator> $class */
         $class = $this->aggregatorClass;
 
-        return new $class($value);
+        return new $class();
     }
 
     /**
@@ -401,5 +391,45 @@ class PivotTableFactory
         $node->addValue($value);
 
         return $node;
+    }
+
+    /**
+     * @psalm-param  PivotField[] $columnFields
+     */
+    private function updateColumnFields(PivotTable $table, array $columnFields): void
+    {
+        if ([] !== $columnFields) {
+            $table->setColumnFields($columnFields);
+        }
+    }
+
+    private function updateDataField(PivotTable $table, ?PivotField $dataField): static
+    {
+        if (null !== $dataField) {
+            $table->setDataField($dataField);
+        }
+
+        return $this;
+    }
+
+    private function updateKeyField(PivotTable $table, ?PivotField $keyField): static
+    {
+        if (null !== $keyField) {
+            $table->setKeyField($keyField);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param  PivotField[] $rowFields
+     */
+    private function updateRowFields(PivotTable $table, array $rowFields): static
+    {
+        if ([] !== $rowFields) {
+            $table->setRowFields($rowFields);
+        }
+
+        return $this;
     }
 }

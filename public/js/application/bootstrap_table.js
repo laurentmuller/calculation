@@ -396,8 +396,7 @@ function initializeDangerTooltips($table) {
     const selector = $table.data('danger-tooltip-selector');
     if (selector) {
         $table.parents('.bootstrap-table').tooltip({
-            customClass: 'tooltip-danger',
-            selector: selector
+            customClass: 'tooltip-danger', selector: selector
         });
     }
 }
@@ -410,12 +409,8 @@ function initializeCalculationStates() {
     $('.dropdown-state').each(function () {
         const $this = $(this);
         $('<span />', {
-            class: 'mr-1 border',
-            css: {
-                width: '1rem',
-                height: '0.75rem',
-                display: 'inline-block',
-                background: $this.data('color') || 'transparent'
+            class: 'mr-1 border', css: {
+                width: '1rem', height: '0.75rem', display: 'inline-block', background: $this.data('color') || 'transparent'
             }
         }).prependTo($this);
     });
@@ -471,81 +466,8 @@ function initializeLogLevels() {
     'use strict';
 
     $.fn.extend({
-        getDataValue: function () {
-            return $(this).data('value') || null;
-        },
-
-        setDataValue(value, $selection) {
-            const $this = $(this);
-            const copyText = $this.data('copyText');
-            const copyIcon = $this.data('copyIcon');
-            const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
-
-            // default values
-            let $icon = $this.find('i');
-            if ($icon.length === 0 && $this.data('icon')) {
-                $icon = $($this.data('icon'));
-            }
-            let text = $this.text().trim();
-
-            // select first item if no value
-            if (!value) {
-                $selection = $items.first();
-            }
-            $selection.addClass('active');
-
-            // icon
-            if (copyIcon) {
-                const $newIcon = $selection.find('i');
-                // const $newIcon = $selection.find(':first-child');
-                if ($newIcon.length) {
-                    $icon = $newIcon;
-                }
-            }
-
-            // text
-            if (copyText) {
-                if (value) {
-                    text = $selection.text().trim() || text;
-                } else {
-                    text = $this.data('default') || text;
-                }
-            }
-
-            // update
-            if ($icon.length) {
-                $this.text(' ' + text).prepend($icon.clone());
-            } else {
-                $this.text(text);
-            }
-            return $this.data('value', value);
-        },
-
-        initDropdown: function () {
-            const $this = $(this);
-            const copyText = $this.data('copyText') || true;
-            const copyIcon = $this.data('copyIcon') || false;
-            const $menu = $this.next('.dropdown-menu');
-            $this.data('copyText', copyText);
-            $this.data('copyIcon', copyIcon);
-            $menu.on('click', '.dropdown-item', function () {
-                const $item = $(this);
-                const newValue = $item.getDataValue();
-                const oldValue = $this.getDataValue();
-                if (newValue !== oldValue) {
-                    $this.setDataValue(newValue || '', $item).trigger('input');
-                }
-                $this.focus();
-            });
-            $this.parent().on('shown.bs.dropdown', function () {
-                $menu.find('.active').focus();
-            });
-            return $this;
-        },
-
         /**
          * Gets the context menu items for the selected cell.
-         *
          * @return {object} the context menu items.
          */
         getContextMenuItems: function () {
@@ -568,27 +490,34 @@ function initializeLogLevels() {
      * Ready function
      */
     const $table = $('#table-edit');
+    const $showPage = $('.btn-show-page');
     const $pageButton = $('#button_page');
     const $sortButton = $('#button_sort');
     const $clearButton = $('#clear_search');
     const $viewButtons = $('.dropdown-menu-view');
     const $searchMinimum = $('#search_minimum');
-    const $inputs = $('.dropdown-toggle.dropdown-input');
-    const $showPage = $('.btn-show-page');
+
+    // handle drop-down input buttons
+    const inputs = $('.dropdown-toggle.dropdown-input').dropdown().on('input', function () {
+        $table.refresh({
+            pageNumber: 1
+        });
+    }).map(function () {
+        return $(this).data($.DropDown.NAME);
+    });
 
     // initialize table
     const options = {
         draggableModal: {
-            marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0,
-            focusOnShow: true
+            marginBottom: $('footer:visible').length ? $('footer').outerHeight() : 0, focusOnShow: true
         },
 
         queryParams: function (params) {
-            $inputs.each(function () {
-                const $this = $(this);
-                const value = $this.getDataValue();
-                if (value) {
-                    params[$this.attr('id')] = value;
+            inputs.each(function () {
+                const id = this.getId();
+                const value = this.getValue();
+                if (id && value) {
+                    params[id] = value;
                 }
             });
             return params;
@@ -615,9 +544,7 @@ function initializeLogLevels() {
                     const pageSize = $.parseInt(options.pageSize);
                     const $links = pageList.map(function (page) {
                         const $link = $('<button/>', {
-                            'class': 'dropdown-page dropdown-item',
-                            'data-value': page,
-                            'text': page
+                            'class': 'dropdown-page dropdown-item', 'data-value': page, 'text': page
                         });
                         if (page === pageSize) {
                             $link.addClass('active');
@@ -639,9 +566,9 @@ function initializeLogLevels() {
             // update clear button
             if ($clearButton.length) {
                 let enabled = $table.isSearchText();
-                if (!enabled && $inputs.length) {
-                    $inputs.each(function () {
-                        if ($(this).getDataValue()) {
+                if (!enabled && inputs.length) {
+                    inputs.each(function () {
+                        if (this.getValue()) {
                             enabled = true;
                             return false;
                         }
@@ -696,8 +623,7 @@ function initializeLogLevels() {
             const $button = $item.find('a.btn-default');
             if ($link.length && $button.length) {
                 $link.attr({
-                    'href': $button.attr('href'),
-                    'title': $button.text()
+                    'href': $button.attr('href'), 'title': $button.text()
                 });
             }
         },
@@ -776,23 +702,14 @@ function initializeLogLevels() {
         });
     }
 
-    // handle drop-down input buttons
-    $inputs.each(function () {
-        $(this).initDropdown().on('input', function () {
-            $table.refresh({
-                pageNumber: 1
-            });
-        });
-    });
-
     // handle clear search button
     if ($clearButton.length) {
         $clearButton.on('click', function () {
             const isSearchText = $table.isSearchText();
             const isQueryParams = !$.isEmptyObject(options.queryParams({}));
-            // clear drop-down
-            $inputs.each(function () {
-                $(this).setDataValue(null);
+            // clear drop-downs
+            inputs.each(function () {
+                this.setValue(null);
             });
             if (isSearchText) {
                 $table.resetSearch();
@@ -805,10 +722,9 @@ function initializeLogLevels() {
 
     // handle the page button
     if ($pageButton.length) {
-        $pageButton.initDropdown().on('input', function () {
-            const pageSize = $pageButton.getDataValue();
+        $pageButton.dropdown().on('input', function (e, value) {
             $table.refresh({
-                pageSize: pageSize
+                pageSize: value
             });
         });
     }
@@ -816,7 +732,7 @@ function initializeLogLevels() {
     // handle view buttons
     $viewButtons.on('click', function () {
         $viewButtons.removeClass('dropdown-item-checked');
-        const view = $(this).addClass('dropdown-item-checked').getDataValue();
+        const view = $(this).addClass('dropdown-item-checked').data('value') || 'table';
         $('#button_other_actions').trigger('focus');
         $table.setDisplayMode(view);
     });

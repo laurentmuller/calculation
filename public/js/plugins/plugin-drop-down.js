@@ -9,8 +9,16 @@
     // -----------------------------------
     // DropDown public class definition
     // -----------------------------------
-    const DropDown = class {
 
+    /**
+     * Plugin name.
+     * @type {{NAME: string}}
+     */
+    $.DropDown = {
+        'NAME': 'bs.drop-down'
+    };
+
+    const DropDown = class {
         // -----------------------------
         // public functions
         // -----------------------------
@@ -35,15 +43,15 @@
                 this.$menu.off('shown.bs.dropdown', this.menuShowProxy);
                 this.$menu.off('click', '.dropdown-item', this.menuClickProxy);
             }
-            this.$element.removeData(DropDown.NAME);
+            this.$element.removeData($.DropDown.NAME);
         }
 
         /**
          * Sets the selected value.
          * @param {any} value - the selected value to set.
          */
-        setDataValue(value) {
-            if (this.getDataValue() !== value) {
+        setValue(value) {
+            if (this.getValue() !== value) {
                 this._updateValue(value || '', null);
             }
         }
@@ -52,7 +60,7 @@
          * Gets the selected value.
          * @return {any} the selected value.
          */
-        getDataValue() {
+        getValue() {
             return this.$element.data('value');
         }
 
@@ -90,7 +98,7 @@
         _menuItemClick(e) {
             e.preventDefault();
             const $item = $(e.currentTarget);
-            const oldValue = this.getDataValue() || '';
+            const oldValue = this.getValue() || '';
             const newValue = $item.data('value') || '';
             if (newValue !== oldValue) {
                 this._updateValue(newValue, $item);
@@ -146,7 +154,7 @@
             } else {
                 $element.text(text);
             }
-            $element.data('value', value).trigger('input', {'value': value});
+            $element.data('value', value).trigger('input', value);
         }
 
         /**
@@ -166,28 +174,23 @@
         copyIcon: false
     };
 
-    /**
-     * The plugin name.
-     */
-    DropDown.NAME = 'bs.drop-down';
-
     // -----------------------------------
-    // ColorPicker plugin definition
+    // DropDown plugin definition
     // -----------------------------------
     const oldDropDown = $.fn.dropdown;
     $.fn.dropdown = function (options) {
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data(DropDown.NAME)) {
+            if (!$this.data($.DropDown.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data(DropDown.NAME, new DropDown(this, settings));
+                $this.data($.DropDown.NAME, new DropDown(this, settings));
             }
         });
     };
     $.fn.dropdown.Constructor = DropDown;
 
     // -----------------------------------
-    // ColorPicker no conflict
+    // DropDown no conflict
     // -----------------------------------
     $.fn.dropdown.noConflict = function () {
         $.fn.dropdown = oldDropDown;

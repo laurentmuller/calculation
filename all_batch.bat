@@ -11,7 +11,7 @@ ECHO -------------------------------------- PHP-CS-FIXER -----------------------
 ECHO -------------------------------------- PHP-PSALM ----------------------------------------- && ^
 .\vendor-bin\psalm\vendor\bin\psalm.bat --no-progress src                                       && ^
 ECHO -------------------------------------- PHP-STAN ------------------------------------------ && ^
-.\vendor-bin\phpstan\vendor\bin\phpstan.bat analyse --no-progress --memory-limit=2G             && ^
+.\vendor-bin\phpstan\vendor\bin\phpstan.bat analyse --no-progress --xdebug --memory-limit=2G    && ^
 ECHO -------------------------------------- PHP-RECTOR ---------------------------------------- && ^
 .\vendor-bin\rector\vendor\bin\rector.bat process --dry-run                                     && ^
 ECHO -------------------------------------- PHP-TWIG-CS --------------------------------------- && ^

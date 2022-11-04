@@ -11,6 +11,14 @@
     // ------------------------------------------
 
     /**
+     * Plugin name.
+     * @type {{NAME: string}}
+     */
+    $.BoostrapTreeView = {
+        'NAME': 'bs.tree-view'
+    };
+
+    /**
      * @typedef Node
      * @type {object}
      * @property {string} [id] the optional node identifier.
@@ -48,7 +56,7 @@
          */
         destroy() {
             this._removeProxies();
-            this.$element.removeData(BoostrapTreeView.NAME);
+            this.$element.removeData($.BoostrapTreeView.NAME);
         }
 
         /**
@@ -623,11 +631,6 @@
         }
     };
 
-    /**
-     * The plugin name.
-     */
-    BoostrapTreeView.NAME = 'bs.tree-view';
-
     // -----------------------------------
     // BoostrapTreeView plugin definition
     // -----------------------------------
@@ -635,9 +638,9 @@
     $.fn.boostrapTreeView = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data(BoostrapTreeView.NAME)) {
+            if (!$this.data($.BoostrapTreeView.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data(BoostrapTreeView.NAME, new BoostrapTreeView(this, settings));
+                $this.data($.BoostrapTreeView.NAME, new BoostrapTreeView(this, settings));
             }
         });
     };

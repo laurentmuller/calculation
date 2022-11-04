@@ -42,6 +42,8 @@ class GeneratorController extends AbstractController
 
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[Route(path: '', name: 'generate')]
     public function generate(): Response

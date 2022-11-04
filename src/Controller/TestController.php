@@ -283,13 +283,10 @@ class TestController extends AbstractController
             'message' => 'My message',
         ];
         $helper = $this->createFormHelper('user.fields.', $data);
-        $helper->getBuilder()->setAttribute('block_name', '');
-        $helper->field('subject')
-            ->addTextType();
-        $helper->field('message')
-            ->addTextType();
-        $helper->field('recaptcha')
-            ->addHiddenType();
+        $helper->field('subject')->addTextType()
+            ->field('message')->addTextType()
+            ->field('recaptcha')->addHiddenType()
+            ->getBuilder()->setAttribute('block_name', '');
 
         // render
         $form = $helper->createForm();
@@ -299,15 +296,11 @@ class TestController extends AbstractController
 
             // OK?
             if ($result->isSuccess()) {
-                /** @psalm-var array<string, mixed> $values */
+                /** @psalm-var array<string, string[]|string> $values */
                 $values = $result->toArray();
+                $values = \array_filter($values);
                 $html = '<table class="table table-borderless table-sm mb-0">';
-
-                /** @psalm-var string[]|string|null $value */
                 foreach ($values as $key => $value) {
-                    if (empty($value)) {
-                        continue;
-                    }
                     if (\is_array($value)) {
                         $value = \implode('<br>', $value);
                     } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
@@ -321,13 +314,10 @@ class TestController extends AbstractController
                 return $this->redirectToHomePage();
             }
 
-            // add errors
-            $errorCodes = \array_map(fn (mixed $code): string => $this->trans("recaptcha.$code", [], 'validators'), $result->getErrorCodes());
-            if (empty($errorCodes)) {
-                $errorCodes[] = $this->trans('recaptcha.unknown-error', [], 'validators');
-            }
-            foreach ($errorCodes as $code) {
-                $form->addError(new FormError($code));
+            // translate and add errors
+            $errors = $service->translateErrors($result->getErrorCodes());
+            foreach ($errors as $error) {
+                $form->addError(new FormError($error));
             }
         }
 

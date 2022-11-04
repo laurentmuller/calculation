@@ -9,6 +9,15 @@
     // ------------------------------------
     // CellEdit public class definition
     // ------------------------------------
+
+    /**
+     * Plugin name.
+     * @type {{NAME: string}}
+     */
+    $.CellEdit = {
+        'NAME': 'bs.cell-edit'
+    };
+
     const CellEdit = class {
 
         // -----------------------------
@@ -35,7 +44,7 @@
                 this._cancel(null, false);
             }
             this.$element.off('click', this.clickProxy)
-                .removeData(CellEdit.NAME);
+                .removeData($.CellEdit.NAME);
         }
 
         /**
@@ -290,11 +299,6 @@
         'onCancelEdit': null,
     };
 
-    /**
-     * The plugin name.
-     */
-    CellEdit.NAME = 'cell-edit';
-
     // -------------------------------
     // CellEdit plugin definition
     // -------------------------------
@@ -302,9 +306,9 @@
     $.fn.celledit = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data(CellEdit.NAME)) {
+            if (!$this.data($.CellEdit.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data(CellEdit.NAME, new CellEdit(this, settings));
+                $this.data($.CellEdit.NAME, new CellEdit(this, settings));
             }
         });
     };

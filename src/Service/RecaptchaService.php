@@ -12,16 +12,20 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\TranslatorTrait;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to validate a reCaptcha.
  */
 class RecaptchaService
 {
+    use TranslatorTrait;
+
     private string $action = 'login';
     private float $scoreThreshold = 0.5;
     private int $timeoutSeconds = 60;
@@ -32,7 +36,8 @@ class RecaptchaService
         #[Autowire('%google_recaptcha_secret_key%')]
         private readonly string $secretKey,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $debug
+        private readonly bool $debug,
+        private readonly TranslatorInterface $translator
     ) {
     }
 
@@ -49,6 +54,11 @@ class RecaptchaService
     public function getSiteKey(): string
     {
         return $this->siteKey;
+    }
+
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     public function setAction(string $action): self
@@ -70,6 +80,19 @@ class RecaptchaService
         $this->timeoutSeconds = $timeoutSeconds;
 
         return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function translateErrors(array $codes): array
+    {
+        $errors = \array_map(fn (mixed $code): string => $this->trans("recaptcha.$code", [], 'validators'), $codes);
+        if (empty($errors)) {
+            $errors[] = $this->trans('recaptcha.unknown-error', [], 'validators');
+        }
+
+        return $errors;
     }
 
     public function verify(Request $request, string $response): Response

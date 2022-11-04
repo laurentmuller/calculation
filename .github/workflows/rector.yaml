@@ -25,7 +25,7 @@ jobs:
       - name: Cache dependencies installed with composer
         uses: actions/cache@v3
         with:
-          path: ${{ steps.composer-cache.outputs.directory }}
+          path: ${{ steps.composer-cache.outputs }}
           key: composer-${{ runner.os }}-${{ hashFiles('composer.*') }}
           restore-keys: composer-${{ runner.os }}-composer-
 

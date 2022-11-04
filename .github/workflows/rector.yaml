@@ -20,11 +20,7 @@ jobs:
 
       - name: Determine composer cache directory
         id: composer-cache
-        # run: echo "::set-output name={name}::{value}"
-        # run: echo "{name}={value}" >> $GITHUB_OUTPUT
-
-        # run: echo "::set-output name=directory::$(composer config cache-dir)"
-        run: echo "name=directory::$(composer config cache-dir)" >> $GITHUB_ENV
+        run: echo "name=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies installed with composer
         uses: actions/cache@v3

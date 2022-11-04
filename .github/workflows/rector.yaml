@@ -20,12 +20,12 @@ jobs:
 
       - name: Determine composer cache directory
         id: composer-cache
-        run: echo "name=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+        run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies installed with composer
         uses: actions/cache@v3
         with:
-          path: ${{ steps.composer-cache.outputs }}
+          path: ${{ steps.composer-cache.outputs.directory }}
           key: composer-${{ runner.os }}-${{ hashFiles('composer.*') }}
           restore-keys: composer-${{ runner.os }}-composer-
 

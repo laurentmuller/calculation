@@ -49,7 +49,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @param string $alias the entity alias
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -92,7 +92,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $builder->where($like)
                 ->setParameter($param, "%$value%");
         } else {
-            /** @phpstan-var literal-string $where */
+            /** @psalm-var literal-string $where */
             $where = $expr->isNotNull($name);
             $builder->where($where);
         }
@@ -148,7 +148,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     public function getSearchQuery(array $sortedFields = [], array $criteria = [], string $alias = self::DEFAULT_ALIAS): Query
     {

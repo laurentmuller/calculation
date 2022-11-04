@@ -89,7 +89,7 @@ abstract class AbstractEntityTable extends AbstractTable
      *
      * @param string $alias the entity alias
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {

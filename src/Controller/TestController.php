@@ -48,7 +48,6 @@ use App\Validator\Password;
 use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -76,24 +75,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class TestController extends AbstractController
 {
     use StrengthLevelTranslatorTrait;
-
-    /**
-     * Show analog clock.
-     */
-    #[Route(path: '/clock', name: 'test_clock')]
-    public function clock(Request $request): Response
-    {
-        $session = $request->getSession();
-        $dark = (bool) $session->get('clock_dark', false);
-        if ($request->request->has('dark')) {
-            $dark = \filter_var($request->request->get('dark', $dark), \FILTER_VALIDATE_BOOLEAN);
-            $session->set('clock_dark', $dark);
-
-            return $this->jsonTrue(['dark' => $dark]);
-        }
-
-        return $this->renderForm('test/clock.html.twig', ['dark' => $dark]);
-    }
 
     /**
      * Test sending notification mail.

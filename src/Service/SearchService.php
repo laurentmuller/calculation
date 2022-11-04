@@ -369,9 +369,9 @@ class SearchService implements ServiceSubscriberInterface
     {
         $name = Utils::getShortName($class);
         $content ??= "e.$field";
-        /** @phpstan-var literal-string $from */
+        /** @psalm-var literal-string $from */
         $from = $class;
-        /** @phpstan-var literal-string $where */
+        /** @psalm-var literal-string $where */
         $where = "$content LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()

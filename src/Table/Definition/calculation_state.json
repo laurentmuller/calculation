@@ -32,14 +32,6 @@
         "fieldFormatter": "formatCalculations"
     },
     {
-        "field": "id",
-        "alias": "action",
-        "sortable": false,
-        "searchable": false,
-        "class": "actions rowlink-skip d-print-none",
-        "cellFormatter": "formatActions"
-    },
-    {
         "field": "color",
         "visible": false
     },

@@ -203,6 +203,8 @@ class CategoryController extends AbstractEntityController
     /**
      * {@inheritdoc}
      *
+     * @psalm-param Category $item
+     *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */

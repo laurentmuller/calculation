@@ -114,7 +114,6 @@
     // Rowlink plugin definition
     // ------------------------------------
     const oldRowlink = $.fn.rowlink;
-
     $.fn.rowlink = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
@@ -124,7 +123,6 @@
             }
         });
     };
-
     $.fn.rowlink.Constructor = Rowlink;
 
     // ------------------------------------

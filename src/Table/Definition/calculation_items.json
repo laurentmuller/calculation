@@ -42,14 +42,6 @@
         "fieldFormatter": "formatItems"
     },
     {
-        "field": "id",
-        "alias": "action",
-        "sortable": false,
-        "searchable": false,
-        "class": "actions rowlink-skip d-print-none",
-        "cellFormatter": "formatActions"
-    },
-    {
         "field": "stateColor",
         "alias": "color",
         "visible": false

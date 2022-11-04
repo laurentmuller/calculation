@@ -1,27 +1,31 @@
 {% extends 'cards/card_table.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon %}
+{% from 'macros/_icons.html.twig' import icon, link %}
 {# parameters #}
 {%- set title = 'category.list.title' -%}
 {%- set title_icon = ICON_CATEGORY -%}
-{%- set groupid = customData.group.id|default(0) -%}
 {%- set object_type = ENTITY_CATEGORY -%}
+{%- set group_id = customData.group.id|default(0) -%}
+{%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
+{%- set category_param = constant('App\\Table\\AbstractCategoryItemTable::PARAM_CATEGORY') -%}
 
 {% block header_actions -%}
-{% if allow_add %}<a class="add-link p-0" href="{{ path('category_add', params) }}">{{ 'category.add.title'|trans }}</a>{% endif %}
+{% if allow_add %}
+    {{ link(path('category_add', params), 'category.add.title', 'add-link p-0') }}
+{% endif %}
 {%- endblock %}
 
 {% block toolbar_actions -%}
 {% if customData.groups|length > 1 %}
 <div class="input-group-append">
-    <button id="groupid" data-value="{{ groupid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
+    <button id="{{ group_param }}" data-value="{{ group_id }}" data-copy-icon="true" data-default-icon="{{ icon(ICON_GROUP)|e }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-icon="{{ icon(ICON_GROUP)|e }}" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
         {{ icon(ICON_GROUP) }}&nbsp;{{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
     </button>
     {% set group = '' %}
-    <div class="dropdown-menu" aria-labelledby="groupid">
-        {{ _self.output_dropdown('group', 0, groupid, 'category.list.group_all_text'|trans) }}
+    <div class="dropdown-menu" aria-labelledby="{{ group_param }}">
+        {{ _self.output_dropdown('group', 0, group_id, 'category.list.group_all_text'|trans) }}
         {{ _self.item_separator() }}
         {% for group in customData.groups %}
-        {{ _self.output_dropdown('group', group.id, groupid, group.code) }}
+        {{ _self.output_dropdown('group', group.id, group_id, group.code) }}
         {% endfor %}
     </div>
 </div>
@@ -53,10 +57,10 @@
 {% block other_actions -%}
 {{- _self.item_separator() }}
 {% if is_granted_product %}
-    {{- _self.item_path(path('product_table', {'categoryid': 'id'}), 'category.list.product_title', ICON_PRODUCT, 'btn-show-product') }}
+    {{- _self.item_path(path('product_table', {category_param: 'id'}), 'category.list.product_title', ICON_PRODUCT, 'btn-show-product') }}
 {% endif %}
 {% if is_granted_task %}
-    {{- _self.item_path(path('task_table', {'categoryid': 'id'}), 'category.list.task_title', ICON_TASK, 'btn-show-task') }}
+    {{- _self.item_path(path('task_table', {category_param: 'id'}), 'category.list.task_title', ICON_TASK, 'btn-show-task') }}
 {% endif %}
 {%- endblock %}
 

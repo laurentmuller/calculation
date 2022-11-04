@@ -1,4 +1,5 @@
 {% extends 'cards/card_table.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'user.list.title' -%}
 {%- set title_icon = ICON_USER -%}
@@ -6,7 +7,9 @@
 {%- set attributes = attributes|default({})|merge({'user-id': app.user.id}) -%}
 
 {% block header_actions -%}
-{% if allow_add %}<a class="add-link p-0" href="{{ path('user_add', params) }}">{{ 'user.add.title'|trans }}</a>{% endif %}
+{% if allow_add %}
+    {{ link(path('user_add', params), 'user.add.title', 'add-link p-0') }}
+{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}
@@ -38,13 +41,17 @@
 
 {% block other_actions -%}
 {% if allow_edit %}
-    {% if allow_edit or allow_delete or allow_add or allow_show %}{{- _self.item_separator() }}{% endif %}
+    {% if allow_edit or allow_delete or allow_add or allow_show %}
+        {{- _self.item_separator('user-message-divider') }}
+    {% endif %}
     {{- _self.item_path(path('user_message', params), 'user.message.title', 'envelope far', 'btn-user-message') }}
-    {{- _self.item_separator() }}
+    {{- _self.item_separator('user-reset-divider') }}
     {{- _self.item_path(path('user_reset', params), 'user.reset.title', 'eraser', 'btn-user-reset') }}
 {% endif %}
 {%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_ADMIN') -%}
-    {% if allow_edit or allow_delete or allow_add or allow_show %}{{- _self.item_separator() }}{% endif %}
+    {% if allow_edit or allow_delete or allow_add or allow_show %}
+        {{- _self.item_separator('user-switch-divider') }}
+    {% endif %}
     {{- _self.item_path(path('homepage', {'_switch_user': 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
 {%- endblock %}

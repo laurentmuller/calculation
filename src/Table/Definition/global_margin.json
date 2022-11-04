@@ -27,13 +27,5 @@
         "fieldFormatter": "formatPercent",
         "class": "text-currency w-30",
         "numeric": true
-    },
-    {
-        "field": "id",
-        "alias": "action",
-        "sortable": false,
-        "searchable": false,
-        "class": "actions rowlink-skip d-print-none",
-        "cellFormatter": "formatActions"
     }
 ]

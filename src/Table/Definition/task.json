@@ -37,13 +37,5 @@
         "searchable": false,
         "class": "text-operation",
         "fieldFormatter": "formatCountable"
-    },
-    {
-        "field": "id",
-        "alias": "action",
-        "sortable": false,
-        "searchable": false,
-        "class": "actions rowlink-skip d-print-none",
-        "cellFormatter": "formatActions"
     }
 ]

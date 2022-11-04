@@ -168,7 +168,6 @@
     // InputNumberFormat plugin definition
     // ------------------------------------
     const oldInputNumberFormat = $.fn.inputNumberFormat;
-
     $.fn.inputNumberFormat = function (options) {
         return this.each(function () {
             const $this = $(this);
@@ -178,7 +177,6 @@
             }
         });
     };
-
     $.fn.inputNumberFormat.Constructor = InputNumberFormat;
 
     // ------------------------------------

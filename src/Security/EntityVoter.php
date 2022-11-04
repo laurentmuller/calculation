@@ -74,14 +74,8 @@ class EntityVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        // check user
-        $user = $token->getUser();
-        if (!$user instanceof User) {
-            return false;
-        }
-
-        // enabled?
-        if (!$user->isEnabled()) {
+        // get user
+        if (null === $user = $this->getUser($token)) {
             return false;
         }
 
@@ -91,8 +85,7 @@ class EntityVoter extends Voter
         }
 
         // find entity
-        $name = EntityName::tryFindValue($subject);
-        if (null === $name) {
+        if (null === $name = EntityName::tryFindValue($subject)) {
             return false;
         }
 
@@ -102,30 +95,50 @@ class EntityVoter extends Voter
         }
 
         // get offset
-        $offset = EntityName::tryFindOffset($name);
-        if (RoleBuilder::INVALID_VALUE === $offset) {
+        if (RoleBuilder::INVALID_VALUE === $offset = EntityName::tryFindOffset($name)) {
             return false;
         }
 
         // get mask
-        $mask = EntityPermission::tryFindValue($attribute);
-        if (RoleBuilder::INVALID_VALUE === $mask) {
+        if (RoleBuilder::INVALID_VALUE === $mask = EntityPermission::tryFindValue($attribute)) {
             return false;
         }
 
         // get rights
-        if ($user->isOverwrite()) {
-            $rights = $user->getRights();
-        } elseif ($user->isAdmin()) {
-            $rights = $this->service->getAdminRights();
-        } else {
-            $rights = $this->service->getUserRights();
-        }
+        $rights = $this->getRights($user);
 
         // get value
         $value = $rights[$offset];
 
         // check rights
         return $this->isBitSet($value, $mask);
+    }
+
+    /**
+     * @psalm-return int[]
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function getRights(User $user): array
+    {
+        if ($user->isOverwrite()) {
+            return $user->getRights();
+        }
+        if ($user->isAdmin()) {
+            return $this->service->getAdminRights();
+        }
+
+        return $this->service->getUserRights();
+    }
+
+    private function getUser(TokenInterface $token): ?User
+    {
+        // check user
+        $user = $token->getUser();
+        if (!$user instanceof User || !$user->isEnabled()) {
+            return null;
+        }
+
+        return $user;
     }
 }

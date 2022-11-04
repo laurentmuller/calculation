@@ -1,11 +1,15 @@
 {% extends 'cards/card_table.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'group.list.title' -%}
 {%- set title_icon = ICON_GROUP -%}
 {%- set object_type = ENTITY_GROUP -%}
+{%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
 
 {% block header_actions -%}
-{% if allow_add %}<a class="add-link p-0" href="{{ path('group_add', params) }}">{{ 'group.add.title'|trans }}</a>{% endif %}
+{% if allow_add %}
+    {{ link(path('group_add', params), 'group.add.title', 'add-link p-0') }}
+{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}
@@ -33,7 +37,7 @@
 {% block other_actions -%}
 {% if is_granted_category %}
     {{- _self.item_separator() }}
-    {{- _self.item_path(path('category_table', {'groupid': 'id'}), 'group.list.category_title', ICON_CATEGORY, 'btn-show-category') }}
+    {{- _self.item_path(path('category_table', {group_param: 'id'}), 'group.list.category_title', ICON_CATEGORY, 'btn-show-category') }}
 {% endif %}
 {%- endblock %}
 

@@ -120,11 +120,11 @@
          * @private
          */
         _bodyMouseMove(e) {
-            const left = Math.max(this.margin, Math.min(this.right, e.pageX - this.startX));
-            const top = Math.max(this.margin, Math.min(this.bottom, e.pageY - this.startY));
+            const offsetX = Math.max(this.margin, Math.min(this.right, e.pageX - this.startX));
+            const offsetY = Math.max(this.margin, Math.min(this.bottom, e.pageY - this.startY));
             this.$dialog.offset({
-                left: left,
-                top: top
+                left: offsetX,
+                top: offsetY
             });
         }
 
@@ -149,6 +149,12 @@
          * @private
          */
         _elementShow() {
+            if (this.options.savePosition && this.positionX && this.positionY) {
+                this.$dialog.css({
+                    left: this.positionX,
+                    top: this.positionY
+                });
+            }
             if (!this.options.focusOnShow) {
                 this.$focused = $(':focus');
             }
@@ -169,6 +175,10 @@
          * @private
          */
         _elementHide() {
+            if (this.options.savePosition) {
+                this.positionX = this.$dialog.css('left');
+                this.positionY = this.$dialog.css('top');
+            }
             this.$body.off('mousemove.drag.body', this.bodyMouseMoveProxy)
                 .off('mouseup.drag.body', this.bodyMouseUpProxy);
         }
@@ -202,7 +212,8 @@
     DraggableModal.DEFAULTS = {
         marginBottom: 0,
         focusOnShow: false,
-        className: 'bg-primary text-white',
+        savePosition: false,
+        className: 'bg-primary text-white'
     };
 
     /**
@@ -214,7 +225,6 @@
     // sidebar plugin definition
     // -----------------------------
     const oldDraggableModal = $.fn.draggableModal;
-
     $.fn.draggableModal = function (options) {
         return this.each(function () {
             const $this = $(this);
@@ -224,14 +234,13 @@
             }
         });
     };
-
     $.fn.draggableModal.Constructor = DraggableModal;
 
     // ------------------------------------
     // sidebar no conflict
     // ------------------------------------
     $.fn.draggableModal.noConflict = function () {
-        $.fn.sidebar = oldDraggableModal;
+        $.fn.draggableModal = oldDraggableModal;
         return this;
     };
 }(jQuery));

@@ -33,6 +33,7 @@
         destroy() {
             this.$dropdown.before(this.$dropdown).remove();
             this.$element.removeClass('d-none').removeData(ColorPicker.NAME);
+            this.$element.off('input', () => this._onElementInput());
         }
 
         // -----------------------------
@@ -60,9 +61,7 @@
             that._createDropDown();
 
             // add handler
-            $element.on('input', function () {
-                that._onElementInput();
-            });
+            $element.on('input', () => that._onElementInput());
             that._updateUI();
 
             // focus
@@ -577,7 +576,6 @@
     // ColorPicker plugin definition
     // -----------------------------------
     const oldColorPicker = $.fn.colorpicker;
-
     $.fn.colorpicker = function (options) {
         return this.each(function () {
             const $this = $(this);
@@ -587,7 +585,6 @@
             }
         });
     };
-
     $.fn.colorpicker.Constructor = ColorPicker;
 
     // -----------------------------------

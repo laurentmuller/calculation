@@ -365,7 +365,6 @@
     // PasswordStrength plugin definition
     // -----------------------------------
     const oldPasswordStrength = $.fn.passwordStrength;
-
     $.fn.passwordStrength = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
@@ -375,7 +374,6 @@
             }
         });
     };
-
     $.fn.passwordStrength.Constructor = PasswordStrength;
 
     // ------------------------------------

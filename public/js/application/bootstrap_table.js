@@ -15,7 +15,7 @@ function customViewFormatter(data) {
     const $template = $('#custom-view');
     const rowIndex = $table.getSelectionIndex();
     const rowClass = $table.getOptions().rowClass;
-    const undefinedText = $table.data('undefined-text') || '&#160;';
+    const undefinedText = $table.data('undefined-text') || '&#8203;';
     const content = data.reduce(function (carry, row, index) {
         // update class selection
         $template.find('.custom-item').toggleClass(rowClass, rowIndex === index);
@@ -53,10 +53,7 @@ function customViewFormatter(data) {
  */
 function formatProductUnit(row) {
     'use strict';
-    if (row.unit) {
-        return ' / ' + row.unit;
-    }
-    return '';
+    return row.unit ? ' / ' + row.unit : '';
 }
 
 /**
@@ -101,8 +98,7 @@ function styleBorderColor(_value, row) {
  */
 function styleProductPrice(value) {
     'use strict';
-    const price = $.parseFloat(value);
-    if (price === 0) {
+    if ($.parseFloat(value) === 0) {
         return {
             css: {
                 color: 'var(--danger)'
@@ -122,10 +118,9 @@ function styleProductPrice(value) {
  */
 function styleTextMuted(row, index) {
     'use strict';
-    const value = $.parseInt(row.textMuted);
-    if (!Number.isNaN(value) && value === 0) {
+    if ($.parseInt(row.textMuted) === 0) {
         const $row = $('#table-edit tbody tr:eq(' + index + ')');
-        const classes = $row.attr('class') + ' text-muted';
+        const classes = ($row.attr('class') || '') + ' text-muted';
         return {
             classes: classes.trim()
         };
@@ -144,7 +139,7 @@ function isConnectedUser($table, row) {
     'use strict';
     const currentId = $.parseInt(row.id);
     const connectedId = $.parseInt($table.data('user-id'));
-    return Number.isNaN(currentId) || Number.isNaN(connectedId) || currentId === connectedId;
+    return currentId === connectedId;
 }
 
 /**
@@ -172,7 +167,7 @@ function isOrignalUser($table, row) {
 function updateUserMessageAction($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row)) {
-        $action.prev('.dropdown-divider').remove();
+        $action.prev('.user-message-divider').remove();
         $action.remove();
     }
 }
@@ -188,7 +183,7 @@ function updateUserMessageAction($table, row, _$element, $action) {
 function updateUserDeleteAction($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row) || isOrignalUser($table, row)) {
-        $action.prev('.dropdown-divider').remove();
+        $action.prev('.delete-divider').remove();
         $action.remove();
     }
 }
@@ -204,7 +199,7 @@ function updateUserDeleteAction($table, row, _$element, $action) {
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row)) {
-        $action.prev('.dropdown-divider').remove();
+        $action.prev('.user-switch-divider').remove();
         $action.remove();
     } else {
         const source = $action.attr('href').split('?')[0];
@@ -227,9 +222,8 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  */
 function updateUserResetAction($table, row, _$element, $action) {
     'use strict';
-    const value = $.parseInt(row.resetPassword);
-    if (value === 0) {
-        $action.prev('.dropdown-divider').remove();
+    if ($.parseInt(row.resetPassword) === 0) {
+        $action.prev('.user-reset-divider').remove();
         $action.remove();
     }
 }
@@ -315,9 +309,8 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
-    const items = $.parseInt(row.items);
-    if (items === 0) {
-        $action.prev('.dropdown-divider').remove();
+    if ($.parseInt(row.items) === 0) {
+        $action.prev('.task-compute-divider').remove();
         $action.remove();
     }
 }
@@ -339,7 +332,6 @@ function updateShowEntityAction(row, $action, propertyName) {
             return;
         }
     }
-    // $action.prev('.dropdown-divider').remove();
     $action.remove();
 }
 
@@ -483,39 +475,44 @@ function initializeLogLevels() {
             return $(this).data('value') || null;
         },
 
-        setDataValue(value, $selection, copyText, copyIcon) {
+        setDataValue(value, $selection) {
             const $this = $(this);
+            const copyText = $this.data('copyText');
+            const copyIcon = $this.data('copyIcon');
             const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
-            if ($.isUndefined(copyText) || copyText === null) {
-                copyText = true;
+
+            // default values
+            let $icon = $this.find('i');
+            if ($icon.length === 0 && $this.data('icon')) {
+                $icon = $($this.data('icon'));
             }
-            if ($.isUndefined(copyIcon) || copyIcon === null) {
-                copyIcon = false;
+            let text = $this.text().trim();
+
+            // select first item if no value
+            if (!value) {
+                $selection = $items.first();
+            }
+            $selection.addClass('active');
+
+            // icon
+            if (copyIcon) {
+                const $newIcon = $selection.find('i');
+                // const $newIcon = $selection.find(':first-child');
+                if ($newIcon.length) {
+                    $icon = $newIcon;
+                }
             }
 
-            let $icon = $this.find('i');
-            let text = $this.text().trim();
-            if (value) {
-                $selection.addClass('active');
-                if (copyIcon) {
-                    // const $newIcon = $selection.find(':first-child');
-                    const $newIcon = $selection.find('i');
-                    $icon = $newIcon.length ? $newIcon : $icon;
-                }
-                if (copyText) {
+            // text
+            if (copyText) {
+                if (value) {
                     text = $selection.text().trim() || text;
-                }
-            } else {
-                const $first = $items.first().addClass('active');
-                text = $first.text().trim();
-                $icon = $first.find('i');
-                if (copyIcon) {
-                    $icon = $this.data('icon') || $icon;
-                }
-                if (copyText) {
+                } else {
                     text = $this.data('default') || text;
                 }
             }
+
+            // update
             if ($icon.length) {
                 $this.text(' ' + text).prepend($icon.clone());
             } else {
@@ -524,21 +521,19 @@ function initializeLogLevels() {
             return $this.data('value', value);
         },
 
-        initDropdown: function (copyText, copyIcon) {
+        initDropdown: function () {
             const $this = $(this);
+            const copyText = $this.data('copyText') || true;
+            const copyIcon = $this.data('copyIcon') || false;
             const $menu = $this.next('.dropdown-menu');
-            if ($.isUndefined(copyText) || copyText === null) {
-                copyText = true;
-            }
-            if ($.isUndefined(copyIcon) || copyIcon === null) {
-                copyIcon = false;
-            }
+            $this.data('copyText', copyText);
+            $this.data('copyIcon', copyIcon);
             $menu.on('click', '.dropdown-item', function () {
                 const $item = $(this);
                 const newValue = $item.getDataValue();
                 const oldValue = $this.getDataValue();
                 if (newValue !== oldValue) {
-                    $this.setDataValue(newValue || '', $item, copyText, copyIcon).trigger('input');
+                    $this.setDataValue(newValue || '', $item).trigger('input');
                 }
                 $this.focus();
             });
@@ -568,13 +563,10 @@ function initializeLogLevels() {
             return builder.fill($elements).getItems();
         }
     });
-}(jQuery));
 
-/**
- * Ready function
- */
-(function ($) {
-    'use strict';
+    /**
+     * Ready function
+     */
     const $table = $('#table-edit');
     const $pageButton = $('#button_page');
     const $sortButton = $('#button_sort');
@@ -620,7 +612,6 @@ function initializeLogLevels() {
                 if (pageList.length <= 1) {
                     $pageButton.toggleDisabled(true);
                 } else {
-                    // window.console.log($table.getOptions().en.formatAllRows());
                     const pageSize = $.parseInt(options.pageSize);
                     const $links = pageList.map(function (page) {
                         const $link = $('<button/>', {
@@ -643,7 +634,6 @@ function initializeLogLevels() {
             if ($showPage.length) {
                 const length = $('.fixed-table-pagination .page-first-separator,.fixed-table-pagination .page-last-separator').length;
                 $showPage.toggleClass('d-none', length === 0);
-                // $showPage.toggleDisabled(length === 0);
             }
 
             // update clear button
@@ -675,10 +665,6 @@ function initializeLogLevels() {
             if ($searchMinimum.length) {
                 $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
-
-            // update sort
-            // $('.dropdown-menu-sort.active').removeClass('active');
-            // $('.dropdown-menu-sort[data-sort="' + options.sortName + '"][data-order="' + options.sortOrder + '"]').addClass('active');
         },
 
         onPageChange: function () {
@@ -722,14 +708,6 @@ function initializeLogLevels() {
                 const $cell = $item.find('td:first');
                 const style = 'border-left-color: ' + row.color + ' !important';
                 $cell.addClass('text-border').attr('style', style);
-            }
-
-            // text-muted
-            if (typeof row.textMuted !== 'undefined') {
-                const value = $.parseInt(row.textMuted);
-                if (value === 0) {
-                    $item.find('.card-view-value.font-weight-bold').addClass('text-body');
-                }
             }
         },
 
@@ -800,9 +778,7 @@ function initializeLogLevels() {
 
     // handle drop-down input buttons
     $inputs.each(function () {
-        const copyText = $(this).data('copy-text') || true;
-        const copyIcon = $(this).data('copy-icon') || false;
-        $(this).initDropdown(copyText, copyIcon).on('input', function () {
+        $(this).initDropdown().on('input', function () {
             $table.refresh({
                 pageNumber: 1
             });
@@ -841,7 +817,7 @@ function initializeLogLevels() {
     $viewButtons.on('click', function () {
         $viewButtons.removeClass('dropdown-item-checked');
         const view = $(this).addClass('dropdown-item-checked').getDataValue();
-        $('#button_other_actions').trigger('focus');//focus();
+        $('#button_other_actions').trigger('focus');
         $table.setDisplayMode(view);
     });
 

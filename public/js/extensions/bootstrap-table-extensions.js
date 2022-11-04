@@ -37,7 +37,7 @@
  * @param {string} message - the loading message.
  * @returns {string} the loading template.
  */
-function loadingTemplate(message) { 
+function loadingTemplate(message) {
     'use strict';
     return `<div class="alert alert-info text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
 }
@@ -211,7 +211,6 @@ function loadingTemplate(message) {
                         const params = $this.getParameters();
                         const selector = '.custom-view-actions:eq(%index%)';
                         const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
-
                         $this.find('tbody tr .actions').each(function (index, element) {
                             // copy actions
                             const $rowActions = $(element).children();
@@ -549,12 +548,14 @@ function loadingTemplate(message) {
                         $row.updateRow($this);
                     });
                     $views.find('.card-view:last').remove();
+                } else {
+                    $row.attr('colspan', 2);
                 }
 
-                // update class
-                $views.find('.card-view-value').each(function (index, element) {
+                // update classes
+                $views.find('.card-view').each(function (index, element) {
                     if (columns[index].cardClass) {
-                        $(element).addClass(columns[index].cardClass);
+                        $(element).find('.card-view-value').addClass(columns[index].cardClass);
                     }
                 });
 

@@ -227,7 +227,6 @@
     // TableEditor plugin definition
     // -----------------------------------
     const oldTableEditor = $.fn.tableEditor;
-
     $.fn.tableEditor = function (options) {
         return this.each(function () {
             const $this = $(this);

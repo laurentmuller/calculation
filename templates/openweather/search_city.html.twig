@@ -31,14 +31,14 @@
             {%- set current = city.current -%}
             <tr>
                 <td class="text-unit">
-                    <img src="{{ current.weather.icon_small }}" class="ow-image ow-image-search" alt="Current Weather" title="{{ current.weather.description }}">
+                    <img src="{{ current.weather.icon_small }}" class="ow-image ow-image-search" alt="{{ 'openweather.fields.current'|trans }}" title="{{ current.weather.description }}">
                 </td>
                 <td class="w-75">
                     <a href="{{ path('openweather_current', {'id': city.id, 'units': units, 'count': count}) }}"><b>{{ city.name }}</b></a><br>
-                    <span class="small" title="{{ 'openweather.fields.temp'|trans }}">{{ value_temp(current.main.temp, city.units.temperature) }}</span></span class="small">, {{ current.weather.description }}</span>
+                    <span class="small" title="{{ 'openweather.fields.temp'|trans }}">{{ value_temp(current.main.temp, city.units.temperature) }}</span><span class="small">, {{ current.weather.description }}</span>
                 </td>
                 <td class="w-25">
-                    {{- city.country_name }} <img src="{{ city.country_flag }}" class="ow-flag" alt="Flag" title="{{ city.country_name -}}">
+                    {{- city.country_name }} <img src="{{ city.country_flag }}" class="ow-flag" alt="{{ city.country_name }}" title="{{ city.country_name -}}">
                 </td>
             <td>
         {% endfor %}

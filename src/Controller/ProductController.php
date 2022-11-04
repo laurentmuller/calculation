@@ -169,6 +169,8 @@ class ProductController extends AbstractEntityController
     /**
      * {@inheritDoc}
      *
+     * @psalm-param Product $item
+     *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */

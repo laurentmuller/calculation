@@ -31,7 +31,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     /**
      * The category parameter name (int).
      */
-    final public const PARAM_CATEGORY = 'categoryid';
+    final public const PARAM_CATEGORY = 'categoryId';
 
     /**
      * Constructor.

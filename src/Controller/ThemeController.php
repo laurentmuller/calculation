@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Enums\Theme;
 use App\Interfaces\RoleInterface;
 use App\Traits\CookieTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

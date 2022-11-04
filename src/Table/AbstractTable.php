@@ -188,6 +188,16 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
+     * Returns a value indicating if the column action is added at the end of the columns.
+     *
+     * @see Column::createColumnAction()
+     */
+    protected function addColumnAction(): bool
+    {
+        return true;
+    }
+
+    /**
      * Create the columns.
      *
      * @return Column[] the columns
@@ -195,8 +205,12 @@ abstract class AbstractTable implements SortModeInterface
     protected function createColumns(): array
     {
         $path = $this->getColumnDefinitions();
+        $columns = Column::fromJson($this, $path);
+        if ($this->addColumnAction()) {
+            $columns[] = Column::createColumnAction();
+        }
 
-        return Column::fromJson($this, $path);
+        return $columns;
     }
 
     /**

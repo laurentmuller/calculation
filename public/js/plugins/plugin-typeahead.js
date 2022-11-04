@@ -760,7 +760,6 @@
     // Typeahead plugin definition
     // -----------------------------
     const oldTypeahead = $.fn.typeahead;
-
     $.fn.typeahead = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
@@ -774,7 +773,6 @@
             }
         });
     };
-
     $.fn.typeahead.Constructor = Typeahead;
 
     // ------------------------------------

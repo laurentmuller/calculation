@@ -3,12 +3,12 @@
 /* global EditDialog */
 
 /**
- * Edit item dialog handler.
+ * Edit item dialog class.
  *
  * @class EditItemDialog
  * @extends {EditDialog}
  */
-class EditItemDialog extends EditDialog { 
+class EditItemDialog extends EditDialog {
 
     /**
      * Gets the selected item.
@@ -37,7 +37,8 @@ class EditItemDialog extends EditDialog {
      *
      * @param {JQuery} $row - the selected row.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @private
      */
     _initAdd($row) {
         'use strict';
@@ -63,7 +64,8 @@ class EditItemDialog extends EditDialog {
      *
      * @param {JQuery} $row - the selected row.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @private
      */
     _initEdit($row) {
         'use strict';
@@ -82,7 +84,8 @@ class EditItemDialog extends EditDialog {
     /**
      * Initialize.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @private
      */
     _init() {
         'use strict';
@@ -120,6 +123,7 @@ class EditItemDialog extends EditDialog {
 
         // init validator
         const options = {
+            showModification: false,
             submitHandler: function () {
                 if (that.$editingRow) {
                     that.application.onEditItemDialogSubmit();
@@ -135,6 +139,7 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Update the total line.
+     * @private
      */
     _updateTotal() {
         'use strict';
@@ -144,6 +149,7 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Handles to delete click event.
+     * @private
      */
     _onDelete() {
         'use strict';
@@ -159,7 +165,8 @@ class EditItemDialog extends EditDialog {
     /**
      * Handles the dialog show event.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @private
      */
     _onDialogShow() {
         'use strict';
@@ -176,7 +183,8 @@ class EditItemDialog extends EditDialog {
     /**
      * Handles the dialog visible event.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @private
      */
     _onDialogVisible() {
         'use strict';

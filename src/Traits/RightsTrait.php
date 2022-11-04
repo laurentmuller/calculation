@@ -71,7 +71,7 @@ trait RightsTrait
     }
 
     /**
-     * @psalm-param string|FlagBag<\BackedEnum> $value
+     * @psalm-param string|FlagBag<EntityPermission> $value
      */
     public function __set(string $name, mixed $value): void
     {
@@ -145,7 +145,7 @@ trait RightsTrait
     /**
      * Gets the rights for the given entity name.
      *
-     * @return FlagBag<EntityPermission>|null
+     * @psalm-return  FlagBag<EntityPermission>|null
      */
     private function getEntityRights(string $entity): ?FlagBag
     {
@@ -162,7 +162,7 @@ trait RightsTrait
     /**
      * Sets the rights for the given entity.
      *
-     * @psalm-param FlagBag<\BackedEnum> $rights
+     * @psalm-param FlagBag<EntityPermission> $rights
      */
     private function setEntityRights(string $entity, FlagBag $rights): static
     {

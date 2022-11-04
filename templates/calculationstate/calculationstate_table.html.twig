@@ -1,12 +1,15 @@
 {% extends 'cards/card_table.html.twig' %}
-
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'calculationstate.list.title' -%}
 {%- set title_icon = ICON_CALCULATION_STATE -%}
 {%- set object_type = ENTITY_CALCULATION_STATE -%}
+{%- set state_param = constant('App\\Table\\CalculationTable::PARAM_STATE') -%}
 
 {% block header_actions -%}
-{% if allow_add %}<a class="add-link p-0" href="{{ path('calculationstate_add', params) }}">{{ 'calculationstate.add.title'|trans }}</a>{% endif %}
+{% if allow_add %}
+    {{ link(path('calculationstate_add', params), 'calculationstate.add.title', 'add-link p-0') }}
+{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}

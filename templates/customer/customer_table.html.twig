@@ -1,11 +1,14 @@
 {% extends 'cards/card_table.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'customer.list.title' -%}
 {%- set title_icon = ICON_CUSTOMER -%}
 {%- set object_type = ENTITY_CUSTOMER -%}
 
 {% block header_actions -%}
-{% if allow_add %}<a class="add-link p-0" href="{{ path('customer_add', params) }}">{{ 'customer.add.title'|trans }}</a>{% endif %}
+{% if allow_add %}
+    {{ link(path('customer_add', params), 'customer.add.title', 'add-link p-0') }}
+{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}

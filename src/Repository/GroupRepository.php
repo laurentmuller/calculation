@@ -70,7 +70,7 @@ class GroupRepository extends AbstractRepository
      *
      * @param string $alias the default entity alias
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

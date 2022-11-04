@@ -1,14 +1,13 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Abstract edit dialog handler.
+ * Abstract edit dialog class.
  *
  * @property {JQuery} $form
  * @property {JQuery} $modal
  * @property {JQuery} $category
  */
 class EditDialog {
-
     /**
      * Constructor.
      *
@@ -27,14 +26,13 @@ class EditDialog {
      * Display the add item dialog.
      *
      * @param {JQuery} $row - the selected row.
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
      */
     showAdd($row) {
         'use strict';
-
         // initialize
         this.$editingRow = null;
-        this.$form.resetValidator();
+        this._resetValidator();
         this._initAdd($row);
 
         // show
@@ -47,14 +45,13 @@ class EditDialog {
      * Display the edit dialog.
      *
      * @param {JQuery} $row - the selected row.
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
      */
     showEdit($row) {
         'use strict';
-
         // initialize
         this.$editingRow = $row;
-        this.$form.resetValidator();
+        this._resetValidator();
         this._initEdit($row);
 
         // show
@@ -66,7 +63,7 @@ class EditDialog {
     /**
      * Hide the dialog.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
      */
     hide() {
         'use strict';
@@ -119,11 +116,11 @@ class EditDialog {
     /**
      * Initialize.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @protected
      */
     _init() {
         'use strict';
-
         return this;
     }
 
@@ -132,9 +129,11 @@ class EditDialog {
      *
      * @param {JQuery} $modal - the modal dialog.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @protected
      */
     _initDialog($modal) {
+        'use strict';
         const that = this;
         $modal.on('show.bs.modal', function () {
             that._onDialogShow();
@@ -155,9 +154,10 @@ class EditDialog {
      *
      * @param {JQuery} _$row - the selected row.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @protected
      */
-    _initAdd(_$row) { 
+    _initAdd(_$row) {
         'use strict';
         return this;
     }
@@ -167,9 +167,10 @@ class EditDialog {
      *
      * @param {JQuery} _$row - the selected row.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @protected
      */
-    _initEdit(_$row) { 
+    _initEdit(_$row) {
         'use strict';
         return this;
     }
@@ -177,20 +178,22 @@ class EditDialog {
     /**
      * Handles the dialog show event.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @protected
      */
     _onDialogShow() {
         'use strict';
         const key = this.$editingRow ? 'edit' : 'add';
         const title = this.$form.data(key);
-        this.$modal.find('.dialog-title').text(title);
+        this.$modal.find('.dialog-title').text(String(title));
         return this;
     }
 
     /**
      * Handles the dialog visible event.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @protected
      */
     _onDialogVisible() {
         'use strict';
@@ -203,11 +206,24 @@ class EditDialog {
     /**
      * Handles the dialog hide event.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @protected
      */
     _onDialogHide() {
         'use strict';
         $('tr.table-primary').removeClass('table-primary');
+        return this;
+    }
+
+    /**
+     * Reset the form validator.
+     *
+     * @return {this} This instance for chaining.
+     * @protected
+     */
+    _resetValidator() {
+        'use strict';
+        this.$form.resetValidator();
         return this;
     }
 }

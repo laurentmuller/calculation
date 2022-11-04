@@ -124,7 +124,7 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
 
         // main query
-        /** @phpstan-var literal-string $where */
+        /** @psalm-var literal-string $where */
         $where = "r.id in($dql)";
         $builder = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
@@ -158,7 +158,7 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
 
         // main query
-        /** @phpstan-var literal-string $where */
+        /** @psalm-var literal-string $where */
         $where = "r.id in($dql)";
         $builder = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')

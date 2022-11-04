@@ -1,35 +1,12 @@
 {# Modal dialog to edit a calculation task #}
 {% extends 'dialog/edit_dialog.html.twig' %}
-{# macros #}
-{% macro plain_text_input(id, class='') %}
-{%- set class = (class ~ ' form-control-plaintext form-control-readonly text-right')|trim -%}
-<div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
-{% endmacro %}
-
-{% macro row_input(task, item, visible=false) %}
-    <tr class="task-item-row{% if not visible %} d-none{% endif %}" data-id="{{ task.id }}" data-unit="{{ task.unit }}">
-    <td>
-        <div class="custom-control custom-switch pt-2">
-            <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}" checked="checked">
-            <label class="custom-control-label" for="item_{{ item.id }}">{{ item.name }}</label>
-        </div>
-    </td>
-    <td class="text-right w-25">
-        {{ _self.plain_text_input('task_value_' ~ item.id, 'task_value') }}
-    </td>
-    <td class="text-right w-25">
-        {{ _self.plain_text_input('task_total_' ~ item.id, 'task_total') }}
-    </td>
-</tr>
-{% endmacro %}
-
 {# parameters #}
 {%- set icon = ICON_TASK -%}
 {%- set form_prefix = 'task' -%}
 {%- set add_title = 'task_compute.add'|trans -%}
 {%- set edit_title = 'task_compute.edit'|trans -%}
 {%- set form_attr = form_attr|default({})|merge({'data-url': path('ajax_task'), 'data-failed': 'task_compute.failed'|trans}) -%}
-
+{# body #}
 {% block modal_body %}
 <div class="form-row">
     <div class="col-6">
@@ -48,38 +25,13 @@
     </div>
 </div>
 <div class="form-row task-row-table">
-    <table class="table table-sm table-borderless mb-0" id="table-task-edit">
-        <thead>
-            <tr>
-                <td><span class="task-items-empty text-danger d-none">{{ 'task_compute.error.items'|trans }}</span></td>
-                <td class="w-25">{{ 'task_compute.fields.price'|trans }}</td>
-                <td class="w-25">{{ 'task_compute.fields.total'|trans }}</td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-                {% set visible = loop.index == 1 %}
-                {% for item in task.items|filter(item => item.count > 0) %}
-                    {{ _self.row_input(task, item, visible) }}
-                {% endfor %}
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3"><hr class="my-1"></td>
-            </tr>
-            <tr>
-                <td class="text-right pt-2" colspan="2">{{ 'task_compute.fields.overall_total'|trans }}</td>
-                <td class="text-right">{{ _self.plain_text_input('task_overall') }}</td>
-            </tr>
-        </tfoot>
-    </table>
+    {% include 'task/_task_table.html.twig' with tasks %}
 </div>
 <div class="form-row task-row-empty d-none pl-1">
     <p class="small text-muted">{{ 'task.edit.empty_items'|trans }}</p>
 </div>
 {% endblock %}
-
+{# buttons #}
 {% block modal_buttons %}
 <input type="submit" role="button" id="task_submit_button" class="btn btn-form btn-primary" value="{{ 'common.button_ok'|trans }}">
 <input type="button" role="button" id="task_cancel_button" class="btn btn-form btn-secondary" value="{{ 'common.button_cancel'|trans }}" data-dismiss="modal">

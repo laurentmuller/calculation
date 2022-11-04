@@ -1,4 +1,5 @@
 {% extends 'cards/card_table.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'globalmargin.list.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
@@ -7,7 +8,7 @@
 
 {% block header_actions -%}
 {% if allow_edit -%}
-    <a href="{{ path('globalmargin_edit', params) }}">{{ 'globalmargin.edit.title'|trans }}</a>
+    {{ link(path('globalmargin_edit', params), 'globalmargin.edit.title', 'add-link p-0') }}
 {%- endif %}
 {%- endblock %}
 

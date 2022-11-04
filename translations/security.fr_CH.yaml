@@ -31,4 +31,4 @@ registration_wrong_email_verify: Le lien pour vérifier votre adresse électroni
 reset_expired_reset_password_token: Le lien dans votre adresse électronique est expiré. Veuillez essayer de réinitialiser votre mot de passe.
 reset_invalid_reset_password_token: Le lien de réinitialisation du mot de passe n'est pas valide. Veuillez essayer de réinitialiser votre mot de passe.
 reset_too_many_password_request: Vous avez déjà demandé une réinitialisation du mot de passe. Veuillez vérifier vos notification ou réessayer après %availableAt%.
-reset_not_found_password_token: Aucun jeton de ré-initialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
+reset_not_found_password_token: Aucun jeton de ré-initialisation du mot de passe n'a été trouvé dans l'adresse web (URL) ou dans la session.

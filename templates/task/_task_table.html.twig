@@ -1,0 +1,53 @@
+{# add a plain text input #}
+{% macro plain_text_input(id, class='') %}
+{%- set class = ('form-control-plaintext form-control-readonly text-right ' ~ class)|trim -%}
+<div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
+{% endmacro %}
+{# add a task item input #}
+{% macro task_item_input(task, item, visible=false, disabled=false) %}
+{% set task_item_id = item.id %}
+<tr data-id="{{ task.id }}" data-unit="{{ task.unit }}" class="task-item-row{% if not visible %} d-none{% endif %}">
+    <td class="align-middle">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input item-input" id="item_{{ task_item_id }}" name="items[]" value="{{ task_item_id }}" checked="checked"{% if disabled %} disabled="disabled"{% endif %}>
+            <label class="custom-control-label" for="item_{{ task_item_id }}">{{ item.name }}</label>
+        </div>
+    </td>
+    <td class="text-right w-25">
+        {{ _self.plain_text_input('task_value_' ~ task_item_id, 'task_value') }}
+    </td>
+    <td class="text-right w-25">
+        {{ _self.plain_text_input('task_total_' ~ task_item_id, 'task_total') }}
+    </td>
+</tr>
+{% endmacro %}
+{# output the tasks table #}
+<table class="table table-sm table-borderless mb-0" id="table-task-edit">
+    <thead>
+    <tr>
+        <td class="required">{{ 'task.fields.items'|trans }}</td>
+        <td class="w-25">{{ 'task_compute.fields.price'|trans }}</td>
+        <td class="w-25">{{ 'task_compute.fields.total'|trans }}</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for task in tasks %}
+        {% set visible = loop.index == 1 %}
+        {% set items = task.items|filter(item => item.count > 0) %}
+        {% set disabled = items|length == 1 %}
+        {% for item in items %}
+            {{ _self.task_item_input(task, item, visible, disabled) }}
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3"><hr class="my-1"></td>
+        </tr>
+        <tr>
+            <td class="align-middle"><span class="task-items-empty text-danger small d-none">{{ 'task_compute.error.items'|trans }}</span></td>
+            <td class="text-right align-middle">{{ 'task_compute.fields.overall_total'|trans }}</td>
+            <td class="text-right">{{ _self.plain_text_input('task_overall') }}</td>
+        </tr>
+    </tfoot>
+</table>

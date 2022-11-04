@@ -38,8 +38,8 @@
 {%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
 {{ linkExternal(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
-{% macro item_separator() %}
-{{ dropdownSeparator() }}
+{% macro item_separator(class='') %}
+{{ dropdownSeparator(false, class) }}
 {%- endmacro %}
 {% macro property_row(field, value, class='') -%}
 {% set class = ('col-8 text-truncate user-select-none ' ~ class)|trim %}
@@ -105,7 +105,7 @@
     'row-class': row_selector,
     'single-select': true,
     'toggle-selector': '#toggle',
-    'undefined-text': '&#160;',
+    'undefined-text': '&#8203;',
     'silent-sort': false,
     'side-pagination': 'server',
     'show-custom-view': false,
@@ -205,9 +205,9 @@
 <table id="table-edit"{{ output_attributes(attributes, 'data-') }}>
     <thead>
         <tr>
-            {% for column in columns %}
+        {% for column in columns %}
             {{ _self.output_column(column) }}
-            {% endfor %}
+        {% endfor %}
         </tr>
     </thead>
     <tbody{% if row_link|default(true) %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
@@ -225,19 +225,19 @@
     {{ dropdownEllipsis() }}
     <div class="dropdown-menu dropdown-menu-right dropdown-menu-actions">
         {% if allow_edit %}
-            {{- _self.item_separator() }}
+            {{- _self.item_separator('edit-divider') }}
             {% block edit_actions -%}{%- endblock %}
         {% endif %}
         {% if allow_delete %}
-            {{- _self.item_separator() }}
+            {{- _self.item_separator('delete-divider') }}
             {% block delete_actions -%}{%- endblock %}
         {% endif %}
         {% if allow_add %}
-            {{- _self.item_separator() }}
+            {{- _self.item_separator('add-divider') }}
             {% block add_actions -%}{%- endblock %}
         {% endif %}
         {% if allow_show %}
-            {{- _self.item_separator() }}
+            {{- _self.item_separator('show-divider') }}
             {% block show_actions -%}{%- endblock %}
         {% endif %}
         {% block other_actions -%}{%- endblock %}
@@ -352,6 +352,7 @@
 {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
 {{ asset_js('js/plugins/plugin-drag-modal.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}
+{{ asset_js('js/plugins/plugin-dropdown.js') }}
 {{ asset_js('js/extensions/bootstrap-table-extensions.js') }}
 {{ asset_js('js/extensions/bootstrap-table-fr-CH.js') }}
 {{ asset_js('js/extensions/contextmenu-extensions.js') }}

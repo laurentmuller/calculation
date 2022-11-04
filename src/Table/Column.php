@@ -118,12 +118,28 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
+     * Create the action column.
+     */
+    public static function createColumnAction(): self
+    {
+        $column = new self();
+        $column->setField('id')
+            ->setAlias('action')
+            ->setSortable(false)
+            ->setSearchable(false)
+            ->setCellFormatter('formatActions')
+            ->setClass('actions rowlink-skip d-print-none');
+
+        return $column;
+    }
+
+    /**
      * Creates columns from the given JSON file definitions.
      *
      * @param AbstractTable $parent the table owner
      * @param string        $path   the path to the JSON file definitions
      *
-     * @return array<self> the column definitions
+     * @return Column[] the column definitions
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {

@@ -58,7 +58,6 @@ body.light .page-content.sidebar-hide footer:before {
     width: 100%;
 }
 
-
 /*
  * Example button for theme example
  */
@@ -174,11 +173,9 @@ h1.card-title {
 .btn-edit {
     line-height: 0.8 !important;
 }
-
 a.btn-list {
     width: 40px;
 }
-
 .pagination {
     margin-bottom: 0;
 }
@@ -281,68 +278,6 @@ body:not(.status-bar) .btn-back-to-top {
     color: inherit;
     text-decoration: inherit;
 }
-
-/*
- * Card flex
-
-.card-flex {
-    min-width: 270px;
-}
-.card-flex table {
-    table-layout: fixed !important;
-}
-.card-flex table td {
-    padding-top: 0;
-    padding-bottom: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-@media (min-width : 768px) {
-    .card-flex {
-        max-width: 48.7%;
-    }
-}
-@media (min-width : 992px) {
-    .card-flex {
-        max-width: 32.3%;
-    }
-}
-@media (min-width : 1200px) {
-    .card-flex {
-        max-width: 32.55%;
-    }
-}
- */
-
-/*
- * last calculations in home page
-
-.card-last td {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-.card-last td.data-search {
-    word-break: break-word;
-    white-space: normal;
-}
-@media (min-width : 0px) {
-    .card-last {
-        flex: 1 0 calc(100% - 30px);
-    }
-}
-@media (min-width : 768px) {
-    .card-last {
-        flex: 1 0 calc(50% - 30px);
-    }
-}
-@media (min-width : 992px) {
-    .card-last {
-        flex: 1 0 calc(33.33333333333333% - 30px);
-    }
-}
-*/
 
 /*
  * states and months cards in home page
@@ -605,6 +540,7 @@ body.dark .horizontal-line:after {
     /* down arrow */
     transform: rotate(90deg);
 }
+
 /**
  * Add a drop-down caret after the element
  */
@@ -651,20 +587,6 @@ body.dark .horizontal-line:after {
 body.dark .context-menu-list {
     background-color: #000 !important;
     border: 1px solid #343a40;
-}
-
-/**
-  * Table selection (datatables and calculation edit).
-  */
-.dataTable .table-primary th,
-.dataTable .table-primary td,
-.dataTable .table-primary thead th,
-.dataTable .table-primary tbody + tbody,
-.table-edit .table-primary th,
-.table-edit .table-primary td,
-.table-edit .table-primary thead th,
-.table-edit .table-primary tbody + tbody {
-    border-color: transparent !important;
 }
 
 /**

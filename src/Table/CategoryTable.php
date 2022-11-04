@@ -42,7 +42,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * The group parameter name (int).
      */
-    final public const PARAM_GROUP = 'groupid';
+    final public const PARAM_GROUP = 'groupId';
 
     /**
      * Constructor.

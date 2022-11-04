@@ -3,12 +3,12 @@
 /* globals EditDialog, Toaster */
 
 /**
- * Edit task dialog handler.
+ * Edit task dialog class.
  *
  * @class EditTaskDialog
  * @extends {EditDialog}
  */
-class EditTaskDialog extends EditDialog { 
+class EditTaskDialog extends EditDialog {
 
     /**
      * Gets the selected items.
@@ -17,13 +17,12 @@ class EditTaskDialog extends EditDialog {
      */
     getItems() {
         'use strict';
-
         const that = this;
+        const unit = that.$unit.val();
         const quantity = that.$quantity.floatVal();
         const task = that.$task.getSelectedOption().text();
-        const unit = that.$unit.val();
 
-        return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
+        return that._getCheckedItems().map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.custom-control-label').text();
             const price = $.parseFloat($row.find('.task_value').data('value'));
@@ -42,11 +41,11 @@ class EditTaskDialog extends EditDialog {
     /**
      * Initialize.
      *
-     * @return {EditDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @private
      */
     _init() {
         'use strict';
-
         // get elements
         const that = this;
         that.$form = $('#task_form');
@@ -80,6 +79,7 @@ class EditTaskDialog extends EditDialog {
 
         // init validator
         const options = {
+            showModification: false,
             submitHandler: function () {
                 if (that.$editingRow) {
                     that.application.onEditTaskDialogSubmit();
@@ -105,6 +105,7 @@ class EditTaskDialog extends EditDialog {
      * Abort the ajax call.
      *
      * @return {EditTaskDialog} This instance for chaining.
+     * @private
      */
     _abort() {
         'use strict';
@@ -119,7 +120,9 @@ class EditTaskDialog extends EditDialog {
      * Send data to server and update UI.
      *
      * @param {Object} data - the data to send.
+     *
      * @return {EditTaskDialog} This instance for chaining.
+     * @private
      */
     _send(data) {
         'use strict';
@@ -145,11 +148,11 @@ class EditTaskDialog extends EditDialog {
                 that._updateValue('task_overall', response.overall);
                 that.$submit.toggleDisabled(false);
             } else {
-                that.showError(response.message);
+                that._showError(response.message);
             }
         }).fail(function (_jqXHR, textStatus) {
             if (textStatus !== 'abort') {
-                that.showError(that.$form.data('failed'));
+                that._showError(that.$form.data('failed'));
             }
         });
         return that;
@@ -159,12 +162,11 @@ class EditTaskDialog extends EditDialog {
      * Gets input values and send to the server.
      *
      * @return {EditTaskDialog} This instance for chaining.
+     * @private
      */
     _update() {
         'use strict';
-
         const that = this;
-
         // disable
         that.$submit.toggleDisabled(true);
 
@@ -174,7 +176,7 @@ class EditTaskDialog extends EditDialog {
         }
 
         // get items
-        const items = that._getItems();
+        const items = that._getItemValues();
         if (items.length === 0) {
             that.$itemsEmpty.removeClass('d-none');
             return that._resetValues();
@@ -195,12 +197,13 @@ class EditTaskDialog extends EditDialog {
     /**
      * Gets selected item identifiers.
      *
-     * @return {array} - the selected item identifiers.
+     * @return {array.<Number>} - the selected item identifiers.
+     * @private
      */
-    _getItems() {
+    _getItemValues() {
         'use strict';
-        return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
-            return $.parseInt($(this).attr('value'));
+        return this._getCheckedItems().map(function () {
+            return $(this).intVal();
         }).get();
     }
 
@@ -209,7 +212,9 @@ class EditTaskDialog extends EditDialog {
      *
      * @param {string} id - the plain-text identifier.
      * @param {number} value - the value.
+     *
      * @return {EditTaskDialog} This instance for chaining.
+     * @private
      */
     _updateValue(id, value) {
         'use strict';
@@ -222,6 +227,7 @@ class EditTaskDialog extends EditDialog {
      * Update all plain-texts to 0.00.
      *
      * @return {EditTaskDialog} This instance for chaining.
+     * @private
      */
     _resetValues() {
         'use strict';
@@ -234,10 +240,11 @@ class EditTaskDialog extends EditDialog {
      * Shows the error.
      *
      * @return {EditTaskDialog} This instance for chaining.
+     * @private
      */
     _showError(message) {
         'use strict';
-        this.resetValues();
+        this._resetValues();
         this.$submit.toggleDisabled(true);
         this.$modal.modal('hide');
         const title = this.$modal.find('.dialog-title').text();
@@ -247,6 +254,9 @@ class EditTaskDialog extends EditDialog {
 
     /**
      * Handles the dialog visible event.
+     *
+     * @return {this} This instance for chaining.
+     * @private
      */
     _onDialogVisible() {
         'use strict';
@@ -263,9 +273,24 @@ class EditTaskDialog extends EditDialog {
     }
 
     /**
+     * Handles the dialog show event.
+     *
+     * @return {this} This instance for chaining.
+     */
+    _onDialogShow() {
+        // update because the task input is reset.
+        if (this.mustReset) {
+            this._onTaskChanged();
+            this.mustReset = false;
+        }
+        return super._onDialogShow();
+    }
+
+    /**
      * Handle the task input event.
      *
-     * @return {EditTaskDialog} This instance for chaining.
+     * @return {this} This instance for chaining.
+     * @private
      */
     _onTaskChanged() {
         'use strict';
@@ -286,5 +311,22 @@ class EditTaskDialog extends EditDialog {
             return this;
         }
         return this._update();
+    }
+
+    _resetValidator() {
+        this.mustReset = this.$task.getSelectedOption().index() !== 0;
+        return super._resetValidator();
+    }
+
+    /**
+     * Gets the checked items.
+     *
+     * @return {JQuery} the checked items.
+     * @private
+     */
+    _getCheckedItems() {
+        const id = this.$task.intVal();
+        const selector = '#table-task-edit tr[data-id="' + id + '"] .item-input:checked';
+        return $(selector);
     }
 }

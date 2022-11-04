@@ -250,7 +250,6 @@
     // CellHighlight plugin definition
     // -------------------------------
     const oldCellHighlight = $.fn.cellhighlight;
-
     $.fn.cellhighlight = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
@@ -260,7 +259,6 @@
             }
         });
     };
-
     $.fn.cellhighlight.Constructor = CellHighlight;
 
     // ------------------------------------

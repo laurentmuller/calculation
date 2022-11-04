@@ -23,11 +23,11 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 {
     /**
-     * Gets the routes to test.
+     * Gets the routes to test. Each entry must contain a URL, a username, an optional expected result and request method.
      *
-     * Each entry must contain a URL, a username, an optional expected result and the request method.
+     * @psalm-return array|\Generator
      */
-    abstract public function getRoutes(): array|\Generator;
+    abstract public function getRoutes();
 
     /**
      * Checks the given route.

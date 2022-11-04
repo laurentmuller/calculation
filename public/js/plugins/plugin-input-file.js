@@ -406,7 +406,6 @@
     // FileInput plugin definition
     // ------------------------------------
     const oldFileInput = $.fn.fileinput;
-
     $.fn.fileinput = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);

@@ -19,6 +19,7 @@
  */
 <!--#include file="plugins/plugin-drag-modal.js" -->
 <!--#include file="plugins/plugin-rowlink.js" -->
+<!--#include file="plugins/plugin-dropdown.js" -->
 /**
  * Extensions files
  */

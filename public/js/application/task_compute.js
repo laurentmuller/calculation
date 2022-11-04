@@ -52,12 +52,15 @@ function submitForm(form) {
     $form.data('value', newValue);
 
     // get items
+    const id = $('#task').intVal();
     const $itemsEmpty = $('.task-items-empty');
-    const items = $('#table-edit .item-row:not(.d-none) :checkbox:checked').map(function () {
+    const selector = '#table-task-edit tr[data-id="' + id + '"] .item-input:checked';
+    const items = $(selector).map(function () {
         return $(this).intVal();
     }).get();
     if (items.length === 0) {
-        $('#table-edit .item-row:not(.d-none) :checkbox:first').trigger('focus');
+        const selector = '#table-task-edit tr[data-id="' + id + '"] .item-input:first';
+        $(selector).trigger('focus');
         $itemsEmpty.removeClass('d-none');
         resetValues();
         return;
@@ -93,10 +96,10 @@ function submitForm(form) {
         if (response.result) {
             // update
             response.results.forEach(function (item) {
-                updateValue('value_' + item.id, item.value);
-                updateValue('amount_' + item.id, item.amount);
+                updateValue('task_value_' + item.id, item.value);
+                updateValue('task_total_' + item.id, item.amount);
             });
-            updateValue('overall', response.overall);
+            updateValue('task_overall', response.overall);
         } else {
             showError(response.message);
         }
@@ -124,8 +127,8 @@ function onTaskChanged() {
     const $task = $('#task');
     const id = $task.intVal();
     const selector = '[data-id="' + id + '"]';
-    $('.item-row:not(' + selector + ')').addClass('d-none');
-    const $rows = $('.item-row' + selector).removeClass('d-none');
+    $('.task-item-row:not(' + selector + ')').addClass('d-none');
+    const $rows = $('.task-item-row' + selector).removeClass('d-none');
 
     // task items?
     const empty = $rows.length === 0;

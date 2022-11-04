@@ -80,8 +80,8 @@
 </a>
 {%- endmacro %}
 
-{% macro dropdownSeparator(hidden=false, extra_class='') -%}
-{%- set class = ('dropdown-divider ' ~ extra_class ~ (hidden ? ' d-none' : ''))|trim -%}
+{% macro dropdownSeparator(hidden=false, class='') -%}
+{%- set class = ('dropdown-divider ' ~ class ~ (hidden ? ' d-none' : ''))|trim -%}
 <div role="separator" class="{{ class }}"></div>
 {%- endmacro %}
 

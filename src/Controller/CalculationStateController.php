@@ -185,6 +185,8 @@ class CalculationStateController extends AbstractEntityController
     /**
      * {@inheritdoc}
      *
+     * @psalm-param CalculationState $item
+     *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */

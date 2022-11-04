@@ -1,30 +1,33 @@
 {% extends 'cards/card_table.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon %}
+{% from 'macros/_icons.html.twig' import icon, link %}
 {# parameters #}
 {%- set title = 'product.list.title' -%}
 {%- set title_icon = ICON_PRODUCT -%}
-{%- set categoryid = customData.category.id|default(0) -%}
 {%- set object_type = ENTITY_PRODUCT -%}
+{%- set category_id = customData.category.id|default(0) -%}
+{%- set category_param = constant('App\\Table\\AbstractCategoryItemTable::PARAM_CATEGORY') -%}
 
 {% block header_actions -%}
-{% if allow_add %}<a class="add-link p-0" href="{{ path('product_add', params) }}">{{ 'product.add.title'|trans }}</a>{% endif %}
+{% if allow_add %}
+    {{ link(path('product_add', params), 'product.add.title', 'add-link p-0') }}
+{% endif %}
 {%- endblock %}
 
 {% block toolbar_actions -%}
 {% if customData.categories|length > 1 %}
 {% set group = '' %}
 <div class="input-group-append">
-    <button id="categoryid" data-value="{{ categoryid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
+    <button id="{{ category_param }}" data-value="{{ category_id }}" data-copy-icon="true" data-icon="{{ icon(ICON_CATEGORY)|e }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
         {{ icon(ICON_CATEGORY) }}&nbsp;{{- customData.category ? customData.category.code : 'product.fields.category'|trans -}}
     </button>
-    <div class="dropdown-menu" aria-labelledby="categoryid">
-        {{ _self.output_dropdown('category', 0, categoryid, 'product.list.category_all_text'|trans) }}
+    <div class="dropdown-menu" aria-labelledby="{{ category_param }}">
+        {{ _self.output_dropdown('category', 0, category_id, 'product.list.category_all_text'|trans) }}
         {% for category in customData.categories %}
             {% if group != category.group %}
                 {% set group = category.group %}
                 {{ _self.output_dropdown_header(group, false) }}
             {% endif %}
-            {{ _self.output_dropdown('category', category.id, categoryid, category.code) }}
+            {{ _self.output_dropdown('category', category.id, category_id, category.code) }}
         {% endfor %}
     </div>
 </div>

@@ -37,13 +37,5 @@
         "field": "supplier",
         "title": "product.fields.supplier",
         "class": "text-supplier"
-    },
-    {
-        "field": "id",
-        "alias": "action",
-        "sortable": false,
-        "searchable": false,
-        "class": "actions rowlink-skip d-print-none",
-        "cellFormatter": "formatActions"
     }
 ]

@@ -119,7 +119,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets query builder for state where editable is true.
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -130,7 +130,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets query builder for state where editable is false.
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -143,7 +143,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @param string $alias the default entity alias
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     public function getQueryBuilderByEditable(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -160,7 +160,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @param string $alias the default entity alias
      *
-     * @phpstan-param literal-string $alias
+     * @psalm-param literal-string $alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

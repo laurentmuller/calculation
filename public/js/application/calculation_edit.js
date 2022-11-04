@@ -1006,6 +1006,9 @@ const Application = {
         'use strict';
 
         // hide dialog
+        /**
+         * @type {EditTaskDialog}
+         */
         const dialog = this.getTaskDialog().hide();
 
         // get dialog values

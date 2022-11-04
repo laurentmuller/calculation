@@ -12,23 +12,24 @@
 
 {% block toolbar_actions -%}
 {% if customData.states is defined and customData.states|length > 1 %}
-{%- set stateid = customData.state ? customData.state.id : 0 -%}
-<div class="input-group-append">
-    <button id="stateid" data-value="{{ stateid }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
-        {{ icon(ICON_CALCULATION_STATE) }}&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
-    </button>
-    {% set editable = false %}
-    <div class="dropdown-menu" aria-labelledby="stateid">
-        {{ _self.output_dropdown('state', 0, stateid, 'calculation.list.state_all_text'|trans, {'data-color': 'white'}) }}
-        {% for state in customData.states %}
-            {% if editable != state.editable %}
-                {{ _self.output_dropdown_header((state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true) }}
-                {% set editable = state.editable %}
-            {% endif %}
-            {{ _self.output_dropdown('state', state.id, stateid, state.code, {'data-color': state.color}) }}
-        {% endfor %}
+    {%- set state_param = constant('App\\Table\\CalculationTable::PARAM_STATE') -%}
+    {%- set state_id = customData.state.id|default(0) -%}
+    <div class="input-group-append">
+        <button id="{{ state_param }}" data-value="{{ state_id }}" data-icon="{{ icon(ICON_CALCULATION_STATE)|e }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
+            {{ icon(ICON_CALCULATION_STATE) }}&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
+        </button>
+        {% set editable = false %}
+        <div class="dropdown-menu" aria-labelledby="{{ state_param }}">
+            {{ _self.output_dropdown('state', 0, state_id, 'calculation.list.state_all_text'|trans, {'data-color': 'transparent'}) }}
+            {% for state in customData.states %}
+                {% if editable != state.editable %}
+                    {{ _self.output_dropdown_header((state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true) }}
+                    {% set editable = state.editable %}
+                {% endif %}
+                {{ _self.output_dropdown('state', state.id, state_id, state.code, {'data-color': state.color}) }}
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endif %}
 {%- endblock %}
 

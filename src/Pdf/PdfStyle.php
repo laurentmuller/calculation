@@ -279,7 +279,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Indent</td><td>:</td><td>0 mm</td></tr>
      * </table>.
      */
-    public function reset(): self
+    public function reset(): static
     {
         return $this->resetLine()
             ->resetBorder()
@@ -291,7 +291,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets border to default (none).
      */
-    public function resetBorder(): self
+    public function resetBorder(): static
     {
         return $this->setBorder(PdfBorder::ALL);
     }
@@ -304,7 +304,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
      * </table>.
      */
-    public function resetColors(): self
+    public function resetColors(): static
     {
         return $this->setFillColor(PdfFillColor::white())
             ->setDrawColor(PdfDrawColor::black())
@@ -314,7 +314,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets font to the default value. The default value is "<code>Arial, 9pt, regular</code>".
      */
-    public function resetFont(): self
+    public function resetFont(): static
     {
         return $this->setFont(PdfFont::default());
     }
@@ -322,7 +322,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the left indent to the default value. The default value is "<code>0 mm</code>".
      */
-    public function resetIndent(): self
+    public function resetIndent(): static
     {
         return $this->setIndent(0);
     }
@@ -330,7 +330,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the line width property to the default value. The default line width is "<code>0.2 mm</code>".
      */
-    public function resetLine(): self
+    public function resetLine(): static
     {
         return $this->setLine(PdfLine::default());
     }
@@ -338,7 +338,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the border.
      */
-    public function setBorder(PdfBorder|string|int $border): self
+    public function setBorder(PdfBorder|string|int $border): static
     {
         $this->border = \is_string($border) || \is_int($border) ? new PdfBorder($border) : $border;
 
@@ -348,7 +348,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the draw color.
      */
-    public function setDrawColor(PdfDrawColor $drawColor): self
+    public function setDrawColor(PdfDrawColor $drawColor): static
     {
         $this->drawColor = $drawColor;
 
@@ -358,7 +358,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the fill color.
      */
-    public function setFillColor(PdfFillColor $fillColor): self
+    public function setFillColor(PdfFillColor $fillColor): static
     {
         $this->fillColor = $fillColor;
 
@@ -368,7 +368,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font style.
      */
-    public function setFont(PdfFont $font): self
+    public function setFont(PdfFont $font): static
     {
         $this->font = $font;
 
@@ -380,7 +380,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * @param bool $add true to add the bold style to the existing style; false to replace
      */
-    public function setFontBold(bool $add = false): self
+    public function setFontBold(bool $add = false): static
     {
         $style = PdfFont::STYLE_BOLD;
         if ($add) {
@@ -395,7 +395,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * @param bool $add true to add the italic style to the existing style; false to replace
      */
-    public function setFontItalic(bool $add = false): self
+    public function setFontItalic(bool $add = false): static
     {
         $style = PdfFont::STYLE_ITALIC;
         if ($add) {
@@ -409,7 +409,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * Sets the font name.
      * Can be one of the FONT_NAME_XX constants.
      */
-    public function setFontName(string $fontName): self
+    public function setFontName(string $fontName): static
     {
         $this->font->setName($fontName);
 
@@ -419,7 +419,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font style to regular (default).
      */
-    public function setFontRegular(): self
+    public function setFontRegular(): static
     {
         $this->font->regular();
 
@@ -429,7 +429,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font size in points.
      */
-    public function setFontSize(float $fontSize): self
+    public function setFontSize(float $fontSize): static
     {
         $this->font->setSize($fontSize);
 
@@ -440,7 +440,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * Sets the font style.
      * Can be one of the FONT_STYLE_XX constants or any combination.
      */
-    public function setFontStyle(string $fontStyle): self
+    public function setFontStyle(string $fontStyle): static
     {
         $this->font->setStyle($fontStyle);
 
@@ -452,7 +452,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * @param bool $add true to add the underline style to the existing style; false to replace
      */
-    public function setFontUnderline(bool $add = false): self
+    public function setFontUnderline(bool $add = false): static
     {
         $style = PdfFont::STYLE_UNDERLINE;
         if ($add) {
@@ -465,7 +465,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the left indent.
      */
-    public function setIndent(int $indent): self
+    public function setIndent(int $indent): static
     {
         $this->indent = \max($indent, 0);
 
@@ -475,7 +475,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the line.
      */
-    public function setLine(PdfLine $line): self
+    public function setLine(PdfLine $line): static
     {
         $this->line = $line;
 
@@ -485,7 +485,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the text color.
      */
-    public function setTextColor(PdfTextColor $textColor): self
+    public function setTextColor(PdfTextColor $textColor): static
     {
         $this->textColor = $textColor;
 

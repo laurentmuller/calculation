@@ -114,6 +114,9 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      * @param string|UploadedFile|null $sourceFile the source file to import
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function import(string|UploadedFile|null $sourceFile): SwissPostUpdateResult
     {
@@ -382,25 +385,19 @@ class SwissPostUpdater implements ServiceSubscriberInterface
                         return false;
                     }
                     break;
-
                 case self::REC_CITY:
                     $this->processCity($data);
                     break;
-
                 case self::REC_STREET:
                     $this->processStreet($data);
                     break;
-
                 case self::REC_STOP_PROCESS:
                     $process = false;
                     break;
             }
 
             // commit
-            if (0 === $this->results->getValids() % 50_000 && null !== $this->database) {
-                $this->database->commitTransaction();
-                $this->database->beginTransaction();
-            }
+            $this->toggleTransaction();
         }
 
         // last commit
@@ -492,6 +489,17 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function setError(string $id, array $parameters = []): SwissPostUpdateResult
     {
         return $this->results->setError($this->trans("swisspost.error.$id", $parameters));
+    }
+
+    /**
+     * Commit and begin a transaction, if applicable.
+     */
+    private function toggleTransaction(): void
+    {
+        if (0 === $this->results->getValids() % 50_000) {
+            $this->database?->commitTransaction();
+            $this->database?->beginTransaction();
+        }
     }
 
     /**

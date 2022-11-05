@@ -123,10 +123,8 @@ class HtmlStyle extends PdfStyle
 
     /**
      * Reset all values to default.
-     *
-     * @return self
      */
-    public function reset(): PdfStyle
+    public function reset(): static
     {
         parent::reset();
         $this->resetMargins();

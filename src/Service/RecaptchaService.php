@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\MathTrait;
 use App\Traits\TranslatorTrait;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
@@ -24,6 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class RecaptchaService
 {
+    use MathTrait;
     use TranslatorTrait;
 
     private string $action = 'login';
@@ -70,14 +72,14 @@ class RecaptchaService
 
     public function setScoreThreshold(float $scoreThreshold): self
     {
-        $this->scoreThreshold = $scoreThreshold;
+        $this->scoreThreshold = $this->validateFloatRange($scoreThreshold, 0, 1);
 
         return $this;
     }
 
     public function setTimeoutSeconds(int $timeoutSeconds): self
     {
-        $this->timeoutSeconds = $timeoutSeconds;
+        $this->timeoutSeconds = \max(0, $timeoutSeconds);
 
         return $this;
     }

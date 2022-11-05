@@ -35,55 +35,29 @@ final class HtmlStyleFactory
      */
     public static function create(string $name): ?HtmlStyle
     {
-        switch ($name) {
-            case 'h1':
-                return self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.5, 2);
-            case 'h2':
-                return self::doCreate(true, PdfFont::DEFAULT_SIZE * 2, 2);
-            case 'h3':
-                return self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.75, 2);
-            case 'h4':
-                return self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.5, 2);
-            case 'h5':
-                return self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.25, 2);
-            case 'h6':
-                return self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.1, 2);
-            case 'p':
-                return self::doCreate(false, PdfFont::DEFAULT_SIZE, 2);
-            case 'ul':
-            case 'ol':
-                return self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 4);
-            case 'li':
-                return self::default();
-            case 'b':
-            case 'strong':
-                return self::doCreate(true);
-            case 'i':
-            case 'em':
-                return self::default()->italic(true);
-            case 'u':
-                return self::default()->underline(true);
-            case 'code':
-                $result = self::default();
-                $result->setTextColor(PdfTextColor::red())
-                    ->setFontName(PdfFont::NAME_COURIER);
-
-                return $result;
-            case 'var':
-                $result = self::default();
-                $result->setFontName(PdfFont::NAME_COURIER)
-                    ->setFontItalic();
-
-                return $result;
-            case 'samp':
-            case 'kbd':
-                $result = self::default();
-                $result->setFontName(PdfFont::NAME_COURIER);
-
-                return $result;
-            default:
-                return null;
-        }
+        return match (\strtolower($name)) {
+            'h1' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.5, 2),
+            'h2' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2, 2),
+            'h3' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.75, 2),
+            'h4' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.5, 2),
+            'h5' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.25, 2),
+            'h6' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.1, 2),
+            'p' => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2),
+            'ul', 'ol' => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 4),
+            'li' => self::default(),
+            'b', 'strong' => self::doCreate(true),
+            'i', 'em' => self::default()->italic(true),
+            'u' => self::default()->underline(true),
+            'code' => self::default()
+                ->setTextColor(PdfTextColor::red())
+                ->setFontName(PdfFont::NAME_COURIER),
+            'var' => self::default()
+                ->setFontName(PdfFont::NAME_COURIER)
+                ->setFontItalic(),
+            'samp', 'kbd' => self::default()
+                ->setFontName(PdfFont::NAME_COURIER),
+            default => null,
+        };
     }
 
     /**

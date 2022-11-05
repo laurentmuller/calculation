@@ -87,6 +87,26 @@ trait MathTrait
     /**
      * Ensure that the given value is within the given range.
      *
+     * @param float $value the value to be tested
+     * @param float $min   the minimum value allowed (inclusive)
+     * @param float $max   the maximum value allowed (inclusive)
+     *
+     * @return float the checked value
+     */
+    protected function validateFloatRange(float $value, float $min, float $max): float
+    {
+        if ($value < $min) {
+            return $min;
+        } elseif ($value > $max) {
+            return $max;
+        } else {
+            return $value;
+        }
+    }
+
+    /**
+     * Ensure that the given value is within the given range.
+     *
      * @param int $value the value to be tested
      * @param int $min   the minimum value allowed (inclusive)
      * @param int $max   the maximum value allowed (inclusive)

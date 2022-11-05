@@ -298,17 +298,7 @@ class TestController extends AbstractController
             if ($result->isSuccess()) {
                 /** @psalm-var array<string, string[]|string> $values */
                 $values = $result->toArray();
-                $values = \array_filter($values);
-                $html = '<table class="table table-borderless table-sm mb-0">';
-                foreach ($values as $key => $value) {
-                    if (\is_array($value)) {
-                        $value = \implode('<br>', $value);
-                    } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
-                        $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
-                    }
-                    $html .= "<tr><td>$key</td><td>:</td><td>$value</td></tr>";
-                }
-                $html .= '</table>';
+                $html = $this->formatRecaptchaResult($values);
                 $this->success($html);
 
                 return $this->redirectToHomePage();
@@ -408,10 +398,7 @@ class TestController extends AbstractController
     #[Route(path: '/translate', name: 'test_translate')]
     public function translate(TranslatorFactory $factory): Response
     {
-        // get service
         $service = $factory->getSessionService();
-
-        // get languages
         $languages = $service->getLanguages();
 
         // check error
@@ -562,6 +549,26 @@ class TestController extends AbstractController
         }
 
         return $this->json(['valid_key' => true]);
+    }
+
+    /**
+     * @psalm-param array<string, string[]|string> $values
+     */
+    private function formatRecaptchaResult(array $values): string
+    {
+        $values = \array_filter($values);
+        $html = '<table class="table table-borderless table-sm mb-0">';
+        foreach ($values as $key => $value) {
+            if (\is_array($value)) {
+                $value = \implode('<br>', $value);
+            } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
+                $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
+            }
+            $html .= "<tr><td>$key</td><td>:</td><td>$value</td></tr>";
+        }
+        $html .= '</table>';
+
+        return $html;
     }
 
     private function getCategories(EntityManagerInterface $manager): array

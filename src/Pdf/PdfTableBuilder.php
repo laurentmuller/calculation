@@ -779,18 +779,16 @@ class PdfTableBuilder
     }
 
     /**
-     * @param float[]   $widths
-     * @param bool[]    $fixeds
      * @param PdfCell[] $cells
+     * @param bool[]    $fixeds
+     * @param float[]   $widths
      */
     private function adjustCellWidths(array $cells, array $fixeds, array &$widths): void
     {
-        if (!$this->fullWidth) {
-            return;
-        }
-
         $count = \count($cells);
         $parent = $this->parent;
+
+        // only 1 cell?
         if (1 === $count) {
             $widths[0] = $parent->getPrintableWidth();
 
@@ -798,15 +796,7 @@ class PdfTableBuilder
         }
 
         // get fixed and resizable widths
-        $fixedWidth = 0.0;
-        $resizableWidth = 0.0;
-        for ($i = 0; $i < $count; ++$i) {
-            if ($fixeds[$i]) {
-                $fixedWidth += $widths[$i];
-            } else {
-                $resizableWidth += $widths[$i];
-            }
-        }
+        [$fixedWidth, $resizableWidth] = $this->computeCellWidths($fixeds, $widths);
 
         // update resizable widths
         $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
@@ -867,5 +857,28 @@ class PdfTableBuilder
             $widths,
             $fixeds,
         ];
+    }
+
+    /**
+     * Compute fixed and resizable widths.
+     *
+     * @param bool[]  $fixeds
+     * @param float[] $widths
+     *
+     * @return array{0: float, 1: float}
+     */
+    private function computeCellWidths(array $fixeds, array $widths): array
+    {
+        $fixedWidth = 0.0;
+        $resizableWidth = 0.0;
+        for ($i = 0, $count = \count($fixeds); $i < $count; ++$i) {
+            if ($fixeds[$i]) {
+                $fixedWidth += $widths[$i];
+            } else {
+                $resizableWidth += $widths[$i];
+            }
+        }
+
+        return [$fixedWidth, $resizableWidth];
     }
 }

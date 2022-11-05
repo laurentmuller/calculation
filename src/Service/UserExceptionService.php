@@ -51,6 +51,9 @@ class UserExceptionService
 
     /**
      * Map the given exception to a custom user exception.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function mapException(\Throwable $e): CustomUserMessageAuthenticationException
     {

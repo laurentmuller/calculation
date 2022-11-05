@@ -91,7 +91,7 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getValidateIntRange(): array
+    public function getValidateRange(): array
     {
         return [
             [0,  0, 100, 0],
@@ -148,7 +148,16 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidateIntRange
+     * @dataProvider getValidateRange
+     */
+    public function testValidateFloatRange(float $value, float $min, float $max, float $expected): void
+    {
+        $actual = $this->validateFloatRange($value, $min, $max);
+        self::assertEquals($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getValidateRange
      */
     public function testValidateIntRange(int $value, int $min, int $max, int $expected): void
     {

@@ -297,6 +297,9 @@ class HelpReport extends AbstractReport
      *      details: string[]|null} $item
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function outputDialog(array $item): void
     {

@@ -297,6 +297,9 @@ class PdfDocument extends \FPDF
      * @param float   $width the desired width. If 0, the width extends up to the right margin.
      *
      * @return int the number of lines
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getLinesCount(?string $text, float $width): int
     {

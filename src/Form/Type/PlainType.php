@@ -260,6 +260,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
      * @throws TransformationFailedException if the value can not be mapped to a string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getDataValue(mixed $value, array $options): string
     {

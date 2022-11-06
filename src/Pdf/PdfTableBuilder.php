@@ -871,11 +871,11 @@ class PdfTableBuilder
     {
         $fixedWidth = 0.0;
         $resizableWidth = 0.0;
-        for ($i = 0, $count = \count($fixeds); $i < $count; ++$i) {
-            if ($fixeds[$i]) {
-                $fixedWidth += $widths[$i];
+        foreach ($fixeds as $index => $fixed) {
+            if ($fixed) {
+                $fixedWidth += $widths[$index];
             } else {
-                $resizableWidth += $widths[$i];
+                $resizableWidth += $widths[$index];
             }
         }
 

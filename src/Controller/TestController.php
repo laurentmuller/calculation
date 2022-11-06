@@ -557,7 +557,7 @@ class TestController extends AbstractController
     private function formatRecaptchaResult(array $values): string
     {
         $values = \array_filter($values);
-        $html = '<table class="table table-borderless table-sm mb-0">';
+        $html = '<table class="table table-borderless table-sm mb-0"><tbody>';
         foreach ($values as $key => $value) {
             if (\is_array($value)) {
                 $value = \implode('<br>', $value);
@@ -566,9 +566,8 @@ class TestController extends AbstractController
             }
             $html .= "<tr><td>$key</td><td>:</td><td>$value</td></tr>";
         }
-        $html .= '</table>';
 
-        return $html;
+        return $html . '</tbody></table>';
     }
 
     private function getCategories(EntityManagerInterface $manager): array
@@ -598,7 +597,6 @@ class TestController extends AbstractController
         }, Currencies::getCurrencyCodes());
 
         $currencies = \array_filter($currencies, static fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name']));
-
         \usort($currencies, static fn (array $left, array $right): int => \strnatcasecmp((string) $left['name'], (string) $right['name']));
 
         return $currencies;

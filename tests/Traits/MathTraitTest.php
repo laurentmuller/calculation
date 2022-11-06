@@ -91,10 +91,22 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getValidateRange(): array
+    public function getValidateFloatRange(): array
+    {
+        return [
+            [0.0,  0, 100.0, 0.0],
+            [100.0,  0, 100.0, 100.0],
+            [50.0,  0.0, 100.0, 50.0],
+            [-0.1,  0.0, 100.0, 0.0],
+            [100.1,  0.0, 100.0, 100.0],
+        ];
+    }
+
+    public function getValidateIntRange(): array
     {
         return [
             [0,  0, 100, 0],
+            [100,  0, 100, 100],
             [50,  0, 100, 50],
             [-1,  0, 100, 0],
             [101,  0, 100, 100],
@@ -148,7 +160,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidateRange
+     * @dataProvider getValidateFloatRange
      */
     public function testValidateFloatRange(float $value, float $min, float $max, float $expected): void
     {
@@ -157,7 +169,7 @@ class MathTraitTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidateRange
+     * @dataProvider getValidateIntRange
      */
     public function testValidateIntRange(int $value, int $min, int $max, int $expected): void
     {

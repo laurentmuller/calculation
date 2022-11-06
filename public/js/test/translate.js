@@ -37,7 +37,7 @@ function handleError(response) {
  *
  * @param {HTMLElement} form - the submitted form.
  */
-function translate(form) {
+function translate(form, notification) {
     'use strict';
     const $form = $(form);
     const $buttonSubmit = $form.find(':submit');
@@ -50,17 +50,15 @@ function translate(form) {
     $buttonCopy.toggleDisabled(true);
 
     // build parameters
-    const $text = $('#text');
-    $text.val($text.val().trim());
     const data = {
         'from': $('#from').val(),
         'to': $('#to').val(),
-        'text': $text.val(),
+        'text': $('#text').val().trim(),
         'service': $('#service').val()
     };
 
     // call
-
+    $.ajaxSetup({global: false});
     const url = $form.data('ajax');
     $.post(url, data, function (response) {
         // ok?
@@ -82,8 +80,9 @@ function translate(form) {
             const to = data.to.name;
             const service = $('#service').getSelectedOption().text();
             const message = $form.data('success').replace('%from%', from).replace('%to%', to).replace('%service%', service);
-            notify(Toaster.NotificationTypes.PRIMARY, message);
-
+            if (notification) {
+                notify(Toaster.NotificationTypes.PRIMARY, message);
+            }
         } else {
             // update
             $textResult.val('');
@@ -95,6 +94,7 @@ function translate(form) {
         }
     }).always(function () {
         $buttonSubmit.toggleDisabled(false);
+        $.ajaxSetup({global: true});
     });
 }
 
@@ -134,6 +134,20 @@ function handleExchange() {
 }
 
 /**
+ * Handle text change event.
+ */
+function handleTextChange() {
+    'use strict';
+    const $text = $('#text');
+    const oldValue = $text.data('old-value');
+    const newValue = $text.val().trim();
+    if (newValue.length && newValue !== oldValue) {
+        translate($('#edit-form')[0], false);
+    }
+    $text.data('old-value', newValue);
+}
+
+/**
  * Handle from and to input event.
  */
 function handleSelection() {
@@ -141,7 +155,8 @@ function handleSelection() {
     // update exchange button.
     const from = $('#from').getSelectedOption().index();
     const to = $('#to').getSelectedOption().index();
-    $('.btn-exchange').toggleDisabled(from === 0 || from - 1 === to);
+    const state = from === 0 || from - 1 === to;
+    $('.btn-exchange').toggleDisabled(state);
 }
 
 /**
@@ -204,6 +219,10 @@ function handleService() {
             if (oldFrom && !$from.val(oldFrom).val()) {
                 $from.selectFirstOption();
             }
+
+            // translate
+            $('#text').data('old-value', null);
+            handleTextChange();
         } else {
             handleError(response);
         }
@@ -220,7 +239,7 @@ function handleService() {
     $fromTo.initSelect2();
 
     // clipboard
-    if (ClipboardJS.isSupported()) {
+    if (ClipboardJS.isSupported('copy')) {
         const clipboard = new ClipboardJS('.btn-copy');
         clipboard.on('success', function (e) {
             onCopySuccess(e);
@@ -245,12 +264,16 @@ function handleService() {
     $('#service').on('input', function () {
         handleService();
     });
+    $('#text').on('keydown', function () {
+        $(this).createTimer(handleTextChange, 250);
+    });
 
     // validate
     const options = {
         focus: false,
+        showModification: false,
         submitHandler: function (form) {
-            translate(form);
+            translate(form, true);
         },
         rules: {
             text: {

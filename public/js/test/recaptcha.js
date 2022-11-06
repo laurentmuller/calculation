@@ -8,7 +8,12 @@
 grecaptcha.ready(function () {
     'use strict';
     // update badge position
-    $('.grecaptcha-badge').css('bottom', '30px');
+    let bottom = 5;
+    if ($('footer:visible').length) {
+        bottom += $('footer').outerHeight();
+    }
+    $('.grecaptcha-badge').css('bottom',  bottom + 'px');
+
     // execute
     const $form = $('#edit-form');
     const key = $form.data('key');

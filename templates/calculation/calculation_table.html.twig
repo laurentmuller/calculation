@@ -14,9 +14,19 @@
 {% if customData.states is defined and customData.states|length > 1 %}
     {%- set state_param = constant('App\\Table\\CalculationTable::PARAM_STATE') -%}
     {%- set state_id = customData.state.id|default(0) -%}
+    {% set data_default = 'calculation.fields.state'|trans %}
     <div class="input-group-append">
-        <button id="{{ state_param }}" data-value="{{ state_id }}" data-icon="{{ icon(ICON_CALCULATION_STATE)|e }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
-            {{ icon(ICON_CALCULATION_STATE) }}&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
+        <button id="{{ state_param }}"
+                type="button"
+                data-value="{{ state_id }}"
+                data-copy-icon="true"
+                data-reset-icon="true"
+                data-default="{{ data_default }}"
+                data-icon="{{ icon(ICON_CALCULATION_STATE)|e }}"
+                data-toggle="dropdown"
+                class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle"
+                title="{{ 'calculation.list.state_help'|trans }}">
+            {{ icon(ICON_CALCULATION_STATE) }}&nbsp;{{- customData.state ? customData.state.code : data_default -}}
         </button>
         {% set editable = false %}
         <div class="dropdown-menu" aria-labelledby="{{ state_param }}">

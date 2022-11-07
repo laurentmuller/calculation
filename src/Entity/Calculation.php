@@ -20,7 +20,6 @@ use App\Util\FormatUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -45,7 +44,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The date.
      */
     #[Assert\NotNull]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE)]
     protected \DateTimeInterface $date;
 
     /**

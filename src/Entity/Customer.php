@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,7 +32,7 @@ class Customer extends AbstractEntity
     protected ?string $address = null;
 
     #[Assert\Date]
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $birthday = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]

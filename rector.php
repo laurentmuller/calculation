@@ -15,6 +15,7 @@ use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
+use Rector\Doctrine\Set\DoctrineSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     // bootstrap files
@@ -41,5 +42,6 @@ return static function (RectorConfig $rectorConfig): void {
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
     ]);
 };

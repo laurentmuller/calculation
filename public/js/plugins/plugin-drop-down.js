@@ -115,11 +115,13 @@
         _updateValue(value, $selection) {
             const $element = this.$element;
             const copyIcon = this.options.copyIcon;
+            const resetIcon = this.options.resetIcon;
             const copyText = this.options.copyText;
+
             const $items = this.$menu.find('.dropdown-item').removeClass('active');
 
             // default values
-            let $icon = $element.find('i');
+            let $icon = $element.find(':first-child');
             if ($icon.length === 0 && $element.data('icon')) {
                 $icon = $($element.data('icon'));
             }
@@ -133,9 +135,12 @@
 
             // icon
             if (copyIcon) {
-                const $newIcon = $selection.find('i');
+                const $newIcon = $selection.find(':first-child');
                 if ($newIcon.length) {
                     $icon = $newIcon;
+                }
+                if (resetIcon && $selection.is($items.first()) && $element.data('icon')) {
+                    $icon = $($element.data('icon'));
                 }
             }
 
@@ -171,7 +176,8 @@
     // -----------------------------------
     DropDown.DEFAULTS = {
         copyText: true,
-        copyIcon: false
+        copyIcon: false,
+        resetIcon: false
     };
 
     // -----------------------------------

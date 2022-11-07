@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Util\FormatUtils;
 use App\Util\Utils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Psr\Log\LogLevel;
@@ -54,7 +53,7 @@ class Log extends AbstractEntity
     #[ORM\Column(length: 50)]
     private string $level = LogLevel::INFO;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
     private string $message = '';
 
     /**

@@ -402,48 +402,6 @@ function initializeDangerTooltips($table) {
 }
 
 /**
- * Initialize search entity drop-down
- */
-function initializeSearchEntities() {
-    'use strict';
-    $('.dropdown-entity ').each(function () {
-        const $this = $(this);
-        const icon = $this.data('icon');
-        if (icon) {
-            $('<i />', {
-                class: ' mr-1 ' + icon
-            }).prependTo($this);
-        }
-    });
-}
-
-/**
- * Initialize log channels drop-down.
- */
-function initializeLogChannels() {
-    'use strict';
-    $('.dropdown-channel[data-value]:not([data-value=""])').each(function () {
-        const $this = $(this);
-        $('<i />', {
-            class: 'icon-channel ' + ($this.data('value') || 'all')
-        }).prependTo($this);
-    });
-}
-
-/**
- * Initialize log levels drop-down.
- */
-function initializeLogLevels() {
-    'use strict';
-    $('.dropdown-level[data-value]:not([data-value=""])').each(function () {
-        const $this = $(this);
-        $('<i />', {
-            class: 'icon-level ' + ($this.data('value') || 'all')
-        }).prependTo($this);
-    });
-}
-
-/**
  * jQuery extensions.
  */
 
@@ -747,11 +705,6 @@ function initializeLogLevels() {
     // initialize danger tooltips
     initializeDangerTooltips($table);
 
-    // initialize drop-down menus
-    initializeSearchEntities();
-    initializeLogChannels();
-    initializeLogLevels();
-
     // update UI
     $('.card .dropdown-menu').removeSeparators();
     $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
@@ -763,10 +716,6 @@ function initializeLogLevels() {
     if ($searchMinimum.length) {
         $searchMinimum.toggleClass('d-none', $table.isSearchText());
     }
-
-    // hide menu when page is selected
-    // $('.card').on('click', hideMenus);
-    //console.log($('.fixed-table-pagination .page-item').length);
 
     if ($table.isEmpty()) {
         $('input.search-input').trigger('focus');

@@ -17,17 +17,16 @@
 {% if customData.categories|length > 1 %}
     {% set group = '' %}
     {% set data_default = 'product.fields.category'|trans %}
+    {% set text = customData.category ? customData.category.code : data_default %}
     <div class="input-group-append">
-        <button id="{{ category_param }}"
-                type="button"
-                title="{{ 'product.list.category_help'|trans }}"
-                class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle"
-                data-toggle="dropdown"
-                data-value="{{ category_id }}"
-                data-icon="{{ icon(ICON_CATEGORY)|e }}"
-                data-default="{{ data_default }}">
-            {{- icon(ICON_CATEGORY) }}&nbsp;{{- customData.category ? customData.category.code : data_default -}}
-        </button>
+        {{ _self.output_dropdown_menu(
+            category_param,
+            ICON_CATEGORY,
+            text,
+            'product.list.category_help',
+            category_id,
+            data_default
+        ) }}
         <div class="dropdown-menu" aria-labelledby="{{ category_param }}">
             {{ _self.output_dropdown('category', 0, category_id, 'product.list.category_all_text'|trans, {}, 'filter-circle-xmark') }}
             {% for category in customData.categories %}

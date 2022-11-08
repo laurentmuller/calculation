@@ -81,13 +81,21 @@
          * @private
          */
         _init() {
-            this.$menu = this.$element.next('.dropdown-menu');
+            this.$menu = this.$element.siblings('.dropdown-menu');
             if (this.$menu.length) {
                 this.menuShowProxy = () => this._menuShow();
-                this.menuClickProxy = (e) => this._menuItemClick(e);
+                this.menuClickProxy = (e) => this._menuClick(e);
                 this.$menu.on('shown.bs.dropdown', this.menuShowProxy);
                 this.$menu.on('click', '.dropdown-item', this.menuClickProxy);
             }
+        }
+
+        /**
+         * Handle the drop-down menu show event.
+         * @private
+         */
+        _menuShow() {
+            this.$menu.find('.active').trigger('focus');
         }
 
         /**
@@ -95,7 +103,7 @@
          * @param {Event} e - the event.
          * @private
          */
-        _menuItemClick(e) {
+        _menuClick(e) {
             e.preventDefault();
             const $item = $(e.currentTarget);
             const oldValue = this.getValue() || '';
@@ -117,7 +125,6 @@
             const copyIcon = this.options.copyIcon;
             const resetIcon = this.options.resetIcon;
             const copyText = this.options.copyText;
-
             const $items = this.$menu.find('.dropdown-item').removeClass('active');
 
             // default values
@@ -160,14 +167,6 @@
                 $element.text(text);
             }
             $element.data('value', value).trigger('input', value);
-        }
-
-        /**
-         * Handle the drop-down menu show event.
-         * @private
-         */
-        _menuShow() {
-            this.$menu.find('.active').trigger('focus');
         }
     };
 

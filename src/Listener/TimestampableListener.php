@@ -71,38 +71,30 @@ class TimestampableListener implements DisableListenerInterface
     /**
      * @return TimestampableInterface[]
      */
+    private function filterEntities(array $entities, bool $includeChildren): array
+    {
+        return \array_unique(\array_filter(\array_map(
+            fn (object $entity) => $this->getTimestampable($entity, $includeChildren),
+            $entities
+        )));
+    }
+
+    /**
+     * @return TimestampableInterface[]
+     */
     private function getEntities(UnitOfWork $unitOfWork): array
     {
-        /** @var object[] $entities */
-        $entities = [
+        $updated = $this->filterEntities([
             ...$unitOfWork->getScheduledEntityUpdates(),
             ...$unitOfWork->getScheduledEntityDeletions(),
             ...$unitOfWork->getScheduledEntityInsertions(),
-        ];
-        if ([] === $entities) {
+        ], true);
+        if ([] === $updated) {
             return [];
         }
+        $deleted = $this->filterEntities($unitOfWork->getScheduledEntityDeletions(), false);
 
-        // get all entities include from ParentTimestampableInterface
-        $result = [];
-        foreach ($entities as $entity) {
-            if (null !== $timestampable = $this->getTimestampable($entity, true)) {
-                $result[\spl_object_id($timestampable)] = $timestampable;
-            }
-        }
-        if ([] === $result) {
-            return [];
-        }
-
-        // exclude deleted TimestampableInterface
-        $entities = $unitOfWork->getScheduledEntityDeletions();
-        foreach ($entities as $entity) {
-            if (null !== $timestampable = $this->getTimestampable($entity, false)) {
-                unset($result[\spl_object_id($timestampable)]);
-            }
-        }
-
-        return $result;
+        return \array_diff($updated, $deleted);
     }
 
     private function getTimestampable(object $entity, bool $includeChildren): ?TimestampableInterface

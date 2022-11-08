@@ -17,17 +17,16 @@
 {% block toolbar_actions -%}
 {% if customData.groups|length > 1 %}
     {% set data_default = 'category.fields.group'|trans %}
+    {% set text = customData.group ? customData.group.code : data_default %}
     <div class="input-group-append">
-        <button id="{{ group_param }}"
-                type="button"
-                title="{{ 'category.list.group_help'|trans }}"
-                class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle"
-                data-toggle="dropdown"
-                data-value="{{ group_id }}"
-                data-icon="{{ icon(ICON_GROUP)|e }}"
-                data-default="{{ data_default }}">
-            {{- icon(ICON_GROUP) }}&nbsp;{{- customData.group ? customData.group.code : data_default -}}
-        </button>
+        {{ _self.output_dropdown_menu(
+            group_param,
+            ICON_GROUP,
+            text,
+            'category.list.group_help',
+            group_id,
+            data_default
+        ) }}
         {% set group = '' %}
         <div class="dropdown-menu" aria-labelledby="{{ group_param }}">
             {{ _self.output_dropdown('group', 0, group_id, 'category.list.group_all_text'|trans, {}, 'filter-circle-xmark') }}

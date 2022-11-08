@@ -625,7 +625,8 @@ list:
   sort_descending: Tri décroissant
   sort_descending_title: 'Ordre de tri par défaut : %name% décroissant'
 log:
-  channel_all: Tous les canaux
+  name: Entré du journal
+  title: Journal de l'application
   delete:
     entries: Nombre d'entrées
     error: Impossible de supprimer le journal de l'application.
@@ -642,7 +643,6 @@ log:
     level: Niveau
     message: Message
     user: Utilisateur
-  level_all: Tous les niveaux
   list:
     title: Journal de l'application
     empty: Le journal de l'application ne contient aucune entrée.
@@ -650,13 +650,14 @@ log:
     excel_title: Exporter le journal
     refresh_title: Recharger le journal
     file: 'Fichier : %file%'
+    level_all: Tous les niveaux
     level_help: Afficher les entrées pour le niveau sélectionné
+    channel_all: Tous les canaux
     channel_help: Afficher les entrées pour le canal sélectionné
-  name: Entré du journal
   show:
     not_found: Impossible d'afficher l'entrée du journal.
     title: Propriétés de l'entrée du journal
-  title: Journal de l'application
+
 openweather:
   current:
     date_calculation: Valeurs obtenue le %date%

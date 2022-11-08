@@ -38,10 +38,8 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
     /**
      * Constructor.
      */
-    public function __construct(
-        CalculationStateRepository $repository,
-        private readonly Environment $twig
-    ) {
+    public function __construct(CalculationStateRepository $repository, private readonly Environment $twig)
+    {
         parent::__construct($repository);
     }
 

@@ -47,11 +47,8 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * Constructor.
      */
-    public function __construct(
-        CategoryRepository $repository,
-        private readonly GroupRepository $groupRepository,
-        private readonly Environment $twig
-    ) {
+    public function __construct(CategoryRepository $repository, private readonly GroupRepository $groupRepository, private readonly Environment $twig)
+    {
         parent::__construct($repository);
     }
 

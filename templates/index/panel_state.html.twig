@@ -1,14 +1,14 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
-{% macro cardEntry(state, list_path, parameters=[], min_margin) -%}
+{% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
 <div class="card index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
     <div class="card-body card-body-tooltip p-2">
         <div class="card-text mb-0">
-            {%- if list_path -%}
+            {%- if table_path -%}
                 {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-                <a href="{{ path(list_path, parameters) }}" class="card-link stretched-link" title="{{ list_title }}">{{ state.code }}</a>
+                <a href="{{ path(table_path, parameters) }}" class="card-link stretched-link" title="{{ list_title }}">{{ state.code }}</a>
             {%- else -%}
                 <span>{{ state.code }}</span>
             {%- endif -%}
@@ -23,8 +23,8 @@
 </div>
 {%- endmacro %}
 {# parameters #}
-{%- set list_path = is_granted_calculation ? 'calculation_table' : false -%}
 {%- set is_states = states|length -%}
+{%- set table_path = is_granted_calculation ? 'calculation_table' : false -%}
 {# content #}
 <div class="card mb-2">
     <div class="card-header">
@@ -33,19 +33,19 @@
                 <h1 class="card-title">{{ icons.icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
             </div>
             <div class="col-auto d-print-none">
-                {%- if list_path and is_states -%}
+                {%- if table_path and is_states -%}
                     {{- icons.link(path('chart_by_state'), null, null, 'chart-pie', 'index.menu_chart_title') -}}
                 {%- endif -%}
             </div>
         </div>
     </div>
     {% if is_states %}
-    <div class="card-body index-parent no-gutters p-1">
-        {% for state in states %}
-            {% set parameters = state.id ? {'stateid': state.id} : {} %}
-            {{ _self.cardEntry(state, list_path, parameters, min_margin) }}
-        {% endfor %}
-    </div>
+        <div class="card-body index-parent no-gutters p-1">
+            {% for state in states %}
+                {% set parameters = state.id ? {'stateId': state.id} : {} %}
+                {{ _self.cardEntry(state, table_path, parameters, min_margin) }}
+            {% endfor %}
+        </div>
     {% else %}
         {{ macros.empty() }}
     {% endif %}

@@ -18,25 +18,27 @@
     <div class="input-group-append">
         <button id="{{ state_param }}"
                 type="button"
-                data-value="{{ state_id }}"
-                data-copy-icon="true"
-                data-reset-icon="true"
-                data-default="{{ data_default }}"
-                data-icon="{{ icon(ICON_CALCULATION_STATE)|e }}"
-                data-toggle="dropdown"
+                title="{{ 'calculation.list.state_help'|trans }}"
                 class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle"
-                title="{{ 'calculation.list.state_help'|trans }}">
-            {{ icon(ICON_CALCULATION_STATE) }}&nbsp;{{- customData.state ? customData.state.code : data_default -}}
+                data-toggle="dropdown"
+                data-value="{{ state_id }}"
+                data-icon="{{ icon(ICON_CALCULATION_STATE)|e }}"
+                data-default="{{ data_default }}">
+            {% if customData.state %}
+                {{- icon(ICON_CALCULATION_STATE) }}&nbsp;{{ customData.state.code -}}
+            {% else %}
+                {{- icon(ICON_CALCULATION_STATE) }}&nbsp;{{ data_default -}}
+            {% endif %}
         </button>
         {% set editable = false %}
         <div class="dropdown-menu" aria-labelledby="{{ state_param }}">
-            {{ _self.output_dropdown('state', 0, state_id, 'calculation.list.state_all_text'|trans, {'data-color': 'transparent'}) }}
+            {{ _self.output_dropdown('state', 0, state_id, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
             {% for state in customData.states %}
                 {% if editable != state.editable %}
-                    {{ _self.output_dropdown_header((state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true) }}
+                    {{ _self.output_dropdown_header((state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable'), true, state.editable ? 'circle-check' : 'circle-xmark') }}
                     {% set editable = state.editable %}
                 {% endif %}
-                {{ _self.output_dropdown('state', state.id, state_id, state.code, {'data-color': state.color}) }}
+                {{ _self.output_dropdown('state pl-5', state.id, state_id, state.code, {'data-color': state.color}, ICON_CALCULATION_STATE) }}
             {% endfor %}
         </div>
     </div>

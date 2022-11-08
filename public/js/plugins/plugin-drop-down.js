@@ -176,8 +176,8 @@
     // -----------------------------------
     DropDown.DEFAULTS = {
         copyText: true,
-        copyIcon: false,
-        resetIcon: false
+        copyIcon: true,
+        resetIcon: true
     };
 
     // -----------------------------------

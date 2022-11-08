@@ -402,21 +402,6 @@ function initializeDangerTooltips($table) {
 }
 
 /**
- * Initialize calculation state drop-down.
- */
-function initializeCalculationStates() {
-    'use strict';
-    $('.dropdown-state').each(function () {
-        const $this = $(this);
-        $('<span />', {
-            class: 'mr-1 border', css: {
-                width: '1rem', height: '0.75rem', display: 'inline-block', background: $this.data('color') || 'transparent'
-            }
-        }).prependTo($this);
-    });
-}
-
-/**
  * Initialize search entity drop-down
  */
 function initializeSearchEntities() {
@@ -437,7 +422,7 @@ function initializeSearchEntities() {
  */
 function initializeLogChannels() {
     'use strict';
-    $('.dropdown-channel').each(function () {
+    $('.dropdown-channel[data-value]:not([data-value=""])').each(function () {
         const $this = $(this);
         $('<i />', {
             class: 'icon-channel ' + ($this.data('value') || 'all')
@@ -450,7 +435,7 @@ function initializeLogChannels() {
  */
 function initializeLogLevels() {
     'use strict';
-    $('.dropdown-level').each(function () {
+    $('.dropdown-level[data-value]:not([data-value=""])').each(function () {
         const $this = $(this);
         $('<i />', {
             class: 'icon-level ' + ($this.data('value') || 'all')
@@ -763,7 +748,6 @@ function initializeLogLevels() {
     initializeDangerTooltips($table);
 
     // initialize drop-down menus
-    initializeCalculationStates();
     initializeSearchEntities();
     initializeLogChannels();
     initializeLogLevels();

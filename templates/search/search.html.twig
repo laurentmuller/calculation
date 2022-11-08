@@ -15,11 +15,18 @@
 {% if customData.entities and customData.entities|length > 1 %}
     {% set data_default = 'search.entity'|trans %}
     <div class="input-group-append btn-dropdown">
-        <button id="entity" data-value="{{ entity }}" data-copy-icon="true" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ data_default }}" title="{{ 'search.entity_help'|trans }}">
-            {{ icon('database') }}&nbsp;{{- entity ? customData.entities[entity].name|trans : data_default -}}
+        <button id="entity"
+                type="button"
+                title="{{ 'search.entity_help'|trans }}"
+                class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle"
+                data-toggle="dropdown"
+                data-value="{{ entity }}"
+                data-icon="{{ icon('database')|e }}"
+                data-default="{{ data_default }}">
+            {{- icon('database') }}&nbsp;{{ entity ? customData.entities[entity].name|trans : data_default -}}
         </button>
         <div class="dropdown-menu" aria-labelledby="entity">
-            {{ _self.output_dropdown('entity', '', entity, 'search.all_entities'|trans, {'data-icon': 'fa-fw fa-solid fa-database'}) }}
+            {{ _self.output_dropdown('entity', '', entity, 'search.all_entities'|trans, false, 'filter-circle-xmark') }}
             {{ _self.item_separator() }}
             {% for key, entry in customData.entities %}
             {{ _self.output_dropdown('entity', key, entity, entry.name|trans, {'data-icon': entry.icon}) }}

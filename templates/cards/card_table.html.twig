@@ -7,7 +7,24 @@
     {{- column.title ? column.title|trans : '&nbsp;'|raw -}}
 </th>
 {%- endmacro %}
-{% macro output_dropdown(suffix, value, selection, text, attributes=[]) -%}
+{% macro output_dropdown_menu(id, icon, text, title, value, default) -%}
+{% set attributes = attributes|default([])|merge({
+    'id': id,
+    'type': 'button',
+    'role': 'button',
+    'title': title,
+    'class': 'btn btn-sm btn-outline-secondary dropdown-toggle dropdown-input',
+    'aria-expanded': 'false',
+    'data-toggle': 'dropdown',
+    'data-value': value,
+    'data-icon': icon(icon)|raw,
+    'data-default': default
+}) %}
+<button{{ output_attributes(attributes) }}>
+    {{- icon(icon) }} {{ text -}}
+</button>
+{% endmacro %}
+{% macro output_dropdown(suffix, value, selection, text, attributes=[], icon=null) -%}
 {% set active = value == selection ? ' active' : '' %}
 {% set attributes = attributes|default([])|merge({
     'type': 'button',
@@ -16,12 +33,12 @@
     'class': 'dropdown-item dropdown-' ~ suffix ~ active
 }) %}
 <button{{ output_attributes(attributes) }}>
-    {{- text|default(value)|capitalize -}}
+    {%- if icon %} {{ icon(icon) }} {% endif %}{{- text|default(value)|capitalize -}}
 </button>
 {%- endmacro %}
-{% macro output_dropdown_header(text, translate=false) -%}
+{% macro output_dropdown_header(text, translate=false, icon=null) -%}
     {{ _self.item_separator() }}
-    <h6 class="dropdown-header">{{ (translate ? text|trans : text)|upper }}</h6>
+    <h6 class="dropdown-header">{% if icon %}{{ icon(icon) }} {% endif %}{{ (translate ? text|trans : text)|upper }}</h6>
 {%- endmacro %}
 {% macro item_path(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}

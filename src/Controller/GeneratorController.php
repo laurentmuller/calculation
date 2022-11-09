@@ -42,30 +42,23 @@ class GeneratorController extends AbstractController
 
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[Route(path: '', name: 'generate')]
     public function generate(): Response
     {
-        $data = [
-            'count' => $this->getSessionInt(self::KEY_COUNT, 1),
-            'entity' => $this->getSessionString(self::KEY_ENTITY),
-            'simulate' => $this->isSessionBool(self::KEY_SIMULATE, true),
-        ];
-        $choices = [
-            'customer.name' => $this->generateUrl(self::ROUTE_CUSTOMER),
-            'calculation.name' => $this->generateUrl(self::ROUTE_CALCULATION),
-            'product.name' => $this->generateUrl(self::ROUTE_PRODUCT),
-        ];
+        $data = $this->getSessionData();
         $helper = $this->createFormHelper('generate.fields.', $data);
+
+        $choices = $this->getChoices();
+        $attributes = $this->getAttributes($choices);
         $helper->field('entity')
-            ->updateOption('choice_attr', static fn (string $_choice, string $key): array => ['data-key' => \explode('.', $key)[0]])
+            ->updateOption('choice_attr', $attributes)
             ->addChoiceType($choices);
 
         $helper->field('count')
             ->updateAttributes([
-                'min' => 1, 'max' => 20,
+                'min' => 1,
+                'max' => 20,
                 'step' => 1,
             ])->addNumberType(0);
 
@@ -121,5 +114,41 @@ class GeneratorController extends AbstractController
         ]);
 
         return $generator->generate($count, $simulate);
+    }
+
+    /**
+     * @param array<string, string> $choices
+     */
+    private function getAttributes(array $choices): array
+    {
+        foreach (\array_keys($choices) as $key) {
+            $choices[$key] = ['data-key' => \explode('.', $key)[0]];
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getChoices(): array
+    {
+        return [
+            'customer.name' => $this->generateUrl(self::ROUTE_CUSTOMER),
+            'calculation.name' => $this->generateUrl(self::ROUTE_CALCULATION),
+            'product.name' => $this->generateUrl(self::ROUTE_PRODUCT),
+        ];
+    }
+
+    /**
+     * @return array{count: ?int, entity: ?string, simulate: bool}
+     */
+    private function getSessionData(): array
+    {
+        return [
+            'count' => $this->getSessionInt(self::KEY_COUNT, 1),
+            'entity' => $this->getSessionString(self::KEY_ENTITY),
+            'simulate' => $this->isSessionBool(self::KEY_SIMULATE, true),
+        ];
     }
 }

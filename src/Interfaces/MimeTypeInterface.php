@@ -18,7 +18,17 @@ namespace App\Interfaces;
 interface MimeTypeInterface
 {
     /**
-     * Gets the mime type.
+     * Gets the attachment mime type.
      */
-    public function getMimeType(): string;
+    public function getAttachmentMimeType(): string;
+
+    /**
+     * Gets the default file extension (without the dot separator).
+     */
+    public function getFileExtension(): string;
+
+    /**
+     * Gets the inline mime type.
+     */
+    public function getInlineMimeType(): string;
 }

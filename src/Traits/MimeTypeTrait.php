@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * Trait to create file response headers.
@@ -30,13 +31,8 @@ trait MimeTypeTrait
     public function buildHeaders(string $name, bool $inline): array
     {
         $encoded = Utils::ascii($name);
-        if ($inline) {
-            $type = $this->getMimeType();
-            $disposition = HeaderUtils::DISPOSITION_INLINE;
-        } else {
-            $type = 'application/x-download';
-            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
-        }
+        $type = $inline ? $this->getInlineMimeType() : $this->getAttachmentMimeType();
+        $disposition = $inline ? HeaderUtils::DISPOSITION_INLINE : HeaderUtils::DISPOSITION_ATTACHMENT;
 
         return [
             'Pragma' => 'public',
@@ -47,7 +43,25 @@ trait MimeTypeTrait
     }
 
     /**
-     * Gets the mime type.
+     * {@inheritDoc}
      */
-    abstract public function getMimeType(): string;
+    public function getAttachmentMimeType(): string
+    {
+        return 'application/x-download';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInlineMimeType(): string
+    {
+        static $mimeType = null;
+        if (null === $mimeType) {
+            $types = new MimeTypes();
+            $extension = $this->getFileExtension();
+            $mimeType = $types->getMimeTypes($extension)[0];
+        }
+
+        return (string) $mimeType;
+    }
 }

@@ -48,11 +48,8 @@ class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
         parent::__construct($callback, self::HTTP_OK, $headers);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getMimeType(): string
+    public function getFileExtension(): string
     {
-        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        return 'xlsx';
     }
 }

@@ -112,7 +112,7 @@ class ResponseListener
      */
     private function getCSP(Response $response): string
     {
-        /** @var array<string, string[]> $csp */
+        /** @psalm-var array<string, string[]> $csp */
         $csp = $this->csp;
         if (empty($csp)) {
             return '';
@@ -121,10 +121,10 @@ class ResponseListener
         // mime type?
         if ($response instanceof MimeTypeInterface) {
             $csp['object-src'] = [self::CSP_SELF];
-            $csp['plugin-types'] = [$response->getMimeType()];
+            $csp['plugin-types'] = [$response->getInlineMimeType()];
         }
 
-        return \array_reduce(\array_keys($csp), fn (string $carry, string $key): string => $carry . $key . ' ' . \implode(' ', $csp[$key]) . ';', '');
+        return \array_reduce(\array_keys($csp), static fn (string $carry, string $key): string => $carry . $key . ' ' . \implode(' ', $csp[$key]) . ';', '');
     }
 
     /**
@@ -178,7 +178,7 @@ class ResponseListener
         ];
 
         /** @psalm-var array<string, string[]> $result */
-        $result = \array_map(fn (array $values): array => \str_replace($search, $replace, $values), $csp);
+        $result = \array_map(static fn (array $values): array => \str_replace($search, $replace, $values), $csp);
 
         return $result;
     }

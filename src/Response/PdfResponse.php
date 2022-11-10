@@ -48,8 +48,8 @@ class PdfResponse extends Response implements MimeTypeInterface
     /**
      * {@inheritDoc}
      */
-    public function getMimeType(): string
+    public function getFileExtension(): string
     {
-        return 'application/pdf';
+        return 'pdf';
     }
 }

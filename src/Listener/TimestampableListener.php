@@ -92,7 +92,11 @@ class TimestampableListener implements DisableListenerInterface
         if ([] === $updated) {
             return [];
         }
+
         $deleted = $this->filterEntities($unitOfWork->getScheduledEntityDeletions(), false);
+        if ([] === $deleted) {
+            return $updated;
+        }
 
         return \array_diff($updated, $deleted);
     }

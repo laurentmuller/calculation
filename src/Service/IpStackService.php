@@ -59,7 +59,11 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      *
      * @param ?Request $request the request to get client IP address or null for detecting the IP address
      *
-     * @return array|null the current Ip information if success; null on error
+     * @return array{
+     *     city: ?string,
+     *     region_name: ?string,
+     *     error: ?array{code: ?string, type: ?string}
+     *  }|null the current Ip information if success; null on error
      *
      * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
@@ -69,27 +73,35 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     {
         $clientIp = $this->getClientIp($request);
 
-        // find from cache
-        /** @psalm-var array|null $result */
+        /**
+         * @var array{
+         *     city: ?string,
+         *     region_name: ?string,
+         *     error: ?array{code: ?string, type: ?string}
+         *  }|null $result */
         $result = $this->getUrlCacheValue($clientIp);
         if (\is_array($result)) {
             return $result;
         }
 
         try {
-            // parameters
             $query = [
                 'output' => 'json',
                 'access_key' => $this->key,
                 'language' => self::getAcceptLanguage(),
             ];
 
-            // call
             $response = $this->requestGet($clientIp, [
                 self::QUERY => $query,
             ]);
 
-            // decode
+            /**
+             * @var array{
+             *     city: ?string,
+             *     region_name: ?string,
+             *     error: ?array{code: ?string, type: ?string}
+             * } $result
+             */
             $result = $response->toArray();
 
             // check
@@ -99,7 +111,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
 
             // update region name
             if (isset($result['region_name'])) {
-                $result['region_name'] = \ucfirst((string) $result['region_name']);
+                $result['region_name'] = \ucfirst($result['region_name']);
             }
 
             // save to cache
@@ -139,22 +151,25 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     }
 
     /**
+     * @param array{
+     *     city: ?string,
+     *     region_name: ?string,
+     *     error: ?array{code: ?string, type: ?string}
+     * } $result
+     *
      * @throws \ReflectionException
      */
     private function isValidResult(array $result): bool
     {
         if (isset($result['error'])) {
-            $code = (int) ($result['code'] ?? 404);
-            $id = (string) ($result['type'] ?? 'unknown');
+            $code = (int) ($result['error']['code'] ?? 404);
+            $id = $result['error']['type'] ?? 'unknown';
 
             return $this->setLastError($code, $this->translateError($id));
         }
 
-        if (empty($result['city'] ?? '')) {
-            $code = (int) ($result['code'] ?? 404);
-            $id = 'ip_not_found';
-
-            return $this->setLastError($code, $this->translateError($id));
+        if (empty($result['city'] ?? null)) {
+            return $this->setLastError(404, $this->translateError('ip_not_found'));
         }
 
         return true;

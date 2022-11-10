@@ -80,7 +80,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      *
      * @param string $code the base currency code
      *
-     * @return array an array with the currency code as key and the currency rate as value or an empty array if an error occurs
+     * @return array<string, float> an array with the currency code as key and the currency rate as value or an empty array if an error occurs
      *
      * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
@@ -89,17 +89,17 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     public function getLatest(string $code): array
     {
         $url = \sprintf(self::URI_LATEST, \strtoupper($code));
-        /** @psalm-var mixed $response */
-        $response = $this->getUrlCacheValue($url);
-        if (\is_array($response)) {
-            return $response;
+        /** @var array<string, float>|null $rates */
+        $rates = $this->getUrlCacheValue($url);
+        if (\is_array($rates)) {
+            return $rates;
         }
 
         if ($response = $this->getResponse($url)) {
-            $rates = (array) ($response['conversion_rates'] ?? []);
-            if (!empty($rates)) {
-                $time = $this->getDeltaTime($response);
-                $this->setUrlCacheValue($url, $rates, $time);
+            /** @var array<string, float>|null $rates */
+            $rates = $response['conversion_rates'] ?? null;
+            if (\is_array($rates)) {
+                $this->saveResponse($url, $response, $rates);
 
                 return $rates;
             }
@@ -123,17 +123,17 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     public function getRate(string $baseCode, string $targetCode): float
     {
         $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
-        /** @psalm-var mixed $response */
-        $response = $this->getUrlCacheValue($url);
-        if (\is_float($response)) {
-            return $response;
+        /** @var float|null $rate */
+        $rate = $this->getUrlCacheValue($url);
+        if (\is_float($rate)) {
+            return $rate;
         }
 
         if ($response = $this->getResponse($url)) {
-            $rate = (float) ($response['conversion_rate'] ?? 0.0);
-            if (!empty($rate)) {
-                $time = $this->getDeltaTime($response);
-                $this->setUrlCacheValue($url, $rate, $time);
+            /** @var float|null $rate */
+            $rate = $response['conversion_rate'] ?? null;
+            if (\is_float($rate)) {
+                $this->saveResponse($url, $response, $rate);
 
                 return $rate;
             }
@@ -148,13 +148,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $baseCode   the base currency code
      * @param string $targetCode the target currency code
      *
-     * @return array|null the exchange rate, the next update and last update dates or null if an error occurs
-     *
-     * @psalm-return null|array{
-     *      rate: float,
-     *      next: int|null,
-     *      update: int|null
-     * }
+     * @return array{rate: float, next: int|null, update: int|null}|null the exchange rate, the next update and last update dates or null if an error occurs
      *
      * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
@@ -164,27 +158,22 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
 
-        /** @psalm-var null|array{
-         *      rate: float,
-         *      next: int|null,
-         *      update: int|null} $response
-         */
-        $response = $this->getUrlCacheValue($url);
-        if (null !== $response) {
-            return $response;
+        /** @var array{rate: float, next: int|null, update: int|null}|null $result */
+        $result = $this->getUrlCacheValue($url);
+        if (\is_array($result)) {
+            return $result;
         }
 
         if ($response = $this->getResponse($url)) {
-            $rate = (float) ($response['conversion_rate'] ?? 0.0);
-            if (!empty($rate)) {
+            /** @var float|null $rate */
+            $rate = $response['conversion_rate'] ?? null;
+            if (\is_float($rate)) {
                 $result = [
                     'rate' => $rate,
                     'next' => $this->getNextTime($response),
                     'update' => $this->getUpdateTime($response),
                 ];
-
-                $time = $this->getDeltaTime($response);
-                $this->setUrlCacheValue($url, $result, $time);
+                $this->saveResponse($url, $response, $result);
 
                 return $result;
             }
@@ -196,7 +185,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     /**
      * Gets the supported currency codes.
      *
-     * @return array the supported currency codes or an empty array if an error occurs
+     * @return array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}> the supported currency codes or an empty array if an error occurs
      *
      * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
@@ -206,21 +195,20 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = self::URI_CODES;
 
-        /** @psalm-var mixed $response */
-        $response = $this->getUrlCacheValue($url);
-        if (\is_array($response)) {
-            return $response;
+        /** @var array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}>|null $result */
+        $result = $this->getUrlCacheValue($url);
+        if (\is_array($result)) {
+            return $result;
         }
 
         if ($response = $this->getResponse($url)) {
-            /** @psalm-var string[] $codes */
-            $codes = (array) ($response['supported_codes'] ?? []);
-            if (!empty($codes)) {
-                $codes = $this->mapCodes($codes);
-                $time = $this->getDeltaTime($response);
-                $this->setUrlCacheValue($url, $codes, $time);
+            /** @var string[]|null $codes */
+            $codes = $response['supported_codes'] ?? null;
+            if (\is_array($codes)) {
+                $result = $this->mapCodes($codes);
+                $this->saveResponse($url, $response, $result);
 
-                return $codes;
+                return $result;
             }
         }
 
@@ -305,29 +293,49 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     }
 
     /**
+     * Map a currency code.
+     */
+    private function mapCode(string $code): array
+    {
+        return [
+            'symbol' => Currencies::getSymbol($code),
+            'name' => \ucfirst(Currencies::getName($code)),
+            'numericCode' => Currencies::getNumericCode($code),
+            'fractionDigits' => Currencies::getFractionDigits($code),
+            'roundingIncrement' => Currencies::getRoundingIncrement($code),
+        ];
+    }
+
+    /**
      * @param string[] $codes
+     *
+     * @return array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}>
      */
     private function mapCodes(array $codes): array
     {
-        // filter
+        /** @var string[] $codes */
         $codes = \array_filter(\array_column($codes, 0), fn (string $code): bool => Currencies::exists($code));
 
-        // map
-        $result = [];
-        /** @psalm-var string $code */
-        foreach ($codes as $code) {
-            $result[$code] = [
-                'symbol' => Currencies::getSymbol($code),
-                'name' => \ucfirst(Currencies::getName($code)),
-                'numericCode' => Currencies::getNumericCode($code),
-                'fractionDigits' => Currencies::getFractionDigits($code),
-                'roundingIncrement' => Currencies::getRoundingIncrement($code),
-            ];
-        }
+        /** @var array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}> $result */
+        $result = \array_reduce($codes, function (array $carry, string $code): array {
+            $carry[$code] = $this->mapCode($code);
+
+            return $carry;
+        }, []);
 
         \uasort($result, fn (array $a, array $b) => $a['name'] <=> $b['name']);
 
         return $result;
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function saveResponse(string $url, array $response, mixed $value): void
+    {
+        $time = $this->getDeltaTime($response);
+        $this->setUrlCacheValue($url, $value, $time);
     }
 
     private function translateError(string $id): string

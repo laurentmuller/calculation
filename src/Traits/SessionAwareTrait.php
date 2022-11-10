@@ -179,11 +179,11 @@ trait SessionAwareTrait
     /**
      * Removes session attributes.
      *
-     * @param string[] $keys the attribute names to remove
+     * @param string ...$keys the attribute names to remove
      *
      * @return array the removed values
      */
-    protected function removeSessionValues(array $keys): array
+    protected function removeSessionValues(string ...$keys): array
     {
         return \array_map(fn (string $key): mixed => $this->removeSessionValue($key), $keys);
     }

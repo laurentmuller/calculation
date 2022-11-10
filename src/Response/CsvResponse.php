@@ -43,8 +43,8 @@ class CsvResponse extends StreamedResponse implements MimeTypeInterface
     /**
      * {@inheritDoc}
      */
-    public function getMimeType(): string
+    public function getFileExtension(): string
     {
-        return 'text/csv';
+        return 'csv';
     }
 }

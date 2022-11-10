@@ -77,7 +77,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     public function clear(): self
     {
-        $this->removeSessionValues([self::KEY_TEXT, self::KEY_TIME, self::KEY_DATA]);
+        $this->removeSessionValues(self::KEY_TEXT, self::KEY_TIME, self::KEY_DATA);
 
         return $this;
     }

@@ -14,7 +14,7 @@
             {{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
             {%- if is_granted_task -%}
                 {{ dropdownSeparator() }}
-                {{ dropdownItem(path('task_compute', {'caller': path('homepage'), 'id': 0}), 'task_compute.title', 'keyboard') }}
+                {{ dropdownItem(path('task_compute'), 'task_compute.title', 'keyboard') }}
             {% endif -%}
         {% endif -%}
     </div>

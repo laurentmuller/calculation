@@ -121,38 +121,37 @@
          * @private
          */
         _updateValue(value, $selection) {
+            const options = this.options;
             const $element = this.$element;
-            const copyIcon = this.options.copyIcon;
-            const resetIcon = this.options.resetIcon;
-            const copyText = this.options.copyText;
             const $items = this.$menu.find('.dropdown-item').removeClass('active');
 
             // default values
+            /** @type {JQuery} */
             let $icon = $element.find(':first-child');
             if ($icon.length === 0 && $element.data('icon')) {
                 $icon = $($element.data('icon'));
             }
             let text = $element.text().trim();
 
-            // select first item if no value
+            // select first item if no value or no selection
             if (!value || !$selection) {
                 $selection = $items.first();
             }
             $selection.addClass('active');
 
             // icon
-            if (copyIcon) {
+            if (options.copyIcon) {
                 const $newIcon = $selection.find(':first-child');
                 if ($newIcon.length) {
                     $icon = $newIcon;
                 }
-                if (resetIcon && $selection.is($items.first()) && $element.data('icon')) {
+                if (options.resetIcon && $selection.is($items.first()) && $element.data('icon')) {
                     $icon = $($element.data('icon'));
                 }
             }
 
             // text
-            if (copyText) {
+            if (options.copyText) {
                 if (value) {
                     text = $selection.text().trim() || text;
                 } else {

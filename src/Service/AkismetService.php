@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -130,26 +131,26 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      */
     public function verifyComment(string $content, array $options = []): bool
     {
-        if (null !== ($request = $this->stack->getCurrentRequest())) {
-            /** @var \App\Entity\User $user */
+        if (null !== ($request = $this->getCurrentRequest())) {
+            /** @var \App\Entity\User|null $user */
             $user = $this->security->getUser();
             $headers = $request->headers;
 
-            $body = \array_merge([
+            $body = \array_filter(\array_merge([
                 'user_ip' => $request->getClientIp(),
-                'user_agent' => $headers->get('User-Agent') ?? '',
-                'referrer' => $headers->get('referer') ?? '',
+                'user_agent' => $headers->get('User-Agent'),
+                'referrer' => $headers->get('referer'),
 
                 'comment_content' => $content,
                 'comment_type' => 'contact-form',
-                'comment_author' => $user->getUserIdentifier(),
-                'comment_author_email' => $user->getEmail(),
+                'comment_author' => $user?->getUserIdentifier(),
+                'comment_author_email' => $user?->getEmail(),
 
                 'blog' => $request->getSchemeAndHttpHost(),
                 'blog_lang' => $request->getLocale(),
                 'blog_charset' => 'UTF-8',
                 'is_test' => true,
-            ], $options);
+            ], $options));
 
             $response = $this->requestPost(self::URI_COMMENT_CHECK, [
                 self::BODY => $body,
@@ -189,14 +190,13 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      */
     public function verifyKey(): bool
     {
-        // already saved?
-        /** @psalm-var mixed $verified */
+        /** @var bool|null $verified */
         $verified = $this->getUrlCacheValue(self::URI_VERIFY);
         if (\is_bool($verified)) {
             return $verified;
         }
 
-        if (null !== ($request = $this->stack->getCurrentRequest())) {
+        if (null !== ($request = $this->getCurrentRequest())) {
             $body = [
                 'key' => $this->key,
                 'blog' => $request->getSchemeAndHttpHost(),
@@ -246,5 +246,10 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
             }
             $this->setLastError($code, $message);
         }
+    }
+
+    private function getCurrentRequest(): ?Request
+    {
+        return $this->stack->getCurrentRequest();
     }
 }

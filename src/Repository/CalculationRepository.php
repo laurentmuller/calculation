@@ -741,7 +741,7 @@ class CalculationRepository extends AbstractRepository
     {
         return match ($field) {
             'date' => "DATE_FORMAT($alias.$field, '%d.%m.%Y')",
-            'overallMargin' => "IFELSE($alias.itemsTotal != 0, CEIL(100 * $alias.overallTotal / $alias.itemsTotal), 0)",
+            'overallMargin' => "IFELSE($alias.itemsTotal != 0, FLOOR(100 * $alias.overallTotal / $alias.itemsTotal), 0)",
             'state.id' => parent::getSearchFields('id', self::STATE_ALIAS),
             'state.code' => parent::getSearchFields('code', self::STATE_ALIAS),
             'state.color' => parent::getSearchFields('color', self::STATE_ALIAS),

@@ -55,10 +55,8 @@ class ProductUpdater implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(
-        private readonly EntityManagerInterface $manager,
-        private readonly FormFactoryInterface $factory
-    ) {
+    public function __construct(private readonly EntityManagerInterface $manager, private readonly FormFactoryInterface $factory)
+    {
     }
 
     /**

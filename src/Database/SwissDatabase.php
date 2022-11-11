@@ -24,11 +24,10 @@ class SwissDatabase extends AbstractDatabase
      */
     private const CREATE_CITY = <<<'sql'
         CREATE TABLE IF NOT EXISTS city (
-            id       INTEGER NOT NULL,
+            id       INTEGER PRIMARY KEY,
             zip      INTEGER NOT NULL,
             name     TEXT NOT NULL,
-            state_id TEXT NOT NULL,
-            PRIMARY KEY(id)
+            state_id TEXT NOT NULL
         ) WITHOUT ROWID
         sql;
 
@@ -39,9 +38,8 @@ class SwissDatabase extends AbstractDatabase
      */
     private const CREATE_STATE = <<<'sql'
         CREATE TABLE "state" (
-            id      TEXT NOT NULL,
-            name    TEXT NOT NULL,
-            PRIMARY KEY(id)
+            id      TEXT PRIMARY KEY,
+            name    TEXT NOT NULL
         ) WITHOUT ROWID
         sql;
 

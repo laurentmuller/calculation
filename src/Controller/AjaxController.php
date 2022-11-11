@@ -180,21 +180,14 @@ class AjaxController extends AbstractController
     #[Route(path: '/task', name: 'ajax_task')]
     public function computeTask(Request $request, TaskService $service, TaskRepository $repository): JsonResponse
     {
-        // get values
-        $id = $this->getRequestInt($request, 'id');
-        $quantity = $this->getRequestFloat($request, 'quantity');
-        $task = $repository->find($id);
-        if (!$task instanceof Task) {
+        if (null === $query = $service->createQuery($request)) {
             return $this->jsonFalse([
                 'message' => $this->trans('task_compute.error.task'),
             ]);
         }
-        // update service and compute
-        $service->setTask($task)
-            ->setQuantity($quantity)
-            ->compute($request);
-        /** @psalm-var array $data */
-        $data = \array_merge($service->jsonSerialize(), [
+
+        $result = $service->computeQuery($query);
+        $data = \array_merge($result->jsonSerialize(), [
             'message' => $this->trans('task_compute.success'),
         ]);
 

@@ -17,6 +17,7 @@ use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
 use App\Interfaces\RoleInterface;
+use App\Model\TaskComputeQuery;
 use App\Report\TasksReport;
 use App\Repository\TaskRepository;
 use App\Response\PdfResponse;
@@ -87,35 +88,29 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * Compute a task.
+     * Display the page to compute a task.
      */
-    #[Route(path: '/compute/{id}', name: 'task_compute', requirements: ['id' => self::DIGITS])]
-    public function compute(Request $request, TaskService $service, TaskRepository $repository, Task $task = null): Response
+    #[Route(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => self::DIGITS])]
+    public function compute(Request $request, TaskService $service, Task $task = null): Response
     {
-        // get tasks
         /** @var Task[] $tasks */
-        $tasks = $repository->getSortedBuilder(false)
-            ->getQuery()
-            ->getResult();
-
-        // set task
+        $tasks = $service->getSortedTasks();
         if (null === $task || $task->isEmpty()) {
             $task = $tasks[0];
         } else {
             $tasks = [$task];
         }
-        $service->setTask($task, true)
-            ->compute();
 
-        $form = $this->createForm(TaskServiceType::class, $service, ['simple_widget' => 1 === \count($tasks)]);
-        if ($this->handleRequestForm($request, $form)) {
-            $service->compute($request);
-        }
+        $query = new TaskComputeQuery($task, true);
+        $result = $service->computeQuery($query);
+
+        $simple_widget = 1 === \count($tasks);
+        $form = $this->createForm(TaskServiceType::class, $result, ['simple_widget' => $simple_widget]);
         $parameters = [
             'form' => $form,
             'tasks' => $tasks,
         ];
-        $this->updateQueryParameters($request, $parameters, (int) $task->getId());
+        $this->updateQueryParameters($request, $parameters, $task->getId());
 
         return $this->renderForm('task/task_compute.html.twig', $parameters);
     }

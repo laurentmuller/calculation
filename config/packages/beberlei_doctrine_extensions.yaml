@@ -53,7 +53,7 @@ doctrine:
 #                 cot: DoctrineExtensions\Query\Mysql\Cot
 #                 degrees: DoctrineExtensions\Query\Mysql\Degrees
 #                 exp: DoctrineExtensions\Query\Mysql\Exp
-#                 floor: DoctrineExtensions\Query\Mysql\Floor
+                 floor: DoctrineExtensions\Query\Mysql\Floor
 #                 json_contains: DoctrineExtensions\Query\Mysql\JsonContains
 #                 json_depth: DoctrineExtensions\Query\Mysql\JsonDepth
 #                 json_length: DoctrineExtensions\Query\Mysql\JsonLength

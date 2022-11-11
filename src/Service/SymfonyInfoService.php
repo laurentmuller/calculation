@@ -60,6 +60,8 @@ final class SymfonyInfoService
      */
     private ?array $packages = null;
 
+    private readonly string $projectDir;
+
     /**
      * @var null|array{
      *     runtime?: array<string, array{name: string, path: string}>,
@@ -73,6 +75,7 @@ final class SymfonyInfoService
      */
     public function __construct(private readonly KernelInterface $kernel, private readonly RouterInterface $router)
     {
+        $this->projectDir = $this->kernel->getProjectDir();
     }
 
     /**
@@ -84,7 +87,7 @@ final class SymfonyInfoService
     {
         if (null === $this->bundles) {
             $this->bundles = [];
-            $rootDir = \realpath($this->kernel->getProjectDir()) . \DIRECTORY_SEPARATOR;
+            $rootDir = \realpath($this->projectDir) . \DIRECTORY_SEPARATOR;
             foreach ($this->kernel->getBundles() as $key => $bundleObject) {
                 $this->bundles[$key] = [
                     'name' => $key,
@@ -224,7 +227,7 @@ final class SymfonyInfoService
     {
         if (null === $this->packages) {
             $result = [];
-            $path = $this->kernel->getProjectDir() . self::PACKAGE_FILE_NAME;
+            $path = $this->projectDir . self::PACKAGE_FILE_NAME;
             if (FileUtils::exists($path)) {
                 try {
                     /**
@@ -252,7 +255,7 @@ final class SymfonyInfoService
      */
     public function getProjectDir(): string
     {
-        return \str_replace('\\', '/', $this->kernel->getProjectDir());
+        return \str_replace('\\', '/', $this->projectDir);
     }
 
     /**

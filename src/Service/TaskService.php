@@ -12,238 +12,67 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Category;
 use App\Entity\Task;
-use App\Entity\TaskItem;
+use App\Model\TaskComputeQuery;
+use App\Model\TaskComputeResult;
+use App\Repository\TaskRepository;
 use App\Traits\RequestTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Service to compute task.
  */
-class TaskService implements \JsonSerializable
+class TaskService
 {
     use RequestTrait;
 
-    private ?Category $category = null;
-
-    /**
-     * @var int[]
-     */
-    private array $items = [];
-
-    private float $overall = 0.0;
-
-    private float $quantity = 1.0;
-
-    private array $results = [];
-
-    private ?Task $task = null;
-
-    /**
-     * Compute values.
-     */
-    public function compute(Request $request = null): void
+    public function __construct(private readonly TaskRepository $repository)
     {
-        $this->results = [];
-        $this->overall = 0.0;
-        if (null !== $request) {
-            $this->items = $this->parseRequest($request);
-        }
+    }
 
-        if (null !== $this->task) {
-            $quantity = $this->quantity;
-            $items = $this->task->getItems();
-            foreach ($items as $item) {
-                $checked = false;
-                $id = $item->getId();
-                $value = $amount = 0.0;
-                if (\in_array($id, $this->items, true)) {
-                    $checked = true;
-                    $value = $item->findValue($quantity);
-                    $amount = $value * $this->quantity;
-                    $this->overall += $amount;
-                }
-                $this->results[] = [
-                    'id' => $id,
-                    'name' => $item->getName(),
-                    'value' => $value,
-                    'amount' => $amount,
-                    'checked' => $checked,
-                ];
+    public function computeQuery(TaskComputeQuery $query): TaskComputeResult
+    {
+        $task = $query->getTask();
+        $quantity = $query->getQuantity();
+        $result = new TaskComputeResult($task, $quantity);
+
+        $items = $query->getItems();
+        $taskItems = $task->getItems();
+        foreach ($taskItems as $taskItem) {
+            $id = (int) $taskItem->getId();
+            $name = (string) $taskItem->getName();
+            if (\in_array($id, $items, true)) {
+                $value = $taskItem->findValue($quantity);
+                $result->addCheckedResult($id, $name, $value);
+            } else {
+                $result->addUncheckedResult($id, $name);
             }
         }
+
+        return $result;
     }
 
-    /**
-     * Gets the category.
-     */
-    public function getCategory(): ?Category
+    public function createQuery(Request $request): ?TaskComputeQuery
     {
-        return $this->category;
-    }
-
-    /**
-     * Gets the selected task item identifiers.
-     *
-     * @return int[]
-     */
-    public function getItems(): array
-    {
-        return $this->items;
-    }
-
-    /**
-     * Gets the overall.
-     */
-    public function getOverall(): float
-    {
-        return $this->overall;
-    }
-
-    /**
-     * Gets the quantity.
-     */
-    public function getQuantity(): float
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * Gets the computed results.
-     */
-    public function getResults(): array
-    {
-        return $this->results;
-    }
-
-    /**
-     * Gets the task.
-     */
-    public function getTask(): ?Task
-    {
-        return $this->task;
-    }
-
-    /**
-     * Gets the selected task items.
-     *
-     * @return Collection<int, TaskItem>
-     */
-    public function getTaskItems(): Collection
-    {
-        if (null !== $this->task && !empty($this->items)) {
-            $items = $this->items;
-
-            return $this->task->filter(fn (TaskItem $item) => \in_array($item->getId(), $items, true));
+        $id = $this->getRequestInt($request, 'id');
+        $task = $this->repository->find($id);
+        if (!$task instanceof Task) {
+            return null;
         }
 
-        return new ArrayCollection();
+        $quantity = $this->getRequestFloat($request, 'quantity');
+        $items = \array_map('intval', $this->getRequestAll($request, 'items'));
+        $query = new TaskComputeQuery($task);
+        $query->setQuantity($quantity)
+            ->setItems($items);
+
+        return $query;
     }
 
-    /**
-     * Returns if this service contains valid data.
-     */
-    public function isValid(): bool
+    public function getSortedTasks(): array
     {
-        if (!$this->task instanceof Task || $this->quantity <= 0 || empty($this->items)) {
-            return false;
-        }
-
-        return !$this->getTaskItems()->isEmpty();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->task?->getId(),
-            'unit' => $this->task?->getUnit(),
-            'categoryId' => $this->task?->getCategoryId(),
-            'quantity' => $this->quantity,
-            'overall' => $this->overall,
-            'results' => $this->results,
-        ];
-    }
-
-    /**
-     * Sets the category.
-     */
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Sets the selected task item identifiers.
-     *
-     * @param int[] $items
-     */
-    public function setItems(array $items): self
-    {
-        $this->items = $items;
-
-        return $this;
-    }
-
-    /**
-     * Sets the quantity.
-     */
-    public function setQuantity(float $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * Sets the task.
-     *
-     * @param ?Task $task      the task to set
-     * @param bool  $selectAll true to select all task items for the given task
-     */
-    public function setTask(?Task $task, bool $selectAll = false): self
-    {
-        $this->task = $task;
-
-        // select all?
-        if (null !== $this->task && $selectAll) {
-            return $this->setTaskItems($this->task->getItems());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the selected task item.
-     *
-     * @param Collection<int, TaskItem> $items
-     */
-    public function setTaskItems(Collection $items): self
-    {
-        $task = $this->task;
-
-        /** @psalm-var int[] $items */
-        $items = $items->filter(fn (TaskItem $item) => $task === $item->getParentTimestampable())->map(fn (TaskItem $item) => (int) $item->getId())->toArray();
-        $this->items = $items;
-
-        return $this;
-    }
-
-    /**
-     * @return int[]
-     */
-    private function parseRequest(Request $request): array
-    {
-        /** @var int[] $items */
-        $items = $this->getRequestAll($request, 'items');
-
-        return \array_map('intval', $items);
+        return $this->repository->getSortedBuilder(false)
+            ->getQuery()
+            ->getResult();
     }
 }

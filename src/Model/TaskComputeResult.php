@@ -15,7 +15,7 @@ namespace App\Model;
 use App\Entity\Task;
 
 /**
- * Data of computed task.
+ * Contains result of a computed task.
  */
 class TaskComputeResult implements \JsonSerializable
 {

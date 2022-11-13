@@ -63,7 +63,7 @@ class TaskController extends AbstractEntityController
     public function add(Request $request): Response
     {
         $item = new Task();
-        if (null !== ($category = $this->getApplication()->getDefaultCategory())) {
+        if (null !== $category = $this->getApplication()->getDefaultCategory()) {
             $item->setCategory($category);
         }
 

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Task;
 use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
@@ -178,7 +177,7 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/task', name: 'ajax_task')]
-    public function computeTask(Request $request, TaskService $service, TaskRepository $repository): JsonResponse
+    public function computeTask(Request $request, TaskService $service): JsonResponse
     {
         if (null === $query = $service->createQuery($request)) {
             return $this->jsonFalse([
@@ -394,10 +393,10 @@ class AjaxController extends AbstractController
      *
      * The request must have the following fields:
      * <ul>
-     * <li><code>entity</code>: the entity class name without the namespace.</li>
-     * <li><code>field</code>: the field name (column) to get values for.</li>
-     * <li><code>query</code>: the value to search.</li>
-     * <li><code>limit</code>: the number of results to retrieve (default = 15).</li>
+     * <li><b>entity</b>: the entity class name without the namespace.</li>
+     * <li><b>field</b>: the field name (column) to get values for.</li>
+     * <li><b>query</b>: the value to search.</li>
+     * <li><b>limit</b>: the number of results to retrieve (default = 15).</li>
      * </ul>
      *
      * @throws \ReflectionException
@@ -618,13 +617,9 @@ class AjaxController extends AbstractController
     /**
      * Search distinct values.
      *
-     * @param Request            $request    the request to get search parameters
-     * @param AbstractRepository $repository the repository to search in
-     * @param string             $field      the field name to search for
-     *
      * @template T of \App\Entity\AbstractEntity
      *
-     * @psalm-param AbstractRepository<T> $repository
+     * @param AbstractRepository<T> $repository
      *
      * @throws \ReflectionException
      */
@@ -651,11 +646,6 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct values from products and tasks.
-     *
-     * @param Request           $request           the request to get search parameters
-     * @param ProductRepository $productRepository the product repository to search in
-     * @param TaskRepository    $taskRepository    the task repository to search in
-     * @param string            $field             the field name to search for
      *
      * @throws \ReflectionException
      */

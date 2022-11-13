@@ -172,26 +172,33 @@
          * @return {JQuery} The element for chaining.
          */
         scrollInViewport: function (delay = 400, bottomMargin = 50) {
-            const $this = $(this);
-            try {
-                if ($this.length && !$this.isInViewport(bottomMargin)) {
-                    const top = $this.offset().top;
-                    const $target = $('html, body');
-                    if ($.isUndefined(delay)) {
-                        delay = 400;
+            // const $window = $(window);
+            const $target = $('html, body');
+            return this.each(function () {
+                const $this = $(this);
+                try {
+                    if (!$this.isInViewport(bottomMargin)) {
+                        let top = $this.offset().top;
+                        // const bottom = top + $this.outerHeight();
+                        // const windowTop = $window.scrollTop();
+                        // const windowBottom = windowTop + $window.height() - bottomMargin;
+                        // const block = top <= windowTop ? 'start' : 'end';
+                        // $this[0].scrollIntoView({
+                        //     block: block,
+                        //     behavior: "smooth"
+                        // });
+                        if (delay && delay > 0) {
+                            $target.animate({
+                                scrollTop: top
+                            }, delay);
+                        } else {
+                            $target.scrollTop(top);
+                        }
                     }
-                    if (delay > 0) {
-                        $target.animate({
-                            scrollTop: top
-                        }, delay);
-                    } else {
-                        $target.scrollTop(top);
-                    }
+                } catch (e) {
+                    // ignore
                 }
-            } catch (e) {
-                // ignore
-            }
-            return $this;
+            });
         },
 
         /**
@@ -312,7 +319,7 @@
          * @param {int} _timeout - The intervals (in milliseconds) on how often to execute the callback.
          * @return {JQuery} The element for chaining.
          */
-        updateInterval: function (_callback, _timeout) { 
+        updateInterval: function (_callback, _timeout) {
             const args = Array.prototype.slice.call(arguments, 2);
             $(this).removeInterval().createInterval(_callback, _timeout, ...args);
         },

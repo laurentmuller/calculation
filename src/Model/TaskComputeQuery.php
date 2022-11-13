@@ -16,7 +16,7 @@ use App\Entity\Task;
 use App\Entity\TaskItem;
 
 /**
- * Data to compute a task.
+ * Contains parameters to compute a task.
  */
 class TaskComputeQuery
 {
@@ -76,9 +76,6 @@ class TaskComputeQuery
 
     private function updateItems(): void
     {
-        /** @var int[] $items */
-        $items = $this->task->getItems()->filter(fn (TaskItem $item) => $this->task === $item->getParentTimestampable())
-            ->map(fn (TaskItem $item) => (int) $item->getId())->toArray();
-        $this->items = $items;
+        $this->items = $this->task->getItems()->map(fn (TaskItem $item) => (int) $item->getId())->toArray();
     }
 }

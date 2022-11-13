@@ -20,7 +20,7 @@ use App\Traits\RequestTrait;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Service to compute task.
+ * Service to compute a task.
  */
 class TaskService
 {

@@ -50,11 +50,6 @@ abstract class AbstractController extends BaseController
     use TranslatorFlashMessageAwareTrait;
 
     /**
-     * Integer requirement for route parameter.
-     */
-    final public const DIGITS = '\d+';
-
-    /**
      * The home route name.
      */
     final public const HOME_PAGE = 'homepage';
@@ -337,7 +332,7 @@ abstract class AbstractController extends BaseController
         $context = Utils::getExceptionContext($e);
         $logger?->error($message, $context);
 
-        return $this->renderForm('@Twig/Exception/exception.html.twig', [
+        return $this->render('@Twig/Exception/exception.html.twig', [
             'message' => $message,
             'exception' => $e,
         ]);

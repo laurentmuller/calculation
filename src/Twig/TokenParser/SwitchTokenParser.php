@@ -38,8 +38,6 @@ final class SwitchTokenParser extends AbstractTokenParser
 
     /**
      * {@inheritdoc}
-     *
-     * @psalm-suppress InternalMethod
      */
     public function parse(Token $token): Node
     {

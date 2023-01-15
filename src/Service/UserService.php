@@ -21,8 +21,8 @@ use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
 use App\Traits\PropertyTrait;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 

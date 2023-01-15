@@ -14,7 +14,7 @@ namespace App\Form\User;
 
 use App\Form\AbstractChoiceType;
 use App\Interfaces\RoleInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * A single role choice type.

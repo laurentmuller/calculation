@@ -222,8 +222,9 @@ class ProductUpdater implements ServiceSubscriberInterface
      */
     private function getAllProducts(): array
     {
-        return $this->manager->getRepository(Product::class)
-            ->findAllByDescription();
+        $repository = $this->manager->getRepository(Product::class);
+
+        return $repository->findAllByDescription();
     }
 
     /**
@@ -248,8 +249,9 @@ class ProductUpdater implements ServiceSubscriberInterface
     private function getProducts(?Category $category): array
     {
         if (null !== $category) {
-            return $this->manager->getRepository(Product::class)
-                ->findByCategory($category);
+            $repository = $this->manager->getRepository(Product::class);
+
+            return $repository->findByCategory($category);
         }
 
         return [];

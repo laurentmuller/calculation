@@ -48,7 +48,6 @@ use App\Validator\Password;
 use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -61,6 +60,7 @@ use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -130,7 +130,7 @@ class TestController extends AbstractController
             }
         }
 
-        return $this->renderForm('test/editor.html.twig', [
+        return $this->render('test/editor.html.twig', [
             'form' => $form,
         ]);
     }
@@ -181,7 +181,7 @@ class TestController extends AbstractController
     #[Route(path: '/notifications', name: 'test_notifications')]
     public function notifications(): Response
     {
-        return $this->renderForm('test/notification.html.twig', ['positions' => MessagePosition::sorted()]);
+        return $this->render('test/notification.html.twig', ['positions' => MessagePosition::sorted()]);
     }
 
     /**
@@ -269,7 +269,7 @@ class TestController extends AbstractController
                 ->redirectToHomePage();
         }
 
-        return $this->renderForm('test/password.html.twig', ['form' => $form]);
+        return $this->render('test/password.html.twig', ['form' => $form]);
     }
 
     /**
@@ -311,7 +311,7 @@ class TestController extends AbstractController
             }
         }
 
-        return $this->renderForm('test/recaptcha.html.twig', [
+        return $this->render('test/recaptcha.html.twig', [
             'action' => $service->getAction(),
             'key' => $service->getSiteKey(),
             'form' => $form,
@@ -387,7 +387,7 @@ class TestController extends AbstractController
             'to' => $to,
         ];
 
-        return $this->renderForm('test/timeline.html.twig', $parameters);
+        return $this->render('test/timeline.html.twig', $parameters);
     }
 
     /**
@@ -428,7 +428,7 @@ class TestController extends AbstractController
             'error' => $error,
         ];
 
-        return $this->renderForm('test/translate.html.twig', $parameters);
+        return $this->render('test/translate.html.twig', $parameters);
     }
 
     #[Route(path: '/tree', name: 'test_tree')]
@@ -473,7 +473,7 @@ class TestController extends AbstractController
             return $this->json([$root]);
         }
 
-        return $this->renderForm('test/treeview.html.twig', [
+        return $this->render('test/treeview.html.twig', [
             'categories' => $this->getCategories($manager),
             'products' => $this->getProducts($manager),
             'states' => $this->getStates($manager),
@@ -604,8 +604,7 @@ class TestController extends AbstractController
 
     private function getProducts(EntityManagerInterface $manager): array
     {
-        $products = $manager->getRepository(Product::class)
-            ->findAllByGroup();
+        $products = $manager->getRepository(Product::class)->findAllByGroup();
 
         return Utils::groupBy($products, fn (Product $p): string => \sprintf('%s - %s', (string) $p->getGroupCode(), (string) $p->getCategoryCode()));
     }

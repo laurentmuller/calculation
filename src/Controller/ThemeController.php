@@ -14,11 +14,11 @@ namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
 use App\Traits\CookieTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to select the website theme.

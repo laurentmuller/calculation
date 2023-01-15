@@ -18,7 +18,7 @@ use App\Interfaces\TimestampableInterface;
 use App\Traits\DisableListenerTrait;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

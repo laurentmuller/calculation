@@ -16,10 +16,11 @@ use App\Chart\MonthChart;
 use App\Chart\StateChart;
 use App\Interfaces\RoleInterface;
 use App\Traits\MathTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for charts.
@@ -38,12 +39,12 @@ class ChartController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
      */
-    #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => self::DIGITS])]
+    #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => Requirement::DIGITS])]
     public function month(MonthChart $chart, int $count = 6): Response
     {
         $data = $chart->generate($count);
 
-        return $this->renderForm('chart/chart_month.html.twig', $data);
+        return $this->render('chart/chart_month.html.twig', $data);
     }
 
     /**
@@ -57,6 +58,6 @@ class ChartController extends AbstractController
     {
         $data = $chart->generate();
 
-        return $this->renderForm('chart/chart_state.html.twig', $data);
+        return $this->render('chart/chart_state.html.twig', $data);
     }
 }

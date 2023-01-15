@@ -23,12 +23,13 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GroupsDocument;
 use App\Table\GroupTable;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for group entities.
@@ -66,7 +67,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -85,7 +86,7 @@ class GroupController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \ReflectionException
      */
-    #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -112,7 +113,7 @@ class GroupController extends AbstractEntityController
             ];
             $this->updateQueryParameters($request, $parameters, $item->getId());
 
-            return $this->renderForm('cards/card_warning.html.twig', $parameters);
+            return $this->render('cards/card_warning.html.twig', $parameters);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -123,7 +124,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Group $item): Response
     {
         return $this->editEntity($request, $item);
@@ -143,7 +144,7 @@ class GroupController extends AbstractEntityController
         $groups = $this->getEntities('code');
         if (empty($groups)) {
             $message = $this->trans('group.list.empty');
-            throw new NotFoundHttpException($message);
+            throw $this->createNotFoundException($message);
         }
         $doc = new GroupsDocument($this, $groups);
 
@@ -164,7 +165,7 @@ class GroupController extends AbstractEntityController
         $groups = $this->getEntities('code');
         if (empty($groups)) {
             $message = $this->trans('group.list.empty');
-            throw new NotFoundHttpException($message);
+            throw $this->createNotFoundException($message);
         }
         $doc = new GroupsReport($this, $groups);
 
@@ -174,7 +175,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[Route(path: '/show/{id}', name: 'group_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'group_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);

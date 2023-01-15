@@ -19,9 +19,9 @@ use App\Form\FormHelper;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Traits\TranslatorTrait;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

@@ -23,11 +23,11 @@ use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\RoleBuilder;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for administration tasks.
@@ -67,7 +67,7 @@ class AdminController extends AbstractController
             }
         }
 
-        return $this->renderForm('admin/clear_cache.html.twig', [
+        return $this->render('admin/clear_cache.html.twig', [
             'size' => $info->getCacheSize(),
             'form' => $form,
         ]);
@@ -99,7 +99,7 @@ class AdminController extends AbstractController
         }
 
         // display
-        return $this->renderForm('admin/parameters.html.twig', [
+        return $this->render('admin/parameters.html.twig', [
             'options' => PropertyServiceInterface::PASSWORD_OPTIONS,
             'form' => $form,
         ]);
@@ -172,7 +172,7 @@ class AdminController extends AbstractController
         }
 
         // show form
-        return $this->renderForm('admin/role_rights.html.twig', [
+        return $this->render('admin/role_rights.html.twig', [
             'form' => $form,
             'default' => $default,
             'is_admin' => $role->isAdmin(),

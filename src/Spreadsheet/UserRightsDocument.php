@@ -54,13 +54,13 @@ class UserRightsDocument extends AbstractArrayDocument
                 parent::setCellValue($sheet, $columnIndex, $rowIndex, $richText);
             } else {
                 parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
-                $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
+                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
                     ->getFont()->setBold(true);
             }
         } else {
             parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
             if (1 === $columnIndex && $this->writeRights) {
-                $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
+                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
                     ->getAlignment()->setIndent(2);
             }
         }

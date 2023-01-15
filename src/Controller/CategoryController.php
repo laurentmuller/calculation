@@ -26,12 +26,13 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CategoriesDocument;
 use App\Table\CategoryTable;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for category entities.
@@ -69,7 +70,7 @@ class CategoryController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -88,7 +89,7 @@ class CategoryController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \ReflectionException
      */
-    #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -120,7 +121,7 @@ class CategoryController extends AbstractEntityController
             ];
             $this->updateQueryParameters($request, $parameters, $item->getId());
 
-            return $this->renderForm('cards/card_warning.html.twig', $parameters);
+            return $this->render('cards/card_warning.html.twig', $parameters);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -131,7 +132,7 @@ class CategoryController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
@@ -151,7 +152,7 @@ class CategoryController extends AbstractEntityController
         $entities = $this->getEntities('code');
         if (empty($entities)) {
             $message = $this->trans('category.list.empty');
-            throw new NotFoundHttpException($message);
+            throw $this->createNotFoundException($message);
         }
         $doc = new CategoriesDocument($this, $entities);
 
@@ -173,7 +174,7 @@ class CategoryController extends AbstractEntityController
         $entities = $this->getEntities('code');
         if (empty($entities)) {
             $message = $this->trans('category.list.empty');
-            throw new NotFoundHttpException($message);
+            throw $this->createNotFoundException($message);
         }
         $doc = new CategoriesReport($this, $entities);
 
@@ -183,7 +184,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      */
-    #[Route(path: '/show/{id}', name: 'category_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'category_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);

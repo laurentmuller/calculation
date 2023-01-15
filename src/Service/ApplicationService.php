@@ -186,9 +186,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $id = $this->getDefaultCategoryId();
         if (0 !== $id) {
-            /** @psalm-var \Doctrine\ORM\EntityRepository<Category> $repository */
-            $repository = $this->manager->getRepository(Category::class);
-            $category = $repository->find($id);
+            $category = $this->manager->getRepository(Category::class)->find($id);
             if ($category instanceof Category) {
                 return $category;
             }
@@ -216,9 +214,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $id = $this->getDefaultProductId();
         if (0 !== $id) {
-            /** @psalm-var \Doctrine\ORM\EntityRepository<Product> $repository */
-            $repository = $this->manager->getRepository(Product::class);
-            $product = $repository->find($id);
+            $product = $this->manager->getRepository(Product::class)->find($id);
             if ($product instanceof Product) {
                 return $product;
             }
@@ -256,9 +252,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $id = $this->getDefaultStateId();
         if (0 !== $id) {
-            /** @psalm-var \Doctrine\ORM\EntityRepository<CalculationState> $repository */
-            $repository = $this->manager->getRepository(CalculationState::class);
-            $state = $repository->find($id);
+            $state = $this->manager->getRepository(CalculationState::class)->find($id);
             if ($state instanceof CalculationState) {
                 return $state;
             }
@@ -685,15 +679,10 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the property repository.
-     *
-     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getRepository(): PropertyRepository
     {
-        /** @psalm-var PropertyRepository $repository */
-        $repository = $this->manager->getRepository(Property::class);
-
-        return $repository;
+        return $this->manager->getRepository(Property::class);
     }
 
     /**

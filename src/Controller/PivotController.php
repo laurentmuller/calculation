@@ -20,11 +20,11 @@ use App\Pivot\PivotTableFactory;
 use App\Repository\CalculationRepository;
 use App\Response\CsvResponse;
 use App\Util\FormatUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the pivot table.
@@ -47,7 +47,7 @@ class PivotController extends AbstractController
     #[Route(path: '', name: 'calculation_pivot')]
     public function pivot(): Response
     {
-        return $this->renderForm('calculation/calculation_pivot.html.twig', [
+        return $this->render('calculation/calculation_pivot.html.twig', [
             'highlight' => $this->isSessionBool('highlight'),
             'popover' => $this->isSessionBool('popover', true),
             'table' => $this->getTable(),

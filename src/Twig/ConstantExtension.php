@@ -16,6 +16,7 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\CalculationService;
 use App\Traits\CacheAwareTrait;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Extension\AbstractExtension;
@@ -37,12 +38,15 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private const CACHE_KEY = 'twig_constant_extension';
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \ReflectionException
      */
     public function getGlobals(): array
     {
-        return (array) $this->getCacheValue(self::CACHE_KEY, $this->getValues());
+        /** @var array<string, mixed> $globals */
+        $globals = (array) $this->getCacheValue(self::CACHE_KEY, $this->getValues());
+
+        return $globals;
     }
 
     /**

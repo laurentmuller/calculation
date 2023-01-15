@@ -18,12 +18,12 @@ use App\Interfaces\RoleInterface;
 use App\Model\Comment;
 use App\Service\MailerService;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to send comments to the webmaster.
@@ -61,7 +61,7 @@ class CommentController extends AbstractController
             }
         }
         // render
-        return $this->renderForm('user/user_comment.html.twig', [
+        return $this->render('user/user_comment.html.twig', [
             'form' => $form,
             'isMail' => $comment->isMail(),
         ]);

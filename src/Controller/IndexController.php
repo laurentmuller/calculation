@@ -23,12 +23,12 @@ use App\Interfaces\RoleInterface;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the home page.
@@ -88,7 +88,7 @@ class IndexController extends AbstractController
         }
 
         $path = $this->getCookiePath();
-        $response = $this->renderForm('index/index.html.twig', $parameters);
+        $response = $this->render('index/index.html.twig', $parameters);
         $this->setCookie($response, self::PARAM_RESTRICT, $restrict, '', $path);
 
         return $response;

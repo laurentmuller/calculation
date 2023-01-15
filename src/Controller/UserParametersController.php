@@ -15,11 +15,11 @@ namespace App\Controller;
 use App\Form\User\UserParametersType;
 use App\Interfaces\RoleInterface;
 use App\Service\UserService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display user's preferences.
@@ -45,7 +45,7 @@ class UserParametersController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        return $this->renderForm('user/user_parameters.html.twig', [
+        return $this->render('user/user_parameters.html.twig', [
             'form' => $form,
         ]);
     }

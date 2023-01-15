@@ -15,12 +15,12 @@ namespace App\Controller;
 use App\Interfaces\RoleInterface;
 use App\Service\ExchangeRateService;
 use App\Util\FormatUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for the exchange rate service.
@@ -47,7 +47,7 @@ class ExchangeRateController extends AbstractController
     #[Route(path: '', name: 'exchange_display')]
     public function display(): Response
     {
-        return $this->renderForm('test/exchangerate.html.twig', [
+        return $this->render('test/exchangerate.html.twig', [
             'form' => $this->createForm(),
             'codes' => $this->service->getSupportedCodes(),
         ]);

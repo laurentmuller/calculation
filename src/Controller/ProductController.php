@@ -23,11 +23,12 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\ProductsDocument;
 use App\Table\ProductTable;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for product entities.
@@ -71,7 +72,7 @@ class ProductController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -89,7 +90,7 @@ class ProductController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \ReflectionException
      */
-    #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -100,7 +101,7 @@ class ProductController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Product $item): Response
     {
         return $this->editEntity($request, $item);
@@ -149,7 +150,7 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      */
-    #[Route(path: '/show/{id}', name: 'product_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'product_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Product $item): Response
     {
         return $this->showEntity($item);

@@ -23,11 +23,12 @@ use App\Entity\Calculation;
 use App\Interfaces\RoleInterface;
 use App\Repository\CalculationRepository;
 use App\Util\DateUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display calendar.
@@ -49,7 +50,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => self::DIGITS, 'month' => self::DIGITS])]
+    #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS])]
     public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
     {
         // validate values
@@ -74,7 +75,7 @@ class CalendarController extends AbstractController
             'next' => $next,
         ];
 
-        return $this->renderForm('calendar/calendar_month.html.twig', $parameters);
+        return $this->render('calendar/calendar_month.html.twig', $parameters);
     }
 
     /**
@@ -89,7 +90,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => self::DIGITS, 'week' => self::DIGITS])]
+    #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS])]
     public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
     {
         // validate values
@@ -119,7 +120,7 @@ class CalendarController extends AbstractController
             'end_date' => $endDate,
         ];
 
-        return $this->renderForm('calendar/calendar_week.html.twig', $parameters);
+        return $this->render('calendar/calendar_week.html.twig', $parameters);
     }
 
     /**
@@ -132,7 +133,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => self::DIGITS])]
+    #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS])]
     public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
     {
         // validate year
@@ -155,7 +156,7 @@ class CalendarController extends AbstractController
             'next' => $next,
         ];
 
-        return $this->renderForm('calendar/calendar_year.html.twig', $parameters);
+        return $this->render('calendar/calendar_year.html.twig', $parameters);
     }
 
     /**

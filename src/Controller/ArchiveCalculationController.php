@@ -16,11 +16,11 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ArchiveService;
 use App\Service\SuspendEventListenerService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to archive calculations.
@@ -56,7 +56,7 @@ class ArchiveCalculationController extends AbstractController
                     $application->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, new \DateTime());
                 }
 
-                return $this->renderForm('admin/archive_result.html.twig', [
+                return $this->render('admin/archive_result.html.twig', [
                     'result' => $result,
                 ]);
             } finally {
@@ -64,7 +64,7 @@ class ArchiveCalculationController extends AbstractController
             }
         }
 
-        return $this->renderForm('admin/archive_query.html.twig', [
+        return $this->render('admin/archive_query.html.twig', [
             'last_update' => $application->getArchiveCalculation(),
             'form' => $form,
         ]);

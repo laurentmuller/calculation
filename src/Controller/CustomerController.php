@@ -22,11 +22,12 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CustomersDocument;
 use App\Table\CustomerTable;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for customer entities.
@@ -69,7 +70,7 @@ class CustomerController extends AbstractEntityController
      * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -80,7 +81,7 @@ class CustomerController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Customer $item): Response
     {
         return $this->editEntity($request, $item);
@@ -130,7 +131,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      */
-    #[Route(path: '/show/{id}', name: 'customer_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'customer_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Customer $item): Response
     {
         return $this->showEntity($item);

@@ -25,7 +25,6 @@ use App\Service\SymfonyInfoService;
 use App\Spreadsheet\MySqlDocument;
 use App\Spreadsheet\PhpIniDocument;
 use App\Spreadsheet\SymfonyDocument;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +33,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for application information.
@@ -49,7 +49,7 @@ class AboutController extends AbstractController
     #[Route(path: '', name: 'about')]
     public function about(): Response
     {
-        return $this->renderForm('about/about.html.twig');
+        return $this->render('about/about.html.twig');
     }
 
     /**
@@ -80,7 +80,7 @@ class AboutController extends AbstractController
     #[Route(path: '/licence', name: 'about_licence')]
     public function licence(): Response
     {
-        return $this->renderForm('about/licence.html.twig', ['link' => true]);
+        return $this->render('about/licence.html.twig', ['link' => true]);
     }
 
     /**
@@ -217,7 +217,7 @@ class AboutController extends AbstractController
             'link' => true,
         ];
 
-        return $this->renderForm('about/policy.html.twig', $parameters);
+        return $this->render('about/policy.html.twig', $parameters);
     }
 
     /**

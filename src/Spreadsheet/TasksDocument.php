@@ -35,10 +35,10 @@ class TasksDocument extends AbstractArrayDocument
 
         if (1 === $columnIndex) {
             if ($this->writeTask) {
-                $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
+                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
                     ->getFont()->setBold(true);
             } elseif ($this->writeItem) {
-                $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
+                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
                     ->getAlignment()->setIndent(2);
             }
         }

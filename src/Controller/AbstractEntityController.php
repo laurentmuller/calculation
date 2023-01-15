@@ -123,7 +123,7 @@ abstract class AbstractEntityController extends AbstractController
         $this->updateQueryParameters($request, $parameters, $item->getId());
 
         // show page
-        return $this->renderForm('cards/card_delete.html.twig', $parameters);
+        return $this->render('cards/card_delete.html.twig', $parameters);
     }
 
     /**
@@ -183,7 +183,7 @@ abstract class AbstractEntityController extends AbstractController
         $this->updateQueryParameters($request, $parameters, (int) $item->getId());
 
         // show form
-        return $this->renderForm($this->getEditTemplate(), $parameters);
+        return $this->render($this->getEditTemplate(), $parameters);
     }
 
     /**
@@ -219,9 +219,10 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @psalm-param literal-string $alias
      *
-     * @psalm-return T[]
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      *
-     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-return T[]
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -303,7 +304,7 @@ abstract class AbstractEntityController extends AbstractController
         $parameters['item'] = $item;
 
         // render
-        return $this->renderForm($this->getShowTemplate(), $parameters);
+        return $this->render($this->getShowTemplate(), $parameters);
     }
 
     /**

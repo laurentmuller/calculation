@@ -23,10 +23,10 @@ use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display the database schema.
@@ -49,7 +49,7 @@ class SchemaController extends AbstractController
     private readonly AbstractSchemaManager $manager;
 
     /**
-     * @var array<string, ClassMetadataInfo>
+     * @var array<string, ClassMetadataInfo<object>>
      */
     private readonly array $metaDatas;
 
@@ -71,7 +71,7 @@ class SchemaController extends AbstractController
     #[Route(path: '', name: 'schema')]
     public function index(): Response
     {
-        return $this->renderForm('schema/index.html.twig', [
+        return $this->render('schema/index.html.twig', [
             'tables' => $this->getTables(),
         ]);
     }
@@ -87,7 +87,7 @@ class SchemaController extends AbstractController
             throw $this->createNotFoundException($this->trans('schema.table.error', ['%name%' => $name]));
         }
 
-        return $this->renderForm('schema/table.html.twig', [
+        return $this->render('schema/table.html.twig', [
             'name' => $name,
             'columns' => $this->getColumns($name),
             'associations' => $this->getAssociations($name),
@@ -102,7 +102,7 @@ class SchemaController extends AbstractController
     }
 
     /**
-     * @return array<string, ClassMetadataInfo>
+     * @return array<string, ClassMetadataInfo<object>>
      */
     private function filterMetaDatas(EntityManagerInterface $manager): array
     {
@@ -262,6 +262,9 @@ class SchemaController extends AbstractController
         return $this->counters[$name];
     }
 
+    /**
+     * @psalm-return ClassMetadataInfo<object>|null
+     */
     private function getTableMetaData(string $name): ?ClassMetadataInfo
     {
         return $this->metaDatas[\strtolower($name)] ?? null;
@@ -295,6 +298,9 @@ class SchemaController extends AbstractController
         }, $tables);
     }
 
+    /**
+     * @psalm-return ClassMetadataInfo<object>|null
+     */
     private function getTargetMetaData(string $name): ?ClassMetadataInfo
     {
         foreach ($this->metaDatas as $metaData) {

@@ -15,11 +15,11 @@ namespace App\Controller;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ProductUpdater;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to update product prices.
@@ -54,13 +54,13 @@ class ProductUpdateController extends AbstractController
                 $application->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, new \DateTime());
             }
 
-            return $this->renderForm('admin/product_result.html.twig', [
+            return $this->render('admin/product_result.html.twig', [
                 'result' => $result,
                 'query' => $query,
             ]);
         }
 
-        return $this->renderForm('admin/product_update.html.twig', [
+        return $this->render('admin/product_update.html.twig', [
             'last_update' => $application->getUpdateProducts(),
             'form' => $form,
         ]);

@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 
 /**
@@ -267,7 +267,7 @@ class OpenWeatherController extends AbstractController
         $values['count'] = $count;
         $values['api_url'] = 'https://openweathermap.org/api';
 
-        return $this->renderForm('openweather/weather.htm.twig', $values);
+        return $this->render('openweather/weather.htm.twig', $values);
     }
 
     /**
@@ -285,10 +285,10 @@ class OpenWeatherController extends AbstractController
             $file = $form['file']->getData();
             $results = $updater->import($file);
 
-            return $this->renderForm('openweather/import_result.html.twig', $results);
+            return $this->render('openweather/import_result.html.twig', $results);
         }
 
-        return $this->renderForm('openweather/import_file.html.twig', [
+        return $this->render('openweather/import_file.html.twig', [
             'sample_url' => 'https://bulk.openweathermap.org/sample/',
             'site_url' => 'https://openweathermap.org/',
             'form' => $form,
@@ -357,7 +357,7 @@ class OpenWeatherController extends AbstractController
                 }
             }
 
-            return $this->renderForm('openweather/search_city.html.twig', [
+            return $this->render('openweather/search_city.html.twig', [
                 'form' => $form,
                 'cities' => $cities,
                 'units' => $units,
@@ -365,7 +365,7 @@ class OpenWeatherController extends AbstractController
             ]);
         }
 
-        return $this->renderForm('openweather/search_city.html.twig', [
+        return $this->render('openweather/search_city.html.twig', [
             'form' => $form,
             'count' => $data[self::KEY_COUNT],
         ]);

@@ -35,17 +35,18 @@ use App\Util\RoleBuilder;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -85,7 +86,7 @@ class UserController extends AbstractEntityController
      * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         // same?
@@ -104,7 +105,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, User $item): Response
     {
         return $this->editEntity($request, $item);
@@ -136,7 +137,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/image/{id}', name: 'user_image', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/image/{id}', name: 'user_image', requirements: ['id' => Requirement::DIGITS])]
     public function image(Request $request, User $item): Response
     {
         // form
@@ -160,7 +161,7 @@ class UserController extends AbstractEntityController
         ];
 
         // render
-        return $this->renderForm('user/user_image.html.twig', $parameters);
+        return $this->render('user/user_image.html.twig', $parameters);
     }
 
     /**
@@ -169,7 +170,7 @@ class UserController extends AbstractEntityController
      * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => Requirement::DIGITS])]
     public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
     {
         // same user?
@@ -208,7 +209,7 @@ class UserController extends AbstractEntityController
         ];
 
         // render
-        return $this->renderForm('user/user_comment.html.twig', $parameters);
+        return $this->render('user/user_comment.html.twig', $parameters);
     }
 
     /**
@@ -216,7 +217,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => Requirement::DIGITS])]
     public function password(Request $request, User $item, UserPasswordHasherInterface $hasher): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
@@ -244,7 +245,7 @@ class UserController extends AbstractEntityController
         ];
 
         // show form
-        return $this->renderForm('user/user_password.html.twig', $parameters);
+        return $this->render('user/user_password.html.twig', $parameters);
     }
 
     /**
@@ -274,7 +275,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => Requirement::DIGITS])]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
         if ($item->isResetPassword()) {
@@ -294,7 +295,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
     public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy, EntityManagerInterface $manager): Response
     {
         // same user?
@@ -323,7 +324,7 @@ class UserController extends AbstractEntityController
         }
 
         // show form
-        return $this->renderForm('user/user_rights.html.twig', [
+        return $this->render('user/user_rights.html.twig', [
             'item' => $item,
             'form' => $form,
             'params' => ['id' => $item->getId()],
@@ -379,7 +380,7 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      */
-    #[Route(path: '/show/{id}', name: 'user_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'user_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(User $item): Response
     {
         return $this->showEntity($item);

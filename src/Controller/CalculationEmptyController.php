@@ -19,11 +19,11 @@ use App\Spreadsheet\CalculationsEmptyDocument;
 use App\Table\CalculationEmptyTable;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for calculations where items have the price or the quantity is equal to 0.

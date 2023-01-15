@@ -20,7 +20,7 @@ use App\Form\Parameters\AbstractParametersType;
 use App\Form\Product\ProductListType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\ApplicationService;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

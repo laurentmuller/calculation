@@ -14,12 +14,12 @@ namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
 use App\Service\SwissPostUpdater;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to import Switzerland address.
@@ -43,12 +43,12 @@ class ImportAddressController extends AbstractController
             $file = $data['file'];
             $results = $updater->import($file);
 
-            return $this->renderForm('admin/import_result.html.twig', [
+            return $this->render('admin/import_result.html.twig', [
                 'results' => $results,
             ]);
         }
 
-        return $this->renderForm('admin/import_file.html.twig', [
+        return $this->render('admin/import_file.html.twig', [
             'last_import' => $this->getApplication()->getLastImport(),
             'form' => $form,
         ]);

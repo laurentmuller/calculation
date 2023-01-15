@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\TooManyPasswordRequestsException;
@@ -87,7 +87,7 @@ class UserExceptionServiceTest extends TestCase
         self::assertNotNull($this->request);
         self::assertNotNull($this->service);
         $this->service->handleException($this->request, $e);
-        $result = $this->request->getSession()->get(Security::AUTHENTICATION_ERROR);
+        $result = $this->request->getSession()->get(SecurityRequestAttributes::AUTHENTICATION_ERROR);
         self::assertInstanceOf(CustomUserMessageAuthenticationException::class, $result);
 
         return $result;

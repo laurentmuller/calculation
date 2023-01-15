@@ -26,12 +26,13 @@ use App\Service\TaskService;
 use App\Spreadsheet\TasksDocument;
 use App\Table\TaskTable;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for task entities.
@@ -75,7 +76,7 @@ class TaskController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Task $item): Response
     {
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
@@ -90,7 +91,7 @@ class TaskController extends AbstractEntityController
     /**
      * Display the page to compute a task.
      */
-    #[Route(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS])]
     public function compute(Request $request, TaskService $service, Task $task = null): Response
     {
         /** @var Task[] $tasks */
@@ -112,7 +113,7 @@ class TaskController extends AbstractEntityController
         ];
         $this->updateQueryParameters($request, $parameters, $task->getId());
 
-        return $this->renderForm('task/task_compute.html.twig', $parameters);
+        return $this->render('task/task_compute.html.twig', $parameters);
     }
 
     /**
@@ -121,7 +122,7 @@ class TaskController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \ReflectionException
      */
-    #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -132,7 +133,7 @@ class TaskController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Task $item): Response
     {
         return $this->editEntity($request, $item);
@@ -152,7 +153,7 @@ class TaskController extends AbstractEntityController
         $entities = $this->getEntities('name');
         if (empty($entities)) {
             $message = $this->trans('task.list.empty');
-            throw new NotFoundHttpException($message);
+            throw $this->createNotFoundException($message);
         }
         $doc = new TasksDocument($this, $entities);
 
@@ -173,7 +174,7 @@ class TaskController extends AbstractEntityController
         $entities = $this->getEntities('name');
         if (empty($entities)) {
             $message = $this->trans('task.list.empty');
-            throw new NotFoundHttpException($message);
+            throw $this->createNotFoundException($message);
         }
         $doc = new TasksReport($this, $entities);
 
@@ -183,7 +184,7 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      */
-    #[Route(path: '/show/{id}', name: 'task_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'task_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Task $item): Response
     {
         return $this->showEntity($item);

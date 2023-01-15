@@ -39,7 +39,7 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
     /**
      * The margins.
      *
-     * @var Collection<int, TaskItemMargin>
+     * @var ArrayCollection<int, TaskItemMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'taskItem', targetEntity: TaskItemMargin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]

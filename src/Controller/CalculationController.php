@@ -31,12 +31,13 @@ use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for calculation entities.
@@ -94,7 +95,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Calculation $item): Response
     {
         // clone
@@ -115,7 +116,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \ReflectionException
      */
-    #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -128,7 +129,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Calculation $item): Response
     {
         $parameters = ['overall_below' => $this->isMarginBelow($item)];
@@ -163,7 +164,7 @@ class CalculationController extends AbstractEntityController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS])]
     public function excelById(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
@@ -199,7 +200,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => Requirement::DIGITS])]
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
         $qrcode = $this->getQrCode($generator, $calculation);
@@ -214,7 +215,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -231,7 +232,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => Requirement::DIGITS])]
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
     {
         $oldState = $item->getState();
@@ -255,7 +256,7 @@ class CalculationController extends AbstractEntityController
         ];
         $this->updateQueryParameters($request, $parameters, (int) $item->getId());
         // display
-        return $this->renderForm('calculation/calculation_state.html.twig', $parameters);
+        return $this->render('calculation/calculation_state.html.twig', $parameters);
     }
 
     /**

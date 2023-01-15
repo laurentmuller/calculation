@@ -15,7 +15,7 @@ namespace App\Form\User;
 use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParametersType;
 use App\Service\ApplicationService;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

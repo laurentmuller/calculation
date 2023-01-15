@@ -20,11 +20,12 @@ use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Util\FileUtils;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The log controller.
@@ -77,7 +78,7 @@ class LogController extends AbstractController
             'route' => $this->getRequestString($request, 'route'),
         ];
         // display
-        return $this->renderForm('log/log_delete.html.twig', $parameters);
+        return $this->render('log/log_delete.html.twig', $parameters);
     }
 
     /**
@@ -138,7 +139,7 @@ class LogController extends AbstractController
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response
     {
         if (null === $item = $service->getLog($id)) {
@@ -148,7 +149,7 @@ class LogController extends AbstractController
             return $this->redirectToRoute($route);
         }
 
-        return $this->renderForm('log/log_show.html.twig', ['item' => $item]);
+        return $this->render('log/log_show.html.twig', ['item' => $item]);
     }
 
     /**

@@ -16,11 +16,10 @@ use App\Interfaces\RoleInterface;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
 use App\Service\HelpService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display help.
@@ -40,11 +39,11 @@ class HelpController extends AbstractController
     {
         $dialog = $service->findDialog($id);
         if (null === $dialog) {
-            throw new NotFoundHttpException("Unable to find the resource for the dialog '$id'.");
+            throw $this->createNotFoundException("Unable to find the resource for the dialog '$id'.");
         }
         $entity = isset($dialog['entity']) ? $service->findEntity((string) $dialog['entity']) : null;
 
-        return $this->renderForm('help/help_dialog.html.twig', [
+        return $this->render('help/help_dialog.html.twig', [
             'service' => $service,
             'dialog' => $dialog,
             'entity' => $entity,
@@ -61,10 +60,10 @@ class HelpController extends AbstractController
     {
         $entity = $service->findEntity($id);
         if (null === $entity) {
-            throw new NotFoundHttpException("Unable to find the resource for the object '$id'.");
+            throw $this->createNotFoundException("Unable to find the resource for the object '$id'.");
         }
 
-        return $this->renderForm('help/help_entity.html.twig', [
+        return $this->render('help/help_entity.html.twig', [
             'service' => $service,
             'entity' => $entity,
         ]);
@@ -78,7 +77,7 @@ class HelpController extends AbstractController
     #[Route(path: '', name: 'help')]
     public function index(HelpService $service): Response
     {
-        return $this->renderForm('help/help_index.html.twig', [
+        return $this->render('help/help_index.html.twig', [
             'service' => $service,
             'help' => $service->getHelp(),
         ]);

@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\TranslatorAwareTrait;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;

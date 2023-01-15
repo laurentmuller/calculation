@@ -21,8 +21,8 @@ use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 

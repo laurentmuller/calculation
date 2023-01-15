@@ -15,7 +15,7 @@ namespace App\Service;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -37,7 +37,7 @@ class UserExceptionService
     {
         if ($request->hasSession()) {
             $exception = $this->mapException($e);
-            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+            $request->getSession()->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, $exception);
         }
     }
 

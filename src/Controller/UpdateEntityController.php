@@ -21,7 +21,6 @@ use App\Service\SuspendEventListenerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
 use Psr\Container\ContainerExceptionInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -29,6 +28,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to update entities.
@@ -66,7 +66,7 @@ class UpdateEntityController extends AbstractController
 
         $helper->addCheckboxConfirm($this->getTranslator(), false);
 
-        return $this->renderForm('admin/update.html.twig', [
+        return $this->render('admin/update.html.twig', [
             'form' => $helper->createForm(),
         ]);
     }

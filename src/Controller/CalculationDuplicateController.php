@@ -19,11 +19,11 @@ use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display and export duplicate items in the calculations.

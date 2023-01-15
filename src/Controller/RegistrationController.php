@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
             }
         }
 
-        return $this->renderForm('registration/register.html.twig', [
+        return $this->render('registration/register.html.twig', [
             'error' => $utils->getLastAuthenticationError(),
             'form' => $form,
         ]);

@@ -37,12 +37,12 @@ use App\Util\Utils;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.

@@ -24,11 +24,12 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CalculationStatesDocument;
 use App\Table\CalculationStateTable;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for calculation state entities.
@@ -66,7 +67,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -82,7 +83,7 @@ class CalculationStateController extends AbstractEntityController
      * @throws \ReflectionException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
         // calculation?
@@ -103,7 +104,7 @@ class CalculationStateController extends AbstractEntityController
                 'back_text' => 'common.button_back_list',
             ];
 
-            return $this->renderForm('cards/card_warning.html.twig', $parameters);
+            return $this->render('cards/card_warning.html.twig', $parameters);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -114,7 +115,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, CalculationState $item): Response
     {
         return $this->editEntity($request, $item);
@@ -165,7 +166,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      */
-    #[Route(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);

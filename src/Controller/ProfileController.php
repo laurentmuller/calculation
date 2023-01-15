@@ -17,12 +17,12 @@ use App\Form\User\ProfileChangePasswordType;
 use App\Form\User\ProfileEditType;
 use App\Interfaces\RoleInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for user profile.
@@ -60,7 +60,7 @@ class ProfileController extends AbstractController
         }
 
         // display
-        return $this->renderForm('profile/profile_change_password.html.twig', [
+        return $this->render('profile/profile_change_password.html.twig', [
             'form' => $form,
         ]);
     }
@@ -87,7 +87,7 @@ class ProfileController extends AbstractController
             return $this->redirectToHomePage();
         }
         // display
-        return $this->renderForm('profile/profile_edit.html.twig', [
+        return $this->render('profile/profile_edit.html.twig', [
             'form' => $form,
         ]);
     }

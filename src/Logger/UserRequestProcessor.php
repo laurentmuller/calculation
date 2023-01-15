@@ -14,7 +14,7 @@ namespace App\Logger;
 
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Log record processor to add user identifier to extra data.

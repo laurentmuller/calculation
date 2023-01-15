@@ -340,7 +340,7 @@ class SpreadsheetDocument extends Spreadsheet
             } elseif (\is_bool($value)) {
                 $value = $value ? 1 : 0;
             }
-            $sheet->setCellValueByColumnAndRow($columnIndex, $rowIndex, $value);
+            $sheet->setCellValue([$columnIndex, $rowIndex], $value);
         }
 
         return $this;
@@ -673,7 +673,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setPageBreak(int $row): static
     {
-        $this->getActiveSheet()->setBreakByColumnAndRow(1, $row, Worksheet::BREAK_ROW);
+        $this->getActiveSheet()->setBreak([1, $row], Worksheet::BREAK_ROW);
 
         return $this;
     }

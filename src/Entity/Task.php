@@ -44,7 +44,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     /**
      * The children items.
      *
-     * @var Collection<int, TaskItem>
+     * @var ArrayCollection<int, TaskItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]

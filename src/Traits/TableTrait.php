@@ -66,7 +66,7 @@ trait TableTrait
                 }
 
                 // generate
-                $response = $this->renderForm($template, (array) $results);
+                $response = $this->render($template, (array) $results);
             }
 
             // save results
@@ -93,7 +93,7 @@ trait TableTrait
                 return $this->json($parameters, $status);
             }
 
-            return $this->renderForm('bundles/TwigBundle/Exception/error.html.twig', $parameters);
+            return $this->render('bundles/TwigBundle/Exception/error.html.twig', $parameters);
         }
     }
 

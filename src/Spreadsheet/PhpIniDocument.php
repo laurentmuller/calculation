@@ -104,7 +104,7 @@ class PhpIniDocument extends AbstractDocument
             $italic = true;
         }
         if (null !== $color || $italic) {
-            $font = $sheet->getCellByColumnAndRow($column, $row)
+            $font = $sheet->getCell([$column, $row])
                 ->getStyle()->getFont();
             if ($italic) {
                 $font->setItalic(true);
@@ -145,15 +145,15 @@ class PhpIniDocument extends AbstractDocument
             if (\is_array($entry)) {
                 $local = $this->convert(\reset($entry));
                 $master = $this->convert(\end($entry));
-                $sheet->setCellValueByColumnAndRow(1, $row, $keyValue)
-                    ->setCellValueByColumnAndRow(2, $row, $local)
-                    ->setCellValueByColumnAndRow(3, $row, $master);
+                $sheet->setCellValue([1, $row], $keyValue)
+                    ->setCellValue([2, $row], $local)
+                    ->setCellValue([3, $row], $master);
                 $this->applyStyle($sheet, 2, $row, $local)
                     ->applyStyle($sheet, 3, $row, $master);
             } else {
                 $entryValue = $this->convert($entry);
-                $sheet->setCellValueByColumnAndRow(1, $row, $keyValue)
-                    ->setCellValueByColumnAndRow(2, $row, $entryValue);
+                $sheet->setCellValue([1, $row], $keyValue)
+                    ->setCellValue([2, $row], $entryValue);
                 $this->applyStyle($sheet, 2, $row, $entryValue);
             }
             ++$row;

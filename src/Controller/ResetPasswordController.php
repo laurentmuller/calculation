@@ -18,7 +18,6 @@ use App\Form\User\ResetChangePasswordType;
 use App\Mime\ResetPasswordEmail;
 use App\Repository\UserRepository;
 use App\Service\UserExceptionService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +28,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -71,7 +71,7 @@ class ResetPasswordController extends AbstractController
             $resetToken = $this->helper->generateFakeResetToken();
         }
 
-        return $this->renderForm('reset_password/check_email.html.twig', [
+        return $this->render('reset_password/check_email.html.twig', [
             'expires_date' => $resetToken->getExpiresAt(),
             'expires_life_time' => $this->getExpiresLifeTime($resetToken),
             'throttle_date' => $this->getThrottleAt($resetToken),
@@ -94,7 +94,7 @@ class ResetPasswordController extends AbstractController
             return $this->sendEmail($request, $usernameOrEmail, $mailer);
         }
 
-        return $this->renderForm('reset_password/request.html.twig', [
+        return $this->render('reset_password/request.html.twig', [
             'error' => $utils->getLastAuthenticationError(),
             'form' => $form,
         ]);
@@ -149,7 +149,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        return $this->renderForm('reset_password/reset.html.twig', [
+        return $this->render('reset_password/reset.html.twig', [
             'form' => $form,
         ]);
     }

@@ -17,12 +17,12 @@ use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
 use App\Interfaces\GeneratorInterface;
 use App\Interfaces\RoleInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to generate entities.
@@ -65,7 +65,7 @@ class GeneratorController extends AbstractController
         $helper->addCheckboxSimulate()
             ->addCheckboxConfirm($this->getTranslator(), $data['simulate']);
 
-        return $this->renderForm('admin/generate.html.twig', [
+        return $this->render('admin/generate.html.twig', [
             'form' => $helper->createForm(),
         ]);
     }

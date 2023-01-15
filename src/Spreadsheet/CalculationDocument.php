@@ -110,7 +110,7 @@ class CalculationDocument extends AbstractDocument
     private function cell(int $column, int $row, mixed $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
     {
         $sheet = $this->getActiveSheet();
-        $style = $sheet->getStyleByColumnAndRow($column, $row);
+        $style = $sheet->getCell([$column, $row])->getStyle();
         if ($bold) {
             $style->getFont()->setBold(true);
         }

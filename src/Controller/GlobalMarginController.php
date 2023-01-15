@@ -25,11 +25,12 @@ use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GlobalMarginsDocument;
 use App\Table\GlobalMarginTable;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for global margins entities.
@@ -83,7 +84,7 @@ class GlobalMarginController extends AbstractEntityController
             return $this->redirectToRoute('globalmargin_table');
         }
 
-        return $this->renderForm('globalmargin/globalmargin_edit_list.html.twig', [
+        return $this->render('globalmargin/globalmargin_edit_list.html.twig', [
             'form' => $form,
         ]);
     }
@@ -133,7 +134,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      */
-    #[Route(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => self::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);

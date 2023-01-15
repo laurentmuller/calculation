@@ -49,7 +49,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     /**
      * The categories.
      *
-     * @var Collection<int, CalculationCategory>
+     * @var ArrayCollection<int, CalculationCategory>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: CalculationCategory::class, cascade: ['persist', 'remove'], orphanRemoval: true)]

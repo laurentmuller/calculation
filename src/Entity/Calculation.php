@@ -64,7 +64,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The children groupes.
      *
-     * @var Collection<int, CalculationGroup>
+     * @var ArrayCollection<int, CalculationGroup>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'calculation', targetEntity: CalculationGroup::class, cascade: ['persist', 'remove'], orphanRemoval: true)]

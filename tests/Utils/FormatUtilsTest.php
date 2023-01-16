@@ -70,12 +70,14 @@ class FormatUtilsTest extends TestCase
 
     public function getDates(): array
     {
+        $date = $this->createDate();
+
         return [
-            [$this->createDate(), '20.02.2022'],
-            [$this->createDate(), '20.02.2022', \IntlDateFormatter::SHORT],
-            [$this->createDate(), '20 févr. 2022', \IntlDateFormatter::MEDIUM],
-            [$this->createDate(), '20 février 2022', \IntlDateFormatter::LONG],
-            [$this->createDate(), 'dimanche, 20 février 2022', \IntlDateFormatter::FULL],
+            [$date, '20.02.2022'],
+            [$date, '20.02.2022', \IntlDateFormatter::SHORT],
+            [$date, '20 févr. 2022', \IntlDateFormatter::MEDIUM],
+            [$date, '20 février 2022', \IntlDateFormatter::LONG],
+            [$date, 'dimanche, 20 février 2022', \IntlDateFormatter::FULL],
 
             [null, null],
             [self::TIME_STAMP, '20.02.2022'],
@@ -84,34 +86,30 @@ class FormatUtilsTest extends TestCase
 
     public function getDateTimes(): \Generator
     {
-        yield [$this->createDate(), '20.02.2022 12:59'];
+        $date = $this->createDate();
 
-        yield [$this->createDate(), '12:59', \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT];
+        yield [$date, '20.02.2022 12:59'];
 
-        yield [$this->createDate(), '20.02.2022', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE];
-        yield [$this->createDate(), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT];
-        yield [$this->createDate(), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM];
-        yield [$this->createDate(), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG];
+        yield [$date, '12:59', \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT];
 
-        if (\DIRECTORY_SEPARATOR === '\\') {
-            yield [$this->createDate(), '20 févr. 2022, 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT];
-            yield [$this->createDate(), '20 févr. 2022, 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM];
-            yield [$this->createDate(), '20 févr. 2022, 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG];
-        } else {
-            yield [$this->createDate(), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT];
-            yield [$this->createDate(), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM];
-            yield [$this->createDate(), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG];
-        }
+        yield [$date, '20.02.2022', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE];
+        yield [$date, '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT];
+        yield [$date, '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM];
+        yield [$date, '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG];
 
-        yield [$this->createDate(), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT];
-        yield [$this->createDate(), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM];
-        yield [$this->createDate(), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG];
+        yield [$date, '20 févr. 2022, 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT];
+        yield [$date, '20 févr. 2022, 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM];
+        yield [$date, '20 févr. 2022, 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG];
 
-        yield [$this->createDate(), 'dimanche, 20 février 2022', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE];
-        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12:59', \IntlDateFormatter::FULL, \IntlDateFormatter::SHORT];
-        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59', \IntlDateFormatter::FULL, \IntlDateFormatter::MEDIUM];
-        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::FULL, \IntlDateFormatter::LONG];
-        yield [$this->createDate(), 'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL];
+        yield [$date, '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT];
+        yield [$date, '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM];
+        yield [$date, '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG];
+
+        yield [$date, 'dimanche, 20 février 2022', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE];
+        yield [$date, 'dimanche, 20 février 2022 à 12:59', \IntlDateFormatter::FULL, \IntlDateFormatter::SHORT];
+        yield [$date, 'dimanche, 20 février 2022 à 12:59:59', \IntlDateFormatter::FULL, \IntlDateFormatter::MEDIUM];
+        yield [$date, 'dimanche, 20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::FULL, \IntlDateFormatter::LONG];
+        yield [$date, 'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL];
 
         yield [null, null];
         yield [self::TIME_STAMP, '20.02.2022 12:59'];
@@ -177,12 +175,14 @@ class FormatUtilsTest extends TestCase
 
     public function getTimes(): array
     {
+        $date = $this->createDate();
+
         return [
-            [$this->createDate(), '12:59'],
-            [$this->createDate(), '12:59', \IntlDateFormatter::SHORT],
-            [$this->createDate(), '12:59:59', \IntlDateFormatter::MEDIUM],
-            [$this->createDate(), '12:59:59 UTC+1', \IntlDateFormatter::LONG],
-            [$this->createDate(), '12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL],
+            [$date, '12:59'],
+            [$date, '12:59', \IntlDateFormatter::SHORT],
+            [$date, '12:59:59', \IntlDateFormatter::MEDIUM],
+            [$date, '12:59:59 UTC+1', \IntlDateFormatter::LONG],
+            [$date, '12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL],
 
             [null, null],
             [self::TIME_STAMP, '12:59'],

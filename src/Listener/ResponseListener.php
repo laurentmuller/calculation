@@ -15,6 +15,7 @@ namespace App\Listener;
 use App\Interfaces\MimeTypeInterface;
 use App\Service\NonceService;
 use App\Util\FileUtils;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,7 +65,8 @@ class ResponseListener
         #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
         string $file,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $debug
+        private readonly bool $debug,
+        private readonly Security $security
     ) {
         $nonce = $service->getCspNonce();
         $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -132,10 +134,9 @@ class ResponseListener
      */
     private function isDevFirewall(Request $request): bool
     {
-        /** @psalm-var mixed $context */
-        $context = $request->attributes->get('_firewall_context');
+        $name = $this->security->getFirewallConfig($request)?->getName();
 
-        return \is_string($context) && false !== \stripos($context, 'dev');
+        return null !== $name && false !== \stripos($name, 'dev');
     }
 
     /**

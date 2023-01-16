@@ -18,7 +18,3 @@ framework:
     # errors
     php_errors:
         log: true
-
-    # see https://symfony.com/doc/current/forms.html#form-validation-messages
-    form:
-        legacy_error_messages: false

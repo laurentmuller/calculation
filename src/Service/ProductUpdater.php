@@ -19,7 +19,6 @@ use App\Form\FormHelper;
 use App\Model\ProductUpdateQuery;
 use App\Model\ProductUpdateResult;
 use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;

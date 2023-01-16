@@ -1,7 +1,5 @@
 vich_uploader:
     db_driver: orm
-    metadata:
-        type: attribute
     mappings:
         user_image:
             namer: App\Service\UserNamer

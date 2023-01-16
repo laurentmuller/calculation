@@ -19,6 +19,7 @@ use App\Form\FormHelper;
 use App\Model\ProductUpdateQuery;
 use App\Model\ProductUpdateResult;
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
@@ -222,9 +223,7 @@ class ProductUpdater implements ServiceSubscriberInterface
      */
     private function getAllProducts(): array
     {
-        $repository = $this->manager->getRepository(Product::class);
-
-        return $repository->findAllByDescription();
+        return $this->manager->getRepository(Product::class)->findAllByDescription();
     }
 
     /**
@@ -249,9 +248,7 @@ class ProductUpdater implements ServiceSubscriberInterface
     private function getProducts(?Category $category): array
     {
         if (null !== $category) {
-            $repository = $this->manager->getRepository(Product::class);
-
-            return $repository->findByCategory($category);
+            return $this->manager->getRepository(Product::class)->findByCategory($category);
         }
 
         return [];

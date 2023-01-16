@@ -614,7 +614,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function removeProperty(string $name): self
     {
-        $repository = $this->getRepository();
+        /** @psalm-var PropertyRepository $repository */
+        $repository = $this->manager->getRepository(Property::class);
         $property = $repository->findOneByName($name);
         if (null !== $property) {
             $repository->remove($property);
@@ -627,7 +628,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function setProperties(array $properties, ?array $defaultValues = null): static
     {
         if (!empty($properties)) {
-            $repository = $this->getRepository();
+            /** @psalm-var PropertyRepository $repository */
+            $repository = $this->manager->getRepository(Property::class);
             $defaultValues ??= $this->getDefaultValues();
 
             /** @psalm-var mixed $value */
@@ -675,14 +677,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $properties = $this->manager->getRepository(Property::class)->findAll();
         $this->saveProperties($properties);
-    }
-
-    /**
-     * Gets the property repository.
-     */
-    private function getRepository(): PropertyRepository
-    {
-        return $this->manager->getRepository(Property::class);
     }
 
     /**

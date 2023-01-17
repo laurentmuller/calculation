@@ -65,7 +65,6 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
             ->addEmailType();
 
         $helper->field('plainPassword')
-            ->notMapped()
             ->addRepeatPasswordType();
 
         parent::addFormFields($helper);

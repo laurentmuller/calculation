@@ -94,14 +94,15 @@ trait TimestampableTrait
     public function updateTimestampable(\DateTimeImmutable $date, string $user): bool
     {
         $changed = false;
-        $isNew = empty($this->getId());
-        if ($isNew && null === $this->createdAt) {
-            $this->createdAt = $date;
-            $changed = true;
-        }
-        if ($isNew && null === $this->createdBy) {
-            $this->createdBy = $user;
-            $changed = true;
+        if (empty($this->getId())) {
+            if (null === $this->createdAt) {
+                $this->createdAt = $date;
+                $changed = true;
+            }
+            if (null === $this->createdBy) {
+                $this->createdBy = $user;
+                $changed = true;
+            }
         }
         if ($this->updatedAt !== $date) {
             $this->updatedAt = $date;

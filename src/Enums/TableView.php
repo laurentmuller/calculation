@@ -16,6 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\DefaultEnumTrait;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -24,6 +25,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<TableView>
  */
+#[ReadableEnum(prefix: 'table_view.', useValueAsDefault: true)]
 enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use DefaultEnumTrait;
@@ -32,17 +34,15 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
     /*
      * Show detailed values.
      */
-    #[EnumCase('table_view.card')]
     case CARD = 'card';
     /*
      * Show values as cards.
      */
-    #[EnumCase('table_view.custom')]
     case CUSTOM = 'custom';
     /*
      * Show values within a table (default value).
      */
-    #[EnumCase('table_view.table', ['default' => true])]
+    #[EnumCase(extras: ['default' => true])]
     case TABLE = 'table';
 
     /**

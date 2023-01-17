@@ -15,6 +15,7 @@ namespace App\Enums;
 use App\Interfaces\SortableEnumInterface;
 use App\Util\RoleBuilder;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ExtrasTrait;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
@@ -26,6 +27,7 @@ use function Symfony\Component\String\u;
  *
  *  @implements SortableEnumInterface<EntityName>
  */
+#[ReadableEnum(suffix: '.name')]
 enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
 {
     use ExtrasTrait;
@@ -34,52 +36,52 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     /*
      * The calculation rights.
      */
-    #[EnumCase('calculation.name', ['offset' => 0])]
+    #[EnumCase('calculation', ['offset' => 0])]
     case CALCULATION = 'EntityCalculation';
     /*
      * The calculation state rights.
      */
-    #[EnumCase('calculationstate.name', ['offset' => 1])]
+    #[EnumCase('calculationstate', ['offset' => 1])]
     case CALCULATION_STATE = 'EntityCalculationState';
     /*
      * The category rights.
      */
-    #[EnumCase('category.name', ['offset' => 2])]
+    #[EnumCase('category', ['offset' => 2])]
     case CATEGORY = 'EntityCategory';
     /*
      * The customer rights.
      */
-    #[EnumCase('customer.name', ['offset' => 3])]
+    #[EnumCase('customer', ['offset' => 3])]
     case CUSTOMER = 'EntityCustomer';
     /*
      * The global margin rights.
      */
-    #[EnumCase('globalmargin.name', ['offset' => 4])]
+    #[EnumCase('globalmargin', ['offset' => 4])]
     case GLOBAL_MARGIN = 'EntityGlobalMargin';
     /*
      * The group rights.
      */
-    #[EnumCase('group.name', ['offset' => 5])]
+    #[EnumCase('group', ['offset' => 5])]
     case GROUP = 'EntityGroup';
     /*
      * The log rights.
      */
-    #[EnumCase('log.name', ['offset' => 6])]
+    #[EnumCase('log', ['offset' => 6])]
     case LOG = 'EntityLog';
     /*
      * The product rights.
      */
-    #[EnumCase('product.name', ['offset' => 7])]
+    #[EnumCase('product', ['offset' => 7])]
     case PRODUCT = 'EntityProduct';
     /*
      * The task rights.
      */
-    #[EnumCase('task.name', ['offset' => 8])]
+    #[EnumCase('task', ['offset' => 8])]
     case TASK = 'EntityTask';
     /*
      * The user rights.
      */
-    #[EnumCase('user.name', ['offset' => 9])]
+    #[EnumCase('user', ['offset' => 9])]
     case USER = 'EntityUser';
     /**
      * The entity prefix.

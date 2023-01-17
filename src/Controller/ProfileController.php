@@ -20,7 +20,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -36,7 +35,7 @@ class ProfileController extends AbstractController
      * Change password of the current user (if any).
      */
     #[Route(path: '/change-password', name: 'user_profile_change_password')]
-    public function changePassword(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager): Response
+    public function changePassword(Request $request, EntityManagerInterface $manager): Response
     {
         // get user
         $user = $this->getUser();
@@ -49,10 +48,6 @@ class ProfileController extends AbstractController
         // create and validate form
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
-            // update password
-            $plainPassword = (string) $form->get('plainPassword')->getData();
-            $encodedPassword = $hasher->hashPassword($user, $plainPassword);
-            $user->setPassword($encodedPassword);
             $manager->flush();
             $this->successTrans('profile.change_password.success', ['%username%' => $user->getUserIdentifier()]);
 

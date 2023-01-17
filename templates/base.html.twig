@@ -15,7 +15,7 @@
 {%- set sidebar_hide = is_remembered and is_actived ? app.request.cookies.get('SIDEBAR_HIDE', true) : true -%}
 {%- set sidebar_class = sidebar_hide ? ' sidebar-hide' : '' -%}
 {%- set status_bar = user_service.statusBar and is_remembered and is_actived -%}
-{%- set theme_class = theme_class|default(theme_dark(app.request) and is_remembered and is_actived ? 'dark' : 'light') -%}
+{%- set theme_class = theme_dark(app.request) ? 'dark' : 'light' -%}
 {# rights #}
 {%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}

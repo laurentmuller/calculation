@@ -16,6 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\DefaultEnumTrait;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -24,6 +25,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<StrengthLevel>
  */
+#[ReadableEnum(prefix: 'strength_level.')]
 enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use DefaultEnumTrait;
@@ -32,37 +34,37 @@ enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, 
     /*
      * Medium level.
      */
-    #[EnumCase('strength_level.medium')]
+    #[EnumCase('medium')]
     case MEDIUM = 2;
 
     /*
      * No validation level (default value).
      */
-    #[EnumCase('strength_level.none', ['default' => true])]
+    #[EnumCase('none', ['default' => true])]
     case NONE = -1;
 
     /*
      * Strong level.
      */
-    #[EnumCase('strength_level.strong')]
+    #[EnumCase('strong')]
     case STRONG = 3;
 
     /*
      * Very strong level.
      */
-    #[EnumCase('strength_level.very_strong')]
+    #[EnumCase('very_strong')]
     case VERY_STRONG = 4;
 
     /*
      * Very weak level.
      */
-    #[EnumCase('strength_level.very_weak')]
+    #[EnumCase('very_weak')]
     case VERY_WEAK = 0;
 
     /*
      * Weak level.
      */
-    #[EnumCase('strength_level.weak')]
+    #[EnumCase('weak')]
     case WEAK = 1;
 
     /**

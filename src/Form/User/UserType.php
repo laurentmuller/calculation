@@ -17,9 +17,7 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Form\Type\EnabledDisabledType;
 use App\Util\FormatUtils;
-use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * User edit type.
@@ -31,40 +29,9 @@ class UserType extends AbstractEntityType
     /**
      * Constructor.
      */
-    public function __construct(private readonly UserPasswordHasherInterface $hasher)
+    public function __construct()
     {
         parent::__construct(User::class);
-    }
-
-    /**
-     * Handles the preset data event.
-     */
-    public function onPreSetData(FormEvent $event): void
-    {
-        /** @var User $user */
-        $user = $event->getData();
-        $form = $event->getForm();
-        if ($user->isNew()) {
-            $form->remove('lastLogin');
-        } else {
-            $form->remove('plainPassword');
-        }
-    }
-
-    /**
-     * Handles the submit event.
-     */
-    public function onSubmit(SubmitEvent $event): void
-    {
-        $form = $event->getForm();
-        if ($form->has('plainPassword')) {
-            /** @var User $user */
-            $user = $event->getData();
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('plainPassword')->getData();
-            $encodedPassword = $this->hasher->hashPassword($user, $plainPassword);
-            $user->setPassword($encodedPassword);
-        }
     }
 
     /**
@@ -84,7 +51,6 @@ class UserType extends AbstractEntityType
             ->addEmailType();
 
         $helper->field('plainPassword')
-            ->notMapped()
             ->addRepeatPasswordType();
 
         $helper->field('role')
@@ -104,7 +70,6 @@ class UserType extends AbstractEntityType
             ->addVichImageType();
 
         $helper->addPreSetDataListener(fn (FormEvent $event) => $this->onPreSetData($event));
-        $helper->addSubmitListener(fn (SubmitEvent $event) => $this->onSubmit($event));
     }
 
     /**
@@ -117,5 +82,20 @@ class UserType extends AbstractEntityType
         }
 
         return null;
+    }
+
+    /**
+     * Handles the preset data event.
+     */
+    private function onPreSetData(FormEvent $event): void
+    {
+        /** @var User $user */
+        $user = $event->getData();
+        $form = $event->getForm();
+        if ($user->isNew()) {
+            $form->remove('lastLogin');
+        } else {
+            $form->remove('plainPassword');
+        }
     }
 }

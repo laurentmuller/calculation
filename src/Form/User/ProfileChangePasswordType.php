@@ -68,7 +68,6 @@ class ProfileChangePasswordType extends AbstractEntityType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        // current password
         $helper->field('current_password')
             ->label('user.password.current')
             ->constraints(new NotBlank(), new UserPassword(['message' => 'current_password.invalid']))
@@ -76,12 +75,9 @@ class ProfileChangePasswordType extends AbstractEntityType
             ->autocomplete('current-password')
             ->add(PasswordType::class);
 
-        // new password
         $helper->field('plainPassword')
-            ->notMapped()
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
 
-        // check password
         $helper->field('checkPassword')
             ->label('user.change_password.check_password')
             ->notRequired()

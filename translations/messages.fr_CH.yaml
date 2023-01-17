@@ -380,8 +380,8 @@ environment:
   dev: Développement
   local: Locale
   prod: Production
-  switch: Basculer en mode %name%
   test: Test
+  switch: Basculer en mode %name%
 error_page:
   default_title: Erreur
   description: Une erreur est survenue dans l'exécution du programme.

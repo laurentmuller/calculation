@@ -6,7 +6,6 @@
 {%- set selection = app.request.get('id', 0) -%}
 {%- set caller = path(app.request.get('_route')) -%}
 {# actions #}
-{%- set is_app_dev = app_mode == 'dev' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
 {%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}

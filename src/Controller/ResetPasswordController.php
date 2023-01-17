@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -104,7 +103,7 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route(path: '/reset/{token}', name: self::ROUTE_RESET)]
-    public function reset(Request $request, UserPasswordHasherInterface $hasher, ?string $token = null): Response
+    public function reset(Request $request, ?string $token = null): Response
     {
         if ($token) {
             // we store the token in session and remove it from the URL, to avoid the URL being
@@ -132,11 +131,7 @@ class ResetPasswordController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             // a password reset token should be used only once, remove it
             $this->helper->removeResetRequest($token);
-
-            // encode password
-            $plainPassword = (string) $form->get('plainPassword')->getData();
-            $encodedPassword = $hasher->hashPassword($user, $plainPassword);
-            $user->setPassword($encodedPassword);
+            //  save user
             $this->repository->flush();
 
             // the session is cleaned up after the password has been changed.

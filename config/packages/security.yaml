@@ -31,7 +31,6 @@ security:
                 password_parameter: password
 
             logout:
-                # enable_csrf: true
                 path: app_logout
                 target: /login?logout=success
 

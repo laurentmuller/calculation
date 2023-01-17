@@ -40,7 +40,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
@@ -218,18 +217,12 @@ class UserController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => Requirement::DIGITS])]
-    public function password(Request $request, User $item, UserPasswordHasherInterface $hasher): Response
+    public function password(Request $request, User $item): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // encode password
-            $plainPassword = (string) $form->get('plainPassword')->getData();
-            $encodedPassword = $hasher->hashPassword($item, $plainPassword);
-            $item->setPassword($encodedPassword);
-
             // save
             $this->saveToDatabase($item);
-
             // message
             $this->successTrans('user.change_password.change_success', ['%name%' => $item->getDisplay()]);
 

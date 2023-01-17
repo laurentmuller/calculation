@@ -16,6 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\DefaultEnumTrait;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -24,6 +25,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<EntityAction>
  */
+#[ReadableEnum(prefix: 'entity_action.', useValueAsDefault: true)]
 enum EntityAction: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use DefaultEnumTrait;
@@ -32,17 +34,15 @@ enum EntityAction: string implements DefaultEnumInterface, ReadableEnumInterface
     /*
      * Edit the entity (default value).
      */
-    #[EnumCase('entity_action.edit', ['default' => true])]
+    #[EnumCase(extras: ['default' => true])]
     case EDIT = 'edit';
     /*
      * No action.
      */
-    #[EnumCase('entity_action.none')]
     case NONE = 'none';
     /*
      * Show the entity.
      */
-    #[EnumCase('entity_action.show')]
     case SHOW = 'show';
 
     /**

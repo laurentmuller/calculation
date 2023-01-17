@@ -15,6 +15,7 @@ namespace App\Enums;
 use App\Interfaces\SortableEnumInterface;
 use App\Util\RoleBuilder;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -23,6 +24,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<EntityPermission>
  */
+#[ReadableEnum(prefix: 'rights.')]
 enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterface
 {
     use ReadableEnumTrait;
@@ -30,32 +32,32 @@ enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterfa
     /*
      * Allow to add an entity.
      */
-    #[EnumCase('rights.add')]
+    #[EnumCase('add')]
     case ADD = 1 << 0;
     /*
      * Allow to delete an entity.
      */
-    #[EnumCase('rights.delete')]
+    #[EnumCase('delete')]
     case DELETE = 1 << 1;
     /*
      * Allow to edit an entity.
      */
-    #[EnumCase('rights.edit')]
+    #[EnumCase('edit')]
     case EDIT = 1 << 2;
     /*
      * Allow to export entities.
      */
-    #[EnumCase('rights.export')]
+    #[EnumCase('export')]
     case EXPORT = 1 << 3;
     /*
      * Allow to list entities.
      */
-    #[EnumCase('rights.list')]
+    #[EnumCase('list')]
     case LIST = 1 << 4;
     /*
      * Allow to show an entity.
      */
-    #[EnumCase('rights.show')]
+    #[EnumCase('show')]
     case SHOW = 1 << 5;
 
     /**

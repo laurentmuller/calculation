@@ -28,7 +28,6 @@ class ResetChangePasswordType extends AbstractType
     {
         $helper = new FormHelper($builder);
         $helper->field('plainPassword')
-            ->notMapped()
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
     }
 

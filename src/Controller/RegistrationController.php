@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -50,16 +49,12 @@ class RegistrationController extends AbstractController
      * Display and process form to register a new user.
      */
     #[Route(path: '', name: self::ROUTE_REGISTER)]
-    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils): Response
+    public function register(Request $request, AuthenticationUtils $utils): Response
     {
         $user = new User();
         $user->setPassword('fake');
         $form = $this->createForm(UserRegistrationType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
-            // encode password and save user
-            $plainPassword = (string) $form->get('plainPassword')->getData();
-            $encodedPassword = $hasher->hashPassword($user, $plainPassword);
-            $user->setPassword($encodedPassword);
             $this->repository->add($user);
 
             try {

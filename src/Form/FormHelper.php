@@ -479,18 +479,18 @@ class FormHelper
      * @param string $passwordLabel the label used for the password
      * @param string $confirmLabel  the label used for the confirmation password
      */
-    public function addRepeatPasswordType(string $passwordLabel = 'user.password.label', string $confirmLabel = 'user.password.confirmation'): self
+    public function addRepeatPasswordType(string $passwordLabel = RepeatPasswordType::PASSWORD_LABEL, string $confirmLabel = RepeatPasswordType::CONFIRM_LABEL): self
     {
-        if ('user.password.label' !== $passwordLabel) {
+        if (RepeatPasswordType::PASSWORD_LABEL !== $passwordLabel) {
             $first_options = \array_replace_recursive(
-                RepeatPasswordType::getFirstOptions(),
+                RepeatPasswordType::getPasswordOptions(),
                 ['label' => $passwordLabel]
             );
             $this->updateOption('first_options', $first_options);
         }
-        if ('user.password.confirmation' !== $confirmLabel) {
+        if (RepeatPasswordType::CONFIRM_LABEL !== $confirmLabel) {
             $second_options = \array_replace_recursive(
-                RepeatPasswordType::getSecondOptions(),
+                RepeatPasswordType::getConfirmOptions(),
                 ['label' => $confirmLabel]
             );
             $this->updateOption('second_options', $second_options);

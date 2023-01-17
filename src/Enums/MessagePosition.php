@@ -16,6 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\DefaultEnumTrait;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -24,6 +25,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<MessagePosition>
  */
+#[ReadableEnum(prefix: 'message_position.')]
 enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use DefaultEnumTrait;
@@ -32,49 +34,49 @@ enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterf
     /*
      * Bottom center position.
      */
-    #[EnumCase('message_position.bottom_center')]
+    #[EnumCase('bottom_center')]
     case BOTTOM_CENTER = 'bottom-center';
     /*
      * Bottom left position.
      */
-    #[EnumCase('message_position.bottom_left')]
+    #[EnumCase('bottom_left')]
     case BOTTOM_LEFT = 'bottom-left';
     /*
      * Bottom right position.
      */
-    #[EnumCase('message_position.bottom_right', ['default' => true])]
+    #[EnumCase('bottom_right', ['default' => true])]
     case BOTTOM_RIGHT = 'bottom-right';
     /*
      * Center position.
      */
-    #[EnumCase('message_position.center_center')]
+    #[EnumCase('center_center')]
     case CENTER_CENTER = 'center-center';
     /*
      * Center left position.
      */
-    #[EnumCase('message_position.center_left')]
+    #[EnumCase('center_left')]
     case CENTER_LEFT = 'center-left';
     /*
      * Center right position.
      */
-    #[EnumCase('message_position.center_right')]
+    #[EnumCase('center_right')]
     case CENTER_RIGHT = 'center-right';
     /*
      * Top center position.
      */
-    #[EnumCase('message_position.top_center')]
+    #[EnumCase('top_center')]
     case TOP_CENTER = 'top-center';
 
     /*
      * Top left position.
      */
-    #[EnumCase('message_position.top_left')]
+    #[EnumCase('top_left')]
     case TOP_LEFT = 'top-left';
 
     /*
      * Top right position.
      */
-    #[EnumCase('message_position.top_right')]
+    #[EnumCase('top_right')]
     case TOP_RIGHT = 'top-right';
 
     /**

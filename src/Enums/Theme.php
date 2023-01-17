@@ -16,6 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\DefaultEnumTrait;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -24,6 +25,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<Theme>
  */
+#[ReadableEnum(prefix: 'theme.', suffix: '.name', useValueAsDefault: true)]
 enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use DefaultEnumTrait;
@@ -32,7 +34,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
     /*
      * The dark theme.
      */
-    #[EnumCase(label: 'theme.dark.name', extras: [
+    #[EnumCase(extras: [
         'icon' => 'fa-solid fa-moon',
         'title' => 'theme.dark.title',
         'success' => 'theme.dark.success',
@@ -41,7 +43,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
     /*
      * The light theme.
      */
-    #[EnumCase(label: 'theme.light.name', extras: [
+    #[EnumCase(extras: [
         'default' => true,
         'icon' => 'fa-regular fa-sun',
         'title' => 'theme.light.title',

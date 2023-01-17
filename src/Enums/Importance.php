@@ -16,6 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\DefaultEnumTrait;
 use Elao\Enum\Attribute\EnumCase;
+use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -24,6 +25,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  *  @implements SortableEnumInterface<Importance>
  */
+#[ReadableEnum(prefix: 'importance.', useValueAsDefault: true)]
 enum Importance: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use DefaultEnumTrait;
@@ -32,22 +34,19 @@ enum Importance: string implements DefaultEnumInterface, ReadableEnumInterface, 
     /*
      * High importance.
      */
-    #[EnumCase('importance.high')]
     case HIGH = 'high';
     /*
      * Low importance (default value).
      */
-    #[EnumCase('importance.low', ['default' => true])]
+    #[EnumCase(extras: ['default' => true])]
     case LOW = 'low';
     /*
      * Medium  importance.
      */
-    #[EnumCase('importance.medium')]
     case MEDIUM = 'medium';
     /*
      * Urgente importance.
      */
-    #[EnumCase('importance.urgent')]
     case URGENT = 'urgent';
 
     /**

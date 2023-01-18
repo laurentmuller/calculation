@@ -21,9 +21,9 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Abstract data transformer to convert an entity to an identifier (integer).
  *
- * @template T of \App\Entity\AbstractEntity
+ * @template T of AbstractEntity
  *
- * @implements DataTransformerInterface<T|null, int|null>
+ * @implements DataTransformerInterface<T, int>
  */
 class AbstractEntityTransformer implements DataTransformerInterface
 {
@@ -49,19 +49,19 @@ class AbstractEntityTransformer implements DataTransformerInterface
      *
      * @return T|null
      */
-    public function reverseTransform(mixed $value)
+    public function reverseTransform(mixed $value): ?AbstractEntity
     {
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 
         if (!\is_numeric($value)) {
-            $message = \sprintf('A number expected, a "%s" given.', \get_debug_type($value));
+            $message = \sprintf('A "number" expected, a "%s" given.', \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 
         $entity = $this->repository->find((int) $value);
-        if (!$entity instanceof AbstractEntity) {
+        if (!\is_a($entity, $this->className)) {
             $message = \sprintf('Unable to find a "%s" for the value "%s".', $this->className, $value);
             throw new TransformationFailedException($message);
         }
@@ -72,11 +72,9 @@ class AbstractEntityTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param T|null $value
-     *
-     * @return int|null
+     * @param AbstractEntity|null $value
      */
-    public function transform(mixed $value)
+    public function transform(mixed $value): ?int
     {
         if (null === $value) {
             return null;
@@ -87,9 +85,6 @@ class AbstractEntityTransformer implements DataTransformerInterface
             throw new TransformationFailedException($message);
         }
 
-        /** @psalm-var T $entity */
-        $entity = $value;
-
-        return $entity->getId();
+        return $value->getId();
     }
 }

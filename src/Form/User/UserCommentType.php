@@ -39,18 +39,14 @@ class UserCommentType extends AbstractType
     {
         parent::buildForm($builder, $options);
 
-        /** @var Comment $data */
-        $data = $options['data'];
-        $isMail = $data->isMail();
         $helper = new FormHelper($builder, 'user.fields.');
 
-        if ($isMail) {
-            $helper->field('toAddress')
-                ->addPlainType(true);
-        } else {
-            $helper->field('fromAddress')
-                ->addPlainType(true);
-        }
+        /** @var Comment $data */
+        $data = $options['data'];
+        $address = $data->isMail() ? 'toAddress' : 'fromAddress';
+        $helper->field($address)
+            ->addPlainType(true);
+        $builder->get($address)->addModelTransformer($this->transformer);
 
         $helper->field('subject')
             ->addTextType();
@@ -71,12 +67,5 @@ class UserCommentType extends AbstractType
                 'maxsizetotal' => '30mi', ])
             ->notRequired()
             ->addFileType();
-
-        // transformer
-        if ($isMail) {
-            $builder->get('toAddress')->addModelTransformer($this->transformer);
-        } else {
-            $builder->get('fromAddress')->addModelTransformer($this->transformer);
-        }
     }
 }

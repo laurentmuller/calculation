@@ -28,9 +28,8 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        CallableThisArrayToAnonymousFunctionRector::class => [
-          __DIR__ . '/src/Twig/*Extension.php',
-        ],
+        __DIR__ . '/src/Form/DataTransformer/AddressTransformer.php',
+        __DIR__ . '/src/Form/DataTransformer/AbstractEntityTransformer.php',
     ]);
 
     // rules to apply

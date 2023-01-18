@@ -81,7 +81,7 @@ final class FunctionExtension extends AbstractExtension
     {
         return [
             new TwigFilter('trans_role', $this->translateRole(...)),
-            new TwigFilter('var_export', [Utils::class, 'exportVar']),
+            new TwigFilter('var_export', fn (mixed $expression): string => Utils::exportVar($expression)),
         ];
     }
 

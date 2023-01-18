@@ -17,25 +17,27 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
 
 /**
- * Data transformer for mime address.
+ * Transforms between an Address string and an Address object.
  *
- * @implements DataTransformerInterface<Address|null, string|null>
+ * @implements DataTransformerInterface<Address, string>
  */
 class AddressTransformer implements DataTransformerInterface
 {
     /**
      * {@inheritDoc}
      *
-     * @return Address|null
+     * @param string|null $value
+     *
+     * @psalm-suppress DocblockTypeContradiction
      */
-    public function reverseTransform(mixed $value)
+    public function reverseTransform(mixed $value): ?Address
     {
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 
         if (!\is_string($value)) {
-            $message = \sprintf('A string expected, a "%s" given.', \get_debug_type($value));
+            $message = \sprintf('A "string" expected, a "%s" given.', \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 
@@ -43,16 +45,16 @@ class AddressTransformer implements DataTransformerInterface
             return Address::create($value);
         } catch (\InvalidArgumentException $e) {
             $message = \sprintf('Unable to parse the address for the value "%s".', $value);
-            throw new TransformationFailedException($message, 0, $e);
+            throw new TransformationFailedException($message, $e->getCode(), $e);
         }
     }
 
     /**
      * {@inheritDoc}
      *
-     * @return string|null
+     * @param Address|null $value
      */
-    public function transform(mixed $value)
+    public function transform(mixed $value): ?string
     {
         if (null === $value) {
             return null;

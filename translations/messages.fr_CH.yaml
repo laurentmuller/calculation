@@ -1355,6 +1355,7 @@ entity_action:
   none: Aucune action
   show: Afficher l'objet
 importance:
+  name: Importance
   low: Basse
   low_full: Importance basse
   medium: Moyenne

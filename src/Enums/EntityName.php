@@ -95,13 +95,12 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
      */
     public static function constants(): array
     {
-        $result = [];
         $entities = EntityName::cases();
-        foreach ($entities as $entity) {
-            $result['ENTITY_' . $entity->name] = $entity->value;
-        }
 
-        return $result;
+        return \array_combine(
+            \array_map(static fn (EntityName $e) => 'ENTITY_' . $e->name, $entities),
+            \array_map(static fn (EntityName $e) => $e->value, $entities)
+        );
     }
 
     /**

@@ -28,13 +28,6 @@ trait CacheAwareTrait
     private ?CacheItemPoolInterface $cacheAdapter = null;
 
     /**
-     * The reserved characters.
-     *
-     * @var string[]|null
-     */
-    private static ?array $reservedCharacters = null;
-
-    /**
      * Clear this cache adapter.
      */
     public function clearCache(): bool
@@ -184,14 +177,16 @@ trait CacheAwareTrait
     }
 
     /**
-     * Remove all reserved characters that cannot be used in a key.
+     * Replace all reserved characters that cannot be used in a key by the underscore ('_') character.
      */
     private static function cleanKey(string $key): string
     {
-        if (null === self::$reservedCharacters) {
-            self::$reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
+        /** @psalm-var string[] $reservedCharacters */
+        static $reservedCharacters = [];
+        if ([] === $reservedCharacters) {
+            $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
         }
 
-        return \str_replace(self::$reservedCharacters, '_', $key);
+        return \str_replace($reservedCharacters, '_', $key);
     }
 }

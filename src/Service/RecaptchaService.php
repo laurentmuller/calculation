@@ -33,8 +33,10 @@ class RecaptchaService
     private int $timeoutSeconds = 60;
 
     public function __construct(
+        #[\SensitiveParameter]
         #[Autowire('%google_recaptcha_site_key%')]
         private readonly string $siteKey,
+        #[\SensitiveParameter]
         #[Autowire('%google_recaptcha_secret_key%')]
         private readonly string $secretKey,
         #[Autowire('%kernel.debug%')]

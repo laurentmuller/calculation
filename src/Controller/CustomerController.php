@@ -32,7 +32,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for customer entities.
  *
- * @see \App\Entity\Customer
+ * @see Customer
  *
  * @template-extends AbstractEntityController<Customer>
  */

@@ -48,6 +48,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(
+        #[\SensitiveParameter]
         #[Autowire('%ip_stack_key%')]
         string $key
     ) {

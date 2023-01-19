@@ -16,7 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use Elao\Enum\ExtrasTrait;
 
 /**
- * Trait to implement {@link \App\Interfaces\DefaultEnumInterface DefaultEnumInterface}.
+ * Trait to implement {@link DefaultEnumInterface}.
  */
 trait DefaultEnumTrait
 {

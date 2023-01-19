@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -60,8 +61,6 @@ final class SymfonyInfoService
      */
     private ?array $packages = null;
 
-    private readonly string $projectDir;
-
     /**
      * @var null|array{
      *     runtime?: array<string, array{name: string, path: string}>,
@@ -73,9 +72,12 @@ final class SymfonyInfoService
     /**
      * Constructor.
      */
-    public function __construct(private readonly KernelInterface $kernel, private readonly RouterInterface $router)
-    {
-        $this->projectDir = $this->kernel->getProjectDir();
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        private readonly string $projectDir,
+        private readonly KernelInterface $kernel,
+        private readonly RouterInterface $router
+    ) {
     }
 
     /**
@@ -237,9 +239,9 @@ final class SymfonyInfoService
                      * } $content
                      */
                     $content = FileUtils::decodeJson($path);
-                    $packages = $content['packages'];
-                    $devPackageNames = $content['dev-package-names'] ?? [];
-                    $result = $this->processPackages($packages, $devPackageNames);
+                    $runtimePackages = $content['packages'];
+                    $debugPackages = $content['dev-package-names'] ?? [];
+                    $result = $this->processPackages($runtimePackages, $debugPackages);
                 } catch (\InvalidArgumentException) {
                     // ignore
                 }
@@ -255,7 +257,7 @@ final class SymfonyInfoService
      */
     public function getProjectDir(): string
     {
-        return \str_replace('\\', '/', $this->projectDir);
+        return \str_replace(\DIRECTORY_SEPARATOR, '/', $this->projectDir);
     }
 
     /**
@@ -342,15 +344,13 @@ final class SymfonyInfoService
     /**
      * Gets the number of days before expiration.
      *
-     * @param string $date the date (month/year) to get for
-     *
      * @return string the number of days, if applicable; '' otherwise
      */
     private function formatDays(string $date): string
     {
-        $datetime = \DateTime::createFromFormat('d/m/Y', "01/$date");
+        $datetime = $this->getLastDate($date);
         if ($datetime instanceof \DateTime) {
-            return (new \DateTime())->diff($datetime->modify('last day of this month 23:59:59'))->format('%R%a days');
+            return (new \DateTime())->diff($datetime)->format('%R%a days');
         }
 
         return '';
@@ -365,32 +365,48 @@ final class SymfonyInfoService
      */
     private function formatExpired(string $date): string
     {
-        $datetime = \DateTime::createFromFormat('m/Y', $date);
+        $datetime = $this->getLastDate($date);
         if ($datetime instanceof \DateTime) {
-            return (string) FormatUtils::formatDate($datetime->modify('last day of this month 23:59:59'));
+            return (string) FormatUtils::formatDate($datetime);
         }
 
         return 'Unknown';
     }
 
     /**
-     * Formats the given path within the given base path.
+     * Formats the given path within the given optional base path.
      *
      * @param string  $path    the path
-     * @param ?string $baseDir the root path
+     * @param ?string $baseDir the base (root) path
      *
      * @return string the relative path
      */
     private function formatPath(string $path, ?string $baseDir = null): string
     {
-        $path = \str_replace('\\', '/', $path);
         if (null !== $baseDir) {
-            $baseDir = \str_replace('\\', '/', $baseDir);
-
-            return (string) \preg_replace('~^' . \preg_quote($baseDir, '~') . '~', '.', $path);
+            try {
+                return FileUtils::makePathRelative($path, $baseDir);
+            } catch (\InvalidArgumentException) {
+                // ignore
+            }
         }
 
-        return $path;
+        return \str_replace(\DIRECTORY_SEPARATOR, '/', $path);
+    }
+
+    /**
+     * Gets a date as the last day of the month.
+     *
+     * @param string $date the date (month/year) to get for
+     */
+    private function getLastDate(string $date): ?\DateTimeInterface
+    {
+        $datetime = \DateTime::createFromFormat('m/Y', $date);
+        if ($datetime instanceof \DateTime) {
+            return $datetime->modify('last day of this month 23:59:59');
+        }
+
+        return null;
     }
 
     private function isDebugRoute(string $name): bool
@@ -399,21 +415,25 @@ final class SymfonyInfoService
     }
 
     /**
-     * @param array<string, array{name: string, version: string, description?: string, homepage?: string}> $packages
-     * @param string[]                                                                                     $devPackageNames
+     * @param array<string, array{
+     *              name: string,
+     *              version: string,
+     *              description?: string,
+     *              homepage?: string}> $runtimePackages
+     * @param string[] $debugPackages
      *
      * @return  array{
      *          runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
      *          debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
      *          }
      */
-    private function processPackages(array $packages, array $devPackageNames): array
+    private function processPackages(array $runtimePackages, array $debugPackages): array
     {
         $result = [];
-        foreach ($packages as $package) {
+        foreach ($runtimePackages as $package) {
             $name = $package['name'];
             $entry = ['name' => $name];
-            $type = \in_array($name, $devPackageNames, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
+            $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             foreach (self::PACKAGE_PROPERTIES as $key) {
                 $value = $package[$key] ?? '';
                 switch ($key) {

@@ -12,12 +12,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\User\UserLoginType;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -29,18 +31,20 @@ class SecurityController extends AbstractController
 {
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $utils): Response
+    public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
     {
-        $username = $utils->getLastUsername();
-        $error = $utils->getLastAuthenticationError();
+        if (null !== $user) {
+            return $this->redirectToHomePage();
+        }
+
         $form = $this->createForm(UserLoginType::class, [
-            'username' => $username,
+            'username' => $utils->getLastUsername(),
             'remember_me' => true,
         ]);
 
         return $this->render('security/login.html.twig', [
             'form' => $form,
-            'error' => $error,
+            'error' => $utils->getLastAuthenticationError(),
         ]);
     }
 

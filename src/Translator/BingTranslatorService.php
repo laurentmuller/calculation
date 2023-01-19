@@ -56,6 +56,7 @@ class BingTranslatorService extends AbstractTranslatorService
      * @throws \InvalidArgumentException if the API key is null or empty
      */
     public function __construct(
+        #[\SensitiveParameter]
         #[Autowire('%bing_translator_key%')]
         string $key
     ) {

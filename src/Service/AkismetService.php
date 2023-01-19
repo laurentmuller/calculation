@@ -79,6 +79,7 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(
+        #[\SensitiveParameter]
         #[Autowire('%akismet_key%')]
         string $key,
         private readonly RequestStack $stack,

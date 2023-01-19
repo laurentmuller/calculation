@@ -18,7 +18,7 @@ use App\Util\Utils;
 /**
  * Represent a group in the grouping table.
  *
- * @see \App\Pdf\PdfGroupTableBuilder
+ * @see PdfGroupTableBuilder
  */
 class PdfGroup implements PdfDocumentUpdaterInterface
 {

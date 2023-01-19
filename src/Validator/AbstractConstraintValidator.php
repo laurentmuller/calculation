@@ -77,8 +77,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     /**
      * Performs validation.
      *
-     * @param string $value      the value that should be validated
-     * @param T      $constraint
+     * @psalm-param T      $constraint
      */
     abstract protected function doValidate(string $value, Constraint $constraint): void;
 }

@@ -22,7 +22,7 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Abstract table for entities.
  *
- * @template T of \App\Entity\AbstractEntity
+ * @template T of AbstractEntity
  */
 abstract class AbstractEntityTable extends AbstractTable
 {

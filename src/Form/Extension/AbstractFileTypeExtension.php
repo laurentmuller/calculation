@@ -31,9 +31,6 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
         $this->updateAttributes($form, $view->vars['attr'], $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         // the number of files

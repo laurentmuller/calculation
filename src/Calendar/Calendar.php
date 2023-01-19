@@ -138,9 +138,10 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function __toString(): string
     {
+        $year = (int) $this->year;
         $name = Utils::getShortName($this);
-        $firstDate = new \DateTime('1 January ' . (int) $this->year);
-        $lastDate = new \DateTime('31 December ' . (int) $this->year);
+        $firstDate = new \DateTimeImmutable(\sprintf('%d-01-01', $year));
+        $lastDate = new \DateTimeImmutable(\sprintf('%d-12-31', $year));
         $first = (string) FormatUtils::formatDate($firstDate);
         $last = (string) FormatUtils::formatDate($lastDate);
 

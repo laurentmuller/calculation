@@ -77,7 +77,7 @@ class PdfColumn
      *
      * @return bool true if fixed
      *
-     * @see \App\Pdf\PdfTableBuilder::isFullWidth()
+     * @see PdfTableBuilder::isFullWidth()
      */
     public function isFixed(): bool
     {
@@ -132,7 +132,7 @@ class PdfColumn
      *
      * @return self this instance
      *
-     * @see \App\Pdf\PdfTableBuilder::isFullWidth()
+     * @see PdfTableBuilder::isFullWidth()
      */
     public function setFixed(bool $fixed): self
     {

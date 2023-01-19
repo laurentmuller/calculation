@@ -161,7 +161,7 @@ class Customer extends AbstractEntity
     /**
      * Gets the full name and the company separate by a comma character.
      *
-     * @see \App\Entity\Customer::getFullName()
+     * @see Customer::getFullName()
      */
     public function getNameAndCompany(): string
     {

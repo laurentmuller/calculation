@@ -4,6 +4,7 @@ about:
   app_customer_fax: Télécopieur
   app_customer_phone: Téléphone
   app_environment: Environnement
+  app_mode: Mode d'exécution
   app_name: Application
   app_owner: Concepteur
   app_version: Version

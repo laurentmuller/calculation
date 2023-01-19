@@ -100,7 +100,7 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     /**
      * {@inheritdoc}
      *
-     * @see \App\Entity\AbstractEntity::getDisplay()
+     * @see AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

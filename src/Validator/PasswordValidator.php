@@ -74,16 +74,17 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * Check util a violation is added.
+     * Check constraints util a violation is added.
      */
-    private function checkAny(string $value, Password $constraint): bool
+    private function checkAny(string $value, Password $constraint): void
     {
-        return $this->checkLetters($constraint, $value)
-        || $this->checkCaseDiff($constraint, $value)
-        || $this->checkNumber($constraint, $value)
-        || $this->checkSpecialChar($constraint, $value)
-        || $this->checkEmail($constraint, $value)
-        || $this->checkPwned($constraint, $value);
+        if (!($this->checkLetters($constraint, $value)
+            || $this->checkCaseDiff($constraint, $value)
+            || $this->checkNumber($constraint, $value)
+            || $this->checkSpecialChar($constraint, $value)
+            || $this->checkEmail($constraint, $value))) {
+            $this->checkPwned($constraint, $value);
+        }
     }
 
     /**

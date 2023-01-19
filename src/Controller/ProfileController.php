@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -35,16 +36,8 @@ class ProfileController extends AbstractController
      * Change password of the current user (if any).
      */
     #[Route(path: '/change-password', name: 'user_profile_change_password')]
-    public function changePassword(Request $request, EntityManagerInterface $manager): Response
+    public function changePassword(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
-        // get user
-        $user = $this->getUser();
-        if (!$user instanceof User) {
-            $this->errorTrans('profile.change_password.failure');
-
-            return $this->redirectToHomePage();
-        }
-
         // create and validate form
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
@@ -64,15 +57,8 @@ class ProfileController extends AbstractController
      * Edit the profile of the current user (if any).
      */
     #[Route(path: '/edit', name: 'user_profile_edit')]
-    public function editProfil(Request $request, EntityManagerInterface $manager): Response
+    public function editProfil(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
-        // get user
-        $user = $this->getUser();
-        if (!$user instanceof User) {
-            $this->errorTrans('profile.edit.failure');
-
-            return $this->redirectToHomePage();
-        }
         // create and validate form
         $form = $this->createForm(ProfileEditType::class, $user);
         if ($this->handleRequestForm($request, $form)) {

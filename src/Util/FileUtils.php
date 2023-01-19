@@ -209,6 +209,16 @@ final class FileUtils
     }
 
     /**
+     * Given an existing end path, convert it to a path relative to a given starting path.
+     *
+     * @throws \InvalidArgumentException if the end path or the start path is not absolute
+     */
+    public static function makePathRelative(string $endPath, string $startPath): string
+    {
+        return self::getFilesystem()->makePathRelative($endPath, $startPath);
+    }
+
+    /**
      * Creates a directory recursively.
      */
     public static function mkdir(string|iterable $dirs, int $mode = 0o777): bool

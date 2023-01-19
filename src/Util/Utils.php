@@ -184,16 +184,10 @@ final class Utils
     /**
      * Returns the first matching item in the given array.
      *
-     * <p>
-     * The callable function must by of type <code>function($value): bool</code>.
-     * </p>
-     *
-     * @param array    $array    the array to search in
-     * @param callable $callback the filter callback
+     * @param array                 $array    the array to search in
+     * @param callable(mixed): bool $callback the filter callback
      *
      * @return mixed the first matching item, if any; null otherwise
-     *
-     * @psalm-param callable(mixed): bool $callback
      */
     public static function findFirst(array $array, callable $callback): mixed
     {

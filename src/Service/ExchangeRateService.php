@@ -68,6 +68,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(
+        #[\SensitiveParameter]
         #[Autowire('%exchange_rate_key%')]
         string $key
     ) {

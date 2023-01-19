@@ -20,7 +20,7 @@ use App\Util\Utils;
 /**
  * Class to build a table.
  *
- * @see \App\Pdf\PdfColumn
+ * @see PdfColumn
  */
 class PdfTableBuilder
 {

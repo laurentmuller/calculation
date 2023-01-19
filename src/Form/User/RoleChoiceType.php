@@ -21,15 +21,11 @@ use Symfony\Bundle\SecurityBundle\Security;
  */
 class RoleChoiceType extends AbstractChoiceType
 {
-    private readonly bool $superAdmin;
-
     /**
      * Constructor.
      */
-    public function __construct(Security $security)
+    public function __construct(private readonly Security $security)
     {
-        $user = $security->getUser();
-        $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
     }
 
     /**
@@ -41,10 +37,17 @@ class RoleChoiceType extends AbstractChoiceType
             'user.roles.user' => RoleInterface::ROLE_USER,
             'user.roles.admin' => RoleInterface::ROLE_ADMIN,
         ];
-        if ($this->superAdmin) {
+        if ($this->isSuperAdmin()) {
             $choices['user.roles.super_admin'] = RoleInterface::ROLE_SUPER_ADMIN;
         }
 
         return $choices;
+    }
+
+    private function isSuperAdmin(): bool
+    {
+        $user = $this->security->getUser();
+
+        return $user instanceof RoleInterface && $user->isSuperAdmin();
     }
 }

@@ -178,6 +178,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(
+        #[\SensitiveParameter]
         #[Autowire('%open_weather_key%')]
         string $key,
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]

@@ -67,12 +67,10 @@ class HtmlParser
      * @param HtmlParentChunk $parent the parent chunk
      * @param ?string         $class  the optional class name
      */
-    private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlBrChunk
+    private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class): void
     {
         $chunk = new HtmlBrChunk($name, $parent);
         $chunk->setClassName($class);
-
-        return $chunk;
     }
 
     /**
@@ -114,9 +112,9 @@ class HtmlParser
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
      */
-    private function createPageBreakChunk(string $name, HtmlParentChunk $parent): HtmlPageBreakChunk
+    private function createPageBreakChunk(string $name, HtmlParentChunk $parent): void
     {
-        return new HtmlPageBreakChunk($name, $parent);
+        new HtmlPageBreakChunk($name, $parent);
     }
 
     /**
@@ -142,7 +140,7 @@ class HtmlParser
      * @param ?string         $class  the optional class name
      * @param \DOMNode        $node   the current node
      */
-    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): ?HtmlTextChunk
+    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): void
     {
         /** @var \DOMText $nodeText */
         $nodeText = $node;
@@ -151,11 +149,7 @@ class HtmlParser
             $chunk = new HtmlTextChunk($name, $parent);
             $chunk->setClassName($class);
             $chunk->setText($value);
-
-            return $chunk;
         }
-
-        return null;
     }
 
     /**

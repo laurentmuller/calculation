@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Util\FileUtils;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -53,6 +53,11 @@ class UpdateAssetsCommand extends Command
      * The vendor configuration file name.
      */
     private const VENDOR_FILE_NAME = 'vendor.json';
+
+    public function __construct(#[Autowire('%kernel.project_dir%')] private readonly string $projectDir)
+    {
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -363,25 +368,11 @@ class UpdateAssetsCommand extends Command
         return [];
     }
 
-    private function getProjectDir(): ?string
-    {
-        $application = $this->getApplication();
-        if (!$application instanceof Application) {
-            $this->writeError('The Application is not defined.');
-
-            return null;
-        }
-
-        return $application->getKernel()->getProjectDir();
-    }
-
     private function getPublicDir(): ?string
     {
-        if ($projectDir = $this->getProjectDir()) {
-            return FileUtils::buildPath($projectDir, 'public');
-        }
+        $publicDir = FileUtils::buildPath($this->projectDir, 'public');
 
-        return null;
+        return FileUtils::exists($publicDir) ? $publicDir : null;
     }
 
     private function getSourceFile(string $source, string $format, \stdClass $plugin, string $file): string

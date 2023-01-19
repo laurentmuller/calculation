@@ -67,10 +67,10 @@ final class FormatExtension extends AbstractExtension
         $options = ['needs_environment' => true];
 
         return [
-            new TwigFilter('identifier', fn (float|int|string|null $number): string => FormatUtils::formatId($number)),
-            new TwigFilter('integer', fn (float|int|string|null $number): string => FormatUtils::formatInt($number)),
-            new TwigFilter('amount', fn (float|int|string|null $number): string => FormatUtils::formatAmount($number)),
-            new TwigFilter('percent', fn (float|int|string|null $number, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): string => FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode)),
+            new TwigFilter('identifier', FormatUtils::formatId(...)),
+            new TwigFilter('integer', FormatUtils::formatInt(...)),
+            new TwigFilter('amount', FormatUtils::formatAmount(...)),
+            new TwigFilter('percent', FormatUtils::formatPercent(...)),
             new TwigFilter('boolean', $this->formatBoolean(...)),
 
             new TwigFilter('locale_date', $this->dateFilter(...), $options),

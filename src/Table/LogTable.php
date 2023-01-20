@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
-use App\Interfaces\SortModeInterface;
 use App\Service\LogService;
 use App\Util\FileUtils;
 use App\Util\Utils;
@@ -137,14 +136,6 @@ class LogTable extends AbstractTable implements \Countable
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'log.json');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultOrder(): array
-    {
-        return [self::COLUMN_DATE => SortModeInterface::SORT_DESC];
     }
 
     /**
@@ -275,7 +266,7 @@ class LogTable extends AbstractTable implements \Countable
 
         // multiple-sort
         $fields = [
-                $field => SortModeInterface::SORT_ASC === $direction,
+                $field => self::SORT_ASC === $direction,
                 self::COLUMN_DATE => false,
             ];
         Utils::sortFields($entities, $fields);

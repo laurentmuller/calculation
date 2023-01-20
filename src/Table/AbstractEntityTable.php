@@ -18,6 +18,7 @@ use App\Repository\AbstractRepository;
 use App\Util\Utils;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\CountWalker;
 
 /**
  * Abstract table for entities.
@@ -27,6 +28,11 @@ use Doctrine\ORM\QueryBuilder;
 abstract class AbstractEntityTable extends AbstractTable
 {
     /**
+     * The join part name of the query.
+     */
+    private const JOIN_PART = 'join';
+
+    /**
      * The where part name of the query builder.
      */
     private const WHERE_PART = 'where';
@@ -34,7 +40,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Constructor.
      *
-     * @psalm-param AbstractRepository<T> $repository
+     * @param AbstractRepository<T> $repository
      */
     public function __construct(protected readonly AbstractRepository $repository)
     {
@@ -51,7 +57,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the repository.
      *
-     * @psalm-return AbstractRepository<T> $repository
+     * @return AbstractRepository<T> $repository
      */
     public function getRepository(): AbstractRepository
     {
@@ -75,7 +81,6 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function countFiltered(QueryBuilder $builder): int
     {
-        // clone
         $alias = $builder->getRootAliases()[0];
         $field = $this->repository->getSingleIdentifierFieldName();
         $select = "COUNT($alias.$field)";
@@ -94,6 +99,16 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->repository->createDefaultQueryBuilder($alias);
+    }
+
+    /**
+     * Gets the default sort order.
+     *
+     * @return array<string, string> an array where each key is the field name and the value is the order direction ('asc' or 'desc')
+     */
+    protected function getDefaultOrder(): array
+    {
+        return [];
     }
 
     /**
@@ -125,13 +140,19 @@ abstract class AbstractEntityTable extends AbstractTable
         // add offset and limit
         $this->limit($query, $builder);
 
+        // join?
+        $q = $builder->getQuery();
+        if (empty($builder->getDQLPart(self::JOIN_PART))) {
+            $q->setHint(CountWalker::HINT_DISTINCT, false);
+        }
+
         // get result
         /** @var AbstractEntity[] $entities */
-        $entities = $builder->getQuery()->getResult();
+        $entities = $q->getResult();
 
         // add selection
         if (0 !== $query->id) {
-            $entities = $this->addSelection($entities, $query->id, $query->limit);
+            $this->addSelection($entities, $query->id, $query->limit);
         }
 
         // map entities
@@ -160,36 +181,27 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function orderBy(DataQuery $query, QueryBuilder $builder): void
     {
-        /** @var array<string, string> $orderBy */
         $orderBy = [];
-        $sort = $query->sort;
-        $order = $query->order;
-        if (Utils::isString($sort) && Utils::isString($order)) {
-            $this->updateOrderBy($orderBy, $sort, $order);
+
+        // add query sort
+        if ($sorting = Utils::isString($query->sort) && Utils::isString($query->order)) {
+            $this->updateOrderBy($orderBy, $query->sort, $query->order);
         }
 
-        // default column
-        if (!Utils::isString($sort) && $column = $this->getDefaultColumn()) {
-            $sort = $column->getField();
-            $order = $column->getOrder();
-            $this->updateOrderBy($orderBy, $sort, $order);
+        // add default column
+        if (!$sorting && null !== $column = $this->getDefaultColumn()) {
+            $this->updateOrderBy($orderBy, $column->getField(), $column->getOrder());
         }
 
-        // default order
-        $defaultSort = $this->getDefaultOrder();
-        foreach ($defaultSort as $defaultField => $defaultOrder) {
-            $this->updateOrderBy($orderBy, $defaultField, $defaultOrder);
-            if (!Utils::isString($sort)) {
-                $sort = $defaultField;
-            }
-            if (!Utils::isString($order)) {
-                $order = $defaultOrder;
-            }
+        // add default order
+        $defaultOrder = $this->getDefaultOrder();
+        foreach ($defaultOrder as $field => $order) {
+            $this->updateOrderBy($orderBy, $field, $order);
         }
 
-        // apply sort
-        foreach ($orderBy as $key => $value) {
-            $builder->addOrderBy($key, $value);
+        // apply
+        foreach ($orderBy as $sort => $order) {
+            $builder->addOrderBy($sort, $order);
         }
     }
 
@@ -202,77 +214,68 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function search(DataQuery $query, QueryBuilder $builder): void
     {
         $search = $query->search;
-        if (Utils::isString($search)) {
-            $expr = new Orx();
-            $columns = $this->getColumns();
-            $repository = $this->repository;
-            foreach ($columns as $column) {
-                if ($column->isSearchable()) {
-                    $fields = (array) $repository->getSearchFields($column->getField());
-                    foreach ($fields as $field) {
-                        $expr->add($field . ' LIKE :' . TableInterface::PARAM_SEARCH);
-                    }
+        if (!Utils::isString($search)) {
+            return;
+        }
+
+        $expr = new Orx();
+        $columns = $this->getColumns();
+        $repository = $this->repository;
+        foreach ($columns as $column) {
+            if ($column->isSearchable()) {
+                $fields = (array) $repository->getSearchFields($column->getField());
+                foreach ($fields as $field) {
+                    $expr->add($field . ' LIKE :' . TableInterface::PARAM_SEARCH);
                 }
             }
-            if (0 !== $expr->count()) {
-                $builder->andWhere($expr)
-                    ->setParameter(TableInterface::PARAM_SEARCH, "%$search%");
-            }
+        }
+        if ($expr->count() > 0) {
+            $builder->andWhere($expr)
+                ->setParameter(TableInterface::PARAM_SEARCH, "%$search%");
         }
     }
 
     /**
      * Add the missing selected entity (if applicable).
      *
-     * @param AbstractEntity[] $entities
-     * @param int              $id       the entity identifier to add
-     * @param int              $limit    the number of entities to return
-     *
-     * @return AbstractEntity[]
+     * @param AbstractEntity[] $entities the entities to search in or to update
+     * @param int              $id       the entity identifier to search for or to add
+     * @param int              $limit    the maximum number of allowed entities (limit)
      */
-    private function addSelection(array $entities, int $id, int $limit): array
+    private function addSelection(array &$entities, int $id, int $limit): void
     {
-        //  identifier?
-        if (0 === $id) {
-            return $entities;
-        }
-
-        // find in existing entities
+        // existing?
         foreach ($entities as $entity) {
             if ($id === $entity->getId()) {
-                return $entities;
+                return;
             }
         }
 
         // get entity
         $entity = $this->repository->find($id);
-        if (!$entity instanceof AbstractEntity) {
-            return $entities;
+        if ($entity instanceof AbstractEntity) {
+            // add to the first position
+            \array_unshift($entities, $entity);
+
+            // limit size
+            if (\count($entities) > $limit) {
+                \array_pop($entities);
+            }
         }
-
-        // add to the first position
-        \array_unshift($entities, $entity);
-
-        // ensure size
-        if (\count($entities) > $limit) {
-            \array_pop($entities);
-        }
-
-        return $entities;
     }
 
     /**
-     * Update the order by clause.
+     * Update the order by clause. Do nothing if the given field already exist in the array.
      *
-     * @param array<string, string> $orderBy    the order by clause to update
-     * @param string                $orderField the order field to add
-     * @param string                $orderSort  the order direction to add
+     * @param array<string, string> $orderBy the order by clause to update
+     * @param string                $field   the sort field
+     * @param string                $order   the sort direction
      */
-    private function updateOrderBy(array &$orderBy, string $orderField, string $orderSort): void
+    private function updateOrderBy(array &$orderBy, string $field, string $order): void
     {
-        $field = $this->repository->getSortField($orderField);
-        if (!\array_key_exists($field, $orderBy)) {
-            $orderBy[$field] = $orderSort;
+        $sortField = $this->repository->getSortField($field);
+        if (!\array_key_exists($sortField, $orderBy)) {
+            $orderBy[$sortField] = $order;
         }
     }
 }

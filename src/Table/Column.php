@@ -243,8 +243,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Gets the default sorting order.
      *
-     * @see SortModeInterface::SORT_ASC
-     * @see SortModeInterface::SORT_DESC
+     * @see SortModeInterface
      */
     public function getOrder(): string
     {
@@ -377,8 +376,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Sets the default sorting order.
      *
-     * @see SortModeInterface::SORT_ASC
-     * @see SortModeInterface::SORT_DESC
+     * @see SortModeInterface
      */
     public function setOrder(string $order): self
     {

@@ -14,7 +14,6 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Util\FileUtils;
@@ -89,7 +88,7 @@ class CalculationTable extends AbstractEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['id' => SortModeInterface::SORT_DESC];
+        return ['id' => self::SORT_DESC];
     }
 
     /**

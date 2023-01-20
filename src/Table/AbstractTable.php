@@ -263,16 +263,6 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Gets the default sort order.
-     *
-     * @return array<string, string> an array where each key is the field name and the value is the order direction ('asc' or 'desc')
-     */
-    protected function getDefaultOrder(): array
-    {
-        return [];
-    }
-
-    /**
      * Gets the session key for the given name.
      *
      * @param string $name the parameter name

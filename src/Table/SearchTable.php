@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -87,18 +86,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'search.json');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultOrder(): array
-    {
-        return [
-            SearchService::COLUMN_CONTENT => SortModeInterface::SORT_ASC,
-            SearchService::COLUMN_ENTITY_NAME => SortModeInterface::SORT_ASC,
-            SearchService::COLUMN_FIELD_NAME => SortModeInterface::SORT_ASC,
-        ];
     }
 
     /**

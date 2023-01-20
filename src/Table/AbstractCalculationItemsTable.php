@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
 use App\Util\FileUtils;
 use Doctrine\Common\Collections\Criteria;
@@ -91,7 +90,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      */
     protected function getDefaultOrder(): array
     {
-        return ['id' => SortModeInterface::SORT_DESC];
+        return ['id' => self::SORT_DESC];
     }
 
     /**

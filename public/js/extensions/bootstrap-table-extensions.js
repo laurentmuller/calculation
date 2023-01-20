@@ -10,7 +10,6 @@
  * @property {string} rowSelector - the row selector.
  * @property {string} customSelector - the custom view selector.
  * @property {string} saveUrl - the URL to save state.
- * @property {boolean} cardView - true if displaying card view is allowed
  *
  * @typedef {Object} Parameters - the query parameters.
  * @property {number} id - the item identifier.
@@ -19,12 +18,11 @@
  * @property {string} order - the sort order.
  * @property {number} offset - the page offset.
  * @property {number} limit - the page size.
- * @property {string} view - the display mode ('table', 'card' or 'custom').
+ * @property {string} view - the display mode ('table' or 'custom').
  * @property {string} searchText - the search text.
  *
  * @typedef {JQuery} JQueryTable - the bootstrap table.
  * @property {Options} getOptions - the options.
- * @property {boolean} isCardView - true if card view is displayed.
  * @property {boolean} isCustomView - true if custom view is displayed.
  * @property {JQuery} getCustomView - get the custom view.
  * @property {JQueryTable} enableKeys - enable the key handler.
@@ -152,7 +150,7 @@ function loadingTemplate(message) {
                             $this.selectFirstRow();
                         }
                         // update
-                        $this.updateCardView().highlight().updateHref(content);
+                        $this.highlight().updateHref(content);
                     }
                     $this.updateHistory().toggleClass('table-hover', isData);
 
@@ -178,9 +176,6 @@ function loadingTemplate(message) {
                             });
                         }
                     });
-
-                    // update background
-                    $this.updateLoadingBackground();
 
                     // update action buttons
                     const title = $this.data('no-action-title');
@@ -215,12 +210,12 @@ function loadingTemplate(message) {
                             // copy actions
                             const $rowActions = $(element).children();
                             const rowSelector = selector.replace('%index%', '' + index);
-                            const $cardActions = $view.find(rowSelector);
-                            $rowActions.appendTo($cardActions);
+                            const $customActions = $view.find(rowSelector);
+                            $rowActions.appendTo($customActions);
 
                             if (callback) {
                                 const row = data[index];
-                                const $item = $cardActions.parents('.custom-item');
+                                const $item = $customActions.parents('.custom-item');
                                 callback($this, row, $item, params);
                             }
                         });
@@ -242,11 +237,6 @@ function loadingTemplate(message) {
                 onSearch: function (searchText) {
                     // update data
                     $this.data('search-text', searchText);
-                },
-
-                onToggle: function () {
-                    // save parameters
-                    $this.saveParameters();
                 }
             };
             const settings = $.extend(true, defaults, options);
@@ -355,15 +345,6 @@ function loadingTemplate(message) {
          */
         isSearchText: function () {
             return $(this).getSearchText().length > 0;
-        },
-
-        /**
-         * Return if the card view mode is displayed.
-         *
-         * @return {boolean} true if displayed.
-         */
-        isCardView: function () {
-            return $(this).getOptions().cardView;
         },
 
         /**
@@ -507,74 +488,6 @@ function loadingTemplate(message) {
         },
 
         /**
-         * Gets the visible columns of the card view.
-         *
-         * @return {Array.<{cardClass: String}>} the visible columns.
-         */
-        getVisibleCardViewColumns: function () {
-            const columns = $(this).bootstrapTable('getVisibleColumns');
-            return columns.filter((c) => c.cardVisible);
-        },
-
-        /**
-         * Update this card view UI.
-         *
-         * @return {JQuery} this instance for chaining.
-         */
-        updateCardView: function () {
-            const $this = $(this);
-            const options = $this.getOptions();
-            if (!options.cardView) {
-                return $this;
-            }
-
-            const $body = $this.find('tbody');
-            const columns = $this.getVisibleCardViewColumns();
-            const callback = typeof options.onRenderCardView === 'function' ? options.onRenderCardView : false;
-            const data = callback ? $this.getData() : null;
-
-            $body.find('tr').each(function () {
-                const $row = $(this);
-                const $views = $row.find('.card-views:first');
-
-                // move actions (if any) to a new column
-                const $actions = $views.find('.card-view-value:last:has(button)');
-                if ($actions.length) {
-                    const $td = $('<td/>', {
-                        class: 'actions d-print-none rowlink-skip'
-                    });
-                    $actions.removeAttr('class').appendTo($td);
-                    $td.appendTo($row).on('click', function () {
-                        $row.updateRow($this);
-                    });
-                    $views.find('.card-view:last').remove();
-                } else {
-                    $row.attr('colspan', 2);
-                }
-
-                // update classes
-                $views.find('.card-view').each(function (index, element) {
-                    if (columns[index].cardClass) {
-                        $(element).find('.card-view-value').addClass(columns[index].cardClass);
-                    }
-                });
-
-                // callback
-                if (callback) {
-                    const row = data[$row.index()];
-                    callback($this, row, $row);
-                }
-            });
-
-            // update classes
-            $body.find('.undefined').removeClass('undefined');
-            $body.find('.card-view-title, .card-view-value').addClass('user-select-none');
-            $body.find('.card-view-title').addClass('text-muted');
-
-            return $this;
-        },
-
-        /**
          * Refresh/reload the remote server data.
          *
          * @param {object} [options] - the refresh options.
@@ -605,15 +518,6 @@ function loadingTemplate(message) {
         },
 
         /**
-         * Toggle the card/table view.
-         *
-         * @return {JQuery} this instance for chaining.
-         */
-        toggleView: function () {
-            return $(this).bootstrapTable('toggleView');
-        },
-
-        /**
          * Toggles the view between the table and the custom view.
          *
          * @return {JQuery} this instance for chaining.
@@ -625,7 +529,7 @@ function loadingTemplate(message) {
         /**
          * Toggles the display mode.
          *
-         * @param {string} mode - the display mode to set ('table', 'card' or 'custom').
+         * @param {string} mode - the display mode to set ('table' or 'custom').
          * @return {JQuery} this instance for chaining.
          */
         setDisplayMode: function (mode) {
@@ -639,18 +543,7 @@ function loadingTemplate(message) {
                         $this.toggleCustomView();
                     }
                     break;
-                case 'card':
-                    if (!$this.isCardView()) {
-                        $this.toggleView();
-                    }
-                    if ($this.isCustomView()) {
-                        $this.toggleCustomView();
-                    }
-                    break;
                 default: // table
-                    if ($this.isCardView()) {
-                        $this.toggleView();
-                    }
                     if ($this.isCustomView()) {
                         $this.toggleCustomView();
                     }
@@ -662,17 +555,11 @@ function loadingTemplate(message) {
         /**
          * Gets the display mode.
          *
-         * @return {string} the display mode ('table', 'card' or 'custom').
+         * @return {string} the display mode ('table' or 'custom').
          */
         getDisplayMode: function () {
             const $this = $(this);
-            if ($this.isCustomView()) {
-                return 'custom';
-            } else if ($this.isCardView()) {
-                return 'card';
-            } else {
-                return 'table';
-            }
+            return $this.isCustomView() ? 'custom' : 'table';
         },
 
         /**
@@ -1004,77 +891,6 @@ function loadingTemplate(message) {
                     text: $this.getOptions().formatNoMatches()
                 }).appendTo($view);
             }
-        },
-
-        /**
-         * Set focus on selected page item (if any).
-         */
-        selectPageItem: function () {
-            const $this = $(this);
-            const page = $this.data('focusPageItem') || '';
-
-            let selector = null;
-            switch (page) {
-                case 'previous':
-                    selector = '.fixed-table-pagination li.page-pre:not(.disabled) .page-link';
-                    break;
-                case 'next':
-                    selector = '.fixed-table-pagination li.page-next:not(.disabled) .page-link';
-                    break;
-                case 'active':
-                    selector = '.fixed-table-pagination li.active .page-link';
-                    break;
-            }
-            if (selector) {
-                let $link = $(selector);
-                if (0 === $link.length) {
-                    $link = $('.fixed-table-pagination li.active .page-link');
-                }
-                $link.trigger('focus');
-            }
-            $this.removeData('focusPageItem');
-            return $this;
-        },
-
-        /**
-         * Update the loading background color.
-         */
-        updateLoadingBackground: function () {
-            const $this = $(this);
-            let color = 'transparent';
-            const $loading = $('.fixed-table-loading');
-            if (!$this.isCustomView()) {
-                let $parent = $loading.parent();
-                while ($parent !== null) {
-                    color = $parent.css('background-color');
-                    if (color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') {
-                        break;
-                    }
-                    $parent = $parent.parent();
-                }
-            }
-            color = $this.rgba2rgb(color);
-            $loading.css('background-color', color);
-
-            return $this;
-        },
-
-        /**
-         * Convert the given RGBA color, if applicable, to an RGB color by removing the alpha value.
-         */
-        rgba2rgb: function (color) {
-            const regex = /rgba\((.*)\)/i;
-            const result = color.match(regex);
-            if (result !== null && result.length === 2) {
-                const colors = result[1].split(',', 3);
-                if (colors.length === 3) {
-                    const newColor = colors.map((color) => {
-                        return color.trim();
-                    }).join(',');
-                    return 'rgb(' + newColor + ')';
-                }
-            }
-            return color;
         },
 
         /**

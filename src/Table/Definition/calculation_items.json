@@ -4,7 +4,6 @@
         "title": "calculation.fields.id",
         "order": "desc",
         "class": "text-id text-border",
-        "cardClass": "font-weight-bold",
         "fieldFormatter": "formatId",
         "styleFormatter": "styleBorderColor",
         "numeric": true
@@ -36,7 +35,6 @@
         "field": "items",
         "title": "calculation.fields.items",
         "class": "f-200 text-ellipsis text-danger",
-        "cardClass": "text-danger",
         "sortable": false,
         "searchable": false,
         "fieldFormatter": "formatItems"

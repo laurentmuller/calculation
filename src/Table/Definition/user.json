@@ -15,8 +15,7 @@
         "field": "username",
         "title": "user.fields.username_short",
         "default": true,
-        "class": "text-user-name",
-        "cardClass": "font-weight-bold"
+        "class": "text-user-name"
     },
     {
         "field": "email",

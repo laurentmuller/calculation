@@ -13,6 +13,9 @@
 .bootstrap-table .fixed-table-container .fixed-table-body .table td {
     vertical-align: top !important;
 }
+.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
+    background: initial;
+}
 
 /**
  * Card View

@@ -4,7 +4,6 @@
         "title": "calculation.fields.id",
         "order": "desc",
         "class": "text-id text-border",
-        "cardClass": "font-weight-bold",
         "fieldFormatter": "formatId",
         "styleFormatter": "styleBorderColor",
         "numeric": true

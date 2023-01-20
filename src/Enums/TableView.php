@@ -32,10 +32,6 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
     use ReadableEnumTrait;
 
     /*
-     * Show detailed values.
-     */
-    case CARD = 'card';
-    /*
      * Show values as cards.
      */
     case CUSTOM = 'custom';
@@ -51,7 +47,6 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
     public function getPageSize(): int
     {
         return match ($this) {
-            self::CARD => 5,
             self::CUSTOM => 15,
             self::TABLE => 20
         };
@@ -65,7 +60,6 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
         return [
             TableView::TABLE,
             TableView::CUSTOM,
-            TableView::CARD,
        ];
     }
 }

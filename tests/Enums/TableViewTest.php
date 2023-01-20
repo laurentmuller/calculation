@@ -25,8 +25,8 @@ class TableViewTest extends TypeTestCase
 {
     public function testCount(): void
     {
-        self::assertCount(3, TableView::cases());
-        self::assertCount(3, TableView::sorted());
+        self::assertCount(2, TableView::cases());
+        self::assertCount(2, TableView::sorted());
     }
 
     public function testDefault(): void
@@ -38,14 +38,12 @@ class TableViewTest extends TypeTestCase
 
     public function testLabel(): void
     {
-        self::assertEquals('table_view.card', TableView::CARD->getReadable());
         self::assertEquals('table_view.custom', TableView::CUSTOM->getReadable());
         self::assertEquals('table_view.table', TableView::TABLE->getReadable());
     }
 
     public function testPageSize(): void
     {
-        self::assertEquals(5, TableView::CARD->getPageSize());
         self::assertEquals(15, TableView::CUSTOM->getPageSize());
         self::assertEquals(20, TableView::TABLE->getPageSize());
     }
@@ -55,7 +53,6 @@ class TableViewTest extends TypeTestCase
         $expected = [
             TableView::TABLE,
             TableView::CUSTOM,
-            TableView::CARD,
         ];
         $sorted = TableView::sorted();
         self::assertEquals($expected, $sorted);
@@ -63,7 +60,6 @@ class TableViewTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertEquals('card', TableView::CARD->value);
         self::assertEquals('custom', TableView::CUSTOM->value);
         self::assertEquals('table', TableView::TABLE->value);
     }

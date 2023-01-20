@@ -217,7 +217,6 @@
                 {% block display_mode %}
                 {{ _self.button_view('table_view.table', 'table', 'table', params.view) }}
                 {{ _self.button_view('table_view.custom', 'grip-horizontal', 'custom', params.view) }}
-                {{ _self.button_view('table_view.card', 'list', 'card', params.view) }}
                 {%- endblock %}
                 {% if sortable %}
                     {{ _self.item_separator() }}

@@ -106,14 +106,6 @@ class DataQuery implements SortModeInterface
     }
 
     /**
-     * Returns if the values must be show as card.
-     */
-    public function isViewCard(): bool
-    {
-        return TableView::CARD === $this->view;
-    }
-
-    /**
      * Returns if the values must be show as custom.
      */
     public function isViewCustom(): bool

@@ -187,7 +187,7 @@
                         //     block: block,
                         //     behavior: "smooth"
                         // });
-                        if (delay && delay > 0) {
+                        if (delay) {
                             $target.animate({
                                 scrollTop: top
                             }, delay);

@@ -571,14 +571,14 @@ function initializeDangerTooltips($table) {
             }
         },
 
-        onRenderCardView: function (_$table, row, $item) {
-            // border color
-            if (typeof row.color !== 'undefined') {
-                const $cell = $item.find('td:first');
-                const style = 'border-left-color: ' + row.color + ' !important';
-                $cell.addClass('text-border').attr('style', style);
-            }
-        },
+        // onRenderCardView: function (_$table, row, $item) {
+        //     // border color
+        //     if (typeof row.color !== 'undefined') {
+        //         const $cell = $item.find('td:first');
+        //         const style = 'border-left-color: ' + row.color + ' !important';
+        //         $cell.addClass('text-border').attr('style', style);
+        //     }
+        // },
 
         onRenderAction: function ($table, row, $element, $action) {
             if ($action.is('.btn-user-switch')) {

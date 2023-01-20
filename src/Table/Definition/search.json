@@ -20,7 +20,6 @@
         "title": "search.fields.content",
         "searchable": false,
         "class": "w-auto text-ellipsis",
-        "cardClass": "font-weight-bold",
         "default": true
     },
     {

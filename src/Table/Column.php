@@ -34,16 +34,6 @@ class Column implements \Stringable, SortModeInterface
     private ?string $alias = null;
 
     /**
-     * The class for the element in the card view mode.
-     */
-    private ?string $cardClass = null;
-
-    /**
-     * The displayed behavior for the element in the card view mode.
-     */
-    private bool $cardVisible = true;
-
-    /**
      * The cell formatter (client side).
      */
     private ?string $cellFormatter = null;
@@ -193,13 +183,9 @@ class Column implements \Stringable, SortModeInterface
             'visible' => $this->isVisible(),
             'numeric' => $this->isNumeric(),
             'sortable' => $this->isSortable(),
-            'card-visible' => $this->isCardVisible(),
         ];
 
         // optional
-        if ($this->cardClass) {
-            $result['card-class'] = $this->cardClass;
-        }
         if ($this->cellFormatter) {
             $result['formatter'] = $this->cellFormatter;
         }
@@ -208,11 +194,6 @@ class Column implements \Stringable, SortModeInterface
         }
 
         return $result;
-    }
-
-    public function getCardClass(): ?string
-    {
-        return $this->cardClass;
     }
 
     public function getCellFormatter(): ?string
@@ -260,11 +241,6 @@ class Column implements \Stringable, SortModeInterface
         return $this->title;
     }
 
-    public function isCardVisible(): bool
-    {
-        return $this->visible && $this->cardVisible;
-    }
-
     public function isDefault(): bool
     {
         return $this->default;
@@ -310,20 +286,6 @@ class Column implements \Stringable, SortModeInterface
     public function setAlias(?string $alias): self
     {
         $this->alias = $alias;
-
-        return $this;
-    }
-
-    public function setCardClass(?string $cardClass): self
-    {
-        $this->cardClass = $cardClass;
-
-        return $this;
-    }
-
-    public function setCardVisible(bool $cardVisible): self
-    {
-        $this->cardVisible = $cardVisible;
 
         return $this;
     }

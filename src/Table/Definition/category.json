@@ -7,8 +7,7 @@
         "field": "code",
         "title": "category.fields.code",
         "default": true,
-        "class": "text-code text-nowrap",
-        "cardClass": "font-weight-bold"
+        "class": "text-code text-nowrap"
     },
     {
         "field": "description",

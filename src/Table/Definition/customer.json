@@ -7,8 +7,7 @@
         "field": "nameAndCompany",
         "title": "customer.fields.nameAndCompany",
         "default": true,
-        "class": "w-35 text-ellipsis",
-        "cardClass": "font-weight-bold"
+        "class": "w-35 text-ellipsis"
     },
     {
         "field": "address",

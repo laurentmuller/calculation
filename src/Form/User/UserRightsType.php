@@ -63,10 +63,10 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
         $helper->field('username')
             ->addPlainType(true);
         $helper->field('role')
-            ->updateOption('value_transformer', fn (string $role) => $this->translateRole($role))
+            ->updateOption('value_transformer', $this->translateRole(...))
             ->addPlainType(true);
         $helper->field('enabled')
-            ->updateOption('value_transformer', fn (string $enabled) => $this->translateEnabled($enabled))
+            ->updateOption('value_transformer', $this->translateEnabled(...))
             ->addPlainType(true);
         $helper->field('overwrite')
             ->notRequired()

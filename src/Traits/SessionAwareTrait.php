@@ -185,7 +185,7 @@ trait SessionAwareTrait
      */
     protected function removeSessionValues(string ...$keys): array
     {
-        return \array_map(fn (string $key): mixed => $this->removeSessionValue($key), $keys);
+        return \array_map($this->removeSessionValue(...), $keys);
     }
 
     /**

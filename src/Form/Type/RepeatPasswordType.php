@@ -42,9 +42,12 @@ class RepeatPasswordType extends AbstractType
     {
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addEventListener(FormEvents::SUBMIT, fn (SubmitEvent $event) => $this->onSubmit($event));
+        $builder->addEventListener(FormEvents::SUBMIT, $this->onSubmit(...));
     }
 
     /**
@@ -105,10 +108,8 @@ class RepeatPasswordType extends AbstractType
     private function onSubmit(SubmitEvent $event): void
     {
         $form = $event->getForm();
-        $parent = $form->getParent();
-
-        /** @psalm-var mixed $data */
-        $data = $parent?->getData();
+        /** @psalm-var ?User $data */
+        $data = $form->getParent()?->getData();
         if ($data instanceof User) {
             $plainPassword = (string) $form->getData();
             $encodedPassword = $this->hasher->hashPassword($data, $plainPassword);

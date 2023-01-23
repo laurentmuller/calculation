@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals updateErrors, sortable, Toaster, MenuBuilder, EditTaskDialog, EditItemDialog  */
+/* globals sortable, Toaster, MenuBuilder, EditTaskDialog, EditItemDialog  */
 
 /**
  * -------------- The type ahead search helper --------------
@@ -444,7 +444,7 @@ const Application = {
                 $('.btn-adjust').toggleDisabled(true).addClass('cursor-default');
             }
             $('#calculation_customer').trigger('input');
-            updateErrors();
+            $("#data-table-edit").updateErrors();
             return that;
 
         }).fail(function (_jqXHR, textStatus) {
@@ -1741,9 +1741,6 @@ const MoveHandler = {
             }
         });
     });
-
-    // errors
-    updateErrors();
 
     // user margin
     const $margin = $('#calculation_userMargin');

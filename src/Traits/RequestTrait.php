@@ -80,7 +80,7 @@ trait RequestTrait
             $default = (string) $default->value;
         }
         if (null !== $input = $this->getRequestBag($request, $key)) {
-            /** @psalm-var string|null $default */
+            /** @psalm-var ?string $default */
             $default = $input->get($key, $default);
         }
 
@@ -93,7 +93,7 @@ trait RequestTrait
     protected function getRequestValue(Request $request, string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
     {
         if (null !== $input = $this->getRequestBag($request, $key)) {
-            /** @psalm-var string|int|float|bool|null $default */
+            /** @psalm-var scalar $default */
             $default = $input->get($key, $default);
         }
 

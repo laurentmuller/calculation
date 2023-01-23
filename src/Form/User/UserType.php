@@ -60,7 +60,7 @@ class UserType extends AbstractEntityType
             ->add(EnabledDisabledType::class);
 
         $helper->field('lastLogin')
-            ->updateOption('value_transformer', fn (\DateTimeInterface|string $lastLogin): ?string => $this->formatLastLogin($lastLogin))
+            ->updateOption('value_transformer', $this->formatLastLogin(...))
             ->updateOption('empty_value', 'common.value_none')
             ->widgetClass('text-center')
             ->addPlainType(true);
@@ -69,7 +69,7 @@ class UserType extends AbstractEntityType
             ->updateOption('maxsize', '10mi')
             ->addVichImageType();
 
-        $helper->addPreSetDataListener(fn (FormEvent $event) => $this->onPreSetData($event));
+        $helper->addPreSetDataListener($this->onPreSetData(...));
     }
 
     /**

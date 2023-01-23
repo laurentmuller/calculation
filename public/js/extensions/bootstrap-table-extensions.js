@@ -534,22 +534,11 @@ function loadingTemplate(message) {
          */
         setDisplayMode: function (mode) {
             const $this = $(this);
-            if ($this.getDisplayMode() === mode) {
-                return $this;
+            if ($this.getDisplayMode() !== mode) {
+                $this.toggleCustomView();
+                $this.saveParameters();
             }
-            switch (mode) {
-                case 'custom':
-                    if (!$this.isCustomView()) {
-                        $this.toggleCustomView();
-                    }
-                    break;
-                default: // table
-                    if ($this.isCustomView()) {
-                        $this.toggleCustomView();
-                    }
-                    break;
-            }
-            return $this.saveParameters();
+            return $this;
         },
 
         /**

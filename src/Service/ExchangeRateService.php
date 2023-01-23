@@ -16,6 +16,7 @@ use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\Intl\Currencies;
+use Symfony\Component\RateLimiter\Policy\Rate;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -23,6 +24,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * Exchange rate service.
  *
  * @see https://www.exchangerate-api.com/
+ *
+ * @phpstan-type RateType array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
@@ -186,7 +189,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     /**
      * Gets the supported currency codes.
      *
-     * @return array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}> the supported currency codes or an empty array if an error occurs
+     * @return array<string, RateType> the supported currency codes or an empty array if an error occurs
      *
      * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
@@ -196,7 +199,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = self::URI_CODES;
 
-        /** @var array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}>|null $result */
+        /** @var array<string, RateType>|null $result */
         $result = $this->getUrlCacheValue($url);
         if (\is_array($result)) {
             return $result;
@@ -310,14 +313,14 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     /**
      * @param string[] $codes
      *
-     * @return array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}>
+     * @return array<string, RateType>
      */
     private function mapCodes(array $codes): array
     {
         /** @var string[] $codes */
-        $codes = \array_filter(\array_column($codes, 0), fn (string $code): bool => Currencies::exists($code));
+        $codes = \array_filter(\array_column($codes, 0), Currencies::exists(...));
 
-        /** @var array<string, array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}> $result */
+        /** @var array<string, RateType> $result */
         $result = \array_reduce($codes, function (array $carry, string $code): array {
             $carry[$code] = $this->mapCode($code);
 

@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Traits\DuplicateItemsTrait;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Exception\ORMException;
 
 /**
  * Calculation table for duplicate items.
@@ -25,7 +26,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     /**
      * {@inheritdoc}
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function count(): int
     {
@@ -34,10 +35,12 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws ORMException
      */
-    public function getEmptyMessage(): string
+    public function getEmptyMessage(): ?string
     {
-        return 'duplicate.empty';
+        return 0 === $this->count() ? 'duplicate.empty' : null;
     }
 
     /**
@@ -63,6 +66,9 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
         }, 0);
     }
 
+    /**
+     * Gets the separator used to implode items.
+     */
     protected function getItemsSeparator(): string
     {
         return '<br>';

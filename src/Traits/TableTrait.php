@@ -43,8 +43,8 @@ trait TableTrait
         }
 
         try {
-            // check empty
-            if (null !== $message = $table->checkEmpty()) {
+            // empty?
+            if (null !== $message = $table->getEmptyMessage()) {
                 $this->infoTrans($message);
 
                 return $this->redirectToHomePage();
@@ -54,20 +54,8 @@ trait TableTrait
             $query = $table->getDataQuery($request);
             $results = $table->processQuery($query);
 
-            // callback?
-            if ($query->callback) {
-                $response = $this->json($results);
-            } else {
-                // empty?
-                if (0 === $results->totalNotFiltered && !$table->isEmptyAllowed()) {
-                    $this->infoTrans($table->getEmptyMessage());
-
-                    return $this->redirectToHomePage();
-                }
-
-                // generate
-                $response = $this->render($template, (array) $results);
-            }
+            // response
+            $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
 
             // save results
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);

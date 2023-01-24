@@ -108,10 +108,12 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getEmptyMessage(): string
+    public function getEmptyMessage(): ?string
     {
-        return 'log.list.empty';
+        return 0 === $this->count() ? 'log.list.empty' : null;
     }
 
     /**
@@ -120,14 +122,6 @@ class LogTable extends AbstractTable implements \Countable
     public function getEntityClassName(): ?string
     {
         return Log::class;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isEmptyAllowed(): bool
-    {
-        return false;
     }
 
     /**

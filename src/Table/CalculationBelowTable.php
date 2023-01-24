@@ -48,18 +48,13 @@ class CalculationBelowTable extends CalculationTable implements \Countable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getEmptyMessage(): string
+    public function getEmptyMessage(): ?string
     {
-        return 'below.empty';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isEmptyAllowed(): bool
-    {
-        return false;
+        return 0 === $this->count() ? 'below.empty' : null;
     }
 
     /**

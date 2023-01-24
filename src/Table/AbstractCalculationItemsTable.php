@@ -45,24 +45,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     }
 
     /**
-     * Returns a value indicating if no items match.
-     *
-     * @return bool true if empty
-     */
-    public function isEmpty(): bool
-    {
-        return 0 === $this->count();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isEmptyAllowed(): bool
-    {
-        return false;
-    }
-
-    /**
      * Formats the invalid calculation items.
      *
      * @param array $items the invalid calculation items

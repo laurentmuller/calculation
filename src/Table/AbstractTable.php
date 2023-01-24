@@ -46,18 +46,6 @@ abstract class AbstractTable implements SortModeInterface
      */
     private ?string $prefix = null;
 
-    /**
-     * Gets a translatable message if empty is not allowed and this contains no data.
-     */
-    public function checkEmpty(): ?string
-    {
-        if (!$this->isEmptyAllowed() && $this instanceof \Countable && 0 === \count($this)) {
-            return $this->getEmptyMessage();
-        }
-
-        return null;
-    }
-
     public function formatAmount(float $value): string
     {
         return FormatUtils::formatAmount($value);
@@ -141,9 +129,9 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the translatable message to show when no data is available.
      */
-    public function getEmptyMessage(): string
+    public function getEmptyMessage(): ?string
     {
-        return 'list.empty_list';
+        return null;
     }
 
     /**
@@ -166,14 +154,6 @@ abstract class AbstractTable implements SortModeInterface
         }
 
         return $this->prefix;
-    }
-
-    /**
-     * Returns a value indicating whether this table should be shown, even if no records are available.
-     */
-    public function isEmptyAllowed(): bool
-    {
-        return true;
     }
 
     /**

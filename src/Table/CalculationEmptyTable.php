@@ -15,6 +15,7 @@ namespace App\Table;
 use App\Repository\CalculationRepository;
 use App\Traits\EmptyItemsTrait;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -47,7 +48,7 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     /**
      * {@inheritDoc}
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public function count(): int
     {
@@ -56,10 +57,12 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
 
     /**
      * {@inheritDoc}
+     *
+     * @throws ORMException
      */
-    public function getEmptyMessage(): string
+    public function getEmptyMessage(): ?string
     {
-        return 'empty.empty';
+        return 0 === $this->count() ? 'empty.empty' : null;
     }
 
     /**
@@ -78,6 +81,9 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
         return \array_reduce($items, fn (int $carry, array $item) => $carry + \count((array) $item['items']), 0);
     }
 
+    /**
+     * Gets the separator used to implode items.
+     */
     protected function getItemsSeparator(): string
     {
         return '<br>';

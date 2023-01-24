@@ -31,22 +31,6 @@ final class Utils
     }
 
     /**
-     * Applies the callback to the keys and elements of the given array.
-     * <p>
-     * The callable function must be of type <code>function($key, $value)</code>.
-     * </p>.
-     *
-     * @param callable $callback the callback function to run for each key and element in array
-     * @param array    $array    an array to run through the callback function
-     *
-     * @return array an array containing the results of applying the callback function
-     */
-    public static function arrayMapKey(callable $callback, array $array): array
-    {
-        return \array_map($callback, \array_keys($array), $array);
-    }
-
-    /**
      * Iteratively reduce the array to a single value using a callback function.
      *
      * The callable function must be of type <code>function($carry, $key, $value)</code>.
@@ -179,26 +163,6 @@ final class Utils
         } catch (\Exception) {
             return (string) $expression;
         }
-    }
-
-    /**
-     * Returns the first matching item in the given array.
-     *
-     * @param array                 $array    the array to search in
-     * @param callable(mixed): bool $callback the filter callback
-     *
-     * @return mixed the first matching item, if any; null otherwise
-     */
-    public static function findFirst(array $array, callable $callback): mixed
-    {
-        /** @psalm-var mixed $value */
-        foreach ($array as $value) {
-            if ($callback($value)) {
-                return $value;
-            }
-        }
-
-        return null;
     }
 
     /**

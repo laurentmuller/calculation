@@ -85,16 +85,12 @@ class RoleBuilder
      */
     public static function getRoleUser(): Role
     {
-        /** @psalm-var FlagBag<EntityPermission> $default */
-        $default = FlagBag::from(
-            EntityPermission::LIST,
-            EntityPermission::EXPORT,
-            EntityPermission::SHOW
-        );
-        $none = new FlagBag(EntityPermission::class, FlagBag::NONE);
+        $all = self::getAllPermissions();
+        $none = self::getNonePermissions();
+        $default = self::getDefaultPermissions();
 
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->EntityCalculation = self::getFlagBagSorted();
+        $role->EntityCalculation = $all;
         $role->EntityCalculationState = $default;
         $role->EntityCategory = $default;
         $role->EntityCustomer = $default;
@@ -109,19 +105,43 @@ class RoleBuilder
     }
 
     /**
-     * @psalm-return FlagBag<EntityPermission>
+     * @return FlagBag<EntityPermission>
      *
-     * @psalm-suppress all
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
      */
-    private static function getFlagBagSorted(): FlagBag
+    private static function getAllPermissions(): FlagBag
     {
         return FlagBag::from(...EntityPermission::sorted());
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     */
+    private static function getDefaultPermissions(): FlagBag
+    {
+        return FlagBag::from(
+            EntityPermission::LIST,
+            EntityPermission::EXPORT,
+            EntityPermission::SHOW
+        );
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>
+     */
+    private static function getNonePermissions(): FlagBag
+    {
+        return new FlagBag(EntityPermission::class, FlagBag::NONE);
     }
 
     private static function getRoleWithAll(string $roleName): Role
     {
         $role = new Role($roleName);
-        $value = self::getFlagBagSorted();
+        $value = self::getAllPermissions();
         $entities = EntityName::constants();
         foreach ($entities as $entity) {
             $role->$entity = $value;

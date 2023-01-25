@@ -53,7 +53,7 @@ trait RightsTrait
     /**
      * @param string $name the property name
      *
-     * @return FlagBag<EntityPermission>|null
+     * @return ?FlagBag<EntityPermission>
      */
     public function __get(string $name): ?FlagBag
     {
@@ -144,7 +144,7 @@ trait RightsTrait
     /**
      * Gets the rights for the given entity name.
      *
-     * @psalm-return  FlagBag<EntityPermission>|null
+     * @psalm-return ?FlagBag<EntityPermission>
      */
     private function getEntityRights(string $entity): ?FlagBag
     {

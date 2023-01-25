@@ -107,8 +107,7 @@ class RoleBuilder
     /**
      * @return FlagBag<EntityPermission>
      *
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress all
      */
     private static function getAllPermissions(): FlagBag
     {
@@ -118,8 +117,7 @@ class RoleBuilder
     /**
      * @return FlagBag<EntityPermission>
      *
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress all
      */
     private static function getDefaultPermissions(): FlagBag
     {

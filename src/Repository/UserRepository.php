@@ -62,16 +62,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         return $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
     }
 
-//    /**
-//     * Gets all users order by username.
-//     *
-//     * @return User[]
-//     */
-//    public function findAllByUsername(): array
-//    {
-//        return $this->findBy([], ['username' => Criteria::ASC]);
-//    }
-
     /**
      * Finds a user by their email.
      */

@@ -256,8 +256,6 @@ class UserController extends AbstractEntityController
     #[Route(path: '/pdf', name: 'user_pdf')]
     public function pdf(StorageInterface $storage): PdfResponse
     {
-        // $users = $this->repository->getResettableUsers();
-
         $entities = $this->getEntities('username');
         if (empty($entities)) {
             $message = $this->trans('user.list.empty');

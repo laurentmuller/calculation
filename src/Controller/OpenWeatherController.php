@@ -374,7 +374,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
      */
-    #[Route(path: '/weather', name: 'openweather_weather')]
+    #[Route(path: '', name: 'openweather_weather')]
     public function weather(Request $request): Response
     {
         $id = $this->getSessionId($request);

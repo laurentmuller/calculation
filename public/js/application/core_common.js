@@ -5,11 +5,10 @@
 /**
  * Show the flash bag messages.
  */
-function showFlashbag() {
+function showFlashBag() {
     'use strict';
     const $element = $('.flash:first');
     if ($element.length) {
-        // options
         const options = $("#flashes").data();
         const title = options.title ? $element.data('title') : null;
         const text = $element.text();
@@ -20,7 +19,7 @@ function showFlashbag() {
         }
         if ($('.flash').length) {
             setTimeout(function () {
-                showFlashbag();
+                showFlashBag();
             }, 1500);
         }
     }
@@ -79,7 +78,6 @@ function initHorizontalSearch() {
         }
     });
 }
-
 
 /**
  * Handle vertical search form.
@@ -148,7 +146,9 @@ function initBackToTop() {
  */
 function initSidebar() {
     'use strict';
-    $('.navbar-vertical').sidebar();
+    $('.navbar-vertical').sidebar({
+        pathname: 'caller'
+    });
 }
 
 /**
@@ -196,16 +196,15 @@ function initSwitchTheme() {
         }
     });
 }
-
 /**
  * Ready function
  */
-(function ($) {
+(function () {
     'use strict';
     initHorizontalSearch();
     initVerticalSearch();
     initSwitchTheme();
     initBackToTop();
     initSidebar();
-    showFlashbag();
-}(jQuery));
+    showFlashBag();
+})();

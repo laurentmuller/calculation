@@ -263,7 +263,7 @@ common:
   button_edit: Modifier
   button_export: Exporter
   button_excel_list: Exporter la liste
-  button_flex: Mode mosaïque
+  button_card: Mode mosaïque
   button_import: Importer
   button_ok: OK
   button_pdf: Télécharger
@@ -305,7 +305,7 @@ common:
   value_null: Vide
   value_true: Oui
   value_unknown: Inconnu
-  save_data: Mise à jour des données...
+  save_data: Sauvegarde des données...
   data_changed: Données modifiées
   api_documentation: Documentation (API)
   simulate:
@@ -1269,9 +1269,16 @@ user:
     new: Nouveau mot de passe
     new_confirmation: Répéter le nouveau mot de passe
   reset:
-    title: Supprimer la demande de mot de passe.
-    error: Aucune demande de suppression du mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
-    success: La demande de suppression du mot de passe pour l'utilisateur <b>%name%</b> a été supprimée avec succès.
+    title: Supprimer la demande de mot de passe
+    confirmation: Êtes-vous sûr de vouloir supprimer la demande de mot de passe pour l'utilisateur <b>%name%</b> ?
+    error: Aucune demande de mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
+    success: La demande de mot de passe pour l'utilisateur <b>%name%</b> a été supprimée avec succès.
+  reset_all:
+    title: Supprimer les demandes de mot de passe
+    empty: Aucune demande de mot de passe n'a été requise.
+    error: Un ou plusieurs utilisateurs doivent être sélectionnés.
+    success: Les %count% demandes de mot de passe ont été supprimées avec succès.
+    confirmation: Êtes-vous sûr de vouloir supprimer les demandes de mot de passe pour les utilisateurs suivants ?
   rights:
     all_title: Tous les droits
     col_title: Activer ou désactiver tous les droits d'accès pour cette action

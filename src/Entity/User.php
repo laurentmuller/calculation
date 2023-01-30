@@ -318,7 +318,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
      */
     public function getNameAndEmail(): string
     {
-        return \sprintf('%s <%s>', $this->getUserIdentifier(), (string) $this->getEmail());
+        return \sprintf('%s (%s)', $this->getUserIdentifier(), (string) $this->getEmail());
     }
 
     /**

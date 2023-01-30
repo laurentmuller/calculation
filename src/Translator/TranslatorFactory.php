@@ -50,7 +50,7 @@ class TranslatorFactory implements ServiceSubscriberInterface
      *
      * @param iterable<TranslatorServiceInterface> $translators
      */
-    public function __construct(#[TaggedIterator('translators_service')] iterable $translators)
+    public function __construct(#[TaggedIterator(TranslatorServiceInterface::class)] iterable $translators)
     {
         $this->translators = $translators instanceof \Traversable ? \iterator_to_array($translators) : $translators;
     }

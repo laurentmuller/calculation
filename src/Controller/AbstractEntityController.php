@@ -169,6 +169,7 @@ abstract class AbstractEntityController extends AbstractController
                 $message = $this->getMessageTrans($item, '.edit.success', 'common.edit_success');
             }
             $this->success($message);
+
             // redirect
             $id = $item->getId();
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());

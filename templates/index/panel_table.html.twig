@@ -4,7 +4,7 @@
 {# parameters #}
 {%- set restrict = restrict|default(0) -%}
 {%- set selection = app.request.get('id', 0) -%}
-{%- set caller = path(app.request.get('_route')) -%}
+{%- set caller = path(app.current_route) -%}
 {# actions #}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}

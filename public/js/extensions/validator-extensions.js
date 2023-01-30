@@ -94,6 +94,8 @@
          * @param {function} [options.submitHandler]
          * @param {Object} [options.spinner]
          * @param {Object} [options.rules]
+         * @param {function} [options.highlight]
+         * @param {function} [options.unhighlight]
          * @returns the validator.
          */
         initValidator: function (options) {

@@ -501,7 +501,6 @@ input[type="number"] {
     margin: auto auto auto 0.5rem;
 }
 
-
 body.dark .horizontal-line:after {
     border-bottom: 1px solid #adadad !important;
 }
@@ -736,4 +735,8 @@ body.dark .small-scrollbar::-webkit-scrollbar-thumb:hover {
     margin-left: -1.25rem;
     margin-right: -1.25rem;
     margin-bottom: 0.75rem;
+}
+
+.card-header.bg-danger .invalid-feedback {
+    color: inherit;
 }

@@ -16,7 +16,7 @@
 {%- set title = 'openweather.current.title' -%}
 {%- set title_icon = 'cloud-sun' -%}
 {%- set id = current.id|default(false) -%}
-{%- set route = app.request.get('_route') -%}
+{%- set route = app.current_route -%}
 {# units #}
 {% if id %}
     {%- set units_system = current.units.system -%}

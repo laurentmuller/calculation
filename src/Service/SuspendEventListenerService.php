@@ -38,7 +38,7 @@ class SuspendEventListenerService
      *
      * @param iterable<DisableListenerInterface> $listeners
      */
-    public function __construct(#[TaggedIterator('disable_listener')] iterable $listeners)
+    public function __construct(#[TaggedIterator(DisableListenerInterface::class)] iterable $listeners)
     {
         $this->listeners = $listeners instanceof \Traversable ? \iterator_to_array($listeners) : $listeners;
     }

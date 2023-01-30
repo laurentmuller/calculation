@@ -134,7 +134,7 @@
 {%- endmacro %}
 
 {% macro dropdownItemCard(route_name, parameters=[]) -%}
-{% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_flex', 'grip-horizontal') }}{% endif %}
+{% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_card', 'grip-horizontal') }}{% endif %}
 {%- endmacro %}
 
 {% macro dropdownItemTable(route_name, parameters=[]) -%}

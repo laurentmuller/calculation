@@ -130,7 +130,7 @@
 {%- set allow_search = attributes.search is defined ? attributes.search : true -%}
 {%- set allow_global = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {%- set row_selector = 'table-primary' -%}
-{%- set caller = path(app.request.get('_route')) -%}
+{%- set caller = path(app.current_route) -%}
 {%- set params = params|default({})|merge({'caller': caller}) -%}
 {%- set id = params.id|default(0) -%}
 {%- set limit = params.limit|default(20) -%}
@@ -157,7 +157,7 @@
     'error-message': 'error_page.description'|trans,
     'no-action-title': 'datatable.no_action'|trans,
     'default-action': user_service.editAction.value,
-    'defer-url': url(app.request.get('_route')),
+    'defer-url': url(app.current_route),
     'save-url': url('ajax_save_table'),
     'icon-size': 'sm',
     'caller': caller

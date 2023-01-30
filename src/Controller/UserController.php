@@ -36,6 +36,10 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -252,6 +256,8 @@ class UserController extends AbstractEntityController
     #[Route(path: '/pdf', name: 'user_pdf')]
     public function pdf(StorageInterface $storage): PdfResponse
     {
+        // $users = $this->repository->getResettableUsers();
+
         $entities = $this->getEntities('username');
         if (empty($entities)) {
             $message = $this->trans('user.list.empty');
@@ -264,6 +270,71 @@ class UserController extends AbstractEntityController
     }
 
     /**
+     * Clear all requested reset passwords.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    #[Route(path: '/reset', name: 'user_reset_all')]
+    public function resetAllPasswordRequest(Request $request): Response
+    {
+        /** @psalm-var UserRepository $repository */
+        $repository = $this->repository;
+        $users = $repository->getResettableUsers();
+        if (empty($users)) {
+            $this->warningTrans('user.reset_all.empty');
+
+            return $this->getUrlGenerator()->redirect($request, null, $this->getDefaultRoute());
+        }
+        if (1 === \count($users)) {
+            return $this->redirectToRoute('user_reset', $this->getUrlGenerator()->routeParams($request, $users[0]->getId()));
+        }
+
+        $fieldName = 'users';
+        $data = [$fieldName => $users];
+        $builder = $this->createFormBuilder($data)
+            ->add($fieldName, ChoiceType::class, [
+                'expanded' => true,
+                'multiple' => true,
+                'label' => 'user.list.title',
+                'label_attr' => ['class' => 'ml-n4'],
+                'choices' => $users,
+                'choice_value' => 'id',
+                'choice_label' => 'NameAndEmail',
+                'choice_translation_domain' => false,
+            ])->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($fieldName): void {
+                /** @psalm-var array<string, mixed> $data */
+                $data = $event->getData();
+                $form = $event->getForm();
+                $field = $form->get($fieldName);
+                if ($field->isRequired() && !isset($data[$fieldName])) {
+                    $form->addError(new FormError($this->trans('user.reset_all.error')));
+                }
+            });
+        $form = $builder->getForm();
+
+        if ($this->handleRequestForm($request, $form)) {
+            /** @psalm-var User[] $users */
+            $users = $form->get($fieldName)->getData();
+            foreach ($users as $user) {
+                $repository->resetPasswordRequest($user, false);
+            }
+            $repository->flush();
+
+            if (1 === \count($users)) {
+                $this->infoTrans('user.reset.success', ['%name%' => $users[0]->getUserIdentifier()]);
+            } else {
+                $this->infoTrans('user.reset_all.success', ['%count%' => \count($users)]);
+            }
+
+            return $this->getUrlGenerator()->redirect($request, null, $this->getDefaultRoute());
+        }
+
+        return $this->render('user/user_reset_all_passwords.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    /**
      * Clear the request reset password.
      *
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -271,16 +342,26 @@ class UserController extends AbstractEntityController
     #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => Requirement::DIGITS])]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
-        if ($item->isResetPassword()) {
-            /** @psalm-var UserRepository $repository */
-            $repository = $this->repository;
-            $repository->removeResetPasswordRequest($item);
-            $this->successTrans('user.reset.success', ['%name%' => $item->getUserIdentifier()]);
-        } else {
-            $this->warningTrans('user.reset.error', ['%name%' => $item->getUserIdentifier()]);
+        $identifier = $item->getUserIdentifier();
+        $form = $this->createFormBuilder()->getForm();
+
+        if ($this->handleRequestForm($request, $form)) {
+            if ($item->isResetPassword()) {
+                /** @psalm-var UserRepository $repository */
+                $repository = $this->repository;
+                $repository->removeResetPasswordRequest($item);
+                $this->successTrans('user.reset.success', ['%name%' => $identifier]);
+            } else {
+                $this->warningTrans('user.reset.error', ['%name%' => $identifier]);
+            }
+
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+        return $this->render('user/user_reset_password.html.twig', [
+            'form' => $form,
+            'name' => $identifier,
+        ]);
     }
 
     /**

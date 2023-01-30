@@ -137,6 +137,7 @@ class UserTable extends AbstractEntityTable
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
             $results->addAttribute('original-user-id', $this->getOriginalUserId());
+            $results->addCustomData('resetPasswords', $this->isResettableUsers());
         }
     }
 
@@ -151,5 +152,13 @@ class UserTable extends AbstractEntityTable
         }
 
         return 0;
+    }
+
+    private function isResettableUsers(): bool
+    {
+        /** @psalm-var UserRepository $repository */
+        $repository = $this->repository;
+
+        return $repository->isResettableUsers();
     }
 }

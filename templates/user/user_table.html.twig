@@ -13,11 +13,17 @@
 {%- endblock %}
 
 {% block global_actions -%}
+{% if customData.resetPasswords %}
+    {{- _self.item_path(path('user_reset_all', params), 'user.reset_all.title', 'eraser') }}
+    {{- _self.item_separator() }}
+{% endif %}
+
 {{- _self.item_external(path('user_pdf'), 'user.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('user_excel'), 'user.list.excel_title', ICON_EXCEL) }}
 {{- _self.item_separator() }}
 {{- _self.item_external(path('user_rights_pdf'), 'user.list.rights_export', ICON_PDF) }}
 {{- _self.item_external(path('user_rights_excel'), 'user.list.rights_excel', ICON_EXCEL) }}
+
 {%- endblock %}
 
 {% block show_actions -%}

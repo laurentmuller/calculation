@@ -30,16 +30,13 @@ URLSearchParams.prototype.toQuery = function () {
  * Returns the parameter value or the default value if none.
  *
  * @param {string} name -the parameter name.
- * @param {any} defaultValue - the default value if the parameter is not found.
+ * @param {string|null} defaultValue - the default value if the parameter is not found.
  *
- * @returns {any} the parameter value, if found; the default value otherwise.
+ * @returns {string|null} the parameter value, if found; the default value otherwise.
  */
 URLSearchParams.prototype.getOrDefault = function (name, defaultValue) {
     'use strict';
-    if (!this.has(name)) {
-        return defaultValue;
-    }
-    return this.get(name);
+    return this.has(name) ? this.get(name) : defaultValue;
 };
 
 /**
@@ -52,9 +49,9 @@ URLSearchParams.prototype.getOrDefault = function (name, defaultValue) {
  */
 URLSearchParams.prototype.getIntOrDefault = function (name, defaultValue) {
     'use strict';
-    if (!this.has(name)) {
-        return defaultValue;
+    if (this.has(name)) {
+        const value = Number.parseInt(this.get(name), 10);
+        return Number.isInteger(value) ? value : defaultValue;
     }
-    const value = Number.parseInt(this.get(name), 10);
-    return Number.isInteger(value) ? value : defaultValue;
+    return defaultValue;
 };

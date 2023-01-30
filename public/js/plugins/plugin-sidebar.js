@@ -73,10 +73,13 @@
                 $(window).trigger('resize');
             }
 
-            // toggle sidebar, if after 1.5 seconds
+            // initialize the timeout
             if (options.timeout > 0) {
                 this._initTimeout();
             }
+
+            //  highlight url
+            this._highlightPath();
         }
 
         /**
@@ -224,6 +227,26 @@
         }
 
         /**
+         * // Add active class to selected url (if any).
+         * @private
+         */
+        _highlightPath() {
+            const pathname = this.options.pathname || '';
+            const params = (new URL(document.location)).searchParams;
+            const search = params.get(pathname) || window.location.pathname;
+            let paths = search.split('/');
+            while (paths.length > 1) {
+                const path = paths.join('/');
+                const $element = $(`.nav-item a[href="${path}"]`);
+                if ($element.length) {
+                    $element.addClass('active');
+                    break;
+                }
+                paths.pop();
+            }
+        }
+
+        /**
          * Collapse expanded sibling menus
          * @param {JQuery} $menu - the selected menu.
          * @private
@@ -331,7 +354,9 @@
         showSidebar: 'Show Sidebar',
         hideSidebar: 'Hide Sidebar',
         showMenu: 'Expand',
-        hideMenu: 'Collapse'
+        hideMenu: 'Collapse',
+        // the path name to search for in query parameters to highlight URL
+        pathname: null
     };
 
     /**

@@ -15,6 +15,8 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -60,15 +62,15 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         return $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
     }
 
-    /**
-     * Gets all users order by username.
-     *
-     * @return User[]
-     */
-    public function findAllByUsername(): array
-    {
-        return $this->findBy([], ['username' => Criteria::ASC]);
-    }
+//    /**
+//     * Gets all users order by username.
+//     *
+//     * @return User[]
+//     */
+//    public function findAllByUsername(): array
+//    {
+//        return $this->findBy([], ['username' => Criteria::ASC]);
+//    }
 
     /**
      * Finds a user by their email.
@@ -113,6 +115,20 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Gets users where reset password was requested.
+     *
+     * @return User[]
+     */
+    public function getResettableUsers(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.hashedToken IS NOT NULL')
+            ->orderBy('e.username')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Gets the query builder for the list of users sorted by username.
      *
      * @param string $alias the default entity alias
@@ -136,6 +152,22 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             'role' => "SUBSTRING(IFNULL($alias.$field, 'ROLE_USER'), 5)",
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    /**
+     * Returns if one or more users have reset password requested.
+     */
+    public function isResettableUsers(): bool
+    {
+        try {
+            return 0 !== (int) $this->createQueryBuilder('e')
+                ->select('COUNT(e.id)')
+                ->where('e.hashedToken IS NOT NULL')
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (NoResultException|NonUniqueResultException) {
+            return false;
+        }
     }
 
     /**
@@ -168,12 +200,23 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {
-        if (!$resetPasswordRequest instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $resetPasswordRequest::class));
+        if (!\is_a($resetPasswordRequest, User::class)) {
+            throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $resetPasswordRequest::class));
         }
 
         $resetPasswordRequest->eraseResetPasswordRequest();
         $this->flush();
+    }
+
+    /**
+     * Remove the reset password request from persistence for the given user.
+     */
+    public function resetPasswordRequest(User $user, bool $flush): void
+    {
+        $user->eraseResetPasswordRequest();
+        if ($flush) {
+            $this->flush();
+        }
     }
 
     /**
@@ -186,7 +229,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
+            throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $user::class));
         }
 
         $user->setPassword($newHashedPassword);

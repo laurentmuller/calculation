@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * Class implementing this interface deals with enablement state.
  */
-#[Autoconfigure(tags: ['disable_listener'])]
+#[AutoconfigureTag()]
 interface DisableListenerInterface
 {
     /**

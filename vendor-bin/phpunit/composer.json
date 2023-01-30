@@ -26,5 +26,8 @@
 		"symfony/polyfill-intl-icu": "*",
 		"symfony/polyfill-intl-grapheme": "*",
 		"symfony/polyfill-intl-normalizer" : "*"
-	}
+	},
+    "require-dev": {
+        "phpunit/php-code-coverage": "^9.2"
+    }
 }

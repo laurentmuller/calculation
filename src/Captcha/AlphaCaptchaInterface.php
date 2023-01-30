@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Captcha;
 
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * Class implementing this interface deals with question and answer validation.
  */
-#[Autoconfigure(tags: ['alpha_captcha'])]
+#[AutoconfigureTag()]
 interface AlphaCaptchaInterface
 {
     /**

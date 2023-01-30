@@ -199,7 +199,7 @@ function initSwitchTheme() {
 /**
  * Ready function
  */
-(function () {
+$(function() {
     'use strict';
     initHorizontalSearch();
     initVerticalSearch();
@@ -207,4 +207,4 @@ function initSwitchTheme() {
     initBackToTop();
     initSidebar();
     showFlashBag();
-})();
+});

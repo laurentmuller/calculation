@@ -50,7 +50,6 @@ security:
         - { path: ^/about/policy,          roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
         - { path: ^/about/licence,         roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
         - { path: ^/ajax/checkuser,        roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
-        - { path: ^/ajax/captcha/image,    roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
-        - { path: ^/ajax/captcha/validate, roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
+        - { path: ^/captcha,               roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%'  }
         - { path: ^/admin/,                roles: ROLE_ADMIN,    requires_channel: '%env(SECURE_SCHEME)%' }
         - { path: ^/,                      roles: ROLE_USER,     requires_channel: '%env(SECURE_SCHEME)%' }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\AbstractEntity;
 use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
@@ -23,13 +24,11 @@ use App\Repository\ProductRepository;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use App\Service\CalculationService;
-use App\Service\CaptchaImageService;
 use App\Service\FakerService;
 use App\Service\SwissPostService;
 use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
-use App\Traits\RequestTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
@@ -53,46 +52,7 @@ class AjaxController extends AbstractController
 {
     use CookieTrait;
     use MathTrait;
-    use RequestTrait;
     use StrengthLevelTranslatorTrait;
-
-    /**
-     * Returns a new captcha image.
-     *
-     * @throws \Exception
-     */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/captcha/image', name: 'ajax_captcha_image')]
-    public function captchaImage(CaptchaImageService $service): JsonResponse
-    {
-        if ($data = $service->generateImage(true)) {
-            return $this->jsonTrue([
-                'data' => $data,
-            ]);
-        }
-
-        return $this->jsonFalse([
-            'message' => $this->trans('captcha.generate', [], 'validators'),
-        ]);
-    }
-
-    /**
-     * Validate a captcha image.
-     */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/captcha/validate', name: 'ajax_captcha_validate')]
-    public function captchaValidate(Request $request, CaptchaImageService $service): JsonResponse
-    {
-        if (!$service->validateTimeout()) {
-            $response = $this->trans('captcha.timeout', [], 'validators');
-        } elseif (!$service->validateToken($this->getRequestString($request, 'captcha'))) {
-            $response = $this->trans('captcha.invalid', [], 'validators');
-        } else {
-            $response = true;
-        }
-
-        return $this->json($response);
-    }
 
     /**
      * Check if a username or e-mail exist.
@@ -420,7 +380,7 @@ class AjaxController extends AbstractController
         }
 
         try {
-            /** @psalm-var AbstractRepository<\App\Entity\AbstractEntity> $repository */
+            /** @psalm-var AbstractRepository<AbstractEntity> $repository */
             $repository = $manager->getRepository($className);
 
             return $this->getDistinctValues($request, $repository, (string) $field);
@@ -617,7 +577,7 @@ class AjaxController extends AbstractController
     /**
      * Search distinct values.
      *
-     * @template T of \App\Entity\AbstractEntity
+     * @template T of AbstractEntity
      *
      * @param AbstractRepository<T> $repository
      *

@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * User login type.
@@ -32,17 +31,6 @@ class UserLoginType extends AbstractUserCaptchaType
     public function __construct(CaptchaImageService $service, ApplicationService $application)
     {
         parent::__construct($service, $application);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        parent::configureOptions($resolver);
-        $resolver->setDefaults([
-            'csrf_protection' => false,
-        ]);
     }
 
     /**

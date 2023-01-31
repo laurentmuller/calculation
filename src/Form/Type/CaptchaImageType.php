@@ -53,8 +53,8 @@ class CaptchaImageType extends AbstractType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'refresh' => $this->generate('ajax_captcha_image'),
-            'remote' => $this->generate('ajax_captcha_validate'),
+            'refresh' => $this->generate('captcha_image'),
+            'remote' => $this->generate('captcha_validate'),
             'attr' => [
                 'autocapitalize' => 'none',
                 'autocomplete' => 'off',
@@ -79,8 +79,6 @@ class CaptchaImageType extends AbstractType
 
     /**
      * Generates an absolute URL for the given route name.
-     *
-     * @param string $name the route name
      */
     private function generate(string $name): string
     {

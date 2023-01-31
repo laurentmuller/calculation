@@ -34,6 +34,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  */
 #[AsController]
 #[Route(path: '/admin')]
+#[IsGranted(RoleInterface::ROLE_ADMIN)]
 class AdminController extends AbstractController
 {
     use RoleTranslatorTrait;
@@ -44,7 +45,6 @@ class AdminController extends AbstractController
      * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/clear', name: 'admin_clear')]
     public function clearCache(Request $request, SymfonyInfoService $info, ClearCacheService $service, LoggerInterface $logger): Response
     {
@@ -79,7 +79,6 @@ class AdminController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
     {
@@ -129,7 +128,6 @@ class AdminController extends AbstractController
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request): Response
     {

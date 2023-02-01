@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Voter for entities.
  *
- * @extends Voter<string,mixed>
+ * @extends Voter<string, EntityName|string>
  *
  * @psalm-suppress TooManyTemplateParams
  */
@@ -52,12 +52,12 @@ class EntityVoter extends Voter
      */
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
-        // map entity
+        // map subject
         if ($subject instanceof EntityName) {
             $subject = $subject->value;
         }
 
-        // map permissions
+        // map attributes
         $attributes = \array_map(static fn (mixed $value): mixed => ($value instanceof EntityPermission) ? $value->name : $value, $attributes);
 
         return parent::vote($token, $subject, $attributes);

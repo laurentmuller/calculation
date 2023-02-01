@@ -199,7 +199,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      */
     private function clean(string $str): string
     {
-        return \utf8_encode(\trim($str));
+        return \mb_convert_encoding(\trim($str), 'UTF-8');
     }
 
     /**

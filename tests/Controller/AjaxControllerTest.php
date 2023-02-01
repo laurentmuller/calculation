@@ -31,7 +31,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
      *
      * @throws \Exception
      *
-     * @see \App\Tests\Web\AbstractAuthenticateWebTestCase::setUp()
+     * @see AbstractAuthenticateWebTestCase::setUp()
      */
     protected function setUp(): void
     {
@@ -57,7 +57,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     public function getUserNames(): array
     {
         return [
-            [true, 'myemail_fake_zz'],
+            [true, 'myEmail_fake_zz'],
             [true, 'ROLE_SUPER_ADMIN', 1],
             ['username.blank'],
             ['username.short', 'A'],

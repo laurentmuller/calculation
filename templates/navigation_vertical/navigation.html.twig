@@ -22,6 +22,8 @@
     <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
         <i class="fa-solid fa-angle-left"></i>
     </button>
+    {% if not status_bar %}
+    {# logo #}
     <div class="mb-1">
         <div class="media position-relative" style="margin-right: 35px;">
             <img src="{{ asset_icon(57) }}" width="57" height="57" alt="{{ app_name }}" class="rounded-lg mr-2 align-self-end">
@@ -33,6 +35,8 @@
         </div>
         {{ dropdownSeparator(false, 'mt-3 mb-2') }}
     </div>
+    {% endif %}
+
     {# home page #}
     <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
         {{- icon('home', 'index.title') -}}

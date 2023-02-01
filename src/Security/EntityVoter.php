@@ -23,6 +23,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
  * Voter for entities.
+ *
+ * @extends Voter<string,mixed>
+ *
+ * @psalm-suppress TooManyTemplateParams
  */
 class EntityVoter extends Voter
 {

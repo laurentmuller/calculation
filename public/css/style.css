@@ -23,7 +23,10 @@ body.status-bar .navbar.navbar-vertical {
 .navbar.navbar-vertical .hide-sidebar {
     position: absolute;
     top: 1.25rem;
-    right: 0.5rem;
+    right: 0.3rem;
+}
+body.status-bar .navbar.navbar-vertical .hide-sidebar {
+    top: 1rem;
 }
 
 /**

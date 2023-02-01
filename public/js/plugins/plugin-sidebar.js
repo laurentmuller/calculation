@@ -68,7 +68,7 @@
             // update menus
             this._updateMenus();
 
-            // toggle sidebar if too small
+            // hide sidebar if too small
             if (this._isClientTooSmall() && !this._isSideBarHidden()) {
                 $(window).trigger('resize');
             }

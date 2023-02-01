@@ -178,6 +178,9 @@ function initSwitchTheme() {
             'class': icon
         }));
 
+        // trigger resize to hide the sidebar if to small
+        $(window).trigger('resize');
+
         // save
         if (options.path) {
             const flashBag = $("#flashes").data();
@@ -194,6 +197,7 @@ function initSwitchTheme() {
                 Toaster.danger(options.error, title, flashBag);
             });
         }
+
     });
 }
 /**

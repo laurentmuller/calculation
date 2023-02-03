@@ -14,6 +14,13 @@ namespace App\Database;
 
 /**
  * Database to search cites for OpenWeatherMap.
+ *
+ * @psalm-type OpenWeatherCityType = array{
+ *      id: int,
+ *      name: string,
+ *      country: string,
+ *      latitude: float,
+ *      longitude: float}
  */
 class OpenWeatherDatabase extends AbstractDatabase
 {
@@ -96,12 +103,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param string $name  the name to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @pslam-return array<int, array{
-     *      id: int,
-     *      name: string,
-     *      country: string,
-     *      latitude: float,
-     *      longitude: float}>
+     * @pslam-return array<int, OpenWeatherCityType>
      */
     public function findCity(string $name, int $limit = 25): array
     {
@@ -120,12 +122,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param string $country the country to search for
      * @param int    $limit   the maximum number of rows to return
      *
-     * @pslam-return array<int, array{
-     *      id: int,
-     *      name: string,
-     *      country: string,
-     *      latitude: float,
-     *      longitude: float}>
+     * @pslam-return array<int, OpenWeatherCityType>
      *
      * @psalm-suppress PossiblyNullReference
      */

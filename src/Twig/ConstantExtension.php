@@ -16,7 +16,6 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\CalculationService;
 use App\Traits\CacheAwareTrait;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Extension\AbstractExtension;
@@ -38,21 +37,24 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private const CACHE_KEY = 'twig_constant_extension';
 
     /**
-     * @throws InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getGlobals(): array
     {
         /** @var array<string, mixed> $globals */
-        $globals = (array) $this->getCacheValue(self::CACHE_KEY, $this->getValues());
+        $globals = (array) $this->getCacheValue(self::CACHE_KEY, fn () => $this->getValues());
 
         return $globals;
     }
 
     /**
-     * @psalm-template T
+     * Gets the public constants for the given class name.
      *
-     * @psalm-param class-string<T> $className
+     * @template T
+     *
+     * @param class-string<T> $className
+     *
+     * @return array<string, mixed>
      *
      * @throws \ReflectionException
      */
@@ -60,14 +62,15 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     {
         $reflection = new \ReflectionClass($className);
         $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $c) => $c->isPublic());
+        $names = \array_map(static fn (\ReflectionClassConstant $c) => $c->getName(), $constants);
+        $values = \array_map(static fn (\ReflectionClassConstant $c) => $c->getValue(), $constants);
 
-        return \array_reduce($constants, static function (array $carry, \ReflectionClassConstant $c): array {
-            $carry[$c->getName()] = $c->getValue();
-
-            return $carry;
-        }, []);
+        return \array_combine($names, $values);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getIcons(): array
     {
         return [
@@ -95,6 +98,8 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     }
 
     /**
+     * @return array<string, mixed>
+     *
      * @throws \ReflectionException
      */
     private function getValues(): array

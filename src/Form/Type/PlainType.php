@@ -325,6 +325,9 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         return $defaultValue;
     }
 
+    /**
+     * @psalm-return ($defaultValue is null ? (string|null) : string)
+     */
     private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
     {
         $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
@@ -347,7 +350,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         $values = \array_map($callback, $value);
         $separator = $this->getOptionString($options, 'separator', ', ');
 
-        return \implode((string) $separator, $values);
+        return \implode($separator, $values);
     }
 
     private function transformBool(bool $value): string
@@ -372,7 +375,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
             return (string) \call_user_func($options['empty_value'], $value);
         }
 
-        return (string) $this->getOptionString($options, 'empty_value', 'common.value_null', true);
+        return $this->getOptionString($options, 'empty_value', 'common.value_null', true);
     }
 
     /**

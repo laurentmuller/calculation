@@ -105,7 +105,7 @@ class ResetPasswordController extends AbstractController
     #[Route(path: '/reset/{token}', name: self::ROUTE_RESET)]
     public function reset(Request $request, ?string $token = null): Response
     {
-        if ($token) {
+        if (null !== $token) {
             // we store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
             $this->storeTokenInSession($token);

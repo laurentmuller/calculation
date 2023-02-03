@@ -45,7 +45,7 @@ class PivotController extends AbstractController
      * Show the pivot data table.
      */
     #[Route(path: '', name: 'calculation_pivot')]
-    public function pivot(): Response
+    public function index(): Response
     {
         return $this->render('calculation/calculation_pivot.html.twig', [
             'highlight' => $this->isSessionBool('highlight'),
@@ -58,7 +58,7 @@ class PivotController extends AbstractController
      * Export pivot data to CSV.
      */
     #[Route(path: '/csv', name: 'calculation_pivot_csv')]
-    public function pivotCsv(): CsvResponse
+    public function toCsv(): CsvResponse
     {
         // load data
         $dataset = $this->getDataset();
@@ -95,7 +95,7 @@ class PivotController extends AbstractController
      * Export pivot data to JSON.
      */
     #[Route(path: '/json', name: 'calculation_pivot_json')]
-    public function pivotJson(): JsonResponse
+    public function toJson(): JsonResponse
     {
         $table = $this->getTable();
 

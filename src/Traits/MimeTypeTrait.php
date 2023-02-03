@@ -22,14 +22,39 @@ use Symfony\Component\Mime\MimeTypes;
 trait MimeTypeTrait
 {
     /**
+     * {@inheritDoc}
+     */
+    public function getAttachmentMimeType(): string
+    {
+        return 'application/x-download';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInlineMimeType(): string
+    {
+        /** @psalm-var string|null $mimeType */
+        static $mimeType = null;
+        if (null === $mimeType) {
+            $types = new MimeTypes();
+            $extension = $this->getFileExtension();
+            $mimeType = $types->getMimeTypes($extension)[0];
+        }
+
+        return $mimeType;
+    }
+
+    /**
      * Build response header for an attachment.
      *
      * @param string $name   the document name
      * @param bool   $inline true to send the file inline to the browser. The document viewer is used if available,
      *                       false to send to the browser and force a file download with the name given.
      */
-    public function buildHeaders(string $name, bool $inline): array
+    protected function buildHeaders(string $name, bool $inline): array
     {
+        $name = $this->validate($name);
         $encoded = Utils::ascii($name);
         $type = $inline ? $this->getInlineMimeType() : $this->getAttachmentMimeType();
         $disposition = $inline ? HeaderUtils::DISPOSITION_INLINE : HeaderUtils::DISPOSITION_ATTACHMENT;
@@ -43,25 +68,16 @@ trait MimeTypeTrait
     }
 
     /**
-     * {@inheritDoc}
+     * Validate the given document name.
      */
-    public function getAttachmentMimeType(): string
+    private function validate(string $name): string
     {
-        return 'application/x-download';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getInlineMimeType(): string
-    {
-        static $mimeType = null;
-        if (null === $mimeType) {
-            $types = new MimeTypes();
-            $extension = $this->getFileExtension();
-            $mimeType = $types->getMimeTypes($extension)[0];
+        $name = empty($name) ? 'document' : \basename($name);
+        $extension = '.' . $this->getFileExtension();
+        if (!\str_ends_with($name, $extension)) {
+            return $name . $extension;
         }
 
-        return (string) $mimeType;
+        return $name;
     }
 }

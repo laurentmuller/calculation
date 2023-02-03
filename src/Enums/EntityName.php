@@ -96,11 +96,10 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     public static function constants(): array
     {
         $entities = EntityName::cases();
+        $keys = \array_map(static fn (EntityName $e) => 'ENTITY_' . $e->name, $entities);
+        $values = \array_map(static fn (EntityName $e) => $e->value, $entities);
 
-        return \array_combine(
-            \array_map(static fn (EntityName $e) => 'ENTITY_' . $e->name, $entities),
-            \array_map(static fn (EntityName $e) => $e->value, $entities)
-        );
+        return \array_combine($keys, $values);
     }
 
     /**
@@ -143,11 +142,13 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
      */
     public static function tryFindOffset(mixed $subject, int $default = RoleBuilder::INVALID_VALUE): int
     {
-        return EntityName::tryFromMixed($subject)?->offset() ?? $default;
+        return EntityName::tryFromMixed($subject)?->offset() ?: $default;
     }
 
     /**
      * Find an entity value for the given subject.
+     *
+     * @psalm-return ($default is null ? (string|null) : string)
      */
     public static function tryFindValue(mixed $subject, string $default = null): ?string
     {

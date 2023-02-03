@@ -89,13 +89,12 @@ trait CacheAwareTrait
     public function getCacheValue(string $key, mixed $default = null): mixed
     {
         $key = self::cleanKey($key);
-        if (($item = $this->getCacheItem($key)) && $item->isHit()) {
+        if ((null !== $item = $this->getCacheItem($key)) && $item->isHit()) {
             return $item->get();
         }
 
         if (\is_callable($default)) {
-            $value = \call_user_func($default);
-            if (null !== $value) {
+            if (null !== $value = \call_user_func($default)) {
                 $this->setCacheValue($key, $value);
 
                 return $value;

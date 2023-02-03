@@ -27,6 +27,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @see https://openweathermap.org/api
  *
+ * @psalm-import-type OpenWeatherCityType from OpenWeatherDatabase
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class OpenWeatherService extends AbstractHttpClientService
@@ -407,12 +409,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      * @param int    $limit the maximum number of cities to return
      *
-     * @pslam-return array<int, array{
-     *      id: int,
-     *      name: string,
-     *      country: string,
-     *      latitude: float,
-     *      longitude: float}>
+     * @pslam-return array<int, OpenWeatherCityType>
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -421,14 +418,7 @@ class OpenWeatherService extends AbstractHttpClientService
         // find from cache
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units]);
 
-        /**
-         *  @psalm-var array<int, array{
-         *      id: int,
-         *      name: string,
-         *      country: string,
-         *      latitude: float,
-         *      longitude: float}>|false $result
-         */
+        /** @psalm-var array<int, OpenWeatherCityType>|false $result */
         $result = $this->getCacheValue($key, false);
         if (\is_array($result)) {
             return $result;

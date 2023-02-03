@@ -31,6 +31,8 @@ use Symfony\Component\Validator\Constraints\Length;
  * Controller for the OpenWeather API.
  *
  * @see https://openweathermap.org/api
+ *
+ * @psalm-import-type OpenWeatherCityType from \App\Database\OpenWeatherDatabase
  */
 #[AsController]
 #[Route(path: '/openweather')]

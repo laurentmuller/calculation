@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Class implementing this interface provides function for download document.
+ * Class implementing this interface provides function to download document.
  */
 interface MimeTypeInterface
 {

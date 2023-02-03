@@ -35,10 +35,6 @@ class CsvResponse extends StreamedResponse implements MimeTypeInterface
      */
     public function __construct(callable $callback = null, bool $inline = true, string $name = '')
     {
-        $name = empty($name) ? 'document' : \basename($name);
-        if (!\str_ends_with($name, '.csv')) {
-            $name .= '.csv';
-        }
         $headers = $this->buildHeaders($name, $inline);
         parent::__construct($callback, self::HTTP_OK, $headers);
     }

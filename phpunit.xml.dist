@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-	bootstrap="tests/bootstrap.php"
-	backupGlobals="false"
-	cacheResult="false"
-	colors="true">
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+    bootstrap="tests/bootstrap.php"
+    backupGlobals="false"
+    cacheResult="false"
+    colors="true">
 
-	<!--
-		Note for local in windows:
-		Update the file C:\Users\<username>\AppData\Local\Temp\phpunit_printer\PHPUnitLogger.php
-		Comment the line 940. 'time' => Timer::resourceUsage()
-	-->
+    <php>
+        <ini name="display_errors" value="1" />
+        <ini name="error_reporting" value="-1" />
+        <server name="APP_ENV" value="test" force="true" />
+        <server name="SHELL_VERBOSITY" value="-1" />
+        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9" />
+    </php>
 
-	<coverage processUncoveredFiles="true">
-		<include>
-			<directory suffix=".php">src</directory>
-		</include>
-	</coverage>
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
 
-	<php>
-		<ini name="error_reporting" value="-1" />
-		<server name="APP_ENV" value="test" force="true" />
-		<server name="SHELL_VERBOSITY" value="-1" />
-		<server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-		<server name="SYMFONY_PHPUNIT_VERSION" value="9" />
-	</php>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
 
-	<testsuites>
-		<testsuite name="Project Test Suite">
-			<directory>tests</directory>
-		</testsuite>
-	</testsuites>
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
 
-	<listeners>
-		<listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-	</listeners>
 </phpunit>

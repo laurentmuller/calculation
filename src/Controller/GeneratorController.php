@@ -104,7 +104,7 @@ class GeneratorController extends AbstractController
     {
         $count = $this->getRequestInt($request, 'count');
         $simulate = $this->getRequestBoolean($request, 'simulate', true);
-        $route = (string) $request->attributes->get('_route', self::ROUTE_CUSTOMER);
+        $route = $this->getRequestString($request, '_route', self::ROUTE_CUSTOMER);
         $entity = $this->generateUrl($route);
 
         $this->setSessionValues([

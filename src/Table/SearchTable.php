@@ -66,7 +66,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
-        $entity = (string) $this->getRequestString($request, self::PARAM_ENTITY, '');
+        $entity = $this->getRequestString($request, self::PARAM_ENTITY, '');
         $query->addCustomData(self::PARAM_ENTITY, $entity);
 
         return $query;

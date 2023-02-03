@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Enums\EntityPermission;
+use App\Form\User\ResetAllPasswordType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
 use App\Form\User\UserImageType;
@@ -36,10 +37,6 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -117,7 +114,7 @@ class UserController extends AbstractEntityController
     /**
      * Export the customers to a Spreadsheet document.
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -168,7 +165,7 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Send an email from the current user to another user.
+     * Send an email from the current user to the selected user.
      *
      * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -275,56 +272,41 @@ class UserController extends AbstractEntityController
     #[Route(path: '/reset', name: 'user_reset_all')]
     public function resetAllPasswordRequest(Request $request): Response
     {
-        /** @psalm-var UserRepository $repository */
+        /** @var UserRepository $repository */
         $repository = $this->repository;
         $users = $repository->getResettableUsers();
+        $generator = $this->getUrlGenerator();
+
         if (empty($users)) {
             $this->warningTrans('user.reset_all.empty');
 
-            return $this->getUrlGenerator()->redirect($request, null, $this->getDefaultRoute());
+            return $generator->redirect($request, null, $this->getDefaultRoute());
         }
+
         if (1 === \count($users)) {
-            return $this->redirectToRoute('user_reset', $this->getUrlGenerator()->routeParams($request, $users[0]->getId()));
+            return $this->redirectToRoute('user_reset', $generator->routeParams($request, \reset($users)->getId()));
         }
 
-        $fieldName = 'users';
-        $data = [$fieldName => $users];
-        $builder = $this->createFormBuilder($data)
-            ->add($fieldName, ChoiceType::class, [
-                'expanded' => true,
-                'multiple' => true,
-                'label' => 'user.list.title',
-                'label_attr' => ['class' => 'ml-n4'],
-                'choices' => $users,
-                'choice_value' => 'id',
-                'choice_label' => 'NameAndEmail',
-                'choice_translation_domain' => false,
-            ])->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($fieldName): void {
-                /** @psalm-var array<string, mixed> $data */
-                $data = $event->getData();
-                $form = $event->getForm();
-                $field = $form->get($fieldName);
-                if ($field->isRequired() && !isset($data[$fieldName])) {
-                    $form->addError(new FormError($this->trans('user.reset_all.error')));
-                }
-            });
-        $form = $builder->getForm();
-
+        $name = 'users';
+        $data = [$name => $users];
+        $form = $this->createFormBuilder($data)
+            ->add($name, ResetAllPasswordType::class)->getForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var User[] $users */
-            $users = $form->get($fieldName)->getData();
+            /** @var User[] $users */
+            $users = $form->get($name)->getData();
             foreach ($users as $user) {
                 $repository->resetPasswordRequest($user, false);
             }
             $repository->flush();
 
-            if (1 === \count($users)) {
-                $this->infoTrans('user.reset.success', ['%name%' => $users[0]->getUserIdentifier()]);
+            $count = \count($users);
+            if (1 === $count && false !== $user = \reset($users)) {
+                $this->infoTrans('user.reset.success', ['%name%' => $user->getUserIdentifier()]);
             } else {
-                $this->infoTrans('user.reset_all.success', ['%count%' => \count($users)]);
+                $this->infoTrans('user.reset_all.success', ['%count%' => $count]);
             }
 
-            return $this->getUrlGenerator()->redirect($request, null, $this->getDefaultRoute());
+            return $generator->redirect($request, null, $this->getDefaultRoute());
         }
 
         return $this->render('user/user_reset_all_passwords.html.twig', [
@@ -408,7 +390,7 @@ class UserController extends AbstractEntityController
     /**
      * Export the user access rights to a Spreadsheet document.
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -430,7 +412,7 @@ class UserController extends AbstractEntityController
     /**
      * Export user access rights to a PDF document.
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface

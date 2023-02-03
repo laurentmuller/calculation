@@ -86,7 +86,7 @@ class PdfFooter
      */
     private function getDate(): string
     {
-        return (string) FormatUtils::formatDateTime(new \DateTime(), \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
+        return FormatUtils::formatDateTime(new \DateTime(), \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
     }
 
     /**

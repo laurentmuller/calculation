@@ -142,8 +142,8 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $name = Utils::getShortName($this);
         $firstDate = new \DateTimeImmutable(\sprintf('%d-01-01', $year));
         $lastDate = new \DateTimeImmutable(\sprintf('%d-12-31', $year));
-        $first = (string) FormatUtils::formatDate($firstDate);
-        $last = (string) FormatUtils::formatDate($lastDate);
+        $first = FormatUtils::formatDate($firstDate);
+        $last = FormatUtils::formatDate($lastDate);
 
         return \sprintf('%s(%d, %s - %s)', $name, $this->getNumber(), $first, $last);
     }

@@ -101,8 +101,8 @@ class ExchangeRateController extends AbstractController
     #[Route(path: '/rate', name: 'exchange_rate')]
     public function getRate(Request $request): JsonResponse
     {
-        $baseCode = (string) $this->getRequestString($request, 'baseCode', '');
-        $targetCode = (string) $this->getRequestString($request, 'targetCode', '');
+        $baseCode = $this->getRequestString($request, 'baseCode', '');
+        $targetCode = $this->getRequestString($request, 'targetCode', '');
         $result = $this->service->getRateAndDates($baseCode, $targetCode);
         if ($lastError = $this->service->getLastError()) {
             return $this->json($lastError);

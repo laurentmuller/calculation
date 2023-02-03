@@ -24,6 +24,11 @@ use App\Util\FileUtils;
 
 /**
  * Report for the help documentation.
+ *
+ * @psalm-import-type HelpDialogType from HelpService
+ * @psalm-import-type HelpEntityType from HelpService
+ * @psalm-import-type HelpMainMenuType from HelpService
+ * @psalm-import-type HelpMenuType from HelpService
  */
 class HelpReport extends AbstractReport
 {
@@ -45,6 +50,7 @@ class HelpReport extends AbstractReport
     {
         parent::__construct($controller);
         $this->imagePath = $service->getImagePath();
+        $this->setTitleTrans('help.title');
     }
 
     /**
@@ -54,56 +60,11 @@ class HelpReport extends AbstractReport
      */
     public function render(): bool
     {
-        /**
-         * @psalm-var array<array{
-         *      id: string,
-         *      description: string,
-         *      menus: array|null
-         *      }> $mainMenus
-         */
-        $mainMenus = $this->service->getMainMenus();
+        $service = $this->service;
+        $newPage = $this->outputMainMenus($service->getMainMenus());
+        $newPage = $this->outputDialogs($service->getDialogs(), $newPage);
 
-        /**
-         * @psalm-var array<array{
-         *      id: string,
-         *      description: string|null,
-         *      image: string|null,
-         *      displayEntityColumns: null|bool,
-         *      displayEntityFields: null|bool,
-         *      displayEntityActions: null|bool,
-         *      entity: null|string,
-         *      editActions: null|array,
-         *      globalActions: null|array,
-         *      forbidden: null|array,
-         *      details: string[]|null}> $dialogs
-         */
-        $dialogs = $this->service->getDialogs();
-
-        /**
-         * @psalm-var array<array{
-         *      id: string,
-         *      name: string,
-         *      description: string|null,
-         *      constraints: string[]|null,
-         *      actions: array|null,
-         *      fields: array|null,
-         *      required: bool|null}> $entities
-         */
-        $entities = $this->service->getEntities();
-
-        if (empty($mainMenus) && empty($dialogs) && empty($entities)) {
-            return false;
-        }
-
-        // title
-        $this->setTitleTrans('help.title');
-
-        // content
-        $newPage = $this->outputMainMenus($mainMenus);
-        $newPage = $this->outputDialogs($dialogs, $newPage);
-        $this->outputEntities($entities, $newPage);
-
-        return true;
+        return $this->outputEntities($service->getEntities(), $newPage);
     }
 
     /**
@@ -111,7 +72,7 @@ class HelpReport extends AbstractReport
      */
     private function br2nl(string $str): string
     {
-        return \preg_replace('/<br(\s*)?\/?\>/i', \PHP_EOL, $str);
+        return \preg_replace('#<br\s*/?>#i', \PHP_EOL, $str);
     }
 
     /**
@@ -387,22 +348,11 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<array{
-     *      id: string,
-     *      description: string|null,
-     *      image: string|null,
-     *      displayEntityColumns: null|bool,
-     *      displayEntityFields: null|bool,
-     *      displayEntityActions: null|bool,
-     *      entity: null|string,
-     *      editActions: null|array,
-     *      globalActions: null|array,
-     *      forbidden: null|array,
-     *      details: string[]|null}> $dialogs
+     * @psalm-param HelpDialogType[]|null $dialogs
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function outputDialogs(array $dialogs, bool $newPage): bool
+    private function outputDialogs(?array $dialogs, bool $newPage): bool
     {
         if (empty($dialogs)) {
             return false;
@@ -428,19 +378,12 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<array{
-     *      id: string,
-     *      name: string,
-     *      description: string|null,
-     *      constraints: string[]|null,
-     *      actions: array|null,
-     *      fields: array|null,
-     *      required: bool|null}> $entities
+     * @psalm-param HelpEntityType[]|null $entities
      */
-    private function outputEntities(array $entities, bool $newPage): void
+    private function outputEntities(?array $entities, bool $newPage): bool
     {
         if (empty($entities)) {
-            return;
+            return false;
         }
 
         if ($newPage) {
@@ -458,17 +401,12 @@ class HelpReport extends AbstractReport
             $newPage = true;
             $this->outputEntity($entity);
         }
+
+        return true;
     }
 
     /**
-     * @psalm-param array{
-     *      id: string,
-     *      name: string,
-     *      description: string|null,
-     *      constraints: string[]|null,
-     *      actions: array|null,
-     *      fields: array|null,
-     *      required: bool|null} $item
+     * @psalm-param HelpEntityType $item
      */
     private function outputEntity(array $item): void
     {
@@ -555,55 +493,45 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<array{
-     *      id: string,
-     *      description: string,
-     *      menus: array|null}> $menus
+     * @psalm-param HelpMenuType[]|null $menus
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function outputMainMenus(array $menus): bool
+    private function outputMainMenus(?array $menus): bool
     {
-        if (!empty($menus)) {
-            $this->AddPage();
-            $this->outputTitle('help.main_menu', 12);
-            $this->outputLine();
-
-            /**
-             * @psalm-param null|array{description: string|null, image: string|null}  $rootMenu
-             */
-            if ($rootMenu = $this->service->getMainMenu()) {
-                // description
-                /** @psalm-var string|null $description */
-                $description = $rootMenu['description'] ?? null;
-                if (null !== $description) {
-                    $this->outputText($description, false);
-                }
-
-                // image
-                /** @psalm-var string|null $image */
-                $image = $rootMenu['image'] ?? null;
-                if (null !== $image) {
-                    $this->Ln(3);
-                    $this->outputText('help.labels.screenshot');
-                    $this->outputImage($image);
-                }
-            }
-
-            // menus
-            $this->Ln(3);
-            $this->outputText('help.labels.edit_actions');
-            $table = new PdfTableBuilder($this);
-            $table->addColumns(
-                PdfColumn::left($this->trans('help.fields.action'), 60, true),
-                PdfColumn::left($this->trans('help.fields.description'), 50)
-            )->outputHeaders();
-            $this->outputMenus($table, $menus);
-
-            return true;
+        if (empty($menus)) {
+            return false;
         }
 
-        return false;
+        $this->AddPage();
+        $this->outputTitle('help.main_menu', 12);
+        $this->outputLine();
+
+        if (null !== $rootMenu = $this->service->getMainMenu()) {
+            $description = $rootMenu['description'] ?? null;
+            if (null !== $description) {
+                $this->outputText($description, false);
+            }
+
+            $image = $rootMenu['image'] ?? null;
+            if (null !== $image) {
+                $this->Ln(3);
+                $this->outputText('help.labels.screenshot');
+                $this->outputImage($image);
+            }
+        }
+
+        // menus
+        $this->Ln(3);
+        $this->outputText('help.labels.edit_actions');
+        $table = new PdfTableBuilder($this);
+        $table->addColumns(
+            PdfColumn::left($this->trans('help.fields.action'), 60, true),
+            PdfColumn::left($this->trans('help.fields.description'), 50)
+        )->outputHeaders();
+        $this->outputMenus($table, $menus);
+
+        return true;
     }
 
     /**

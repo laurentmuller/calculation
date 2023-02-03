@@ -39,7 +39,10 @@ class PdfResponse extends Response implements MimeTypeInterface
      */
     public function __construct(PdfDocument $doc, bool $inline = true, string $name = '')
     {
-        $name = empty($name) ? 'document.pdf' : \basename($name);
+        $name = empty($name) ? 'document' : \basename($name);
+        if (!\str_ends_with($name, '.pdf')) {
+            $name .= '.pdf';
+        }
         $headers = $this->buildHeaders($name, $inline);
         $content = $doc->Output(PdfDocumentOutput::STRING);
         parent::__construct($content, self::HTTP_OK, $headers);

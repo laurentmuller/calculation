@@ -194,6 +194,23 @@
                 return $toUpdate;
             };
 
+            /**
+             * Find elements with the same name attribute.
+             *
+             * @param {JQuery} $element the element to search same name for.
+             * @return {{JQuery[]}|{JQuery}} the elements, if found; the argument element otherwise.
+             */
+            $.validator.prototype.findNamedElements = function ($element) {
+                const name = $element.attr('name');
+                if (name.endsWith('[]')) {
+                    const $elements = $element.closest('form').find(`[name="${name}"]`);
+                    if ($elements.length) {
+                        return $elements;
+                    }
+                }
+                return $element;
+            };
+
             // default options
             let defaults = {
                 focus: true,
@@ -216,8 +233,8 @@
 
                 highlight: function (element, errorClass) {
                     const $element = $(element);
+                    this.findNamedElements($element).addClass(errorClass);
                     const $toUpdate = this.findElement($element);
-                    $element.addClass(errorClass);
                     if ($toUpdate) {
                         $toUpdate.addClass('border-danger');
                         if ($toUpdate.hasClass('field-valid')) {
@@ -228,8 +245,8 @@
 
                 unhighlight: function (element, errorClass) {
                     const $element = $(element);
+                    this.findNamedElements($element).removeClass(errorClass);
                     const $toUpdate = this.findElement($element);
-                    $element.removeClass(errorClass);
                     if ($toUpdate) {
                         $toUpdate.removeClass('border-danger');
                         if ($toUpdate.hasClass('field-invalid')) {

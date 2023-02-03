@@ -363,8 +363,8 @@ class TestController extends AbstractController
     public function timeline(Request $request, CalculationRepository $repository): Response
     {
         $max_date = $repository->getMaxDate()?->format('Y-m-d') ?? 'today';
-        $interval = (string) $this->getRequestString($request, 'interval', 'P1W');
-        $to = new \DateTime((string) $this->getRequestString($request, 'date', $max_date));
+        $interval = $this->getRequestString($request, 'interval', 'P1W');
+        $to = new \DateTime($this->getRequestString($request, 'date', $max_date));
         $max_date = new \DateTime($max_date);
         $from = DateUtils::sub($to, $interval);
         $calculations = $repository->getByInterval($from, $to);

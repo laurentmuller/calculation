@@ -81,6 +81,8 @@ trait SessionAwareTrait
      * @param ?float $default the default value if not found
      *
      * @return float|null the session value, if found; the default value otherwise
+     *
+     * @psalm-return ($default is null ? (float|null) : float)
      */
     protected function getSessionFloat(string $key, ?float $default): ?float
     {
@@ -94,6 +96,8 @@ trait SessionAwareTrait
      * @param ?int   $default the default value if not found
      *
      * @return int|null the session value, if found; the default value otherwise
+     *
+     * @psalm-return ($default is null ? (int|null) : int)
      */
     protected function getSessionInt(string $key, ?int $default): ?int
     {
@@ -120,6 +124,8 @@ trait SessionAwareTrait
      * @param ?string $default the default value if not found
      *
      * @return string|null the session value, if found; the default value otherwise
+     *
+     * @psalm-return ($default is null ? (string|null) : string)
      */
     protected function getSessionString(string $key, ?string $default = null): ?string
     {

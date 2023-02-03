@@ -163,7 +163,7 @@ class AjaxController extends AbstractController
     public function languages(Request $request, TranslatorFactory $factory): JsonResponse
     {
         $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
-        $service = $factory->getService((string) $class);
+        $service = $factory->getService($class);
         if ($languages = $service->getLanguages()) {
             return $this->jsonTrue([
                 'languages' => $languages,
@@ -302,7 +302,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/save', name: 'ajax_save_table')]
     public function saveTable(Request $request): JsonResponse
     {
-        $requestView = (string) $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE);
+        $requestView = $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE);
         $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
 
         $response = $this->json(true);
@@ -365,7 +365,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/search/distinct', name: 'ajax_search_distinct')]
     public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
     {
-        $className = 'App\\Entity\\' . \ucfirst((string) $this->getRequestString($request, 'entity', ''));
+        $className = 'App\\Entity\\' . \ucfirst($this->getRequestString($request, 'entity', ''));
         if (!\class_exists($className)) {
             return $this->jsonFalse([
                 'values' => [],
@@ -399,7 +399,7 @@ class AjaxController extends AbstractController
     public function searchProduct(Request $request, ProductRepository $repository): JsonResponse
     {
         try {
-            $search = (string) $this->getRequestString($request, 'query', '');
+            $search = $this->getRequestString($request, 'query', '');
             if (Utils::isString($search)) {
                 $maxResults = $this->getRequestInt($request, 'limit', 15);
                 $products = $repository->search($search, $maxResults);
@@ -468,10 +468,10 @@ class AjaxController extends AbstractController
             return $response;
         }
         // get parameters
-        $to = (string) $this->getRequestString($request, 'to', '');
+        $to = $this->getRequestString($request, 'to', '');
         $from = $this->getRequestString($request, 'from');
-        $text = (string) $this->getRequestString($request, 'text', '');
-        $class = (string) $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
+        $text = $this->getRequestString($request, 'text', '');
+        $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
         // check parameters
         if (!Utils::isString($text)) {

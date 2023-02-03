@@ -58,7 +58,7 @@ abstract class AbstractTable implements SortModeInterface
 
     public function formatDate(\DateTimeInterface $value): string
     {
-        return (string) FormatUtils::formatDate($value);
+        return FormatUtils::formatDate($value);
     }
 
     public function formatId(int $value): string

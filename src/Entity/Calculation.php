@@ -346,7 +346,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getFormattedDate(): string
     {
-        return (string) FormatUtils::formatDate($this->date);
+        return FormatUtils::formatDate($this->date);
     }
 
     /**

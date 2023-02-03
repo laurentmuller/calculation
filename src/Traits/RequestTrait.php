@@ -73,6 +73,8 @@ trait RequestTrait
 
     /**
      * Returns the request parameter value converted to string.
+     *
+     * @psalm-return ($default is null ? (string|null) : string)
      */
     protected function getRequestString(Request $request, string $key, string|\BackedEnum $default = null): ?string
     {

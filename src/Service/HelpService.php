@@ -21,6 +21,40 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to provide help.
  *
+ * @psalm-type  HelpDialogType = array{
+ *      id: string,
+ *      description: string|null,
+ *      image: string|null,
+ *      displayEntityColumns: null|bool,
+ *      displayEntityFields: null|bool,
+ *      displayEntityActions: null|bool,
+ *      entity: null|string,
+ *      editActions: null|array,
+ *      globalActions: null|array,
+ *      forbidden: null|array,
+ *      details: string[]|null}
+ * @psalm-type HelpEntityType = array{
+ *      id: string,
+ *      name: string,
+ *      description: string|null,
+ *      constraints: string[]|null,
+ *      actions: array|null,
+ *      fields: array|null,
+ *      required: bool|null}
+ * @psalm-type HelpMenuType = array{
+ *      id: string,
+ *      description: string,
+ *      menus: array[]|null}
+ * @psalm-type HelpMainMenuType = array{
+ *      id: string,
+ *      image: string|null,
+ *      description: string|null,
+ *      menus: HelpMenuType[]|null}
+ * @psalm-type HelpContentType = array{
+ *      dialogs: HelpDialogType[]|null,
+ *      entities: HelpEntityType[]|null,
+ *      mainMenu: HelpMainMenuType|null}
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class HelpService implements ServiceSubscriberInterface
@@ -72,6 +106,8 @@ class HelpService implements ServiceSubscriberInterface
      *
      * @return array|null the dialog, if found; null otherwise
      *
+     * @pslam-return HelpDialogType|null
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findDialog(string $id): ?array
@@ -85,6 +121,8 @@ class HelpService implements ServiceSubscriberInterface
      * @param string $id the entity identifier to search for
      *
      * @return array|null the entity, if found; null otherwise
+     *
+     * @pslam-return HelpEntityType|null
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -100,14 +138,16 @@ class HelpService implements ServiceSubscriberInterface
      *
      * @return array|null the entity, if found; null otherwise
      *
+     * @psalm-param HelpDialogType $dialog
+     *
+     * @pslam-return HelpEntityType|null
+     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findEntityByDialog(array $dialog): ?array
     {
-        /** @var string|null $id */
-        $id = $dialog['entity'] ?? null;
-        if (null !== $id) {
-            return $this->findEntity($id);
+        if (isset($dialog['entity'])) {
+            return $this->findEntity($dialog['entity']);
         }
 
         return null;
@@ -118,40 +158,16 @@ class HelpService implements ServiceSubscriberInterface
      *
      * @return array|null the dialogs, if found; null otherwise
      *
-     * @psalm-return null|array<array{
-     *      id: string,
-     *      description: string|null,
-     *      image: string|null,
-     *      displayEntityColumns: null|bool,
-     *      displayEntityFields: null|bool,
-     *      displayEntityActions: null|bool,
-     *      entity: null|string,
-     *      editActions: null|array,
-     *      globalActions: null|array,
-     *      forbidden: null|array,
-     *      details: string[]|null}>
+     * @psalm-return HelpDialogType[]|null
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDialogs(): ?array
     {
-        /**
-         * @psalm-var null|array<array{
-         *      id: string,
-         *      description: string|null,
-         *      image: string|null,
-         *      displayEntityColumns: null|bool,
-         *      displayEntityFields: null|bool,
-         *      displayEntityActions: null|bool,
-         *      entity: null|string,
-         *      editActions: null|array,
-         *      globalActions: null|array,
-         *      forbidden: null|array,
-         *      details: string[]|null}> $dialogs
-         */
-        $dialogs = $this->findEntries('dialogs');
+        /** @psalm-var HelpDialogType[]|null $items */
+        $items = $this->findEntries('dialogs');
 
-        return $dialogs;
+        return $items;
     }
 
     /**
@@ -159,32 +175,16 @@ class HelpService implements ServiceSubscriberInterface
      *
      * @return array|null the entities, if found; null otherwise
      *
-     * @psalm-return null|array<array{
-     *      id: string,
-     *      name: string,
-     *      description: string|null,
-     *      constraints: string[]|null,
-     *      actions: array|null,
-     *      fields: array|null,
-     *      required: bool|null}>
+     * @psalm-return HelpEntityType[]|null
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEntities(): ?array
     {
-        /**
-         * @psalm-var null|array<array{
-         *      id: string,
-         *      name: string,
-         *      description: string|null,
-         *      constraints: string[]|null,
-         *      actions: array|null,
-         *      fields: array|null,
-         *      required: bool|null}> $entities
-         */
-        $entities = $this->findEntries('entities');
+        /** @psalm-var HelpEntityType[]|null $items */
+        $items = $this->findEntries('entities');
 
-        return $entities;
+        return $items;
     }
 
     /**
@@ -203,7 +203,7 @@ class HelpService implements ServiceSubscriberInterface
     public function getHelp(): array
     {
         // read from cache
-        /** @psalm-var array|null $help */
+        /** @psalm-var HelpContentType|null $help */
         $help = $this->getCacheValue(self::CACHE_KEY);
         if (\is_array($help)) {
             return $help;
@@ -211,22 +211,16 @@ class HelpService implements ServiceSubscriberInterface
 
         // load
         $content = (string) \file_get_contents($this->file);
-        /**
-         * @psalm-var null|array{
-         *      entities: null|bool|array<array{id: string}>,
-         *      dialogs:  null|bool|array<array{id: string, entity: null|string}>
-         * } $help
-         */
+
+        /** @psalm-var HelpContentType|null $help */
         $help = \json_decode($content, true);
         if (\is_array($help)) {
-            if (isset($help['entities']) && \is_array($help['entities'])) {
-                $this->sortEntities($help['entities']);
-            }
-            if (isset($help['dialogs']) && \is_array($help['dialogs'])) {
+            if (!empty($help['dialogs'])) {
                 $this->sortDialogs($help['dialogs']);
             }
-
-            // save to cache
+            if (!empty($help['entities'])) {
+                $this->sortEntities($help['entities']);
+            }
             $this->setCacheValue(self::CACHE_KEY, $help);
 
             return $help;
@@ -246,13 +240,16 @@ class HelpService implements ServiceSubscriberInterface
     /**
      * Gets the main (root) menu.
      *
-     * @return array|null the main menu, if found; null otherwise
+     * @return HelpMainMenuType|null the main menu, if found; null otherwise
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMainMenu(): ?array
     {
-        return $this->findEntries('mainMenu');
+        /** @psalm-var HelpMainMenuType|null $items */
+        $items = $this->findEntries('mainMenu');
+
+        return $items;
     }
 
     /**
@@ -260,25 +257,16 @@ class HelpService implements ServiceSubscriberInterface
      *
      * @return array|null the main menus, if found; null otherwise
      *
-     * @psalm-return null|array<array{
-     *      id: string,
-     *      description:
-     *      string,
-     *      menus: array|null}>
+     * @psalm-return HelpMenuType[]|null
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMainMenus(): ?array
     {
-        /**
-         * @psalm-var null|array<array{
-         *      id: string,
-         *      description: string,
-         *      menus: array|null}> $menus
-         */
-        $menus = $this->findEntries('mainMenu', 'menus');
+        /** @psalm-var HelpMenuType[]|null $items */
+        $items = $this->findEntries('mainMenu', 'menus');
 
-        return $menus;
+        return $items;
     }
 
     /**
@@ -316,7 +304,7 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param array<array{entity: string|null, id: string}> $values
+     * @psalm-param HelpDialogType[] $values
      */
     private function sortDialogs(array &$values): void
     {
@@ -335,7 +323,7 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
-     *  @psalm-param array<array{id: string}> $values
+     *  @psalm-param HelpEntityType[] $values
      */
     private function sortEntities(array &$values): void
     {

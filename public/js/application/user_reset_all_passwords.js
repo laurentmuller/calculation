@@ -6,7 +6,6 @@
 (function ($) {
     'use strict';
     const $form = $("#edit-form");
-    const $inputs = $form.find(':checkbox');
     $form.initValidator({
         focus: false,
         rules: {
@@ -17,12 +16,6 @@
         },
         messages: {
             'form[users][]': $form.data('error')
-        },
-        highlight: function (element, errorClass) {
-            $inputs.addClass(errorClass);
-        },
-        unhighlight: function (element, errorClass) {
-            $inputs.removeClass(errorClass);
         }
     });
 }(jQuery));

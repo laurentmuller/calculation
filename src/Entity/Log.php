@@ -145,7 +145,7 @@ class Log extends AbstractEntity
      */
     public function getFormattedDate(): string
     {
-        return (string) FormatUtils::formatDateTime($this->createdAt, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
+        return FormatUtils::formatDateTime($this->createdAt, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
     }
 
     /**

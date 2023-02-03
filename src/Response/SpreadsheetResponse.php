@@ -39,7 +39,10 @@ class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
      */
     public function __construct(SpreadsheetDocument $doc, bool $inline = true, string $name = '')
     {
-        $name = empty($name) ? 'document.xlsx' : \basename($name);
+        $name = empty($name) ? 'document' : \basename($name);
+        if (!\str_ends_with($name, '.xlsx')) {
+            $name .= '.xlsx';
+        }
         $headers = $this->buildHeaders($name, $inline);
         $callback = function () use ($doc): void {
             $writer = IOFactory::createWriter($doc, 'Xlsx');

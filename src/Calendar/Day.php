@@ -53,7 +53,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
-        $date = (string) FormatUtils::formatDate($this->date);
+        $date = FormatUtils::formatDate($this->date);
 
         return \sprintf('%s(%s)', $name, $date);
     }

@@ -322,7 +322,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getDisplayMode(): TableView
     {
         $default = self::DEFAULT_DISPLAY_MODE;
-        $value = (string) $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
+        $value = $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
 
         return TableView::tryFrom($value) ?? $default;
     }
@@ -333,7 +333,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getEditAction(): EntityAction
     {
         $default = self::DEFAULT_ACTION;
-        $value = (string) $this->getPropertyString(self::P_EDIT_ACTION, $default->value);
+        $value = $this->getPropertyString(self::P_EDIT_ACTION, $default->value);
 
         return EntityAction::tryFrom($value) ?? $default;
     }
@@ -354,7 +354,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getMessagePosition(): MessagePosition
     {
         $default = self::DEFAULT_MESSAGE_POSITION;
-        $value = (string) $this->getPropertyString(self::P_MESSAGE_POSITION, $default->value);
+        $value = $this->getPropertyString(self::P_MESSAGE_POSITION, $default->value);
 
         return MessagePosition::tryFrom($value) ?? $default;
     }

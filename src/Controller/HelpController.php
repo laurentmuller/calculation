@@ -23,6 +23,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display help.
+ *
+ * @psalm-import-type HelpDialogType from HelpService
+ * @psalm-import-type HelpEntityType from HelpService
  */
 #[AsController]
 #[Route(path: '/help')]
@@ -37,11 +40,14 @@ class HelpController extends AbstractController
     #[Route(path: '/dialog/{id}', name: 'help_dialog')]
     public function dialog(string $id, HelpService $service): Response
     {
+        /** @psalm-var HelpDialogType|null $dialog */
         $dialog = $service->findDialog($id);
         if (null === $dialog) {
             throw $this->createNotFoundException("Unable to find the resource for the dialog '$id'.");
         }
-        $entity = isset($dialog['entity']) ? $service->findEntity((string) $dialog['entity']) : null;
+
+        /** @psalm-var HelpEntityType|null $entity */
+        $entity = $service->findEntityByDialog($dialog);
 
         return $this->render('help/help_dialog.html.twig', [
             'service' => $service,
@@ -58,6 +64,7 @@ class HelpController extends AbstractController
     #[Route(path: '/entity/{id}', name: 'help_entity')]
     public function entity(string $id, HelpService $service): Response
     {
+        /** @psalm-var HelpEntityType|null $entity */
         $entity = $service->findEntity($id);
         if (null === $entity) {
             throw $this->createNotFoundException("Unable to find the resource for the object '$id'.");
@@ -71,15 +78,12 @@ class HelpController extends AbstractController
 
     /**
      * Display the help index.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '', name: 'help')]
     public function index(HelpService $service): Response
     {
         return $this->render('help/help_index.html.twig', [
             'service' => $service,
-            'help' => $service->getHelp(),
         ]);
     }
 
@@ -93,7 +97,8 @@ class HelpController extends AbstractController
     public function pdf(HelpService $service): PdfResponse
     {
         $doc = new HelpReport($this, $service);
+        $name = $this->trans('help.title_name', ['%name%' => $this->getApplicationName()]);
 
-        return $this->renderPdfDocument($doc);
+        return $this->renderPdfDocument(doc: $doc, name: $name);
     }
 }

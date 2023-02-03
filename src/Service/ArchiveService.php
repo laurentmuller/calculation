@@ -308,7 +308,7 @@ class ArchiveService implements ServiceSubscriberInterface
 
     private function getTarget(): ?CalculationState
     {
-        $id = (int) $this->getSessionInt(self::KEY_TARGET, 0);
+        $id = $this->getSessionInt(self::KEY_TARGET, 0);
         if (0 !== $id) {
             return $this->stateRepository->find($id);
         }

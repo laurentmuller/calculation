@@ -114,7 +114,7 @@ class TranslatorFactory implements ServiceSubscriberInterface
      */
     public function getSessionService(): TranslatorServiceInterface
     {
-        $class = (string) $this->getSessionString(self::KEY_LAST_SERVICE, self::DEFAULT_SERVICE);
+        $class = $this->getSessionString(self::KEY_LAST_SERVICE, self::DEFAULT_SERVICE);
         if (!$this->exists($class)) {
             $class = self::DEFAULT_SERVICE;
         }

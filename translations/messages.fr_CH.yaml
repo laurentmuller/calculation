@@ -308,12 +308,12 @@ common:
   save_data: Sauvegarde des données...
   data_changed: Données modifiées
   api_documentation: Documentation (API)
-  simulate:
-    label: Simuler la mise à jour
-    help: Simule une mise à jour sans enregistrer les changements dans la base de données.
-    confirm: Confirmer la mise à jour des données
-    error: Vous devez cochez le message de confirmation.
-    message: La mise à jour a été simulée. Aucun changement n'a été effectué dans la base de données.
+simulate:
+  label: Simuler la mise à jour
+  help: Simule une mise à jour sans enregistrer les changements dans la base de données.
+  confirm: Confirmer la mise à jour des données
+  error: Vous devez cochez le message de confirmation.
+  message: La mise à jour a été simulée. Aucun changement n'a été effectué dans la base de données.
 cookie_banner:
   accept: Accepter
   accept_title: Accepter la politique de confidentialité
@@ -1316,6 +1316,7 @@ archive:
   edit:
     description: Cette page vous permet d'archiver des calculations en modifiant leur statut.
     last_update: 'Dernier archivage : %date%'
+    error: Au moins 1 statut doit être sélectionné.
     submit: Archiver
   result:
     new_archive: Nouvel archivage

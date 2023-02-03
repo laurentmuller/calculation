@@ -129,7 +129,7 @@
 					"description": "Crée une copie de la tâche et affiche la page de création."
 				},
 				{
-					"id": "taskcompute.title",
+					"id": "task_compute.title",
 					"icon": "keyboard",
 					"description": "Permet de simuler le calcul d'une tâche."
 				}
@@ -295,17 +295,7 @@
 				{
 					"id": "globalmargin.edit.title",
 					"icon": "pencil-alt",
-					"description": "Affiche la page d'édition de la marge globale."
-				},
-				{
-					"id": "globalmargin.delete.title",
-					"icon": "times",
-					"description": "Affiche la page de suppression de la marge globale."
-				},
-				{
-					"id": "globalmargin.add.title",
-					"icon": "file far",
-					"description": "Affiche la page de création d'une la marge globale."
+					"description": "Affiche la page d'édition des marges globales."
 				}
 			]
 		},
@@ -591,10 +581,10 @@
 						"description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0."
 					},
 					{
-						"id": "taskcompute.title",
+						"id": "task_compute.title",
 						"icon": "keyboard",
 						"description": "Page pour calculer une tâche.",
-						"dialog": "taskcompute.title"
+						"dialog": "task_compute.title"
 					}
 				]
 			},
@@ -1091,7 +1081,7 @@
 			]
 		},
 		{
-			"id": "taskcompute.title",
+			"id": "task_compute.title",
 			"entity": "task",
 			"image": "task/task_compute.png",
 			"icon": "keyboard",
@@ -1377,30 +1367,8 @@
 				},
 				{
 					"id": "common.button_edit",
-					"description": "Affiche la page d'édition de la marge globale.",
+					"description": "Affiche la page d'édition des marges globales.",
 					"dialog": "globalmargin.edit.title"
-				},
-				{
-					"id": "common.button_delete",
-					"description": "Affiche la page de suppression de la marge globale.",
-					"dialog": "globalmargin.delete.title"
-				}
-			]
-		},
-		{
-			"id": "globalmargin.add.title",
-			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_add.png",
-			"description": "Cette page permet de créer une marge globale.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
 				}
 			]
 		},
@@ -1408,7 +1376,7 @@
 			"id": "globalmargin.edit.title",
 			"entity": "globalmargin",
 			"image": "globalmargin/globalmargin_edit.png",
-			"description": "Cette page permet de modifier une marge globale.",
+			"description": "Cette page permet de modifier les marges globales.",
 			"displayEntityFields": true,
 			"editActions": [
 				{
@@ -1418,23 +1386,6 @@
 				{
 					"id": "common.button_cancel",
 					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "globalmargin.delete.title",
-			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_delete.png",
-			"icon": "times",
-			"description": "Cette page permet de confirmer la suppression d'une marge globale.",
-			"editActions": [
-				{
-					"id": "common.button_delete",
-					"description": "Supprime la marge globale et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."
 				}
 			]
 		},
@@ -1512,7 +1463,7 @@
 		},
 		{
 			"id": "log.delete.title",
-			"entity": "globalmargin",
+			"entity": "log",
 			"image": "log/log_delete.png",
 			"icon": "times",
 			"description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page est accessible uniquement aux administrateurs.",

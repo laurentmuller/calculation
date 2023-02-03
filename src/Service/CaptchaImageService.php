@@ -98,7 +98,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     {
         // not force and valid?
         if (!$force && $this->validateTimeout() && $this->hasSessionValue(self::KEY_DATA)) {
-            return (string) $this->getSessionString(self::KEY_DATA);
+            return $this->getSessionString(self::KEY_DATA);
         }
 
         // clear previous values
@@ -131,7 +131,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     public function validateTimeout(): bool
     {
         $actual = \time();
-        $last = (int) $this->getSessionInt(self::KEY_TIME, 0);
+        $last = $this->getSessionInt(self::KEY_TIME, 0);
         $delta = $actual - $last;
 
         return $delta <= self::MAX_TIME_OUT;
@@ -142,7 +142,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     public function validateToken(?string $token): bool
     {
-        return $token && 0 === \strcasecmp($token, (string) $this->getSessionString(self::KEY_TEXT, ''));
+        return null !== $token && 0 === \strcasecmp($token, $this->getSessionString(self::KEY_TEXT, ''));
     }
 
     /**

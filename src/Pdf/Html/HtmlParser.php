@@ -192,6 +192,8 @@ class HtmlParser
      * @param ?string  $default the default value to return if the attribute is not found
      *
      * @return ?string the attribute value, if found; the default value otherwise
+     *
+     * @psalm-return ($default is null ? (string|null) : string)
      */
     private function getAttribute(\DOMNode $node, string $name, ?string $default = null): ?string
     {
@@ -243,7 +245,7 @@ class HtmlParser
     private function getTypeAttribute(\DOMNode $node): HtmlListType
     {
         $default = HtmlListType::NUMBER;
-        $value = (string) $this->getAttribute($node, 'type', $default->value);
+        $value = $this->getAttribute($node, 'type', $default->value);
 
         return HtmlListType::tryFrom($value) ?? $default;
     }

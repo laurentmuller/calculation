@@ -357,7 +357,7 @@ abstract class AbstractController extends BaseController
 
         // title
         if (empty($name) && \is_string($title = $doc->getTitle())) {
-            $name = \sprintf('%s.pdf', $title);
+            $name = $title;
         }
 
         // create response

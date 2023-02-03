@@ -173,6 +173,8 @@ trait PropertyTrait
      * @param ?\DateTimeInterface $default the default value if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @psalm-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
      */
     protected function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
@@ -220,6 +222,8 @@ trait PropertyTrait
      * @param ?string $default the default value if the property is not found
      *
      * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @psalm-return ($default is null ? (string|null) : string)
      */
     protected function getPropertyString(string $name, ?string $default = null): ?string
     {

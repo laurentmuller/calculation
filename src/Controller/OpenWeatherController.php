@@ -186,7 +186,7 @@ class OpenWeatherController extends AbstractController
             $units = $this->getRequestUnits($request);
             $latitude = $this->getRequestFloat($request, self::KEY_LATITUDE);
             $longitude = $this->getRequestFloat($request, self::KEY_LONGITUDE);
-            $exclude = (string) $this->getRequestString($request, self::KEY_EXCLUDE);
+            $exclude = $this->getRequestString($request, self::KEY_EXCLUDE, '');
             $exclude = \explode(',', $exclude);
             $response = $this->service->oneCall($latitude, $longitude, $units, $exclude);
             if (false === $response) {
@@ -434,36 +434,36 @@ class OpenWeatherController extends AbstractController
 
     private function getRequestQuery(Request $request): string
     {
-        return \trim((string) $this->getRequestString($request, self::KEY_QUERY, ''));
+        return \trim($this->getRequestString($request, self::KEY_QUERY, ''));
     }
 
     private function getRequestUnits(Request $request): string
     {
-        return (string) $this->getRequestString($request, self::KEY_UNITS, OpenWeatherService::UNIT_METRIC);
+        return $this->getRequestString($request, self::KEY_UNITS, OpenWeatherService::UNIT_METRIC);
     }
 
     private function getSessionCount(Request $request): int
     {
-        return (int) $this->getSessionInt(self::KEY_COUNT, $this->getRequestCount($request));
+        return $this->getSessionInt(self::KEY_COUNT, $this->getRequestCount($request));
     }
 
     private function getSessionId(Request $request): int
     {
-        return (int) $this->getSessionInt(self::KEY_ID, $this->getRequestId($request));
+        return $this->getSessionInt(self::KEY_ID, $this->getRequestId($request));
     }
 
     private function getSessionLimit(Request $request): int
     {
-        return (int) $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request));
+        return $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request));
     }
 
     private function getSessionQuery(Request $request): string
     {
-        return (string) $this->getSessionString(self::KEY_QUERY, $this->getRequestQuery($request));
+        return $this->getSessionString(self::KEY_QUERY, $this->getRequestQuery($request));
     }
 
     private function getSessionUnits(Request $request): string
     {
-        return (string) $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));
+        return $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));
     }
 }

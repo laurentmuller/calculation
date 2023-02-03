@@ -196,7 +196,7 @@ final class FormatExtension extends AbstractExtension
         $date = twig_date_converter($env, $date, $timezone);
 
         // format
-        return (string) FormatUtils::formatDateTime($date, $date_type, $time_type, $timezone, $calendar, $pattern);
+        return FormatUtils::formatDateTime($date, $date_type, $time_type, $timezone, $calendar, $pattern);
     }
 
     /**

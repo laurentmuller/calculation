@@ -367,7 +367,7 @@ final class SymfonyInfoService
     {
         $datetime = $this->getLastDate($date);
         if ($datetime instanceof \DateTime) {
-            return (string) FormatUtils::formatDate($datetime);
+            return FormatUtils::formatDate($datetime);
         }
 
         return 'Unknown';

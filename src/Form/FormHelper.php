@@ -156,9 +156,9 @@ class FormHelper
     public function addCheckboxConfirm(?TranslatorInterface $translator, bool $disabled): self
     {
         return $this->field('confirm')
-            ->label('common.simulate.confirm')
+            ->label('simulate.confirm')
             ->updateAttributes([
-                'data-error' => $translator?->trans('common.simulate.error'),
+                'data-error' => $translator?->trans('simulate.error'),
                 'disabled' => $disabled ? 'disabled' : null,
             ])
             ->notMapped()
@@ -171,8 +171,8 @@ class FormHelper
     public function addCheckboxSimulate(): self
     {
         return $this->field('simulate')
-            ->label('common.simulate.label')
-            ->help('common.simulate.help')
+            ->label('simulate.label')
+            ->help('simulate.help')
             ->helpClass('ml-4')
             ->notRequired()
             ->addCheckboxType();

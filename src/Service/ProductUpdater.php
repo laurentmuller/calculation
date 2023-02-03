@@ -125,7 +125,7 @@ class ProductUpdater implements ServiceSubscriberInterface
      */
     public function createUpdateQuery(): ProductUpdateQuery
     {
-        $id = (int) $this->getSessionInt(self::KEY_CATEGORY, 0);
+        $id = $this->getSessionInt(self::KEY_CATEGORY, 0);
         $category = $this->getCategory($id);
 
         $query = new ProductUpdateQuery();
@@ -134,7 +134,7 @@ class ProductUpdater implements ServiceSubscriberInterface
             ->setProducts($this->getProducts($category))
             ->setPercent($this->getSessionFloat(self::KEY_PERCENT, 0))
             ->setFixed($this->getSessionFloat(self::KEY_FIXED, 0))
-            ->setType((string) $this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT))
+            ->setType($this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT))
             ->setSimulate($this->isSessionBool(self::KEY_SIMULATE, true))
             ->setRound($this->isSessionBool(self::KEY_ROUND));
 

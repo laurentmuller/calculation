@@ -101,7 +101,7 @@ class UsersReport extends AbstractArrayReport
     private function formatLastLogin(?\DateTimeInterface $date): string
     {
         if ($date instanceof \DateTimeInterface) {
-            return (string) FormatUtils::formatDateTime($date);
+            return FormatUtils::formatDateTime($date);
         }
 
         return $this->trans('common.value_none');

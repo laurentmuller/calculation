@@ -35,7 +35,12 @@
             {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
         {% endif %}
         {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
-        {{ dropdownSeparator() }}
-        {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
+        {% if is_env_dev %}
+            {{ dropdownItem(path('help'), 'help.title', 'question-circle') }}
+        {% endif %}
+        {% if not status_bar %}
+            {{ dropdownSeparator() }}
+            {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
+        {% endif %}
     </div>
 </li>

@@ -51,16 +51,16 @@
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'help.title' -%}
+{%- set help = service.help -%}
 {%- set menus = help.mainMenu.menus|default(false) -%}
 {%- set dialogs = help.dialogs|default(false) -%}
 {%- set entities = help.entities|default(false) -%}
-
+{# class #}
 {%- block container_class 'container-fluid' -%}
-
+{# title #}
 {% block help_title -%}
 {{- tools.output_icon('question-circle', 'help.title') -}}
 {%- endblock %}
-
 {# body #}
 {% block help_body -%}
 <p class="mb-1">{{ 'help.description'|trans({'%appname%': app_name_version})|raw }}</p>

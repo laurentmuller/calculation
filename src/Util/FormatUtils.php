@@ -62,6 +62,8 @@ final class FormatUtils
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted date or null if formatting failed or if the date is null
+     *
+     * @psalm-return ($date is null ? (string|null) : string)
      */
     public static function formatDate(\DateTimeInterface|int|null $date, ?int $datetype = null, \IntlTimeZone|\DateTimeZone|string|null $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null): ?string
     {
@@ -79,6 +81,8 @@ final class FormatUtils
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
+     *
+     * @psalm-return ($date is null ? (string|null) : string)
      */
     public static function formatDateTime(\DateTimeInterface|int|null $date, ?int $datetype = null, ?int $timetype = null, \IntlTimeZone|\DateTimeZone|string|null $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null): ?string
     {
@@ -150,6 +154,8 @@ final class FormatUtils
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted time or null if formatting failed or if the date is null
+     *
+     * @psalm-return ($date is null ? (string|null) : string)
      */
     public static function formatTime(\DateTimeInterface|int|null $date, ?int $timetype = null, \IntlTimeZone|\DateTimeZone|string|null $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null): ?string
     {

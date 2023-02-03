@@ -67,13 +67,13 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSub
             $letterIndex = \abs($letterIndex) - 1;
             $word = \strrev($word);
         }
-        $answer = null;
+        $answer = '';
         for ($i = $letterIndex; $i >= 0; --$i) {
             $answer = $word[\strcspn($word, $source)];
             $word = \preg_replace('/' . $answer . '/', '_', $word, 1);
         }
 
-        return (string) $answer;
+        return $answer;
     }
 
     /**

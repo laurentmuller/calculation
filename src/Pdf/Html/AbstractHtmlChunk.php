@@ -19,7 +19,6 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
 use App\Report\HtmlReport;
-use App\Util\Utils;
 
 /**
  * Represents an HTML chunk.
@@ -218,8 +217,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
         // write text
         $text = $this->getOutputText();
-        if (Utils::isString($text)) {
-            $this->outputText($report, (string) $text);
+        if (\is_string($text) && '' !== $text) {
+            $this->outputText($report, $text);
         }
     }
 

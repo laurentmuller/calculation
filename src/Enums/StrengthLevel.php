@@ -101,6 +101,6 @@ enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, 
      */
     public static function values(): array
     {
-        return \array_map(fn (StrengthLevel $level): int => $level->value, StrengthLevel::sorted());
+        return \array_map(static fn (StrengthLevel $level): int => $level->value, StrengthLevel::sorted());
     }
 }

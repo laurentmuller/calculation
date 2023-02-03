@@ -142,7 +142,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
      */
     public static function tryFindOffset(mixed $subject, int $default = RoleBuilder::INVALID_VALUE): int
     {
-        return EntityName::tryFromMixed($subject)?->offset() ?: $default;
+        return EntityName::tryFromMixed($subject)?->offset() ?? $default;
     }
 
     /**

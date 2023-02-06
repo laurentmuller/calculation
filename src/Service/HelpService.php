@@ -21,6 +21,12 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to provide help.
  *
+ *  @psalm-type  HelpFieldType = array{
+ *      name: string,
+ *      description: string,
+ *      type: string|null,
+ *      length: int|null,
+ *      required: bool|null}
  * @psalm-type  HelpDialogType = array{
  *      id: string,
  *      description: string|null,
@@ -39,8 +45,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      description: string|null,
  *      constraints: string[]|null,
  *      actions: array|null,
- *      fields: array|null,
- *      required: bool|null}
+ *      fields: HelpFieldType[]|null,
+ *      required: bool|null,
+ *      editActions: array|null}
  * @psalm-type HelpMenuType = array{
  *      id: string,
  *      description: string,

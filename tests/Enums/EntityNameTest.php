@@ -33,7 +33,31 @@ use PHPUnit\Framework\TestCase;
  */
 class EntityNameTest extends TestCase
 {
-    public function getOffsets(): array
+    public function getMatch(): array
+    {
+        return [
+            [EntityName::CALCULATION, 'EntityCalculation', true],
+            [EntityName::CALCULATION, 'Fake', false],
+        ];
+    }
+
+    public function getOffset(): array
+    {
+        return [
+            [EntityName::CALCULATION, 0],
+            [EntityName::CALCULATION_STATE, 1],
+            [EntityName::CATEGORY, 2],
+            [EntityName::CUSTOMER, 3],
+            [EntityName::GLOBAL_MARGIN, 4],
+            [EntityName::GROUP, 5],
+            [EntityName::LOG, 6],
+            [EntityName::PRODUCT, 7],
+            [EntityName::TASK, 8],
+            [EntityName::USER, 9],
+        ];
+    }
+
+    public function getTryFindOffset(): array
     {
         return [
             [EntityName::CALCULATION, 0],
@@ -53,7 +77,16 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public function getTryFinds(): array
+    public function getTryFindValue(): array
+    {
+        return [
+            ['Calculation', 'EntityCalculation'],
+            [Calculation::class, 'EntityCalculation'],
+            [null, 'EntityCalculation', 'EntityCalculation'],
+        ];
+    }
+
+    public function getTryFromMixed(): array
     {
         return [
             [null, null],
@@ -104,6 +137,22 @@ class EntityNameTest extends TestCase
         ];
     }
 
+    public function getValue(): array
+    {
+        return [
+            [EntityName::CALCULATION, 'EntityCalculation'],
+            [EntityName::CALCULATION_STATE, 'EntityCalculationState'],
+            [EntityName::CATEGORY, 'EntityCategory'],
+            [EntityName::CUSTOMER, 'EntityCustomer'],
+            [EntityName::GLOBAL_MARGIN, 'EntityGlobalMargin'],
+            [EntityName::GROUP, 'EntityGroup'],
+            [EntityName::LOG, 'EntityLog'],
+            [EntityName::PRODUCT, 'EntityProduct'],
+            [EntityName::TASK, 'EntityTask'],
+            [EntityName::USER, 'EntityUser'],
+        ];
+    }
+
     public function testConstants(): void
     {
         $cases = EntityName::cases();
@@ -122,16 +171,36 @@ class EntityNameTest extends TestCase
         self::assertCount(10, EntityName::sorted());
     }
 
-    /**
-     * @dataProvider getOffsets
-     */
-    public function testOffset(EntityName|string $e, int $expected): void
+    public function testLabel(): void
     {
-        if (\is_string($e)) {
-            $e = EntityName::tryFromMixed($e);
-        }
-        self::assertNotNull($e);
-        self::assertEquals($expected, $e->offset());
+        self::assertEquals('calculation.name', EntityName::CALCULATION->getReadable());
+        self::assertEquals('calculationstate.name', EntityName::CALCULATION_STATE->getReadable());
+        self::assertEquals('category.name', EntityName::CATEGORY->getReadable());
+        self::assertEquals('customer.name', EntityName::CUSTOMER->getReadable());
+        self::assertEquals('globalmargin.name', EntityName::GLOBAL_MARGIN->getReadable());
+        self::assertEquals('group.name', EntityName::GROUP->getReadable());
+        self::assertEquals('log.name', EntityName::LOG->getReadable());
+        self::assertEquals('product.name', EntityName::PRODUCT->getReadable());
+        self::assertEquals('task.name', EntityName::TASK->getReadable());
+        self::assertEquals('user.name', EntityName::USER->getReadable());
+    }
+
+    /**
+     * @dataProvider getMatch
+     */
+    public function testMatch(EntityName $name, string $value, bool $expected): void
+    {
+        $result = $name->match($value);
+        self::assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider getOffset
+     */
+    public function testOffset(EntityName $entityName, int $expected): void
+    {
+        $result = $entityName->offset();
+        self::assertEquals($expected, $result);
     }
 
     public function testSorted(): void
@@ -153,11 +222,37 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @dataProvider getTryFinds
+     * @dataProvider getTryFindOffset
      */
-    public function testTryFind(mixed $subject, mixed $expected): void
+    public function testTryFindOffset(mixed $e, int $expected): void
+    {
+        $result = EntityName::tryFindOffset($e);
+        self::assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider getTryFindValue
+     */
+    public function testTryFindValue(mixed $subject, ?string $expected, ?string $default = null): void
+    {
+        $result = EntityName::tryFindValue($subject, $default);
+        self::assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider getTryFromMixed
+     */
+    public function testTryFromMixed(mixed $subject, mixed $expected): void
     {
         $result = EntityName::tryFromMixed($subject);
         self::assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider getValue
+     */
+    public function testValue(EntityName $entityName, string $expected): void
+    {
+        self::assertEquals($expected, $entityName->value);
     }
 }

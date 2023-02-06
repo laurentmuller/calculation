@@ -8,10 +8,11 @@ table.container {
 
 .wrapper.secondary {
     background-color: #fff;
+
 }
 
 table.body.wrapper {
-    background-color: #f3f3f3;
+    background-color: #fff;
 }
 
 .container.body_alert,
@@ -24,4 +25,8 @@ table.body.wrapper {
 
 #csp td {
     padding-top: 5px;
+}
+
+.footer-text {
+    color: darkgray;
 }

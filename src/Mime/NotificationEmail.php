@@ -64,10 +64,11 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
     {
         $headers = parent::getPreparedHeaders();
         $subject = $headers->get('Subject');
+        $text = $this->translateSubject();
         if (null !== $subject) {
-            $subject->setBody($this->translateSubject());
+            $subject->setBody($text);
         } else {
-            $headers->addTextHeader('Subject', $this->translateSubject());
+            $headers->addTextHeader('Subject', $text);
         }
 
         return $headers;

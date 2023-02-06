@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityPermission;
+use App\Util\RoleBuilder;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,33 @@ use PHPUnit\Framework\TestCase;
  */
 class EntityPermissionTest extends TestCase
 {
+    public function getLabel(): array
+    {
+        return [
+            [EntityPermission::ADD, 'rights.add'],
+            [EntityPermission::DELETE, 'rights.delete'],
+            [EntityPermission::EDIT, 'rights.edit'],
+            [EntityPermission::EXPORT, 'rights.export'],
+            [EntityPermission::LIST, 'rights.list'],
+            [EntityPermission::SHOW, 'rights.show'],
+        ];
+    }
+
+    public function getTryFindValue(): array
+    {
+        return [
+            ['add', 1],
+            ['delete', 2],
+            ['edit', 4],
+            ['export', 8],
+            ['list', 16],
+            ['show', 32],
+
+            ['fake', -1],
+            ['fake', 1, 1],
+        ];
+    }
+
     public function getTryFromName(): array
     {
         return [
@@ -41,10 +69,22 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
+    public function getValue(): array
+    {
+        return [
+            [EntityPermission::ADD, 1],
+            [EntityPermission::DELETE, 2],
+            [EntityPermission::EDIT, 4],
+            [EntityPermission::EXPORT, 8],
+            [EntityPermission::LIST, 16],
+            [EntityPermission::SHOW, 32],
+        ];
+    }
+
     public function testBits(): void
     {
         $expected = [1, 2, 4, 8, 16, 32];
-        $permissions = self::fromAll();
+        $permissions = FlagBag::fromAll(EntityPermission::class);
         $bits = $permissions->getBits();
         self::assertEquals($expected, $bits);
     }
@@ -63,7 +103,7 @@ class EntityPermissionTest extends TestCase
 
     public function testCount(): void
     {
-        $permissions = self::fromAll();
+        $permissions = FlagBag::fromAll(EntityPermission::class);
         $bits = $permissions->getBits();
         self::assertCount(6, $bits);
 
@@ -71,14 +111,13 @@ class EntityPermissionTest extends TestCase
         self::assertCount(6, $flags);
     }
 
-    public function testLabel(): void
+    /**
+     * @dataProvider getLabel
+     */
+    public function testLabel(EntityPermission $permission, string $expected): void
     {
-        self::assertEquals('rights.add', EntityPermission::ADD->getReadable());
-        self::assertEquals('rights.delete', EntityPermission::DELETE->getReadable());
-        self::assertEquals('rights.edit', EntityPermission::EDIT->getReadable());
-        self::assertEquals('rights.export', EntityPermission::EXPORT->getReadable());
-        self::assertEquals('rights.list', EntityPermission::LIST->getReadable());
-        self::assertEquals('rights.show', EntityPermission::SHOW->getReadable());
+        $label = $permission->getReadable();
+        self::assertEquals($expected, $label);
     }
 
     public function testSorted(): void
@@ -97,8 +136,17 @@ class EntityPermissionTest extends TestCase
 
     public function testSum(): void
     {
-        $permissions = self::fromAll();
+        $permissions = FlagBag::fromAll(EntityPermission::class);
         self::assertEquals(63, $permissions->getValue());
+    }
+
+    /**
+     * @dataProvider getTryFindValue
+     */
+    public function testTryFindValue(string $name, int $expected, int $default = RoleBuilder::INVALID_VALUE): void
+    {
+        $result = EntityPermission::tryFindValue($name, $default);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -110,21 +158,12 @@ class EntityPermissionTest extends TestCase
         self::assertEquals($expected, $result);
     }
 
-    public function testValue(): void
-    {
-        self::assertEquals(1, EntityPermission::ADD->value);
-        self::assertEquals(2, EntityPermission::DELETE->value);
-        self::assertEquals(4, EntityPermission::EDIT->value);
-        self::assertEquals(8, EntityPermission::EXPORT->value);
-        self::assertEquals(16, EntityPermission::LIST->value);
-        self::assertEquals(32, EntityPermission::SHOW->value);
-    }
-
     /**
-     * @return FlagBag<EntityPermission>
+     * @dataProvider getValue
      */
-    private static function fromAll(): FlagBag
+    public function testValue(EntityPermission $permission, int $expected): void
     {
-        return FlagBag::fromAll(EntityPermission::class);
+        $value = $permission->value;
+        self::assertEquals($expected, $value);
     }
 }

@@ -17,14 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Abstract entity with a category, a unit and a supplier.
- *
- * Note: A protected $category variable must present.
- *
- * @property Category|null $category
  */
 #[ORM\MappedSuperclass]
 abstract class AbstractCategoryItemEntity extends AbstractEntity
 {
+    protected ?Category $category = null;
+
     /**
      * The supplier.
      */
@@ -41,8 +39,6 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
 
     /**
      * Get category.
-     *
-     * @psalm-suppress all
      */
     public function getCategory(): ?Category
     {
@@ -99,8 +95,6 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
 
     /**
      * Set category.
-     *
-     * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function setCategory(?Category $category): static
     {

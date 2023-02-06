@@ -160,7 +160,9 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
      */
     public static function tryFromMixed(mixed $subject): ?EntityName
     {
-        if (\is_scalar($subject)) {
+        if ($subject instanceof EntityName) {
+            return $subject;
+        } elseif (\is_scalar($subject)) {
             $name = (string) $subject;
         } elseif (\is_object($subject)) {
             $name = $subject::class;

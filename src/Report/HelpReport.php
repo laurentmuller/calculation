@@ -25,6 +25,7 @@ use App\Util\FileUtils;
 /**
  * Report for the help documentation.
  *
+ * @psalm-import-type HelpFieldType from HelpService
  * @psalm-import-type HelpDialogType from HelpService
  * @psalm-import-type HelpEntityType from HelpService
  * @psalm-import-type HelpMainMenuType from HelpService
@@ -76,15 +77,9 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{entity: null|string} $dialog
+     * @psalm-param HelpDialogType $dialog
      *
-     * @psalm-return null|array{
-     *      id: string,
-     *      name:string,
-     *      description: string,
-     *      fields: null|array,
-     *      actions: null|array,
-     *      editActions: null|array}
+     * @psalm-return HelpEntityType|null
      *
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -92,13 +87,7 @@ class HelpReport extends AbstractReport
     {
         $id = $dialog['entity'] ?? null;
         if (null !== $id) {
-            /** @psalm-var null|array{
-             *      id: string,
-             *      name:string,
-             *      description: string,
-             *      fields: null|array,
-             *      actions: null|array,
-             *      editActions: null|array} $entity */
+            /** @psalm-var HelpEntityType|null $entity */
             $entity = $this->service->findEntity($id);
             if (null !== $entity) {
                 return $entity;
@@ -109,36 +98,18 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{fields: null|array} $entity
+     * @psalm-param HelpEntityType|null $entity
      *
-     * @psalm-return null|array<array{
-     *      name: string,
-     *      description: string,
-     *      type: string|null,
-     *      length: int|null,
-     *      required: bool|null}>
+     * @psalm-return HelpFieldType[]|null
      */
     private function findFields(?array $entity): ?array
     {
-        if (null !== $entity) {
-            /** @psalm-var null|array<array{
-             *      name: string,
-             *      description: string,
-             *      type: string|null,
-             *      length: int|null,
-             *      required: bool|null}> $fields */
-            $fields = $entity['fields'] ?? null;
-            if (null !== $fields) {
-                return $fields;
-            }
-        }
-
-        return null;
+        return null === $entity ? null : $entity['fields'] ?? null;
     }
 
     /**
-     * @psalm-param array{id: string} $item
-     * @psalm-param array{name: string} $field
+     * @psalm-param HelpEntityType $item
+     * @psalm-param HelpFieldType $field
      */
     private function formatFieldName(array $item, array $field): string
     {
@@ -149,9 +120,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{
-     *      type: string|null,
-     *      length: int|null} $field
+     * @psalm-param HelpFieldType $field
      */
     private function formatFieldType(array $field): string
     {
@@ -198,8 +167,8 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{id: string} $item
-     * @psalm-param array<array{name: string, description: string}> $fields
+     * @psalm-param HelpEntityType $item
+     * @psalm-param HelpFieldType[] $fields
      */
     private function outputColumns(array $item, array $fields): void
     {
@@ -244,18 +213,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{
-     *      id: string,
-     *      description: string|null,
-     *      image: string|null,
-     *      displayEntityColumns: null|bool,
-     *      displayEntityFields: null|bool,
-     *      displayEntityActions: null|bool,
-     *      entity: null|string,
-     *      editActions: null|array,
-     *      globalActions: null|array,
-     *      forbidden: null|array,
-     *      details: string[]|null} $item
+     * @psalm-param HelpDialogType $item
      *
      * @throws \Psr\Cache\InvalidArgumentException
      *
@@ -307,7 +265,7 @@ class HelpReport extends AbstractReport
             // actions
             $displayEntityActions = $item['displayEntityActions'] ?? false;
             if ($displayEntityActions) {
-                /** @var array<array{id: string, description: string}>|null $actions */
+                /** @psalm-var array<array{id: string, description: string}>|null $actions */
                 $actions = $entity['actions'] ?? null;
                 if (null !== $actions) {
                     $this->outputActions($actions, 'help.labels.entity_actions');
@@ -316,20 +274,20 @@ class HelpReport extends AbstractReport
         }
 
         // edit actions
-        /** @psalm-var null|array<array{id: string, description: string}> $actions */
+        /** @psalm-var array<array{id: string, description: string}>|null $actions */
         $actions = $item['editActions'] ?? null;
         if (null !== $actions) {
             $this->outputActions($actions, 'help.labels.edit_actions');
         }
 
         // global actions
-        /** @psalm-var null|array<array{id: string, description: string}> $actions */
+        /** @psalm-var array<array{id: string, description: string}>|null $actions */
         $actions = $item['globalActions'] ?? null;
         if (null !== $actions) {
             $this->outputActions($actions, 'help.labels.global_actions');
         }
 
-        /** @psalm-var null|array{image: string|null, text:string|null, action: array|null} $forbidden */
+        /** @psalm-var array{image: string|null, text:string|null, action: array|null}|null $forbidden */
         $forbidden = $item['forbidden'] ?? null;
         if (null !== $forbidden) {
             $this->Ln(3);
@@ -339,7 +297,7 @@ class HelpReport extends AbstractReport
             if (null !== $image) {
                 $this->outputImage($image);
             }
-            /** @psalm-var null|array{id: string, description: string} $action */
+            /** @psalm-var array{id: string, description: string}|null $action */
             $action = $forbidden['action'] ?? null;
             if (null !== $action) {
                 $this->outputActions([$action], 'help.labels.edit_actions');
@@ -432,7 +390,7 @@ class HelpReport extends AbstractReport
             $this->outputConstraints($constraints);
         }
 
-        /** @psalm-var null|array<array{id: string, description: string}> $actions */
+        /** @psalm-var array<array{id: string, description: string}>|null $actions */
         $actions = $item['actions'] ?? null;
         if (null !== $actions) {
             $this->outputActions($actions, 'help.labels.entity_actions');
@@ -440,16 +398,8 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{
-     *      id: string,
-     *      name:string,
-     *      description: string|null} $item
-     * @psalm-param array<array{
-     *      name: string,
-     *      description: string,
-     *      type: string|null,
-     *      length: int|null,
-     *      required: bool|null}> $fields
+     * @psalm-param HelpEntityType $item
+     * @psalm-param HelpFieldType[] $fields
      */
     private function outputFields(array $item, array $fields): void
     {
@@ -535,11 +485,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<array{
-     *      id: string,
-     *      description: string,
-     *      menus: array|null
-     *      }> $menus
+     * @psalm-param array<array{id: string, description: string, menus: array|null}> $menus
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      */

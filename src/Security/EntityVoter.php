@@ -94,7 +94,7 @@ class EntityVoter extends Voter
         }
 
         // special case for Log entity
-        if (EntityName::LOG->match($name)) {
+        if (EntityName::LOG->matchValue($name)) {
             return $user->isAdmin();
         }
 

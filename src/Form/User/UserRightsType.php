@@ -37,7 +37,7 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-        $resolver->setDefaults(['data_class' => User::class]);
+        $resolver->setDefault('data_class', User::class);
     }
 
     /**

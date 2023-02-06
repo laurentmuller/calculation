@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\MessagePosition;
+use App\Interfaces\PropertyServiceInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
@@ -22,6 +23,23 @@ use Symfony\Component\Form\Test\TypeTestCase;
  */
 class MessagePositionTest extends TypeTestCase
 {
+    public function getLabel(): array
+    {
+        return [
+            [MessagePosition::TOP_LEFT, 'top-left'],
+            [MessagePosition::TOP_CENTER, 'top-center'],
+            [MessagePosition::TOP_RIGHT, 'top-right'],
+
+            [MessagePosition::CENTER_LEFT, 'center-left'],
+            [MessagePosition::CENTER_CENTER, 'center-center'],
+            [MessagePosition::CENTER_RIGHT, 'center-right'],
+
+            [MessagePosition::BOTTOM_LEFT, 'bottom-left'],
+            [MessagePosition::BOTTOM_CENTER, 'bottom-center'],
+            [MessagePosition::BOTTOM_RIGHT, 'bottom-right'],
+        ];
+    }
+
     public function testCount(): void
     {
         self::assertCount(9, MessagePosition::cases());
@@ -30,23 +48,21 @@ class MessagePositionTest extends TypeTestCase
 
     public function testDefault(): void
     {
+        $expected = MessagePosition::BOTTOM_RIGHT;
         $default = MessagePosition::getDefault();
-        self::assertEquals(MessagePosition::BOTTOM_RIGHT, $default);
+        self::assertEquals($expected, $default);
+        $default = PropertyServiceInterface::DEFAULT_MESSAGE_POSITION;
+        self::assertEquals($expected, $default);
     }
 
-    public function testLabel(): void
+    /**
+     * @dataProvider getLabel
+     */
+    public function testLabel(MessagePosition $position, string $value): void
     {
-        self::assertEquals('message_position.top_left', MessagePosition::TOP_LEFT->getReadable());
-        self::assertEquals('message_position.top_center', MessagePosition::TOP_CENTER->getReadable());
-        self::assertEquals('message_position.top_right', MessagePosition::TOP_RIGHT->getReadable());
-
-        self::assertEquals('message_position.center_left', MessagePosition::CENTER_LEFT->getReadable());
-        self::assertEquals('message_position.center_center', MessagePosition::CENTER_CENTER->getReadable());
-        self::assertEquals('message_position.center_right', MessagePosition::CENTER_RIGHT->getReadable());
-
-        self::assertEquals('message_position.bottom_left', MessagePosition::BOTTOM_LEFT->getReadable());
-        self::assertEquals('message_position.bottom_center', MessagePosition::BOTTOM_CENTER->getReadable());
-        self::assertEquals('message_position.bottom_right', MessagePosition::BOTTOM_RIGHT->getReadable());
+        $result = $position->getReadable();
+        $expected = 'message_position.' . $value;
+        self::assertEquals($expected, $result);
     }
 
     public function testSorted(): void
@@ -68,18 +84,12 @@ class MessagePositionTest extends TypeTestCase
         self::assertEquals($expected, $sorted);
     }
 
-    public function testValue(): void
+    /**
+     * @dataProvider getLabel
+     */
+    public function testValue(MessagePosition $position, string $expected): void
     {
-        self::assertEquals('top-left', MessagePosition::TOP_LEFT->value);
-        self::assertEquals('top-center', MessagePosition::TOP_CENTER->value);
-        self::assertEquals('top-right', MessagePosition::TOP_RIGHT->value);
-
-        self::assertEquals('center-left', MessagePosition::CENTER_LEFT->value);
-        self::assertEquals('center-center', MessagePosition::CENTER_CENTER->value);
-        self::assertEquals('center-right', MessagePosition::CENTER_RIGHT->value);
-
-        self::assertEquals('bottom-left', MessagePosition::BOTTOM_LEFT->value);
-        self::assertEquals('bottom-center', MessagePosition::BOTTOM_CENTER->value);
-        self::assertEquals('bottom-right', MessagePosition::BOTTOM_RIGHT->value);
+        $value = $position->value;
+        self::assertEquals($expected, $value);
     }
 }

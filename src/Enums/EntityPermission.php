@@ -75,6 +75,14 @@ enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterfa
     }
 
     /**
+     * Returns if the given name is equal to this name, ignoring case consideration.
+     */
+    public function matchName(string $name): bool
+    {
+        return 0 === \strcasecmp($name, $this->name);
+    }
+
+    /**
      * @return EntityPermission[]
      */
     public static function sorted(): array
@@ -90,7 +98,7 @@ enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterfa
     }
 
     /**
-     * Find an entity permission value from the given name.
+     * Find an entity permission value from the given name, ignoring case consideration.
      */
     public static function tryFindValue(string $name, int $default = RoleBuilder::INVALID_VALUE): int
     {
@@ -98,12 +106,14 @@ enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterfa
     }
 
     /**
-     * Find an entity permission from the given name.
+     * Find an entity permission from the given name, ignoring case consideration.
+     *
+     * @see EntityPermission::matchName()
      */
     public static function tryFromName(string $name): ?EntityPermission
     {
         foreach (EntityPermission::cases() as $permission) {
-            if (0 === \strcasecmp($name, $permission->name)) {
+            if ($permission->matchName($name)) {
                 return $permission;
             }
         }

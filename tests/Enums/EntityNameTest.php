@@ -33,10 +33,11 @@ use PHPUnit\Framework\TestCase;
  */
 class EntityNameTest extends TestCase
 {
-    public function getMatch(): array
+    public function getMatchValue(): array
     {
         return [
-            [EntityName::CALCULATION, 'EntityCalculation', true],
+            [EntityName::CALCULATION, 'EntityCalculation'],
+            [EntityName::CALCULATION, 'entityCalculation'],
             [EntityName::CALCULATION, 'Fake', false],
         ];
     }
@@ -186,11 +187,11 @@ class EntityNameTest extends TestCase
     }
 
     /**
-     * @dataProvider getMatch
+     * @dataProvider getMatchValue
      */
-    public function testMatch(EntityName $name, string $value, bool $expected): void
+    public function testMatch(EntityName $name, string $value, bool $expected = true): void
     {
-        $result = $name->match($value);
+        $result = $name->matchValue($value);
         self::assertEquals($expected, $result);
     }
 

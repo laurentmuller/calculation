@@ -15,18 +15,15 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * Type to change the profile of the current (logged) user.
+ * Type to change the password of the current (logged) user.
  *
  * @template-extends AbstractEntityType<User>
  */
@@ -68,12 +65,8 @@ class ProfileChangePasswordType extends AbstractEntityType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('current_password')
-            ->label('user.password.current')
-            ->constraints(new NotBlank(), new UserPassword(['message' => 'current_password.invalid']))
-            ->notMapped()
-            ->autocomplete('current-password')
-            ->add(PasswordType::class);
+        $helper->field('currentPassword')
+            ->addCurrentPasswordType();
 
         $helper->field('plainPassword')
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
@@ -93,22 +86,20 @@ class ProfileChangePasswordType extends AbstractEntityType
      */
     private function validate(ExecutionContextInterface $context): void
     {
-        /** @var Form $root */
+        /** @var FormInterface $root */
         $root = $context->getRoot();
 
-        // not checked so skip
-        /** @var bool|mixed $checkPassword */
-        $checkPassword = $root->get('checkPassword')->getData();
-        if (\is_bool($checkPassword) && !$checkPassword) {
+        // must check password?
+        if (!$root->get('checkPassword')->getData()) {
             return;
         }
 
         // check password
-        /** @var Form $password */
         $password = $root->get('plainPassword');
-        $violations = $context->getValidator()->validate($password->getData(), [
-            new NotCompromisedPassword(),
-        ]);
+        $violations = $context->getValidator()->validate(
+            $password->getData(),
+            new NotCompromisedPassword()
+        );
 
         // if compromised assign the error to the password field
         if ($violations->count() > 0 && \method_exists($violations, '__toString')) {

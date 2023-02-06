@@ -36,6 +36,24 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
+    public function getMatchName(): array
+    {
+        return [
+            [EntityPermission::ADD, 'add'],
+            [EntityPermission::ADD, 'AdD'],
+            [EntityPermission::ADD, 'Add'],
+            [EntityPermission::ADD, 'ADD'],
+            [EntityPermission::DELETE, 'DELETE'],
+            [EntityPermission::EDIT, 'EDIT'],
+            [EntityPermission::EXPORT, 'EXPORT'],
+            [EntityPermission::LIST, 'LIST'],
+            [EntityPermission::SHOW, 'SHOW'],
+
+            [EntityPermission::ADD, '', false],
+            [EntityPermission::ADD, 'FAKE', false],
+        ];
+    }
+
     public function getTryFindValue(): array
     {
         return [
@@ -118,6 +136,15 @@ class EntityPermissionTest extends TestCase
     {
         $label = $permission->getReadable();
         self::assertEquals($expected, $label);
+    }
+
+    /**
+     * @dataProvider getMatchName
+     */
+    public function testMatchName(EntityPermission $permission, string $name, bool $expected = true): void
+    {
+        $result = $permission->matchName($name);
+        self::assertEquals($expected, $result);
     }
 
     public function testSorted(): void

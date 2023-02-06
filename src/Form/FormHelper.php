@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\FaxType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
@@ -33,7 +34,6 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -243,6 +243,14 @@ class FormHelper
     }
 
     /**
+     * Add a current password type to the builder and reset all values to default.
+     */
+    public function addCurrentPasswordType(): self
+    {
+        return $this->add(CurrentPasswordType::class);
+    }
+
+    /**
      * Add a date type to the builder and reset all values to default.
      */
     public function addDateType(): self
@@ -361,14 +369,6 @@ class FormHelper
             ->updateAttribute('scale', $scale)
             ->updateOption('html5', true)
             ->add(NumberType::class);
-    }
-
-    /**
-     * Add a password type to the builder and reset all values to default.
-     */
-    public function addPasswordType(): self
-    {
-        return $this->add(PasswordType::class);
     }
 
     /**

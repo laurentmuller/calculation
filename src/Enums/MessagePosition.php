@@ -25,7 +25,7 @@ use Elao\Enum\ReadableEnumTrait;
  *
  * @implements SortableEnumInterface<MessagePosition>
  */
-#[ReadableEnum(prefix: 'message_position.')]
+#[ReadableEnum(prefix: 'message_position.', useValueAsDefault: true)]
 enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use DefaultEnumTrait;
@@ -34,49 +34,41 @@ enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterf
     /*
      * Bottom center position.
      */
-    #[EnumCase('bottom_center')]
     case BOTTOM_CENTER = 'bottom-center';
     /*
      * Bottom left position.
      */
-    #[EnumCase('bottom_left')]
     case BOTTOM_LEFT = 'bottom-left';
     /*
      * Bottom right position.
      */
-    #[EnumCase('bottom_right', ['default' => true])]
+    #[EnumCase(extras: ['default' => true])]
     case BOTTOM_RIGHT = 'bottom-right';
     /*
      * Center position.
      */
-    #[EnumCase('center_center')]
     case CENTER_CENTER = 'center-center';
     /*
      * Center left position.
      */
-    #[EnumCase('center_left')]
     case CENTER_LEFT = 'center-left';
     /*
      * Center right position.
      */
-    #[EnumCase('center_right')]
     case CENTER_RIGHT = 'center-right';
     /*
      * Top center position.
      */
-    #[EnumCase('top_center')]
     case TOP_CENTER = 'top-center';
 
     /*
      * Top left position.
      */
-    #[EnumCase('top_left')]
     case TOP_LEFT = 'top-left';
 
     /*
      * Top right position.
      */
-    #[EnumCase('top_right')]
     case TOP_RIGHT = 'top-right';
 
     /**

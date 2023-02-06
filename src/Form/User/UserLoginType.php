@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
-use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
@@ -44,9 +43,7 @@ class UserLoginType extends AbstractUserCaptchaType
             ->add(UserNameType::class);
 
         $helper->field('password')
-            ->autocomplete('current-password')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
-            ->addPasswordType();
+            ->addCurrentPasswordType();
 
         parent::addFormFields($helper);
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\StrengthLevel;
+use App\Interfaces\PropertyServiceInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
@@ -30,8 +31,11 @@ class StrengthLevelTest extends TypeTestCase
 
     public function testDefault(): void
     {
+        $expected = StrengthLevel::NONE;
         $default = StrengthLevel::getDefault();
-        self::assertEquals(StrengthLevel::NONE, $default);
+        self::assertEquals($expected, $default);
+        $default = PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL;
+        self::assertEquals($expected, $default);
     }
 
     public function testLabel(): void

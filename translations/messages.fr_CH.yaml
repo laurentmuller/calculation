@@ -1339,15 +1339,15 @@ notification:
   exception: La trace de la pile d'exception est en pièce jointe.
 # enumerations
 message_position:
-  top_left: En haut à gauche
-  top_center: En haut centré
-  top_right: En haut à droite
-  center_left: Au milieu à gauche
-  center_center: Au milieu centré
-  center_right: Au milieu à droite
-  bottom_left: En bas à gauche
-  bottom_center: En bas centré
-  bottom_right: En bas à droite
+  top-left: En haut à gauche
+  top-center: En haut centré
+  top-right: En haut à droite
+  center-left: Au milieu à gauche
+  center-center: Au milieu centré
+  center-right: Au milieu à droite
+  bottom-left: En bas à gauche
+  bottom-center: En bas centré
+  bottom-right: En bas à droite
 strength_level:
   medium: Moyenne
   none: Aucune

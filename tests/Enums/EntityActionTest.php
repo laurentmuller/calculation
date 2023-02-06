@@ -31,9 +31,11 @@ class EntityActionTest extends TypeTestCase
 
     public function testDefault(): void
     {
+        $expected = EntityAction::EDIT;
         $default = EntityAction::getDefault();
-        self::assertEquals(EntityAction::EDIT, $default);
-        self::assertEquals(EntityAction::EDIT, PropertyServiceInterface::DEFAULT_ACTION);
+        self::assertEquals($expected, $default);
+        $default = PropertyServiceInterface::DEFAULT_ACTION;
+        self::assertEquals($expected, $default);
     }
 
     public function testLabel(): void

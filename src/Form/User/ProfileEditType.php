@@ -15,9 +15,6 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Type to update the user profile.
@@ -58,12 +55,8 @@ class ProfileEditType extends AbstractEntityType
             ->addEmailType();
 
         // current password
-        $helper->field('current_password')
-            ->label('user.password.current')
-            ->constraints(new NotBlank(), new UserPassword(['message' => 'current_password.invalid']))
-            ->notMapped()
-            ->autocomplete('current-password')
-            ->add(PasswordType::class);
+        $helper->field('currentPassword')
+            ->addCurrentPasswordType();
 
         // image
         $helper->field('imageFile')

@@ -13,15 +13,12 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\AbstractEntity;
-use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Repeat password type.
@@ -38,18 +35,6 @@ class RepeatPasswordType extends AbstractType
      */
     final public const PASSWORD_LABEL = 'user.password.label';
 
-    public function __construct(private readonly UserPasswordHasherInterface $hasher)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder->addEventListener(FormEvents::SUBMIT, $this->onSubmit(...));
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -61,6 +46,10 @@ class RepeatPasswordType extends AbstractType
             'invalid_message' => 'password.mismatch',
             'first_options' => self::getPasswordOptions(),
             'second_options' => self::getConfirmOptions(),
+            'constraint' => [
+                new NotBlank(),
+                new Length(min: 6, max: AbstractEntity::MAX_STRING_LENGTH),
+            ],
         ]);
     }
 
@@ -93,6 +82,7 @@ class RepeatPasswordType extends AbstractType
     {
         return [
             'label' => self::PASSWORD_LABEL,
+            'hash_property_path' => 'password',
             'attr' => [
                 'minlength' => 6,
                 'maxlength' => AbstractEntity::MAX_STRING_LENGTH,
@@ -100,20 +90,5 @@ class RepeatPasswordType extends AbstractType
                 'autocomplete' => 'new-password',
             ],
         ];
-    }
-
-    /**
-     * Handles the submit event.
-     */
-    private function onSubmit(SubmitEvent $event): void
-    {
-        $form = $event->getForm();
-        /** @psalm-var ?User $data */
-        $data = $form->getParent()?->getData();
-        if ($data instanceof User) {
-            $plainPassword = (string) $form->getData();
-            $encodedPassword = $this->hasher->hashPassword($data, $plainPassword);
-            $data->setPassword($encodedPassword);
-        }
     }
 }

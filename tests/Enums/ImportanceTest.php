@@ -31,7 +31,8 @@ class ImportanceTest extends TypeTestCase
     public function testDefault(): void
     {
         $default = Importance::getDefault();
-        self::assertEquals(Importance::LOW, $default);
+        $expected = Importance::LOW;
+        self::assertEquals($expected, $default);
     }
 
     public function testLabel(): void

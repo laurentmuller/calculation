@@ -46,7 +46,7 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => User::class]);
+        $resolver->setDefault('data_class', User::class);
     }
 
     /**

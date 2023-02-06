@@ -53,9 +53,7 @@ abstract class AbstractEntityType extends AbstractHelperType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => $this->className,
-        ]);
+        $resolver->setDefault('data_class', $this->className);
     }
 
     /**

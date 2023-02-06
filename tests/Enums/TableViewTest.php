@@ -31,9 +31,11 @@ class TableViewTest extends TypeTestCase
 
     public function testDefault(): void
     {
+        $expected = TableView::TABLE;
         $default = TableView::getDefault();
-        self::assertEquals(TableView::TABLE, $default);
-        self::assertEquals(TableView::TABLE, PropertyServiceInterface::DEFAULT_DISPLAY_MODE);
+        self::assertEquals($expected, $default);
+        $default = PropertyServiceInterface::DEFAULT_DISPLAY_MODE;
+        self::assertEquals($expected, $default);
     }
 
     public function testLabel(): void

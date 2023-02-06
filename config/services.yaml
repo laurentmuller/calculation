@@ -81,3 +81,7 @@ services:
     monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
+
+    #override because repeated password is not take into account
+    form.listener.password_hasher:
+        class: App\Listener\PasswordHasherListener

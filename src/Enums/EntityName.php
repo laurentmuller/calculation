@@ -103,11 +103,11 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     }
 
     /**
-     * Returns if the given value is equal to this value.
+     * Returns if the given value is equal to this value, ignoring case consideration.
      */
-    public function match(string $value): bool
+    public function matchValue(string $value): bool
     {
-        return $this->value === $value;
+        return 0 === \strcasecmp($value, $this->value);
     }
 
     /**

@@ -25,8 +25,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update calculation totals.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 final class CalculationService implements ServiceSubscriberInterface
 {

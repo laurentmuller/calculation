@@ -19,8 +19,6 @@ use Doctrine\ORM\EntityManagerInterface;
  * Category provider.
  *
  * @template-extends EntityProvider<Category>
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CategoryProvider extends EntityProvider
 {

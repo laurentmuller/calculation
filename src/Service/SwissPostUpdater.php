@@ -28,8 +28,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to import zip codes, cities and streets from Switzerland.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class SwissPostUpdater implements ServiceSubscriberInterface
 {

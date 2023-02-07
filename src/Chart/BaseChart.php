@@ -38,8 +38,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $plotOptions the plot options.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $lang        the language.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $title       the language.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class BaseChart extends Highchart implements ServiceSubscriberInterface
 {

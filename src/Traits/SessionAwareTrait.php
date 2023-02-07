@@ -19,6 +19,8 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
  * Trait to get or set values within session.
+ *
+ * @property \Psr\Container\ContainerInterface $container
  */
 trait SessionAwareTrait
 {

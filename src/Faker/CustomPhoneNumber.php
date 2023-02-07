@@ -15,24 +15,14 @@ namespace App\Faker;
 /**
  * Faker provider to generate custom phone numbers.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @property \Faker\UniqueGenerator $unique
  */
 class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
 {
-    /**
-     * Swiss phone number formats.
-     *
-     * @psalm-var mixed
-     */
-    protected static $formats = [
-        '0## ### ## ##',
-    ];
+    /** @psalm-var mixed */
+    protected static $formats = ['0## ### ## ##'];
 
-    /**
-     * Swiss mobile (cell) phone number formats.
-     *
-     * @psalm-var array
-     */
+    /** @psalm-var array */
     protected static $mobileFormats = [
         // Local
         '075 ### ## ##',

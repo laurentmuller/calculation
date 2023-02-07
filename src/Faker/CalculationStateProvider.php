@@ -19,8 +19,6 @@ use Doctrine\ORM\EntityManagerInterface;
  * Calculation state provider.
  *
  * @template-extends EntityProvider<CalculationState>
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalculationStateProvider extends EntityProvider
 {

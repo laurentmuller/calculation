@@ -30,8 +30,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to display an alpha captcha.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterface
 {

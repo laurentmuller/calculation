@@ -23,8 +23,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to read and cache log file.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class LogService implements ServiceSubscriberInterface
 {

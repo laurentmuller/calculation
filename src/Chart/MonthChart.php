@@ -19,8 +19,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Chart to display calculations by month.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class MonthChart extends BaseChart
 {

@@ -20,8 +20,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to generate and validate a captcha image.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CaptchaImageService implements ServiceSubscriberInterface
 {

@@ -28,8 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @see https://openweathermap.org/api
  *
  * @psalm-import-type OpenWeatherCityType from OpenWeatherDatabase
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class OpenWeatherService extends AbstractHttpClientService
 {

@@ -35,8 +35,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Listener to display flash messages when entities are updated.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class PersistenceListener implements DisableListenerInterface, EventSubscriber, ServiceSubscriberInterface
 {

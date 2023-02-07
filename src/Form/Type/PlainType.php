@@ -28,8 +28,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * This is useful for forms where certain field need to be shown but not editable.
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class PlainType extends AbstractType implements ServiceSubscriberInterface
 {

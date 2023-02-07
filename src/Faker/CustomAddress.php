@@ -15,7 +15,7 @@ namespace App\Faker;
 /**
  * Custom address.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @property \Faker\UniqueGenerator $unique
  */
 class CustomAddress extends \Faker\Provider\fr_CH\Address
 {

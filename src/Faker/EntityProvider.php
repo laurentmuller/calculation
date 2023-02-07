@@ -21,7 +21,7 @@ use Faker\Provider\Base;
  *
  * @template T of \App\Entity\AbstractEntity
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @property \Faker\UniqueGenerator $unique
  */
 class EntityProvider extends Base
 {

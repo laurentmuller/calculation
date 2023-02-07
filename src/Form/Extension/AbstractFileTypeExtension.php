@@ -25,10 +25,14 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 {
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param array<array-key, mixed> $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        $this->updateAttributes($form, $view->vars['attr'], $options);
+        /** @psalm-param array<array-key, mixed> $attributes */
+        $attributes = &$view->vars['attr'];
+        $this->updateAttributes($form, $attributes, $options);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -54,11 +58,8 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
     /**
      * Updates attributes.
      *
-     * @param FormInterface $form       the form
-     * @param array         $attributes the attributes to update
-     * @param array         $options    the options
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @psalm-param array<array-key, mixed> $attributes
+     * @psalm-param array<array-key, mixed> $options
      */
     protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void
     {

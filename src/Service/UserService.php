@@ -28,8 +28,6 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage user properties.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class UserService implements PropertyServiceInterface, ServiceSubscriberInterface
 {

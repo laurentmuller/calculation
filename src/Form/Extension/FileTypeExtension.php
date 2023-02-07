@@ -31,6 +31,9 @@ class FileTypeExtension extends AbstractFileTypeExtension
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param array<array-key, mixed> $attributes
+     * @psalm-param array<array-key, mixed> $options
      */
     protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void
     {
@@ -49,9 +52,7 @@ class FileTypeExtension extends AbstractFileTypeExtension
     /**
      * Update an option.
      *
-     * @param FormConfigInterface $configuration the form configuration to get value from
-     * @param array               $options       the options array to update
-     * @param string              $name          the option name to search for
+     * @psalm-param array<array-key, mixed> $options
      *
      * @psalm-suppress MixedAssignment
      */

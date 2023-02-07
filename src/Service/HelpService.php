@@ -61,8 +61,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      dialogs: HelpDialogType[]|null,
  *      entities: HelpEntityType[]|null,
  *      mainMenu: HelpMainMenuType|null}
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class HelpService implements ServiceSubscriberInterface
 {

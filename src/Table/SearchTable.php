@@ -25,8 +25,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * The search table.
  *
  * @psalm-import-type SearchType from SearchService
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 {

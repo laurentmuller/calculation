@@ -15,12 +15,15 @@ namespace App\Faker;
 /**
  * Faker provider to generate custom person.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @property \Faker\UniqueGenerator $unique
  */
 class CustomPerson extends \Faker\Provider\fr_CH\Person
 {
     /** @psalm-var mixed */
-    protected static $titleFemale = ['Madame', 'Mademoiselle'];
+    protected static $titleFemale = [
+        'Madame',
+        'Mademoiselle',
+    ];
 
     /** @psalm-var mixed */
     protected static $titleMale = ['Monsieur'];

@@ -22,8 +22,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Chart to display calculations by state.
  *
  * @psalm-import-type QueryCalculation from CalculationStateRepository
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class StateChart extends BaseChart
 {

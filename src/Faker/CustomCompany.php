@@ -15,7 +15,7 @@ namespace App\Faker;
 /**
  * Faker provider to generate company names.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @property \Faker\UniqueGenerator $unique
  */
 class CustomCompany extends \Faker\Provider\fr_CH\Company
 {

@@ -147,4 +147,11 @@ class DataResults implements \JsonSerializable
             TableInterface::PARAM_ROWS => $this->rows,
         ];
     }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
 }

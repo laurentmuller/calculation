@@ -25,8 +25,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Class to generate entities.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSubscriberInterface
 {

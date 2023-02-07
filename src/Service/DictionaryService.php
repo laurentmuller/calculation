@@ -17,7 +17,7 @@ namespace App\Service;
  */
 class DictionaryService
 {
-    private const DICTIONNARY = [
+    private const DICTIONARY = [
         'Accointance',
         'Amphigouri',
         'Anonchalir',
@@ -89,18 +89,6 @@ class DictionaryService
      */
     public function getRandomWord(): string
     {
-        $dictionnary = $this->getWords();
-
-        return \strtoupper($dictionnary[\array_rand($dictionnary)]);
-    }
-
-    /**
-     * Gets words.
-     *
-     * @return string[]
-     */
-    public function getWords(): array
-    {
-        return self::DICTIONNARY;
+        return \strtoupper(self::DICTIONARY[\array_rand(self::DICTIONARY)]);
     }
 }

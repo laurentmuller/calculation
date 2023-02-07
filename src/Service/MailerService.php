@@ -28,8 +28,6 @@ use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
  * Service to send notifications.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class MailerService implements ServiceSubscriberInterface
 {

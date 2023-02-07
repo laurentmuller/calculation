@@ -41,8 +41,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     entityName: string,
  *     fieldName: string
  * }
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class SearchService implements ServiceSubscriberInterface
 {

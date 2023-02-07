@@ -22,8 +22,6 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
  * @Annotation
  *
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class Strength extends Constraint
 {

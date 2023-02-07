@@ -34,8 +34,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update the price of products.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ProductUpdater implements ServiceSubscriberInterface
 {

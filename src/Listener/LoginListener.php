@@ -24,8 +24,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Listener for the user interactive login event.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 #[AsEventListener(event: LoginSuccessEvent::class, method: 'onLoginSuccess')]
 class LoginListener implements ServiceSubscriberInterface

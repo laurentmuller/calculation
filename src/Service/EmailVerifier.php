@@ -27,8 +27,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 /**
  * Email verifier used for register new user.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class EmailVerifier implements ServiceSubscriberInterface
 {

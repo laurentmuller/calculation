@@ -211,27 +211,24 @@ final class Utils
     }
 
     /**
-     * Groups an array by a given key.
-     *
-     * Any additional keys (if any) will be used for grouping the next set of sub-arrays.
-     *
-     * @param array<array-key, mixed>           $array the array to be grouped
-     * @param callable(mixed):string|int|string $key   the key to group by
+     * Groups an array by the given key. Any additional keys will be used for grouping the next set of sub-arrays.
      *
      * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArrayAccess
      * @psalm-suppress MixedArrayOffset
      */
-    public static function groupBy(array $array, callable|int|string $key): array
+    public static function groupBy(array $array, string|int|callable $key): array
     {
         $result = [];
         foreach ($array as $value) {
             if (\is_callable($key)) {
-                $result[$key($value)][] = $value;
+                $entry = $key($value);
             } elseif (\is_object($value)) {
-                $result[$value->{$key}][] = $value;
+                $entry = $value->{$key};
             } else { // array
-                $result[$key][] = $value;
+                $entry = $value[$key];
             }
+            $result[$entry][] = $value;
         }
 
         // Recursively build a nested grouping if more parameters are supplied
@@ -239,11 +236,8 @@ final class Utils
         if (\func_num_args() > 2) {
             $args = \func_get_args();
             $callback = [__CLASS__, __FUNCTION__];
-            /** @psalm-var array $result */
-            /** @psalm-var int|string $value */
             foreach ($result as $groupKey => $value) {
                 $params = \array_merge([$value], \array_slice($args, 2, \func_num_args()));
-                /** @psalm-var mixed $value */
                 $value = \call_user_func_array($callback, $params);
                 $result[$groupKey] = $value;
             }

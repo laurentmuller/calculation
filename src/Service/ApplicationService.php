@@ -36,8 +36,6 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage application properties.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ApplicationService implements PropertyServiceInterface, ServiceSubscriberInterface
 {

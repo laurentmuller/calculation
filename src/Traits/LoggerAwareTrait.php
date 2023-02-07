@@ -17,6 +17,8 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
  * Extends logger trait wih the subscribed service.
+ *
+ * @property \Psr\Container\ContainerInterface $container
  */
 trait LoggerAwareTrait
 {

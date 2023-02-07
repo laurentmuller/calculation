@@ -26,8 +26,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * @see https://www.exchangerate-api.com/
  *
  * @phpstan-type RateType array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ExchangeRateService extends AbstractHttpClientService implements ServiceSubscriberInterface
 {

@@ -19,8 +19,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Abstract implementation of the alpha captcha interface.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSubscriberInterface
 {
@@ -30,7 +28,7 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSub
     /**
      * Constructor.
      */
-    public function __construct(protected DictionaryService $dictionary)
+    public function __construct(private readonly DictionaryService $dictionary)
     {
     }
 

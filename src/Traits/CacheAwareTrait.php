@@ -19,6 +19,8 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
  * Trait to save or load data from a cache.
+ *
+ * @property \Psr\Container\ContainerInterface $container
  */
 trait CacheAwareTrait
 {

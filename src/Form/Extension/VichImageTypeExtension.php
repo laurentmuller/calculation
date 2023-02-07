@@ -20,14 +20,9 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
  */
 class VichImageTypeExtension extends AbstractFileTypeExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-
-        // remove place holder
         $resolver->setDefault('placeholder', null);
     }
 

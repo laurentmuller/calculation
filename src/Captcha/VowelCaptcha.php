@@ -14,8 +14,6 @@ namespace App\Captcha;
 
 /**
  * Alpha captcha to validate a vowel.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class VowelCaptcha extends AbstractAlphaCaptcha
 {

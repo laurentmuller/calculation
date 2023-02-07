@@ -32,8 +32,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to archive calculations.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ArchiveService implements ServiceSubscriberInterface
 {

@@ -99,11 +99,9 @@ class LogTable extends AbstractTable implements \Countable
         $level = $this->getRequestString($request, self::PARAM_LEVEL, '');
         $channel = $this->getRequestString($request, self::PARAM_CHANNEL, '');
 
-        $query = parent::getDataQuery($request);
-        $query->addCustomData(self::PARAM_CHANNEL, $channel);
-        $query->addCustomData(self::PARAM_LEVEL, $level);
-
-        return $query;
+        return parent::getDataQuery($request)
+            ->addCustomData(self::PARAM_CHANNEL, $channel)
+            ->addCustomData(self::PARAM_LEVEL, $level);
     }
 
     /**
@@ -142,15 +140,11 @@ class LogTable extends AbstractTable implements \Countable
         $results = parent::handleQuery($query);
 
         if (null === $logFile = $this->service->getLogFile()) {
-            $results->status = Response::HTTP_PRECONDITION_FAILED;
-
-            return $results;
+            return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
         }
 
         if ($logFile->isEmpty()) {
-            $results->status = Response::HTTP_PRECONDITION_FAILED;
-
-            return $results;
+            return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
         }
 
         $entities = $logFile->getLogs();

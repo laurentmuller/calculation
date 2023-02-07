@@ -23,8 +23,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to resize images.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterface
 {

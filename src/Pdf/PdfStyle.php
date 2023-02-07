@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * This class describe a style that can be applied to a PDF document.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class PdfStyle implements PdfDocumentUpdaterInterface
 {
@@ -59,18 +57,23 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public function __construct()
     {
-        $this->reset();
+        $this->font = PdfFont::default();
+        $this->line = PdfLine::default();
+        $this->border = PdfBorder::all();
+        $this->textColor = PdfTextColor::black();
+        $this->drawColor = PdfDrawColor::black();
+        $this->fillColor = PdfFillColor::white();
     }
 
     public function __clone()
     {
         // deep clone
-        $this->drawColor = clone $this->drawColor;
-        $this->fillColor = clone $this->fillColor;
-        $this->textColor = clone $this->textColor;
-        $this->border = clone $this->border;
         $this->font = clone $this->font;
         $this->line = clone $this->line;
+        $this->border = clone $this->border;
+        $this->textColor = clone $this->textColor;
+        $this->drawColor = clone $this->drawColor;
+        $this->fillColor = clone $this->fillColor;
     }
 
     /**

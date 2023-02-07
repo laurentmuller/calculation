@@ -23,8 +23,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Type to register a new user.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSubscriberInterface
 {

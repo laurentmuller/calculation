@@ -23,8 +23,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service using the HttpClient.
+
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @property \Psr\Container\ContainerInterface $container
  */
 abstract class AbstractHttpClientService implements ServiceSubscriberInterface
 {

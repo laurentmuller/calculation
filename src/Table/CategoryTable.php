@@ -31,8 +31,6 @@ use Twig\Environment;
  * The categories table.
  *
  * @template-extends AbstractEntityTable<Category>
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {

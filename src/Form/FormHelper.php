@@ -299,8 +299,8 @@ class FormHelper
      *                            with a higher priority are called before
      *                            listeners with a lower priority.
      *
-     * @psalm-suppress ArgumentTypeCoercion
-     * @psalm-suppress MixedArgumentTypeCoercion
+     * @psalm-param FormEvents::PRE_SUBMIT|FormEvents::SUBMIT|FormEvents::POST_SUBMIT|FormEvents::PRE_SET_DATA|FormEvents::POST_SET_DATA $eventName
+     * @psalm-param callable(\Symfony\Component\Form\Event\PostSetDataEvent): void|callable(\Symfony\Component\Form\Event\PostSubmitEvent): void|callable(\Symfony\Component\Form\Event\PreSetDataEvent): void|callable(\Symfony\Component\Form\Event\PreSubmitEvent): void|callable(\Symfony\Component\Form\Event\SubmitEvent): void $listener
      */
     public function addEventListener(string $eventName, callable $listener, int $priority = 0): self
     {
@@ -417,12 +417,8 @@ class FormHelper
 
     /**
      * Adds a post-set-data-submit event listener.
-     * The FormEvents::POST_SET_DATA event is dispatched at the end of the Form::setData() method.
      *
-     * @param callable $listener the event listener
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
-     *                           listeners with a lower priority.
+     * @param callable(\Symfony\Component\Form\Event\PostSetDataEvent): void $listener
      */
     public function addPostSetDataListener(callable $listener, int $priority = 0): self
     {
@@ -431,12 +427,8 @@ class FormHelper
 
     /**
      * Adds a post-submit event listener.
-     * The FormEvents::POST_SUBMIT event is dispatched at the very end of the Form::submit().
      *
-     * @param callable $listener the event listener
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
-     *                           listeners with a lower priority.
+     * @param callable(\Symfony\Component\Form\Event\PostSubmitEvent): void $listener the event listener
      */
     public function addPostSubmitListener(callable $listener, int $priority = 0): self
     {
@@ -446,12 +438,7 @@ class FormHelper
     /**
      * Adds a pre-set-data event listener.
      *
-     * The FormEvents::PRE_SET_DATA event is dispatched at the beginning of the Form::setData() method.
-     *
-     * @param callable $listener the event listener
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
-     *                           listeners with a lower priority.
+     * @param callable(\Symfony\Component\Form\Event\PreSetDataEvent): void $listener the event listener
      */
     public function addPreSetDataListener(callable $listener, int $priority = 0): self
     {
@@ -461,12 +448,7 @@ class FormHelper
     /**
      * Adds a pre-submit event listener.
      *
-     * The PRE_SUBMIT event is dispatched at the beginning of the Form::submit() method.
-     *
-     * @param callable $listener the event listener
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
-     *                           listeners with a lower priority.
+     * @param callable(\Symfony\Component\Form\Event\PreSubmitEvent): void $listener the event listener
      */
     public function addPreSubmitListener(callable $listener, int $priority = 0): self
     {
@@ -502,13 +484,7 @@ class FormHelper
     /**
      * Adds a submit event listener.
      *
-     * The SUBMIT event is dispatched after the Form::submit() method
-     * has changed the view data by the request data.
-     *
-     * @param callable $listener the event listener
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
-     *                           listeners with a lower priority.
+     * @param callable(\Symfony\Component\Form\Event\SubmitEvent): void $listener the event listener
      */
     public function addSubmitListener(callable $listener, int $priority = 0): self
     {

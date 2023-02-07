@@ -24,8 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to import OpenWeatherMap cities.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class OpenWeatherCityUpdater
 {

@@ -22,8 +22,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * User rights type.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class UserRightsType extends RightsType implements ServiceSubscriberInterface
 {

@@ -15,7 +15,7 @@ namespace App\Captcha;
 /**
  * Alpha captcha to validate a consonant.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @property \Psr\Container\ContainerInterface $container
  */
 class ConsonantCaptcha extends AbstractAlphaCaptcha
 {

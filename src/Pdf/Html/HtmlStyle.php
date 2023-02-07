@@ -17,8 +17,6 @@ use App\Pdf\PdfStyle;
 
 /**
  * The HTML style.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class HtmlStyle extends PdfStyle
 {

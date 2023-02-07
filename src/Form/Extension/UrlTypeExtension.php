@@ -25,6 +25,8 @@ class UrlTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritdoc}
      *
+     * @psalm-param array<array-key, mixed> $options
+     *
      * @psalm-suppress MixedArrayAssignment
      * @psalm-suppress PropertyTypeCoercion
      */

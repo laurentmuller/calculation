@@ -303,19 +303,17 @@ class UtilsTest extends TestCase
 
     public function testGroupByCallable(): void
     {
-        /**
-         * @var array<array{id: int, value: string}> $array
-         */
+        /** @psalm-var array<array{id: int, value: string}> $array */
         $array = [
             ['id' => 1, 'value' => '1'],
             ['id' => 2, 'value' => '2'],
             ['id' => 2, 'value' => '3'],
         ];
+
+        /** @psalm-var callable(mixed): string $key */
         $key = fn (array $value): int => (int) $value['id'];
 
-        /**
-         * @var array<int, array> $result
-         */
+        /** @psalm-var array<int, array> $result */
         $result = Utils::groupBy($array, $key);
 
         self::assertArrayHasKey(1, $result);

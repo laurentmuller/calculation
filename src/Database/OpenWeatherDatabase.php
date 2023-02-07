@@ -123,13 +123,12 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param int    $limit   the maximum number of rows to return
      *
      * @pslam-return array<int, OpenWeatherCityType>
-     *
-     * @psalm-suppress PossiblyNullReference
      */
     public function findCityCountry(string $city, string $country, int $limit = 25): array
     {
         $city = $this->likeValue($city);
         $country = $this->likeValue($country);
+        /** @psalm-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
         $stmt->bindParam(':name', $city);
         $stmt->bindParam(':country', $country);
@@ -148,11 +147,10 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @param float  $longitude the city longitude
      *
      * @return bool true if success
-     *
-     * @psalm-suppress PossiblyNullReference
      */
     public function insertCity(int $id, string $name, string $country, float $latitude, float $longitude): bool
     {
+        /** @psalm-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_CITY);
         $stmt->bindParam(':id', $id, \SQLITE3_INTEGER);
         $stmt->bindParam(':name', $name);

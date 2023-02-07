@@ -26,7 +26,7 @@ class AddressTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      *
-     * @param string|null $value
+     * @param ?string $value
      *
      * @psalm-suppress DocblockTypeContradiction
      */
@@ -52,7 +52,7 @@ class AddressTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      *
-     * @param Address|null $value
+     * @param ?Address $value
      */
     public function transform(mixed $value): ?string
     {

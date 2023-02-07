@@ -485,9 +485,7 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<array{id: string, description: string, menus: array|null}> $menus
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
+     * @psalm-param HelpMenuType[] $menus
      */
     private function outputMenus(PdfTableBuilder $table, array $menus, int $indent = 0): void
     {
@@ -498,8 +496,10 @@ class HelpReport extends AbstractReport
                 ->add($menu['description'])
                 ->endRow();
 
-            if (isset($menu['menus'])) {
-                $this->outputMenus($table, $menu['menus'], $indent + 4);
+            /** @psalm-var HelpMenuType[]|null $menus */
+            $menus = $menu['menus'] ?? null;
+            if (null !== $menus) {
+                $this->outputMenus($table, $menus, $indent + 4);
             }
         }
     }

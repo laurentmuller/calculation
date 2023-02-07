@@ -215,29 +215,23 @@ final class Utils
      *
      * Any additional keys (if any) will be used for grouping the next set of sub-arrays.
      *
-     * @param array               $array the array to be grouped
-     * @param callable|int|string $key   a set of keys to group by
+     * @param array<array-key, mixed>           $array the array to be grouped
+     * @param callable(mixed):string|int|string $key   the key to group by
      *
      * @psalm-suppress MixedAssignment
-     * @psalm-suppress MixedArrayAccess
      * @psalm-suppress MixedArrayOffset
-     * @psalm-suppress PossiblyNullArrayOffset
      */
     public static function groupBy(array $array, callable|int|string $key): array
     {
-        $callable = \is_callable($key) ? $key : null;
-
-        // load the new array, splitting by the target key
         $result = [];
         foreach ($array as $value) {
-            if ($callable) {
-                $groupKey = $callable($value);
+            if (\is_callable($key)) {
+                $result[$key($value)][] = $value;
             } elseif (\is_object($value)) {
-                $groupKey = $value->{$key};
+                $result[$value->{$key}][] = $value;
             } else { // array
-                $groupKey = $value[$key] ?? null;
+                $result[$key][] = $value;
             }
-            $result[$groupKey][] = $value;
         }
 
         // Recursively build a nested grouping if more parameters are supplied

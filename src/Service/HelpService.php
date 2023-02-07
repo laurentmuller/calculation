@@ -51,7 +51,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * @psalm-type HelpMenuType = array{
  *      id: string,
  *      description: string,
- *      menus: array[]|null}
+ *      menus: array|null}
  * @psalm-type HelpMainMenuType = array{
  *      id: string,
  *      image: string|null,

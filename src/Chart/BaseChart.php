@@ -25,9 +25,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * High chart with method shortcuts.
  *
- * @method BaseChart style(array $styles) set the CSS style.
- * @method BaseChart xAxis(array $xAxis)  set the x-axis.
- * @method BaseChart yAxis(array $yAxis)  set the y-axis.
+ * @method BaseChart style(array $style) set the CSS style.
+ * @method BaseChart xAxis(array $xAxis) set the x-axis.
+ * @method BaseChart yAxis(array $yAxis) set the y-axis.
  *
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x-axis.
  * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y-axis.
@@ -169,8 +169,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Sets the chart title.
-     *
-     * @param ?string $title the title to set or null to hide
      */
     public function setTitle(?string $title): static
     {
@@ -182,8 +180,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Sets the chart type.
-     *
-     * @param string $type the chart type to set
      *
      * @psalm-param 'column'|'line'|'pie'|'spline' $type
      */
@@ -197,8 +193,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Sets the x-axis categories.
-     *
-     * @param mixed $categories the categories to set
      */
     public function setXAxisCategories(mixed $categories): self
     {

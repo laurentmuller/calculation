@@ -157,6 +157,7 @@ abstract class AbstractEntityController extends AbstractController
         $this->checkPermission($permission);
 
         // form
+        /** @psalm-var class-string<\Symfony\Component\Form\FormTypeInterface> $type  */
         $type = $this->getEditFormType();
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
@@ -220,9 +221,6 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @psalm-param literal-string $alias
      *
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     *
      * @psalm-return T[]
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -230,10 +228,12 @@ abstract class AbstractEntityController extends AbstractController
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         $sortedFields = null !== $field ? [$field => $mode] : [];
-
-        return $this->repository
+        /** @psalm-var T[] $result */
+        $result = $this->repository
             ->getSearchQuery($sortedFields, $criteria, $alias)
             ->getResult();
+
+        return $result;
     }
 
     /**

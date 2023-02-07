@@ -213,7 +213,10 @@ abstract class AbstractController extends BaseController
      *
      * @param mixed $data the initial data
      *
-     * @psalm-suppress ArgumentTypeCoercion
+     * @template T of \Symfony\Component\Form\FormTypeInterface
+     *
+     * @param class-string<T> $type
+     *
      * @psalm-suppress OverriddenMethodAccess
      */
     protected function createForm(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface

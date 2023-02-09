@@ -37,7 +37,7 @@ final class HtmlStyleFactory
     {
         return match (\strtolower($name)) {
             'h1' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.5, 2),
-            'h2' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2, 2),
+            'h2' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.0, 2),
             'h3' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.75, 2),
             'h4' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.5, 2),
             'h5' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.25, 2),

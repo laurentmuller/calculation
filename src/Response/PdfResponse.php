@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
  * The PdfResponse represents an HTTP response within a PDF document.
  *
  * @see PdfDocument
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class PdfResponse extends Response implements MimeTypeInterface
 {

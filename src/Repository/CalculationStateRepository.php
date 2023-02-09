@@ -27,14 +27,12 @@ use Doctrine\Persistence\ManagerRegistry;
  *      editable: boolean,
  *      color: string,
  *      count: int,
- *      items: float|string,
- *      total: float|string,
- *      margin: float|string,
- *      marginAmount: float|string}
+ *      items: float,
+ *      total: float,
+ *      margin: float,
+ *      marginAmount: float}
  *
  * @template-extends AbstractRepository<CalculationState>
- *
- * @psalm-suppress  MixedReturnTypeCoercion
  */
 class CalculationStateRepository extends AbstractRepository
 {

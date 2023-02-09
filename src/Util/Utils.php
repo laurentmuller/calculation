@@ -170,7 +170,13 @@ final class Utils
      */
     public static function getAccessor(): PropertyAccessorInterface
     {
-        return PropertyAccess::createPropertyAccessor();
+        /** @psalm-var PropertyAccessorInterface|null $accessor */
+        static $accessor = null;
+        if (null === $accessor) {
+            $accessor = PropertyAccess::createPropertyAccessor();
+        }
+
+        return $accessor;
     }
 
     /**
@@ -213,19 +219,22 @@ final class Utils
     /**
      * Groups an array by the given key. Any additional keys will be used for grouping the next set of sub-arrays.
      *
-     * @psalm-suppress MixedAssignment
-     * @psalm-suppress MixedArrayAccess
-     * @psalm-suppress MixedArrayOffset
+     * @psalm-param array<array-key, object|array> $array
+     * @psalm-param string|int|(callable(mixed):string|int) $key
      */
     public static function groupBy(array $array, string|int|callable $key): array
     {
         $result = [];
+
+        /** @psalm-param object|array $value */
         foreach ($array as $value) {
             if (\is_callable($key)) {
                 $entry = $key($value);
             } elseif (\is_object($value)) {
+                /** @psalm-var string|int $entry */
                 $entry = $value->{$key};
             } else { // array
+                /** @psalm-var string|int $entry */
                 $entry = $value[$key];
             }
             $result[$entry][] = $value;
@@ -236,8 +245,10 @@ final class Utils
         if (\func_num_args() > 2) {
             $args = \func_get_args();
             $callback = [__CLASS__, __FUNCTION__];
+            /** @psalm-param string|int $groupKey */
             foreach ($result as $groupKey => $value) {
                 $params = \array_merge([$value], \array_slice($args, 2, \func_num_args()));
+                /** @psalm-var array|object $value */
                 $value = \call_user_func_array($callback, $params);
                 $result[$groupKey] = $value;
             }
@@ -261,26 +272,22 @@ final class Utils
     /**
      * Sorts an array for the given field.
      *
-     * @param array  $array     the array to sort
-     * @param string $field     the field name to get values for
-     * @param bool   $ascending true to sort in ascending, false to sort in descending
-     *
-     * @psalm-suppress MixedArgument
+     * @param array<object|array> $array     the array to sort
+     * @param string              $field     the field name to get values for
+     * @param bool                $ascending true to sort in ascending, false to sort in descending
      */
     public static function sortField(array &$array, string $field, bool $ascending = true): void
     {
         $accessor = self::getAccessor();
-        \uasort($array, fn ($a, $b) => self::compare($a, $b, $field, $accessor, $ascending));
+        \uasort($array, fn (object|array $a, object|array $b): int => self::compare($a, $b, $field, $accessor, $ascending));
     }
 
     /**
      * Sorts an array for the given fields.
      *
-     * @param array               $array  the array to sort
-     * @param array<string, bool> $fields the array where the key is field name to sort and the value is ascending state
+     * @param array<object|array> $array  the array to sort
+     * @param array<string, bool> $fields the array where the key is field name to sort and the value is the ascending state
      *                                    (true to sort in ascending, false to sort in descending)
-     *
-     * @psalm-suppress MixedArgument
      */
     public static function sortFields(array &$array, array $fields): void
     {
@@ -291,16 +298,14 @@ final class Utils
             self::sortField($array, $field, $ascending);
         } elseif ($count > 1) {
             $accessor = self::getAccessor();
-            \uasort($array, function (mixed $a, mixed $b) use ($accessor, $fields): int {
-                $result = 0;
+            \uasort($array, function (object|array $a, object|array $b) use ($accessor, $fields): int {
                 foreach ($fields as $field => $ascending) {
-                    $result = self::compare($a, $b, $field, $accessor, $ascending);
-                    if (0 !== $result) {
-                        break;
+                    if (0 !== $result = self::compare($a, $b, $field, $accessor, $ascending)) {
+                        return $result;
                     }
                 }
 
-                return $result;
+                return 0;
             });
         }
     }

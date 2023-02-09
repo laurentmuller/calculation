@@ -18,26 +18,27 @@ use App\Traits\TranslatorAwareTrait;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
 use Laminas\Json\Expr;
+use Ob\HighchartsBundle\Highcharts\ChartOption;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
- * High chart with method shortcuts.
+ * Extends the High chart with method shortcuts.
  *
  * @method BaseChart style(array $style) set the CSS style.
  * @method BaseChart xAxis(array $xAxis) set the x-axis.
  * @method BaseChart yAxis(array $yAxis) set the y-axis.
  *
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $xAxis       the x-axis.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $yAxis       the y-axis.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $chart       the chart.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $credits     the credits.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $legend      the legend.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $tooltip     the tooltip.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $plotOptions the plot options.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $lang        the language.
- * @property \Ob\HighchartsBundle\Highcharts\ChartOption $title       the language.
+ * @property ChartOption $xAxis       the x-axis.
+ * @property ChartOption $yAxis       the y-axis.
+ * @property ChartOption $chart       the chart.
+ * @property ChartOption $credits     the credits.
+ * @property ChartOption $legend      the legend.
+ * @property ChartOption $tooltip     the tooltip.
+ * @property ChartOption $plotOptions the plot options.
+ * @property ChartOption $lang        the language.
+ * @property ChartOption $title       the language.
  */
 class BaseChart extends Highchart implements ServiceSubscriberInterface
 {

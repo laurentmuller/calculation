@@ -37,27 +37,22 @@ class CustomerGenerator extends AbstractEntityGenerator
             $style = (int) $generator->randomElement($styles);
             $gender = (string) $generator->randomElement($genders);
 
-            switch ($style) {
-                case 0: // company
-                    $customer->setCompany($generator->company())
-                        ->setEmail($generator->companyEmail());
-                    break;
-
-                case 1: // contact
-                    $customer->setTitle($generator->title($gender))
-                        ->setFirstName($generator->firstName($gender))
-                        ->setLastName($generator->lastName())
-                        ->setEmail($generator->email());
-                    break;
-
-                default: // both
-                    $customer->setCompany($generator->company())
-                        ->setFirstName($generator->firstName($gender))
-                        ->setTitle($generator->title($gender))
-                        ->setLastName($generator->lastName())
-                        ->setEmail($generator->email());
-                    break;
-            }
+            match ($style) {
+                // company
+                0 => $customer->setCompany($generator->company())
+                    ->setEmail($generator->companyEmail()),
+                // contact
+                1 => $customer->setTitle($generator->title($gender))
+                    ->setFirstName($generator->firstName($gender))
+                    ->setLastName($generator->lastName())
+                    ->setEmail($generator->email()),
+                // both
+                default => $customer->setCompany($generator->company())
+                    ->setFirstName($generator->firstName($gender))
+                    ->setTitle($generator->title($gender))
+                    ->setLastName($generator->lastName())
+                    ->setEmail($generator->email())
+            };
 
             $customer->setAddress($generator->streetAddress())
                 ->setZipCode($generator->postcode())

@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
+use App\Service\LogFilter;
 use App\Service\LogService;
+use App\Service\LogSorter;
 use App\Util\FileUtils;
-use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -34,11 +35,6 @@ class LogTable extends AbstractTable implements \Countable
      * The level parameter name.
      */
     final public const PARAM_LEVEL = 'level';
-
-    /**
-     * The created at column name.
-     */
-    private const COLUMN_DATE = 'createdAt';
 
     /**
      * Constructor.
@@ -61,8 +57,6 @@ class LogTable extends AbstractTable implements \Countable
      * Formats the channel.
      *
      * @throws \Twig\Error\Error
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function formatChannel(string $value, Log $log): string
     {
@@ -71,8 +65,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * Formats the date.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function formatCreatedAt(\DateTimeInterface $value, Log $log): string
     {
@@ -83,8 +75,6 @@ class LogTable extends AbstractTable implements \Countable
      * Format the level.
      *
      * @throws \Twig\Error\Error
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function formatLevel(string $value, Log $log): string
     {
@@ -148,31 +138,14 @@ class LogTable extends AbstractTable implements \Countable
         }
 
         $entities = $logFile->getLogs();
-        $results->totalNotFiltered = $logFile->count();
+        $results->totalNotFiltered = \count($entities);
 
         // filter
-        /** @var string|null $level */
-        $level = $query->customData[self::PARAM_LEVEL];
-        if ($isLevel = Utils::isString($level)) {
-            $entities = $this->filterLevel($entities, (string) $level);
-        }
-        /** @var string|null $channel */
-        $channel = $query->customData[self::PARAM_CHANNEL];
-        if ($isChannel = Utils::isString($channel)) {
-            $entities = $this->filterChannel($entities, (string) $channel);
-        }
-        $search = $query->search;
-        if (Utils::isString($search)) {
-            $entities = LogService::filter($entities, $search, $isLevel, $isChannel);
-        }
+        $entities = $this->filter($query, $entities);
         $results->filtered = \count($entities);
 
         // sort
-        $sort = $query->sort;
-        $order = $query->order;
-        if (Utils::isString($sort)) {
-            $this->sort($entities, $sort, $order);
-        }
+        $this->sort($query, $entities);
 
         // limit
         $entities = \array_slice($entities, $query->offset, $query->limit);
@@ -180,12 +153,11 @@ class LogTable extends AbstractTable implements \Countable
         // map entities
         $results->rows = $this->mapEntities($entities);
 
-        // copy
-        $levels = \array_keys($logFile->getLevels());
-        $channels = \array_keys($logFile->getChannels());
-
         // ajax?
         if (!$query->callback) {
+            $level = (string) $query->customData[self::PARAM_LEVEL];
+            $channel = (string) $query->customData[self::PARAM_CHANNEL];
+
             // action parameters
             $results->params = [
                 self::PARAM_LEVEL => $level,
@@ -195,9 +167,9 @@ class LogTable extends AbstractTable implements \Countable
             // custom data
             $results->customData = [
                 'level' => $level,
-                'levels' => $levels,
                 'channel' => $channel,
-                'channels' => $channels,
+                'levels' => \array_keys($logFile->getLevels()),
+                'channels' => \array_keys($logFile->getChannels()),
                 'file' => $logFile->getFile(),
             ];
         }
@@ -206,57 +178,38 @@ class LogTable extends AbstractTable implements \Countable
     }
 
     /**
-     * Filters the log for the given channel.
+     * Filter logs.
      *
-     * @param Log[] $logs the logs to search in
+     * @param Log[] $entities
      *
-     * @return Log[] the filtered logs
+     * @return Log[]
      */
-    private function filterChannel(array $logs, string $value): array
+    private function filter(DataQuery $query, array $entities): array
     {
-        return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, $log->getChannel()));
-    }
+        $search = $query->search;
+        $level = (string) $query->customData[self::PARAM_LEVEL];
+        $channel = (string) $query->customData[self::PARAM_CHANNEL];
+        if (LogFilter::isFilter($search, $level, $channel)) {
+            $filter = new LogFilter($search, $level, $channel);
 
-    /**
-     * Filters the log for the given level.
-     *
-     * @param Log[] $logs the logs to search in
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterLevel(array $logs, string $value): array
-    {
-        return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, $log->getLevel()));
+            return $filter->apply($entities);
+        }
+
+        return $entities;
     }
 
     /**
      * Sort logs.
      *
-     * @param Log[]  $entities  the logs to sort
-     * @param string $field     the sorted field
-     * @param string $direction the sorted direction ('asc' or 'desc')
-     *
-     * @psalm-suppress ReferenceConstraintViolation
+     * @param Log[] $entities
      */
-    private function sort(array &$entities, string $field, string $direction): void
+    private function sort(DataQuery $query, array &$entities): void
     {
-        // default sorting?
-        if (self::COLUMN_DATE === $field && self::SORT_DESC === $direction) {
-            return;
+        $sort = $query->sort;
+        $ascending = self::SORT_ASC === $query->order;
+        if (!empty($sort) && !LogSorter::isDefaultSort($sort, $ascending)) {
+            $sorter = new LogSorter($sort, $ascending);
+            $sorter->sort($entities);
         }
-
-        // date? (single sort)
-        if (self::COLUMN_DATE === $field) {
-            \uasort($entities, fn (Log $a, Log $b): int => $a->getCreatedAt() <=> $b->getCreatedAt());
-
-            return;
-        }
-
-        // multiple-sort
-        $fields = [
-                $field => self::SORT_ASC === $direction,
-                self::COLUMN_DATE => false,
-            ];
-        Utils::sortFields($entities, $fields);
     }
 }

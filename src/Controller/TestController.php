@@ -572,6 +572,7 @@ class TestController extends AbstractController
 
     private function getCategories(EntityManagerInterface $manager): array
     {
+        /** @psalm-var array<int, Category> $categories */
         $categories = $manager->getRepository(Category::class)
             ->getQueryBuilderByGroup()
             ->getQuery()
@@ -611,6 +612,7 @@ class TestController extends AbstractController
 
     private function getStates(EntityManagerInterface $manager): array
     {
+        /** @psalm-var array<int, CalculationState> $states */
         $states = $manager->getRepository(CalculationState::class)
             ->getQueryBuilderByEditable()
             ->getQuery()

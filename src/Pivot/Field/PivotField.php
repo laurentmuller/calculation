@@ -106,15 +106,10 @@ class PivotField implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        $result = [
+        return \array_filter([
             'name' => $this->name,
-        ];
-
-        if ($this->title) {
-            $result['title'] = $this->title;
-        }
-
-        return $result;
+            'title' => $this->title,
+        ]);
     }
 
     /**

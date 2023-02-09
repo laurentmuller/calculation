@@ -155,9 +155,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @return string the formatted date
      *
-     * @psalm-suppress UndefinedFunction
-     *
-     * @throws SyntaxError if the date format or the time format is unknown
+     * @throws SyntaxError if the date or the time format is invalid
      */
     private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {

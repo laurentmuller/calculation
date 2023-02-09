@@ -119,22 +119,7 @@ class FormHelper
      */
     public function add(string $type): self
     {
-        // merge options and attributes
-        if (!empty($this->attributes)) {
-            $this->options['attr'] = $this->attributes;
-        }
-        if (!empty($this->rowAttributes)) {
-            $this->options['row_attr'] = $this->rowAttributes;
-        }
-        if (!empty($this->helpAttributes)) {
-            $this->options['help_attr'] = $this->helpAttributes;
-        }
-        if (!empty($this->labelAttributes)) {
-            $this->options['label_attr'] = $this->labelAttributes;
-        }
-
-        // add
-        $this->builder->add((string) $this->field, $type, $this->options);
+        $this->builder->add((string) $this->field, $type, $this->mergeAttributes());
 
         return $this->reset();
     }
@@ -293,14 +278,14 @@ class FormHelper
     /**
      * Adds an event listener to an event on this form builder.
      *
-     * @param string   $eventName the event name
-     * @param callable $listener  the event listener
+     * @param string   $eventName the event name to listen for
+     * @param callable $listener  the event listener to add
      * @param int      $priority  The priority of the listener. Listeners
      *                            with a higher priority are called before
      *                            listeners with a lower priority.
      *
      * @psalm-param FormEvents::PRE_SUBMIT|FormEvents::SUBMIT|FormEvents::POST_SUBMIT|FormEvents::PRE_SET_DATA|FormEvents::POST_SET_DATA $eventName
-     * @psalm-param callable(\Symfony\Component\Form\Event\PostSetDataEvent): void|callable(\Symfony\Component\Form\Event\PostSubmitEvent): void|callable(\Symfony\Component\Form\Event\PreSetDataEvent): void|callable(\Symfony\Component\Form\Event\PreSubmitEvent): void|callable(\Symfony\Component\Form\Event\SubmitEvent): void $listener
+     * @psalm-param callable(\Symfony\Component\Form\Event\PreSubmitEvent): void|callable(\Symfony\Component\Form\Event\SubmitEvent): void|callable(\Symfony\Component\Form\Event\PostSubmitEvent): void|callable(\Symfony\Component\Form\Event\PreSetDataEvent): void|callable(\Symfony\Component\Form\Event\PostSetDataEvent): void $listener
      */
     public function addEventListener(string $eventName, callable $listener, int $priority = 0): self
     {
@@ -418,7 +403,10 @@ class FormHelper
     /**
      * Adds a post-set-data-submit event listener.
      *
-     * @param callable(\Symfony\Component\Form\Event\PostSetDataEvent): void $listener
+     * @param callable(\Symfony\Component\Form\Event\PostSetDataEvent): void $listener the event listener to add
+     * @param int                                                            $priority The priority of the listener. Listeners
+     *                                                                                 with a higher priority are called before
+     *                                                                                 listeners with a lower priority.
      */
     public function addPostSetDataListener(callable $listener, int $priority = 0): self
     {
@@ -428,7 +416,10 @@ class FormHelper
     /**
      * Adds a post-submit event listener.
      *
-     * @param callable(\Symfony\Component\Form\Event\PostSubmitEvent): void $listener the event listener
+     * @param callable(\Symfony\Component\Form\Event\PostSubmitEvent): void $listener the event listener to add
+     * @param int                                                           $priority The priority of the listener. Listeners
+     *                                                                                with a higher priority are called before
+     *                                                                                listeners with a lower priority.
      */
     public function addPostSubmitListener(callable $listener, int $priority = 0): self
     {
@@ -438,7 +429,10 @@ class FormHelper
     /**
      * Adds a pre-set-data event listener.
      *
-     * @param callable(\Symfony\Component\Form\Event\PreSetDataEvent): void $listener the event listener
+     * @param callable(\Symfony\Component\Form\Event\PreSetDataEvent): void $listener the event listener to add
+     * @param int                                                           $priority The priority of the listener. Listeners
+     *                                                                                with a higher priority are called before
+     *                                                                                listeners with a lower priority.
      */
     public function addPreSetDataListener(callable $listener, int $priority = 0): self
     {
@@ -448,7 +442,10 @@ class FormHelper
     /**
      * Adds a pre-submit event listener.
      *
-     * @param callable(\Symfony\Component\Form\Event\PreSubmitEvent): void $listener the event listener
+     * @param callable(\Symfony\Component\Form\Event\PreSubmitEvent): void $listener the event listener to add
+     * @param int                                                          $priority The priority of the listener. Listeners
+     *                                                                               with a higher priority are called before
+     *                                                                               listeners with a lower priority.
      */
     public function addPreSubmitListener(callable $listener, int $priority = 0): self
     {
@@ -484,7 +481,10 @@ class FormHelper
     /**
      * Adds a submit event listener.
      *
-     * @param callable(\Symfony\Component\Form\Event\SubmitEvent): void $listener the event listener
+     * @param callable(\Symfony\Component\Form\Event\SubmitEvent): void $listener the event listener to add
+     * @param int                                                       $priority The priority of the listener. Listeners
+     *                                                                            with a higher priority are called before
+     *                                                                            listeners with a lower priority.
      */
     public function addSubmitListener(callable $listener, int $priority = 0): self
     {
@@ -522,11 +522,11 @@ class FormHelper
     /**
      * Add an Url type to the builder and reset all values to default.
      *
-     * @param ?string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
+     * @param string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
      */
-    public function addUrlType(?string $default_protocol = 'https'): self
+    public function addUrlType(string $default_protocol = 'https'): self
     {
-        return $this->updateOption('default_protocol', $default_protocol, true)
+        return $this->updateOption('default_protocol', $default_protocol)
             ->updateAttribute('inputmode', 'url')
             ->add(UrlType::class);
     }
@@ -574,7 +574,9 @@ class FormHelper
      */
     public function autocomplete(bool|string $autocomplete): self
     {
-        $autocomplete = empty($autocomplete) ? null : $autocomplete;
+        if ('' === $autocomplete) {
+            $autocomplete = null;
+        }
 
         return $this->updateAttribute('autocomplete', $autocomplete);
     }
@@ -696,8 +698,6 @@ class FormHelper
 
     /**
      * Sets the help parameters.
-     *
-     * @param array $parameters the help parameters
      */
     public function helpParameters(array $parameters): self
     {
@@ -709,19 +709,21 @@ class FormHelper
      */
     public function hideLabel(): self
     {
-        return $this->updateOption('label', false);
+        return $this->label(false);
     }
 
     /**
      * Sets the label property.
      *
-     * @param ?string $label the label identifier to translate
+     * @param string|bool $label the label identifier to translate or false to hide
      */
-    public function label(?string $label): self
+    public function label(string|bool $label): self
     {
-        $label = empty($label) ? null : $label;
+        if ('' === $label) {
+            $label = null;
+        }
 
-        return $this->updateOption('label_format', $label);
+        return $this->updateOption('label', $label);
     }
 
     /**
@@ -831,34 +833,33 @@ class FormHelper
      */
     public function tabindex(?int $index): self
     {
-        $index = \is_int($index) ? $index : null;
-
-        return $this->updateAttribute('tabIndex', $index);
+        return $this->updateAttribute('tabIndex', \is_int($index) ? $index : null);
     }
 
     /**
      * Updates an attribute.
-     *
-     * @param string $name  the attribute name
-     * @param mixed  $value the attribute value or null to remove
-     * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateAttribute(string $name, mixed $value, bool $force = false): self
+    public function updateAttribute(string $name, mixed $value): self
     {
-        return $this->updateEntry($this->attributes, $name, $value, $force);
+        if (null === $value) {
+            unset($this->attributes[$name]);
+        } else {
+            $this->attributes[$name] = $value;
+        }
+
+        return $this;
     }
 
     /**
      * Update attributes.
      *
-     * @param array<string, mixed> $attributes the attribute's name and value
-     * @param bool                 $force      true to put the option, even if the value is null
+     * @param array<string, mixed> $attributes the attribute's names and values
      */
-    public function updateAttributes(array $attributes, bool $force = false): self
+    public function updateAttributes(array $attributes): self
     {
         /** @psalm-var mixed $value */
         foreach ($attributes as $name => $value) {
-            $this->updateAttribute($name, $value, $force);
+            $this->updateAttribute($name, $value);
         }
 
         return $this;
@@ -866,51 +867,56 @@ class FormHelper
 
     /**
      * Updates a help attribute.
-     *
-     * @param string $name  the attribute name
-     * @param mixed  $value the attribute value
-     * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateHelpAttribute(string $name, mixed $value, bool $force = false): self
+    public function updateHelpAttribute(string $name, mixed $value): self
     {
-        return $this->updateEntry($this->helpAttributes, $name, $value, $force);
+        if (null === $value) {
+            unset($this->helpAttributes[$name]);
+        } else {
+            $this->helpAttributes[$name] = $value;
+        }
+
+        return $this;
     }
 
     /**
      * Updates a label attribute.
-     *
-     * @param string $name  the attribute name
-     * @param mixed  $value the attribute value
-     * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateLabelAttribute(string $name, mixed $value, bool $force = false): self
+    public function updateLabelAttribute(string $name, mixed $value): self
     {
-        return $this->updateEntry($this->labelAttributes, $name, $value, $force);
+        if (null === $value) {
+            unset($this->labelAttributes[$name]);
+        } else {
+            $this->labelAttributes[$name] = $value;
+        }
+
+        return $this;
     }
 
     /**
      * Updates an option.
-     *
-     * @param string $name  the option name
-     * @param mixed  $value the option value
-     * @param bool   $force true to put the option, even if the value is null
      */
-    public function updateOption(string $name, mixed $value, bool $force = false): self
+    public function updateOption(string $name, mixed $value): self
     {
-        return $this->updateEntry($this->options, $name, $value, $force);
+        if (null === $value) {
+            unset($this->options[$name]);
+        } else {
+            $this->options[$name] = $value;
+        }
+
+        return $this;
     }
 
     /**
      * Update options.
      *
      * @param array<string, mixed> $options the option's name and value
-     * @param bool                 $force   true to put the option, even if the value is null
      */
-    public function updateOptions(array $options, bool $force = false): self
+    public function updateOptions(array $options): self
     {
         /** @psalm-var mixed $value */
         foreach ($options as $name => $value) {
-            $this->updateOption($name, $value, $force);
+            $this->updateOption($name, $value);
         }
 
         return $this;
@@ -918,14 +924,16 @@ class FormHelper
 
     /**
      * Updates a row attribute.
-     *
-     * @param string $name  the attribute name
-     * @param mixed  $value the attribute value
-     * @param bool   $force true to put the attribute, even if the value is null
      */
-    public function updateRowAttribute(string $name, mixed $value, bool $force = false): self
+    public function updateRowAttribute(string $name, mixed $value): self
     {
-        return $this->updateEntry($this->rowAttributes, $name, $value, $force);
+        if (null === $value) {
+            unset($this->rowAttributes[$name]);
+        } else {
+            $this->rowAttributes[$name] = $value;
+        }
+
+        return $this;
     }
 
     /**
@@ -939,44 +947,45 @@ class FormHelper
     }
 
     /**
-     * Add one or more classes.
+     * Add one or more classes. Do nothing if the given name is empty.
      *
-     * @param array<string, mixed> $array the array attributes where to find and update existing classes
-     * @param string               $name  one or more space-separated classes to add
+     * @psalm-param array<string, mixed> $array
      */
-    private function addClasses(array &$array, string $name): self
+    private function addClasses(array &$array, string $classNames): self
     {
-        if ('' === \trim($name)) {
+        if ('' === \trim($classNames)) {
             return $this;
         }
 
-        /** @var string $existing */
-        $existing = $array['class'] ?? '';
-        $newValues = \array_filter(\explode(' ', $name));
+        $existing = (string) ($array['class'] ?? '');
         $oldValues = \array_filter(\explode(' ', $existing));
+        $newValues = \array_filter(\explode(' ', $classNames));
         $className = \implode(' ', \array_unique([...$oldValues, ...$newValues]));
 
-        return $this->updateEntry($array, 'class', empty($className) ? null : $className, false);
-    }
-
-    /**
-     * Update an entry in the given array.
-     *
-     * @param array<string, mixed> $array the array to update
-     * @param string               $name  the entry name
-     * @param mixed                $value the entry value
-     * @param bool                 $force true to put the entry, even if the value is null
-     *
-     * @psalm-suppress MixedAssignment
-     */
-    private function updateEntry(array &$array, string $name, mixed $value, bool $force): self
-    {
-        if (null !== $value || $force) {
-            $array[$name] = $value;
+        if (empty($className)) {
+            unset($array['class']);
         } else {
-            unset($array[$name]);
+            $array['class'] = $className;
         }
 
         return $this;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mergeAttributes(): array
+    {
+        $attributes = \array_filter([
+            'attr' => $this->attributes,
+            'row_attr' => $this->rowAttributes,
+            'help_attr' => $this->helpAttributes,
+            'label_attr' => $this->labelAttributes,
+        ]);
+        foreach ($attributes as $name => $value) {
+            $this->options[$name] = $value;
+        }
+
+        return $this->options;
     }
 }

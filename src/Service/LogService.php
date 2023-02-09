@@ -78,25 +78,6 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Filters the given logs.
-     *
-     * @param Log[]   $logs        the logs to search in
-     * @param ?string $value       the value to search for
-     * @param bool    $skipChannel true to skip search in channel
-     * @param bool    $skipLevel   true to skip search in level
-     *
-     * @return Log[] the filtered logs
-     */
-    public static function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
-    {
-        if (null !== $value && '' !== $value) {
-            return (new LogFilter($value, $skipChannel, $skipLevel))->filter($logs);
-        }
-
-        return $logs;
-    }
-
-    /**
      * Gets the log directory.
      */
     public function getDirectory(): string
@@ -145,11 +126,8 @@ class LogService implements ServiceSubscriberInterface
     {
         /** @var ?LogFile $value */
         $value = $this->getCacheValue(self::KEY_CACHE);
-        if ($value instanceof LogFile) {
-            return $value;
-        }
 
-        return $this->parseFile();
+        return $value instanceof LogFile ? $value : $this->parseFile();
     }
 
     /**

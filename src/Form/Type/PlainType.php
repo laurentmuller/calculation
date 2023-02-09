@@ -254,11 +254,17 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
             ]);
     }
 
+    private function formatPercent(float|int|string $value, array $options): string
+    {
+        $includeSign = $this->isOptionBool($options, 'percent_sign', true);
+        $decimals = $this->getOptionInt($options, 'percent_decimals', 2);
+        $roundingMode = $this->getOptionInt($options, 'percent_rounding_mode', \NumberFormatter::ROUND_HALFEVEN);
+
+        return FormatUtils::formatPercent((float) $value, $includeSign, $decimals, $roundingMode);
+    }
+
     /**
      * @throws TransformationFailedException if the value can not be mapped to a string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getDataValue(mixed $value, array $options): string
     {
@@ -388,22 +394,13 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     {
         $type = $this->getOptionString($options, 'number_pattern', '');
 
-        switch ($type) {
-            case self::NUMBER_IDENTIFIER:
-                return FormatUtils::formatId((int) $value);
-            case self::NUMBER_INTEGER:
-                return FormatUtils::formatInt((int) $value);
-            case self::NUMBER_PERCENT:
-                $includeSign = $this->isOptionBool($options, 'percent_sign', true);
-                $decimals = $this->getOptionInt($options, 'percent_decimals', 2);
-                $roundingMode = $this->getOptionInt($options, 'percent_rounding_mode', \NumberFormatter::ROUND_HALFEVEN);
-
-                return FormatUtils::formatPercent((float) $value, $includeSign, $decimals, $roundingMode);
-            case self::NUMBER_AMOUNT:
-                return FormatUtils::formatAmount((float) $value);
-            default:
-                return (string) $value;
-        }
+        return match ($type) {
+            self::NUMBER_IDENTIFIER => FormatUtils::formatId((int) $value),
+            self::NUMBER_INTEGER => FormatUtils::formatInt((int) $value),
+            self::NUMBER_AMOUNT => FormatUtils::formatAmount((float) $value),
+            self::NUMBER_PERCENT => $this->formatPercent($value, $options),
+            default => (string) $value
+        };
     }
 
     private function transformValue(mixed $value, array $options): mixed

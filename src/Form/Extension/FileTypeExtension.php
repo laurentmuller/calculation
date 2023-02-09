@@ -51,15 +51,13 @@ class FileTypeExtension extends AbstractFileTypeExtension
 
     /**
      * Update an option.
-     *
-     * @psalm-param array<array-key, mixed> $options
-     *
-     * @psalm-suppress MixedAssignment
      */
     private function updateOption(FormConfigInterface $configuration, array &$options, string $name): void
     {
         if ($configuration->hasOption($name)) {
-            $options[$name] = $configuration->getOption($name);
+            /** @psalm-var string $value */
+            $value = $configuration->getOption($name);
+            $options[$name] = $value;
         }
     }
 }

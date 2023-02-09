@@ -88,19 +88,11 @@ class UpdateEntityController extends AbstractController
             $listener->disableListeners();
             foreach ($calculations as $calculation) {
                 $style = (int) $generator->randomElement($styles);
-                switch ($style) {
-                    case 0:
-                        $calculation->setCustomer($generator->company());
-                        break;
-
-                    case 1:
-                        $calculation->setCustomer($generator->name(Person::GENDER_MALE));
-                        break;
-
-                    default:
-                        $calculation->setCustomer($generator->name(Person::GENDER_FEMALE));
-                        break;
-                }
+                match ($style) {
+                    0 => $calculation->setCustomer($generator->company()),
+                    1 => $calculation->setCustomer($generator->name(Person::GENDER_MALE)),
+                    default => $calculation->setCustomer($generator->name(Person::GENDER_FEMALE)),
+                };
 
                 /** @psalm-var CalculationState $state */
                 $state = $generator->randomElement($states);
@@ -140,29 +132,26 @@ class UpdateEntityController extends AbstractController
                 $style = (int) $generator->randomElement($styles);
                 $gender = (string) $generator->randomElement($genders);
 
-                switch ($style) {
-                    case 0: // company
-                        $this->replace($accessor, $customer, 'company', $generator->company())
-                            ->replace($accessor, $customer, 'title', null)
-                            ->replace($accessor, $customer, 'firstName', null)
-                            ->replace($accessor, $customer, 'lastName', null)
-                            ->replace($accessor, $customer, 'email', $generator->companyEmail());
-                        break;
-                    case 1: // contact
-                        $this->replace($accessor, $customer, 'company', null)
-                            ->replace($accessor, $customer, 'title', $generator->title($gender))
-                            ->replace($accessor, $customer, 'firstName', $generator->firstName($gender))
-                            ->replace($accessor, $customer, 'lastName', $generator->lastName())
-                            ->replace($accessor, $customer, 'email', $generator->email());
-                        break;
-                    default: // both
-                        $this->replace($accessor, $customer, 'company', $generator->company())
-                            ->replace($accessor, $customer, 'title', $generator->title($gender))
-                            ->replace($accessor, $customer, 'firstName', $generator->firstName($gender))
-                            ->replace($accessor, $customer, 'lastName', $generator->lastName())
-                            ->replace($accessor, $customer, 'email', $generator->email());
-                        break;
-                }
+                match ($style) {
+                    // company
+                    0 => $this->replace($accessor, $customer, 'company', $generator->company())
+                        ->replace($accessor, $customer, 'title', null)
+                        ->replace($accessor, $customer, 'firstName', null)
+                        ->replace($accessor, $customer, 'lastName', null)
+                        ->replace($accessor, $customer, 'email', $generator->companyEmail()),
+                    // contact
+                    1 => $this->replace($accessor, $customer, 'company', null)
+                        ->replace($accessor, $customer, 'title', $generator->title($gender))
+                        ->replace($accessor, $customer, 'firstName', $generator->firstName($gender))
+                        ->replace($accessor, $customer, 'lastName', $generator->lastName())
+                        ->replace($accessor, $customer, 'email', $generator->email()),
+                    // both
+                    default => $this->replace($accessor, $customer, 'company', $generator->company())
+                        ->replace($accessor, $customer, 'title', $generator->title($gender))
+                        ->replace($accessor, $customer, 'firstName', $generator->firstName($gender))
+                        ->replace($accessor, $customer, 'lastName', $generator->lastName())
+                        ->replace($accessor, $customer, 'email', $generator->email()),
+                };
 
                 // other fields
                 $this->replace($accessor, $customer, 'address', $generator->streetAddress())

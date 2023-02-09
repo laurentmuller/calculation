@@ -369,31 +369,32 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             case 'border':
                 $style->setBorder(PdfBorder::ALL);
                 break;
-
             case 'border-top':
                 $style->setBorder(PdfBorder::TOP);
                 break;
-
-            case 'border-right':
-                $style->setBorder(PdfBorder::RIGHT);
-                break;
-
             case 'border-bottom':
                 $style->setBorder(PdfBorder::BOTTOM);
                 break;
-
             case 'border-left':
                 $style->setBorder(PdfBorder::LEFT);
                 break;
-
+            case 'border-right':
+                $style->setBorder(PdfBorder::RIGHT);
+                break;
             case 'border-0':
                 $style->setBorder(PdfBorder::NONE);
                 break;
-
             case 'border-top-0':
-            case 'border-right-0':
+                $style->setBorder(PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::BOTTOM);
+                break;
             case 'border-bottom-0':
+                $style->setBorder(PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::TOP);
+                break;
             case 'border-left-0':
+                $style->setBorder(PdfBorder::RIGHT . PdfBorder::TOP . PdfBorder::BOTTOM);
+                break;
+            case 'border-right-0':
+                $style->setBorder(PdfBorder::LEFT . PdfBorder::TOP . PdfBorder::BOTTOM);
                 break;
         }
     }
@@ -409,29 +410,16 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         $pattern = '/m[tblrxy]{?}-[012345]/';
         if (\preg_match($pattern, $class)) {
             $value = (float) $class[-1];
-            switch ($class[1]) {
-                case 't':
-                    $style->setTopMargin($value);
-                    break;
-                case 'b':
-                    $style->setBottomMargin($value);
-                    break;
-                case 'l':
-                    $style->setLeftMargin($value);
-                    break;
-                case 'r':
-                    $style->setRightMargin($value);
-                    break;
-                case 'x':
-                    $style->setXMargins($value);
-                    break;
-                case 'y':
-                    $style->setYMargins($value);
-                    break;
-                default: // '-' = all
-                    $style->setMargins($value);
-                    break;
-            }
+            match ($class[1]) {
+                't' => $style->setTopMargin($value),
+                'b' => $style->setBottomMargin($value),
+                'l' => $style->setLeftMargin($value),
+                'r' => $style->setRightMargin($value),
+                'x' => $style->setXMargins($value),
+                'y' => $style->setYMargins($value),
+                // '-' = all
+                default => $style->setMargins($value)
+            };
         }
     }
 
@@ -459,7 +447,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                 foreach ($matches as $match) {
                     $name = \strtolower($match[1]);
                     $value = \trim($match[2]);
-
                     switch ($name) {
                         case 'color':
                             $color = PdfTextColor::create($value);

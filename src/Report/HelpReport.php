@@ -144,8 +144,7 @@ class HelpReport extends AbstractReport
     private function outputActions(array $actions, string $description): void
     {
         // check height
-        $height = self::LINE_HEIGHT * (empty($description) ? 0 : $this->getLinesCount($description, 0))
-            + 3 + self::LINE_HEIGHT;
+        $height = self::LINE_HEIGHT * (empty($description) ? 0 : $this->getLinesCount($description, 0.0)) + 3 + self::LINE_HEIGHT;
         if (!$this->isPrintable($height)) {
             $this->AddPage();
         } else {
@@ -216,9 +215,6 @@ class HelpReport extends AbstractReport
      * @psalm-param HelpDialogType $item
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function outputDialog(array $item): void
     {

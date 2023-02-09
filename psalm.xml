@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<psalm 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<psalm
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         allowStringToStandInForClass="true"
@@ -12,15 +13,58 @@
         errorLevel="1">
 
     <projectFiles>
-        <directory name="src" />
-        <directory name="tests" />
+        <directory name="src"/>
+        <directory name="tests"/>
         <ignoreFiles>
-            <directory name="vendor" />
+            <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
 
+    <issueHandlers>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Component\HttpFoundation\Response::$charset"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Component\HttpFoundation\Response::$content"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Component\HttpFoundation\Response::$headers"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Component\HttpFoundation\Response::$statusCode"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Component\HttpFoundation\Response::$statusText"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedProperty name="Symfony\Component\HttpFoundation\Response::$version"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+
+        <MissingPropertyType>
+            <errorLevel type="suppress">
+                <referencedProperty name="App\Faker\CustomCompany::$formats"/>
+            </errorLevel>
+        </MissingPropertyType>
+
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <file name="src/Service/DatabaseInfoService.php" />
+                <referencedMethod name="App\Service\DatabaseInfoService::getDatabase"/>
+            </errorLevel>
+        </InternalMethod>
+
+        <UndefinedFunction>
+            <errorLevel type="suppress">
+                <file name="src/Twig/FormatExtension.php" />
+                <referencedFunction name="App\Twig\FormatExtension::dateTimeFilter" />
+            </errorLevel>
+        </UndefinedFunction>
+    </issueHandlers>
+
     <plugins>
-        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin" />
-        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin" />
+        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
     </plugins>
 </psalm>

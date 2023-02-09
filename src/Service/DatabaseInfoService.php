@@ -84,7 +84,6 @@ final class DatabaseInfoService
             $this->database = [];
 
             try {
-                /** @psalm-suppress InternalMethod */
                 $params = $this->getConnection()->getParams();
                 foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
                     $value = $params[$key] ?? null;

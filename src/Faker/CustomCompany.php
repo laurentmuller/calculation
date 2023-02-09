@@ -19,7 +19,6 @@ namespace App\Faker;
  */
 class CustomCompany extends \Faker\Provider\fr_CH\Company
 {
-    /** @psalm-suppress MissingPropertyType */
     protected static $formats = [
         '{{lastName}} {{companySuffix}}',
         '{{lastName}} {{firstName}} {{companySuffix}}',

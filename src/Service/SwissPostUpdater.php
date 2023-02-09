@@ -112,9 +112,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      * @param string|UploadedFile|null $sourceFile the source file to import
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function import(string|UploadedFile|null $sourceFile): SwissPostUpdateResult
     {

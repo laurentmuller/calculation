@@ -391,7 +391,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     public function updatePositions(): self
     {
         $position = 0;
-
         foreach ($this->categories as $category) {
             if ($category->getPosition() !== $position) {
                 $category->setPosition($position);

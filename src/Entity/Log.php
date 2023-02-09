@@ -48,6 +48,8 @@ class Log extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?array $extra = null;
 
+    private ?string $formattedDate = null;
+
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
@@ -145,7 +147,11 @@ class Log extends AbstractEntity
      */
     public function getFormattedDate(): string
     {
-        return FormatUtils::formatDateTime($this->createdAt, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
+        if (null === $this->formattedDate) {
+            $this->formattedDate = FormatUtils::formatDateTime($this->createdAt, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
+        }
+
+        return $this->formattedDate;
     }
 
     /**

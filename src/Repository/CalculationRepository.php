@@ -24,8 +24,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Repository for calculation entity.
  *
  * @template-extends AbstractRepository<Calculation>
- *
- * @psalm-suppress  MixedReturnTypeCoercion
  */
 class CalculationRepository extends AbstractRepository
 {
@@ -839,8 +837,6 @@ class CalculationRepository extends AbstractRepository
      *      calculation_color: string,
      *      calculation_editable: bool
      * } $item
-     *
-     * @psalm-suppress MixedArrayAssignment
      */
     private function updateResult(array &$result, array $item, array $values): void
     {

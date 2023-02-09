@@ -23,8 +23,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for product entity.
  *
  * @template-extends AbstractCategoryItemRepository<Product>
- *
- * @psalm-suppress  MixedReturnTypeCoercion
  */
 class ProductRepository extends AbstractCategoryItemRepository
 {

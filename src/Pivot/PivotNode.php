@@ -50,7 +50,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * @param mixed              $key        the key
      * @param mixed              $value      the initial value
      */
-    public function __construct(protected AbstractAggregator $aggregator, private readonly mixed $key = null, mixed $value = null)
+    public function __construct(AbstractAggregator $aggregator, private readonly mixed $key = null, mixed $value = null)
     {
         parent::__construct($aggregator, $value);
     }
@@ -466,26 +466,15 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * {@inheritdoc}
-     *
-     * @psalm-suppress MixedAssignment
      */
     public function jsonSerialize(): ?array
     {
-        $result = [];
-        if (null !== $this->key) {
-            $result['key'] = $this->key;
-        }
-        if (null !== $this->title) {
-            $result['title'] = $this->title;
-        }
-        if (!empty($this->getValue())) {
-            $result['value'] = $this->aggregator->getFormattedResult();
-        }
-        if (!$this->isEmpty()) {
-            $result['children'] = $this->children;
-        }
-
-        return empty($result) ? null : $result;
+        return \array_filter([
+            'key' => $this->key,
+            'title' => $this->title,
+            'value' => $this->aggregator->getFormattedResult(),
+            'children' => empty($this->children) ? null : $this->children,
+        ]);
     }
 
     /**

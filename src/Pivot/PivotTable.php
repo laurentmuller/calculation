@@ -53,12 +53,12 @@ class PivotTable extends AbstractPivotAggregator
     /**
      * The root column.
      */
-    private PivotNode $rootCol;
+    private readonly PivotNode $rootCol;
 
     /**
      * The root row.
      */
-    private PivotNode $rootRow;
+    private readonly PivotNode $rootRow;
 
     /**
      * The row fields.
@@ -78,7 +78,7 @@ class PivotTable extends AbstractPivotAggregator
      * @param AbstractAggregator $aggregator the aggregator function
      * @param ?string            $title      the table title
      */
-    public function __construct(protected AbstractAggregator $aggregator, private ?string $title = null)
+    public function __construct(AbstractAggregator $aggregator, private ?string $title = null)
     {
         parent::__construct($aggregator);
 
@@ -256,22 +256,18 @@ class PivotTable extends AbstractPivotAggregator
      */
     public function jsonSerialize(): array
     {
-        $result = [];
-        $this->serialize($result, 'title', $this->title)
-
-            ->serialize($result, 'aggregator', Utils::getShortName($this->aggregator))
-            ->serialize($result, 'value', $this->aggregator->getFormattedResult())
-            ->serialize($result, 'keyField', $this->keyField)
-
-            ->serialize($result, 'dataField', $this->dataField)
-            ->serialize($result, 'columnFields', $this->columnFields)
-            ->serialize($result, 'rowFields', $this->rowFields)
-
-            ->serialize($result, 'column', $this->rootCol)
-            ->serialize($result, 'row', $this->rootRow)
-            ->serialize($result, 'cells', $this->cells);
-
-        return $result;
+        return \array_filter([
+            'title' => $this->title,
+            'aggregator' => Utils::getShortName($this->aggregator),
+            'value' => $this->aggregator->getFormattedResult(),
+            'keyField' => $this->keyField,
+            'dataField' => $this->dataField,
+            'columnFields' => $this->columnFields,
+            'rowFields' => $this->rowFields,
+            'column' => $this->rootCol,
+            'row' => $this->rootRow,
+            'cells' => $this->cells,
+        ]);
     }
 
     /**
@@ -334,24 +330,6 @@ class PivotTable extends AbstractPivotAggregator
     public function setTotalTitle(?string $totalTitle): self
     {
         $this->totalTitle = $totalTitle;
-
-        return $this;
-    }
-
-    /**
-     * Serialize a value. Do nothing if the value is null.
-     *
-     * @param array  $result the array to update
-     * @param string $name   the array key
-     * @param mixed  $value  the array value
-     *
-     * @psalm-suppress MixedAssignment
-     */
-    private function serialize(array &$result, string $name, mixed $value): self
-    {
-        if ($value) {
-            $result[$name] = $value;
-        }
 
         return $this;
     }

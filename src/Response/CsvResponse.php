@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * The CsvResponse represents an HTTP streamed response within an CSV content.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CsvResponse extends StreamedResponse implements MimeTypeInterface
 {

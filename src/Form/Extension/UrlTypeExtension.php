@@ -26,14 +26,14 @@ class UrlTypeExtension extends AbstractTypeExtension
      * {@inheritdoc}
      *
      * @psalm-param array<array-key, mixed> $options
-     *
-     * @psalm-suppress MixedArrayAssignment
-     * @psalm-suppress PropertyTypeCoercion
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if (isset($options['default_protocol'])) {
-            $view->vars['attr']['data-protocol'] = $options['default_protocol'];
+            /** @psalm-var string $value */
+            $value = $options['default_protocol'];
+            $vars = &$view->vars['attr'];
+            $vars['data-protocol'] = $value;
         }
     }
 

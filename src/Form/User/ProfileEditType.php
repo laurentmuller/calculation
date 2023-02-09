@@ -46,6 +46,8 @@ class ProfileEditType extends AbstractEntityType
     {
         // username
         $helper->field('username')
+            ->minLength(User::MIN_USERNAME_LENGTH)
+            ->maxLength(User::MAX_USERNAME_LENGTH)
             ->autocomplete('username')
             ->add(UserNameType::class);
 
@@ -56,6 +58,7 @@ class ProfileEditType extends AbstractEntityType
 
         // current password
         $helper->field('currentPassword')
+            ->label('user.password.current')
             ->addCurrentPasswordType();
 
         // image

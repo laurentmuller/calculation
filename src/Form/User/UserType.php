@@ -43,7 +43,7 @@ class UserType extends AbstractEntityType
             ->addHiddenType();
 
         $helper->field('username')
-            ->minLength(2)
+            ->minLength(User::MIN_USERNAME_LENGTH)
             ->maxLength(User::MAX_USERNAME_LENGTH)
             ->add(UserNameType::class);
 

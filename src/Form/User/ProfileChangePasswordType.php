@@ -82,6 +82,14 @@ class ProfileChangePasswordType extends AbstractEntityType
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getLabelPrefix(): ?string
+    {
+        return null;
+    }
+
+    /**
      * Conditional validation depending on the check password checkbox.
      */
     private function validate(ExecutionContextInterface $context): void

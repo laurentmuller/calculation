@@ -55,6 +55,7 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
         $helper->field('username')
             ->label('user.fields.username')
             ->autocomplete('username')
+            ->minLength(User::MIN_USERNAME_LENGTH)
             ->maxLength(User::MAX_USERNAME_LENGTH)
             ->add(UserNameType::class);
 

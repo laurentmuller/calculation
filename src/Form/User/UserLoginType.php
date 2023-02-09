@@ -39,6 +39,7 @@ class UserLoginType extends AbstractUserCaptchaType
     {
         $helper->field('username')
             ->autocomplete('username')
+            ->minLength(User::MIN_USERNAME_LENGTH)
             ->maxLength(User::MAX_USERNAME_LENGTH)
             ->add(UserNameType::class);
 

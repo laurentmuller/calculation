@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\AbstractEntity;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -84,7 +85,7 @@ class RepeatPasswordType extends AbstractType
             'label' => self::PASSWORD_LABEL,
             'hash_property_path' => 'password',
             'attr' => [
-                'minlength' => 6,
+                'minlength' => User::MIN_PASSWORD_LENGTH,
                 'maxlength' => AbstractEntity::MAX_STRING_LENGTH,
                 'class' => 'password-strength',
                 'autocomplete' => 'new-password',

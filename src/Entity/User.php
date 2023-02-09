@@ -49,9 +49,18 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     use TimestampableTrait;
 
     /**
-     * The maximum length for a username or email string property.
+     * The maximum length for a username property.
      */
     final public const MAX_USERNAME_LENGTH = 180;
+    /**
+     * The minimum length for the password.
+     */
+    final public const MIN_PASSWORD_LENGTH = 6;
+
+    /**
+     * The minimum length for a username property.
+     */
+    final public const MIN_USERNAME_LENGTH = 2;
 
     #[Assert\Email]
     #[Assert\NotBlank]
@@ -87,7 +96,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     private ?\DateTimeImmutable $lastLogin = null;
 
     #[Assert\NotBlank]
-    #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
     private ?string $password = null;
 
@@ -105,7 +113,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     private ?string $selector = null;
 
     #[Assert\NotBlank]
-    #[Assert\Length(max: self::MAX_USERNAME_LENGTH)]
+    #[Assert\Length(min: self::MIN_USERNAME_LENGTH, max: self::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: self::MAX_USERNAME_LENGTH, unique: true)]
     private ?string $username = null;
 

@@ -46,10 +46,6 @@ class UserControllerTest extends AbstractControllerTest
             ['/user/show/1', self::ROLE_ADMIN],
             ['/user/show/1', self::ROLE_SUPER_ADMIN],
 
-            ['/user/image/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/image/1', self::ROLE_ADMIN],
-            ['/user/image/1', self::ROLE_SUPER_ADMIN],
-
             ['/user/password/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/user/password/1', self::ROLE_ADMIN],
             ['/user/password/1', self::ROLE_SUPER_ADMIN],

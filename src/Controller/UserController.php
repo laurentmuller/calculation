@@ -17,7 +17,6 @@ use App\Enums\EntityPermission;
 use App\Form\User\ResetAllPasswordType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
-use App\Form\User\UserImageType;
 use App\Form\User\UserRightsType;
 use App\Form\User\UserType;
 use App\Interfaces\RoleInterface;
@@ -130,38 +129,6 @@ class UserController extends AbstractEntityController
         $doc = new UsersDocument($this, $entities, $storage);
 
         return $this->renderSpreadsheetDocument($doc);
-    }
-
-    /**
-     * Edit a user's image.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    #[Route(path: '/image/{id}', name: 'user_image', requirements: ['id' => Requirement::DIGITS])]
-    public function image(Request $request, User $item): Response
-    {
-        // form
-        $form = $this->createForm(UserImageType::class, $item);
-        if ($this->handleRequestForm($request, $form)) {
-            // save
-            $this->saveToDatabase($item);
-
-            // message
-            $this->successTrans('user.image.success', ['%name%' => $item->getDisplay()]);
-
-            // redirect
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
-        }
-
-        // parameters
-        $parameters = [
-            'params' => ['id' => $item->getId()],
-            'form' => $form,
-            'item' => $item,
-        ];
-
-        // render
-        return $this->render('user/user_image.html.twig', $parameters);
     }
 
     /**
@@ -284,7 +251,10 @@ class UserController extends AbstractEntityController
         }
 
         if (1 === \count($users)) {
-            return $this->redirectToRoute('user_reset', $generator->routeParams($request, \reset($users)->getId()));
+            $id = \reset($users)->getId();
+            $params = $generator->routeParams($request, $id);
+
+            return $this->redirectToRoute('user_reset', $params);
         }
 
         $name = 'users';

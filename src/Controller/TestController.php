@@ -221,7 +221,8 @@ class TestController extends AbstractController
             ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
             ->updateAttribute('data-url', $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL))
             ->minLength(User::MIN_PASSWORD_LENGTH)
-            ->constraints(new Length(min: User::MIN_PASSWORD_LENGTH), $passwordConstraint, $strengthConstraint)
+            ->maxLength(User::MAX_USERNAME_LENGTH)
+            ->constraints(new Length(min: User::MIN_PASSWORD_LENGTH, max: User::MAX_USERNAME_LENGTH), $passwordConstraint, $strengthConstraint)
             ->addTextType();
         foreach ($options as $option) {
             $helper->field($option)

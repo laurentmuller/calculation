@@ -46,6 +46,8 @@ class CalculationTable extends AbstractEntityTable
      * Render the overall margin column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @noinspection PhpUnused
      */
     public function formatOverallMargin(float $margin, Calculation $entity): string
     {
@@ -97,7 +99,7 @@ class CalculationTable extends AbstractEntityTable
     protected function search(DataQuery $query, QueryBuilder $builder): void
     {
         parent::search($query, $builder);
-        if (0 !== $stateId = (int) $query->getCustomData(self::PARAM_STATE, 0)) {
+        if (0 !== $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
             /** @var string $field */
             $field = $this->repository->getSearchFields('state.id');
             $builder->andWhere($field . '=:' . self::PARAM_STATE)
@@ -113,7 +115,7 @@ class CalculationTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
-            $stateId = (int) $query->getCustomData(self::PARAM_STATE, 0);
+            $stateId = $query->getCustomData(self::PARAM_STATE, 0);
             $results->addCustomData('state', $this->getCalculationState($stateId));
             $results->addCustomData('states', $this->getCalculationStates());
             $results->addParameter(self::PARAM_STATE, $stateId);

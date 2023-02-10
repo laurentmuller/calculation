@@ -54,6 +54,8 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * Formatter for the product column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @noinspection PhpUnused
      */
     public function formatProducts(\Countable $products, Category $category): string
     {
@@ -73,6 +75,8 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * Formatter for the task column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @noinspection PhpUnused
      */
     public function formatTasks(\Countable $tasks, Category $category): string
     {
@@ -122,7 +126,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     protected function search(DataQuery $query, QueryBuilder $builder): void
     {
         parent::search($query, $builder);
-        if (0 !== $groupId = (int) $query->getCustomData(self::PARAM_GROUP, 0)) {
+        if (0 !== $groupId = $query->getCustomData(self::PARAM_GROUP, 0)) {
             /** @var string $field */
             $field = $this->repository->getSearchFields('group.id');
             $builder->andWhere($field . '=:' . self::PARAM_GROUP)
@@ -137,7 +141,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $groupId = (int) $query->getCustomData(self::PARAM_GROUP, 0);
+            $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
             $results->addCustomData('group', $this->getGroup($groupId));
             $results->addCustomData('groups', $this->getGroups());
             $results->addParameter(self::PARAM_GROUP, $groupId);

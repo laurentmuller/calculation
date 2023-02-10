@@ -37,6 +37,9 @@ parameters:
     # optimize
     container.dumper.inline_factories: true
 
+    # the date format for log
+    log_date_format: 'd.m.Y H:i:s.v'
+
 services:
     # default configuration for services
     _defaults:
@@ -80,7 +83,7 @@ services:
     # custom line formatter for monolog
     monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter
-        arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
+        arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n",'%log_date_format%']
 
     #override because repeated password is not take into account
     form.listener.password_hasher:

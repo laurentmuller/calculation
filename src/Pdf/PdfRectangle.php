@@ -42,10 +42,8 @@ class PdfRectangle
      */
     public function contains(float $x, float $y): bool
     {
-        return $x >= $this->x
-            && $y >= $this->y
-            && $x < $this->right()
-            && $y < $this->bottom();
+        return $x >= $this->x && $y >= $this->y
+            && $x < $this->right() && $y < $this->bottom();
     }
 
     /**

@@ -16,8 +16,7 @@ use App\Entity\Log;
 use App\Model\LogFile;
 use App\Traits\CacheAwareTrait;
 use App\Util\FileUtils;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -30,11 +29,6 @@ class LogService implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
 
     /**
-     * The format to parse the date.
-     */
-    private const DATE_FORMAT = 'd.m.Y H:i:s';
-
-    /**
      * The key to cache result.
      */
     private const KEY_CACHE = 'log_service_file';
@@ -45,11 +39,6 @@ class LogService implements ServiceSubscriberInterface
     private const VALUES_SEP = '|';
 
     /**
-     * The log directory.
-     */
-    private readonly string $directory;
-
-    /**
      * The log file name.
      */
     private readonly string $fileName;
@@ -57,10 +46,15 @@ class LogService implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel)
-    {
-        $this->directory = $this->buildLogDirectory($kernel);
-        $this->fileName = $this->buildLogFile($kernel);
+    public function __construct(
+        #[Autowire('%kernel.logs_dir%')]
+        string $directory,
+        #[Autowire('%kernel.environment%')]
+        string $environment,
+        #[Autowire('%log_date_format%')]
+        private readonly string $dateFormat
+    ) {
+        $this->fileName = \sprintf('%s%s%s.log', \rtrim($directory, '\\/'), \DIRECTORY_SEPARATOR, $environment);
     }
 
     /**
@@ -75,36 +69,6 @@ class LogService implements ServiceSubscriberInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Gets the log directory.
-     */
-    public function getDirectory(): string
-    {
-        return $this->directory;
-    }
-
-    /**
-     * Gets the log file names.
-     *
-     * @return string[]
-     */
-    public function getFileNames(): array
-    {
-        $finder = Finder::create()
-            ->in($this->directory)
-            ->sortByName()
-            ->name('*.log');
-
-        $files = [];
-        foreach ($finder as $file) {
-            if ($file->isReadable()) {
-                $files[] = $file->getRealPath();
-            }
-        }
-
-        return $files;
     }
 
     /**
@@ -128,22 +92,6 @@ class LogService implements ServiceSubscriberInterface
         $value = $this->getCacheValue(self::KEY_CACHE);
 
         return $value instanceof LogFile ? $value : $this->parseFile();
-    }
-
-    /**
-     * Builds the log directory.
-     */
-    private function buildLogDirectory(KernelInterface $kernel): string
-    {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $kernel->getLogDir()) . \DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Builds the log file name.
-     */
-    private function buildLogFile(KernelInterface $kernel): string
-    {
-        return $this->directory . $kernel->getEnvironment() . '.log';
     }
 
     /**
@@ -171,7 +119,7 @@ class LogService implements ServiceSubscriberInterface
      */
     private function parseDate(string $value): \DateTimeImmutable|false
     {
-        return \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
+        return \DateTimeImmutable::createFromFormat($this->dateFormat, $value);
     }
 
     /**
@@ -206,15 +154,14 @@ class LogService implements ServiceSubscriberInterface
                 }
 
                 // create and add
-                $log = Log::instance()
+                $file->addLog(Log::instance()
                     ->setId($id++)
                     ->setCreatedAt($date)
                     ->setChannel($values[1])
                     ->setLevel($values[2])
                     ->setMessage($values[3])
                     ->setContext($this->parseJson($values[4]))
-                    ->setExtra($this->parseJson($values[5]));
-                $file->addLog($log);
+                    ->setExtra($this->parseJson($values[5])));
             }
         } catch (\Exception) {
             return null;

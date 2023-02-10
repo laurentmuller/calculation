@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Util;
 
 use App\Entity\Log;
 
@@ -33,14 +33,14 @@ class LogSorter
      * Constructor.
      *
      * @param string $field     the field to sort
-     * @param bool   $ascending true the sort in ascending false for descending
+     * @param bool   $ascending true to sort in ascending mode false to sort in descending mode
      */
     public function __construct(private readonly string $field, private readonly bool $ascending)
     {
     }
 
     /**
-     * Returns if the given field and ascending sort is the default mode.
+     * Returns if the given field and ascending mode is the default sort.
      */
     public static function isDefaultSort(string $field, bool $ascending): bool
     {
@@ -65,15 +65,16 @@ class LogSorter
             return \uasort($logs, $dateSorter);
         }
 
+        $order = $this->ascending ? 1 : -1;
         $fieldSorter = $this->getFieldSorter();
 
-        return \uasort($logs, function (Log $a, Log $b) use ($dateSorter, $fieldSorter): int {
-            if (null === $fieldSorter || 0 === $result = $fieldSorter($a, $b)) {
+        return \uasort($logs, function (Log $a, Log $b) use ($dateSorter, $fieldSorter, $order): int {
+            if (null === $fieldSorter || 0 === $result = $order * $fieldSorter($a, $b)) {
                 // by date descending (default)
                 return -$dateSorter($a, $b);
             }
 
-            return $this->ascending ? $result : -$result;
+            return $result;
         });
     }
 
@@ -86,7 +87,7 @@ class LogSorter
     }
 
     /**
-     * @return \Closure(Log, Log): int|null
+     * @return ?\Closure(Log, Log): int
      */
     private function getFieldSorter(): ?\Closure
     {

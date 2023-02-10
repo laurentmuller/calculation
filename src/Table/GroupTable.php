@@ -43,6 +43,8 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      * Formatter for the category column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @noinspection PhpUnused
      */
     public function formatCategories(\Countable $categories, Group $group): string
     {

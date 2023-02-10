@@ -13,10 +13,10 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
-use App\Service\LogFilter;
 use App\Service\LogService;
-use App\Service\LogSorter;
 use App\Util\FileUtils;
+use App\Util\LogFilter;
+use App\Util\LogSorter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -57,6 +57,8 @@ class LogTable extends AbstractTable implements \Countable
      * Formats the channel.
      *
      * @throws \Twig\Error\Error
+     *
+     * @noinspection PhpUnused
      */
     public function formatChannel(string $value, Log $log): string
     {
@@ -65,6 +67,8 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * Formats the date.
+     *
+     * @noinspection PhpUnused
      */
     public function formatCreatedAt(\DateTimeInterface $value, Log $log): string
     {
@@ -75,6 +79,8 @@ class LogTable extends AbstractTable implements \Countable
      * Format the level.
      *
      * @throws \Twig\Error\Error
+     *
+     * @noinspection PhpUnused
      */
     public function formatLevel(string $value, Log $log): string
     {

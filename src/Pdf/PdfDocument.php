@@ -69,6 +69,7 @@ class PdfDocument extends \FPDF
      * The default line height.
      */
     final public const LINE_HEIGHT = 5;
+
     /**
      * The new line separator.
      */
@@ -294,41 +295,41 @@ class PdfDocument extends \FPDF
      * Computes the number of lines a MultiCell of the given width will take.
      *
      * @param ?string $text  the text to compute
-     * @param float   $width the desired width. If 0, the width extends up to the right margin.
+     * @param float   $width the desired width. If 0.0, the width extends up to the right margin.
      *
      * @return int the number of lines
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getLinesCount(?string $text, float $width): int
+    public function getLinesCount(?string $text, float $width = 0): int
     {
+        // text?
+        if (null === $text || '' === $text) {
+            return 0;
+        }
+
+        // clean text
+        $text = \rtrim(\str_replace("\r", '', $text));
+        $lenText = \strlen($text);
+        if (0 === $lenText) {
+            return 0;
+        }
+
         // check width
         if ($width <= 0) {
             $width = $this->w - $this->rMargin - $this->x;
         }
         $maxWidth = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;
 
-        // clean text
-        $text = \str_replace("\r", '', (string) $text);
-        $lenText = \strlen($text);
-        while ($lenText > 0 && self::NEW_LINE === $text[$lenText - 1]) {
-            --$lenText;
-        }
-
         $sep = -1;
         $index = 0;
         $lastIndex = 0;
         $currentWidth = 0;
         $linesCount = 1;
-
         /** @psalm-var array<string, float> $cw */
-        $cw = &$this->CurrentFont['cw'];
+        $cw = $this->CurrentFont['cw'];
 
         // run over text
         while ($index < $lenText) {
             $ch = $text[$index];
-
             // new line?
             if (self::NEW_LINE === $ch) {
                 ++$index;
@@ -338,15 +339,12 @@ class PdfDocument extends \FPDF
                 ++$linesCount;
                 continue;
             }
-
             // separator?
             if (' ' === $ch) {
                 $sep = $index;
             }
-
             // compute width
             $currentWidth += $cw[$ch];
-
             // exceed allowed width?
             if ($currentWidth > $maxWidth) {
                 if (-1 === $sep) {
@@ -411,9 +409,7 @@ class PdfDocument extends \FPDF
      */
     public function GetStringWidth($s): float
     {
-        $s = $this->cleanText($s);
-
-        return (float) parent::GetStringWidth($s);
+        return (float) parent::GetStringWidth($this->cleanText($s));
     }
 
     /**
@@ -661,6 +657,18 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Defines the document description.
+     *
+     * @see PdfHeader::setDescription()
+     */
+    public function setDescription(?string $description): self
+    {
+        $this->header->setDescription($description);
+
+        return $this;
+    }
+
+    /**
      * @param PdfDocumentZoom|string   $zoom
      * @param PdfDocumentLayout|string $layout
      */
@@ -673,26 +681,6 @@ class PdfDocument extends \FPDF
             $layout = $layout->value;
         }
         parent::SetDisplayMode($zoom, $layout);
-    }
-
-    /**
-     * Sets the footer.
-     */
-    public function setFooter(PdfFooter $footer): self
-    {
-        $this->footer = $footer;
-
-        return $this;
-    }
-
-    /**
-     * Sets the header.
-     */
-    public function setHeader(PdfHeader $header): self
-    {
-        $this->header = $header;
-
-        return $this;
     }
 
     /**

@@ -113,9 +113,12 @@ class FormHelper
     }
 
     /**
-     * Adds a new field to this builder and reset all values to default.
+     * Adds a new field to this builder and reset all values to default. The field must have a unique name.
+     * Otherwise, the existing field is overwritten.
      *
-     * @param string $type the child type to add
+     * @template T of FormTypeInterface
+     *
+     * @param class-string<T> $type the child type to add
      */
     public function add(string $type): self
     {

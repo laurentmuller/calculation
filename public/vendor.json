@@ -34,7 +34,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.2.1",
+            "version": "6.3.0",
             "files": [
                 "css/all.css",
                 "webfonts/fa-brands-400.ttf",
@@ -190,7 +190,7 @@
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
             "name": "currency-flags",
-            "version": "4.0.3",
+            "version": "4.0.7",
             "files": [
                 "currency-flags.css"
             ]

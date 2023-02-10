@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Util;
 
 use App\Entity\Log;
 
@@ -19,9 +19,11 @@ use App\Entity\Log;
  */
 class LogFilter
 {
-    private readonly bool $filterChannel;
+    private readonly bool $isFilterChannel;
 
-    private readonly bool $filterLevel;
+    private readonly bool $isFilterLevel;
+
+    private readonly bool $isFilterValue;
 
     /**
      * @param string $value   the value to search for
@@ -30,12 +32,13 @@ class LogFilter
      */
     public function __construct(private readonly string $value, private readonly string $level, private readonly string $channel)
     {
-        $this->filterLevel = !empty($this->level);
-        $this->filterChannel = !empty($this->channel);
+        $this->isFilterValue = '' !== \trim($this->value);
+        $this->isFilterLevel = '' !== \trim($this->level);
+        $this->isFilterChannel = '' !== \trim($this->channel);
     }
 
     /**
-     * Apply this filters, if applicable; to the given logs.
+     * Apply this filters to the given logs.
      *
      * @param Log[] $logs
      *
@@ -43,22 +46,17 @@ class LogFilter
      */
     public function apply(array $logs): array
     {
-        if ($this->filterLevel) {
-            $logs = $this->filterLevel($logs, $this->level);
+        if (!self::isFilter($this->value, $this->level, $this->channel)) {
+            return $logs;
         }
-
-        if ($this->filterChannel) {
-            $logs = $this->filterChannel($logs, $this->channel);
+        if ($this->isFilterLevel) {
+            $logs = $this->filterLevel($logs);
         }
-
-        if (!empty($this->value)) {
-            return \array_filter($logs, function (Log $log) {
-                return $this->acceptChannel($log)
-                    || $this->acceptLevel($log)
-                    || $this->acceptDate($log)
-                    || $this->acceptMessage($log)
-                    || $this->acceptUser($log);
-            });
+        if ($this->isFilterChannel) {
+            $logs = $this->filterChannel($logs);
+        }
+        if ($this->isFilterValue) {
+            return $this->filterValue($logs);
         }
 
         return $logs;
@@ -75,12 +73,12 @@ class LogFilter
      */
     public static function isFilter(string $value, string $level, string $channel): bool
     {
-        return !empty($value) || !empty($level) || !empty($channel);
+        return '' !== \trim($value) || '' !== \trim($level) || '' !== \trim($channel);
     }
 
     private function acceptChannel(Log $log): bool
     {
-        return !$this->filterChannel && $log->isChannel()
+        return !$this->isFilterChannel && $log->isChannel()
             && $this->acceptValue($log->getChannel());
     }
 
@@ -91,7 +89,7 @@ class LogFilter
 
     private function acceptLevel(Log $log): bool
     {
-        return !$this->filterLevel && $log->isLevel()
+        return !$this->isFilterLevel && $log->isLevel()
             && $this->acceptValue($log->getLevel());
     }
 
@@ -111,26 +109,42 @@ class LogFilter
     }
 
     /**
-     * Filters the log for the given channel.
+     * Filters the given logs for this channel.
      *
      * @param Log[] $logs the logs to search in
      *
      * @return Log[] the filtered logs
      */
-    private function filterChannel(array $logs, string $value): array
+    private function filterChannel(array $logs): array
     {
-        return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, $log->getChannel()));
+        return \array_filter($logs, fn (Log $log): bool => 0 === \strcasecmp($this->channel, $log->getChannel()));
     }
 
     /**
-     * Filters the log for the given level.
+     * Filters the given logs for this level.
      *
      * @param Log[] $logs the logs to search in
      *
      * @return Log[] the filtered logs
      */
-    private function filterLevel(array $logs, string $value): array
+    private function filterLevel(array $logs): array
     {
-        return \array_filter($logs, static fn (Log $log): bool => 0 === \strcasecmp($value, $log->getLevel()));
+        return \array_filter($logs, fn (Log $log): bool => 0 === \strcasecmp($this->level, $log->getLevel()));
+    }
+
+    /**
+     * Filter the given logs for this search value.
+     *
+     * @param Log[] $logs the logs to search in
+     *
+     * @return Log[] the filtered logs
+     */
+    private function filterValue(array $logs): array
+    {
+        return \array_filter($logs, fn (Log $log) => $this->acceptChannel($log)
+            || $this->acceptLevel($log)
+            || $this->acceptDate($log)
+            || $this->acceptMessage($log)
+            || $this->acceptUser($log));
     }
 }

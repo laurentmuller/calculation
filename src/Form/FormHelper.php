@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Form\Type\CurrentPasswordType;
-use App\Form\Type\FaxType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Form\Type\YesNoType;
@@ -22,6 +21,7 @@ use App\Util\FormatUtils;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Elao\Enum\Bridge\Symfony\Form\Type\FlagBagType;
 use Elao\Enum\ReadableEnumInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -86,6 +86,13 @@ class FormHelper
     private readonly ?string $labelPrefix;
 
     /**
+     * The data transformer.
+     *
+     * @psalm-var ?DataTransformerInterface<mixed, mixed> $modelTransformer
+     */
+    private ?DataTransformerInterface $modelTransformer = null;
+
+    /**
      * The options.
      *
      * @var array<string, mixed>
@@ -122,7 +129,11 @@ class FormHelper
      */
     public function add(string $type): self
     {
-        $this->builder->add((string) $this->field, $type, $this->mergeAttributes());
+        $field = (string) $this->field;
+        $this->builder->add($field, $type, $this->mergeAttributes());
+        if (null !== $this->modelTransformer) {
+            $this->builder->get($field)->addModelTransformer($this->modelTransformer);
+        }
 
         return $this->reset();
     }
@@ -253,6 +264,8 @@ class FormHelper
     public function addEmailType(): self
     {
         return $this->updateAttribute('inputmode', 'email')
+            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-at')
+            ->updateOption('prepend_class', 'input-group-email')
             ->add(EmailType::class);
     }
 
@@ -303,7 +316,8 @@ class FormHelper
     public function addFaxType(string $pattern = null): self
     {
         return $this->updateAttribute('pattern', $pattern)
-            ->add(FaxType::class);
+            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-fax')
+            ->add(TelType::class);
     }
 
     /**
@@ -370,7 +384,6 @@ class FormHelper
     {
         $this->widgetClass('text-right')
             ->updateAttribute('inputmode', 'decimal')
-            ->updateOption('rounding_mode', \NumberFormatter::ROUND_HALFUP)
             ->updateOption('html5', true)
             ->autocomplete('off');
 
@@ -500,6 +513,7 @@ class FormHelper
     public function addTelType(string $pattern = null): self
     {
         return $this->updateAttribute('inputmode', 'tel')
+            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-phone')
             ->updateAttribute('pattern', $pattern)
             ->add(TelType::class);
     }
@@ -530,6 +544,8 @@ class FormHelper
     public function addUrlType(string $default_protocol = 'https'): self
     {
         return $this->updateOption('default_protocol', $default_protocol)
+            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-globe')
+            ->updateOption('prepend_class', 'input-group-url')
             ->updateAttribute('inputmode', 'url')
             ->add(UrlType::class);
     }
@@ -760,6 +776,18 @@ class FormHelper
     }
 
     /**
+     * Adds a model transformer.
+     *
+     * @psalm-param DataTransformerInterface<mixed, mixed> $modelTransformer
+     */
+    public function modelTransformer(DataTransformerInterface $modelTransformer): static
+    {
+        $this->modelTransformer = $modelTransformer;
+
+        return $this;
+    }
+
+    /**
      * Sets the mapped property to false.
      *
      * Used if you wish the field to be ignored when reading or writing to the object.
@@ -815,6 +843,7 @@ class FormHelper
         $this->rowAttributes = [];
         $this->helpAttributes = [];
         $this->labelAttributes = [];
+        $this->modelTransformer = null;
 
         return $this;
     }

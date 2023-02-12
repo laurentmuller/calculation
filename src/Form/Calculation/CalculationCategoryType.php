@@ -16,7 +16,6 @@ use App\Entity\CalculationCategory;
 use App\Form\AbstractEntityType;
 use App\Form\DataTransformer\CategoryTransformer;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Calculation category edit type.
@@ -36,21 +35,11 @@ class CalculationCategoryType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        parent::buildForm($builder, $options);
-
-        // add transformer
-        $builder->get('category')
-            ->addModelTransformer($this->transformer);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('category')->addHiddenType()
+        $helper->field('category')
+            ->modelTransformer($this->transformer)
+            ->addHiddenType()
             ->field('code')->addHiddenType()
             ->field('position')->addHiddenType();
 

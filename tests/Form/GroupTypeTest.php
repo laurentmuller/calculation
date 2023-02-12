@@ -19,7 +19,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Test for the {@link GroupType} class.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @extends AbstractEntityTypeTestCase<Group, GroupType>
  */
 class GroupTypeTest extends AbstractEntityTypeTestCase
 {
@@ -29,7 +29,6 @@ class GroupTypeTest extends AbstractEntityTypeTestCase
             'code' => 'code',
             'description' => 'description',
             'margins' => new ArrayCollection(),
-            // 'categories' => new ArrayCollection(),
         ];
     }
 

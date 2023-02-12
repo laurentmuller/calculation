@@ -38,11 +38,7 @@ class PhpIniReport extends AbstractReport
         if ($description = \php_ini_loaded_file()) {
             $this->header->setDescription($description);
         }
-        $title = $this->trans('about.php');
-        if (!empty($version)) {
-            $title .= ' ' . $version;
-        }
-        $this->SetTitle($title);
+        $this->setTitleTrans('about.php_version', ['%version%' => $version]);
     }
 
     /**

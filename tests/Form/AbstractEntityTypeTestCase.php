@@ -12,11 +12,22 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
+use App\Entity\AbstractEntity;
+use App\Form\Extension\FileTypeExtension;
+use App\Form\Extension\TextTypeExtension;
+use App\Form\Extension\UrlTypeExtension;
+use App\Form\Extension\VichImageTypeExtension;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * Test for type class.
+ * Test for entity type class.
+ *
+ * @template TEntity of AbstractEntity
+ * @template TForm of FormTypeInterface
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractEntityTypeTestCase extends TypeTestCase
 {
@@ -25,14 +36,16 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      */
     public function testSubmitValidData(): void
     {
-        $data = $this->getData();
+        /** @psalm-var class-string<TEntity> $className */
         $className = $this->getEntityClass();
 
         // create model and form
+        /** @psalm-var TEntity $model */
         $model = new $className();
         $form = $this->factory->create($this->getFormTypeClass(), $model);
 
         // populate form data
+        $data = $this->getData();
         $expected = $this->populate($className, $data);
 
         // submit the data to the form directly
@@ -55,31 +68,48 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * Gets the data to test.
      *
-     * @return array an array where keys are field
+     * @return array<string, mixed> an array where keys are field
      */
     abstract protected function getData(): array;
 
     /**
      * Gets the entity class name.
      *
-     * @psalm-return class-string
+     * @return class-string<TEntity>
      */
     abstract protected function getEntityClass(): string;
 
     /**
      * Gets the form type class name.
      *
-     * @psalm-return class-string
+     * @return class-string<FormTypeInterface>
      */
     abstract protected function getFormTypeClass(): string;
 
+    protected function getTypeExtensions(): array
+    {
+        return [
+            new FileTypeExtension(),
+            new TextTypeExtension(),
+            new UrlTypeExtension(),
+            new VichImageTypeExtension(),
+        ];
+    }
+
     /**
      * Update the given entity with the given data.
+     *
+     * @param class-string<TEntity> $className
+     * @param array<string, mixed>  $data
+     *
+     * @return TEntity
      */
     protected function populate(string $className, array $data): mixed
     {
+        /** @psalm-var TEntity $entity */
         $entity = new $className();
         $accessor = PropertyAccess::createPropertyAccessor();
+        /** @psalm-var  mixed $value */
         foreach ($data as $key => $value) {
             $accessor->setValue($entity, $key, $value);
         }

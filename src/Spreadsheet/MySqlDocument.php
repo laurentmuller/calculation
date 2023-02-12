@@ -47,12 +47,7 @@ class MySqlDocument extends AbstractDocument
         }
 
         // initialize
-        $title = $this->trans('about.mysql');
-        $version = $this->info->getVersion();
-        if (!empty($version)) {
-            $title .= ' ' . $version;
-        }
-        $this->start($title);
+        $this->start($this->trans('about.mysql_version', ['%version%' => $this->info->getVersion()]));
 
         $row = $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,

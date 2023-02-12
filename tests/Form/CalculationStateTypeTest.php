@@ -18,7 +18,7 @@ use App\Form\CalculationState\CalculationStateType;
 /**
  * Test fo the {@link CalculationStateType} class.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @extends AbstractEntityTypeTestCase<CalculationState, CalculationStateType>
  */
 class CalculationStateTypeTest extends AbstractEntityTypeTestCase
 {

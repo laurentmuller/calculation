@@ -16,7 +16,6 @@ use App\Entity\CalculationGroup;
 use App\Form\AbstractEntityType;
 use App\Form\DataTransformer\GroupTransformer;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Calculation group edit type.
@@ -36,21 +35,11 @@ class CalculationGroupType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        parent::buildForm($builder, $options);
-
-        // add transformer
-        $builder->get('group')
-            ->addModelTransformer($this->transformer);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('group')->addHiddenType()
+        $helper->field('group')
+            ->modelTransformer($this->transformer)
+            ->addHiddenType()
             ->field('code')->addHiddenType()
             ->field('position')->addHiddenType();
 

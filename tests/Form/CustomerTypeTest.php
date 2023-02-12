@@ -18,7 +18,7 @@ use App\Form\Customer\CustomerType;
 /**
  * Test for the {@link CustomerType} class.
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @extends AbstractEntityTypeTestCase<Customer, CustomerType>
  */
 class CustomerTypeTest extends AbstractEntityTypeTestCase
 {

@@ -104,6 +104,8 @@ class DataQuery implements SortModeInterface
      *
      * @psalm-template T
      *
+     * @psalm-param T|null $default
+     *
      * @psalm-return ($default is null ? (T|null) : T)
      */
     public function getCustomData(string $name, mixed $default = null): mixed

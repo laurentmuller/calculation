@@ -41,12 +41,7 @@ class SymfonyDocument extends AbstractDocument
     {
         // initialize
         $info = $this->info;
-        $version = $info->getVersion();
-        $title = $this->trans('about.symfony');
-        if (!empty($version)) {
-            $title .= ' ' . $version;
-        }
-        $this->start($title);
+        $this->start($this->trans('about.symfony_version', ['%version%' => $info->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
 
         // info

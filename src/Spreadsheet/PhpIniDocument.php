@@ -46,11 +46,7 @@ class PhpIniDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        $title = $this->trans('about.php');
-        if (!empty($this->version)) {
-            $title .= ' ' . $this->version;
-        }
-        $this->start($title);
+        $this->start($this->trans('about.php_version', ['%version%' => $this->version]));
         $this->setActiveTitle('Configuration', $this->controller);
 
         $content = $this->content;

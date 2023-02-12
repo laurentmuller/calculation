@@ -38,9 +38,6 @@ class UserLoginType extends AbstractUserCaptchaType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
-            ->autocomplete('username')
-            ->minLength(User::MIN_USERNAME_LENGTH)
-            ->maxLength(User::MAX_USERNAME_LENGTH)
             ->add(UserNameType::class);
 
         $helper->field('password')

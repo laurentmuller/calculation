@@ -15,14 +15,14 @@ about:
   licence: Accord de licence
   licence_short: Licence
   loading: Recherche des informations...
-  mysql: Configuration MySQL
-  mysql_pdf: MySql Info
-  php: Configuration PHP
-  php_pdf: PHP Info
+  mysql: Configuration de MySQL
+  mysql_version: Configuration de MySQL v%version%
+  php: Configuration de PHP
+  php_version: Configuration de PHP v%version%
   policy: Politique de confidentialité
   policy_short: Confidentialité
-  symfony: Configuration Symfony
-  symfony_pdf: Symfony Info
+  symfony: Configuration de Symfony
+  symfony_version: Configuration de Symfony v%version%
   title: A propos de
   version: Version %version%
   expand: Afficher le contenu
@@ -752,10 +752,12 @@ parameters:
   fields:
     customer_address: Adresse
     customer_email: E-mail
+    customer_email_title: Envoyer un message électronique au client
     customer_fax: Télécopieur
     customer_name: Nom
     customer_phone: Téléphone
     customer_url: Site internet
+    customer_url_title: Accéder au site internet du client
     customer_zip_city: NPA / Localité
     default_category: Catégorie
     default_product: Article

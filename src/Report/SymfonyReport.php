@@ -33,12 +33,7 @@ class SymfonyReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
     {
         parent::__construct($controller);
-        $title = $this->trans('about.symfony');
-        $version = $this->info->getVersion();
-        if (!empty($version)) {
-            $title .= ' ' . $version;
-        }
-        $this->SetTitle($title);
+        $this->setTitleTrans('about.symfony_version', ['%version%' => $this->info->getVersion()]);
     }
 
     /**

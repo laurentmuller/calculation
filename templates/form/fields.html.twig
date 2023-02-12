@@ -37,55 +37,41 @@
 {%- endif -%}
 {%- endblock %}
 
-{# extends form widget with password strength place holder #}
-{%- block form_widget -%}
-{{ parent() }}
-{% if ('password-strength' in attr.class|default('')) %}
-    <div id="{{ form.vars.id }}_passwordStrength" class="d-print-none password-strength"></div>
-{%- endif %}
-{%- endblock %}
-
-{# extends text widget with with user icon #}
-{% block user_name_widget -%}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa-regular fa-fw fa-user"></i></span>
-    </div>
-    {{- block('form_widget_simple') -}}
-</div>
-{%- endblock %}
-
 {# override password widget with an addon to show or hide the password within jQuery #}
 {% block password_widget -%}
-{% if 'password-strength' in attr.class|default('') %}
-    {% set attr = attr|default({})|merge({'data-url': url('ajax_password'), 'data-strength': user_service.application.strengthLevel.value}) %}
-{% endif %}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa-solid fa-fw fa-lock"></i></span>
+    {% set is_strength = 'password-strength' in attr.class|default('') %}
+    {% if is_strength %}
+        {% set attr = attr|default({})|merge({'data-url': url('ajax_password'), 'data-strength': user_service.application.strengthLevel.value}) %}
+    {% endif %}
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa-fw fa-solid fa-lock"></i></span>
+        </div>
+        {{ parent() }}
+        <div class="input-group-append">
+            <span class="btn btn-password btn-outline-secondary{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">
+                <i class="fa-fw fa-regular fa-eye"></i>
+            </span>
+        </div>
     </div>
-    {{ parent() }}
-    <div class="input-group-append">
-        <span class="btn btn-outline-secondary btn-password{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">
-            <i class="fa-fw fa-regular fa-eye"></i>
-        </span>
-    </div>
-</div>
+    {% if is_strength %}
+    <div id="{{ form.vars.id }}_passwordStrength" class="d-print-none password-strength"></div>
+    {% endif %}
 {%- endblock %}
 
 {# plain text #}
 {% block plain_widget -%}
-{% apply spaceless %}
-{% if expanded %}
+    {% if expanded %}
     {% set class = (attr.class|default('') ~ ' form-control-plaintext form-control-readonly')|trim %}
     <div class="{{ class }}">
         <span>{{ display_value|default('&nbsp;')|raw }}</span>
     </div>
-{% else %}
+    {% else %}
     <span>{{ display_value|default('&nbsp;')|raw }}</span>
-{% endif %}
-{% if hidden_input %}{{ block('hidden_widget') }}{% endif %}
-{% endapply %}
+    {% endif %}
+    {% if hidden_input %}
+        {{ block('hidden_widget') }}
+    {% endif %}
 {%- endblock %}
 
 {# color widget #}
@@ -106,48 +92,36 @@
 {%- endif -%}
 {%- endblock %}
 
-{# prepend icon #}
-{%- block url_widget -%}
-{%- set type = type|default('url') -%}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text input-group-url"><i class="fa-solid fa-fw fa-globe"></i></span>
-    </div>
-    {{- parent() -}}
-</div>
-{%- endblock -%}
-
-{# prepend icon #}
-{%- block tel_widget -%}
-{%- set type = type|default('tel') -%}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa-solid fa-phone"></i></i></span>
-    </div>
-    {{- parent() -}}
-</div>
-{%- endblock -%}
-
-{# prepend icon #}
-{%- block fax_widget -%}
-{%- set type = type|default('tel') -%}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa-solid fa-fax"></i></i></span>
-    </div>
-    {{- block('form_widget_simple') -}}
-</div>
-{%- endblock -%}
-
-{# prepend icon #}
-{%- block email_widget %}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text input-group-email"><i class="fa-solid fa-at"></i></span>
-    </div>
-    {{- parent() -}}
-</div>
-{%- endblock -%}
+{# prepend and append icons, if applicable #}
+{% block form_widget_simple -%}
+    {% set prepend_icon = prepend_icon|default(false) %}
+    {% set prepend_class = ('input-group-text ' ~ prepend_class|default(''))|trim %}
+    {% set prepend_title = prepend_title|default(false) %}
+    {% set append_icon = append_icon|default(false) %}
+    {% set append_class = ('input-group-text ' ~ append_class|default(''))|trim %}
+    {% set append_title = append_title|default(false) %}
+    {% if prepend_icon or append_icon %}
+        <div class="input-group">
+            {% if prepend_icon %}
+                <div class="input-group-prepend"{% if prepend_title %} title="{{ prepend_title|trans }}" {% endif %}>
+                    <span class="{{ prepend_class }}">
+                        <i class="{{ prepend_icon }}"></i>
+                    </span>
+                </div>
+            {% endif %}
+            {{- parent() -}}
+            {% if append_icon %}
+                <div class="input-group-append"{% if append_title %} title="{{ append_title|trans }}" {% endif %}>
+                    <span class="{{ append_class }}">
+                        <i class="{{ append_icon }}"></i>
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        {{- parent() -}}
+    {% endif %}
+{%- endblock form_widget_simple %}
 
 {# use file-input style #}
 {% block file_widget -%}

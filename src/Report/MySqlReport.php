@@ -32,12 +32,7 @@ class MySqlReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $info)
     {
         parent::__construct($controller);
-        $title = $this->trans('about.mysql');
-        $version = $this->info->getVersion();
-        if (!empty($version)) {
-            $title .= ' ' . $version;
-        }
-        $this->SetTitle($title);
+        $this->setTitleTrans('about.mysql_version', ['%version%' => $this->info->getVersion()]);
     }
 
     /**

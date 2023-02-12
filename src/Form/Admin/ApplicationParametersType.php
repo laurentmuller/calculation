@@ -73,10 +73,12 @@ class ApplicationParametersType extends AbstractParametersType
             ->addFaxType();
 
         $helper->field(PropertyServiceInterface::P_CUSTOMER_EMAIL)
+            ->updateOption('prepend_title', 'parameters.fields.customer_email_title')
             ->notRequired()
             ->addEmailType();
 
         $helper->field(PropertyServiceInterface::P_CUSTOMER_URL)
+            ->updateOption('prepend_title', 'parameters.fields.customer_url_title')
             ->notRequired()
             ->addUrlType();
     }

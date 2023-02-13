@@ -8,7 +8,7 @@
 {% macro row(data, default, overwrite) -%}
 <tr class="text-center">
     <td class="text-left">
-        <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ data.vars.label_format|trans }}</button>
+        <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ data.vars.label|trans }}</button>
     </td>
     {% for entry in data %}
         {%- set checked = default.hasBits(entry.vars.value) -%}

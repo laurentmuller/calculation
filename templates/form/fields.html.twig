@@ -25,14 +25,10 @@
 
 {% block form_errors -%}
 {%- if errors|length > 0 -%}
-    {%- set messages = [] -%}
     <span class="invalid-feedback d-block">
-        {%- for error in errors -%}
-            {%- if error.message not in messages -%}
-                <span class="mb-0 d-block">{{ error.message }}</span>
-            {%- endif -%}
-            {%- set messages = messages|merge([error.message]) -%}
-        {%- endfor -%}
+    {%- for error in errors -%}
+        <span class="mb-0 d-block">{{ error.message }}</span>
+    {%- endfor -%}
     </span>
 {%- endif -%}
 {%- endblock %}
@@ -103,19 +99,15 @@
     {% if prepend_icon or append_icon %}
         <div class="input-group">
             {% if prepend_icon %}
-                <div class="input-group-prepend"{% if prepend_title %} title="{{ prepend_title|trans }}" {% endif %}>
-                    <span class="{{ prepend_class }}">
-                        <i class="{{ prepend_icon }}"></i>
-                    </span>
-                </div>
+            <div class="input-group-prepend"{% if prepend_title %} title="{{ prepend_title|trans }}" {% endif %}>
+                <span class="{{ prepend_class }}"><i class="{{ prepend_icon }}"></i></span>
+            </div>
             {% endif %}
             {{- parent() -}}
             {% if append_icon %}
-                <div class="input-group-append"{% if append_title %} title="{{ append_title|trans }}" {% endif %}>
-                    <span class="{{ append_class }}">
-                        <i class="{{ append_icon }}"></i>
-                    </span>
-                </div>
+            <div class="input-group-append"{% if append_title %} title="{{ append_title|trans }}" {% endif %}>
+                <span class="{{ append_class }}"><i class="{{ append_icon }}"></i></span>
+            </div>
             {% endif %}
         </div>
     {% else %}

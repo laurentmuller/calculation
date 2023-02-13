@@ -16,7 +16,7 @@ use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
-use Twig\Error\SyntaxError;
+use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -26,6 +26,18 @@ use Twig\TwigFilter;
 final class FormatExtension extends AbstractExtension
 {
     use TranslatorTrait;
+
+    private const CALENDARS = [
+        'gregorian' => \IntlDateFormatter::GREGORIAN,
+        'traditional' => \IntlDateFormatter::TRADITIONAL,
+    ];
+    private const DATE_FORMATS = [
+        'none' => \IntlDateFormatter::NONE,
+        'short' => \IntlDateFormatter::SHORT,
+        'medium' => \IntlDateFormatter::MEDIUM,
+        'long' => \IntlDateFormatter::LONG,
+        'full' => \IntlDateFormatter::FULL,
+    ];
 
     /**
      * Constructor.
@@ -88,42 +100,6 @@ final class FormatExtension extends AbstractExtension
     }
 
     /**
-     * Check the calendar.
-     *
-     * @throws SyntaxError
-     */
-    private function checkCalendar(?string $calendar, array $calendars): void
-    {
-        if (null !== $calendar && !isset($calendars[$calendar])) {
-            throw new SyntaxError(\sprintf('The calendar "%s" does not exist. Known calendars are: "%s"', $calendar, \implode('", "', \array_keys($calendars))));
-        }
-    }
-
-    /**
-     * Check the date format.
-     *
-     * @throws SyntaxError
-     */
-    private function checkDateFormat(?string $dateFormat, array $formats): void
-    {
-        if (null !== $dateFormat && !isset($formats[$dateFormat])) {
-            throw new SyntaxError(\sprintf('The date format "%s" does not exist. Known formats are: "%s"', $dateFormat, \implode('", "', \array_keys($formats))));
-        }
-    }
-
-    /**
-     * Check the time format.
-     *
-     * @throws SyntaxError
-     */
-    private function checkTimeFormat(?string $timeFormat, array $formats): void
-    {
-        if (null !== $timeFormat && !isset($formats[$timeFormat])) {
-            throw new SyntaxError(\sprintf('The time format "%s" does not exist. Known formats are: "%s"', $timeFormat, \implode('", "', \array_keys($formats))));
-        }
-    }
-
-    /**
      * Formats a date for the current locale; ignoring the time part.
      *
      * @param Environment                    $env        the Twig environment
@@ -135,7 +111,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @return string the formatted date
      *
-     * @throws SyntaxError if the date format or the time format is unknown
+     * @throws RuntimeError if the date format or the calendar is invalid
      */
     private function dateFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
@@ -155,34 +131,14 @@ final class FormatExtension extends AbstractExtension
      *
      * @return string the formatted date
      *
-     * @throws SyntaxError if the date or the time format is invalid
+     * @throws RuntimeError if the date format, the time format or the calendar is invalid
      */
     private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
-        /** @psalm-var array<string, int> $formats */
-        static $formats = [
-            'none' => \IntlDateFormatter::NONE,
-            'short' => \IntlDateFormatter::SHORT,
-            'medium' => \IntlDateFormatter::MEDIUM,
-            'long' => \IntlDateFormatter::LONG,
-            'full' => \IntlDateFormatter::FULL,
-        ];
-
-        /** @psalm-var array<string, int> $calendars */
-        static $calendars = [
-            'gregorian' => \IntlDateFormatter::GREGORIAN,
-            'traditional' => \IntlDateFormatter::TRADITIONAL,
-        ];
-
-        // check formats and calendar
-        $this->checkDateFormat($dateFormat, $formats);
-        $this->checkTimeFormat($timeFormat, $formats);
-        $this->checkCalendar($calendar, $calendars);
-
-        // get types and calendar
-        $date_type = $dateFormat ? $formats[$dateFormat] : null;
-        $time_type = $timeFormat ? $formats[$timeFormat] : null;
-        $calendar = $calendars[$calendar ?? 'gregorian'];
+        // check types and calendar
+        $date_type = $this->validateDateFormat($dateFormat);
+        $time_type = $this->validateTimeFormat($timeFormat);
+        $calendar = $this->validateCalendar($calendar);
 
         // no formats and pattern?
         if (\IntlDateFormatter::NONE === $date_type && \IntlDateFormatter::NONE === $time_type && null === $pattern) {
@@ -209,10 +165,61 @@ final class FormatExtension extends AbstractExtension
      *
      * @return string the formatted date
      *
-     * @throws SyntaxError if the date format or the time format is unknown
+     * @throws RuntimeError if the time format or the calendar is invalid
      */
     private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
+    }
+
+    /**
+     * Check the calendar.
+     *
+     * @throws RuntimeError
+     */
+    private function validateCalendar(?string $calendar): int
+    {
+        if (null === $calendar) {
+            return \IntlDateFormatter::GREGORIAN;
+        }
+        if (!isset(self::CALENDARS[$calendar])) {
+            throw new RuntimeError(\sprintf('The calendar "%s" does not exist. Known calendars are: "%s"', $calendar, \implode('", "', \array_keys(self::CALENDARS))));
+        }
+
+        return self::CALENDARS[$calendar];
+    }
+
+    /**
+     * Check the date format.
+     *
+     * @throws RuntimeError
+     */
+    private function validateDateFormat(?string $dateFormat): ?int
+    {
+        if (null === $dateFormat) {
+            return null;
+        }
+        if (!isset(self::DATE_FORMATS[$dateFormat])) {
+            throw new RuntimeError(\sprintf('The date format "%s" does not exist. Known formats are: "%s"', $dateFormat, \implode('", "', \array_keys(self::DATE_FORMATS))));
+        }
+
+        return self::DATE_FORMATS[$dateFormat];
+    }
+
+    /**
+     * Check the time format.
+     *
+     * @throws RuntimeError
+     */
+    private function validateTimeFormat(?string $timeFormat): ?int
+    {
+        if (null === $timeFormat) {
+            return null;
+        }
+        if (!isset(self::DATE_FORMATS[$timeFormat])) {
+            throw new RuntimeError(\sprintf('The time format "%s" does not exist. Known formats are: "%s"', $timeFormat, \implode('", "', \array_keys(self::DATE_FORMATS))));
+        }
+
+        return self::DATE_FORMATS[$timeFormat];
     }
 }

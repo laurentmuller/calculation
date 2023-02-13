@@ -19,20 +19,20 @@ use Symfony\Component\Mime\Address;
 /**
  * Transforms between an Address string and an Address object.
  *
- * @template-implements DataTransformerInterface<?Address, ?string>
+ * @implements DataTransformerInterface<Address, string>
  */
 class AddressTransformer implements DataTransformerInterface
 {
     /**
-     * {@inheritDoc}
+     * Transforms an Address object into a string.
      *
-     * @param ?string $value
+     * @psalm-param mixed $value
      *
-     * @psalm-suppress DocblockTypeContradiction
+     * @psalm-return Address|null
      */
     public function reverseTransform(mixed $value): ?Address
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return null;
         }
 
@@ -42,17 +42,21 @@ class AddressTransformer implements DataTransformerInterface
         }
 
         try {
-            return Address::create($value);
+            $address = Address::create($value);
         } catch (\InvalidArgumentException $e) {
             $message = \sprintf('Unable to parse the address for the value "%s".', $value);
             throw new TransformationFailedException($message, $e->getCode(), $e);
         }
+
+        return $address;
     }
 
     /**
-     * {@inheritDoc}
+     * Transforms an Address string into an Address object.
      *
-     * @param ?Address $value
+     * @psalm-param mixed $value
+     *
+     * @psalm-return string|null
      */
     public function transform(mixed $value): ?string
     {

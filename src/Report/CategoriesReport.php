@@ -79,7 +79,7 @@ class CategoriesReport extends AbstractArrayReport
 
         $border = PdfBorder::none();
         $margins = $this->setCellMargin(0);
-        $width = $this->GetPageWidth() / 2;
+        $width = $this->GetPageWidth() / 2.0;
         $this->Cell($width, self::LINE_HEIGHT, $txtGroup . ' - ' . $txtCount, $border);
         $this->Cell(0, self::LINE_HEIGHT, $txtProduct . ' - ' . $txtTask, $border, PdfMove::NEW_LINE, PdfTextAlignment::RIGHT);
         $this->setCellMargin($margins);

@@ -599,7 +599,7 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getWindDirection(int $deg): string
     {
         $deg %= 360;
-        $index = (int) \floor($deg / 22.5 + 0.5);
+        $index = (int) \floor((float) $deg / 22.5 + 0.5);
 
         return self::WIND_DIRECTIONS[$index];
     }
@@ -614,8 +614,9 @@ class OpenWeatherService extends AbstractHttpClientService
     private function offsetToTimZone(int $offset): \DateTimeZone
     {
         $sign = $offset < 0 ? '-' : '+';
-        $minutes = \floor(\abs($offset) / 60) % 60;
-        $hours = \floor(\abs($offset) / 3600);
+        $offset = (float) \abs($offset);
+        $minutes = (\floor($offset / 60.0) % 60.0);
+        $hours = (int) \floor($offset / 3600.0);
         $id = \sprintf('%s%02d%02d', $sign, $hours, $minutes);
 
         return new \DateTimeZone($id);

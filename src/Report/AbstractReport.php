@@ -38,15 +38,19 @@ abstract class AbstractReport extends PdfDocument
     /**
      * Constructor.
      *
-     * @param PdfDocumentOrientation|string $orientation the page orientation
-     * @param PdfDocumentUnit|string        $unit        the measure unit
-     * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
+     * @param PdfDocumentOrientation $orientation the page orientation
+     * @param PdfDocumentUnit        $unit        the user unit
+     * @param PdfDocumentSize        $size        the document size
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function __construct(protected AbstractController $controller, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
-    {
+    public function __construct(
+        protected AbstractController $controller,
+        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
+        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
+        PdfDocumentSize $size = PdfDocumentSize::A4
+    ) {
         parent::__construct($orientation, $unit, $size);
         $this->translator = $this->controller->getTranslator();
         $this->extension = new FormatExtension($this->translator);

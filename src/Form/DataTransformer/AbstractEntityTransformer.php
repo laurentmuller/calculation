@@ -23,7 +23,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  *
  * @template T of AbstractEntity
  *
- * @implements DataTransformerInterface<T, int>
+ * @template-implements DataTransformerInterface<T, int>
  */
 class AbstractEntityTransformer implements DataTransformerInterface
 {

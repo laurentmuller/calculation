@@ -82,9 +82,9 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
             $width = $size;
             $height = $size;
             if ($width / $height > $ratio) {
-                $width = (int) ($height * $ratio);
+                $width = (int) ((float) $height * $ratio);
             } else {
-                $height = (int) ($width / $ratio);
+                $height = (int) ((float) $width / $ratio);
             }
             $size = new Box($width, $height);
             $options = \array_merge(self::DEFAULT_OPTIONS, $options);

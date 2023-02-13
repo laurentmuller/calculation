@@ -19,7 +19,7 @@ use Symfony\Component\Mime\Address;
 /**
  * Transforms between an Address string and an Address object.
  *
- * @implements DataTransformerInterface<Address, string>
+ * @template-implements DataTransformerInterface<?Address, ?string>
  */
 class AddressTransformer implements DataTransformerInterface
 {

@@ -123,6 +123,8 @@ final class FunctionExtension extends AbstractExtension
      * Output a link style sheet tag with a version and nonce.
      *
      * @throws \Exception
+     *
+     * @psalm-param array<string, mixed> $parameters
      */
     private function assetCss(string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -164,6 +166,8 @@ final class FunctionExtension extends AbstractExtension
      * Output an image tag with a version.
      *
      * @throws \Exception
+     *
+     * @psalm-param array<string, mixed> $parameters
      */
     private function assetImage(string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -183,6 +187,8 @@ final class FunctionExtension extends AbstractExtension
      * Output the user image profile.
      *
      * @throws \Exception
+     *
+     * @psalm-param array<string, mixed> $parameters
      */
     private function assetImageUser(?User $user, ?string $size = null, array $parameters = []): string|false
     {
@@ -207,6 +213,8 @@ final class FunctionExtension extends AbstractExtension
      * Output a javascript source tag with a version and nonce.
      *
      * @throws \Exception
+     *
+     * @psalm-param array<string, mixed> $parameters
      */
     private function assetJs(string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -307,6 +315,8 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Reduce parameters with a key/value tags.
+     *
+     * @psalm-param array<string, mixed> $parameters
      */
     private function reduceParameters(array $parameters): string
     {

@@ -111,7 +111,7 @@ class ApplicationParametersType extends AbstractParametersType
 
         $key = PropertyServiceInterface::P_MIN_MARGIN;
         $helper->field($key)
-            ->updateAttribute('data-default', (float) $this->getDefaultValue($key) * 100)
+            ->updateAttribute('data-default', (float) $this->getDefaultValue($key) * 100.0)
             ->percent(true)
             ->addPercentType(0);
     }

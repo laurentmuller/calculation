@@ -196,7 +196,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
      */
     public function getMarginAmount(): float
     {
-        return $this->amount * ($this->margin - 1);
+        return $this->amount * ($this->margin - 1.0);
     }
 
     /**
@@ -359,7 +359,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     public function update(): self
     {
         // update categories
-        $amount = 0;
+        $amount = 0.0;
         foreach ($this->categories as $category) {
             $category->update()->setGroup($this);
             $amount += $category->getAmount();

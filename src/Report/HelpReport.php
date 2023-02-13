@@ -144,7 +144,7 @@ class HelpReport extends AbstractReport
     private function outputActions(array $actions, string $description): void
     {
         // check height
-        $height = self::LINE_HEIGHT * (empty($description) ? 0 : $this->getLinesCount($description, 0.0)) + 3 + self::LINE_HEIGHT;
+        $height = self::LINE_HEIGHT * (empty($description) ? 0.0 : (float) $this->getLinesCount($description, 0.0)) + 3.0 + self::LINE_HEIGHT;
         if (!$this->isPrintable($height)) {
             $this->AddPage();
         } else {
@@ -191,7 +191,7 @@ class HelpReport extends AbstractReport
     private function outputConstraints(array $constraints): void
     {
         $margin = $this->getLeftMargin();
-        $this->SetLeftMargin($margin + 4);
+        $this->SetLeftMargin($margin + 4.0);
         foreach ($constraints as $constraint) {
             $this->MultiCell(0, self::LINE_HEIGHT, \strip_tags("- $constraint"), PdfBorder::none(), PdfTextAlignment::LEFT);
         }

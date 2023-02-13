@@ -316,7 +316,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     public function update(): self
     {
         // update items
-        $amount = 0;
+        $amount = 0.0;
         foreach ($this->items as $item) {
             $item->setCategory($this);
             $amount += $item->getTotal();

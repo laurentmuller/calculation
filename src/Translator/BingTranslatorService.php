@@ -19,6 +19,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * Microsoft BingTranslatorService Text API 3.0.
  *
+ * @psalm-import-type LastErrorType from \App\Service\AbstractHttpClientService
+ *
  * @see https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview
  */
 class BingTranslatorService extends AbstractTranslatorService
@@ -228,13 +230,7 @@ class BingTranslatorService extends AbstractTranslatorService
 
         // check error
         if (isset($value['error'])) {
-            /**
-             * @var null|array{
-             *      result: bool,
-             *      code: string|int,
-             *      message: string,
-             *      exception?: array|\Exception} $error
-             */
+            /** @psalm-var  LastErrorType|null $error */
             $error = $value['error'];
             $this->lastError = $error;
 

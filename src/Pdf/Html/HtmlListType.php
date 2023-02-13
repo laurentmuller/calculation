@@ -55,7 +55,7 @@ enum HtmlListType: string
             HtmlListType::LETTER_UPPER => self::toLetter($number, $suffix),
             HtmlListType::ROMAN_LOWER => \strtolower(self::toRoman($number, $suffix)),
             HtmlListType::ROMAN_UPPER => self::toRoman($number, $suffix),
-            HtmlListType::NUMBER => $number <= 0 ? '' : $number . $suffix,
+            HtmlListType::NUMBER => $number <= 0 ? '' : \sprintf('%d%s', $number, $suffix),
         };
     }
 

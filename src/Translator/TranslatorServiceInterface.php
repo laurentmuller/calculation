@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * Service to detect and translate texts.
+ *
+ * @psalm-import-type LastErrorType from \App\Service\AbstractHttpClientService
  */
 #[AutoconfigureTag()]
 interface TranslatorServiceInterface
@@ -68,11 +70,7 @@ interface TranslatorServiceInterface
      *
      * @return array|null the last error with the 'code' and the 'message' entries; null if none
      *
-     * @psalm-return null|array{
-     *      result: bool,
-     *      code: string|int,
-     *      message: string,
-     *      exception?: array|\Exception}
+     * @psalm-return LastErrorType|null
      */
     public function getLastError(): ?array;
 

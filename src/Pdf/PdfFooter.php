@@ -56,7 +56,7 @@ class PdfFooter
 
         // position and cells width
         $parent->SetY(PdfDocument::FOOTER_OFFSET);
-        $cellWidth = $parent->getPrintableWidth() / 3;
+        $cellWidth = $parent->getPrintableWidth() / 3.0;
 
         // style and line color
         PdfStyle::getDefaultStyle()->setFontSize(8)->apply($parent);

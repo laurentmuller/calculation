@@ -660,7 +660,7 @@ class AjaxController extends AbstractController
     {
         if ($error = $service->getLastError()) {
             // translate message
-            $id = $service->getDefaultIndexName() . '.' . $error['code'];
+            $id = \sprintf('%s.%s', $service->getDefaultIndexName(), $error['code']);
             if ($this->isTransDefined($id, 'translator')) {
                 $error['message'] = $this->trans($id, [], 'translator');
             }

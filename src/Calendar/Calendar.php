@@ -166,17 +166,17 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->reset();
 
         // get first and last days of the year
-        $firstYearDate = new \DateTime('1 January ' . $year);
-        $lastYearDate = new \DateTime('31 December ' . $year);
+        $firstYearDate = new \DateTime(\sprintf('1 January %d', $year));
+        $lastYearDate = new \DateTime(\sprintf('31 December %d', $year));
 
         // get first day in calendar (monday of the 1st week)
-        $firstDate = new \DateTime('first monday of January ' . $year);
+        $firstDate = new \DateTime(\sprintf('first monday of January %s', $year));
         if ($firstDate > $firstYearDate) {
             $firstDate->sub(new \DateInterval('P1W'));
         }
 
         // get the last days in calendar (sunday of the last week)
-        $lastDate = new \DateTime('last sunday of December ' . $year);
+        $lastDate = new \DateTime(\sprintf('last sunday of December %d', $year));
         if ($lastDate < $lastYearDate) {
             $lastDate->add(new \DateInterval('P1W'));
         }

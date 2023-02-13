@@ -627,7 +627,7 @@ class SpreadsheetDocument extends Spreadsheet
         $firstName = $this->stringFromColumnIndex($columnIndex);
         $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
         $sheet->getStyle("$firstName$rowIndex:$lastName$rowIndex")->getFont()->setBold(true);
-        $sheet->freezePane('A' . ($rowIndex + 1));
+        $sheet->freezePane(\sprintf('A%d', $rowIndex + 1));
 
         $sheet->getPageSetup()
             ->setFitToWidth(1)
@@ -867,7 +867,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $columnName = $this->stringFromColumnIndex($columnIndex);
 
-        return $columnName . $rowIndex;
+        return \sprintf('%s%d', $columnName, $rowIndex);
     }
 
     /**

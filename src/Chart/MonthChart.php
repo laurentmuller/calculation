@@ -87,8 +87,8 @@ class MonthChart extends BaseChart
         }
 
         $count = \array_sum($countValues);
-        $total = \array_sum($sumValues);
-        $items = \array_sum($itemValues);
+        $total = (float) \array_sum($sumValues);
+        $items = (float) \array_sum($itemValues);
         $marginAmount = $total - $items;
         $marginPercent = $this->safeDivide($total, $items);
 

@@ -17,6 +17,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Google translator service v2.0.
  *
+ * @psalm-import-type LastErrorType from \App\Service\AbstractHttpClientService
+ *
  * @see https://cloud.google.com/translate/docs/translating-text
  */
 class GoogleTranslatorService extends AbstractTranslatorService
@@ -245,13 +247,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
 
         // check error
         if (isset($response['error'])) {
-            /**
-             * @var null|array{
-             *      result: bool,
-             *      code: string|int,
-             *      message: string,
-             *      exception?: array|\Exception} $error
-             */
+            /** @psalm-var  LastErrorType|null $error */
             $error = $response['error'];
             $this->lastError = $error;
 

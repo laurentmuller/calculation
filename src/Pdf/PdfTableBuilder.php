@@ -554,10 +554,10 @@ class PdfTableBuilder
             // cell text
             $line_height = PdfDocument::LINE_HEIGHT;
             if (!$style->getFont()->isDefaultSize()) {
-                $line_height = $parent->getFontSize() + 2 * $margins;
+                $line_height = $parent->getFontSize() + 2.0 * $margins;
             }
             $textBounds = clone $bounds;
-            $indent = $style->getIndent();
+            $indent = (float) $style->getIndent();
             if ($indent > 0) {
                 $parent->SetX($x + $indent);
                 $textBounds->indent($indent);
@@ -569,7 +569,7 @@ class PdfTableBuilder
                 $linkBounds = clone $textBounds;
                 $linkBounds->inflate(-$margins);
                 $linkWidth = $parent->GetStringWidth($text);
-                $linkHeight = $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2 * $margins;
+                $linkHeight = (float) $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2.0 * $margins;
                 $linkBounds->setSize($linkWidth, $linkHeight);
                 $this->drawCellLink($parent, $linkBounds, $link);
             }
@@ -687,11 +687,13 @@ class PdfTableBuilder
             switch ($this->alignment) {
                 case PdfTextAlignment::CENTER:
                 case PdfTextAlignment::JUSTIFIED:
+                    /** @psalm-var float $w */
                     $w = \array_sum($widths);
-                    $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2;
+                    $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2.0;
                     $parent->SetX($x);
                     break;
                 case PdfTextAlignment::RIGHT:
+                    /** @psalm-var float $w */
                     $w = \array_sum($widths);
                     $x = $parent->GetPageWidth() - $parent->getRightMargin() - $w;
                     $parent->SetX($x);
@@ -729,16 +731,16 @@ class PdfTableBuilder
         if ($cell instanceof PdfImageCell) {
             $height = $parent->pixels2UserUnit($cell->getHeight());
 
-            return $height + 2 * $parent->getCellMargin();
+            return $height + 2.0 * $parent->getCellMargin();
         }
 
         $style->apply($parent);
-        $width = \max(0, $width - $style->getIndent());
-        $lines = $parent->getLinesCount($text, $width);
+        $width = \max(0, $width - (float) $style->getIndent());
+        $lines = (float) $parent->getLinesCount($text, $width);
 
         $height = PdfDocument::LINE_HEIGHT;
         if (PdfFont::DEFAULT_SIZE !== $style->getFont()->getSize()) {
-            $height = $parent->getFontSize() + 2 * $parent->getCellMargin();
+            $height = $parent->getFontSize() + 2.0 * $parent->getCellMargin();
         }
 
         return $lines * $height;

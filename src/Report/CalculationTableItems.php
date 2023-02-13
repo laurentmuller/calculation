@@ -157,7 +157,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     private function checkLines(int $lines): bool
     {
         $this->inProgress = true;
-        $result = $this->checkNewPage($lines * PdfDocument::LINE_HEIGHT);
+        $result = $this->checkNewPage((float) $lines * PdfDocument::LINE_HEIGHT);
         $this->inProgress = false;
 
         return $result;

@@ -208,7 +208,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if (!$outputUsers) {
             --$lines;
         }
-        if (!$this->isPrintable($lines * self::LINE_HEIGHT)) {
+        if (!$this->isPrintable((float) $lines * self::LINE_HEIGHT)) {
             $this->AddPage();
         }
 

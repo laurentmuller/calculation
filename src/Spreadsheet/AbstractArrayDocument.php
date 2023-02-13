@@ -25,9 +25,7 @@ abstract class AbstractArrayDocument extends AbstractDocument
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
-     * @param array              $entities   the entities to render
-     *
-     * @psalm-param T[] $entities
+     * @param T[]                $entities   the entities to render
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
@@ -51,11 +49,9 @@ abstract class AbstractArrayDocument extends AbstractDocument
     /**
      * Render the given entities.
      *
-     * @param array $entities the entities to render
+     * @param T[] $entities the entities to render
      *
      * @return bool true if rendered successfully; false otherwise
-     *
-     * @psalm-param T[] $entities
      */
     abstract protected function doRender(array $entities): bool;
 }

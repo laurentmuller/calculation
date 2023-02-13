@@ -370,7 +370,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getGlobalMarginAmount(): float
     {
-        return $this->getGroupsTotal() * ($this->globalMargin - 1);
+        return $this->getGroupsTotal() * ($this->globalMargin - 1.0);
     }
 
     /**
@@ -388,7 +388,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getGroupsAmount(): float
     {
-        $total = 0;
+        $total = 0.0;
         foreach ($this->groups as $group) {
             $total += $group->getAmount();
         }
@@ -420,7 +420,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getGroupsMarginAmount(): float
     {
-        $total = 0;
+        $total = 0.0;
         foreach ($this->groups as $group) {
             $total += $group->getMarginAmount();
         }
@@ -433,7 +433,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getGroupsTotal(): float
     {
-        $total = 0;
+        $total = 0.0;
         foreach ($this->groups as $group) {
             $total += $group->getTotal();
         }
@@ -487,7 +487,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         $value = $this->safeDivide($this->overallTotal, $this->itemsTotal);
 
-        return \floor($value * 100) / 100;
+        return \floor($value * 100.0) / 100.0;
     }
 
     /**
@@ -581,7 +581,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getUserMarginTotal(): float
     {
-        return $this->getTotalNet() * (1 + $this->userMargin);
+        return $this->getTotalNet() * (1.0 + $this->userMargin);
     }
 
     /**

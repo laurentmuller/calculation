@@ -73,7 +73,7 @@ class CalculationTableOverall extends PdfTableBuilder
         $totalBrut = $totalItems + $totalMargins;
 
         $globalMargin = $calculation->getGlobalMargin();
-        $globalAmount = $totalBrut * ($globalMargin - 1);
+        $globalAmount = $totalBrut * ($globalMargin - 1.0);
 
         $totalNet = $totalBrut + $globalAmount;
         $userMargin = $calculation->getUserMargin();

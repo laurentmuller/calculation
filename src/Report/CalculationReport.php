@@ -142,11 +142,11 @@ class CalculationReport extends AbstractReport
         $lines += 3;
 
         // total height
-        $total = 2 + self::LINE_HEIGHT * $lines;
+        $total = 2.0 + self::LINE_HEIGHT * (float) $lines;
 
         // qr-code
         if (null !== $this->qrcode) {
-            $total += $this->getQrCodeSize() - 1;
+            $total += $this->getQrCodeSize() - 1.0;
         }
 
         // check
@@ -239,7 +239,7 @@ class CalculationReport extends AbstractReport
                 // position
                 $size = $this->getQrCodeSize();
                 $x = $this->GetPageWidth() - $this->getRightMargin() - $size;
-                $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1;
+                $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1.0;
 
                 // render
                 $this->Image($path, $x, $y, $size, $size, PdfImageType::PNG, $this->getQrCodeLink());

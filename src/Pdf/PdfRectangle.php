@@ -105,8 +105,8 @@ class PdfRectangle
     {
         $this->x -= $x;
         $this->y -= $y;
-        $this->width += 2 * $x;
-        $this->height += 2 * $y;
+        $this->width += 2.0 * $x;
+        $this->height += 2.0 * $y;
 
         return $this;
     }

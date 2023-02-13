@@ -251,7 +251,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
         $color = $image->allocateBlack();
         if (\is_int($color)) {
             // get layout
-            $size = (int) ($height * 0.7);
+            $size = (int) ((float) $height * 0.7);
             /** @psalm-var non-empty-array<array{angle: int, char: string, height: int, width: int}> $items */
             $items = $this->computeText($image, $size, $font, $text);
 

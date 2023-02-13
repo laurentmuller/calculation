@@ -205,9 +205,9 @@ class ProductUpdater implements ServiceSubscriberInterface
      */
     private function computePrice(float $oldPrice, bool $percent, float $value, bool $isRound): float
     {
-        $newPrice = $percent ? $oldPrice * (1 + $value) : $oldPrice + $value;
+        $newPrice = $percent ? $oldPrice * (1.0 + $value) : $oldPrice + $value;
         if ($isRound) {
-            $newPrice = \round($newPrice * 20) / 20;
+            $newPrice = \round($newPrice * 20.0) / 20.0;
         }
 
         return $this->round($newPrice);

@@ -81,11 +81,11 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
         $height = $parent->pixels2UserUnit($this->height);
 
         // get default position
-        $y = $bounds->y() + ($bounds->height() - $height) / 2;
+        $y = $bounds->y() + ($bounds->height() - $height) / 2.0;
         $x = match ($alignment) {
             PdfTextAlignment::RIGHT => $bounds->right() - $width,
             PdfTextAlignment::CENTER,
-            PdfTextAlignment::JUSTIFIED => $bounds->x() + ($bounds->width() - $width) / 2,
+            PdfTextAlignment::JUSTIFIED => $bounds->x() + ($bounds->width() - $width) / 2.0,
             default => $bounds->x(),
         };
 
@@ -156,13 +156,13 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
 
         $ratio = $this->safeDivide($this->originalWidth, $this->originalHeight, 1);
         if ($height > 0) {
-            $width = $height * $ratio;
+            $width = (int) \round((float) $height * $ratio);
         } elseif ($width > 0) {
-            $height = $width / $ratio;
+            $height = (int) \round((float) $width / $ratio);
         }
 
-        $this->width = (int) \round($width);
-        $this->height = (int) \round($height);
+        $this->width = $width;
+        $this->height = $height;
 
         return $this;
     }

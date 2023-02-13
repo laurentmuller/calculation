@@ -9,6 +9,7 @@
         findUnusedPsalmSuppress="true"
         findUnusedCode="true"
         resolveFromConfigFile="true"
+        strictBinaryOperands="true"
         phpVersion="8.1"
         errorLevel="1">
 
@@ -50,15 +51,15 @@
 
         <InternalMethod>
             <errorLevel type="suppress">
-                <file name="src/Service/DatabaseInfoService.php" />
+                <file name="src/Service/DatabaseInfoService.php"/>
                 <referencedMethod name="App\Service\DatabaseInfoService::getDatabase"/>
             </errorLevel>
         </InternalMethod>
 
         <UndefinedFunction>
             <errorLevel type="suppress">
-                <file name="src/Twig/FormatExtension.php" />
-                <referencedFunction name="App\Twig\FormatExtension::dateTimeFilter" />
+                <file name="src/Twig/FormatExtension.php"/>
+                <referencedFunction name="App\Twig\FormatExtension::dateTimeFilter"/>
             </errorLevel>
         </UndefinedFunction>
     </issueHandlers>
@@ -66,5 +67,7 @@
     <plugins>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+        <pluginClass class="Orklah\PsalmInsaneComparison\Plugin"/>
     </plugins>
 </psalm>

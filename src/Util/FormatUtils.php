@@ -179,7 +179,14 @@ final class FormatUtils
         $datetype ??= self::getDateType();
         $timetype ??= self::getTimeType();
 
-        $hash = $locale . '|' . $datetype . '|' . $timetype . '|' . self::hashTimeZone($timezone) . '|' . $calendar . '|' . $pattern;
+        $hash = \implode('|', [
+            $locale,
+            $datetype,
+            $timetype,
+            self::hashTimeZone($timezone),
+            $calendar,
+            $pattern,
+        ]);
         if (!isset(self::$dateFormatters[$hash])) {
             /** @var \IntlDateFormatter $formatter */
             $formatter = \IntlDateFormatter::create($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
@@ -321,7 +328,13 @@ final class FormatUtils
      */
     private static function getNumberHash(int $style, int $digits, int $roundingMode, string $extraHash = ''): string
     {
-        return \Locale::getDefault() . '|' . $style . '|' . $digits . '|' . $roundingMode . '|' . $extraHash;
+        return \implode('|', [
+            \Locale::getDefault(),
+            $style,
+            $digits,
+            $roundingMode,
+            $extraHash,
+        ]);
     }
 
     /**

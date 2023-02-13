@@ -56,8 +56,8 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
             if ($this->started) {
                 $doc = $builder->getParent();
                 $margin = $doc->getCellMargin();
-                $bounds->inflateXY(-3 * $margin, -$margin)
-                    ->setHeight(self::LINE_HEIGHT - 2 * $margin);
+                $bounds->inflateXY(-3.0 * $margin, -$margin)
+                    ->setHeight(self::LINE_HEIGHT - 2.0 * $margin);
                 $doc->rectangle($bounds, PdfRectangleStyle::BOTH);
 
                 return true;

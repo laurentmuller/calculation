@@ -27,19 +27,22 @@ abstract class AbstractArrayReport extends AbstractReport
     /**
      * Constructor.
      *
-     * @param AbstractController            $controller  the parent controller
-     * @param array                         $entities    the entities to render
-     * @param PdfDocumentOrientation|string $orientation the page orientation
-     * @param PdfDocumentUnit|string        $unit        the measure unit
-     * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
-     *
-     * @psalm-param T[] $entities
+     * @param AbstractController     $controller  the parent controller
+     * @param T[]                    $entities    the entities to render
+     * @param PdfDocumentOrientation $orientation the page orientation
+     * @param PdfDocumentUnit        $unit        the user unit
+     * @param PdfDocumentSize        $size        the document size
      *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function __construct(AbstractController $controller, protected array $entities, PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
-    {
+    public function __construct(
+        AbstractController $controller,
+        protected array $entities,
+        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
+        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
+        PdfDocumentSize $size = PdfDocumentSize::A4
+    ) {
         parent::__construct($controller, $orientation, $unit, $size);
     }
 
@@ -58,11 +61,9 @@ abstract class AbstractArrayReport extends AbstractReport
     /**
      * Render the given entities.
      *
-     * @param array $entities the entities to render
+     * @param T[] $entities the entities to render
      *
      * @return bool true if rendered successfully; false otherwise
-     *
-     * @psalm-param T[] $entities
      */
     abstract protected function doRender(array $entities): bool;
 }

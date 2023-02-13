@@ -120,7 +120,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $overall_group['margin_amount'] = $overall_group['total'] - $total_amount;
 
         // update parameters
-        $parameters['user_margin'] = (int) (100 * $user_margin);
+        $parameters['user_margin'] = (int) (100.0 * $user_margin);
     }
 
     /**
@@ -278,8 +278,8 @@ final class CalculationService implements ServiceSubscriberInterface
         $old_global_margin = $this->round($calculation->getGlobalMargin());
 
         // 1. update each groups and compute item and overall total
-        $items_total = 0;
-        $overall_total = 0;
+        $items_total = 0.0;
+        $overall_total = 0.0;
         $groups = $calculation->getGroups();
         foreach ($groups as $group) {
             $group->update();
@@ -385,7 +385,7 @@ final class CalculationService implements ServiceSubscriberInterface
 
         // global margin row
         $global_margin ??= $this->getGlobalMargin($total_net);
-        $global_amount = $this->round($total_net * ($global_margin - 1));
+        $global_amount = $this->round($total_net * ($global_margin - 1.0));
         $total_net += $global_amount;
         $result[] = [
             'id' => self::ROW_GLOBAL_MARGIN,
@@ -414,7 +414,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $overall_total = $total_net + $user_amount;
         $overall_amount = $overall_total - $groups_amount;
         $overall_margin = $this->safeDivide($overall_amount, $groups_amount);
-        $overall_margin = 1.0 + \floor($overall_margin * 100) / 100;
+        $overall_margin = 1.0 + \floor($overall_margin * 100.0) / 100.0;
         $overall_below = !empty($groups) && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         $result[] = [

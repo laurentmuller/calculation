@@ -109,7 +109,7 @@ class CellBuilder
     public function applyByColumnAndRow(int $column, int $row, mixed $value): self
     {
         $name = Coordinate::stringFromColumnIndex($column);
-        $coordinate = $name . $row;
+        $coordinate = \sprintf('%s%d', $name, $row);
 
         return $this->apply($coordinate, $value);
     }

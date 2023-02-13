@@ -24,7 +24,7 @@ class PdfHeader
     /**
      * The line height for customer address and contact.
      */
-    private const SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1;
+    private const SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1.0;
 
     /**
      * The customer information.
@@ -169,13 +169,13 @@ class PdfHeader
     {
         if ($isAddress) {
             // name + title + phone
-            $cellWidth = $printableWidth / 3;
+            $cellWidth = $printableWidth / 3.0;
             $this->outputName($cellWidth, true);
             $this->outputTitle($cellWidth, true);
             $this->outputPhone($cellWidth);
         } else {
             // title + name
-            $cellWidth = $printableWidth / 2;
+            $cellWidth = $printableWidth / 2.0;
             $this->outputTitle($cellWidth, false);
             $this->outputName($cellWidth, false);
 
@@ -188,14 +188,14 @@ class PdfHeader
     {
         if (null !== $this->description) {
             // address + description + fax
-            $cellWidth = $printableWidth / 3;
+            $cellWidth = $printableWidth / 3.0;
             $this->outputAddress($cellWidth);
 
             // description
             $this->outputDescription($cellWidth, true);
         } else {
             // address
-            $cellWidth = $printableWidth / 2;
+            $cellWidth = $printableWidth / 2.0;
             $this->outputAddress($cellWidth);
         }
         // fax
@@ -205,7 +205,7 @@ class PdfHeader
     private function line3(float $printableWidth): void
     {
         // zip city + e-mail
-        $cellWidth = $printableWidth / 2;
+        $cellWidth = $printableWidth / 2.0;
         $this->outputZipCity($cellWidth);
         $this->outputEmail($cellWidth);
     }

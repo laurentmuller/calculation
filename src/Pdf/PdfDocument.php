@@ -27,28 +27,28 @@ use App\Traits\MathTrait;
 /**
  * PDF document with default header and footer.
  *
- * @property int     $page           The current page number.
- * @property float[] $DefPageSize    The default page size.
- * @property float[] $CurPageSize    The current page size.
- * @property float   $lMargin        The left margin.
- * @property float   $tMargin        The top margin.
- * @property float   $rMargin        The right margin.
- * @property float   $bMargin        The bottom margin.
- * @property float   $cMargin        The cell margin.
- * @property float   $k              The scale factor (number of points in user unit).
- * @property float   $x              The current X position in user unit.
- * @property float   $y              The current Y position in user unit.
- * @property float   $w              The width of current page in user unit.
- * @property float   $h              The height of current page in user unit.
- * @property string  $FontFamily     The current font family.
- * @property string  $FontStyle      The current font style.
- * @property float   $FontSizePt     The current font size in points.
- * @property float   $FontSize       The current font size in user unit.
- * @property array   $CurrentFont    The current font information.
- * @property string  $DefOrientation The default orientation.
- * @property string  $CurOrientation The current orientation.
- * @property int     $CurRotation    The current page rotation in degrees.
- * @property float   $lasth          The height of last printed cell.
+ * @property int                             $page           The current page number.
+ * @property array{0: float, 1: float}       $DefPageSize    The default page size (width and height) in the user unit.
+ * @property array{0: float, 1: float}       $CurPageSize    The current page size (width and height) in the user unit.
+ * @property float                           $lMargin        The left margin.
+ * @property float                           $tMargin        The top margin.
+ * @property float                           $rMargin        The right margin.
+ * @property float                           $bMargin        The bottom margin.
+ * @property float                           $cMargin        The cell margin.
+ * @property float                           $k              The scale factor (number of points in user unit).
+ * @property float                           $x              The current X position in user unit.
+ * @property float                           $y              The current Y position in user unit.
+ * @property float                           $w              The width of current page in user unit.
+ * @property float                           $h              The height of current page in user unit.
+ * @property string                          $FontFamily     The current font family.
+ * @property string                          $FontStyle      The current font style.
+ * @property float                           $FontSizePt     The current font size in points.
+ * @property float                           $FontSize       The current font size in user unit.
+ * @property array{cw: array<string, float>} $CurrentFont    The current font information.
+ * @property string                          $DefOrientation The default orientation.
+ * @property string                          $CurOrientation The current orientation.
+ * @property int                             $CurRotation    The current page rotation in degrees.
+ * @property float                           $lasth          The height of last printed cell.
  *
  * @method float GetX()          The current X position in user unit.
  * @method float GetY()          The current Y position in user unit.
@@ -63,12 +63,12 @@ class PdfDocument extends \FPDF
     /**
      * The footer offset.
      */
-    final public const FOOTER_OFFSET = -15;
+    final public const FOOTER_OFFSET = -15.0;
 
     /**
      * The default line height.
      */
-    final public const LINE_HEIGHT = 5;
+    final public const LINE_HEIGHT = 5.0;
 
     /**
      * The new line separator.
@@ -93,22 +93,16 @@ class PdfDocument extends \FPDF
     /**
      * Constructor.
      *
-     * @param PdfDocumentOrientation|string $orientation the page orientation
-     * @param PdfDocumentUnit|string        $unit        the measure unit
-     * @param PdfDocumentSize|int[]         $size        the document size or the width and height of the document
+     * @param PdfDocumentOrientation $orientation the page orientation
+     * @param PdfDocumentUnit        $unit        the user unit
+     * @param PdfDocumentSize        $size        the document size or an array containing the width and the height (expressed in the user unit)
      */
-    public function __construct(PdfDocumentOrientation|string $orientation = PdfDocumentOrientation::PORTRAIT, PdfDocumentUnit|string $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize|array $size = PdfDocumentSize::A4)
-    {
-        if ($orientation instanceof PdfDocumentOrientation) {
-            $orientation = $orientation->value;
-        }
-        if ($unit instanceof PdfDocumentUnit) {
-            $unit = $unit->value;
-        }
-        if ($size instanceof PdfDocumentSize) {
-            $size = $size->value;
-        }
-        parent::__construct($orientation, $unit, $size);
+    public function __construct(
+        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
+        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
+        PdfDocumentSize $size = PdfDocumentSize::A4
+    ) {
+        parent::__construct($orientation->value, $unit->value, $size->value);
 
         $this->header = new PdfHeader($this);
         $this->footer = new PdfFooter($this);
@@ -239,9 +233,9 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Gets the default page size.
+     * Gets the default page size (width and height) in the user unit.
      *
-     * @return float[] the current page size
+     * @return array{0: float, 1: float} the current page size
      */
     public function getDefaultPageSize(): array
     {
@@ -317,14 +311,13 @@ class PdfDocument extends \FPDF
         if ($width <= 0) {
             $width = $this->w - $this->rMargin - $this->x;
         }
-        $maxWidth = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $maxWidth = ($width - 2.0 * $this->cMargin) * 1000.0 / $this->FontSize;
 
         $sep = -1;
         $index = 0;
         $lastIndex = 0;
-        $currentWidth = 0;
+        $currentWidth = 0.0;
         $linesCount = 1;
-        /** @psalm-var array<string, float> $cw */
         $cw = $this->CurrentFont['cw'];
 
         // run over text
@@ -335,7 +328,7 @@ class PdfDocument extends \FPDF
                 ++$index;
                 $sep = -1;
                 $lastIndex = $index;
-                $currentWidth = 0;
+                $currentWidth = 0.0;
                 ++$linesCount;
                 continue;
             }
@@ -356,7 +349,7 @@ class PdfDocument extends \FPDF
                 }
                 $sep = -1;
                 $lastIndex = $index;
-                $currentWidth = 0;
+                $currentWidth = 0.0;
                 ++$linesCount;
             } else {
                 ++$index;

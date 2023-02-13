@@ -136,7 +136,7 @@ class HeaderFooter
         }
 
         if (self::DEFAULT_FONT_SIZE !== $this->fontSize) {
-            $value .= '&' . $this->fontSize;
+            $value .= \sprintf('&%d', $this->fontSize);
         }
 
         if ($bold) {

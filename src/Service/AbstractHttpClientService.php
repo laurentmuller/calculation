@@ -23,9 +23,14 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service using the HttpClient.
-
  *
  * @property \Psr\Container\ContainerInterface $container
+ *
+ * @psalm-type LastErrorType = array{
+ *      result: bool,
+ *      code: string|int,
+ *      message: string,
+ *      exception?: array|\Exception}
  */
 abstract class AbstractHttpClientService implements ServiceSubscriberInterface
 {
@@ -65,11 +70,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * The last error.
      *
-     * @psalm-var null|array{
-     *      result: bool,
-     *      code: string|int,
-     *      message: string,
-     *      exception?: array|\Exception}
+     * @psalm-var LastErrorType|null
      */
     protected ?array $lastError = null;
 
@@ -108,11 +109,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @return array|null the last error with the 'code' and the 'message' and eventually the exception; null if none
      *
-     * @psalm-return null|array{
-     *      result: bool,
-     *      code: string|int,
-     *      message: string,
-     *      exception?: array|\Exception}
+     * @psalm-return LastErrorType|null
      */
     public function getLastError(): ?array
     {

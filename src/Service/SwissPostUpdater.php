@@ -19,6 +19,7 @@ use App\Model\SwissPostUpdateResult;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
+use App\Util\Utils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -136,7 +137,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
 
         // same as current database?
-        if (0 === \strcasecmp($sourceFile, $this->databaseName)) {
+        if (Utils::equalIgnoreCase($sourceFile, $this->databaseName)) {
             return $this->setError('open_database');
         }
 

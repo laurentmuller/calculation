@@ -95,6 +95,15 @@ class UtilsTest extends TestCase
         ];
     }
 
+    public function getEqualIgnoreCase(): array
+    {
+        return [
+            ['home', 'Home'],
+            ['home', 'HOME'],
+            ['a', 'b', false],
+        ];
+    }
+
     public function getExportVar(): array
     {
         return [
@@ -200,8 +209,8 @@ class UtilsTest extends TestCase
      */
     public function testCapitalize(string $value, string $expected): void
     {
-        $actual = Utils::capitalize($value);
-        self::assertEquals($expected, $actual);
+        $result = Utils::capitalize($value);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -210,8 +219,8 @@ class UtilsTest extends TestCase
     public function testCompare(\stdClass $a, \stdClass $b, string $field, int $expected, bool $ascending = true): void
     {
         $accessor = Utils::getAccessor();
-        $actual = Utils::compare($a, $b, $field, $accessor, $ascending);
-        self::assertEquals($expected, $actual);
+        $result = Utils::compare($a, $b, $field, $accessor, $ascending);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -219,8 +228,8 @@ class UtilsTest extends TestCase
      */
     public function testContains(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
-        $actual = Utils::contains($haystack, $needle, $ignore_case);
-        self::assertEquals($expected, $actual);
+        $result = Utils::contains($haystack, $needle, $ignore_case);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -228,8 +237,17 @@ class UtilsTest extends TestCase
      */
     public function testEndWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
-        $actual = Utils::endWith($haystack, $needle, $ignore_case);
-        self::assertEquals($expected, $actual);
+        $result = Utils::endWith($haystack, $needle, $ignore_case);
+        self::assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider getEqualIgnoreCase
+     */
+    public function testEqualIgnoreCase(string $string1, string $string2, bool $expected = true): void
+    {
+        $result = Utils::equalIgnoreCase($string1, $string2);
+        self::assertEquals($result, $expected);
     }
 
     /**
@@ -258,31 +276,29 @@ class UtilsTest extends TestCase
      */
     public function testExportVar(mixed $var, mixed $expected): void
     {
-        $actual = Utils::exportVar($var);
-        self::assertEquals($expected, $actual);
+        $result = Utils::exportVar($var);
+        self::assertEquals($expected, $result);
     }
 
     /**
      * @dataProvider getShortName
      *
-     * @param mixed $var
+     * @psalm-param object|class-string|null $var
      */
-    public function testGetShortName($var, mixed $expected, bool $exception = false): void
+    public function testGetShortName(object|string|null $var, mixed $expected, bool $exception = false): void
     {
         if (null === $var) {
             $this->expectException(\TypeError::class);
         } elseif ($exception) {
             $this->expectException(\ReflectionException::class);
         }
-        $actual = Utils::getShortName($var);
-        self::assertEquals($expected, $actual);
+        $result = Utils::getShortName($var);
+        self::assertEquals($expected, $result);
     }
 
     public function testGroupByArrays(): void
     {
-        /**
-         * @var array<array{id: int, value: string}> $array
-         */
+        /** @psalm-var  array<array{id: int, value: string}> $array */
         $array = [
             ['id' => 1, 'value' => '1'],
             ['id' => 2, 'value' => '2'],
@@ -290,9 +306,7 @@ class UtilsTest extends TestCase
         ];
         $key = 'id';
 
-        /**
-         * @var array<int, array> $result
-         */
+        /** @psalm-var array<int, array> $result */
         $result = Utils::groupBy($array, $key);
 
         self::assertArrayHasKey(1, $result);
@@ -324,9 +338,7 @@ class UtilsTest extends TestCase
 
     public function testGroupByMultiple(): void
     {
-        /**
-         * @var array<array{id0: int, id1: string, value: string}> $array
-         */
+        /** @psalm-var  array<array{id0: int, id1: string, value: string}> $array */
         $array = [
             ['id0' => 1, 'id1' => '1', 'value' => '1'],
             ['id0' => 1, 'id1' => '1', 'value' => '2'],
@@ -337,9 +349,7 @@ class UtilsTest extends TestCase
             ['id0' => 2, 'id1' => '2', 'value' => '2'],
         ];
 
-        /**
-         * @var array<int, array<int, array>> $result
-         */
+        /** @psalm-var  array<int, array<int, array>> $result */
         $result = Utils::groupBy($array, 'id0', 'id1');
 
         // first level
@@ -371,9 +381,8 @@ class UtilsTest extends TestCase
             $this->createData(2, '3'),
         ];
         $key = 'value';
-        /**
-         * @var array<int, array> $result
-         */
+
+        /** @psalm-var  array<int, array> $result */
         $result = Utils::groupBy($array, $key);
 
         self::assertArrayHasKey(1, $result);
@@ -387,8 +396,8 @@ class UtilsTest extends TestCase
      */
     public function testIsString(?string $var, bool $expected): void
     {
-        $actual = Utils::isString($var);
-        self::assertEquals($expected, $actual);
+        $result = Utils::isString($var);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -396,8 +405,8 @@ class UtilsTest extends TestCase
      */
     public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
-        $actual = Utils::startWith($haystack, $needle, $ignore_case);
-        self::assertEquals($expected, $actual);
+        $result = Utils::startWith($haystack, $needle, $ignore_case);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -405,11 +414,11 @@ class UtilsTest extends TestCase
      */
     public function testToFloat(mixed $var, float $expected, bool $equal): void
     {
-        $actual = Utils::toFloat($var);
+        $result = Utils::toFloat($var);
         if ($equal) {
-            self::assertEquals($actual, $expected);
+            self::assertEquals($result, $expected);
         } else {
-            self::assertNotEquals($actual, $expected);
+            self::assertNotEquals($result, $expected);
         }
     }
 
@@ -418,11 +427,11 @@ class UtilsTest extends TestCase
      */
     public function testToInt(mixed $var, int $expected, bool $equal): void
     {
-        $actual = Utils::toInt($var);
+        $result = Utils::toInt($var);
         if ($equal) {
-            self::assertEquals($actual, $expected);
+            self::assertEquals($result, $expected);
         } else {
-            self::assertNotEquals($actual, $expected);
+            self::assertNotEquals($result, $expected);
         }
     }
 
@@ -431,11 +440,11 @@ class UtilsTest extends TestCase
      */
     public function testToString(mixed $var, string $expected, bool $equal): void
     {
-        $actual = Utils::toString($var);
+        $result = Utils::toString($var);
         if ($equal) {
-            self::assertEquals($actual, $expected);
+            self::assertEquals($result, $expected);
         } else {
-            self::assertNotEquals($actual, $expected);
+            self::assertNotEquals($result, $expected);
         }
     }
 

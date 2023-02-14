@@ -40,6 +40,21 @@ trait StrengthLevelTranslatorTrait
     }
 
     /**
+     * Translate an invalid strength value.
+     */
+    public function translateInvalidLevel(StrengthLevel|int $value): string
+    {
+        if ($value instanceof StrengthLevel) {
+            $value = $value->value;
+        }
+
+        return $this->trans('password.strength_invalid', [
+            '%allowed%' => \implode(', ', StrengthLevel::values()),
+            '%value%' => $value,
+        ], 'validators');
+    }
+
+    /**
      * Translate the strength level.
      */
     public function translateLevel(StrengthLevel $level): string

@@ -164,6 +164,9 @@ class EntityVoterTest extends TestCase
         return $this->getUser(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
+    /**
+     * @psalm-param  RoleInterface::ROLE_* $role
+     */
     private function getUser(string $role): User
     {
         $user = new User();

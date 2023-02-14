@@ -34,9 +34,11 @@
         destroy() {
             if (this.$progress) {
                 this.$progress.remove();
+                this.$progress = null;
             }
             if (this.$label) {
                 this.$label.remove();
+                this.$label = null;
             }
             this.$element.off('keyup', this.keyupProxy);
             this.$element.removeData(PasswordStrength.NAME);
@@ -231,13 +233,13 @@
                 return null;
             }
 
-            // progress
+            // create progress
             that.$progress = that._createControl('div', 'progress bg-transparent').css({
                 'height': options.height,
                 'border-radius': 0
             }).appendTo($progressContainer);
 
-            // progress bars
+            // create progress bars
             for (let i = 0; i < 5; i++) {
                 const className = 'progress-bar d-none ' + options.progressClasses[i];
                 that._createControl('div', className).css({

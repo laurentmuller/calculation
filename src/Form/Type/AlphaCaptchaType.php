@@ -37,7 +37,6 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
     use SessionAwareTrait;
 
     private const SESSION_KEY = 'alpha_captcha_answer';
-
     private readonly AlphaCaptchaInterface $captcha;
     private readonly string $dataError;
     private ?string $previousAnswer = null;
@@ -80,6 +79,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
     {
         $resolver->setDefaults([
             'attr' => [
+                'class' => 'text-uppercase text-center',
                 'data-error' => $this->dataError,
                 'autocapitalize' => 'none',
                 'autocomplete' => 'off',

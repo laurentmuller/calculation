@@ -7,8 +7,9 @@
     'use strict';
 
     // password strength
-    $("#form_input").initPasswordStrength({
-        labelContainer: $('#score'),
+    const $input =  $("#form_input");
+    $input.initPasswordStrength({
+        labelContainer: $('#form_input_passwordStrength'),
         debug: true
     });
 
@@ -41,10 +42,9 @@
     });
 
     // strength level
-    // const $level = $('#form_level');
     $('#form_level').on('input', function () {
         const value = $(this).val();
-        $('#form_input').data('strength', value).trigger('keyup');
+        $input.data('strength', value).trigger('keyup');
     }).trigger('keyup');
 
 }(jQuery));

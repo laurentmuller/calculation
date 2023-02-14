@@ -28,6 +28,7 @@ use App\Repository\UserRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\MailerService;
+use App\Service\RoleHierarchyService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\UserTable;
@@ -43,7 +44,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -320,18 +320,14 @@ class UserController extends AbstractEntityController
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
-    public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy, EntityManagerInterface $manager): Response
+    public function rights(Request $request, User $item, RoleHierarchyService $service, EntityManagerInterface $manager): Response
     {
-        // same user?
-        if ($this->isConnectedUser($item)) {
-            // super admin?
-            $roles = $hierarchy->getReachableRoleNames($item->getRoles());
-            if (!\in_array(RoleInterface::ROLE_SUPER_ADMIN, $roles, true)) {
-                $this->warningTrans('user.rights.connected');
+        // same user and not super admin?
+        if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
+            $this->warningTrans('user.rights.connected');
 
-                // redirect
-                return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
-            }
+            // redirect
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
         // form
@@ -435,9 +431,10 @@ class UserController extends AbstractEntityController
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         // remove super admin users if not granted
-        $role = RoleInterface::ROLE_SUPER_ADMIN;
-        if (!$this->isGranted($role)) {
-            $criteria[] = "$alias.role <> '$role' or $alias.role IS NULL";
+        if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
+            /** @psalm-var UserRepository $repository */
+            $repository = $this->repository;
+            $criteria[] = $repository->getSuperAdminFilter($alias);
         }
 
         return parent::getEntities($field, $mode, $criteria, $alias);

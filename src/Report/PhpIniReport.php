@@ -18,6 +18,7 @@ use App\Pdf\PdfFont;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
+use App\Util\Utils;
 
 /**
  * Report for php.ini.
@@ -93,7 +94,7 @@ class PhpIniReport extends AbstractReport
         $fontStyle = PdfFont::STYLE_REGULAR;
         if (\preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = PdfTextColor::create($var);
-        } elseif (0 === \strcasecmp('no value', $var)) {
+        } elseif (Utils::equalIgnoreCase('no value', $var)) {
             $color = PdfTextColor::create('#7F7F7F');
             $fontStyle = PdfFont::STYLE_ITALIC;
         }

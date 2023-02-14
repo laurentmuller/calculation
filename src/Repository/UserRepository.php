@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Interfaces\RoleInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\NonUniqueResultException;
@@ -139,9 +140,18 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
+            'enabled' => "IFELSE($alias.$field = 1, 0, 1)",
             'role' => "SUBSTRING(IFNULL($alias.$field, 'ROLE_USER'), 5)",
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    /**
+     * Returns the criteria clause to filter user where the role name is not the super administrator role name.
+     */
+    public function getSuperAdminFilter(string $alias = self::DEFAULT_ALIAS): string
+    {
+        return \sprintf("IFNULL(%s.role, '%s') <> '%s'", $alias, RoleInterface::ROLE_USER, RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     /**

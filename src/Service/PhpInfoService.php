@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Util\Utils;
+
 /**
  * Utility class to get PHP information.
  */
@@ -62,7 +64,7 @@ final class PhpInfoService
                         $match3 = $this->convert(\trim($matchs[3]));
 
                         // special case for 'Directive'
-                        if (0 === \strcasecmp('directive', $match1)) {
+                        if (Utils::equalIgnoreCase('directive', $match1)) {
                             $directive1 = $match2;
                             $directive2 = $match3;
                         } elseif ($directive1 && $directive2) {

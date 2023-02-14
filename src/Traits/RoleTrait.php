@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Interfaces\RoleInterface;
+use App\Util\Utils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -36,6 +37,8 @@ trait RoleTrait
      * Gets the role.
      *
      * @see RoleInterface
+     *
+     * @pslam-return RoleInterface::ROLE_*
      */
     public function getRole(): string
     {
@@ -48,6 +51,8 @@ trait RoleTrait
      * @return string[]
      *
      * @see UserInterface
+     *
+     * @pslam-return RoleInterface::ROLE_*[]
      */
     public function getRoles(): array
     {
@@ -58,10 +63,12 @@ trait RoleTrait
      * {@inheritdoc}
      *
      * @see RoleInterface
+     *
+     * @psalm-param RoleInterface::ROLE_* $role
      */
     public function hasRole(string $role): bool
     {
-        return 0 === \strcasecmp($role, $this->getRole());
+        return Utils::equalIgnoreCase($role, $this->getRole());
     }
 
     /**
@@ -85,11 +92,13 @@ trait RoleTrait
     }
 
     /**
-     * Sets role.
+     * Sets the role.
+     *
+     * @psalm-param  RoleInterface::ROLE_*|null $role
      */
     public function setRole(?string $role): static
     {
-        $this->role = null === $role || 0 === \strcasecmp(RoleInterface::ROLE_USER, $role) ? null : $role;
+        $this->role = null === $role || Utils::equalIgnoreCase(RoleInterface::ROLE_USER, $role) ? null : $role;
 
         return $this;
     }

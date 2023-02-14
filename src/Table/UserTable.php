@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\User;
-use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Traits\RoleTranslatorTrait;
@@ -50,9 +49,7 @@ class UserTable extends AbstractEntityTable
      */
     public function formatEnabled(bool $enabled): string
     {
-        $key = $enabled ? 'common.value_enabled' : 'common.value_disabled';
-
-        return $this->trans($key);
+        return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
     }
 
     /**
@@ -112,8 +109,9 @@ class UserTable extends AbstractEntityTable
 
         $user = $this->security->getUser();
         if ($user instanceof User && !$user->isSuperAdmin()) {
-            $role = RoleInterface::ROLE_SUPER_ADMIN;
-            $criteria = "$alias.role <> '$role' or $alias.role IS NULL";
+            /** @psalm-var UserRepository $repository */
+            $repository = $this->repository;
+            $criteria = $repository->getSuperAdminFilter($alias);
             $query->andWhere($criteria);
         }
 

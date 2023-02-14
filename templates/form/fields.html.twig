@@ -33,10 +33,15 @@
 {%- endif -%}
 {%- endblock %}
 
+{# extends form widget with password strength place holder #}
+{%- block form_widget -%}
+    {{ parent() }}
+
+{%- endblock %}
+
 {# override password widget with an addon to show or hide the password within jQuery #}
 {% block password_widget -%}
-    {% set is_strength = 'password-strength' in attr.class|default('') %}
-    {% if is_strength %}
+    {% if ('password-strength' in attr.class|default('')) %}
         {% set attr = attr|default({})|merge({'data-url': url('ajax_password'), 'data-strength': user_service.application.strengthLevel.value}) %}
     {% endif %}
     <div class="input-group">
@@ -50,9 +55,9 @@
             </span>
         </div>
     </div>
-    {% if is_strength %}
-    <div id="{{ form.vars.id }}_passwordStrength" class="d-print-none password-strength"></div>
-    {% endif %}
+    {% if ('password-strength' in attr.class|default('')) %}
+        <div id="{{ form.vars.id }}_passwordStrength" class="password-strength d-print-none"></div>
+    {%- endif %}
 {%- endblock %}
 
 {# plain text #}
@@ -166,9 +171,7 @@
 {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt}) -}}
 {# delete #}
 {% if form.delete is defined -%}
-<div class="d-none">
-    {{- form_widget(form.delete, {hidden: true}) -}}
-</div>
+    <div class="d-none">{{- form_widget(form.delete, {hidden: true}) -}}</div>
 {%- endif %}
 {%- endblock %}
 
@@ -249,7 +252,6 @@
 {%- endblock %}
 
 {%- block alpha_captcha_widget -%}
-{%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-uppercase text-center')|trim}) -%}
 <div class="row">
     <label for="{{ id }}" class="col-sm-10 col-form-label">
         {{- question -}}

@@ -133,6 +133,19 @@ final class Utils
     }
 
     /**
+     * Returns a value indicating if the given strings are equal ignoring case consideration.
+     *
+     * @param string $string1 the first string to compare
+     * @param string $string2 the second string to compare
+     *
+     * @return bool true if equal; false otherwise
+     */
+    public static function equalIgnoreCase(string $string1, string $string2): bool
+    {
+        return 0 === \strcasecmp($string1, $string2);
+    }
+
+    /**
      * Returns a parsable string representation of a variable.
      *
      * @param mixed $expression the variable to export
@@ -207,7 +220,7 @@ final class Utils
      *
      * @psalm-param object|class-string $var
      *
-     * @throws \ReflectionException
+     * @throws \ReflectionException if the class does not exist
      */
     public static function getShortName(object|string $var): string
     {

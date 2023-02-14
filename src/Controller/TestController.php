@@ -214,7 +214,7 @@ class TestController extends AbstractController
         }
 
         $helper = $this->createFormHelper('password.', $data);
-        $helper->addPreSubmitListener($listener);
+        $helper->eventPreSubmitListener($listener);
 
         $helper->field('input')
             ->widgetClass('password-strength')

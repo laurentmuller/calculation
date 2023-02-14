@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Traits\SessionAwareTrait;
 use App\Util\ImageHandler;
+use App\Util\Utils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -140,7 +141,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     public function validateToken(?string $token): bool
     {
-        return null !== $token && 0 === \strcasecmp($token, $this->getSessionString(self::KEY_TEXT, ''));
+        return null !== $token && Utils::equalIgnoreCase($token, $this->getSessionString(self::KEY_TEXT, ''));
     }
 
     /**

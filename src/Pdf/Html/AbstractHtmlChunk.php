@@ -19,6 +19,7 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
 use App\Report\HtmlReport;
+use App\Util\Utils;
 
 /**
  * Represents an HTML chunk.
@@ -191,7 +192,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     public function is(string ...$names): bool
     {
         foreach ($names as $name) {
-            if (0 === \strcasecmp($this->name, $name)) {
+            if (Utils::equalIgnoreCase($this->name, $name)) {
                 return true;
             }
         }

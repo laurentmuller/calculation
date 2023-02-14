@@ -68,7 +68,7 @@ class UserType extends AbstractEntityType
             ->updateOption('maxsize', '10mi')
             ->addVichImageType();
 
-        $helper->addPreSetDataListener($this->onPreSetData(...));
+        $helper->eventPreSetDataListener($this->onPreSetData(...));
     }
 
     /**

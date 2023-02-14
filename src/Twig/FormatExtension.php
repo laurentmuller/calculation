@@ -31,6 +31,7 @@ final class FormatExtension extends AbstractExtension
         'gregorian' => \IntlDateFormatter::GREGORIAN,
         'traditional' => \IntlDateFormatter::TRADITIONAL,
     ];
+
     private const DATE_FORMATS = [
         'none' => \IntlDateFormatter::NONE,
         'short' => \IntlDateFormatter::SHORT,

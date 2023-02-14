@@ -39,6 +39,7 @@ password:
   special_char: Le mot de passe doit contenir un caractère spécial.
   strength_level: Le mot de passe doit avoir une force "%minimum%", la force actuelle est "%score%".
   strength_disabled: La force minimum du mot de passe est désactivée.
+  strength_invalid: La force "%value%" est invalide. Les valeurs autorisée sont "%allowed%".
 product:
   unique_description: Cette description est déjà utilisée par autre article.
 property:

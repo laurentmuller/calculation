@@ -25,15 +25,14 @@ use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use App\Service\CalculationService;
 use App\Service\FakerService;
+use App\Service\PasswordService;
 use App\Service\SwissPostService;
 use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
-use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
-use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,7 +51,6 @@ class AjaxController extends AbstractController
 {
     use CookieTrait;
     use MathTrait;
-    use StrengthLevelTranslatorTrait;
 
     /**
      * Check if a username or e-mail exist.
@@ -178,54 +176,18 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/password', name: 'ajax_password')]
-    public function password(Request $request, ZxcvbnFactoryInterface $factory): JsonResponse
+    public function password(Request $request, PasswordService $service): JsonResponse
     {
-        $level = $this->getStrengthLevel($request, $factory);
-        if (!$level instanceof StrengthLevel) {
-            return $this->jsonFalse([
-                'message' => $this->trans('password.empty', [], 'validators'),
-            ]);
-        }
-
+        // get values
+        $password = $this->getRequestString($request, 'password');
         $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE);
-        $minimumLevel = StrengthLevel::tryFrom($strength);
-        if (!$minimumLevel instanceof StrengthLevel) {
-            $values = \implode(', ', StrengthLevel::values());
-            $message = \sprintf('The minimum strength parameter %d is invalid. Allowed values: [%s].', $strength, $values);
+        $email = $this->getRequestString($request, 'email');
+        $user = $this->getRequestString($request, 'user');
 
-            return $this->jsonFalse(
-                [
-                    'minimum' => $strength,
-                    'message' => $message,
-                ]
-            );
-        }
+        // get results
+        $results = $service->validate($password, $strength, $email, $user);
 
-        $result = [
-            'minimum' => $minimumLevel->value,
-            'minimumText' => $this->translateLevel($minimumLevel),
-            'percent' => 0,
-        ];
-
-        if (StrengthLevel::NONE === $minimumLevel) {
-            $result['message'] = $this->trans('password.strength_disabled', [], 'validators');
-
-            return $this->jsonFalse($result);
-        }
-
-        $result = \array_merge($result, [
-            'score' => $level->value,
-            'scoreText' => $this->translateLevel($level),
-            'percent' => ($level->value + 1) * 20,
-        ]);
-
-        if ($level->isSmaller($minimumLevel)) {
-            $result['message'] = $this->translateScore($minimumLevel, $level);
-
-            return $this->jsonFalse($result);
-        }
-
-        return $this->jsonTrue($result);
+        return $this->json($results);
     }
 
     /**
@@ -632,28 +594,6 @@ class AjaxController extends AbstractController
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
-    }
-
-    private function getStrengthLevel(Request $request, ZxcvbnFactoryInterface $factory): ?StrengthLevel
-    {
-        $password = $this->getRequestString($request, 'password');
-        if (empty($password)) {
-            return null;
-        }
-
-        $inputs = [];
-        if (null !== $userField = $this->getRequestString($request, 'user')) {
-            $inputs[] = $userField;
-        }
-        if (null !== $emailField = $this->getRequestString($request, 'email')) {
-            $inputs[] = $emailField;
-        }
-
-        $service = $factory->createZxcvbn();
-        /** @psalm-var array{score: int} $result */
-        $result = $service->passwordStrength($password, $inputs);
-
-        return StrengthLevel::tryFrom($result['score']);
     }
 
     private function handleTranslationError(TranslatorServiceInterface $service, string $message): JsonResponse

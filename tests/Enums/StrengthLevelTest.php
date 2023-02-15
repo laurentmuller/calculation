@@ -48,6 +48,16 @@ class StrengthLevelTest extends TypeTestCase
         self::assertEquals('strength_level.weak', StrengthLevel::WEAK->getReadable());
     }
 
+    public function testPercent(): void
+    {
+        self::assertEquals(0, StrengthLevel::NONE->percent());
+        self::assertEquals(20, StrengthLevel::VERY_WEAK->percent());
+        self::assertEquals(40, StrengthLevel::WEAK->percent());
+        self::assertEquals(60, StrengthLevel::MEDIUM->percent());
+        self::assertEquals(80, StrengthLevel::STRONG->percent());
+        self::assertEquals(100, StrengthLevel::VERY_STRONG->percent());
+    }
+
     public function testSorted(): void
     {
         $expected = [
@@ -64,11 +74,11 @@ class StrengthLevelTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertEquals(2, StrengthLevel::MEDIUM->value);
         self::assertEquals(-1, StrengthLevel::NONE->value);
-        self::assertEquals(3, StrengthLevel::STRONG->value);
-        self::assertEquals(4, StrengthLevel::VERY_STRONG->value);
         self::assertEquals(0, StrengthLevel::VERY_WEAK->value);
         self::assertEquals(1, StrengthLevel::WEAK->value);
+        self::assertEquals(2, StrengthLevel::MEDIUM->value);
+        self::assertEquals(3, StrengthLevel::STRONG->value);
+        self::assertEquals(4, StrengthLevel::VERY_STRONG->value);
     }
 }

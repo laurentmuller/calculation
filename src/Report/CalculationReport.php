@@ -190,8 +190,10 @@ class CalculationReport extends AbstractReport
     {
         $calculation = $this->calculation;
 
-        $leftStyle = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT);
-        $rightStyle = PdfStyle::getHeaderStyle()->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
+        $leftStyle = PdfStyle::getHeaderStyle()
+            ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT);
+        $rightStyle = PdfStyle::getHeaderStyle()
+            ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
 
         $table = new PdfTableBuilder($this);
         $table->addColumns(

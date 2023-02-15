@@ -121,14 +121,11 @@ class ApplicationParametersType extends AbstractParametersType
         $key = PropertyServiceInterface::P_DISPLAY_CAPTCHA;
         $helper->field($key)
             ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->addChoiceType([
-                'parameters.display.show' => true,
-                'parameters.display.hide' => false,
-            ]);
+            ->addTrueFalseType('parameters.display.show', 'parameters.display.hide');
 
         $key = PropertyServiceInterface::P_STRENGTH_LEVEL;
         $helper->field($key)
-            ->label('password.strength_level')
+            ->label("password.$key")
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->addEnumType(StrengthLevel::class);
 

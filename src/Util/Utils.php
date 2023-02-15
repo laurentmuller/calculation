@@ -214,17 +214,20 @@ final class Utils
     /**
      * Gets the short class name of the given variable.
      *
-     * @param object|string $var either a string containing the name of the class to reflect, or an object
+     * @param object|string $objectOrClass either a string containing the name of
+     *                                     the class to reflect, or an object
      *
      * @return string the short name or null if the variable is null
      *
-     * @psalm-param object|class-string $var
+     * @psalm-template T of object
+     *
+     * @psalm-param class-string<T>|T $objectOrClass
      *
      * @throws \ReflectionException if the class does not exist
      */
-    public static function getShortName(object|string $var): string
+    public static function getShortName(object|string $objectOrClass): string
     {
-        return (new \ReflectionClass($var))->getShortName();
+        return (new \ReflectionClass($objectOrClass))->getShortName();
     }
 
     /**

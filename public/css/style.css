@@ -643,6 +643,10 @@ body.dark table.table-fixed-header th {
     border-bottom-width: 1px !important;
 }
 
+body.dark .dropdown-item.disabled, .dropdown-item:disabled {
+    color: #adb5bd;
+}
+
 /**
  * Cards in index page.
  */

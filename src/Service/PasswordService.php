@@ -25,14 +25,13 @@ class PasswordService
 {
     use StrengthLevelTranslatorTrait;
 
-    private readonly Zxcvbn $service;
+    private ?Zxcvbn $service = null;
 
     /**
      * Constructor.
      */
-    public function __construct(ZxcvbnFactoryInterface $factory, private readonly TranslatorInterface $translator)
+    public function __construct(private readonly ZxcvbnFactoryInterface $factory, private readonly TranslatorInterface $translator)
     {
-        $this->service = $factory->createZxcvbn();
     }
 
     public function getTranslator(): TranslatorInterface
@@ -52,7 +51,7 @@ class PasswordService
      */
     public function validate(?string $password, int $strength, ?string $email = null, ?string $user = null): array
     {
-        // password?
+        // validate password
         if (null === $password || '' === $password) {
             return $this->getFalseResult(
                 $this->trans('password.empty', [], 'validators'),
@@ -62,25 +61,33 @@ class PasswordService
         // get results
         $results = $this->getPasswordStrength($password, \array_filter([$email, $user]));
 
+        // validate score
         $score = $results['score'];
         if (null === $actualLevel = StrengthLevel::tryFrom($score)) {
             $message = $this->translateInvalidLevel($score);
 
             return $this->getFalseResult($message, $results);
         }
+        $results = \array_merge($results, [
+            'score' => [
+                'value' => $score,
+                'percent' => $actualLevel->percent(),
+                'text' => $this->translateLevel($actualLevel),
+            ],
+        ]);
 
+        // validate minimum level
         if (null === $minimumLevel = StrengthLevel::tryFrom($strength)) {
             $message = $this->translateInvalidLevel($strength);
-            $results = \array_merge($results, ['minimum' => $strength]);
 
-            return $this->getFalseResult($message, $results);
+            return $this->getFalseResult($message, ['minimum' => $strength] + $results);
         }
-
-        // default
         $results = \array_merge($results, [
-            'percent' => 0,
-            'minimum' => $minimumLevel->value,
-            'minimumText' => $this->translateLevel($minimumLevel),
+            'minimum' => [
+                'value' => $minimumLevel->value,
+                'percent' => $minimumLevel->percent(),
+                'text' => $this->translateLevel($minimumLevel),
+            ],
         ]);
 
         // none?
@@ -90,12 +97,6 @@ class PasswordService
             return $this->getFalseResult($message, $results);
         }
 
-        // update
-        $results = \array_merge($results, [
-            'percent' => ($actualLevel->value + 1) * 20,
-            'scoreText' => $this->translateLevel($actualLevel),
-        ]);
-
         // valid?
         if ($actualLevel->isSmaller($minimumLevel)) {
             $message = $this->translateScore($minimumLevel, $actualLevel);
@@ -104,12 +105,12 @@ class PasswordService
         }
 
         // ok
-        return \array_merge($results, ['result' => true]);
+        return ['result' => true] + $results;
     }
 
     private function getFalseResult(string $message, array $values = []): array
     {
-        return \array_merge($values, ['result' => false, 'message' => $message]);
+        return \array_merge(['result' => false, 'message' => $message], $values);
     }
 
     /**
@@ -118,7 +119,7 @@ class PasswordService
     private function getPasswordStrength(string $password, array $userInputs): array
     {
         /** @psalm-var array{score: int, feedback: array{suggestions: array, warning: string}} $result */
-        $result = $this->service->passwordStrength($password, $userInputs);
+        $result = $this->getService()->passwordStrength($password, $userInputs);
 
         return \array_merge(
             ['score' => $result['score']],
@@ -127,5 +128,14 @@ class PasswordService
                 'suggestions' => $result['feedback']['suggestions'],
             ]),
         );
+    }
+
+    private function getService(): Zxcvbn
+    {
+        if (null === $this->service) {
+            $this->service = $this->factory->createZxcvbn();
+        }
+
+        return $this->service;
     }
 }

@@ -178,9 +178,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the header fill color.
-     *
-     * Value is RGB(245, 245, 245).
+     * Gets the header fill color. Value is RGB(245, 245, 245).
      *
      * @return static
      */

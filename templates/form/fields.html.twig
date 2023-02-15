@@ -133,11 +133,11 @@
             <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}">
         {%- endif %}
         </div>
-        <div>
+        <div class="text-left">
             <span class="btn btn-file btn-sm btn-form-sm btn-outline-secondary">
                 <span class="file-input-new">{{ 'common.button_browse'|trans }}</span>
                 <span class="file-input-exists">{{ 'common.button_edit'|trans }}</span>
-                {% set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
+                {%- set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
                 {{- block('form_widget_simple') -}}
             </span>
             <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger file-input-exists" data-dismiss="file-input">{{ 'common.button_delete'|trans }}</button>

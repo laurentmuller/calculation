@@ -108,7 +108,7 @@ class UserTable extends AbstractEntityTable
         $query = parent::createDefaultQueryBuilder($alias);
 
         $user = $this->security->getUser();
-        if ($user instanceof User && !$user->isSuperAdmin()) {
+        if (!$user instanceof User || !$user->isSuperAdmin()) {
             /** @psalm-var UserRepository $repository */
             $repository = $this->repository;
             $criteria = $repository->getSuperAdminFilter($alias);

@@ -15,7 +15,6 @@ namespace App\Form;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
-use App\Form\Type\YesNoType;
 use App\Interfaces\SortableEnumInterface;
 use App\Util\FormatUtils;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
@@ -443,6 +442,21 @@ class FormHelper
     }
 
     /**
+     * Add a True/False choice type to the builder and reset all values to default.
+     *
+     * @param string           $true        the translatable text to use for the "True" value
+     * @param string           $false       the translatable text to use for the "False" value
+     * @param string|bool|null $translation determines if the choice values should be translated and in which translation domain
+     */
+    public function addTrueFalseType(string $true = 'common.value_true', string $false = 'common.value_false', string|bool|null $translation = true): self
+    {
+        // 'choice_translation_domain' => false,
+        return $this->updateOption('choices', [$true => true, $false => false])
+            ->updateOption('choice_translation_domain', $translation)
+            ->add(ChoiceType::class);
+    }
+
+    /**
      * Add an Url type to the builder and reset all values to default.
      *
      * @param string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
@@ -478,14 +492,6 @@ class FormHelper
         }
 
         return $this->add(VichImageType::class);
-    }
-
-    /**
-     * Add a Yes/No choice type to the builder and reset all values to default.
-     */
-    public function addYesNoType(): self
-    {
-        return $this->add(YesNoType::class);
     }
 
     /**

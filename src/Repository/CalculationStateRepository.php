@@ -169,6 +169,17 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
+    {
+        return match ($field) {
+            'editable' => "IFELSE($alias.$field = 1, 0, 1)", // reverse
+            default => parent::getSortField($field, $alias),
+        };
+    }
+
+    /**
      * Gets the query builder for calculations statistics.
      */
     private function getCalculationsQueryBuilder(): QueryBuilder

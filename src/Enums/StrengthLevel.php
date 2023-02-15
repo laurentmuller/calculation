@@ -80,6 +80,16 @@ enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, 
     }
 
     /**
+     * Returns the percentage of this level.
+     *
+     * @return int a value between 0 and  100
+     */
+    public function percent(): int
+    {
+        return \max(0, ($this->value + 1) * 20);
+    }
+
+    /**
      * @return StrengthLevel[]
      */
     public static function sorted(): array

@@ -61,6 +61,9 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+use function Symfony\Component\String\u;
+
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -199,7 +202,8 @@ class TestController extends AbstractController
             /** @psalm-var array $data */
             $data = $event->getData();
             foreach ($options as $option) {
-                $passwordConstraint->{$option} = (bool) ($data[$option] ?? false);
+                $property = u($option)->trimPrefix('security_')->toString();
+                $passwordConstraint->{$property} = (bool) ($data[$option] ?? false);
             }
             $strength = (int) $data['level'];
             $strengthConstraint->minimum = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;

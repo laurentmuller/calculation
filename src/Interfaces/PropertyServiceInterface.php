@@ -191,7 +191,7 @@ interface PropertyServiceInterface
      *
      * When <code>true</code>, display the image; when <code>false</code>, hide.
      */
-    final public const P_DISPLAY_CAPTCHA = 'display_captcha';
+    final public const P_DISPLAY_CAPTCHA = 'security_display_captcha';
 
     /**
      * The property name for the display mode (string).
@@ -303,7 +303,7 @@ interface PropertyServiceInterface
     /**
      * The property name for the password strength level (int).
      */
-    final public const P_STRENGTH_LEVEL = 'strength_level';
+    final public const P_STRENGTH_LEVEL = 'security_strength_level';
 
     /**
      * The property name for the user role rights (string).
@@ -314,12 +314,12 @@ interface PropertyServiceInterface
      * The password options.
      */
     final public const PASSWORD_OPTIONS = [
-        'letters',
-        'numbers',
-        'special_char',
-        'case_diff',
-        'email',
-        'pwned',
+        'security_letters',
+        'security_numbers',
+        'security_special_char',
+        'security_case_diff',
+        'security_email',
+        'security_pwned',
     ];
 
     /**

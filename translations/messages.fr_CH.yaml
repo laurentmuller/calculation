@@ -764,7 +764,7 @@ parameters:
     default_product_edit: Éditer l'article lors de l'affichage de la nouvelle calculation
     default_product_quantity: Quantité
     default_state: Statut
-    display_captcha: Code de contrôle
+    security_display_captcha: Code de contrôle
     display_mode: Mode d'affichage
     edit_action: Action
     message_auto_close: Fermer automatiquement
@@ -804,7 +804,7 @@ parameters:
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
     panel_month: Afficher la liste des calculations regroupées par mois.
     panel_state: Afficher la liste des calculations regroupées par status.
-    print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
+    print_address: L'adresse du client est imprimée sur les entêtes des documents PDF et Excel®.
     qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
     status_bar: Afficher la barre d'état au bas de l'application.
   placeholders:
@@ -812,16 +812,16 @@ parameters:
   success: Les paramètres de l'application ont été mis à jour avec succès.
   title: Paramètres
 password:
+  input: Mot de passe
   title: Mot de passe
   success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
-  letters: Une lettre est obligatoire
-  special_char: Un caractère spécial est obligatoire
-  case_diff: Une majuscule et une minuscule est obligatoire
-  numbers: Un chiffre est obligatoire
-  email: Le mot de passe ne doit pas être une adresse e-mail
-  input: Mot de passe
-  strength_level: Force minimum
-  pwned: Le mot de passe ne doit pas être compromis
+  security_letters: Une lettre est obligatoire
+  security_special_char: Un caractère spécial est obligatoire
+  security_case_diff: Une majuscule et une minuscule est obligatoire
+  security_numbers: Un chiffre est obligatoire
+  security_email: Le mot de passe ne doit pas être une adresse e-mail
+  security_strength_level: Force minimum
+  security_pwned: Le mot de passe ne doit pas être compromis
 pivot:
   column: Colonne
   fields:

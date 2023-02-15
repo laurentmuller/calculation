@@ -40,7 +40,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * The left indent.
      */
-    protected int $indent = 0;
+    protected float $indent = 0.0;
 
     /**
      * The line.
@@ -89,14 +89,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the black header cell style. The style has the following properties:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Bold</td></tr>
-     * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>White</i></td></tr>
-     * </table>.
+     * Gets the black header cell style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Bold.
+     * - Line width: 0.2mm.
+     * - Fill color: Black.
+     * - Draw color: Black.
+     * - Text color: White.
      */
     public static function getBlackHeaderStyle(): self
     {
@@ -108,14 +109,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the bold cell style. The style has the following properties:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Bold</td></tr>
-     * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>RGB(221, 221, 221)</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Black</i></td></tr>
-     * </table>.
+     * Gets the bold cell style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Bold.
+     * - Line width: 0.2mm.
+     * - Fill color: White.
+     * - Draw color: RGB(221, 221, 221).
+     * - Text color: Black.
      */
     public static function getBoldCellStyle(): self
     {
@@ -132,14 +134,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the cell style. The style has the following properties:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
-     * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>RGB(221, 221, 221)</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Black</i></td></tr>
-     * </table>.
+     * Gets the cell style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Regular.
+     * - Line width: 0.2mm.
+     * - Fill color: White.
+     * - Draw color: RGB(221, 221, 221).
+     * - Text color: Black.
      */
     public static function getCellStyle(): self
     {
@@ -149,14 +152,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the default style. The style has the following properties:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
-     * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
-     * </table>.
+     * Gets the default style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Regular.
+     * - Line width: 0.2mm.
+     * - Fill color: White.
+     * - Draw color: Black.
+     * - Text color: Black.
      */
     public static function getDefaultStyle(): self
     {
@@ -188,14 +192,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the header cell style. The style has the following properties:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Bold</td></tr>
-     * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>RGB(245, 245, 245)</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>RGB(221, 221, 221)</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Black</i></td></tr>
-     * </table>.
+     * Gets the header cell style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Bold.
+     * - Line width: 0.2mm.
+     * - Fill color: RGB(245, 245, 245).
+     * - Draw color: RGB(221, 221, 221).
+     * - Text color: Black.
      */
     public static function getHeaderStyle(): self
     {
@@ -207,7 +212,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Gets the left indent.
      */
-    public function getIndent(): int
+    public function getIndent(): float
     {
         return $this->indent;
     }
@@ -221,14 +226,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the link style. The style has the following properties:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
-     * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Blue</td></tr>
-     * </table>.
+     * Gets the link style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Regular.
+     * - Line width: 0.2mm.
+     * - Fill color: White.
+     * - Draw color: Black.
+     * - Text color: Blue.
      */
     public static function getLinkStyle(): self
     {
@@ -237,14 +243,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the no border style. The style has the following properties:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
-     * <tr><td>Border</td><td>:</td><td>None</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
-     * </table>.
+     * Gets the no border style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Regular.
+     * - Border: None.
+     * - Fill color: White.
+     * - Draw color: Black.
+     * - Text color: Black.
      */
     public static function getNoBorderStyle(): self
     {
@@ -262,6 +269,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Gets a value indicating if the fill color is set.
+     *
      * To be true, the fill color must be different from the White color.
      *
      * @return bool true if the fill color is set
@@ -272,15 +280,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Reset all properties to the default values. The default values are:
-     * <table style='padding:15px'>
-     * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
-     * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
-     * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Indent</td><td>:</td><td>0 mm</td></tr>
-     * </table>.
+     * Reset all properties to the default values.
+     *
+     * The default values are:
+     *
+     * - Font: Arial 9pt Regular.
+     * - Line width: 0.2mm.
+     * - Fill color: White.
+     * - Draw Color: Black.
+     * - Text Color: Black.
      */
     public function reset(): static
     {
@@ -300,12 +308,13 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets colors properties to the default values. The default colors are:
-     * <table style='padding:15px'>
-     * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
-     * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
-     * <tr><td>Text color</td><td>:</td><td>Black</td></tr>
-     * </table>.
+     * Sets colors properties to the default values.
+     *
+     * The default colors are:
+     *
+     * - Fill color: White.
+     * - Draw color: Black.
+     * - Text color: Black.
      */
     public function resetColors(): static
     {
@@ -315,7 +324,11 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets font to the default value. The default value is "<code>Arial, 9pt, regular</code>".
+     * Sets font to the default value.
+     *
+     * The default value is:
+     *
+     * - Arial, 9pt, regular.
      */
     public function resetFont(): static
     {
@@ -323,7 +336,11 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the left indent to the default value. The default value is "<code>0 mm</code>".
+     * Sets the left indent to the default value.
+     *
+     * The default value is:
+     *
+     * - 0 mm.
      */
     public function resetIndent(): static
     {
@@ -331,7 +348,11 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the line width property to the default value. The default line width is "<code>0.2 mm</code>".
+     * Sets the line width property to the default value.
+     *
+     * The default line width is:
+     *
+     * - 0.2 mm.
      */
     public function resetLine(): static
     {
@@ -441,6 +462,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font style.
+     *
      * Can be one of the FONT_STYLE_XX constants or any combination.
      */
     public function setFontStyle(string $fontStyle): static
@@ -468,9 +490,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the left indent.
      */
-    public function setIndent(int $indent): static
+    public function setIndent(float $indent): static
     {
-        $this->indent = \max($indent, 0);
+        $this->indent = \max($indent, 0.0);
 
         return $this;
     }

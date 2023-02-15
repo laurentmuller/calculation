@@ -35,6 +35,7 @@ use App\Translator\TranslatorServiceInterface;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -176,7 +177,7 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/password', name: 'ajax_password')]
-    public function password(Request $request, PasswordService $service): JsonResponse
+    public function password(Request $request, PasswordService $service, #[Autowire('%kernel.debug')] bool $debug): JsonResponse
     {
         // get values
         $password = $this->getRequestString($request, 'password');
@@ -186,6 +187,9 @@ class AjaxController extends AbstractController
 
         // get results
         $results = $service->validate($password, $strength, $email, $user);
+        if ($debug) {
+            \ksort($results);
+        }
 
         return $this->json($results);
     }

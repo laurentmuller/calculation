@@ -557,7 +557,7 @@ class PdfTableBuilder
                 $line_height = $parent->getFontSize() + 2.0 * $margins;
             }
             $textBounds = clone $bounds;
-            $indent = (float) $style->getIndent();
+            $indent = $style->getIndent();
             if ($indent > 0) {
                 $parent->SetX($x + $indent);
                 $textBounds->indent($indent);
@@ -735,7 +735,7 @@ class PdfTableBuilder
         }
 
         $style->apply($parent);
-        $width = \max(0, $width - (float) $style->getIndent());
+        $width = \max(0, $width - $style->getIndent());
         $lines = (float) $parent->getLinesCount($text, $width);
 
         $height = PdfDocument::LINE_HEIGHT;

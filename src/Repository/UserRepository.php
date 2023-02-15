@@ -140,7 +140,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
-            'enabled' => "IFELSE($alias.$field = 1, 0, 1)",
+            'enabled' => "IFELSE($alias.$field = 1, 0, 1)", // reverse
             'role' => "SUBSTRING(IFNULL($alias.$field, 'ROLE_USER'), 5)",
             default => parent::getSortField($field, $alias),
         };

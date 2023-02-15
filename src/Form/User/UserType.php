@@ -15,7 +15,6 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use App\Form\Type\EnabledDisabledType;
 use App\Util\FormatUtils;
 use Symfony\Component\Form\FormEvent;
 
@@ -56,7 +55,7 @@ class UserType extends AbstractEntityType
             ->add(RoleChoiceType::class);
 
         $helper->field('enabled')
-            ->add(EnabledDisabledType::class);
+            ->addTrueFalseType('common.value_enabled', 'common.value_disabled');
 
         $helper->field('lastLogin')
             ->updateOption('value_transformer', $this->formatLastLogin(...))

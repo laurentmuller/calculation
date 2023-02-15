@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Attribute\SortableEntity;
 use App\Entity\AbstractEntity;
 use App\Util\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -62,6 +63,19 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function flush(): void
     {
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Gets the default order of this entity.
+     *
+     * @return array<string, string> an array with the field as key and the order as value. An
+     *                               empty array is returned if not attribute is found.
+     *
+     * @throws \ReflectionException
+     */
+    public function getDefaultOrder(): array
+    {
+        return SortableEntity::getOrder($this->getEntityName());
     }
 
     /**

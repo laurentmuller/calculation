@@ -47,7 +47,7 @@ class CalculationStateType extends AbstractEntityType
             ->addTextareaType();
 
         $helper->field('editable')
-            ->addYesNoType();
+            ->addTrueFalseType();
 
         $helper->field('color')
             ->addColorType();

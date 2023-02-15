@@ -28,10 +28,17 @@ use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Traits\PropertyTrait;
 use App\Util\RoleBuilder;
+use App\Validator\Captcha;
+use App\Validator\Password;
+use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+
+use function Symfony\Component\String\u;
+
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -389,6 +396,22 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function getPanelCalculation(): int
     {
         return $this->getPropertyInteger(self::P_PANEL_CALCULATION, self::DEFAULT_PANEL_CALCULATION);
+    }
+
+    /**
+     * Create a password contraint with this security properties.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getPasswordConstraint(): Password
+    {
+        $contraint = new Password();
+        foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
+            $property = u($option)->trimPrefix('security_')->toString();
+            $contraint->{$property} = $this->getPropertyBoolean($option);
+        }
+
+        return $contraint;
     }
 
     /**

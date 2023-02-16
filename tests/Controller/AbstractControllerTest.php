@@ -27,7 +27,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
      *
      * @psalm-return array|\Generator
      */
-    abstract public function getRoutes();
+    abstract public static function getRoutes();
 
     /**
      * Checks the given route.

@@ -24,7 +24,7 @@ class CustomerControllerTest extends AbstractControllerTest
 {
     private static ?Customer $entity = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/customer', self::ROLE_USER],

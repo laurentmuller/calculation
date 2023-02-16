@@ -17,7 +17,7 @@ namespace App\Tests\Controller;
  */
 class IndexControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/', self::ROLE_USER],

@@ -30,7 +30,7 @@ class PivotControllerTest extends AbstractControllerTest
     private static ?Product $product = null;
     private static ?CalculationState $state = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
 //             ['/pivot', self::ROLE_USER],

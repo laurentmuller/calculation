@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ImportAddressControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/admin/import', self::ROLE_USER, Response::HTTP_FORBIDDEN],

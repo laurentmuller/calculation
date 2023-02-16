@@ -30,7 +30,7 @@ class TaskControllerTest extends AbstractControllerTest
     private static ?Group $group = null;
     private static ?TaskItem $item = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/task', self::ROLE_USER],

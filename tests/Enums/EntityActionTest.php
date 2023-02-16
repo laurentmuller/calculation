@@ -33,16 +33,16 @@ class EntityActionTest extends TypeTestCase
     {
         $expected = EntityAction::EDIT;
         $default = EntityAction::getDefault();
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_ACTION;
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
     }
 
     public function testLabel(): void
     {
-        self::assertEquals('entity_action.edit', EntityAction::EDIT->getReadable());
-        self::assertEquals('entity_action.show', EntityAction::SHOW->getReadable());
-        self::assertEquals('entity_action.none', EntityAction::NONE->getReadable());
+        self::assertSame('entity_action.edit', EntityAction::EDIT->getReadable());
+        self::assertSame('entity_action.show', EntityAction::SHOW->getReadable());
+        self::assertSame('entity_action.none', EntityAction::NONE->getReadable());
     }
 
     public function testSorted(): void
@@ -53,13 +53,13 @@ class EntityActionTest extends TypeTestCase
             EntityAction::NONE,
         ];
         $sorted = EntityAction::sorted();
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     public function testValue(): void
     {
-        self::assertEquals('edit', EntityAction::EDIT->value);
-        self::assertEquals('show', EntityAction::SHOW->value);
-        self::assertEquals('none', EntityAction::NONE->value);
+        self::assertSame('edit', EntityAction::EDIT->value);
+        self::assertSame('show', EntityAction::SHOW->value);
+        self::assertSame('none', EntityAction::NONE->value);
     }
 }

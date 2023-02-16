@@ -19,7 +19,7 @@ namespace App\Tests\Controller;
  */
 class CalendarControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/calendar/month', self::ROLE_USER],

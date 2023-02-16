@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PdfBorderTest extends TestCase
 {
-    public function getBorders(): array
+    public static function getBorders(): array
     {
         return [
             [-1, PdfBorder::INHERITED],
@@ -59,6 +59,6 @@ class PdfBorderTest extends TestCase
     public function testBorder(string|int $value, string|int $expected): void
     {
         $broder = new PdfBorder($value);
-        self::assertEquals($expected, $broder->getValue());
+        self::assertSame($expected, $broder->getValue());
     }
 }

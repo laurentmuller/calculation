@@ -49,7 +49,7 @@ class DatabaseTest extends KernelTestCase
     /**
      * @return array<int, array<int, int|string>>
      */
-    public function getRepositories(): array
+    public static function getRepositories(): array
     {
         return [
             [GroupRepository::class, 0],
@@ -69,7 +69,7 @@ class DatabaseTest extends KernelTestCase
     /**
      * @return array<int, array<int, int|string>>
      */
-    public function getTables(): array
+    public static function getTables(): array
     {
         return [
             ['sy_Group', 0],
@@ -89,7 +89,7 @@ class DatabaseTest extends KernelTestCase
     /**
      * @return array<int, array<int, int|string>>
      */
-    public function getUsers(): array
+    public static function getUsers(): array
     {
         return [
             [AbstractAuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER],
@@ -127,7 +127,7 @@ class DatabaseTest extends KernelTestCase
     {
         $query = "SELECT COUNT(id) FROM $tablename";
         $result = self::$database->querySingle($query);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -144,7 +144,7 @@ class DatabaseTest extends KernelTestCase
         $user = $repository->findOneBy(['username' => $username]);
         self::assertInstanceOf(User::class, $user);
 
-        self::assertEquals($username, $user->getUserIdentifier());
+        self::assertSame($username, $user->getUserIdentifier());
         self::assertTrue($user->hasRole($role));
     }
 }

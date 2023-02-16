@@ -33,29 +33,29 @@ class StrengthLevelTest extends TypeTestCase
     {
         $expected = StrengthLevel::NONE;
         $default = StrengthLevel::getDefault();
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL;
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
     }
 
     public function testLabel(): void
     {
-        self::assertEquals('strength_level.medium', StrengthLevel::MEDIUM->getReadable());
-        self::assertEquals('strength_level.none', StrengthLevel::NONE->getReadable());
-        self::assertEquals('strength_level.strong', StrengthLevel::STRONG->getReadable());
-        self::assertEquals('strength_level.very_strong', StrengthLevel::VERY_STRONG->getReadable());
-        self::assertEquals('strength_level.very_weak', StrengthLevel::VERY_WEAK->getReadable());
-        self::assertEquals('strength_level.weak', StrengthLevel::WEAK->getReadable());
+        self::assertSame('strength_level.medium', StrengthLevel::MEDIUM->getReadable());
+        self::assertSame('strength_level.none', StrengthLevel::NONE->getReadable());
+        self::assertSame('strength_level.strong', StrengthLevel::STRONG->getReadable());
+        self::assertSame('strength_level.very_strong', StrengthLevel::VERY_STRONG->getReadable());
+        self::assertSame('strength_level.very_weak', StrengthLevel::VERY_WEAK->getReadable());
+        self::assertSame('strength_level.weak', StrengthLevel::WEAK->getReadable());
     }
 
     public function testPercent(): void
     {
-        self::assertEquals(0, StrengthLevel::NONE->percent());
-        self::assertEquals(20, StrengthLevel::VERY_WEAK->percent());
-        self::assertEquals(40, StrengthLevel::WEAK->percent());
-        self::assertEquals(60, StrengthLevel::MEDIUM->percent());
-        self::assertEquals(80, StrengthLevel::STRONG->percent());
-        self::assertEquals(100, StrengthLevel::VERY_STRONG->percent());
+        self::assertSame(0, StrengthLevel::NONE->percent());
+        self::assertSame(20, StrengthLevel::VERY_WEAK->percent());
+        self::assertSame(40, StrengthLevel::WEAK->percent());
+        self::assertSame(60, StrengthLevel::MEDIUM->percent());
+        self::assertSame(80, StrengthLevel::STRONG->percent());
+        self::assertSame(100, StrengthLevel::VERY_STRONG->percent());
     }
 
     public function testSorted(): void
@@ -69,16 +69,16 @@ class StrengthLevelTest extends TypeTestCase
             StrengthLevel::VERY_STRONG,
         ];
         $sorted = StrengthLevel::sorted();
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     public function testValue(): void
     {
-        self::assertEquals(-1, StrengthLevel::NONE->value);
-        self::assertEquals(0, StrengthLevel::VERY_WEAK->value);
-        self::assertEquals(1, StrengthLevel::WEAK->value);
-        self::assertEquals(2, StrengthLevel::MEDIUM->value);
-        self::assertEquals(3, StrengthLevel::STRONG->value);
-        self::assertEquals(4, StrengthLevel::VERY_STRONG->value);
+        self::assertSame(-1, StrengthLevel::NONE->value);
+        self::assertSame(0, StrengthLevel::VERY_WEAK->value);
+        self::assertSame(1, StrengthLevel::WEAK->value);
+        self::assertSame(2, StrengthLevel::MEDIUM->value);
+        self::assertSame(3, StrengthLevel::STRONG->value);
+        self::assertSame(4, StrengthLevel::VERY_STRONG->value);
     }
 }

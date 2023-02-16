@@ -26,7 +26,7 @@ class ProductControllerTest extends AbstractControllerTest
     private static ?Group $group = null;
     private static ?Product $product = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/product', self::ROLE_USER],

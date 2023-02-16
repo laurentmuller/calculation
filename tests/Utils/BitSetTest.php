@@ -45,7 +45,7 @@ class BitSetTest extends TestCase
         self::assertTrue($bs->get(2));
         $bs->clear(2);
         self::assertFalse($bs->get(2));
-        self::assertEquals([0], $bs->toArray());
+        self::assertSame([0], $bs->toArray());
     }
 
     public function testClearInvalid(): void
@@ -72,7 +72,7 @@ class BitSetTest extends TestCase
         $bs = new BitSet();
         $bs->sets([0, 1, 2]);
         $bs->clears([0, 1, 2]);
-        self::assertEquals([0], $bs->toArray());
+        self::assertSame([0], $bs->toArray());
     }
 
     public function testClearsInvalid(): void
@@ -118,7 +118,7 @@ class BitSetTest extends TestCase
     {
         $words = [0, 1, 2];
         $bs = BitSet::fromArray($words);
-        self::assertEquals($words, $bs->toArray());
+        self::assertSame($words, $bs->toArray());
     }
 
     public function testGet(): void
@@ -140,7 +140,7 @@ class BitSetTest extends TestCase
         $bs = new BitSet();
         $bs->sets($values);
         $indexes = $bs->toIndexes();
-        self::assertEquals($values, $indexes);
+        self::assertSame($values, $indexes);
     }
 
     public function testIsEqual(): void
@@ -267,7 +267,7 @@ class BitSetTest extends TestCase
             $bs->set($key);
         }
         $expected = \array_sum($array);
-        self::assertEquals([$expected], $bs->toArray());
+        self::assertSame([$expected], $bs->toArray());
     }
 
     public function testSetInvalid(): void
@@ -301,9 +301,9 @@ class BitSetTest extends TestCase
     {
         $value = 4;
         $bs = new BitSet();
-        self::assertEquals(0, $bs->size());
+        self::assertSame(0, $bs->size());
         $bs->set($value);
-        self::assertEquals($value + 1, $bs->size());
+        self::assertSame($value + 1, $bs->size());
     }
 
     public function testToString(): void
@@ -311,7 +311,7 @@ class BitSetTest extends TestCase
         $bs = new BitSet();
         $bs->sets([1, 5]);
         $result = (string) $bs;
-        self::assertEquals('BitSet{1,5}', $result);
+        self::assertSame('BitSet{1,5}', $result);
     }
 
     public function testTrim(): void
@@ -323,6 +323,6 @@ class BitSetTest extends TestCase
 
         self::assertFalse($bs->get(63));
         self::assertTrue($bs->get(4));
-        self::assertEquals(5, $bs->size());
+        self::assertSame(5, $bs->size());
     }
 }

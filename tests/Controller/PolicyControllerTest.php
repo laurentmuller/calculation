@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PolicyControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array|\Generator
+    public static function getRoutes(): array|\Generator
     {
         return [
             ['/policy/accept', '', Response::HTTP_FOUND],

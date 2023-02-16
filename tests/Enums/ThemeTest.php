@@ -29,26 +29,26 @@ class ThemeTest extends TypeTestCase
 
     public function testCss(): void
     {
-        self::assertEquals('js/vendor/bootstrap/css/bootstrap-dark.css', Theme::DARK->getCss());
-        self::assertEquals('js/vendor/bootstrap/css/bootstrap-light.css', Theme::LIGHT->getCss());
+        self::assertSame('js/vendor/bootstrap/css/bootstrap-dark.css', Theme::DARK->getCss());
+        self::assertSame('js/vendor/bootstrap/css/bootstrap-light.css', Theme::LIGHT->getCss());
     }
 
     public function testDefault(): void
     {
         $default = Theme::getDefault();
-        self::assertEquals(Theme::LIGHT, $default);
+        self::assertSame(Theme::LIGHT, $default);
     }
 
     public function testIcon(): void
     {
-        self::assertEquals('fa-solid fa-moon', Theme::DARK->getIcon());
-        self::assertEquals('fa-regular fa-sun', Theme::LIGHT->getIcon());
+        self::assertSame('fa-solid fa-moon', Theme::DARK->getIcon());
+        self::assertSame('fa-regular fa-sun', Theme::LIGHT->getIcon());
     }
 
     public function testLabel(): void
     {
-        self::assertEquals('theme.dark.name', Theme::DARK->getReadable());
-        self::assertEquals('theme.light.name', Theme::LIGHT->getReadable());
+        self::assertSame('theme.dark.name', Theme::DARK->getReadable());
+        self::assertSame('theme.light.name', Theme::LIGHT->getReadable());
     }
 
     public function testSorted(): void
@@ -59,24 +59,24 @@ class ThemeTest extends TypeTestCase
         ];
         $sorted = Theme::sorted();
         self::assertCount(2, $sorted);
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     public function testSuccess(): void
     {
-        self::assertEquals('theme.dark.success', Theme::DARK->getSuccess());
-        self::assertEquals('theme.light.success', Theme::LIGHT->getSuccess());
+        self::assertSame('theme.dark.success', Theme::DARK->getSuccess());
+        self::assertSame('theme.light.success', Theme::LIGHT->getSuccess());
     }
 
     public function testTitle(): void
     {
-        self::assertEquals('theme.dark.title', Theme::DARK->getTitle());
-        self::assertEquals('theme.light.title', Theme::LIGHT->getTitle());
+        self::assertSame('theme.dark.title', Theme::DARK->getTitle());
+        self::assertSame('theme.light.title', Theme::LIGHT->getTitle());
     }
 
     public function testValue(): void
     {
-        self::assertEquals('dark', Theme::DARK->value);
-        self::assertEquals('light', Theme::LIGHT->value);
+        self::assertSame('dark', Theme::DARK->value);
+        self::assertSame('light', Theme::LIGHT->value);
     }
 }

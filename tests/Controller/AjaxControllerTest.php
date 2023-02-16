@@ -42,7 +42,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         }
     }
 
-    public function getUserEmails(): array
+    public static function getUserEmails(): array
     {
         return [
             [true, 'myemail_fake_zz@myemail.com'],
@@ -54,7 +54,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
-    public function getUserNames(): array
+    public static function getUserNames(): array
     {
         return [
             [true, 'myEmail_fake_zz'],
@@ -66,7 +66,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
-    public function getUsers(): array
+    public static function getUsers(): array
     {
         return [
             [true, 'ROLE_SUPER_ADMIN'],
@@ -123,6 +123,6 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
             self::assertNotNull($this->translator);
             $expected = $this->translator->trans($expected, [], 'validators');
         }
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 }

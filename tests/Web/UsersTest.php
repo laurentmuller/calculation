@@ -22,7 +22,7 @@ class UsersTest extends AbstractAuthenticateWebTestCase
     /**
      * @return array<int, array<int, bool|string>>
      */
-    public function getUserExist(): array
+    public static function getUserExist(): array
     {
         return [
             [self::ROLE_USER, true],
@@ -36,7 +36,7 @@ class UsersTest extends AbstractAuthenticateWebTestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function getUserRole(): array
+    public static function getUserRole(): array
     {
         return [
             [self::ROLE_USER],

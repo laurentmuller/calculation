@@ -35,12 +35,12 @@ class SortableEntityTest extends TestCase
         self::assertCount(2, $actual);
         self::assertArrayHasKey('ascending', $actual);
         self::assertArrayHasKey('descending', $actual);
-        self::assertEquals(SortModeInterface::SORT_ASC, $actual['ascending']);
-        self::assertEquals(SortModeInterface::SORT_DESC, $actual['descending']);
+        self::assertSame(SortModeInterface::SORT_ASC, $actual['ascending']);
+        self::assertSame(SortModeInterface::SORT_DESC, $actual['descending']);
 
         // test order
         $first = \reset($actual);
-        self::assertEquals(SortModeInterface::SORT_DESC, $first);
+        self::assertSame(SortModeInterface::SORT_DESC, $first);
     }
 
     /**

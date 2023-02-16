@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class EntityNameTest extends TestCase
 {
-    public function getMatchValue(): array
+    public static function getMatchValue(): array
     {
         return [
             [EntityName::CALCULATION, 'EntityCalculation'],
@@ -42,7 +42,7 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public function getOffset(): array
+    public static function getOffset(): array
     {
         return [
             [EntityName::CALCULATION, 0],
@@ -58,7 +58,7 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public function getTryFindOffset(): array
+    public static function getTryFindOffset(): array
     {
         return [
             [EntityName::CALCULATION, 0],
@@ -78,7 +78,7 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public function getTryFindValue(): array
+    public static function getTryFindValue(): array
     {
         return [
             ['Calculation', 'EntityCalculation'],
@@ -87,7 +87,7 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public function getTryFromMixed(): array
+    public static function getTryFromMixed(): array
     {
         return [
             [null, null],
@@ -138,7 +138,7 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public function getValue(): array
+    public static function getValue(): array
     {
         return [
             [EntityName::CALCULATION, 'EntityCalculation'],
@@ -174,16 +174,16 @@ class EntityNameTest extends TestCase
 
     public function testLabel(): void
     {
-        self::assertEquals('calculation.name', EntityName::CALCULATION->getReadable());
-        self::assertEquals('calculationstate.name', EntityName::CALCULATION_STATE->getReadable());
-        self::assertEquals('category.name', EntityName::CATEGORY->getReadable());
-        self::assertEquals('customer.name', EntityName::CUSTOMER->getReadable());
-        self::assertEquals('globalmargin.name', EntityName::GLOBAL_MARGIN->getReadable());
-        self::assertEquals('group.name', EntityName::GROUP->getReadable());
-        self::assertEquals('log.name', EntityName::LOG->getReadable());
-        self::assertEquals('product.name', EntityName::PRODUCT->getReadable());
-        self::assertEquals('task.name', EntityName::TASK->getReadable());
-        self::assertEquals('user.name', EntityName::USER->getReadable());
+        self::assertSame('calculation.name', EntityName::CALCULATION->getReadable());
+        self::assertSame('calculationstate.name', EntityName::CALCULATION_STATE->getReadable());
+        self::assertSame('category.name', EntityName::CATEGORY->getReadable());
+        self::assertSame('customer.name', EntityName::CUSTOMER->getReadable());
+        self::assertSame('globalmargin.name', EntityName::GLOBAL_MARGIN->getReadable());
+        self::assertSame('group.name', EntityName::GROUP->getReadable());
+        self::assertSame('log.name', EntityName::LOG->getReadable());
+        self::assertSame('product.name', EntityName::PRODUCT->getReadable());
+        self::assertSame('task.name', EntityName::TASK->getReadable());
+        self::assertSame('user.name', EntityName::USER->getReadable());
     }
 
     /**
@@ -192,7 +192,7 @@ class EntityNameTest extends TestCase
     public function testMatch(EntityName $name, string $value, bool $expected = true): void
     {
         $result = $name->matchValue($value);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -201,7 +201,7 @@ class EntityNameTest extends TestCase
     public function testOffset(EntityName $entityName, int $expected): void
     {
         $result = $entityName->offset();
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     public function testSorted(): void
@@ -219,7 +219,7 @@ class EntityNameTest extends TestCase
             EntityName::LOG,
         ];
         $sorted = EntityName::sorted();
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     /**
@@ -228,7 +228,7 @@ class EntityNameTest extends TestCase
     public function testTryFindOffset(mixed $e, int $expected): void
     {
         $result = EntityName::tryFindOffset($e);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -237,7 +237,7 @@ class EntityNameTest extends TestCase
     public function testTryFindValue(mixed $subject, ?string $expected, ?string $default = null): void
     {
         $result = EntityName::tryFindValue($subject, $default);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -246,7 +246,7 @@ class EntityNameTest extends TestCase
     public function testTryFromMixed(mixed $subject, mixed $expected): void
     {
         $result = EntityName::tryFromMixed($subject);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -254,6 +254,6 @@ class EntityNameTest extends TestCase
      */
     public function testValue(EntityName $entityName, string $expected): void
     {
-        self::assertEquals($expected, $entityName->value);
+        self::assertSame($expected, $entityName->value);
     }
 }

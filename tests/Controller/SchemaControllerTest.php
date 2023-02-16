@@ -22,7 +22,7 @@ class SchemaControllerTest extends AbstractControllerTest
     /**
      * {@inheritDoc}
      */
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/schema', self::ROLE_USER, Response::HTTP_FORBIDDEN],

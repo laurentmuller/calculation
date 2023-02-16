@@ -23,7 +23,7 @@ class RoutesTest extends AbstractAuthenticateWebTestCase
     /**
      * @return array<int, array<int, int|string>>
      */
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             // index

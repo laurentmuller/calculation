@@ -41,7 +41,7 @@ class EntityVoterTest extends TestCase
         $this->voter = $this->getEntityVoter();
     }
 
-    public function getSupportsAttribute(): array
+    public static function getSupportsAttribute(): array
     {
         return [
             ['add', true],
@@ -97,7 +97,7 @@ class EntityVoterTest extends TestCase
         foreach ($entities as $index => $entity) {
             self::assertNotNull($this->voter);
             $actual = EntityName::tryFindOffset($entity);
-            self::assertEquals($index, $actual);
+            self::assertSame($index, $actual);
         }
     }
 
@@ -108,7 +108,7 @@ class EntityVoterTest extends TestCase
             $expected = 2 ** $index;
             self::assertNotNull($this->voter);
             $actual = EntityPermission::tryFindValue($key);
-            self::assertEquals($expected, $actual);
+            self::assertSame($expected, $actual);
         }
     }
 
@@ -128,7 +128,7 @@ class EntityVoterTest extends TestCase
     {
         self::assertNotNull($this->voter);
         $result = $this->voter->supportsAttribute($value);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     private function checkVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void
@@ -136,7 +136,7 @@ class EntityVoterTest extends TestCase
         $token = $this->getUserToken($user);
         self::assertNotNull($this->voter);
         $result = $this->voter->vote($token, $subject, [$attribute]);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     private function getAdminUser(): User

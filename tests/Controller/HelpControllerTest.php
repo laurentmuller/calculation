@@ -17,7 +17,7 @@ namespace App\Tests\Controller;
  */
 class HelpControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/help', self::ROLE_USER],

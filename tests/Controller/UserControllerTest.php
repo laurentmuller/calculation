@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/user', self::ROLE_USER, Response::HTTP_FORBIDDEN],

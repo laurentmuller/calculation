@@ -44,7 +44,7 @@ class AddressTransformerTest extends TestCase
         parent::tearDown();
     }
 
-    public function getReverseTransformValues(): \Generator
+    public static function getReverseTransformValues(): \Generator
     {
         yield [null, null];
         yield [true, null, true];
@@ -54,7 +54,7 @@ class AddressTransformerTest extends TestCase
         yield ['email-invalid', null, true];
     }
 
-    public function getTransformValues(): \Generator
+    public static function getTransformValues(): \Generator
     {
         yield [null, null];
         yield [true, null, true];
@@ -86,7 +86,7 @@ class AddressTransformerTest extends TestCase
         }
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testTransformerNotNull(): void

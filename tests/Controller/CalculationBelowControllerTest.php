@@ -32,7 +32,7 @@ class CalculationBelowControllerTest extends AbstractControllerTest
     private static ?Product $product = null;
     private static ?CalculationState $state = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/below', self::ROLE_USER, Response::HTTP_FORBIDDEN],

@@ -44,7 +44,7 @@ class UserServiceTest extends KernelTestCase
     public function testActions(): void
     {
         $service = $this->getUserService();
-        self::assertEquals(EntityAction::EDIT, $service->getEditAction());
+        self::assertSame(EntityAction::EDIT, $service->getEditAction());
         self::assertTrue($service->isActionEdit());
         self::assertFalse($service->isActionShow());
         self::assertFalse($service->isActionNone());
@@ -56,7 +56,7 @@ class UserServiceTest extends KernelTestCase
     public function testDisplayMode(): void
     {
         $service = $this->getUserService();
-        self::assertEquals(TableView::TABLE, $service->getDisplayMode());
+        self::assertSame(TableView::TABLE, $service->getDisplayMode());
     }
 
     /**
@@ -65,8 +65,8 @@ class UserServiceTest extends KernelTestCase
     public function testMessage(): void
     {
         $service = $this->getUserService();
-        self::assertEquals(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
-        self::assertEquals(4000, $service->getMessageTimeout());
+        self::assertSame(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
+        self::assertSame(4000, $service->getMessageTimeout());
         self::assertFalse($service->isMessageSubTitle());
     }
 
@@ -89,7 +89,7 @@ class UserServiceTest extends KernelTestCase
         self::assertTrue($service->isPanelCatalog());
         self::assertTrue($service->isPanelMonth());
         self::assertTrue($service->isPanelState());
-        self::assertEquals(10, $service->getPanelCalculation());
+        self::assertSame(10, $service->getPanelCalculation());
     }
 
     private function getUserService(): UserService

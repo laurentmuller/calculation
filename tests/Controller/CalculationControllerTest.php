@@ -29,7 +29,7 @@ class CalculationControllerTest extends AbstractControllerTest
     private static ?Group $group = null;
     private static ?CalculationState $state = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/calculation', self::ROLE_USER],

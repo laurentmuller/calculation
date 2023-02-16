@@ -54,7 +54,7 @@ class AjaxController extends AbstractController
     use MathTrait;
 
     /**
-     * Check if a username or e-mail exist.
+     * Check if a username or an e-mail exist.
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/checkuser', name: 'ajax_check_user')]
@@ -180,7 +180,7 @@ class AjaxController extends AbstractController
     public function password(Request $request, PasswordService $service, #[Autowire('%kernel.debug')] bool $debug): JsonResponse
     {
         // get values
-        $password = $this->getRequestString($request, 'password');
+        $password = $this->getRequestString($request, 'password', '');
         $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE);
         $email = $this->getRequestString($request, 'email');
         $user = $this->getRequestString($request, 'user');
@@ -369,7 +369,7 @@ class AjaxController extends AbstractController
             if (Utils::isString($search)) {
                 $maxResults = $this->getRequestInt($request, 'limit', 15);
                 $products = $repository->search($search, $maxResults);
-                if (!empty($products)) {
+                if ([] !== $products) {
                     return $this->json($products);
                 }
             }
@@ -545,7 +545,9 @@ class AjaxController extends AbstractController
      *
      * @template T of AbstractEntity
      *
-     * @param AbstractRepository<T> $repository
+     * @param Request               $request    the request to get query value
+     * @param AbstractRepository<T> $repository the entity repository to search from
+     * @param string                $field      the field name (column) to get values for
      *
      * @throws \ReflectionException
      */
@@ -556,7 +558,7 @@ class AjaxController extends AbstractController
             if (Utils::isString($search)) {
                 $limit = $this->getRequestInt($request, 'limit', 15);
                 $values = $repository->getDistinctValues($field, $search, $limit);
-                if (!empty($values)) {
+                if ([] !== $values) {
                     return $this->json($values);
                 }
             }
@@ -586,7 +588,7 @@ class AjaxController extends AbstractController
                 $values = \array_unique(\array_merge($productValues, $taskValues));
                 \sort($values, \SORT_LOCALE_STRING);
                 $values = \array_slice($values, 0, $limit);
-                if (!empty($values)) {
+                if ([] !== $values) {
                     return $this->json($values);
                 }
             }

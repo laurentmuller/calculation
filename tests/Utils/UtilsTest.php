@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UtilsTest extends TestCase
 {
-    public function getAscii(): array
+    public static function getAscii(): array
     {
         return [
             ['home', 'home'],
@@ -31,7 +31,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getCapitalize(): array
+    public static function getCapitalize(): array
     {
         return [
             ['home', 'Home'],
@@ -42,40 +42,40 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getCompare(): array
+    public static function getCompare(): array
     {
         return [
             // equal
-            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'value', 0],
-            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'string', 0],
+            [self::createData(0, 'd'), self::createData(0, 'd'), 'value', 0],
+            [self::createData(0, 'd'), self::createData(0, 'd'), 'string', 0],
 
             // equal reverse
-            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'value', 0, false],
-            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'string', 0, false],
+            [self::createData(0, 'd'), self::createData(0, 'd'), 'value', 0, false],
+            [self::createData(0, 'd'), self::createData(0, 'd'), 'string', 0, false],
 
             // smaller
-            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'value', -1],
-            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'string', -1],
+            [self::createData(0, 'd'), self::createData(10, 'z'), 'value', -1],
+            [self::createData(0, 'd'), self::createData(10, 'z'), 'string', -1],
 
             // smaller reverse
-            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'value', 1, false],
-            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'string', 1, false],
+            [self::createData(0, 'd'), self::createData(10, 'z'), 'value', 1, false],
+            [self::createData(0, 'd'), self::createData(10, 'z'), 'string', 1, false],
 
             // greater
-            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'value', 1],
-            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'string', 1],
+            [self::createData(0, 'd'), self::createData(-10, 'a'), 'value', 1],
+            [self::createData(0, 'd'), self::createData(-10, 'a'), 'string', 1],
 
             // greater reverse
-            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'value', -1, false],
-            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'string', -1, false],
+            [self::createData(0, 'd'), self::createData(-10, 'a'), 'value', -1, false],
+            [self::createData(0, 'd'), self::createData(-10, 'a'), 'string', -1, false],
 
             // ignore case
-            [$this->createData(0, 'fake'), $this->createData(0, 'FAKE'), 'string', 0],
-            [$this->createData(0, 'FAKE'), $this->createData(0, 'fake'), 'string', 0],
+            [self::createData(0, 'fake'), self::createData(0, 'FAKE'), 'string', 0],
+            [self::createData(0, 'FAKE'), self::createData(0, 'fake'), 'string', 0],
         ];
     }
 
-    public function getContains(): array
+    public static function getContains(): array
     {
         return [
             ['fake', '', false, false],
@@ -85,7 +85,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getEndWith(): array
+    public static function getEndWith(): array
     {
         return [
             ['fake', '', false, false],
@@ -95,7 +95,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getEqualIgnoreCase(): array
+    public static function getEqualIgnoreCase(): array
     {
         return [
             ['home', 'Home'],
@@ -104,7 +104,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getExportVar(): array
+    public static function getExportVar(): array
     {
         return [
             [null, 'NULL'],
@@ -115,11 +115,11 @@ class UtilsTest extends TestCase
             [0.01, '0.01'],
             [1000, '1000'],
             ['fake', "'fake'"],
-            [['key' => 'value'], $this->getVarArray()],
+            [['key' => 'value'], self::getVarArray()],
         ];
     }
 
-    public function getIsString(): array
+    public static function getIsString(): array
     {
         return [
             [null, false],
@@ -128,7 +128,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getShortName(): array
+    public static function getShortName(): array
     {
         return [
             [null, null, true],
@@ -139,7 +139,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getStartWith(): array
+    public static function getStartWith(): array
     {
         return [
             ['fake', '', false, false],
@@ -149,7 +149,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getToFloat(): array
+    public static function getToFloat(): array
     {
         return [
             [null, 0.0, true],
@@ -160,7 +160,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getToInt(): array
+    public static function getToInt(): array
     {
         return [
             [null, 0, true],
@@ -171,7 +171,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getToString(): array
+    public static function getToString(): array
     {
         return [
             [null, '', true],
@@ -181,7 +181,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getTranslateLevels(): array
+    public static function getTranslateLevels(): array
     {
         return [
             [-2, 'none'],
@@ -201,7 +201,7 @@ class UtilsTest extends TestCase
     public function testAscii(string $value, string $expected): void
     {
         $result = Utils::ascii($value);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -210,7 +210,7 @@ class UtilsTest extends TestCase
     public function testCapitalize(string $value, string $expected): void
     {
         $result = Utils::capitalize($value);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -220,7 +220,7 @@ class UtilsTest extends TestCase
     {
         $accessor = Utils::getAccessor();
         $result = Utils::compare($a, $b, $field, $accessor, $ascending);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -229,7 +229,7 @@ class UtilsTest extends TestCase
     public function testContains(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $result = Utils::contains($haystack, $needle, $ignore_case);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -238,7 +238,7 @@ class UtilsTest extends TestCase
     public function testEndWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $result = Utils::endWith($haystack, $needle, $ignore_case);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -247,7 +247,7 @@ class UtilsTest extends TestCase
     public function testEqualIgnoreCase(string $string1, string $string2, bool $expected = true): void
     {
         $result = Utils::equalIgnoreCase($string1, $string2);
-        self::assertEquals($result, $expected);
+        self::assertSame($result, $expected);
     }
 
     /**
@@ -266,9 +266,9 @@ class UtilsTest extends TestCase
         self::assertArrayHasKey('line', $result);
         self::assertArrayHasKey('trace', $result);
 
-        self::assertEquals($message, $result['message']);
-        self::assertEquals($code, $result['code']);
-        self::assertEquals(__FILE__, $result['file']);
+        self::assertSame($message, $result['message']);
+        self::assertSame($code, $result['code']);
+        self::assertSame(__FILE__, $result['file']);
     }
 
     /**
@@ -277,7 +277,7 @@ class UtilsTest extends TestCase
     public function testExportVar(mixed $var, mixed $expected): void
     {
         $result = Utils::exportVar($var);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -293,7 +293,7 @@ class UtilsTest extends TestCase
             $this->expectException(\ReflectionException::class);
         }
         $result = Utils::getShortName($var);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     public function testGroupByArrays(): void
@@ -397,7 +397,7 @@ class UtilsTest extends TestCase
     public function testIsString(?string $var, bool $expected): void
     {
         $result = Utils::isString($var);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -406,7 +406,7 @@ class UtilsTest extends TestCase
     public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $result = Utils::startWith($haystack, $needle, $ignore_case);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -416,9 +416,9 @@ class UtilsTest extends TestCase
     {
         $result = Utils::toFloat($var);
         if ($equal) {
-            self::assertEquals($result, $expected);
+            self::assertSame($result, $expected);
         } else {
-            self::assertNotEquals($result, $expected);
+            self::assertNotSame($result, $expected);
         }
     }
 
@@ -429,9 +429,9 @@ class UtilsTest extends TestCase
     {
         $result = Utils::toInt($var);
         if ($equal) {
-            self::assertEquals($result, $expected);
+            self::assertSame($result, $expected);
         } else {
-            self::assertNotEquals($result, $expected);
+            self::assertNotSame($result, $expected);
         }
     }
 
@@ -442,13 +442,13 @@ class UtilsTest extends TestCase
     {
         $result = Utils::toString($var);
         if ($equal) {
-            self::assertEquals($result, $expected);
+            self::assertSame($result, $expected);
         } else {
-            self::assertNotEquals($result, $expected);
+            self::assertNotSame($result, $expected);
         }
     }
 
-    private function createData(int $value, string $string): \stdClass
+    private static function createData(int $value, string $string): \stdClass
     {
         return (object) [
             'value' => $value,
@@ -456,7 +456,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    private function getVarArray(): string
+    private static function getVarArray(): string
     {
         return <<<ARRAY
             [

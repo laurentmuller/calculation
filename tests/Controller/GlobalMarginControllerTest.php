@@ -24,7 +24,7 @@ class GlobalMarginControllerTest extends AbstractControllerTest
 {
     private static ?GlobalMargin $entity = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/globalmargin', self::ROLE_USER],

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use ReCaptcha\ReCaptcha as ReCaptchaService;
+use ReCaptcha\Response;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Constraint;
 
@@ -42,16 +43,24 @@ class RecaptchaValidator extends AbstractConstraintValidator
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
-        $recaptcha = new ReCaptchaService($this->secret);
-        $result = $recaptcha->verify($value);
-        if (!$result->isSuccess()) {
-            /** @var string[] $errorCodes */
-            $errorCodes = $result->getErrorCodes();
-            foreach ($errorCodes as $code) {
-                $this->context->buildViolation("recaptcha.$code")
-                    ->setCode($code)
-                    ->addViolation();
-            }
+        $response = $this->verify($value);
+        if ($response->isSuccess()) {
+            return;
         }
+
+        /** @var string[] $errorCodes */
+        $errorCodes = $response->getErrorCodes();
+        foreach ($errorCodes as $code) {
+            $this->context->buildViolation("recaptcha.$code")
+                ->setCode($code)
+                ->addViolation();
+        }
+    }
+
+    private function verify(string $value): Response
+    {
+        $service = new ReCaptchaService($this->secret);
+
+        return $service->verify($value);
     }
 }

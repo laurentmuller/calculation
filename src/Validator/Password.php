@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraint;
  *
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Password extends Constraint
 {
     final public const CASE_DIFF_ERROR = '4c725240-da48-42df-ba9a-ce09a16ab1b5';
@@ -34,6 +35,15 @@ class Password extends Constraint
     final public const PWNED_ERROR = 'd042c39d-b2d3-4ef3-97b8-10948aed2988';
 
     final public const SPECIAL_CHAR_ERROR = '5c5998ca-d67b-45ed-b210-dda950c8ea09';
+
+    protected const ERROR_NAMES = [
+        self::CASE_DIFF_ERROR => 'CASE_DIFF_ERROR',
+        self::EMAIL_ERROR => 'EMAIL_ERROR',
+        self::LETTERS_ERROR => 'LETTERS_ERROR',
+        self::NUMBERS_ERROR => 'NUMBERS_ERROR',
+        self::PWNED_ERROR => 'PWNED_ERROR',
+        self::SPECIAL_CHAR_ERROR => 'SPECIAL_CHAR_ERROR',
+    ];
 
     /**
      * Add all violations or stop of the first violation found.

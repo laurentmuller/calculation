@@ -40,7 +40,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         self::assertNotNull($this->service);
         $result = $this->service->current(self::CITY_VALID);
         self::assertIsArray($result);
-        self::assertEquals(self::CITY_VALID, $result['id']);
+        self::assertSame(self::CITY_VALID, $result['id']);
 
         self::assertIsArray($result['units']);
         $this->validateResult($result, true);
@@ -58,7 +58,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         $count = 5;
         $result = $this->service->daily(self::CITY_VALID, $count);
         self::assertIsArray($result);
-        self::assertEquals($count, $result['cnt']);
+        self::assertSame($count, $result['cnt']);
         self::assertCount($count, $result['list']);
         self::assertIsArray($result['units']);
 
@@ -84,14 +84,22 @@ class OpenWeatherServiceTest extends KernelTestCase
         $result = $this->service->group($cityIds);
 
         self::assertIsArray($result);
-        self::assertEquals(1, $result['cnt']);
-        self::assertCount(1, $result['list']);
-        self::assertIsArray($result['units']);
 
-        // @phpstan-ignore-next-line
-        $result = $result['list'][0];
-        self::assertIsArray($result);
-        $this->validateResult($result, false);
+        /** @psalm-var int $cnt */
+        $cnt = $result['cnt'];
+        self::assertSame(1, $cnt);
+
+        $list = $result['list'];
+        self::assertCount(1, $list);
+
+        $units = $result['units'];
+        self::assertIsArray($units);
+
+        /** @psalm-var array<int, array> $list */
+        $list = $result['list'];
+        $firstList = $list[0];
+        self::assertIsArray($firstList);
+        $this->validateResult($firstList, false);
     }
 
     public function testGroupInvalidCount(): void
@@ -137,7 +145,7 @@ class OpenWeatherServiceTest extends KernelTestCase
     private function validateSys(array $data): void
     {
         self::assertIsString($data['country']);
-        self::assertEquals(2, \strlen((string) $data['country']));
+        self::assertSame(2, \strlen((string) $data['country']));
         self::assertIsInt($data['sunrise']);
         self::assertIsInt($data['sunset']);
     }

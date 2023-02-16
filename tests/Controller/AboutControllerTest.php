@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AboutControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/about', self::ROLE_USER],

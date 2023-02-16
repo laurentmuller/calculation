@@ -41,7 +41,7 @@ class ReverseReaderTest extends TestCase
         $reader = $this->getReader();
         for ($i = 3; $i >= 1; --$i) {
             $line = $reader->current();
-            self::assertEquals("Line $i", $line);
+            self::assertSame("Line $i", $line);
         }
         self::assertNull($reader->current());
         $reader->close();

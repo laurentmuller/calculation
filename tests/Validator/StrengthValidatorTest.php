@@ -16,7 +16,7 @@ use App\Enums\StrengthLevel;
 use App\Validator\Strength;
 use App\Validator\StrengthValidator;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
-use Symfony\Component\Validator\Exception\InvalidArgumentException;
+use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -32,13 +32,13 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
     private const EMPTY_MESSAGE = 'empty';
 
-    public function getStrengthInvalids(): \Generator
+    public static function getStrengthInvalids(): \Generator
     {
         yield [-2];
         yield [5];
     }
 
-    public function getStrengthLevels(): \Generator
+    public static function getStrengthLevels(): \Generator
     {
         $levels = StrengthLevel::cases();
         foreach ($levels as $level) {
@@ -46,7 +46,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    public function getStrengths(): \Generator
+    public static function getStrengths(): \Generator
     {
         for ($i = -1; $i < 5; ++$i) {
             yield ['123', $i, $i > 0];
@@ -101,7 +101,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
      */
     public function testStrengthInvalid(int $strength): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ConstraintDefinitionException::class);
 
         new Strength($strength);
     }

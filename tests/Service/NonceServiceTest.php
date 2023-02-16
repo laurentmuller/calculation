@@ -51,7 +51,7 @@ class NonceServiceTest extends KernelTestCase
         self::stringStartsWith("'nonce-")->evaluate($csp);
         self::stringEndsWith("'")->evaluate($csp);
         self::stringContains($nonce)->evaluate($csp);
-        self::assertEquals("'nonce-" . $nonce . "'", $csp);
+        self::assertSame("'nonce-" . $nonce . "'", $csp);
     }
 
     /**
@@ -61,7 +61,7 @@ class NonceServiceTest extends KernelTestCase
     {
         $nonce = $this->service->getNonce(32);
         self::assertIsString($nonce);
-        self::assertEquals(64, \strlen($nonce));
+        self::assertSame(64, \strlen($nonce));
     }
 
     /**
@@ -71,7 +71,7 @@ class NonceServiceTest extends KernelTestCase
     {
         $nonce = $this->service->getNonce();
         self::assertIsString($nonce);
-        self::assertEquals(32, \strlen($nonce));
+        self::assertSame(32, \strlen($nonce));
     }
 
     public function testServiceNotNull(): void

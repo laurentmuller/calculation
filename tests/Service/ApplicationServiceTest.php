@@ -44,7 +44,7 @@ class ApplicationServiceTest extends KernelTestCase
     public function testActions(): void
     {
         $service = $this->getApplicationService();
-        self::assertEquals(EntityAction::EDIT, $service->getEditAction());
+        self::assertSame(EntityAction::EDIT, $service->getEditAction());
         self::assertTrue($service->isActionEdit());
         self::assertFalse($service->isActionShow());
         self::assertFalse($service->isActionNone());
@@ -58,8 +58,8 @@ class ApplicationServiceTest extends KernelTestCase
         $service = $this->getApplicationService();
         $role = $service->getAdminRole();
         $rights = $service->getAdminRights();
-        self::assertEquals('ROLE_ADMIN', $role->getName());
-        self::assertEquals($role->getRights(), $rights);
+        self::assertSame('ROLE_ADMIN', $role->getName());
+        self::assertSame($role->getRights(), $rights);
     }
 
     /**
@@ -73,12 +73,12 @@ class ApplicationServiceTest extends KernelTestCase
             'customer_url' => 'customer_url',
         ]);
 
-        self::assertEquals('customer_name', $service->getCustomerName());
-        self::assertEquals('customer_url', $service->getCustomerUrl());
+        self::assertSame('customer_name', $service->getCustomerName());
+        self::assertSame('customer_url', $service->getCustomerUrl());
 
         $customer = $service->getCustomer();
-        self::assertEquals('customer_name', $customer->getName());
-        self::assertEquals('customer_url', $customer->getUrl());
+        self::assertSame('customer_name', $customer->getName());
+        self::assertSame('customer_url', $customer->getUrl());
         self::assertNull($customer->getAddress());
         self::assertNull($customer->getEmail());
         self::assertNull($customer->getFax());
@@ -104,7 +104,7 @@ class ApplicationServiceTest extends KernelTestCase
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getDefaultCategory());
-        self::assertEquals(0, $service->getDefaultCategoryId());
+        self::assertSame(0, $service->getDefaultCategoryId());
     }
 
     /**
@@ -114,8 +114,8 @@ class ApplicationServiceTest extends KernelTestCase
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getDefaultProduct());
-        self::assertEquals(0, $service->getDefaultProductId());
-        self::assertEquals(0, $service->getDefaultQuantity());
+        self::assertSame(0, $service->getDefaultProductId());
+        self::assertSame(0.0, $service->getDefaultQuantity());
         self::assertTrue($service->isDefaultEdit());
     }
 
@@ -126,7 +126,7 @@ class ApplicationServiceTest extends KernelTestCase
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getDefaultState());
-        self::assertEquals(0, $service->getDefaultStateId());
+        self::assertSame(0, $service->getDefaultStateId());
     }
 
     /**
@@ -135,7 +135,7 @@ class ApplicationServiceTest extends KernelTestCase
     public function testDisplayMode(): void
     {
         $service = $this->getApplicationService();
-        self::assertEquals(TableView::TABLE, $service->getDisplayMode());
+        self::assertSame(TableView::TABLE, $service->getDisplayMode());
     }
 
     /**
@@ -144,8 +144,8 @@ class ApplicationServiceTest extends KernelTestCase
     public function testMessage(): void
     {
         $service = $this->getApplicationService();
-        self::assertEquals(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
-        self::assertEquals(4000, $service->getMessageTimeout());
+        self::assertSame(MessagePosition::BOTTOM_RIGHT, $service->getMessagePosition());
+        self::assertSame(4000, $service->getMessageTimeout());
         self::assertFalse($service->isMessageSubTitle());
     }
 
@@ -155,7 +155,7 @@ class ApplicationServiceTest extends KernelTestCase
     public function testMinMargin(): void
     {
         $service = $this->getApplicationService();
-        self::assertEquals(1.1, $service->getMinMargin());
+        self::assertSame(1.1, $service->getMinMargin());
         self::assertTrue($service->isMarginBelow(1.0));
         self::assertFalse($service->isMarginBelow(1.2));
 
@@ -182,7 +182,7 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertTrue($service->isPanelCatalog());
         self::assertTrue($service->isPanelMonth());
         self::assertTrue($service->isPanelState());
-        self::assertEquals(10, $service->getPanelCalculation());
+        self::assertSame(10, $service->getPanelCalculation());
     }
 
     /**
@@ -192,7 +192,7 @@ class ApplicationServiceTest extends KernelTestCase
     {
         $service = $this->getApplicationService();
         self::assertFalse($service->isDisplayCaptcha());
-        self::assertEquals(StrengthLevel::NONE, $service->getStrengthLevel());
+        self::assertSame(StrengthLevel::NONE, $service->getStrengthLevel());
     }
 
     /**
@@ -203,8 +203,8 @@ class ApplicationServiceTest extends KernelTestCase
         $service = $this->getApplicationService();
         $role = $service->getUserRole();
         $rights = $service->getUserRights();
-        self::assertEquals('ROLE_USER', $role->getName());
-        self::assertEquals($role->getRights(), $rights);
+        self::assertSame('ROLE_USER', $role->getName());
+        self::assertSame($role->getRights(), $rights);
     }
 
     private function getApplicationService(): ApplicationService

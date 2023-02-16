@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
-    public function getConstraints(): array
+    public static function getConstraints(): array
     {
         return [
             ['case_diff'],
@@ -37,7 +37,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function getInvalidValues(): array
+    public static function getInvalidValues(): array
     {
         return [
             ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR],
@@ -49,7 +49,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function getPasswords(): array
+    public static function getPasswords(): array
     {
         return [
             ['123456', true],
@@ -57,7 +57,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function getValidValues(): array
+    public static function getValidValues(): array
     {
         return [
             ['ABC abc', ['case_diff' => true]],
@@ -117,8 +117,8 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             $violations = $this->context->getViolations();
             self::assertCount(1, $violations);
             $first = $violations[0];
-            self::assertEquals('password.pwned', $first->getMessageTemplate());
-            self::assertEquals($value, $first->getInvalidValue());
+            self::assertSame('password.pwned', $first->getMessageTemplate());
+            self::assertSame($value, $first->getInvalidValue());
         } else {
             self::assertNoViolation();
         }

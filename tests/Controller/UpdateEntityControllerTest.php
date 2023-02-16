@@ -32,7 +32,7 @@ class UpdateEntityControllerTest extends AbstractControllerTest
     private static ?array $products = null;
     private static ?CalculationState $state = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],

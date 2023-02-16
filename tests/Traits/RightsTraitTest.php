@@ -38,7 +38,7 @@ class RightsTraitTest extends TestCase
         $this->rights = null;
     }
 
-    public function getAttributes(): \Generator
+    public static function getAttributes(): \Generator
     {
         $values = \array_values(EntityPermission::constants());
         foreach ($values as $value) {
@@ -46,7 +46,7 @@ class RightsTraitTest extends TestCase
         }
     }
 
-    public function getEntities(): \Generator
+    public static function getEntities(): \Generator
     {
         $values = \array_values(EntityName::constants());
         foreach ($values as $value) {
@@ -85,13 +85,13 @@ class RightsTraitTest extends TestCase
     {
         /** @psalm-var FlagBag<EntityPermission> $entity */
         $entity = $this->$entity;
-        self::assertEquals(0, $entity->getValue());
+        self::assertSame(0, $entity->getValue());
     }
 
     public function testInvalidAttribute(): void
     {
         $attribute = $this->getAttribute('UnknownAttribute');
-        self::assertTrue(RoleBuilder::INVALID_VALUE === $attribute);
+        self::assertSame(RoleBuilder::INVALID_VALUE, $attribute);
     }
 
     public function testIsNotSet(): void
@@ -111,7 +111,7 @@ class RightsTraitTest extends TestCase
         /** @psalm-var FlagBag<EntityPermission> $entity */
         $entity = $this->$entity;
         self::assertInstanceOf(FlagBag::class, $entity);
-        self::assertEquals(0, $entity->getValue());
+        self::assertSame(0, $entity->getValue());
     }
 
     private function checkAttribute(string $entity, string $key): void
@@ -121,7 +121,7 @@ class RightsTraitTest extends TestCase
         $this->$entity = $rights;
         /** @psalm-var FlagBag<EntityPermission> $value */
         $value = $this->$entity;
-        self::assertEquals($rights, $value);
+        self::assertSame($rights->getValue(), $value->getValue());
     }
 
     private function getAttribute(string $key): int

@@ -26,7 +26,7 @@ class CategoryControllerTest extends AbstractControllerTest
     private static ?Category $entity = null;
     private static ?Group $group = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/category', self::ROLE_USER],

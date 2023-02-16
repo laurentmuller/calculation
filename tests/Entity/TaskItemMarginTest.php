@@ -53,9 +53,9 @@ class TaskItemMarginTest extends AbstractEntityValidatorTest
     public function testValues(): void
     {
         $margin = $this->getTaskItemMargin(0, 100, 10);
-        self::assertEquals(0, $margin->getMinimum());
-        self::assertEquals(100, $margin->getMaximum());
-        self::assertEquals(10, $margin->getValue());
+        self::assertSame(0.0, $margin->getMinimum());
+        self::assertSame(100.0, $margin->getMaximum());
+        self::assertSame(10.0, $margin->getValue());
 
         self::assertFalse($margin->contains(-1));
         self::assertTrue($margin->contains(0));

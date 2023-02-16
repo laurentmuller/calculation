@@ -23,7 +23,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
  */
 class MessagePositionTest extends TypeTestCase
 {
-    public function getLabel(): array
+    public static function getLabel(): array
     {
         return [
             [MessagePosition::TOP_LEFT, 'top-left'],
@@ -50,9 +50,9 @@ class MessagePositionTest extends TypeTestCase
     {
         $expected = MessagePosition::BOTTOM_RIGHT;
         $default = MessagePosition::getDefault();
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_MESSAGE_POSITION;
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
     }
 
     /**
@@ -62,7 +62,7 @@ class MessagePositionTest extends TypeTestCase
     {
         $result = $position->getReadable();
         $expected = 'message_position.' . $value;
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     public function testSorted(): void
@@ -81,7 +81,7 @@ class MessagePositionTest extends TypeTestCase
             MessagePosition::BOTTOM_RIGHT,
         ];
         $sorted = MessagePosition::sorted();
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     /**
@@ -90,6 +90,6 @@ class MessagePositionTest extends TypeTestCase
     public function testValue(MessagePosition $position, string $expected): void
     {
         $value = $position->value;
-        self::assertEquals($expected, $value);
+        self::assertSame($expected, $value);
     }
 }

@@ -60,8 +60,8 @@ class CalculationServiceTest extends KernelTestCase
         $service = $this->getTestedService($manager);
         $service->updateTotal($calculation);
 
-        self::assertEquals(1, $calculation->getGroupsCount());
-        self::assertEquals(1, $calculation->getCategoriesCount());
+        self::assertSame(1, $calculation->getGroupsCount());
+        self::assertSame(1, $calculation->getCategoriesCount());
 
         /** @var CalculationGroup $group */
         $group = $calculation->getGroups()->first();
@@ -82,25 +82,25 @@ class CalculationServiceTest extends KernelTestCase
         $totalOverall = $totalUser * self::MARGIN_PERCENT;
 
         // item
-        self::assertEquals(self::PRODUCT_PRICE, $item->getPrice());
-        self::assertEquals(self::QUANTITY, $item->getQuantity());
-        self::assertEquals($totalItem, $item->getTotal());
+        self::assertSame(self::PRODUCT_PRICE, $item->getPrice());
+        self::assertSame(self::QUANTITY, $item->getQuantity());
+        self::assertSame($totalItem, $item->getTotal());
 
         // group
-        self::assertEquals($totalItem, $group->getAmount());
-        self::assertEquals(self::MARGIN_PERCENT, $group->getMargin());
-        self::assertEquals($totalGroup, $group->getTotal());
+        self::assertSame($totalItem, $group->getAmount());
+        self::assertSame(self::MARGIN_PERCENT, $group->getMargin());
+        self::assertSame($totalGroup, $group->getTotal());
 
         // category
-        self::assertEquals($totalItem, $category->getAmount());
-        self::assertEquals($category->getAmount(), $item->getTotal());
+        self::assertSame($totalItem, $category->getAmount());
+        self::assertSame($category->getAmount(), $item->getTotal());
 
         // assert
-        self::assertEquals($totalItem, $calculation->getItemsTotal());
-        self::assertEquals($totalGroup, $calculation->getGroupsTotal());
-        self::assertEquals(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
-        self::assertEquals(self::MARGIN_USER, $calculation->getUserMargin());
-        self::assertEquals($totalOverall, $calculation->getOverallTotal());
+        self::assertSame($totalItem, $calculation->getItemsTotal());
+        self::assertSame($totalGroup, $calculation->getGroupsTotal());
+        self::assertSame(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
+        self::assertSame(self::MARGIN_USER, $calculation->getUserMargin());
+        self::assertSame($totalOverall, $calculation->getOverallTotal());
     }
 
     /**

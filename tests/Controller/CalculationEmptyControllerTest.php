@@ -35,7 +35,7 @@ class CalculationEmptyControllerTest extends AbstractControllerTest
     /**
      * {@inheritdoc}
      */
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN],

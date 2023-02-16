@@ -22,7 +22,7 @@ class GroupControllerTest extends AbstractControllerTest
 {
     private static ?Group $entity = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/group', self::ROLE_USER],

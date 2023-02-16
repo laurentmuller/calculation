@@ -58,13 +58,13 @@ class GroupTransformerTest extends KernelTestCase
         parent::tearDown();
     }
 
-    public function getReverseTransformValues(): \Generator
+    public static function getReverseTransformValues(): \Generator
     {
         yield [null, null];
         yield [true, null, true];
     }
 
-    public function getTransformValues(): \Generator
+    public static function getTransformValues(): \Generator
     {
         yield [null, null];
         yield [true, null, true];
@@ -87,7 +87,7 @@ class GroupTransformerTest extends KernelTestCase
         }
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testReverseTransformInvalid(): void
@@ -95,7 +95,7 @@ class GroupTransformerTest extends KernelTestCase
         self::assertNotNull($this->transformer);
         $this->expectException(TransformationFailedException::class);
         $actual = $this->transformer->reverseTransform(-1);
-        self::assertEquals($this->group, $actual);
+        self::assertSame($this->group, $actual);
     }
 
     public function testReverseTransformValid(): void
@@ -103,7 +103,7 @@ class GroupTransformerTest extends KernelTestCase
         self::assertNotNull($this->group);
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($this->group->getId());
-        self::assertEquals($this->group, $actual);
+        self::assertSame($this->group, $actual);
     }
 
     /**
@@ -116,7 +116,7 @@ class GroupTransformerTest extends KernelTestCase
         }
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testTransformerNotNull(): void
@@ -129,7 +129,7 @@ class GroupTransformerTest extends KernelTestCase
         self::assertNotNull($this->group);
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($this->group);
-        self::assertEquals($this->group->getId(), $actual);
+        self::assertSame($this->group->getId(), $actual);
     }
 
     /**

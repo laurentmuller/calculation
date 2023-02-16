@@ -25,28 +25,12 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 abstract class AbstractConstraintValidator extends ConstraintValidator
 {
     /**
-     * The constraint class.
-     *
-     * @psalm-var class-string<T> $className
-     */
-    protected string $className;
-
-    /**
      * Constructor.
      *
-     * @param string $className the constraint class
-     *
-     * @psalm-param class-string<T> $className
-     *
-     * @throws UnexpectedTypeException if the given class name is not a subclass of the Constraint class
+     * @param class-string<T> $className the constraint class
      */
-    public function __construct(string $className)
+    public function __construct(private readonly string $className)
     {
-        if (!\is_subclass_of($className, Constraint::class)) {
-            throw new UnexpectedTypeException($className, Constraint::class);
-        }
-
-        $this->className = $className;
     }
 
     /**
@@ -62,7 +46,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
             return;
         }
 
-        if (!\is_scalar($value) && !$value instanceof \Stringable && !(\is_object($value) && \method_exists($value, '__toString'))) {
+        if (!\is_scalar($value) && !$value instanceof \Stringable) {
             throw new UnexpectedValueException($value, 'string');
         }
 

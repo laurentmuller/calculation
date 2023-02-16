@@ -19,7 +19,7 @@ namespace App\Tests\Controller;
  */
 class SiteMapControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/sitemap', self::ROLE_USER],

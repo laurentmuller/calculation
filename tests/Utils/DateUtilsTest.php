@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DateUtilsTest extends TestCase
 {
-    public function getCompletYears(): array
+    public static function getCompletYears(): array
     {
         return [
             [29, 2029],
@@ -41,7 +41,7 @@ class DateUtilsTest extends TestCase
         ];
     }
 
-    public function getMonthNames(): array
+    public static function getMonthNames(): array
     {
         return [
             ['Janvier', 1],
@@ -59,7 +59,7 @@ class DateUtilsTest extends TestCase
         ];
     }
 
-    public function getShortMonthNames(): array
+    public static function getShortMonthNames(): array
     {
         return [
             ['Janv.', 1],
@@ -77,7 +77,7 @@ class DateUtilsTest extends TestCase
         ];
     }
 
-    public function getShortWeekdayNames(): array
+    public static function getShortWeekdayNames(): array
     {
         return [
             // default (sunday)
@@ -100,7 +100,7 @@ class DateUtilsTest extends TestCase
         ];
     }
 
-    public function getWeekdayNames(): array
+    public static function getWeekdayNames(): array
     {
         return [
             // default (sunday)
@@ -128,14 +128,14 @@ class DateUtilsTest extends TestCase
         $date = new \DateTime('2020-01-10');
         $interval = new \DateInterval('P1W');
         $add = DateUtils::add($date, $interval);
-        self::assertEquals('2020-01-17', $add->format('Y-m-d'));
+        self::assertSame('2020-01-17', $add->format('Y-m-d'));
     }
 
     public function testAddByString(): void
     {
         $date = new \DateTime('2020-01-10');
         $add = DateUtils::add($date, 'P1W');
-        self::assertEquals('2020-01-17', $add->format('Y-m-d'));
+        self::assertSame('2020-01-17', $add->format('Y-m-d'));
     }
 
     /**
@@ -144,7 +144,7 @@ class DateUtilsTest extends TestCase
     public function testCompletYear(int $value, int $expected, int $change = 1930): void
     {
         $year = DateUtils::completYear($value, $change);
-        self::assertEquals($expected, $year);
+        self::assertSame($expected, $year);
     }
 
     /**
@@ -154,7 +154,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getMonths($locale);
         self::assertArrayHasKey($index, $values);
-        self::assertEquals($name, $values[$index]);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testMonthsCount(): void
@@ -170,7 +170,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getShortMonths($locale);
         self::assertArrayHasKey($index, $values);
-        self::assertEquals($name, $values[$index]);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testShortMonthsCount(): void
@@ -186,7 +186,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getShortWeekdays($firstday, $locale);
         self::assertArrayHasKey($index, $values);
-        self::assertEquals($name, $values[$index]);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testShortWeekdaysCount(): void
@@ -200,14 +200,14 @@ class DateUtilsTest extends TestCase
         $date = new \DateTime('2020-01-10');
         $interval = new \DateInterval('P1W');
         $add = DateUtils::sub($date, $interval);
-        self::assertEquals('2020-01-03', $add->format('Y-m-d'));
+        self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
     public function testSubByString(): void
     {
         $date = new \DateTime('2020-01-10');
         $add = DateUtils::sub($date, 'P1W');
-        self::assertEquals('2020-01-03', $add->format('Y-m-d'));
+        self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
     /**
@@ -217,7 +217,7 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getWeekdays($firstday, $locale);
         self::assertArrayHasKey($index, $values);
-        self::assertEquals($name, $values[$index]);
+        self::assertSame($name, $values[$index]);
     }
 
     public function testWeekdaysCount(): void

@@ -34,7 +34,7 @@ class LogControllerTest extends AbstractControllerTest
         $logger->info('LogControllerTest: A message for testing purposes.');
     }
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/log', self::ROLE_USER, Response::HTTP_FORBIDDEN],

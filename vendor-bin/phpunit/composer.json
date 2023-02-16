@@ -3,7 +3,7 @@
 		"php" : "^8.1",
 		"phpunit/phpunit": "^9.5",
         "symfony/phpunit-bridge": "^6.0"
-    },
+	},
 	"config" : {
 		"preferred-install" : {
 			"*" : "dist"
@@ -26,8 +26,5 @@
 		"symfony/polyfill-intl-icu": "*",
 		"symfony/polyfill-intl-grapheme": "*",
 		"symfony/polyfill-intl-normalizer" : "*"
-	},
-    "require-dev": {
-        "phpunit/php-code-coverage": "^9.2"
-    }
+	}
 }

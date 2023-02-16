@@ -63,13 +63,13 @@ class CategoryTransformerTest extends KernelTestCase
         parent::tearDown();
     }
 
-    public function getReverseTransformValues(): \Generator
+    public static function getReverseTransformValues(): \Generator
     {
         yield [null, null];
         yield [true, null, true];
     }
 
-    public function getTransformValues(): \Generator
+    public static function getTransformValues(): \Generator
     {
         yield [null, null];
         yield [true, null, true];
@@ -97,7 +97,7 @@ class CategoryTransformerTest extends KernelTestCase
         }
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testReverseTransformInvalid(): void
@@ -105,7 +105,7 @@ class CategoryTransformerTest extends KernelTestCase
         self::assertNotNull($this->transformer);
         $this->expectException(TransformationFailedException::class);
         $actual = $this->transformer->reverseTransform(-1);
-        self::assertEquals($this->category, $actual);
+        self::assertSame($this->category, $actual);
     }
 
     public function testReverseTransformValid(): void
@@ -113,7 +113,7 @@ class CategoryTransformerTest extends KernelTestCase
         self::assertNotNull($this->category);
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($this->category->getId());
-        self::assertEquals($this->category, $actual);
+        self::assertSame($this->category, $actual);
     }
 
     /**
@@ -126,7 +126,7 @@ class CategoryTransformerTest extends KernelTestCase
         }
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testTransformerNotNull(): void
@@ -139,7 +139,7 @@ class CategoryTransformerTest extends KernelTestCase
         self::assertNotNull($this->category);
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($this->category);
-        self::assertEquals($this->category->getId(), $actual);
+        self::assertSame($this->category->getId(), $actual);
     }
 
     /**

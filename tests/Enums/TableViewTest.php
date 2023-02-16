@@ -33,21 +33,21 @@ class TableViewTest extends TypeTestCase
     {
         $expected = TableView::TABLE;
         $default = TableView::getDefault();
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_DISPLAY_MODE;
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
     }
 
     public function testLabel(): void
     {
-        self::assertEquals('table_view.custom', TableView::CUSTOM->getReadable());
-        self::assertEquals('table_view.table', TableView::TABLE->getReadable());
+        self::assertSame('table_view.custom', TableView::CUSTOM->getReadable());
+        self::assertSame('table_view.table', TableView::TABLE->getReadable());
     }
 
     public function testPageSize(): void
     {
-        self::assertEquals(15, TableView::CUSTOM->getPageSize());
-        self::assertEquals(20, TableView::TABLE->getPageSize());
+        self::assertSame(15, TableView::CUSTOM->getPageSize());
+        self::assertSame(20, TableView::TABLE->getPageSize());
     }
 
     public function testSorted(): void
@@ -57,12 +57,12 @@ class TableViewTest extends TypeTestCase
             TableView::CUSTOM,
         ];
         $sorted = TableView::sorted();
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     public function testValue(): void
     {
-        self::assertEquals('custom', TableView::CUSTOM->value);
-        self::assertEquals('table', TableView::TABLE->value);
+        self::assertSame('custom', TableView::CUSTOM->value);
+        self::assertSame('table', TableView::TABLE->value);
     }
 }

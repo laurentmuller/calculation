@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class EntityPermissionTest extends TestCase
 {
-    public function getLabel(): array
+    public static function getLabel(): array
     {
         return [
             [EntityPermission::ADD, 'rights.add'],
@@ -36,7 +36,7 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    public function getMatchName(): array
+    public static function getMatchName(): array
     {
         return [
             [EntityPermission::ADD, 'add'],
@@ -54,7 +54,7 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    public function getTryFindValue(): array
+    public static function getTryFindValue(): array
     {
         return [
             ['add', 1],
@@ -69,7 +69,7 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    public function getTryFromName(): array
+    public static function getTryFromName(): array
     {
         return [
             [EntityPermission::ADD, 'add'],
@@ -87,7 +87,7 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    public function getValue(): array
+    public static function getValue(): array
     {
         return [
             [EntityPermission::ADD, 1],
@@ -104,7 +104,7 @@ class EntityPermissionTest extends TestCase
         $expected = [1, 2, 4, 8, 16, 32];
         $permissions = FlagBag::fromAll(EntityPermission::class);
         $bits = $permissions->getBits();
-        self::assertEquals($expected, $bits);
+        self::assertSame($expected, $bits);
     }
 
     public function testConstants(): void
@@ -135,7 +135,7 @@ class EntityPermissionTest extends TestCase
     public function testLabel(EntityPermission $permission, string $expected): void
     {
         $label = $permission->getReadable();
-        self::assertEquals($expected, $label);
+        self::assertSame($expected, $label);
     }
 
     /**
@@ -144,7 +144,7 @@ class EntityPermissionTest extends TestCase
     public function testMatchName(EntityPermission $permission, string $name, bool $expected = true): void
     {
         $result = $permission->matchName($name);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     public function testSorted(): void
@@ -158,13 +158,13 @@ class EntityPermissionTest extends TestCase
             EntityPermission::EXPORT,
         ];
         $sorted = EntityPermission::sorted();
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     public function testSum(): void
     {
         $permissions = FlagBag::fromAll(EntityPermission::class);
-        self::assertEquals(63, $permissions->getValue());
+        self::assertSame(63, $permissions->getValue());
     }
 
     /**
@@ -173,7 +173,7 @@ class EntityPermissionTest extends TestCase
     public function testTryFindValue(string $name, int $expected, int $default = RoleBuilder::INVALID_VALUE): void
     {
         $result = EntityPermission::tryFindValue($name, $default);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -182,7 +182,7 @@ class EntityPermissionTest extends TestCase
     public function testTryFromName(mixed $expected, string $value): void
     {
         $result = EntityPermission::tryFromName($value);
-        self::assertEquals($expected, $result);
+        self::assertSame($expected, $result);
     }
 
     /**
@@ -191,6 +191,6 @@ class EntityPermissionTest extends TestCase
     public function testValue(EntityPermission $permission, int $expected): void
     {
         $value = $permission->value;
-        self::assertEquals($expected, $value);
+        self::assertSame($expected, $value);
     }
 }

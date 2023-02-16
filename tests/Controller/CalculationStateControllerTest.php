@@ -22,7 +22,7 @@ class CalculationStateControllerTest extends AbstractControllerTest
 {
     private static ?CalculationState $entity = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/calculationstate', self::ROLE_USER],

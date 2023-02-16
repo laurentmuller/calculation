@@ -37,7 +37,7 @@ class ConstantExtensionTest extends KernelTestCase
         }
     }
 
-    public function getCalculationServiceConstants(): array
+    public static function getCalculationServiceConstants(): array
     {
         return [
             ['ROW_EMPTY', 0],
@@ -50,7 +50,7 @@ class ConstantExtensionTest extends KernelTestCase
         ];
     }
 
-    public function getEntityVoterConstants(): array
+    public static function getEntityVoterConstants(): array
     {
         return [
             ['ATTRIBUTE_ADD', 'ADD'],
@@ -83,7 +83,7 @@ class ConstantExtensionTest extends KernelTestCase
         $globals = $this->extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsInt($globals[$key]);
-        self::assertEquals($value, $globals[$key]);
+        self::assertSame($value, $globals[$key]);
     }
 
     /**
@@ -96,7 +96,7 @@ class ConstantExtensionTest extends KernelTestCase
         $globals = $this->extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsString($globals[$key]);
-        self::assertEquals($value, $globals[$key]);
+        self::assertSame($value, $globals[$key]);
     }
 
     public function testExtensionNotNull(): void

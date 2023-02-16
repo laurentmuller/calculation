@@ -42,46 +42,45 @@ class PasswordService
     /**
      * Validate the given password.
      *
-     * @param ?string $password the password to validate
+     * @param string  $password the password to validate
      * @param int     $strength the minimum level
      * @param ?string $email    the optional user's email
      * @param ?string $user     the optional user's name
      *
      * @return array the validation result where the 'result' is boolean indicate, when true; the success
      */
-    public function validate(?string $password, int $strength, ?string $email = null, ?string $user = null): array
+    public function validate(string $password, int $strength, ?string $email = null, ?string $user = null): array
     {
         // validate password
-        if (null === $password || '' === $password) {
-            return $this->getFalseResult(
-                $this->trans('password.empty', [], 'validators'),
-            );
+        if (null !== $response = $this->validatePassword($password)) {
+            return $response;
         }
 
         // get results
         $results = $this->getPasswordStrength($password, \array_filter([$email, $user]));
 
         // validate score
-        $score = $results['score'];
-        if (null === $actualLevel = StrengthLevel::tryFrom($score)) {
-            $message = $this->translateInvalidLevel($score);
-
-            return $this->getFalseResult($message, $results);
+        if (null !== $response = $this->validateScoreResults($results)) {
+            return $response;
         }
+
+        // add score
+        $scoreLevel = StrengthLevel::from($results['score']);
         $results = \array_merge($results, [
             'score' => [
-                'value' => $score,
-                'percent' => $actualLevel->percent(),
-                'text' => $this->translateLevel($actualLevel),
+                'value' => $scoreLevel->value,
+                'percent' => $scoreLevel->percent(),
+                'text' => $this->translateLevel($scoreLevel),
             ],
         ]);
 
-        // validate minimum level
-        if (null === $minimumLevel = StrengthLevel::tryFrom($strength)) {
-            $message = $this->translateInvalidLevel($strength);
-
-            return $this->getFalseResult($message, ['minimum' => $strength] + $results);
+        // validate strength input
+        if (null !== $response = $this->validateStrength($strength, $results)) {
+            return $response;
         }
+
+        // add minimum level
+        $minimumLevel = StrengthLevel::from($strength);
         $results = \array_merge($results, [
             'minimum' => [
                 'value' => $minimumLevel->value,
@@ -90,22 +89,18 @@ class PasswordService
             ],
         ]);
 
-        // none?
-        if (StrengthLevel::NONE === $minimumLevel) {
-            $message = $this->trans('password.strength_disabled', [], 'validators');
-
-            return $this->getFalseResult($message, $results);
+        // validate minimum level
+        if (null !== $response = $this->validateMinimumLevel($minimumLevel, $results)) {
+            return $response;
         }
 
-        // valid?
-        if ($actualLevel->isSmaller($minimumLevel)) {
-            $message = $this->translateScore($minimumLevel, $actualLevel);
-
-            return $this->getFalseResult($message, $results);
+        // validate actual level
+        if (null !== $response = $this->validateScoreLevel($minimumLevel, $scoreLevel, $results)) {
+            return $response;
         }
 
         // ok
-        return ['result' => true] + $results;
+        return \array_merge(['result' => true], $results);
     }
 
     private function getFalseResult(string $message, array $values = []): array
@@ -114,11 +109,11 @@ class PasswordService
     }
 
     /**
-     * @return array{score: int, warning?: string, suggestions?: array}
+     * @return array{score: int, warning?: string, suggestions?: string[]}
      */
     private function getPasswordStrength(string $password, array $userInputs): array
     {
-        /** @psalm-var array{score: int, feedback: array{suggestions: array, warning: string}} $result */
+        /** @psalm-var array{score: int, feedback: array{warning: string, suggestions: string[]}} $result */
         $result = $this->getService()->passwordStrength($password, $userInputs);
 
         return \array_merge(
@@ -132,10 +127,65 @@ class PasswordService
 
     private function getService(): Zxcvbn
     {
-        if (null === $this->service) {
-            $this->service = $this->factory->createZxcvbn();
+        return $this->service ??= $this->factory->createZxcvbn();
+    }
+
+    private function validateMinimumLevel(StrengthLevel $minimumLevel, array $results): ?array
+    {
+        if (StrengthLevel::NONE === $minimumLevel) {
+            $message = $this->trans('password.strength_disabled', [], 'validators');
+
+            return $this->getFalseResult($message, $results);
         }
 
-        return $this->service;
+        return null;
+    }
+
+    private function validatePassword(string $password): ?array
+    {
+        if ('' === $password) {
+            return $this->getFalseResult(
+                $this->trans('password.empty', [], 'validators'),
+            );
+        }
+
+        return null;
+    }
+
+    private function validateScoreLevel(StrengthLevel $minimumLevel, StrengthLevel $scoreLevel, array $results): ?array
+    {
+        if ($scoreLevel->isSmaller($minimumLevel)) {
+            $message = $this->translateScore($minimumLevel, $scoreLevel);
+
+            return $this->getFalseResult($message, $results);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array{score: int, warning?: string, suggestions?: array} $results
+     */
+    private function validateScoreResults(array $results): ?array
+    {
+        $score = $results['score'];
+        if (null === StrengthLevel::tryFrom($score)) {
+            $message = $this->translateInvalidLevel($score);
+
+            return $this->getFalseResult($message, $results);
+        }
+
+        return null;
+    }
+
+    private function validateStrength(int $strength, array $results): ?array
+    {
+        if (null === StrengthLevel::tryFrom($strength)) {
+            $message = $this->translateInvalidLevel($strength);
+
+            return $this->getFalseResult($message, \array_merge(['minimum' => $strength], $results));
+        }
+
+        return null;
     }
 }

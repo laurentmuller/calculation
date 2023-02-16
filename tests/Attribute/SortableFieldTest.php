@@ -33,7 +33,7 @@ class SortableFieldTest extends TestCase
 
         $actual = SortableField::getOrder($testedClass, 'field');
         $expected = SortModeInterface::SORT_ASC;
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -48,7 +48,7 @@ class SortableFieldTest extends TestCase
 
         $actual = SortableField::getOrder($testedClass, 'field');
         $expected = SortModeInterface::SORT_DESC;
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**

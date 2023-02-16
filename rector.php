@@ -11,11 +11,10 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
-use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
-use Rector\Doctrine\Set\DoctrineSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     // bootstrap files
@@ -27,20 +26,28 @@ return static function (RectorConfig $rectorConfig): void {
         'tests',
     ]);
 
+    // rules to skip
     $rectorConfig->skip([
-        __DIR__ . '/src/Form/DataTransformer/AddressTransformer.php',
-        __DIR__ . '/src/Form/DataTransformer/AbstractEntityTransformer.php',
+        Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector::class,
     ]);
 
     // rules to apply
     $rectorConfig->sets([
+        // global
         SetList::PHP_81,
         SetList::CODE_QUALITY,
-        PHPUnitSetList::PHPUNIT_90,
-        SymfonySetList::SYMFONY_60,
+        // PHP-Unit
+        PHPUnitSetList::PHPUNIT_91,
+        PHPUnitSetList::PHPUNIT_EXCEPTION,
+        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+        // Symfony
+        SymfonySetList::SYMFONY_62,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        // Doctrine
+        DoctrineSetList::DOCTRINE_DBAL_30,
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
+        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ]);
 };

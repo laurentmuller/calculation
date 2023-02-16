@@ -32,15 +32,15 @@ class ImportanceTest extends TypeTestCase
     {
         $default = Importance::getDefault();
         $expected = Importance::LOW;
-        self::assertEquals($expected, $default);
+        self::assertSame($expected, $default);
     }
 
     public function testLabel(): void
     {
-        self::assertEquals('importance.high', Importance::HIGH->getReadable());
-        self::assertEquals('importance.low', Importance::LOW->getReadable());
-        self::assertEquals('importance.medium', Importance::MEDIUM->getReadable());
-        self::assertEquals('importance.urgent', Importance::URGENT->getReadable());
+        self::assertSame('importance.high', Importance::HIGH->getReadable());
+        self::assertSame('importance.low', Importance::LOW->getReadable());
+        self::assertSame('importance.medium', Importance::MEDIUM->getReadable());
+        self::assertSame('importance.urgent', Importance::URGENT->getReadable());
     }
 
     public function testSorted(): void
@@ -52,14 +52,14 @@ class ImportanceTest extends TypeTestCase
             Importance::URGENT,
         ];
         $sorted = Importance::sorted();
-        self::assertEquals($expected, $sorted);
+        self::assertSame($expected, $sorted);
     }
 
     public function testValue(): void
     {
-        self::assertEquals('high', Importance::HIGH->value);
-        self::assertEquals('low', Importance::LOW->value);
-        self::assertEquals('medium', Importance::MEDIUM->value);
-        self::assertEquals('urgent', Importance::URGENT->value);
+        self::assertSame('high', Importance::HIGH->value);
+        self::assertSame('low', Importance::LOW->value);
+        self::assertSame('medium', Importance::MEDIUM->value);
+        self::assertSame('urgent', Importance::URGENT->value);
     }
 }

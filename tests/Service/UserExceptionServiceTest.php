@@ -48,7 +48,7 @@ class UserExceptionServiceTest extends TestCase
         $this->request->setSession($session);
     }
 
-    public function getExceptions(): array
+    public static function getExceptions(): array
     {
         return [
             // register user
@@ -75,9 +75,9 @@ class UserExceptionServiceTest extends TestCase
     public function testException(\Throwable $e, string $message, int $messageData = 0): void
     {
         $result = $this->mapException($e);
-        self::assertEquals(0, $result->getCode());
-        self::assertEquals($message, $result->getMessage());
-        self::assertEquals($message, $result->getMessageKey());
+        self::assertSame(0, $result->getCode());
+        self::assertSame($message, $result->getMessage());
+        self::assertSame($message, $result->getMessageKey());
         self::assertCount($messageData, $result->getMessageData());
         self::assertInstanceOf($e::class, $result->getPrevious());
     }

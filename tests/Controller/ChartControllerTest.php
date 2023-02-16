@@ -19,7 +19,7 @@ namespace App\Tests\Controller;
  */
 class ChartControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/chart/month', self::ROLE_USER],

@@ -30,7 +30,7 @@ class GeneratorControllerTest extends AbstractControllerTest
     private static ?array $products = null;
     private static ?CalculationState $state = null;
 
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN],

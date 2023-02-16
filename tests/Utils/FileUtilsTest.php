@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FileUtilsTest extends TestCase
 {
-    public function getBuildPaths(): array
+    public static function getBuildPaths(): array
     {
         return [
             ['', ''],
@@ -41,7 +41,7 @@ class FileUtilsTest extends TestCase
     public function testBuildPath(string $expected, string ...$segments): void
     {
         $actual = FileUtils::buildPath(...$segments);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testExist(): void
@@ -60,7 +60,7 @@ class FileUtilsTest extends TestCase
         $file = $this->getLinesFile();
         $size = \filesize($file);
         self::assertTrue(FileUtils::exists($file));
-        self::assertEquals($size . ' B', FileUtils::formatSize($file));
+        self::assertSame($size . ' B', FileUtils::formatSize($file));
     }
 
     public function testIsFile(): void
@@ -71,12 +71,12 @@ class FileUtilsTest extends TestCase
     public function testLineCount(): void
     {
         $empty = $this->getEmptyFile();
-        self::assertEquals(0, FileUtils::getLinesCount($empty));
-        self::assertEquals(0, FileUtils::getLinesCount($empty, false));
+        self::assertSame(0, FileUtils::getLinesCount($empty));
+        self::assertSame(0, FileUtils::getLinesCount($empty, false));
 
         $lines = $this->getLinesFile();
-        self::assertEquals(3, FileUtils::getLinesCount($lines));
-        self::assertEquals(6, FileUtils::getLinesCount($lines, false));
+        self::assertSame(3, FileUtils::getLinesCount($lines));
+        self::assertSame(6, FileUtils::getLinesCount($lines, false));
     }
 
     private function getEmptyFile(): string

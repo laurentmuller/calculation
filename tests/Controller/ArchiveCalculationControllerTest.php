@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ArchiveCalculationControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN],

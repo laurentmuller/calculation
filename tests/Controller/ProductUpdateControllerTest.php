@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProductUpdateControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/admin/product', self::ROLE_USER, Response::HTTP_FORBIDDEN],

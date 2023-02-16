@@ -24,7 +24,7 @@ class MathTraitTest extends TestCase
 {
     use MathTrait;
 
-    public function getIsBitSet(): array
+    public static function getIsBitSet(): array
     {
         return [
             [31, 1],
@@ -41,7 +41,7 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getIsFloatEquals(): array
+    public static function getIsFloatEquals(): array
     {
         return [
             [0, 0],
@@ -53,7 +53,7 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getIsFloatZero(): array
+    public static function getIsFloatZero(): array
     {
         return [
             [0],
@@ -70,7 +70,7 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getRound(): array
+    public static function getRound(): array
     {
         return [
             [0, 0.0],
@@ -81,7 +81,7 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getSafeDivide(): array
+    public static function getSafeDivide(): array
     {
         return [
             [100, 0,  0.0],
@@ -91,7 +91,7 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getValidateFloatRange(): array
+    public static function getValidateFloatRange(): array
     {
         return [
             [0.0,  0, 100.0, 0.0],
@@ -102,7 +102,7 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    public function getValidateIntRange(): array
+    public static function getValidateIntRange(): array
     {
         return [
             [0,  0, 100, 0],
@@ -119,7 +119,7 @@ class MathTraitTest extends TestCase
     public function testIsBitSet(int $value, int $mask, bool $expected = true): void
     {
         $actual = $this->isBitSet($value, $mask);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -128,7 +128,7 @@ class MathTraitTest extends TestCase
     public function testIsFloatEquals(float $val1, float $val2, int $precision = 2, bool $expected = true): void
     {
         $actual = $this->isFloatEquals($val1, $val2, $precision);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -137,7 +137,7 @@ class MathTraitTest extends TestCase
     public function testIsFloatZero(float $val, int $precision = 2, bool $expected = true): void
     {
         $actual = $this->isFloatZero($val, $precision);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -146,7 +146,7 @@ class MathTraitTest extends TestCase
     public function testRound(float $val, float $expected, int $precision = 2): void
     {
         $actual = $this->round($val, $precision);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -155,8 +155,8 @@ class MathTraitTest extends TestCase
     public function testSafeDivide(float $dividend, float $divisor, float $expected, float $default = 0.0): void
     {
         $actual = $this->safeDivide($dividend, $divisor, $default);
-        self::assertEquals($expected, $actual);
-        self::assertEquals(11.0, $this->safeDivide(100, 0, 11));
+        self::assertSame($expected, $actual);
+        self::assertSame(11.0, $this->safeDivide(100, 0, 11));
     }
 
     /**
@@ -165,7 +165,7 @@ class MathTraitTest extends TestCase
     public function testValidateFloatRange(float $value, float $min, float $max, float $expected): void
     {
         $actual = $this->validateFloatRange($value, $min, $max);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -174,6 +174,6 @@ class MathTraitTest extends TestCase
     public function testValidateIntRange(int $value, int $min, int $max, int $expected): void
     {
         $actual = $this->validateIntRange($value, $min, $max);
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

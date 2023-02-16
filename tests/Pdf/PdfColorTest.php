@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PdfColorTest extends TestCase
 {
-    public function getColors(): array
+    public static function getColors(): array
     {
         return [
             ['black', 0, 0, 0],
@@ -38,7 +38,7 @@ class PdfColorTest extends TestCase
         ];
     }
 
-    public function getCreateColors(): \Generator
+    public static function getCreateColors(): \Generator
     {
         yield ['FFF', 255, 255, 255];
         yield ['FFFFFF', 255, 255, 255];
@@ -46,7 +46,7 @@ class PdfColorTest extends TestCase
         yield [[255, 255, 255], 255, 255, 255];
     }
 
-    public function getCreateColorsInvalid(): \Generator
+    public static function getCreateColorsInvalid(): \Generator
     {
         yield [''];
         yield [[255]];
@@ -54,14 +54,14 @@ class PdfColorTest extends TestCase
         yield [[255, 255, 255, 255]];
     }
 
-    public function getParseColors(): \Generator
+    public static function getParseColors(): \Generator
     {
         yield ['FFF', 255, 255, 255];
         yield ['FFFFFF', 255, 255, 255];
         yield ['#FFFFFF', 255, 255, 255];
     }
 
-    public function getParseColorsInvalid(): \Generator
+    public static function getParseColorsInvalid(): \Generator
     {
         yield [null];
         yield [''];
@@ -117,9 +117,9 @@ class PdfColorTest extends TestCase
         $rgb = PdfTextColor::parse($value);
         self::assertIsArray($rgb);
         self::assertCount(3, $rgb);
-        self::assertEquals($red, $rgb[0]);
-        self::assertEquals($green, $rgb[1]);
-        self::assertEquals($blue, $rgb[2]);
+        self::assertSame($red, $rgb[0]);
+        self::assertSame($green, $rgb[1]);
+        self::assertSame($blue, $rgb[2]);
     }
 
     /**
@@ -144,8 +144,8 @@ class PdfColorTest extends TestCase
     private function validateColor(?AbstractPdfColor $color, int $red, int $green, int $blue): void
     {
         self::assertNotNull($color);
-        self::assertEquals($red, $color->getRed());
-        self::assertEquals($green, $color->getGreen());
-        self::assertEquals($blue, $color->getBlue());
+        self::assertSame($red, $color->getRed());
+        self::assertSame($green, $color->getGreen());
+        self::assertSame($blue, $color->getBlue());
     }
 }

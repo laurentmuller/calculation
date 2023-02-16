@@ -17,7 +17,7 @@ namespace App\Tests\Controller;
  */
 class SearchControllerTest extends AbstractControllerTest
 {
-    public function getRoutes(): array
+    public static function getRoutes(): array
     {
         return [
             ['/search', self::ROLE_USER],

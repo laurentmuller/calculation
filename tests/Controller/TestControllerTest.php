@@ -38,7 +38,7 @@ class TestControllerTest extends AbstractControllerTest
         'verify',
         ];
 
-    public function getRoutes(): \Generator
+    public static function getRoutes(): \Generator
     {
         foreach (self::ROUTES as $route) {
             yield ["/test/$route", self::ROLE_USER, Response::HTTP_FORBIDDEN];

@@ -27,7 +27,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      *
      * @var AbstractHtmlChunk[]
      */
-    protected array $children;
+    protected array $children = [];
 
     /**
      * Constructor.
@@ -38,7 +38,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     public function __construct(protected string $name, ?self $parent = null)
     {
         parent::__construct($name, $parent);
-        $this->children = [];
     }
 
     /**
@@ -119,7 +118,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      */
     public function isEmpty(): bool
     {
-        return empty($this->children);
+        return [] === $this->children;
     }
 
     /**

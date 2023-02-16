@@ -41,7 +41,7 @@ class RoleHierarchyService
     {
         $roles = $this->getRoleNames($data);
 
-        return empty($roles) ? $roles : $this->service->getReachableRoleNames($roles);
+        return [] === $roles ? $roles : $this->service->getReachableRoleNames($roles);
     }
 
     /**
@@ -77,6 +77,6 @@ class RoleHierarchyService
     {
         $roles = $this->getReachableRoleNames($data);
 
-        return !empty($roles) && \in_array($role, $roles, true);
+        return [] !== $roles && \in_array($role, $roles, true);
     }
 }

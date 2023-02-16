@@ -349,7 +349,7 @@ class TestController extends AbstractController
         }
 
         $data = [
-            'result' => !empty($rows),
+            'result' => [] !== $rows,
             'query' => $all ?? $zip ?? $city ?? $street ?? '',
             'limit' => $limit,
             'count' => \count($rows),

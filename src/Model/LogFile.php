@@ -97,7 +97,7 @@ class LogFile implements \Countable
 
     public function isEmpty(): bool
     {
-        return empty($this->logs);
+        return [] === $this->logs;
     }
 
     /**

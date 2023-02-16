@@ -133,7 +133,7 @@ class CalculationStateController extends AbstractEntityController
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('calculationstate.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -154,7 +154,7 @@ class CalculationStateController extends AbstractEntityController
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('calculationstate.list.empty');
             throw $this->createNotFoundException($message);
         }

@@ -200,7 +200,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {
-        if (!\is_a($resetPasswordRequest, User::class)) {
+        if (!$resetPasswordRequest instanceof User) {
             throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $resetPasswordRequest::class));
         }
 

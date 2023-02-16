@@ -707,7 +707,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function removeDuplicateItems(): int
     {
         $items = $this->getDuplicateItems();
-        if (empty($items)) {
+        if ([] === $items) {
             return 0;
         }
 
@@ -737,7 +737,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function removeEmptyItems(): int
     {
         $items = $this->getEmptyItems();
-        if (empty($items)) {
+        if ([] === $items) {
             return 0;
         }
 

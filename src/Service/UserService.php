@@ -231,7 +231,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     public function setProperties(array $properties): static
     {
-        if (!empty($properties) && null !== $user = $this->getUser()) {
+        if ([] !== $properties && null !== $user = $this->getUser()) {
             $defaultValues = $this->service->getProperties();
 
             /** @psalm-var mixed $value */

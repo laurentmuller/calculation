@@ -49,29 +49,29 @@ class SymfonyDocument extends AbstractDocument
 
         // bundles
         $bundles = $info->getBundles();
-        if (!empty($bundles)) {
+        if ([] !== $bundles) {
             $this->outputBundles($bundles);
         }
 
         // packages
         $packages = $info->getPackages();
         $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if (!empty($runtimePackages)) {
+        if ([] !== $runtimePackages) {
             $this->outputPackages('Packages', $runtimePackages);
         }
         $debugPackages = $packages[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if (!empty($debugPackages)) {
+        if ([] !== $debugPackages) {
             $this->outputPackages('Debug Packages', $debugPackages);
         }
 
         // routes
         $routes = $info->getRoutes();
         $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if (!empty($runtimeRoutes)) {
+        if ([] !== $runtimeRoutes) {
             $this->outputRoutes('Routes', $runtimeRoutes);
         }
         $debugRoutes = $routes[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if (!empty($debugRoutes)) {
+        if ([] !== $debugRoutes) {
             $this->outputRoutes('Debug Routes', $debugRoutes);
         }
 

@@ -63,7 +63,7 @@ class ProductUpdateResult implements \Countable
      */
     public function isValid(): bool
     {
-        return !empty($this->products);
+        return [] !== $this->products;
     }
 
     public function setSimulate(bool $simulate): self

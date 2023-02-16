@@ -138,7 +138,7 @@ class Column implements \Stringable, SortModeInterface
         $definitions = FileUtils::decodeJson($path);
 
         // definitions?
-        if (empty($definitions)) {
+        if ([] === $definitions) {
             throw new \InvalidArgumentException("The file '$path' does not contain any definition.");
         }
 

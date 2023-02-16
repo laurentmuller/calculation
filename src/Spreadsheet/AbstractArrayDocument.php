@@ -39,7 +39,7 @@ abstract class AbstractArrayDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        if (!empty($this->entities)) {
+        if ([] !== $this->entities) {
             return $this->doRender($this->entities);
         }
 

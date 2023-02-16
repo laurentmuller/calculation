@@ -51,31 +51,31 @@ class SymfonyReport extends AbstractReport
         $this->outputInfo($info);
 
         $bundles = $info->getBundles();
-        if (!empty($bundles)) {
+        if ([] !== $bundles) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputBundles($bundles);
         }
 
         $packages = $info->getPackages();
         $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if (!empty($runtimePackages)) {
+        if ([] !== $runtimePackages) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputPackages('Packages', $runtimePackages);
         }
         $debugPackages = $packages[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if (!empty($debugPackages)) {
+        if ([] !== $debugPackages) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputPackages('Debug Packages', $debugPackages);
         }
 
         $routes = $info->getRoutes();
         $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if (!empty($runtimeRoutes)) {
+        if ([] !== $runtimeRoutes) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputRoutes('Routes', $runtimeRoutes);
         }
         $debugRoutes = $routes[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if (!empty($debugRoutes)) {
+        if ([] !== $debugRoutes) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputRoutes('Debug Routes', $debugRoutes);
         }

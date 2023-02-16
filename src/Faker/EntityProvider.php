@@ -122,7 +122,7 @@ class EntityProvider extends Base
         if (empty($this->entities)) {
             $criteria = $this->getCriteria();
             $repository = $this->getRepository();
-            $this->entities = empty($criteria) ? $repository->findAll() : $repository->findBy($criteria);
+            $this->entities = [] === $criteria ? $repository->findAll() : $repository->findBy($criteria);
         }
 
         return $this->entities;

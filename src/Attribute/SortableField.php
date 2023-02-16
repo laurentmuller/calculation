@@ -60,7 +60,7 @@ class SortableField
         if ($class->hasProperty($name)) {
             $property = $class->getProperty($name);
             $attributes = $property->getAttributes(self::class);
-            if (!empty($attributes)) {
+            if ([] !== $attributes) {
                 $attribute = $attributes[0];
                 $instance = $attribute->newInstance();
 

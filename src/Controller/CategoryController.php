@@ -150,7 +150,7 @@ class CategoryController extends AbstractEntityController
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('category.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -172,7 +172,7 @@ class CategoryController extends AbstractEntityController
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('category.list.empty');
             throw $this->createNotFoundException($message);
         }

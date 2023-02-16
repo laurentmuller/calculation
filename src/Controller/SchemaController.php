@@ -142,7 +142,7 @@ class SchemaController extends AbstractController
             return [];
         }
         $associationNames = $metaData->getAssociationNames();
-        if (empty($associationNames)) {
+        if ([] === $associationNames) {
             return [];
         }
 

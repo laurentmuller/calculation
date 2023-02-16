@@ -342,7 +342,7 @@ class UpdateAssetsCommand extends Command
             }
         }
 
-        return empty($result) ? false : $result;
+        return [] === $result ? false : $result;
     }
 
     /**

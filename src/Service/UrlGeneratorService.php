@@ -86,7 +86,7 @@ class UrlGeneratorService
         // caller?
         if (null !== $caller = $this->getCaller($params)) {
             unset($params[self::PARAM_CALLER]);
-            if (!empty($params)) {
+            if ([] !== $params) {
                 $caller .= \str_contains($caller, '?') ? '&' : '?';
                 $caller .= \http_build_query($params);
             }

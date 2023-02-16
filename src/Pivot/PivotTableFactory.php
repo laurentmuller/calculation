@@ -216,7 +216,7 @@ class PivotTableFactory
      */
     public function isValid(): bool
     {
-        return !(empty($this->dataset) || empty($this->columnFields) || empty($this->rowFields) || empty($this->dataField));
+        return [] !== $this->dataset && [] !== $this->columnFields && [] !== $this->rowFields && null !== $this->dataField;
     }
 
     /**

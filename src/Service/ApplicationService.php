@@ -647,7 +647,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     public function setProperties(array $properties, ?array $defaultValues = null): static
     {
-        if (!empty($properties)) {
+        if ([] !== $properties) {
             $repository = $this->manager->getRepository(Property::class);
             $defaultValues ??= $this->getDefaultValues();
 

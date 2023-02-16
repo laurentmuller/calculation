@@ -195,7 +195,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
             }
 
             return false;
-        } elseif (empty($var)) {
+        } elseif ([] === $var) {
             if ($error) {
                 return $this->setLastError(self::ERROR_NOT_FOUND, "The '$name' field is empty.");
             }

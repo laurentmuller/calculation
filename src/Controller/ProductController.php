@@ -118,7 +118,7 @@ class ProductController extends AbstractEntityController
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findAllByGroup();
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('product.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -138,7 +138,7 @@ class ProductController extends AbstractEntityController
     public function pdf(ProductRepository $repository): PdfResponse
     {
         $entities = $repository->findAllByGroup();
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('product.list.empty');
             throw $this->createNotFoundException($message);
         }

@@ -51,7 +51,7 @@ abstract class AbstractArrayReport extends AbstractReport
      */
     public function render(): bool
     {
-        if (!empty($this->entities)) {
+        if ([] !== $this->entities) {
             return $this->doRender($this->entities);
         }
 

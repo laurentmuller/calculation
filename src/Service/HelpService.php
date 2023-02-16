@@ -313,7 +313,7 @@ class HelpService implements ServiceSubscriberInterface
      */
     private function sortDialogs(array &$values): void
     {
-        \usort($values, function (array $a, array $b) {
+        \usort($values, function (array $a, array $b): int {
             $entityA = isset($a['entity']) ? $this->trans((string) $a['entity'] . '.name') : 'zzzz';
             $entityB = isset($b['entity']) ? $this->trans((string) $b['entity'] . '.name') : 'zzzz';
             if (0 !== $result = \strnatcmp($entityA, $entityB)) {
@@ -332,7 +332,7 @@ class HelpService implements ServiceSubscriberInterface
      */
     private function sortEntities(array &$values): void
     {
-        \usort($values, function (array $a, array $b) {
+        \usort($values, function (array $a, array $b): int {
             $textA = $this->trans((string) $a['id'] . '.name');
             $textB = $this->trans((string) $b['id'] . '.name');
 

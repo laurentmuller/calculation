@@ -98,7 +98,7 @@ class CustomerController extends AbstractEntityController
     public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findAllByNameAndCompany();
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -118,7 +118,7 @@ class CustomerController extends AbstractEntityController
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
         $entities = $repository->findAllByNameAndCompany();
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
         }

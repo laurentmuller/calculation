@@ -159,7 +159,7 @@ class ArchiveService implements ServiceSubscriberInterface
     {
         $builder = $this->calculationRepository
             ->createQueryBuilder('c');
-        if (!empty($sources)) {
+        if ([] !== $sources) {
             $ids = $this->getIds($sources);
             $builder->andWhere('c.state IN (:states)')
                 ->setParameter('states', $ids);
@@ -181,7 +181,7 @@ class ArchiveService implements ServiceSubscriberInterface
      */
     private function getCalculations(\DateTimeInterface $date, array $sources): array
     {
-        if (empty($sources)) {
+        if ([] === $sources) {
             return [];
         }
 
@@ -296,7 +296,7 @@ class ArchiveService implements ServiceSubscriberInterface
         if ($useSession) {
             /** @var int[] $ids */
             $ids = $this->getSessionValue(self::KEY_SOURCES, []);
-            if (!empty($ids)) {
+            if ([] !== $ids) {
                 return \array_filter($sources, fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
             }
         }

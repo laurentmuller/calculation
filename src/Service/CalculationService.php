@@ -224,7 +224,7 @@ final class CalculationService implements ServiceSubscriberInterface
         }
 
         // root groups?
-        if (empty($groups)) {
+        if ([] === $groups) {
             return [
                 'result' => true,
                 'groups' => [$this->createEmptyGroup()],
@@ -415,7 +415,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $overall_amount = $overall_total - $groups_amount;
         $overall_margin = $this->safeDivide($overall_amount, $groups_amount);
         $overall_margin = 1.0 + \floor($overall_margin * 100.0) / 100.0;
-        $overall_below = !empty($groups) && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
+        $overall_below = [] !== $groups && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         $result[] = [
             'id' => self::ROW_OVERALL_TOTAL,

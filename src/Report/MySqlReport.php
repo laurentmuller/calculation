@@ -42,7 +42,7 @@ class MySqlReport extends AbstractReport
     {
         $database = $this->info->getDatabase();
         $configuration = $this->info->getConfiguration();
-        if (empty($database) && empty($configuration)) {
+        if ([] === $database && [] === $configuration) {
             return false;
         }
 
@@ -54,14 +54,14 @@ class MySqlReport extends AbstractReport
                 PdfColumn::left('Value', 60)
             )->outputHeaders();
 
-        if (!empty($database)) {
+        if ([] !== $database) {
             $table->setGroupKey('Database');
             foreach ($database as $key => $value) {
                 $table->addRow($key, $value);
             }
         }
 
-        if (!empty($configuration)) {
+        if ([] !== $configuration) {
             $table->setGroupKey('Configuration');
             foreach ($configuration as $key => $value) {
                 $table->addRow($key, $value);

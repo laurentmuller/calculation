@@ -42,7 +42,7 @@ class MySqlDocument extends AbstractDocument
         // get values
         $database = $this->info->getDatabase();
         $configuration = $this->info->getConfiguration();
-        if (empty($database) && empty($configuration)) {
+        if ([] === $database && [] === $configuration) {
             return false;
         }
 
@@ -54,10 +54,10 @@ class MySqlDocument extends AbstractDocument
             'Value' => Alignment::HORIZONTAL_LEFT,
         ]);
 
-        if (!empty($database)) {
+        if ([] !== $database) {
             $row = $this->outputArray($row, $database);
         }
-        if (!empty($configuration)) {
+        if ([] !== $configuration) {
             $this->outputArray($row, $configuration);
         }
 

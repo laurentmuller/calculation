@@ -151,7 +151,7 @@ class TaskController extends AbstractEntityController
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('name');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('task.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -172,7 +172,7 @@ class TaskController extends AbstractEntityController
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('name');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('task.list.empty');
             throw $this->createNotFoundException($message);
         }

@@ -312,7 +312,7 @@ class PdfBorder
         $chars = \array_unique(\str_split(\strtoupper($value)));
         $chars = \array_filter($chars, fn (string $ch) => \in_array($ch, $allowed, true));
 
-        if (empty($chars)) {
+        if ([] === $chars) {
             return self::NONE;
         }
         if (\count($chars) === \count($allowed)) {

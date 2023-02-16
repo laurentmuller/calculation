@@ -167,7 +167,7 @@ class ProductUpdater implements ServiceSubscriberInterface
 
         // get products
         $products = $query->isAllProducts() ? $this->getProducts($query->getCategory()) : $query->getProducts();
-        if (empty($products)) {
+        if ([] === $products) {
             return $result;
         }
 

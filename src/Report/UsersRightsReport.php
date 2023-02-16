@@ -274,7 +274,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private function outputUsers(array $users, PdfGroupTableBuilder $builder): int
     {
         // users?
-        if (empty($users)) {
+        if ([] === $users) {
             return 0;
         }
 

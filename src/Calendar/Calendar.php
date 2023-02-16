@@ -202,14 +202,14 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
 
             if ($monthYear === $this->year) {
                 // create month if needed
-                if (null === $currentMonth || $currentMonth->getNumber() !== $monthNumber) {
+                if (!$currentMonth instanceof Month || $currentMonth->getNumber() !== $monthNumber) {
                     $currentMonth = $this->createMonth($monthNumber);
                 }
                 $currentMonth->addDay($day);
             }
 
             // create week if needed
-            if (null === $currentWeek || $currentWeek->getNumber() !== $weekNumber) {
+            if (!$currentWeek instanceof Week || $currentWeek->getNumber() !== $weekNumber) {
                 $currentWeek = $this->createWeek($weekNumber);
             }
             $currentWeek->addDay($day);

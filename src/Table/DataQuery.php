@@ -70,14 +70,13 @@ class DataQuery implements SortModeInterface
     /**
      * The view.
      */
-    public TableView $view;
+    public TableView $view = TableView::TABLE;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->view = TableView::TABLE;
         $this->limit = TableView::TABLE->getPageSize();
     }
 

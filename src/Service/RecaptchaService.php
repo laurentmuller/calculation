@@ -92,7 +92,7 @@ class RecaptchaService
     public function translateErrors(array $codes): array
     {
         $errors = \array_map(fn (mixed $code): string => $this->trans("recaptcha.$code", [], 'validators'), $codes);
-        if (empty($errors)) {
+        if ([] === $errors) {
             $errors[] = $this->trans('recaptcha.unknown-error', [], 'validators');
         }
 

@@ -403,7 +403,7 @@ class SearchService implements ServiceSubscriberInterface
         }
 
         // empty?
-        if (empty($queries)) {
+        if ([] === $queries) {
             return [];
         }
 
@@ -467,7 +467,7 @@ class SearchService implements ServiceSubscriberInterface
     private function getQueries(): array
     {
         // created?
-        if (empty($this->queries)) {
+        if ([] === $this->queries) {
             // entities queries
             $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal', 'createdBy', 'updatedBy'])
                 ->createEntityQueries(CalculationState::class, ['code', 'description'])
@@ -488,18 +488,7 @@ class SearchService implements ServiceSubscriberInterface
             }
 
             // update SQL
-            $param = ':' . self::SEARCH_PARAM;
-            $columns = \array_keys(self::COLUMNS);
-            /** @psalm-var string $query */
-            foreach ($this->queries as &$query) {
-                // replace parameter
-                $query = \str_replace('?', $param, $query);
-
-                // replace column's names
-                foreach ($columns as $index => $name) {
-                    $query = \preg_replace("/AS \\w+[$index]/i", "AS $name", $query);
-                }
-            }
+            $this->updateSQL();
         }
 
         return $this->queries;
@@ -526,5 +515,23 @@ class SearchService implements ServiceSubscriberInterface
     private function isGrantedSearch(string $subject): bool
     {
         return $this->isGrantedList($subject) && $this->isGrantedShow($subject);
+    }
+
+    /**
+     * Update the SQL content of queries.
+     */
+    private function updateSQL(): void
+    {
+        $param = ':' . self::SEARCH_PARAM;
+        $columns = \array_keys(self::COLUMNS);
+        foreach ($this->queries as &$query) {
+            // replace parameter
+            $query = \str_replace('?', $param, $query);
+
+            // replace column's names
+            foreach ($columns as $index => $name) {
+                $query = \preg_replace("/AS \\w+[$index]/i", "AS $name", $query);
+            }
+        }
     }
 }

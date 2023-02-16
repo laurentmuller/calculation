@@ -50,7 +50,7 @@ class PhpIniReport extends AbstractReport
         $this->AddPage();
 
         $content = $this->content;
-        if (empty($content)) {
+        if ([] === $content) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('about.error'));
 
             return true;

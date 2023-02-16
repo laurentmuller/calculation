@@ -121,7 +121,7 @@ class UserController extends AbstractEntityController
     public function excel(StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -221,7 +221,7 @@ class UserController extends AbstractEntityController
     public function pdf(StorageInterface $storage): PdfResponse
     {
         $entities = $this->getEntities('username');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -244,7 +244,7 @@ class UserController extends AbstractEntityController
         $users = $repository->getResettableUsers();
         $generator = $this->getUrlGenerator();
 
-        if (empty($users)) {
+        if ([] === $users) {
             $this->warningTrans('user.reset_all.empty');
 
             return $generator->redirect($request, null, $this->getDefaultRoute());
@@ -365,7 +365,7 @@ class UserController extends AbstractEntityController
     public function rightsExcel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -386,13 +386,13 @@ class UserController extends AbstractEntityController
     #[Route(path: '/rights/pdf', name: 'user_rights_pdf')]
     public function rightsPdf(): PdfResponse
     {
-        $users = $this->getEntities('username');
-        if (empty($users)) {
+        $entities = $this->getEntities('username');
+        if ([] === $entities) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersRightsReport($this, $users);
+        $doc = new UsersRightsReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
     }

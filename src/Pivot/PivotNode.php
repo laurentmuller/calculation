@@ -473,7 +473,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
             'key' => $this->key,
             'title' => $this->title,
             'value' => $this->aggregator->getFormattedResult(),
-            'children' => empty($this->children) ? null : $this->children,
+            'children' => [] === $this->children ? null : $this->children,
         ]);
     }
 

@@ -241,7 +241,7 @@ class PdfTableBuilder
     public function endRow(): static
     {
         // check
-        if (empty($this->cells)) {
+        if ([] === $this->cells) {
             throw new \LengthException('No cell to add.');
         }
         if ($this->getCellsSpan() !== $this->getColumnsCount()) {
@@ -377,7 +377,7 @@ class PdfTableBuilder
      */
     public function outputHeaders(): static
     {
-        if (empty($this->columns)) {
+        if ([] === $this->columns) {
             throw new \LengthException('No column is defined.');
         }
 

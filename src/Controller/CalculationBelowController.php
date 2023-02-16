@@ -49,7 +49,7 @@ class CalculationBelowController extends AbstractController
     {
         $minMargin = $this->getApplication()->getMinMargin();
         $items = $this->getItems($repository, $minMargin);
-        if (empty($items)) {
+        if ([] === $items) {
             $this->warningTrans('below.empty');
 
             return $this->redirectToHomePage();
@@ -71,7 +71,7 @@ class CalculationBelowController extends AbstractController
     {
         $minMargin = $this->getApplication()->getMinMargin();
         $items = $this->getItems($repository, $minMargin);
-        if (empty($items)) {
+        if ([] === $items) {
             $this->warningTrans('below.empty');
 
             return $this->redirectToHomePage();

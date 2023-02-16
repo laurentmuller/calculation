@@ -217,7 +217,7 @@ class OpenWeatherController extends AbstractController
             if ($lastError = $this->service->getLastError()) {
                 return $this->json($lastError);
             }
-            if (empty($cities)) {
+            if ([] === $cities) {
                 return $this->jsonFalse();
             }
 

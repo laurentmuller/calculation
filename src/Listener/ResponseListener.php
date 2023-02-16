@@ -116,7 +116,7 @@ class ResponseListener
     {
         /** @psalm-var array<string, string[]> $csp */
         $csp = $this->csp;
-        if (empty($csp)) {
+        if ([] === $csp) {
             return '';
         }
 
@@ -155,7 +155,7 @@ class ResponseListener
 
         /** @psalm-var array<string, string|string[]> $csp */
         $csp = \json_decode($content, true);
-        if (\JSON_ERROR_NONE !== \json_last_error() || empty($csp)) {
+        if (\JSON_ERROR_NONE !== \json_last_error() || [] === $csp) {
             return [];
         }
 

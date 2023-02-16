@@ -101,7 +101,7 @@ class GlobalMarginController extends AbstractEntityController
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('minimum');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('globalmargin.list.empty');
             throw $this->createNotFoundException($message);
         }
@@ -122,7 +122,7 @@ class GlobalMarginController extends AbstractEntityController
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('minimum');
-        if (empty($entities)) {
+        if ([] === $entities) {
             $message = $this->trans('globalmargin.list.empty');
             throw $this->createNotFoundException($message);
         }

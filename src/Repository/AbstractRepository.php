@@ -172,7 +172,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $builder = $this->createDefaultQueryBuilder($alias);
 
         // add criteria
-        if (!empty($criteria)) {
+        if ([] !== $criteria) {
             foreach ($criteria as $criterion) {
                 if ($criterion instanceof Criteria) {
                     $builder->addCriteria($criterion);
@@ -183,7 +183,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         // add order by clause
-        if (!empty($sortedFields)) {
+        if ([] !== $sortedFields) {
             foreach ($sortedFields as $name => $order) {
                 $field = $this->getSortField($name, $alias);
                 $builder->addOrderBy($field, $order);

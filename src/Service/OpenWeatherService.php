@@ -393,7 +393,7 @@ class OpenWeatherService extends AbstractHttpClientService
             'lon' => $longitude,
             'units' => $units,
         ];
-        if (!empty($exclude)) {
+        if ([] !== $exclude) {
             $query['exclude'] = \implode(',', $exclude);
         }
 
@@ -687,7 +687,7 @@ class OpenWeatherService extends AbstractHttpClientService
                     break;
 
                 case 'weather':
-                    if (\is_array($value) && !empty($value)) {
+                    if (\is_array($value) && [] !== $value) {
                         $this->updateResult($value, $timezone);
                         $value = (array) \reset($value);
                     }

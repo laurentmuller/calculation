@@ -141,12 +141,12 @@ class GroupController extends AbstractEntityController
     #[Route(path: '/excel', name: 'group_excel')]
     public function excel(): SpreadsheetResponse
     {
-        $groups = $this->getEntities('code');
-        if (empty($groups)) {
+        $entities = $this->getEntities('code');
+        if ([] === $entities) {
             $message = $this->trans('group.list.empty');
             throw $this->createNotFoundException($message);
         }
-        $doc = new GroupsDocument($this, $groups);
+        $doc = new GroupsDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -162,12 +162,12 @@ class GroupController extends AbstractEntityController
     #[Route(path: '/pdf', name: 'group_pdf')]
     public function pdf(): PdfResponse
     {
-        $groups = $this->getEntities('code');
-        if (empty($groups)) {
+        $entities = $this->getEntities('code');
+        if ([] === $entities) {
             $message = $this->trans('group.list.empty');
             throw $this->createNotFoundException($message);
         }
-        $doc = new GroupsReport($this, $groups);
+        $doc = new GroupsReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
     }

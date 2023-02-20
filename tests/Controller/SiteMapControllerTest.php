@@ -14,8 +14,6 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link SiteMapController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class SiteMapControllerTest extends AbstractControllerTest
 {

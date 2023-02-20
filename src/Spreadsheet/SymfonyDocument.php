@@ -80,11 +80,6 @@ class SymfonyDocument extends AbstractDocument
         return true;
     }
 
-    private function outputBoolRow(int $row, string $key, bool $value): self
-    {
-        return $this->outputRow($row, $key, $value ? 'enabled' : 'disabled');
-    }
-
     /**
      * @param array<array{name: string, path: string}> $bundles
      *
@@ -139,15 +134,20 @@ class SymfonyDocument extends AbstractDocument
         $this->outputGroup($row++, 'Kernel')
             ->outputRow($row++, 'Environment', $info->getEnvironment())
             ->outputRow($row++, 'Mode', $this->mode)
+            ->outputRow($row++, 'Version status', $info->getMaintenanceStatus())
+            ->outputRow($row++, 'End of maintenance', $info->getEndOfMaintenance())
+            ->outputRow($row++, 'End of product life', $info->getEndOfLife());
+
+        $this->outputGroup($row++, 'Parameters')
             ->outputRow($row++, 'Intl Locale', $this->locale)
             ->outputRow($row++, 'Timezone', $info->getTimeZone())
-            ->outputRow($row++, 'Charset', $info->getCharset())
-            ->outputBoolRow($row++, 'Debug', $app->isDebug())
-            ->outputBoolRow($row++, 'OP Cache', $info->isZendCacheLoaded())
-            ->outputBoolRow($row++, 'APCu', $info->isApcuLoaded())
-            ->outputBoolRow($row++, 'Xdebug', $info->isXdebugLoaded())
-            ->outputRow($row++, 'End of maintenance', $info->getEndOfMaintenanceInfo())
-            ->outputRow($row++, 'End of product life', $info->getEndOfLifeInfo());
+            ->outputRow($row++, 'Charset', $info->getCharset());
+
+        $this->outputGroup($row++, 'Extensions')
+            ->outputRowEnabled($row++, 'Debug', $app->isDebug())
+            ->outputRowEnabled($row++, 'OP Cache', $info->isZendCacheLoaded())
+            ->outputRowEnabled($row++, 'APCu', $info->isApcuLoaded())
+            ->outputRowEnabled($row++, 'Xdebug', $info->isXdebugLoaded());
 
         $this->outputGroup($row++, 'Directories')
             ->outputRow($row++, 'Project', $info->getProjectDir())
@@ -185,7 +185,7 @@ class SymfonyDocument extends AbstractDocument
         }
 
         $this->getActiveSheet()
-            ->getStyle('A')
+            ->getStyle('A:C')
             ->getAlignment()
             ->setVertical(Alignment::VERTICAL_TOP);
 
@@ -223,5 +223,10 @@ class SymfonyDocument extends AbstractDocument
         $this->setRowValues($row, $values);
 
         return $this;
+    }
+
+    private function outputRowEnabled(int $row, string $key, bool $enabled): self
+    {
+        return $this->outputRow($row, $key, $enabled ? 'Enabled' : 'Disabled');
     }
 }

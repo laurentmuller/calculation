@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link TaskController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class TaskControllerTest extends AbstractControllerTest
 {

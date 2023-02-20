@@ -19,11 +19,12 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for {@link EntityPermission} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityPermissionTest extends TestCase
 {
+    /**
+     * @return array<array{EntityPermission, string}>
+     */
     public static function getLabel(): array
     {
         return [
@@ -36,6 +37,9 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{EntityPermission, string}>
+     */
     public static function getMatchName(): array
     {
         return [
@@ -54,6 +58,9 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{string, int}>
+     */
     public static function getTryFindValue(): array
     {
         return [
@@ -69,6 +76,9 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{?EntityPermission, string}>
+     */
     public static function getTryFromName(): array
     {
         return [
@@ -87,6 +97,9 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{EntityPermission, int}>
+     */
     public static function getValue(): array
     {
         return [

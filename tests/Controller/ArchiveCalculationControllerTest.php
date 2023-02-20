@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link ArchiveCalculationController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ArchiveCalculationControllerTest extends AbstractControllerTest
 {

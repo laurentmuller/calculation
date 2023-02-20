@@ -6,18 +6,19 @@
 (function ($) {
     'use strict';
 
-    $('#date').trigger('focus');
-    const updateCursor = function () {
+    // $('#date').trigger('focus');
+
+    const showWait = function () {
         $('*').css('cursor', 'wait');
         setTimeout(function () {
             $('*').css('cursor', '');
-        }, 250);
+        }, 350);
     };
-    $('.btn-previous, .btn-today, .btn-next, .btn-submit').on('click', updateCursor);
-    $('#interval, #date').on('input', function () {
-        $(this).updateTimer(function () {
-            updateCursor();
+    $('form#search a, form#search .btn-submit').on('click', showWait);
+    $('form#search #interval,form#search #date').on('input', function () {
+        $('form#search').updateTimer(function () {
+            showWait();
             $('form#search').trigger('submit');
-        }, 500);
+        }, 1500);
     });
 }(jQuery));

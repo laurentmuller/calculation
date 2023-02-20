@@ -18,8 +18,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Unit test for the {@link StrengthLevel} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class StrengthLevelTest extends TypeTestCase
 {

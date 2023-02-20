@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link AdminController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class AdminControllerTest extends AbstractControllerTest
 {

@@ -17,8 +17,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Unit test for the {@link Importance} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ImportanceTest extends TypeTestCase
 {

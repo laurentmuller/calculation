@@ -108,10 +108,10 @@ class SearchService implements ServiceSubscriberInterface
      * @var array<string,string>
      */
     private const COLUMNS = [
-        self::COLUMN_ID => 'integer',
-        self::COLUMN_TYPE => 'string',
-        self::COLUMN_FIELD => 'string',
-        self::COLUMN_CONTENT => 'string',
+        self::COLUMN_ID => Types::INTEGER,
+        self::COLUMN_TYPE => Types::STRING,
+        self::COLUMN_FIELD => Types::STRING,
+        self::COLUMN_CONTENT => Types::STRING,
     ];
 
     /**
@@ -467,29 +467,31 @@ class SearchService implements ServiceSubscriberInterface
     private function getQueries(): array
     {
         // created?
-        if ([] === $this->queries) {
-            // entities queries
-            $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal', 'createdBy', 'updatedBy'])
-                ->createEntityQueries(CalculationState::class, ['code', 'description'])
-                ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
-                ->createEntityQueries(Task::class, ['name'])
-                ->createEntityQueries(Category::class, ['code', 'description'])
-                ->createEntityQueries(Group::class, ['code', 'description']);
-
-            // custom calculation queries
-            $this->createCalculationDatesQuery()
-                ->createCalculationStateQuery()
-                ->createCalculationItemQuery();
-
-            // debug queries
-            if ($this->debug) {
-                $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company', 'address', 'zipCode', 'city'])
-                    ->createCalculationGroupQuery();
-            }
-
-            // update SQL
-            $this->updateSQL();
+        if ([] !== $this->queries) {
+            return $this->queries;
         }
+
+        // entities queries
+        $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal', 'createdBy', 'updatedBy'])
+            ->createEntityQueries(CalculationState::class, ['code', 'description'])
+            ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
+            ->createEntityQueries(Task::class, ['name'])
+            ->createEntityQueries(Category::class, ['code', 'description'])
+            ->createEntityQueries(Group::class, ['code', 'description']);
+
+        // custom calculation queries
+        $this->createCalculationDatesQuery()
+            ->createCalculationStateQuery()
+            ->createCalculationItemQuery();
+
+        // debug queries
+        if ($this->debug) {
+            $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company', 'address', 'zipCode', 'city'])
+                ->createCalculationGroupQuery();
+        }
+
+        // update SQL
+        $this->updateSQL();
 
         return $this->queries;
     }
@@ -522,16 +524,18 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function updateSQL(): void
     {
-        $param = ':' . self::SEARCH_PARAM;
+        $pattern = [];
+        $replacement = [];
         $columns = \array_keys(self::COLUMNS);
-        foreach ($this->queries as &$query) {
-            // replace parameter
-            $query = \str_replace('?', $param, $query);
+        foreach ($columns as $index => $name) {
+            $pattern[] = "/AS \\w+[$index]/i";
+            $replacement[] = "AS $name";
+        }
 
-            // replace column's names
-            foreach ($columns as $index => $name) {
-                $query = \preg_replace("/AS \\w+[$index]/i", "AS $name", $query);
-            }
+        $param = ':' . self::SEARCH_PARAM;
+        foreach ($this->queries as &$query) {
+            $query = \str_replace('?', $param, $query);
+            $query = \preg_replace($pattern, $replacement, $query);
         }
     }
 }

@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link PolicyController$} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class PolicyControllerTest extends AbstractControllerTest
 {

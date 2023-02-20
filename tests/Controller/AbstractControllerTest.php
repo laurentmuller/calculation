@@ -25,7 +25,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
     /**
      * Gets the routes to test. Each entry must contain a URL, a username, an optional expected result and request method.
      *
-     * @psalm-return array|\Generator
+     * @return array|\Generator
      */
     abstract public static function getRoutes();
 
@@ -68,7 +68,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
      * Checks the given route.
      *
      * @param string $url      the URL to be tested
-     * @param string $username the username to log in or empty('') if none
+     * @param string $username the username to log in or empty ("") if none
      * @param int    $expected the expected result
      * @param string $method   the request method
      */

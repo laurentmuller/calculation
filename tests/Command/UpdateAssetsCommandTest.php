@@ -18,8 +18,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class to test the {@link UpdateAssetsCommand}.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class UpdateAssetsCommandTest extends KernelTestCase
 {

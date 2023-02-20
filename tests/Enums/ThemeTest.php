@@ -17,8 +17,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Unit test for the {@link Theme} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ThemeTest extends TypeTestCase
 {

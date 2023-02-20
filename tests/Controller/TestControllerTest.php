@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link TestController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class TestControllerTest extends AbstractControllerTest
 {
@@ -30,7 +28,6 @@ class TestControllerTest extends AbstractControllerTest
         'password',
         'recaptcha',
         'swiss',
-        'timeline',
         'translate',
         'tree',
         'union',

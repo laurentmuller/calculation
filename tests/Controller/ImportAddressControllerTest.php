@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link ImportAddressController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ImportAddressControllerTest extends AbstractControllerTest
 {

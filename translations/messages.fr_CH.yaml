@@ -1165,12 +1165,15 @@ theme:
     title: Appliquer le thème claire sur le site.
     success: Le <b>thème claire</b> a été sélectionné avec succès.
 timeline:
-  date: Date
-  interval: Période
-  next: Période suivante
-  previous: Période précédente
   title: Chronologie
+  date: Date
+  toolbar: Navigation
+  interval: Période
   today: Période actuelle
+  first: Première période
+  previous: Période précédente
+  next: Période suivante
+  last: Dernière période
 translator:
   auto_detect: Détecter la langue
   copy_error: Une erreur s'est produite lors de la copie du texte dans le presse-papiers.

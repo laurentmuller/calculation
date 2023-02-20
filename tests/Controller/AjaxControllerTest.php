@@ -19,8 +19,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link AjaxController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class AjaxControllerTest extends AbstractAuthenticateWebTestCase
 {

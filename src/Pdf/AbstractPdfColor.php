@@ -120,6 +120,18 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
+     * Gets the dark-gray color.
+     *
+     * Value is RGB(169, 169, 169).
+     *
+     * @return static
+     */
+    public static function darkGray(): self
+    {
+        return new static(169, 169, 169);
+    }
+
+    /**
      * Gets the dark-green color.
      *
      * Value is RGB(0, 128, 0).

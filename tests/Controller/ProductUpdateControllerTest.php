@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link ProductUpdateController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class ProductUpdateControllerTest extends AbstractControllerTest
 {

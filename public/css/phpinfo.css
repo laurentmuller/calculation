@@ -13,9 +13,12 @@
     -webkit-hyphens: auto;
        -moz-hyphens: auto;
             hyphens: auto;
-    font-size: 14px;
+    /*font-size: 14px;*/
 }
 
+.phpversion td.h {
+    font-size: initial;
+}
 .phpversion td.e {
     width: 30%;
 }

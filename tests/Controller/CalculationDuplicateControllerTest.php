@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link CalculationDuplicateController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalculationDuplicateControllerTest extends AbstractControllerTest
 {

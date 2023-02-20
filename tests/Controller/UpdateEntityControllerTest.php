@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link UpdateEntityController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class UpdateEntityControllerTest extends AbstractControllerTest
 {

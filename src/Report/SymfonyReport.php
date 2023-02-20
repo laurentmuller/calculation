@@ -115,21 +115,25 @@ class SymfonyReport extends AbstractReport
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Value', 70)
-            )
-            ->setGroupKey('Kernel')
-            ->outputHeaders();
+            );
 
+        $table->setGroupKey('Kernel')->outputHeaders();
         $this->outputRow($table, 'Environment', $info->getEnvironment())
             ->outputRow($table, 'Mode', $this->mode)
-            ->outputRow($table, 'Intl Locale', $this->locale)
+            ->outputRow($table, 'Version status', $info->getMaintenanceStatus())
+            ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenance())
+            ->outputRow($table, 'End of product life', $info->getEndOfLife());
+
+        $table->setGroupKey('Parameters');
+        $this->outputRow($table, 'Intl Locale', $this->locale)
             ->outputRow($table, 'Timezone', $info->getTimeZone())
-            ->outputRow($table, 'Charset', $info->getCharset())
-            ->outputRowBool($table, 'Debug', $app->isDebug())
-            ->outputRowBool($table, 'OP Cache', $info->isZendCacheLoaded())
-            ->outputRowBool($table, 'APCu', $info->isApcuLoaded())
-            ->outputRowBool($table, 'Xdebug', $info->isXdebugLoaded())
-            ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenanceInfo())
-            ->outputRow($table, 'End of product life', $info->getEndOfLifeInfo());
+            ->outputRow($table, 'Charset', $info->getCharset());
+
+        $table->setGroupKey('Extensions');
+        $this->outputRowEnabled($table, 'Debug', $app->isDebug())
+            ->outputRowEnabled($table, 'OP Cache', $info->isZendCacheLoaded())
+            ->outputRowEnabled($table, 'APCu', $info->isApcuLoaded())
+            ->outputRowEnabled($table, 'Xdebug', $info->isXdebugLoaded());
 
         $table->setGroupKey('Directories');
         $this->outputRow($table, 'Project', $info->getProjectDir())
@@ -190,8 +194,8 @@ class SymfonyReport extends AbstractReport
         return $this;
     }
 
-    private function outputRowBool(PdfGroupTableBuilder $table, string $key, bool $value): self
+    private function outputRowEnabled(PdfGroupTableBuilder $table, string $key, bool $enabled): self
     {
-        return $this->outputRow($table, $key, $value ? 'enabled' : 'disabled');
+        return $this->outputRow($table, $key, $enabled ? 'Enabled' : 'Disabled');
     }
 }

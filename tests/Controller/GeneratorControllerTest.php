@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link GeneratorController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class GeneratorControllerTest extends AbstractControllerTest
 {

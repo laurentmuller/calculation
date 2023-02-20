@@ -18,8 +18,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Unit test for the {@link TableView} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class TableViewTest extends TypeTestCase
 {

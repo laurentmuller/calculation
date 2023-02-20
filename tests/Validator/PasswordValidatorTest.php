@@ -20,8 +20,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  * Unit test for {@link PasswordValidator} class.
  *
  * @extends ConstraintValidatorTestCase<PasswordValidator>
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {

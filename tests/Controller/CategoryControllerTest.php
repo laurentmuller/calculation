@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Unit test for {@link CategoryController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CategoryControllerTest extends AbstractControllerTest
 {

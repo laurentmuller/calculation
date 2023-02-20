@@ -683,6 +683,28 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Gets the minimum (first) and maximum (last) dates of the calculations.
+     *
+     * @return array{0: \DateTimeInterface|null, 1: \DateTimeInterface|null}
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Exception
+     */
+    public function getMinMaxDates(): array
+    {
+        $values = $this->createQueryBuilder('c')
+            ->select('MIN(c.date) as MIN_DATE')
+            ->addSelect('MAX(c.date) as MAX_DATE')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $min_date = \is_string($values['MIN_DATE']) ? new \DateTime($values['MIN_DATE']) : null;
+        $max_date = \is_string($values['MAX_DATE']) ? new \DateTime($values['MAX_DATE']) : null;
+
+        return [$min_date, $max_date];
+    }
+
+    /**
      * Gets data for the pivot table.
      *
      * @psalm-return array<array{

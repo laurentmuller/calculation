@@ -14,8 +14,6 @@ namespace App\Tests\Controller;
 
 /**
  * Unit test for {@link CalendarController} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CalendarControllerTest extends AbstractControllerTest
 {

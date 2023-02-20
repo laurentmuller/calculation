@@ -93,7 +93,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     protected function doEcho(string $name, mixed $value, bool $newLine = false): void
     {
         $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
-        \printf($format, \htmlspecialchars($name), $value);
+        \printf($format, \htmlspecialchars($name), (string) $value);
     }
 
     /**

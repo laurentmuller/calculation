@@ -18,11 +18,12 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Unit test for the {@link MessagePosition} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class MessagePositionTest extends TypeTestCase
 {
+    /**
+     * @return array<array{MessagePosition, string}>
+     */
     public static function getLabel(): array
     {
         return [

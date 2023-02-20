@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Util\FileUtils;
-use App\Util\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -146,43 +145,11 @@ final class SymfonyInfoService
     }
 
     /**
-     * Gets the end of life in days.
-     */
-    public function getEndOfLifeDays(): string
-    {
-        return $this->formatDays(Kernel::END_OF_LIFE);
-    }
-
-    /**
-     * Gets the end of life date and days.
-     */
-    public function getEndOfLifeInfo(): string
-    {
-        return "{$this->getEndOfLife()} ({$this->getEndOfLifeDays()})";
-    }
-
-    /**
      * Gets the end of maintenance.
      */
     public function getEndOfMaintenance(): string
     {
         return $this->formatExpired(Kernel::END_OF_MAINTENANCE);
-    }
-
-    /**
-     * Gets the end of maintenance in days.
-     */
-    public function getEndOfMaintenanceDays(): string
-    {
-        return $this->formatDays(Kernel::END_OF_MAINTENANCE);
-    }
-
-    /**
-     * Gets the end of maintenance date and days.
-     */
-    public function getEndOfMaintenanceInfo(): string
-    {
-        return "{$this->getEndOfMaintenance()} ({$this->getEndOfMaintenanceDays()})";
     }
 
     /**
@@ -215,6 +182,28 @@ final class SymfonyInfoService
     public function getLogSize(): string
     {
         return FileUtils::formatSize($this->kernel->getLogDir());
+    }
+
+    /**
+     * Gets the maintenance status.
+     */
+    public function getMaintenanceStatus(): string
+    {
+        $now = new \DateTimeImmutable();
+        $eol = $this->getEndOfMonth(Kernel::END_OF_LIFE);
+        $eom = $this->getEndOfMonth(Kernel::END_OF_MAINTENANCE);
+
+        if ($eom instanceof \DateTimeImmutable && $eol instanceof \DateTimeImmutable) {
+            if ($now > $eol) {
+                return 'Unmaintained';
+            } elseif ($now > $eom) {
+                return 'Security Fixes Only';
+            } else {
+                return 'Maintained';
+            }
+        }
+
+        return 'Unknown';
     }
 
     /**
@@ -342,21 +331,6 @@ final class SymfonyInfoService
     }
 
     /**
-     * Gets the number of days before expiration.
-     *
-     * @return string the number of days, if applicable; '' otherwise
-     */
-    private function formatDays(string $date): string
-    {
-        $datetime = $this->getLastDate($date);
-        if ($datetime instanceof \DateTime) {
-            return (new \DateTime())->diff($datetime)->format('%R%a days');
-        }
-
-        return '';
-    }
-
-    /**
      * Format the expired date.
      *
      * @param string $date the date (month/year) to format
@@ -365,9 +339,9 @@ final class SymfonyInfoService
      */
     private function formatExpired(string $date): string
     {
-        $datetime = $this->getLastDate($date);
-        if ($datetime instanceof \DateTime) {
-            return FormatUtils::formatDate($datetime);
+        $date = \DateTimeImmutable::createFromFormat('d/m/Y', '01/' . $date);
+        if ($date instanceof \DateTimeImmutable) {
+            return $date->format('F Y');
         }
 
         return 'Unknown';
@@ -395,18 +369,20 @@ final class SymfonyInfoService
     }
 
     /**
-     * Gets a date as the last day of the month.
+     * Gets the end of month date.
      *
-     * @param string $date the date (month/year) to get for
+     * @param string $value the date as month/year format
+     *
+     * @return \DateTimeImmutable|false the date or false
      */
-    private function getLastDate(string $date): ?\DateTimeInterface
+    private function getEndOfMonth(string $value): \DateTimeImmutable|false
     {
-        $datetime = \DateTime::createFromFormat('m/Y', $date);
-        if ($datetime instanceof \DateTime) {
-            return $datetime->modify('last day of this month 23:59:59');
+        $date = \DateTimeImmutable::createFromFormat('d/m/Y', '01/' . $value);
+        if ($date instanceof \DateTimeImmutable) {
+            return $date->modify('last day of this month');
         }
 
-        return null;
+        return $date;
     }
 
     private function isDebugRoute(string $name): bool

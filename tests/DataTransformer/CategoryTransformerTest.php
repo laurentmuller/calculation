@@ -22,8 +22,6 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * Test for the {@link CategoryTransformer} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class CategoryTransformerTest extends KernelTestCase
 {

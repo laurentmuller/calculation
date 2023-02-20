@@ -21,8 +21,6 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * Test for the {@link GroupTransformer} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class GroupTransformerTest extends KernelTestCase
 {

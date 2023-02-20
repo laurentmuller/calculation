@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Unit test for the {@link NonceService} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class NonceServiceTest extends KernelTestCase
 {

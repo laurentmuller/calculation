@@ -74,7 +74,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getGroupCode(): ?string
     {
-        return $this->getCategory()?->getGroupCode();
+        return $this->getGroup()?->getCode();
     }
 
     /**

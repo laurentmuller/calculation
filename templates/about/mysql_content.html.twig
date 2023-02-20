@@ -1,4 +1,8 @@
 {% import 'about/_about_macro.html.twig' as tools %}
+{# parameters #}
+{% set enabled_values = ['On', 'Yes', 'True', 'Enabled'] %}
+{% set disabled_values = ['Off', 'No', 'False', 'Disabled'] %}
+{# content #}
 <div class="phpversion">
     <table id="data-table-mysql" class="table table-hover table-sm mb-0">
         <tbody>
@@ -16,7 +20,11 @@
         {% endfor %}
         {{ tools.headerInfo('Configuration') }}
          {% for key, value in configuration %}
-            {{ tools.rowInfo(key, value) }}
+             {% if value in enabled_values or value in disabled_values %}
+                 {{ tools.rowInfoBoolean(key, value, value in enabled_values) }}
+             {% else %}
+                 {{ tools.rowInfo(key, value) }}
+             {% endif %}
         {% endfor %}
         </tbody>
     </table>

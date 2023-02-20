@@ -26,8 +26,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  *
  * @template TEntity of AbstractEntity
  * @template TForm of FormTypeInterface
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractEntityTypeTestCase extends TypeTestCase
 {

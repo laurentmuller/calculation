@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Group;
@@ -27,7 +26,6 @@ use App\Form\Type\SimpleEditorType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
-use App\Repository\CalculationRepository;
 use App\Response\PdfResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\AkismetService;
@@ -40,7 +38,6 @@ use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
-use App\Util\DateUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use App\Validator\Captcha;
@@ -357,42 +354,6 @@ class TestController extends AbstractController
         ];
 
         return $this->json($data);
-    }
-
-    /**
-     * Display calculations in a timeline.
-     *
-     * @throws \Exception
-     */
-    #[Route(path: '/timeline', name: 'test_timeline')]
-    public function timeline(Request $request, CalculationRepository $repository): Response
-    {
-        $max_date = $repository->getMaxDate()?->format('Y-m-d') ?? 'today';
-        $interval = $this->getRequestString($request, 'interval', 'P1W');
-        $to = new \DateTime($this->getRequestString($request, 'date', $max_date));
-        $max_date = new \DateTime($max_date);
-        $from = DateUtils::sub($to, $interval);
-        $calculations = $repository->getByInterval($from, $to);
-        $data = Utils::groupBy($calculations, fn (Calculation $c) => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG));
-
-        $today = new \DateTime('today');
-        $previous = DateUtils::sub($to, $interval);
-        $next = DateUtils::add($to, $interval);
-
-        $parameters = [
-            'max_date' => $max_date->format('Y-m-d'),
-            'date' => $to->format('Y-m-d'),
-            'interval' => $interval,
-            'today' => $today->format('Y-m-d'),
-            'previous' => $previous->format('Y-m-d'),
-            'next' => $next->format('Y-m-d'),
-            'count' => \count($calculations),
-            'data' => $data,
-            'from' => $from,
-            'to' => $to,
-        ];
-
-        return $this->render('test/timeline.html.twig', $parameters);
     }
 
     /**

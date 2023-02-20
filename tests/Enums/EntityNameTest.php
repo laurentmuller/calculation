@@ -28,11 +28,12 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for {@link EntityName} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityNameTest extends TestCase
 {
+    /**
+     * @return array<array{EntityName, string}>
+     */
     public static function getMatchValue(): array
     {
         return [
@@ -42,6 +43,9 @@ class EntityNameTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{EntityName, int}>
+     */
     public static function getOffset(): array
     {
         return [
@@ -58,6 +62,9 @@ class EntityNameTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{EntityName|string, int}>
+     */
     public static function getTryFindOffset(): array
     {
         return [
@@ -78,6 +85,9 @@ class EntityNameTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{string|null, string}>
+     */
     public static function getTryFindValue(): array
     {
         return [
@@ -87,6 +97,9 @@ class EntityNameTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{mixed, EntityName|null}>
+     */
     public static function getTryFromMixed(): array
     {
         return [
@@ -138,6 +151,9 @@ class EntityNameTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{EntityName, string}>
+     */
     public static function getValue(): array
     {
         return [

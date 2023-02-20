@@ -100,7 +100,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     private ?string $password = null;
 
     /**
-     * @var Collection<int, UserProperty>
+     * @var ArrayCollection<int, UserProperty>
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProperty::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $properties;
@@ -126,34 +126,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     public function __construct()
     {
         $this->properties = new ArrayCollection();
-    }
-
-    /**
-     * @return array{
-     *      id: int|null,
-     *      username: string|null,
-     *      password: string|null}
-     */
-    public function __serialize(): array
-    {
-        return [
-            'id' => $this->id,
-            'username' => $this->username,
-            'password' => $this->password,
-        ];
-    }
-
-    /**
-     * @param array{
-     *     id: int|null,
-     *     username: string|null,
-     *     password: string|null} $data
-     */
-    public function __unserialize(array $data): void
-    {
-        $this->id = $data['id'];
-        $this->username = $data['username'];
-        $this->password = $data['password'];
     }
 
     /**
@@ -301,7 +273,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     {
         try {
             if (null !== $this->imageName) {
-                $path = $storage->resolvePath($this, 'imageFile');
+                $path = $storage->resolvePath($this);
                 if (null !== $path && FileUtils::isFile($path)) {
                     return $path;
                 }

@@ -26,8 +26,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * Unit test for {@link EntityVoter} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityVoterTest extends TestCase
 {

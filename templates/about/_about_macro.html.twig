@@ -3,15 +3,17 @@
 <tr class="h"><th colspan="2">{{ name }}</th></tr>
 {%- endmacro %}
 
-{% macro headerLinkInfo(name, target, count, colspan=1) -%}
-<tr>
-    <th class="h font-weight-normal" colspan="{{ colspan }}">
-        <a data-toggle="collapse" href="#{{ target }}" class="card-link ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
-    </th>
-    <th class="h font-weight-normal text-right">
-        <span class="badge badge-pill badge-secondary">{{ count|integer }}</span>
-    </th>
-</tr>
+{% macro headerLinkInfo(name, target, countable, colspan=1) -%}
+<thead>
+    <tr>
+        <td class="h" colspan="{{ colspan }}">
+            <a data-toggle="collapse" href="#{{ target }}" class="drop-down-icon-left ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
+        </td>
+        <td class="h text-right">
+            <span class="badge badge-pill badge-secondary">{{ countable|length|integer }}</span>
+        </td>
+    </tr>
+</thead>
 {%- endmacro %}
 
 {% macro rowInfo(name, value, name_class='', value_class='') -%}
@@ -30,6 +32,17 @@
         <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">
             {{- value -}}
         </a>
+    </td>
+</tr>
+{%- endmacro %}
+
+{% macro rowInfoBoolean(name, value, enabled) -%}
+{%- set check_text = enabled ? '✓' : '✗' -%}
+{%- set check_class = enabled ? 'success' : 'secondary' -%}
+<tr>
+    <td class="e">{{ name }}</td>
+    <td class="v">
+        <span class="font-weight-bold text-{{ check_class }}">{{ check_text }}</span> <span>{{ value }}</span>
     </td>
 </tr>
 {%- endmacro %}

@@ -19,8 +19,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link StrengthLevelTranslatorTrait} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class StrengthLevelTranslatorTraitTest extends TestCase
 {

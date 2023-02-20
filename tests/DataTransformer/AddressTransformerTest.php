@@ -19,8 +19,6 @@ use Symfony\Component\Mime\Address;
 
 /**
  * Test for the {@link AddressTransformer} class.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class AddressTransformerTest extends TestCase
 {

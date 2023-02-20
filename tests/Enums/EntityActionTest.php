@@ -18,8 +18,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Unit test for the {@link EntityAction} enumeration.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class EntityActionTest extends TypeTestCase
 {

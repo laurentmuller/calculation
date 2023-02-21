@@ -3,14 +3,12 @@
 <tr class="h"><th colspan="2">{{ name }}</th></tr>
 {%- endmacro %}
 
-{% macro headerLinkInfo(name, target, countable, colspan=1) -%}
+{% macro headerLinkInfo(name, target, countable, colspan=2) -%}
 <thead>
     <tr>
-        <td class="h" colspan="{{ colspan }}">
-            <a data-toggle="collapse" href="#{{ target }}" class="drop-down-icon-left ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
-        </td>
-        <td class="h text-right">
-            <span class="badge badge-pill badge-secondary">{{ countable|length|integer }}</span>
+        <td class="h position-relative" colspan="{{ colspan }}">
+            <a data-toggle="collapse" href="#{{ target }}" class="drop-down-icon-left stretched-link ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
+            <span class="badge badge-pill badge-secondary float-right">{{ countable|length|integer }}</span>
         </td>
     </tr>
 </thead>

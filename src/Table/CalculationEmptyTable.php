@@ -15,7 +15,6 @@ namespace App\Table;
 use App\Repository\CalculationRepository;
 use App\Traits\EmptyItemsTrait;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -48,19 +47,18 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     /**
      * {@inheritDoc}
      *
-     * @throws ORMException
-     *
-     * @psalm-return int<0, max>
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int
     {
-        return $this->repository->countEmptyItems();
+        // @phpstan-ignore-next-line
+        return $this->repository->countItemsEmpty();
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws ORMException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getEmptyMessage(): ?string
     {
@@ -72,7 +70,7 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
      */
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
-        return $this->repository->getEmptyItems($orderColumn, $orderDirection);
+        return $this->repository->getItemsEmpty($orderColumn, $orderDirection);
     }
 
     /**

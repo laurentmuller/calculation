@@ -19,6 +19,7 @@ use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -44,10 +45,8 @@ class CalculationDuplicateController extends AbstractController
     #[Route(path: '/excel', name: 'duplicate_excel')]
     public function excel(CalculationRepository $repository): Response
     {
-        if ($this->isEmptyItems($repository)) {
-            $this->warningTrans('duplicate.empty');
-
-            return $this->redirectToHomePage();
+        if (null !== $response = $this->getEmptyResponse($repository)) {
+            return $response;
         }
         $items = $this->getItems($repository);
         $doc = new CalculationsDuplicateDocument($this, $items);
@@ -65,10 +64,8 @@ class CalculationDuplicateController extends AbstractController
     #[Route(path: '/pdf', name: 'duplicate_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
-        if ($this->isEmptyItems($repository)) {
-            $this->warningTrans('duplicate.empty');
-
-            return $this->redirectToHomePage();
+        if (null !== $response = $this->getEmptyResponse($repository)) {
+            return $response;
         }
         $items = $this->getItems($repository);
         $doc = new CalculationDuplicateReport($this, $items);
@@ -85,6 +82,22 @@ class CalculationDuplicateController extends AbstractController
     public function table(Request $request, CalculationDuplicateTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table_duplicate.html.twig', $logger);
+    }
+
+    /**
+     * Returns a response if no item is duplicated.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
+    {
+        if (0 === $repository->countItemsDuplicate()) {
+            $this->warningTrans('duplicate.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        return null;
     }
 
     /**
@@ -105,16 +118,6 @@ class CalculationDuplicateController extends AbstractController
      */
     private function getItems(CalculationRepository $repository): array
     {
-        return $repository->getDuplicateItems();
-    }
-
-    /**
-     * Returns a value indicating if no item is duplicated.
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    private function isEmptyItems(CalculationRepository $repository): bool
-    {
-        return 0 === $repository->countDuplicateItems();
+        return $repository->getItemsDuplicate();
     }
 }

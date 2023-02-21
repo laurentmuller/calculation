@@ -42,20 +42,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     final public const DEFAULT_WEEK_MODEL = Week::class;
 
     /**
-     * The day model class.
-     *
-     * @psalm-var class-string<Day>
-     */
-    protected string $dayModel = self::DEFAULT_DAY_MODEL;
-
-    /**
-     * The month model class.
-     *
-     * @psalm-var class-string<Month>
-     */
-    protected string $monthModel = self::DEFAULT_MONTH_MODEL;
-
-    /**
      * The full month names.
      *
      * @var array<int, string>
@@ -80,13 +66,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      * The today day.
      */
     protected ?Day $today = null;
-
-    /**
-     * The week model class.
-     *
-     * @psalm-var class-string<Week>
-     */
-    protected string $weekModel = self::DEFAULT_WEEK_MODEL;
 
     /**
      * The full name of the week days.
@@ -166,17 +145,17 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->reset();
 
         // get first and last days of the year
-        $firstYearDate = new \DateTime(\sprintf('1 January %d', $year));
-        $lastYearDate = new \DateTime(\sprintf('31 December %d', $year));
+        $firstYearDate = new \DateTimeImmutable(\sprintf('1 January %d', $this->year));
+        $lastYearDate = new \DateTimeImmutable(\sprintf('31 December %d', $this->year));
 
         // get first day in calendar (monday of the 1st week)
-        $firstDate = new \DateTime(\sprintf('first monday of January %s', $year));
+        $firstDate = new \DateTime(\sprintf('first monday of January %s', $this->year));
         if ($firstDate > $firstYearDate) {
             $firstDate->sub(new \DateInterval('P1W'));
         }
 
         // get the last days in calendar (sunday of the last week)
-        $lastDate = new \DateTime(\sprintf('last sunday of December %d', $year));
+        $lastDate = new \DateTime(\sprintf('last sunday of December %d', $this->year));
         if ($lastDate < $lastYearDate) {
             $lastDate->add(new \DateInterval('P1W'));
         }
@@ -187,18 +166,16 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         /** @var ?Month $currentMonth */
         $currentMonth = null;
 
-        $currentDate = clone $firstDate;
-
         // build calendar
         $interval = new \DateInterval('P1D');
-        while ($currentDate <= $lastDate) {
+        while ($firstDate <= $lastDate) {
             // add day
-            $day = $this->createDay($currentDate);
+            $day = $this->createDay($firstDate);
 
             // calculate numbers
-            $monthYear = (int) $currentDate->format('Y');
-            $monthNumber = (int) $currentDate->format('n');
-            $weekNumber = (int) $currentDate->format('W');
+            $monthYear = (int) $firstDate->format('Y');
+            $monthNumber = (int) $firstDate->format('n');
+            $weekNumber = (int) $firstDate->format('W');
 
             if ($monthYear === $this->year) {
                 // create month if needed
@@ -215,7 +192,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
             $currentWeek->addDay($day);
 
             // next day
-            $currentDate->add($interval);
+            $firstDate->add($interval);
         }
 
         return $this;
@@ -401,88 +378,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     }
 
     /**
-     * Sets the models.
-     *
-     * @param ?string $monthModel the month model class or null for default
-     * @param ?string $weekModel  the week model class or null for default
-     * @param ?string $dayModel   the day model class or null for default
-     *
-     * @throws CalendarException if the month, the week or the day class model does not exist
-     *
-     * @psalm-param class-string<Month>|null $monthModel
-     * @psalm-param class-string<Week>|null $weekModel
-     * @psalm-param class-string<Day>|null $dayModel
-     */
-    public function setModels(?string $monthModel = null, ?string $weekModel = null, ?string $dayModel = null): self
-    {
-        $this->monthModel = $this->checkClass($monthModel, self::DEFAULT_MONTH_MODEL);
-        $this->weekModel = $this->checkClass($weekModel, self::DEFAULT_WEEK_MODEL);
-        $this->dayModel = $this->checkClass($dayModel, self::DEFAULT_DAY_MODEL);
-
-        return $this;
-    }
-
-    /**
-     * Sets the full name of the months. The array must have 12 values and keys from 1 to 12.
-     *
-     * @param array<int, string> $monthNames the month names to set
-     *
-     * @throws CalendarException if the array does not contain 12 values, if a key is missing or if one of the values is not a string
-     */
-    public function setMonthNames(array $monthNames): self
-    {
-        $this->checkArray($monthNames, self::MONTHS_COUNT);
-        $this->monthNames = $monthNames;
-
-        return $this;
-    }
-
-    /**
-     * Sets the short name of the months. The array must have 12 values and keys from 1 to 12.
-     *
-     * @param array<int, string> $monthShortNames the month short names to set
-     *
-     * @throws CalendarException if the array does not contain 12 values, if a key is missing or if one of the values is not a string
-     */
-    public function setMonthShortNames(array $monthShortNames): self
-    {
-        $this->checkArray($monthShortNames, self::MONTHS_COUNT);
-        $this->monthShortNames = $monthShortNames;
-
-        return $this;
-    }
-
-    /**
-     * Sets the full name of the week days. The array must have 7 values and keys from 1 to 7.
-     *
-     * @param array<int, string> $weekNames the week names to set
-     *
-     * @throws CalendarException if the array does not contain 7 values, if a key is missing or if one of the values is not a string
-     */
-    public function setWeekNames(array $weekNames): self
-    {
-        $this->checkArray($weekNames, self::DAYS_COUNT);
-        $this->weekNames = $weekNames;
-
-        return $this;
-    }
-
-    /**
-     * Sets the short name of the week days. The array must have 7 values and keys from 1 to 7.
-     *
-     * @param array<int, string> $weekShortNames the week short names to set
-     *
-     * @throws CalendarException if the array does not contain 7 values, if a key is missing or if one of the values is not a string
-     */
-    public function setWeekShortNames(array $weekShortNames): self
-    {
-        $this->checkArray($weekShortNames, self::DAYS_COUNT);
-        $this->weekShortNames = $weekShortNames;
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function reset(): void
@@ -491,29 +386,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $this->months = [];
         $this->weeks = [];
         $this->days = [];
-    }
-
-    /**
-     * Checks if the given array has the given length, that all keys from 1 to length are present and values are string.
-     *
-     * @param array<int, mixed> $array  the array to verify
-     * @param int               $length the length to match
-     *
-     * @throws CalendarException if the array has the wrong length, if a key is missing or if one of the values is not a string
-     */
-    private function checkArray(array $array, int $length): void
-    {
-        if ($length !== \count($array)) {
-            throw new CalendarException("The array must contains $length values.");
-        }
-        for ($i = 1; $i <= $length; ++$i) {
-            if (!\array_key_exists($i, $array)) {
-                throw new CalendarException("The array must contains the key $i.");
-            }
-            if (!\is_string($array[$i])) {
-                throw new CalendarException("The value $array[$i] for the key $i must be a string.");
-            }
-        }
     }
 
     /**

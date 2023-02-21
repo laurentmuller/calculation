@@ -14,20 +14,23 @@ namespace App\Tests\Controller;
 
 use App\Entity\AbstractEntity;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Abstract unit test for controllers.
+ *
+ * @psalm-type RouteType = array{url: string, username: string, expected?: int, method?: string}
  */
 abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 {
     /**
      * Gets the routes to test. Each entry must contain a URL, a username, an optional expected result and request method.
      *
-     * @return array|\Generator
+     * @return iterable<array-key, RouteType[]>
      */
-    abstract public static function getRoutes();
+    abstract public static function getRoutes(): iterable;
 
     /**
      * Checks the given route.
@@ -54,6 +57,8 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 
     /**
      * Adds an entity to the database.
+     *
+     * @throws ORMException
      */
     protected function addEntity(?AbstractEntity $entity): void
     {
@@ -99,6 +104,8 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
      * Delete an entity from the database.
      *
      * @return null this function returns always null
+     *
+     * @throws ORMException
      */
     protected function deleteEntity(?AbstractEntity $entity): mixed
     {

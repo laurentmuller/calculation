@@ -64,28 +64,6 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets the number of calculations below the given margin.
-     *
-     * @param float $minMargin the minimum margin
-     *
-     * @return int<0, max> the number of calculations
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    public function countBelowItems(float $minMargin): int
-    {
-        // create
-        $builder = $this->createQueryBuilder('e')
-            ->select('COUNT(e.id)');
-        $builder = $this->addBelowFilter($builder, $minMargin);
-
-        /** @psalm-var int<0, max> $value */
-        $value = (int) $builder->getQuery()->getSingleScalarResult();
-
-        return $value;
-    }
-
-    /**
      * Returns the number of distinct years and months.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -99,13 +77,30 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Count the number of calculations with duplicate items. Items are duplicate if the descriptions are equal.
+     * Gets the number of calculations below the given margin.
      *
-     * @return int<0, max> the number of calculations
+     * @param float $minMargin the minimum margin
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function countDuplicateItems(): int
+    public function countItemsBelow(float $minMargin): int
+    {
+        // create
+        $builder = $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)');
+        $builder = $this->addBelowFilter($builder, $minMargin);
+
+        return (int) $builder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count the number of calculations with duplicate items.
+     *
+     * Items are duplicate if the descriptions are equal.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function countItemsDuplicate(): int
     {
         // sub query
         $dql = $this->createQueryBuilder('e')
@@ -125,20 +120,17 @@ class CalculationRepository extends AbstractRepository
             ->select('COUNT(r.id)')
             ->where($where);
 
-        /** @psalm-var int<0, max> $value */
-        $value = (int) $builder->getQuery()->getSingleScalarResult();
-
-        return $value;
+        return (int) $builder->getQuery()->getSingleScalarResult();
     }
 
     /**
-     * Count the number of calculations with empty items. Items are empty if the price or the quantity is equal to 0.
+     * Count the number of calculations with empty items.
      *
-     * @return int<0, max> the number of calculations
+     * Items are empty if the price or the quantity is equal to 0.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function countEmptyItems(): int
+    public function countItemsEmpty(): int
     {
         // sub query
         $dql = $this->createQueryBuilder('e')
@@ -157,10 +149,7 @@ class CalculationRepository extends AbstractRepository
             ->select('COUNT(r.id)')
             ->where($where);
 
-        /** @psalm-var int<0, max> $value */
-        $value = (int) $builder->getQuery()->getSingleScalarResult();
-
-        return $value;
+        return (int) $builder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -190,26 +179,6 @@ class CalculationRepository extends AbstractRepository
         return parent::createDefaultQueryBuilder($alias)
             ->innerJoin("$alias.state", self::STATE_ALIAS)
             ->addSelect(self::STATE_ALIAS);
-    }
-
-    /**
-     * Gets calculations with the overall margin below the given value.
-     *
-     * @param float $minMargin the minimum margin in percent
-     *
-     * @return Calculation[] the below calculations
-     */
-    public function getBelowMargin(float $minMargin): array
-    {
-        // create
-        $builder = $this->createQueryBuilder('c')
-            ->addOrderBy('c.id', Criteria::DESC);
-
-        // filter
-        $builder = $this->addBelowFilter($builder, $minMargin);
-
-        // execute
-        return $builder->getQuery()->getResult();
     }
 
     /**
@@ -270,15 +239,10 @@ class CalculationRepository extends AbstractRepository
         // execute
         $result = $builder->getQuery()->getArrayResult();
 
-        // convert and create dates
+        // add date
         /** @psalm-var array $item */
         foreach ($result as &$item) {
-            $item['year'] = (int) $item['year'];
-            $item['month'] = (int) $item['month'];
             $item['date'] = $this->convertToDate($item);
-            $item['items'] = (float) $item['items'];
-            $item['total'] = (float) $item['total'];
-            $item['margin'] = (float) $item['margin'];
         }
 
         // reverse
@@ -315,25 +279,17 @@ class CalculationRepository extends AbstractRepository
     {
         $year = 'year(e.date)';
         $month = 'month(e.date)';
+        $year_month = "$year * 1000 + $month";
 
         $builder = $this->createQueryBuilder('e')
             ->select("$year AS year")
             ->addSelect("$month AS month")
+            ->addSelect("$year_month AS year_month")
             ->distinct()
             ->orderBy($year)
             ->addOrderBy($month);
 
-        $result = $builder->getQuery()->getArrayResult();
-
-        // convert
-        /** @psalm-var array $entry */
-        foreach ($result as &$entry) {
-            $entry['year'] = (int) $entry['year'];
-            $entry['month'] = (int) $entry['month'];
-            $entry['year_month'] = $entry['year'] * 1000 + $entry['month'];
-        }
-
-        return $result;
+        return $builder->getQuery()->getArrayResult();
     }
 
     /**
@@ -350,25 +306,89 @@ class CalculationRepository extends AbstractRepository
     {
         $year = 'year(e.date)';
         $week = 'week(e.date, 3)';
+        $year_week = "$year * 1000 + $week";
 
         $builder = $this->createQueryBuilder('e')
             ->select("$year AS year")
             ->addSelect("$week AS week")
+            ->addSelect("$year_week AS year_week")
             ->distinct()
             ->orderBy($year)
             ->addOrderBy($week);
 
-        $result = $builder->getQuery()->getArrayResult();
+        return $builder->getQuery()->getArrayResult();
+    }
 
-        // convert
-        /** @psalm-var array $entry */
-        foreach ($result as &$entry) {
-            $entry['year'] = (int) $entry['year'];
-            $entry['week'] = (int) $entry['week'];
-            $entry['year_week'] = $entry['year'] * 1000 + $entry['week'];
-        }
+    /**
+     * Gets calculations for the given year and month.
+     *
+     * @param int $year  the year
+     * @param int $month the month number (1 = January, 2 = February, ...)
+     *
+     * @return Calculation[] the matching calculations
+     */
+    public function getForMonth(int $year, int $month): array
+    {
+        return $this->getCalendarBuilder($year)
+            ->andWhere('MONTH(c.date) = :month')
+            ->setParameter('month', $month, Types::INTEGER)
+            ->getQuery()
+            ->getResult();
+    }
 
-        return $result;
+    /**
+     * Gets calculations for the given year and week.
+     *
+     * @param int $year the year
+     * @param int $week the week number (1 to 53)
+     *
+     * @return Calculation[] the matching calculations
+     *
+     * @psalm-return list<Calculation>
+     */
+    public function getForWeek(int $year, int $week): array
+    {
+        return $this->getCalendarBuilder($year)
+            ->andWhere('WEEK(c.date, 3) = :week')
+            ->setParameter('week', $week, Types::INTEGER)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Gets calculations for the given year.
+     *
+     * @param int $year the year
+     *
+     * @return Calculation[] the matching calculations
+     *
+     * @psalm-return list<Calculation>
+     */
+    public function getForYear(int $year): array
+    {
+        return $this->getCalendarBuilder($year)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Gets calculations with the overall margin below the given value.
+     *
+     * @param float $minMargin the minimum margin in percent
+     *
+     * @return Calculation[] the below calculations
+     */
+    public function getItemsBelow(float $minMargin): array
+    {
+        // create
+        $builder = $this->createQueryBuilder('c')
+            ->addOrderBy('c.id', Criteria::DESC);
+
+        // filter
+        $builder = $this->addBelowFilter($builder, $minMargin);
+
+        // execute
+        return $builder->getQuery()->getResult();
     }
 
     /**
@@ -390,7 +410,7 @@ class CalculationRepository extends AbstractRepository
      *          count: int}>
      *      }>
      */
-    public function getDuplicateItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         // build
         $builder = $this->createQueryBuilder('e')
@@ -482,7 +502,7 @@ class CalculationRepository extends AbstractRepository
      *          count: int}>
      *      }>
      */
-    public function getEmptyItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         // build
         $builder = $this->createQueryBuilder('e')
@@ -559,58 +579,6 @@ class CalculationRepository extends AbstractRepository
         }
 
         return $result;
-    }
-
-    /**
-     * Gets calculations for the given year and month.
-     *
-     * @param int $year  the year
-     * @param int $month the month number (1 = January, 2 = February, ...)
-     *
-     * @return Calculation[] the matching calculations
-     */
-    public function getForMonth(int $year, int $month): array
-    {
-        return $this->getCalendarBuilder($year)
-            ->andWhere('MONTH(c.date) = :month')
-            ->setParameter('month', $month, Types::INTEGER)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Gets calculations for the given year and week.
-     *
-     * @param int $year the year
-     * @param int $week the week number (1 to 53)
-     *
-     * @return Calculation[] the matching calculations
-     *
-     * @psalm-return list<Calculation>
-     */
-    public function getForWeek(int $year, int $week): array
-    {
-        return $this->getCalendarBuilder($year)
-            ->andWhere('WEEK(c.date, 3) = :week')
-            ->setParameter('week', $week, Types::INTEGER)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Gets calculations for the given year.
-     *
-     * @param int $year the year
-     *
-     * @return Calculation[] the matching calculations
-     *
-     * @psalm-return list<Calculation>
-     */
-    public function getForYear(int $year): array
-    {
-        return $this->getCalendarBuilder($year)
-            ->getQuery()
-            ->getResult();
     }
 
     /**
@@ -750,8 +718,8 @@ class CalculationRepository extends AbstractRepository
      */
     private function convertToDate(array $item): \DateTimeInterface
     {
-        $year = (int) $item['year'];
-        $month = (int) $item['month'];
+        $year = $item['year'];
+        $month = $item['month'];
         $time = "$year-$month-10";
 
         return new \DateTime($time);

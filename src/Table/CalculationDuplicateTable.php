@@ -14,7 +14,6 @@ namespace App\Table;
 
 use App\Traits\DuplicateItemsTrait;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Exception\ORMException;
 
 /**
  * Calculation table for duplicate items.
@@ -26,19 +25,18 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     /**
      * {@inheritdoc}
      *
-     * @throws ORMException
-     *
-     * @psalm-return int<0, max>
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int
     {
-        return $this->repository->countDuplicateItems();
+        // @phpstan-ignore-next-line
+        return $this->repository->countItemsDuplicate();
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws ORMException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getEmptyMessage(): ?string
     {
@@ -50,7 +48,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
      */
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
-        return $this->repository->getDuplicateItems($orderColumn, $orderDirection);
+        return $this->repository->getItemsDuplicate($orderColumn, $orderDirection);
     }
 
     /**

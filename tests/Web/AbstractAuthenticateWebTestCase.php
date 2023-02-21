@@ -38,7 +38,6 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     final public const ID_DISABLE = 4;
     final public const ID_SUPER_ADMIN = 1;
     final public const ID_USER = 3;
-
     final public const ROLE_ADMIN = RoleInterface::ROLE_ADMIN;
     final public const ROLE_DISABLED = 'ROLE_DISABLED';
     final public const ROLE_FAKE = 'ROLE_FAKE';

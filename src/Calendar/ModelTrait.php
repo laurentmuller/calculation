@@ -18,27 +18,118 @@ namespace App\Calendar;
 trait ModelTrait
 {
     /**
-     * Checks if the given class name exist.
+     * The day model class.
      *
-     * @param ?string $className    the class name to verify
-     * @param string  $defaultClass the default class name to use if the class name si null
+     * @psalm-var class-string<Day>
+     */
+    protected string $dayModel = Calendar::DEFAULT_DAY_MODEL;
+
+    /**
+     * The month model class.
      *
-     * @return string the class name if no exception
+     * @psalm-var class-string<Month>
+     */
+    protected string $monthModel = Calendar::DEFAULT_MONTH_MODEL;
+
+    /**
+     * The week model class.
+     *
+     * @psalm-var class-string<Week>
+     */
+    protected string $weekModel = Calendar::DEFAULT_WEEK_MODEL;
+
+    /**
+     * Gets the day model class.
+     *
+     * @return class-string<Day>
+     */
+    public function getDayModel(): string
+    {
+        return $this->dayModel;
+    }
+
+    /**
+     * Gets the month model class.
+     *
+     * @return class-string<Month>
+     */
+    public function getMonthModel(): string
+    {
+        return $this->monthModel;
+    }
+
+    /**
+     * Gets the week model class.
+     *
+     * @return class-string<Week>
+     */
+    public function getWeekModel(): string
+    {
+        return $this->weekModel;
+    }
+
+    /**
+     * Sets the day model class.
+     *
+     * @param class-string<Day>|null $dayModel the day model class or null for default
+     *
+     * @throws CalendarException if the day class model does not exist
+     */
+    public function setDayModel(?string $dayModel): static
+    {
+        $this->dayModel = $this->checkClass($dayModel, Calendar::DEFAULT_DAY_MODEL);
+
+        return $this;
+    }
+
+    /**
+     * Sets the month model class.
+     *
+     * @param class-string<Month>|null $monthModel the month model class or null for default
+     *
+     * @throws CalendarException if the month class model does not exist
+     */
+    public function setMonthModel(?string $monthModel): static
+    {
+        $this->monthModel = $this->checkClass($monthModel, Calendar::DEFAULT_MONTH_MODEL);
+
+        return $this;
+    }
+
+    /**
+     * Sets the week model class.
+     *
+     * @param class-string<Week>|null $weekModel the week model class or null for default
+     *
+     * @throws CalendarException if the week class model does not exist
+     */
+    public function setWeekModel(?string $weekModel): static
+    {
+        $this->weekModel = $this->checkClass($weekModel, Calendar::DEFAULT_WEEK_MODEL);
+
+        return $this;
+    }
+
+    /**
+     * Checks if the model class name.
+     *
+     * @template T of AbstractCalendarItem
+     *
+     * @param class-string<T>|null $className    the model class name to verify
+     * @param class-string<T>      $defaultClass the default model class name to use if the model class name si null
+     *
+     * @return class-string<T> the class name if no exception
      *
      * @throws CalendarException if the given class name does not exist
-     *
-     * @template T
-     *
-     * @psalm-param class-string<T>|null $className
-     * @psalm-param class-string<T> $defaultClass
-     *
-     * @psalm-return  class-string<T>
      */
     protected function checkClass(?string $className, string $defaultClass): string
     {
         $name = $className ?? $defaultClass;
         if (!\class_exists($name)) {
             throw new CalendarException("Class '$name' not found.");
+        }
+        if (!\is_a($name, AbstractCalendarItem::class, true)) {
+            throw new CalendarException("Class '$name' is not a instance of 'AbstractCalendarItem'.");
         }
 
         return $name;

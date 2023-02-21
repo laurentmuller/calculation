@@ -35,17 +35,16 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     /**
      * {@inheritdoc}
      *
-     * @psalm-return int<0, max>
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function count(): int
     {
-        /** @var CalculationRepository $repository */
+        /** @psalm-var CalculationRepository $repository */
         $repository = $this->repository;
 
-        return $repository->countBelowItems($this->getMinMargin());
+        // @phpstan-ignore-next-line
+        return $repository->countItemsBelow($this->getMinMargin());
     }
 
     /**

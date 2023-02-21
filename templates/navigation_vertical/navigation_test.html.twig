@@ -10,9 +10,6 @@
         {{- icon('bug fa-fw', 'index.menu_test') -}}
     </a>
     <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
-        {{ navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
-        {{ dropdownSeparator() }}
-
         {% set id = 'menu_test_service' %}
         {% set expanded = app.session.get(id, false) %}
         {% set toggle_class = expanded ? ' active' : '' %}
@@ -61,14 +58,27 @@
             </ul>
         </li>
 
-        {{ dropdownSeparator() }}
-        {{ navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
-        {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
-        {{ navItem(path('timeline'), 'timeline.title', 'stream') }}
+        {% set id = 'menu_test_chart' %}
+        {% set expanded = app.session.get(id, false) %}
+        {% set toggle_class = expanded ? ' active' : '' %}
+        {% set display_style = expanded ? 'block' : 'none' %}
+        {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+        <li class="nav-item nav-item-dropdown" id="{{ id }}">
+            <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+                {{- icon('chart-area fa-fw', 'menu_graphics', 'chart') -}}
+            </a>
+            <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
+                {{ navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
+                {{ navItem(path('timeline'), 'timeline.title', 'stream') }}
+                {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
+            </ul>
+        </li>
+
         {{ dropdownSeparator() }}
         {{ navItem(path('test_notifications'), 'test.notification', 'bell far') }}
         {{ navItem(path('test_editor'), 'test.editor', 'edit') }}
         {{ navItem(path('test_password'), 'password.title', 'lock') }}
         {{ navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
+        {{ navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
     </ul>
 </li>

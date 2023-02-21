@@ -59,6 +59,6 @@ trait CalculationsTrait
      */
     public function isEmpty(): bool
     {
-        return empty($this->calculations);
+        return [] === $this->calculations;
     }
 }

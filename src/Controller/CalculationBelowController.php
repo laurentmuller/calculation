@@ -21,6 +21,7 @@ use App\Table\CalculationBelowTable;
 use App\Traits\TableTrait;
 use App\Util\FormatUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -43,17 +44,16 @@ class CalculationBelowController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'below_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getApplication()->getMinMargin();
-        $items = $this->getItems($repository, $minMargin);
-        if ([] === $items) {
-            $this->warningTrans('below.empty');
-
-            return $this->redirectToHomePage();
+        if (null !== $response = $this->getEmptyResponse($repository, $minMargin)) {
+            return $response;
         }
+        $items = $this->getItems($repository, $minMargin);
         $doc = new CalculationsDocument($this, $items);
         $doc->setTitle('below.title');
 
@@ -65,17 +65,16 @@ class CalculationBelowController extends AbstractController
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/pdf', name: 'below_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getApplication()->getMinMargin();
-        $items = $this->getItems($repository, $minMargin);
-        if ([] === $items) {
-            $this->warningTrans('below.empty');
-
-            return $this->redirectToHomePage();
+        if (null !== $response = $this->getEmptyResponse($repository, $minMargin)) {
+            return $response;
         }
+        $items = $this->getItems($repository, $minMargin);
         $percent = FormatUtils::formatPercent($minMargin);
         $description = $this->trans('below.description', ['%margin%' => $percent]);
         $doc = new CalculationsReport($this, $items);
@@ -97,12 +96,28 @@ class CalculationBelowController extends AbstractController
     }
 
     /**
+     * Returns a response if no calculation is below the given margin.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function getEmptyResponse(CalculationRepository $repository, float $minMargin): ?RedirectResponse
+    {
+        if (0 === $repository->countItemsBelow($minMargin)) {
+            $this->warningTrans('below.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        return null;
+    }
+
+    /**
      * Gets items to display.
      *
      * @return Calculation[]
      */
     private function getItems(CalculationRepository $repository, float $minMargin): array
     {
-        return $repository->getBelowMargin($minMargin);
+        return $repository->getItemsBelow($minMargin);
     }
 }

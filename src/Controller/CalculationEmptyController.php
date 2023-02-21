@@ -19,6 +19,7 @@ use App\Spreadsheet\CalculationsEmptyDocument;
 use App\Table\CalculationEmptyTable;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -44,10 +45,8 @@ class CalculationEmptyController extends AbstractController
     #[Route(path: '/excel', name: 'empty_excel')]
     public function excel(CalculationRepository $repository): Response
     {
-        if ($this->isEmptyItems($repository)) {
-            $this->warningTrans('empty.empty');
-
-            return $this->redirectToHomePage();
+        if (null !== $response = $this->getEmptyResponse($repository)) {
+            return $response;
         }
         $items = $this->getItems($repository);
         $doc = new CalculationsEmptyDocument($this, $items);
@@ -65,10 +64,8 @@ class CalculationEmptyController extends AbstractController
     #[Route(path: '/pdf', name: 'empty_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
-        if ($this->isEmptyItems($repository)) {
-            $this->warningTrans('empty.empty');
-
-            return $this->redirectToHomePage();
+        if (null !== $response = $this->getEmptyResponse($repository)) {
+            return $response;
         }
         $items = $this->getItems($repository);
         $doc = new CalculationEmptyReport($this, $items);
@@ -85,6 +82,22 @@ class CalculationEmptyController extends AbstractController
     public function table(Request $request, CalculationEmptyTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table_empty.html.twig', $logger);
+    }
+
+    /**
+     * Returns a response if no calculation's item is empty.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
+    {
+        if (0 === $repository->countItemsEmpty()) {
+            $this->warningTrans('empty.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        return null;
     }
 
     /**
@@ -105,16 +118,6 @@ class CalculationEmptyController extends AbstractController
      */
     private function getItems(CalculationRepository $repository): array
     {
-        return $repository->getEmptyItems();
-    }
-
-    /**
-     * Returns a value indicating if no item is empty.
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    private function isEmptyItems(CalculationRepository $repository): bool
-    {
-        return 0 === $repository->countEmptyItems();
+        return $repository->getItemsEmpty();
     }
 }

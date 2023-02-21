@@ -38,7 +38,7 @@ class TimelineController extends AbstractController
         $interval = $this->getRequestString($request, 'interval');
         $parameters = $service->current($date, $interval);
 
-        return $this->render('test/timeline.html.twig', $parameters);
+        return $this->renderTimeline($parameters);
     }
 
     /**
@@ -50,7 +50,7 @@ class TimelineController extends AbstractController
         $interval = $this->getRequestString($request, 'interval');
         $parameters = $service->first($interval);
 
-        return $this->render('test/timeline.html.twig', $parameters);
+        return $this->renderTimeline($parameters);
     }
 
     /**
@@ -62,6 +62,11 @@ class TimelineController extends AbstractController
         $interval = $this->getRequestString($request, 'interval');
         $parameters = $service->last($interval);
 
+        return $this->renderTimeline($parameters);
+    }
+
+    private function renderTimeline(array $parameters): Response
+    {
         return $this->render('test/timeline.html.twig', $parameters);
     }
 }

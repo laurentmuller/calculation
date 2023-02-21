@@ -27,6 +27,8 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
      * {@inheritdoc}
      *
      * @throws ORMException
+     *
+     * @psalm-return int<0, max>
      */
     public function count(): int
     {

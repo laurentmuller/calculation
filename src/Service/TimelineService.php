@@ -17,13 +17,14 @@ use App\Repository\CalculationRepository;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
-use Doctrine\ORM\Exception\ORMException;
 
 /**
  * Service for calculations timeline.
  */
 class TimelineService
 {
+    private const DATE_FORMAT = 'Y-m-d';
+
     public function __construct(private readonly CalculationRepository $repository)
     {
     }
@@ -84,7 +85,7 @@ class TimelineService
     /**
      * @return array{0: \DateTimeInterface|null, 1: \DateTimeInterface, 2: \DateTimeInterface}
      *
-     * @throws ORMException
+     * @throws \Exception
      */
     private function getDates(): array
     {
@@ -100,7 +101,7 @@ class TimelineService
     /**
      * @return array{0: \DateTimeInterface, 1: \DateTimeInterface}
      *
-     * @throws ORMException
+     * @throws \Exception
      */
     private function getMinMaxDates(\DateTimeInterface $default): array
     {
@@ -114,9 +115,9 @@ class TimelineService
      */
     private function getNextDate(\DateTimeInterface $date, string $interval, \DateTimeInterface $max_date): ?\DateTimeInterface
     {
-        $previous = DateUtils::add($date, $interval);
+        $nextDate = DateUtils::add($date, $interval);
 
-        return $previous > $max_date ? null : $previous;
+        return $nextDate > $max_date ? null : $nextDate;
     }
 
     /**
@@ -138,14 +139,14 @@ class TimelineService
             'from' => $from,
             'to' => $to,
             'interval' => $interval,
-            'date' => $to->format('Y-m-d'),
+            'date' => $to->format(self::DATE_FORMAT),
 
             'min_date' => $min_date,
             'max_date' => $max_date,
 
-            'today' => $today?->format('Y-m-d'),
-            'previous' => $previous?->format('Y-m-d'),
-            'next' => $next?->format('Y-m-d'),
+            'today' => $today?->format(self::DATE_FORMAT),
+            'previous' => $previous?->format(self::DATE_FORMAT),
+            'next' => $next?->format(self::DATE_FORMAT),
 
             'count' => \count($calculations),
             'data' => $this->groupByDate($calculations),
@@ -171,6 +172,6 @@ class TimelineService
             return [];
         }
 
-        return Utils::groupBy($calculations, fn (Calculation $c) => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG));
+        return Utils::groupBy($calculations, static fn (Calculation $c) => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG));
     }
 }

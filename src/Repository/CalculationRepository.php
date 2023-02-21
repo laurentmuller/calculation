@@ -68,9 +68,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @param float $minMargin the minimum margin
      *
-     * @return int the number of calculations
-     *
-     * @psalm-return  int<0, max>
+     * @return int<0, max> the number of calculations
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -80,10 +78,11 @@ class CalculationRepository extends AbstractRepository
         $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)');
         $builder = $this->addBelowFilter($builder, $minMargin);
-        /** @var int<0, max> $count */
-        $count = (int) $builder->getQuery()->getSingleScalarResult();
 
-        return $count;
+        /** @psalm-var int<0, max> $value */
+        $value = (int) $builder->getQuery()->getSingleScalarResult();
+
+        return $value;
     }
 
     /**
@@ -102,9 +101,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Count the number of calculations with duplicate items. Items are duplicate if the descriptions are equal.
      *
-     * @return int the number of calculations
-     *
-     * @psalm-return  int<0, max>
+     * @return int<0, max> the number of calculations
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -128,18 +125,16 @@ class CalculationRepository extends AbstractRepository
             ->select('COUNT(r.id)')
             ->where($where);
 
-        /** @phpstan-var int<0, max> $count */
-        $count = (int) $builder->getQuery()->getSingleScalarResult();
+        /** @psalm-var int<0, max> $value */
+        $value = (int) $builder->getQuery()->getSingleScalarResult();
 
-        return $count;
+        return $value;
     }
 
     /**
      * Count the number of calculations with empty items. Items are empty if the price or the quantity is equal to 0.
      *
-     * @return int the number of calculations
-     *
-     * @psalm-return int<0, max>
+     * @return int<0, max> the number of calculations
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -162,10 +157,10 @@ class CalculationRepository extends AbstractRepository
             ->select('COUNT(r.id)')
             ->where($where);
 
-        /** @phpstan-var int<0, max> $count */
-        $count = (int) $builder->getQuery()->getSingleScalarResult();
+        /** @psalm-var int<0, max> $value */
+        $value = (int) $builder->getQuery()->getSingleScalarResult();
 
-        return $count;
+        return $value;
     }
 
     /**
@@ -303,9 +298,7 @@ class CalculationRepository extends AbstractRepository
             ->distinct()
             ->orderBy($year);
 
-        $result = $builder->getQuery()->getSingleColumnResult();
-
-        return \array_map('intval', $result);
+        return $builder->getQuery()->getSingleColumnResult();
     }
 
     /**
@@ -649,45 +642,10 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets tne maximum date of the calculations.
+     * Gets the minimum (first) and maximum (last) dates of calculations.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Exception
-     */
-    public function getMaxDate(): ?\DateTimeInterface
-    {
-        /** @psalm-var string|null $value */
-        $value = $this->createQueryBuilder('c')
-            ->select('MAX(c.date) as MAX_DATE')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return \is_string($value) ? new \DateTime($value) : null;
-    }
-
-    /**
-     * Gets tne minimum date of the calculations.
+     * @return array{0: ?\DateTimeInterface, 1: ?\DateTimeInterface}
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Exception
-     */
-    public function getMinDate(): ?\DateTimeInterface
-    {
-        /** @psalm-var string|null $value */
-        $value = $this->createQueryBuilder('c')
-            ->select('MIN(c.date) as MIN_DATE')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return \is_string($value) ? new \DateTime($value) : null;
-    }
-
-    /**
-     * Gets the minimum (first) and maximum (last) dates of the calculations.
-     *
-     * @return array{0: \DateTimeInterface|null, 1: \DateTimeInterface|null}
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
      */
     public function getMinMaxDates(): array
@@ -697,6 +655,10 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('MAX(c.date) as MAX_DATE')
             ->getQuery()
             ->getOneOrNullResult();
+
+        if (!\is_array($values)) {
+            return [null, null];
+        }
 
         $min_date = \is_string($values['MIN_DATE']) ? new \DateTime($values['MIN_DATE']) : null;
         $max_date = \is_string($values['MAX_DATE']) ? new \DateTime($values['MAX_DATE']) : null;

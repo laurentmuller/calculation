@@ -35,6 +35,8 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     /**
      * {@inheritdoc}
      *
+     * @psalm-return int<0, max>
+     *
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Cache\InvalidArgumentException
      */

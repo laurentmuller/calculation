@@ -329,9 +329,9 @@ class BingTranslatorService extends AbstractTranslatorService
 
         // call
         $response = $this->requestPost($uri, [
-                self::QUERY => $query,
-                self::JSON => $data,
-            ]);
+            self::QUERY => $query,
+            self::JSON => $data,
+        ]);
 
         return $this->checkResponse($response);
     }

@@ -194,15 +194,16 @@
         _toggleMenu(e) {
             e.preventDefault();
             const that = this;
+            const options = that.options;
             const $link = $(e.currentTarget);
             const $parent = $link.closest('.nav-item-dropdown');
             const $menu = $parent.find('.navbar-menu:first');
             if ($menu.is(':visible')) {
                 that._collapseChildrenMenus($menu);
-            } else {
+            } else if (options.collapseSiblingMenus) {
                 that._collapseSiblingMenus($menu);
             }
-            $menu.toggle(this.options.duration, function () {
+            $menu.toggle(options.duration, function () {
                 $link.addClass('active');
                 that._updateMenus();
                 that._saveState();
@@ -334,7 +335,7 @@
     // Default options
     // -----------------------------------
     Sidebar.DEFAULTS = {
-        // url to save menus state
+        // url to save menu states
         url: null,
         // show sidebar button
         showSidebarButton: '.show-sidebar',
@@ -356,7 +357,9 @@
         showMenu: 'Expand',
         hideMenu: 'Collapse',
         // the path name to search for in query parameters to highlight URL
-        pathname: null
+        pathname: null,
+        // collapse siblings menus
+        collapseSiblingMenus: true
     };
 
     /**

@@ -49,6 +49,8 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
      * {@inheritDoc}
      *
      * @throws ORMException
+     *
+     * @psalm-return int<0, max>
      */
     public function count(): int
     {

@@ -69,6 +69,8 @@ class Column implements \Stringable, SortModeInterface
 
     /**
      * The sort order.
+     *
+     * @psalm-var SortModeInterface::*
      */
     private string $order = self::SORT_ASC;
 
@@ -224,7 +226,7 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Gets the default sorting order.
      *
-     * @see SortModeInterface
+     * @psalm-return SortModeInterface::*
      */
     public function getOrder(): string
     {
@@ -337,8 +339,6 @@ class Column implements \Stringable, SortModeInterface
 
     /**
      * Sets the default sorting order.
-     *
-     * @see SortModeInterface
      */
     public function setOrder(string $order): self
     {

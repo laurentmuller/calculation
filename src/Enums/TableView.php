@@ -24,6 +24,7 @@ use Elao\Enum\ReadableEnumTrait;
  * Table view enumeration.
  *
  * @implements SortableEnumInterface<TableView>
+ * @implements DefaultEnumInterface<TableView>
  */
 #[ReadableEnum(prefix: 'table_view.', useValueAsDefault: true)]
 enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface

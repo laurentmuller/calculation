@@ -53,6 +53,7 @@ class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
     public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities, 'empty.title');
+        $this->setDescription($this->trans('empty.description'));
         $this->priceLabel = $this->trans('calculationitem.fields.price');
         $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }

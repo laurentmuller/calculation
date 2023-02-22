@@ -87,7 +87,7 @@ class MailerService implements ServiceSubscriberInterface
     {
         $notification = $this->createNotification()
             ->from($fromEmail)
-            ->to($toUser->getAddress())
+            ->to($toUser->getEmailAddress())
             ->subject($this->trans('user.comment.title'))
             ->markdown($this->convert($message))
             ->importance($importance);

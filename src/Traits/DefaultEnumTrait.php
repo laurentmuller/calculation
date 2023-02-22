@@ -16,14 +16,16 @@ use App\Interfaces\DefaultEnumInterface;
 use Elao\Enum\ExtrasTrait;
 
 /**
- * Trait to implement {@link DefaultEnumInterface}.
+ * Trait for class implementing {@link DefaultEnumInterface}.
+ *
+ * @psalm-require-implements \App\Interfaces\DefaultEnumInterface
  */
 trait DefaultEnumTrait
 {
     use ExtrasTrait;
 
     /**
-     * @see DefaultEnumInterface::getDefault()
+     * {@inheritdoc}
      */
     public static function getDefault(): self
     {
@@ -39,7 +41,7 @@ trait DefaultEnumTrait
     }
 
     /**
-     * @see DefaultEnumInterface::isDefault()
+     * {@inheritdoc}
      */
     public function isDefault(): bool
     {

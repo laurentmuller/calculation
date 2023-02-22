@@ -55,7 +55,8 @@ class CalculationBelowController extends AbstractController
         }
         $items = $this->getItems($repository, $minMargin);
         $doc = new CalculationsDocument($this, $items);
-        $doc->setTitle('below.title');
+        $doc->setTitle('below.title')
+            ->setDescription($this->getDescription($minMargin));
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -75,11 +76,9 @@ class CalculationBelowController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository, $minMargin);
-        $percent = FormatUtils::formatPercent($minMargin);
-        $description = $this->trans('below.description', ['%margin%' => $percent]);
         $doc = new CalculationsReport($this, $items);
         $doc->setTitleTrans('below.title')
-            ->setDescription($description);
+            ->setDescription($this->getDescription($minMargin));
 
         return $this->renderPdfDocument($doc);
     }
@@ -93,6 +92,11 @@ class CalculationBelowController extends AbstractController
     public function table(Request $request, CalculationBelowTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest($request, $table, 'calculation/calculation_table_below.html.twig', $logger);
+    }
+
+    private function getDescription(float $minMargin): string
+    {
+        return $this->trans('below.description', ['%margin%' => FormatUtils::formatPercent($minMargin)]);
     }
 
     /**

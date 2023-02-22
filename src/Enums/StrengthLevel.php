@@ -24,6 +24,7 @@ use Elao\Enum\ReadableEnumTrait;
  * The password strength level.
  *
  * @implements SortableEnumInterface<StrengthLevel>
+ * @implements DefaultEnumInterface<StrengthLevel>
  */
 #[ReadableEnum(prefix: 'strength_level.')]
 enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface

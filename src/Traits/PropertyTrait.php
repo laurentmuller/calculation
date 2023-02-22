@@ -21,7 +21,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Trait to manage application and user properties.
  *
- * @see \App\Interfaces\PropertyServiceInterface
+ * @psalm-require-implements \App\Interfaces\PropertyServiceInterface
  */
 trait PropertyTrait
 {

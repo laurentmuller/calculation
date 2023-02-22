@@ -57,32 +57,27 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
 
     /**
      * Gets categories.
+     *
+     * @return array<string, array{id: int, code: string, group: string}> an array grouped by group name with the categories
      */
-    protected function getCategories(): array
-    {
-        return [];
-    }
-
-    /**
-     * Gets the category for the given identifier.
-     */
-    protected function getCategory(int $categoryId): ?Category
-    {
-        return 0 !== $categoryId ? $this->categoryRepository->find($categoryId) : null;
-    }
+    abstract protected function getCategories(): array;
 
     /**
      * {@inheritDoc}
      */
-    protected function search(DataQuery $query, QueryBuilder $builder): void
+    protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
-        parent::search($query, $builder);
-        if (0 !== $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0)) {
-            /** @var string $field */
-            $field = $this->repository->getSearchFields('category.id');
-            $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
-                ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
+        $result = parent::search($query, $builder, $alias);
+        if (0 === $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0)) {
+            return $result;
         }
+
+        /** @psalm-var string $field */
+        $field = $this->repository->getSearchFields('category.id', $alias);
+        $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
+            ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
+
+        return true;
     }
 
     /**
@@ -97,5 +92,13 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
             $results->addCustomData('categories', $this->getCategories());
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
         }
+    }
+
+    /**
+     * Gets the category for the given identifier.
+     */
+    private function getCategory(int $categoryId): ?Category
+    {
+        return 0 !== $categoryId ? $this->categoryRepository->find($categoryId) : null;
     }
 }

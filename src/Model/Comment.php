@@ -148,7 +148,7 @@ class Comment
     public function setFromAddress(Address|User|string $fromAddress): self
     {
         if ($fromAddress instanceof User) {
-            $this->fromAddress = $fromAddress->getAddress();
+            $this->fromAddress = $fromAddress->getEmailAddress();
         } else {
             $this->fromAddress = Address::create($fromAddress);
         }
@@ -191,7 +191,7 @@ class Comment
     public function setToAddress(Address|User|string $toAddress): self
     {
         if ($toAddress instanceof User) {
-            $this->toAddress = $toAddress->getAddress();
+            $this->toAddress = $toAddress->getEmailAddress();
         } else {
             $this->toAddress = Address::create($toAddress);
         }

@@ -65,12 +65,9 @@ class CalculationBelowTable extends CalculationTable implements \Countable
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @var CalculationRepository $repository */
-        $repository = $this->repository;
-
         $builder = parent::createDefaultQueryBuilder($alias);
 
-        return $repository->addBelowFilter($builder, $this->getMinMargin());
+        return CalculationRepository::addBelowFilter($builder, $this->getMinMargin());
     }
 
     /**

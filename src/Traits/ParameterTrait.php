@@ -43,6 +43,9 @@ trait ParameterTrait
         return $this->getRequestInt($request, $key, $default);
     }
 
+    /**
+     * @psalm-return ($default is null ? (string|null) : string)
+     */
     protected function getParamString(Request $request, string $key, string $prefix = '', string|\BackedEnum $default = null): string|null
     {
         $default = $this->getCookieString($request, $key, $prefix, $default);

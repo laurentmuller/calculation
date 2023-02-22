@@ -176,14 +176,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * Gets the address (email and name) used for send email.
-     */
-    public function getAddress(): Address
-    {
-        return new Address((string) $this->email, (string) $this->username);
-    }
-
-    /**
      * Gets the URL of the avatar image.
      *
      * @param int $size       the image size (only used if the value is greater than 0)
@@ -226,6 +218,14 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    /**
+     * Gets email address.
+     */
+    public function getEmailAddress(): Address
+    {
+        return new Address((string) $this->email, (string) $this->username);
     }
 
     /**

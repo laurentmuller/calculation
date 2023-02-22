@@ -35,6 +35,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * The sort direction.
+     *
+     * @psalm-var SortModeInterface::*
      */
     private string $sortMode = self::SORT_ASC;
 
@@ -364,6 +366,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * Gets the sort mode.
+     *
+     * @psalm-return SortModeInterface::*
      */
     public function getSortMode(): string
     {
@@ -524,7 +528,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         return match ($this->sortMode) {
             self::SORT_ASC => $this->sortAscending(),
             self::SORT_DESC => $this->sortDescending(),
-            default => $this,
         };
     }
 

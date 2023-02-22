@@ -21,22 +21,14 @@ use App\Interfaces\SortModeInterface;
 class SortableField
 {
     /**
-     * The sorted order.
-     *
-     * @psalm-var SortModeInterface::* $order
-     */
-    public string $order;
-
-    /**
      * Constructor.
      *
      * @param string $order the field order
      *
      * @psalm-param SortModeInterface::* $order
      */
-    public function __construct(string $order = SortModeInterface::SORT_ASC)
+    public function __construct(public readonly string $order = SortModeInterface::SORT_ASC)
     {
-        $this->order = $order;
     }
 
     /**

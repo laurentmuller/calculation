@@ -49,6 +49,8 @@ class DataQuery implements SortModeInterface
 
     /**
      * The sort order ('asc' or 'desc').
+     *
+     * @psalm-var SortModeInterface::* $order
      */
     public string $order = self::SORT_ASC;
 
@@ -129,5 +131,20 @@ class DataQuery implements SortModeInterface
     public function isViewTable(): bool
     {
         return TableView::TABLE === $this->view;
+    }
+
+    /**
+     * Sets the sorting order.
+     */
+    public function setOrder(string $order): self
+    {
+        $order = \strtolower($order);
+        $this->order = match ($order) {
+            self::SORT_ASC,
+            self::SORT_DESC => $order,
+            default => $this->order,
+        };
+
+        return $this;
     }
 }

@@ -47,13 +47,14 @@ class CalculationRepository extends AbstractRepository
      *
      * @param QueryBuilder $builder   the query builder to update
      * @param float        $minMargin the minimum margin
+     * @param ?string      $alias     the entity alias to use or null to use the first root alias
      *
      * @return QueryBuilder the updated query builder
      */
-    public function addBelowFilter(QueryBuilder $builder, float $minMargin): QueryBuilder
+    public static function addBelowFilter(QueryBuilder $builder, float $minMargin, ?string $alias = null): QueryBuilder
     {
         $param = 'minMargin';
-        $alias = $builder->getRootAliases()[0];
+        $alias ??= $builder->getRootAliases()[0];
         $itemsField = "$alias.itemsTotal";
         $overallField = "$alias.overallTotal";
 
@@ -88,7 +89,7 @@ class CalculationRepository extends AbstractRepository
         // create
         $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)');
-        $builder = $this->addBelowFilter($builder, $minMargin);
+        $builder = self::addBelowFilter($builder, $minMargin);
 
         return (int) $builder->getQuery()->getSingleScalarResult();
     }
@@ -385,7 +386,7 @@ class CalculationRepository extends AbstractRepository
             ->addOrderBy('c.id', Criteria::DESC);
 
         // filter
-        $builder = $this->addBelowFilter($builder, $minMargin);
+        $builder = self::addBelowFilter($builder, $minMargin);
 
         // execute
         return $builder->getQuery()->getResult();
@@ -718,11 +719,7 @@ class CalculationRepository extends AbstractRepository
      */
     private function convertToDate(array $item): \DateTimeInterface
     {
-        $year = $item['year'];
-        $month = $item['month'];
-        $time = "$year-$month-10";
-
-        return new \DateTime($time);
+        return new \DateTime(\sprintf('%s-%s-10', $item['year'], $item['month']));
     }
 
     /**

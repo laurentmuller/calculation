@@ -155,7 +155,7 @@ class ResetPasswordController extends AbstractController
     private function createEmail(User $user, ResetPasswordToken $resetToken): ResetPasswordEmail
     {
         $email = new ResetPasswordEmail($this->getTranslator());
-        $email->to($user->getAddress())
+        $email->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
             ->updateFooterText($this->getApplicationName())
             ->subject($this->trans('resetting.request.title'))

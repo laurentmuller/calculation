@@ -25,17 +25,15 @@
             state_id,
             data_default
         ) }}
-        {% set editable = '' %}
         <div class="dropdown-menu" aria-labelledby="{{ state_param }}">
             {{ _self.output_dropdown('state', 0, state_id, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
-            {% for state in customData.states %}
-                {% if editable != state.editable %}
-                    {% set editable = state.editable %}
-                    {% set icon_title = state.editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable' %}
-                    {% set icon_style = state.editable ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far' %}
-                    {{ _self.output_dropdown_header(icon_title, true, icon_style) }}
-                {% endif %}
-                {{ _self.output_dropdown('state pl-5', state.id, state_id, state.code, {}, ICON_CALCULATION_STATE) }}
+            {% for editable, states in customData.states %}
+                {% set icon_title = editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable' %}
+                {% set icon_style = editable ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far' %}
+                {{ _self.output_dropdown_header(icon_title, true, icon_style) }}
+                {% for state in states %}
+                    {{ _self.output_dropdown('state pl-5', state.id, state_id, state.code, {}, ICON_CALCULATION_STATE) }}
+                {% endfor %}
             {% endfor %}
         </div>
     </div>

@@ -71,6 +71,8 @@ class CalculationTable extends AbstractEntityTable
 
     /**
      * Gets calculation states.
+     *
+     * @return array<int, array{id: int, code: string, editable: int, color: string}>
      */
     protected function getCalculationStates(): array
     {
@@ -96,15 +98,19 @@ class CalculationTable extends AbstractEntityTable
     /**
      * {@inheritDoc}
      */
-    protected function search(DataQuery $query, QueryBuilder $builder): void
+    protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
-        parent::search($query, $builder);
-        if (0 !== $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
-            /** @var string $field */
-            $field = $this->repository->getSearchFields('state.id');
-            $builder->andWhere($field . '=:' . self::PARAM_STATE)
-                ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
+        $result = parent::search($query, $builder, $alias);
+        if (0 === $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
+            return $result;
         }
+
+        /** @psalm-var string $field */
+        $field = $this->repository->getSearchFields('state.id', $alias);
+        $builder->andWhere($field . '=:' . self::PARAM_STATE)
+            ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
+
+        return true;
     }
 
     /**

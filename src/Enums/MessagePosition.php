@@ -24,6 +24,7 @@ use Elao\Enum\ReadableEnumTrait;
  * The message position for flash bag.
  *
  * @implements SortableEnumInterface<MessagePosition>
+ * @implements DefaultEnumInterface<MessagePosition>
  */
 #[ReadableEnum(prefix: 'message_position.', useValueAsDefault: true)]
 enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface

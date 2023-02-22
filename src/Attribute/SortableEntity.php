@@ -21,18 +21,6 @@ use App\Interfaces\SortModeInterface;
 class SortableEntity
 {
     /**
-     * The property name.
-     */
-    public string $name;
-
-    /**
-     * The sort order.
-     *
-     * @psalm-var SortModeInterface::* $order
-     */
-    public string $order;
-
-    /**
      * Constructor.
      *
      * @param string $name  the property name
@@ -40,10 +28,8 @@ class SortableEntity
      *
      * @psalm-param SortModeInterface::* $order
      */
-    public function __construct(string $name, string $order = SortModeInterface::SORT_ASC)
+    public function __construct(public readonly string $name, public readonly string $order = SortModeInterface::SORT_ASC)
     {
-        $this->name = $name;
-        $this->order = $order;
     }
 
     /**

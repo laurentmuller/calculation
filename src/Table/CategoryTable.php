@@ -123,15 +123,19 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * {@inheritDoc}
      */
-    protected function search(DataQuery $query, QueryBuilder $builder): void
+    protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
-        parent::search($query, $builder);
-        if (0 !== $groupId = $query->getCustomData(self::PARAM_GROUP, 0)) {
-            /** @var string $field */
-            $field = $this->repository->getSearchFields('group.id');
-            $builder->andWhere($field . '=:' . self::PARAM_GROUP)
-                ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
+        $result = parent::search($query, $builder, $alias);
+        if (0 === $groupId = $query->getCustomData(self::PARAM_GROUP, 0)) {
+            return $result;
         }
+
+        /** @psalm-var string $field */
+        $field = $this->repository->getSearchFields('group.id', $alias);
+        $builder->andWhere($field . '=:' . self::PARAM_GROUP)
+            ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
+
+        return true;
     }
 
     /**

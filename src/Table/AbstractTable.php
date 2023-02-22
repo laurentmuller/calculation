@@ -51,6 +51,9 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatAmount($value);
     }
 
+    /**
+     * @noinspection PhpUnused
+     */
     public function formatCountable(\Countable $value): string
     {
         return $this->formatInt($value->count());
@@ -61,6 +64,9 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatDate($value);
     }
 
+    /**
+     * @noinspection PhpUnused
+     */
     public function formatId(int $value): string
     {
         return FormatUtils::formatId($value);
@@ -92,6 +98,8 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets the data query from the given request.
+     *
+     * @throws \ReflectionException
      */
     public function getDataQuery(Request $request): DataQuery
     {
@@ -100,10 +108,10 @@ abstract class AbstractTable implements SortModeInterface
         // global parameters
         $query->callback = $request->isXmlHttpRequest();
         $query->id = $this->getParamInt($request, TableInterface::PARAM_ID);
-        $query->search = (string) $this->getParamString($request, TableInterface::PARAM_SEARCH);
+        $query->search = $this->getParamString($request, TableInterface::PARAM_SEARCH, '', '');
 
         // find view
-        $view = (string) $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
+        $view = $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
         $tableView = TableView::tryFrom($view) ?? TableView::TABLE;
         $query->view = $tableView;
 
@@ -120,8 +128,8 @@ abstract class AbstractTable implements SortModeInterface
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
         }
-        $query->sort = (string) $this->getParamString($request, TableInterface::PARAM_SORT, '', $query->sort);
-        $query->order = (string) $this->getParamString($request, TableInterface::PARAM_ORDER, '', $query->order);
+        $query->sort = $this->getParamString($request, TableInterface::PARAM_SORT, '', $query->sort);
+        $query->setOrder($this->getParamString($request, TableInterface::PARAM_ORDER, '', $query->order));
 
         return $query;
     }
@@ -248,6 +256,8 @@ abstract class AbstractTable implements SortModeInterface
      * @param string $name the parameter name
      *
      * @throws \ReflectionException
+     *
+     * @noinspection PhpUnused
      */
     protected function getSessionKey(string $name): string
     {

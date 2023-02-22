@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -69,14 +70,14 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
-     * @return array an array with the categories
+     * @return array<string, array{id: int, code: string, group: string}> an array grouped by group name with the categories
      */
     public function getDropDownProducts(): array
     {
         $builder = $this->getDropDownQuery()
             ->innerJoin('c.products', 'p');
 
-        return $builder->getQuery()->getArrayResult();
+        return $this->mergeByGroup($builder);
     }
 
     /**
@@ -84,14 +85,14 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one task are returned.
      *
-     * @return array an array with the categories
+     * @return array<string, array{id: int, code: string, group: string}> an array grouped by group name with the categories
      */
     public function getDropDownTasks(): array
     {
-        return $this->getDropDownQuery()
-            ->innerJoin('c.tasks', 't')
-            ->getQuery()
-            ->getArrayResult();
+        $builder = $this->getDropDownQuery()
+            ->innerJoin('c.tasks', 't');
+
+        return $this->mergeByGroup($builder);
     }
 
     /**
@@ -155,5 +156,12 @@ class CategoryRepository extends AbstractRepository
             ->groupBy('c.id')
             ->orderBy($group, Criteria::ASC)
             ->addOrderBy('c.code', Criteria::ASC);
+    }
+
+    private function mergeByGroup(QueryBuilder $builder): array
+    {
+        $values = $builder->getQuery()->getArrayResult();
+
+        return Utils::groupBy($values, 'group');
     }
 }

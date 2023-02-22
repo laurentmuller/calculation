@@ -24,6 +24,7 @@ use Elao\Enum\ReadableEnumTrait;
  * Entity action enumeration.
  *
  * @implements SortableEnumInterface<EntityAction>
+ * @implements DefaultEnumInterface<EntityAction>
  */
 #[ReadableEnum(prefix: 'entity_action.', useValueAsDefault: true)]
 enum EntityAction: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface

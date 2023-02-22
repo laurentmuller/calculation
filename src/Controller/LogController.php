@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
+use App\Model\LogFile;
 use App\Report\LogReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
@@ -20,6 +21,7 @@ use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Util\FileUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -46,10 +48,10 @@ class LogController extends AbstractController
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
-        if (null === $logFile = $service->getLogFile()) {
-            $this->infoTrans('log.list.empty');
-
-            return $this->redirectToHomePage();
+        // empty?
+        $logFile = $service->getLogFile();
+        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
+            return $this->getEmptyResponse();
         }
 
         // handle request
@@ -91,10 +93,9 @@ class LogController extends AbstractController
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
     {
-        if (null === $logFile = $service->getLogFile()) {
-            $this->infoTrans('log.list.empty');
-
-            return $this->redirectToHomePage();
+        $logFile = $service->getLogFile();
+        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
+            return $this->getEmptyResponse();
         }
         $doc = new LogsDocument($this, $logFile);
 
@@ -110,10 +111,9 @@ class LogController extends AbstractController
     #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response
     {
-        if (null === $logFile = $service->getLogFile()) {
-            $this->infoTrans('log.list.empty');
-
-            return $this->redirectToHomePage();
+        $logFile = $service->getLogFile();
+        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
+            return $this->getEmptyResponse();
         }
         $doc = new LogReport($this, $logFile);
 
@@ -173,5 +173,12 @@ class LogController extends AbstractController
         }
 
         return 'log_table';
+    }
+
+    private function getEmptyResponse(): RedirectResponse
+    {
+        $this->infoTrans('log.list.empty');
+
+        return $this->redirectToHomePage();
     }
 }

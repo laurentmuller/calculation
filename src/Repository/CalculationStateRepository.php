@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationState;
+use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -73,20 +73,12 @@ class CalculationStateRepository extends AbstractRepository
      * Gets states used for the calculation table.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
+     *
+     * @return array<int, array{id: int, code: string, editable: int, color: string}> an array grouped by editable with the states
      */
     public function getDropDownStates(): array
     {
-        return $this->createQueryBuilder('s')
-            ->select('s.id')
-            ->addSelect('s.code')
-            ->addSelect('s.editable')
-            ->addSelect('s.color')
-            ->innerJoin('s.calculations', 'c')
-            ->groupBy('s.id')
-            ->orderBy('s.editable', Criteria::DESC)
-            ->addOrderBy('s.code', Criteria::ASC)
-            ->getQuery()
-            ->getArrayResult();
+        return $this->mergeByEditable($this->getDropDownQuery());
     }
 
     /**
@@ -94,24 +86,16 @@ class CalculationStateRepository extends AbstractRepository
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
-     * @param float $margin the minimum margin
+     * @param float $minMargin the minimum margin
+     *
+     * @return array<int, array{id: int, code: string, editable: int, color: string}> an array grouped by editable with the states
      */
-    public function getDropDownStatesBelow(float $margin): array
+    public function getDropDownStatesBelow(float $minMargin): array
     {
-        return $this->createQueryBuilder('s')
-            ->select('s.id')
-            ->addSelect('s.code')
-            ->addSelect('s.editable')
-            ->addSelect('s.color')
-            ->innerJoin('s.calculations', 'c')
-            ->groupBy('s.id')
-            ->orderBy('s.editable', Criteria::DESC)
-            ->addOrderBy('s.code', Criteria::ASC)
-            ->where('c.itemsTotal != 0')
-            ->andWhere('(c.overallTotal / c.itemsTotal) < :margin')
-            ->setParameter('margin', $margin, Types::FLOAT)
-            ->getQuery()
-            ->getArrayResult();
+        $builder = $this->getDropDownQuery();
+        $builder = CalculationRepository::addBelowFilter($builder, $minMargin, 'c');
+
+        return $this->mergeByEditable($builder);
     }
 
     /**
@@ -197,6 +181,26 @@ class CalculationStateRepository extends AbstractRepository
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.code', Criteria::ASC);
+    }
+
+    private function getDropDownQuery(): QueryBuilder
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s.id')
+            ->addSelect('s.code')
+            ->addSelect('s.editable')
+            ->addSelect('s.color')
+            ->innerJoin('s.calculations', 'c')
+            ->groupBy('s.id')
+            ->orderBy('s.editable', Criteria::DESC)
+            ->addOrderBy('s.code', Criteria::ASC);
+    }
+
+    private function mergeByEditable(QueryBuilder $builder): array
+    {
+        $values = $builder->getQuery()->getArrayResult();
+
+        return Utils::groupBy($values, 'editable');
     }
 
     /**

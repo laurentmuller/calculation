@@ -13,12 +13,16 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Interface to get a default enumeration.
+ * Interface to get the default enumeration value.
+ *
+ * @template T of \UnitEnum&DefaultEnumInterface
  */
 interface DefaultEnumInterface
 {
     /**
      * Gets the default enumeration.
+     *
+     * @return T
      *
      * @throws \LogicException if default enumeration is not found
      */

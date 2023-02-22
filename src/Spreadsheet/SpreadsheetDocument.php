@@ -403,6 +403,20 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
+     * Sets the document description.
+     *
+     * @param ?string $description the description
+     */
+    public function setDescription(?string $description): static
+    {
+        if ($description) {
+            $this->getProperties()->setDescription($description);
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the foreground color for the given column.
      *
      * @param int    $columnIndex   the column index (A = 1)
@@ -816,7 +830,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the file title.
+     * Sets the document title.
      */
     public function setTitle(?string $title): static
     {

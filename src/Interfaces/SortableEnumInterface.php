@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * @template T of \UnitEnum
+ * Interface to get sorted enumerations.
+ *
+ * @template T of \UnitEnum&SortableEnumInterface
  */
 interface SortableEnumInterface
 {

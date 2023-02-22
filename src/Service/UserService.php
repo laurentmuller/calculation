@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
@@ -23,7 +24,6 @@ use App\Traits\PropertyTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -253,15 +253,17 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         }
     }
 
-    private function getUser(): ?UserInterface
+    private function getUser(): ?User
     {
-        return $this->security->getUser();
+        $user = $this->security->getUser();
+
+        return $user instanceof User ? $user : null;
     }
 
     /**
      * Update a property without saving changes to database.
      */
-    private function saveProperty(string $name, mixed $value, array $defaultValues, UserInterface $user): void
+    private function saveProperty(string $name, mixed $value, array $defaultValues, User $user): void
     {
         $property = $this->repository->findOneByUserAndName($user, $name);
         if ($this->isDefaultValue($defaultValues, $name, $value)) {

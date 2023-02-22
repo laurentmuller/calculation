@@ -28,12 +28,9 @@ use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Traits\PropertyTrait;
 use App\Util\RoleBuilder;
-use App\Validator\Captcha;
 use App\Validator\Password;
-use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 
@@ -401,7 +398,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Create a password contraint with this security properties.
      *
-     * @throws InvalidArgumentException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPasswordConstraint(): Password
     {

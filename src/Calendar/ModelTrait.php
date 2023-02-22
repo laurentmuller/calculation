@@ -20,21 +20,21 @@ trait ModelTrait
     /**
      * The day model class.
      *
-     * @psalm-var class-string<Day>
+     * @var class-string<Day>
      */
     protected string $dayModel = Calendar::DEFAULT_DAY_MODEL;
 
     /**
      * The month model class.
      *
-     * @psalm-var class-string<Month>
+     * @var class-string<Month>
      */
     protected string $monthModel = Calendar::DEFAULT_MONTH_MODEL;
 
     /**
      * The week model class.
      *
-     * @psalm-var class-string<Week>
+     * @var class-string<Week>
      */
     protected string $weekModel = Calendar::DEFAULT_WEEK_MODEL;
 

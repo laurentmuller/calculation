@@ -47,12 +47,14 @@ trait CacheAwareTrait
 
     /**
      * Removes the item from the cache pool.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function deleteCacheItem(string $key): bool
     {
-        return $this->getCacheAdapter()->deleteItem(self::cleanKey($key));
+        try {
+            return $this->getCacheAdapter()->deleteItem(self::cleanKey($key));
+        } catch (\Psr\Cache\InvalidArgumentException) {
+            return false;
+        }
     }
 
     #[SubscribedService]
@@ -69,12 +71,14 @@ trait CacheAwareTrait
 
     /**
      * Gets the cache item for the given key.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCacheItem(string $key): ?CacheItemInterface
     {
-        return $this->getCacheAdapter()->getItem(self::cleanKey($key));
+        try {
+            return $this->getCacheAdapter()->getItem(self::cleanKey($key));
+        } catch (\Psr\Cache\InvalidArgumentException) {
+            return null;
+        }
     }
 
     /**
@@ -82,11 +86,9 @@ trait CacheAwareTrait
      *
      * @param string $key     The key for which to return the corresponding value
      * @param mixed  $default The default value to return or a callable function to get the default value.
-     *                        If the callable function returns a value, this value is saved to the cache.
+     *                        If the callable function returns a not null value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCacheValue(string $key, mixed $default = null): mixed
     {
@@ -97,8 +99,7 @@ trait CacheAwareTrait
         }
 
         if (\is_callable($default)) {
-            $value = \call_user_func($default);
-            if (null !== $value) {
+            if (null !== $value = \call_user_func($default)) {
                 $this->setCacheValue($key, $value);
 
                 return $value;
@@ -112,12 +113,14 @@ trait CacheAwareTrait
 
     /**
      * Confirms if the cache contains specified cache item.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function hasCacheItem(string $key): bool
     {
-        return $this->getCacheAdapter()->hasItem(self::cleanKey($key));
+        try {
+            return $this->getCacheAdapter()->hasItem(self::cleanKey($key));
+        } catch (\Psr\Cache\InvalidArgumentException) {
+            return false;
+        }
     }
 
     /**
@@ -128,8 +131,6 @@ trait CacheAwareTrait
      * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
@@ -153,7 +154,9 @@ trait CacheAwareTrait
     }
 
     /**
-     * Save the given value to the cache. If the value is null, the item is removed from the cache.
+     * Save the given value to the cache.
+     *
+     * If the value is null, the item is removed from the cache.
      *
      * @param string                 $key   The key for which to save the value
      * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
@@ -161,22 +164,23 @@ trait CacheAwareTrait
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @return bool true if the cache is updated
      */
-    public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): static
+    public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         $key = self::cleanKey($key);
         if (null === $value) {
-            $this->deleteCacheItem($key);
+            return $this->deleteCacheItem($key);
         } elseif (null !== $item = $this->getCacheItem($key)) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
             }
-            $this->getCacheAdapter()->save($item);
+
+            return $this->getCacheAdapter()->save($item);
         }
 
-        return $this;
+        return false;
     }
 
     /**

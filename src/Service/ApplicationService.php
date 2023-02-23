@@ -59,8 +59,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      * Gets the administrator role rights.
      *
      * @return int[] the rights
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getAdminRights(): array
     {
@@ -69,8 +67,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the administrator role.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getAdminRole(): Role
     {
@@ -83,8 +79,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the last archive calculation.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getArchiveCalculation(): ?\DateTimeInterface
     {
@@ -111,8 +105,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the customer address.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerAddress(): ?string
     {
@@ -121,8 +113,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the customer e-mail.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerEmail(): ?string
     {
@@ -131,8 +121,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the customer fax number.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerFax(): ?string
     {
@@ -141,8 +129,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the customer name.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerName(): ?string
     {
@@ -151,8 +137,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the customer phone number.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerPhone(): ?string
     {
@@ -161,8 +145,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the customer website (URL).
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerUrl(): ?string
     {
@@ -171,8 +153,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the customer zip code and city.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getCustomerZipCity(): ?string
     {
@@ -181,8 +161,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the default category.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultCategory(): ?Category
     {
@@ -199,8 +177,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the default category identifier.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultCategoryId(): int
     {
@@ -209,8 +185,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the default product.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultProduct(): ?Product
     {
@@ -227,8 +201,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the default product identifier.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultProductId(): int
     {
@@ -237,8 +209,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the default product quantity.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultQuantity(): float
     {
@@ -247,8 +217,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the default calculation state.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultState(): ?CalculationState
     {
@@ -265,8 +233,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the default calculation state identifier.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDefaultStateId(): int
     {
@@ -342,8 +308,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the last import of Swiss cities.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLastImport(): ?\DateTimeInterface
     {
@@ -379,8 +343,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the minimum margin, in percent, for a calculation (default: 3.0 = 300%).
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMinMargin(): float
     {
@@ -397,8 +359,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Create a password contraint with this security properties.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getPasswordConstraint(): Password
     {
@@ -415,8 +375,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      * Gets all properties except date values.
      *
      * @return array<string, mixed>
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getProperties(): array
     {
@@ -453,8 +411,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the password strength level.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getStrengthLevel(): StrengthLevel
     {
@@ -466,8 +422,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the last products update.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getUpdateProducts(): ?\DateTimeInterface
     {
@@ -478,8 +432,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      * Gets the user role rights.
      *
      * @return int[] the rights
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getUserRights(): array
     {
@@ -488,8 +440,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets the user role.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getUserRole(): Role
     {
@@ -511,8 +461,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Gets a value indicating if the default product (if any)  must be edited
      * when a new calculation is created.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isDefaultEdit(): bool
     {
@@ -521,8 +469,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Gets a value indicating the image captcha is displayed when login.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isDisplayCaptcha(): bool
     {
@@ -533,8 +479,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      * Returns if the given value is below the minimum margin.
      *
      * @param float|Calculation $value the calculation or the margin to be tested
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function isMarginBelow(float|Calculation $value): bool
     {
@@ -627,8 +571,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Remove the give property.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function removeProperty(string $name): self
     {
@@ -661,8 +603,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Remove the default category if deleted from the database.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function updateDeletedCategory(Category $category): void
     {
@@ -671,8 +611,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Remove the default product if deleted from the database.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function updateDeletedProduct(Product $product): void
     {
@@ -681,8 +619,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Remove the default calculation state if deleted from the database.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function updateDeletedState(CalculationState $state): void
     {
@@ -716,9 +652,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         }
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     private function updateDeletedEntity(string $name, AbstractEntity $entity): void
     {
         if ($this->getPropertyInteger($name) === $entity->getId()) {

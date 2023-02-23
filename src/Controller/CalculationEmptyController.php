@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationEmptyReport;
 use App\Repository\CalculationRepository;
@@ -58,7 +59,6 @@ class CalculationEmptyController extends AbstractController
      * Export the calculations where items have the price or the quantity is equal to 0.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'empty_pdf')]
@@ -75,8 +75,6 @@ class CalculationEmptyController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'empty_table')]
     public function table(Request $request, CalculationEmptyTable $table, LoggerInterface $logger): Response
@@ -92,9 +90,7 @@ class CalculationEmptyController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {
         if (0 === $repository->countItemsEmpty()) {
-            $this->warningTrans('empty.empty');
-
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('empty.empty', [], FlashType::WARNING);
         }
 
         return null;

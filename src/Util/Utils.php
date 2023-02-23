@@ -196,8 +196,6 @@ final class Utils
      * @param \Throwable $e the exception to get the context for
      *
      * @return array an array with the message, class, code, file, line and trace properties
-     *
-     * @throws \ReflectionException
      */
     public static function getExceptionContext(\Throwable $e): array
     {
@@ -222,12 +220,16 @@ final class Utils
      * @psalm-template T of object
      *
      * @psalm-param class-string<T>|T $objectOrClass
-     *
-     * @throws \ReflectionException if the class does not exist
      */
     public static function getShortName(object|string $objectOrClass): string
     {
-        return (new \ReflectionClass($objectOrClass))->getShortName();
+        try {
+            return (new \ReflectionClass($objectOrClass))->getShortName();
+        } catch (\ReflectionException $e) {
+            $type = \is_object($objectOrClass) ? \get_debug_type($objectOrClass) : $objectOrClass;
+            $message = \sprintf("Unable to get short name for '%s'.", $type);
+            throw new \RuntimeException($message, $e->getCode(), $e);
+        }
     }
 
     /**

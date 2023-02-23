@@ -64,6 +64,8 @@ trait SessionAwareTrait
      * @param \DateTimeInterface|null $default the default value if not found
      *
      * @return \DateTimeInterface|null the session value, if found; the default value otherwise
+     *
+     * @psalm-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
      */
     protected function getSessionDate(string $key, \DateTimeInterface $default = null): ?\DateTimeInterface
     {

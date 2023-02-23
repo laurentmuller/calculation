@@ -33,7 +33,6 @@ abstract class AbstractArrayReport extends AbstractReport
      * @param PdfDocumentUnit        $unit        the user unit
      * @param PdfDocumentSize        $size        the document size
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(

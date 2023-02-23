@@ -44,8 +44,6 @@ class GlobalMarginController extends AbstractEntityController
 {
     /**
      * Constructor.
-     *
-     * @throws \ReflectionException
      */
     public function __construct(GlobalMarginRepository $repository)
     {
@@ -115,7 +113,6 @@ class GlobalMarginController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'globalmargin_pdf')]
@@ -142,8 +139,6 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'globalmargin_table')]
     public function table(Request $request, GlobalMarginTable $table, LoggerInterface $logger): Response

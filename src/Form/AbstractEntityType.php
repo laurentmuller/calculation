@@ -58,8 +58,6 @@ abstract class AbstractEntityType extends AbstractHelperType
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \ReflectionException
      */
     protected function getLabelPrefix(): ?string
     {

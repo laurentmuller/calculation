@@ -66,6 +66,7 @@
 {{- _self.item_separator() }}
 {{- _self.item_external(path('log_pdf'), 'log.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('log_excel'), 'log.list.excel_title', ICON_EXCEL) }}
+{{- _self.item_external(path('log_download'), 'log.list.download_title', 'file-arrow-down') }}
 {%- endblock %}
 
 {% block show_actions -%}

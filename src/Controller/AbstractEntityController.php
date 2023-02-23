@@ -50,8 +50,6 @@ abstract class AbstractEntityController extends AbstractController
      * Constructor.
      *
      * @param AbstractRepository<T> $repository the repository
-     *
-     * @throws \ReflectionException
      */
     public function __construct(protected readonly AbstractRepository $repository)
     {
@@ -84,7 +82,6 @@ abstract class AbstractEntityController extends AbstractController
      * @psalm-param T $item
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \ReflectionException
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {

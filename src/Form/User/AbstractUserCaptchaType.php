@@ -32,8 +32,6 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
 
     /**
      * Constructor.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(protected CaptchaImageService $service, ApplicationService $application)
     {

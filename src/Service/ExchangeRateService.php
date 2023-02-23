@@ -16,7 +16,6 @@ use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\Intl\Currencies;
-use Symfony\Component\RateLimiter\Policy\Rate;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -84,9 +83,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      *
      * @return array<string, float> an array with the currency code as key and the currency rate as value or an empty array if an error occurs
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLatest(string $code): array
     {
@@ -118,9 +115,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      *
      * @return float the exchange rate or 0.0 if an error occurs.
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getRate(string $baseCode, string $targetCode): float
     {
@@ -152,9 +147,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      *
      * @return array{rate: float, next: int|null, update: int|null}|null the exchange rate, the next update and last update dates or null if an error occurs
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
@@ -189,9 +182,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      *
      * @return array<string, RateType> the supported currency codes or an empty array if an error occurs
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getSupportedCodes(): array
     {
@@ -244,7 +235,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function getResponse(string $url): ?array
@@ -276,8 +266,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
 
     /**
      * @param array<string, string> $response
-     *
-     * @throws \ReflectionException
      */
     private function isValidResult(array $response): bool
     {
@@ -330,10 +318,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         return $result;
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     private function saveResponse(string $url, array $response, mixed $value): void
     {
         $time = $this->getDeltaTime($response);

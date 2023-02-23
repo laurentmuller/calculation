@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Customer;
+use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Service\FakerService;
 use App\Service\SuspendEventListenerService;
@@ -107,9 +108,8 @@ class UpdateEntityController extends AbstractController
         }
 
         $count = \count($calculations);
-        $this->infoTrans('counters.calculations_update', ['count' => $count]);
 
-        return $this->redirectToHomePage();
+        return $this->redirectToHomePage('counters.calculations_update', ['count' => $count], FlashType::INFO);
     }
 
     /**
@@ -164,9 +164,8 @@ class UpdateEntityController extends AbstractController
         }
 
         $count = \count($customers);
-        $this->infoTrans('counters.customers_update', ['count' => $count]);
 
-        return $this->redirectToHomePage();
+        return $this->redirectToHomePage('counters.customers_update', ['count' => $count], FlashType::INFO);
     }
 
     /**

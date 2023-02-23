@@ -253,8 +253,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Gets the minimum margin, in percent, for a calculation (default: 3.0 = 300%).
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getMinMargin(): float
     {

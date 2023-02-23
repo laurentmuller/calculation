@@ -46,7 +46,6 @@ class HtmlReport extends AbstractReport
      * @param PdfDocumentSize        $size        the document size
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(
         AbstractController $controller,

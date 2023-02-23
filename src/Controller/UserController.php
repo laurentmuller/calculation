@@ -60,8 +60,6 @@ class UserController extends AbstractEntityController
 {
     /**
      * Constructor.
-     *
-     * @throws \ReflectionException
      */
     public function __construct(UserRepository $repository)
     {
@@ -82,7 +80,6 @@ class UserController extends AbstractEntityController
     /**
      * Delete an user.
      *
-     * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => Requirement::DIGITS])]
@@ -134,7 +131,6 @@ class UserController extends AbstractEntityController
     /**
      * Send an email from the current user to the selected user.
      *
-     * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => Requirement::DIGITS])]
@@ -215,7 +211,6 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/pdf', name: 'user_pdf')]
     public function pdf(StorageInterface $storage): PdfResponse
@@ -380,7 +375,6 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/pdf', name: 'user_rights_pdf')]
@@ -408,8 +402,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'user_table')]
     public function table(Request $request, UserTable $table, LoggerInterface $logger): Response

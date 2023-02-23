@@ -66,8 +66,6 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function detect(string $text): array|false
@@ -120,8 +118,6 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
@@ -168,7 +164,6 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     protected function doGetLanguages(): array|false
@@ -216,7 +211,7 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * @@throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function checkResponse(ResponseInterface $response): array|false
     {
@@ -240,9 +235,6 @@ class BingTranslatorService extends AbstractTranslatorService
         return $value;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function detectLanguage(mixed $response): ?string
     {
         if (!\is_array($response)) {
@@ -287,9 +279,6 @@ class BingTranslatorService extends AbstractTranslatorService
         return $this->checkResponse($response);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getTranslation(array $response): ?string
     {
         if (!$this->isValidArray($response, 'response')) {

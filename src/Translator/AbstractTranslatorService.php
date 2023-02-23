@@ -14,8 +14,6 @@ namespace App\Translator;
 
 use App\Service\AbstractHttpClientService;
 use App\Util\Utils;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Abstract translator service.
@@ -28,11 +26,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     final protected const ERROR_NOT_FOUND = 199;
 
     /**
-     * The property accessor.
-     */
-    protected ?PropertyAccessor $accessor = null;
-
-    /**
      * The key to cache language.
      */
     protected ?string $cacheKey = null;
@@ -43,9 +36,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param ?string $tag the BCP 47 language tag to search for
      *
      * @return string|null the display name, if found; null otherwise
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function findLanguage(?string $tag): ?string
     {
@@ -66,9 +56,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function getLanguages(): array|false
     {
@@ -102,8 +89,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     /**
      * Gets the cache key used to save or retrieve languages.
-     *
-     * @throws \ReflectionException
      */
     protected function getCacheKey(): string
     {
@@ -122,8 +107,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param bool   $error true to create an error if the property is not found
      *
      * @return mixed the property value, if found; false if fail
-     *
-     * @throws \ReflectionException
      */
     protected function getProperty(array $data, string $name, bool $error = true): mixed
     {
@@ -139,18 +122,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     }
 
     /**
-     * Gets the property accessor.
-     */
-    protected function getPropertyAccessor(): PropertyAccessor
-    {
-        if (null === $this->accessor) {
-            $this->accessor = PropertyAccess::createPropertyAccessor();
-        }
-
-        return $this->accessor;
-    }
-
-    /**
      * Gets the property value as an array.
      *
      * @param array  $data  the data to search in
@@ -158,12 +129,10 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param bool   $error true to create an error if the property is not found
      *
      * @return array|false a none empty array, if found; false if fail
-     *
-     * @throws \ReflectionException
      */
     protected function getPropertyArray(array $data, string $name, bool $error = true): array|false
     {
-        /** @var mixed $property */
+        /** @psalm-var mixed $property */
         $property = $this->getProperty($data, $name, $error);
         if (false === $property) {
             return false;
@@ -184,8 +153,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @param bool   $error true to create an error if the property is not found
      *
      * @return bool true if variable is an array and is not empty
-     *
-     * @throws \ReflectionException
      */
     protected function isValidArray(mixed $var, string $name, bool $error = true): bool
     {

@@ -34,8 +34,6 @@ class HelpController extends AbstractController
 {
     /**
      * Display the help for a dialog.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/dialog/{id}', name: 'help_dialog')]
     public function dialog(string $id, HelpService $service): Response
@@ -58,8 +56,6 @@ class HelpController extends AbstractController
 
     /**
      * Display the help for an entity.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/entity/{id}', name: 'help_entity')]
     public function entity(string $id, HelpService $service): Response
@@ -90,7 +86,6 @@ class HelpController extends AbstractController
     /**
      * Export the help to a PDF document.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'help_pdf')]

@@ -104,8 +104,6 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns current conditions data for a specific location.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/current', name: 'openweather_api_current')]
@@ -127,8 +125,6 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns 16 day / daily forecast conditions data for a specific location.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/daily', name: 'openweather_api_daily')]
@@ -151,10 +147,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns 5 days / 3 hours forecast conditions data for a specific location.
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/api/forecast', name: 'openweather_api_forecast')]
     public function apiForecast(Request $request): JsonResponse
@@ -176,10 +169,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns all essential weather data for a specific location.
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/api/onecall', name: 'openweather_api_onecall')]
     public function apiOneCall(Request $request): JsonResponse
@@ -203,9 +193,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns an array of cities that match the query text.
-     *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/api/search', name: 'openweather_api_search')]
     public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
@@ -248,9 +235,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns current conditions data for a specific location.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
      */
     #[Route(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response
@@ -300,9 +285,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the search city view.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
      */
     #[Route(path: '/search', name: 'openweather_search')]
     public function search(Request $request): Response

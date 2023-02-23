@@ -47,8 +47,6 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \ReflectionException
      */
     public function generate(int $count, bool $simulate): JsonResponse
     {

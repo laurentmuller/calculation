@@ -56,7 +56,6 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      *          count: int}>
      *      }> $items
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function __construct(AbstractController $controller, array $items, string $title, string $description)

@@ -130,7 +130,6 @@ final class CalculationService implements ServiceSubscriberInterface
      *
      * @return array an array with the computed values used to render the total view
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function createGroupsFromCalculation(Calculation $calculation): array
@@ -165,7 +164,6 @@ final class CalculationService implements ServiceSubscriberInterface
      *
      * @return array an array with the computed values used to render the total view
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function createGroupsFromData(array $source): array
@@ -253,8 +251,6 @@ final class CalculationService implements ServiceSubscriberInterface
 
     /**
      * Gets the minimum margin, in percent, for a calculation.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMinMargin(): float
     {
@@ -346,7 +342,6 @@ final class CalculationService implements ServiceSubscriberInterface
      *
      * @return non-empty-array<array> the total groups
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function computeGroups(array $groups, float $user_margin, ?callable $callback = null, ?float $global_margin = null): array

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Enums\EntityPermission;
+use App\Enums\FlashType;
 use App\Enums\TableView;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractTable;
@@ -32,8 +33,6 @@ trait TableTrait
 
     /**
      * Handles a table request.
-     *
-     * @throws \ReflectionException
      */
     protected function handleTableRequest(Request $request, AbstractTable $table, string $template, LoggerInterface $logger): Response
     {
@@ -45,9 +44,7 @@ trait TableTrait
         try {
             // empty?
             if (null !== $message = $table->getEmptyMessage()) {
-                $this->infoTrans($message);
-
-                return $this->redirectToHomePage();
+                return $this->redirectToHomePage($message, [], FlashType::INFO);
             }
 
             // get query and results

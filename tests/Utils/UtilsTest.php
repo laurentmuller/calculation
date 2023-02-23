@@ -290,7 +290,7 @@ class UtilsTest extends TestCase
         if (null === $var) {
             $this->expectException(\TypeError::class);
         } elseif ($exception) {
-            $this->expectException(\ReflectionException::class);
+            $this->expectException(\RuntimeException::class);
         }
         $result = Utils::getShortName($var);
         self::assertSame($expected, $result);

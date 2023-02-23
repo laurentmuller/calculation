@@ -86,9 +86,6 @@ trait PropertyTrait
 
     /**
      * Override to update cached values.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
     #[Required]
     public function setContainer(ContainerInterface $container): ?ContainerInterface
@@ -110,15 +107,11 @@ trait PropertyTrait
      * Save the given properties to the database and to the cache.
      *
      * @param array<string, mixed> $properties the properties to set
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     abstract public function setProperties(array $properties): static;
 
     /**
      * Sets a single property value.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function setProperty(string $name, mixed $value): self
     {
@@ -134,8 +127,6 @@ trait PropertyTrait
      * @param T[]    $default the default array if the property is not found or is not valid
      *
      * @return T[]
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getPropertyArray(string $name, array $default): array
     {
@@ -158,8 +149,6 @@ trait PropertyTrait
      *
      * @param string $name    the property name to search for
      * @param bool   $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getPropertyBoolean(string $name, bool $default = false): bool
     {
@@ -171,8 +160,6 @@ trait PropertyTrait
      *
      * @param string              $name    the property name to search for
      * @param ?\DateTimeInterface $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      *
      * @psalm-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
      */
@@ -194,8 +181,6 @@ trait PropertyTrait
      *
      * @param string $name    the property name to search for
      * @param float  $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getPropertyFloat(string $name, float $default = 0.0): float
     {
@@ -207,8 +192,6 @@ trait PropertyTrait
      *
      * @param string $name    the property name to search for
      * @param int    $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getPropertyInteger(string $name, int $default = 0): int
     {
@@ -220,8 +203,6 @@ trait PropertyTrait
      *
      * @param string  $name    the property name to search for
      * @param ?string $default the default value if the property is not found
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      *
      * @psalm-return ($default is null ? (string|null) : string)
      */
@@ -251,8 +232,6 @@ trait PropertyTrait
      * Load the properties.
      *
      * @return array<string, mixed>
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function loadProperties(): array
     {
@@ -284,8 +263,6 @@ trait PropertyTrait
 
     /**
      * @param AbstractProperty[]|list<AbstractProperty> $properties
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function saveProperties(array $properties): void
     {
@@ -299,8 +276,5 @@ trait PropertyTrait
         }
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     abstract protected function updateAdapter(): void;
 }

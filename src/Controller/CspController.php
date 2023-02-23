@@ -33,7 +33,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CspController extends AbstractController
 {
     /**
-     * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/csp', name: 'log_csp')]

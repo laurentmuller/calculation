@@ -38,7 +38,6 @@ class MonthChart extends BaseChart
      *
      * @param int $months the number of months to display
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
      */

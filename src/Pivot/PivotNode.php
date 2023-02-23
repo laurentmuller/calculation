@@ -57,9 +57,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         parent::__construct($aggregator, $value);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function __toString(): string
     {
         $className = Utils::getShortName($this);

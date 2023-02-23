@@ -173,9 +173,6 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *                        If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
-     *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function getUrlCacheValue(string $url, mixed $default = null): mixed
     {
@@ -186,13 +183,11 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
 
     /**
      * Gets the cache key for the given URL.
-     *
-     * @throws \ReflectionException
      */
     protected function getUrlKey(string $url): string
     {
         $options = $this->getDefaultOptions();
-        $prefix = isset($options[self::BASE_URI]) ? (string) $options[self::BASE_URI] : Utils::getShortName($this);
+        $prefix = (string) ($options[self::BASE_URI] ?? '');
 
         return $prefix . $url;
     }
@@ -251,8 +246,6 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      * @param ?\Exception $e       the optional source exception
      *
      * @return bool this function returns always false
-     *
-     * @throws \ReflectionException
      */
     protected function setLastError(int $code, string $message, \Exception $e = null): bool
     {
@@ -283,10 +276,9 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
      *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @return bool true if the cache is updated
      */
-    protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): static
+    protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): bool
     {
         $key = $this->getUrlKey($url);
 

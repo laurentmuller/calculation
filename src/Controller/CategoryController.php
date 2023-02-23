@@ -46,8 +46,6 @@ class CategoryController extends AbstractEntityController
 {
     /**
      * Constructor.
-     *
-     * @throws \ReflectionException
      */
     public function __construct(CategoryRepository $repository)
     {
@@ -87,7 +85,6 @@ class CategoryController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
@@ -164,7 +161,6 @@ class CategoryController extends AbstractEntityController
      *
      * @throws NotFoundHttpException                      if no category is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
@@ -192,8 +188,6 @@ class CategoryController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'category_table')]
     public function table(Request $request, CategoryTable $table, LoggerInterface $logger): Response
@@ -207,7 +201,6 @@ class CategoryController extends AbstractEntityController
      * @psalm-param Category $item
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {

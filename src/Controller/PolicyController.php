@@ -36,9 +36,8 @@ class PolicyController extends AbstractController
     public function invoke(): RedirectResponse
     {
         $path = $this->getCookiePath();
-        $response = $this->redirectToHomePage();
+        $response = $this->redirectToHomePage('cookie_banner.success');
         $this->updateCookie($response, self::POLICY_ACCEPTED, 1, '', $path);
-        $this->successTrans('cookie_banner.success');
 
         return $response;
     }

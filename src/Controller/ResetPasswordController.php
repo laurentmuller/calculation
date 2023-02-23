@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enums\FlashType;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
 use App\Mime\ResetPasswordEmail;
@@ -137,11 +138,8 @@ class ResetPasswordController extends AbstractController
             // the session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            // show message
-            $this->infoTrans('resetting.success', ['%username%' => $user->getUserIdentifier()]);
-
             // redirect
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('resetting.success', ['%username%' => $user->getUserIdentifier()], FlashType::INFO);
         }
 
         return $this->render('reset_password/reset.html.twig', [

@@ -15,6 +15,9 @@ namespace App\Service;
 use App\Entity\Log;
 use App\Model\LogFile;
 use App\Traits\CacheAwareTrait;
+use App\Traits\LoggerAwareTrait;
+use App\Traits\TranslatorAwareTrait;
+use App\Util\CSVReader;
 use App\Util\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -26,7 +29,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class LogService implements ServiceSubscriberInterface
 {
     use CacheAwareTrait;
+    use LoggerAwareTrait;
     use ServiceSubscriberTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The key to cache result.
@@ -59,8 +64,6 @@ class LogService implements ServiceSubscriberInterface
 
     /**
      * Clear the cached log file.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function clearCache(): self
     {
@@ -72,9 +75,15 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
+     * Gets the file name.
+     */
+    public function getFileName(): string
+    {
+        return $this->fileName;
+    }
+
+    /**
      * Gets the given log.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLog(int $id): ?Log
     {
@@ -83,8 +92,6 @@ class LogService implements ServiceSubscriberInterface
 
     /**
      * Gets the parsed log file.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getLogFile(): ?LogFile
     {
@@ -99,19 +106,9 @@ class LogService implements ServiceSubscriberInterface
      *
      * @return bool true if valid
      */
-    private function isFileValid(): bool
+    public function isFileValid(): bool
     {
         return FileUtils::exists($this->fileName) && 0 !== \filesize($this->fileName);
-    }
-
-    /**
-     * Load the content of the file as array.
-     *
-     * @psalm-return string[]|false
-     */
-    private function loadFile(): array|false
-    {
-        return \file($this->fileName, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
     }
 
     /**
@@ -124,8 +121,6 @@ class LogService implements ServiceSubscriberInterface
 
     /**
      * Gets the log file.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function parseFile(): ?LogFile
     {
@@ -135,27 +130,14 @@ class LogService implements ServiceSubscriberInterface
         }
 
         try {
-            // load content
-            if (false === $lines = $this->loadFile()) {
-                return null;
-            }
-
-            $id = 0;
             $file = new LogFile($this->fileName);
-
-            // read line by line
-            foreach ($lines as $line) {
-                $values = \explode(self::VALUES_SEP, $line);
-                if (6 !== \count($values)) {
+            $reader = new CSVReader(filename: $this->fileName, separator: self::VALUES_SEP);
+            foreach ($reader as $values) {
+                if (6 !== \count($values) || false === $date = $this->parseDate($values[0])) {
                     continue;
                 }
-                if (false === ($date = $this->parseDate($values[0]))) {
-                    continue;
-                }
-
-                // create and add
                 $file->addLog(Log::instance()
-                    ->setId($id++)
+                    ->setId($reader->key())
                     ->setCreatedAt($date)
                     ->setChannel($values[1])
                     ->setLevel($values[2])
@@ -163,14 +145,16 @@ class LogService implements ServiceSubscriberInterface
                     ->setContext($this->parseJson($values[4]))
                     ->setExtra($this->parseJson($values[5])));
             }
-        } catch (\Exception) {
-            return null;
+
+            $file->sort();
+            $this->setCacheValue(self::KEY_CACHE, $file);
+
+            return $file;
+        } catch (\Exception $e) {
+            $this->logException($e, $this->trans('log.download.error'));
         }
 
-        $file->sort();
-        $this->setCacheValue(self::KEY_CACHE, $file);
-
-        return $file;
+        return null;
     }
 
     /**

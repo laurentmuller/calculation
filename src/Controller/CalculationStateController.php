@@ -43,8 +43,6 @@ class CalculationStateController extends AbstractEntityController
 {
     /**
      * Constructor.
-     *
-     * @throws \ReflectionException
      */
     public function __construct(CalculationStateRepository $repository)
     {
@@ -80,7 +78,6 @@ class CalculationStateController extends AbstractEntityController
      * Delete a calculation state.
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \ReflectionException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => Requirement::DIGITS])]
@@ -147,7 +144,6 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'calculationstate_pdf')]
@@ -174,8 +170,6 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'calculationstate_table')]
     public function table(Request $request, CalculationStateTable $table, LoggerInterface $logger): Response
@@ -189,7 +183,6 @@ class CalculationStateController extends AbstractEntityController
      * @psalm-param CalculationState $item
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {

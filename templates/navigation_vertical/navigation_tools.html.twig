@@ -14,7 +14,6 @@
             {{ navItem(path('search'), 'search.title', 'search') }}
         {% endif %}
         {% if is_admin %}
-            {{ dropdownSeparator() }}
             {{ navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
             {{ navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
             {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}

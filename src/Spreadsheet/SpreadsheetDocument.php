@@ -115,7 +115,6 @@ class SpreadsheetDocument extends Spreadsheet
      * @return Worksheet the newly created worksheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function createSheetAndTitle(AbstractController $controller, string $title = null, int $sheetIndex = null): Worksheet
@@ -178,7 +177,6 @@ class SpreadsheetDocument extends Spreadsheet
      * @param bool               $landscape  true to set landscape orientation, false for default (portrait)
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function initialize(AbstractController $controller, string $title, bool $landscape = false): static
     {
@@ -223,7 +221,6 @@ class SpreadsheetDocument extends Spreadsheet
      * Sets the title of the active sheet. If the controller is not null,
      * the header and footer are also updated.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function setActiveTitle(string $title, ?AbstractController $controller = null): static

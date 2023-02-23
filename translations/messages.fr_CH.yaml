@@ -644,11 +644,14 @@ log:
     level: Niveau
     message: Message
     user: Utilisateur
+  download:
+    error: Impossible de télécharger le journal de l'application.
   list:
     title: Journal de l'application
     empty: Le journal de l'application ne contient aucune entrée.
     pdf_title: Télécharger le journal
     excel_title: Exporter le journal
+    download_title: Télécharger le fichier brut
     refresh_title: Recharger le journal
     file: 'Fichier : %file%'
     level_all: Tous les niveaux
@@ -658,7 +661,6 @@ log:
   show:
     not_found: Impossible d'afficher l'entrée du journal.
     title: Propriétés de l'entrée du journal
-
 openweather:
   current:
     date_calculation: Valeurs obtenue le %date%

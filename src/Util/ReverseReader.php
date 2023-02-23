@@ -13,9 +13,21 @@ declare(strict_types=1);
 namespace App\Util;
 
 /**
- * Class to get the file content, line by line; in the reverse order (last line first).
+ * Class to get the file content on the fly, line by line; in the reverse order (last line first).
+ *
+ * Example:
+ *
+ * <code>
+ *      $reader = new ReverseReader("path/to/file_name.txt");
+ *
+ *      foreach ($reader as $data) {
+ *          echo $data ."\n";
+ *      }
+ * </code>
+ *
+ * @extends AbstractReader<string|null>
  */
-class ReverseReader
+class ReverseReader extends AbstractReader
 {
     /**
      * The carriage return character.
@@ -28,74 +40,34 @@ class ReverseReader
     private const LINE_FEED = "\n";
 
     /**
-     * The file handler.
-     *
-     * @var ?resource
-     */
-    private $handle = null;
-
-    /**
      * Constructor.
      *
      * @param string $filename the file name to open
      */
     public function __construct(string $filename)
     {
-        $resource = \fopen($filename, 'r');
-        if (\is_resource($resource)) {
-            $this->handle = $resource;
-        }
+        parent::__construct($filename);
     }
 
     /**
-     * Destructor.
+     * @param resource $stream
      */
-    public function __destruct()
+    protected function parseData($stream): ?string
     {
-        $this->close();
-    }
-
-    /**
-     * Close the resource file.
-     *
-     * @return bool true on success or false on failure
-     */
-    public function close(): bool
-    {
-        $result = true;
-        if (\is_resource($this->handle)) {
-            $handle = $this->handle;
-            $result = \fclose($handle);
-            $this->handle = null;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Gets the current line.
-     */
-    public function current(): ?string
-    {
-        // valid?
-        if (null === $this->handle) {
-            return null;
-        }
-
         $line = '';
         $started = false;
         $hasLine = false;
 
         while (!$hasLine) {
             // move
-            if (0 === \ftell($this->handle)) {
-                \fseek($this->handle, -1, \SEEK_END);
+            if (0 === \ftell($stream)) {
+                \fseek($stream, -1, \SEEK_END);
             } else {
-                \fseek($this->handle, -2, \SEEK_CUR);
+                \fseek($stream, -2, \SEEK_CUR);
             }
 
             // read
-            $read = ($char = \fgetc($this->handle));
+            $read = ($char = \fgetc($stream));
 
             // check
             if (false === $read) {
@@ -112,19 +84,9 @@ class ReverseReader
         }
 
         // move
-        \fseek($this->handle, 1, \SEEK_CUR);
+        \fseek($stream, 1, \SEEK_CUR);
 
         // reverse
         return '' === $line ? null : \strrev($line);
-    }
-
-    /**
-     * Returns if the resource file is open.
-     *
-     * @return bool true if open or false if not
-     */
-    public function isOpen(): bool
-    {
-        return null !== $this->handle;
     }
 }

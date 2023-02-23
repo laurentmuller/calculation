@@ -148,8 +148,6 @@ class SearchService implements ServiceSubscriberInterface
      * @param ?string $entity the entity to search in or null for all
      *
      * @return int the number of rows
-     *
-     * @throws \ReflectionException
      */
     public function count(?string $search, ?string $entity = null): int
     {
@@ -182,8 +180,6 @@ class SearchService implements ServiceSubscriberInterface
      * Gets the entities class and name.
      *
      * @return array<string, string>
-     *
-     * @throws \ReflectionException
      */
     public function getEntities(): array
     {
@@ -215,8 +211,6 @@ class SearchService implements ServiceSubscriberInterface
      * @return array the array of results for the given search (can be empty)
      *
      * @psalm-return SearchType[]
-     *
-     * @throws \ReflectionException
      */
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
@@ -247,8 +241,6 @@ class SearchService implements ServiceSubscriberInterface
 
     /**
      * Create the SQL query for the calculation dates.
-     *
-     * @throws \ReflectionException
      */
     private function createCalculationDatesQuery(): self
     {
@@ -268,8 +260,6 @@ class SearchService implements ServiceSubscriberInterface
 
     /**
      * Create the SQL query for the calculation groups.
-     *
-     * @throws \ReflectionException
      */
     private function createCalculationGroupQuery(): self
     {
@@ -288,8 +278,6 @@ class SearchService implements ServiceSubscriberInterface
 
     /**
      * Create the SQL query for the calculation items.
-     *
-     * @throws \ReflectionException
      */
     private function createCalculationItemQuery(): self
     {
@@ -310,8 +298,6 @@ class SearchService implements ServiceSubscriberInterface
 
     /**
      * Create the SQL query for the calculation state.
-     *
-     * @throws \ReflectionException
      */
     private function createCalculationStateQuery(): self
     {
@@ -335,8 +321,6 @@ class SearchService implements ServiceSubscriberInterface
      * @param string[] $fields the entity fields to search in
      *
      * @psalm-param class-string $class
-     *
-     * @throws \ReflectionException
      */
     private function createEntityQueries(string $class, array $fields): self
     {
@@ -360,8 +344,6 @@ class SearchService implements ServiceSubscriberInterface
      * @param ?string $content the field content to search in or null to use the field name
      *
      * @psalm-param class-string $class
-     *
-     * @throws \ReflectionException
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
@@ -389,8 +371,6 @@ class SearchService implements ServiceSubscriberInterface
      * @param string  $extra  a SQL statement to add to the default native SELECT SQL statement
      *
      * @psalm-return SearchType[]
-     *
-     * @throws \ReflectionException
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
@@ -430,8 +410,6 @@ class SearchService implements ServiceSubscriberInterface
      * @return string the entity name
      *
      * @psalm-param class-string $class
-     *
-     * @throws \ReflectionException
      */
     private function getEntityName(string $class): string
     {
@@ -447,8 +425,6 @@ class SearchService implements ServiceSubscriberInterface
      * @return string the key
      *
      * @psalm-param class-string $class
-     *
-     * @throws \ReflectionException
      */
     private function getKey(string $class, string $field): string
     {
@@ -461,8 +437,6 @@ class SearchService implements ServiceSubscriberInterface
      * Gets the SQL queries.
      *
      * @return string[] the SQL queries
-     *
-     * @throws \ReflectionException
      */
     private function getQueries(): array
     {

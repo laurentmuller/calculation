@@ -88,8 +88,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \ReflectionException
      */
     protected function handleQuery(DataQuery $query): DataResults
     {

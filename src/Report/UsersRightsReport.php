@@ -104,7 +104,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @param User[] $entities
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function doRender(array $entities): bool
@@ -236,7 +235,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @return int this function returns always 1
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputRoleAdmin(PdfGroupTableBuilder $builder): int
@@ -253,7 +251,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @return int this function returns always 1
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputRoleUser(PdfGroupTableBuilder $builder): int

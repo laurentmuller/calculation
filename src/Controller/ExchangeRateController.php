@@ -40,9 +40,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Display the view.
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '', name: 'exchange_display')]
     public function display(): Response
@@ -56,9 +54,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Gets the supported currency codes.
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/codes', name: 'exchange_codes')]
     public function getCodes(): JsonResponse
@@ -76,9 +72,7 @@ class ExchangeRateController extends AbstractController
      *
      * @param string $code the base currency code
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/latest/{code}', name: 'exchange_latest')]
     public function getLatest(string $code): JsonResponse
@@ -94,9 +88,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Gets the exchange rate from the base currency code to the target currency code.
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/rate', name: 'exchange_rate')]
     public function getRate(Request $request): JsonResponse

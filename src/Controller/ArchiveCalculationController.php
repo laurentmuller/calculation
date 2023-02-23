@@ -31,7 +31,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ArchiveCalculationController extends AbstractController
 {
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/archive', name: 'admin_archive')]

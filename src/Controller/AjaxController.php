@@ -304,8 +304,6 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct calculation's customers in existing calculations.
-     *
-     * @throws \ReflectionException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/customer', name: 'ajax_search_customer')]
@@ -324,8 +322,6 @@ class AjaxController extends AbstractController
      * <li><b>query</b>: the value to search.</li>
      * <li><b>limit</b>: the number of results to retrieve (default = 15).</li>
      * </ul>
-     *
-     * @throws \ReflectionException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/distinct', name: 'ajax_search_distinct')]
@@ -357,8 +353,6 @@ class AjaxController extends AbstractController
 
     /**
      * Search products.
-     *
-     * @throws \ReflectionException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/product', name: 'ajax_search_product')]
@@ -385,8 +379,6 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct product and task suppliers.
-     *
-     * @throws \ReflectionException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/supplier', name: 'ajax_search_supplier')]
@@ -397,8 +389,6 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct customer's titles.
-     *
-     * @throws \ReflectionException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/title', name: 'ajax_search_title')]
@@ -409,8 +399,6 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct units from products and tasks.
-     *
-     * @throws \ReflectionException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/unit', name: 'ajax_search_unit')]
@@ -422,7 +410,6 @@ class AjaxController extends AbstractController
     /**
      * Translate a text.
      *
-     * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
@@ -468,9 +455,6 @@ class AjaxController extends AbstractController
 
     /**
      * Update the calculation's totals.
-     *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/update', name: 'ajax_update')]
@@ -548,8 +532,6 @@ class AjaxController extends AbstractController
      * @param Request               $request    the request to get query value
      * @param AbstractRepository<T> $repository the entity repository to search from
      * @param string                $field      the field name (column) to get values for
-     *
-     * @throws \ReflectionException
      */
     private function getDistinctValues(Request $request, AbstractRepository $repository, string $field): JsonResponse
     {
@@ -574,8 +556,6 @@ class AjaxController extends AbstractController
 
     /**
      * Search distinct values from products and tasks.
-     *
-     * @throws \ReflectionException
      */
     private function getDistinctValuesForCategoryItem(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository, string $field): JsonResponse
     {

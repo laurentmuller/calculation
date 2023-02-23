@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
@@ -58,7 +59,6 @@ class CalculationDuplicateController extends AbstractController
      * Exports the duplicate items in the calculations.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'duplicate_pdf')]
@@ -75,8 +75,6 @@ class CalculationDuplicateController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'duplicate_table')]
     public function table(Request $request, CalculationDuplicateTable $table, LoggerInterface $logger): Response
@@ -92,9 +90,7 @@ class CalculationDuplicateController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository): ?RedirectResponse
     {
         if (0 === $repository->countItemsDuplicate()) {
-            $this->warningTrans('duplicate.empty');
-
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('duplicate.empty', [], FlashType::WARNING);
         }
 
         return null;

@@ -30,7 +30,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ImportAddressController extends AbstractController
 {
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/import', name: 'admin_import')]

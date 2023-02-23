@@ -45,8 +45,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function count(): int
     {
@@ -102,8 +100,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEmptyMessage(): ?string
     {
@@ -128,8 +124,6 @@ class LogTable extends AbstractTable implements \Countable
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function handleQuery(DataQuery $query): DataResults
     {

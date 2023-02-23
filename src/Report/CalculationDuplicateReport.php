@@ -38,7 +38,6 @@ class CalculationDuplicateReport extends AbstractCalculationItemsReport
      *          count: int}>
      *      }> $items
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $items)

@@ -22,6 +22,12 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to get IP lookup.
  *
+ * @psalm-type IpStackInfo = array{
+ *     city: ?string,
+ *     region_name: ?string,
+ *     error?: array{code: ?int, type: ?string, info: ?string}
+ * }
+ *
  * @see https://ipstack.com/documentation
  */
 class IpStackService extends AbstractHttpClientService implements ServiceSubscriberInterface
@@ -58,26 +64,15 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      *
      * @param ?Request $request the request to get client IP address or null for detecting the IP address
      *
-     * @return array{
-     *     city: ?string,
-     *     region_name: ?string,
-     *     error: ?array{code: ?string, type: ?string}
-     *  }|null the current Ip information if success; null on error
+     * @return IpStackInfo|null the current Ip information if success; null on error
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getIpInfo(?Request $request = null): ?array
     {
         $clientIp = $this->getClientIp($request);
 
-        /**
-         * @var array{
-         *     city: ?string,
-         *     region_name: ?string,
-         *     error: ?array{code: ?string, type: ?string}
-         *  }|null $result */
+        /** @psalm-var IpStackInfo|null $result */
         $result = $this->getUrlCacheValue($clientIp);
         if (\is_array($result)) {
             return $result;
@@ -89,18 +84,11 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
                 'access_key' => $this->key,
                 'language' => self::getAcceptLanguage(),
             ];
-
             $response = $this->requestGet($clientIp, [
                 self::QUERY => $query,
             ]);
 
-            /**
-             * @var array{
-             *     city: ?string,
-             *     region_name: ?string,
-             *     error: ?array{code: ?string, type: ?string}
-             * } $result
-             */
+            /** @psalm-var IpStackInfo $result */
             $result = $response->toArray();
 
             // check
@@ -150,21 +138,19 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     }
 
     /**
-     * @param array{
-     *     city: ?string,
-     *     region_name: ?string,
-     *     error: ?array{code: ?string, type: ?string}
-     * } $result
+     * Returns if the given result is valid.
      *
-     * @throws \ReflectionException
+     * @param IpStackInfo $result
+     *
+     * @return bool true if valid; false otherwise
      */
     private function isValidResult(array $result): bool
     {
         if (isset($result['error'])) {
-            $code = (int) ($result['error']['code'] ?? 404);
-            $id = $result['error']['type'] ?? 'unknown';
+            $code = $result['error']['code'] ?? 404;
+            $type = $result['error']['type'] ?? 'unknown';
 
-            return $this->setLastError($code, $this->translateError($id));
+            return $this->setLastError($code, $this->translateError($type));
         }
 
         if (empty($result['city'] ?? null)) {

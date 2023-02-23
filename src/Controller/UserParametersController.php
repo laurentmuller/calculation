@@ -29,9 +29,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class UserParametersController extends AbstractController
 {
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     #[Route(path: '/parameters', name: 'user_parameters')]
     public function invoke(Request $request, UserService $service): Response
     {
@@ -40,9 +37,8 @@ class UserParametersController extends AbstractController
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $service->setProperties($data);
-            $this->successTrans('user.parameters.success');
 
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('user.parameters.success');
         }
 
         return $this->render('user/user_parameters.html.twig', [

@@ -43,8 +43,6 @@ class GroupController extends AbstractEntityController
 {
     /**
      * Constructor.
-     *
-     * @throws \ReflectionException
      */
     public function __construct(GroupRepository $repository)
     {
@@ -84,7 +82,6 @@ class GroupController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
@@ -156,7 +153,6 @@ class GroupController extends AbstractEntityController
      *
      * @throws NotFoundHttpException                      if no group is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'group_pdf')]
@@ -183,8 +179,6 @@ class GroupController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'group_table')]
     public function table(Request $request, GroupTable $table, LoggerInterface $logger): Response

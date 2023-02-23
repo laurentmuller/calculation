@@ -111,8 +111,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      * Import data from the given source file.
      *
      * @param string|UploadedFile|null $sourceFile the source file to import
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function import(string|UploadedFile|null $sourceFile): SwissPostUpdateResult
     {
@@ -234,8 +232,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     /**
      * Gets the date of the last import.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getLastImport(): ?\DateTimeInterface
     {
@@ -348,8 +344,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     /**
      * Process the Zip archive entry stream.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function processStream(): bool
     {
@@ -435,8 +429,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      *      6: string,
      *      8: string,
      *      9: string} $data
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function processValidity(array $data): bool
     {
@@ -500,8 +492,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     /**
      * Update the last imported date.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function updateValidity(): void
     {

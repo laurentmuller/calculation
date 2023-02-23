@@ -25,7 +25,6 @@ class CalculationsDocument extends AbstractArrayDocument
      * {@inheritdoc}
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function doRender(array $entities): bool
@@ -75,7 +74,6 @@ class CalculationsDocument extends AbstractArrayDocument
     /**
      * Gets the overall margin format.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getMarginFormat(): string

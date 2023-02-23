@@ -42,9 +42,8 @@ class ProfileController extends AbstractController
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();
-            $this->successTrans('profile.change_password.success', ['%username%' => $user->getUserIdentifier()]);
 
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('profile.change_password.success', ['%username%' => $user->getUserIdentifier()]);
         }
 
         // display
@@ -63,9 +62,8 @@ class ProfileController extends AbstractController
         $form = $this->createForm(ProfileEditType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();
-            $this->successTrans('profile.edit.success', ['%username%' => $user->getUserIdentifier()]);
 
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('profile.edit.success', ['%username%' => $user->getUserIdentifier()]);
         }
         // display
         return $this->render('profile/profile_edit.html.twig', [

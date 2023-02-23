@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Enums\EntityPermission;
+use App\Enums\FlashType;
 use App\Form\FormHelper;
 use App\Pdf\PdfDocument;
 use App\Report\AbstractReport;
@@ -201,15 +202,30 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Redirect to the home page.
+     * Display a message, if not empty; and redirect to the home page.
+     *
+     * @param string    $message    the translatable message
+     * @param array     $parameters the message parameters
+     * @param FlashType $type       the message type
+     * @param ?string   $domain     the translation domain
+     * @param ?string   $locale     the translation locale
+     *
+     * @return RedirectResponse the response
      */
-    public function redirectToHomePage(): RedirectResponse
+    public function redirectToHomePage(string $message = '', array $parameters = [], FlashType $type = FlashType::SUCCESS, ?string $domain = null, ?string $locale = null): RedirectResponse
     {
+        if ('' !== $message) {
+            $message = $this->trans($message, $parameters, $domain, $locale);
+            $this->addFlashMessage($type, $message);
+        }
+
         return $this->redirectToRoute(self::HOME_PAGE);
     }
 
     /**
-     * {@inheritDoc} Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
+     * {@inheritDoc}
+     *
+     * Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
      *
      * @param mixed $data the initial data
      *
@@ -293,8 +309,6 @@ abstract class AbstractController extends BaseController
      *
      * @param \Exception $e       the exception to serialize
      * @param ?string    $message the optional error message
-     *
-     * @throws \ReflectionException
      */
     protected function jsonException(\Exception $e, ?string $message = null): JsonResponse
     {
@@ -326,8 +340,6 @@ abstract class AbstractController extends BaseController
 
     /**
      * Render the template exception.
-     *
-     * @throws \ReflectionException
      */
     protected function renderFormException(string $id, \Throwable $e, LoggerInterface $logger = null): Response
     {

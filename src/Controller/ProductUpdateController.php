@@ -30,7 +30,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ProductUpdateController extends AbstractController
 {
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/product', name: 'admin_product')]

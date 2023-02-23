@@ -33,8 +33,6 @@ class SearchController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '/search', name: 'search')]
     public function search(Request $request, SearchTable $table, LoggerInterface $logger): Response

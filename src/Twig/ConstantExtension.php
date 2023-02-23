@@ -36,9 +36,6 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     private const CACHE_KEY = 'twig_constant_extension';
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function getGlobals(): array
     {
         /** @var array<string, mixed> $globals */

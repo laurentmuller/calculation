@@ -46,8 +46,6 @@ class TaskController extends AbstractEntityController
 {
     /**
      * Constructor.
-     *
-     * @throws \ReflectionException
      */
     public function __construct(TaskRepository $repository)
     {
@@ -57,7 +55,6 @@ class TaskController extends AbstractEntityController
     /**
      * Add a task.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'task_add')]
@@ -120,7 +117,6 @@ class TaskController extends AbstractEntityController
      * Delete a task.
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \ReflectionException
      */
     #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
@@ -165,7 +161,6 @@ class TaskController extends AbstractEntityController
      *
      * @throws NotFoundHttpException                      if no category is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'task_pdf')]
@@ -192,8 +187,6 @@ class TaskController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'task_table')]
     public function table(Request $request, TaskTable $table, LoggerInterface $logger): Response

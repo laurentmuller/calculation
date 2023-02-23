@@ -45,7 +45,6 @@ class HelpReport extends AbstractReport
      * @param HelpService        $service    the help service
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(AbstractController $controller, private readonly HelpService $service)
     {
@@ -56,8 +55,6 @@ class HelpReport extends AbstractReport
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function render(): bool
     {
@@ -80,8 +77,6 @@ class HelpReport extends AbstractReport
      * @psalm-param HelpDialogType $dialog
      *
      * @psalm-return HelpEntityType|null
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function findEntity(array $dialog): ?array
     {
@@ -213,8 +208,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType $item
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function outputDialog(array $item): void
     {
@@ -303,8 +296,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType[]|null $dialogs
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function outputDialogs(?array $dialogs, bool $newPage): bool
     {
@@ -440,8 +431,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpMenuType[]|null $menus
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function outputMainMenus(?array $menus): bool
     {

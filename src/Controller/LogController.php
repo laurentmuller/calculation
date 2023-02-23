@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Model\LogFile;
 use App\Report\LogReport;
@@ -21,9 +22,11 @@ use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Util\FileUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -41,9 +44,6 @@ class LogController extends AbstractController
 
     /**
      * Delete the content of the log file (if any).
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
      */
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
@@ -67,10 +67,7 @@ class LogController extends AbstractController
                 $service->clearCache();
             }
 
-            // OK
-            $this->successTrans('log.delete.success');
-
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('log.delete.success');
         }
         $parameters = [
             'form' => $form,
@@ -79,14 +76,30 @@ class LogController extends AbstractController
             'entries' => FileUtils::getLinesCount($file),
             'route' => $this->getRequestString($request, 'route'),
         ];
-        // display
+
         return $this->render('log/log_delete.html.twig', $parameters);
+    }
+
+    /**
+     * Download the file.
+     */
+    #[Route(path: '/download', name: 'log_download')]
+    public function download(LogService $service): Response
+    {
+        if (!$service->isFileValid()) {
+            return $this->redirectToHomePage('log.download.error', [], FlashType::WARNING);
+        }
+
+        $file = $service->getFileName();
+        $response = new BinaryFileResponse($file);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, \basename($file));
+
+        return $response;
     }
 
     /**
      * Export the logs to a Spreadsheet document.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
      */
@@ -105,7 +118,6 @@ class LogController extends AbstractController
     /**
      * Export to PDF the content of the log file.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'log_pdf')]
@@ -122,8 +134,6 @@ class LogController extends AbstractController
 
     /**
      * Clear the log file cache.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/refresh', name: 'log_refresh')]
     public function refresh(Request $request, LogService $service): Response
@@ -136,8 +146,6 @@ class LogController extends AbstractController
 
     /**
      * Show properties of a log entry.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response
@@ -154,8 +162,6 @@ class LogController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'log_table')]
     public function table(Request $request, LogTable $table, LoggerInterface $logger): Response
@@ -177,8 +183,6 @@ class LogController extends AbstractController
 
     private function getEmptyResponse(): RedirectResponse
     {
-        $this->infoTrans('log.list.empty');
-
-        return $this->redirectToHomePage();
+        return $this->redirectToHomePage('log.list.empty', [], FlashType::INFO);
     }
 }

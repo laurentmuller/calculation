@@ -12,16 +12,27 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
-use App\Util\ReverseReader;
+use App\Util\CSVReader;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for the {@link ReverseReader} class.
+ * Unit test for the {@link CSVReader} class.
  *
- * @see ReverseReader
+ * @see CSVReader
  */
-class ReverseReaderTest extends TestCase
+class CSVReaderTest extends TestCase
 {
+    private const VALUES_SEP = '|';
+
+    public function testContent(): void
+    {
+        $reader = $this->getReader();
+        foreach ($reader as $data) {
+            self::assertCount(6, $data);
+        }
+        $reader->close();
+    }
+
     public function testFileExist(): void
     {
         $filename = $this->getFileName();
@@ -37,15 +48,18 @@ class ReverseReaderTest extends TestCase
         self::assertFalse($reader->isOpen());
     }
 
+    /**
+     * @psalm-suppress UnusedForeachValue
+     */
     public function testLines(): void
     {
-        $index = 3;
+        $lines = 0;
         $reader = $this->getReader();
-        foreach ($reader as $line) {
-            self::assertSame("Line $index", $line);
-            --$index;
+        foreach ($reader as $ignored) {
+            ++$lines;
         }
-        self::assertNull($reader->current());
+        self::assertSame(4, $lines);
+        self::assertSame(4, $reader->key());
         $reader->close();
     }
 
@@ -61,13 +75,13 @@ class ReverseReaderTest extends TestCase
 
     private function getFileName(): string
     {
-        return __DIR__ . '/../Data/reverse_reader.txt';
+        return __DIR__ . '/../Data/csv_reader.csv';
     }
 
-    private function getReader(): ReverseReader
+    private function getReader(): CSVReader
     {
         $filename = $this->getFileName();
 
-        return new ReverseReader($filename);
+        return new CSVReader(filename: $filename, separator: self::VALUES_SEP);
     }
 }

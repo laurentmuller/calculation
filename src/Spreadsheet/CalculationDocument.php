@@ -50,7 +50,6 @@ class CalculationDocument extends AbstractDocument
     /**
      * {@inheritDoc}
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
@@ -165,7 +164,6 @@ class CalculationDocument extends AbstractDocument
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getMarginFormat(): string
@@ -287,7 +285,6 @@ class CalculationDocument extends AbstractDocument
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function renderOverallTotal(Calculation $calculation, int $row): void

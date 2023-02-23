@@ -35,8 +35,6 @@ class StateChart extends BaseChart
 
     /**
      * Generate the chart data.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function generate(): array
     {

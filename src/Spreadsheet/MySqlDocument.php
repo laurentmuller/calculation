@@ -35,7 +35,6 @@ class MySqlDocument extends AbstractDocument
      * {@inheritDoc}
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function render(): bool
     {

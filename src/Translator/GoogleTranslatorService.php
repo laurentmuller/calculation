@@ -59,8 +59,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function detect(string $text): array|false
@@ -123,8 +121,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
@@ -167,7 +163,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     protected function doGetLanguages(): array|false
@@ -203,9 +198,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
         return [self::BASE_URI => self::HOST_NAME];
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function detectLanguage(array $response): ?string
     {
         if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
@@ -229,7 +221,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
      *
      * @return array|false the data response on success, false otherwise
      *
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function get(string $uri, array $query = []): array|false
@@ -264,9 +255,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
         return $data;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getTranslation(array $response): ?string
     {
         if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {

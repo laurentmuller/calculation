@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enums\EntityPermission;
+use App\Enums\FlashType;
 use App\Form\Admin\ApplicationParametersType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\PropertyServiceInterface;
@@ -42,7 +43,6 @@ class AdminController extends AbstractController
     /**
      * Clear the application cache.
      *
-     * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clear', name: 'admin_clear')]
@@ -56,12 +56,10 @@ class AdminController extends AbstractController
 
             try {
                 if ($service->execute()) {
-                    $this->successTrans('clear_cache.success');
+                    $this->redirectToHomePage('clear_cache.success');
                 } else {
-                    $this->errorTrans('clear_cache.failure');
+                    $this->redirectToHomePage('clear_cache.failure', [], FlashType::DANGER);
                 }
-
-                return $this->redirectToHomePage();
             } catch (\Exception $e) {
                 return $this->renderFormException('clear_cache.failure', $e, $logger);
             }
@@ -76,7 +74,6 @@ class AdminController extends AbstractController
     /**
      * Edit the application parameters.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/parameters', name: 'admin_parameters')]
@@ -92,9 +89,8 @@ class AdminController extends AbstractController
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $application->setProperties($data);
-            $this->successTrans('parameters.success');
 
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('parameters.success');
         }
 
         // display
@@ -107,7 +103,6 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
@@ -125,7 +120,6 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/user', name: 'admin_rights_user')]
@@ -144,7 +138,6 @@ class AdminController extends AbstractController
      *
      * @param int[] $rights
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
@@ -164,9 +157,8 @@ class AdminController extends AbstractController
             } else {
                 $application->setProperty($property, $role->getRights());
             }
-            $this->successTrans('admin.rights.success', ['%name%' => $role->getName()]);
 
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('admin.rights.success', ['%name%' => $role->getName()]);
         }
 
         // show form

@@ -43,7 +43,6 @@ abstract class AbstractReport extends PdfDocument
      * @param PdfDocumentSize        $size        the document size
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(
         protected AbstractController $controller,

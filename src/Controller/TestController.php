@@ -78,8 +78,6 @@ class TestController extends AbstractController
 
     /**
      * Test sending notification mail.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '/editor', name: 'test_editor')]
     public function editor(Request $request, MailerService $service, LoggerInterface $logger): Response
@@ -121,9 +119,8 @@ class TestController extends AbstractController
 
                 try {
                     $service->sendNotification($email, $user, $message, $importance, $attachments);
-                    $this->successTrans('user.comment.success');
 
-                    return $this->redirectToHomePage();
+                    return $this->redirectToHomePage('user.comment.success');
                 } catch (TransportExceptionInterface $e) {
                     return $this->renderFormException('user.comment.error', $e, $logger);
                 }
@@ -139,7 +136,6 @@ class TestController extends AbstractController
      * Export a HTML page to PDF.
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/html', name: 'test_html')]
     public function html(): PdfResponse
@@ -157,9 +153,7 @@ class TestController extends AbstractController
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/ipstack', name: 'test_ipstack')]
     public function ipStack(Request $request, IpStackService $service): JsonResponse
@@ -267,8 +261,7 @@ class TestController extends AbstractController
             }
             $message .= '</ul>';
 
-            return $this->success($message)
-                ->redirectToHomePage();
+            return $this->redirectToHomePage($message);
         }
 
         return $this->render('test/password.html.twig', ['form' => $form]);
@@ -301,9 +294,8 @@ class TestController extends AbstractController
                 /** @psalm-var array<string, string[]|string> $values */
                 $values = $result->toArray();
                 $html = $this->formatRecaptchaResult($values);
-                $this->success($html);
 
-                return $this->redirectToHomePage();
+                return $this->redirectToHomePage($html);
             }
 
             // translate and add errors
@@ -448,9 +440,6 @@ class TestController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     #[Route(path: '/union', name: 'test_union')]
     public function union(Request $request, SearchService $service): JsonResponse
     {
@@ -483,7 +472,6 @@ class TestController extends AbstractController
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/spam', name: 'test_spam')]
@@ -503,9 +491,7 @@ class TestController extends AbstractController
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[Route(path: '/verify', name: 'test_verify')]
     public function verifyAkismetKey(AkismetService $service): JsonResponse

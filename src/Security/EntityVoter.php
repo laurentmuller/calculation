@@ -73,8 +73,6 @@ class EntityVoter extends Voter
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
@@ -120,8 +118,6 @@ class EntityVoter extends Voter
 
     /**
      * @psalm-return int[]
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getRights(User $user): array
     {

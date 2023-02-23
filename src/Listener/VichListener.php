@@ -44,8 +44,6 @@ class VichListener implements ImageExtensionInterface
 
     /**
      * Create the small and medium image if applicable.
-     *
-     * @throws \ReflectionException
      */
     public function onPostUpload(Event $event): void
     {
@@ -105,8 +103,6 @@ class VichListener implements ImageExtensionInterface
 
     /**
      * Rename and resize the image if applicable.
-     *
-     * @throws \ReflectionException
      */
     public function onPreUpload(Event $event): void
     {

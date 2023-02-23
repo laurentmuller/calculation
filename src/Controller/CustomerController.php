@@ -43,8 +43,6 @@ class CustomerController extends AbstractEntityController
 {
     /**
      * Constructor.
-     *
-     * @throws \ReflectionException
      */
     public function __construct(CustomerRepository $repository)
     {
@@ -67,7 +65,6 @@ class CustomerController extends AbstractEntityController
      *
      * throws \Psr\Container\ContainerExceptionInterface
      *
-     * @throws \ReflectionException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => Requirement::DIGITS])]
@@ -111,7 +108,6 @@ class CustomerController extends AbstractEntityController
      * Export the customers to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'customer_pdf')]
@@ -139,8 +135,6 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'customer_table')]
     public function table(Request $request, CustomerTable $table, LoggerInterface $logger): Response

@@ -91,6 +91,8 @@ trait RequestTrait
 
     /**
      * Returns the request parameter value.
+     *
+     * @psalm-return ($default is null ? (string|int|float|bool|null) : string|int|float|bool)
      */
     protected function getRequestValue(Request $request, string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
     {

@@ -55,7 +55,6 @@ class AboutController extends AbstractController
     /**
      * Export the licence and policy pages to PDF.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
@@ -96,7 +95,6 @@ class AboutController extends AbstractController
     /**
      * Export the licence page to PDF.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
@@ -142,7 +140,6 @@ class AboutController extends AbstractController
     /**
      * Exports the MySql information as PDF.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
@@ -192,7 +189,6 @@ class AboutController extends AbstractController
      * Exports the PHP information as PDF.
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/php/pdf', name: 'about_php_pdf')]
@@ -238,7 +234,6 @@ class AboutController extends AbstractController
     /**
      * Export the policy to PDF.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
@@ -287,7 +282,6 @@ class AboutController extends AbstractController
     /**
      * Exports the Symfony information as PDF.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
@@ -344,7 +338,6 @@ class AboutController extends AbstractController
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function renderHtmlReport(string $template, array $parameters, ?string $title = null, array $titleParameters = []): PdfResponse

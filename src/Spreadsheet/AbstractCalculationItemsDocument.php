@@ -61,7 +61,6 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function doRender(array $entities): bool
     {

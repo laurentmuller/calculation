@@ -199,8 +199,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @return array{current: array|false, forecast: array|false, daily: array|false}
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function all(int $id, int $count = -1, string $units = self::UNIT_METRIC): array
     {
@@ -219,9 +217,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the current conditions if success; false on error
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
      */
     public function current(int $id, string $units = self::UNIT_METRIC): array|false
     {
@@ -242,9 +238,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the current conditions if success; false on error
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
      */
     public function daily(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
@@ -269,8 +263,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @return array|false the current conditions if success; false on error
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function forecast(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
@@ -341,8 +333,6 @@ class OpenWeatherService extends AbstractHttpClientService
      *  }>|bool
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function group(array $cityIds, string $units = self::UNIT_METRIC): array|bool
     {
@@ -383,8 +373,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @return array|false the essential conditions if success; false on error
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function oneCall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, array $exclude = []): array|false
     {
@@ -408,8 +396,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int    $limit the maximum number of cities to return
      *
      * @pslam-return array<int, OpenWeatherCityType>
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array
     {
@@ -467,8 +453,6 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * Checks if the response contains an error.
-     *
-     * @throws \ReflectionException
      */
     private function checkErrorCode(array $result): bool
     {
@@ -508,9 +492,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the JSON response on success, false on failure
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     * @throws \ReflectionException
      */
     private function get(string $uri, array $query = []): array|false
     {

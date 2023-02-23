@@ -10,4 +10,4 @@ invalid_fields: Un ou plusieurs champs non valides ont été spécifiés à l'ai
 too_many_ips: Trop d'adresses IP ont été spécifiées pour le point de terminaison de recherche en bloc (maximum 50).
 batch_not_supported_on_plan: Le point de terminaison de recherche en bloc n'est pas pris en charge sur le plan d'abonnement actuel.
 ip_not_found: L'adresse IP demandée n'existe pas.
-unknown: Une erreur inconnue s'est déclarée lors de l'utilisation du service Ip Stack.
+unknown: Une erreur inconnue s'est produite lors de l'utilisation du service Ip Stack.

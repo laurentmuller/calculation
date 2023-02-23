@@ -49,7 +49,6 @@ class CalculationsReport extends AbstractArrayReport
      * @param Calculation[]      $entities   the calculations to render
      * @param bool               $grouped    true if calculations are grouped by state
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, protected bool $grouped = true)

@@ -34,8 +34,6 @@ class CommentController extends AbstractController
 {
     /**
      * Send comment to the webmaster.
-     *
-     * @throws \ReflectionException
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/comment', name: 'user_comment')]
@@ -53,9 +51,8 @@ class CommentController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 $service->sendComment($comment);
-                $this->successTrans('user.comment.success');
 
-                return $this->redirectToHomePage();
+                return $this->redirectToHomePage('user.comment.success');
             } catch (TransportExceptionInterface $e) {
                 return $this->renderFormException('user.comment.error', $e, $logger);
             }

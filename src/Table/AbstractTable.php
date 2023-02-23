@@ -98,8 +98,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets the data query from the given request.
-     *
-     * @throws \ReflectionException
      */
     public function getDataQuery(Request $request): DataQuery
     {
@@ -152,8 +150,6 @@ abstract class AbstractTable implements SortModeInterface
 
     /**
      * Gets cookie and session prefix.
-     *
-     * @throws \ReflectionException
      */
     public function getPrefix(): string
     {
@@ -254,8 +250,6 @@ abstract class AbstractTable implements SortModeInterface
      * Gets the session key for the given name.
      *
      * @param string $name the parameter name
-     *
-     * @throws \ReflectionException
      *
      * @noinspection PhpUnused
      */

@@ -35,7 +35,6 @@ class ChartController extends AbstractController
     /**
      * Gets the calculations by month.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
      */
@@ -50,7 +49,6 @@ class ChartController extends AbstractController
     /**
      * Gets the calculations by state.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Exception
      */
     #[Route(path: '/state', name: 'chart_by_state')]

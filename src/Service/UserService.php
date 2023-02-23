@@ -86,8 +86,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     /**
      * Gets the message attributes.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMessageAttributes(): array
     {
@@ -141,8 +139,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      * Gets all properties.
      *
      * @return array<string, mixed>
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getProperties(): array
     {

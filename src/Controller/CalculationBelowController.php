@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Calculation;
+use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
@@ -43,7 +44,6 @@ class CalculationBelowController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'below_excel')]
@@ -65,7 +65,6 @@ class CalculationBelowController extends AbstractController
      * Export calculations to a PDF document.
      *
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/pdf', name: 'below_pdf')]
@@ -85,8 +84,6 @@ class CalculationBelowController extends AbstractController
 
     /**
      * Render the table view.
-     *
-     * @throws \ReflectionException
      */
     #[Route(path: '', name: 'below_table')]
     public function table(Request $request, CalculationBelowTable $table, LoggerInterface $logger): Response
@@ -107,9 +104,7 @@ class CalculationBelowController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository, float $minMargin): ?RedirectResponse
     {
         if (0 === $repository->countItemsBelow($minMargin)) {
-            $this->warningTrans('below.empty');
-
-            return $this->redirectToHomePage();
+            return $this->redirectToHomePage('below.empty', [], FlashType::WARNING);
         }
 
         return null;

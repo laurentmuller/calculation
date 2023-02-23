@@ -112,8 +112,6 @@ class HelpService implements ServiceSubscriberInterface
      * @return array|null the dialog, if found; null otherwise
      *
      * @pslam-return HelpDialogType|null
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findDialog(string $id): ?array
     {
@@ -128,8 +126,6 @@ class HelpService implements ServiceSubscriberInterface
      * @return array|null the entity, if found; null otherwise
      *
      * @pslam-return HelpEntityType|null
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findEntity(string $id): ?array
     {
@@ -146,8 +142,6 @@ class HelpService implements ServiceSubscriberInterface
      * @psalm-param HelpDialogType $dialog
      *
      * @pslam-return HelpEntityType|null
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function findEntityByDialog(array $dialog): ?array
     {
@@ -164,8 +158,6 @@ class HelpService implements ServiceSubscriberInterface
      * @return array|null the dialogs, if found; null otherwise
      *
      * @psalm-return HelpDialogType[]|null
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getDialogs(): ?array
     {
@@ -181,8 +173,6 @@ class HelpService implements ServiceSubscriberInterface
      * @return array|null the entities, if found; null otherwise
      *
      * @psalm-return HelpEntityType[]|null
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEntities(): ?array
     {
@@ -202,8 +192,6 @@ class HelpService implements ServiceSubscriberInterface
 
     /**
      * Gets the full help content.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getHelp(): array
     {
@@ -246,8 +234,6 @@ class HelpService implements ServiceSubscriberInterface
      * Gets the main (root) menu.
      *
      * @return HelpMainMenuType|null the main menu, if found; null otherwise
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMainMenu(): ?array
     {
@@ -263,8 +249,6 @@ class HelpService implements ServiceSubscriberInterface
      * @return array|null the main menus, if found; null otherwise
      *
      * @psalm-return HelpMenuType[]|null
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getMainMenus(): ?array
     {
@@ -274,9 +258,6 @@ class HelpService implements ServiceSubscriberInterface
         return $items;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     private function findById(string $path, string $id): ?array
     {
         if ($entries = $this->findEntries($path)) {
@@ -291,9 +272,6 @@ class HelpService implements ServiceSubscriberInterface
         return null;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     private function findEntries(string ...$paths): ?array
     {
         $entries = $this->getHelp();

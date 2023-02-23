@@ -40,7 +40,6 @@ class CalculationReport extends AbstractReport
     /**
      * Constructor.
      *
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly LoggerInterface $logger, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
@@ -78,8 +77,6 @@ class CalculationReport extends AbstractReport
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \ReflectionException
      */
     public function render(): bool
     {
@@ -213,8 +210,6 @@ class CalculationReport extends AbstractReport
 
     /**
      * Render the QR code (if any).
-     *
-     * @throws \ReflectionException
      */
     private function renderQrCode(): void
     {

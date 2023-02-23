@@ -71,7 +71,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @return array<string, string> an array with the field as key and the order as value. An
      *                               empty array is returned if not attribute is found.
      *
-     * @throws \ReflectionException
+     * @throws \ReflectionException if the class does not exist or if the validate parameter
+     *                              is true and a property name is not found
      */
     public function getDefaultOrder(): array
     {

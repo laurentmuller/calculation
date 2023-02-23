@@ -31,8 +31,6 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
 
     /**
      * Constructor.
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function __construct(CaptchaImageService $service, ApplicationService $application)
     {

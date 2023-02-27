@@ -159,7 +159,7 @@ class TestController extends AbstractController
     public function ipStack(Request $request, IpStackService $service): JsonResponse
     {
         $result = $service->getIpInfo($request);
-        if ($lastError = $service->getLastError()) {
+        if (null !== $lastError = $service->getLastError()) {
             return $this->json($lastError);
         }
 
@@ -360,17 +360,17 @@ class TestController extends AbstractController
         $languages = $service->getLanguages();
 
         // check error
-        if ($error = $service->getLastError()) {
+        if (null !== $error = $service->getLastError()) {
             // translate message
-            $id = \sprintf('%s.%s', $service->getDefaultIndexName(), $error['code']);
+            $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
-                $error['message'] = $this->trans($id, [], 'translator');
+                $error->setMessage($this->trans($id, [], 'translator'));
             }
             $message = $this->trans('translator.title') . '|';
             $message .= $this->trans('translator.languages_error');
             $message .= $this->trans('translator.last_error', [
-                '%code%' => $error['code'],
-                '%message%' => $error['message'],
+                '%code%' => $error->getCode(),
+                '%message%' => $error->getMessage(),
                 ]);
             $this->error($message);
             $error = true;
@@ -480,7 +480,7 @@ class TestController extends AbstractController
         $generator = $fakerService->getGenerator();
         $comment = $generator->realText(145);
         $value = $akismetService->verifyComment($comment);
-        if ($lastError = $akismetService->getLastError()) {
+        if (null !== $lastError = $akismetService->getLastError()) {
             return $this->json($lastError);
         }
 

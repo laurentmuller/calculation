@@ -13,13 +13,12 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Microsoft BingTranslatorService Text API 3.0.
- *
- * @psalm-import-type LastErrorType from \App\Service\AbstractHttpClientService
  *
  * @see https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview
  */
@@ -70,25 +69,13 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     public function detect(string $text): array|false
     {
-        // query
-        $query = [['Text' => $text]];
-
-        if (false === $response = $this->post(self::URI_DETECT, $query)) {
+        $json = [['Text' => $text]];
+        if (!$response = $this->call(uri: self::URI_DETECT, json: $json)) {
             return false;
         }
 
-        // check response
-        if (!$this->isValidArray($response, 'response')) {
-            return false;
-        }
-
-        // get first result
-        /** @var array $result */
-        $result = $response[0];
-
-        // get language
-        /** @var string|bool $tag */
-        $tag = $this->getProperty($result, 'language');
+        /** @psalm-var string|null $tag */
+        $tag = $this->getValue($response, '[0][language]');
         if (!\is_string($tag)) {
             return false;
         }
@@ -110,7 +97,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultIndexName(): string
+    public static function getName(): string
     {
         return 'Bing';
     }
@@ -122,28 +109,25 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
     {
-        // content
-        $data = [['Text' => $text]];
-
-        // query
         $query = [
             'to' => $to,
             'from' => $from ?? '',
             'textType' => $html ? 'html' : 'plain',
         ];
-
-        // post
-        if (false === $response = $this->post(self::URI_TRANSLATE, $data, $query)) {
+        $json = [['Text' => $text]];
+        if (!$response = $this->call(uri: self::URI_TRANSLATE, query: $query, json: $json)) {
             return false;
         }
 
-        // translation
-        if (null === $target = $this->getTranslation($response)) {
+        /** @psalm-var string|null $target */
+        $target = $this->getValue($response, '[0][translations][0][text]');
+        if (!\is_string($target)) {
             return false;
         }
 
-        // detect from
-        if ($language = $this->detectLanguage($response)) {
+        /** @psalm-var string|null $language */
+        $language = $this->getValue($response, '[0][detectedLanguage][language]', false);
+        if (\is_string($language)) {
             $from = $language;
         }
 
@@ -163,28 +147,40 @@ class BingTranslatorService extends AbstractTranslatorService
 
     /**
      * {@inheritdoc}
+     */
+    protected function getDefaultOptions(): array
+    {
+        $headers = [
+            'Accept-language' => self::getAcceptLanguage(),
+            'Ocp-Apim-Subscription-Key' => $this->key,
+        ];
+        $query = ['api-version' => self::API_VERSION];
+
+        return [
+            self::BASE_URI => self::HOST_NAME,
+            self::HEADERS => $headers,
+            self::QUERY => $query,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    protected function doGetLanguages(): array|false
+    protected function loadLanguages(): array|false
     {
-        // query
         $query = ['scope' => 'translation'];
-
-        // get
-        $response = $this->get(self::URI_LANGUAGE, $query);
-        if (!\is_array($response)) {
+        if (!$response = $this->call(uri: self::URI_LANGUAGE, query: $query, json: $query, method: Request::METHOD_GET)) {
             return false;
         }
 
-        // translations
-        /** @var bool|array<string, array{name: string}>  $translation */
-        $translation = $this->getPropertyArray($response, 'translation');
+        /** @psalm-var array<string, array{name: string}>|null  $translation */
+        $translation = $this->getValue($response, '[translation]');
         if (!\is_array($translation)) {
             return false;
         }
 
-        // build
         $result = [];
         foreach ($translation as $key => $value) {
             $result[$value['name']] = $key;
@@ -195,19 +191,19 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    protected function getDefaultOptions(): array
+    private function call(string $uri, array $query = [], array $json = [], string $method = Request::METHOD_POST): array|false
     {
-        $headers = [
-            'Accept-language' => self::getAcceptLanguage(),
-            'Ocp-Apim-Subscription-Key' => $this->key,
-        ];
+        $response = $this->request($method, $uri, [
+            self::JSON => $json,
+            self::QUERY => $query,
+        ]);
+        if (!\is_array($values = $this->checkResponse($response))) {
+            return false;
+        }
 
-        return [
-            self::BASE_URI => self::HOST_NAME,
-            self::HEADERS => $headers,
-        ];
+        return $values;
     }
 
     /**
@@ -224,104 +220,10 @@ class BingTranslatorService extends AbstractTranslatorService
         }
 
         // check error
-        if (isset($value['error'])) {
-            /** @psalm-var  LastErrorType|null $error */
-            $error = $value['error'];
-            $this->lastError = $error;
-
+        if (!$this->handleError($value)) {
             return false;
         }
 
         return $value;
-    }
-
-    private function detectLanguage(mixed $response): ?string
-    {
-        if (!\is_array($response)) {
-            return null;
-        }
-        if (!$this->isValidArray($response, 'response')) {
-            return null;
-        }
-        if (!\is_array($result = $response[0])) {
-            return null;
-        }
-        if (!\is_array($detectedLanguage = $this->getPropertyArray($result, 'detectedLanguage', false))) {
-            return null;
-        }
-        if (!\is_string($language = $this->getProperty($detectedLanguage, 'language', false))) {
-            return null;
-        }
-
-        return $language;
-    }
-
-    /**
-     * Make an HTTP-GET call.
-     *
-     * @param string $uri   the uri to append to the host name
-     * @param array  $query an associative array of query string values to add to the request
-     *
-     * @return array|false the HTTP response body on success, false on failure
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    private function get(string $uri, array $query = []): array|false
-    {
-        // add version
-        $query['api-version'] = self::API_VERSION;
-
-        // call
-        $response = $this->requestGet($uri, [
-            self::QUERY => $query,
-        ]);
-
-        return $this->checkResponse($response);
-    }
-
-    private function getTranslation(array $response): ?string
-    {
-        if (!$this->isValidArray($response, 'response')) {
-            return null;
-        }
-        if (!\is_array($result = $response[0])) {
-            return null;
-        }
-        if (!\is_array($translations = $this->getPropertyArray($result, 'translations'))) {
-            return null;
-        }
-        if (!\is_array($translation = $translations[0])) {
-            return null;
-        }
-        if (!\is_string($target = $this->getProperty($translation, 'text'))) {
-            return null;
-        }
-
-        return $target;
-    }
-
-    /**
-     * Make an HTTP-POST call.
-     *
-     * @param string $uri   the uri to append to the host name
-     * @param array  $data  the JSON data
-     * @param array  $query an associative array of query string values to add to the request
-     *
-     * @return array|false the HTTP response body on success, false on failure
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    private function post(string $uri, array $data, array $query = []): array|false
-    {
-        // add version
-        $query['api-version'] = self::API_VERSION;
-
-        // call
-        $response = $this->requestPost($uri, [
-            self::QUERY => $query,
-            self::JSON => $data,
-        ]);
-
-        return $this->checkResponse($response);
     }
 }

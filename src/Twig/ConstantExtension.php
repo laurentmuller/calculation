@@ -23,8 +23,6 @@ use Twig\Extension\GlobalsInterface;
 
 /**
  * Twig extension to access global class and icon constants.
- *
- * @property \Psr\Container\ContainerInterface $container
  */
 final class ConstantExtension extends AbstractExtension implements GlobalsInterface, ServiceSubscriberInterface
 {

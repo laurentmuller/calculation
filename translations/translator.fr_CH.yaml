@@ -50,4 +50,4 @@ Google:
     500: Une erreur interne au serveur a été générée.
     501: Méthode d'API non mise en oeuvre par le serveur.
     503: Le service est indisponible (serveur inactif).
-    504: Délai de requête dépassé. Cela se produira uniquement si l'appelant définit un délai plus court que le délai par défaut de la méthode.
+    504: Le délai de la requête est dépassé. Cela se produira uniquement si l'appelant définit un délai plus court que le délai par défaut de la méthode.

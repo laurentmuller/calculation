@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Model\HttpClientError;
 use App\Traits\CacheAwareTrait;
-use App\Util\Utils;
+use App\Traits\LoggerAwareTrait;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -23,18 +24,11 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service using the HttpClient.
- *
- * @property \Psr\Container\ContainerInterface $container
- *
- * @psalm-type LastErrorType = array{
- *      result: bool,
- *      code: string|int,
- *      message: string,
- *      exception?: array|\Exception}
  */
 abstract class AbstractHttpClientService implements ServiceSubscriberInterface
 {
     use CacheAwareTrait;
+    use LoggerAwareTrait;
     use ServiceSubscriberTrait;
 
     /**
@@ -68,11 +62,9 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     protected ?HttpClientInterface $client = null;
 
     /**
-     * The last error.
-     *
-     * @psalm-var LastErrorType|null
+     * The last client error.
      */
-    protected ?array $lastError = null;
+    protected ?HttpClientError $lastError = null;
 
     /**
      * Constructor.
@@ -106,36 +98,10 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
 
     /**
      * Gets the last error.
-     *
-     * @return array|null the last error with the 'code' and the 'message' and eventually the exception; null if none
-     *
-     * @psalm-return LastErrorType|null
      */
-    public function getLastError(): ?array
+    public function getLastError(): ?HttpClientError
     {
-        return \is_array($this->lastError) ? $this->lastError : null;
-    }
-
-    /**
-     * Returns a value indicating if the connection status is normal.
-     *
-     * @return bool true if the connection status is normal
-     */
-    public static function isConnected(): bool
-    {
-        $result = \connection_status();
-
-        return \CONNECTION_NORMAL === $result;
-    }
-
-    /**
-     * Clear the last error.
-     */
-    protected function clearLastError(): static
-    {
-        $this->lastError = null;
-
-        return $this;
+        return $this->lastError;
     }
 
     /**
@@ -239,29 +205,17 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     }
 
     /**
-     * Sets the last error.
+     * Sets the last error and log it.
      *
-     * @param int         $code    the error code
-     * @param string      $message the error message
-     * @param ?\Exception $e       the optional source exception
-     *
-     * @return bool this function returns always false
+     * @return false this function returns always false
      */
-    protected function setLastError(int $code, string $message, \Exception $e = null): bool
+    protected function setLastError(int $code, string $message, ?\Exception $exception = null): bool
     {
-        if (null !== $e) {
-            $this->lastError = [
-                'result' => false,
-                'code' => $code,
-                'message' => $message,
-                'exception' => Utils::getExceptionContext($e),
-            ];
+        $this->lastError = new HttpClientError($code, $message, $exception);
+        if (null !== $exception) {
+            $this->logException($exception, $message);
         } else {
-            $this->lastError = [
-                'result' => false,
-                'code' => $code,
-                'message' => $message,
-            ];
+            $this->logError($message);
         }
 
         return false;

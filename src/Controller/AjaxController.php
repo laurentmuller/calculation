@@ -153,6 +153,43 @@ class AjaxController extends AbstractController
     }
 
     /**
+     * Translate a text.
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[Route(path: '/detect', name: 'ajax_detect')]
+    public function detect(Request $request, TranslatorFactory $factory): JsonResponse
+    {
+        // get parameters
+        $text = $this->getRequestString($request, 'text', '');
+        $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
+        $service = $factory->getService($class);
+
+        // check parameters
+        if (!Utils::isString($text)) {
+            return $this->jsonFalse([
+                'message' => $this->trans('translator.text_error'),
+            ]);
+        }
+
+        try {
+            // translate
+            if ($result = $service->detect($text)) {
+                return $this->jsonTrue([
+                    'service' => $service::getName(),
+                    'data' => $result,
+                ]);
+            }
+
+            // error
+            return $this->handleTranslationError($service, 'translator.detect_error');
+        } catch (\Exception $e) {
+            return $this->jsonException($e, $this->trans('translator.detect_error'));
+        }
+    }
+
+    /**
      * Gets the list of translate languages.
      *
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -442,6 +479,7 @@ class AjaxController extends AbstractController
             // translate
             if ($result = $service->translate($text, $to, $from)) {
                 return $this->jsonTrue([
+                    'service' => $service::getName(),
                     'data' => $result,
                 ]);
             }
@@ -584,11 +622,10 @@ class AjaxController extends AbstractController
 
     private function handleTranslationError(TranslatorServiceInterface $service, string $message): JsonResponse
     {
-        if ($error = $service->getLastError()) {
-            // translate message
-            $id = \sprintf('%s.%s', $service->getDefaultIndexName(), $error['code']);
+        if (null !== $error = $service->getLastError()) {
+            $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
-                $error['message'] = $this->trans($id, [], 'translator');
+                $error->setMessage($this->trans($id, [], 'translator'));
             }
 
             return $this->jsonFalse([

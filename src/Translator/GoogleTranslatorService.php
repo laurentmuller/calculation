@@ -17,8 +17,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Google translator service v2.0.
  *
- * @psalm-import-type LastErrorType from \App\Service\AbstractHttpClientService
- *
  * @see https://cloud.google.com/translate/docs/translating-text
  */
 class GoogleTranslatorService extends AbstractTranslatorService
@@ -63,35 +61,13 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     public function detect(string $text): array|false
     {
-        // query
         $query = ['q' => $text];
-        $response = $this->get(self::URI_DETECT, $query);
-        if (!\is_array($response)) {
+        if (!$response = $this->call(uri: self::URI_DETECT, query: $query)) {
             return false;
         }
 
-        // detections
-        $detections = $this->getPropertyArray($response, 'detections');
-        if (!\is_array($detections)) {
-            return false;
-        }
-
-        // entries
-        if (!$this->isValidArray($detections[0], 'entries')) {
-            return false;
-        }
-        /** @var array $entries */
-        $entries = $detections[0];
-
-        // entry
-        if (!$this->isValidArray($entries[0], 'detection')) {
-            return false;
-        }
-        /** @var array $detection */
-        $detection = $entries[0];
-
-        // language
-        $tag = $this->getProperty($detection, 'language');
+        /** @psalm-var string|null $tag */
+        $tag = $this->getValue($response, '[data][detections][0][0][language]');
         if (!\is_string($tag)) {
             return false;
         }
@@ -113,7 +89,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultIndexName(): string
+    public static function getName(): string
     {
         return 'Google';
     }
@@ -125,24 +101,25 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
     {
-        // query
         $query = [
             'q' => $text,
             'target' => $to,
             'source' => $from ?? '',
             'format' => $html ? 'html' : 'text',
         ];
-        if (false === $response = $this->get(self::URI_TRANSLATE, $query)) {
+        if (!$response = $this->call(uri: self::URI_TRANSLATE, query: $query)) {
             return false;
         }
 
-        // translation
-        if (!$target = $this->getTranslation($response)) {
+        /** @psalm-var string|null $target */
+        $target = $this->getValue($response, '[data][translations][0][translatedText]');
+        if (!\is_string($target)) {
             return false;
         }
 
-        // detect from
-        if ($language = $this->detectLanguage($response)) {
+        /** @psalm-var string|null $language */
+        $language = $this->getValue($response, '[data][translations][0][detectedSourceLanguage]', false);
+        if (\is_string($language)) {
             $from = $language;
         }
 
@@ -162,25 +139,35 @@ class GoogleTranslatorService extends AbstractTranslatorService
 
     /**
      * {@inheritdoc}
+     */
+    protected function getDefaultOptions(): array
+    {
+        $query = ['key' => $this->key];
+
+        return [
+            self::BASE_URI => self::HOST_NAME,
+            self::QUERY => $query,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    protected function doGetLanguages(): array|false
+    protected function loadLanguages(): array|false
     {
-        // query
         $query = ['target' => self::getAcceptLanguage()];
-        if (false === $response = $this->get(self::URI_LANGUAGE, $query)) {
+        if (!$response = $this->call(uri: self::URI_LANGUAGE, query: $query)) {
             return false;
         }
 
-        // languages
-        /** @var bool|array<array{name: string, language: string}>  $languages */
-        $languages = $this->getPropertyArray($response, 'languages');
+        /** @psalm-var array<array{name: string, language: string}>|false  $languages */
+        $languages = $this->getValue($response, '[data][languages]');
         if (!\is_array($languages)) {
             return false;
         }
 
-        // build
         $result = [];
         foreach ($languages as $language) {
             $result[$language['name']] = $language['language'];
@@ -191,82 +178,19 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultOptions(): array
-    {
-        return [self::BASE_URI => self::HOST_NAME];
-    }
-
-    private function detectLanguage(array $response): ?string
-    {
-        if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
-            return null;
-        }
-        if (!\is_array($translation = $translations[0])) {
-            return null;
-        }
-        if (!\is_string($language = $this->getProperty($translation, 'detectedSourceLanguage', false))) {
-            return null;
-        }
-
-        return $language;
-    }
-
-    /**
-     * Make an HTTP-GET call.
-     *
-     * @param string $uri   the uri to append to the host name
-     * @param array  $query an associative array of query string values to add to the request
-     *
-     * @return array|false the data response on success, false otherwise
-     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function get(string $uri, array $query = []): array|false
+    private function call(string $uri, array $query = []): array|false
     {
-        // add key parameter
-        $query['key'] = $this->key;
-
-        // call
         $response = $this->requestGet($uri, [
             self::QUERY => $query,
         ]);
 
-        // decode
         $response = $response->toArray(false);
-
-        // check error
-        if (isset($response['error'])) {
-            /** @psalm-var  LastErrorType|null $error */
-            $error = $response['error'];
-            $this->lastError = $error;
-
+        if (!$this->handleError($response)) {
             return false;
         }
 
-        // get data
-        /** @var bool|array $data */
-        $data = $this->getProperty($response, 'data');
-        if (!\is_array($data)) {
-            return false;
-        }
-
-        return $data;
-    }
-
-    private function getTranslation(array $response): ?string
-    {
-        if (!\is_array($translations = $this->getPropertyArray($response, 'translations'))) {
-            return null;
-        }
-        if (!\is_array($translation = $translations[0])) {
-            return null;
-        }
-        if (!\is_string($target = $this->getProperty($translation, 'translatedText'))) {
-            return null;
-        }
-
-        return $target;
+        return $response;
     }
 }

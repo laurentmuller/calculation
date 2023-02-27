@@ -195,7 +195,13 @@ final class Utils
      *
      * @param \Throwable $e the exception to get the context for
      *
-     * @return array an array with the message, class, code, file, line and trace properties
+     * @return array{
+     *     message: string,
+     *     code: string|int,
+     *     file: string,
+     *     line: int,
+     *     class: string,
+     *     trace: string}
      */
     public static function getExceptionContext(\Throwable $e): array
     {

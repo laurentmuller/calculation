@@ -60,7 +60,7 @@ class ExchangeRateController extends AbstractController
     public function getCodes(): JsonResponse
     {
         $codes = $this->service->getSupportedCodes();
-        if ($lastError = $this->service->getLastError()) {
+        if (null !== $lastError = $this->service->getLastError()) {
             return $this->json($lastError);
         }
 
@@ -78,7 +78,7 @@ class ExchangeRateController extends AbstractController
     public function getLatest(string $code): JsonResponse
     {
         $latest = $this->service->getLatest($code);
-        if ($lastError = $this->service->getLastError()) {
+        if (null !== $lastError = $this->service->getLastError()) {
             return $this->json($lastError);
         }
 
@@ -96,7 +96,7 @@ class ExchangeRateController extends AbstractController
         $baseCode = $this->getRequestString($request, 'baseCode', '');
         $targetCode = $this->getRequestString($request, 'targetCode', '');
         $result = $this->service->getRateAndDates($baseCode, $targetCode);
-        if ($lastError = $this->service->getLastError()) {
+        if (null !== $lastError = $this->service->getLastError()) {
             return $this->json($lastError);
         }
         if (\is_array($result)) {

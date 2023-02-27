@@ -14,6 +14,8 @@ namespace App\Translator;
 
 use App\Service\AbstractHttpClientService;
 use App\Util\Utils;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Abstract translator service.
@@ -29,6 +31,11 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * The key to cache language.
      */
     protected ?string $cacheKey = null;
+
+    /**
+     * The property accessor to get values.
+     */
+    private ?PropertyAccessorInterface $accessor = null;
 
     /**
      * Gets the display name of the language for the given BCP 47 language tag.
@@ -49,14 +56,6 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * {@inheritdoc}
      */
-    public static function getClassName(): string
-    {
-        return static::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLanguages(): array|false
     {
         // already cached?
@@ -68,108 +67,67 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
         }
 
         // get language
-        $languages = $this->doGetLanguages();
+        $languages = $this->loadLanguages();
 
         // cache result
-        if (!empty($languages) && empty($this->lastError)) {
+        if (!empty($languages) && null === $this->lastError) {
             $this->setCacheValue($key, $languages);
         }
 
         return $languages;
     }
 
-    /**
-     * Gets the set of languages currently supported by other operations of the service.
-     *
-     * @return array|bool an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
-     *
-     * @psalm-return array<string, string>|false
-     */
-    abstract protected function doGetLanguages(): array|false;
-
-    /**
-     * Gets the cache key used to save or retrieve languages.
-     */
-    protected function getCacheKey(): string
+    protected function getValue(array $values, string $path, bool $error = true): mixed
     {
-        if (!$this->cacheKey) {
-            $this->cacheKey = Utils::getShortName($this) . 'Languages';
+        $accessor = $this->getPropertyAccessor();
+        /** @psalm-var mixed $value */
+        $value = $accessor->getValue($values, $path);
+        if (null === $value && $error) {
+            return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the value at '$path'.");
         }
 
-        return $this->cacheKey;
+        return $value;
     }
 
     /**
-     * Gets the property value.
+     * Handle the response error.
      *
-     * @param array  $data  the data to search in
-     * @param string $name  the property name to search for
-     * @param bool   $error true to create an error if the property is not found
-     *
-     * @return mixed the property value, if found; false if fail
+     * @return bool false if an error is set; true otherwise
      */
-    protected function getProperty(array $data, string $name, bool $error = true): mixed
+    protected function handleError(array $response): bool
     {
-        if (!isset($data[$name])) {
-            if ($error) {
-                return $this->setLastError(self::ERROR_NOT_FOUND, "Unable to find the '$name' field.");
-            }
+        if (isset($response['error'])) {
+            /** @psalm-var  array{code: int, message: string} $error */
+            $error = $response['error'];
 
-            return false;
-        }
-
-        return $data[$name];
-    }
-
-    /**
-     * Gets the property value as an array.
-     *
-     * @param array  $data  the data to search in
-     * @param string $name  the property name to search for
-     * @param bool   $error true to create an error if the property is not found
-     *
-     * @return array|false a none empty array, if found; false if fail
-     */
-    protected function getPropertyArray(array $data, string $name, bool $error = true): array|false
-    {
-        /** @psalm-var mixed $property */
-        $property = $this->getProperty($data, $name, $error);
-        if (false === $property) {
-            return false;
-        }
-
-        if (!$this->isValidArray($property, $name, $error)) {
-            return false;
-        }
-
-        return (array) $property;
-    }
-
-    /**
-     * Checks if the given variable is an array and is not empty.
-     *
-     * @param mixed  $var   the variable being evaluated
-     * @param string $name  the variable name to use to report error
-     * @param bool   $error true to create an error if the property is not found
-     *
-     * @return bool true if variable is an array and is not empty
-     */
-    protected function isValidArray(mixed $var, string $name, bool $error = true): bool
-    {
-        if (!\is_array($var)) {
-            if ($error) {
-                return $this->setLastError(self::ERROR_NOT_FOUND, "The '$name' field is not an array.");
-            }
-
-            return false;
-        } elseif ([] === $var) {
-            if ($error) {
-                return $this->setLastError(self::ERROR_NOT_FOUND, "The '$name' field is empty.");
-            }
-
-            return false;
+            return $this->setLastError($error['code'], $error['message']);
         }
 
         return true;
+    }
+
+    /**
+     * Gets the set of languages currently supported by other operations of the service.
+     *
+     * @return array|false an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
+     *
+     * @psalm-return array<string, string>|false
+     */
+    abstract protected function loadLanguages(): array|false;
+
+    private function getCacheKey(): string
+    {
+        return $this->cacheKey ??= \sprintf('%s.Languages', Utils::getShortName($this));
+    }
+
+    private function getPropertyAccessor(): PropertyAccessorInterface
+    {
+        if (null === $this->accessor) {
+            $this->accessor = PropertyAccess::createPropertyAccessorBuilder()
+                ->disableExceptionOnInvalidPropertyPath()
+                ->getPropertyAccessor();
+        }
+
+        return $this->accessor;
     }
 }

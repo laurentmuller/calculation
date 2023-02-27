@@ -72,8 +72,9 @@ trait LoggerTrait
      */
     public function logException(\Throwable $e, ?string $message = null): void
     {
+        $message ??= $e->getMessage();
         $context = Utils::getExceptionContext($e);
-        $this->logError($message ?? $e->getMessage(), $context);
+        $this->logError($message, $context);
     }
 
     /**

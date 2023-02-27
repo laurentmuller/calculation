@@ -56,26 +56,26 @@ class TranslatorFactory implements ServiceSubscriberInterface
     /**
      * Returns if the given translator service exists.
      *
-     * @param string $class the service class name to be tested
+     * @param string $classOrName the service class or name to be tested
      *
      * @return bool true if exist
      */
-    public function exists(string $class): bool
+    public function exists(string $classOrName): bool
     {
-        return null !== $this->find($class);
+        return null !== $this->find($classOrName);
     }
 
     /**
      * Finds the translator service for the given class.
      *
-     * @param string $class the service class name to find
+     * @param string $classOrName the service class or name to find
      *
      * @return TranslatorServiceInterface|null the service, if found; null otherwise
      */
-    public function find(string $class): ?TranslatorServiceInterface
+    public function find(string $classOrName): ?TranslatorServiceInterface
     {
         foreach ($this->translators as $translator) {
-            if ($class === $translator::class) {
+            if ($classOrName === $translator::class || 0 === \strcasecmp($classOrName, $translator::getName())) {
                 return $translator;
             }
         }
@@ -86,19 +86,19 @@ class TranslatorFactory implements ServiceSubscriberInterface
     /**
      * Gets a translator service from the given class name.
      *
-     * @param string $class the service class name to return
+     * @param string $classOrName the service class or name to return
      *
      * @return TranslatorServiceInterface the translator service
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function getService(string $class): TranslatorServiceInterface
+    public function getService(string $classOrName): TranslatorServiceInterface
     {
-        $service = $this->find($class);
+        $service = $this->find($classOrName);
         if (!$service instanceof TranslatorServiceInterface) {
-            throw new ServiceNotFoundException($class);
+            throw new ServiceNotFoundException($classOrName);
         }
-        $this->setSessionValue(self::KEY_LAST_SERVICE, $class);
+        $this->setSessionValue(self::KEY_LAST_SERVICE, $classOrName);
 
         return $service;
     }

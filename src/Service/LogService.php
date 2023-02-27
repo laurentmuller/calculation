@@ -44,22 +44,14 @@ class LogService implements ServiceSubscriberInterface
     private const VALUES_SEP = '|';
 
     /**
-     * The log file name.
-     */
-    private readonly string $fileName;
-
-    /**
      * Constructor.
      */
     public function __construct(
-        #[Autowire('%kernel.logs_dir%')]
-        string $directory,
-        #[Autowire('%kernel.environment%')]
-        string $environment,
+        #[Autowire('%kernel.logs_dir%/%kernel.environment%.log')]
+        private readonly string $fileName,
         #[Autowire('%log_date_format%')]
-        private readonly string $dateFormat
+        private readonly string $dateFormat,
     ) {
-        $this->fileName = \sprintf('%s%s%s.log', \rtrim($directory, '\\/'), \DIRECTORY_SEPARATOR, $environment);
     }
 
     /**
@@ -79,7 +71,7 @@ class LogService implements ServiceSubscriberInterface
      */
     public function getFileName(): string
     {
-        return $this->fileName;
+        return \str_replace('\/', \DIRECTORY_SEPARATOR, $this->fileName);
     }
 
     /**
@@ -130,7 +122,7 @@ class LogService implements ServiceSubscriberInterface
         }
 
         try {
-            $file = new LogFile($this->fileName);
+            $file = new LogFile($this->getFileName());
             $reader = new CSVReader(filename: $this->fileName, separator: self::VALUES_SEP);
             foreach ($reader as $values) {
                 if (6 !== \count($values) || false === $date = $this->parseDate($values[0])) {

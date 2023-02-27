@@ -201,7 +201,7 @@ class OpenWeatherController extends AbstractController
             $query = $this->getRequestQuery($request);
             $units = $this->getRequestUnits($request);
             $cities = $this->service->search($query, $units);
-            if ($lastError = $this->service->getLastError()) {
+            if (null !== $lastError = $this->service->getLastError()) {
                 return $this->json($lastError);
             }
             if ([] === $cities) {

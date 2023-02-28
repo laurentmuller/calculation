@@ -36,7 +36,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
      * The total amount.
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $amount = 0.0;
+    private float $amount = 0.0;
 
     /**
      * The parent's calculation.
@@ -44,7 +44,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(name: 'calculation_id', nullable: false, onDelete: 'cascade')]
-    protected ?Calculation $calculation = null;
+    private ?Calculation $calculation = null;
 
     /**
      * The categories.
@@ -54,7 +54,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: CalculationCategory::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['position' => Criteria::ASC])]
-    protected Collection $categories;
+    private Collection $categories;
 
     /**
      * The code.
@@ -62,20 +62,20 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH)]
-    protected ?string $code = null;
+    private ?string $code = null;
 
     /**
      * The parent's group.
      */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]
-    protected ?Group $group = null;
+    private ?Group $group = null;
 
     /**
      * The margin in percent (%).
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $margin = 0.0;
+    private float $margin = 0.0;
 
     /**
      * Constructor.

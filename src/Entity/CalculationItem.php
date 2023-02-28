@@ -37,7 +37,7 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'category_id', nullable: false, onDelete: 'cascade')]
-    protected ?CalculationCategory $category = null;
+    private ?CalculationCategory $category = null;
 
     /**
      * The description.
@@ -45,26 +45,26 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    protected ?string $description = null;
+    private ?string $description = null;
 
     /**
      * The price.
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $price = 0.0;
+    private float $price = 0.0;
 
     /**
      * The quantity.
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $quantity = 0.0;
+    private float $quantity = 0.0;
 
     /**
      * The unit.
      */
     #[Assert\Length(max: 15)]
     #[ORM\Column(length: 15, nullable: true)]
-    protected ?string $unit = null;
+    private ?string $unit = null;
 
     /**
      * Create a calculation item from the given product.

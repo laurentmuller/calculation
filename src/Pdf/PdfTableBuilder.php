@@ -751,7 +751,7 @@ class PdfTableBuilder
      *
      * @return int the number of columns span
      *
-     * @see PdfCell::getCols();
+     * @see PdfCell::getCols()
      */
     protected function getCellsSpan(): int
     {

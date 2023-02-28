@@ -29,50 +29,50 @@ class Customer extends AbstractEntity
 {
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $address = null;
+    private ?string $address = null;
 
     #[Assert\Date]
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE, nullable: true)]
-    protected ?\DateTimeInterface $birthday = null;
+    private ?\DateTimeInterface $birthday = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $city = null;
+    private ?string $city = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $company = null;
+    private ?string $company = null;
 
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    protected ?string $country = null;
+    private ?string $country = null;
 
     #[Assert\Email]
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    protected ?string $email = null;
+    private ?string $email = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $firstName = null;
+    private ?string $firstName = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $lastName = null;
+    private ?string $lastName = null;
 
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50, nullable: true)]
-    protected ?string $title = null;
+    private ?string $title = null;
 
     #[Assert\Url]
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    protected ?string $webSite = null;
+    private ?string $webSite = null;
 
     #[Assert\Length(max: 10)]
     #[Assert\Regex(pattern: '/^[1-9]\d{3}$/', message: 'customer.zip_code')]
     #[ORM\Column(length: 10, nullable: true)]
-    protected ?string $zipCode = null;
+    private ?string $zipCode = null;
 
     /**
      * Get address.

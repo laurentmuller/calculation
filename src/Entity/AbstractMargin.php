@@ -29,7 +29,7 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
      */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $margin = 0.0;
+    private float $margin = 0.0;
 
     /**
      * The maximum amount (exclusive) to apply within this margin.
@@ -37,14 +37,14 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     #[Assert\GreaterThanOrEqual(0)]
     #[Assert\GreaterThan(propertyPath: 'minimum', message: 'margin.maximum_greater_minimum')]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $maximum = 0.0;
+    private float $maximum = 0.0;
 
     /**
      * The minimum amount (inclusive) to apply within this margin.
      */
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $minimum = 0.0;
+    private float $minimum = 0.0;
 
     /**
      * {@inheritdoc}

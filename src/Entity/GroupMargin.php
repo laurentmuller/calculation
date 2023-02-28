@@ -31,7 +31,7 @@ class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'margins')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
-    protected ?Group $group = null;
+    private ?Group $group = null;
 
     /**
      * {@inheritDoc}

@@ -21,6 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\MappedSuperclass]
 abstract class AbstractCategoryItemEntity extends AbstractEntity
 {
+    /**
+     * The parent's category.
+     */
     protected ?Category $category = null;
 
     /**
@@ -28,14 +31,14 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $supplier = null;
+    private ?string $supplier = null;
 
     /**
      * The unit.
      */
     #[Assert\Length(max: 15)]
     #[ORM\Column(length: 15, nullable: true)]
-    protected ?string $unit = null;
+    private ?string $unit = null;
 
     /**
      * Get category.

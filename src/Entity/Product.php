@@ -55,6 +55,8 @@ class Product extends AbstractCategoryItemEntity implements TimestampableInterfa
 
     /**
      * Clone this product.
+     *
+     * @param ?string $description the new description
      */
     public function clone(?string $description = null): self
     {

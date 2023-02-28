@@ -38,12 +38,20 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
     final public const DEFAULT_COLOR = '#000000';
 
     /**
+     * The calculations.
+     *
+     * @var Collection<int, Calculation>
+     */
+    #[ORM\OneToMany(mappedBy: 'state', targetEntity: Calculation::class)]
+    private Collection $calculations;
+
+    /**
      * The code (unique).
      */
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH, unique: true)]
-    protected ?string $code = null;
+    private ?string $code = null;
 
     /**
      * The color used in the user interface (UI).
@@ -52,28 +60,20 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
     #[Assert\NotBlank]
     #[Assert\Length(max: 10)]
     #[ORM\Column(length: 10, options: ['default' => self::DEFAULT_COLOR])]
-    protected string $color = self::DEFAULT_COLOR;
+    private string $color = self::DEFAULT_COLOR;
 
     /**
      * The description.
      */
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column(nullable: true)]
-    protected ?string $description = null;
+    private ?string $description = null;
 
     /**
      * The editable state.
      */
     #[ORM\Column(options: ['default' => true])]
-    protected bool $editable = true;
-
-    /**
-     * The calculations.
-     *
-     * @var Collection<int, Calculation>
-     */
-    #[ORM\OneToMany(mappedBy: 'state', targetEntity: Calculation::class)]
-    private Collection $calculations;
+    private bool $editable = true;
 
     /**
      * Constructor.

@@ -40,7 +40,7 @@ abstract class AbstractEntity implements \Stringable
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    private ?int $id = null;
 
     /**
      * Magic method called after clone.
@@ -81,6 +81,16 @@ abstract class AbstractEntity implements \Stringable
     public function isNew(): bool
     {
         return empty($this->id);
+    }
+
+    /**
+     * Sets the identifier.
+     */
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**

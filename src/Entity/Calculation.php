@@ -38,14 +38,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    protected ?string $customer = null;
+    private ?string $customer = null;
 
     /**
      * The date.
      */
     #[Assert\NotNull]
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE)]
-    protected \DateTimeInterface $date;
+    private \DateTimeInterface $date;
 
     /**
      * The description.
@@ -53,13 +53,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]
     #[ORM\Column]
-    protected ?string $description = null;
+    private ?string $description = null;
 
     /**
      * The global margin in percent (%).
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $globalMargin = 0.0;
+    private float $globalMargin = 0.0;
 
     /**
      * The children groupes.
@@ -69,19 +69,19 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'calculation', targetEntity: CalculationGroup::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['position' => Criteria::ASC])]
-    protected Collection $groups;
+    private Collection $groups;
 
     /**
      * The total of all items.
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $itemsTotal = 0.0;
+    private float $itemsTotal = 0.0;
 
     /**
      * The overall total.
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $overallTotal = 0.0;
+    private float $overallTotal = 0.0;
 
     /**
      * The state.
@@ -89,13 +89,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'calculations')]
     #[ORM\JoinColumn(name: 'state_id', nullable: false)]
-    protected ?CalculationState $state = null;
+    private ?CalculationState $state = null;
 
     /**
      * The user margin in percent (%).
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $userMargin = 0.0;
+    private float $userMargin = 0.0;
 
     /**
      * Constructor.
@@ -354,7 +354,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getFormattedId(): string
     {
-        return FormatUtils::formatId((int) $this->id);
+        return FormatUtils::formatId((int) $this->getId());
     }
 
     /**
@@ -800,16 +800,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function setGlobalMargin(float $globalMargin): self
     {
         $this->globalMargin = $this->round($globalMargin);
-
-        return $this;
-    }
-
-    /**
-     * Sets the identifier.
-     */
-    public function setId(int $id): self
-    {
-        $this->id = $id;
 
         return $this;
     }

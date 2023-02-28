@@ -36,14 +36,14 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
      * The total amount.
      */
     #[ORM\Column(type: FixedFloatType::NAME)]
-    protected float $amount = 0.0;
+    private float $amount = 0.0;
 
     /**
      * The parent's category.
      */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'category_id', nullable: false)]
-    protected ?Category $category = null;
+    private ?Category $category = null;
 
     /**
      * The code.
@@ -51,7 +51,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     #[Assert\NotBlank]
     #[Assert\Length(max: self::MAX_CODE_LENGTH)]
     #[ORM\Column(length: self::MAX_CODE_LENGTH)]
-    protected ?string $code = null;
+    private ?string $code = null;
 
     /**
      * The parent's group.
@@ -59,7 +59,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
-    protected ?CalculationGroup $group = null;
+    private ?CalculationGroup $group = null;
 
     /**
      * The items.
@@ -69,7 +69,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: CalculationItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['position' => Criteria::ASC])]
-    protected Collection $items;
+    private Collection $items;
 
     /**
      * Constructor.

@@ -271,16 +271,6 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Sets the identifier.
-     */
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Sets the level.
      */
     public function setLevel(string $level): self

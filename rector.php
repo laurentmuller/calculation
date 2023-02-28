@@ -23,9 +23,9 @@ return static function (RectorConfig $rectorConfig): void {
 
     // paths
     $rectorConfig->paths([
-        'src',
-        'tests',
-        'templates',
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+        __DIR__ . '/templates',
     ]);
 
     // rules to skip
@@ -43,10 +43,9 @@ return static function (RectorConfig $rectorConfig): void {
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // PHP-Unit
-        PHPUnitSetList::PHPUNIT_100,
+        PHPUnitSetList::PHPUNIT_91,
         PHPUnitSetList::PHPUNIT_EXCEPTION,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-        PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // Symfony
         SymfonySetList::SYMFONY_62,
         SymfonySetList::SYMFONY_CODE_QUALITY,

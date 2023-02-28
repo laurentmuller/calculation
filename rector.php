@@ -15,6 +15,7 @@ use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\Symfony\Set\TwigSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     // bootstrap files
@@ -24,6 +25,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         'src',
         'tests',
+        'templates',
     ]);
 
     // rules to skip
@@ -36,18 +38,22 @@ return static function (RectorConfig $rectorConfig): void {
         // global
         SetList::PHP_81,
         SetList::CODE_QUALITY,
+        // Doctrine
+        DoctrineSetList::DOCTRINE_DBAL_30,
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
+        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // PHP-Unit
-        PHPUnitSetList::PHPUNIT_91,
+        PHPUnitSetList::PHPUNIT_100,
         PHPUnitSetList::PHPUNIT_EXCEPTION,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+        PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // Symfony
         SymfonySetList::SYMFONY_62,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-        // Doctrine
-        DoctrineSetList::DOCTRINE_DBAL_30,
-        DoctrineSetList::DOCTRINE_CODE_QUALITY,
-        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
+        // twig
+        TwigSetList::TWIG_240,
+        TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
     ]);
 };

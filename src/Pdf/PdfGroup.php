@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Enums\PdfTextAlignment;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Represent a group in the grouping table.
@@ -105,7 +105,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
      */
     public function isKey(): bool
     {
-        return Utils::isString($this->getName());
+        return StringUtils::isString($this->getName());
     }
 
     /**

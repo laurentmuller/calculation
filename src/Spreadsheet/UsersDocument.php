@@ -35,6 +35,8 @@ class UsersDocument extends AbstractArrayDocument
      * Constructor.
      *
      * @param User[] $entities
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
     {

@@ -14,7 +14,7 @@ namespace App\Form\Type;
 
 use App\Captcha\AlphaCaptchaInterface;
 use App\Traits\SessionAwareTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -110,7 +110,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
 
     public function validate(?string $data, ExecutionContextInterface $context): void
     {
-        if (!Utils::isString($data) || !$this->captcha->checkAnswer((string) $data, (string) $this->previousAnswer)) {
+        if (!StringUtils::isString($data) || !$this->captcha->checkAnswer((string) $data, (string) $this->previousAnswer)) {
             $context->buildViolation('error')
                 ->setTranslationDomain('captcha')
                 ->addViolation();

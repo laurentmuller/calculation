@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -61,7 +61,7 @@ final class DatabaseInfoService
                         'YES', 'NO',
                         'ENABLED', 'DISABLED',
                         'AUTO',
-                        'AUTOMATIC' => Utils::capitalize($value),
+                        'AUTOMATIC' => StringUtils::capitalize($value),
                         default => $value
                     };
                 }

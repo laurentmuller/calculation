@@ -15,7 +15,7 @@ namespace App\Pdf;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Class to build a table.
@@ -550,7 +550,7 @@ class PdfTableBuilder
             $imageBounds = clone $bounds;
             $imageBounds->inflate(-$margins);
             $cell->drawImage($parent, $imageBounds, $alignment);
-        } elseif (Utils::isString($text)) {
+        } elseif (StringUtils::isString($text)) {
             // cell text
             $line_height = PdfDocument::LINE_HEIGHT;
             if (!$style->getFont()->isDefaultSize()) {

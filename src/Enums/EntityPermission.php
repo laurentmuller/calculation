@@ -14,7 +14,7 @@ namespace App\Enums;
 
 use App\Interfaces\SortableEnumInterface;
 use App\Util\RoleBuilder;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
@@ -80,7 +80,7 @@ enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterfa
      */
     public function matchName(string $name): bool
     {
-        return Utils::equalIgnoreCase($name, $this->name);
+        return StringUtils::equalIgnoreCase($name, $this->name);
     }
 
     /**

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\Mime\MimeTypes;
 
@@ -55,7 +55,7 @@ trait MimeTypeTrait
     protected function buildHeaders(string $name, bool $inline): array
     {
         $name = $this->validate($name);
-        $encoded = Utils::ascii($name);
+        $encoded = StringUtils::ascii($name);
         $type = $inline ? $this->getInlineMimeType() : $this->getAttachmentMimeType();
         $disposition = $inline ? HeaderUtils::DISPOSITION_INLINE : HeaderUtils::DISPOSITION_ATTACHMENT;
 

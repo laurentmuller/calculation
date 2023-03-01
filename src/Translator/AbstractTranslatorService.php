@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Service\AbstractHttpClientService;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -97,7 +97,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     protected function handleError(array $response): bool
     {
         if (isset($response['error'])) {
-            /** @psalm-var  array{code: int, message: string} $error */
+            /** @psalm-var array{code: int, message: string} $error */
             $error = $response['error'];
 
             return $this->setLastError($error['code'], $error['message']);
@@ -117,7 +117,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     private function getCacheKey(): string
     {
-        return $this->cacheKey ??= \sprintf('%s.Languages', Utils::getShortName($this));
+        return $this->cacheKey ??= \sprintf('%s.Languages', StringUtils::getShortName($this));
     }
 
     private function getPropertyAccessor(): PropertyAccessorInterface

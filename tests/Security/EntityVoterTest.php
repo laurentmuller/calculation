@@ -163,7 +163,7 @@ class EntityVoterTest extends TestCase
     }
 
     /**
-     * @psalm-param  RoleInterface::ROLE_* $role
+     * @psalm-param RoleInterface::ROLE_* $role
      */
     private function getUser(string $role): User
     {

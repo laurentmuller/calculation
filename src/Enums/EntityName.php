@@ -14,7 +14,7 @@ namespace App\Enums;
 
 use App\Interfaces\SortableEnumInterface;
 use App\Util\RoleBuilder;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ExtrasTrait;
@@ -108,7 +108,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
      */
     public function matchValue(string $value): bool
     {
-        return Utils::equalIgnoreCase($value, $this->value);
+        return StringUtils::equalIgnoreCase($value, $this->value);
     }
 
     /**

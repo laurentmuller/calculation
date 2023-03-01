@@ -107,7 +107,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
         /** @psalm-var TEntity $entity */
         $entity = new $className();
         $accessor = PropertyAccess::createPropertyAccessor();
-        /** @psalm-var  mixed $value */
+        /** @psalm-var mixed $value */
         foreach ($data as $key => $value) {
             $accessor->setValue($entity, $key, $value);
         }

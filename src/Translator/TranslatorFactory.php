@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Traits\SessionAwareTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -76,8 +76,8 @@ class TranslatorFactory implements ServiceSubscriberInterface
     public function find(string $classOrName): ?TranslatorServiceInterface
     {
         foreach ($this->translators as $translator) {
-            if (Utils::equalIgnoreCase($classOrName, $translator::class)
-                || Utils::equalIgnoreCase($classOrName, $translator::getName())) {
+            if (StringUtils::equalIgnoreCase($classOrName, $translator::class)
+                || StringUtils::equalIgnoreCase($classOrName, $translator::getName())) {
                 return $translator;
             }
         }

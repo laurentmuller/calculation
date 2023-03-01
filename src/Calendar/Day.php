@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Represents a single day with a date.
@@ -50,7 +50,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
      */
     public function __toString(): string
     {
-        $name = Utils::getShortName($this);
+        $name = StringUtils::getShortName($this);
         $date = FormatUtils::formatDate($this->date);
 
         return \sprintf('%s(%s)', $name, $date);

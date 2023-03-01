@@ -24,7 +24,13 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * @see https://www.exchangerate-api.com/
  *
- * @phpstan-type RateType array{symbol: string, name: string, numericCode: int, fractionDigits: int, roundingIncrement: int}
+ * @psalm-type ExchangeRateType = array{
+ *     symbol: string,
+ *     name: string,
+ *     numericCode: int,
+ *     fractionDigits: int,
+ *     roundingIncrement: int
+ * }
  */
 class ExchangeRateService extends AbstractHttpClientService implements ServiceSubscriberInterface
 {
@@ -87,15 +93,15 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     public function getLatest(string $code): array
     {
-        $url = \sprintf(self::URI_LATEST, \strtoupper($code));
-        /** @var array<string, float>|null $rates */
+        $url = $this->getUrl(self::URI_LATEST, $code);
+        /** @psalm-var array<string, float>|null $rates */
         $rates = $this->getUrlCacheValue($url);
         if (\is_array($rates)) {
             return $rates;
         }
 
-        if ($response = $this->getResponse($url)) {
-            /** @var array<string, float>|null $rates */
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var array<string, float>|null $rates */
             $rates = $response['conversion_rates'] ?? null;
             if (\is_array($rates)) {
                 $this->saveResponse($url, $response, $rates);
@@ -119,15 +125,15 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     public function getRate(string $baseCode, string $targetCode): float
     {
-        $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
-        /** @var float|null $rate */
+        $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
+        /** @psalm-var float|null $rate */
         $rate = $this->getUrlCacheValue($url);
         if (\is_float($rate)) {
             return $rate;
         }
 
-        if ($response = $this->getResponse($url)) {
-            /** @var float|null $rate */
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var float|null $rate */
             $rate = $response['conversion_rate'] ?? null;
             if (\is_float($rate)) {
                 $this->saveResponse($url, $response, $rate);
@@ -151,16 +157,15 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
-        $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
-
-        /** @var array{rate: float, next: int|null, update: int|null}|null $result */
+        $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
+        /** @psalm-var array{rate: float, next: int|null, update: int|null}|null $result */
         $result = $this->getUrlCacheValue($url);
         if (\is_array($result)) {
             return $result;
         }
 
-        if ($response = $this->getResponse($url)) {
-            /** @var float|null $rate */
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var float|null $rate */
             $rate = $response['conversion_rate'] ?? null;
             if (\is_float($rate)) {
                 $result = [
@@ -180,22 +185,21 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     /**
      * Gets the supported currency codes.
      *
-     * @return array<string, RateType> the supported currency codes or an empty array if an error occurs
+     * @return array<string, ExchangeRateType> the supported currency codes or an empty array if an error occurs
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function getSupportedCodes(): array
     {
         $url = self::URI_CODES;
-
-        /** @var array<string, RateType>|null $result */
+        /** @psalm-var array<string, ExchangeRateType>|null $result */
         $result = $this->getUrlCacheValue($url);
         if (\is_array($result)) {
             return $result;
         }
 
-        if ($response = $this->getResponse($url)) {
-            /** @var string[]|null $codes */
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var string[]|null $codes */
             $codes = $response['supported_codes'] ?? null;
             if (\is_array($codes)) {
                 $result = $this->mapCodes($codes);
@@ -216,6 +220,26 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         return [self::BASE_URI => $this->endpoint];
     }
 
+    /**
+     * Make an HTTP-GET call.
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     */
+    private function get(string $url): ?array
+    {
+        try {
+            /** @psalm-var array<string, string> $result */
+            $result = $this->requestGet($url)->toArray();
+            if ($this->isValidResult($result)) {
+                return $result;
+            }
+        } catch (\Exception $e) {
+            $this->setLastError(404, $this->translateError('unknown'), $e);
+        }
+
+        return null;
+    }
+
     private function getDeltaTime(array $response): ?int
     {
         $time = $this->getNextTime($response);
@@ -231,28 +255,10 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
 
     private function getNextTime(array $response): ?int
     {
-        return $this->getTime($response, 'time_next_update_unix');
+        return $this->getResponseTime($response, 'time_next_update_unix');
     }
 
-    /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    private function getResponse(string $url): ?array
-    {
-        try {
-            /** @var array<string, string> $result */
-            $result = $this->requestGet($url)->toArray();
-            if ($this->isValidResult($result)) {
-                return $result;
-            }
-        } catch (\Exception $e) {
-            $this->setLastError(404, $this->translateError('unknown'), $e);
-        }
-
-        return null;
-    }
-
-    private function getTime(array $response, string $key): ?int
+    private function getResponseTime(array $response, string $key): ?int
     {
         $time = (int) ($response[$key] ?? 0);
 
@@ -261,7 +267,12 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
 
     private function getUpdateTime(array $response): ?int
     {
-        return $this->getTime($response, 'time_last_update_unix');
+        return $this->getResponseTime($response, 'time_last_update_unix');
+    }
+
+    private function getUrl(string $uri, string ...$parameters): string
+    {
+        return \sprintf($uri, ...\array_map('strtoupper', $parameters));
     }
 
     /**
@@ -270,7 +281,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     private function isValidResult(array $response): bool
     {
         // result
-        $result = $response['result'] ?? 'unknown';
+        $result = $response['result'] ?? '';
         if (self::RESPONSE_SUCCESS === $result) {
             return true;
         }
@@ -284,6 +295,10 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
 
     /**
      * Map a currency code.
+     *
+     * @param string $code the currency code
+     *
+     * @return ExchangeRateType
      */
     private function mapCode(string $code): array
     {
@@ -299,14 +314,14 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     /**
      * @param string[] $codes
      *
-     * @return array<string, RateType>
+     * @return array<string, ExchangeRateType>
      */
     private function mapCodes(array $codes): array
     {
-        /** @var string[] $codes */
+        /** @psalm-var string[] $codes */
         $codes = \array_filter(\array_column($codes, 0), Currencies::exists(...));
 
-        /** @var array<string, RateType> $result */
+        /** @psalm-var array<string, ExchangeRateType> $result */
         $result = \array_reduce($codes, function (array $carry, string $code): array {
             $carry[$code] = $this->mapCode($code);
 

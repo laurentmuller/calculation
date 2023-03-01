@@ -105,13 +105,13 @@ trait MathTrait
     }
 
     /**
-     * Ensure that the given value is within the given range.
+     * Ensure that the given value is within the given inclusive range.
      *
      * @param int $value the value to be tested
      * @param int $min   the minimum value allowed (inclusive)
      * @param int $max   the maximum value allowed (inclusive)
      *
-     * @return int the checked value
+     * @return int checked value
      */
     protected function validateIntRange(int $value, int $min, int $max): int
     {

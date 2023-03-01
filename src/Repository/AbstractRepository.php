@@ -14,7 +14,7 @@ namespace App\Repository;
 
 use App\Attribute\SortableEntity;
 use App\Entity\AbstractEntity;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query;
@@ -101,7 +101,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         // search
         $expr = $builder->expr();
-        if (Utils::isString($value)) {
+        if (StringUtils::isString($value)) {
             $param = 'search';
             $like = $expr->like($name, ':' . $param);
             $builder->where($like)

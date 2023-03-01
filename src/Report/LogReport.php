@@ -31,7 +31,7 @@ use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Psr\Log\LogLevel;
 
 /**
@@ -239,7 +239,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
         // total
         $columns[] = PdfColumn::center(self::TOTAL, 30);
-        $textCells[] = new PdfCell(Utils::capitalize(self::TOTAL));
+        $textCells[] = new PdfCell(StringUtils::capitalize(self::TOTAL));
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
 
         $this->started = true;
@@ -269,7 +269,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $index = \count($values) - 1;
         foreach ($values as $key => $value) {
             $columns[] = PdfColumn::center($key, 30);
-            $textCells[] = new PdfCell(Utils::capitalize($key));
+            $textCells[] = new PdfCell(StringUtils::capitalize($key));
             $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
             if ($index-- > 0) {
                 $columns[] = $emptyCol;

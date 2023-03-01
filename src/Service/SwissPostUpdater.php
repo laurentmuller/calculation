@@ -19,7 +19,7 @@ use App\Model\SwissPostUpdateResult;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -91,17 +91,18 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $builder = $this->factory->createBuilder();
         $helper = new FormHelper($builder, 'swisspost.fields.');
+        $types = ['application/zip', 'application/x-zip-compressed'];
 
         // file constraints
         $constraint = new File([
-            'mimeTypes' => ['application/zip', 'application/x-zip-compressed'],
+            'mimeTypes' => $types,
             'mimeTypesMessage' => $this->trans('swisspost.error.mime_type'),
         ]);
 
         // fields
         $helper->field('file')
             ->constraints($constraint)
-            ->updateAttribute('accept', 'application/x-zip-compressed')
+            ->updateAttribute('accept', \implode(',', $types))
             ->addFileType();
 
         return $helper->createForm();
@@ -135,7 +136,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
 
         // same as current database?
-        if (Utils::equalIgnoreCase($sourceFile, $this->databaseName)) {
+        if (StringUtils::equalIgnoreCase($sourceFile, $this->databaseName)) {
             return $this->setError('open_database');
         }
 

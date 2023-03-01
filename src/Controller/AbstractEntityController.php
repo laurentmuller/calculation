@@ -21,7 +21,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TableTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,7 +54,7 @@ abstract class AbstractEntityController extends AbstractController
     public function __construct(protected readonly AbstractRepository $repository)
     {
         $this->className = $this->repository->getClassName();
-        $this->lowerName = \strtolower(Utils::getShortName($this->className));
+        $this->lowerName = \strtolower(StringUtils::getShortName($this->className));
     }
 
     /**

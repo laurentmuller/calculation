@@ -18,7 +18,7 @@ use App\Repository\UserRepository;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
@@ -61,7 +61,7 @@ class UserTable extends AbstractEntityTable
      */
     public function formatImage(?string $image, User $user): string
     {
-        if (Utils::isString($image)) {
+        if (StringUtils::isString($image)) {
             return $this->twig->render('macros/_cell_user_image.html.twig', ['user' => $user]);
         }
 

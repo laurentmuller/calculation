@@ -69,7 +69,7 @@ trait SessionAwareTrait
      */
     protected function getSessionDate(string $key, \DateTimeInterface $default = null): ?\DateTimeInterface
     {
-        /** @var int|\DateTimeInterface|null $value */
+        /** @var \DateTimeInterface|int|null $value */
         $value = $this->getSessionValue($key, $default);
         if (\is_int($value)) {
             return (new \DateTime())->setTimestamp($value);
@@ -90,7 +90,10 @@ trait SessionAwareTrait
      */
     protected function getSessionFloat(string $key, ?float $default): ?float
     {
-        return (float) $this->getSessionValue($key, $default);
+        /** @psalm-var float|null $value */
+        $value = $this->getSessionValue($key, $default);
+
+        return \is_float($value) ? $value : $default;
     }
 
     /**
@@ -105,7 +108,10 @@ trait SessionAwareTrait
      */
     protected function getSessionInt(string $key, ?int $default): ?int
     {
-        return (int) $this->getSessionValue($key, $default);
+        /** @psalm-var int|null $value */
+        $value = $this->getSessionValue($key, $default);
+
+        return \is_int($value) ? $value : $default;
     }
 
     /**
@@ -133,7 +139,10 @@ trait SessionAwareTrait
      */
     protected function getSessionString(string $key, ?string $default = null): ?string
     {
-        return (string) $this->getSessionValue($key, $default);
+        /** @psalm-var string|null $value */
+        $value = $this->getSessionValue($key, $default);
+
+        return \is_string($value) ? $value : $default;
     }
 
     /**

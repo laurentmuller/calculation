@@ -400,7 +400,7 @@ class OpenWeatherService extends AbstractHttpClientService
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array
     {
         // find from cache
-        $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units]);
+        $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
 
         /** @psalm-var array<int, OpenWeatherCityType>|false $result */
         $result = $this->getCacheValue($key, false);
@@ -429,7 +429,13 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     protected function getDefaultOptions(): array
     {
-        return [self::BASE_URI => self::HOST_NAME];
+        return [
+            self::BASE_URI => self::HOST_NAME,
+            self::QUERY => [
+                'appid' => $this->key,
+                'lang' => self::getAcceptLanguage(),
+            ],
+        ];
     }
 
     /**
@@ -472,7 +478,7 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function findTimezone(array $data): int
     {
-        /** @var mixed $value */
+        /** @psalm-var mixed $value */
         foreach ($data as $key => $value) {
             if ('timezone' === $key) {
                 return (int) $value;
@@ -503,10 +509,6 @@ class OpenWeatherService extends AbstractHttpClientService
         if (\is_array($result)) {
             return $result;
         }
-
-        // add API key and language
-        $query['appid'] = $this->key;
-        $query['lang'] = self::getAcceptLanguage();
 
         // call
         $response = $this->requestGet($uri, [
@@ -633,9 +635,6 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * Update result.
-     *
-     * @param array                                   $result   the result to process
-     * @param \DateTimeZone|\IntlTimeZone|string|null $timezone the timezone identifier
      */
     private function updateResult(array &$result, \DateTimeZone|\IntlTimeZone|string $timezone = null): void
     {

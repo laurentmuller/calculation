@@ -14,7 +14,7 @@ namespace App\Calendar;
 
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Represents a calendar for a specified year.
@@ -118,7 +118,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function __toString(): string
     {
         $year = (int) $this->year;
-        $name = Utils::getShortName($this);
+        $name = StringUtils::getShortName($this);
         $firstDate = new \DateTimeImmutable(\sprintf('%d-01-01', $year));
         $lastDate = new \DateTimeImmutable(\sprintf('%d-12-31', $year));
         $first = FormatUtils::formatDate($firstDate);
@@ -315,7 +315,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function getWeekNames(): array
     {
         if (!$this->weekNames) {
-            $this->weekNames = DateUtils::getWeekdays('monday');
+            $this->weekNames = DateUtils::getWeekdays();
         }
 
         return $this->weekNames;
@@ -339,7 +339,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     public function getWeekShortNames(): array
     {
         if (!$this->weekShortNames) {
-            $this->weekShortNames = DateUtils::getShortWeekdays('monday');
+            $this->weekShortNames = DateUtils::getShortWeekdays();
         }
 
         return $this->weekShortNames;

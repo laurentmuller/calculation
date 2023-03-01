@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Psr\Log\LogLevel;
@@ -76,10 +76,10 @@ class Log extends AbstractEntity
             $message = $formatter->format($message);
         }
         if (!empty($this->context)) {
-            $message .= "\nContext:\n" . Utils::exportVar($this->getContext());
+            $message .= "\nContext:\n" . StringUtils::exportVar($this->getContext());
         }
         if (!empty($this->extra)) {
-            $message .= "\nExtra:\n" . Utils::exportVar($this->getExtra());
+            $message .= "\nExtra:\n" . StringUtils::exportVar($this->getExtra());
         }
 
         return $message;
@@ -90,7 +90,7 @@ class Log extends AbstractEntity
      */
     public function getChannel(bool $capitalize = false): string
     {
-        return $capitalize ? Utils::capitalize($this->channel) : $this->channel;
+        return $capitalize ? StringUtils::capitalize($this->channel) : $this->channel;
     }
 
     /**
@@ -159,7 +159,7 @@ class Log extends AbstractEntity
      */
     public function getLevel(bool $capitalize = false): string
     {
-        return $capitalize ? Utils::capitalize($this->level) : $this->level;
+        return $capitalize ? StringUtils::capitalize($this->level) : $this->level;
     }
 
     /**

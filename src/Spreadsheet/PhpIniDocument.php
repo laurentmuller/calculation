@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -95,7 +95,7 @@ class PhpIniDocument extends AbstractDocument
         $italic = false;
         if (\preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = \substr($var, 1);
-        } elseif (Utils::equalIgnoreCase('no value', $var)) {
+        } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
             $color = '7F7F7F';
             $italic = true;
         }

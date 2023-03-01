@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pivot\Aggregator;
 
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * AbstractAggregator function.
@@ -36,7 +36,7 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
 
     public function __toString(): string
     {
-        $name = Utils::getShortName($this);
+        $name = StringUtils::getShortName($this);
         /** @psalm-var mixed $value */
         $value = $this->getFormattedResult();
 
@@ -74,7 +74,7 @@ abstract class AbstractAggregator implements \JsonSerializable, \Stringable
     public function jsonSerialize(): array
     {
         return [
-            'name' => Utils::getShortName($this),
+            'name' => StringUtils::getShortName($this),
             'value' => $this->getFormattedResult(),
         ];
     }

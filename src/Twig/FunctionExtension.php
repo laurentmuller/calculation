@@ -19,7 +19,7 @@ use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +81,7 @@ final class FunctionExtension extends AbstractExtension
     {
         return [
             new TwigFilter('trans_role', $this->translateRole(...)),
-            new TwigFilter('var_export', Utils::exportVar(...)),
+            new TwigFilter('var_export', StringUtils::exportVar(...)),
         ];
     }
 
@@ -122,9 +122,9 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Output a link style sheet tag with a version and nonce.
      *
-     * @throws \Exception
+     * @param array<string, string|int> $parameters
      *
-     * @psalm-param array<string, mixed> $parameters
+     * @throws \Exception
      */
     private function assetCss(string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -134,9 +134,9 @@ final class FunctionExtension extends AbstractExtension
             'rel' => 'stylesheet',
             'nonce' => $this->service->getNonce(),
         ], $parameters);
-        $attributes = $this->reduceParameters($parameters);
+        $attributes = $this->reduceParams($parameters);
 
-        return "<link$attributes>";
+        return "<link $attributes>";
     }
 
     /**
@@ -165,9 +165,9 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Output an image tag with a version.
      *
-     * @throws \Exception
+     * @param array<string, string|int> $parameters
      *
-     * @psalm-param array<string, mixed> $parameters
+     * @throws \Exception
      */
     private function assetImage(string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -178,17 +178,17 @@ final class FunctionExtension extends AbstractExtension
             'width' => $width,
             'height' => $height,
         ], $parameters);
-        $attributes = $this->reduceParameters($parameters);
+        $attributes = $this->reduceParams($parameters);
 
-        return "<image$attributes>";
+        return "<image $attributes>";
     }
 
     /**
      * Output the user image profile.
      *
-     * @throws \Exception
+     * @psalm-param array<string, string|int> $parameters
      *
-     * @psalm-param array<string, mixed> $parameters
+     * @throws \Exception
      */
     private function assetImageUser(?User $user, ?string $size = null, array $parameters = []): string|false
     {
@@ -212,9 +212,9 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Output a javascript source tag with a version and nonce.
      *
-     * @throws \Exception
+     * @param array<string, string|int> $parameters
      *
-     * @psalm-param array<string, mixed> $parameters
+     * @throws \Exception
      */
     private function assetJs(string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -223,9 +223,9 @@ final class FunctionExtension extends AbstractExtension
             'src' => $src,
             'nonce' => $this->service->getNonce(),
         ], $parameters);
-        $attributes = $this->reduceParameters($parameters);
+        $attributes = $this->reduceParams($parameters);
 
-        return "<script$attributes></script>";
+        return "<script $attributes></script>";
     }
 
     /**
@@ -314,15 +314,15 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Reduce parameters with a key/value tags.
+     * Reduce parameters.
      *
-     * @psalm-param array<string, mixed> $parameters
+     * @param array<string, string|int> $parameters
      */
-    private function reduceParameters(array $parameters): string
+    private function reduceParams(array $parameters): string
     {
-        $callback = static fn (string $carry, string $key, mixed $value): string => \sprintf('%s %s="%s"', $carry, $key, \htmlspecialchars((string) $value));
+        $callback = static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, \htmlspecialchars((string) $value));
 
-        return (string) Utils::arrayReduceKey($parameters, $callback, '');
+        return \implode(' ', \array_map($callback, \array_keys($parameters), $parameters));
     }
 
     /**

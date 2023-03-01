@@ -34,8 +34,6 @@ class MailerService implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 
-    private readonly string $appName;
-
     /**
      * Constructor.
      */
@@ -43,12 +41,9 @@ class MailerService implements ServiceSubscriberInterface
         private readonly UrlGeneratorInterface $generator,
         private readonly MarkdownInterface $markdown,
         private readonly MailerInterface $mailer,
-        #[Autowire('%app_name%')]
-        string $appName,
-        #[Autowire('%app_version%')]
-        string $appVersion,
+        #[Autowire('%app_name% v%app_version%')]
+        private readonly string $appName
     ) {
-        $this->appName = \sprintf('%s v%s', $appName, $appVersion);
     }
 
     /**

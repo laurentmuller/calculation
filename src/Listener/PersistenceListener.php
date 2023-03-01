@@ -25,7 +25,7 @@ use App\Entity\User;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
@@ -107,6 +107,8 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
 
     /**
      * @param LifecycleEventArgs<EntityManagerInterface> $args
+     *
+     * @return ?AbstractEntity
      */
     private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
     {
@@ -121,7 +123,7 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
 
     private function getId(AbstractEntity $entity, string $suffix, string $default): string
     {
-        $id = \strtolower(Utils::getShortName($entity)) . $suffix;
+        $id = \strtolower(StringUtils::getShortName($entity)) . $suffix;
 
         return $this->isTransDefined($id) ? $id : $default;
     }
@@ -132,7 +134,7 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
     }
 
     /**
-     * @param LifecycleEventArgs<EntityManagerInterface> $args
+     * @psalm-param LifecycleEventArgs<EntityManagerInterface> $args
      */
     private function isLastLogin(LifecycleEventArgs $args, AbstractEntity $entity): bool
     {

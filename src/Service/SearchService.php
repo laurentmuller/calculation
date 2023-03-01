@@ -21,7 +21,7 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -152,7 +152,7 @@ class SearchService implements ServiceSubscriberInterface
     public function count(?string $search, ?string $entity = null): int
     {
         // check value
-        if (!Utils::isString($search)) {
+        if (!StringUtils::isString($search)) {
             return 0;
         }
 
@@ -215,7 +215,7 @@ class SearchService implements ServiceSubscriberInterface
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
         // check values
-        if (!Utils::isString($search) || 0 === $limit) {
+        if (!StringUtils::isString($search) || 0 === $limit) {
             return [];
         }
 
@@ -347,7 +347,7 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
-        $name = Utils::getShortName($class);
+        $name = StringUtils::getShortName($class);
         $content ??= "e.$field";
         /** @psalm-var literal-string $from */
         $from = $class;
@@ -378,7 +378,7 @@ class SearchService implements ServiceSubscriberInterface
         $queries = $this->getQueries();
 
         // entity?
-        if (Utils::isString($entity)) {
+        if (StringUtils::isString($entity)) {
             $queries = \array_filter($queries, fn (string $key): bool => 0 === \stripos($key, (string) $entity), \ARRAY_FILTER_USE_KEY);
         }
 
@@ -413,7 +413,7 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getEntityName(string $class): string
     {
-        return \strtolower(Utils::getShortName($class));
+        return \strtolower(StringUtils::getShortName($class));
     }
 
     /**
@@ -428,7 +428,7 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getKey(string $class, string $field): string
     {
-        $shortName = \strtolower(Utils::getShortName($class));
+        $shortName = \strtolower(StringUtils::getShortName($class));
 
         return "$shortName.$field";
     }

@@ -22,7 +22,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to get IP lookup.
  *
- * @psalm-type IpStackInfo = array{
+ * @psalm-type IpStackType = array{
  *     city: ?string,
  *     region_name: ?string,
  *     error?: array{code: ?int, type: ?string, info: ?string}
@@ -64,7 +64,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      *
      * @param ?Request $request the request to get client IP address or null for detecting the IP address
      *
-     * @return IpStackInfo|null the current Ip information if success; null on error
+     * @return IpStackType|null the current Ip information if success; null on error
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
@@ -72,7 +72,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     {
         $clientIp = $this->getClientIp($request);
 
-        /** @psalm-var IpStackInfo|null $result */
+        /** @psalm-var IpStackType|null $result */
         $result = $this->getUrlCacheValue($clientIp);
         if (\is_array($result)) {
             return $result;
@@ -88,7 +88,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
                 self::QUERY => $query,
             ]);
 
-            /** @psalm-var IpStackInfo $result */
+            /** @psalm-var IpStackType $result */
             $result = $response->toArray();
 
             // check
@@ -140,7 +140,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     /**
      * Returns if the given result is valid.
      *
-     * @param IpStackInfo $result
+     * @param IpStackType $result
      *
      * @return bool true if valid; false otherwise
      */

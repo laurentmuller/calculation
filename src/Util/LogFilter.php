@@ -117,7 +117,7 @@ class LogFilter
      */
     private function filterChannel(array $logs): array
     {
-        return \array_filter($logs, fn (Log $log): bool => Utils::equalIgnoreCase($this->channel, $log->getChannel()));
+        return \array_filter($logs, fn (Log $log): bool => StringUtils::equalIgnoreCase($this->channel, $log->getChannel()));
     }
 
     /**
@@ -129,7 +129,7 @@ class LogFilter
      */
     private function filterLevel(array $logs): array
     {
-        return \array_filter($logs, fn (Log $log): bool => Utils::equalIgnoreCase($this->level, $log->getLevel()));
+        return \array_filter($logs, fn (Log $log): bool => StringUtils::equalIgnoreCase($this->level, $log->getLevel()));
     }
 
     /**

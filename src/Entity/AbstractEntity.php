@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Traits\MathTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -102,10 +102,10 @@ abstract class AbstractEntity implements \Stringable
      */
     protected function trim(?string $str): ?string
     {
-        if (!Utils::isString($str)) {
+        if (!StringUtils::isString($str)) {
             return null;
         }
-        if (!Utils::isString($str = \trim((string) $str))) {
+        if (!StringUtils::isString($str = \trim((string) $str))) {
             return null;
         }
 

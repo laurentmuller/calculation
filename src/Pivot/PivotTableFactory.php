@@ -394,7 +394,7 @@ class PivotTableFactory
     }
 
     /**
-     * @psalm-param  PivotField[] $columnFields
+     * @psalm-param PivotField[] $columnFields
      */
     private function updateColumnFields(PivotTable $table, array $columnFields): void
     {
@@ -422,7 +422,7 @@ class PivotTableFactory
     }
 
     /**
-     * @psalm-param  PivotField[] $rowFields
+     * @psalm-param PivotField[] $rowFields
      */
     private function updateRowFields(PivotTable $table, array $rowFields): static
     {

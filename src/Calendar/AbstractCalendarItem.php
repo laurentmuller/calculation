@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Base class for calendar objects.
@@ -32,7 +32,7 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
 
     public function __toString(): string
     {
-        $name = Utils::getShortName($this);
+        $name = StringUtils::getShortName($this);
 
         return \sprintf('%s(%d)', $name, $this->getNumber());
     }

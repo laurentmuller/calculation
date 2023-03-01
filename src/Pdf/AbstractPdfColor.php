@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Traits\MathTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Define a RGB color.
@@ -34,16 +34,22 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     /**
      * The blue component.
+     *
+     * @psalm-var int<0, 255>
      */
     protected int $blue = 0;
 
     /**
      * The green component.
+     *
+     * @psalm-var int<0, 255>
      */
     protected int $green = 0;
 
     /**
      * The red component.
+     *
+     * @psalm-var int<0, 255>
      */
     protected int $red = 0;
 
@@ -55,6 +61,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * @param int $red   the red component
      * @param int $green the green component
      * @param int $blue  the blue component
+     *
+     * @psalm-param int<0, 255> $red
+     * @psalm-param int<0, 255> $green
+     * @psalm-param int<0, 255> $blue
      */
     final public function __construct(int $red = 0, int $green = 0, int $blue = 0)
     {
@@ -100,7 +110,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Creates a new instance.
      *
-     * @param string|int[] $rgb an array containing the red, green and blue values or a hexadecimal string
+     * @param int[]|string $rgb an array containing the red, green and blue values or a hexadecimal string
      *
      * @return static|null the color or null if the RGB value can not be parsed
      *
@@ -112,6 +122,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
             $rgb = self::parse($rgb);
         }
 
+        /** @psalm-var array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false $rgb */
         if (\is_array($rgb) && 3 === \count($rgb)) {
             return new static($rgb[0], $rgb[1], $rgb[2]);
         }
@@ -145,6 +156,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the blue component.
+     *
+     * @psalm-return int<0, 255>
      */
     public function getBlue(): int
     {
@@ -153,6 +166,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the green component.
+     *
+     * @psalm-return int<0, 255>
      */
     public function getGreen(): int
     {
@@ -161,6 +176,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     /**
      * Gets the red component.
+     *
+     * @psalm-return int<0, 255>
      */
     public function getRed(): int
     {
@@ -170,7 +187,9 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the red, the green and the blue values.
      *
-     * @return int[]
+     * @return array{0: int, 1: int, 2: int}
+     *
+     * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
      */
     public function getRGB(): array
     {
@@ -218,12 +237,14 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @param ?string $value a hexadecimal string
      *
-     * @return int[]|false the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
+     * @return array{0: int, 1: int, 2: int}|false the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
+     *
+     * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false
      */
     public static function parse(?string $value): array|false
     {
         // string?
-        if (!Utils::isString($value)) {
+        if (!StringUtils::isString($value)) {
             return false;
         }
 
@@ -232,17 +253,23 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
         // parse depending of length
         switch (\strlen((string) $value)) {
-            case 6: // FF8040
+            case 6:
                 $color = \hexdec($value);
+                /** @psalm-var int<0, 255> $r */
                 $r = 0xFF & ($color >> 0x10);
+                /** @psalm-var int<0, 255> $g */
                 $g = 0xFF & ($color >> 0x8);
+                /** @psalm-var int<0, 255> $b */
                 $b = 0xFF & $color;
 
                 return [$r, $g, $b];
 
-            case 3: // FAC -> FFAACC
+            case 3:
+                /** @psalm-var int<0, 255> $r */
                 $r = (int) \hexdec(\str_repeat(\substr($value, 0, 1), 2));
+                /** @psalm-var int<0, 255> $g */
                 $g = (int) \hexdec(\str_repeat(\substr($value, 1, 1), 2));
+                /** @psalm-var int<0, 255> $b */
                 $b = (int) \hexdec(\str_repeat(\substr($value, 2, 1), 2));
 
                 return [$r, $g, $b];
@@ -268,6 +295,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Sets the blue component.
      *
      * @param int $blue the value to set. Must be between 0 and 255 inclusive.
+     *
+     * @psalm-param int<0, 255> $blue
      */
     public function setBlue(int $blue): static
     {
@@ -280,6 +309,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Sets the green component.
      *
      * @param int $green the value to set. Must be between 0 and 255 inclusive.
+     *
+     * @psalm-param int<0, 255> $green
      */
     public function setGreen(int $green): static
     {
@@ -292,6 +323,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Sets the red component.
      *
      * @param int $red the value to set. Must be between 0 and 255 inclusive.
+     *
+     * @psalm-param int<0, 255> $red
      */
     public function setRed(int $red): static
     {
@@ -307,6 +340,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * @param int $red   the red component
      * @param int $green the green component
      * @param int $blue  the blue component
+     *
+     * @psalm-param int<0, 255> $red
+     * @psalm-param int<0, 255> $green
+     * @psalm-param int<0, 255> $blue
      */
     public function setRGB(int $red, int $green, int $blue): static
     {
@@ -333,9 +370,14 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * @param int $value the value to verify
      *
      * @return int the validate value
+     *
+     * @psalm-return int<0, 255>
      */
     private function checkColor(int $value): int
     {
-        return $this->validateIntRange($value, self::MIN_VALUE, self::MAX_VALUE);
+        /** @psalm-var int<0, 255> $value */
+        $value = $this->validateIntRange($value, self::MIN_VALUE, self::MAX_VALUE);
+
+        return $value;
     }
 }

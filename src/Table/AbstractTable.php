@@ -19,7 +19,7 @@ use App\Interfaces\TableInterface;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -154,7 +154,7 @@ abstract class AbstractTable implements SortModeInterface
     public function getPrefix(): string
     {
         if (null === $this->prefix) {
-            $this->prefix = u(Utils::getShortName($this))->snake()->toString();
+            $this->prefix = u(StringUtils::getShortName($this))->snake()->toString();
         }
 
         return $this->prefix;

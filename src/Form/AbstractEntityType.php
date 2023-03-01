@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\AbstractEntity;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -61,7 +61,7 @@ abstract class AbstractEntityType extends AbstractHelperType
      */
     protected function getLabelPrefix(): ?string
     {
-        $name = \strtolower(Utils::getShortName($this->className));
+        $name = \strtolower(StringUtils::getShortName($this->className));
 
         return "$name.fields.";
     }

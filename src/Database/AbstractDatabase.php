@@ -81,6 +81,9 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * Begin a transaction.
      *
      * @return bool true if success, false on failure
+     *
+     * @see AbstractDatabase::commitTransaction()
+     * @see AbstractDatabase::rollbackTransaction()
      */
     public function beginTransaction(): bool
     {
@@ -116,6 +119,9 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * Commit the current transaction (if any).
      *
      * @return bool true if success, false on failure
+     *
+     * @see AbstractDatabase::beginTransaction()
+     * @see AbstractDatabase::rollbackTransaction()
      */
     public function commitTransaction(): bool
     {
@@ -182,6 +188,9 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * Rollback the current transaction (if any).
      *
      * @return bool true if success, false on failure
+     *
+     * @see AbstractDatabase::beginTransaction()
+     * @see AbstractDatabase::commitTransaction()
      */
     public function rollbackTransaction(): bool
     {

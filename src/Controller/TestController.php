@@ -530,7 +530,7 @@ class TestController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        return Utils::groupBy($categories, fn (Category $c): string => (string) $c->getGroupCode());
+        return Utils::groupBy($categories, static fn (Category $c): string => (string) $c->getGroupCode());
     }
 
     /**
@@ -559,7 +559,7 @@ class TestController extends AbstractController
     {
         $products = $manager->getRepository(Product::class)->findAllByGroup();
 
-        return Utils::groupBy($products, fn (Product $p): string => \sprintf('%s - %s', (string) $p->getGroupCode(), (string) $p->getCategoryCode()));
+        return Utils::groupBy($products, static fn (Product $p): string => \sprintf('%s - %s', (string) $p->getGroupCode(), (string) $p->getCategoryCode()));
     }
 
     private function getStates(EntityManagerInterface $manager): array
@@ -570,6 +570,6 @@ class TestController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        return Utils::groupBy($states, fn (CalculationState $state): string => $state->isEditable() ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable');
+        return Utils::groupBy($states, static fn (CalculationState $state): string => $state->isEditable() ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable');
     }
 }

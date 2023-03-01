@@ -398,7 +398,7 @@ final class SymfonyInfoService
      *              homepage?: string}> $runtimePackages
      * @param string[] $debugPackages
      *
-     * @return  array{
+     * @return array{
      *          runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
      *          debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
      *          }

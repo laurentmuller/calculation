@@ -14,7 +14,7 @@ namespace App\Pivot;
 
 use App\Interfaces\SortModeInterface;
 use App\Pivot\Aggregator\AbstractAggregator;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Represents a pivot node.
@@ -59,7 +59,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     public function __toString(): string
     {
-        $className = Utils::getShortName($this);
+        $className = StringUtils::getShortName($this);
 
         return \sprintf('%s(%s)', $className, 0);
     }

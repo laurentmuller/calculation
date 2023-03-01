@@ -15,7 +15,7 @@ namespace App\Pdf\Html;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Report\HtmlReport;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Represents a text chunk.
@@ -54,7 +54,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
      */
     public function isEmpty(): bool
     {
-        return !Utils::isString($this->text);
+        return !StringUtils::isString($this->text);
     }
 
     /**

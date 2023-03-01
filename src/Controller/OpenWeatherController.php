@@ -208,7 +208,7 @@ class OpenWeatherController extends AbstractController
                 return $this->jsonFalse();
             }
 
-            /**  @psalm-var array{id: int, latitude: float, longitude: float} $city */
+            /** @psalm-var array{id: int, latitude: float, longitude: float} $city */
             foreach ($cities as $city) {
                 $parameters = [
                     self::KEY_UNITS => $units,

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Class to parse HTML content.
@@ -202,7 +202,7 @@ class HtmlParser
             $attributes = $node->attributes;
             if (null !== ($attribute = $attributes->getNamedItem($name))) {
                 $value = \trim((string) $attribute->nodeValue);
-                if (Utils::isString($value)) {
+                if (StringUtils::isString($value)) {
                     return $value;
                 }
             }
@@ -312,7 +312,7 @@ class HtmlParser
     private function trimHtml(): ?string
     {
         // check content
-        if (!Utils::isString($content = \trim((string) $this->html))) {
+        if (!StringUtils::isString($content = \trim((string) $this->html))) {
             return null;
         }
 
@@ -321,7 +321,7 @@ class HtmlParser
         $content = \trim(\preg_replace('/\s\s+/m', ' ', $content));
 
         // string?
-        if (!Utils::isString($content)) {
+        if (!StringUtils::isString($content)) {
             return null;
         }
 

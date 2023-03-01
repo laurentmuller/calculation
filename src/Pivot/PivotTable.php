@@ -14,7 +14,7 @@ namespace App\Pivot;
 
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Field\PivotField;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * The pivot table.
@@ -256,7 +256,7 @@ class PivotTable extends AbstractPivotAggregator
     {
         return \array_filter([
             'title' => $this->title,
-            'aggregator' => Utils::getShortName($this->aggregator),
+            'aggregator' => StringUtils::getShortName($this->aggregator),
             'value' => $this->aggregator->getFormattedResult(),
             'keyField' => $this->keyField,
             'dataField' => $this->dataField,

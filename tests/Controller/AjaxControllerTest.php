@@ -115,7 +115,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     private function validateResponse(Response $response, string|bool $expected): void
     {
         self::assertTrue($response->isOk());
-        /** @psalm-var  mixed $result */
+        /** @psalm-var mixed $result */
         $result = \json_decode((string) $response->getContent(), true);
         if (\is_string($expected)) {
             self::assertNotNull($this->translator);

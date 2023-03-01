@@ -15,7 +15,7 @@ namespace App\Table;
 use App\Entity\AbstractEntity;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
@@ -182,7 +182,7 @@ abstract class AbstractEntityTable extends AbstractTable
         $orderBy = [];
 
         // add query sort
-        if ($sorting = Utils::isString($query->sort) && Utils::isString($query->order)) {
+        if ($sorting = StringUtils::isString($query->sort) && StringUtils::isString($query->order)) {
             $this->updateOrderBy($orderBy, $query, $alias);
         }
 
@@ -211,7 +211,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         // search?
         $search = $query->search;
-        if (!Utils::isString($search)) {
+        if (!StringUtils::isString($search)) {
             return false;
         }
 

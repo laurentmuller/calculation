@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Util\FormatUtils;
-use App\Util\Utils;
+use App\Util\StringUtils;
 
 /**
  * Represents a week with a calendar and an array of days.
@@ -52,7 +52,7 @@ class Week extends AbstractCalendarItem
      */
     public function __toString(): string
     {
-        $name = Utils::getShortName($this);
+        $name = StringUtils::getShortName($this);
         $first = (string) FormatUtils::formatDate($this->getFirstDate());
         $last = (string) FormatUtils::formatDate($this->getLastDate());
 

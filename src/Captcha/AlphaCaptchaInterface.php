@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 /**
  * Class implementing this interface deals with question and answer validation.
  */
-#[AutoconfigureTag()]
+#[AutoconfigureTag]
 interface AlphaCaptchaInterface
 {
     /**

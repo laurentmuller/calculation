@@ -14,7 +14,7 @@ namespace App\Captcha;
 
 use App\Service\DictionaryService;
 use App\Traits\TranslatorAwareTrait;
-use App\Util\Utils;
+use App\Util\StringUtils;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -38,7 +38,7 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSub
      */
     public function checkAnswer(string $givenAnswer, string $expectedAnswer): bool
     {
-        return Utils::equalIgnoreCase($givenAnswer, $expectedAnswer);
+        return StringUtils::equalIgnoreCase($givenAnswer, $expectedAnswer);
     }
 
     /**

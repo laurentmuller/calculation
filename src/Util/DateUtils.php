@@ -149,17 +149,17 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string  $firstday The first day of the week, in english,  like 'sunday' or 'monday'
+     * @param string  $firstDay The first day of the week, in english,  like 'sunday' or 'monday'
      * @param ?string $locale   The locale to format names or null to use default
      *
      * @return array<int, string>
      */
-    public static function getShortWeekdays(string $firstday = 'sunday', ?string $locale = null): array
+    public static function getShortWeekdays(string $firstDay = 'monday', ?string $locale = null): array
     {
         $locale ??= \Locale::getDefault();
-        $key = "$firstday|$locale";
+        $key = "$firstDay|$locale";
         if (empty(self::$shortWeekNames[$key])) {
-            self::$shortWeekNames[$key] = self::getDayNames('eee', $firstday, $locale);
+            self::$shortWeekNames[$key] = self::getDayNames('eee', $firstDay, $locale);
         }
 
         return self::$shortWeekNames[$key];
@@ -175,17 +175,17 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string  $firstday the first day of the week, in english, like 'sunday' or 'monday'
+     * @param string  $firstDay the first day of the week, in english, like 'sunday' or 'monday'
      * @param ?string $locale   The locale to format names or null to use default
      *
      * @return array<int, string>
      */
-    public static function getWeekdays(string $firstday = 'sunday', ?string $locale = null): array
+    public static function getWeekdays(string $firstDay = 'monday', ?string $locale = null): array
     {
         $locale ??= \Locale::getDefault();
-        $key = "$firstday|$locale";
+        $key = "$firstDay|$locale";
         if (empty(self::$weekNames[$key])) {
-            self::$weekNames[$key] = self::getDayNames('eeee', $firstday, $locale);
+            self::$weekNames[$key] = self::getDayNames('eeee', $firstDay, $locale);
         }
 
         return self::$weekNames[$key];
@@ -217,7 +217,7 @@ final class DateUtils
      *
      * @return array<int, string>
      */
-    private static function getDayNames(string $pattern, string $firstday, string $locale): array
+    private static function getDayNames(string $pattern, string $firstDay, string $locale): array
     {
         /** @var \IntlDateFormatter $formatter */
         $formatter = \IntlDateFormatter::create(
@@ -231,7 +231,7 @@ final class DateUtils
 
         $result = [];
         for ($i = 0; $i <= 6; ++$i) {
-            $time = (int) \strtotime("last $firstday + $i day");
+            $time = (int) \strtotime("last $firstDay + $i day");
             $value = (string) $formatter->format($time);
             $result[$i + 1] = \ucfirst($value);
         }

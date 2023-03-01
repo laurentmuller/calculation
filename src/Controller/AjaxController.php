@@ -32,6 +32,7 @@ use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
+use App\Util\StringUtils;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -167,7 +168,7 @@ class AjaxController extends AbstractController
         $service = $factory->getService($class);
 
         // check parameters
-        if (!Utils::isString($text)) {
+        if (!StringUtils::isString($text)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
             ]);
@@ -372,7 +373,7 @@ class AjaxController extends AbstractController
         }
         // field
         $field = $this->getRequestString($request, 'field');
-        if (!Utils::isString($field)) {
+        if (!StringUtils::isString($field)) {
             return $this->jsonFalse([
                 'values' => [],
             ]);
@@ -397,7 +398,7 @@ class AjaxController extends AbstractController
     {
         try {
             $search = $this->getRequestString($request, 'query', '');
-            if (Utils::isString($search)) {
+            if (StringUtils::isString($search)) {
                 $maxResults = $this->getRequestInt($request, 'limit', 15);
                 $products = $repository->search($search, $maxResults);
                 if ([] !== $products) {
@@ -464,12 +465,12 @@ class AjaxController extends AbstractController
         $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
         // check parameters
-        if (!Utils::isString($text)) {
+        if (!StringUtils::isString($text)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
             ]);
         }
-        if (!Utils::isString($to)) {
+        if (!StringUtils::isString($to)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.to_error'),
             ]);
@@ -575,7 +576,7 @@ class AjaxController extends AbstractController
     {
         try {
             $search = $this->getRequestString($request, 'query', '');
-            if (Utils::isString($search)) {
+            if (StringUtils::isString($search)) {
                 $limit = $this->getRequestInt($request, 'limit', 15);
                 $values = $repository->getDistinctValues($field, $search, $limit);
                 if ([] !== $values) {
@@ -599,7 +600,7 @@ class AjaxController extends AbstractController
     {
         try {
             $search = $this->getRequestString($request, 'query', '');
-            if (Utils::isString($search)) {
+            if (StringUtils::isString($search)) {
                 $limit = $this->getRequestInt($request, 'limit', 15);
                 $productValues = $productRepository->getDistinctValues($field, $search);
                 $taskValues = $taskRepository->getDistinctValues($field, $search);

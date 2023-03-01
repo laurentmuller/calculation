@@ -39,7 +39,7 @@ class SwissPostService
      */
     public function findAll(string $value, int $limit = 25): array
     {
-        $db = $this->getDatabase(true);
+        $db = $this->getDatabase();
         $result = $db->findAll($value, $limit);
         $db->close();
 
@@ -56,7 +56,7 @@ class SwissPostService
      */
     public function findCity(string $name, int $limit = 25): array
     {
-        $db = $this->getDatabase(true);
+        $db = $this->getDatabase();
         $result = $db->findCity($name, $limit);
         $db->close();
 
@@ -73,7 +73,7 @@ class SwissPostService
      */
     public function findStreet(string $name, int $limit = 25): array
     {
-        $db = $this->getDatabase(true);
+        $db = $this->getDatabase();
         $result = $db->findStreet($name, $limit);
         $db->close();
 
@@ -90,21 +90,11 @@ class SwissPostService
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        $db = $this->getDatabase(true);
+        $db = $this->getDatabase();
         $result = $db->findZip($zip, $limit);
         $db->close();
 
         return $result;
-    }
-
-    /**
-     * Gets the database.
-     *
-     * @param bool $readonly true open the database for reading only
-     */
-    public function getDatabase(bool $readonly = false): SwissDatabase
-    {
-        return new SwissDatabase($this->getDatabaseName(), $readonly);
     }
 
     /**
@@ -113,5 +103,13 @@ class SwissPostService
     public function getDatabaseName(): string
     {
         return $this->databaseName;
+    }
+
+    /**
+     * Gets the database.
+     */
+    private function getDatabase(): SwissDatabase
+    {
+        return new SwissDatabase($this->getDatabaseName(), true);
     }
 }

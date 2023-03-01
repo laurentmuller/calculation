@@ -24,6 +24,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to import OpenWeatherMap cities.
+ *
+ * @psalm-type OpenWeatherCityType = array{
+ *     id: float,
+ *     name: string,
+ *     country: string,
+ *     coord: array{
+ *          lat: float,
+ *          lon: float}
+ *     }
  */
 class OpenWeatherCityUpdater
 {
@@ -79,7 +88,7 @@ class OpenWeatherCityUpdater
             }
 
             // get cities
-            if (!$cities = $this->getFileContent($file)) {
+            if (false === $cities = $this->getFileContent($file)) {
                 return $this->falseResult('swisspost.error.open_archive', [
                         '%name%' => $file->getClientOriginalName(),
                     ]);
@@ -126,52 +135,32 @@ class OpenWeatherCityUpdater
     }
 
     /**
-     * @return array<array{
-     *     id: float,
-     *     name: string,
-     *     country: string,
-     *     coord: array{
-     *          lat: float,
-     *          lon: float}}>|false
+     * @return OpenWeatherCityType[]|false
      */
     private function getFileContent(UploadedFile $file): array|false
     {
         if (!$file->isValid()) {
             return false;
         }
-        if (!$filename = $file->getRealPath()) {
+        if (false === $filename = $file->getRealPath()) {
             return false;
         }
-        if (!$content = \file_get_contents($filename)) {
+        if (false === $content = \file_get_contents($filename)) {
             return false;
         }
-        if (!$content = \gzdecode($content)) {
+        if (false === $content = \gzdecode($content)) {
             return false;
         }
-        /**
-         * @var array<array{
-         *     id: float,
-         *     name: string,
-         *     country: string,
-         *     coord: array{
-         *          lat: float,
-         *          lon: float}}>|null $result
-         */
+        /** @var OpenWeatherCityType[]|null $result */
         $result = \json_decode($content, true);
 
         return \is_array($result) ? $result : false;
     }
 
     /**
-     * @param array<array{
-     *     id: float,
-     *     name: string,
-     *     country: string,
-     *     coord: array{
-     *          lat: float,
-     *          lon: float}}> $cities
+     * @param OpenWeatherCityType[] $cities
      *
-     * @return int[]
+     * @return array{0: int, 1: int}
      */
     private function insertCities(OpenWeatherDatabase $db, array $cities): array
     {
@@ -179,7 +168,13 @@ class OpenWeatherCityUpdater
         $error = 0;
         $db->beginTransaction();
         foreach ($cities as $city) {
-            if (!$db->insertCity((int) $city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
+            if (!$db->insertCity(
+                (int) $city['id'],
+                $city['name'],
+                $city['country'],
+                $city['coord']['lat'],
+                $city['coord']['lon']
+            )) {
                 ++$error;
             } elseif (0 === ++$valid % 50_000) {
                 $db->commitTransaction();

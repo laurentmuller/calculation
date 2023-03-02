@@ -15,7 +15,7 @@ namespace App\Database;
 use App\Util\FileUtils;
 
 /**
- * Extended the SQLite3 database with transaction support.
+ * Extended the SQLite3 database with transaction support and caching SQL statements.
  */
 abstract class AbstractDatabase extends \SQLite3 implements \Stringable
 {
@@ -27,7 +27,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * The opened statements.
      *
-     * @var \SQLite3Stmt[]
+     * @var array<string, \SQLite3Stmt>
      */
     protected array $statements = [];
 
@@ -80,14 +80,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Begin a transaction.
      *
-     * @return bool true if success, false on failure
+     * @return bool true on success; false on failure
      *
      * @see AbstractDatabase::commitTransaction()
      * @see AbstractDatabase::rollbackTransaction()
      */
     public function beginTransaction(): bool
     {
-        if (!$this->isTransaction() && $this->exec('BEGIN TRANSACTION;')) {
+        if (!$this->transaction && $this->exec('BEGIN TRANSACTION;')) {
             $this->transaction = true;
 
             return true;
@@ -118,14 +118,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Commit the current transaction (if any).
      *
-     * @return bool true if success, false on failure
+     * @return bool true on success; false on failure
      *
      * @see AbstractDatabase::beginTransaction()
      * @see AbstractDatabase::rollbackTransaction()
      */
     public function commitTransaction(): bool
     {
-        if ($this->isTransaction() && $this->exec('COMMIT TRANSACTION;')) {
+        if ($this->transaction && $this->exec('COMMIT TRANSACTION;')) {
             $this->transaction = false;
 
             return true;
@@ -173,7 +173,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param string     $name  the pragma name
      * @param mixed|null $value the optional pragma value
      *
-     * @return bool true if the succeeded, false on failure
+     * @return bool true if the succeeded; false on failure
      */
     public function pragma(string $name, mixed $value = null): bool
     {
@@ -187,14 +187,14 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Rollback the current transaction (if any).
      *
-     * @return bool true if success, false on failure
+     * @return bool true on success; false on failure
      *
      * @see AbstractDatabase::beginTransaction()
      * @see AbstractDatabase::commitTransaction()
      */
     public function rollbackTransaction(): bool
     {
-        if ($this->isTransaction() && $this->exec('ROLLBACK TRANSACTION;')) {
+        if ($this->transaction && $this->exec('ROLLBACK TRANSACTION;')) {
             $this->transaction = false;
 
             return true;
@@ -204,37 +204,17 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     }
 
     /**
-     * Binds a parameter to the given statement variable.
+     * Creates an index for the given table and columns.
      *
-     * @param \SQLite3Stmt $stmt  the statement to bind parameter with
-     * @param int|string   $name  either a string or an int identifying the statement variable to which the parameter should be bound
-     * @param mixed        $value the parameter to bind to a statement variable
-     * @param ?int         $type  the optional data type of the parameter to bind
+     * @param string $table      the table name
+     * @param string ...$columns the column names
      *
-     * @return bool true if the parameter is bound to the statement variable, false
-     *              on failure
+     * @return bool true if creation succeeded; false on failure
      */
-    protected function bindParam(\SQLite3Stmt $stmt, int|string $name, mixed $value, int $type = null): bool
+    protected function createIndex(string $table, string ...$columns): bool
     {
-        if (null !== $type) {
-            return $stmt->bindParam($name, $value, $type);
-        }
-
-        return $stmt->bindParam($name, $value);
-    }
-
-    /**
-     * Creates an index.
-     *
-     * @param string $table  the table name
-     * @param string $column the column name
-     *
-     * @return bool true if the creation succeeded, false on failure
-     */
-    protected function createIndex(string $table, string $column): bool
-    {
-        $name = \sprintf('idx_%s_%s', $table, $column);
-        $query = "CREATE INDEX IF NOT EXISTS $name ON $table($column)";
+        $name = \sprintf('idx_%s_%s', $table, \implode('_', $columns));
+        $query = \sprintf('CREATE INDEX IF NOT EXISTS %s ON %s(%s)', $name, $table, \implode(',', $columns));
 
         return $this->exec($query);
     }
@@ -254,6 +234,8 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
      * @pslam-template T of array<string, mixed>
+     *
+     * @psalm-param int<1,3> $mode
      *
      * @pslam-return array<int, T>
      */
@@ -280,7 +262,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      *
      * @param string $query the SQL query to prepare
      *
-     * @return \SQLite3Stmt|null the statement object on success or false on failure
+     * @return ?\SQLite3Stmt the statement object on success; null on failure
      */
     protected function getStatement(string $query): ?\SQLite3Stmt
     {
@@ -327,6 +309,8 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      *                      must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
      * @pslam-template T of array<string, mixed>
+     *
+     * @psalm-param int<1,3> $mode $mode
      *
      * @pslam-return array<int, T>
      */

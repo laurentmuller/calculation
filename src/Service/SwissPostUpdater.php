@@ -29,6 +29,16 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to import zip codes, cities and streets from Switzerland.
+ *
+ * @psalm-type SwissAddressType =  array{
+ *      0: int,
+ *      1: int,
+ *      2: int,
+ *      4: string|int,
+ *      6: string,
+ *      8: string,
+ *      9: string
+ * }
  */
 class SwissPostUpdater implements ServiceSubscriberInterface
 {
@@ -246,21 +256,33 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         // open archive
         $this->archive = new \ZipArchive();
-        if (true !== $this->archive->open($sourceFile)) {
-            $this->setError('open_archive', ['%name%' => $this->sourceName]);
+        $error = $this->archive->open($sourceFile, \ZipArchive::RDONLY);
+        if (true !== $error) {
+            $this->setError('open_archive', [
+                '%name%' => $this->sourceName,
+                '%error' => $error,
+            ]);
 
             return false;
         }
 
-        // check if only 1 entry is present
-        if (1 !== $this->archive->count()) {
-            $this->setError('entry_not_one', ['%name%' => $this->sourceName]);
-            $this->closeArchive();
+        // check count
+        switch ($this->archive->count()) {
+            case 0:
+                $this->setError('empty_archive', ['%name%' => $this->sourceName]);
+                $this->closeArchive();
 
-            return false;
+                return false;
+
+            case 1:
+                return true;
+
+            default:
+                $this->setError('entry_not_one', ['%name%' => $this->sourceName]);
+                $this->closeArchive();
+
+                return false;
         }
-
-        return true;
     }
 
     /**
@@ -299,17 +321,13 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     /**
      * Insert a city record to the database.
      *
-     * @psalm-param array{
-     *      1: string|int,
-     *      4: string,
-     *      8: string,
-     *      9: string} $data
+     * @psalm-param SwissAddressType $data
      */
     private function processCity(array $data): void
     {
         if ($this->validateLength($data, 9) && null !== $this->database && $this->database->insertCity([
-                $data[1],               // id
-                $data[4],               // zip code
+                $data[1],         // id
+                (int) $data[4],         // zip code
                 $this->clean($data[8]), // city name
                 $data[9],               // state (canton)
         ])) {
@@ -326,13 +344,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $filename = FileUtils::buildPath(\dirname($this->databaseName), self::STATE_FILE);
         if (FileUtils::exists($filename) && false !== ($handle = \fopen($filename, 'r'))) {
-            /**
-             * @psalm-param bool|array{
-             *      0: string,
-             *      1: string
-             * } $data
-             */
             while (false !== ($data = \fgetcsv($handle, 0, ';'))) {
+                /** @psalm-var array{0: string, 1: string} $data */
                 if (null !== $this->database && $this->database->insertState($data)) {
                     $this->results->addValidStates();
                 } else {
@@ -353,22 +366,13 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         $process = true;
 
         while ($process) {
-            /**
-             * @psalm-var bool|null|array{
-             *      0: string,
-             *      1: string|int,
-             *      2: int,
-             *      4: string,
-             *      6: string,
-             *      8: string,
-             *      9: string} $data
-             */
-            $data = \fgetcsv($stream, 0, ';');
+            /** @psalm-var SwissAddressType|bool|null $data */
+            $data = \fgetcsv(stream: $stream, separator: ';');
             if (!\is_array($data)) {
                 break;
             }
 
-            switch ((int) $data[0]) {
+            switch ($data[0]) {
                 case self::REC_VALIDITY:
                     if (!$this->processValidity($data)) {
                         $this->closeStream();
@@ -403,9 +407,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     /**
      * Insert a street record to the database.
      *
-     * @psalm-param array{
-     *      2: int,
-     *      6: string} $data
+     * @psalm-param SwissAddressType $data
      */
     private function processStreet(array $data): void
     {
@@ -422,14 +424,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     /**
      * Process the validity record.
      *
-     * @psalm-param array{
-     *      0: string,
-     *      1: string|int,
-     *      2: int,
-     *      4: string,
-     *      6: string,
-     *      8: string,
-     *      9: string} $data
+     * @psalm-param SwissAddressType $data
      */
     private function processValidity(array $data): bool
     {

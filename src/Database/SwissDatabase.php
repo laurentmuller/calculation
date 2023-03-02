@@ -28,7 +28,7 @@ class SwissDatabase extends AbstractDatabase
             zip      INTEGER NOT NULL,
             name     TEXT NOT NULL,
             state_id TEXT NOT NULL
-        ) WITHOUT ROWID
+        )
         sql;
 
     /**
@@ -37,10 +37,10 @@ class SwissDatabase extends AbstractDatabase
      * @var string
      */
     private const CREATE_STATE = <<<'sql'
-        CREATE TABLE "state" (
+        CREATE TABLE IF NOT EXISTS  "state" (
             id      TEXT PRIMARY KEY,
             name    TEXT NOT NULL
-        ) WITHOUT ROWID
+        )
         sql;
 
     /**
@@ -231,26 +231,26 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a city.
      *
-     * @param array $data the data to insert with the following values:
-     *                    <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                    <tr>
-     *                    <th>Index</th><th>Type</th><th>Description</th>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>0</td><td>integer</td><td>The city identifier (primary key).</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>1</td><td>integer</td><td>The zip code.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>2</td><td>string</td><td>The city name.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>3</td><td>string</td><td>The state (canton).</td>
-     *                    </tr>
-     *                    </table>
+     * @param array{0: int, 1: int, 2: string, 3:string} $data the data to insert with the following values:
+     *                                                         <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *                                                         <tr>
+     *                                                         <th>Index</th><th>Type</th><th>Description</th>
+     *                                                         </tr>
+     *                                                         <tr>
+     *                                                         <td>0</td><td>integer</td><td>The city identifier (primary key).</td>
+     *                                                         </tr>
+     *                                                         <tr>
+     *                                                         <td>1</td><td>integer</td><td>The zip code.</td>
+     *                                                         </tr>
+     *                                                         <tr>
+     *                                                         <td>2</td><td>string</td><td>The city name.</td>
+     *                                                         </tr>
+     *                                                         <tr>
+     *                                                         <td>3</td><td>string</td><td>The state (canton).</td>
+     *                                                         </tr>
+     *                                                         </table>
      *
-     * @return bool true if success
+     *  @return bool true if success
      */
     public function insertCity(array $data): bool
     {
@@ -258,10 +258,10 @@ class SwissDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::INSERT_CITY);
 
         // parameters
-        $stmt->bindParam(':id', $data[0], \SQLITE3_INTEGER);
-        $stmt->bindParam(':zip', $data[1], \SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $data[2]);
-        $stmt->bindParam(':state_id', $data[3]);
+        $stmt->bindValue(':id', $data[0], \SQLITE3_INTEGER);
+        $stmt->bindValue(':zip', $data[1], \SQLITE3_INTEGER);
+        $stmt->bindValue(':name', $data[2]);
+        $stmt->bindValue(':state_id', $data[3]);
 
         // execute
         return false !== $stmt->execute();
@@ -270,20 +270,20 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a state.
      *
-     * @param array $data the data to insert with the following values:
-     *                    <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                    <tr>
-     *                    <th>Index</th><th>Type</th><th>Description</th>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>0</td><td>string</td><td>The state identifier (primary key).</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>1</td><td>string</td><td>The state name.</td>
-     *                    </tr>
-     *                    </table>
+     * @param array{0: string, 1: string} $data the data to insert with the following values:
+     *                                          <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *                                          <tr>
+     *                                          <th>Index</th><th>Type</th><th>Description</th>
+     *                                          </tr>
+     *                                          <tr>
+     *                                          <td>0</td><td>string</td><td>The state identifier (primary key).</td>
+     *                                          </tr>
+     *                                          <tr>
+     *                                          <td>1</td><td>string</td><td>The state name.</td>
+     *                                          </tr>
+     *                                          </table>
      *
-     * @return bool true if success
+     *  @return bool true if success
      */
     public function insertState(array $data): bool
     {
@@ -291,8 +291,8 @@ class SwissDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::INSERT_STATE);
 
         // parameters
-        $stmt->bindParam(':id', $data[0]);
-        $stmt->bindParam(':name', $data[1]);
+        $stmt->bindValue(':id', $data[0]);
+        $stmt->bindValue(':name', $data[1]);
 
         // execute
         return false !== $stmt->execute();
@@ -301,18 +301,18 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a street.
      *
-     * @param array $data the data to insert with the following values:
-     *                    <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                    <tr>
-     *                    <th>Index</th><th>Type</th><th>Description</th>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>0</td><td>integer</td><td>The city identifier (foreign key).</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>1</td><td>string</td><td>The street name.</td>
-     *                    </tr>
-     *                    </table>
+     * @param array{0: int, 1: string} $data the data to insert with the following values:
+     *                                       <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *                                       <tr>
+     *                                       <th>Index</th><th>Type</th><th>Description</th>
+     *                                       </tr>
+     *                                       <tr>
+     *                                       <td>0</td><td>integer</td><td>The city identifier (foreign key).</td>
+     *                                       </tr>
+     *                                       <tr>
+     *                                       <td>1</td><td>string</td><td>The street name.</td>
+     *                                       </tr>
+     *                                       </table>
      *
      * @return bool true if success
      */
@@ -322,8 +322,8 @@ class SwissDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::INSERT_STREET);
 
         // parameters
-        $stmt->bindParam(':city_id', $data[0], \SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $data[1]);
+        $stmt->bindValue(':city_id', $data[0], \SQLITE3_INTEGER);
+        $stmt->bindValue(':name', $data[1]);
 
         // execute
         return false !== $stmt->execute();

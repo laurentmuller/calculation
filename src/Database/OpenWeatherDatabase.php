@@ -30,14 +30,14 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @noinspection SqlResolve
      */
     private const CREATE_CITY = <<<'SQL'
-        CREATE TABLE city (
+        CREATE TABLE IF NOT EXISTS city (
             id        INTEGER NOT NULL,
             name      TEXT NOT NULL,
             country   TEXT NOT NULL,
             latitude  REAL NOT NULL,
             longitude REAL NOT NULL,
             PRIMARY KEY("id")
-        ) WITHOUT ROWID
+        )
         SQL;
 
     /**
@@ -152,11 +152,12 @@ class OpenWeatherDatabase extends AbstractDatabase
     {
         /** @psalm-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_CITY);
-        $stmt->bindParam(':id', $id, \SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':country', $country);
-        $stmt->bindParam(':latitude', $latitude, \SQLITE3_FLOAT);
-        $stmt->bindParam(':longitude', $longitude, \SQLITE3_FLOAT);
+
+        $stmt->bindValue(':id', $id, \SQLITE3_INTEGER);
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':country', $country);
+        $stmt->bindValue(':latitude', $latitude, \SQLITE3_FLOAT);
+        $stmt->bindValue(':longitude', $longitude, \SQLITE3_FLOAT);
 
         // execute
         return false !== $stmt->execute();

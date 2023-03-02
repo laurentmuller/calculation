@@ -1047,7 +1047,7 @@ swisspost:
     file_not_exist: Le fichier à importer est introuvable ou n'existe pas.
     mime_type: Le type de fichier sélectionné n'est pas valide.
     no_validity: L'archive '%name%' ne contient aucune date de validité.
-    open_archive: Impossible d'ouvrir le fichier d'archive '%name%'.
+    open_archive: Impossible d'ouvrir le fichier d'archive '%name%' (code d'erreur %error%).
     open_database: Impossible d'ouvrir la base de de données.
     open_stream: Impossible d'ouvrir le flux de données '%stream%' de l'archive '%name%'.
     rename_database: Impossible de renommer la base de données.

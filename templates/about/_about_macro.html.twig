@@ -19,14 +19,18 @@
 {%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
 <tr>
     <td class="{{ name_class }}">{{ name }}</td>
-    <td class="{{ value_class }}">{{ value }}</td>
+    <td class="{{ value_class }}">
+        {{- value -}}
+    </td>
 </tr>
 {%- endmacro %}
 
-{% macro rowInfoLink(name, value, href) -%}
+{% macro rowInfoLink(name, value, href, name_class='', value_class='') -%}
+{%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
+{%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
 <tr>
-    <td class="e">{{ name }}</td>
-    <td class="v">
+    <td class="{{ name_class }}">{{ name }}</td>
+    <td class="{{ value_class }}">
         <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">
             {{- value -}}
         </a>
@@ -42,6 +46,16 @@
     <td class="v">
         <span class="font-weight-bold text-{{ check_class }}">{{ check_text }}</span> <span>{{ value }}</span>
     </td>
+</tr>
+{%- endmacro %}
+
+{% macro rowBundle(bundle) -%}
+{% from 'macros/_icons.html.twig' import linkExternal %}
+<tr>
+    <td class="e pl-3">
+        {{- bundle.name -}}{%- if bundle.homepage|default(false) %}&nbsp;{{- linkExternal(bundle.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
+    </td>
+    <td class="v">{{ bundle.path }}</td>
 </tr>
 {%- endmacro %}
 

@@ -100,7 +100,7 @@ class LogService implements ServiceSubscriberInterface
      */
     public function isFileValid(): bool
     {
-        return FileUtils::exists($this->fileName) && 0 !== \filesize($this->fileName);
+        return FileUtils::exists($this->fileName) && !FileUtils::empty($this->fileName);
     }
 
     /**

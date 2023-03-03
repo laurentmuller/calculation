@@ -60,8 +60,8 @@ class CustomersReport extends AbstractArrayReport
         $this->AddPage();
 
         // create table
-        $table = new PdfGroupTableBuilder($this);
-        $table->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left($this->trans('customer.fields.nameAndCompany'), 50),
                 PdfColumn::left($this->trans('customer.fields.address'), 25),

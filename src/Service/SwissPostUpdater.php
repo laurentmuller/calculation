@@ -16,6 +16,7 @@ use App\Database\SwissDatabase;
 use App\Form\FormHelper;
 use App\Interfaces\PropertyServiceInterface;
 use App\Model\SwissPostUpdateResult;
+use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
@@ -42,6 +43,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  */
 class SwissPostUpdater implements ServiceSubscriberInterface
 {
+    use LoggerAwareTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 
@@ -95,7 +97,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * Creates the edit form.
+     * Creates a form to select the file to upload.
      */
     public function createForm(): FormInterface
     {
@@ -140,8 +142,8 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             $this->sourceName = \basename($sourceFile);
         }
 
-        // exist?
-        if (!FileUtils::exists($sourceFile)) {
+        // exist and not empty?
+        if (!FileUtils::exists($sourceFile) || FileUtils::empty($sourceFile)) {
             return $this->setError('file_not_exist');
         }
 
@@ -198,13 +200,13 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * Strip whitespace and convert to UTF-8 the given string.
+     * Strip whitespace and convert the given string from ISO-8859-1 to UTF-8.
      *
      * @param string $str the string to clean
      */
     private function clean(string $str): string
     {
-        return \mb_convert_encoding(\trim($str), 'UTF-8');
+        return \mb_convert_encoding(\trim($str), 'UTF-8', 'ISO-8859-1');
     }
 
     /**
@@ -212,8 +214,15 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      */
     private function closeArchive(): void
     {
-        $this->archive?->close();
-        $this->archive = null;
+        if (null !== $this->archive) {
+            try {
+                $this->archive->close();
+            } catch (\Exception $e) {
+                $this->logException($e, $this->trans('swisspost.error.close_archive'));
+            } finally {
+                $this->archive = null;
+            }
+        }
     }
 
     /**
@@ -222,11 +231,16 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     private function closeDatabase(): void
     {
         if (null !== $this->database) {
-            if ($this->results->isValid()) {
-                $this->database->compact();
+            try {
+                if ($this->results->isValid()) {
+                    $this->database->compact();
+                }
+                $this->database->close();
+            } catch (\Exception $e) {
+                $this->logException($e, $this->trans('swisspost.error.close_database'));
+            } finally {
+                $this->database = null;
             }
-            $this->database->close();
-            $this->database = null;
         }
     }
 
@@ -235,10 +249,15 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      */
     private function closeStream(): void
     {
-        if (\is_resource($this->stream)) {
-            \fclose($this->stream);
+        try {
+            if (\is_resource($this->stream)) {
+                \fclose($this->stream);
+            }
+        } catch (\Exception $e) {
+            $this->logException($e, $this->trans('swisspost.error.close_stream'));
+        } finally {
+            $this->stream = false;
         }
-        $this->stream = false;
     }
 
     /**
@@ -256,7 +275,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         // open archive
         $this->archive = new \ZipArchive();
-        $error = $this->archive->open($sourceFile, \ZipArchive::RDONLY);
+        $error = $this->archive->open($sourceFile);
         if (true !== $error) {
             $this->setError('open_archive', [
                 '%name%' => $this->sourceName,

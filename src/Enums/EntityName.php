@@ -139,7 +139,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     }
 
     /**
-     * Find an entity value for the given subject.
+     * Find an entity name offset for the given subject.
      */
     public static function tryFindOffset(mixed $subject, int $default = RoleBuilder::INVALID_VALUE): int
     {
@@ -147,7 +147,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     }
 
     /**
-     * Find an entity value for the given subject.
+     * Find an entity name value for the given subject.
      *
      * @psalm-return ($default is null ? (string|null) : string)
      */

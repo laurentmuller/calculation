@@ -47,53 +47,37 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
         try {
             $this->imagine = new Imagine();
         } catch (\Exception $e) {
-            $message = $this->trans('user.image.failure');
-            $this->logException($e, $message);
+            $this->logException($e, $this->trans('user.image.failure'));
         }
     }
 
     /**
      * Resize an image with the given size.
      *
-     * @param string $source  the source image path
-     * @param string $target  the target image path
-     * @param int    $size    the image size
-     * @param array  $options the options to use when saving image
+     * @param string $source the source image path
+     * @param string $target the target image path
+     * @param int    $size   the image size
      *
      * @return bool true on success, false on error or if the size is not a positive value
+     *
+     * @psalm-param ImageExtensionInterface::SIZE_* $size
      */
-    public function resize(string $source, string $target, int $size, array $options = []): bool
+    public function resize(string $source, string $target, int $size): bool
     {
         // check values?
-        if (null === $this->imagine || $size <= 0) {
+        if (null === $this->imagine) {
             return false;
         }
 
         try {
-            $imageSize = (array) \getimagesize($source);
-            $imageWidth = (float) $imageSize[0];
-            $imageHeight = (float) $imageSize[1];
-            $ratio = ($imageWidth / $imageHeight);
-
-            $width = $size;
-            $height = $size;
-            if ($width / $height > $ratio) {
-                $width = (int) ((float) $height * $ratio);
-            } else {
-                $height = (int) ((float) $width / $ratio);
-            }
-            $size = new Box($width, $height);
-            $options = \array_merge(self::DEFAULT_OPTIONS, $options);
-
-            // open, resize and save
+            $size = $this->getNewSize($source, $size);
             $this->imagine->open($source)
                 ->resize($size)
-                ->save($target, $options);
+                ->save($target, self::DEFAULT_OPTIONS);
 
             return true;
         } catch (\Exception $e) {
-            $message = $this->trans('user.image.failure');
-            $this->logException($e, $message);
+            $this->logException($e, $this->trans('user.image.failure'));
 
             return false;
         }
@@ -102,42 +86,65 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
     /**
      * Resize the given image with the default size (192 pixels).
      *
-     * @param string $source  the source image path
-     * @param string $target  the target image path
-     * @param array  $options the options to use when saving image
+     * @param string $source the source image path
+     * @param string $target the target image path
      *
      * @return bool true on success, false on error
      */
-    public function resizeDefault(string $source, string $target, array $options = []): bool
+    public function resizeDefault(string $source, string $target): bool
     {
-        return $this->resize($source, $target, self::SIZE_DEFAULT, $options);
+        return $this->resize($source, $target, self::SIZE_DEFAULT);
     }
 
     /**
      * Resize the given image with the medium size (96 pixels).
      *
-     * @param string $source  the source image path
-     * @param string $target  the target image path
-     * @param array  $options the options to use when saving image
+     * @param string $source the source image path
+     * @param string $target the target image path
      *
      * @return bool true on success, false on error
      */
-    public function resizeMedium(string $source, string $target, array $options = []): bool
+    public function resizeMedium(string $source, string $target): bool
     {
-        return $this->resize($source, $target, self::SIZE_MEDIUM, $options);
+        return $this->resize($source, $target, self::SIZE_MEDIUM);
     }
 
     /**
      * Resize the given image with the small size (32 pixels).
      *
-     * @param string $source  the source image path
-     * @param string $target  the target image path
-     * @param array  $options the options to use when saving image
+     * @param string $source the source image path
+     * @param string $target the target image path
      *
      * @return bool true on success, false on error
      */
-    public function resizeSmall(string $source, string $target, array $options = []): bool
+    public function resizeSmall(string $source, string $target): bool
     {
-        return $this->resize($source, $target, self::SIZE_SMALL, $options);
+        return $this->resize($source, $target, self::SIZE_SMALL);
+    }
+
+    /**
+     * @return array{0: float, 1: float}
+     */
+    private function getImageSize(string $filename): array
+    {
+        [$imageWidth, $imageHeight] = (array) \getimagesize($filename);
+
+        return [(float) $imageWidth, (float) $imageHeight];
+    }
+
+    private function getNewSize(string $filename, float $size): Box
+    {
+        [$imageWidth, $imageHeight] = $this->getImageSize($filename);
+        $ratio = $imageWidth / $imageHeight;
+
+        $width = $size;
+        $height = $size;
+        if ($width / $height > $ratio) {
+            $width = $height * $ratio;
+        } else {
+            $height = $width / $ratio;
+        }
+
+        return new Box((int) $width, (int) $height);
     }
 }

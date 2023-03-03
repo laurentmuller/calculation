@@ -47,16 +47,14 @@ final class DatabaseInfoService
             $this->configuration = [];
 
             try {
-                /** @psalm-var array<array{Variable_name:string, Value:string}> $entries */
+                /** @psalm-var array<array{Variable_name: string, Value: string}> $entries */
                 $entries = $this->executeQuery('SHOW VARIABLES', true);
-                // convert
                 foreach ($entries as $entry) {
                     $value = $entry['Value'];
                     if ('' === $value) {
                         continue;
                     }
-                    $key = $entry['Variable_name'];
-                    $this->configuration[$key] = match ($value) {
+                    $this->configuration[$entry['Variable_name']] = match ($value) {
                         'ON', 'OFF',
                         'YES', 'NO',
                         'ENABLED', 'DISABLED',
@@ -86,8 +84,7 @@ final class DatabaseInfoService
             try {
                 $params = $this->getConnection()->getParams();
                 foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
-                    $value = $params[$key] ?? null;
-                    if (\is_string($value) || \is_int($value)) {
+                    if (\is_scalar($value = $params[$key] ?? null)) {
                         $key = match ($key) {
                             'dbname' => 'Name',
                             'serverVersion' => 'Version',
@@ -118,7 +115,6 @@ final class DatabaseInfoService
                     $this->version = (string) $entries['Value'];
                 }
             } catch (\Exception) {
-                // ignore
             }
         }
 

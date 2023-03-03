@@ -8,7 +8,7 @@
         <tbody>
         <tr class="h">
             <td colspan="2" style="transform: rotate(0);">
-                <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset">
+                <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}">
                    <i class="icon-mysql icon-about"></i>
                    <h1 class="p text-body">{{ 'about.version'|trans({'%version%': version}) }}</h1>
                 </a>
@@ -20,8 +20,10 @@
         {% endfor %}
         {{ tools.headerInfo('Configuration') }}
          {% for key, value in configuration %}
-             {% if value in enabled_values or value in disabled_values %}
-                 {{ tools.rowInfoBoolean(key, value, value in enabled_values) }}
+             {% if value in enabled_values %}
+                {{ tools.rowInfoBoolean(key, value, true) }}
+             {% elseif value in disabled_values %}
+                 {{ tools.rowInfoBoolean(key, value, false) }}
              {% else %}
                  {{ tools.rowInfo(key, value) }}
              {% endif %}

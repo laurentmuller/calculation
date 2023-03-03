@@ -28,6 +28,8 @@ final class FileUtils
         0 => '%.0f B',
     ];
 
+    private static ?Filesystem $filesystem = null;
+
     // prevent instance creation
     private function __construct()
     {
@@ -58,10 +60,8 @@ final class FileUtils
 
             return true;
         } catch (IOException) {
-            // ignore
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -76,23 +76,20 @@ final class FileUtils
      */
     public static function decodeJson(string|\SplFileInfo $file, bool $assoc = true): array|\stdClass
     {
-        // file?
+        $file = self::realPath($file);
         if (!self::isFile($file)) {
-            throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", self::getRealPath($file)));
+            throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", $file));
         }
 
-        // get content
-        $file = self::getRealPath($file);
-        if (false === $json = \file_get_contents($file)) {
-            throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", self::getRealPath($file)));
+        if (false === $json = \file_get_contents(self::realPath($file))) {
+            throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
 
-        // decode
         /** @var array|\stdClass $content */
         $content = \json_decode($json, $assoc);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             $message = \json_last_error_msg();
-            throw new \InvalidArgumentException(\sprintf("Unable to decode the content of the file '%s' (%s).", self::getRealPath($file), $message));
+            throw new \InvalidArgumentException(\sprintf("Unable to decode the content of the file '%s' (%s).", $file, $message));
         }
 
         return $content;
@@ -108,17 +105,23 @@ final class FileUtils
      */
     public static function dumpFile(string|\SplFileInfo $file, $content): bool
     {
-        $file = self::getRealPath($file);
-
         try {
-            self::getFilesystem()->dumpFile($file, $content);
+            self::getFilesystem()->dumpFile(self::realPath($file), $content);
 
             return true;
         } catch (IOException) {
-            // ignore
+            return false;
         }
+    }
 
-        return false;
+    /**
+     * Returns if the given file is empty (size = 0).
+     *
+     * @param string|\SplFileInfo $file the file or directory path
+     */
+    public static function empty(string|\SplFileInfo $file): bool
+    {
+        return 0 === self::size($file);
     }
 
     /**
@@ -126,9 +129,7 @@ final class FileUtils
      */
     public static function exists(string|\SplFileInfo $file): bool
     {
-        $file = self::getRealPath($file);
-
-        return self::getFilesystem()->exists($file);
+        return self::getFilesystem()->exists(self::realPath($file));
     }
 
     /**
@@ -158,13 +159,7 @@ final class FileUtils
      */
     public static function getFilesystem(): Filesystem
     {
-        /** @psalm-var Filesystem|null $fs */
-        static $fs;
-        if (null === $fs) {
-            $fs = new Filesystem();
-        }
-
-        return $fs;
+        return self::$filesystem ??= new Filesystem();
     }
 
     /**
@@ -177,7 +172,7 @@ final class FileUtils
      */
     public static function getLinesCount(string $filename, bool $skipEmpty = true): int
     {
-        if (!self::isFile($filename) || 0 === self::size($filename)) {
+        if (!self::isFile($filename) || self::empty($filename)) {
             return 0;
         }
 
@@ -193,7 +188,6 @@ final class FileUtils
 
             return $file->key();
         } catch (\Exception) {
-            // ignore
             return 0;
         }
     }
@@ -203,9 +197,7 @@ final class FileUtils
      */
     public static function isFile(string|\SplFileInfo $file): bool
     {
-        $file = self::getRealPath($file);
-
-        return \is_file($file);
+        return \is_file(self::realPath($file));
     }
 
     /**
@@ -233,20 +225,33 @@ final class FileUtils
     }
 
     /**
+     * Gets the real path of the given file.
+     */
+    public static function realPath(string|\SplFileInfo $file): string
+    {
+        if ($file instanceof \SplFileInfo) {
+            $path = $file->getRealPath();
+
+            return false === $path ? $file->getPathname() : $path;
+        }
+        $path = \realpath($file);
+
+        return false === $path ? $file : $path;
+    }
+
+    /**
      * Deletes a file or a directory.
      */
     public static function remove(string|\SplFileInfo $file): bool
     {
-        $file = self::getRealPath($file);
-
         try {
+            $file = self::realPath($file);
             if (self::exists($file)) {
                 self::getFilesystem()->remove($file);
 
                 return true;
             }
         } catch (IOException) {
-            // ignore
         }
 
         return false;
@@ -268,32 +273,34 @@ final class FileUtils
 
             return true;
         } catch (IOException) {
-            // ignore
+            return false;
         }
-
-        return false;
     }
 
     /**
      * Gets the size, in bytes, of the given path.
      *
-     * @param string $path the file or directory path
+     * @param string|\SplFileInfo $file the file or directory path
      */
-    public static function size(string $path): int
+    public static function size(string|\SplFileInfo $file): int
     {
-        if (self::isFile($path)) {
-            return \filesize($path) ?: 0;
+        $file = self::realPath($file);
+        if (!self::exists($file)) {
+            return 0;
+        }
+        if (self::isFile($file)) {
+            return \filesize($file) ?: 0;
         }
 
         $size = 0;
         $flags = \FilesystemIterator::SKIP_DOTS;
-        $innerIterator = new \RecursiveDirectoryIterator($path, $flags);
+        $innerIterator = new \RecursiveDirectoryIterator($file, $flags);
         $outerIterator = new \RecursiveIteratorIterator($innerIterator);
 
-        /** @var \SplFileInfo $file */
-        foreach ($outerIterator as $file) {
-            if ($file->isReadable()) {
-                $size += $file->getSize();
+        /** @var \SplFileInfo $child */
+        foreach ($outerIterator as $child) {
+            if ($child->isReadable()) {
+                $size += $child->getSize();
             }
         }
 
@@ -324,7 +331,6 @@ final class FileUtils
                 }
             }
         } catch (IOException) {
-            // ignore
         }
 
         return null;
@@ -348,21 +354,7 @@ final class FileUtils
 
             return $file;
         } catch (IOException) {
-            // ignore
+            return null;
         }
-
-        return null;
-    }
-
-    /**
-     * Gets the real path of the given file.
-     */
-    private static function getRealPath(string|\SplFileInfo $file): string
-    {
-        if ($file instanceof \SplFileInfo) {
-            return (string) $file->getRealPath();
-        }
-
-        return $file;
     }
 }

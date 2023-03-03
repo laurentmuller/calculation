@@ -45,13 +45,12 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param bool   $readonly       true open the database for reading only. Note that if the file name
      *                               does not exist, the database is opened with the
      *                               <code>SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE</code> flags.
-     * @param string $encryption_key An optional encryption key used when encrypting and decrypting an SQLite database. If the
-     *                               SQLite's encryption module is not installed, this parameter will have no effect.
+     * @param string $encryption_key an optional encryption key used when encrypting and decrypting an SQLite database
      */
     public function __construct(protected string $filename, bool $readonly = false, string $encryption_key = '')
     {
         // check creation state
-        $create = '' === $filename || self::IN_MEMORY === $filename || !FileUtils::exists($filename) || 0 === \filesize($filename);
+        $create = '' === $filename || self::IN_MEMORY === $filename || !FileUtils::exists($filename) || FileUtils::empty($filename);
 
         if ($create) {
             $flags = \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE;

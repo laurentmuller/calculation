@@ -27,6 +27,8 @@ class UserNamer implements ImageExtensionInterface, NamerInterface
 {
     /**
      * Gets the base file name.
+     *
+     * @psalm-param ImageExtensionInterface::SIZE_* $size
      */
     public static function getBaseName(User|int $key, int $size, ?string $ext = null): string
     {

@@ -92,13 +92,12 @@ class CategoriesReport extends AbstractArrayReport
      */
     private function createTable(): PdfGroupTableBuilder
     {
-        $table = new PdfGroupTableBuilder($this);
-
-        return $table->addColumns(
-            PdfColumn::left($this->trans('category.fields.code'), 40, true),
-            PdfColumn::left($this->trans('category.fields.description'), 50),
-            PdfColumn::right($this->trans('category.fields.products'), 20, true),
-            PdfColumn::right($this->trans('category.fields.tasks'), 20, true)
-        )->outputHeaders();
+        return PdfGroupTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left($this->trans('category.fields.code'), 40, true),
+                PdfColumn::left($this->trans('category.fields.description'), 50),
+                PdfColumn::right($this->trans('category.fields.products'), 20, true),
+                PdfColumn::right($this->trans('category.fields.tasks'), 20, true)
+            )->outputHeaders();
     }
 }

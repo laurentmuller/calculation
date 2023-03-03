@@ -72,12 +72,12 @@ class GroupsReport extends AbstractArrayReport
         ]);
 
         $margins = $this->setCellMargin(0);
-        $table = new PdfTableBuilder($this);
-        $table->addColumns(
-            PdfColumn::left(null, 20),
-            PdfColumn::center(null, 20),
-            PdfColumn::right(null, 20)
-        )->startRow(PdfStyle::getNoBorderStyle())
+        PdfTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left(null, 20),
+                PdfColumn::center(null, 20),
+                PdfColumn::right(null, 20)
+            )->startRow(PdfStyle::getNoBorderStyle())
             ->add($txtCount)
             ->add($txtCategory)
             ->add($txtMargin)
@@ -94,16 +94,15 @@ class GroupsReport extends AbstractArrayReport
      */
     private function createTable(): PdfTableBuilder
     {
-        $table = new PdfTableBuilder($this);
-
-        return $table->addColumns(
-            PdfColumn::left($this->trans('group.fields.code'), 40, true),
-            PdfColumn::left($this->trans('group.fields.description'), 50),
-            PdfColumn::right($this->trans('group.fields.categories'), 25, true),
-            PdfColumn::right($this->trans('groupmargin.fields.minimum'), 22, true),
-            PdfColumn::right($this->trans('groupmargin.fields.maximum'), 22, true),
-            PdfColumn::right($this->trans('groupmargin.fields.margin'), 18, true)
-        )->outputHeaders();
+        return PdfTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left($this->trans('group.fields.code'), 40, true),
+                PdfColumn::left($this->trans('group.fields.description'), 50),
+                PdfColumn::right($this->trans('group.fields.categories'), 25, true),
+                PdfColumn::right($this->trans('groupmargin.fields.minimum'), 22, true),
+                PdfColumn::right($this->trans('groupmargin.fields.maximum'), 22, true),
+                PdfColumn::right($this->trans('groupmargin.fields.margin'), 18, true)
+            )->outputHeaders();
     }
 
     /**

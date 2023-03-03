@@ -18,6 +18,10 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Document containing Symfony configuration.
+ *
+ * @psalm-import-type RouteType from SymfonyInfoService
+ * @psalm-import-type BundleType from SymfonyInfoService
+ * @psalm-import-type PackageType from SymfonyInfoService
  */
 class SymfonyDocument extends AbstractDocument
 {
@@ -33,6 +37,8 @@ class SymfonyDocument extends AbstractDocument
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {
@@ -78,7 +84,7 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @param array<array{name: string, path: string}> $bundles
+     * @param BundleType[] $bundles
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -153,7 +159,7 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @param array<string, array{name: string, version: string, description: string, homepage: string}> $packages
+     * @param array<string, PackageType> $packages
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -189,7 +195,7 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @param array<array{name: string, path: string}> $routes
+     * @param RouteType[] $routes
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Psr\Container\ContainerExceptionInterface

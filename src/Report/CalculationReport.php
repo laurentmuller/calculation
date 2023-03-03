@@ -192,11 +192,11 @@ class CalculationReport extends AbstractReport
         $rightStyle = PdfStyle::getHeaderStyle()
             ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
 
-        $table = new PdfTableBuilder($this);
-        $table->addColumns(
-            PdfColumn::left(null, 100),
-            PdfColumn::right(null, 40, true)
-        )->startHeaderRow()
+        PdfTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left(null, 100),
+                PdfColumn::right(null, 40, true)
+            )->startHeaderRow()
             ->add(text: $calculation->getCustomer(), style: $leftStyle)
             ->add(text: $calculation->getStateCode(), style: $rightStyle)
             ->endRow()

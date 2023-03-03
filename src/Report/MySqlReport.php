@@ -46,8 +46,8 @@ class MySqlReport extends AbstractReport
         }
 
         $this->AddPage();
-        $table = new PdfGroupTableBuilder($this);
-        $table->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 40),
                 PdfColumn::left('Value', 60)

@@ -127,9 +127,8 @@ class CalculationsReport extends AbstractArrayReport
             PdfColumn::right($this->trans('calculation.fields.total'), 25, true),
         ]);
 
-        $table = new PdfGroupTableBuilder($this);
-
-        return $table->addColumns(...$columns)
+        return PdfGroupTableBuilder::instance($this)
+            ->addColumns(...$columns)
             ->outputHeaders();
     }
 

@@ -38,7 +38,7 @@ final class FunctionExtension extends AbstractExtension
     use RoleTranslatorTrait;
 
     /**
-     * The file version.
+     * The default file version.
      */
     private readonly int $version;
 
@@ -70,8 +70,8 @@ final class FunctionExtension extends AbstractExtension
         private readonly TranslatorInterface $translator
     ) {
         $filename = FileUtils::buildPath($projectDir, 'composer.lock');
-        $this->webDir = (string) \realpath(FileUtils::buildPath($projectDir, 'public'));
-        $this->version = $this->fileExists($filename) ? (int) \filemtime($filename) : Kernel::VERSION_ID;
+        $this->version = FileUtils::exists($filename) ? (int) \filemtime($filename) : Kernel::VERSION_ID;
+        $this->webDir = FileUtils::realpath(FileUtils::buildPath($projectDir, 'public'));
     }
 
     /**
@@ -155,19 +155,17 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets an application icon.
      */
-    private function assetIcon(int $size): string
+    private function assetIcon(int $size, ?string $packageName = null): string
     {
         $path = \sprintf('images/icons/favicon-%1$dx%1$d.png', $size);
 
-        return $this->assetUrl($path);
+        return $this->assetUrl($path, $packageName);
     }
 
     /**
      * Output an image tag with a version.
      *
      * @param array<string, string|int> $parameters
-     *
-     * @throws \Exception
      */
     private function assetImage(string $path, array $parameters = [], ?string $packageName = null): string
     {
@@ -187,8 +185,6 @@ final class FunctionExtension extends AbstractExtension
      * Output the user image profile.
      *
      * @psalm-param array<string, string|int> $parameters
-     *
-     * @throws \Exception
      */
     private function assetImageUser(?User $user, ?string $size = null, array $parameters = []): string|false
     {
@@ -260,14 +256,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Checks the existence of file or directory.
-     */
-    private function fileExists(?string $filename): bool
-    {
-        return null !== $filename && FileUtils::exists($filename);
-    }
-
-    /**
      * Gets the real (absolute) path or null if not exist.
      */
     private function getRealPath(?string $path): ?string
@@ -299,10 +287,9 @@ final class FunctionExtension extends AbstractExtension
     private function imageSize(string $path): array
     {
         $full_path = (string) $this->getRealPath($path);
-        /** @psalm-var array{0: int, 1: int} $size */
-        $size = (array) \getimagesize($full_path);
+        [$width, $height] = (array) \getimagesize($full_path);
 
-        return [$size[0], $size[1]];
+        return [(int) $width, (int) $height];
     }
 
     /**

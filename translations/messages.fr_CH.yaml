@@ -11,7 +11,7 @@ about:
   app_github: Code source
   app_github_url: GitHub
   error: Erreur lors du chargement des informations.
-  extern_link: Lien externe
+  extern_link: Accéder au site
   licence: Accord de licence
   licence_short: Licence
   loading: Recherche des informations...
@@ -1053,6 +1053,9 @@ swisspost:
     rename_database: Impossible de renommer la base de données.
     temp_file: Impossible de créer un fichier temporaire.
     validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
+    close_archive: Une erreur s'est produite de la fermeture de l'archive.
+    close_database: Une erreur s'est produite de la fermeture de la base de données.
+    close_stream: Une erreur s'est produite de la fermeture du flux de données.
   fields:
     cities: Localités
     errors: Erreurs

@@ -35,6 +35,19 @@ class FileUtilsTest extends TestCase
         ];
     }
 
+    public static function getRealPath(): array
+    {
+        return [
+            ['D:\temps', 'D:\temps'],
+            ['D:\temps\file.txt', 'D:\temps\file.txt'],
+            ['/usr/bin/php', '/usr/bin/php'],
+
+            [new \SplFileInfo('D:\temps'), 'D:\temps'],
+            [new \SplFileInfo('D:\temps\file.txt'), 'D:\temps\file.txt'],
+            [new \SplFileInfo('/usr/bin/php'), '/usr/bin/php'],
+        ];
+    }
+
     /**
      * @dataProvider getBuildPaths
      */
@@ -60,7 +73,14 @@ class FileUtilsTest extends TestCase
         $file = $this->getLinesFile();
         $size = \filesize($file);
         self::assertTrue(FileUtils::exists($file));
-        self::assertSame($size . ' B', FileUtils::formatSize($file));
+        $expected = \sprintf('%d B', $size);
+        self::assertSame($expected, FileUtils::formatSize($file));
+    }
+
+    public function testFormatSizeEmpty(): void
+    {
+        $file = "D:\zzz_aaa";
+        self::assertSame('empty', FileUtils::formatSize($file));
     }
 
     public function testIsFile(): void
@@ -77,6 +97,15 @@ class FileUtilsTest extends TestCase
         $lines = $this->getLinesFile();
         self::assertSame(3, FileUtils::getLinesCount($lines));
         self::assertSame(6, FileUtils::getLinesCount($lines, false));
+    }
+
+    /**
+     * @dataProvider getRealPath
+     */
+    public function testRealPath(string|\SplFileInfo $file, string $expected): void
+    {
+        $actual = FileUtils::realPath($file);
+        self::assertSame($expected, $actual);
     }
 
     private function getEmptyFile(): string

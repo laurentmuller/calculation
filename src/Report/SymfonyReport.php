@@ -21,6 +21,10 @@ use App\Service\SymfonyInfoService;
 
 /**
  * Report containing Symfony configuration.
+ *
+ * @psalm-import-type RouteType from SymfonyInfoService
+ * @psalm-import-type BundleType from SymfonyInfoService
+ * @psalm-import-type PackageType from SymfonyInfoService
  */
 class SymfonyReport extends AbstractReport
 {
@@ -83,12 +87,12 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @param array<array{name: string, path: string}> $bundles
+     * @param BundleType[] $bundles
      */
     private function outputBundles(array $bundles): void
     {
-        $table = new PdfGroupTableBuilder($this);
-        $table->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Path', 70)
@@ -98,7 +102,10 @@ class SymfonyReport extends AbstractReport
             ->outputHeaders();
 
         foreach ($bundles as $bundle) {
-            $this->outputRow($table, $bundle['name'], $bundle['path']);
+            $table->startRow()
+                ->addCell(new PdfCell(text: $bundle['name'], link: $bundle['homepage'] ?? ''))
+                ->add($bundle['path'])
+                ->endRow();
         }
     }
 
@@ -109,8 +116,8 @@ class SymfonyReport extends AbstractReport
     {
         $app = $this->controller->getApplication();
 
-        $table = new PdfGroupTableBuilder($this);
-        $table->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Value', 70)
@@ -141,12 +148,12 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @param array<string, array{name: string, version: string, description: string, homepage: string}> $packages
+     * @param array<string, PackageType> $packages
      */
     private function outputPackages(string $title, array $packages): void
     {
-        $table = new PdfGroupTableBuilder($this);
-        $table->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Version', 10),
@@ -157,9 +164,8 @@ class SymfonyReport extends AbstractReport
             ->outputHeaders();
 
         foreach ($packages as $package) {
-            $cell = new PdfCell(text: $package['name'], link: $package['homepage']);
             $table->startRow()
-                ->addCell($cell)
+                ->addCell(new PdfCell(text: $package['name'], link: $package['homepage']))
                 ->add($package['version'])
                 ->add($package['description'])
                 ->endRow();
@@ -167,12 +173,12 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @param array<array{name: string, path: string}> $routes
+     * @param RouteType[] $routes
      */
     private function outputRoutes(string $title, array $routes): void
     {
-        $table = new PdfGroupTableBuilder($this);
-        $table->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Path', 70)

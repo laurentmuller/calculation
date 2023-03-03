@@ -11,7 +11,7 @@
         <tbody>
             <tr class="h">
                 <td colspan="2" style="transform: rotate(0);">
-                    <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset">
+                    <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}">
                         <i class="icon-symfony icon-about"></i>
                         <h1 class="p text-body">{{ 'about.version'|trans({'%version%': info.version}) }}</h1>
                     </a>
@@ -50,9 +50,9 @@
         <table id="data-table-bundles" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Bundles', 'bundles', bundles) }}
             <tbody class="collapse" id="bundles" data-parent="#symfonyAccordion">
-                {% for bundle in info.bundles %}
-                    {{ tools.rowInfo(bundle.name, bundle.path, 'pl-3') }}
-                {% endfor %}
+            {% for bundle in info.bundles %}
+                {{ tools.rowBundle(bundle) }}
+            {% endfor %}
             </tbody>
         </table>
         {% endif %}
@@ -61,9 +61,9 @@
         <table id="data-table-runtime-packages" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtime_packages, 3) }}
             <tbody class="collapse" id="runtime-packages" data-parent="#symfonyAccordion">
-                {% for package in runtime_packages %}
-                    {{ tools.rowPackage(package) }}
-                {% endfor %}
+            {% for package in runtime_packages %}
+                {{ tools.rowPackage(package) }}
+            {% endfor %}
             </tbody>
         </table>
         {% endif %}
@@ -72,9 +72,9 @@
         <table id="data-table-development-packages" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Debug Packages', 'development-packages', debug_packages, 3) }}
             <tbody class="collapse" id="development-packages" data-parent="#symfonyAccordion">
-                {% for package in debug_packages %}
-                    {{ tools.rowPackage(package) }}
-                {% endfor %}
+            {% for package in debug_packages %}
+                {{ tools.rowPackage(package) }}
+            {% endfor %}
             </tbody>
         </table>
         {% endif %}
@@ -83,9 +83,9 @@
         <table id="data-table-routes" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Routes', 'application-routes', runtime_routes) }}
             <tbody class="collapse" id="application-routes" data-parent="#symfonyAccordion">
-                {% for route in runtime_routes %}
-                    {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
-                {% endfor %}
+            {% for route in runtime_routes %}
+                {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+            {% endfor %}
             </tbody>
         </table>
         {% endif %}
@@ -94,9 +94,9 @@
         <table id="data-table-routes-dev" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Debug Routes', 'symfony-routes', debug_routes) }}
             <tbody class="collapse" id="symfony-routes" data-parent="#symfonyAccordion">
-                {% for route in debug_routes %}
-                    {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
-                {% endfor %}
+            {% for route in debug_routes %}
+                {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+            {% endfor %}
             </tbody>
         </table>
         {% endif %}

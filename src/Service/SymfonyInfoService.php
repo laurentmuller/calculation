@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Util\FileUtils;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -23,6 +22,10 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @see https://github.com/symfony/symfony/blob/5.x/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
+ *
+ * @psalm-type RouteType = array{name: string, path: string}
+ * @psalm-type PackageType = array{name: string, version: string, description: string, homepage: string}
+ * @psalm-type BundleType = array{name: string, namespace: string, path: string, package: string, homepage?: string}
  *
  * @internal
  */
@@ -38,8 +41,14 @@ final class SymfonyInfoService
      */
     final public const KEY_RUNTIME = 'runtime';
 
+    /**
+     * The file name containing composer information.
+     */
     private const PACKAGE_FILE_NAME = '/vendor/composer/installed.json';
 
+    /**
+     * The package properties.
+     */
     private const PACKAGE_PROPERTIES = [
         'name',
         'version',
@@ -48,22 +57,33 @@ final class SymfonyInfoService
     ];
 
     /**
-     * @var array<string, array{name: string, namespace: string, path: string}>|null
+     * The bundles.
+     *
+     * @var array<string, BundleType>|null
      */
     private ?array $bundles = null;
 
     /**
+     * The packages.
+     *
      * @var null|array{
-     *     runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
-     *     debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
+     *     runtime?: array<string, PackageType>,
+     *     debug?: array<string, PackageType>
      * }
      */
     private ?array $packages = null;
 
     /**
+     * The project directory.
+     */
+    private readonly string $projectDir;
+
+    /**
+     * The routes.
+     *
      * @var null|array{
-     *     runtime?: array<string, array{name: string, path: string}>,
-     *     debug?: array<string, array{name: string, path: string}>
+     *     runtime?: array<string, RouteType>,
+     *     debug?: array<string, RouteType>
      * }
      */
     private ?array $routes = null;
@@ -72,32 +92,36 @@ final class SymfonyInfoService
      * Constructor.
      */
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir,
         private readonly KernelInterface $kernel,
-        private readonly RouterInterface $router
+        private readonly RouterInterface $router,
     ) {
+        $this->projectDir = $kernel->getProjectDir();
     }
 
     /**
      * Gets bundles information.
      *
-     * @return array<string, array{name: string, namespace: string, path: string}>
+     * @return array<string, BundleType>
      */
     public function getBundles(): array
     {
         if (null === $this->bundles) {
             $this->bundles = [];
-            $rootDir = \realpath($this->projectDir) . \DIRECTORY_SEPARATOR;
+            $projectDir = $this->projectDir;
+            $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
             foreach ($this->kernel->getBundles() as $key => $bundleObject) {
+                $path = $bundleObject->getPath();
                 $this->bundles[$key] = [
                     'name' => $key,
                     'namespace' => $bundleObject->getNamespace(),
-                    'path' => \str_replace($rootDir, '', $bundleObject->getPath()),
+                    'path' => $this->makePathRelative($path, $projectDir),
+                    'package' => $this->makePathRelative($path, $vendorDir),
                 ];
             }
-            if (!empty($this->bundles)) {
+            if ([] !== $this->bundles) {
                 \ksort($this->bundles);
+                $this->getPackages();
+                $this->updateBundles();
             }
         }
 
@@ -192,7 +216,6 @@ final class SymfonyInfoService
         $now = new \DateTimeImmutable();
         $eol = $this->getEndOfMonth(Kernel::END_OF_LIFE);
         $eom = $this->getEndOfMonth(Kernel::END_OF_MAINTENANCE);
-
         if ($eom instanceof \DateTimeImmutable && $eol instanceof \DateTimeImmutable) {
             if ($now > $eol) {
                 return 'Unmaintained';
@@ -210,32 +233,31 @@ final class SymfonyInfoService
      * Gets packages information.
      *
      * @return array{
-     *     runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
-     *     debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
+     *     runtime?: array<string, PackageType>,
+     *     debug?: array<string, PackageType>
      * }
      */
     public function getPackages(): array
     {
         if (null === $this->packages) {
-            $result = [];
+            $this->packages = [];
             $path = $this->projectDir . self::PACKAGE_FILE_NAME;
             if (FileUtils::exists($path)) {
                 try {
                     /**
                      * @var array{
-                     *     'dev-package-names': string[]|null,
-                     *     packages: array<string, array{name: string, version: string, description?: string, homepage?: string}>
+                     *     packages: array<string, PackageType>,
+                     *     'dev-package-names': string[]|null
                      * } $content
                      */
                     $content = FileUtils::decodeJson($path);
                     $runtimePackages = $content['packages'];
                     $debugPackages = $content['dev-package-names'] ?? [];
-                    $result = $this->processPackages($runtimePackages, $debugPackages);
+                    $this->packages = $this->processPackages($runtimePackages, $debugPackages);
                 } catch (\InvalidArgumentException) {
                     // ignore
                 }
             }
-            $this->packages = $result;
         }
 
         return $this->packages;
@@ -253,8 +275,8 @@ final class SymfonyInfoService
      * Gets all routes.
      *
      * @return array{
-     *     runtime?: array<string, array{name: string, path: string}>,
-     *     debug?: array<string, array{name: string, path: string}>
+     *     runtime?: array<string, RouteType>,
+     *     debug?: array<string, RouteType>
      * }
      */
     public function getRoutes(): array
@@ -330,6 +352,28 @@ final class SymfonyInfoService
         return \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN);
     }
 
+    private function cleanDescription(string $description): string
+    {
+        if ('' !== $description && !\str_ends_with($description, '.')) {
+            return $description . '.';
+        }
+
+        return $description;
+    }
+
+    private function cleanVersion(string $version): string
+    {
+        return \ltrim($version, 'v');
+    }
+
+    /**
+     * @psalm-return PackageType|null
+     */
+    private function findPackage(string $name): ?array
+    {
+        return $this->packages['runtime'][$name] ?? $this->packages['debug'][$name] ?? null;
+    }
+
     /**
      * Format the expired date.
      *
@@ -390,17 +434,18 @@ final class SymfonyInfoService
         return \str_starts_with($name, '_');
     }
 
+    private function makePathRelative(string $endPath, string $startPath): string
+    {
+        return \rtrim(FileUtils::makePathRelative($endPath, $startPath), '/src');
+    }
+
     /**
-     * @param array<string, array{
-     *              name: string,
-     *              version: string,
-     *              description?: string,
-     *              homepage?: string}> $runtimePackages
-     * @param string[] $debugPackages
+     * @param array<string, PackageType> $runtimePackages
+     * @param string[]                   $debugPackages
      *
      * @return array{
-     *          runtime?: array<string, array{name: string, version: string, description: string, homepage: string}>,
-     *          debug?: array<string, array{name: string, version: string, description: string, homepage: string}>
+     *          runtime?: array<string, PackageType>,
+     *          debug?: array<string, PackageType>
      *          }
      */
     private function processPackages(array $runtimePackages, array $debugPackages): array
@@ -409,21 +454,19 @@ final class SymfonyInfoService
         foreach ($runtimePackages as $package) {
             $name = $package['name'];
             $entry = ['name' => $name];
-            $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             foreach (self::PACKAGE_PROPERTIES as $key) {
                 $value = $package[$key] ?? '';
                 switch ($key) {
                     case 'description':
-                        if ('' !== $value && !\str_ends_with($value, '.')) {
-                            $value .= '.';
-                        }
+                        $value = $this->cleanDescription($value);
                         break;
                     case 'version':
-                        $value = \ltrim($value, 'v');
+                        $value = $this->cleanVersion($value);
                         break;
                 }
                 $entry[$key] = $value;
             }
+            $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             $result[$type][$name] = $entry;
         }
         if (!empty($result[self::KEY_RUNTIME])) {
@@ -434,5 +477,16 @@ final class SymfonyInfoService
         }
 
         return $result; // @phpstan-ignore-line
+    }
+
+    private function updateBundles(): void
+    {
+        if (null !== $this->bundles && null !== $this->packages) {
+            foreach ($this->bundles as &$bundle) {
+                if (null !== $package = $this->findPackage($bundle['package'])) {
+                    $bundle['homepage'] = $package['homepage'];
+                }
+            }
+        }
     }
 }

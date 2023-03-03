@@ -246,8 +246,8 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $this->drawCards = true;
         $titleStyle = PdfStyle::getDefaultStyle()->setBorder(PdfBorder::NONE)->setFontBold();
 
-        $table = new PdfTableBuilder($this);
-        $table->addColumns(...$columns)
+        PdfTableBuilder::instance($this)
+            ->addColumns(...$columns)
             ->startRow()
             ->add($this->trans('log.fields.level'), \count($levels) * 2, $titleStyle, PdfTextAlignment::LEFT)
             ->add($this->trans('log.fields.channel'), \count($channels) * 2 + 1, $titleStyle, PdfTextAlignment::LEFT)
@@ -291,8 +291,8 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $this->drawCards = false;
         $this->cellTitle('log.name');
 
-        $table = new PdfTableBuilder($this);
-        $table->setListener($this)
+        $table = PdfTableBuilder::instance($this)
+            ->setListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('log.fields.level'), 20, true),
                 PdfColumn::left($this->trans('log.fields.channel'), 20, true),

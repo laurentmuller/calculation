@@ -97,6 +97,17 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     }
 
     /**
+     * Creates a new instance.
+     *
+     * @param PdfDocument $parent    the parent document to print in
+     * @param bool        $fullWidth a value indicating if the table take all the printable width
+     */
+    public static function instance(PdfDocument $parent, bool $fullWidth = true): self
+    {
+        return new self($parent, $fullWidth);
+    }
+
+    /**
      * Gets a value indicating if the group is output before header.
      */
     public function isGroupBeforeHeader(): bool

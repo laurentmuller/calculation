@@ -143,12 +143,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function createTableBuilder(): PdfGroupTableBuilder
     {
-        $builder = new PdfGroupTableBuilder($this);
-        $style = PdfStyle::getCellStyle()->setFontBold();
-
-        $builder->setGroupStyle($style)
+        $builder = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getCellStyle()->setFontBold())
             ->setGroupListener($this)
             ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50));
+
         $permissions = EntityPermission::sorted();
         foreach ($permissions as $permission) {
             $builder->addColumn(PdfColumn::center($this->trans($permission->getReadable()), 25, true));

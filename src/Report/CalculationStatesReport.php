@@ -82,8 +82,8 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
         $this->AddPage();
 
         // table
-        $table = new PdfTableBuilder($this);
-        $table->setListener($this)
+        $table = PdfTableBuilder::instance($this)
+            ->setListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('calculationstate.fields.code'), 20),
                 PdfColumn::left($this->trans('calculationstate.fields.description'), 80),

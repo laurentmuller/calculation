@@ -56,8 +56,8 @@ class PhpIniReport extends AbstractReport
         }
 
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-        $table = new PdfGroupTableBuilder($this);
-        $table->setGroupStyle(PdfStyle::getHeaderStyle())
+        $table = PdfGroupTableBuilder::instance($this)
+            ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Directive', 40),
                 PdfColumn::left('Local Value', 30),

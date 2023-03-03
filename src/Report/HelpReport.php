@@ -146,11 +146,11 @@ class HelpReport extends AbstractReport
             $this->Ln(3);
         }
         $this->outputText($description);
-        $table = new PdfTableBuilder($this);
-        $table->addColumns(
-            PdfColumn::left($this->trans('help.fields.action'), 70, true),
-            PdfColumn::left($this->trans('help.fields.description'), 50)
-        )->outputHeaders();
+        $table = PdfTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left($this->trans('help.fields.action'), 70, true),
+                PdfColumn::left($this->trans('help.fields.description'), 50)
+            )->outputHeaders();
 
         foreach ($actions as $action) {
             $table->addRow(
@@ -166,11 +166,11 @@ class HelpReport extends AbstractReport
      */
     private function outputColumns(array $item, array $fields): void
     {
-        $table = new PdfTableBuilder($this);
-        $table->addColumns(
-            PdfColumn::left($this->trans('help.fields.column'), 30, true),
-            PdfColumn::left($this->trans('help.fields.description'), 50)
-        )->outputHeaders();
+        $table = PdfTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left($this->trans('help.fields.column'), 30, true),
+                PdfColumn::left($this->trans('help.fields.description'), 50)
+            )->outputHeaders();
 
         foreach ($fields as $field) {
             $table->addRow(
@@ -390,13 +390,13 @@ class HelpReport extends AbstractReport
      */
     private function outputFields(array $item, array $fields): void
     {
-        $table = new PdfTableBuilder($this);
-        $table->addColumns(
-            PdfColumn::left($this->trans('help.fields.field'), 30, true),
-            PdfColumn::left($this->trans('help.fields.description'), 50),
-            PdfColumn::left($this->trans('help.fields.type'), 30, true),
-            PdfColumn::center($this->trans('help.fields.required'), 18, true)
-        )->outputHeaders();
+        $table = PdfTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left($this->trans('help.fields.field'), 30, true),
+                PdfColumn::left($this->trans('help.fields.description'), 50),
+                PdfColumn::left($this->trans('help.fields.type'), 30, true),
+                PdfColumn::center($this->trans('help.fields.required'), 18, true)
+            )->outputHeaders();
 
         foreach ($fields as $field) {
             $table->addRow(
@@ -459,11 +459,11 @@ class HelpReport extends AbstractReport
         // menus
         $this->Ln(3);
         $this->outputText('help.labels.edit_actions');
-        $table = new PdfTableBuilder($this);
-        $table->addColumns(
-            PdfColumn::left($this->trans('help.fields.action'), 60, true),
-            PdfColumn::left($this->trans('help.fields.description'), 50)
-        )->outputHeaders();
+        $table = PdfTableBuilder::instance($this)
+            ->addColumns(
+                PdfColumn::left($this->trans('help.fields.action'), 60, true),
+                PdfColumn::left($this->trans('help.fields.description'), 50)
+            )->outputHeaders();
         $this->outputMenus($table, $menus);
 
         return true;

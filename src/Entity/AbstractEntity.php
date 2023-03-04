@@ -40,7 +40,7 @@ abstract class AbstractEntity implements \Stringable
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue]
-    private ?int $id = null;
+    protected ?int $id = null;
 
     /**
      * Magic method called after clone.

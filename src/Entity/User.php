@@ -129,6 +129,34 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
+     * @return array{
+     *      id: int|null,
+     *      username: string|null,
+     *      password: string|null}
+     */
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->username,
+            'password' => $this->password,
+        ];
+    }
+
+    /**
+     * @param array{
+     *     id: int|null,
+     *     username: string|null,
+     *     password: string|null} $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->username = $data['username'];
+        $this->password = $data['password'];
+    }
+
+    /**
      * Add a property.
      */
     public function addProperty(UserProperty $property): self

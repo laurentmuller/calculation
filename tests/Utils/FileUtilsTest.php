@@ -20,6 +20,9 @@ use PHPUnit\Framework\TestCase;
  */
 class FileUtilsTest extends TestCase
 {
+    /**
+     * @return array<array{0: string, 1: string, 2?: string, 3?: string}>
+     */
     public static function getBuildPaths(): array
     {
         return [
@@ -35,16 +38,65 @@ class FileUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0: string|\SplFileInfo|int, 1: string}>
+     */
+    public static function getFormatSize(): array
+    {
+        $kb = 1024;
+        $mb = $kb * $kb;
+        $gb = $mb * $kb;
+        $empty = 'Empty';
+
+        $file = self::getLinesFile();
+        $size = \filesize($file) ?: 0;
+
+        return [
+            [$file, \sprintf('%d B', $size)],
+            [$size, \sprintf('%d B', $size)],
+
+            ["D:\zzz_aaa", $empty],
+            [self::getEmptyFile(), $empty],
+
+            [0, $empty],
+            [1, '1 B'],
+            [$kb - 1, '1023 B'],
+
+            [$kb, '1 KB'],
+            [$kb * 2, '2 KB'],
+            [$mb - 1, '1024 KB'],
+
+            [$mb, '1.0 MB'],
+            [$mb * 2, '2.0 MB'],
+            [$gb - 1, '1024.0 MB'],
+
+            [$gb, '1.0 GB'],
+            [$gb * 2, '2.0 GB'],
+            [$gb * $kb, '1024.0 GB'],
+
+            [__FILE__, \sprintf('%d KB', \filesize(__FILE__) / $kb)],
+
+            [new \SplFileInfo("D:\zzz_aaa"), $empty],
+        ];
+    }
+
+    /**
+     * @return array<array{0: string|\SplFileInfo, 1: string|\SplFileInfo}>
+     */
     public static function getRealPath(): array
     {
-        return [
-            ['D:\temps', 'D:\temps'],
-            ['D:\temps\file.txt', 'D:\temps\file.txt'],
-            ['/usr/bin/php', '/usr/bin/php'],
+        $temp_dir = \sys_get_temp_dir();
 
-            [new \SplFileInfo('D:\temps'), 'D:\temps'],
-            [new \SplFileInfo('D:\temps\file.txt'), 'D:\temps\file.txt'],
-            [new \SplFileInfo('/usr/bin/php'), '/usr/bin/php'],
+        return [
+            [__DIR__, __DIR__],
+            [__FILE__, __FILE__],
+            [$temp_dir, $temp_dir],
+            [\strtoupper($temp_dir), $temp_dir],
+            [\strtolower($temp_dir), $temp_dir],
+
+            [new \SplFileInfo(__DIR__), __DIR__],
+            [new \SplFileInfo(__FILE__), __FILE__],
+            [new \SplFileInfo($temp_dir), $temp_dir],
         ];
     }
 
@@ -68,19 +120,13 @@ class FileUtilsTest extends TestCase
         self::assertNotNull(FileUtils::getFilesystem());
     }
 
-    public function testFormatSize(): void
+    /**
+     * @dataProvider getFormatSize
+     */
+    public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
     {
-        $file = $this->getLinesFile();
-        $size = \filesize($file);
-        self::assertTrue(FileUtils::exists($file));
-        $expected = \sprintf('%d B', $size);
-        self::assertSame($expected, FileUtils::formatSize($file));
-    }
-
-    public function testFormatSizeEmpty(): void
-    {
-        $file = "D:\zzz_aaa";
-        self::assertSame('empty', FileUtils::formatSize($file));
+        $actual = FileUtils::formatSize($path);
+        self::assertSame($expected, $actual);
     }
 
     public function testIsFile(): void
@@ -90,11 +136,11 @@ class FileUtilsTest extends TestCase
 
     public function testLineCount(): void
     {
-        $empty = $this->getEmptyFile();
+        $empty = self::getEmptyFile();
         self::assertSame(0, FileUtils::getLinesCount($empty));
         self::assertSame(0, FileUtils::getLinesCount($empty, false));
 
-        $lines = $this->getLinesFile();
+        $lines = self::getLinesFile();
         self::assertSame(3, FileUtils::getLinesCount($lines));
         self::assertSame(6, FileUtils::getLinesCount($lines, false));
     }
@@ -108,12 +154,12 @@ class FileUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    private function getEmptyFile(): string
+    private static function getEmptyFile(): string
     {
         return __DIR__ . '/../Data/empty.txt';
     }
 
-    private function getLinesFile(): string
+    private static function getLinesFile(): string
     {
         return __DIR__ . '/../Data/lines_count.txt';
     }

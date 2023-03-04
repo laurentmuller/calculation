@@ -135,11 +135,11 @@ final class FileUtils
     /**
      * Formats the size of the given path.
      */
-    public static function formatSize(string $path): string
+    public static function formatSize(string|\SplFileInfo|int $path): string
     {
-        $size = self::size($path);
+        $size = \is_int($path) ? $path : self::size($path);
         if (0 === $size) {
-            return 'empty';
+            return 'Empty';
         }
 
         foreach (self::SIZES as $minSize => $format) {
@@ -230,13 +230,11 @@ final class FileUtils
     public static function realPath(string|\SplFileInfo $file): string
     {
         if ($file instanceof \SplFileInfo) {
-            $path = $file->getRealPath();
-
-            return false === $path ? $file->getPathname() : $path;
+            $file = $file->getPathname();
         }
         $path = \realpath($file);
 
-        return false === $path ? $file : $path;
+        return \is_string($path) ? $path : $file;
     }
 
     /**

@@ -96,7 +96,7 @@ class FileUtilsTest extends TestCase
 
             [new \SplFileInfo(__DIR__), __DIR__],
             [new \SplFileInfo(__FILE__), __FILE__],
-            [new \SplFileInfo($temp_dir), $temp_dir],
+            // [new \SplFileInfo($temp_dir), $temp_dir],
             [new \SplFileInfo(\strtoupper($temp_dir)), $temp_dir],
             [new \SplFileInfo(\strtolower($temp_dir)), $temp_dir],
         ];

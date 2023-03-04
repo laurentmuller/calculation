@@ -330,11 +330,11 @@ class OpenWeatherService extends AbstractHttpClientService
      *      cnt: int,
      *      units: array,
      *      list: array<int, array>
-     *  }>|bool
+     *  }>|false
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    public function group(array $cityIds, string $units = self::UNIT_METRIC): array|bool
+    public function group(array $cityIds, string $units = self::UNIT_METRIC): array|false
     {
         if (\count($cityIds) > self::MAX_GROUP) {
             throw new \InvalidArgumentException('The number of city identifiers is greater than 20.');
@@ -345,7 +345,7 @@ class OpenWeatherService extends AbstractHttpClientService
             'units' => $units,
         ];
 
-        /** @psalm-var bool|array<array{
+        /** @psalm-var false|array<array{
          *      cnt: int,
          *      units: array,
          *      list: array<int, array>

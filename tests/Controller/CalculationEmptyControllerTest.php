@@ -52,6 +52,8 @@ class CalculationEmptyControllerTest extends AbstractControllerTest
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function addEntities(): void
     {
@@ -94,6 +96,8 @@ class CalculationEmptyControllerTest extends AbstractControllerTest
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function deleteEntities(): void
     {

@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 use App\Service\OpenWeatherService;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Unit test for {@link OpenWeatherService} class.
@@ -35,6 +36,9 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->service = $this->getService(OpenWeatherService::class);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function testCurrent(): void
     {
         self::assertNotNull($this->service);
@@ -46,6 +50,9 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->validateResult($result, true);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function testCurrentInvalid(): void
     {
         self::assertNotNull($this->service);
@@ -53,33 +60,53 @@ class OpenWeatherServiceTest extends KernelTestCase
         self::assertFalse($result);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function testDaily(): void
     {
         $count = 5;
+        self::assertNotNull($this->service);
         $result = $this->service->daily(self::CITY_VALID, $count);
         self::assertIsArray($result);
         self::assertSame($count, $result['cnt']);
-        self::assertCount($count, $result['list']);
-        self::assertIsArray($result['units']);
 
-        self::assertIsArray($result['city']);
+        /** @psalm-var array $list */
+        $list = $result['list'];
+        self::assertCount($count, $list);
+        self::assertArrayHasKey(0, $list);
+
+        $units = $result['units'];
+        self::assertIsArray($units);
+
         $city = $result['city'];
+        self::assertIsArray($city);
+
         self::assertIsArray($city['coord']);
         $this->validateCoord($city['coord']);
 
-        $result = $result['list'][0];
+        /** @psalm-var array{sunrise: int|null, sunset: int|null}  $result */
+        $result = $list[0];
         self::assertIsInt($result['sunrise']);
         self::assertIsInt($result['sunset']);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function testDailyInvalid(): void
     {
+        self::assertNotNull($this->service);
         $result = $this->service->daily(self::CITY_INVALID);
         self::assertFalse($result);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function testGroup(): void
     {
+        self::assertNotNull($this->service);
         $cityIds = [self::CITY_VALID];
         $result = $this->service->group($cityIds);
 
@@ -89,21 +116,25 @@ class OpenWeatherServiceTest extends KernelTestCase
         $cnt = $result['cnt'];
         self::assertSame(1, $cnt);
 
+        /** @psalm-var array<int, array> $list */
         $list = $result['list'];
         self::assertCount(1, $list);
 
         $units = $result['units'];
-        self::assertIsArray($units);
+        self::assertNotEmpty($units);
 
-        /** @psalm-var array<int, array> $list */
-        $list = $result['list'];
-        $firstList = $list[0];
+        $firstList = $list[0] ?? null;
         self::assertIsArray($firstList);
+        self::assertNotEmpty($firstList);
         $this->validateResult($firstList, false);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function testGroupInvalidCount(): void
     {
+        self::assertNotNull($this->service);
         $this->expectException(\InvalidArgumentException::class);
         $this->service->group(\range(0, 25));
     }
@@ -145,7 +176,7 @@ class OpenWeatherServiceTest extends KernelTestCase
     private function validateSys(array $data): void
     {
         self::assertIsString($data['country']);
-        self::assertSame(2, \strlen((string) $data['country']));
+        self::assertSame(2, \strlen($data['country']));
         self::assertIsInt($data['sunrise']);
         self::assertIsInt($data['sunset']);
     }

@@ -21,6 +21,9 @@ use App\Entity\Task;
  */
 class TaskTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $group = $this->createGroup();
@@ -57,6 +60,9 @@ class TaskTest extends AbstractEntityValidatorTest
         $this->validate($task, 1);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $group = $this->createGroup();

@@ -35,6 +35,9 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
+    /**
+     * @return array<array{0:string, 1: array, 2: string, 3: string}>
+     */
     public static function getInvalidValues(): array
     {
         return [
@@ -47,6 +50,9 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
+    /**
+     * @return array<array{0:string, 1:bool}>
+     */
     public static function getPasswords(): array
     {
         return [
@@ -55,6 +61,9 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
+    /**
+     * @return array<array{0:string, 1: array}>
+     */
     public static function getValidValues(): array
     {
         return [

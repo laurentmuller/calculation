@@ -23,6 +23,9 @@ use App\Entity\TaskItemMargin;
  */
 class TaskItemTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $group = $this->createGroup();
@@ -62,6 +65,9 @@ class TaskItemTest extends AbstractEntityValidatorTest
         self::assertEqualsWithDelta(0, $item->findValue(100), 0.01);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $group = $this->createGroup();

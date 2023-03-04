@@ -20,15 +20,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Abstract unit test for controllers.
- *
- * @psalm-type RouteType = array{url: string, username: string, expected?: int, method?: string}
  */
 abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 {
     /**
      * Gets the routes to test. Each entry must contain a URL, a username, an optional expected result and request method.
      *
-     * @return iterable<array-key, RouteType[]>
+     * @return iterable<array-key, array{url: string, username: string, expected?: int, method?: string}>
      */
     abstract public static function getRoutes(): iterable;
 

@@ -73,6 +73,9 @@ class TaskControllerTest extends AbstractControllerTest
         ];
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function addEntities(): void
     {
         if (null === self::$group) {
@@ -100,6 +103,9 @@ class TaskControllerTest extends AbstractControllerTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteEntities(): void
     {
         self::$item = $this->deleteEntity(self::$item);

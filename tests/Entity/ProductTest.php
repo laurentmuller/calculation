@@ -21,6 +21,9 @@ use App\Entity\Product;
  */
 class ProductTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $group = $this->getGroup();
@@ -68,6 +71,9 @@ class ProductTest extends AbstractEntityValidatorTest
         $this->validate($product, 1);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $group = $this->getGroup();

@@ -20,6 +20,9 @@ use PHPUnit\Framework\TestCase;
  */
 class DateUtilsTest extends TestCase
 {
+    /**
+     * @return array<array{0:int, 1: int}>
+     */
     public static function getCompletYears(): array
     {
         return [
@@ -41,6 +44,9 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0:string, 1: int}>
+     */
     public static function getMonthNames(): array
     {
         return [
@@ -59,6 +65,9 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0:string, 1: int}>
+     */
     public static function getShortMonthNames(): array
     {
         return [
@@ -77,6 +86,9 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0:string, 1: int}>
+     */
     public static function getShortWeekdayNames(): array
     {
         return [
@@ -100,6 +112,9 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0:string, 1: int, 2?: string}>
+     */
     public static function getWeekdayNames(): array
     {
         return [
@@ -123,6 +138,9 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testAddByInterval(): void
     {
         $date = new \DateTime('2020-01-10');
@@ -131,6 +149,9 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-17', $add->format('Y-m-d'));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testAddByString(): void
     {
         $date = new \DateTime('2020-01-10');
@@ -182,9 +203,9 @@ class DateUtilsTest extends TestCase
     /**
      *  @dataProvider getShortWeekdayNames
      */
-    public function testShortWeekdayNames(string $name, int $index, string $firstday = 'sunday', string $locale = 'fr_CH'): void
+    public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday', string $locale = 'fr_CH'): void
     {
-        $values = DateUtils::getShortWeekdays($firstday, $locale);
+        $values = DateUtils::getShortWeekdays($firstDay, $locale);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
     }
@@ -195,6 +216,9 @@ class DateUtilsTest extends TestCase
         self::assertCount(7, $values);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSubByInterval(): void
     {
         $date = new \DateTime('2020-01-10');
@@ -203,6 +227,9 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSubByString(): void
     {
         $date = new \DateTime('2020-01-10');
@@ -213,9 +240,9 @@ class DateUtilsTest extends TestCase
     /**
      *  @dataProvider getWeekdayNames
      */
-    public function testWeekdayNames(string $name, int $index, string $firstday = 'sunday', string $locale = 'fr_CH'): void
+    public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday', string $locale = 'fr_CH'): void
     {
-        $values = DateUtils::getWeekdays($firstday, $locale);
+        $values = DateUtils::getWeekdays($firstDay, $locale);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
     }

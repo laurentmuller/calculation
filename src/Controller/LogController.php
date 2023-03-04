@@ -22,11 +22,9 @@ use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Util\FileUtils;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -87,14 +85,10 @@ class LogController extends AbstractController
     public function download(LogService $service): Response
     {
         if (!$service->isFileValid()) {
-            return $this->redirectToHomePage('log.download.error', [], FlashType::WARNING);
+            return $this->getEmptyResponse('log.download.error', FlashType::WARNING);
         }
 
-        $file = $service->getFileName();
-        $response = new BinaryFileResponse($file);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, \basename($file));
-
-        return $response;
+        return $this->file($service->getFileName());
     }
 
     /**
@@ -181,8 +175,8 @@ class LogController extends AbstractController
         return 'log_table';
     }
 
-    private function getEmptyResponse(): RedirectResponse
+    private function getEmptyResponse(string $message = 'log.list.empty', FlashType $type = FlashType::INFO): RedirectResponse
     {
-        return $this->redirectToHomePage('log.list.empty', [], FlashType::INFO);
+        return $this->redirectToHomePage($message, [], $type);
     }
 }

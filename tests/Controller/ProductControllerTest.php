@@ -63,6 +63,9 @@ class ProductControllerTest extends AbstractControllerTest
         ];
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function addEntities(): void
     {
         if (null === self::$group) {
@@ -86,6 +89,9 @@ class ProductControllerTest extends AbstractControllerTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteEntities(): void
     {
         self::$product = $this->deleteEntity(self::$product);

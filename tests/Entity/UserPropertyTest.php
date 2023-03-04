@@ -21,6 +21,9 @@ use App\Repository\UserPropertyRepository;
  */
 class UserPropertyTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $first = new UserProperty('name');
@@ -40,9 +43,13 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testFindByName(): void
     {
         $user = $this->getUser();
+        self::assertNotNull($user);
         $expected = new UserProperty('name');
         $expected->setString('value');
         $expected->setUser($user);
@@ -59,9 +66,13 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testFindByUser(): void
     {
         $user = $this->getUser();
+        self::assertNotNull($user);
         $expected = new UserProperty('name');
         $expected->setString('value');
         $expected->setUser($user);
@@ -91,6 +102,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
         $object = new UserProperty();
         $object->setString('value');
         $object->setUser($this->getUser());
+        self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount(1, $result);
     }
@@ -99,6 +111,7 @@ class UserPropertyTest extends AbstractEntityValidatorTest
     {
         $object = new UserProperty('name');
         $object->setString('value');
+        self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount(1, $result);
     }
@@ -107,10 +120,14 @@ class UserPropertyTest extends AbstractEntityValidatorTest
     {
         $object = new UserProperty('name');
         $object->setUser($this->getUser());
+        self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount(1, $result);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $user = $this->getUser();
@@ -142,10 +159,13 @@ class UserPropertyTest extends AbstractEntityValidatorTest
 
     private function getRepository(): UserPropertyRepository
     {
-        return $this->getManager()->getRepository(UserProperty::class);
+        /** @psalm-var UserPropertyRepository $repository */
+        $repository = $this->getManager()->getRepository(UserProperty::class);
+
+        return $repository;
     }
 
-    private function getUser(): User
+    private function getUser(): ?User
     {
         return $this->getManager()->getRepository(User::class)->find(1);
     }

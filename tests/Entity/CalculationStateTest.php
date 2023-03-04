@@ -19,6 +19,9 @@ use App\Entity\CalculationState;
  */
 class CalculationStateTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $first = new CalculationState();
@@ -42,6 +45,9 @@ class CalculationStateTest extends AbstractEntityValidatorTest
         $this->validate($state, 1);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $first = new CalculationState();

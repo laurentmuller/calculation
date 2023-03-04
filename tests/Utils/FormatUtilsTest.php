@@ -30,6 +30,9 @@ class FormatUtilsTest extends TestCase
 
     private const TIME_ZONE = 'Europe/Zurich';
 
+    /**
+     * @return array<array{0: string|int|float, 1: string}>
+     */
     public static function getAmounts(): array
     {
         return [
@@ -59,6 +62,9 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0: string, 1: string}>
+     */
     public static function getDateFormatterPatterns(): array
     {
         return [
@@ -68,6 +74,11 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0: \DateTimeInterface|int|null, 1: string|null, 2?: int}>
+     *
+     * @throws \Exception
+     */
     public static function getDates(): array
     {
         $date = self::createDate();
@@ -84,6 +95,11 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-return \Generator<int, array{0: \DateTimeInterface|int|null, 1: string|null, 2?: (-1|0|1|2|3), 3?: (-1|0|1|2|3)}, mixed, void>
+     *
+     * @throws \Exception
+     */
     public static function getDateTimes(): \Generator
     {
         $date = self::createDate();
@@ -115,6 +131,9 @@ class FormatUtilsTest extends TestCase
         yield [self::TIME_STAMP, '20.02.2022 12:59'];
     }
 
+    /**
+     * @return array<array{0: int|float|string|null, 1: string}>
+     */
     public static function getIds(): array
     {
         return [
@@ -132,6 +151,9 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0: int|float|string|null, 1: string}>
+     */
     public static function getIntegers(): array
     {
         return [
@@ -150,6 +172,9 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0: int|float|string|null, 1: string, 2?: bool, 3?: int, 4?: int}>
+     */
     public static function getPercents(): array
     {
         return [
@@ -173,6 +198,11 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{0: \DateTimeInterface|int|null, 1: string|null, 2?: int}>
+     *
+     * @throws \Exception
+     */
     public static function getTimes(): array
     {
         $date = self::createDate();
@@ -192,7 +222,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getDateFormatterPatterns
      */
-    public function testDateFormatterPattern(mixed $pattern, string $expected, ?int $datetype = null, ?int $timetype = null): void
+    public function testDateFormatterPattern(string $pattern, string $expected, ?int $datetype = null, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -215,7 +245,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getAmounts
      */
-    public function testFormatAmount(mixed $number, string $expected): void
+    public function testFormatAmount(string|int|float $number, string $expected): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         $actual = FormatUtils::formatAmount($number);
@@ -225,7 +255,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getDates
      */
-    public function testFormatDate(mixed $date, mixed $expected, ?int $datetype = null): void
+    public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, ?int $datetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -236,7 +266,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getDateTimes
      */
-    public function testFormatDateTime(mixed $date, mixed $expected, ?int $datetype = null, ?int $timetype = null): void
+    public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $datetype = null, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -247,7 +277,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getIds
      */
-    public function testFormatId(mixed $number, string $expected): void
+    public function testFormatId(int|float|string|null $number, string $expected): void
     {
         $actual = FormatUtils::formatId($number);
         self::assertSame($expected, $actual);
@@ -256,7 +286,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getIntegers
      */
-    public function testFormatInteger(mixed $number, string $expected): void
+    public function testFormatInteger(int|float|string|null $number, string $expected): void
     {
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
@@ -265,7 +295,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getPercents
      */
-    public function testFormatPercent(mixed $number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
+    public function testFormatPercent(int|float|string|null $number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
@@ -282,7 +312,7 @@ class FormatUtilsTest extends TestCase
     /**
      *  @dataProvider getTimes
      */
-    public function testFormatTime(mixed $date, mixed $expected, ?int $timetype = null): void
+    public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -309,7 +339,10 @@ class FormatUtilsTest extends TestCase
         self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::getTimeType());
     }
 
-    private static function createDate(): \DateTime
+    /**
+     * @throws \Exception
+     */
+    private static function createDate(): \DateTimeInterface
     {
         return new \DateTime(self::DATE_TIME, new \DateTimeZone(self::TIME_ZONE));
     }

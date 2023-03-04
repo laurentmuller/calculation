@@ -49,6 +49,8 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      *          price: float,
      *          count: int}>
      *      }> $entities
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, string $title)
     {

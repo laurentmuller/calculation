@@ -19,6 +19,9 @@ use App\Entity\User;
  */
 class UserTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicateBoth(): void
     {
         $first = new User();
@@ -40,6 +43,9 @@ class UserTest extends AbstractEntityValidatorTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicateEmail(): void
     {
         $first = new User();
@@ -61,6 +67,9 @@ class UserTest extends AbstractEntityValidatorTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicateUserName(): void
     {
         $first = new User();
@@ -115,6 +124,9 @@ class UserTest extends AbstractEntityValidatorTest
         $this->validate($user, 1);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $first = new User();

@@ -20,13 +20,14 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class NonceExtensionTest extends KernelTestCase
 {
-    /**
-     * @var NonceExtension
-     */
-    private $extension;
+    private ?NonceExtension $extension = null;
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Exception
+     *
+     * @psalm-suppress RedundantCondition
      */
     protected function setUp(): void
     {
@@ -41,14 +42,22 @@ class NonceExtensionTest extends KernelTestCase
         self::assertNotNull($this->extension);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testLength32(): void
     {
+        self::assertNotNull($this->extension);
         $nonce = $this->extension->getNonce(32);
         self::assertSame(64, \strlen($nonce));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testLengthDefault(): void
     {
+        self::assertNotNull($this->extension);
         $nonce = $this->extension->getNonce();
         self::assertSame(32, \strlen($nonce));
     }

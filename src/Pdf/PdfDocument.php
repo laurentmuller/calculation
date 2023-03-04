@@ -108,8 +108,8 @@ class PdfDocument extends \FPDF
         $this->footer = new PdfFooter($this);
 
         $this->AliasNbPages();
-        $this->SetAutoPageBreak(true, $this->bMargin - self::LINE_HEIGHT);
         $this->SetDisplayMode();
+        $this->SetAutoPageBreak(true, $this->bMargin - self::LINE_HEIGHT);
     }
 
     /**

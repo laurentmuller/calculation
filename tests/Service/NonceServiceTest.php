@@ -20,10 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class NonceServiceTest extends KernelTestCase
 {
-    /**
-     * @var NonceService
-     */
-    private $service;
+    private ?NonceService $service = null;
 
     /**
      * {@inheritDoc}

@@ -20,6 +20,9 @@ use App\Entity\Group;
  */
 class CategoryTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $group = new Group();
@@ -52,6 +55,9 @@ class CategoryTest extends AbstractEntityValidatorTest
         $this->validate($object, 1);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $group = new Group();

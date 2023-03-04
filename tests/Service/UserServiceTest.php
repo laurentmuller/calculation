@@ -36,9 +36,6 @@ class UserServiceTest extends KernelTestCase
         self::bootKernel();
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testActions(): void
     {
         $service = $this->getUserService();
@@ -48,18 +45,12 @@ class UserServiceTest extends KernelTestCase
         self::assertFalse($service->isActionNone());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testDisplayMode(): void
     {
         $service = $this->getUserService();
         self::assertSame(TableView::TABLE, $service->getDisplayMode());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testMessage(): void
     {
         $service = $this->getUserService();
@@ -68,9 +59,6 @@ class UserServiceTest extends KernelTestCase
         self::assertFalse($service->isMessageSubTitle());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testOptions(): void
     {
         $service = $this->getUserService();
@@ -78,9 +66,6 @@ class UserServiceTest extends KernelTestCase
         self::assertFalse($service->isPrintAddress());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testPanels(): void
     {
         $service = $this->getUserService();

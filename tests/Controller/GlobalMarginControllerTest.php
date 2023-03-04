@@ -47,6 +47,9 @@ class GlobalMarginControllerTest extends AbstractControllerTest
         ];
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function addEntities(): void
     {
         if (null === self::$entity) {
@@ -56,6 +59,9 @@ class GlobalMarginControllerTest extends AbstractControllerTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteEntities(): void
     {
         self::$entity = $this->deleteEntity(self::$entity);

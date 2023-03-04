@@ -20,6 +20,9 @@ use App\Entity\GroupMargin;
  */
 class GroupTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $first = new Group();
@@ -65,6 +68,9 @@ class GroupTest extends AbstractEntityValidatorTest
         $this->validate($object, 1);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $first = new Group();

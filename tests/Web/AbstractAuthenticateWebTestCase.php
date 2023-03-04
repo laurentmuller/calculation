@@ -48,8 +48,6 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function setUp(): void
     {

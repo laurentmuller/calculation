@@ -38,9 +38,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::bootKernel();
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testActions(): void
     {
         $service = $this->getApplicationService();
@@ -50,9 +47,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertFalse($service->isActionNone());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testAdminRole(): void
     {
         $service = $this->getApplicationService();
@@ -62,9 +56,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertSame($role->getRights(), $rights);
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testCustomer(): void
     {
         $service = $this->getApplicationService();
@@ -87,9 +78,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertNull($customer->getZipCity());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testDates(): void
     {
         $service = $this->getApplicationService();
@@ -97,9 +85,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertNull($service->getUpdateProducts());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testDefaultCategory(): void
     {
         $service = $this->getApplicationService();
@@ -107,9 +92,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertSame(0, $service->getDefaultCategoryId());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testDefaultProduct(): void
     {
         $service = $this->getApplicationService();
@@ -119,9 +101,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertTrue($service->isDefaultEdit());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testDefaultState(): void
     {
         $service = $this->getApplicationService();
@@ -129,18 +108,12 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertSame(0, $service->getDefaultStateId());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testDisplayMode(): void
     {
         $service = $this->getApplicationService();
         self::assertSame(TableView::TABLE, $service->getDisplayMode());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testMessage(): void
     {
         $service = $this->getApplicationService();
@@ -149,9 +122,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertFalse($service->isMessageSubTitle());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testMinMargin(): void
     {
         $service = $this->getApplicationService();
@@ -163,9 +133,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertFalse($service->isMarginBelow($calculation));
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testOptions(): void
     {
         $service = $this->getApplicationService();
@@ -173,9 +140,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertFalse($service->isPrintAddress());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testPanels(): void
     {
         $service = $this->getApplicationService();
@@ -185,9 +149,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertSame(10, $service->getPanelCalculation());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testSecurity(): void
     {
         $service = $this->getApplicationService();
@@ -195,9 +156,6 @@ class ApplicationServiceTest extends KernelTestCase
         self::assertSame(StrengthLevel::NONE, $service->getStrengthLevel());
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function testUserRole(): void
     {
         $service = $this->getApplicationService();

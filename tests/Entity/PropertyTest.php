@@ -19,6 +19,9 @@ use App\Entity\Property;
  */
 class PropertyTest extends AbstractEntityValidatorTest
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testDuplicate(): void
     {
         $first = new Property();
@@ -58,6 +61,9 @@ class PropertyTest extends AbstractEntityValidatorTest
         $this->validate($object, 1);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testNotDuplicate(): void
     {
         $first = new Property();

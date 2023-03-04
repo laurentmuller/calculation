@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Util\FileUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -74,11 +75,6 @@ final class SymfonyInfoService
     private ?array $packages = null;
 
     /**
-     * The project directory.
-     */
-    private readonly string $projectDir;
-
-    /**
      * The routes.
      *
      * @var null|array{
@@ -94,8 +90,9 @@ final class SymfonyInfoService
     public function __construct(
         private readonly KernelInterface $kernel,
         private readonly RouterInterface $router,
+        #[Autowire('%kernel.project_dir%')]
+        private readonly string $projectDir,
     ) {
-        $this->projectDir = $kernel->getProjectDir();
     }
 
     /**

@@ -38,6 +38,9 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
         $this->validator = $this->getService(ValidatorInterface::class);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteEntity(AbstractEntity $object): void
     {
         $manager = $this->getManager();
@@ -45,6 +48,9 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
         $manager->flush();
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function saveEntity(AbstractEntity $object): void
     {
         $manager = $this->getManager();

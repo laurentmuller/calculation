@@ -111,8 +111,9 @@ class UserController extends AbstractEntityController
      * Export the customers to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'user_excel')]
     public function excel(StorageInterface $storage): SpreadsheetResponse

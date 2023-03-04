@@ -47,6 +47,9 @@ class UpdateEntityControllerTest extends AbstractControllerTest
         ];
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function addEntities(): void
     {
         if (null === self::$customer) {
@@ -84,6 +87,9 @@ class UpdateEntityControllerTest extends AbstractControllerTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteEntities(): void
     {
         foreach (self::$products as $product) {

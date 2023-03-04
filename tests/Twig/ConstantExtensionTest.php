@@ -20,12 +20,14 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ConstantExtensionTest extends KernelTestCase
 {
-    private ?ConstantExtension $extension;
+    private ?ConstantExtension $extension = null;
 
     /**
      * {@inheritDoc}
      *
      * @throws \Exception
+     *
+     * @psalm-suppress RedundantCondition
      */
     protected function setUp(): void
     {
@@ -35,6 +37,9 @@ class ConstantExtensionTest extends KernelTestCase
         }
     }
 
+    /**
+     * @return array<array{0: string, 1: int}>
+     */
     public static function getCalculationServiceConstants(): array
     {
         return [
@@ -48,6 +53,9 @@ class ConstantExtensionTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return array<array{0: string, 1: string}>
+     */
     public static function getEntityVoterConstants(): array
     {
         return [
@@ -73,11 +81,10 @@ class ConstantExtensionTest extends KernelTestCase
 
     /**
      * @dataProvider getCalculationServiceConstants
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testCalculationService(string $key, int $value): void
     {
+        self::assertNotNull($this->extension);
         $globals = $this->extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsInt($globals[$key]);
@@ -86,11 +93,10 @@ class ConstantExtensionTest extends KernelTestCase
 
     /**
      * @dataProvider getEntityVoterConstants
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testEntityVoter(string $key, string $value): void
     {
+        self::assertNotNull($this->extension);
         $globals = $this->extension->getGlobals();
         self::assertArrayHasKey($key, $globals);
         self::assertIsString($globals[$key]);

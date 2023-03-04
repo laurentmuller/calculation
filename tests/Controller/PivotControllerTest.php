@@ -33,20 +33,15 @@ class PivotControllerTest extends AbstractControllerTest
     public static function getRoutes(): array
     {
         return [
-//             ['/pivot', self::ROLE_USER],
-//             ['/pivot', self::ROLE_ADMIN],
-//             ['/pivot', self::ROLE_SUPER_ADMIN],
-
             ['/pivot/csv', self::ROLE_USER],
             ['/pivot/csv', self::ROLE_ADMIN],
             ['/pivot/csv', self::ROLE_SUPER_ADMIN],
-
-//             ['/pivot/json', self::ROLE_USER],
-//             ['/pivot/json', self::ROLE_ADMIN],
-//             ['/pivot/json', self::ROLE_SUPER_ADMIN],
         ];
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function addEntities(): void
     {
         if (null === self::$state) {
@@ -89,6 +84,9 @@ class PivotControllerTest extends AbstractControllerTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteEntities(): void
     {
         self::$calculation = $this->deleteEntity(self::$calculation);

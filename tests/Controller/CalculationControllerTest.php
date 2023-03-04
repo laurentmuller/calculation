@@ -80,6 +80,9 @@ class CalculationControllerTest extends AbstractControllerTest
         ];
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function addEntities(): void
     {
         if (null === self::$state) {
@@ -110,6 +113,9 @@ class CalculationControllerTest extends AbstractControllerTest
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function deleteEntities(): void
     {
         self::$calculation = $this->deleteEntity(self::$calculation);

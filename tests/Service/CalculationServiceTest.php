@@ -45,6 +45,9 @@ class CalculationServiceTest extends KernelTestCase
     private const PRODUCT_PRICE = 100.0;
     private const QUANTITY = 10.0;
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public function testService(): void
     {
         self::bootKernel();
@@ -54,8 +57,7 @@ class CalculationServiceTest extends KernelTestCase
         $calculation->addProduct($product, self::QUANTITY)
             ->setUserMargin(self::MARGIN_USER);
 
-        $manager = $this->getManager();
-        $service = $this->getTestedService($manager);
+        $service = $this->getTestedService();
         $service->updateTotal($calculation);
 
         self::assertSame(1, $calculation->getGroupsCount());
@@ -76,7 +78,7 @@ class CalculationServiceTest extends KernelTestCase
 
         $totalItem = self::PRODUCT_PRICE * self::QUANTITY;
         $totalGroup = $totalItem * self::MARGIN_PERCENT;
-        $totalUser = $totalGroup * (1 + self::MARGIN_USER);
+        $totalUser = $totalGroup * (1.0 + self::MARGIN_USER);
         $totalOverall = $totalUser * self::MARGIN_PERCENT;
 
         // item
@@ -101,15 +103,12 @@ class CalculationServiceTest extends KernelTestCase
         self::assertSame($totalOverall, $calculation->getOverallTotal());
     }
 
-    /**
-     * @param mixed $value
-     */
-    protected function echo(string $name, $value): void
+    protected function echo(string $name, mixed $value): void
     {
         echo \sprintf("\n%-15s: %s", $name, $value);
     }
 
-    protected function getTestedService(EntityManager $manager): CalculationService
+    protected function getTestedService(): CalculationService
     {
         // get services
         $globalRepository = $this->getService(GlobalMarginRepository::class);
@@ -120,6 +119,9 @@ class CalculationServiceTest extends KernelTestCase
         return new CalculationService($globalRepository, $marginRepository, $groupRepository, $service);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function init(): Product
     {
         $manager = $this->getManager();
@@ -129,6 +131,9 @@ class CalculationServiceTest extends KernelTestCase
         return $this->initProducts($manager, $category);
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function initCategories(EntityManager $manager): Category
     {
         $this->initRepository($manager, GroupMargin::class);
@@ -154,6 +159,9 @@ class CalculationServiceTest extends KernelTestCase
         return $category;
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function initGlobalMargins(EntityManager $manager): void
     {
         $this->initRepository($manager, GlobalMargin::class);
@@ -165,6 +173,9 @@ class CalculationServiceTest extends KernelTestCase
         $manager->flush();
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     protected function initProducts(EntityManager $manager, Category $category): Product
     {
         $this->initRepository($manager, Product::class);
@@ -186,6 +197,8 @@ class CalculationServiceTest extends KernelTestCase
      * @psalm-param class-string<T> $entityName
      *
      * @psalm-return EntityRepository<T> $repository
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function initRepository(EntityManager $manager, string $entityName): EntityRepository
     {

@@ -402,7 +402,7 @@ errors:
   item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de données.
   page_not_found: La page %page% n'existe pas.
   render_document: Impossible de générer le document PDF ou le document ne contient aucune donnée.
-exchangerate:
+exchange_rate:
   amount: Montant
   description: Choisissez les devises et le montant pour obtenir le taux de change.
   last_update: 'Dernière mise à jour : %date%'
@@ -1041,38 +1041,43 @@ simple_editor:
   undo: Annuler la dernière action
 swisspost:
   error:
-    empty_archive: L'archive '%name%' ne contient aucune donnée.
-    entry_not_one: L'archive '%name%' ne contient aucune entrée valide.
+    mime_type: Le type de fichier sélectionné n'est pas valide.
+    file_temp: Impossible de créer un fichier temporaire.
     file_empty: Aucun fichier à importer n'a été défini.
     file_not_exist: Le fichier à importer est introuvable ou n'existe pas.
-    mime_type: Le type de fichier sélectionné n'est pas valide.
-    no_validity: L'archive '%name%' ne contient aucune date de validité.
-    open_archive: Impossible d'ouvrir le fichier d'archive '%name%' (code d'erreur %error%).
-    open_database: Impossible d'ouvrir la base de de données.
-    open_stream: Impossible d'ouvrir le flux de données '%stream%' de l'archive '%name%'.
-    rename_database: Impossible de renommer la base de données.
-    temp_file: Impossible de créer un fichier temporaire.
+    validity_none: L'archive '%name%' ne contient aucune date de validité.
     validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
-    close_archive: Une erreur s'est produite de la fermeture de l'archive.
-    close_database: Une erreur s'est produite de la fermeture de la base de données.
-    close_stream: Une erreur s'est produite de la fermeture du flux de données.
+    archive_open: Impossible d'ouvrir le fichier d'archive '%name%' (code d'erreur %error%).
+    archive_empty: L'archive '%name%' ne contient aucune donnée.
+    archive_not_one: L'archive '%name%' ne contient aucune entrée valide.
+    archive_close: Une erreur s'est produite de la fermeture de l'archive.
+    database_open: Impossible d'ouvrir la base de de données.
+    database_compact: Une erreur s'est produite du compactage de la base de données.
+    database_rename: Impossible de renommer la base de données.
+    database_close: Une erreur s'est produite de la fermeture de la base de données.
+    stream_open: Impossible d'ouvrir le flux de données '%stream%' de l'archive '%name%'.
+    stream_close: Une erreur s'est produite de la fermeture du flux de données.
   fields:
+    file: Fichier d'archive
+    overwrite: Forcer l'importation
     cities: Localités
     errors: Erreurs
-    file: Fichier d'archive
     objects: Objets
     states: Cantons
     streets: Rues
     total: Total
     valids: Valides
+  helps:
+    file: Le fichier doit être un fichier compressé au format *.zip avec une seule entrée.
+    overwrite: Ne pas tenir compte de la date de validité contenue dans le fichier d'archive.
   import:
-    description: Permet de mettre à jour la liste des localités et des noms de rue de la Suisse.
+    description: Permet de mettre à jour la liste des localités et des rues de Suisse.
     last_import: 'Date de validité de la dernière importation : %date%.'
   result:
     description: Résultat de l'importation.
-    failure: Une erreur s'est produite lors de l'importation des localités et des noms de rue.
+    failure: Une erreur s'est produite lors de l'importation des localités et des rues.
     new_import: Nouvelle importation
-    success: L'importation des localités et des noms de rue a été réalisée avec succès. La nouvelle date de validité est le %date%.
+    success: L'importation des localités et des rues a été réalisée avec succès. La nouvelle date de validité est le %date%.
   title: Importer les localités
 task:
   add:

@@ -14,7 +14,6 @@ namespace App\Service;
 
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -70,8 +69,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the API key is not defined
-     * @throws \InvalidArgumentException  if the API key is null or empty
+     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]
@@ -341,6 +339,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
 
     private function translateError(string $id): string
     {
-        return $this->trans($id, [], 'exchangerate');
+        return $this->trans($id, [], 'exchange_rate');
     }
 }

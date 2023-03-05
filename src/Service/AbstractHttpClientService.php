@@ -73,7 +73,6 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      */
     public function __construct(protected readonly string $key)
     {
-        // check key
         if (empty($key)) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
@@ -105,15 +104,24 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the HTTP client.
+     * Create the HTTP client.
      *
      * @see AbstractHttpClientService::getDefaultOptions()
+     */
+    protected function createClient(): HttpClientInterface
+    {
+        $options = $this->getDefaultOptions();
+
+        return HttpClient::create($options);
+    }
+
+    /**
+     * Gets the HTTP client.
      */
     protected function getClient(): HttpClientInterface
     {
         if (null === $this->client) {
-            $options = $this->getDefaultOptions();
-            $this->client = HttpClient::create($options);
+            $this->client = $this->createClient();
         }
 
         return $this->client;
@@ -124,7 +132,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @return array the default requests options
      *
-     * @see AbstractHttpClientService::getClient()
+     * @see AbstractHttpClientService::createClient()
      */
     protected function getDefaultOptions(): array
     {
@@ -168,6 +176,8 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      * @return ResponseInterface the response
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface when an unsupported option is passed
+     *
+     * @psalm-param Request::METHOD_* $method
      */
     protected function request(string $method, string $url, array $options = []): ResponseInterface
     {

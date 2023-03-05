@@ -52,7 +52,7 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * Constructor.
      *
-     * @throws \InvalidArgumentException if the API key is null or empty
+     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]
@@ -192,6 +192,8 @@ class BingTranslatorService extends AbstractTranslatorService
 
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     *
+     * @psalm-param Request::METHOD_* $method
      */
     private function call(string $uri, array $query = [], array $json = [], string $method = Request::METHOD_POST): array|false
     {

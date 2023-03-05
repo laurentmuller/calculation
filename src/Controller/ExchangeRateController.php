@@ -45,7 +45,7 @@ class ExchangeRateController extends AbstractController
     #[Route(path: '', name: 'exchange_display')]
     public function display(): Response
     {
-        return $this->render('test/exchangerate.html.twig', [
+        return $this->render('test/exchange_rate.html.twig', [
             'form' => $this->createForm(),
             'codes' => $this->service->getSupportedCodes(),
         ]);
@@ -109,7 +109,7 @@ class ExchangeRateController extends AbstractController
 
         return $this->jsonFalse([
             'code' => Response::HTTP_NOT_FOUND,
-            'message' => $this->trans('unknown', [], 'exchangerate'),
+            'message' => $this->trans('unknown', [], 'exchange_rate'),
         ]);
     }
 }

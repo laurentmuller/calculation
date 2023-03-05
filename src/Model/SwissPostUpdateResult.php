@@ -21,6 +21,7 @@ class SwissPostUpdateResult
     private int $errorCities = 0;
     private int $errorStates = 0;
     private int $errorStreets = 0;
+    private bool $overwrite = false;
     private int $validCities = 0;
     private ?\DateTimeInterface $validity = null;
     private int $validStates = 0;
@@ -167,6 +168,14 @@ class SwissPostUpdateResult
     }
 
     /**
+     * gets the overwrite option.
+     */
+    public function isOverwrite(): bool
+    {
+        return $this->overwrite;
+    }
+
+    /**
      * Returns if the update is valid.
      */
     public function isValid(): bool
@@ -180,6 +189,16 @@ class SwissPostUpdateResult
     public function setError(?string $error): self
     {
         $this->error = $error;
+
+        return $this;
+    }
+
+    /**
+     * Sets the overwrite option.
+     */
+    public function setOverwrite(bool $overwrite): self
+    {
+        $this->overwrite = $overwrite;
 
         return $this;
     }

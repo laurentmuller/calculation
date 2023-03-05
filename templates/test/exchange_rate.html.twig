@@ -12,20 +12,20 @@
 {% endfor -%}
 {% endmacro %}
 {# parameters #}
-{%- set title = 'exchangerate.title' -%}
+{%- set title = 'exchange_rate.title' -%}
 {%- set title_icon = 'comments-dollar' -%}
-{%- set title_description = 'exchangerate.description' -%}
+{%- set title_description = 'exchange_rate.description' -%}
 {%- set form_attr = form_attr|default({})|merge({
     'action': url('exchange_rate'),
-    'data-error': 'unknown'|trans({}, 'exchangerate'),
-    'data-rate': 'exchangerate.rate'|trans}) -%}
+    'data-error': 'unknown'|trans({}, 'exchange_rate'),
+    'data-rate': 'exchange_rate.rate'|trans}) -%}
 {# body #}
 {% block card_body %}
 {{ parent() }}
 <div class="row">
     <div class="col-md-5">
         <div class="form-group">
-            <label class="required" for="baseCode">{{ 'exchangerate.source'|trans }}</label>
+            <label class="required" for="baseCode">{{ 'exchange_rate.source'|trans }}</label>
             <select class="form-control" id="baseCode" name="baseCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'CHF') }}
             </select>
@@ -33,15 +33,15 @@
     </div>
     <div class="col-md-2">
         <div class="form-group text-md-center">
-            <label>{{ 'exchangerate.swap_label'|trans }}</label>
-            <button role="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchangerate.swap_label'|trans }}">
+            <label>{{ 'exchange_rate.swap_label'|trans }}</label>
+            <button role="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchange_rate.swap_label'|trans }}">
                 <i class="fa-solid fa-exchange-alt"></i>
             </button>
         </div>
     </div>
     <div class="col-md-5">
         <div class="form-group">
-            <label class="required" for="targetCode">{{ 'exchangerate.target'|trans }}</label>
+            <label class="required" for="targetCode">{{ 'exchange_rate.target'|trans }}</label>
             <select class="form-control" id="targetCode" name="targetCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'EUR') }}
             </select>
@@ -52,24 +52,24 @@
 <div class="row">
     <div class="col-md-5">
         <div class="form-group">
-            <label class="required" for="amount">{{ 'exchangerate.amount'|trans }}</label>
+            <label class="required" for="amount">{{ 'exchange_rate.amount'|trans }}</label>
             <input type="number" class="form-control text-right" id="amount" name="amount" value="100" required="required">
         </div>
     </div>
     <div class="col-md-2">&nbsp;</div>
     <div class="col-md-5">
         <div class="form-group">
-            <label for="result">{{ 'exchangerate.result'|trans }}</label>
+            <label for="result">{{ 'exchange_rate.result'|trans }}</label>
             <input type="number" class="form-control text-right font-weight-bold" id="result" name="result" value="1.00" disabled="disabled">
         </div>
     </div>
 </div>
 <div class="row small text-muted">
-    <div class="col-md-6" id="last-update" data-text="{{ 'exchangerate.last_update'|trans }}">
-        {{- 'exchangerate.last_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
+    <div class="col-md-6" id="last-update" data-text="{{ 'exchange_rate.last_update'|trans }}">
+        {{- 'exchange_rate.last_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
     </div>
-    <div class="col-md-6 text-md-right" id="next-update" data-text="{{ 'exchangerate.next_update'|trans }}">
-        {{- 'exchangerate.next_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
+    <div class="col-md-6 text-md-right" id="next-update" data-text="{{ 'exchange_rate.next_update'|trans }}">
+        {{- 'exchange_rate.next_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
     </div>
 </div>
 {% endblock %}
@@ -88,5 +88,5 @@
 {{ asset_js('js/vendor/select2/js/select2.js') }}
 {{ asset_js('js/vendor/select2/js/i18n/fr.js') }}
 {{ asset_js('js/extensions/select2-extensions.js') }}
-{{ asset_js('js/test/exchangerate.js') }}
+{{ asset_js('js/test/exchange_rate.js') }}
 {%- endblock %}

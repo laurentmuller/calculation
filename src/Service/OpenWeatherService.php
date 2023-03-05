@@ -16,7 +16,6 @@ use App\Database\OpenWeatherDatabase;
 use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
@@ -174,8 +173,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the API key parameter is not defined
-     * @throws \InvalidArgumentException  if the API key is null or empty
+     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]

@@ -29,18 +29,23 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ImportAddressController extends AbstractController
 {
+    private const KEY_OVERWRITE = 'import.overwrite';
+
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/import', name: 'admin_import')]
     public function invoke(Request $request, SwissPostUpdater $updater): Response
     {
-        $form = $updater->createForm();
+        $data = ['overwrite' => $this->isSessionBool(self::KEY_OVERWRITE)];
+        $form = $updater->createForm($data);
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array{file: string|UploadedFile|null} $data */
+            /** @psalm-var array{file: UploadedFile|string|null, overwrite: bool} $data */
             $data = $form->getData();
             $file = $data['file'];
-            $results = $updater->import($file);
+            $overwrite = $data['overwrite'];
+            $this->setSessionValue(self::KEY_OVERWRITE, $overwrite);
+            $results = $updater->import($file, $overwrite);
 
             return $this->render('admin/import_result.html.twig', [
                 'results' => $results,

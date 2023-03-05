@@ -14,7 +14,6 @@ namespace App\Service;
 
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -48,8 +47,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the API key parameter is not defined
-     * @throws \InvalidArgumentException  if the API key is null or empty
+     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]

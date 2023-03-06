@@ -20,7 +20,7 @@ use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Model\CustomerInformation;
 use App\Repository\UserPropertyRepository;
-use App\Traits\PropertyTrait;
+use App\Traits\PropertyServiceTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -31,7 +31,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class UserService implements PropertyServiceInterface, ServiceSubscriberInterface
 {
-    use PropertyTrait;
+    use PropertyServiceTrait;
 
     public function __construct(
         private readonly UserPropertyRepository $repository,

@@ -1045,18 +1045,20 @@ swisspost:
     file_temp: Impossible de créer un fichier temporaire.
     file_empty: Aucun fichier à importer n'a été défini.
     file_not_exist: Le fichier à importer est introuvable ou n'existe pas.
-    validity_none: L'archive '%name%' ne contient aucune date de validité.
-    validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
+    file_states: Une erreur s'est produite de la mise à jour des cantons.
+    validity_none: Le fichier d'archive '%name%' ne contient aucune date de validité.
+    validity_before: La date de validité du %validity% dans fichier d'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
     archive_open: Impossible d'ouvrir le fichier d'archive '%name%' (code d'erreur %error%).
-    archive_empty: L'archive '%name%' ne contient aucune donnée.
-    archive_not_one: L'archive '%name%' ne contient aucune entrée valide.
-    archive_close: Une erreur s'est produite de la fermeture de l'archive.
+    archive_empty: Le fichier d'archive '%name%' ne contient aucune donnée.
+    archive_not_one: Le fichier d'archive '%name%' ne contient aucune entrée valide.
+    archive_close: Une erreur s'est produite de la fermeture du fichier d'archive.
     database_open: Impossible d'ouvrir la base de de données.
     database_compact: Une erreur s'est produite du compactage de la base de données.
     database_rename: Impossible de renommer la base de données.
     database_close: Une erreur s'est produite de la fermeture de la base de données.
-    stream_open: Impossible d'ouvrir le flux de données '%stream%' de l'archive '%name%'.
-    stream_close: Une erreur s'est produite de la fermeture du flux de données.
+    reader_name: Impossible de trouver un nom dans le ficher d'archive '%name%'.
+    reader_open: Impossible d'ouvrir le flux de données '%stream%' du fichier d'archive '%name%'.
+    reader_close: Une erreur s'est produite de la fermeture du flux de données.
   fields:
     file: Fichier d'archive
     overwrite: Forcer l'importation

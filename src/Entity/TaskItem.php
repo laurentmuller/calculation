@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\PositionInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskItemRepository;
 use App\Traits\PositionTrait;
@@ -31,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'sy_TaskItem')]
 #[ORM\UniqueConstraint(name: 'unique_task_item_task_name', columns: ['task_id', 'name'])]
 #[UniqueEntity(fields: ['task', 'name'], message: 'task_item.unique_name', errorPath: 'name')]
-class TaskItem extends AbstractEntity implements \Countable, ParentTimestampableInterface
+class TaskItem extends AbstractEntity implements \Countable, ParentTimestampableInterface, PositionInterface
 {
     use PositionTrait;
     use ValidateMarginsTrait;

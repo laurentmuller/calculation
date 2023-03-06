@@ -19,11 +19,11 @@ use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
- * Trait to manage application and user properties.
+ * Trait for class implementing the {@link \App\Interfaces\PropertyServiceInterface PropertyServiceInterface} interface.
  *
  * @psalm-require-implements \App\Interfaces\PropertyServiceInterface
  */
-trait PropertyTrait
+trait PropertyServiceTrait
 {
     use CacheAwareTrait {
         clearCache as private traitClearCache;

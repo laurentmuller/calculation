@@ -275,7 +275,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     /**
      * Initialize the language options.
      */
-    private function initLangOptions(): self
+    private function initLangOptions(): static
     {
         $options = [
             'thousandsSep' => FormatUtils::getGrouping(),

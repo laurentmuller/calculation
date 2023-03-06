@@ -19,9 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Trait to implement the Timestampable interface.
+ * Trait for class implementing the {@link \App\Interfaces\TimestampableInterface TimestampableInterface} interface.
  *
- * @see TimestampableInterface
+ * @psalm-require-implements \App\Interfaces\TimestampableInterface
  */
 trait TimestampableTrait
 {

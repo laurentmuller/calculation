@@ -26,7 +26,7 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
-use App\Traits\PropertyTrait;
+use App\Traits\PropertyServiceTrait;
 use App\Util\RoleBuilder;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,7 +43,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class ApplicationService implements PropertyServiceInterface, ServiceSubscriberInterface
 {
-    use PropertyTrait;
+    use PropertyServiceTrait;
 
     public function __construct(
         private readonly EntityManagerInterface $manager,

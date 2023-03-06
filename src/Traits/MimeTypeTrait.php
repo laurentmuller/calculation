@@ -17,7 +17,9 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * Trait to create file response headers.
+ * Trait for class implementing the {@link \App\Interfaces\MimeTypeInterface MimeTypeInterface} interface.
+ *
+ * @psalm-require-implements \App\Interfaces\MimeTypeInterface
  */
 trait MimeTypeTrait
 {

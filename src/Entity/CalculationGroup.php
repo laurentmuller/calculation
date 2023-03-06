@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\PositionInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationGroupRepository;
 use App\Traits\PositionTrait;
@@ -28,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: CalculationGroupRepository::class)]
 #[ORM\Table(name: 'sy_CalculationGroup')]
-class CalculationGroup extends AbstractEntity implements \Countable, ParentTimestampableInterface
+class CalculationGroup extends AbstractEntity implements \Countable, ParentTimestampableInterface, PositionInterface
 {
     use PositionTrait;
 

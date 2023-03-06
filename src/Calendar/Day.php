@@ -58,12 +58,8 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
 
     /**
      * Returns this date formatted according to given format.
-     *
-     * @param string $format a format accepted by date
-     *
-     * @return string|false the formatted date string on success or false on failure
      */
-    public function format(string $format): string|false
+    public function format(string $format): string
     {
         return $this->date->format($format);
     }

@@ -15,7 +15,9 @@ namespace App\Traits;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Trait to get or to set the position index of an entity in a collection.
+ * Trait for class implementing the {@link \App\Interfaces\PositionInterface PositionInterface} interface.
+ *
+ * @psalm-require-implements \App\Interfaces\PositionInterface
  */
 trait PositionTrait
 {

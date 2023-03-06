@@ -148,6 +148,8 @@ class SearchService implements ServiceSubscriberInterface
      * @param ?string $entity the entity to search in or null for all
      *
      * @return int the number of rows
+     *
+     * @psalm-return 0|positive-int
      */
     public function count(?string $search, ?string $entity = null): int
     {

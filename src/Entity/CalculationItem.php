@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\PositionInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationItemRepository;
 use App\Traits\MathTrait;
@@ -26,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: CalculationItemRepository::class)]
 #[ORM\Table(name: 'sy_CalculationItem')]
-class CalculationItem extends AbstractEntity implements ParentTimestampableInterface
+class CalculationItem extends AbstractEntity implements ParentTimestampableInterface, PositionInterface
 {
     use MathTrait;
     use PositionTrait;

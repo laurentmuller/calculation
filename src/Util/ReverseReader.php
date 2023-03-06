@@ -40,6 +40,16 @@ class ReverseReader extends AbstractReader
     private const LINE_FEED = "\n";
 
     /**
+     * Constructor.
+     *
+     * @param \SplFileInfo|string $file the file to open
+     */
+    public function __construct(\SplFileInfo|string $file)
+    {
+        parent::__construct($file);
+    }
+
+    /**
      * @param resource $stream
      */
     protected function getNextData($stream): ?string

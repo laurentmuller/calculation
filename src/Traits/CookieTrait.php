@@ -62,6 +62,9 @@ trait CookieTrait
         return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
     }
 
+    /**
+     * @psalm-return ($default is null ? (string|null) : string)
+     */
     protected function getCookieString(Request $request, string $key, string $prefix = '', string|\BackedEnum $default = null): string|null
     {
         $name = $this->getCookieName($key, $prefix);

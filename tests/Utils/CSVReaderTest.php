@@ -82,6 +82,6 @@ class CSVReaderTest extends TestCase
     {
         $filename = $this->getFileName();
 
-        return new CSVReader(filename: $filename, separator: self::VALUES_SEP);
+        return new CSVReader(file: $filename, separator: self::VALUES_SEP);
     }
 }

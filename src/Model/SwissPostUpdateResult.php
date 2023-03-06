@@ -14,81 +14,67 @@ namespace App\Model;
 
 /**
  * Contains result of updated states, cities and streets.
+ *
+ * @psalm-type SwissPostResultType = array{state: int, city: int, street: int}
  */
 class SwissPostUpdateResult
 {
     private ?string $error = null;
-    private int $errorCities = 0;
-    private int $errorStates = 0;
-    private int $errorStreets = 0;
+    /** @var SwissPostResultType */
+    private array $errors = [
+            'state' => 0,
+            'city' => 0,
+            'street' => 0,
+        ];
     private bool $overwrite = false;
-    private int $validCities = 0;
+    private string $sourceFile = '';
+    private string $sourceName = '';
     private ?\DateTimeInterface $validity = null;
-    private int $validStates = 0;
-    private int $validStreets = 0;
+    /** @var SwissPostResultType */
+    private array $valids = [
+        'state' => 0,
+        'city' => 0,
+        'street' => 0,
+    ];
 
     /**
-     * Adds the number of error cities.
+     * Adds a parsed city to the results.
+     *
+     * @param bool $valid true if valid; false if not
+     *
+     * @return bool the valid argument
      */
-    public function addErrorCities(int $value = 1): self
+    public function addCity(bool $valid): bool
     {
-        $this->errorCities += $value;
-
-        return $this;
+        return $this->add($valid, 'city');
     }
 
     /**
-     * Adds the number of error states.
+     * Adds a parsed state to the results.
+     *
+     * @param bool $valid true if valid; false if not
+     *
+     * @return bool the valid argument
      */
-    public function addErrorStates(int $value = 1): self
+    public function addState(bool $valid): bool
     {
-        $this->errorStates += $value;
-
-        return $this;
+        return $this->add($valid, 'state');
     }
 
     /**
-     * Adds the number of error streets.
+     * Adds a parsed street to the results.
+     *
+     * @param bool $valid true if valid; false if not
+     *
+     * @return bool the valid argument
      */
-    public function addErrorStreets(int $value = 1): self
+    public function addStreet(bool $valid): bool
     {
-        $this->errorStreets += $value;
-
-        return $this;
+        return $this->add($valid, 'street');
     }
 
     /**
-     * Adds the number of valid cities.
-     */
-    public function addValidCities(int $value = 1): self
-    {
-        $this->validCities += $value;
-
-        return $this;
-    }
-
-    /**
-     * Adds the number of valid states.
-     */
-    public function addValidStates(int $value = 1): self
-    {
-        $this->validStates += $value;
-
-        return $this;
-    }
-
-    /**
-     * Adds the number of valid streets.
-     */
-    public function addValidStreets(int $value = 1): self
-    {
-        $this->validStreets += $value;
-
-        return $this;
-    }
-
-    /**
-     * Gets the error.
+     * Gets the error message.
      */
     public function getError(): ?string
     {
@@ -96,43 +82,45 @@ class SwissPostUpdateResult
     }
 
     /**
-     * Gets the number of error cities.
-     */
-    public function getErrorCities(): int
-    {
-        return $this->errorCities;
-    }
-
-    /**
      * Gets the total number of errors.
      */
-    public function getErrors(): int
+    public function getErrorCount(): int
     {
-        return $this->errorStates + $this->errorCities + $this->errorStreets;
+        return \array_sum($this->errors);
     }
 
     /**
-     * Gets the  number of error states.
+     * Gets the error entries.
+     *
+     * @return SwissPostResultType
      */
-    public function getErrorStates(): int
+    public function getErrors(): array
     {
-        return $this->errorStates;
+        return $this->errors;
     }
 
     /**
-     * Gets the  number of  error streets.
+     * Gets the source (archive) file.
      */
-    public function getErrorStreets(): int
+    public function getSourceFile(): string
     {
-        return $this->errorStreets;
+        return $this->sourceFile;
     }
 
     /**
-     * Gets the  number of valid cities.
+     * Gets the source (archive name) file name.
      */
-    public function getValidCities(): int
+    public function getSourceName(): string
     {
-        return $this->validCities;
+        return $this->sourceName;
+    }
+
+    /**
+     * Gets the total number of valid entries.
+     */
+    public function getValidCount(): int
+    {
+        return \array_sum($this->valids);
     }
 
     /**
@@ -144,31 +132,17 @@ class SwissPostUpdateResult
     }
 
     /**
-     * Gets the total number of valid entries.
+     * Gets the valid entries.
+     *
+     * @return SwissPostResultType
      */
-    public function getValids(): int
+    public function getValids(): array
     {
-        return $this->validStates + $this->validCities + $this->validStreets;
+        return $this->valids;
     }
 
     /**
-     * Gets the  number of valid states.
-     */
-    public function getValidStates(): int
-    {
-        return $this->validStates;
-    }
-
-    /**
-     * Gets the  number of valid streets.
-     */
-    public function getValidStreets(): int
-    {
-        return $this->validStreets;
-    }
-
-    /**
-     * gets the overwrite option.
+     * Gets the overwrite option.
      */
     public function isOverwrite(): bool
     {
@@ -180,13 +154,13 @@ class SwissPostUpdateResult
      */
     public function isValid(): bool
     {
-        return empty($this->error);
+        return null === $this->error;
     }
 
     /**
      * Sets the error message.
      */
-    public function setError(?string $error): self
+    public function setError(string $error): self
     {
         $this->error = $error;
 
@@ -204,6 +178,26 @@ class SwissPostUpdateResult
     }
 
     /**
+     * Sets the source (archive) file.
+     */
+    public function setSourceFile(string $sourceFile): self
+    {
+        $this->sourceFile = $sourceFile;
+
+        return $this;
+    }
+
+    /**
+     * Sets the source (archive name) file name.
+     */
+    public function setSourceName(string $sourceName): self
+    {
+        $this->sourceName = $sourceName;
+
+        return $this;
+    }
+
+    /**
      * Sets the validity date.
      */
     public function setValidity(\DateTimeInterface $validity): self
@@ -211,5 +205,15 @@ class SwissPostUpdateResult
         $this->validity = $validity;
 
         return $this;
+    }
+
+    /**
+     * @psalm-param 'state'|'city'|'street' $key
+     */
+    private function add(bool $valid, string $key): bool
+    {
+        $valid ? $this->valids[$key]++ : $this->errors[$key]++;
+
+        return $valid;
     }
 }

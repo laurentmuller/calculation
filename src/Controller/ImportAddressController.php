@@ -45,10 +45,10 @@ class ImportAddressController extends AbstractController
             $file = $data['file'];
             $overwrite = $data['overwrite'];
             $this->setSessionValue(self::KEY_OVERWRITE, $overwrite);
-            $results = $updater->import($file, $overwrite);
+            $result = $updater->import($file, $overwrite);
 
             return $this->render('admin/import_result.html.twig', [
-                'results' => $results,
+                'result' => $result,
             ]);
         }
 

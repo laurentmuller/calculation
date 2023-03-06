@@ -19,7 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * A trait used by classes that deal with roles and access rights.
+ * Trait for class implementing the {@link \App\Interfaces\RoleInterface RoleInterface} interface.
+ *
+ * @psalm-require-implements \App\Interfaces\RoleInterface
  */
 trait RoleTrait
 {

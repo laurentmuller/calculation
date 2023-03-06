@@ -56,6 +56,7 @@ services:
             - '../src/Enums'
             - '../src/Faker'
             - '../src/Migrations'
+            - '../src/Model'
             - '../src/Pdf'
             - '../src/Report'
             - '../src/Spreadsheet'

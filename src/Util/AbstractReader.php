@@ -22,6 +22,11 @@ namespace App\Util;
 abstract class AbstractReader implements \Iterator
 {
     /**
+     * The first rewind call.
+     */
+    private bool $canRewind;
+
+    /**
      * The current data.
      *
      * @var ?TValue
@@ -29,25 +34,34 @@ abstract class AbstractReader implements \Iterator
     private mixed $data = null;
 
     /**
-     * The current position (line index).
+     * The current key (line index).
      */
-    private int $position = 0;
+    private int $key = 0;
 
     /**
      * The resource file.
      *
      * @var resource|closed-resource|false
      */
-    private $stream; // @phpstan-ignore-line
+    private mixed $stream; // @phpstan-ignore-line
 
     /**
      * Constructor.
      *
-     * @param string $filename the file name to open
+     * @param \SplFileInfo|string|resource $file the file to open
      */
-    public function __construct(string $filename)
+    public function __construct(mixed $file)
     {
-        $this->stream = \fopen($filename, 'r');
+        if ($file instanceof \SplFileInfo) {
+            $file = $file->getPathname();
+        }
+        if (\is_resource($file)) {
+            $this->canRewind = false;
+            $this->stream = $file;
+        } else {
+            $this->canRewind = true;
+            $this->stream = \fopen($file, 'r');
+        }
         if (\is_resource($this->stream)) {
             $this->parseNextLine();
         }
@@ -67,9 +81,9 @@ abstract class AbstractReader implements \Iterator
     public function close(): void
     {
         if (\is_resource($this->stream) && \fclose($this->stream)) {
-            $this->stream = false;
-            $this->position = 0;
+            $this->key = 0;
             $this->data = null;
+            $this->stream = false;
         }
     }
 
@@ -96,7 +110,7 @@ abstract class AbstractReader implements \Iterator
      */
     public function key(): int
     {
-        return $this->position;
+        return $this->key;
     }
 
     /**
@@ -104,8 +118,10 @@ abstract class AbstractReader implements \Iterator
      */
     public function next(): void
     {
-        ++$this->position;
         $this->parseNextLine();
+        if ($this->valid()) {
+            ++$this->key;
+        }
     }
 
     /**
@@ -113,9 +129,13 @@ abstract class AbstractReader implements \Iterator
      */
     public function rewind(): void
     {
-        if (\is_resource($this->stream) && \rewind($this->stream)) {
-            $this->position = 0;
-            $this->parseNextLine();
+        try {
+            if ($this->canRewind && \is_resource($this->stream) && \rewind($this->stream)) {
+                $this->key = 0;
+                $this->parseNextLine();
+            }
+        } catch (\Exception) {
+            $this->canRewind = false;
         }
     }
 

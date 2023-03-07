@@ -48,12 +48,15 @@ class FileUtilsTest extends TestCase
         $gb = $mb * $kb;
         $empty = 'Empty';
 
-        $file = self::getLinesFile();
-        $size = \filesize($file) ?: 0;
+        $linesFile = self::getLinesFile();
+        $lineSize = \filesize($linesFile) ?: 0;
+
+        $thisSize = \filesize(__FILE__) / $kb;
+        $thisText = \sprintf('%d KB', $thisSize);
 
         return [
-            [$file, \sprintf('%d B', $size)],
-            [$size, \sprintf('%d B', $size)],
+            [$linesFile, \sprintf('%d B', $lineSize)],
+            [$lineSize, \sprintf('%d B', $lineSize)],
 
             ["D:\zzz_aaa", $empty],
             [self::getEmptyFile(), $empty],
@@ -74,7 +77,7 @@ class FileUtilsTest extends TestCase
             [$gb * 2, '2.0 GB'],
             [$gb * $kb, '1024.0 GB'],
 
-            [__FILE__, \sprintf('%d KB', \filesize(__FILE__) / $kb)],
+            [__FILE__, $thisText],
 
             [new \SplFileInfo("D:\zzz_aaa"), $empty],
         ];

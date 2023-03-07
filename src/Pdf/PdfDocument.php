@@ -1050,12 +1050,6 @@ class PdfDocument extends \FPDF
             if (null !== $str && false !== $result = \iconv('UTF-8', 'ISO-8859-1', $str)) {
                 return $result;
             }
-//            if (null !== $str && false !== \mb_detect_encoding($str, 'UTF-8', true)) {
-//                if (false !== $result = \iconv('UTF-8', 'windows-1252', $str)) {
-//                    // if (false !== $result = \iconv('UTF-8', 'ISO-8859-1', $str)) {
-//                    return $result;
-//                }
-//            }
         } catch (\Exception) {
         }
 

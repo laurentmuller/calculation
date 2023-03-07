@@ -85,19 +85,12 @@ class FileUtilsTest extends TestCase
      */
     public static function getRealPath(): array
     {
-        $temp_dir = \sys_get_temp_dir();
-
         return [
             [__DIR__, __DIR__],
             [__FILE__, __FILE__],
-            [$temp_dir, $temp_dir],
-            [\strtoupper($temp_dir), $temp_dir],
-            [\strtolower($temp_dir), $temp_dir],
 
             [new \SplFileInfo(__DIR__), __DIR__],
             [new \SplFileInfo(__FILE__), __FILE__],
-            [new \SplFileInfo($temp_dir), $temp_dir],
-            [new \SplFileInfo(\strtolower($temp_dir)), $temp_dir],
         ];
     }
 

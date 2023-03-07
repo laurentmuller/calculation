@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\Enums\PdfFontName;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
 
@@ -50,12 +51,12 @@ final class HtmlStyleFactory
             'u' => self::default()->underline(true),
             'code' => self::default()
                 ->setTextColor(PdfTextColor::red())
-                ->setFontName(PdfFont::NAME_COURIER),
+                ->setFontName(PdfFontName::COURIER),
             'var' => self::default()
-                ->setFontName(PdfFont::NAME_COURIER)
+                ->setFontName(PdfFontName::COURIER)
                 ->setFontItalic(),
             'samp', 'kbd' => self::default()
-                ->setFontName(PdfFont::NAME_COURIER),
+                ->setFontName(PdfFontName::COURIER),
             default => null,
         };
     }

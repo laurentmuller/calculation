@@ -59,7 +59,7 @@ class CSVReaderTest extends TestCase
             ++$lines;
         }
         self::assertSame(4, $lines);
-        self::assertSame(4, $reader->key());
+        self::assertSame(3, $reader->key());
         $reader->close();
     }
 

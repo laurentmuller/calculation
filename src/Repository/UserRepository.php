@@ -203,20 +203,24 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         if (!$resetPasswordRequest instanceof User) {
             throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $resetPasswordRequest::class));
         }
-
-        $resetPasswordRequest->eraseResetPasswordRequest();
-        $this->flush();
+        $this->resetPasswordRequest($resetPasswordRequest);
     }
 
     /**
-     * Remove the reset password request from persistence for the given user.
+     * Remove the reset password request.
+     *
+     * @param User|User[] $users the user or users to reset
      */
-    public function resetPasswordRequest(User $user, bool $flush): void
+    public function resetPasswordRequest(User|array $users): void
     {
-        $user->eraseResetPasswordRequest();
-        if ($flush) {
-            $this->flush();
+        if (!\is_array($users)) {
+            $users = [$users];
         }
+        foreach ($users as $user) {
+            $user->eraseResetPasswordRequest();
+        }
+
+        $this->flush();
     }
 
     /**

@@ -110,10 +110,14 @@ final class FormatUtils
     }
 
     /**
-     * Format a number for the current locale with 2 decimals (Ex: 2312.2 -> 2'312.00).
+     * Format a number for the current locale with no decimal (Ex: 2312.2 -> 2'312).
      */
-    public static function formatInt(float|int|string|null $number): string
+    public static function formatInt(\Countable|array|int|float|string|null $number): string
     {
+        if ($number instanceof \Countable || \is_array($number)) {
+            $number = \count($number);
+        }
+
         $value = self::checkNegativeZero($number);
 
         return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format($value);
@@ -322,7 +326,7 @@ final class FormatUtils
     /**
      * Check the given value.
      */
-    private static function checkNegativeZero(float|int|string|null $number): float
+    private static function checkNegativeZero(int|float|string|null $number): float
     {
         return empty($number) ? 0.0 : (float) $number;
     }

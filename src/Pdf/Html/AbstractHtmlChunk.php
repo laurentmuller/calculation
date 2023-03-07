@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
@@ -522,7 +523,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                         break;
 
                     case 'text-monospace':
-                        $style->regular()->getFont()->setName(PdfFont::NAME_COURIER);
+                        $style->regular()->getFont()->setName(PdfFontName::COURIER);
                         break;
 
                     case 'text-primary':

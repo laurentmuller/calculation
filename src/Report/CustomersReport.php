@@ -18,6 +18,7 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
+use App\Util\StringUtils;
 
 /**
  * Report for the list of customers.
@@ -70,56 +71,37 @@ class CustomersReport extends AbstractArrayReport
 
         // grouped?
         if ($this->grouped) {
-            $groups = $this->groupCustomers($entities);
-            foreach ($groups as $name => $items) {
-                $table->setGroupKey($name);
-                foreach ($items as $entity) {
-                    $this->outputCustomer($table, $entity);
-                }
-            }
+            $this->outputGrouped($table, $entities);
         } else {
-            foreach ($entities as $entity) {
-                $this->outputCustomer($table, $entity);
-            }
+            $this->outputList($table, $entities);
         }
 
         // count
         return $this->renderCount($entities);
     }
 
-    /**
-     * Gets the first character, in upper case, of the given text.
-     *
-     * @param string $text the text to get character for
-     *
-     * @return string the first character
-     */
-    private function getFirstChar(string $text): string
+    private function firstChar(string $text): string
     {
-        if ('' !== $text) {
-            return \strtoupper($text[0]);
+        if ('' === $text) {
+            return $this->other;
         }
 
-        return $this->other;
+        return \strtoupper(StringUtils::slug($text)[0]);
     }
 
     /**
-     * Groups customers by the first character of the name or company.
+     * @param Customer[] $entities
      *
-     * @param Customer[] $customers the customers to group
-     *
-     * @return array<string, Customer[]> an array with first character as key, and corresponding customers as value
+     * @return array<string|int, Customer[]>
      */
-    private function groupCustomers(array $customers): array
+    private function groupCustomers(array $entities): array
     {
-        // group
         $result = [];
-        foreach ($customers as $c) {
-            $key = $this->getFirstChar($c->getNameAndCompany());
+        foreach ($entities as $c) {
+            $key = $this->firstChar($c->getNameAndCompany());
             $result[$key][] = $c;
         }
 
-        // sort
         \uksort($result, function (string $str1, string $str2) {
             if ($str1 === $this->other) {
                 return -1;
@@ -128,18 +110,12 @@ class CustomersReport extends AbstractArrayReport
                 return 1;
             }
 
-            return \strcmp($str1, $str2);
+            return \strcasecmp($str1, $str2);
         });
 
         return $result;
     }
 
-    /**
-     * Output a customer.
-     *
-     * @param PdfGroupTableBuilder $table    the table to write to
-     * @param Customer             $customer the customer to output
-     */
     private function outputCustomer(PdfGroupTableBuilder $table, Customer $customer): void
     {
         $table->addRow(
@@ -147,5 +123,30 @@ class CustomersReport extends AbstractArrayReport
             $customer->getAddress(),
             $customer->getZipCity()
         );
+    }
+
+    /**
+     * @param Customer[] $entities
+     */
+    private function outputGrouped(PdfGroupTableBuilder $table, array $entities): void
+    {
+        $groups = $this->groupCustomers($entities);
+        foreach ($groups as $key => $customers) {
+            $this->addOutline((string) $key);
+            $table->setGroupKey($key);
+            foreach ($customers as $customer) {
+                $this->outputCustomer($table, $customer);
+            }
+        }
+    }
+
+    /**
+     * @param Customer[] $entities
+     */
+    private function outputList(PdfGroupTableBuilder $table, array $entities): void
+    {
+        foreach ($entities as $entity) {
+            $this->outputCustomer($table, $entity);
+        }
     }
 }

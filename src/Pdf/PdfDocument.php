@@ -18,43 +18,73 @@ use App\Pdf\Enums\PdfDocumentOutput;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfDocumentZoom;
+use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfImageType;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
+use App\Util\FormatUtils;
 
 /**
- * PDF document with default header and footer.
+ * PDF document with default header and footer, outline and index capabilities.
  *
- * @property int                             $page           The current page number.
- * @property array{0: float, 1: float}       $DefPageSize    The default page size (width and height) in the user unit.
- * @property array{0: float, 1: float}       $CurPageSize    The current page size (width and height) in the user unit.
- * @property float                           $lMargin        The left margin.
- * @property float                           $tMargin        The top margin.
- * @property float                           $rMargin        The right margin.
- * @property float                           $bMargin        The bottom margin.
- * @property float                           $cMargin        The cell margin.
- * @property float                           $k              The scale factor (number of points in user unit).
- * @property float                           $x              The current X position in user unit.
- * @property float                           $y              The current Y position in user unit.
- * @property float                           $w              The width of current page in user unit.
- * @property float                           $h              The height of current page in user unit.
- * @property string                          $FontFamily     The current font family.
- * @property string                          $FontStyle      The current font style.
- * @property float                           $FontSizePt     The current font size in points.
- * @property float                           $FontSize       The current font size in user unit.
- * @property array{cw: array<string, float>} $CurrentFont    The current font information.
- * @property string                          $DefOrientation The default orientation.
- * @property string                          $CurOrientation The current orientation.
- * @property int                             $CurRotation    The current page rotation in degrees.
- * @property float                           $lasth          The height of last printed cell.
+ * @property int                         $page           The current page number.
+ * @property PdfPageSizeType             $DefPageSize    The default page size (width and height) in the user unit.
+ * @property PdfPageSizeType             $CurPageSize    The current page size (width and height) in the user unit.
+ * @property float                       $lMargin        The left margin.
+ * @property float                       $tMargin        The top margin.
+ * @property float                       $rMargin        The right margin.
+ * @property float                       $bMargin        The bottom margin.
+ * @property float                       $cMargin        The cell margin.
+ * @property float                       $k              The scale factor (number of points in user unit).
+ * @property float                       $x              The current X position in user unit.
+ * @property float                       $y              The current Y position in user unit.
+ * @property float                       $w              The width of current page in user unit.
+ * @property float                       $h              The height of current page in user unit.
+ * @property string                      $FontFamily     The current font family.
+ * @property string                      $FontStyle      The current font style.
+ * @property float                       $FontSizePt     The current font size in points.
+ * @property float                       $FontSize       The current font size in user unit.
+ * @property PdfFontType                 $CurrentFont    The current font information.
+ * @property array<string, PdfFontType>  $fonts          The array of used fonts.
+ * @property string                      $DefOrientation The default orientation.
+ * @property string                      $CurOrientation The current orientation.
+ * @property int                         $CurRotation    The current page rotation in degrees.
+ * @property float                       $lasth          The height of last printed cell.
+ * @property int                         $n              The current object number.
+ * @property array<int, PdfPageInfoType> $PageInfo       The page-related data.
  *
- * @method float GetX()          The current X position in user unit.
- * @method float GetY()          The current Y position in user unit.
- * @method int   PageNo()        The current page number.
- * @method float GetPageWidth()  The width of current page in user unit.
- * @method float GetPageHeight() The height of current page in user unit.
+ * @method float  GetX()                                           The current X position in user unit.
+ * @method float  GetY()                                           The current Y position in user unit.
+ * @method int    PageNo()                                         The current page number.
+ * @method float  GetPageWidth()                                   The width of current page in user unit.
+ * @method float  GetPageHeight()                                  The height of current page in user unit.
+ * @method string _textstring(string $s)                           Convert the given string.
+ * @method int    AddLink()                                        Creates a new internal link and returns its identifier.
+ * @method void   SetLink(int $link, float $y = 0, int $page = -1) Defines the page and position a link points to.
+ *
+ * @psalm-type PdfFontType = array{
+ *      name: string,
+ *      cw: array<string, float>}
+ * @psalm-type PdfPageSizeType = array{
+ *     0: float,
+ *     1: float}
+ * @psalm-type PdfPageInfoType = array{
+ *      n: int,
+ *      rotation: int,
+ *      size: PdfPageSizeType}
+ * @psalm-type PdfOutlineType = array{
+ *     text: string,
+ *     level: int,
+ *     y: float,
+ *     page: int,
+ *     link: string|int,
+ *     parent?: int,
+ *     first?: int,
+ *     prev?: int,
+ *     next?: int,
+ *     last?: int}
  */
 class PdfDocument extends \FPDF
 {
@@ -91,6 +121,18 @@ class PdfDocument extends \FPDF
     protected ?string $title = null;
 
     /**
+     * The outline root object number.
+     */
+    private int $outlineRoot = -1;
+
+    /**
+     * The outlines.
+     *
+     * @psalm-var array<int, PdfOutlineType>
+     */
+    private array $outlines = [];
+
+    /**
      * Constructor.
      *
      * @param PdfDocumentOrientation $orientation the page orientation
@@ -110,6 +152,123 @@ class PdfDocument extends \FPDF
         $this->AliasNbPages();
         $this->SetDisplayMode();
         $this->SetAutoPageBreak(true, $this->bMargin - self::LINE_HEIGHT);
+    }
+
+    /**
+     * Add a new index page containing all outlines.
+     *
+     * Do nothing if no outline is defined.
+     *
+     * @param string $title           the index title or an empty string to use the default title ('Index')
+     * @param float  $titleFontSize   the title font size
+     * @param float  $contentFontSize the content font size
+     */
+    public function addIndexPage(string $title = '', float $titleFontSize = 12, float $contentFontSize = PdfFont::DEFAULT_SIZE): void
+    {
+        if ([] === $this->outlines) {
+            return;
+        }
+
+        // new page
+        $this->AddPage();
+
+        // title
+        $space = 2.0;
+        $old_font = $this->getCurrentFont();
+        $this->SetFont('', '', $titleFontSize);
+        $title = '' === $title ? 'Index' : $title;
+        $this->Cell(0, self::LINE_HEIGHT, $title, PdfBorder::NONE, PdfMove::NEW_LINE, PdfTextAlignment::CENTER);
+        $this->SetFont('', '', $contentFontSize);
+
+        // @phpstan-ignore-next-line
+        $page = \end($this->outlines)['page'];
+        $line_height = $this->getFontSize() + $space;
+        $page_text = FormatUtils::formatInt($page);
+        $page_cell_size = $this->GetStringWidth($page_text) + $space;
+        $printable_width = $this->getPrintableWidth();
+
+        // outlines
+        foreach ($this->outlines as $outline) {
+            // offset
+            $offset = (float) $outline['level'] * 2.0 * $space;
+            if ($offset > 0) {
+                $this->Cell($offset);
+            }
+
+            // text
+            $link = $outline['link'];
+            $text = (string) \iconv('UTF-8', 'windows-1252', $outline['text']);
+            $text_size = $this->GetStringWidth($text);
+            $available_size = $printable_width - $page_cell_size - $offset - 2.0 * $space;
+            while ($text_size >= $available_size) {
+                $text = \substr($text, 0, -1);
+                $text_size = $this->GetStringWidth($text);
+            }
+            $this->Cell(
+                w: $text_size + $space,
+                h: $line_height,
+                txt: $text,
+                link: $link
+            );
+
+            // dots
+            $dot_width = $printable_width - $page_cell_size - $offset - $text_size - $space;
+            $dot_count = $dot_width / $this->GetStringWidth('.');
+            $dot_text = \str_repeat('.', (int) $dot_count);
+            $this->Cell(
+                w: $dot_width,
+                h: $line_height,
+                txt: $dot_text,
+                align: PdfTextAlignment::RIGHT,
+                link: $link
+            );
+
+            // page number
+            $this->Cell(
+                w: $page_cell_size,
+                h: $line_height,
+                txt: FormatUtils::formatInt($outline['page']),
+                ln: PdfMove::NEW_LINE,
+                align: PdfTextAlignment::RIGHT,
+                link: $link
+            );
+        }
+        $old_font->apply($this);
+    }
+
+    /**
+     * Add an outline.
+     *
+     * @param string $text   the outline title
+     * @param bool   $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @param int    $level  the outline level (0 is top level, 1 is just below, and so on)
+     * @param float  $y      the y position of the outline destination in the current page. -1 means the current position.
+     * @param bool   $link   true to create and add a link at the given y position and page
+     */
+    public function addOutline(string $text, bool $isUTF8 = false, int $level = 0, float $y = -1, bool $link = true): self
+    {
+        if (!$isUTF8) {
+            $text = (string) $this->_UTF8encode($text);
+        }
+        if ($y < 0) {
+            $y = $this->GetY();
+        }
+
+        $link_id = '';
+        if ($link) {
+            $link_id = $this->AddLink();
+            $this->SetLink($link_id, $y, $this->page);
+        }
+
+        $this->outlines[] = [
+            'text' => $text,
+            'level' => \max(0, $level),
+            'y' => ($this->h - $y) * $this->k,
+            'page' => $this->page,
+            'link' => $link_id,
+        ];
+
+        return $this;
     }
 
     /**
@@ -171,23 +330,25 @@ class PdfDocument extends \FPDF
      *                                        </li>
      *                                        </ul>
      * @param PdfMove|int             $ln     indicates where the current position should go after the call.
-     *                                        Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after. The default value is <code>0</code>.
+     *                                        Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after.
      *                                        Possible values are:
      *                                        <ul>
-     *                                        <li><b>0</b>: To the right</li>
+     *                                        <li>A Pdf move enumeration.</li>
+     *                                        <li><b>0</b>: To the right (default value)</li>
      *                                        <li><b>1</b>: To the beginning of the next line</li>
      *                                        <li><b>2</b>: Below</li>
      *                                        </ul>
-     * @param string|PdfTextAlignment $align  the text alignment. The value can be:
+     * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
+     *                                        <li>A Pdf text alignment enumeration.</li>
      *                                        <li>'<b>L</b>' or en empty string (''): left align (default value).</li>
      *                                        <li>'<b>C</b>' : center.</li>
      *                                        <li>'<b>R</b>' : right align.</li>
      *                                        </ul>
-     * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
+     * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      * @param string|int              $link   a URL or an identifier returned by AddLink()
      */
-    public function Cell($w, $h = 0.0, $txt = '', $border = 0, $ln = PdfMove::RIGHT, $align = '', $fill = false, $link = ''): void
+    public function Cell($w, $h = 0.0, $txt = '', $border = PdfBorder::NONE, $ln = PdfMove::RIGHT, $align = PdfTextAlignment::LEFT, $fill = false, $link = ''): void
     {
         if ($ln instanceof PdfMove) {
             $ln = $ln->value;
@@ -209,7 +370,9 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Gets the cell margin. The default value is 1 mm.
+     * Gets the cell margin.
+     *
+     * The default value is 1 mm.
      */
     public function getCellMargin(): float
     {
@@ -235,7 +398,7 @@ class PdfDocument extends \FPDF
     /**
      * Gets the default page size (width and height) in the user unit.
      *
-     * @return array{0: float, 1: float} the current page size
+     * @return PdfPageSizeType the current page size
      */
     public function getDefaultPageSize(): array
     {
@@ -512,12 +675,13 @@ class PdfDocument extends \FPDF
      *                                        </ul>
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
-     *                                        <li>'<b>L</b>' or an empty string: left align.</li>
+     *                                        <li>A Pdf text alignment enumeration.</li>
+     *                                        <li>'<b>L</b>' or an empty string (''): left align (default value).</li>
      *                                        <li>'<b>C</b>' : center.</li>
      *                                        <li>'<b>R</b>' : right align.</li>
      *                                        <li>'<b>J</b>' : justification (default value).</li>
      *                                        </ul>
-     * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
+     * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      */
     public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false): void
     {
@@ -582,7 +746,7 @@ class PdfDocument extends \FPDF
      * @param float                              $h     the height
      * @param PdfBorder|PdfRectangleStyle|string $style the style of rendering. Possible values are:
      *                                                  <ul>
-     *                                                  <li>'<b>D</b>' or empty string: draw. This is the default value.</li>
+     *                                                  <li>'<b>D</b>' or empty string: draw (default value).</li>
      *                                                  <li>'<b>F</b>' : fill.</li>
      *                                                  <li>'<b>DF</b>' : draw and fill.</li>
      *                                                  </ul>
@@ -662,8 +826,16 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * @param PdfDocumentZoom|string   $zoom
-     * @param PdfDocumentLayout|string $layout
+     * Defines the way the document is to be displayed by the viewer.
+     *
+     * The zoom level can be set: pages can be displayed entirely on screen, occupy the
+     * full width of the window, use real size, be scaled by a specific zooming factor
+     * or use viewer default (configured in the Preferences menu of Adobe Reader).
+     * The page layout can be specified too: single at once, continuous display, two
+     * columns or viewer default.
+     *
+     * @param PdfDocumentZoom|string|int $zoom   the zoom to use
+     * @param PdfDocumentLayout|string   $layout the page layout
      */
     public function SetDisplayMode($zoom = PdfDocumentZoom::FULL_PAGE, $layout = PdfDocumentLayout::SINGLE): void
     {
@@ -674,6 +846,38 @@ class PdfDocument extends \FPDF
             $layout = $layout->value;
         }
         parent::SetDisplayMode($zoom, $layout);
+    }
+
+    /**
+     * Sets the font used to print character strings.
+     *
+     * @param PdfFontName|string $family the font family. It can be either a font name enumeration, a name defined by AddFont()
+     *                                   or one of the standard families (case-insensitive):
+     *                                   <ul>
+     *                                   <li><b>Courier</b>: Fixed-width.</li>
+     *                                   <li><b>Helvetica</b> or <b>Arial</b>: Synonymous: sans serif.</li>
+     *                                   <li><b>Symbol</b>: Symbolic.</li>
+     *                                   <li><b>ZapfDingbats</b>: Symbolic.</li>
+     *                                   </ul>
+     *                                   It is also possible to pass an empty string. In that case, the current family is kept.
+     * @param string             $style  the font style. Possible values are (case-insensitive):
+     *                                   <ul>
+     *                                   <li>Empty string: Regular.</li>
+     *                                   <li><b>B</b>: Bold.</li>
+     *                                   <li><b>I</b>: Italic.</li>
+     *                                   <li><b>U</b>: Underline.</li>
+     *                                   </ul>
+     *                                   or any combination. The default value is regular.
+     * @param float              $size   the font size in points or 0 to use the current size. If no size has been
+     *                                   specified since the beginning of the document, the value is 9.
+     */
+    public function SetFont($family, $style = '', $size = 0): void
+    {
+        if ($family instanceof PdfFontName) {
+            $family = $family->value;
+        }
+
+        parent::SetFont($family, $style, $size);
     }
 
     /**
@@ -752,6 +956,87 @@ class PdfDocument extends \FPDF
         parent::Write($h, $this->cleanText($txt), $link);
     }
 
+    protected function _putBookmarks(): void
+    {
+        /** @psalm-var array<int, int> $lru */
+        $lru = [];
+        $level = 0;
+
+        // build outlines hierarchy
+        foreach ($this->outlines as $index => $outline) {
+            if ($outline['level'] > 0) {
+                $parent = $lru[$outline['level'] - 1];
+                // set parent and last pointers
+                $this->outlines[$index]['parent'] = $parent;
+                $this->outlines[$parent]['last'] = $index;
+                if ($outline['level'] > $level) {
+                    // level increasing: set first pointer
+                    $this->outlines[$parent]['first'] = $index;
+                }
+            } else {
+                $this->outlines[$index]['parent'] = \count($this->outlines);
+            }
+            if ($outline['level'] <= $level && $index > 0) {
+                // set previous and next pointers
+                $prev = $lru[$outline['level']];
+                $this->outlines[$prev]['next'] = $index;
+                $this->outlines[$index]['prev'] = $prev;
+            }
+            $lru[$outline['level']] = $index;
+            $level = $outline['level'];
+        }
+
+        // outline items
+        $n = $this->n + 1;
+        foreach ($this->outlines as $outline) {
+            $this->_putOutline($outline, $n);
+        }
+
+        // outline root
+        $this->_newobj();
+        $this->outlineRoot = $this->n;
+        $this->_put(\sprintf('<</Type /Outlines /First %d 0 R', $n));
+        $this->_put(\sprintf('/Last %d 0 R>>', $n + $lru[0]));
+        $this->_put('endobj');
+    }
+
+    protected function _putcatalog(): void
+    {
+        parent::_putcatalog();
+        if ([] !== $this->outlines) {
+            $this->_put(\sprintf('/Outlines %d 0 R', $this->outlineRoot));
+            $this->_put('/PageMode /UseOutlines');
+        }
+    }
+
+    /**
+     * @psalm-param PdfOutlineType $outline
+     */
+    protected function _putOutline(array $outline, int $n): void
+    {
+        $this->_newobj();
+        $this->_put(\sprintf('<</Title %s', $this->_textstring($outline['text'])));
+
+        foreach (['parent', 'prev', 'next', 'first', 'last'] as $key) {
+            if (isset($outline[$key])) {
+                $this->_put(\sprintf('/%s %d 0 R', \ucfirst($key), $n + (int) $outline[$key]));
+            }
+        }
+
+        $pageN = $this->PageInfo[$outline['page']]['n'];
+        $this->_put(\sprintf('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $outline['y']));
+        $this->_put('/Count 0>>');
+        $this->_put('endobj');
+    }
+
+    protected function _putresources(): void
+    {
+        parent::_putresources();
+        if ([] !== $this->outlines) {
+            $this->_putBookmarks();
+        }
+    }
+
     /**
      * Clean the given text.
      *
@@ -762,12 +1047,15 @@ class PdfDocument extends \FPDF
     protected function cleanText(?string $str): ?string
     {
         try {
-            if (null !== $str && false !== \mb_detect_encoding($str, 'UTF-8', true)) {
-                $result = \iconv('UTF-8', 'windows-1252', $str);
-                if (false !== $result) {
-                    return $result;
-                }
+            if (null !== $str && false !== $result = \iconv('UTF-8', 'ISO-8859-1', $str)) {
+                return $result;
             }
+//            if (null !== $str && false !== \mb_detect_encoding($str, 'UTF-8', true)) {
+//                if (false !== $result = \iconv('UTF-8', 'windows-1252', $str)) {
+//                    // if (false !== $result = \iconv('UTF-8', 'ISO-8859-1', $str)) {
+//                    return $result;
+//                }
+//            }
         } catch (\Exception) {
         }
 

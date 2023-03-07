@@ -16,10 +16,10 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Model\Role;
+use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfFont;
 use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
@@ -118,7 +118,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
         // create styles
         $this->titleStyle = PdfStyle::getCellStyle()->setIndent(2);
-        $this->rightStyle = PdfStyle::getCellStyle()->setFontName(PdfFont::NAME_SYMBOL);
+        $this->rightStyle = PdfStyle::getCellStyle()->setFontName(PdfFontName::SYMBOL);
 
         // create table
         $builder = $this->createTableBuilder();

@@ -20,6 +20,7 @@ use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
+use App\Pdf\PdfFont;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
 use App\Util\FormatUtils;
@@ -67,6 +68,17 @@ abstract class AbstractReport extends PdfDocument
 
         // footer
         $this->footer->setContent($appName, $controller->getApplicationOwnerUrl());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addIndexPage(string $title = '', float $titleFontSize = 12, float $contentFontSize = PdfFont::DEFAULT_SIZE): void
+    {
+        if ('' === $title) {
+            $title = $this->trans('report.index');
+        }
+        parent::addIndexPage($title, $titleFontSize, $contentFontSize);
     }
 
     /**
@@ -135,16 +147,38 @@ abstract class AbstractReport extends PdfDocument
     }
 
     /**
+     * Add a first level (0) outline with this title (if any) as text.
+     *
+     * Do nothing if no title is defined.
+     *
+     * @param bool $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     *
+     * @return bool true if the outline is added; false otherwise
+     */
+    protected function addOutlineTitle(bool $isUTF8 = true): bool
+    {
+        if (null !== $this->title) {
+            $this->addOutline($this->title, $isUTF8);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Gets the translated count label.
      *
      * @param \Countable|array|int $count the number of elements
      */
-    protected function translateCount(\Countable|array|int $count, string $message = 'common.count'): string
+    protected function translateCount(\Countable|array|int $count, string $message = 'common.count', bool $format = true): string
     {
-        if (\is_countable($count)) {
+        if ($format) {
+            $count = FormatUtils::formatInt($count);
+        } elseif ($count instanceof \Countable || \is_array($count)) {
             $count = \count($count);
         }
 
-        return $this->trans($message, ['%count%' => FormatUtils::formatInt($count)]);
+        return $this->trans($message, ['%count%' => $count]);
     }
 }

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfFontName;
+
 /**
  * Define a font style.
  */
@@ -33,7 +35,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     final public const DEFAULT_STYLE = self::STYLE_REGULAR;
 
     /**
-     * The Arial font name (synonymous; sans serif).
+     * The Arial font name (synonymous: sans serif).
      */
     final public const NAME_ARIAL = 'Arial';
 
@@ -43,7 +45,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     final public const NAME_COURIER = 'Courier';
 
     /**
-     * The Helvetica font name (synonymous; sans serif).
+     * The Helvetica font name (synonymous: sans serif).
      */
     final public const NAME_HELVETICA = 'Helvetica';
 
@@ -83,6 +85,11 @@ class PdfFont implements PdfDocumentUpdaterInterface
     final public const STYLE_UNDERLINE = 'U';
 
     /**
+     * The name.
+     */
+    protected string $name;
+
+    /**
      * The style.
      */
     protected string $style = self::DEFAULT_STYLE;
@@ -90,12 +97,32 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Constructor.
      *
-     * @param string $name  the name
-     * @param float  $size  the size
-     * @param string $style the style
+     * @param PdfFontName|string|null $name  It can be either a font name enumeration, a name defined by AddFont()
+     *                                       or one of the standard families (case-insensitive):
+     *                                       <ul>
+     *                                       <li><b>Courier</b>: Fixed-width.</li>
+     *                                       <li><b>Helvetica</b> or <b>Arial</b>: Synonymous: sans serif.</li>
+     *                                       <li><b>Symbol</b>: Symbolic.</li>
+     *                                       <li><b>ZapfDingbats</b>: Symbolic.</li>
+     *                                       </ul>
+     *                                       It is also possible to pass a null value. In that case, the default name
+     *                                       ('Arial') is used.
+     * @param float                   $size  the size
+     * @param string                  $style the font style. Possible values are (case-insensitive):
+     *                                       <ul>
+     *                                       <li>Empty string: Regular.</li>
+     *                                       <li><b>B</b>: Bold.</li>
+     *                                       <li><b>I</b>: Italic.</li>
+     *                                       <li><b>U</b>: Underline.</li>
+     *                                       </ul>
+     *                                       or any combination.
      */
-    public function __construct(protected string $name = self::DEFAULT_NAME, protected float $size = self::DEFAULT_SIZE, string $style = self::DEFAULT_STYLE)
+    public function __construct(PdfFontName|string|null $name = PdfFontName::ARIAL, protected float $size = self::DEFAULT_SIZE, string $style = self::DEFAULT_STYLE)
     {
+        if ($name instanceof PdfFontName) {
+            $name = $name->value;
+        }
+        $this->name = empty($name) ? self::DEFAULT_NAME : $name;
         $this->setStyle($style);
     }
 
@@ -223,12 +250,22 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Sets the font name.
      *
-     * @param ?string $name the name or null for default
-     *
-     * @return self this instance
+     * @param PdfFontName|string|null $name It can be either a font name enumeration, a name defined by AddFont()
+     *                                      or one of the standard families (case-insensitive):
+     *                                      <ul>
+     *                                      <li><b>Courier</b>: Fixed-width.</li>
+     *                                      <li><b>Helvetica</b> or <b>Arial</b>: Synonymous: sans serif.</li>
+     *                                      <li><b>Symbol</b>: Symbolic.</li>
+     *                                      <li><b>ZapfDingbats</b>: Symbolic.</li>
+     *                                      </ul>
+     *                                      It is also possible to pass a null value. In that case, the default name
+     *                                      ('Arial') is used.
      */
-    public function setName(?string $name): self
+    public function setName(PdfFontName|string|null $name = null): self
     {
+        if ($name instanceof PdfFontName) {
+            $name = $name->value;
+        }
         $this->name = empty($name) ? self::DEFAULT_NAME : $name;
 
         return $this;
@@ -250,6 +287,15 @@ class PdfFont implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font style.
+     *
+     * @param string $style the font style. Possible values are (case-insensitive):
+     *                      <ul>
+     *                      <li>Empty string: Regular.</li>
+     *                      <li><b>B</b>: Bold.</li>
+     *                      <li><b>I</b>: Italic.</li>
+     *                      <li><b>U</b>: Underline.</li>
+     *                      </ul>
+     *                      or any combination.
      *
      * @return self this instance
      */

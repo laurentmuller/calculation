@@ -1,5 +1,10 @@
 counters:
-    calculations: '{count, plural, =0 {Aucune calculation} one {1 calculation} other {# calculations}}'
+    calculations: >-
+        {count, plural, 
+            =0    {Aucune calculation}
+            one   {1 calculation}
+            other {# calculations}
+        }
     calculations_lower: '{count, plural, =0 {aucune calculation} one {1 calculation} other {# calculations}}'
     calculations_day: '{count, plural, =0 {Afficher aucune calculation pour le {date}} one {Afficher la calculation pour le {date}} other {Afficher les # calculations pour le {date}}}'
     calculations_calendar: '{count, plural, =0 {Afficher aucune calculation pour {date}} one {Afficher la calculation pour {date}} other {Afficher les # calculations pour {date}}}'

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Enums\PdfFontName;
+
 /**
  * This class describe a style that can be applied to a PDF document.
  */
@@ -431,9 +433,19 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font name.
-     * Can be one of the FONT_NAME_XX constants.
+     *
+     * @param PdfFontName|string|null $fontName It can be either a font name enumeration, a name defined by AddFont()
+     *                                          or one of the standard families (case-insensitive):
+     *                                          <ul>
+     *                                          <li><b>Courier</b>: Fixed-width.</li>
+     *                                          <li><b>Helvetica</b> or <b>Arial</b>: Synonymous: sans serif.</li>
+     *                                          <li><b>Symbol</b>: Symbolic.</li>
+     *                                          <li><b>ZapfDingbats</b>: Symbolic.</li>
+     *                                          </ul>
+     *                                          It is also possible to pass a null value. In that case, the default name
+     *                                          ('Arial') is used.
      */
-    public function setFontName(string $fontName): static
+    public function setFontName(PdfFontName|string|null $fontName): static
     {
         $this->font->setName($fontName);
 
@@ -463,7 +475,14 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font style.
      *
-     * Can be one of the FONT_STYLE_XX constants or any combination.
+     * @param string $fontStyle the font style. Possible values are (case-insensitive):
+     *                          <ul>
+     *                          <li>Empty string: Regular.</li>
+     *                          <li><b>B</b>: Bold.</li>
+     *                          <li><b>I</b>: Italic.</li>
+     *                          <li><b>U</b>: Underline.</li>
+     *                          </ul>
+     *                          or any combination.
      */
     public function setFontStyle(string $fontStyle): static
     {

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Util;
 
+use Symfony\Component\String\Slugger\AsciiSlugger;
+
 use function Symfony\Component\String\u;
 
 use Symfony\Component\String\UnicodeString;
@@ -161,6 +163,20 @@ final class StringUtils
     public static function isString(mixed $var): bool
     {
         return \is_string($var) && '' !== $var;
+    }
+
+    /**
+     * Transforms the given string into another string that only includes safe ASCII characters.
+     */
+    public static function slug(string $string): string
+    {
+        /** @psalm-var AsciiSlugger|null $slugger */
+        static $slugger = null;
+        if (null === $slugger) {
+            $slugger = new AsciiSlugger();
+        }
+
+        return $slugger->slug($string)->toString();
     }
 
     /**

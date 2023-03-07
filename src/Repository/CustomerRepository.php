@@ -62,13 +62,10 @@ class CustomerRepository extends AbstractRepository
     {
         $fields = $this->concat(self::DEFAULT_ALIAS, self::NAME_COMPANY_FIELDS, 'ZZZ');
 
-        /** @psalm-var Customer[] $result */
-        $result = $this->createQueryBuilder(self::DEFAULT_ALIAS)
+        return $this->createQueryBuilder(self::DEFAULT_ALIAS)
             ->orderBy($fields, Criteria::ASC)
             ->getQuery()
             ->getResult();
-
-        return $result;
     }
 
     /**

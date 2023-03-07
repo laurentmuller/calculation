@@ -45,6 +45,7 @@ class ReverseReaderTest extends TestCase
             self::assertSame("Line $index", $line);
             --$index;
         }
+        self::assertFalse($reader->valid());
         self::assertNull($reader->current());
         $reader->close();
     }

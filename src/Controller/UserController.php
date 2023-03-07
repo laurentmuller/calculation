@@ -260,16 +260,13 @@ class UserController extends AbstractEntityController
         if ($this->handleRequestForm($request, $form)) {
             /** @var User[] $users */
             $users = $form->get($name)->getData();
-            foreach ($users as $user) {
-                $repository->resetPasswordRequest($user, false);
-            }
-            $repository->flush();
+            $repository->resetPasswordRequest($users);
 
             $count = \count($users);
             if (1 === $count && false !== $user = \reset($users)) {
-                $this->infoTrans('user.reset.success', ['%name%' => $user->getUserIdentifier()]);
+                $this->successTrans('user.reset.success', ['%name%' => $user->getUserIdentifier()]);
             } else {
-                $this->infoTrans('user.reset_all.success', ['%count%' => $count]);
+                $this->successTrans('user.reset_all.success', ['%count%' => $count]);
             }
 
             return $generator->redirect($request, null, $this->getDefaultRoute());

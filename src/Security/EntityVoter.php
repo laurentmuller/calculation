@@ -27,6 +27,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  * @extends Voter<string, EntityName|string>
  *
  * @psalm-suppress TooManyTemplateParams
+ *
+ * @see \App\Tests\Security\EntityVoterTest
  */
 class EntityVoter extends Voter
 {

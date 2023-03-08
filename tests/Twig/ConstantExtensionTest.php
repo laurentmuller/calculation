@@ -79,9 +79,7 @@ class ConstantExtensionTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @dataProvider getCalculationServiceConstants
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCalculationServiceConstants')]
     public function testCalculationService(string $key, int $value): void
     {
         self::assertNotNull($this->extension);
@@ -91,9 +89,7 @@ class ConstantExtensionTest extends KernelTestCase
         self::assertSame($value, $globals[$key]);
     }
 
-    /**
-     * @dataProvider getEntityVoterConstants
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntityVoterConstants')]
     public function testEntityVoter(string $key, string $value): void
     {
         self::assertNotNull($this->extension);

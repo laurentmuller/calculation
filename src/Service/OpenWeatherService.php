@@ -27,6 +27,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @see https://openweathermap.org/api
  *
  * @psalm-import-type OpenWeatherCityType from OpenWeatherDatabase
+ *
+ * @see \App\Tests\Service\OpenWeatherServiceTest
  */
 class OpenWeatherService extends AbstractHttpClientService
 {

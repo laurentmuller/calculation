@@ -119,9 +119,7 @@ class EntityVoterTest extends TestCase
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
-    /**
-     * @dataProvider getSupportsAttribute
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getSupportsAttribute')]
     public function testSupportsAttribute(string $value, bool $expected): void
     {
         self::assertNotNull($this->voter);

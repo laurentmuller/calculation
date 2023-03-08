@@ -113,45 +113,35 @@ class MathTraitTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getIsBitSet
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIsBitSet')]
     public function testIsBitSet(int $value, int $mask, bool $expected = true): void
     {
         $actual = $this->isBitSet($value, $mask);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getIsFloatEquals
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIsFloatEquals')]
     public function testIsFloatEquals(float $val1, float $val2, int $precision = 2, bool $expected = true): void
     {
         $actual = $this->isFloatEquals($val1, $val2, $precision);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getIsFloatZero
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIsFloatZero')]
     public function testIsFloatZero(float $val, int $precision = 2, bool $expected = true): void
     {
         $actual = $this->isFloatZero($val, $precision);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getRound
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRound')]
     public function testRound(float $val, float $expected, int $precision = 2): void
     {
         $actual = $this->round($val, $precision);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getSafeDivide
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getSafeDivide')]
     public function testSafeDivide(float $dividend, float $divisor, float $expected, float $default = 0.0): void
     {
         $actual = $this->safeDivide($dividend, $divisor, $default);
@@ -159,18 +149,14 @@ class MathTraitTest extends TestCase
         self::assertSame(11.0, $this->safeDivide(100, 0, 11));
     }
 
-    /**
-     * @dataProvider getValidateFloatRange
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValidateFloatRange')]
     public function testValidateFloatRange(float $value, float $min, float $max, float $expected): void
     {
         $actual = $this->validateFloatRange($value, $min, $max);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getValidateIntRange
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValidateIntRange')]
     public function testValidateIntRange(int $value, int $min, int $max, int $expected): void
     {
         $actual = $this->validateIntRange($value, $min, $max);

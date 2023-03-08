@@ -69,9 +69,7 @@ class UserExceptionServiceTest extends TestCase
         ];
     }
 
-    /**
-     *  @dataProvider getExceptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getExceptions')]
     public function testException(\Throwable $e, string $message, int $messageData = 0): void
     {
         $result = $this->mapException($e);

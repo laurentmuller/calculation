@@ -17,9 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
 
-/**
- * Test for the {@link AddressTransformer} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(AddressTransformer::class)]
 class AddressTransformerTest extends TestCase
 {
     private ?AddressTransformer $transformer = null;
@@ -61,9 +59,7 @@ class AddressTransformerTest extends TestCase
         yield [new Address('user@root.com', 'username'), \htmlentities('username <user@root.com>')];
     }
 
-    /**
-     * @dataProvider getReverseTransformValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
@@ -74,9 +70,7 @@ class AddressTransformerTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider getTransformValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {

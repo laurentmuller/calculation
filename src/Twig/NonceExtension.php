@@ -18,6 +18,8 @@ use Twig\TwigFunction;
 
 /**
  * Extension to generate CSP nonce key.
+ *
+ * @see \App\Tests\Twig\NonceExtensionTest
  */
 final class NonceExtension extends AbstractExtension
 {

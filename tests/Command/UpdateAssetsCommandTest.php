@@ -12,13 +12,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\Command\UpdateAssetsCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * Class to test the {@link UpdateAssetsCommand}.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(UpdateAssetsCommand::class)]
 class UpdateAssetsCommandTest extends KernelTestCase
 {
     public function testExecute(): void

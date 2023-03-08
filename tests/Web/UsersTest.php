@@ -45,9 +45,7 @@ class UsersTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
-    /**
-     * @dataProvider getUserExist
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUserExist')]
     public function testUserExist(string $username, bool $exist): void
     {
         $user = $this->loadUser($username, false);
@@ -59,10 +57,9 @@ class UsersTest extends AbstractAuthenticateWebTestCase
     }
 
     /**
-     * @dataProvider getUserRole
-     *
      * @psalm-param RoleInterface::ROLE_* $username
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUserRole')]
     public function testUserRole(string $username): void
     {
         $user = $this->loadUser($username, false);

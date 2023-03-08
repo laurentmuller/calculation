@@ -51,9 +51,8 @@ class RoleTranslatorTraitTest extends TestCase
 
     /**
      * @param string|RoleInterface $role the role to translate
-     *
-     * @dataProvider getTranslateRoles
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateRoles')]
     public function testTranslateRole(RoleInterface|string $role, string $message): void
     {
         $expected = "user.roles.$message";

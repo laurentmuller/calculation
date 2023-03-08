@@ -19,9 +19,7 @@ use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-/**
- * Test for the {@link GroupTransformer} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(GroupTransformer::class)]
 class GroupTransformerTest extends KernelTestCase
 {
     use DatabaseTrait;
@@ -75,9 +73,8 @@ class GroupTransformerTest extends KernelTestCase
 
     /**
      * @psalm-param int|string|null $value
-     *
-     * @dataProvider getReverseTransformValues
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
@@ -104,9 +101,7 @@ class GroupTransformerTest extends KernelTestCase
         self::assertSame($this->group, $actual);
     }
 
-    /**
-     * @dataProvider getTransformValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {

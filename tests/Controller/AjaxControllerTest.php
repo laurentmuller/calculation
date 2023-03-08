@@ -12,14 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AjaxController;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Unit test for {@link AjaxController} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(AjaxController::class)]
 class AjaxControllerTest extends AbstractAuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
@@ -74,9 +73,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
-    /**
-     * @dataProvider getUsers
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUsers')]
     public function testCheckUser(string|bool $expected, string $user = null): void
     {
         $parameters = ['user' => $user];
@@ -86,9 +83,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
-    /**
-     * @dataProvider getUserEmails
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUserEmails')]
     public function testCheckUserEmail(string|bool $expected, string $email = null, int $id = null): void
     {
         $this->loginUserName('ROLE_SUPER_ADMIN');
@@ -99,9 +94,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
-    /**
-     * @dataProvider getUserNames
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUserNames')]
     public function testCheckUserName(string|bool $expected, string $username = null, int $id = null): void
     {
         $this->loginUserName('ROLE_SUPER_ADMIN');

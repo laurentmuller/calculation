@@ -202,18 +202,14 @@ class EntityNameTest extends TestCase
         self::assertSame('user.name', EntityName::USER->getReadable());
     }
 
-    /**
-     * @dataProvider getMatchValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getMatchValue')]
     public function testMatch(EntityName $name, string $value, bool $expected = true): void
     {
         $result = $name->matchValue($value);
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @dataProvider getOffset
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getOffset')]
     public function testOffset(EntityName $entityName, int $expected): void
     {
         $result = $entityName->offset();
@@ -238,36 +234,28 @@ class EntityNameTest extends TestCase
         self::assertSame($expected, $sorted);
     }
 
-    /**
-     * @dataProvider getTryFindOffset
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindOffset')]
     public function testTryFindOffset(mixed $e, int $expected): void
     {
         $result = EntityName::tryFindOffset($e);
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @dataProvider getTryFindValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
     public function testTryFindValue(mixed $subject, ?string $expected, ?string $default = null): void
     {
         $result = EntityName::tryFindValue($subject, $default);
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @dataProvider getTryFromMixed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromMixed')]
     public function testTryFromMixed(mixed $subject, mixed $expected): void
     {
         $result = EntityName::tryFromMixed($subject);
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @dataProvider getValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValue')]
     public function testValue(EntityName $entityName, string $expected): void
     {
         self::assertSame($expected, $entityName->value);

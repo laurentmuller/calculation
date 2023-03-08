@@ -63,54 +63,42 @@ class HtmlListTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getLetterValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLetterValues')]
     public function testLetter(int $value, string $expected): void
     {
         $actual = HtmlListType::toLetter($value);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getLetterValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLetterValues')]
     public function testLetterLower(int $value, string $expected): void
     {
         $actual = HtmlListType::LETTER_LOWER->getBulletText($value, '');
         self::assertSame(\strtolower($expected), $actual);
     }
 
-    /**
-     * @dataProvider getLetterValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLetterValues')]
     public function testLetterUpper(int $value, string $expected): void
     {
         $actual = HtmlListType::LETTER_UPPER->getBulletText($value, '');
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getRomanValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRomanValues')]
     public function testRoman(int $value, string $expected): void
     {
         $actual = HtmlListType::toRoman($value);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider getRomanValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRomanValues')]
     public function testRomanLower(int $value, string $expected): void
     {
         $actual = HtmlListType::ROMAN_LOWER->getBulletText($value, '');
         self::assertSame(\strtolower($expected), $actual);
     }
 
-    /**
-     * @dataProvider getRomanValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRomanValues')]
     public function testRomanUpper(int $value, string $expected): void
     {
         $actual = HtmlListType::ROMAN_UPPER->getBulletText($value, '');

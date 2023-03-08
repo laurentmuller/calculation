@@ -76,9 +76,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    /**
-     * @dataProvider getConstraints
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]
     public function testEmptyStringIsValid(string $constraint): void
     {
         $constraint = $this->createPassword([$constraint => true]);
@@ -88,9 +86,8 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
 
     /**
      * @param mixed $value the value to be tested
-     *
-     * @dataProvider getInvalidValues
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getInvalidValues')]
     public function testInvalid(mixed $value, array $options, string $message, string $code, array $parameters = []): void
     {
         $constraint = $this->createPassword($options);
@@ -102,9 +99,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    /**
-     * @dataProvider getConstraints
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]
     public function testNullIsValid(string $constraint): void
     {
         $constraint = $this->createPassword([$constraint => true]);
@@ -112,9 +107,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    /**
-     * @dataProvider getPasswords
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getPasswords')]
     public function testPwned(string $value, bool $violation): void
     {
         $options = ['pwned' => true];
@@ -133,9 +126,8 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
 
     /**
      * @param mixed $value the value to be tested
-     *
-     * @dataProvider getValidValues
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValidValues')]
     public function testValid(mixed $value, array $options): void
     {
         $constraint = $this->createPassword($options);

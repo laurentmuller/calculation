@@ -16,9 +16,7 @@ use App\Attribute\SortableField;
 use App\Interfaces\SortModeInterface;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the SortableField attribute.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(SortableField::class)]
 class SortableFieldTest extends TestCase
 {
     /**

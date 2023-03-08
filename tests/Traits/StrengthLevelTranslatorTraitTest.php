@@ -49,9 +49,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         return $this->translator;
     }
 
-    /**
-     * @dataProvider getTranslateLevels
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateLevels')]
     public function testTranslateLevel(int $value, string $message): void
     {
         $expected = "strength_level.$message";

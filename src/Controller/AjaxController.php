@@ -46,6 +46,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
+ *
+ * @see \App\Tests\Controller\AjaxControllerTest
  */
 #[AsController]
 #[Route(path: '/ajax')]

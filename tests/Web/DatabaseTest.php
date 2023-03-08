@@ -100,12 +100,11 @@ class DatabaseTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider getRepositories
-     *
      * @template T of \App\Entity\AbstractEntity
      *
      * @param class-string<T> $className
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRepositories')]
     public function testRepository(string $className, int $expected): void
     {
         /**
@@ -120,9 +119,7 @@ class DatabaseTest extends KernelTestCase
         self::assertCount($expected, $result);
     }
 
-    /**
-     * @dataProvider getTables
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTables')]
     public function testTable(string $tablename, int $expected): void
     {
         $query = "SELECT COUNT(id) FROM $tablename";
@@ -131,10 +128,9 @@ class DatabaseTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider getUsers
-     *
      * @psalm-param RoleInterface::ROLE_* $role
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUsers')]
     public function testUser(string $username, string $role): void
     {
         $repository = $this->getService(UserRepository::class);

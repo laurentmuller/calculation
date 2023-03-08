@@ -16,11 +16,9 @@ use App\Attribute\SortableEntity;
 use App\Interfaces\SortModeInterface;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the SortableEntity attribute.
- */
 #[SortableEntity(name: 'descending', order: SortModeInterface::SORT_DESC)]
 #[SortableEntity(name: 'ascending')]
+#[\PHPUnit\Framework\Attributes\CoversClass(SortableEntity::class)]
 class SortableEntityTest extends TestCase
 {
     public string $ascending = '';

@@ -21,8 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a margin within a group.
  */
-#[ORM\Entity(repositoryClass: GroupMarginRepository::class)]
 #[ORM\Table(name: 'sy_GroupMargin')]
+#[ORM\Entity(repositoryClass: GroupMarginRepository::class)]
 class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
 {
     /**

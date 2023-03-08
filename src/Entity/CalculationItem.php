@@ -25,8 +25,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents an item of a calculation category.
  */
-#[ORM\Entity(repositoryClass: CalculationItemRepository::class)]
 #[ORM\Table(name: 'sy_CalculationItem')]
+#[ORM\Entity(repositoryClass: CalculationItemRepository::class)]
 class CalculationItem extends AbstractEntity implements ParentTimestampableInterface, PositionInterface
 {
     use MathTrait;

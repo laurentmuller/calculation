@@ -98,7 +98,9 @@ class GroupTest extends AbstractEntityValidatorTest
     private function createMargin(): GroupMargin
     {
         $cm = new GroupMargin();
-        $cm->setValues(0, 100, 0.1);
+        $cm->setMinimum(0)
+            ->setMaximum(100)
+            ->setMargin(0.1);
 
         return $cm;
     }

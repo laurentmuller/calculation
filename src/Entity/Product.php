@@ -23,8 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a product.
  */
-#[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: 'sy_Product')]
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_product_description', columns: ['description'])]
 #[UniqueEntity(fields: 'description', message: 'product.unique_description')]
 class Product extends AbstractCategoryItemEntity implements TimestampableInterface

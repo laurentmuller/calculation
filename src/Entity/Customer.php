@@ -21,8 +21,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Represents a customer.
  */
-#[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\Table(name: 'sy_Customer')]
+#[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_customer_email', columns: ['email'])]
 #[UniqueEntity(fields: 'email', message: 'customer.unique_email')]
 class Customer extends AbstractEntity

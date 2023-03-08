@@ -24,8 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a calculation state.
  */
-#[ORM\Entity(repositoryClass: CalculationStateRepository::class)]
 #[ORM\Table(name: 'sy_CalculationState')]
+#[ORM\Entity(repositoryClass: CalculationStateRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_calculation_state_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'state.unique_code')]
 class CalculationState extends AbstractEntity implements TimestampableInterface

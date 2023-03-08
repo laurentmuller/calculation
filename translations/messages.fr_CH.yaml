@@ -1,4 +1,5 @@
 about:
+  title: A propos de
   app_customer: Client
   app_customer_email: E-mail
   app_customer_fax: Télécopieur
@@ -23,23 +24,22 @@ about:
   policy_short: Confidentialité
   symfony: Configuration de Symfony
   symfony_version: Configuration de Symfony v%version%
-  title: A propos de
   version: Version %version%
   expand: Afficher le contenu
   collapse: Masquer le contenu
 admin:
   rights:
-    success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec succès.
     title: Droits d'accès
+    success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec succès.
 application_service:
   clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
   commit_error: Impossible de valider les changements dans le cache des propriétés.
   deferred_error: Impossible de différer la sauvegarde de la propriété '%key%'.
 below:
-  count: 'Nombre de calculations : %calculations%'
+  title: Marges insuffisantes
   description: Calculations contenant une marge globale inférieure à %margin%.
   empty: Aucune calculation ne contient une marge globale insuffisante.
-  title: Marges insuffisantes
+  count: 'Nombre de calculations : %calculations%'
 breadcrumb:
   add: Nouveau
   clone: Copie
@@ -48,13 +48,13 @@ breadcrumb:
   property: Propriétés
 calculation:
   add:
-    success: La calculation Nº <b>%name%</b> a été créée avec succès.
     title: Nouvelle calculation
+    success: La calculation Nº <b>%name%</b> a été créée avec succès.
   delete:
-    failure: Impossible de supprimer la calculation Nº <b>%name%</b>.
+    title: Supprimer la calculation
     message: Êtes-vous sûr de vouloir supprimer la calculation Nº <b>%name%</b> ?
     success: La calculation Nº <b>%name%</b> a été supprimée avec succès.
-    title: Supprimer la calculation
+    failure: Impossible de supprimer la calculation Nº <b>%name%</b>.
   edit:
     add_item: Ajouter un article
     add_task: Ajouter une tâche
@@ -80,14 +80,14 @@ calculation:
     panel_items: Articles
     panel_resume: Résumé
     price:
+      title: Cliquez pour modifier directement le prix
       edit: Modifier le prix
       error: Le prix ne peut pas être vide.
-      title: Cliquez pour modifier directement le prix
       tooltip: Modification du prix
     quantity:
+      title: Cliquez pour modifier directement la quantité
       edit: Modifier la quantité
       error: La quantité ne peut pas être vide.
-      title: Cliquez pour modifier directement la quantité
       tooltip: Modification de la quantité
     read_only: Calculation non-modifiable (Statut %name%).
     sort_item: Trier les groupes, les catégories et les articles
@@ -118,6 +118,7 @@ calculation:
     updatedBy: Mise à jour
     userMargin: Marge utilisateur
   list:
+    title: Calculations
     add_title: Créer une nouvelle calculation
     empty: Aucune calculation définie.
     excel_single_title: Exporter la calculation
@@ -130,7 +131,6 @@ calculation:
     state_description: Statut des calculations
     state_help: Afficher les calculations pour le statut sélectionné
     state_title: Modifier le statut
-    title: Calculations
   name: Calculation
   show:
     title: Propriétés de la calculation
@@ -160,16 +160,16 @@ calculationitem:
   name: Article
 calculationstate:
   add:
-    success: Le statut <b>%name%</b> a été créé avec succès.
     title: Nouveau statut
+    success: Le statut <b>%name%</b> a été créé avec succès.
   delete:
-    failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%'
+    title: Supprimer le statut
     message: Êtes-vous sûr de vouloir supprimer le statut <b>%name%</b> ?
     success: Le statut <b>%name%</b> a été supprimé avec succès.
-    title: Supprimer le statut
+    failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%'
   edit:
-    success: Le statut <b>%name%</b> a été mis à jour avec succès.
     title: Modifier le statut
+    success: Le statut <b>%name%</b> a été mis à jour avec succès.
   fields:
     calculations: Calculations
     code: Nom
@@ -177,6 +177,7 @@ calculationstate:
     description: Description
     editable: Modifiable
   list:
+    title: Statuts
     add_title: Créer un nouveau statut
     calculation_title: Afficher les calculations de ce statut
     editable: Modifiable
@@ -184,7 +185,6 @@ calculationstate:
     excel_title: Exporter la liste des statuts
     not_editable: Non-Modifiable
     pdf_title: Télécharger la liste des statuts
-    title: Statuts
   name: Statut
   show:
     title: Propriétés du statut
@@ -208,21 +208,21 @@ calendar:
   year_show: Afficher l'année (%year%)
   year_title: Calendrier %year%
 captcha:
+  title: Image de contrôle
   label: Code de contrôle
   refresh: Générer une nouvelle image
-  title: Image de contrôle
 category:
   add:
-    success: La catégorie <b>%name%</b> a été créée avec succès.
     title: Nouvelle catégorie
+    success: La catégorie <b>%name%</b> a été créée avec succès.
   delete:
-    failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
+    title: Supprimer la catégorie
     message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
     success: La catégorie <b>%name%</b> a été supprimée avec succès.
-    title: Supprimer la catégorie
+    failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
   edit:
-    success: La catégorie <b>%name%</b> a été mise à jour avec succès.
     title: Modifier la catégorie
+    success: La catégorie <b>%name%</b> a été mise à jour avec succès.
   fields:
     code: Nom
     description: Description
@@ -230,6 +230,7 @@ category:
     products: Articles
     tasks: Tâches
   list:
+    title: Catégories
     add_title: Créer une nouvelle catégorie
     empty: Aucune catégorie définie.
     excel_title: Exporter la liste des catégories
@@ -238,17 +239,16 @@ category:
     pdf_title: Télécharger la liste des catégories
     product_title: Afficher les articles de cette catégorie
     task_title: Afficher les tâches de cette catégorie
-    title: Catégories
   name: Catégorie
   show:
     title: Propriétés de la catégorie
 clear_cache:
-  failure: Impossible de vider le cache de l'application.
+  title: Vider le cache
   message: "Êtes-vous sûr de vouloir vider le cache de l'application (taille actuelle : %size%) ?"
   note: '<b>Note : </b>Cette opération peut durer un certain temps.'
   submit: Vider
   success: Le cache de l'application a été vidé avec succès.
-  title: Vider le cache
+  failure: Impossible de vider le cache de l'application.
 common:
   actions: Actions
   button_add: Nouveau
@@ -323,17 +323,17 @@ cookie_banner:
   message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
 customer:
   add:
-    success: Le client <b>%name%</b> a été créé avec succès.
     title: Nouveau client
+    success: Le client <b>%name%</b> a été créé avec succès.
   delete:
-    failure: Impossible de supprimer le client <b>%name%</b>.
+    title: Supprimer le client
     message: Êtes-vous sûr de vouloir supprimer le client <b>%name%</b> ?
     success: Le client <b>%name%</b> a été supprimé avec succès.
-    title: Supprimer le client
+    failure: Impossible de supprimer le client <b>%name%</b>.
   edit:
-    error_search: Une erreur s'est produite lors de la recherche de l'adresse.
-    success: Le client <b>%name%</b> a été mis à jour avec succès.
     title: Modifier le client
+    success: Le client <b>%name%</b> a été mis à jour avec succès.
+    error_search: Une erreur s'est produite lors de la recherche de l'adresse.
   fields:
     address: Adresse
     birthday: Date de naissance
@@ -349,11 +349,11 @@ customer:
     zipCity: NPA / Localité
     zipCode: NPA
   list:
-    add_title: Créer un nouveau client
-    empty: Aucun client défini.
-    excel_title: Exporter la liste des clients
-    pdf_title: Télécharger la liste des clients
     title: Clients
+    add_title: Créer un nouveau client
+    pdf_title: Télécharger la liste des clients
+    excel_title: Exporter la liste des clients
+    empty: Aucun client défini.
   name: Client
   show:
     title: Propriétés du client
@@ -445,8 +445,8 @@ generate:
   title: Générateur de données
 globalmargin:
   edit:
-    success: Les marges globales ont été mises à jour avec succès.
     title: Modifier les marges globales
+    success: Les marges globales ont été mises à jour avec succès.
   fields:
     margin: Marge
     margin_percent: Marge (%)
@@ -462,20 +462,20 @@ globalmargin:
     title: Propriétés de la marge globale
 group:
   add:
-    success: Le groupe <b>%name%</b> a été créé avec succès.
     title: Nouveau groupe
+    success: Le groupe <b>%name%</b> a été créé avec succès.
   delete:
-    failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
+    title: Supprimer le groupe
     message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
     success: Le groupe <b>%name%</b> a été supprimé avec succès.
-    title: Supprimer le groupe
+    failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
   edit:
+    title: Modifier le groupe
+    success: Le groupe <b>%name%</b> a été mise à jour avec succès.
     add_margin: Ajouter une marge
     delete_margin: Supprimer la marge
     empty_margins: Aucune marge définie.
     sort_margins: Trier les marges
-    success: Le groupe <b>%name%</b> a été mise à jour avec succès.
-    title: Modifier le groupe
   fields:
     categories: Catégories
     code: Nom
@@ -629,13 +629,13 @@ log:
   name: Entré du journal
   title: Journal de l'application
   delete:
-    entries: Nombre d'entrées
+    title: Supprimer le journal
+    message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
+    success: Le journal de l'application a été supprimé avec succès.
     error: Impossible de supprimer le journal de l'application.
     file: Fichier
-    message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
     size: Taille
-    success: Le journal de l'application a été supprimé avec succès.
-    title: Supprimer le journal
+    entries: Nombre d'entrées
   fields:
     channel: Canal
     context: Contexte
@@ -665,10 +665,16 @@ openweather:
   current:
     date_calculation: Valeurs obtenue le %date%
     empty: Aucune localité ne correspond aux <a href="#">critères de recherche</a>.
-    imperial: Système impériale
-    metric: Système métrique
     title: Météo
     today: Aujourd'hui
+    imperial:
+      short: °F
+      text: Impériale (°F, mph)
+      title: Afficher les données en unités impériales (°F, mph)
+    metric:
+      short: °C
+      text: Métrique (°C, m/s)
+      title: Afficher les données en unités métriques (°C, m/s)
   direction:
     E: Est
     N: Nord
@@ -846,18 +852,18 @@ pivot:
   value: Valeur
 product:
   add:
-    success: L'article <b>%name%</b> a été créé avec succès.
     title: Nouvel article
+    success: L'article <b>%name%</b> a été créé avec succès.
   delete:
-    failure: Impossible de supprimer l'article <b>%name%</b>.
+    title: Supprimer l'article
     message: Êtes-vous sûr de vouloir supprimer l'article <b>%name%</b> ?
     success: L'article <b>%name%</b> a été supprimé avec succès.
-    title: Supprimer l'article
+    failure: Impossible de supprimer l'article <b>%name%</b>.
   edit:
-    error_search_supplier: Une erreur s'est produite lors de la recherche des fournisseur.
-    error_search_unit: Une erreur s'est produite lors de la recherche des unités.
-    success: L'article <b>%name%</b> a été mis à jour avec succès.
     title: Modifier l'article
+    success: L'article <b>%name%</b> a été mis à jour avec succès.
+    error_search_unit: Une erreur s'est produite lors de la recherche des unités.
+    error_search_supplier: Une erreur s'est produite lors de la recherche des fournisseur.
   fields:
     category: Catégorie
     description: Description
@@ -866,13 +872,13 @@ product:
     supplier: Fournisseur
     unit: Unité
   list:
+    title: Articles
     add_title: Créer un nouvel article
+    pdf_title: Télécharger la liste des articles
+    excel_title: Exporter la liste des articles
     category_all_text: Toutes les catégorie
     category_help: Afficher les articles pour la catégorie sélectionnée
     empty: Aucun article défini.
-    excel_title: Exporter la liste des articles
-    pdf_title: Télécharger la liste des articles
-    title: Articles
   name: Article
   result:
     description: Résultats de la mise à jour des articles.
@@ -886,6 +892,7 @@ product:
   show:
     title: Propriétés de l'article
   update:
+    title: Mise à jour des articles
     allProducts: Mettre à jour tous les articles
     check_all: Sélectionner tous les articles
     check_none: Supprimer la sélection des articles
@@ -900,27 +907,26 @@ product:
     products_empty: '<b>Remarque :</b> Aucun article ne correspond aux critères. Veuillez sélectionner une autre catégorie ou un autre type de mise à jour.'
     round: Arrondir au 5 centimes
     round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
-    title: Mise à jour des articles
     type: Type de mise à jour
     submit_text: Mettre à jour
 profile:
   change_password:
-    failure: Impossible de trouver l'utilisateur actuel.
-    success: <b>%username%</b>, votre mot de passe a été modifié avec succès.
     title: Modifier le mot de passe
+    success: <b>%username%</b>, votre mot de passe a été modifié avec succès.
+    failure: Impossible de trouver l'utilisateur actuel.
   edit:
+    title: Modifier le profil
+    success: <b>%username%</b>, votre profil a été mis à jour avec succès.
     failure: Impossible de trouver l'utilisateur actuel.
     submit: Mettre à jour
-    success: <b>%username%</b>, votre profil a été mis à jour avec succès.
-    title: Modifier le profil
 registration:
   agreeTerms:
     error: Vous devez accepter les conditions générales d'utilisation.
     label: J'accepte les conditions générales d'utilisation de l'application.
   confirmed: Félicitations <b>%username%</b>, votre compte est maintenant activé.
   register:
-    submit: Créer
     title: Créer un compte
+    submit: Créer
   subject: Création d'un compte
   action: Confirmer
 report:
@@ -1076,6 +1082,8 @@ swisspost:
   import:
     description: Permet de mettre à jour la liste des localités et des rues de Suisse.
     last_import: 'Date de validité de la dernière importation : %date%.'
+    data_url_text: 'Remarque : Les données peuvent être téléchargées depuis le site de'
+    data_url_content: La Poste
   result:
     description: Résultat de l'importation.
     failure: Une erreur s'est produite lors de l'importation des localités et des rues.
@@ -1084,21 +1092,21 @@ swisspost:
   title: Importer les localités
 task:
   add:
-    success: La tâche <b>%name%</b> a été créée avec succès.
     title: Nouvelle tâche
+    success: La tâche <b>%name%</b> a été créée avec succès.
   delete:
-    failure: Impossible de tâche la tâche <b>%name%</b>.
+    title: Supprimer la tâche
     message: Êtes-vous sûr de vouloir supprimer la tâche <b>%name%</b> ?
     success: La tâche <b>%name%</b> a été supprimée avec succès.
-    title: Supprimer la tâche
+    failure: Impossible de supprimer la tâche <b>%name%</b>.
   edit:
+    title: Modifier la tâche
+    success: La tâche <b>%name%</b> a été mise à jour avec succès.
     add_item: Ajouter une opération
     delete_item: Supprimer l'opération et ses marges
-    empty_items: Aucune opération définie.
     move_down_item: Déplacer l'opération vers le bas
     move_up_item: Déplacer l'opération vers le haut
-    success: La tâche <b>%name%</b> a été mise à jour avec succès.
-    title: Modifier la tâche
+    empty_items: Aucune opération définie.
   fields:
     category: Catégorie
     group: Groupe
@@ -1120,6 +1128,7 @@ task:
 task_compute:
   add: Nouvelle tâche
   button_ok: Calculer
+  title: Calculer une tâche
   edit: Edition d'une tâche
   error:
     items: Une opération doit être sélectionnée.
@@ -1135,7 +1144,6 @@ task_compute:
     total: Total
     unit: Unité
   success: Le calcul de la tâche a été effectué avec succès.
-  title: Calculer une tâche
 taskitem:
   edit:
     add_item: Ajouter une marge
@@ -1188,6 +1196,7 @@ timeline:
   next: Période suivante
   last: Dernière période
 translator:
+  title: Traduction
   auto_detect: Détecter la langue
   copy_error: Une erreur s'est produite lors de la copie du texte dans le presse-papiers.
   copy_success: La traduction du texte a été copiée avec succès dans le presse-papiers.
@@ -1203,7 +1212,6 @@ translator:
   swap_label: Inverser
   text_error: Le texte à traduire est absent ou vide.
   text_label: Texte
-  title: Traduction
   to_error: La langue de destination est absente ou vide.
   to_label: Vers
   translate_error: Une erreur s'est produite lors de la traduction du texte.
@@ -1220,27 +1228,27 @@ update:
   title: Mise à jour des données
 user:
   add:
-    success: L'utilisateur <b>%name%</b> a été créé avec succès.
     title: Nouvel utilisateur
+    success: L'utilisateur <b>%name%</b> a été créé avec succès.
   change_password:
+    title: Modifier le mot de passe
     change_success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.
     check_password: Tester si le mot de passe est compromis
-    title: Modifier le mot de passe
   comment:
+    title: Commentaires
     description: Envoyer vos commentaires au responsable du site.
     error: Une erreur s'est produite lors de l'envoi de vos commentaires. Veuillez de nouveau tenter cette action plus tard.
     success: Vos commentaires ont été envoyé avec succès au responsable du site et vous allez être contacté bientôt.
-    title: Commentaires
   delete:
-    connected: Impossible de supprimer l'utilisateur actuellement connecté !
-    failure: Impossible de supprimer l'utilisateur <b>%name%</b>.
+    title: Supprimer l'utilisateur
     message: Êtes-vous sûr de vouloir supprimer l'utilisateur <b>%name%</b> ?
     success: L'utilisateur <b>%name%</b> a été supprimé avec succès.
-    title: Supprimer l'utilisateur
+    failure: Impossible de supprimer l'utilisateur <b>%name%</b>.
+    connected: Impossible de supprimer l'utilisateur actuellement connecté !
   edit:
-    delete_image: Supprimer la photo de profil
-    success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
     title: Modifier l'utilisateur
+    success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
+    delete_image: Supprimer la photo de profil
   fields:
     attachments: Fichier
     email: E-mail
@@ -1263,6 +1271,7 @@ user:
     title: Image du profil
     action: Modifier l'image du profil
   list:
+    title: Utilisateurs
     add_title: Créer un nouvel utilisateur
     empty: Aucun utilisateur défini.
     excel_title: Exporter la liste des utilisateurs
@@ -1270,15 +1279,14 @@ user:
     rights_excel: Exporter la liste des droits d'accès
     rights_export: Télécharger la liste des droits d'accès
     rights_title: Droits d'accès
-    title: Utilisateurs
   login:
     reset: Mot de passe oublié
   message:
-    connected: Le nom de l'expéditeur et du destinataire sont les mêmes.
-    description: Envoyer vos commentaires à l'utilisateur sélectionné.
-    error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de nouveau tenter cette action plus tard.
-    success: Votre message ont été envoyé avec succès à l'utilisateur <b>%name%</b>.
     title: Envoyer un message
+    description: Envoyer vos commentaires à l'utilisateur sélectionné.
+    success: Votre message ont été envoyé avec succès à l'utilisateur <b>%name%</b>.
+    error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de nouveau tenter cette action plus tard.
+    connected: Le nom de l'expéditeur et du destinataire sont les mêmes.
   name: Utilisateur
   password:
     confirmation: Répéter le mot de passe
@@ -1289,15 +1297,16 @@ user:
   reset:
     title: Supprimer la demande de mot de passe
     confirmation: Êtes-vous sûr de vouloir supprimer la demande de mot de passe pour l'utilisateur <b>%name%</b> ?
-    error: Aucune demande de mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
     success: La demande de mot de passe pour l'utilisateur <b>%name%</b> a été supprimée avec succès.
+    error: Aucune demande de mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
   reset_all:
     title: Supprimer les demandes de mot de passe
-    empty: Aucune demande de mot de passe n'a été requise.
-    error: Un ou plusieurs utilisateurs doivent être sélectionnés.
-    success: Les %count% demandes de mot de passe ont été supprimées avec succès.
     confirmation: Êtes-vous sûr de vouloir supprimer les demandes de mot de passe pour les utilisateurs suivants ?
+    empty: Aucune demande de mot de passe n'a été requise.
+    success: Les %count% demandes de mot de passe ont été supprimées avec succès.
+    error: Un ou plusieurs utilisateurs doivent être sélectionnés.
   rights:
+    title: Droits d'accès
     all_title: Tous les droits
     col_title: Activer ou désactiver tous les droits d'accès pour cette action
     connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
@@ -1307,7 +1316,6 @@ user:
     row_title: Activer ou désactiver tous les droits d'accès pour cet objet
     success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
     table_title: Objet / Action
-    title: Droits d'accès
     toggle_title: Inverser les droits
     action: Modifier les droits d'accès
   roles:
@@ -1323,12 +1331,12 @@ user:
   switch:
     connected: <b>%original%</b>, vous êtes connecté en tant qu'utilisateur <b>%current%</b>.
     exit:
-      success: <b>%name%</b>, vous avez repris votre identité avec succès.
       title: Reprendre son identité
+      success: <b>%name%</b>, vous avez repris votre identité avec succès.
     take:
+      title: Prendre l'identité de l'utilisateur
       default: Vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
       success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
-      title: Prendre l'identité de l'utilisateur
 archive:
   title: Archiver des calculations
   edit:

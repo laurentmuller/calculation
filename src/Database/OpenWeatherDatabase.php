@@ -130,9 +130,9 @@ class OpenWeatherDatabase extends AbstractDatabase
         $country = $this->likeValue($country);
         /** @psalm-var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
-        $stmt->bindParam(':name', $city);
-        $stmt->bindParam(':country', $country);
-        $stmt->bindParam(':limit', $limit, \SQLITE3_INTEGER);
+        $stmt->bindValue(':name', $city);
+        $stmt->bindValue(':country', $country);
+        $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
         return $this->executeAndFetch($stmt);
     }

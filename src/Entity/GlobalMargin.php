@@ -20,8 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Represents a global margin.
  */
-#[ORM\Entity(repositoryClass: GlobalMarginRepository::class)]
 #[ORM\Table(name: 'sy_GlobalMargin')]
+#[ORM\Entity(repositoryClass: GlobalMarginRepository::class)]
 class GlobalMargin extends AbstractMargin implements TimestampableInterface
 {
     use TimestampableTrait;

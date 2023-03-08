@@ -52,7 +52,9 @@ class PivotControllerTest extends AbstractControllerTest
 
         if (null === self::$group) {
             $margin = new GroupMargin();
-            $margin->setValues(0, 1000, 0.1);
+            $margin->setMinimum(0)
+                ->setMaximum(1000)
+                ->setMargin(0.1);
             self::$group = new Group();
             self::$group->setCode('Test Group');
             self::$group->addMargin($margin);

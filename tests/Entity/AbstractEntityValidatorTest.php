@@ -66,9 +66,7 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
      */
     protected function validate(mixed $object, int $expected): ConstraintViolationListInterface
     {
-        if (null === $this->validator) {
-            $this->markTestSkipped('The validator is null.');
-        }
+        self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount($expected, $result);
 

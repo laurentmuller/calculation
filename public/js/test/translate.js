@@ -36,6 +36,7 @@ function handleError(response) {
  * Translate.
  *
  * @param {HTMLElement} form - the submitted form.
+ * @param {boolean} notification - true to notify.
  */
 function translate(form, notification) {
     'use strict';
@@ -138,13 +139,23 @@ function handleExchange() {
  */
 function handleTextChange() {
     'use strict';
+    const $from = $('#from');
+    const $to = $('#to');
     const $text = $('#text');
-    const oldValue = $text.data('old-value');
-    const newValue = $text.val().trim();
-    if (newValue.length && newValue !== oldValue) {
+
+    const oldFrom = $from.data('old-value');
+    const oldTo = $to.data('old-value');
+    const oldText = $text.data('old-value');
+
+    const newFrom = $from.val();
+    const newTo = $to.val().trim();
+    const newText = $text.val().trim();
+    if (newText.length && (newFrom !== oldFrom || newTo !== oldTo || newText !== oldText)) {
+        $from.data('old-value', newFrom);
+        $to.data('old-value', newTo);
+        $text.data('old-value', newText);
         translate($('#edit-form')[0], false);
     }
-    $text.data('old-value', newValue);
 }
 
 /**
@@ -257,6 +268,8 @@ function handleService() {
     });
     $fromTo.on('input', function () {
         handleSelection();
+    }).on('change', function () {
+        $(this).createTimer(handleTextChange, 250);
     });
     $('#text, #result').on('focus', function () {
         $(this).trigger('select');

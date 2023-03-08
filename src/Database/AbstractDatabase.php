@@ -321,8 +321,8 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
         // create statement
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement($query);
-        $stmt->bindParam(':value', $value);
-        $stmt->bindParam(':limit', $limit, \SQLITE3_INTEGER);
+        $stmt->bindValue(':value', $value);
+        $stmt->bindValue(':limit', $limit, \SQLITE3_INTEGER);
 
         // execute
         return $this->executeAndFetch($stmt, $mode);

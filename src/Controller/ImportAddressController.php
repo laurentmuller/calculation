@@ -29,6 +29,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ImportAddressController extends AbstractController
 {
+    /**
+     * The URL to download data.
+     */
+    private const DATA_URL = 'https://www.post.ch/fr/espace-clients/services-en-ligne/zopa/adress-und-geodaten/info';
+
     private const KEY_OVERWRITE = 'import.overwrite';
 
     /**
@@ -54,6 +59,7 @@ class ImportAddressController extends AbstractController
 
         return $this->render('admin/import_file.html.twig', [
             'last_import' => $this->getApplication()->getLastImport(),
+            'data_url' => self::DATA_URL,
             'form' => $form,
         ]);
     }

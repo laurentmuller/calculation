@@ -1,15 +1,15 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link, linkExternal %}
+{% from 'macros/_icons.html.twig' import linkExternal %}
 {% from 'openweather/_weather_macro.html.twig' import value_temp %}
 {# macros #}
-{% macro system(units, route, id, count) -%}
-{% set text = units == 'metric' ? '°C' : '°F' %}
-{% set title = ('openweather.current.' ~ units)|trans %}
-{% if route %}
+{% macro system(units, selection, route, id, count) -%}
+{% set text = ('openweather.current.' ~ units ~ '.short')|trans %}
+{% set title = ('openweather.current.' ~ units ~ '.title')|trans %}
+{% if units != selection and route %}
     {% set href = path(route, {'id': id, 'units': units, 'count': count}) %}
-    <a href="{{ href }}" class="small" title="{{ title }}">{{ text }}</a>
+    <a href="{{ href }}" title="{{ title }}">{{ text }}</a>
 {% else %}
-    <span class="small" title="{{ title }}">{{ text }}</span>
+    <span title="{{ title }}">{{ text }}</span>
 {% endif %}
 {%- endmacro %}
 {# parameters #}
@@ -36,17 +36,16 @@
 {% block card_header %}
 {% if id %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             {{ parent() }}
             <small>{{ 'openweather.current.date_calculation'|trans({'%date%': current.dt_date_time_medium}) }}</small>
         </div>
-        <div class="col-md-6 text-md-right d-print-none">
-            {% if units_system == 'metric' %}
-                {{ _self.system(units_system) }}<span class="small"> / </span>{{ _self.system('imperial', route, id, count) }}
-            {% else %}
-                {{ _self.system('metric', route, id, count) }}<span class="small"> / </span>{{ _self.system(units_system) }}
-            {% endif %}
-            {{ link(path('openweather_search'), 'common.button_search', 'btn btn-link btn-sm') }}
+        <div class="col-md-4 text-md-right small d-print-none">
+            {{ _self.system('metric', units_system, route, id, count) }}
+            <span> / </span>
+            {{ _self.system('imperial', units_system, route, id, count) }}
+            <span class="small">&nbsp;</span>
+            <a href="{{ path('openweather_search') }}" title="{{ 'openweather.search.title'|trans }}">{{ 'common.button_search'|trans }}</a>
         </div>
     </div>
 {% else %}
@@ -62,11 +61,11 @@
     </h3>
     <div class="row">
         <div class="col-lg-5">
-            {{ include('openweather/weather_today.html.twig') }}
+            {{ include('openweather/_weather_today.html.twig') }}
         </div>
         <div class="col-lg-7">
-            {{ include('openweather/weather_forecast.html.twig') }}
-            {{ include('openweather/weather_daily.html.twig') }}
+            {{ include('openweather/_weather_forecast.html.twig') }}
+            {{ include('openweather/_weather_daily.html.twig') }}
         </div>
     </div>
 {% else %}

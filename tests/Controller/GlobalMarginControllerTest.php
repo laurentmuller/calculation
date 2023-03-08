@@ -54,7 +54,9 @@ class GlobalMarginControllerTest extends AbstractControllerTest
     {
         if (null === self::$entity) {
             self::$entity = new GlobalMargin();
-            self::$entity->setValues(0.0, 100.0, 0.1);
+            self::$entity->setMinimum(0)
+                ->setMaximum(100)
+                ->setMargin(0.1);
             $this->addEntity(self::$entity);
         }
     }

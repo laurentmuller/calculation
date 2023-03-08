@@ -52,7 +52,9 @@ class GlobalMarginTest extends AbstractEntityValidatorTest
     private function getGlobalMargin(float $minimum, float $maximum, float $margin): GlobalMargin
     {
         $entity = new GlobalMargin();
-        $entity->setValues($minimum, $maximum, $margin);
+        $entity->setMinimum($minimum)
+            ->setMaximum($maximum)
+            ->setMargin($margin);
 
         return $entity;
     }

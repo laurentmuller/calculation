@@ -24,8 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a category of products and tasks.
  */
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'sy_Category')]
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_category_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'category.unique_code')]
 class Category extends AbstractEntity implements TimestampableInterface

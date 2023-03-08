@@ -61,7 +61,9 @@ class GroupMarginsTest extends AbstractEntityValidatorTest
     private function createMargin(float $minimum, float $maximum, float $margin): GroupMargin
     {
         $entity = new GroupMargin();
-        $entity->setValues($minimum, $maximum, $margin);
+        $entity->setMinimum($minimum)
+            ->setMaximum($maximum)
+            ->setMargin($margin);
 
         return $entity;
     }

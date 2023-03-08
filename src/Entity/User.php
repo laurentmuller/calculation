@@ -36,8 +36,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 /**
  * User.
  */
-#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'sy_User')]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_user_email', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'unique_user_username', columns: ['username'])]
 #[UniqueEntity(fields: ['email'], message: 'email.already_used')]

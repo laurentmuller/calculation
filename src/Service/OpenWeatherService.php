@@ -397,9 +397,7 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array
     {
-        // find from cache
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
-
         /** @psalm-var array<int, OpenWeatherCityType>|false $result */
         $result = $this->getCacheValue($key, false);
         if (\is_array($result)) {
@@ -415,7 +413,6 @@ class OpenWeatherService extends AbstractHttpClientService
             $db?->close();
         }
 
-        // update and cache
         $this->updateResult($result);
         $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
 
@@ -508,26 +505,18 @@ class OpenWeatherService extends AbstractHttpClientService
             return $result;
         }
 
-        // call
         $response = $this->requestGet($uri, [
             self::QUERY => $query,
         ]);
-
-        // decode
         $result = $response->toArray(false);
-
-        // check
         if (!$this->checkErrorCode($result)) {
             return false;
         }
 
-        // update
         $offset = $this->findTimezone($result);
         $timezone = $this->offsetToTimZone($offset);
         $this->updateResult($result, $timezone);
         $this->addUnits($result, (string) $query['units']);
-
-        // save to cache
         $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
 
         return $result;

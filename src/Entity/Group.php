@@ -26,8 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a group of categories.
  */
-#[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: 'sy_Group')]
+#[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_group_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
 class Group extends AbstractEntity implements TimestampableInterface

@@ -123,14 +123,4 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
 
         return $this;
     }
-
-    /**
-     * Set values.
-     */
-    public function setValues(float $minimum, float $maximum, float $margin): static
-    {
-        return $this->setMinimum($minimum)
-            ->setMaximum($maximum)
-            ->setMargin($margin);
-    }
 }

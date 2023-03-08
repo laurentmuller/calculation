@@ -299,14 +299,13 @@ class OpenWeatherController extends AbstractController
         $form = $this->createSearchForm($data);
 
         if ($this->handleRequestForm($request, $form)) {
-            /** @var array{query: string, units: string, limit: int, count: int} $data */
+            /** @psalm-var array{query: string, units: string, limit: int, count: int} $data */
             $data = $form->getData();
             $query = $data[self::KEY_QUERY];
             $units = $data[self::KEY_UNITS];
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
-
-            /** @var array<int, array{id: int}>|false $cities */
+            /** @psalm-var array<int, array{id: int}>|false $cities */
             $cities = $this->service->search($query, $units, $limit);
             if (false !== $cities) {
                 // save
@@ -326,7 +325,7 @@ class OpenWeatherController extends AbstractController
                     ]);
                 }
 
-                /** @var array{units: array, list: array<int, mixed>}|null $group */
+                /** @psalm-var array{units: array, list: array<int, mixed>}|null $group */
                 $group = null;
                 $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
                 foreach (\array_keys($cities) as $index) {
@@ -387,12 +386,11 @@ class OpenWeatherController extends AbstractController
             ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
             ->add(SearchType::class);
         $helper->field(self::KEY_UNITS)
-            ->updateOption('choice_translation_domain', false)
             ->addChoiceType([
-                OpenWeatherService::DEGREE_METRIC => OpenWeatherService::UNIT_METRIC,
-                OpenWeatherService::DEGREE_IMPERIAL => OpenWeatherService::UNIT_IMPERIAL,
+                'openweather.current.metric.text' => OpenWeatherService::UNIT_METRIC,
+                'openweather.current.imperial.text' => OpenWeatherService::UNIT_IMPERIAL,
             ]);
-        $limits = [5, 10, 15, 25, 50];
+        $limits = [5, 10, 15, 20];
         $helper->field(self::KEY_LIMIT)
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType(\array_combine($limits, $limits));

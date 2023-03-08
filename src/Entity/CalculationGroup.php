@@ -27,8 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a group of a calculation.
  */
-#[ORM\Entity(repositoryClass: CalculationGroupRepository::class)]
 #[ORM\Table(name: 'sy_CalculationGroup')]
+#[ORM\Entity(repositoryClass: CalculationGroupRepository::class)]
 class CalculationGroup extends AbstractEntity implements \Countable, ParentTimestampableInterface, PositionInterface
 {
     use PositionTrait;

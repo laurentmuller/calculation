@@ -26,8 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a calculation.
  */
-#[ORM\Entity(repositoryClass: CalculationRepository::class)]
 #[ORM\Table(name: 'sy_Calculation')]
+#[ORM\Entity(repositoryClass: CalculationRepository::class)]
 class Calculation extends AbstractEntity implements TimestampableInterface
 {
     use TimestampableTrait;

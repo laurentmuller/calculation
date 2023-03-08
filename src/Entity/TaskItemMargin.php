@@ -23,8 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a margin of a task item.
  */
-#[ORM\Entity(repositoryClass: TaskItemMarginRepository::class)]
 #[ORM\Table(name: 'sy_TaskItemMargin')]
+#[ORM\Entity(repositoryClass: TaskItemMarginRepository::class)]
 class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTimestampableInterface
 {
     /**

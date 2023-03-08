@@ -25,8 +25,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a task.
  */
-#[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: 'sy_Task')]
+#[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_task_name', columns: ['name'])]
 #[UniqueEntity(fields: 'name', message: 'task.unique_name')]
 class Task extends AbstractCategoryItemEntity implements \Countable, TimestampableInterface

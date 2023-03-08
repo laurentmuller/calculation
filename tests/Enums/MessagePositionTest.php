@@ -56,9 +56,7 @@ class MessagePositionTest extends TypeTestCase
         self::assertSame($expected, $default);
     }
 
-    /**
-     * @dataProvider getLabel
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(MessagePosition $position, string $value): void
     {
         $result = $position->getReadable();
@@ -85,9 +83,7 @@ class MessagePositionTest extends TypeTestCase
         self::assertSame($expected, $sorted);
     }
 
-    /**
-     * @dataProvider getLabel
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testValue(MessagePosition $position, string $expected): void
     {
         $value = $position->value;

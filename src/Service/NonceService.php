@@ -14,6 +14,8 @@ namespace App\Service;
 
 /**
  * Service to generate a nonce value.
+ *
+ * @see \App\Tests\Service\NonceServiceTest
  */
 class NonceService
 {

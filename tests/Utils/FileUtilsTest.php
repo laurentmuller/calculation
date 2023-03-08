@@ -97,9 +97,7 @@ class FileUtilsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getBuildPaths
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getBuildPaths')]
     public function testBuildPath(string $expected, string ...$segments): void
     {
         $actual = FileUtils::buildPath(...$segments);
@@ -117,9 +115,7 @@ class FileUtilsTest extends TestCase
         self::assertNotNull(FileUtils::getFilesystem());
     }
 
-    /**
-     * @dataProvider getFormatSize
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFormatSize')]
     public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
     {
         $actual = FileUtils::formatSize($path);
@@ -142,9 +138,7 @@ class FileUtilsTest extends TestCase
         self::assertSame(6, FileUtils::getLinesCount($lines, false));
     }
 
-    /**
-     * @dataProvider getRealPath
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRealPath')]
     public function testRealPath(string|\SplFileInfo $file, string $expected): void
     {
         $actual = FileUtils::realPath($file);

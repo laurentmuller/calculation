@@ -54,33 +54,25 @@ class RightsTraitTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider getEntities
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
     public function testGetAdd(string $entity): void
     {
         $this->checkAttribute($entity, 'ADD');
     }
 
-    /**
-     * @dataProvider getEntities
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
     public function testGetDelete(string $entity): void
     {
         $this->checkAttribute($entity, 'DELETE');
     }
 
-    /**
-     * @dataProvider getEntities
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
     public function testGetEdit(string $entity): void
     {
         $this->checkAttribute($entity, 'EDIT');
     }
 
-    /**
-     * @dataProvider getEntities
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
     public function testGetEmpty(string $entity): void
     {
         /** @psalm-var FlagBag<EntityPermission> $entity */
@@ -102,9 +94,7 @@ class RightsTraitTest extends TestCase
         self::assertNull($value);
     }
 
-    /**
-     * @dataProvider getEntities
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
     public function testIsSet(string $entity): void
     {
         self::assertTrue($this->__isset($entity));

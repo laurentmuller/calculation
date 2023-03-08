@@ -219,9 +219,7 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
-    /**
-     *  @dataProvider getDateFormatterPatterns
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDateFormatterPatterns')]
     public function testDateFormatterPattern(string $pattern, string $expected, ?int $datetype = null, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
@@ -242,9 +240,7 @@ class FormatUtilsTest extends TestCase
         self::assertSame('.', FormatUtils::getDecimal());
     }
 
-    /**
-     *  @dataProvider getAmounts
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAmounts')]
     public function testFormatAmount(string|int|float $number, string $expected): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
@@ -252,9 +248,7 @@ class FormatUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     *  @dataProvider getDates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
     public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, ?int $datetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
@@ -263,9 +257,7 @@ class FormatUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     *  @dataProvider getDateTimes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
     public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $datetype = null, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
@@ -274,27 +266,21 @@ class FormatUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     *  @dataProvider getIds
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIds')]
     public function testFormatId(int|float|string|null $number, string $expected): void
     {
         $actual = FormatUtils::formatId($number);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     *  @dataProvider getIntegers
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIntegers')]
     public function testFormatInteger(int|float|string|null $number, string $expected): void
     {
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
     }
 
-    /**
-     *  @dataProvider getPercents
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getPercents')]
     public function testFormatPercent(int|float|string|null $number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
@@ -309,9 +295,7 @@ class FormatUtilsTest extends TestCase
         self::assertSame($ends_with, $contains);
     }
 
-    /**
-     *  @dataProvider getTimes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
     public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);

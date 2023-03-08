@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraint;
  * Password constraint validator.
  *
  * @extends AbstractConstraintValidator<Password>
+ *
+ * @see \App\Tests\Validator\PasswordValidatorTest
  */
 class PasswordValidator extends AbstractConstraintValidator
 {

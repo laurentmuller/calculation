@@ -1,0 +1,83 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Entity;
+
+use App\Entity\Property;
+
+#[\PHPUnit\Framework\Attributes\CoversClass(Property::class)]
+class PropertyTestCase extends AbstractEntityValidatorTestCase
+{
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function testDuplicate(): void
+    {
+        $first = new Property();
+        $first->setName('name')
+            ->setValue('value');
+
+        try {
+            $this->saveEntity($first);
+
+            $second = new Property();
+            $second->setName('name')
+                ->setValue('value');
+
+            $this->validate($second, 1);
+        } finally {
+            $this->deleteEntity($first);
+        }
+    }
+
+    public function testInvalidBoth(): void
+    {
+        $object = new Property();
+        $this->validate($object, 2);
+    }
+
+    public function testInvalidName(): void
+    {
+        $object = new Property();
+        $object->setValue('value');
+        $this->validate($object, 1);
+    }
+
+    public function testInvalidValue(): void
+    {
+        $object = new Property();
+        $object->setName('name');
+        $this->validate($object, 1);
+    }
+
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function testNotDuplicate(): void
+    {
+        $first = new Property();
+        $first->setName('name')
+            ->setValue('value');
+
+        try {
+            $this->saveEntity($first);
+
+            $second = new Property();
+            $second->setName('name2')
+                ->setValue('value');
+
+            $this->validate($second, 0);
+        } finally {
+            $this->deleteEntity($first);
+        }
+    }
+}

@@ -10,6 +10,7 @@ symfony.lock
 
 ###> phpunit ###
 .phpunit
+.phpunit.cache
 .phpunit.result.cache
 /phpunit.xml
 /tests/Data/db_test.sqlite

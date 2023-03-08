@@ -53,9 +53,7 @@ class PdfBorderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getBorders
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getBorders')]
     public function testBorder(string|int $value, string|int $expected): void
     {
         $broder = new PdfBorder($value);

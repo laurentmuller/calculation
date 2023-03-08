@@ -54,9 +54,7 @@ class RoutesTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
-    /**
-     * @dataProvider getRoutes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRoutes')]
     public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
     {
         $this->loginUserName($username);

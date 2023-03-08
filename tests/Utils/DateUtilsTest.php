@@ -159,18 +159,14 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-17', $add->format('Y-m-d'));
     }
 
-    /**
-     *  @dataProvider getCompletYears
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCompletYears')]
     public function testCompletYear(int $value, int $expected, int $change = 1930): void
     {
         $year = DateUtils::completYear($value, $change);
         self::assertSame($expected, $year);
     }
 
-    /**
-     *  @dataProvider getMonthNames
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getMonthNames')]
     public function testMonthNames(string $name, int $index, string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getMonths($locale);
@@ -184,9 +180,7 @@ class DateUtilsTest extends TestCase
         self::assertCount(12, $values);
     }
 
-    /**
-     *  @dataProvider getShortMonthNames
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getShortMonthNames')]
     public function testShortMonthNames(string $name, int $index, string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getShortMonths($locale);
@@ -200,9 +194,7 @@ class DateUtilsTest extends TestCase
         self::assertCount(12, $values);
     }
 
-    /**
-     *  @dataProvider getShortWeekdayNames
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getShortWeekdayNames')]
     public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday', string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getShortWeekdays($firstDay, $locale);
@@ -237,9 +229,7 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
-    /**
-     *  @dataProvider getWeekdayNames
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getWeekdayNames')]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday', string $locale = 'fr_CH'): void
     {
         $values = DateUtils::getWeekdays($firstDay, $locale);

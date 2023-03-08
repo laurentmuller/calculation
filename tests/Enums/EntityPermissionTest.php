@@ -142,18 +142,14 @@ class EntityPermissionTest extends TestCase
         self::assertCount(6, $flags);
     }
 
-    /**
-     * @dataProvider getLabel
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(EntityPermission $permission, string $expected): void
     {
         $label = $permission->getReadable();
         self::assertSame($expected, $label);
     }
 
-    /**
-     * @dataProvider getMatchName
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getMatchName')]
     public function testMatchName(EntityPermission $permission, string $name, bool $expected = true): void
     {
         $result = $permission->matchName($name);
@@ -180,27 +176,21 @@ class EntityPermissionTest extends TestCase
         self::assertSame(63, $permissions->getValue());
     }
 
-    /**
-     * @dataProvider getTryFindValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
     public function testTryFindValue(string $name, int $expected, int $default = RoleBuilder::INVALID_VALUE): void
     {
         $result = EntityPermission::tryFindValue($name, $default);
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @dataProvider getTryFromName
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromName')]
     public function testTryFromName(mixed $expected, string $value): void
     {
         $result = EntityPermission::tryFromName($value);
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @dataProvider getValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValue')]
     public function testValue(EntityPermission $permission, int $expected): void
     {
         $value = $permission->value;

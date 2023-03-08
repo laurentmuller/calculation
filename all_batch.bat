@@ -17,5 +17,5 @@ ECHO -------------------------------------- PHP-RECTOR -------------------------
 ECHO -------------------------------------- PHP-TWIG-CS --------------------------------------- && ^
 .\vendor-bin\twigcs\vendor\bin\twigcs.bat --severity error --display blocking templates         && ^
 ECHO -------------------------------------- PHP-UNIT ------------------------------------------ && ^
-.\vendor-bin\phpunit\vendor\bin\simple-phpunit.bat                                              && ^
-ECHO -------------------------------------- END BATCH %time% -----------------------------
+.\vendor-bin\phpunit\vendor\bin\phpunit.bat                                                     && ^
+ECHO -------------------------------------- END BATCH %time% ----------------------------------

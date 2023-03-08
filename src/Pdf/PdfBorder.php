@@ -14,6 +14,8 @@ namespace App\Pdf;
 
 /**
  * Define a cell border.
+ *
+ * @see \App\Tests\Pdf\PdfBorderTest
  */
 class PdfBorder
 {

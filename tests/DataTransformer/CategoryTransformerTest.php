@@ -20,9 +20,7 @@ use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-/**
- * Test for the {@link CategoryTransformer} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(CategoryTransformer::class)]
 class CategoryTransformerTest extends KernelTestCase
 {
     use DatabaseTrait;
@@ -85,9 +83,8 @@ class CategoryTransformerTest extends KernelTestCase
 
     /**
      * @psalm-param int|string|null $value
-     *
-     * @dataProvider getReverseTransformValues
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
@@ -114,9 +111,7 @@ class CategoryTransformerTest extends KernelTestCase
         self::assertSame($this->category, $actual);
     }
 
-    /**
-     * @dataProvider getTransformValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {

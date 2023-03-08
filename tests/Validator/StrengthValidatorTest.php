@@ -60,9 +60,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    /**
-     * @dataProvider getStrengthLevels
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengthLevels')]
     public function testEmptyStringIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
@@ -70,9 +68,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    /**
-     * @dataProvider getStrengthLevels
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengthLevels')]
     public function testNullIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
@@ -80,9 +76,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    /**
-     * @dataProvider getStrengths
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengths')]
     public function testStrength(string $value, int $strength, bool $violation = true): void
     {
         $level = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;
@@ -103,9 +97,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    /**
-     * @dataProvider getStrengthInvalids
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengthInvalids')]
     public function testStrengthInvalid(int $strength): void
     {
         $this->expectException(ConstraintDefinitionException::class);

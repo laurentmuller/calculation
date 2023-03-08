@@ -69,9 +69,8 @@ class PdfColorTest extends TestCase
 
     /**
      * @param int[]|string $rgb
-     *
-     * @dataProvider getCreateColors
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCreateColors')]
     public function testCreate(array|string $rgb, int $red, int $green, int $blue): void
     {
         $color = PdfTextColor::create($rgb);
@@ -80,18 +79,15 @@ class PdfColorTest extends TestCase
 
     /**
      * @param int[]|string $rgb
-     *
-     * @dataProvider getCreateColorsInvalid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCreateColorsInvalid')]
     public function testCreateInvalid(array|string $rgb): void
     {
         $color = PdfTextColor::create($rgb);
         self::assertNull($color);
     }
 
-    /**
-     * @dataProvider getColors
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getColors')]
     public function testDrawColor(string $name, int $red, int $green, int $blue): void
     {
         /** @var PdfDrawColor $color */
@@ -99,9 +95,7 @@ class PdfColorTest extends TestCase
         $this->validateColor($color, $red, $green, $blue);
     }
 
-    /**
-     * @dataProvider getColors
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getColors')]
     public function testFillColor(string $name, int $red, int $green, int $blue): void
     {
         /** @var PdfFillColor $color */
@@ -109,9 +103,7 @@ class PdfColorTest extends TestCase
         $this->validateColor($color, $red, $green, $blue);
     }
 
-    /**
-     * @dataProvider getParseColors
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getParseColors')]
     public function testParse(?string $value, int $red, int $green, int $blue): void
     {
         $rgb = PdfTextColor::parse($value);
@@ -122,18 +114,14 @@ class PdfColorTest extends TestCase
         self::assertSame($blue, $rgb[2]);
     }
 
-    /**
-     * @dataProvider getParseColorsInvalid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getParseColorsInvalid')]
     public function testParseInvalid(?string $value): void
     {
         $color = PdfFillColor::parse($value);
         self::assertFalse($color);
     }
 
-    /**
-     * @dataProvider getColors
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getColors')]
     public function testTextColor(string $name, int $red, int $green, int $blue): void
     {
         /** @var PdfTextColor $color */

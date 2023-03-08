@@ -24,6 +24,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Command to update Javascript and CSS dependencies.
+ *
+ * @see \App\Tests\Command\UpdateAssetsCommandTest
  */
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
 class UpdateAssetsCommand extends Command

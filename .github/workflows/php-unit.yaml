@@ -35,4 +35,4 @@ jobs:
           composer bin simple-phpunit install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPUnit
-        run: vendor/bin/simple-phpunit
+        run: vendor/bin/phpunit

@@ -16,8 +16,6 @@ use App\Interfaces\SortModeInterface;
 
 /**
  * Attribute to define the sort order of a property.
- *
- * @see \App\Tests\Attribute\SortableFieldTest
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 class SortableField

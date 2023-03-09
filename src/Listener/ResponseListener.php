@@ -47,7 +47,7 @@ class ResponseListener
      */
     private const CSP_UNSAFE_INLINE = "'unsafe-inline'";
 
-    /*
+    /**
      * The CSP directives.
      *
      * @var array<string, string[]>
@@ -114,7 +114,6 @@ class ResponseListener
      */
     private function getCSP(Response $response): string
     {
-        /** @psalm-var array<string, string[]> $csp */
         $csp = $this->csp;
         if ([] === $csp) {
             return '';

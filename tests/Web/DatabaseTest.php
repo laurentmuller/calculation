@@ -26,13 +26,12 @@ use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserPropertyRepository;
 use App\Repository\UserRepository;
+use App\Tests\Data\Database;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Unit test for database.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(Database::class)]
 class DatabaseTest extends KernelTestCase
 {
     use DatabaseTrait;
@@ -47,7 +46,7 @@ class DatabaseTest extends KernelTestCase
     }
 
     /**
-     * @return array<int, array<int, int|string>>
+     * @return array<array{0: string, 1: int}>
      */
     public static function getRepositories(): array
     {
@@ -67,7 +66,7 @@ class DatabaseTest extends KernelTestCase
     }
 
     /**
-     * @return array<int, array<int, int|string>>
+     * @return array<array{0: string, 1: int}>
      */
     public static function getTables(): array
     {
@@ -113,17 +112,17 @@ class DatabaseTest extends KernelTestCase
          * @psalm-var AbstractRepository<T> $repository
          */
         $repository = $this->getService($className);
-        self::assertNotNull($repository);
-
         $result = $repository->findAll();
         self::assertCount($expected, $result);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTables')]
-    public function testTable(string $tablename, int $expected): void
+    public function testTable(string $tableName, int $expected): void
     {
-        $query = "SELECT COUNT(id) FROM $tablename";
-        $result = self::$database->querySingle($query);
+        $database = self::$database;
+        self::assertNotNull($database);
+        $query = "SELECT COUNT(id) FROM $tableName";
+        $result = $database->querySingle($query);
         self::assertSame($expected, $result);
     }
 
@@ -134,12 +133,8 @@ class DatabaseTest extends KernelTestCase
     public function testUser(string $username, string $role): void
     {
         $repository = $this->getService(UserRepository::class);
-        self::assertNotNull($repository);
-
-        /** @var User $user */
         $user = $repository->findOneBy(['username' => $username]);
         self::assertInstanceOf(User::class, $user);
-
         self::assertSame($username, $user->getUserIdentifier());
         self::assertTrue($user->hasRole($role));
     }

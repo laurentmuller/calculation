@@ -40,8 +40,6 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage application properties.
- *
- * @see \App\Tests\Service\ApplicationServiceTest
  */
 class ApplicationService implements PropertyServiceInterface, ServiceSubscriberInterface
 {

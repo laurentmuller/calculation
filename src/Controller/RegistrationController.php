@@ -19,7 +19,6 @@ use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,8 +47,6 @@ class RegistrationController extends AbstractController
 
     /**
      * Display and process form to register a new user.
-     *
-     * @throws ContainerExceptionInterface
      */
     #[Route(path: '', name: self::ROUTE_REGISTER)]
     public function register(Request $request, AuthenticationUtils $utils): Response
@@ -101,9 +98,6 @@ class RegistrationController extends AbstractController
         return $this->redirectToHomePage('registration.confirmed', ['%username%' => $user->getUserIdentifier()]);
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     */
     private function createEmail(User $user): RegistrationEmail
     {
         $email = new RegistrationEmail($this->getTranslator());

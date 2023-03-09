@@ -39,8 +39,6 @@ class CalculationReport extends AbstractReport
 
     /**
      * Constructor.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly LoggerInterface $logger, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
     {

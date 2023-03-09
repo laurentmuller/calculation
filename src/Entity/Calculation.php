@@ -44,7 +44,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The date.
      */
     #[Assert\NotNull]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_IMMUTABLE)]
     private \DateTimeInterface $date;
 
     /**

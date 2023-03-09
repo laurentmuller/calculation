@@ -17,9 +17,7 @@ use App\Traits\StrengthLevelTranslatorTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Unit test for {@link StrengthLevelTranslatorTrait} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevelTranslatorTrait::class)]
 class StrengthLevelTranslatorTraitTest extends TestCase
 {
     use StrengthLevelTranslatorTrait;

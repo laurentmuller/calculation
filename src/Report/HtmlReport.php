@@ -44,8 +44,6 @@ class HtmlReport extends AbstractReport
      * @param PdfDocumentOrientation $orientation the page orientation
      * @param PdfDocumentUnit        $unit        the user unit
      * @param PdfDocumentSize        $size        the document size
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(
         AbstractController $controller,

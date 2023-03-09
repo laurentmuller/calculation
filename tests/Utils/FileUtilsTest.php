@@ -15,9 +15,7 @@ namespace App\Tests\Utils;
 use App\Util\FileUtils;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the Unit test for {@link FileUtils} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(FileUtils::class)]
 class FileUtilsTest extends TestCase
 {
     /**

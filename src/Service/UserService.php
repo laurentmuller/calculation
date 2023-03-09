@@ -28,8 +28,6 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * Service to manage user properties.
- *
- * @see \App\Tests\Service\UserServiceTest
  */
 class UserService implements PropertyServiceInterface, ServiceSubscriberInterface
 {

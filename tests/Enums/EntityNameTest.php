@@ -26,9 +26,7 @@ use App\Enums\EntityName;
 use App\Model\Role;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link EntityName} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(EntityName::class)]
 class EntityNameTest extends TestCase
 {
     /**

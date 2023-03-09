@@ -176,6 +176,7 @@ class PdfDocument extends \FPDF
         $space = 2.0;
         $old_font = $this->getCurrentFont();
         $this->SetFont('', '', $titleFontSize);
+
         $title = '' === $title ? 'Index' : $title;
         $this->Cell(0, self::LINE_HEIGHT, $title, PdfBorder::NONE, PdfMove::NEW_LINE, PdfTextAlignment::CENTER);
         $this->SetFont('', '', $contentFontSize);
@@ -956,50 +957,6 @@ class PdfDocument extends \FPDF
         parent::Write($h, $this->cleanText($txt), $link);
     }
 
-    protected function _putBookmarks(): void
-    {
-        /** @psalm-var array<int, int> $lru */
-        $lru = [];
-        $level = 0;
-
-        // build outlines hierarchy
-        foreach ($this->outlines as $index => $outline) {
-            if ($outline['level'] > 0) {
-                $parent = $lru[$outline['level'] - 1];
-                // set parent and last pointers
-                $this->outlines[$index]['parent'] = $parent;
-                $this->outlines[$parent]['last'] = $index;
-                if ($outline['level'] > $level) {
-                    // level increasing: set first pointer
-                    $this->outlines[$parent]['first'] = $index;
-                }
-            } else {
-                $this->outlines[$index]['parent'] = \count($this->outlines);
-            }
-            if ($outline['level'] <= $level && $index > 0) {
-                // set previous and next pointers
-                $prev = $lru[$outline['level']];
-                $this->outlines[$prev]['next'] = $index;
-                $this->outlines[$index]['prev'] = $prev;
-            }
-            $lru[$outline['level']] = $index;
-            $level = $outline['level'];
-        }
-
-        // outline items
-        $n = $this->n + 1;
-        foreach ($this->outlines as $outline) {
-            $this->_putOutline($outline, $n);
-        }
-
-        // outline root
-        $this->_newobj();
-        $this->outlineRoot = $this->n;
-        $this->_put(\sprintf('<</Type /Outlines /First %d 0 R', $n));
-        $this->_put(\sprintf('/Last %d 0 R>>', $n + $lru[0]));
-        $this->_put('endobj');
-    }
-
     protected function _putcatalog(): void
     {
         parent::_putcatalog();
@@ -1016,7 +973,6 @@ class PdfDocument extends \FPDF
     {
         $this->_newobj();
         $this->_put(\sprintf('<</Title %s', $this->_textstring($outline['text'])));
-
         foreach (['parent', 'prev', 'next', 'first', 'last'] as $key) {
             if (isset($outline[$key])) {
                 $this->_put(\sprintf('/%s %d 0 R', \ucfirst($key), $n + (int) $outline[$key]));
@@ -1029,11 +985,55 @@ class PdfDocument extends \FPDF
         $this->_put('endobj');
     }
 
+    protected function _putOutlines(): void
+    {
+        $level = 0;
+        /** @psalm-var array<int, int> $lastUsedReferences */
+        $lastUsedReferences = [];
+
+        // build outlines hierarchy
+        foreach ($this->outlines as $index => $outline) {
+            if ($outline['level'] > 0) {
+                $parent = $lastUsedReferences[$outline['level'] - 1];
+                // set parent and last pointers
+                $this->outlines[$index]['parent'] = $parent;
+                $this->outlines[$parent]['last'] = $index;
+                if ($outline['level'] > $level) {
+                    // level increasing: set first pointer
+                    $this->outlines[$parent]['first'] = $index;
+                }
+            } else {
+                $this->outlines[$index]['parent'] = \count($this->outlines);
+            }
+            if ($outline['level'] <= $level && $index > 0) {
+                // set previous and next pointers
+                $prev = $lastUsedReferences[$outline['level']];
+                $this->outlines[$prev]['next'] = $index;
+                $this->outlines[$index]['prev'] = $prev;
+            }
+            $lastUsedReferences[$outline['level']] = $index;
+            $level = $outline['level'];
+        }
+
+        // outline items
+        $n = $this->n + 1;
+        foreach ($this->outlines as $outline) {
+            $this->_putOutline($outline, $n);
+        }
+
+        // outline root
+        $this->_newobj();
+        $this->outlineRoot = $this->n;
+        $this->_put(\sprintf('<</Type /Outlines /First %d 0 R', $n));
+        $this->_put(\sprintf('/Last %d 0 R>>', $n + $lastUsedReferences[0]));
+        $this->_put('endobj');
+    }
+
     protected function _putresources(): void
     {
         parent::_putresources();
         if ([] !== $this->outlines) {
-            $this->_putBookmarks();
+            $this->_putOutlines();
         }
     }
 

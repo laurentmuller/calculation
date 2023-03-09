@@ -15,9 +15,7 @@ namespace App\Tests\Utils;
 use App\Util\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the {@link FormatUtils} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(FormatUtils::class)]
 class FormatUtilsTest extends TestCase
 {
     private const DATE_TIME = '2022-02-20 12:59:59';

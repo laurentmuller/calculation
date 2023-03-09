@@ -35,6 +35,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
     /*
      * The dark theme.
      */
+
     #[EnumCase(extras: [
         'icon' => 'fa-solid fa-moon',
         'title' => 'theme.dark.title',
@@ -44,6 +45,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
     /*
      * The light theme.
      */
+
     #[EnumCase(extras: [
         'default' => true,
         'icon' => 'fa-regular fa-sun',

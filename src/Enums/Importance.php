@@ -23,8 +23,8 @@ use Elao\Enum\ReadableEnumTrait;
 /**
  * The notification email importance enumeration.
  *
- *  @implements SortableEnumInterface<Importance>
- *  @implements DefaultEnumInterface<Importance>
+ * @implements SortableEnumInterface<Importance>
+ * @implements DefaultEnumInterface<Importance>
  */
 #[ReadableEnum(prefix: 'importance.', useValueAsDefault: true)]
 enum Importance: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface

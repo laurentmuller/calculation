@@ -106,7 +106,7 @@ class GroupsReport extends AbstractArrayReport
     }
 
     /**
-     * Ouput a group.
+     * Output a group.
      *
      * @param PdfTableBuilder $table the table to render to
      * @param Group           $group the group to output

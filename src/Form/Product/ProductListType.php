@@ -19,7 +19,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to display a list of products grouped by categories.
+ * Type to display a list of products grouped by groups and categories.
  *
  * @template-extends AbstractListEntityType<Product>
  */
@@ -48,9 +48,9 @@ class ProductListType extends AbstractListEntityType
 
     private function getGroupBy(Product $product): string
     {
-        $category = $product->getCategoryCode() ?? '';
-        $group = $product->getGroupCode() ?? '';
+        $category = (string) $product->getCategoryCode();
+        $group = (string) $product->getGroupCode();
 
-        return "$category - $group";
+        return \sprintf('%s - %s', $group, $category);
     }
 }

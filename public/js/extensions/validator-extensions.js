@@ -395,9 +395,7 @@
                     zIndex: 2
                 },
                 maxWidth: 600,
-                show: 150,
-                hide: 350,
-                timeout: 1500
+                show: 150
             }, options);
 
             // check width
@@ -425,13 +423,7 @@
                 });
                 $alert.prepend($icon);
             }
-            $alert.appendTo($(settings.parent)).show(settings.show, function () {
-                $alert.createTimer(function () {
-                    $alert.hide(settings.hide, function () {
-                        $alert.removeTimer().remove();
-                    });
-                }, settings.timeout);
-            });
+            $alert.appendTo($(settings.parent)).show(settings.show);
 
             return $this;
         }

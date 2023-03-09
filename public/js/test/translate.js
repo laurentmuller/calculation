@@ -278,7 +278,7 @@ function handleService() {
         handleService();
     });
     $('#text').on('keydown', function () {
-        $(this).createTimer(handleTextChange, 250);
+        $(this).createTimer(handleTextChange, 500);
     });
 
     // validate

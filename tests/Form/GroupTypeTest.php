@@ -17,10 +17,9 @@ use App\Form\Group\GroupType;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Test for the {@link GroupType} class.
- *
  * @extends AbstractEntityTypeTestCase<Group, GroupType>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(GroupType::class)]
 class GroupTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array

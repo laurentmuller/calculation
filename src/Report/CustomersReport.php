@@ -38,8 +38,6 @@ class CustomersReport extends AbstractArrayReport
      * @param AbstractController $controller the parent controller
      * @param Customer[]         $entities   the customers to export
      * @param bool               $grouped    true if the customers are grouped by the first letter
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, private readonly bool $grouped = true)
     {

@@ -43,8 +43,6 @@ class HelpReport extends AbstractReport
      *
      * @param AbstractController $controller the parent controller
      * @param HelpService        $service    the help service
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly HelpService $service)
     {

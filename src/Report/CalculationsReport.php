@@ -48,8 +48,6 @@ class CalculationsReport extends AbstractArrayReport
      * @param AbstractController $controller the parent controller
      * @param Calculation[]      $entities   the calculations to render
      * @param bool               $grouped    true if calculations are grouped by state
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, protected bool $grouped = true)
     {
@@ -183,7 +181,7 @@ class CalculationsReport extends AbstractArrayReport
     }
 
     /**
-     * Ouput the calculations as list.
+     * Output the calculations as list.
      *
      * @param Calculation[] $entities the calculations to render
      *

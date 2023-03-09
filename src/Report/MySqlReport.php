@@ -25,8 +25,6 @@ class MySqlReport extends AbstractReport
 {
     /**
      * Constructor.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $info)
     {

@@ -17,10 +17,9 @@ use App\Validator\PasswordValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
- * Unit test for {@link PasswordValidator} class.
- *
  * @extends ConstraintValidatorTestCase<PasswordValidator>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(PasswordValidator::class)]
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
     public static function getConstraints(): array

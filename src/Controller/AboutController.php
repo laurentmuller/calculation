@@ -54,8 +54,6 @@ class AboutController extends AbstractController
 
     /**
      * Export the licence and policy pages to PDF.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/pdf', name: 'about_pdf')]
@@ -94,8 +92,6 @@ class AboutController extends AbstractController
 
     /**
      * Export the licence page to PDF.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/licence/pdf', name: 'about_licence_pdf')]
@@ -126,7 +122,6 @@ class AboutController extends AbstractController
      * Exports the MySql information as Excel.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/mysql/excel', name: 'about_mysql_excel')]
@@ -139,8 +134,6 @@ class AboutController extends AbstractController
 
     /**
      * Exports the MySql information as PDF.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/mysql/pdf', name: 'about_mysql_pdf')]
@@ -172,7 +165,6 @@ class AboutController extends AbstractController
      * Exports the PHP information as PDF.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/php/excel', name: 'about_php_excel')]
@@ -187,8 +179,6 @@ class AboutController extends AbstractController
 
     /**
      * Exports the PHP information as PDF.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/php/pdf', name: 'about_php_pdf')]
@@ -233,8 +223,6 @@ class AboutController extends AbstractController
 
     /**
      * Export the policy to PDF.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/policy/pdf', name: 'about_policy_pdf')]
@@ -267,7 +255,6 @@ class AboutController extends AbstractController
      * Exports the Symfony information as Excel.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/symfony/excel', name: 'about_symfony_excel')]
@@ -281,8 +268,6 @@ class AboutController extends AbstractController
 
     /**
      * Exports the Symfony information as PDF.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/symfony/pdf', name: 'about_symfony_pdf')]
@@ -337,9 +322,6 @@ class AboutController extends AbstractController
         return "$name - $locale";
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function renderHtmlReport(string $template, array $parameters, ?string $title = null, array $titleParameters = []): PdfResponse
     {
         $content = $this->renderView($template, $parameters);

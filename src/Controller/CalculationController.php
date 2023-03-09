@@ -60,7 +60,6 @@ class CalculationController extends AbstractEntityController
     /**
      * Add a new calculation.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/add', name: 'calculation_add')]
@@ -88,7 +87,6 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a copy (cloned) calculation.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => Requirement::DIGITS])]
@@ -108,8 +106,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Delete a calculation.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
@@ -120,7 +116,6 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a calculation.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => Requirement::DIGITS])]
@@ -137,7 +132,6 @@ class CalculationController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
@@ -156,7 +150,6 @@ class CalculationController extends AbstractEntityController
      * Export a single calculation to a Spreadsheet document.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS])]
     public function excelById(Calculation $calculation): SpreadsheetResponse
@@ -171,7 +164,6 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'calculation_pdf')]
     public function pdf(Request $request): PdfResponse
@@ -189,8 +181,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export a single calculation to a PDF document.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => Requirement::DIGITS])]
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
@@ -203,8 +193,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Show properties of a calculation.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Calculation $item): Response
@@ -220,8 +208,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Edit the state of a calculation.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => Requirement::DIGITS])]
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
@@ -310,8 +296,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Gets the QR-code for the given calculation.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): ?string
     {
@@ -338,8 +322,6 @@ class CalculationController extends AbstractEntityController
      * @param Calculation $calculation the calculation to verify
      *
      * @return bool true if margin is below
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function isMarginBelow(Calculation $calculation): bool
     {

@@ -118,6 +118,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
         if (\preg_match('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', (string) $size, $matches)) {
             return (int) $matches[1] * $factors[\strtolower($matches[2])];
         }
+
         throw new InvalidOptionsException("\"$size\" is not a valid size.");
     }
 }

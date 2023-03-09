@@ -15,9 +15,7 @@ namespace App\Tests\Utils;
 use App\Util\Utils;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link Utils} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(Utils::class)]
 class UtilsTest extends TestCase
 {
     public function testExceptionContext(): void

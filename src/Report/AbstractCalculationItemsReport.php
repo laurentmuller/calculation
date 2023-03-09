@@ -55,8 +55,6 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      *          price: float,
      *          count: int}>
      *      }> $items
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function __construct(AbstractController $controller, array $items, string $title, string $description)
     {

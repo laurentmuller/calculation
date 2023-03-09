@@ -20,7 +20,11 @@ use App\Util\FormatUtils;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Elao\Enum\ReadableEnumInterface;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Event\PostSetDataEvent;
+use Symfony\Component\Form\Event\PostSubmitEvent;
+use Symfony\Component\Form\Event\PreSetDataEvent;
+use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -30,7 +34,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -118,8 +121,9 @@ class FormHelper
     }
 
     /**
-     * Adds a new field to this builder and reset all values to default. The field must have a unique name.
-     * Otherwise, the existing field is overwritten.
+     * Adds a new field to this builder and reset all values to default.
+     *
+     * The field must have a unique name. Otherwise, the existing field is overwritten.
      *
      * @template T of FormTypeInterface
      *
@@ -128,21 +132,12 @@ class FormHelper
     public function add(string $type): self
     {
         $field = (string) $this->field;
-        $this->builder->add($field, $type, $this->mergeAttributes());
+        $this->builder->add($field, $type, $this->getOptions());
         if (null !== $this->modelTransformer) {
             $this->builder->get($field)->addModelTransformer($this->modelTransformer);
         }
 
         return $this->reset();
-    }
-
-    /**
-     * Add a birthday type to the builder and reset all values to default.
-     */
-    public function addBirthdayType(): self
-    {
-        return $this->updateOption('widget', 'single_text')
-            ->add(BirthdayType::class);
     }
 
     /**
@@ -316,18 +311,6 @@ class FormHelper
     }
 
     /**
-     * Add a money type to the builder and reset all values to default.
-     */
-    public function addMoneyType(): self
-    {
-        return $this->updateAttribute('inputmode', 'decimal')
-            ->updateOption('currency', 'CHF')
-            ->updateOption('html5', true)
-            ->widgetClass('text-right')
-            ->add(MoneyType::class);
-    }
-
-    /**
      * Add a number type to the builder and reset all values to default.
      *
      * @param int $scale the number of decimals to set
@@ -363,7 +346,7 @@ class FormHelper
         if (\PHP_INT_MAX !== $max) {
             $this->updateAttribute('max', $max);
         }
-        if (-1 !== (int) $step) {
+        if ($step > 0) {
             $this->updateAttribute('step', $step);
         }
 
@@ -513,14 +496,6 @@ class FormHelper
     }
 
     /**
-     * Sets auto-focus attribute.
-     */
-    public function autofocus(): self
-    {
-        return $this->updateAttribute('autofocus', true);
-    }
-
-    /**
      * Sets the constraints option.
      */
     public function constraints(Constraint ...$constrains): self
@@ -579,90 +554,6 @@ class FormHelper
     }
 
     /**
-     * Adds an event listener to an event on this form builder.
-     *
-     * @param string   $eventName the event name to listen for
-     * @param callable $listener  the event listener to add
-     * @param int      $priority  The priority of the listener. Listeners
-     *                            with a higher priority are called before
-     *                            listeners with a lower priority.
-     *
-     * @psalm-param FormEvents::PRE_SUBMIT|FormEvents::SUBMIT|FormEvents::POST_SUBMIT|FormEvents::PRE_SET_DATA|FormEvents::POST_SET_DATA $eventName
-     * @psalm-param callable(\Symfony\Component\Form\Event\PreSubmitEvent): void|callable(\Symfony\Component\Form\Event\SubmitEvent): void|callable(\Symfony\Component\Form\Event\PostSubmitEvent): void|callable(\Symfony\Component\Form\Event\PreSetDataEvent): void|callable(\Symfony\Component\Form\Event\PostSetDataEvent): void $listener
-     */
-    public function eventListener(string $eventName, callable $listener, int $priority = 0): self
-    {
-        $this->builder->addEventListener($eventName, $listener, $priority);
-
-        return $this;
-    }
-
-    /**
-     * Adds a post-set-data-submit event listener.
-     *
-     * @param callable(\Symfony\Component\Form\Event\PostSetDataEvent): void $listener the event listener to add
-     * @param int                                                            $priority The priority of the listener. Listeners
-     *                                                                                 with a higher priority are called before
-     *                                                                                 listeners with a lower priority.
-     */
-    public function eventPostSetDataListener(callable $listener, int $priority = 0): self
-    {
-        return $this->eventListener(FormEvents::POST_SET_DATA, $listener, $priority);
-    }
-
-    /**
-     * Adds a post-submit event listener.
-     *
-     * @param callable(\Symfony\Component\Form\Event\PostSubmitEvent): void $listener the event listener to add
-     * @param int                                                           $priority The priority of the listener. Listeners
-     *                                                                                with a higher priority are called before
-     *                                                                                listeners with a lower priority.
-     */
-    public function eventPostSubmitListener(callable $listener, int $priority = 0): self
-    {
-        return $this->eventListener(FormEvents::POST_SUBMIT, $listener, $priority);
-    }
-
-    /**
-     * Adds a pre-set-data event listener.
-     *
-     * @param callable(\Symfony\Component\Form\Event\PreSetDataEvent): void $listener the event listener to add
-     * @param int                                                           $priority The priority of the listener. Listeners
-     *                                                                                with a higher priority are called before
-     *                                                                                listeners with a lower priority.
-     */
-    public function eventPreSetDataListener(callable $listener, int $priority = 0): self
-    {
-        return $this->eventListener(FormEvents::PRE_SET_DATA, $listener, $priority);
-    }
-
-    /**
-     * Adds a pre-submit event listener.
-     *
-     * @param callable(\Symfony\Component\Form\Event\PreSubmitEvent): void $listener the event listener to add
-     * @param int                                                          $priority The priority of the listener. Listeners
-     *                                                                               with a higher priority are called before
-     *                                                                               listeners with a lower priority.
-     */
-    public function eventPreSubmitListener(callable $listener, int $priority = 0): self
-    {
-        return $this->eventListener(FormEvents::PRE_SUBMIT, $listener, $priority);
-    }
-
-    /**
-     * Adds a submit event listener.
-     *
-     * @param callable(\Symfony\Component\Form\Event\SubmitEvent): void $listener the event listener to add
-     * @param int                                                       $priority The priority of the listener. Listeners
-     *                                                                            with a higher priority are called before
-     *                                                                            listeners with a lower priority.
-     */
-    public function eventSubmitListener(callable $listener, int $priority = 0): self
-    {
-        return $this->eventListener(FormEvents::SUBMIT, $listener, $priority);
-    }
-
-    /**
      * Sets the field name property.
      *
      * If the label prefix is defined, the label is added automatically.
@@ -712,22 +603,6 @@ class FormHelper
     }
 
     /**
-     * Sets the help parameters.
-     */
-    public function helpParameters(array $parameters): self
-    {
-        return $this->updateOption('help_translation_parameters', $parameters);
-    }
-
-    /**
-     * Hides the label.
-     */
-    public function hideLabel(): self
-    {
-        return $this->label(false);
-    }
-
-    /**
      * Sets the label property.
      *
      * @param string|bool $label the label identifier to translate or false to hide
@@ -752,9 +627,93 @@ class FormHelper
     }
 
     /**
+     * Adds an event listener to this form builder.
+     *
+     * @param string   $eventName the event name to listen for
+     * @param callable $listener  the event listener to add
+     * @param int      $priority  The priority of the listener. Listeners
+     *                            with a higher priority are called before
+     *                            listeners with a lower priority.
+     *
+     * @psalm-param FormEvents::PRE_SUBMIT|FormEvents::SUBMIT|FormEvents::POST_SUBMIT|FormEvents::PRE_SET_DATA|FormEvents::POST_SET_DATA $eventName
+     * @psalm-param callable(PostSetDataEvent): void|callable(PostSubmitEvent): void|callable(PreSetDataEvent): void|callable(PreSubmitEvent): void|callable(SubmitEvent): void $listener
+     */
+    public function listener(string $eventName, callable $listener, int $priority = 0): self
+    {
+        $this->builder->addEventListener($eventName, $listener, $priority);
+
+        return $this;
+    }
+
+    /**
+     * Adds a post-set-data-submit event listener to this form builder.
+     *
+     * @param callable(PostSetDataEvent): void $listener the event listener to add
+     * @param int                              $priority The priority of the listener. Listeners
+     *                                                   with a higher priority are called before
+     *                                                   listeners with a lower priority.
+     */
+    public function listenerPostSetData(callable $listener, int $priority = 0): self
+    {
+        return $this->listener(FormEvents::POST_SET_DATA, $listener, $priority);
+    }
+
+    /**
+     * Adds a post-submit event listener to this form builder.
+     *
+     * @param callable(PostSubmitEvent): void $listener the event listener to add
+     * @param int                             $priority The priority of the listener. Listeners
+     *                                                  with a higher priority are called before
+     *                                                  listeners with a lower priority.
+     */
+    public function listenerPostSubmit(callable $listener, int $priority = 0): self
+    {
+        return $this->listener(FormEvents::POST_SUBMIT, $listener, $priority);
+    }
+
+    /**
+     * Adds a pre-set-data event listener to this form builder.
+     *
+     * @param callable(PreSetDataEvent): void $listener the event listener to add
+     * @param int                             $priority The priority of the listener. Listeners
+     *                                                  with a higher priority are called before
+     *                                                  listeners with a lower priority.
+     */
+    public function listenerPreSetData(callable $listener, int $priority = 0): self
+    {
+        return $this->listener(FormEvents::PRE_SET_DATA, $listener, $priority);
+    }
+
+    /**
+     * Adds a pre-submit event listener to this form builder.
+     *
+     * @param callable(PreSubmitEvent): void $listener the event listener to add
+     * @param int                            $priority The priority of the listener. Listeners
+     *                                                 with a higher priority are called before
+     *                                                 listeners with a lower priority.
+     */
+    public function listenerPreSubmit(callable $listener, int $priority = 0): self
+    {
+        return $this->listener(FormEvents::PRE_SUBMIT, $listener, $priority);
+    }
+
+    /**
+     * Adds a submit event listener to this form builder.
+     *
+     * @param callable(SubmitEvent): void $listener the event listener to add
+     * @param int                         $priority The priority of the listener. Listeners
+     *                                              with a higher priority are called before
+     *                                              listeners with a lower priority.
+     */
+    public function listenerSubmit(callable $listener, int $priority = 0): self
+    {
+        return $this->listener(FormEvents::SUBMIT, $listener, $priority);
+    }
+
+    /**
      * Sets the maximum length.
      *
-     * @param int $maxLength the maximum length or 0 if none
+     * @param int $maxLength the maximum length or 0 to remove the attribute
      */
     public function maxLength(int $maxLength): self
     {
@@ -764,7 +723,7 @@ class FormHelper
     /**
      * Sets the minimum length.
      *
-     * @param int $minLength the minimum length or 0 if none
+     * @param int $minLength the minimum length or 0 to remove the attribute
      */
     public function minLength(int $minLength): self
     {
@@ -855,16 +814,6 @@ class FormHelper
     }
 
     /**
-     * Sets the tab index.
-     *
-     * @param ?int $index the index or null to remove
-     */
-    public function tabindex(?int $index): self
-    {
-        return $this->updateAttribute('tabIndex', \is_int($index) ? $index : null);
-    }
-
-    /**
      * Updates an attribute.
      */
     public function updateAttribute(string $name, mixed $value): self
@@ -888,34 +837,6 @@ class FormHelper
         /** @psalm-var mixed $value */
         foreach ($attributes as $name => $value) {
             $this->updateAttribute($name, $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Updates a help attribute.
-     */
-    public function updateHelpAttribute(string $name, mixed $value): self
-    {
-        if (null === $value) {
-            unset($this->helpAttributes[$name]);
-        } else {
-            $this->helpAttributes[$name] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Updates a label attribute.
-     */
-    public function updateLabelAttribute(string $name, mixed $value): self
-    {
-        if (null === $value) {
-            unset($this->labelAttributes[$name]);
-        } else {
-            $this->labelAttributes[$name] = $value;
         }
 
         return $this;
@@ -1002,7 +923,7 @@ class FormHelper
     /**
      * @return array<string, mixed>
      */
-    private function mergeAttributes(): array
+    private function getOptions(): array
     {
         $attributes = \array_filter([
             'attr' => $this->attributes,

@@ -51,9 +51,6 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatAmount($value);
     }
 
-    /**
-     * @noinspection PhpUnused
-     */
     public function formatCountable(\Countable $value): string
     {
         return $this->formatInt($value->count());
@@ -64,9 +61,6 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatDate($value);
     }
 
-    /**
-     * @noinspection PhpUnused
-     */
     public function formatId(int $value): string
     {
         return FormatUtils::formatId($value);
@@ -250,8 +244,6 @@ abstract class AbstractTable implements SortModeInterface
      * Gets the session key for the given name.
      *
      * @param string $name the parameter name
-     *
-     * @noinspection PhpUnused
      */
     protected function getSessionKey(string $name): string
     {

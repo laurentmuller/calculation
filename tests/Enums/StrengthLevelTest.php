@@ -16,9 +16,7 @@ use App\Enums\StrengthLevel;
 use App\Interfaces\PropertyServiceInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-/**
- * Unit test for the {@link StrengthLevel} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevel::class)]
 class StrengthLevelTest extends TypeTestCase
 {
     public function testCount(): void

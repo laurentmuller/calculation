@@ -78,13 +78,10 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      */
     protected function checkResponse(string $url, string $username, int $expected): void
     {
-        $response = $this->client?->getResponse();
-        if (null !== $response) {
-            $statusCode = $response->getStatusCode();
-            self::assertSame($expected, $statusCode, "Invalid status code for '$url' and '$username'.");
-        } else {
-            throwException(new \InvalidArgumentException('Unable to get the client response.'));
-        }
+        self::assertNotNull($this->client);
+        $response = $this->client->getResponse();
+        $statusCode = $response->getStatusCode();
+        self::assertSame($expected, $statusCode, "Invalid status code for '$url' and '$username'.");
     }
 
     protected function doEcho(string $name, mixed $value, bool $newLine = false): void
@@ -99,14 +96,14 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      * @param string $username the username to search for
      * @param bool   $verify   true to check if the user is not null
      *
-     * @return User|null the user, if found; null otherwise
+     * @return ?User the user, if found; null otherwise
+     *
+     * @psalm-return ($verify is true ? User : (User|null))
      */
     protected function loadUser(string $username, bool $verify = true): ?User
     {
         $repository = $this->getService(UserRepository::class);
-
         $user = $repository->findByUsername($username);
-
         if ($verify) {
             self::assertNotNull($user, "The user '$username' is null.");
         }
@@ -116,29 +113,25 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 
     /**
      * Login the given user.
-     *
-     * @param User   $user     the user to login
-     * @param string $firewall the firewall name
      */
-    protected function loginUser(User $user, string $firewall = 'main'): void
+    protected function loginUser(User $user): void
     {
-        $this->client?->loginUser($user, $firewall);
+        $this->client?->loginUser($user);
     }
 
     /**
-     * Login the given username.
+     * Login with the given username.
      *
      * @param string $username the username to login
      * @param bool   $verify   true to check if the user is not null
-     * @param string $firewall the firewall name
      *
      * @throws \InvalidArgumentException if the given username cannot be found
      */
-    protected function loginUserName(string $username, bool $verify = true, string $firewall = 'main'): void
+    protected function loginUsername(string $username, bool $verify = true): void
     {
         $user = $this->loadUser($username, $verify);
-        if (null !== $user) {
-            $this->loginUser($user, $firewall);
+        if ($user instanceof User) {
+            $this->loginUser($user);
         } else {
             throwException(new \InvalidArgumentException("Unable to find the user '$username'."));
         }

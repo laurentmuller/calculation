@@ -15,9 +15,7 @@ namespace App\Tests\Pdf;
 use App\Pdf\PdfBorder;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link PdfBorder}.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(PdfBorder::class)]
 class PdfBorderTest extends TestCase
 {
     public static function getBorders(): array

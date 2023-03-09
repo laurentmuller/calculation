@@ -20,9 +20,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Unit test for the {@link UserService} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(UserService::class)]
 class UserServiceTest extends KernelTestCase
 {
     use DatabaseTrait;

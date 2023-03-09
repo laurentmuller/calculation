@@ -63,7 +63,7 @@ class RightsType extends AbstractHelperType
         foreach ($entities as $entity) {
             $this->addRightType($helper, $entity);
         }
-        $helper->eventPreSetDataListener($this->onPreSetData(...));
+        $helper->listenerPreSetData($this->onPreSetData(...));
     }
 
     private function addRightType(FormHelper $helper, EntityName $entity): void

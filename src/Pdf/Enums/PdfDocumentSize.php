@@ -32,9 +32,11 @@ enum PdfDocumentSize: string
     /*
      * The Legal document size.
      */
+
     case LEGAL = 'Legal';
     /*
      * The Letter document size.
      */
+
     case LETTER = 'Letter';
 }

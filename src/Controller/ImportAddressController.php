@@ -36,9 +36,6 @@ class ImportAddressController extends AbstractController
 
     private const KEY_OVERWRITE = 'import.overwrite';
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     #[Route(path: '/import', name: 'admin_import')]
     public function invoke(Request $request, SwissPostUpdater $updater): Response
     {

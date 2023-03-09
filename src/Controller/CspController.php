@@ -32,9 +32,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CspController extends AbstractController
 {
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     #[Route(path: '/csp', name: 'log_csp')]
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
     {
@@ -93,7 +90,6 @@ class CspController extends AbstractController
 
     /**
      * @throws TransportExceptionInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function sendNotification(string $title, array $context, MailerInterface $mailer): void
     {

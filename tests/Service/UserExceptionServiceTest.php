@@ -27,9 +27,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
-/**
- * Unit test for {@link UserExceptionService} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(UserExceptionService::class)]
 class UserExceptionServiceTest extends TestCase
 {
     private ?Request $request = null;

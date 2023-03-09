@@ -101,7 +101,7 @@ class ProductUpdater implements ServiceSubscriberInterface
         $helper->field('fixed')
             ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_FIXED)
             ->help('product.update.fixed_help')
-            ->addMoneyType();
+            ->addNumberType();
 
         $helper->field('round')
             ->help('product.update.round_help')

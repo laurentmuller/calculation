@@ -95,7 +95,6 @@ class LogController extends AbstractController
      * Export the logs to a Spreadsheet document.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
@@ -111,8 +110,6 @@ class LogController extends AbstractController
 
     /**
      * Export to PDF the content of the log file.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response

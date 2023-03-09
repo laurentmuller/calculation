@@ -33,12 +33,12 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $translator = $this->getContainer()->get(TranslatorInterface::class);
-        if ($translator instanceof TranslatorInterface) {
-            $this->translator = $translator;
-        }
+        $this->translator = $this->getService(TranslatorInterface::class);
     }
 
+    /**
+     * @return array<array{0: string|bool, 1?: string|null, 2?: int|null}>
+     */
     public static function getUserEmails(): array
     {
         return [
@@ -51,6 +51,9 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
+    /**
+     * @return array<array{0: string|bool, 1?: string, 2?: int}>
+     */
     public static function getUserNames(): array
     {
         return [
@@ -63,6 +66,9 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
+    /**
+     * @return array<array{0: bool|string, 1: string}>
+     */
     public static function getUsers(): array
     {
         return [
@@ -78,7 +84,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     {
         $parameters = ['user' => $user];
         self::assertNotNull($this->client);
-        $this->client->request(Request::METHOD_GET, '/ajax/checkuser', $parameters);
+        $this->client->request(Request::METHOD_GET, '/ajax/check/user', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
     }
@@ -86,10 +92,10 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getUserEmails')]
     public function testCheckUserEmail(string|bool $expected, string $email = null, int $id = null): void
     {
-        $this->loginUserName('ROLE_SUPER_ADMIN');
+        $this->loginUsername('ROLE_SUPER_ADMIN');
         $parameters = ['email' => $email, 'id' => $id];
         self::assertNotNull($this->client);
-        $this->client->request(Request::METHOD_GET, '/ajax/checkuseremail', $parameters);
+        $this->client->request(Request::METHOD_GET, '/ajax/check/user/email', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
     }
@@ -97,10 +103,10 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getUserNames')]
     public function testCheckUserName(string|bool $expected, string $username = null, int $id = null): void
     {
-        $this->loginUserName('ROLE_SUPER_ADMIN');
+        $this->loginUsername('ROLE_SUPER_ADMIN');
         $parameters = ['username' => $username, 'id' => $id];
         self::assertNotNull($this->client);
-        $this->client->request(Request::METHOD_GET, '/ajax/checkusername', $parameters);
+        $this->client->request(Request::METHOD_GET, '/ajax/check/user/name', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
     }

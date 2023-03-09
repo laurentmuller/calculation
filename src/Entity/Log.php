@@ -42,8 +42,8 @@ class Log extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
 
-    #[ORM\Column]
-    private \DateTimeImmutable $createdAt;
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE)]
+    private \DateTimeInterface $createdAt;
 
     #[ORM\Column(nullable: true)]
     private ?array $extra = null;

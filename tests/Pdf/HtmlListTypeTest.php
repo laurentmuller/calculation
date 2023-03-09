@@ -15,9 +15,7 @@ namespace App\Tests\Pdf;
 use App\Pdf\Html\HtmlListType;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link HtmlListType} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(HtmlListType::class)]
 class HtmlListTypeTest extends TestCase
 {
     public static function getLetterValues(): array

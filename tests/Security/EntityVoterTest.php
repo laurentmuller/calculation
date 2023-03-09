@@ -24,9 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
-/**
- * Unit test for {@link EntityVoter} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(EntityVoter::class)]
 class EntityVoterTest extends TestCase
 {
     private ?EntityVoter $voter = null;

@@ -22,10 +22,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
 
 /**
- * Unit test for {@link StrengthValidator} class.
- *
  * @extends ConstraintValidatorTestCase<StrengthValidator>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(StrengthValidator::class)]
 class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
     private const EMPTY_MESSAGE = 'empty';

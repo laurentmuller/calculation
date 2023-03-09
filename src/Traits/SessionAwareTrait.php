@@ -30,6 +30,7 @@ trait SessionAwareTrait
     public function getRequestStack(): RequestStack
     {
         if (null === $this->requestStack) {
+            /* @noinspection PhpUnhandledExceptionInspection */
             /** @phpstan-var RequestStack $result */
             $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
             $this->requestStack = $result;

@@ -44,8 +44,9 @@ abstract class AbstractHelperType extends AbstractType
     }
 
     /**
-     * Gets the label prefix. If the prefix is not null, the label is automatically added when
-     * the field property is set.
+     * Gets the label prefix.
+     *
+     * If the prefix is not null, the label is automatically added when the field property is set.
      */
     protected function getLabelPrefix(): ?string
     {

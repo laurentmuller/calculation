@@ -15,9 +15,7 @@ namespace App\Tests\Twig;
 use App\Twig\ConstantExtension;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Unit test for Twig {@link ConstantExtension}.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(ConstantExtension::class)]
 class ConstantExtensionTest extends KernelTestCase
 {
     private ?ConstantExtension $extension = null;

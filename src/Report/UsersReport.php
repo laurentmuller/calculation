@@ -37,8 +37,6 @@ class UsersReport extends AbstractArrayReport
      * Constructor.
      *
      * @param User[] $entities
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
     {

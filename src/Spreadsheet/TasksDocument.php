@@ -50,7 +50,6 @@ class TasksDocument extends AbstractArrayDocument
      * {@inheritdoc}
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function doRender(array $entities): bool
     {

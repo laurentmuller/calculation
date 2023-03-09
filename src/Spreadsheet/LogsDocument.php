@@ -33,8 +33,6 @@ class LogsDocument extends AbstractDocument
 
     /**
      * Constructor.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
@@ -47,8 +45,6 @@ class LogsDocument extends AbstractDocument
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {

@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Trait for class implementing the {@link \App\Interfaces\RoleInterface RoleInterface} interface.
+ * Trait for class implementing the {@link RoleInterface} interface.
  *
  * @psalm-require-implements \App\Interfaces\RoleInterface
  */

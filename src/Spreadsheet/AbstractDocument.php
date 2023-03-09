@@ -23,8 +23,6 @@ abstract class AbstractDocument extends SpreadsheetDocument
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(protected AbstractController $controller)
     {
@@ -57,8 +55,6 @@ abstract class AbstractDocument extends SpreadsheetDocument
      *
      * @param string $title     the spreadsheet title to translate
      * @param bool   $landscape true to set landscape orientation, false for default (portrait)
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function start(string $title, bool $landscape = false): static
     {

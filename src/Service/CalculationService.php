@@ -25,8 +25,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update calculation totals.
- *
- * @see \App\Tests\Service\CalculationServiceTest
  */
 final class CalculationService implements ServiceSubscriberInterface
 {

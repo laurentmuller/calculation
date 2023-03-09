@@ -15,9 +15,7 @@ namespace App\Tests\Enums;
 use App\Enums\Importance;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-/**
- * Unit test for the {@link Importance} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(Importance::class)]
 class ImportanceTest extends TypeTestCase
 {
     public function testCount(): void

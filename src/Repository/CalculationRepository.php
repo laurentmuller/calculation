@@ -280,6 +280,7 @@ class CalculationRepository extends AbstractRepository
     {
         $year = 'year(e.date)';
         $month = 'month(e.date)';
+
         $year_month = "$year * 1000 + $month";
 
         $builder = $this->createQueryBuilder('e')
@@ -306,7 +307,9 @@ class CalculationRepository extends AbstractRepository
     public function getCalendarYearsWeeks(): array
     {
         $year = 'year(e.date)';
+
         $week = 'week(e.date, 3)';
+
         $year_week = "$year * 1000 + $week";
 
         $builder = $this->createQueryBuilder('e')

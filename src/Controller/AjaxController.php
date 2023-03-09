@@ -46,8 +46,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
- *
- * @see \App\Tests\Controller\AjaxControllerTest
  */
 #[AsController]
 #[Route(path: '/ajax')]
@@ -60,12 +58,12 @@ class AjaxController extends AbstractController
      * Check if a username or an e-mail exist.
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/checkuser', name: 'ajax_check_user')]
+    #[Route(path: '/check/user', name: 'ajax_check_user')]
     public function checkUser(Request $request, UserRepository $repository): JsonResponse
     {
         // find username
         $usernameOrEmail = $this->getRequestString($request, 'user');
-        if (null !== $usernameOrEmail && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
+        if (!empty($usernameOrEmail) && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
             return $this->json(true);
         }
 
@@ -76,7 +74,7 @@ class AjaxController extends AbstractController
      * Check if a user e-mail already exists.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/checkuseremail', name: 'ajax_check_user_email')]
+    #[Route(path: '/check/user/email', name: 'ajax_check_user_email')]
     public function checkUserEmail(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
@@ -107,7 +105,7 @@ class AjaxController extends AbstractController
      * Check if a username already exists.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/checkusername', name: 'ajax_check_user_name')]
+    #[Route(path: '/check/user/name', name: 'ajax_check_user_name')]
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
@@ -158,7 +156,7 @@ class AjaxController extends AbstractController
     /**
      * Translate a text.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/detect', name: 'ajax_detect')]
@@ -195,7 +193,7 @@ class AjaxController extends AbstractController
     /**
      * Gets the list of translate languages.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/languages', name: 'ajax_languages')]
@@ -450,7 +448,7 @@ class AjaxController extends AbstractController
     /**
      * Translate a text.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/translate', name: 'ajax_translate')]

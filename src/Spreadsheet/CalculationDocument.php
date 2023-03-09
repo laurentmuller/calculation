@@ -39,8 +39,6 @@ class CalculationDocument extends AbstractDocument
      *
      * @param AbstractController $controller  the parent controller
      * @param Calculation        $calculation the calculation to render
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly Calculation $calculation)
     {
@@ -49,8 +47,6 @@ class CalculationDocument extends AbstractDocument
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {
@@ -163,9 +159,6 @@ class CalculationDocument extends AbstractDocument
             ->getStartColor()->setARGB(self::COLOR_BACKGROUND);
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function getMarginFormat(): string
     {
         $minMargin = $this->controller->getApplication()->getMinMargin();
@@ -284,9 +277,6 @@ class CalculationDocument extends AbstractDocument
         ++$row;
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function renderOverallTotal(Calculation $calculation, int $row): void
     {
         $this->cellBold(1, $row, $this->trans('calculation.fields.overallTotal'))

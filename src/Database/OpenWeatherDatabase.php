@@ -26,8 +26,6 @@ class OpenWeatherDatabase extends AbstractDatabase
 {
     /**
      * SQL statement to create the city table.
-     *
-     * @noinspection SqlResolve
      */
     private const CREATE_CITY = <<<'SQL'
         CREATE TABLE IF NOT EXISTS city (

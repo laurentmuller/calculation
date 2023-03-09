@@ -68,8 +68,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Add a user.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'user_add')]
     public function add(Request $request): Response
@@ -79,8 +77,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Delete an user.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
@@ -98,8 +94,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Edit a user.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, User $item): Response
@@ -112,7 +106,6 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'user_excel')]
@@ -131,8 +124,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Send an email from the current user to the selected user.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => Requirement::DIGITS])]
     public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
@@ -178,8 +169,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Change password for an existing user.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => Requirement::DIGITS])]
     public function password(Request $request, User $item): Response
@@ -211,7 +200,6 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'user_pdf')]
     public function pdf(StorageInterface $storage): PdfResponse
@@ -229,8 +217,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Clear all requested reset passwords.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/reset', name: 'user_reset_all')]
     public function resetAllPasswordRequest(Request $request): Response
@@ -279,8 +265,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Clear the request reset password.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => Requirement::DIGITS])]
     public function resetPasswordRequest(Request $request, User $item): Response
@@ -309,8 +293,6 @@ class UserController extends AbstractEntityController
 
     /**
      * Edit user access rights.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
     public function rights(Request $request, User $item, RoleHierarchyService $service, EntityManagerInterface $manager): Response
@@ -352,7 +334,6 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/excel', name: 'user_rights_excel')]
     public function rightsExcel(): SpreadsheetResponse
@@ -373,7 +354,6 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/pdf', name: 'user_rights_pdf')]
     public function rightsPdf(): PdfResponse

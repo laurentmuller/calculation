@@ -17,7 +17,7 @@ use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
 
 /**
- * Factory to create HtmlStyle depenging of the tag name.
+ * Factory to create HtmlStyle depending on the tag name.
  */
 final class HtmlStyleFactory
 {

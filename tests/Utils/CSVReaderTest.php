@@ -15,11 +15,7 @@ namespace App\Tests\Utils;
 use App\Util\CSVReader;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the {@link CSVReader} class.
- *
- * @see CSVReader
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(CSVReader::class)]
 class CSVReaderTest extends TestCase
 {
     private const VALUES_SEP = '|';

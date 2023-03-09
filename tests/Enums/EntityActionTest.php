@@ -16,9 +16,7 @@ use App\Enums\EntityAction;
 use App\Interfaces\PropertyServiceInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-/**
- * Unit test for the {@link EntityAction} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(EntityAction::class)]
 class EntityActionTest extends TypeTestCase
 {
     public function testCount(): void

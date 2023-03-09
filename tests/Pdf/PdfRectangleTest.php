@@ -15,9 +15,7 @@ namespace App\Tests\Pdf;
 use App\Pdf\PdfRectangle;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link PdfRectangle} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(PdfRectangle::class)]
 class PdfRectangleTest extends TestCase
 {
     public function testBottom(): void

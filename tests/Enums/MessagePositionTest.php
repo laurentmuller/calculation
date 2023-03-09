@@ -16,9 +16,7 @@ use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-/**
- * Unit test for the {@link MessagePosition} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(MessagePosition::class)]
 class MessagePositionTest extends TypeTestCase
 {
     /**

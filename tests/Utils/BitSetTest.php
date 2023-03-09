@@ -15,9 +15,7 @@ namespace App\Tests\Utils;
 use App\Util\BitSet;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the {@link BitSet} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(BitSet::class)]
 class BitSetTest extends TestCase
 {
     public function testBinary(): void

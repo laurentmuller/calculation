@@ -54,8 +54,11 @@ class ResetPasswordController extends AbstractController
     /**
      * Constructor.
      */
-    public function __construct(private readonly ResetPasswordHelperInterface $helper, private readonly UserRepository $repository, private readonly UserExceptionService $service)
-    {
+    public function __construct(
+        private readonly ResetPasswordHelperInterface $helper,
+        private readonly UserRepository $repository,
+        private readonly UserExceptionService $service
+    ) {
     }
 
     /**
@@ -81,8 +84,6 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Display and process form to request a password reset.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '', name: self::ROUTE_FORGET)]
     public function request(Request $request, MailerInterface $mailer, AuthenticationUtils $utils): Response
@@ -147,9 +148,6 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function createEmail(User $user, ResetPasswordToken $resetToken): ResetPasswordEmail
     {
         $email = new ResetPasswordEmail($this->getTranslator());
@@ -200,8 +198,6 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Send email to the user for resetting the password.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer): RedirectResponse
     {

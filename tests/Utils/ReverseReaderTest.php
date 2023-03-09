@@ -15,11 +15,7 @@ namespace App\Tests\Utils;
 use App\Util\ReverseReader;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the {@link ReverseReader} class.
- *
- * @see ReverseReader
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(ReverseReader::class)]
 class ReverseReaderTest extends TestCase
 {
     public function testFileExist(): void

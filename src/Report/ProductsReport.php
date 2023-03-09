@@ -48,7 +48,7 @@ class ProductsReport extends AbstractArrayReport
         foreach ($entities as $entity) {
             // group outline
             if ($groupCode !== $entity->getGroupCode()) {
-                $this->addOutline((string) $entity->getGroupCode(), true, 0);
+                $this->addOutline((string) $entity->getGroupCode(), true);
                 $groupCode = $entity->getGroupCode();
             }
             // category outline

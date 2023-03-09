@@ -176,6 +176,7 @@ class SimpleEditorType extends AbstractType
         if (isset($action['actions']) && !empty($action['actions'])) {
             $action['attributes']['aria-expanded'] = 'false';
             $action['attributes']['data-toggle'] = 'dropdown';
+
             $action['attributes']['class'] .= ' dropdown-toggle';
 
             /** @psalm-var SimpleEditorAction[] $_children */

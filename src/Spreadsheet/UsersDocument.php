@@ -35,8 +35,6 @@ class UsersDocument extends AbstractArrayDocument
      * Constructor.
      *
      * @param User[] $entities
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
     {
@@ -47,7 +45,6 @@ class UsersDocument extends AbstractArrayDocument
      * {@inheritdoc}
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function doRender(array $entities): bool
     {

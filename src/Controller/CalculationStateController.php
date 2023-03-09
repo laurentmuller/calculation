@@ -51,8 +51,6 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Add a new calculation state.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'calculationstate_add')]
     public function add(Request $request): Response
@@ -62,8 +60,6 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Clone (copy) a calculation state.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, CalculationState $item): Response
@@ -77,7 +73,6 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Delete a calculation state.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => Requirement::DIGITS])]
@@ -109,8 +104,6 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * Edit a calculation state.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, CalculationState $item): Response
@@ -124,7 +117,6 @@ class CalculationStateController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'calculationstate_excel')]
     public function excel(): SpreadsheetResponse
@@ -144,7 +136,6 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'calculationstate_pdf')]
     public function pdf(): PdfResponse
@@ -181,8 +172,6 @@ class CalculationStateController extends AbstractEntityController
      * {@inheritdoc}
      *
      * @psalm-param CalculationState $item
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
     {

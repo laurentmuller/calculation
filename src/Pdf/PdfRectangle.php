@@ -14,8 +14,6 @@ namespace App\Pdf;
 
 /**
  * Represents a rectangle.
- *
- * @see \App\Tests\Pdf\PdfRectangleTest
  */
 class PdfRectangle
 {

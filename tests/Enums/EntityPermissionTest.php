@@ -17,9 +17,7 @@ use App\Util\RoleBuilder;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link EntityPermission} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(EntityPermission::class)]
 class EntityPermissionTest extends TestCase
 {
     /**

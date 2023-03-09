@@ -15,9 +15,7 @@ namespace App\Tests\Service;
 use App\Service\NonceService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Unit test for the {@link NonceService} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(NonceService::class)]
 class NonceServiceTest extends KernelTestCase
 {
     private ?NonceService $service = null;

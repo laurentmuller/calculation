@@ -18,9 +18,9 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfTextColor;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for PDF colors.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(PdfDrawColor::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(PdfFillColor::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(PdfTextColor::class)]
 class PdfColorTest extends TestCase
 {
     public static function getColors(): array

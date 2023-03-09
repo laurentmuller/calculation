@@ -32,9 +32,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Unit test for {@link CalculationService} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(CalculationService::class)]
 class CalculationServiceTest extends KernelTestCase
 {
     use DatabaseTrait;

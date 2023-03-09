@@ -17,9 +17,7 @@ use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
-/**
- * Unit test for {@link OpenWeatherService} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(OpenWeatherService::class)]
 class OpenWeatherServiceTest extends KernelTestCase
 {
     use ServiceTrait;

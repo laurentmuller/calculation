@@ -15,11 +15,7 @@ namespace App\Tests\Traits;
 use App\Traits\MathTrait;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link MathTrait} class.
- *
- * @see MathTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(MathTrait::class)]
 class MathTraitTest extends TestCase
 {
     use MathTrait;

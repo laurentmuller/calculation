@@ -59,7 +59,6 @@ class CalculationEmptyController extends AbstractController
      * Export the calculations where items have the price or the quantity is equal to 0.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'empty_pdf')]
     public function pdf(CalculationRepository $repository): Response

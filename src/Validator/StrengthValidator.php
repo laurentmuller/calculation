@@ -27,21 +27,24 @@ use ZxcvbnPhp\Zxcvbn;
  * Strength constraint validator.
  *
  * @extends AbstractConstraintValidator<Strength>
- *
- * @see \App\Tests\Validator\StrengthValidatorTest
  */
 class StrengthValidator extends AbstractConstraintValidator
 {
     use StrengthLevelTranslatorTrait;
 
+    private readonly PropertyAccessorInterface $propertyAccessor;
     private ?Zxcvbn $service = null;
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly TranslatorInterface $translator, private readonly ZxcvbnFactoryInterface $factory, private ?PropertyAccessorInterface $propertyAccessor = null)
-    {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+        private readonly ZxcvbnFactoryInterface $factory,
+        ?PropertyAccessorInterface $propertyAccessor = null
+    ) {
         parent::__construct(Strength::class);
+        $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
 
     /**
@@ -74,15 +77,6 @@ class StrengthValidator extends AbstractConstraintValidator
         }
     }
 
-    private function getPropertyAccessor(): PropertyAccessorInterface
-    {
-        if (null === $this->propertyAccessor) {
-            $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        }
-
-        return $this->propertyAccessor;
-    }
-
     private function getService(): Zxcvbn
     {
         if (null === $this->service) {
@@ -92,32 +86,29 @@ class StrengthValidator extends AbstractConstraintValidator
         return $this->service;
     }
 
-    /**
-     * @return string[]
-     */
     private function getUserInputs(Strength $constraint): array
     {
-        /** @var string[] $userInputs */
-        $userInputs = [];
         if (null === $object = $this->context->getObject()) {
-            return $userInputs;
+            return [];
         }
 
-        if ($path = $constraint->userNamePath) {
-            try {
-                $userInputs[] = (string) $this->getPropertyAccessor()->getValue($object, $path);
-            } catch (NoSuchPropertyException $e) {
-                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, \get_debug_type($constraint)) . $e->getMessage(), 0, $e);
-            }
+        $userInputs = [];
+        if (null !== $path = $constraint->userNamePath) {
+            $userInputs[] = $this->getValue($object, $path);
         }
-        if ($path = $constraint->emailPath) {
-            try {
-                $userInputs[] = (string) $this->getPropertyAccessor()->getValue($object, $path);
-            } catch (NoSuchPropertyException $e) {
-                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, \get_debug_type($constraint)) . $e->getMessage(), 0, $e);
-            }
+        if (null !== $path = $constraint->emailPath) {
+            $userInputs[] = $this->getValue($object, $path);
         }
 
-        return $userInputs;
+        return \array_filter($userInputs);
+    }
+
+    private function getValue(object $object, string $path): string
+    {
+        try {
+            return (string) $this->propertyAccessor->getValue($object, $path);
+        } catch (NoSuchPropertyException $e) {
+            throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided for object "%s".', $path, \get_debug_type($object)), $e->getCode(), $e);
+        }
     }
 }

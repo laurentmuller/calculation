@@ -15,9 +15,7 @@ namespace App\Tests\Utils;
 use App\Util\DateUtils;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for the {@link DateUtils} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
     /**

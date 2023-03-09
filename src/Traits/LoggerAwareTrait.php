@@ -30,6 +30,7 @@ trait LoggerAwareTrait
     public function getLogger(): LoggerInterface
     {
         if (null === $this->logger) {
+            /* @noinspection PhpUnhandledExceptionInspection */
             /** @psalm-var LoggerInterface $result */
             $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
             $this->logger = $result;

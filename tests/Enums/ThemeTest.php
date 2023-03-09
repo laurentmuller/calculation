@@ -15,9 +15,7 @@ namespace App\Tests\Enums;
 use App\Enums\Theme;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-/**
- * Unit test for the {@link Theme} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
 class ThemeTest extends TypeTestCase
 {
     public function testCount(): void

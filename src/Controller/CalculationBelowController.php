@@ -42,9 +42,9 @@ class CalculationBelowController extends AbstractController
     /**
      * Export the calculations to a Spreadsheet document.
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'below_excel')]
     public function excel(CalculationRepository $repository): Response
@@ -64,7 +64,6 @@ class CalculationBelowController extends AbstractController
     /**
      * Export calculations to a PDF document.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/pdf', name: 'below_pdf')]

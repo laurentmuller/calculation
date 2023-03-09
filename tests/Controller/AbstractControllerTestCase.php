@@ -78,7 +78,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
     {
         $isExcel = false !== \stripos($url, '/excel');
         if (!empty($username)) {
-            $this->loginUserName($username);
+            $this->loginUsername($username);
         }
         if ($isExcel) {
             \ob_start();

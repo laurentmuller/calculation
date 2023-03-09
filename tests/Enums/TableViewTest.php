@@ -16,9 +16,7 @@ use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-/**
- * Unit test for the {@link TableView} enumeration.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(TableView::class)]
 class TableViewTest extends TypeTestCase
 {
     public function testCount(): void

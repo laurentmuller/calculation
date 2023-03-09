@@ -12,7 +12,7 @@
     "plugins": [
         {
             "name": "jquery",
-            "version": "3.6.3",
+            "version": "3.6.4",
             "files": [
                 "jquery.js",
                 "jquery.min.map"
@@ -134,7 +134,7 @@
         },
         {
             "name": "bootstrap-table",
-            "version": "1.21.2",
+            "version": "1.21.3",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
             "target": "bootstrap-table",
@@ -146,7 +146,7 @@
         {
             "display": "bootstrap-table-defer-url",
             "name": "bootstrap-table",
-            "version": "1.21.2",
+            "version": "1.21.3",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/extensions/defer-url/{file}",
             "target": "bootstrap-table",
@@ -157,7 +157,7 @@
         {
             "display": "bootstrap-table-custom-view",
             "name": "bootstrap-table",
-            "version": "1.21.2",
+            "version": "1.21.3",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/extensions/custom-view/{file}",
             "target": "bootstrap-table",

@@ -16,7 +16,7 @@ use App\Interfaces\DefaultEnumInterface;
 use Elao\Enum\ExtrasTrait;
 
 /**
- * Trait for class implementing {@link \App\Interfaces\DefaultEnumInterface DefaultEnumInterface} interface.
+ * Trait for class implementing {@link DefaultEnumInterface} interface.
  *
  * @psalm-require-implements \App\Interfaces\DefaultEnumInterface
  */

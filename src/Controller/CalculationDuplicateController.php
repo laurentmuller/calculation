@@ -59,7 +59,6 @@ class CalculationDuplicateController extends AbstractController
      * Exports the duplicate items in the calculations.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'duplicate_pdf')]
     public function pdf(CalculationRepository $repository): Response

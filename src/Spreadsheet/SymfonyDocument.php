@@ -27,8 +27,6 @@ class SymfonyDocument extends AbstractDocument
 {
     /**
      * Constructor.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
     {
@@ -37,8 +35,6 @@ class SymfonyDocument extends AbstractDocument
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {
@@ -87,7 +83,6 @@ class SymfonyDocument extends AbstractDocument
      * @param BundleType[] $bundles
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputBundles(array $bundles): void
     {
@@ -119,7 +114,6 @@ class SymfonyDocument extends AbstractDocument
 
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputInfo(SymfonyInfoService $info): void
     {
@@ -162,7 +156,6 @@ class SymfonyDocument extends AbstractDocument
      * @param array<string, PackageType> $packages
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputPackages(string $title, array $packages): void
     {
@@ -198,7 +191,6 @@ class SymfonyDocument extends AbstractDocument
      * @param RouteType[] $routes
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function outputRoutes(string $title, array $routes): void
     {

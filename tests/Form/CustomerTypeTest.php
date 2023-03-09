@@ -16,10 +16,9 @@ use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
 
 /**
- * Test for the {@link CustomerType} class.
- *
  * @extends AbstractEntityTypeTestCase<Customer, CustomerType>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(CustomerType::class)]
 class CustomerTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array

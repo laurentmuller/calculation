@@ -49,8 +49,6 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      *          price: float,
      *          count: int}>
      *      }> $entities
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, array $entities, string $title)
     {
@@ -62,7 +60,6 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      * {@inheritdoc}
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function doRender(array $entities): bool
     {

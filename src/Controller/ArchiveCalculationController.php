@@ -30,9 +30,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ArchiveCalculationController extends AbstractController
 {
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     #[Route(path: '/archive', name: 'admin_archive')]
     public function invoke(Request $request, ArchiveService $service, SuspendEventListenerService $listener): Response
     {

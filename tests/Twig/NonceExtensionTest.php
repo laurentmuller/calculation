@@ -15,9 +15,7 @@ namespace App\Tests\Twig;
 use App\Twig\NonceExtension;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Unit test for Twig NonceExtension.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(NonceExtension::class)]
 class NonceExtensionTest extends KernelTestCase
 {
     private ?NonceExtension $extension = null;

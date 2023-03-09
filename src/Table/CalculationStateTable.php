@@ -45,8 +45,6 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      * Formatter for the calculation column.
      *
      * @throws \Twig\Error\Error
-     *
-     * @noinspection PhpUnused
      */
     public function formatCalculations(\Countable $calculations, CalculationState $state): string
     {
@@ -64,8 +62,6 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
 
     /**
      * Format the editable state.
-     *
-     * @noinspection PhpUnused
      */
     public function formatEditable(bool $value): string
     {

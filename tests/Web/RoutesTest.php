@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RoutesTest extends AbstractAuthenticateWebTestCase
 {
     /**
-     * @return array<int, array<int, int|string>>
+     * @return array<array{0: string, 1: string, 2?: int}>
      */
     public static function getRoutes(): array
     {
@@ -57,8 +57,8 @@ class RoutesTest extends AbstractAuthenticateWebTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getRoutes')]
     public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
     {
-        $this->loginUserName($username);
-        $this->client->request(Request::METHOD_GET, $url);
+        $this->loginUsername($username);
+        $this->client?->request(Request::METHOD_GET, $url);
         $this->checkResponse($url, $username, $expected);
     }
 }

@@ -83,7 +83,7 @@ interface TableInterface
     final public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**
-     * The dispay view parameter name (string: 'table', 'custom' or 'card').
+     * The display view parameter name (string: 'table', 'custom' or 'card').
      */
     final public const PARAM_VIEW = 'view';
 }

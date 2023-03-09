@@ -40,9 +40,6 @@ class GeneratorController extends AbstractController
     private const KEY_ENTITY = 'admin.generate.entity';
     private const KEY_SIMULATE = 'admin.generate.simulate';
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     #[Route(path: '', name: 'generate')]
     public function generate(): Response
     {

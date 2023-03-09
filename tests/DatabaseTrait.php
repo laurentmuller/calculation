@@ -23,8 +23,6 @@ trait DatabaseTrait
 {
     /**
      * The database.
-     *
-     * @var ?Database
      */
     protected static ?Database $database = null;
 
@@ -44,6 +42,7 @@ trait DatabaseTrait
         if (null !== self::$database) {
             self::$database->close();
             self::$database = Database::deleteDatabase();
+            self::$database = null;
         }
     }
 

@@ -33,6 +33,7 @@ trait AuthorizationCheckerAwareTrait
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
         if (null === $this->authorizationChecker) {
+            /* @noinspection PhpUnhandledExceptionInspection */
             /** @psalm-var AuthorizationCheckerInterface $result */
             $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
             $this->authorizationChecker = $result;

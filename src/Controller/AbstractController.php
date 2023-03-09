@@ -73,8 +73,6 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the application service.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getApplication(): ApplicationService
     {
@@ -108,12 +106,16 @@ abstract class AbstractController extends BaseController
         return $this->getParameterString('app_owner_url');
     }
 
+    /**
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
+     */
     public function getRequestStack(): RequestStack
     {
         if (null === $this->requestStack) {
-            /** @psalm-var RequestStack $result */
-            $result = $this->container->get('request_stack');
-            $this->requestStack = $result;
+            /* @noinspection PhpUnhandledExceptionInspection */
+            $this->requestStack = $this->container->get('request_stack');
         }
 
         return $this->requestStack;
@@ -133,12 +135,11 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the translator.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getTranslator(): TranslatorInterface
     {
         if (null === $this->translator) {
+            /* @noinspection PhpUnhandledExceptionInspection */
             $this->translator = $this->container->get(TranslatorInterface::class);
         }
 
@@ -147,12 +148,11 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the URL generator service.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
         if (null === $this->generatorService) {
+            /* @noinspection PhpUnhandledExceptionInspection */
             $this->generatorService = $this->container->get(UrlGeneratorService::class);
         }
 
@@ -189,12 +189,11 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the user service.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getUserService(): UserService
     {
         if (null === $this->userService) {
+            /* @noinspection PhpUnhandledExceptionInspection */
             $this->userService = $this->container->get(UserService::class);
         }
 

@@ -80,8 +80,6 @@ abstract class AbstractEntityController extends AbstractController
      * @param array           $parameters the optional parameters
      *
      * @psalm-param T $item
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
@@ -143,8 +141,6 @@ abstract class AbstractEntityController extends AbstractController
      * @param array          $parameters the optional parameters
      *
      * @psalm-param T $item
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

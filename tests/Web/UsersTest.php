@@ -12,10 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
-use App\Interfaces\RoleInterface;
-
 /**
- * Test class for users.
+ * Test class for user's roles.
  */
 class UsersTest extends AbstractAuthenticateWebTestCase
 {
@@ -56,14 +54,13 @@ class UsersTest extends AbstractAuthenticateWebTestCase
         }
     }
 
-    /**
-     * @psalm-param RoleInterface::ROLE_* $username
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getUserRole')]
     public function testUserRole(string $username): void
     {
+        /** @psalm-var \App\Interfaces\RoleInterface::ROLE_* $role */
+        $role = $username;
         $user = $this->loadUser($username, false);
-        self::assertNotNull($user, "The user '$username' is null.");
-        self::assertTrue($user->hasRole($username));
+        self::assertNotNull($user);
+        self::assertTrue($user->hasRole($role));
     }
 }

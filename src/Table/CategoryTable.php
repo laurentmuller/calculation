@@ -54,8 +54,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * Formatter for the product column.
      *
      * @throws \Twig\Error\Error
-     *
-     * @noinspection PhpUnused
      */
     public function formatProducts(\Countable $products, Category $category): string
     {
@@ -75,8 +73,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * Formatter for the task column.
      *
      * @throws \Twig\Error\Error
-     *
-     * @noinspection PhpUnused
      */
     public function formatTasks(\Countable $tasks, Category $category): string
     {

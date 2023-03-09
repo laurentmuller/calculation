@@ -51,12 +51,12 @@ $rules = [
     'array_syntax' => ['syntax' => 'short'],
     'list_syntax' => ['syntax' => 'short'],
     'doctrine_annotation_array_assignment' => ['operator' => '='],
-    'ordered_interfaces' => true
+    'ordered_interfaces' => true,
 ];
 
 $finder = Finder::create()
-    ->in(\realpath(__DIR__ . '/src'))
-    ->in(\realpath(__DIR__ . '/tests'));
+    ->in(__DIR__ . '/src')
+    ->in(__DIR__ . '/tests');
 
 $config = new Config();
 

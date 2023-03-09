@@ -30,8 +30,6 @@ class SymfonyReport extends AbstractReport
 {
     /**
      * Constructor.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
     {
@@ -41,8 +39,6 @@ class SymfonyReport extends AbstractReport
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function render(): bool
     {
@@ -109,9 +105,6 @@ class SymfonyReport extends AbstractReport
         }
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     private function outputInfo(SymfonyInfoService $info): void
     {
         $app = $this->controller->getApplication();

@@ -16,8 +16,6 @@ use App\Interfaces\SortModeInterface;
 
 /**
  * Attribute to define the sort order of an object.
- *
- * @see \App\Tests\Attribute\SortableEntityTest
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 class SortableEntity

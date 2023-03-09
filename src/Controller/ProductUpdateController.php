@@ -29,9 +29,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ProductUpdateController extends AbstractController
 {
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
     #[Route(path: '/product', name: 'admin_product')]
     public function invoke(Request $request, ProductUpdater $updater): Response
     {

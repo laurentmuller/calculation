@@ -21,7 +21,6 @@ use App\Service\FakerService;
 use App\Service\SuspendEventListenerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -39,9 +38,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class UpdateEntityController extends AbstractController
 {
-    /**
-     * @throws ContainerExceptionInterface
-     */
     #[Route(path: '', name: 'update')]
     public function update(): Response
     {

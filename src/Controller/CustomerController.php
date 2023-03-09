@@ -51,8 +51,6 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Add a customer.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'customer_add')]
     public function add(Request $request): Response
@@ -62,10 +60,6 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Delete a customer.
-     *
-     * throws \Psr\Container\ContainerExceptionInterface
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
@@ -75,8 +69,6 @@ class CustomerController extends AbstractEntityController
 
     /**
      * Edit a customer.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Customer $item): Response
@@ -89,7 +81,6 @@ class CustomerController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'customer_excel')]
     public function excel(CustomerRepository $repository): SpreadsheetResponse
@@ -108,7 +99,6 @@ class CustomerController extends AbstractEntityController
      * Export the customers to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'customer_pdf')]
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse

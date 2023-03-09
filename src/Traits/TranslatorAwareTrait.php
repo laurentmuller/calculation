@@ -30,6 +30,7 @@ trait TranslatorAwareTrait
     public function getTranslator(): TranslatorInterface
     {
         if (null === $this->translator) {
+            /* @noinspection PhpUnhandledExceptionInspection */
             /** @psalm-var TranslatorInterface $result */
             $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
             $this->translator = $result;

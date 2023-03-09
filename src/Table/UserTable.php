@@ -44,8 +44,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Translate the user's enabled state.
-     *
-     * @noinspection PhpUnused
      */
     public function formatEnabled(bool $enabled): string
     {
@@ -56,8 +54,6 @@ class UserTable extends AbstractEntityTable
      * Format the user's image.
      *
      * @throws \Twig\Error\Error
-     *
-     * @noinspection PhpUnused
      */
     public function formatImage(?string $image, User $user): string
     {
@@ -70,8 +66,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Format the last login date.
-     *
-     * @noinspection PhpUnused
      */
     public function formatLastLogin(?\DateTimeInterface $date): string
     {
@@ -84,8 +78,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Translate the user's role.
-     *
-     * @noinspection PhpUnused
      */
     public function formatRole(string $role): string
     {

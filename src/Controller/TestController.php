@@ -134,8 +134,6 @@ class TestController extends AbstractController
 
     /**
      * Export a HTML page to PDF.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/html', name: 'test_html')]
     public function html(): PdfResponse
@@ -209,7 +207,7 @@ class TestController extends AbstractController
         }
 
         $helper = $this->createFormHelper('password.', $data);
-        $helper->eventPreSubmitListener($listener);
+        $helper->listenerPreSubmit($listener);
 
         $helper->field('input')
             ->widgetClass('password-strength')
@@ -351,7 +349,7 @@ class TestController extends AbstractController
     /**
      * Show the translation page.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[Route(path: '/translate', name: 'test_translate')]
     public function translate(TranslatorFactory $factory): Response
@@ -407,6 +405,7 @@ class TestController extends AbstractController
 
                 foreach ($group->getCategories() as $category) {
                     $count += $category->countItems();
+
                     $node['nodes'][] = [
                         'id' => \sprintf('category-%d', (int) $category->getId()),
                         'text' => $category->getCode(),
@@ -419,6 +418,7 @@ class TestController extends AbstractController
             }
 
             // root
+
             $root = [
                 'id' => 'root',
                 'text' => 'Catalogue',

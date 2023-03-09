@@ -16,13 +16,11 @@ use App\Entity\Calculation;
 use App\Util\StringUtils;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for {@link StringUtils} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(StringUtils::class)]
 class StringUtilsTest extends TestCase
 {
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: string, 1: string}>
      */
     public static function getAscii(): array
     {
@@ -35,7 +33,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: string, 1: string}>
      */
     public static function getCapitalize(): array
     {
@@ -49,7 +47,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: string, 1: string, 2: bool, 3: bool}>
      */
     public static function getContains(): array
     {
@@ -62,7 +60,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: string, 1: string, 2: bool, 3: bool}>
      */
     public static function getEndWith(): array
     {
@@ -75,7 +73,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: string, 1: string, 2?: bool}>
      */
     public static function getEqualIgnoreCase(): array
     {
@@ -87,7 +85,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: mixed, 1: mixed}>
      */
     public static function getExportVar(): array
     {
@@ -105,7 +103,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: string|null, 1: bool}>
      */
     public static function getIsString(): array
     {
@@ -117,7 +115,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: object|string|null, 1: string|null, 2?: bool}>
      */
     public static function getShortName(): array
     {
@@ -131,7 +129,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: string, 1: string, 2: bool, 3: bool}>
      */
     public static function getStartWith(): array
     {
@@ -144,7 +142,7 @@ class StringUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @return array<array{0: mixed, 1: string, 2: bool}>
      */
     public static function getToString(): array
     {

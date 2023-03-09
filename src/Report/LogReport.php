@@ -80,8 +80,6 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
     /**
      * Constructor.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {

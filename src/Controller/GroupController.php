@@ -51,8 +51,6 @@ class GroupController extends AbstractEntityController
 
     /**
      * Add a group.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/add', name: 'group_add')]
     public function add(Request $request): Response
@@ -62,8 +60,6 @@ class GroupController extends AbstractEntityController
 
     /**
      * Clone (copy) a group.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Group $item): Response
@@ -81,7 +77,6 @@ class GroupController extends AbstractEntityController
      * Delete a group.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
@@ -118,8 +113,6 @@ class GroupController extends AbstractEntityController
 
     /**
      * Edit a group.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Group $item): Response
@@ -133,7 +126,6 @@ class GroupController extends AbstractEntityController
      * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/excel', name: 'group_excel')]
     public function excel(): SpreadsheetResponse
@@ -151,9 +143,8 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a PDF document.
      *
-     * @throws NotFoundHttpException                      if no group is found
+     * @throws NotFoundHttpException                if no group is found
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/pdf', name: 'group_pdf')]
     public function pdf(): PdfResponse

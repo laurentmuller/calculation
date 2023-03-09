@@ -114,13 +114,13 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * Set the blending mode for this image.
      *
-     * @param bool $blendmode whether to enable the blending mode or not
+     * @param bool $blendMode whether to enable the blending mode or not
      *
      * @return bool true on success or false on failure
      */
-    public function alphaBlending(bool $blendmode): bool
+    public function alphaBlending(bool $blendMode): bool
     {
-        return \imagealphablending($this->image, $blendmode);
+        return \imagealphablending($this->image, $blendMode);
     }
 
     /**
@@ -563,7 +563,7 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
-     * @param string $fontfile the path to the TrueType font
+     * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
      * @return int[]|bool an array with 8 elements representing four points making the bounding box of the
@@ -609,10 +609,10 @@ class ImageHandler implements ImageExtensionInterface
      *                    </tr>
      *                    </table>
      */
-    public function ttfBox(float $size, float $angle, string $fontfile, string $text): array|bool
+    public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|bool
     {
         /** @var int[]|bool $result */
-        $result = \imagettfbbox($size, $angle, $fontfile, $text);
+        $result = \imagettfbbox($size, $angle, $fontFile, $text);
 
         return $result;
     }
@@ -622,16 +622,16 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
-     * @param string $fontfile the path to the TrueType font
+     * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
      * @return int the text height or 0 on error
      *
      * @see ImageHandler::ttfBox()
      */
-    public function ttfHeight(float $size, float $angle, string $fontfile, string $text): int
+    public function ttfHeight(float $size, float $angle, string $fontFile, string $text): int
     {
-        return $this->ttfSize($size, $angle, $fontfile, $text)[1];
+        return $this->ttfSize($size, $angle, $fontFile, $text)[1];
     }
 
     /**
@@ -639,16 +639,16 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
-     * @param string $fontfile the path to the TrueType font
+     * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
      * @return int[] an array with the text width and the text height or an empty array ([0, 0]) on error
      *
      * @see ImageHandler::ttfBox()
      */
-    public function ttfSize(float $size, float $angle, string $fontfile, string $text): array
+    public function ttfSize(float $size, float $angle, string $fontFile, string $text): array
     {
-        $box = $this->ttfBox($size, $angle, $fontfile, $text);
+        $box = $this->ttfBox($size, $angle, $fontFile, $text);
         if (\is_array($box)) {
             $values = [$box[0], $box[2], $box[4], $box[6]];
             $width = \max($values) - \min($values);
@@ -674,7 +674,7 @@ class ImageHandler implements ImageExtensionInterface
      * @param int    $y        The y-coordinate. This sets the position of the font baseline, not the
      *                         very bottom of the character.
      * @param int    $color    a color identifier created with allocate
-     * @param string $fontfile the path to the TrueType font
+     * @param string $fontFile the path to the TrueType font
      * @param string $text     The text string in UTF-8 encoding.
      *                         <br>
      *                         May include decimal numeric character references (of the form:
@@ -732,9 +732,9 @@ class ImageHandler implements ImageExtensionInterface
      *                     </tr>
      *                     </table>
      */
-    public function ttfText(float $size, float $angle, int $x, int $y, int $color, string $fontfile, string $text): array|false
+    public function ttfText(float $size, float $angle, int $x, int $y, int $color, string $fontFile, string $text): array|false
     {
-        return \imagettftext($this->image, $size, $angle, $x, $y, $color, $fontfile, $text);
+        return \imagettftext($this->image, $size, $angle, $x, $y, $color, $fontFile, $text);
     }
 
     /**
@@ -742,15 +742,15 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
-     * @param string $fontfile the path to the TrueType font
+     * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
      * @return int the text width or 0 on error
      *
      * @see ImageHandler::ttfBox()
      */
-    public function ttfWidth(float $size, float $angle, string $fontfile, string $text): int
+    public function ttfWidth(float $size, float $angle, string $fontFile, string $text): int
     {
-        return $this->ttfSize($size, $angle, $fontfile, $text)[0];
+        return $this->ttfSize($size, $angle, $fontFile, $text)[0];
     }
 }

@@ -18,9 +18,7 @@ use App\Traits\RoleTranslatorTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Unit test for {@link RoleTranslatorTrait} class.
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(RoleTranslatorTrait::class)]
 class RoleTranslatorTraitTest extends TestCase
 {
     use RoleTranslatorTrait;

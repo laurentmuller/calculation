@@ -42,8 +42,6 @@ class AdminController extends AbstractController
 
     /**
      * Clear the application cache.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/clear', name: 'admin_clear')]
     public function clearCache(Request $request, SymfonyInfoService $info, ClearCacheService $service, LoggerInterface $logger): Response
@@ -73,8 +71,6 @@ class AdminController extends AbstractController
 
     /**
      * Edit the application parameters.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
@@ -102,8 +98,6 @@ class AdminController extends AbstractController
 
     /**
      * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/rights/admin', name: 'admin_rights_admin')]
@@ -119,8 +113,6 @@ class AdminController extends AbstractController
 
     /**
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request): Response
@@ -137,8 +129,6 @@ class AdminController extends AbstractController
      * Edit rights for the given role name.
      *
      * @param int[] $rights
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
     {

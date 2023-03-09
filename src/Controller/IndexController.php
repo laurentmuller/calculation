@@ -54,8 +54,6 @@ class IndexController extends AbstractController
 
     /**
      *  Display the home page.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
     #[Route(path: '/', name: 'homepage')]
     public function invoke(Request $request): Response

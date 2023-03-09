@@ -19,13 +19,7 @@ use App\Util\RoleBuilder;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
-/***
- * Unit test for {@link RightsTrait} class.
- *
- *
- *
- * @see RightsTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(RightsTrait::class)]
 class RightsTraitTest extends TestCase
 {
     use RightsTrait;

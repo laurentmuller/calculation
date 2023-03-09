@@ -89,6 +89,7 @@ final class FileUtils
         $content = \json_decode($json, $assoc);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             $message = \json_last_error_msg();
+
             throw new \InvalidArgumentException(\sprintf("Unable to decode the content of the file '%s' (%s).", $file, $message));
         }
 
@@ -103,7 +104,7 @@ final class FileUtils
      *
      * @return bool true on success, false on failure
      */
-    public static function dumpFile(string|\SplFileInfo $file, $content): bool
+    public static function dumpFile(string|\SplFileInfo $file, mixed $content): bool
     {
         try {
             self::getFilesystem()->dumpFile(self::realPath($file), $content);

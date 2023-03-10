@@ -185,7 +185,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             ->set('u.requestedAt', 'NULL')
             ->set('u.expiresAt', 'NULL')
             ->where('u.expiresAt <= :time')
-            ->setParameter('time', $time, Types::DATE_IMMUTABLE)
+            ->setParameter('time', $time, Types::DATETIME_IMMUTABLE)
             ->getQuery();
 
         return (int) $query->execute();

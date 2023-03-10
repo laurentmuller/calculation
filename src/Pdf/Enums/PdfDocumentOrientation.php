@@ -21,6 +21,7 @@ enum PdfDocumentOrientation: string
      * The document orientation as landscape.
      */
     case LANDSCAPE = 'L';
+
     /*
      * The document orientation as portrait.
      */

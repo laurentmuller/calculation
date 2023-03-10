@@ -36,15 +36,18 @@ enum Importance: string implements DefaultEnumInterface, ReadableEnumInterface, 
      * High importance.
      */
     case HIGH = 'high';
+
     /*
      * Low importance (default value).
      */
     #[EnumCase(extras: ['default' => true])]
     case LOW = 'low';
+
     /*
      * Medium  importance.
      */
     case MEDIUM = 'medium';
+
     /*
      * Urgente importance.
      */

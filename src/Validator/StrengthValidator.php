@@ -79,11 +79,7 @@ class StrengthValidator extends AbstractConstraintValidator
 
     private function getService(): Zxcvbn
     {
-        if (null === $this->service) {
-            $this->service = $this->factory->createZxcvbn();
-        }
-
-        return $this->service;
+        return $this->service ??= $this->factory->createZxcvbn();
     }
 
     private function getUserInputs(Strength $constraint): array

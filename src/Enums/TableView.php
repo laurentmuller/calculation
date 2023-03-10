@@ -36,6 +36,7 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
      * Show values as cards.
      */
     case CUSTOM = 'custom';
+
     /*
      * Show values within a table (default value).
      */

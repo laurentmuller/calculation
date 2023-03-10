@@ -21,14 +21,17 @@ enum PdfDocumentUnit: string
      * The centimeter document unit.
      */
     case CENTIMETER = 'cm';
+
     /*
      * The inch document unit.
      */
     case INCH = 'in';
+
     /*
      * The millimeter document unit.
      */
     case MILLIMETER = 'mm';
+
     /*
      * The point document unit.
      */

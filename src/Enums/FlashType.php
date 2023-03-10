@@ -21,14 +21,17 @@ enum FlashType: string
      * Danger flash bag.
      */
     case DANGER = 'danger';
+
     /*
      * Information  flash bag.
      */
     case INFO = 'info';
+
     /*
      * Success flash bag.
      */
     case SUCCESS = 'success';
+
     /*
      * Warning flash bag.
      */

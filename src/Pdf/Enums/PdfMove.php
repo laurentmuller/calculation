@@ -21,12 +21,15 @@ enum PdfMove: int
      * Move below of the printed cell.
      */
     case BELOW = 2;
+
     /*
      * Move at the beginning of the next line after the cell is printed.
-     * it is equivalent to the setting <b>RIGHT</b> and calling the
+     *
+     * It is equivalent to the setting <b>RIGHT</b> and calling the
      * <code>PdfDocument->Ln()</code> method immediately afterwards.
      */
     case NEW_LINE = 1;
+
     /*
      * Move to the right position of the printed cell.
      */

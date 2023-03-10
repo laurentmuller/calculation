@@ -43,7 +43,7 @@ abstract class AbstractReader implements \Iterator
      *
      * @var resource|closed-resource|false
      */
-    private mixed $stream; /** @phpstan-ignore-line */
+    private mixed $stream; // @phpstan-ignore-line
 
     /**
      * Constructor.

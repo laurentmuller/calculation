@@ -21,14 +21,17 @@ enum PdfDocumentLayout: string
      * Displays pages continuously.
      */
     case CONTINUOUS = 'continuous';
+
     /*
      * Uses viewer default mode.
      */
     case DEFAULT = 'default';
+
     /*
      * Displays one page at once.
      */
     case SINGLE = 'single';
+
     /*
      * Displays two pages on two columns.
      */

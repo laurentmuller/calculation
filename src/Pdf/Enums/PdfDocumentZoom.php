@@ -21,14 +21,17 @@ enum PdfDocumentZoom: string
      * Uses viewer default mode.
      */
     case DEFAULT = 'default';
+
     /*
      * Displays the entire page on screen.
      */
     case FULL_PAGE = 'fullpage';
+
     /*
      * Uses maximum width of window.
      */
     case FULL_WIDTH = 'fullwidth';
+
     /*
      * Uses real size (equivalent to 100% zoom).
      */

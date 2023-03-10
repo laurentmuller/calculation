@@ -20,7 +20,7 @@ use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfFont;
+use App\Pdf\PdfStyle;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
 use App\Util\FormatUtils;
@@ -70,13 +70,12 @@ abstract class AbstractReport extends PdfDocument
 
     /**
      * {@inheritdoc}
+     *
+     * Override the default behavior by adding the translated title if null.
      */
-    public function addIndexPage(string $title = '', float $titleFontSize = 12, float $contentFontSize = PdfFont::DEFAULT_SIZE): void
+    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null): void
     {
-        if ('' === $title) {
-            $title = $this->trans('report.index');
-        }
-        parent::addIndexPage($title, $titleFontSize, $contentFontSize);
+        parent::addPageIndex($title ?? $this->trans('report.index'), $titleStyle, $contentStyle);
     }
 
     /**
@@ -145,7 +144,7 @@ abstract class AbstractReport extends PdfDocument
     }
 
     /**
-     * Add a first level (0) outline with this title (if any) as text.
+     * Add a first level (0) bookmark  with this title as text.
      *
      * Do nothing if no title is defined.
      *
@@ -153,10 +152,10 @@ abstract class AbstractReport extends PdfDocument
      *
      * @return bool true if the outline is added; false otherwise
      */
-    protected function addOutlineTitle(bool $isUTF8 = true): bool
+    protected function addBookmarkTitle(bool $isUTF8 = true): bool
     {
         if (null !== $this->title) {
-            $this->addOutline($this->title, $isUTF8);
+            $this->addBookmark($this->title, $isUTF8);
 
             return true;
         }

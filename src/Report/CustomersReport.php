@@ -130,7 +130,7 @@ class CustomersReport extends AbstractArrayReport
     {
         $groups = $this->groupCustomers($entities);
         foreach ($groups as $key => $customers) {
-            $this->addOutline((string) $key);
+            $this->addBookmark((string) $key);
             $table->setGroupKey($key);
             foreach ($customers as $customer) {
                 $this->outputCustomer($table, $customer);

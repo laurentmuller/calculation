@@ -37,10 +37,12 @@ enum EntityAction: string implements DefaultEnumInterface, ReadableEnumInterface
      */
     #[EnumCase(extras: ['default' => true])]
     case EDIT = 'edit';
+
     /*
      * No action.
      */
     case NONE = 'none';
+
     /*
      * Show the entity.
      */

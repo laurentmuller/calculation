@@ -55,11 +55,11 @@ use App\Util\FormatUtils;
  * @property int                         $n              The current object number.
  * @property array<int, PdfPageInfoType> $PageInfo       The page-related data.
  *
- * @method float  GetX()                                           The current X position in user unit.
- * @method float  GetY()                                           The current Y position in user unit.
- * @method int    PageNo()                                         The current page number.
- * @method float  GetPageWidth()                                   The width of current page in user unit.
- * @method float  GetPageHeight()                                  The height of current page in user unit.
+ * @method float  GetX()                                           Gets the current X position in user unit.
+ * @method float  GetY()                                           Gets the current Y position in user unit.
+ * @method int    PageNo()                                         Gets the current page number.
+ * @method float  GetPageWidth()                                   Gets the width of current page in user unit.
+ * @method float  GetPageHeight()                                  Gets the height of current page in user unit.
  * @method string _textstring(string $s)                           Convert the given string.
  * @method int    AddLink()                                        Creates a new internal link and returns its identifier.
  * @method void   SetLink(int $link, float $y = 0, int $page = -1) Defines the page and position a link points to.
@@ -74,7 +74,7 @@ use App\Util\FormatUtils;
  *      n: int,
  *      rotation: int,
  *      size: PdfPageSizeType}
- * @psalm-type PdfOutlineType = array{
+ * @psalm-type PdfBookmarkType = array{
  *     text: string,
  *     level: int,
  *     y: float,
@@ -121,16 +121,16 @@ class PdfDocument extends \FPDF
     protected ?string $title = null;
 
     /**
-     * The outline root object number.
+     * The bookmark root object number.
      */
-    private int $outlineRoot = -1;
+    private int $bookmakRoot = -1;
 
     /**
-     * The outlines.
+     * The bookmarks.
      *
-     * @psalm-var array<int, PdfOutlineType>
+     * @psalm-var array<int, PdfBookmarkType>
      */
-    private array $outlines = [];
+    private array $bookmarks = [];
 
     /**
      * Constructor.
@@ -155,118 +155,38 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Add a new index page containing all outlines.
+     * Add a bookmark.
      *
-     * Do nothing if no outline is defined.
-     *
-     * @param string $title           the index title or an empty string to use the default title ('Index')
-     * @param float  $titleFontSize   the title font size
-     * @param float  $contentFontSize the content font size
-     */
-    public function addIndexPage(string $title = '', float $titleFontSize = 12, float $contentFontSize = PdfFont::DEFAULT_SIZE): void
-    {
-        if ([] === $this->outlines) {
-            return;
-        }
-
-        // new page
-        $this->AddPage();
-
-        // title
-        $space = 2.0;
-        $old_font = $this->getCurrentFont();
-        $this->SetFont('', '', $titleFontSize);
-
-        $title = '' === $title ? 'Index' : $title;
-        $this->Cell(0, self::LINE_HEIGHT, $title, PdfBorder::NONE, PdfMove::NEW_LINE, PdfTextAlignment::CENTER);
-        $this->SetFont('', '', $contentFontSize);
-
-        // @phpstan-ignore-next-line
-        $page = \end($this->outlines)['page'];
-        $line_height = $this->getFontSize() + $space;
-        $page_text = FormatUtils::formatInt($page);
-        $page_cell_size = $this->GetStringWidth($page_text) + $space;
-        $printable_width = $this->getPrintableWidth();
-
-        // outlines
-        foreach ($this->outlines as $outline) {
-            // offset
-            $offset = (float) $outline['level'] * 2.0 * $space;
-            if ($offset > 0) {
-                $this->Cell($offset);
-            }
-
-            // text
-            $link = $outline['link'];
-            $text = (string) \iconv('UTF-8', 'windows-1252', $outline['text']);
-            $text_size = $this->GetStringWidth($text);
-            $available_size = $printable_width - $page_cell_size - $offset - 2.0 * $space;
-            while ($text_size >= $available_size) {
-                $text = \substr($text, 0, -1);
-                $text_size = $this->GetStringWidth($text);
-            }
-            $this->Cell(
-                w: $text_size + $space,
-                h: $line_height,
-                txt: $text,
-                link: $link
-            );
-
-            // dots
-            $dot_width = $printable_width - $page_cell_size - $offset - $text_size - $space;
-            $dot_count = $dot_width / $this->GetStringWidth('.');
-            $dot_text = \str_repeat('.', (int) $dot_count);
-            $this->Cell(
-                w: $dot_width,
-                h: $line_height,
-                txt: $dot_text,
-                align: PdfTextAlignment::RIGHT,
-                link: $link
-            );
-
-            // page number
-            $this->Cell(
-                w: $page_cell_size,
-                h: $line_height,
-                txt: FormatUtils::formatInt($outline['page']),
-                ln: PdfMove::NEW_LINE,
-                align: PdfTextAlignment::RIGHT,
-                link: $link
-            );
-        }
-        $old_font->apply($this);
-    }
-
-    /**
-     * Add an outline.
-     *
-     * @param string $text   the outline title
-     * @param bool   $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @param string $text   the bookmark text
+     * @param bool   $isUTF8 indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
      * @param int    $level  the outline level (0 is top level, 1 is just below, and so on)
-     * @param float  $y      the y position of the outline destination in the current page. -1 means the current position.
-     * @param bool   $link   true to create and add a link at the given y position and page
+     * @param float  $y      the ordinate of the outline destination in the current page.
+     *                       -1 means the current position. 0 means top of page.
+     * @param bool   $link   true to create and add a link at the given ordinate position and page
+     *
+     * @see PdfDocument::addPageIndex()
      */
-    public function addOutline(string $text, bool $isUTF8 = false, int $level = 0, float $y = -1, bool $link = true): self
+    public function addBookmark(string $text, bool $isUTF8 = false, int $level = 0, float $y = -1, bool $link = true): self
     {
         if (!$isUTF8) {
             $text = (string) $this->_UTF8encode($text);
         }
         if ($y < 0) {
-            $y = $this->GetY();
+            $y = $this->y;
         }
 
-        $link_id = '';
+        $linkId = '';
+        $page = $this->page;
         if ($link) {
-            $link_id = $this->AddLink();
-            $this->SetLink($link_id, $y, $this->page);
+            $linkId = $this->CreateLink($y, $page);
         }
 
-        $this->outlines[] = [
+        $this->bookmarks[] = [
             'text' => $text,
             'level' => \max(0, $level),
             'y' => ($this->h - $y) * $this->k,
-            'page' => $this->page,
-            'link' => $link_id,
+            'page' => $page,
+            'link' => $linkId,
         ];
 
         return $this;
@@ -292,6 +212,103 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Add a new page (index page) containing all bookmarks.
+     *
+     * Each line contain the text on the left, the page number on the right and are separate by dot ('.') characters.
+     *
+     * <b>Remark:</b> Do nothing if no bookmark is defined.
+     *
+     * @param ?string   $title        the index title or null to use the default title ('Index')
+     * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9pt Bold)
+     * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9pt Regular)
+     *
+     * @see PdfDocument::addBookmark()
+     */
+    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null): void
+    {
+        if ([] === $this->bookmarks) {
+            return;
+        }
+
+        // new page
+        $this->AddPage();
+
+        // styles
+        $titleStyle ??= PdfStyle::getBoldCellStyle();
+        $contentStyle ??= PdfStyle::getDefaultStyle();
+
+        // title
+        $titleStyle->apply($this);
+        $this->Cell(
+            w: 0,
+            h: self::LINE_HEIGHT,
+            txt: $title ?? 'Index',
+            ln: PdfMove::NEW_LINE,
+            align: PdfTextAlignment::CENTER
+        );
+
+        // bookmarks
+        $space = 1.25;
+        $contentStyle->apply($this);
+        $line_height = $this->getFontSize() + 2.0;
+        $printable_width = $this->getPrintableWidth();
+
+        foreach ($this->bookmarks as $bookmark) {
+            // offset
+            $offset = (float) $bookmark['level'] * 2.0 * $space;
+            if ($offset > 0) {
+                $this->Cell($offset);
+            }
+
+            // page
+            $page_text = FormatUtils::formatInt($bookmark['page']);
+            $page_size = $this->GetStringWidth($page_text) + $space;
+
+            // text
+            $link = $bookmark['link'];
+            $text = (string) \iconv('UTF-8', 'ISO-8859-1', $bookmark['text']);
+            $text_size = $this->GetStringWidth($text);
+            $available_size = $printable_width - $page_size - $offset - 2.0 * $space;
+            while ($text_size >= $available_size) {
+                $text = \substr($text, 0, -1);
+                $text_size = $this->GetStringWidth($text);
+            }
+            $this->Cell(
+                w: $text_size + $space,
+                h: $line_height,
+                txt: $text,
+                link: $link
+            );
+
+            // dots
+            $dots_width = $printable_width - $page_size - $offset - $text_size - 2.0 * $space;
+            $dots_count = (int) ($dots_width / $this->GetStringWidth('.'));
+            if ($dots_count > 0) {
+                $dots_text = \str_repeat('.', $dots_count);
+                $this->Cell(
+                    w: $dots_width + $space,
+                    h: $line_height,
+                    txt: $dots_text,
+                    align: PdfTextAlignment::RIGHT,
+                    link: $link
+                );
+            }
+
+            // page number
+            $this->Cell(
+                w: $page_size,
+                h: $line_height,
+                txt: $page_text,
+                ln: PdfMove::NEW_LINE,
+                align: PdfTextAlignment::RIGHT,
+                link: $link
+            );
+        }
+
+        $this->resetStyle();
+    }
+
+    /**
      * Apply the given font.
      *
      * @param PdfFont $font the font to apply
@@ -314,7 +331,7 @@ class PdfDocument extends \FPDF
      * @param string                  $txt    the cell text
      * @param PdfBorder|int|string    $border indicates if borders must be drawn around the cell. The value can be either:
      *                                        <ul>
-     *                                        <li>A Pdf border object.</li>
+     *                                        <li>A PdfBorder enumeration.</li>
      *                                        <li>A number:
      *                                        <ul>
      *                                        <li><b>0</b> : No border (default value).</li>
@@ -334,20 +351,22 @@ class PdfDocument extends \FPDF
      *                                        Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after.
      *                                        Possible values are:
      *                                        <ul>
-     *                                        <li>A Pdf move enumeration.</li>
-     *                                        <li><b>0</b>: To the right (default value)</li>
-     *                                        <li><b>1</b>: To the beginning of the next line</li>
-     *                                        <li><b>2</b>: Below</li>
+     *                                        <li>A PdfMove enumeration.</li>
+     *                                        <li><b>0</b>: Move to the right (default value)</li>
+     *                                        <li><b>1</b>: Move to the beginning of the next line</li>
+     *                                        <li><b>2</b>: Move below</li>
      *                                        </ul>
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
-     *                                        <li>A Pdf text alignment enumeration.</li>
+     *                                        <li>A PdfTextAlignment enumeration.</li>
      *                                        <li>'<b>L</b>' or en empty string (''): left align (default value).</li>
      *                                        <li>'<b>C</b>' : center.</li>
      *                                        <li>'<b>R</b>' : right align.</li>
      *                                        </ul>
      * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      * @param string|int              $link   a URL or an identifier returned by AddLink()
+     *
+     * @see PdfDocument::MultiCell()
      */
     public function Cell($w, $h = 0.0, $txt = '', $border = PdfBorder::NONE, $ln = PdfMove::RIGHT, $align = PdfTextAlignment::LEFT, $fill = false, $link = ''): void
     {
@@ -363,6 +382,27 @@ class PdfDocument extends \FPDF
             $align = $align->value;
         }
         parent::Cell($w, $h, $this->cleanText($txt), $border, $ln, $align, $fill, $link);
+    }
+
+    /**
+     * Creates a new internal link for the given position and page and returns its identifier.
+     *
+     * This is a combination of the <code>AddLink()</code> and the <code>SetLink()</code> functions.
+     *
+     * @param float $y    the ordinate of the target position; -1 means the current position. 0 means top of page.
+     * @param int   $page the target page; -1 indicates the current page
+     *
+     * @return int the link identifier
+     *
+     * @see PdfDocument::AddLink()
+     * @see PdfDocument::SetLink()
+     */
+    public function CreateLink(float $y = -1, int $page = -1): int
+    {
+        $id = $this->addLinK();
+        $this->SetLink($id, $y, $page);
+
+        return $id;
     }
 
     public function Footer(): void
@@ -658,7 +698,7 @@ class PdfDocument extends \FPDF
      * @param string                  $txt    the cell text
      * @param PdfBorder|int|string    $border indicates if borders must be drawn around the cell. The value can be either:
      *                                        <ul>
-     *                                        <li>A Pdf border object.</li>
+     *                                        <li>A PdfBorder enumeration.</li>
      *                                        <li>A number:
      *                                        <ul>
      *                                        <li><b>0</b> : No border (default value).</li>
@@ -676,13 +716,15 @@ class PdfDocument extends \FPDF
      *                                        </ul>
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
-     *                                        <li>A Pdf text alignment enumeration.</li>
+     *                                        <li>A PdfTextAlignment enumeration.</li>
      *                                        <li>'<b>L</b>' or an empty string (''): left align (default value).</li>
      *                                        <li>'<b>C</b>' : center.</li>
      *                                        <li>'<b>R</b>' : right align.</li>
      *                                        <li>'<b>J</b>' : justification (default value).</li>
      *                                        </ul>
      * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
+     *
+     * @see PdfDocument::Cell()
      */
     public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false): void
     {
@@ -957,83 +999,85 @@ class PdfDocument extends \FPDF
         parent::Write($h, $this->cleanText($txt), $link);
     }
 
-    protected function _putcatalog(): void
-    {
-        parent::_putcatalog();
-        if ([] !== $this->outlines) {
-            $this->_put(\sprintf('/Outlines %d 0 R', $this->outlineRoot));
-            $this->_put('/PageMode /UseOutlines');
-        }
-    }
-
     /**
-     * @psalm-param PdfOutlineType $outline
+     * @psalm-param PdfBookmarkType $bookmark
      */
-    protected function _putOutline(array $outline, int $n): void
+    protected function _putBookmark(array $bookmark, int $n): void
     {
         $this->_newobj();
-        $this->_put(\sprintf('<</Title %s', $this->_textstring($outline['text'])));
+        $this->_put(\sprintf('<</Title %s', $this->_textstring($bookmark['text'])));
         foreach (['parent', 'prev', 'next', 'first', 'last'] as $key) {
-            if (isset($outline[$key])) {
-                $this->_put(\sprintf('/%s %d 0 R', \ucfirst($key), $n + (int) $outline[$key]));
+            if (isset($bookmark[$key])) {
+                $this->_put(\sprintf('/%s %d 0 R', \ucfirst($key), $n + (int) $bookmark[$key]));
             }
         }
 
-        $pageN = $this->PageInfo[$outline['page']]['n'];
-        $this->_put(\sprintf('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $outline['y']));
+        $pageN = $this->PageInfo[$bookmark['page']]['n'];
+        $this->_put(\sprintf('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']));
         $this->_put('/Count 0>>');
         $this->_put('endobj');
     }
 
-    protected function _putOutlines(): void
+    protected function _putBookmarks(): void
     {
         $level = 0;
+        $count = \count($this->bookmarks);
+
         /** @psalm-var array<int, int> $lastUsedReferences */
         $lastUsedReferences = [];
 
-        // build outlines hierarchy
-        foreach ($this->outlines as $index => $outline) {
-            if ($outline['level'] > 0) {
-                $parent = $lastUsedReferences[$outline['level'] - 1];
+        // build hierarchy
+        foreach ($this->bookmarks as $index => $bookmark) {
+            if ($bookmark['level'] > 0) {
+                $parent = $lastUsedReferences[$bookmark['level'] - 1];
                 // set parent and last pointers
-                $this->outlines[$index]['parent'] = $parent;
-                $this->outlines[$parent]['last'] = $index;
-                if ($outline['level'] > $level) {
+                $this->bookmarks[$index]['parent'] = $parent;
+                $this->bookmarks[$parent]['last'] = $index;
+                if ($bookmark['level'] > $level) {
                     // level increasing: set first pointer
-                    $this->outlines[$parent]['first'] = $index;
+                    $this->bookmarks[$parent]['first'] = $index;
                 }
             } else {
-                $this->outlines[$index]['parent'] = \count($this->outlines);
+                $this->bookmarks[$index]['parent'] = $count;
             }
-            if ($outline['level'] <= $level && $index > 0) {
+            if ($bookmark['level'] <= $level && $index > 0) {
                 // set previous and next pointers
-                $prev = $lastUsedReferences[$outline['level']];
-                $this->outlines[$prev]['next'] = $index;
-                $this->outlines[$index]['prev'] = $prev;
+                $prev = $lastUsedReferences[$bookmark['level']];
+                $this->bookmarks[$prev]['next'] = $index;
+                $this->bookmarks[$index]['prev'] = $prev;
             }
-            $lastUsedReferences[$outline['level']] = $index;
-            $level = $outline['level'];
+            $lastUsedReferences[$bookmark['level']] = $index;
+            $level = $bookmark['level'];
         }
 
-        // outline items
+        // outline bookmarks
         $n = $this->n + 1;
-        foreach ($this->outlines as $outline) {
-            $this->_putOutline($outline, $n);
+        foreach ($this->bookmarks as $bookmark) {
+            $this->_putBookmark($bookmark, $n);
         }
 
         // outline root
         $this->_newobj();
-        $this->outlineRoot = $this->n;
+        $this->bookmakRoot = $this->n;
         $this->_put(\sprintf('<</Type /Outlines /First %d 0 R', $n));
         $this->_put(\sprintf('/Last %d 0 R>>', $n + $lastUsedReferences[0]));
         $this->_put('endobj');
     }
 
+    protected function _putcatalog(): void
+    {
+        parent::_putcatalog();
+        if ([] !== $this->bookmarks) {
+            $this->_put(\sprintf('/Outlines %d 0 R', $this->bookmakRoot));
+            $this->_put('/PageMode /UseOutlines');
+        }
+    }
+
     protected function _putresources(): void
     {
         parent::_putresources();
-        if ([] !== $this->outlines) {
-            $this->_putOutlines();
+        if ([] !== $this->bookmarks) {
+            $this->_putBookmarks();
         }
     }
 

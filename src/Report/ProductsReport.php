@@ -48,12 +48,12 @@ class ProductsReport extends AbstractArrayReport
         foreach ($entities as $entity) {
             // group outline
             if ($groupCode !== $entity->getGroupCode()) {
-                $this->addOutline((string) $entity->getGroupCode(), true);
+                $this->addBookmark((string) $entity->getGroupCode(), true);
                 $groupCode = $entity->getGroupCode();
             }
             // category outline
             if ($categoryCode !== $entity->getCategoryCode()) {
-                $this->addOutline((string) $entity->getCategoryCode(), true, 1);
+                $this->addBookmark((string) $entity->getCategoryCode(), true, 1);
                 $categoryCode = $entity->getCategoryCode();
             }
             // group key
@@ -71,7 +71,7 @@ class ProductsReport extends AbstractArrayReport
         }
 
         $this->renderCount($entities, 'counters.products');
-        $this->addIndexPage();
+        $this->addPageIndex();
 
         return true;
     }

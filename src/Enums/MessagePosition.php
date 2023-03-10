@@ -36,27 +36,33 @@ enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterf
      * Bottom center position.
      */
     case BOTTOM_CENTER = 'bottom-center';
+
     /*
      * Bottom left position.
      */
     case BOTTOM_LEFT = 'bottom-left';
+
     /*
      * Bottom right position.
      */
     #[EnumCase(extras: ['default' => true])]
     case BOTTOM_RIGHT = 'bottom-right';
+
     /*
      * Center position.
      */
     case CENTER_CENTER = 'center-center';
+
     /*
      * Center left position.
      */
     case CENTER_LEFT = 'center-left';
+
     /*
      * Center right position.
      */
     case CENTER_RIGHT = 'center-right';
+
     /*
      * Top center position.
      */

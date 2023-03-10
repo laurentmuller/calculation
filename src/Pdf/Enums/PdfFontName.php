@@ -30,36 +30,31 @@ enum PdfFontName: string implements DefaultEnumInterface
      *
      * This is the default font.
      */
-
     #[EnumCase(extras: ['default' => true])]
     case ARIAL = 'Arial';
 
     /*
      * The Courier font name (fixed-width).
      */
-
     case COURIER = 'Courier';
 
     /*
      * The Helvetica font name (synonymous: sans serif).
      */
-
     case HELVETICA = 'Helvetica';
+
     /*
      * The Symbol font name (symbolic).
      */
-
     case SYMBOL = 'Symbol';
 
     /*
      * The Times font name (serif).
      */
-
     case TIMES = 'Times';
 
     /*
      * The ZapfDingbats font name (symbolic).
      */
-
     case ZAPFDINGBATS = 'ZapfDingbats';
 }

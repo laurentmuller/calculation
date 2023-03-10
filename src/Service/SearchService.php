@@ -227,7 +227,6 @@ class SearchService implements ServiceSubscriberInterface
         }
 
         // sort, limit and offset
-
         $extra = " LIMIT $limit OFFSET $offset";
 
         // return result
@@ -351,7 +350,6 @@ class SearchService implements ServiceSubscriberInterface
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
         $name = StringUtils::getShortName($class);
-
         $content ??= "e.$field";
         /** @psalm-var literal-string $from */
         $from = $class;

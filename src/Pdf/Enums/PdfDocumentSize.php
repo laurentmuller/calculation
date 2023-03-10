@@ -21,22 +21,24 @@ enum PdfDocumentSize: string
      * The A3 document size.
      */
     case A3 = 'A3';
+
     /*
      * The A4 document size.
      */
     case A4 = 'A4';
+
     /*
      * The A5 document size.
      */
     case A5 = 'A5';
+
     /*
      * The Legal document size.
      */
-
     case LEGAL = 'Legal';
+
     /*
      * The Letter document size.
      */
-
     case LETTER = 'Letter';
 }

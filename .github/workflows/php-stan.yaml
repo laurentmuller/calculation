@@ -16,7 +16,7 @@ jobs:
           coverage: none
           extensions: intl
           php-version: '8.2'
-          tools: composer, phpstan,phpstan/phpstan-symfony, slam/phpstan-extensions
+          tools: composer
 
       - name: Determine composer cache directory
         id: composer-cache
@@ -32,6 +32,9 @@ jobs:
       - name: Download dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin phpstan install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin phpstan/phpstan-symfony install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin slam/phpstan-extensions install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPStan
-        run: phpstan analyze --no-progress --configuration phpstan.neon
+        run: vendor/bin/phpstan analyze --no-progress

@@ -16,7 +16,7 @@ jobs:
           coverage: none
           extensions: intl
           php-version: '8.2'
-          tools: composer:v2
+          tools: composer, phpstan
 
       - name: Determine composer cache directory
         id: composer-cache
@@ -32,7 +32,6 @@ jobs:
       - name: Download dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin phpstan install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze --no-progress

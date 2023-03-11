@@ -35,7 +35,7 @@ jobs:
           composer bin orklah/psalm-insane-comparison install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin psalm/plugin-phpunit           install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin psalm/plugin-symfony           install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin vimeo/psalm                    install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin psalm                          install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin weirdan/doctrine-psalm-plugin  install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run Psalm

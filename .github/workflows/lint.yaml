@@ -39,23 +39,23 @@ jobs:
 
       - name: Lint YAML
         if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console lint:yaml translations config .github/workflows --parse-tags'
+        run: php bin/console lint:yaml translations config .github/workflows --parse-tags
 
       - name: Lint Twig
         if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console lint:twig --env=prod templates'
+        run: php bin/console lint:twig --env=prod templates
 
       - name: Lint XLIFF
         if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console lint:xliff translations'
+        run: php bin/console lint:xliff translations
 
       - name: Lint Container
         if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console lint:container'
+        run: php bin/console lint:container
 
       - name: Schema validate
         if: always() && steps.install.outcome == 'success'
-        run: 'php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction'
+        run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
 
       - name: Composer validate
         if: always() && steps.install.outcome == 'success'

@@ -16,7 +16,7 @@ jobs:
           coverage: none
           extensions: intl
           php-version: '8.2'
-          tools: composer:v2
+          tools: composer
 
       - name: Determine composer cache directory
         id: composer-cache
@@ -31,8 +31,9 @@ jobs:
 
       - name: Download dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin simple-phpunit install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer                            install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin phpunit/phpunit        install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin symfony/phpunit-bridge install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit

@@ -31,8 +31,8 @@ jobs:
 
       - name: Download dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin rector install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer                   install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer bin rector/rector install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run Rector
         run: vendor/bin/rector process --dry-run

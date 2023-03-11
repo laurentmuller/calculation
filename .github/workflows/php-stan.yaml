@@ -31,7 +31,7 @@ jobs:
 
       - name: Download dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer                                       install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin phpstan/extension-installer       install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin phpstan                           install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin phpstan/phpstan-deprecation-rules install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -40,11 +40,6 @@ jobs:
           composer bin phpstan/phpstan-symfony           install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin slam/phpstan-extensions           install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin spaze/phpstan-disallowed-calls    install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          
-          
-          
-          composer bin phpstan/phpstan-symfony install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin slam/phpstan-extensions install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze --no-progress

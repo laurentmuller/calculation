@@ -16,7 +16,7 @@ jobs:
           coverage: none
           extensions: intl
           php-version: '8.2'
-          tools: composer:v2
+          tools: composer
 
       - name: Determine composer cache directory
         id: composer-cache

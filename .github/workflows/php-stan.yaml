@@ -34,4 +34,4 @@ jobs:
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPStan
-        run: vendor/bin/phpstan analyze --no-progress
+        run: phpstan analyze --no-progress

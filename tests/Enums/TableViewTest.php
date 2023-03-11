@@ -31,7 +31,7 @@ class TableViewTest extends TypeTestCase
         $default = TableView::getDefault();
         self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_DISPLAY_MODE;
-        self::assertSame($expected, $default);
+        self::assertSame($expected, $default); // @phpstan-ignore-line
     }
 
     public function testLabel(): void
@@ -58,7 +58,7 @@ class TableViewTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertSame('custom', TableView::CUSTOM->value);
-        self::assertSame('table', TableView::TABLE->value);
+        self::assertSame('custom', TableView::CUSTOM->value); // @phpstan-ignore-line
+        self::assertSame('table', TableView::TABLE->value); // @phpstan-ignore-line
     }
 }

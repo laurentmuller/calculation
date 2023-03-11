@@ -15,6 +15,9 @@ namespace App\Tests\Utils;
 use App\Util\Utils;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @psalm-type UtilsType = array{id: int, value: string}
+ */
 #[\PHPUnit\Framework\Attributes\CoversClass(Utils::class)]
 class UtilsTest extends TestCase
 {
@@ -28,11 +31,11 @@ class UtilsTest extends TestCase
 
         $result = Utils::getExceptionContext($e);
 
-        self::assertArrayHasKey('message', $result);
-        self::assertArrayHasKey('code', $result);
-        self::assertArrayHasKey('file', $result);
-        self::assertArrayHasKey('line', $result);
-        self::assertArrayHasKey('trace', $result);
+        self::assertArrayHasKey('message', $result); // @phpstan-ignore-line
+        self::assertArrayHasKey('code', $result); // @phpstan-ignore-line
+        self::assertArrayHasKey('file', $result); // @phpstan-ignore-line
+        self::assertArrayHasKey('line', $result); // @phpstan-ignore-line
+        self::assertArrayHasKey('trace', $result); // @phpstan-ignore-line
 
         self::assertSame($message, $result['message']);
         self::assertSame($code, $result['code']);
@@ -42,40 +45,34 @@ class UtilsTest extends TestCase
 
     public function testGroupByArrays(): void
     {
-        /** @psalm-var array<array{id: int, value: string}> $array */
+        /** @psalm-var UtilsType[] $array */
         $array = [
-            ['id' => 1, 'value' => '1'],
-            ['id' => 2, 'value' => '2'],
-            ['id' => 2, 'value' => '3'],
+            self::createObject(1, '1'),
+            self::createObject(2, '2'),
+            self::createObject(2, '3'),
         ];
         $key = 'id';
-
-        /** @psalm-var array<int, array> $result */
         $result = Utils::groupBy($array, $key);
 
-        self::assertArrayHasKey(1, $result);
-        self::assertArrayHasKey(2, $result);
+        self::assertIsArray($result[1]);
+        self::assertIsArray($result[2]);
         self::assertCount(1, $result[1]);
         self::assertCount(2, $result[2]);
     }
 
     public function testGroupByCallable(): void
     {
-        /** @psalm-var array<array{id: int, value: string}> $array */
+        /** @psalm-var UtilsType[] $array */
         $array = [
-            ['id' => 1, 'value' => '1'],
-            ['id' => 2, 'value' => '2'],
-            ['id' => 2, 'value' => '3'],
+            self::createObject(1, '1'),
+            self::createObject(2, '2'),
+            self::createObject(2, '3'),
         ];
-
-        /** @psalm-var callable(mixed): string $key */
         $key = fn (array $value): int => (int) $value['id'];
-
-        /** @psalm-var array<int, array> $result */
         $result = Utils::groupBy($array, $key);
 
-        self::assertArrayHasKey(1, $result);
-        self::assertArrayHasKey(2, $result);
+        self::assertIsArray($result[1]);
+        self::assertIsArray($result[2]);
         self::assertCount(1, $result[1]);
         self::assertCount(2, $result[2]);
     }
@@ -92,27 +89,25 @@ class UtilsTest extends TestCase
             ['id0' => 2, 'id1' => '1', 'value' => '2'],
             ['id0' => 2, 'id1' => '2', 'value' => '2'],
         ];
-
-        /** @psalm-var array<int, array<int, array>> $result */
         $result = Utils::groupBy($array, 'id0', 'id1');
 
         // first level
-        self::assertArrayHasKey(1, $result);
-        self::assertArrayHasKey(2, $result);
+        self::assertIsArray($result[1]);
+        self::assertIsArray($result[2]);
         self::assertCount(2, $result[1]);
         self::assertCount(2, $result[2]);
 
         // second level - first
         $result1 = $result[1];
-        self::assertArrayHasKey(1, $result1);
-        self::assertArrayHasKey(2, $result1);
+        self::assertIsArray($result1[1]);
+        self::assertIsArray($result1[2]);
         self::assertCount(2, $result1[1]);
         self::assertCount(1, $result1[2]);
 
         // second level - second
         $result2 = $result[2];
-        self::assertArrayHasKey(1, $result2);
-        self::assertArrayHasKey(2, $result2);
+        self::assertIsArray($result2[1]);
+        self::assertIsArray($result2[2]);
         self::assertCount(2, $result2[1]);
         self::assertCount(1, $result2[2]);
     }
@@ -120,17 +115,17 @@ class UtilsTest extends TestCase
     public function testGroupByObjectInt(): void
     {
         $array = [
-            $this->createObject(1, '1'),
-            $this->createObject(2, '2'),
-            $this->createObject(2, '3'),
+            (object) self::createObject(1, '1'),
+            (object) self::createObject(2, '2'),
+            (object) self::createObject(2, '3'),
         ];
-        $key = 'value';
-
-        /** @psalm-var array<int, array> $array */
+        $key = 'id';
         $result = Utils::groupBy($array, $key);
 
         self::assertArrayHasKey(1, $result);
         self::assertArrayHasKey(2, $result);
+        self::assertIsArray($result[1]);
+        self::assertIsArray($result[2]);
         self::assertCount(1, $result[1]);
         self::assertCount(2, $result[2]);
     }
@@ -138,26 +133,24 @@ class UtilsTest extends TestCase
     public function testGroupByObjectStrings(): void
     {
         $array = [
-            $this->createObject(1, '1'),
-            $this->createObject(2, '2'),
-            $this->createObject(3, '2'),
+            self::createObject(1, '1'),
+            self::createObject(2, '2'),
+            self::createObject(3, '2'),
         ];
-        $key = 'string';
-
-        /** @psalm-var array<string, array> $array */
+        $key = 'value';
         $result = Utils::groupBy($array, $key);
 
         self::assertArrayHasKey('1', $result);
         self::assertArrayHasKey('2', $result);
-        self::assertCount(1, $result['1']);
-        self::assertCount(2, $result['2']);
+        self::assertCount(1, (array) $result['1']);
+        self::assertCount(2, (array) $result['2']);
     }
 
-    private static function createObject(int $value, string $string): object
+    /**
+     * @psalm-return UtilsType
+     */
+    private static function createObject(int $id, string $value): array
     {
-        return (object) [
-            'value' => $value,
-            'string' => $string,
-        ];
+        return ['id' => $id, 'value' => $value];
     }
 }

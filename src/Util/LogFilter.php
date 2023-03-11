@@ -17,20 +17,20 @@ use App\Entity\Log;
 /**
  * Class to filter logs.
  */
-class LogFilter
+readonly class LogFilter
 {
-    private readonly bool $isFilterChannel;
+    private bool $isFilterChannel;
 
-    private readonly bool $isFilterLevel;
+    private bool $isFilterLevel;
 
-    private readonly bool $isFilterValue;
+    private bool $isFilterValue;
 
     /**
      * @param string $value   the value to search for
      * @param string $channel the channel to search for
      * @param string $level   the level to search for
      */
-    public function __construct(private readonly string $value, private readonly string $level, private readonly string $channel)
+    public function __construct(private string $value, private string $level, private string $channel)
     {
         $this->isFilterValue = '' !== \trim($this->value);
         $this->isFilterLevel = '' !== \trim($this->level);

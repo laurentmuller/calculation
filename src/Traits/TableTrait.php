@@ -44,7 +44,7 @@ trait TableTrait
         try {
             // empty?
             if (null !== $message = $table->getEmptyMessage()) {
-                return $this->redirectToHomePage($message, [], FlashType::INFO);
+                return $this->redirectToHomePage(message: $message, type: FlashType::INFO);
             }
 
             // get query and results

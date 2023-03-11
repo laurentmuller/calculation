@@ -409,14 +409,13 @@ class OpenWeatherService extends AbstractHttpClientService
         try {
             $db = $this->getDatabase(true);
             $result = $db->findCity($name, $limit);
+            $this->updateResult($result);
+            $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
+
+            return $result;
         } finally {
             $db?->close();
         }
-
-        $this->updateResult($result);
-        $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
-
-        return $result;
     }
 
     /**

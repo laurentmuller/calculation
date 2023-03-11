@@ -14,7 +14,6 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Interfaces\ImageExtensionInterface;
-use Vich\UploaderBundle\Exception\NameGenerationException;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
@@ -46,10 +45,6 @@ class UserNamer implements ImageExtensionInterface, NamerInterface
      */
     public function name($object, PropertyMapping $mapping): string
     {
-        if (!$object instanceof User) {
-            throw new NameGenerationException(\sprintf('Expected argument of type "%s", "%s" given.', User::class, \get_debug_type($object)));
-        }
-
         return self::getBaseName($object, self::SIZE_DEFAULT, self::EXTENSION_PNG);
     }
 }

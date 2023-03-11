@@ -87,9 +87,7 @@ class SuspendEventListenerService
     private function updateListeners(bool $enabled): void
     {
         foreach ($this->listeners as $listener) {
-            if ($listener instanceof DisableListenerInterface) {
-                $listener->setEnabled($enabled);
-            }
+            $listener->setEnabled($enabled);
         }
     }
 }

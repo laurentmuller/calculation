@@ -31,7 +31,7 @@ class EntityActionTest extends TypeTestCase
         $default = EntityAction::getDefault();
         self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_ACTION;
-        self::assertSame($expected, $default);
+        self::assertSame($expected, $default); // @phpstan-ignore-line
     }
 
     public function testLabel(): void
@@ -54,8 +54,8 @@ class EntityActionTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertSame('edit', EntityAction::EDIT->value);
-        self::assertSame('show', EntityAction::SHOW->value);
-        self::assertSame('none', EntityAction::NONE->value);
+        self::assertSame('edit', EntityAction::EDIT->value); // @phpstan-ignore-line
+        self::assertSame('show', EntityAction::SHOW->value); // @phpstan-ignore-line
+        self::assertSame('none', EntityAction::NONE->value); // @phpstan-ignore-line
     }
 }

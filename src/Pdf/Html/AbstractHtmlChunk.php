@@ -490,7 +490,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
         // class
         if ($this->className) {
-            /** @var string[] $classNames */
+            /** @psalm-var list<string> $classNames */
             $classNames = \preg_split('/\s+/m', $this->className);
             foreach ($classNames as $class) {
                 switch ($class) {

@@ -19,12 +19,12 @@ use Symfony\Bundle\SecurityBundle\Security;
 /**
  * Log record processor to add user identifier to extra data.
  */
-class UserRequestProcessor implements ProcessorInterface
+readonly class UserRequestProcessor implements ProcessorInterface
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Security $security)
+    public function __construct(private Security $security)
     {
     }
 

@@ -305,9 +305,9 @@ class OpenWeatherController extends AbstractController
             $units = $data[self::KEY_UNITS];
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
-            /** @psalm-var array<int, array{id: int}>|false $cities */
+            /** @psalm-var array<int, array{id: int}> $cities */
             $cities = $this->service->search($query, $units, $limit);
-            if (false !== $cities) {
+            if ([] !== $cities) {
                 // save
                 $this->setSessionValues([
                     self::KEY_QUERY => $query,

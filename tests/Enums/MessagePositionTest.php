@@ -51,7 +51,7 @@ class MessagePositionTest extends TypeTestCase
         $default = MessagePosition::getDefault();
         self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_MESSAGE_POSITION;
-        self::assertSame($expected, $default);
+        self::assertSame($expected, $default); // @phpstan-ignore-line
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]

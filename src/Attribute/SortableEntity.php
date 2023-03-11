@@ -18,7 +18,7 @@ use App\Interfaces\SortModeInterface;
  * Attribute to define the sort order of an object.
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-class SortableEntity
+readonly class SortableEntity
 {
     /**
      * Constructor.
@@ -28,7 +28,7 @@ class SortableEntity
      *
      * @psalm-param SortModeInterface::* $order
      */
-    public function __construct(public readonly string $name, public readonly string $order = SortModeInterface::SORT_ASC)
+    public function __construct(public string $name, public string $order = SortModeInterface::SORT_ASC)
     {
     }
 

@@ -17,14 +17,14 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * Contains application information.
  */
-class ApplicationInfo
+readonly class ApplicationInfo
 {
-    private readonly string $description;
-    private readonly string $name;
-    private readonly string $ownerCity;
-    private readonly string $ownerName;
-    private readonly string $ownerUrl;
-    private readonly string $version;
+    private string $description;
+    private string $name;
+    private string $ownerCity;
+    private string $ownerName;
+    private string $ownerUrl;
+    private string $version;
 
     /**
      * Constructor.

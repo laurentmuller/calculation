@@ -53,9 +53,9 @@ class ImportanceTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertSame('high', Importance::HIGH->value);
-        self::assertSame('low', Importance::LOW->value);
-        self::assertSame('medium', Importance::MEDIUM->value);
-        self::assertSame('urgent', Importance::URGENT->value);
+        self::assertSame('high', Importance::HIGH->value); // @phpstan-ignore-line
+        self::assertSame('low', Importance::LOW->value); // @phpstan-ignore-line
+        self::assertSame('medium', Importance::MEDIUM->value); // @phpstan-ignore-line
+        self::assertSame('urgent', Importance::URGENT->value); // @phpstan-ignore-line
     }
 }

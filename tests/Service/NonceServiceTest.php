@@ -38,9 +38,12 @@ class NonceServiceTest extends KernelTestCase
      */
     public function testCsp(): void
     {
-        $nonce = $this->service->getNonce();
-        $csp = $this->service->getCspNonce();
+        $nonce = $this->service?->getNonce();
+        self::assertIsString($nonce);
+
+        $csp = $this->service?->getCspNonce();
         self::assertIsString($csp);
+
         self::stringStartsWith("'nonce-")->evaluate($csp);
         self::stringEndsWith("'")->evaluate($csp);
         self::stringContains($nonce)->evaluate($csp);
@@ -52,7 +55,7 @@ class NonceServiceTest extends KernelTestCase
      */
     public function testLength32(): void
     {
-        $nonce = $this->service->getNonce(32);
+        $nonce = $this->service?->getNonce(32);
         self::assertIsString($nonce);
         self::assertSame(64, \strlen($nonce));
     }
@@ -62,7 +65,7 @@ class NonceServiceTest extends KernelTestCase
      */
     public function testLengthDefault(): void
     {
-        $nonce = $this->service->getNonce();
+        $nonce = $this->service?->getNonce();
         self::assertIsString($nonce);
         self::assertSame(32, \strlen($nonce));
     }

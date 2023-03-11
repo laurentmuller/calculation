@@ -18,14 +18,14 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Service to search zip codes, cities and streets from Switzerland.
  */
-class SwissPostService
+readonly class SwissPostService
 {
     /**
      * Constructor.
      */
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/swiss.sqlite')]
-        private readonly string $databaseName
+        private string $databaseName
     ) {
     }
 

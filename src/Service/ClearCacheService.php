@@ -20,24 +20,22 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Service to clear the cache.
  */
-class ClearCacheService
+readonly class ClearCacheService
 {
-    public function __construct(private readonly KernelInterface $kernel)
+    public function __construct(private KernelInterface $kernel)
     {
     }
 
     /**
-     * @throws \Exception
+     * @throws \Exception if the running command fail
      */
     public function execute(): bool
     {
-        $options = [
+        $input = new ArrayInput([
             'command' => 'cache:pool:clear',
             'pools' => ['cache.global_clearer'],
             '--env' => $this->kernel->getEnvironment(),
-        ];
-
-        $input = new ArrayInput($options);
+        ]);
         $application = new Application($this->kernel);
         $application->setCatchExceptions(false);
         $application->setAutoExit(false);

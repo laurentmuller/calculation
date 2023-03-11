@@ -32,7 +32,7 @@ $rules = [
     '@PHP80Migration:risky' => true,
     '@PHP81Migration' => true,
     '@DoctrineAnnotation' => true,
-    '@PHPUnit84Migration:risky' => true,
+    '@PHPUnit100Migration:risky' => true,
 
     // --------------------------------------------------------------
     //  Rules override

@@ -18,7 +18,7 @@ use App\Interfaces\SortModeInterface;
  * Attribute to define the sort order of a property.
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-class SortableField
+readonly class SortableField
 {
     /**
      * Constructor.
@@ -27,7 +27,7 @@ class SortableField
      *
      * @psalm-param SortModeInterface::* $order
      */
-    public function __construct(public readonly string $order = SortModeInterface::SORT_ASC)
+    public function __construct(public string $order = SortModeInterface::SORT_ASC)
     {
     }
 

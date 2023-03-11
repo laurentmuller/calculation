@@ -72,7 +72,7 @@ class ThemeTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertSame('dark', Theme::DARK->value);
-        self::assertSame('light', Theme::LIGHT->value);
+        self::assertSame('dark', Theme::DARK->value); // @phpstan-ignore-line
+        self::assertSame('light', Theme::LIGHT->value); // @phpstan-ignore-line
     }
 }

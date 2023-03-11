@@ -54,10 +54,10 @@ class AdminController extends AbstractController
 
             try {
                 if ($service->execute()) {
-                    $this->redirectToHomePage('clear_cache.success');
-                } else {
-                    $this->redirectToHomePage('clear_cache.failure', [], FlashType::DANGER);
+                    return $this->redirectToHomePage('clear_cache.success');
                 }
+
+                return $this->redirectToHomePage(message: 'clear_cache.failure', type: FlashType::DANGER);
             } catch (\Exception $e) {
                 return $this->renderFormException('clear_cache.failure', $e, $logger);
             }

@@ -566,52 +566,52 @@ class ImageHandler implements ImageExtensionInterface
      * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
-     * @return int[]|bool an array with 8 elements representing four points making the bounding box of the
-     *                    text on success and false on error.<br>
-     *                    The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
-     *                    corner seeing the text horizontally.<br><br>
-     *                    <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                    <tr>
-     *                    <th>Key</th>
-     *                    <th>Content</th>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>0</td>
-     *                    <td>The lower left corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>1</td>
-     *                    <td>The lower left corner, Y position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>2</td>
-     *                    <td>The lower right corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>3</td>
-     *                    <td>The lower right corner, Y position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>4</td>
-     *                    <td>The upper right corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>5</td>
-     *                    <td>The upper right corner, Y position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>6</td>
-     *                    <td>The upper left corner, X position.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>7</td>
-     *                    <td>The upper left corner, Y position.</td>
-     *                    </tr>
-     *                    </table>
+     * @return int[]|false an array with 8 elements representing four points making the bounding box of the
+     *                     text on success and false on error.<br>
+     *                     The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
+     *                     corner seeing the text horizontally.<br><br>
+     *                     <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *                     <tr>
+     *                     <th>Key</th>
+     *                     <th>Content</th>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>0</td>
+     *                     <td>The lower left corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>1</td>
+     *                     <td>The lower left corner, Y position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>2</td>
+     *                     <td>The lower right corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>3</td>
+     *                     <td>The lower right corner, Y position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>4</td>
+     *                     <td>The upper right corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>5</td>
+     *                     <td>The upper right corner, Y position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>6</td>
+     *                     <td>The upper left corner, X position.</td>
+     *                     </tr>
+     *                     <tr>
+     *                     <td>7</td>
+     *                     <td>The upper left corner, Y position.</td>
+     *                     </tr>
+     *                     </table>
      */
-    public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|bool
+    public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|false
     {
-        /** @var int[]|bool $result */
+        /** @var int[]|false $result */
         $result = \imagettfbbox($size, $angle, $fontFile, $text);
 
         return $result;

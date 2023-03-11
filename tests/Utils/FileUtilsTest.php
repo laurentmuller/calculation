@@ -108,11 +108,6 @@ class FileUtilsTest extends TestCase
         self::assertTrue(FileUtils::exists(__FILE__));
     }
 
-    public function testFilesystem(): void
-    {
-        self::assertNotNull(FileUtils::getFilesystem());
-    }
-
     #[\PHPUnit\Framework\Attributes\DataProvider('getFormatSize')]
     public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
     {

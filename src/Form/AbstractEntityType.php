@@ -14,6 +14,7 @@ namespace App\Form;
 
 use App\Entity\AbstractEntity;
 use App\Util\StringUtils;
+use App\Util\Utils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -41,10 +42,7 @@ abstract class AbstractEntityType extends AbstractHelperType
      */
     protected function __construct(string $className)
     {
-        if (!\is_subclass_of($className, AbstractEntity::class)) {
-            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractEntity::class, $className));
-        }
-
+        Utils::checkSubClass($className, AbstractEntity::class);
         $this->className = $className;
     }
 

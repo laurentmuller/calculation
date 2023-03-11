@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\AbstractEntity;
+use App\Util\Utils;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -42,10 +43,7 @@ abstract class AbstractListEntityType extends AbstractType
      */
     public function __construct(string $className)
     {
-        if (!\is_subclass_of($className, AbstractEntity::class)) {
-            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractEntity::class, $className));
-        }
-
+        Utils::checkSubClass($className, AbstractEntity::class);
         $this->className = $className;
     }
 

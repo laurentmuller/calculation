@@ -29,13 +29,14 @@ return static function (RectorConfig $rectorConfig): void {
 
     // rules to skip
     $rectorConfig->skip([
+        Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector::class,
         Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector::class,
     ]);
 
     // rules to apply
     $rectorConfig->sets([
         // global
-        SetList::PHP_81,
+        SetList::PHP_82,
         SetList::CODE_QUALITY,
         // Doctrine
         DoctrineSetList::DOCTRINE_DBAL_30,

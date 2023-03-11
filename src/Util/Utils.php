@@ -24,6 +24,20 @@ final class Utils
     }
 
     /**
+     * Check if the given class name is a subclass of the given target class name.
+     *
+     * @throws \InvalidArgumentException if check failed
+     *
+     * @psalm-param class-string $targetClassName
+     */
+    public static function checkSubClass(string $className, string $targetClassName): void
+    {
+        if (!\is_subclass_of($className, $targetClassName)) {
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', $targetClassName, $className));
+        }
+    }
+
+    /**
      * Gets the context, as array; for the given exception.
      *
      * @param \Throwable $e the exception to get the context for
@@ -53,9 +67,9 @@ final class Utils
      *
      * Any additional keys will be used for grouping the next set of sub-arrays.
      *
-     * @param array<array-key, object|array> $array
-     * @param string|int|(callable(mixed):string|int) $key
-     * @param string|int|(callable(mixed):string|int) ...$others
+     * @psalm-param array<array-key, mixed>         $array
+     * @psalm-param string|int|callable(mixed):array-key $key
+     * @psalm-param string|int|callable(mixed):array-key ...$others
      *
      * @return array the grouped array
      */
@@ -63,15 +77,15 @@ final class Utils
     {
         $result = [];
 
-        /** @psalm-param object|array $value */
+        /** @psalm-var object|array $value */
         foreach ($array as $value) {
             if (\is_callable($key)) {
                 $entry = $key($value);
             } elseif (\is_object($value)) {
-                /** @psalm-var string|int $entry */
+                /** @psalm-var array-key $entry */
                 $entry = $value->{$key};
             } else { // array
-                /** @psalm-var string|int $entry */
+                /** @psalm-var array-key $entry */
                 $entry = $value[$key];
             }
             $result[$entry][] = $value;

@@ -103,7 +103,7 @@ class CalculationBelowController extends AbstractController
     private function getEmptyResponse(CalculationRepository $repository, float $minMargin): ?RedirectResponse
     {
         if (0 === $repository->countItemsBelow($minMargin)) {
-            return $this->redirectToHomePage('below.empty', [], FlashType::WARNING);
+            return $this->redirectToHomePage(message: 'below.empty', type: FlashType::WARNING);
         }
 
         return null;

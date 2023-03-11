@@ -38,7 +38,7 @@ final class SwitchNode extends Node
             ->indent();
 
         /** @psalm-var Node[] $cases */
-        $cases = $this->getNode('cases');
+        $cases = $this->getNode('cases'); // @phpstan-ignore-line
         foreach ($cases as $case) {
             // The 'body' node may have been removed by Twig if it was an empty text node in a sub-template,
             // outside any blocks

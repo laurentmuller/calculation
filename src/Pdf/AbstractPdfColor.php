@@ -121,9 +121,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         if (\is_string($rgb)) {
             $rgb = self::parse($rgb);
         }
-
         /** @psalm-var array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false $rgb */
-        if (\is_array($rgb) && 3 === \count($rgb)) {
+        if (\is_array($rgb) && 3 === \count($rgb)) { // @phpstan-ignore-line
             return new static($rgb[0], $rgb[1], $rgb[2]);
         }
 

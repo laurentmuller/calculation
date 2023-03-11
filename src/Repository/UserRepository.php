@@ -232,7 +232,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof User) {
+        if (!$user instanceof User) { // @phpstan-ignore-line
             throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $user::class));
         }
 

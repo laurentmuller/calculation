@@ -71,11 +71,14 @@ abstract class AbstractReport extends PdfDocument
     /**
      * {@inheritdoc}
      *
-     * Override the default behavior by adding the translated title if null.
+     * Override the default behavior by adding a translated title if null and the page index to bookmarks.
      */
-    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null): void
+    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null, bool $addBookmark = false): self
     {
-        parent::addPageIndex($title ?? $this->trans('report.index'), $titleStyle, $contentStyle);
+        $title ??= $this->trans('report.index');
+        parent::addPageIndex($title, $titleStyle, $contentStyle, true);
+
+        return $this;
     }
 
     /**
@@ -133,7 +136,7 @@ abstract class AbstractReport extends PdfDocument
      * Sets the title to be translated.
      *
      * @param string $id     the title id (may also be an object that can be cast to string)
-     * @param bool   $isUTF8 true to encode to UTF-8
+     * @param bool   $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
      */
     public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, ?string $domain = null, ?string $locale = null): static
     {
@@ -141,26 +144,6 @@ abstract class AbstractReport extends PdfDocument
         $this->SetTitle($title, $isUTF8);
 
         return $this;
-    }
-
-    /**
-     * Add a first level (0) bookmark  with this title as text.
-     *
-     * Do nothing if no title is defined.
-     *
-     * @param bool $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
-     *
-     * @return bool true if the outline is added; false otherwise
-     */
-    protected function addBookmarkTitle(bool $isUTF8 = true): bool
-    {
-        if (null !== $this->title) {
-            $this->addBookmark($this->title, $isUTF8);
-
-            return true;
-        }
-
-        return false;
     }
 
     /**

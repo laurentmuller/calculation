@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
-use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
@@ -62,8 +61,6 @@ class CalculationTableItems extends PdfGroupTableBuilder
     public function output(): void
     {
         $calculation = $this->calculation;
-
-        /** @var CalculationGroup[] $groups */
         $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
 

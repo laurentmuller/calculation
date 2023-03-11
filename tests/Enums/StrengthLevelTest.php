@@ -31,7 +31,7 @@ class StrengthLevelTest extends TypeTestCase
         $default = StrengthLevel::getDefault();
         self::assertSame($expected, $default);
         $default = PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL;
-        self::assertSame($expected, $default);
+        self::assertSame($expected, $default); // @phpstan-ignore-line
     }
 
     public function testLabel(): void
@@ -70,11 +70,11 @@ class StrengthLevelTest extends TypeTestCase
 
     public function testValue(): void
     {
-        self::assertSame(-1, StrengthLevel::NONE->value);
-        self::assertSame(0, StrengthLevel::VERY_WEAK->value);
-        self::assertSame(1, StrengthLevel::WEAK->value);
-        self::assertSame(2, StrengthLevel::MEDIUM->value);
-        self::assertSame(3, StrengthLevel::STRONG->value);
-        self::assertSame(4, StrengthLevel::VERY_STRONG->value);
+        self::assertSame(-1, StrengthLevel::NONE->value); // @phpstan-ignore-line
+        self::assertSame(0, StrengthLevel::VERY_WEAK->value); // @phpstan-ignore-line
+        self::assertSame(1, StrengthLevel::WEAK->value); // @phpstan-ignore-line
+        self::assertSame(2, StrengthLevel::MEDIUM->value); // @phpstan-ignore-line
+        self::assertSame(3, StrengthLevel::STRONG->value); // @phpstan-ignore-line
+        self::assertSame(4, StrengthLevel::VERY_STRONG->value); // @phpstan-ignore-line
     }
 }

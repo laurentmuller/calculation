@@ -86,6 +86,7 @@ use App\Util\FormatUtils;
  *     next?: int,
  *     last?: int}
  */
+#[\AllowDynamicProperties]
 class PdfDocument extends \FPDF
 {
     use MathTrait;
@@ -119,6 +120,11 @@ class PdfDocument extends \FPDF
      * The title.
      */
     protected ?string $title = null;
+
+    /**
+     * Indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true).
+     */
+    protected bool $titleUTF8 = false;
 
     /**
      * The bookmark root object number.
@@ -221,31 +227,38 @@ class PdfDocument extends \FPDF
      * @param ?string   $title        the index title or null to use the default title ('Index')
      * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9pt Bold)
      * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9pt Regular)
+     * @param bool      $addBookmark  true to add the page index in the list of the bookmarks
      *
      * @see PdfDocument::addBookmark()
      */
-    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null): void
+    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null, bool $addBookmark = false): self
     {
         if ([] === $this->bookmarks) {
-            return;
+            return $this;
         }
+
+        // default values
+        $title ??= 'Index';
+        $titleStyle ??= PdfStyle::getBoldCellStyle();
+        $contentStyle ??= PdfStyle::getDefaultStyle();
 
         // new page
         $this->AddPage();
-
-        // styles
-        $titleStyle ??= PdfStyle::getBoldCellStyle();
-        $contentStyle ??= PdfStyle::getDefaultStyle();
 
         // title
         $titleStyle->apply($this);
         $this->Cell(
             w: 0,
             h: self::LINE_HEIGHT,
-            txt: $title ?? 'Index',
+            txt: $title,
             ln: PdfMove::NEW_LINE,
-            align: PdfTextAlignment::CENTER
+            align: PdfTextAlignment::CENTER,
         );
+
+        // bookmark
+        if ($addBookmark) {
+            $this->addBookmark(text: $title, y: $this->y - $this->lasth);
+        }
 
         // bookmarks
         $space = 1.25;
@@ -305,7 +318,7 @@ class PdfDocument extends \FPDF
             );
         }
 
-        $this->resetStyle();
+        return $this->resetStyle();
     }
 
     /**
@@ -334,16 +347,16 @@ class PdfDocument extends \FPDF
      *                                        <li>A PdfBorder enumeration.</li>
      *                                        <li>A number:
      *                                        <ul>
-     *                                        <li><b>0</b> : No border (default value).</li>
-     *                                        <li><b>1</b> : Frame.</li>
+     *                                        <li><code>0</code> : No border (default value).</li>
+     *                                        <li><code>1</code> : Frame.</li>
      *                                        </ul>
      *                                        </li>
      *                                        <li>A string containing some or all of the following characters (in any order):
      *                                        <ul>
-     *                                        <li>'<b>L</b>' : Left.</li>
-     *                                        <li>'<b>T</b>' : Top.</li>
-     *                                        <li>'<b>R</b>' : Right.</li>
-     *                                        <li>'<b>B</b>' : Bottom.</li>
+     *                                        <li><code>'L'</code> : Left.</li>
+     *                                        <li><code>'T'</code> : Top.</li>
+     *                                        <li><code>'R'</code> : Right.</li>
+     *                                        <li><code>'B'</code> : Bottom.</li>
      *                                        </ul>
      *                                        </li>
      *                                        </ul>
@@ -352,16 +365,16 @@ class PdfDocument extends \FPDF
      *                                        Possible values are:
      *                                        <ul>
      *                                        <li>A PdfMove enumeration.</li>
-     *                                        <li><b>0</b>: Move to the right (default value)</li>
-     *                                        <li><b>1</b>: Move to the beginning of the next line</li>
-     *                                        <li><b>2</b>: Move below</li>
+     *                                        <li><code>0</code>: Move to the right (default value)</li>
+     *                                        <li><code>1</code>: Move to the beginning of the next line</li>
+     *                                        <li><code>2</code>: Move below</li>
      *                                        </ul>
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li>'<b>L</b>' or en empty string (''): left align (default value).</li>
-     *                                        <li>'<b>C</b>' : center.</li>
-     *                                        <li>'<b>R</b>' : right align.</li>
+     *                                        <li><code>'L'</code> or an empty string (''): left align (default value).</li>
+     *                                        <li><code>'C'</code> : center.</li>
+     *                                        <li><code>'R'</code> : right align.</li>
      *                                        </ul>
      * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      * @param string|int              $link   a URL or an identifier returned by AddLink()
@@ -627,7 +640,7 @@ class PdfDocument extends \FPDF
      */
     public function GetXY(): array
     {
-        return [$this->GetX(), $this->GetY()];
+        return [$this->x, $this->y];
     }
 
     public function Header(): void
@@ -701,26 +714,26 @@ class PdfDocument extends \FPDF
      *                                        <li>A PdfBorder enumeration.</li>
      *                                        <li>A number:
      *                                        <ul>
-     *                                        <li><b>0</b> : No border (default value).</li>
-     *                                        <li><b>1</b> : Frame.</li>
+     *                                        <li><code>0</code> : No border (default value).</li>
+     *                                        <li><code>1</code> : Frame.</li>
      *                                        </ul>
      *                                        </li>
      *                                        <li>A string containing some or all of the following characters (in any order):
      *                                        <ul>
-     *                                        <li>'<b>L</b>' : Left.</li>
-     *                                        <li>'<b>T</b>' : Top.</li>
-     *                                        <li>'<b>R</b>' : Right.</li>
-     *                                        <li>'<b>B</b>' : Bottom.</li>
+     *                                        <li><code>'L'</code> : Left.</li>
+     *                                        <li><code>'T'</code> : Top.</li>
+     *                                        <li><code>'R'</code> : Right.</li>
+     *                                        <li><code>'B'</code> : Bottom.</li>
      *                                        </ul>
      *                                        </li>
      *                                        </ul>
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li>'<b>L</b>' or an empty string (''): left align (default value).</li>
-     *                                        <li>'<b>C</b>' : center.</li>
-     *                                        <li>'<b>R</b>' : right align.</li>
-     *                                        <li>'<b>J</b>' : justification (default value).</li>
+     *                                        <li><code>'L'</code> or an empty string (''): left align (default value).</li>
+     *                                        <li><code>'C'</code> : center.</li>
+     *                                        <li><code>'R'</code> : right align.</li>
+     *                                        <li><code>'J'</code> : justification (default value).</li>
      *                                        </ul>
      * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      *
@@ -789,9 +802,11 @@ class PdfDocument extends \FPDF
      * @param float                              $h     the height
      * @param PdfBorder|PdfRectangleStyle|string $style the style of rendering. Possible values are:
      *                                                  <ul>
-     *                                                  <li>'<b>D</b>' or empty string: draw (default value).</li>
-     *                                                  <li>'<b>F</b>' : fill.</li>
-     *                                                  <li>'<b>DF</b>' : draw and fill.</li>
+     *                                                  <li>A PdfBorder instance.</li>
+     *                                                  <li>A PdfRectangleStyle enumeration.</li>
+     *                                                  <li><code>'D'</code> or an empty string (''): draw (default value).</li>
+     *                                                  <li><code>'F'</code> : fill.</li>
+     *                                                  <li><code>'DF'</code> : draw and fill.</li>
      *                                                  </ul>
      */
     public function Rect($x, $y, $w, $h, $style = ''): void
@@ -897,18 +912,19 @@ class PdfDocument extends \FPDF
      * @param PdfFontName|string $family the font family. It can be either a font name enumeration, a name defined by AddFont()
      *                                   or one of the standard families (case-insensitive):
      *                                   <ul>
-     *                                   <li><b>Courier</b>: Fixed-width.</li>
-     *                                   <li><b>Helvetica</b> or <b>Arial</b>: Synonymous: sans serif.</li>
-     *                                   <li><b>Symbol</b>: Symbolic.</li>
-     *                                   <li><b>ZapfDingbats</b>: Symbolic.</li>
+     *                                   <li>A PdfFontName enumeration.</li>
+     *                                   <li><code>'Courier'</code>: Fixed-width.</li>
+     *                                   <li><code>'Helvetica'</code> or <code>Arial</code>: Synonymous: sans serif.</li>
+     *                                   <li><code>'Symbol'</code>: Symbolic.</li>
+     *                                   <li><code>'ZapfDingbats'</code>: Symbolic.</li>
      *                                   </ul>
-     *                                   It is also possible to pass an empty string. In that case, the current family is kept.
+     *                                   It is also possible to pass an empty string (""). In that case, the current family is kept.
      * @param string             $style  the font style. Possible values are (case-insensitive):
      *                                   <ul>
-     *                                   <li>Empty string: Regular.</li>
-     *                                   <li><b>B</b>: Bold.</li>
-     *                                   <li><b>I</b>: Italic.</li>
-     *                                   <li><b>U</b>: Underline.</li>
+     *                                   <li>An empty string (''): Regular.</li>
+     *                                   <li><code>'B'</code>: Bold.</li>
+     *                                   <li><code>'I'</code>: Italic.</li>
+     *                                   <li><code>'U'</code>: Underline.</li>
      *                                   </ul>
      *                                   or any combination. The default value is regular.
      * @param float              $size   the font size in points or 0 to use the current size. If no size has been
@@ -932,6 +948,7 @@ class PdfDocument extends \FPDF
     public function SetTitle($title, $isUTF8 = false): self
     {
         $this->title = $title;
+        $this->titleUTF8 = $isUTF8;
         parent::SetTitle($title, $isUTF8);
 
         return $this;
@@ -939,6 +956,7 @@ class PdfDocument extends \FPDF
 
     /**
      * This method prints text from the current position in the same way as Write().
+     *
      * An additional parameter allows reducing or increase the font size; it's useful for initials.
      * A second parameter allows to specify an offset so that text is placed at a superscripted or subscribed position.
      *
@@ -1020,13 +1038,12 @@ class PdfDocument extends \FPDF
 
     protected function _putBookmarks(): void
     {
-        $level = 0;
-        $count = \count($this->bookmarks);
-
         /** @psalm-var array<int, int> $lastUsedReferences */
         $lastUsedReferences = [];
 
         // build hierarchy
+        $level = 0;
+        $count = \count($this->bookmarks);
         foreach ($this->bookmarks as $index => $bookmark) {
             if ($bookmark['level'] > 0) {
                 $parent = $lastUsedReferences[$bookmark['level'] - 1];
@@ -1079,6 +1096,24 @@ class PdfDocument extends \FPDF
         if ([] !== $this->bookmarks) {
             $this->_putBookmarks();
         }
+    }
+
+    /**
+     * Add a first level (0) bookmark  with this title as text.
+     *
+     * Do nothing if no title is defined.
+     *
+     * @return bool true if the bookmark is added; false otherwise
+     */
+    protected function addBookmarkTitle(): bool
+    {
+        if (null !== $this->title) {
+            $this->addBookmark($this->title, $this->titleUTF8);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -19,12 +19,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Service to deals with roles and the role's hierarchy.
  */
-class RoleHierarchyService
+readonly class RoleHierarchyService
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly RoleHierarchyInterface $service)
+    public function __construct(private RoleHierarchyInterface $service)
     {
     }
 

@@ -29,14 +29,12 @@ jobs:
           key: composer-${{ runner.os }}-${{ hashFiles('composer.*') }}
           restore-keys: composer-${{ runner.os }}-composer-
 
-      - name: Download dependencies
-        run: |
-          composer                                    install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin orklah/psalm-insane-comparison install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin psalm/plugin-phpunit           install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin psalm/plugin-symfony           install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin psalm                          install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin weirdan/doctrine-psalm-plugin  install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Run Psalm
-        run: vendor/bin/psalm src
+      - name: Install psalm
+        working-directory: ./vendor-bin/psalm
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Run psalm
+        run: vendor-bin/psalm/vendor/bin/psalm src

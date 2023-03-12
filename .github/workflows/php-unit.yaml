@@ -29,11 +29,12 @@ jobs:
           key: composer-${{ runner.os }}-${{ hashFiles('composer.*') }}
           restore-keys: composer-${{ runner.os }}-composer-
 
-      - name: Download dependencies
-        run: |
-          composer                            install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin phpunit/phpunit        install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin symfony/phpunit-bridge install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit
+      - name: Install phpunit
+        working-directory: ./vendor-bin/phpunit
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Run phpunit
+        run: vendor-bin/phpunit/vendor/bin/phpunit

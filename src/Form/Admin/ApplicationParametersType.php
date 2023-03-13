@@ -45,7 +45,7 @@ class ApplicationParametersType extends AbstractParametersType
         $this->addMessageSection($helper);
         $this->addHomePageSection($helper);
         $this->addOptionsSection($helper);
-        if ($this->superAdmin) {
+        if ($this->isSuperAdmin()) {
             $this->addSecuritySection($helper);
         }
     }
@@ -65,6 +65,7 @@ class ApplicationParametersType extends AbstractParametersType
             ->addTextType();
 
         $helper->field(PropertyServiceInterface::P_CUSTOMER_PHONE)
+            ->updateOption('prepend_title', 'parameters.fields.customer_phone_title')
             ->notRequired()
             ->addTelType();
 

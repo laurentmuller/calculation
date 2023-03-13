@@ -3,6 +3,7 @@
 {# macros #}
 {% macro collapseLine(href, form, expanded=false, options=null) %}
 {%- set name = ('parameters.group_' ~ href)|trans -%}
+{%- set template = 'parameters/_parameters_' ~ href ~ '.html.twig' -%}
 {%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
 {%- set title = expanded ? hide : show -%}
@@ -10,7 +11,7 @@
     <a href="#{{ href }}" class="drop-down-icon-left horizontal-line" role="button" aria-expanded="{{ expanded|json_encode }}" data-toggle="collapse" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
         {{- name -}}
     </a>
-    {{ include('parameters/_parameters_' ~ href ~ '.html.twig', {'form': form, expanded: expanded, options: options}) }}
+    {{ include(template, {'form': form, expanded: expanded, options: options}) }}
 </div>
 {% endmacro %}
 {# customized fields #}

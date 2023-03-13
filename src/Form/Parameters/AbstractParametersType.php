@@ -32,20 +32,15 @@ abstract class AbstractParametersType extends AbstractType
     use TranslatorTrait;
 
     /**
-     * The current logged user has the super administrator role.
-     */
-    protected bool $superAdmin = false;
-
-    /**
      * Constructor.
      *
      * @param array<string, mixed> $defaultValues
      */
-    public function __construct(Security $security, private readonly TranslatorInterface $translator, private readonly array $defaultValues)
-    {
-        if (null !== ($user = $security->getUser())) {
-            $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
-        }
+    public function __construct(
+        private readonly Security $security,
+        private readonly TranslatorInterface $translator,
+        private readonly array $defaultValues
+    ) {
     }
 
     /**
@@ -75,7 +70,7 @@ abstract class AbstractParametersType extends AbstractType
     }
 
     /**
-     * Adds a checkbox type for message option.
+     * Adds a checkbox type.
      */
     protected function addCheckBox(FormHelper $helper, string $key, string $rowClass = 'custom-control-inline'): void
     {
@@ -208,6 +203,15 @@ abstract class AbstractParametersType extends AbstractType
         }
 
         return $value;
+    }
+
+    protected function isSuperAdmin(): bool
+    {
+        if (null !== $user = $this->security->getUser()) {
+            return $user instanceof RoleInterface && $user->isSuperAdmin();
+        }
+
+        return false;
     }
 
     /**

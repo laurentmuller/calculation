@@ -92,32 +92,69 @@ function displayNotification() {
     });
 }
 
-/**
- * Display the customer URL in a blank window.
- */
-function displayUrl($url) {
+function handleUrl() {
     'use strict';
-    if ($url.valid() && $url.val().trim()) {
-        const url = $url.val().trim();
-        // eslint-disable-next-line
-        window.open(url, '_blank');
-    } else {
-        $url.focus();
-    }
+    const handler = function (value) {
+        window.open(value, '_blank');
+    };
+    handleInput('#customer_url', '.input-group-url', handler);
 }
 
 /**
- * Display the customer mail to.
+ * @param {string} inputId the input selector.
+ * @param {string} groupId the group selector.
+ * @param {function} callback the function to call.
  */
-function displayEmail($email) {
+function handleInput(inputId, groupId, callback) {
     'use strict';
-    if ($email.valid() && $email.val().trim()) {
-        window.location.href = 'mailto:' + $email.val().trim();
-    } else {
-        $email.focus();
+    const $input = $(inputId);
+    const $group = $input.parents('.input-group').find(groupId);
+    if (!$input.length || !$group.length) {
+        return;
     }
+    const handler = function (e) {
+        e.preventDefault();
+        if ($input.valid() && $input.val().trim()) {
+            try {
+                callback($input.val().trim());
+            } catch (error) {
+                $group.off('click', handler).removeClass('cursor-pointer');
+                window.console.error(error);
+            }
+        }
+        $input.trigger('focus');
+    };
+    $input.on('input', function () {
+        $group.removeClass('cursor-pointer').off('click', handler);
+        if ($input.valid() && $input.val().trim()) {
+            $group.addClass('cursor-pointer').on('click', handler);
+        }
+    }).trigger('input');
 }
 
+function handlePhone() {
+    'use strict';
+    const handler = function (value) {
+        window.location.href = 'tel:' + value;
+    };
+    handleInput('#customer_phone', '.input-group-phone', handler);
+}
+
+// function handleFax() {
+//     'use strict';
+//     const handler = function (value) {
+//         window.location.href = 'fax:' + value;
+//     };
+//     handleInput('#customer_fax', '.input-group-fax', handler);
+// }
+
+function handleEmail() {
+    'use strict';
+    const handler = function (value) {
+        window.location.href = 'mailto:' + value;
+    };
+    handleInput('#customer_email', '.input-group-email', handler);
+}
 
 /**
  * Ready function
@@ -129,8 +166,7 @@ function displayEmail($email) {
 
     // validation
     $('#edit-form').initValidator({
-        inline: true,
-        rules: {
+        inline: true, rules: {
             'customer_url': {
                 url: true
             }
@@ -169,40 +205,8 @@ function displayEmail($email) {
         updateVisibleButton();
     });
     updateVisibleButton();
-
-    const $url = $('#customer_url');
-    const $urlGroup = $url.parents('.input-group').find('.input-group-url');
-    if ($url.length && $urlGroup.length) {
-        const handler = function (e) {
-            e.preventDefault();
-            displayUrl($url);
-        };
-        $url.on('input', function () {
-            $urlGroup.off('click', handler);
-            $urlGroup.removeClass('cursor-pointer');
-            if ($url.valid()) {
-                $urlGroup.on('click', handler);
-                $urlGroup.addClass('cursor-pointer');
-            }
-        });
-        $url.trigger('input');
-    }
-
-    const $email = $('#customer_email');
-    const $emailGroup = $email.parents('.input-group').find('.input-group-email');
-    if ($email.length && $emailGroup.length) {
-        const handler = function (e) {
-            e.preventDefault();
-            displayEmail($email);
-        };
-        $email.on('input', function () {
-            $emailGroup.off('click', handler);
-            $emailGroup.removeClass('cursor-pointer');
-            if ($email.valid()) {
-                $emailGroup.on('click', handler);
-                $emailGroup.addClass('cursor-pointer');
-            }
-        });
-        $email.trigger('input');
-    }
+    handlePhone();
+    handleEmail();
+    // handleFax();
+    handleUrl();
 }(jQuery));

@@ -33,12 +33,6 @@
 {%- endif -%}
 {%- endblock %}
 
-{# extends form widget with password strength place holder #}
-{%- block form_widget -%}
-    {{ parent() }}
-
-{%- endblock %}
-
 {# override password widget with an addon to show or hide the password within jQuery #}
 {% block password_widget -%}
     {% if ('password-strength' in attr.class|default('')) %}
@@ -95,29 +89,29 @@
 
 {# prepend and append icons, if applicable #}
 {% block form_widget_simple -%}
-    {% set prepend_icon = prepend_icon|default(false) %}
-    {% set prepend_class = ('input-group-text ' ~ prepend_class|default(''))|trim %}
-    {% set prepend_title = prepend_title|default(false) %}
-    {% set append_icon = append_icon|default(false) %}
-    {% set append_class = ('input-group-text ' ~ append_class|default(''))|trim %}
-    {% set append_title = append_title|default(false) %}
-    {% if prepend_icon or append_icon %}
-        <div class="input-group">
-            {% if prepend_icon %}
-            <div class="input-group-prepend"{% if prepend_title %} title="{{ prepend_title|trans }}" {% endif %}>
-                <span class="{{ prepend_class }}"><i class="{{ prepend_icon }}"></i></span>
-            </div>
-            {% endif %}
-            {{- parent() -}}
-            {% if append_icon %}
-            <div class="input-group-append"{% if append_title %} title="{{ append_title|trans }}" {% endif %}>
-                <span class="{{ append_class }}"><i class="{{ append_icon }}"></i></span>
-            </div>
-            {% endif %}
+{% set prepend_icon = prepend_icon|default(false) %}
+{% set prepend_class = ('input-group-text ' ~ prepend_class|default(''))|trim %}
+{% set prepend_title = prepend_title|default(false) %}
+{% set append_icon = append_icon|default(false) %}
+{% set append_class = ('input-group-text ' ~ append_class|default(''))|trim %}
+{% set append_title = append_title|default(false) %}
+{% if prepend_icon or append_icon %}
+    <div class="input-group">
+        {% if prepend_icon %}
+        <div class="input-group-prepend"{% if prepend_title %} title="{{ prepend_title|trans }}" {% endif %}>
+            <span class="{{ prepend_class }}"><i class="{{ prepend_icon }}"></i></span>
         </div>
-    {% else %}
+        {% endif %}
         {{- parent() -}}
-    {% endif %}
+        {% if append_icon %}
+        <div class="input-group-append"{% if append_title %} title="{{ append_title|trans }}" {% endif %}>
+            <span class="{{ append_class }}"><i class="{{ append_icon }}"></i></span>
+        </div>
+        {% endif %}
+    </div>
+{% else %}
+    {{- parent() -}}
+{% endif %}
 {%- endblock form_widget_simple %}
 
 {# use file-input style #}

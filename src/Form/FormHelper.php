@@ -291,6 +291,7 @@ class FormHelper
     {
         return $this->updateAttribute('pattern', $pattern)
             ->updateOption('prepend_icon', 'fa-fw fa-solid fa-fax')
+            ->updateOption('prepend_class', 'input-group-fax')
             ->add(TelType::class);
     }
 
@@ -402,6 +403,7 @@ class FormHelper
     {
         return $this->updateAttribute('inputmode', 'tel')
             ->updateOption('prepend_icon', 'fa-fw fa-solid fa-phone')
+            ->updateOption('prepend_class', 'input-group-phone')
             ->updateAttribute('pattern', $pattern)
             ->add(TelType::class);
     }

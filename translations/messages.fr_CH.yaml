@@ -762,8 +762,10 @@ parameters:
     customer_email: E-mail
     customer_email_title: Envoyer un message électronique au client
     customer_fax: Télécopieur
+    customer_fax_title: Envoyer un fax au client
     customer_name: Nom
     customer_phone: Téléphone
+    customer_phone_title: Passer un appel téléphonique au client
     customer_url: Site internet
     customer_url_title: Accéder au site internet du client
     customer_zip_city: NPA / Localité

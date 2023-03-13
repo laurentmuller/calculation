@@ -97,7 +97,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         if (\is_array($rates)) {
             return $rates;
         }
-
         if (\is_array($response = $this->get($url))) {
             /** @psalm-var array<string, float>|null $rates */
             $rates = $response['conversion_rates'] ?? null;
@@ -129,7 +128,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         if (\is_float($rate)) {
             return $rate;
         }
-
         if (\is_array($response = $this->get($url))) {
             /** @psalm-var float|null $rate */
             $rate = $response['conversion_rate'] ?? null;
@@ -161,7 +159,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         if (\is_array($result)) {
             return $result;
         }
-
         if (\is_array($response = $this->get($url))) {
             /** @psalm-var float|null $rate */
             $rate = $response['conversion_rate'] ?? null;
@@ -195,7 +192,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         if (\is_array($result)) {
             return $result;
         }
-
         if (\is_array($response = $this->get($url))) {
             /** @psalm-var string[]|null $codes */
             $codes = $response['supported_codes'] ?? null;
@@ -278,13 +274,10 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     private function isValidResult(array $response): bool
     {
-        // result
         $result = $response['result'] ?? '';
         if (self::RESPONSE_SUCCESS === $result) {
             return true;
         }
-
-        // error
         $error = $response['error-type'] ?? 'unknown';
         $this->setLastError(404, $this->translateError($error));
 
@@ -318,14 +311,12 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         /** @psalm-var string[] $codes */
         $codes = \array_filter(\array_column($codes, 0), Currencies::exists(...));
-
         /** @psalm-var array<string, ExchangeRateType> $result */
         $result = \array_reduce($codes, function (array $carry, string $code): array {
             $carry[$code] = $this->mapCode($code);
 
             return $carry;
         }, []);
-
         \uasort($result, fn (array $a, array $b) => $a['name'] <=> $b['name']);
 
         return $result;

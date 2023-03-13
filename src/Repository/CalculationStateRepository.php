@@ -60,7 +60,6 @@ class CalculationStateRepository extends AbstractRepository
         $results = $this->getCalculationsQueryBuilder()
             ->getQuery()
             ->getArrayResult();
-
         /** @psalm-var QueryCalculation $result */
         foreach ($results as &$result) {
             $this->updateQueryResult($result);

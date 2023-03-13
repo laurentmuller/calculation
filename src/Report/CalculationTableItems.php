@@ -63,13 +63,9 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $calculation = $this->calculation;
         $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
-
-        // styles
         $groupStyle = $this->findGroupStyle();
         $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::INDENT);
         $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
-
-        // headers
         $this->addColumns(
             PdfColumn::left($this->trans('calculationitem.fields.description'), 50),
             PdfColumn::left($this->trans('calculationitem.fields.unit'), 20, true),
@@ -77,12 +73,10 @@ class CalculationTableItems extends PdfGroupTableBuilder
             PdfColumn::right($this->trans('calculationitem.fields.quantity'), 20, true),
             PdfColumn::right($this->trans('calculationitem.fields.total'), 20, true)
         )->outputHeaders();
-
         foreach ($groups as $group) {
             $this->checkLines(3);
             $groupStyle->resetIndent();
             $this->setGroupKey($group->getCode());
-
             foreach ($group->getCategories() as $category) {
                 $this->checkLines(2);
                 $groupStyle->setIndent(self::INDENT / 2);
@@ -99,8 +93,6 @@ class CalculationTableItems extends PdfGroupTableBuilder
                 }
             }
         }
-
-        // total
         $this->inProgress = true;
         $total = $calculation->getItemsTotal();
         $this->startHeaderRow()

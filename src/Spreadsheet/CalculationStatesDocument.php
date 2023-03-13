@@ -30,10 +30,7 @@ class CalculationStatesDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('calculationstate.list.title', true);
-
-        // headers
         $row = $this->setHeaderValues([
             'calculationstate.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'calculationstate.fields.description' => Alignment::HORIZONTAL_GENERAL,
@@ -41,12 +38,8 @@ class CalculationStatesDocument extends AbstractArrayDocument
             'calculationstate.fields.calculations' => Alignment::HORIZONTAL_RIGHT,
             'calculationstate.fields.color' => Alignment::HORIZONTAL_CENTER,
         ]);
-
-        // formats
         $this->setFormatYesNo(3)
             ->setFormatInt(4);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 $entity->getCode(),
@@ -54,8 +47,6 @@ class CalculationStatesDocument extends AbstractArrayDocument
                 $entity->isEditable(),
                 $entity->countCalculations(),
             ]);
-
-            // color
             $col = $this->stringFromColumnIndex(5);
             $color = new Color(\substr($entity->getColor(), 1));
             $fill = $this->getActiveSheet()
@@ -63,10 +54,8 @@ class CalculationStatesDocument extends AbstractArrayDocument
                 ->getFill();
             $fill->setFillType(Fill::FILL_SOLID)
                 ->setStartColor($color);
-
             ++$row;
         }
-
         $this->finish();
 
         return true;

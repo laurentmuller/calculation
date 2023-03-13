@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace App\Enums;
 
 use App\Interfaces\SortableEnumInterface;
+use App\Traits\ExtendedExtrasTrait;
 use App\Util\RoleBuilder;
 use App\Util\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
-use Elao\Enum\ExtrasTrait;
 use Elao\Enum\ReadableEnumInterface;
 use Elao\Enum\ReadableEnumTrait;
 
@@ -31,7 +31,7 @@ use function Symfony\Component\String\u;
 #[ReadableEnum(suffix: '.name')]
 enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
 {
-    use ExtrasTrait;
+    use ExtendedExtrasTrait;
     use ReadableEnumTrait;
 
     /*
@@ -126,7 +126,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
      */
     public function offset(): int
     {
-        return (int) $this->getExtra('offset');
+        return $this->getExtraInt('offset');
     }
 
     /**

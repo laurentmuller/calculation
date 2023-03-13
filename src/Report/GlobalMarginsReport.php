@@ -31,20 +31,14 @@ class GlobalMarginsReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('globalmargin.list.title');
-
-        // new page
         $this->AddPage();
-
-        // table
         $table = PdfTableBuilder::instance($this)
             ->addColumns(
                 PdfColumn::right($this->trans('globalmargin.fields.minimum'), 50),
                 PdfColumn::right($this->trans('globalmargin.fields.maximum'), 50),
                 PdfColumn::right($this->trans('globalmargin.fields.margin'), 50)
             )->outputHeaders();
-
         foreach ($entities as $entity) {
             $table->addRow(
                 FormatUtils::formatAmount($entity->getMinimum()),
@@ -53,7 +47,6 @@ class GlobalMarginsReport extends AbstractArrayReport
             );
         }
 
-        // count
         return $this->renderCount($entities);
     }
 }

@@ -81,7 +81,6 @@ class PivotTable extends AbstractPivotAggregator
     public function __construct(AbstractAggregator $aggregator, private ?string $title = null)
     {
         parent::__construct($aggregator);
-
         $this->rootCol = new PivotNode(clone $aggregator);
         $this->rootRow = new PivotNode(clone $aggregator);
     }

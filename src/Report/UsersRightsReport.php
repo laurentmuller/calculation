@@ -61,14 +61,12 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         /** @var Role|User|null $key */
         $key = $group->getKey();
         $description = $this->trans('user.fields.role') . ' ';
-
         if ($key instanceof Role) {
             $description .= $this->translateRole($key);
             $parent->singleLine($description, $group->getStyle());
 
             return true;
         }
-
         if ($key instanceof User) {
             $text = $key->getUserIdentifier();
             if ($key->isEnabled()) {
@@ -76,20 +74,12 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             } else {
                 $description .= $this->trans('common.value_disabled');
             }
-
-            // save position
             [$x, $y] = $this->GetXY();
-
-            // border
             $group->apply($this);
             $this->Cell(0, self::LINE_HEIGHT, '', PdfBorder::all());
-
-            // text
             $this->SetXY($x, $y);
             $width = $this->GetStringWidth($text);
             $this->Cell($width, self::LINE_HEIGHT, $text);
-
-            // description
             PdfStyle::getDefaultStyle()->setFontItalic()->apply($this);
             $this->Cell(0, self::LINE_HEIGHT, ' - ' . $description, PdfBorder::none(), PdfMove::NEW_LINE);
 
@@ -107,30 +97,15 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     protected function doRender(array $entities): bool
     {
         $count = 0;
-
-        // title
         $this->setTitleTrans('user.rights.title', [], true);
-
-        // new page
         $this->AddPage();
-
-        // create styles
         $this->titleStyle = PdfStyle::getCellStyle()->setIndent(2);
         $this->rightStyle = PdfStyle::getCellStyle()->setFontName(PdfFontName::SYMBOL);
-
-        // create table
         $builder = $this->createTableBuilder();
-
-        // default rights for administrator role
         $count += $this->outputRoleAdmin($builder);
-
-        // default rights for user role
         $count += $this->outputRoleUser($builder);
-
-        // user rights
         $count += $this->outputUsers($entities, $builder);
 
-        // count
         return $this->renderCount($count);
     }
 
@@ -145,7 +120,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             ->setGroupStyle(PdfStyle::getCellStyle()->setFontBold())
             ->setGroupListener($this)
             ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50));
-
         $permissions = EntityPermission::sorted();
         foreach ($permissions as $permission) {
             $builder->addColumn(PdfColumn::center($this->trans($permission->getReadable()), 25, true));
@@ -192,10 +166,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputRole(PdfGroupTableBuilder $builder, Role|User $role): void
     {
-        // allow outputting user entity rights
         $outputUsers = $role->isAdmin();
-
-        // check new page
         $entities = EntityName::sorted();
         $lines = \count($entities) - 1;
         if (!$outputUsers) {
@@ -204,11 +175,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if (!$this->isPrintable((float) $lines * self::LINE_HEIGHT)) {
             $this->AddPage();
         }
-
-        // group
         $builder->setGroupKey($role);
-
-        // rights
         foreach ($entities as $entity) {
             if (EntityName::LOG === $entity) {
                 continue;
@@ -260,19 +227,14 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputUsers(array $users, PdfGroupTableBuilder $builder): int
     {
-        // users?
         if ([] === $users) {
             return 0;
         }
-
-        // render
         foreach ($users as $user) {
-            // update rights
             if (!$user->isOverwrite()) {
                 $rights = RoleBuilder::getRole($user)->getRights();
                 $user->setRights($rights);
             }
-
             $this->outputRole($builder, $user);
         }
 

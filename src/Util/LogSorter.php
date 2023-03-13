@@ -54,17 +54,13 @@ class LogSorter
      */
     public function sort(array &$logs): bool
     {
-        // not data or sort by default
         if (\count($logs) <= 1 || self::isDefaultSort($this->field, $this->ascending)) {
             return false;
         }
-
-        // sort by date ascending
         $dateSorter = $this->getDateSorter();
         if (self::COLUMN_DATE === $this->field) {
             return \uasort($logs, $dateSorter);
         }
-
         $order = $this->ascending ? 1 : -1;
         $fieldSorter = $this->getFieldSorter();
 

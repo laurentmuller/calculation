@@ -32,7 +32,6 @@ class TasksDocument extends AbstractArrayDocument
     public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): static
     {
         parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
-
         if (1 === $columnIndex) {
             if ($this->writeTask) {
                 $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
@@ -53,11 +52,8 @@ class TasksDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('task.list.title');
         $this->writeTask = $this->writeItem = false;
-
-        // headers
         $row = $this->setHeaderValues([
             'task.fields.name' => Alignment::HORIZONTAL_GENERAL,
             'task.fields.group' => Alignment::HORIZONTAL_GENERAL,
@@ -68,13 +64,9 @@ class TasksDocument extends AbstractArrayDocument
             'taskitemmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
             'taskitemmargin.fields.value' => Alignment::HORIZONTAL_RIGHT,
         ]);
-
-        // formats
         $this->setFormatAmount(6)
             ->setFormatAmount(7)
             ->setFormatPrice(8);
-
-        // rows
         foreach ($entities as $entity) {
             $this->writeTask = true;
             if ($entity->isEmpty()) {
@@ -97,7 +89,6 @@ class TasksDocument extends AbstractArrayDocument
                 ]);
             }
             $this->writeTask = false;
-
             foreach ($entity->getItems() as $item) {
                 $this->writeItem = true;
                 if ($item->isEmpty()) {
@@ -129,7 +120,6 @@ class TasksDocument extends AbstractArrayDocument
                 }
             }
         }
-
         $this->finish();
 
         return true;

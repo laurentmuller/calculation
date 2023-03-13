@@ -35,22 +35,13 @@ class CategoriesReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('category.list.title', [], true);
-
-        // group by parent code
         $default = $this->trans('report.other');
         $fn = fn (Category $category): string => $category->getGroupCode() ?? $default;
         /** @var array<string, Category[]> $groups */
         $groups = Utils::groupBy($entities, $fn);
-
-        // new page
         $this->AddPage();
-
-        // table
         $table = $this->createTable();
-
-        // categories by group
         foreach ($groups as $key => $items) {
             $table->setGroupKey($key);
             foreach ($items as $item) {
@@ -63,21 +54,16 @@ class CategoriesReport extends AbstractArrayReport
             }
         }
         $this->resetStyle();
-
-        // count task and products
         $tasks = 0;
         $products = 0;
         foreach ($entities as $item) {
             $tasks += $item->countTasks();
             $products += $item->countProducts();
         }
-
-        // totals
         $txtGroup = $this->trans('counters.groups', ['count' => \count($groups)]);
         $txtCount = $this->trans('counters.categories', ['count' => \count($entities)]);
         $txtProduct = $this->trans('counters.products', ['count' => $products]);
         $txtTask = $this->trans('counters.tasks', ['count' => $tasks]);
-
         $border = PdfBorder::none();
         $margins = $this->setCellMargin(0);
         $width = $this->GetPageWidth() / 2.0;

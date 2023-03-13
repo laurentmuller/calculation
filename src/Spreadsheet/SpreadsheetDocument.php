@@ -93,12 +93,9 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public static function checkSheetTitle(string $title): string
     {
-        // replace invalid characters
         /** @var string[] $invalidChars */
         $invalidChars = Worksheet::getInvalidCharacters();
         $title = \str_replace($invalidChars, '', $title);
-
-        // check length
         if (StringHelper::countCharacters($title) > Worksheet::SHEET_TITLE_MAXIMUM_LENGTH) {
             return StringHelper::substring($title, 0, Worksheet::SHEET_TITLE_MAXIMUM_LENGTH);
         }
@@ -181,7 +178,6 @@ class SpreadsheetDocument extends Spreadsheet
         $application = $controller->getApplicationName();
         $username = $controller->getUserIdentifier();
         $title = $this->trans($title);
-
         $this->setHeaderFooter($title, $customer)
             ->setTitle($title)
             ->setActiveTitle($title)
@@ -273,7 +269,6 @@ class SpreadsheetDocument extends Spreadsheet
     public function setCellImage(string $path, string $coordinates, int $width, int $height): static
     {
         $sheet = $this->getActiveSheet();
-
         $drawing = new Drawing();
         $drawing->setPath($path)
             ->setResizeProportional(false)
@@ -283,8 +278,6 @@ class SpreadsheetDocument extends Spreadsheet
             ->setOffsetX(2)
             ->setOffsetY(2)
             ->setWorksheet($sheet);
-
-        // update size
         [$columnIndex, $rowIndex] = Coordinate::coordinateFromString($coordinates);
         $columnDimension = $sheet->getColumnDimension($columnIndex);
         if ($width > $columnDimension->getWidth()) {
@@ -420,13 +413,11 @@ class SpreadsheetDocument extends Spreadsheet
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
         $style = $sheet->getStyle($name)->getFont()->getColor();
-
         if (\strlen($color) > 6) {
             $style->setARGB($color);
         } else {
             $style->setRGB($color);
         }
-
         if (!$includeHeader) {
             $sheet->getStyle("{$name}1")->getFont()->getColor()
                 ->setARGB();
@@ -568,7 +559,6 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $sheet = $this->getActiveSheet();
         $pageMargins = $sheet->getPageMargins();
-
         $header = new HeaderFooter(true, 9);
         if ($customer->isPrintAddress()) {
             $header->addLeft($customer->getName() ?? '', true)
@@ -585,7 +575,6 @@ class SpreadsheetDocument extends Spreadsheet
             $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
         }
         $header->apply($sheet);
-
         $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
         $footer = new HeaderFooter(false, 9);
         $footer->addPages()->addDateTime()
@@ -612,7 +601,6 @@ class SpreadsheetDocument extends Spreadsheet
     public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): int
     {
         $sheet = $this->getActiveSheet();
-
         $index = $columnIndex;
         foreach ($headers as $id => $alignment) {
             $name = $this->stringFromColumnIndex($index++);
@@ -629,12 +617,10 @@ class SpreadsheetDocument extends Spreadsheet
             $sheet->getColumnDimension($name)->setAutoSize(true);
             $sheet->setCellValue("$name$rowIndex", $this->trans($id));
         }
-
         $firstName = $this->stringFromColumnIndex($columnIndex);
         $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
         $sheet->getStyle("$firstName$rowIndex:$lastName$rowIndex")->getFont()->setBold(true);
         $sheet->freezePane(\sprintf('A%d', $rowIndex + 1));
-
         $sheet->getPageSetup()
             ->setFitToWidth(1)
             ->setFitToHeight(0)

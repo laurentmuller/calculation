@@ -36,35 +36,25 @@ trait TableTrait
      */
     protected function handleTableRequest(Request $request, AbstractTable $table, string $template, LoggerInterface $logger): Response
     {
-        // check permission
         if (null !== $subject = $table->getEntityClassName()) {
             $this->denyAccessUnlessGranted(EntityPermission::LIST, $subject);
         }
 
         try {
-            // empty?
             if (null !== $message = $table->getEmptyMessage()) {
                 return $this->redirectToHomePage(message: $message, type: FlashType::INFO);
             }
-
-            // get query and results
             $query = $table->getDataQuery($request);
             $results = $table->processQuery($query);
-
-            // response
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
-
-            // save results
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
             $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $table->getPrefix());
 
             return $response;
         } catch (\Throwable $e) {
-            // log error
             $context = Utils::getExceptionContext($e);
             $message = $this->trans('error_page.description');
             $logger->error($message, $context);
-
             $status = Response::HTTP_BAD_REQUEST;
             $parameters = [
                 'result' => false,
@@ -73,7 +63,6 @@ trait TableTrait
                 'status_code' => $status,
                 'status_text' => $this->trans('errors.invalid_request'),
             ];
-
             if ($request->isXmlHttpRequest()) {
                 return $this->json($parameters, $status);
             }

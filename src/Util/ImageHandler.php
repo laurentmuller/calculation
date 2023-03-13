@@ -652,7 +652,6 @@ class ImageHandler implements ImageExtensionInterface
         if (\is_array($box)) {
             $values = [$box[0], $box[2], $box[4], $box[6]];
             $width = \max($values) - \min($values);
-
             $values = [$box[1], $box[3], $box[5], $box[7]];
             $height = \max($values) - \min($values);
 

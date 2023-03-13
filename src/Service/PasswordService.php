@@ -51,20 +51,13 @@ class PasswordService
      */
     public function validate(string $password, int $strength, ?string $email = null, ?string $user = null): array
     {
-        // validate password
         if (null !== $response = $this->validatePassword($password)) {
             return $response;
         }
-
-        // get results
         $results = $this->getPasswordStrength($password, \array_filter([$email, $user]));
-
-        // validate score
         if (null !== $response = $this->validateScoreResults($results)) {
             return $response;
         }
-
-        // add score
         $scoreLevel = StrengthLevel::from($results['score']);
         $results = \array_merge($results, [
             'score' => [
@@ -73,13 +66,9 @@ class PasswordService
                 'text' => $this->translateLevel($scoreLevel),
             ],
         ]);
-
-        // validate strength input
         if (null !== $response = $this->validateStrength($strength, $results)) {
             return $response;
         }
-
-        // add minimum level
         $minimumLevel = StrengthLevel::from($strength);
         $results = \array_merge($results, [
             'minimum' => [
@@ -88,18 +77,13 @@ class PasswordService
                 'text' => $this->translateLevel($minimumLevel),
             ],
         ]);
-
-        // validate minimum level
         if (null !== $response = $this->validateMinimumLevel($minimumLevel, $results)) {
             return $response;
         }
-
-        // validate actual level
         if (null !== $response = $this->validateScoreLevel($minimumLevel, $scoreLevel, $results)) {
             return $response;
         }
 
-        // ok
         return \array_merge(['result' => true], $results);
     }
 

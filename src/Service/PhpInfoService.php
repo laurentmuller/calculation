@@ -98,22 +98,12 @@ final class PhpInfoService
      */
     public function asHtml(int $what = \INFO_ALL): string
     {
-        // get info
         $info = $this->asText($what);
-
-        // extract body
         $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
-
-        // remove links
         $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/is', '<p>$2</p>', $info);
-
-        // no value
         $info = \str_ireplace('<i>no value</i>', '<i class="text-muted">No value</i>', $info);
-
-        // update table class
         $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
-        // remove first table (icon and version)
         return (string) \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
     }
 
@@ -176,7 +166,6 @@ final class PhpInfoService
             'DATABASE_EDIT',
             'PASSWORD',
         ];
-
         foreach ($keys as $key) {
             $content = (string) \preg_replace("/<tr>.*$key.*<\/tr>/m", '', $content);
         }

@@ -58,7 +58,6 @@ class MailerService implements ServiceSubscriberInterface
             ->importance($comment->getImportance())
             ->markdown($this->convert((string) $comment->getMessage()))
             ->action($this->trans('index.title'), $this->getHomeUrl());
-
         if (null !== $address = $comment->getFromAddress()) {
             $notification->from($address);
         }

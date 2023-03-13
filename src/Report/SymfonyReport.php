@@ -43,18 +43,13 @@ class SymfonyReport extends AbstractReport
     public function render(): bool
     {
         $info = $this->info;
-
         $this->AddPage();
-
-        // kernel
         $this->outputInfo($info);
-
         $bundles = $info->getBundles();
         if ([] !== $bundles) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputBundles($bundles);
         }
-
         $packages = $info->getPackages();
         $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if ([] !== $runtimePackages) {
@@ -66,7 +61,6 @@ class SymfonyReport extends AbstractReport
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputPackages('Debug Packages', $debugPackages);
         }
-
         $routes = $info->getRoutes();
         $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if ([] !== $runtimeRoutes) {
@@ -96,7 +90,6 @@ class SymfonyReport extends AbstractReport
             ->setGroupBeforeHeader(true)
             ->setGroupKey('Bundles')
             ->outputHeaders();
-
         foreach ($bundles as $bundle) {
             $table->startRow()
                 ->addCell(new PdfCell(text: $bundle['name'], link: $bundle['homepage'] ?? ''))
@@ -108,32 +101,27 @@ class SymfonyReport extends AbstractReport
     private function outputInfo(SymfonyInfoService $info): void
     {
         $app = $this->controller->getApplication();
-
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
                 PdfColumn::left('Value', 70)
             );
-
         $table->setGroupKey('Kernel')->outputHeaders();
         $this->outputRow($table, 'Environment', $info->getEnvironment())
             ->outputRow($table, 'Mode', $this->mode)
             ->outputRow($table, 'Version status', $info->getMaintenanceStatus())
             ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($table, 'End of product life', $info->getEndOfLife());
-
         $table->setGroupKey('Parameters');
         $this->outputRow($table, 'Intl Locale', $this->locale)
             ->outputRow($table, 'Timezone', $info->getTimeZone())
             ->outputRow($table, 'Charset', $info->getCharset());
-
         $table->setGroupKey('Extensions');
         $this->outputRowEnabled($table, 'Debug', $app->isDebug())
             ->outputRowEnabled($table, 'OP Cache', $info->isZendCacheLoaded())
             ->outputRowEnabled($table, 'APCu', $info->isApcuLoaded())
             ->outputRowEnabled($table, 'Xdebug', $info->isXdebugLoaded());
-
         $table->setGroupKey('Directories');
         $this->outputRow($table, 'Project', $info->getProjectDir())
             ->outputRow($table, 'Logs', $info->getLogInfo())
@@ -155,7 +143,6 @@ class SymfonyReport extends AbstractReport
             ->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
-
         foreach ($packages as $package) {
             $table->startRow()
                 ->addCell(new PdfCell(text: $package['name'], link: $package['homepage']))
@@ -179,7 +166,6 @@ class SymfonyReport extends AbstractReport
             ->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
-
         foreach ($routes as $route) {
             $this->outputRow($table, $route['name'], $route['path']);
         }

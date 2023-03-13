@@ -62,22 +62,17 @@ class ProductUpdater implements ServiceSubscriberInterface
      */
     public function createForm(ProductUpdateQuery $query): FormInterface
     {
-        // create helper
         $builder = $this->factory->createBuilder(FormType::class, $query);
         $helper = new FormHelper($builder, 'product.update.');
-
-        // add fields
         $helper->field('category')
             ->label('product.fields.category')
             ->updateOption('query_builder', static fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS))
             ->add(CategoryListType::class);
-
         $helper->field('allProducts')
             ->notRequired()
             ->rowClass('mb-0')
             ->updateAttribute('data-error', $this->trans('product.update.products_error'))
             ->addCheckboxType();
-
         $helper->field('products')
             ->label('product.list.title')
             ->updateOptions([
@@ -92,26 +87,21 @@ class ProductUpdater implements ServiceSubscriberInterface
                 ],
             ])
             ->add(EntityType::class);
-
         $helper->field('percent')
             ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_PERCENT)
             ->help('product.update.percent_help')
             ->addPercentType();
-
         $helper->field('fixed')
             ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_FIXED)
             ->help('product.update.fixed_help')
             ->addNumberType();
-
         $helper->field('round')
             ->help('product.update.round_help')
             ->helpClass('ml-4')
             ->notRequired()
             ->addCheckboxType();
-
         $helper->addCheckboxSimulate()
             ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());
-
         $helper->field('type')
             ->addHiddenType();
 
@@ -125,7 +115,6 @@ class ProductUpdater implements ServiceSubscriberInterface
     {
         $id = $this->getSessionInt(self::KEY_CATEGORY, 0);
         $category = $this->getCategory($id);
-
         $query = new ProductUpdateQuery();
         $query->setAllProducts(true)
             ->setCategory($category)
@@ -147,7 +136,6 @@ class ProductUpdater implements ServiceSubscriberInterface
         $percent = $query->isPercent();
         $type = $percent ? ProductUpdateQuery::UPDATE_PERCENT : ProductUpdateQuery::UPDATE_FIXED;
         $key = $percent ? self::KEY_PERCENT : self::KEY_FIXED;
-
         $this->setSessionValues([
             self::KEY_CATEGORY => $query->getCategoryId(),
             self::KEY_SIMULATE => $query->isSimulate(),
@@ -164,23 +152,16 @@ class ProductUpdater implements ServiceSubscriberInterface
     {
         $result = new ProductUpdateResult();
         $result->setSimulate($query->isSimulate());
-
-        // get products
         $products = $query->isAllProducts() ? $this->getProducts($query->getCategory()) : $query->getProducts();
         if ([] === $products) {
             return $result;
         }
-
-        // get query values
         $percent = $query->isPercent();
         $value = $query->getValue();
         $round = $query->isRound();
-
-        // update price
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
             $newPrice = $this->computePrice($oldPrice, $percent, $value, $round);
-
             if ($oldPrice !== $newPrice) {
                 $product->setPrice($newPrice);
                 $result->addProduct([
@@ -190,8 +171,6 @@ class ProductUpdater implements ServiceSubscriberInterface
                 ]);
             }
         }
-
-        // save if applicable
         if (!$query->isSimulate() && $result->isValid()) {
             $this->manager->flush();
             $this->logResult($query, $result);

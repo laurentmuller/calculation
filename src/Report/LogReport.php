@@ -84,8 +84,6 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
         parent::__construct($controller, PdfDocumentOrientation::LANDSCAPE);
-
-        // title and description
         $this->setTitleTrans('log.title');
         $description = $this->trans('log.list.file', [
             '%file%' => $this->logFile->getFile(),
@@ -107,14 +105,11 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
      */
     public function drawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, PdfBorder $border): bool
     {
-        // started?
         if (!$this->started) {
             $this->started = true;
 
             return false;
         }
-
-        // cards
         if ($this->drawCards) {
             $text = $builder->getColumns()[$index]->getText();
             if (self::TOTAL === $text) {
@@ -124,7 +119,6 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
             return $this->drawBorder($builder, $text, $bounds, $border);
         }
 
-        // lines
         return (0 === $index) && $this->drawBorder($builder, $this->level, $bounds, $border);
     }
 
@@ -134,21 +128,14 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     public function render(): bool
     {
         $logFile = $this->logFile;
-
-        // new page
         $this->AddPage();
-
-        // logs?
         if ($logFile->isEmpty()) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.list.empty'));
 
             return true;
         }
-
-        // levels and channels
         $this->outputCards();
 
-        // logs
         return $this->outputLogs($logFile->getLogs());
     }
 
@@ -165,21 +152,14 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, PdfBorder $border): bool
     {
         if ($level && $color = $this->getLevelColor($level)) {
-            // get values
             $x = $bounds->x() + self::HALF_WIDTH;
             $y = $bounds->y() + self::HALF_WIDTH;
             $h = $bounds->height() - self::FULL_WIDTH;
             $doc = $builder->getParent();
-
-            // default
             $doc->rectangle($bounds, $border);
-
-            // left border
             $color->apply($doc);
             $doc->SetLineWidth(self::FULL_WIDTH);
             $doc->Line($x, $y, $x, $y + $h);
-
-            // restore
             PdfLine::default()->apply($doc);
             PdfDrawColor::cellBorder()->apply($doc);
 
@@ -215,35 +195,26 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     {
         $levels = $this->logFile->getLevels();
         $channels = $this->logFile->getChannels();
-
         $columns = [];
         $textCells = [];
         $valueCells = [];
         $sepCol = PdfColumn::center(null, 3);
         $emptyCol = PdfColumn::center(null, 1);
         $emptyCell = new PdfCell(null, 1, PdfStyle::getNoBorderStyle());
-
-        // levels
         $this->outputCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
-
-        // channels
         $this->outputCardsEntries($channels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
-
-        // total
         $columns[] = PdfColumn::center(self::TOTAL, 30);
         $textCells[] = new PdfCell(StringUtils::capitalize(self::TOTAL));
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
-
         $this->started = true;
         $this->drawCards = true;
         $titleStyle = PdfStyle::getDefaultStyle()->setBorder(PdfBorder::NONE)->setFontBold();
-
         PdfTableBuilder::instance($this)
             ->addColumns(...$columns)
             ->startRow()
@@ -288,7 +259,6 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     {
         $this->drawCards = false;
         $this->cellTitle('log.name');
-
         $table = PdfTableBuilder::instance($this)
             ->setListener($this)
             ->addColumns(
@@ -298,7 +268,6 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
                 PdfColumn::left($this->trans('log.fields.message'), 150),
                 PdfColumn::left($this->trans('log.fields.user'), 20, true)
             )->outputHeaders();
-
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
             $table->addRow(

@@ -69,7 +69,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     public function getIpInfo(?Request $request = null): ?array
     {
         $clientIp = $this->getClientIp($request);
-
         /** @psalm-var IpStackType|null $result */
         $result = $this->getUrlCacheValue($clientIp);
         if (\is_array($result)) {
@@ -85,21 +84,14 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
             $response = $this->requestGet($clientIp, [
                 self::QUERY => $query,
             ]);
-
             /** @psalm-var IpStackType $result */
             $result = $response->toArray();
-
-            // check
             if (!$this->isValidResult($result)) {
                 return null;
             }
-
-            // update region name
             if (isset($result['region_name'])) {
                 $result['region_name'] = \ucfirst($result['region_name']);
             }
-
-            // save to cache
             $this->setUrlCacheValue($clientIp, $result);
 
             return $result;
@@ -126,7 +118,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         if (null === $request) {
             return self::URI_CHECK;
         }
-
         $clientIp = $request->getClientIp();
         if (null === $clientIp || '127.0.0.1' === $clientIp) {
             return self::URI_CHECK;
@@ -150,7 +141,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
 
             return $this->setLastError($code, $this->translateError($type));
         }
-
         if (empty($result['city'] ?? null)) {
             return $this->setLastError(404, $this->translateError('ip_not_found'));
         }

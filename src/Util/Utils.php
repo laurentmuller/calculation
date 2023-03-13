@@ -73,10 +73,9 @@ final class Utils
      *
      * @return array the grouped array
      */
-    public static function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
+    public static function groupBy(array $array, string|int|callable $key, string | int | callable ...$others): array
     {
         $result = [];
-
         /** @psalm-var object|array $value */
         foreach ($array as $value) {
             if (\is_callable($key)) {
@@ -90,9 +89,6 @@ final class Utils
             }
             $result[$entry][] = $value;
         }
-
-        // Recursively build a nested grouping if more parameters are supplied
-        // Each grouped array value is grouped according to the next sequential key
         if (\func_num_args() > 2) {
             $args = \func_get_args();
             $callback = [__CLASS__, __FUNCTION__];

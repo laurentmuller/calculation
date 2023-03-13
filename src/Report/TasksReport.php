@@ -53,31 +53,20 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('task.list.title', [], true);
-
-        // new page
         $this->AddPage();
-
-        // table
         $table = $this->createTable();
-
-        // styles
         $table->getGroupStyle()?->setFontBold();
         $itemStyle = PdfStyle::getCellStyle()
             ->setIndent(4);
         $emptyStyle = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
-
         foreach ($entities as $entity) {
-            // empty?
             if ($entity->isEmpty()) {
                 $table->setGroupKey($entity);
                 continue;
             }
-
             foreach ($entity->getItems() as $item) {
-                // check for new page
                 $count = 1 + \max($item->count(), 1);
                 $height = (float) $count * self::LINE_HEIGHT;
                 if ($this->isPrintable($height)) {
@@ -86,7 +75,6 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                     $table->setGroupKey($entity, false);
                     $table->checkNewPage($height);
                 }
-
                 if ($item->isEmpty()) {
                     $table->startRow()
                         ->add(text: $item->getName(), style: $itemStyle)
@@ -115,7 +103,6 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
             }
         }
 
-        // count
         return $this->renderCount($entities, 'counters.tasks');
     }
 

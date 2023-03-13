@@ -79,19 +79,13 @@ class CalculationReport extends AbstractReport
     public function render(): bool
     {
         $calculation = $this->calculation;
-
-        // update title
         if ($calculation->isNew()) {
             $this->setTitleTrans('calculation.add.title');
         } else {
             $id = $calculation->getFormattedId();
             $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
-
-        // new page
         $this->AddPage();
-
-        // empty?
         if ($calculation->isEmpty()) {
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
@@ -100,21 +94,11 @@ class CalculationReport extends AbstractReport
 
             return true;
         }
-
-        // items
         CalculationTableItems::render($this);
         $this->Ln(3);
-
-        // check new page
         $this->checkTablesHeight($calculation);
-
-        // totals by group
         CalculationTableGroups::render($this);
-
-        // overall totals
         CalculationTableOverall::render($this);
-
-        // qr-code
         $this->renderQrCode();
 
         return true;
@@ -125,26 +109,15 @@ class CalculationReport extends AbstractReport
      */
     private function checkTablesHeight(Calculation $calculation): void
     {
-        // groups header + groups count + groups footer
         $lines = $calculation->getGroupsCount() + 2;
-
-        // net total + user margin
         if (!empty($calculation->getUserMargin())) {
             $lines += 2;
         }
-
-        // overall margin + overall total + timestamp
         $lines += 3;
-
-        // total height
         $total = 2.0 + self::LINE_HEIGHT * (float) $lines;
-
-        // qr-code
         if (null !== $this->qrcode) {
             $total += $this->getQrCodeSize() - 1.0;
         }
-
-        // check
         if (!$this->isPrintable($total)) {
             $this->AddPage();
         }
@@ -184,12 +157,10 @@ class CalculationReport extends AbstractReport
     private function renderCalculation(): void
     {
         $calculation = $this->calculation;
-
         $leftStyle = PdfStyle::getHeaderStyle()
             ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT);
         $rightStyle = PdfStyle::getHeaderStyle()
             ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
-
         PdfTableBuilder::instance($this)
             ->addColumns(
                 PdfColumn::left(null, 100),
@@ -202,7 +173,6 @@ class CalculationReport extends AbstractReport
             ->add(text: $calculation->getDescription(), style: $leftStyle)
             ->add(text: $calculation->getFormattedDate(), style: $rightStyle)
             ->endRow();
-
         $this->Ln(3);
     }
 
@@ -213,7 +183,6 @@ class CalculationReport extends AbstractReport
     {
         if (null !== $this->qrcode) {
             try {
-                // temp file
                 if (null === $path = FileUtils::tempfile('qr_code')) {
                     $this->logWarning($this->trans('report.calculation.error_qr_code'), [
                         'calculation' => $this->calculation->getDisplay(),
@@ -221,8 +190,6 @@ class CalculationReport extends AbstractReport
 
                     return;
                 }
-
-                // build and save
                 Builder::create()
                     ->roundBlockSizeMode(new RoundBlockSizeModeNone())
                     ->writer(new PngWriter())
@@ -230,13 +197,9 @@ class CalculationReport extends AbstractReport
                     ->margin(0)
                     ->build()
                     ->saveToFile($path);
-
-                // position
                 $size = $this->getQrCodeSize();
                 $x = $this->GetPageWidth() - $this->getRightMargin() - $size;
                 $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1.0;
-
-                // render
                 $this->Image($path, $x, $y, $size, $size, PdfImageType::PNG, $this->getQrCodeLink());
             } catch (\Exception $e) {
                 $this->logException($e, $this->trans('report.calculation.error_qr_code'));

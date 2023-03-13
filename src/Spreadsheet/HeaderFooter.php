@@ -130,21 +130,17 @@ class HeaderFooter
         if ('' === $text) {
             return $this;
         }
-
         if (!empty($value)) {
             $value .= "\n";
         }
-
         if (self::DEFAULT_FONT_SIZE !== $this->fontSize) {
             $value .= \sprintf('&%d', $this->fontSize);
         }
-
         if ($bold) {
             $value .= '&B';
         } else {
             $value .= '&"-,Regular"';
         }
-
         if ($clean) {
             $text = \str_replace('&', '&&', $text);
         }

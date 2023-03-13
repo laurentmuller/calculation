@@ -47,7 +47,6 @@ class TaskRepository extends AbstractCategoryItemRepository
         $field = $this->getSortField('name', $alias);
         $builder = $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);
-
         if (!$all) {
             $builder->innerJoin("$alias.items", 'item')
                 ->innerJoin('item.margins', 'margin')

@@ -28,10 +28,7 @@ class CustomersDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('customer.list.title');
-
-        // headers
         $row = $this->setHeaderValues([
             'customer.fields.lastName' => Alignment::HORIZONTAL_GENERAL,
             'customer.fields.firstName' => Alignment::HORIZONTAL_GENERAL,
@@ -40,8 +37,6 @@ class CustomersDocument extends AbstractArrayDocument
             'customer.fields.zipCode' => Alignment::HORIZONTAL_RIGHT,
             'customer.fields.city' => Alignment::HORIZONTAL_GENERAL,
         ]);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getLastName(),
@@ -52,7 +47,6 @@ class CustomersDocument extends AbstractArrayDocument
                 $entity->getCity(),
             ]);
         }
-
         $this->finish();
 
         return true;

@@ -74,7 +74,6 @@ class HtmlReport extends AbstractReport
      */
     public function render(): bool
     {
-        // parse
         $parser = new HtmlParser($this->content);
         if (null !== ($root = $parser->parse())) {
             $this->AddPage();

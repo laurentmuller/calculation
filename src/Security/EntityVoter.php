@@ -52,12 +52,9 @@ class EntityVoter extends Voter
      */
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
-        // map subject
         if ($subject instanceof EntityName) {
             $subject = $subject->value;
         }
-
-        // map attributes
         $attributes = \array_map(static fn (mixed $value): mixed => ($value instanceof EntityPermission) ? $value->name : $value, $attributes);
 
         return parent::vote($token, $subject, $attributes);
@@ -76,43 +73,27 @@ class EntityVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        // get user
         if (null === $user = $this->getUser($token)) {
             return false;
         }
-
-        // super admin can access all
         if ($user->isSuperAdmin()) {
             return true;
         }
-
-        // find entity
         if (null === $name = EntityName::tryFindValue($subject)) {
             return false;
         }
-
-        // special case for Log entity
         if (EntityName::LOG->matchValue($name)) {
             return $user->isAdmin();
         }
-
-        // get offset
         if (RoleBuilder::INVALID_VALUE === $offset = EntityName::tryFindOffset($name)) {
             return false;
         }
-
-        // get mask
         if (RoleBuilder::INVALID_VALUE === $mask = EntityPermission::tryFindValue($attribute)) {
             return false;
         }
-
-        // get rights
         $rights = $this->getRights($user);
-
-        // get value
         $value = $rights[$offset];
 
-        // check rights
         return $this->isBitSet($value, $mask);
     }
 

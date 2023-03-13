@@ -45,14 +45,12 @@ class PhpIniReport extends AbstractReport
     public function render(): bool
     {
         $this->AddPage();
-
         $content = $this->content;
         if ([] === $content) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('about.error'));
 
             return true;
         }
-
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -61,7 +59,6 @@ class PhpIniReport extends AbstractReport
                 PdfColumn::left('Local Value', 30),
                 PdfColumn::left('Master Value', 30)
             )->outputHeaders();
-
         foreach ($content as $key => $value) {
             $table->setGroupKey($key);
             $this->outputEntries($table, $value);

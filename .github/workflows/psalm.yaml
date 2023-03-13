@@ -32,5 +32,9 @@ jobs:
       - name: Install dependencies
         run: composer install $COMPOSER_FLAGS
 
+      - name: Install psalm
+        working-directory: ./vendor-bin/psalm
+        run: composer install $COMPOSER_FLAGS
+
       - name: Run psalm
         run: vendor-bin/psalm/vendor/bin/psalm src

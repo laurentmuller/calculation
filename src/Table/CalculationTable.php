@@ -102,7 +102,6 @@ class CalculationTable extends AbstractEntityTable
         if (0 === $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
             return $result;
         }
-
         /** @psalm-var string $field */
         $field = $this->repository->getSearchFields('state.id', $alias);
         $builder->andWhere($field . '=:' . self::PARAM_STATE)

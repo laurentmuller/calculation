@@ -28,10 +28,7 @@ class CategoriesDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('category.list.title');
-
-        // headers
         $row = $this->setHeaderValues([
             'category.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
@@ -39,11 +36,7 @@ class CategoriesDocument extends AbstractArrayDocument
             'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
             'category.fields.tasks' => Alignment::HORIZONTAL_RIGHT,
         ]);
-
-        // formats
         $this->setFormatInt(4);
-
-        // rows
         $default = $this->trans('report.other');
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
@@ -54,7 +47,6 @@ class CategoriesDocument extends AbstractArrayDocument
                 $entity->countTasks(),
             ]);
         }
-
         $this->finish();
 
         return true;

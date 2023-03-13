@@ -98,7 +98,6 @@ class UserTable extends AbstractEntityTable
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         $query = parent::createDefaultQueryBuilder($alias);
-
         $user = $this->security->getUser();
         if (!$user instanceof User || !$user->isSuperAdmin()) {
             /** @psalm-var UserRepository $repository */

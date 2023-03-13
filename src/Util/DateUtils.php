@@ -228,7 +228,6 @@ final class DateUtils
             \IntlDateFormatter::GREGORIAN,
             $pattern
         );
-
         $result = [];
         for ($i = 0; $i <= 6; ++$i) {
             $time = (int) \strtotime("last $firstDay + $i day");
@@ -255,7 +254,6 @@ final class DateUtils
             \IntlDateFormatter::GREGORIAN,
             $pattern
         );
-
         $result = [];
         $date = new \DateTime('2000-01-01');
         $interval = new \DateInterval('P1M');

@@ -58,18 +58,13 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     public function getLanguages(): array|false
     {
-        // already cached?
         $key = $this->getCacheKey();
         /** @var array<string, string>|null $languages */
         $languages = $this->getCacheValue($key);
         if (\is_array($languages)) {
             return $languages;
         }
-
-        // get language
         $languages = $this->loadLanguages();
-
-        // cache result
         if (!empty($languages) && null === $this->lastError) {
             $this->setCacheValue($key, $languages);
         }

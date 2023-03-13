@@ -65,11 +65,7 @@ class ReverseReader extends AbstractReader
             } else {
                 \fseek($stream, -2, \SEEK_CUR);
             }
-
-            // read
             $read = ($char = \fgetc($stream));
-
-            // check
             if (false === $read) {
                 $hasLine = true;
             } elseif (self::LINE_FEED === $char || self::CARRIAGE_RETURN === $char) {
@@ -82,11 +78,8 @@ class ReverseReader extends AbstractReader
                 $line .= $char;
             }
         }
-
-        // move
         \fseek($stream, 1, \SEEK_CUR);
 
-        // reverse
         return '' === $line ? null : \strrev($line);
     }
 }

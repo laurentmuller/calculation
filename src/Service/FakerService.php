@@ -49,19 +49,16 @@ class FakerService
             $manager = $this->manager;
             $locale = \Locale::getDefault();
             $generator = Factory::create($locale);
-
             // custom providers
             $generator->addProvider(new CustomPerson($generator));
             $generator->addProvider(new CustomCompany($generator));
             $generator->addProvider(new CustomAddress($generator));
             $generator->addProvider(new CustomPhoneNumber($generator));
-
             // entity providers
             $generator->addProvider(new UserProvider($generator, $manager));
             $generator->addProvider(new ProductProvider($generator, $manager));
             $generator->addProvider(new CategoryProvider($generator, $manager));
             $generator->addProvider(new CalculationStateProvider($generator, $manager));
-
             $this->generator = $generator;
         }
 

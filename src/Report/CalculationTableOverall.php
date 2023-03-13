@@ -58,7 +58,6 @@ class CalculationTableOverall extends PdfTableBuilder
     public function output(): void
     {
         $calculation = $this->calculation;
-
         $this->addColumns(
             PdfColumn::left(null, 50),
             PdfColumn::right(null, 20, true),
@@ -66,27 +65,19 @@ class CalculationTableOverall extends PdfTableBuilder
             PdfColumn::right(null, 20, true),
             PdfColumn::right(null, 20, true)
         )->setRepeatHeader(false);
-
-        // compute values
         $totalItems = $calculation->getGroupsAmount();
         $totalMargins = $calculation->getGroupsMarginAmount();
         $totalBrut = $totalItems + $totalMargins;
-
         $globalMargin = $calculation->getGlobalMargin();
         $globalAmount = $totalBrut * ($globalMargin - 1.0);
-
         $totalNet = $totalBrut + $globalAmount;
         $userMargin = $calculation->getUserMargin();
         $userAmount = $totalNet * $userMargin;
-
-        // global margin
         $this->startRow()
             ->add($this->trans('calculation.fields.globalMargin'), 2)
             ->add(FormatUtils::formatPercent($globalMargin))
             ->add(FormatUtils::formatAmount($globalAmount), 2)
             ->endRow();
-
-        // user margin
         if (!empty($userMargin)) {
             $this->startHeaderRow()
                 ->add($this->trans('calculation.fields.totalNet'), 4)
@@ -98,14 +89,10 @@ class CalculationTableOverall extends PdfTableBuilder
                 ->add(FormatUtils::formatAmount($userAmount), 2)
                 ->endRow();
         }
-
-        // style for margin
         $style = null;
         if ($calculation->isMarginBelow($this->minMargin)) {
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
-
-        // overall margin and amount
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.overallTotal'))
             ->add(FormatUtils::formatAmount($totalItems))
@@ -113,8 +100,6 @@ class CalculationTableOverall extends PdfTableBuilder
             ->add(FormatUtils::formatAmount($calculation->getOverallMarginAmount()))
             ->add(FormatUtils::formatAmount($calculation->getOverallTotal()))
             ->endRow();
-
-        // created and updated
         $this->parent->Ln(1);
         $style = PdfStyle::getNoBorderStyle()
             ->setFontItalic()

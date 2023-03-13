@@ -63,14 +63,9 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start((string) $this->title, true);
-
-        // red color and word wrap for items
         $this->setForeground(6, Color::COLOR_RED)
             ->setWrapText(6);
-
-        // headers
         $row = $this->setHeaderValues([
             'calculation.fields.id' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
             'calculation.fields.date' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
@@ -79,12 +74,8 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
             'calculation.fields.description' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'calculationgroup.fields.items' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
         ]);
-
-        // formats
         $this->setFormatId(1)
             ->setFormatDate(2);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity['id'],
@@ -95,7 +86,6 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
                 $this->formatItems($entity['items']),
             ]);
         }
-
         $this->finish();
 
         return true;

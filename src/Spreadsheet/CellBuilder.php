@@ -86,7 +86,6 @@ class CellBuilder
             ->updateIndent($style)
             ->updateAlignment($style)
             ->updateFormat($style);
-
         if (null !== $value) {
             if ($value instanceof \DateTimeInterface) {
                 $value = Date::PHPToExcel($value);

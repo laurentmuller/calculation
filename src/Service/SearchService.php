@@ -153,12 +153,9 @@ class SearchService implements ServiceSubscriberInterface
      */
     public function count(?string $search, ?string $entity = null): int
     {
-        // check value
         if (!StringUtils::isString($search)) {
             return 0;
         }
-
-        // get result
         $result = $this->getArrayResult((string) $search, $entity);
 
         // count
@@ -216,20 +213,14 @@ class SearchService implements ServiceSubscriberInterface
      */
     public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
-        // check values
         if (!StringUtils::isString($search) || 0 === $limit) {
             return [];
         }
-
-        // all?
         if (self::NO_LIMIT === $limit) {
             $limit = \PHP_INT_MAX;
         }
-
-        // sort, limit and offset
         $extra = " LIMIT $limit OFFSET $offset";
 
-        // return result
         return $this->getArrayResult((string) $search, $entity, $extra);
     }
 
@@ -326,7 +317,6 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function createEntityQueries(string $class, array $fields): self
     {
-        // granted?
         if ($this->isGrantedSearch($class)) {
             foreach ($fields as $field) {
                 $key = $this->getKey($class, $field);
@@ -376,28 +366,16 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
-        // queries:
         $queries = $this->getQueries();
-
-        // entity?
         if (StringUtils::isString($entity)) {
             $queries = \array_filter($queries, fn (string $key): bool => 0 === \stripos($key, (string) $entity), \ARRAY_FILTER_USE_KEY);
         }
-
-        // empty?
         if ([] === $queries) {
             return [];
         }
-
-        // SQL
         $sql = \implode(' UNION ', $queries) . $extra;
-
-        // create query
         $query = $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
-
-        // set parameter
         $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
-
         /** @psalm-var SearchType[] $result */
         $result = $query->getArrayResult();
 
@@ -442,31 +420,22 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getQueries(): array
     {
-        // created?
         if ([] !== $this->queries) {
             return $this->queries;
         }
-
-        // entities queries
         $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal', 'createdBy', 'updatedBy'])
             ->createEntityQueries(CalculationState::class, ['code', 'description'])
             ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
             ->createEntityQueries(Task::class, ['name'])
             ->createEntityQueries(Category::class, ['code', 'description'])
             ->createEntityQueries(Group::class, ['code', 'description']);
-
-        // custom calculation queries
         $this->createCalculationDatesQuery()
             ->createCalculationStateQuery()
             ->createCalculationItemQuery();
-
-        // debug queries
         if ($this->debug) {
             $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company', 'address', 'zipCode', 'city'])
                 ->createCalculationGroupQuery();
         }
-
-        // update SQL
         $this->updateSQL();
 
         return $this->queries;
@@ -505,7 +474,6 @@ class SearchService implements ServiceSubscriberInterface
         $columns = \array_keys(self::COLUMNS);
         foreach ($columns as $index => $name) {
             $pattern[] = "/AS \\w+[$index]/i";
-
             $replacement[] = "AS $name";
         }
 

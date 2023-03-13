@@ -58,7 +58,6 @@ class BitSet implements \Stringable
      */
     public function clear(int $bit): self
     {
-        // get word position
         $index = $this->index($bit);
         if ($index < $this->count()) {
             $this->words[$index] &= ~$this->bitValue($bit);
@@ -153,13 +152,11 @@ class BitSet implements \Stringable
      */
     public static function fromBinary2(string $bin): self
     {
-        // ensure size
         $size = \PHP_INT_SIZE * 4;
         $remain = $size - \strlen($bin) % $size;
         if ($remain > 0) {
             $bin = \str_repeat('0', $remain) . $bin;
         }
-
         /** @psalm-var int[] $words $words */
         $words = [];
         $chunks = \str_split($bin, $size);
@@ -179,8 +176,6 @@ class BitSet implements \Stringable
         if ($bit < 0 || $this->isEmpty()) {
             return false;
         }
-
-        // get word position
         $index = $this->index($bit);
         $size = $this->count();
         if ($size < $index) {
@@ -349,7 +344,6 @@ class BitSet implements \Stringable
             }
         }
 
-        // reset
         return $this->reset();
     }
 
@@ -371,10 +365,8 @@ class BitSet implements \Stringable
         if ($this->isEqual($other)) {
             return $this;
         }
-
         $required = $other->count();
         $this->expand($required);
-
         for ($i = 0; $i < $required; ++$i) {
             $this->words[$i] = $callable($this->words[$i], $other->words[$i]);
         }

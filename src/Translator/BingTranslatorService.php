@@ -73,7 +73,6 @@ class BingTranslatorService extends AbstractTranslatorService
         if (!$response = $this->call(uri: self::URI_DETECT, json: $json)) {
             return false;
         }
-
         /** @psalm-var string|null $tag */
         $tag = $this->getValue($response, '[0][language]');
         if (!\is_string($tag)) {
@@ -118,13 +117,11 @@ class BingTranslatorService extends AbstractTranslatorService
         if (!$response = $this->call(uri: self::URI_TRANSLATE, query: $query, json: $json)) {
             return false;
         }
-
         /** @psalm-var string|null $target */
         $target = $this->getValue($response, '[0][translations][0][text]');
         if (!\is_string($target)) {
             return false;
         }
-
         /** @psalm-var string|null $language */
         $language = $this->getValue($response, '[0][detectedLanguage][language]', false);
         if (\is_string($language)) {
@@ -174,13 +171,11 @@ class BingTranslatorService extends AbstractTranslatorService
         if (!$response = $this->call(uri: self::URI_LANGUAGE, query: $query, json: $query, method: Request::METHOD_GET)) {
             return false;
         }
-
         /** @psalm-var array<string, array{name: string}>|null  $translation */
         $translation = $this->getValue($response, '[translation]');
         if (!\is_array($translation)) {
             return false;
         }
-
         $result = [];
         foreach ($translation as $key => $value) {
             $result[$value['name']] = $key;

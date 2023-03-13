@@ -36,11 +36,9 @@ class EnumExtension extends AbstractExtension
         /** @psalm-var class-string<\UnitEnum> $className */
         $className = $parts[0];
         $enumName = $parts[1] ?? null;
-
         if (!\enum_exists($className)) {
             throw new \InvalidArgumentException(\sprintf('"%s" is not an enum.', $className));
         }
-
         if (null !== $enumName) {
             return (object) \constant($fullClassName);
         }

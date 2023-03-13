@@ -91,13 +91,11 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        /** SearchType[] $items */
+        /** @psalm-var SearchType[] $items */
         $items = [];
         $search = $query->search;
         $entity = (string) $query->customData[self::PARAM_ENTITY];
         $results = parent::handleQuery($query);
-
-        // search?
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
             $results->totalNotFiltered = $results->filtered = \count($items);
@@ -111,8 +109,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
             }
         }
         $results->rows = $items;
-
-        // ajax?
         if (!$query->callback) {
             $entities = $this->service->getEntities();
             foreach ($entities as $key => &$value) {
@@ -165,7 +161,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
             $item[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
             $item[SearchService::COLUMN_CONTENT] = $this->service->formatContent("$type.$field", $item[SearchService::COLUMN_CONTENT]);
 
-            // set authorizations
             $item[SearchService::COLUMN_GRANTED_SHOW] = $this->isGrantedShow($type);
             $item[SearchService::COLUMN_GRANTED_EDIT] = $this->isGrantedEdit($type);
             $item[SearchService::COLUMN_GRANTED_DELETE] = $this->isGrantedDelete($type);
@@ -185,7 +180,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
                 $columns[$field] = 1;
             }
         }
-
         \usort($items, function (array $a, array $b) use ($columns): int {
             foreach ($columns as $key => $order) {
                 $result = \strnatcasecmp((string) $a[$key], (string) $b[$key]);
@@ -210,7 +204,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         $name = $item[SearchService::COLUMN_ENTITY_NAME];
         $type = \strtolower($item[SearchService::COLUMN_TYPE]);
         $icon = $this->getIcon($type);
-
         $item[SearchService::COLUMN_ENTITY_NAME] = \sprintf('<i class="%s" aria-hidden="true"></i>&nbsp;%s', $icon, $name);
         $item[SearchService::COLUMN_TYPE] = $type;
         unset($item[SearchService::COLUMN_FIELD]);

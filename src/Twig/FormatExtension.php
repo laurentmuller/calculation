@@ -64,7 +64,6 @@ final class FormatExtension extends AbstractExtension
 
             return $this->trans('common.value_true');
         }
-
         if (null !== $false) {
             return $translate ? $this->trans($false) : $false;
         }
@@ -140,17 +139,12 @@ final class FormatExtension extends AbstractExtension
         $date_type = $this->validateDateFormat($dateFormat);
         $time_type = $this->validateTimeFormat($timeFormat);
         $calendar = $this->validateCalendar($calendar);
-
-        // no formats and pattern?
         if (\IntlDateFormatter::NONE === $date_type && \IntlDateFormatter::NONE === $time_type && null === $pattern) {
             return '';
         }
-
-        // convert
         /** @psalm-var \DateTimeInterface $date */
         $date = twig_date_converter($env, $date, $timezone);
 
-        // format
         return FormatUtils::formatDateTime($date, $date_type, $time_type, $timezone, $calendar, $pattern);
     }
 

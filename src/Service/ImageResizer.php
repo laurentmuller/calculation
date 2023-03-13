@@ -64,7 +64,6 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
      */
     public function resize(string $source, string $target, int $size): bool
     {
-        // check values?
         if (null === $this->imagine) {
             return false;
         }
@@ -136,7 +135,6 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
     {
         [$imageWidth, $imageHeight] = $this->getImageSize($filename);
         $ratio = $imageWidth / $imageHeight;
-
         $width = $size;
         $height = $size;
         if ($width / $height > $ratio) {

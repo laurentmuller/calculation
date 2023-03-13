@@ -44,7 +44,6 @@ class PhpIniDocument extends AbstractDocument
     {
         $this->start($this->trans('about.php_version', ['%version%' => $this->version]));
         $this->setActiveTitle('Configuration', $this->controller);
-
         $content = $this->content;
         if ([] === $content) {
             $this->setCellValue($this->getActiveSheet(), 1, 1, $this->trans('about.error'))
@@ -52,32 +51,27 @@ class PhpIniDocument extends AbstractDocument
 
             return true;
         }
-
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
         $row = $this->setHeaderValues([
             'Directive' => Alignment::HORIZONTAL_LEFT,
             'Local Value' => Alignment::HORIZONTAL_LEFT,
             'Master Value' => Alignment::HORIZONTAL_LEFT,
         ]);
-
         foreach ($content as $key => $value) {
             if ($this->outputGroup($row, $key)) {
                 ++$row;
             }
             $row = $this->outputEntries($row, $value);
         }
-
         $this->getActiveSheet()
             ->getStyle('A')
             ->getAlignment()
             ->setVertical(Alignment::VERTICAL_TOP);
-
         $this->setWrapText(2)
             ->setAutoSize(1)
             ->setColumnWidth(2, 50)
             ->setColumnWidth(3, 50, true)
             ->finish();
-
         $this->getPageSetup()
             ->setFitToWidth(1)
             ->setFitToHeight(0);
@@ -130,7 +124,6 @@ class PhpIniDocument extends AbstractDocument
         $sheet = $this->getActiveSheet();
         $sheet->getPageSetup()
             ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-
         /** @var mixed $entry */
         foreach ($entries as $key => $entry) {
             $keyValue = $this->convert($key);
@@ -165,7 +158,6 @@ class PhpIniDocument extends AbstractDocument
             $style = $this->getActiveSheet()->getStyle("A$row");
             $style->getFill()->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()->setARGB('F5F5F5');
-
             $style->getFont()->setBold(true);
             $this->key = $group;
 

@@ -35,7 +35,6 @@ class TaskService
         $task = $query->getTask();
         $quantity = $query->getQuantity();
         $result = new TaskComputeResult($task, $quantity);
-
         $items = $query->getItems();
         $taskItems = $task->getItems();
         foreach ($taskItems as $taskItem) {
@@ -59,7 +58,6 @@ class TaskService
         if (!$task instanceof Task) {
             return null;
         }
-
         $quantity = $this->getRequestFloat($request, 'quantity');
         $items = \array_map('intval', $this->getRequestAll($request, 'items'));
         $query = new TaskComputeQuery($task);

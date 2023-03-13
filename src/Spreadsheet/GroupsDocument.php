@@ -28,22 +28,15 @@ class GroupsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('group.list.title');
-
-        // headers
         $row = $this->setHeaderValues([
             'group.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'group.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'group.fields.margins' => Alignment::HORIZONTAL_RIGHT,
             'group.fields.categories' => Alignment::HORIZONTAL_RIGHT,
         ]);
-
-        // formats
         $this->setFormatInt(3)
             ->setFormatInt(4);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getCode(),
@@ -52,7 +45,6 @@ class GroupsDocument extends AbstractArrayDocument
                 $entity->countCategories(),
             ]);
         }
-
         $this->finish();
 
         return true;

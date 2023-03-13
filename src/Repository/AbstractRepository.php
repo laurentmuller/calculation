@@ -90,16 +90,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
      */
     public function getDistinctValues(string $field, ?string $value = null, int $limit = -1): array
     {
-        // name
         $name = self::DEFAULT_ALIAS . '.' . $field;
-
-        // select and order
         $builder = $this->createQueryBuilder(self::DEFAULT_ALIAS)
             ->select($name)
             ->distinct()
             ->orderBy($name);
-
-        // search
         $expr = $builder->expr();
         if (StringUtils::isString($value)) {
             $param = 'search';
@@ -111,8 +106,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $where = $expr->isNotNull($name);
             $builder->where($where);
         }
-
-        // limit
         if ($limit > 0) {
             $builder->setMaxResults($limit);
         }
@@ -169,10 +162,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      */
     public function getSearchQuery(array $sortedFields = [], array $criteria = [], string $alias = self::DEFAULT_ALIAS): Query
     {
-        // builder
         $builder = $this->createDefaultQueryBuilder($alias);
-
-        // add criteria
         if ([] !== $criteria) {
             foreach ($criteria as $criterion) {
                 if ($criterion instanceof Criteria) {
@@ -182,8 +172,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
                 }
             }
         }
-
-        // add order by clause
         if ([] !== $sortedFields) {
             foreach ($sortedFields as $name => $order) {
                 $field = $this->getSortField($name, $alias);
@@ -191,7 +179,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
             }
         }
 
-        // query
         return $builder->getQuery();
     }
 

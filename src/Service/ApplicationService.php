@@ -589,7 +589,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         if ([] !== $properties) {
             $repository = $this->manager->getRepository(Property::class);
             $defaultValues ??= $this->getDefaultValues();
-
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
                 $this->saveProperty($key, $value, $defaultValues, $repository);
@@ -638,12 +637,10 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $property = $repository->findOneByName($name);
         if ($this->isDefaultValue($defaultValues, $name, $value)) {
-            // remove if present
             if ($property instanceof Property) {
                 $repository->remove($property, false);
             }
         } else {
-            // create if needed
             if (!$property instanceof Property) {
                 $property = Property::instance($name);
                 $repository->add($property, false);

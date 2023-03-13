@@ -35,12 +35,13 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
     /*
      * Show values as cards.
      */
+    #[EnumCase(extras: ['page-size' => 15])]
     case CUSTOM = 'custom';
 
     /*
      * Show values within a table (default value).
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: ['page-size' => 20, 'default' => true])]
     case TABLE = 'table';
 
     /**
@@ -48,10 +49,7 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
      */
     public function getPageSize(): int
     {
-        return match ($this) {
-            self::CUSTOM => 15,
-            self::TABLE => 20
-        };
+        return $this->getExtraInt('page-size');
     }
 
     /**

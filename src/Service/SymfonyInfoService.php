@@ -294,7 +294,6 @@ final class SymfonyInfoService
             if (!empty($result[self::KEY_DEBUG])) {
                 \ksort($result[self::KEY_DEBUG]);
             }
-
             $this->routes = $result;
         }
 
@@ -402,7 +401,6 @@ final class SymfonyInfoService
             try {
                 return FileUtils::makePathRelative($path, $baseDir);
             } catch (\InvalidArgumentException) {
-                // ignore
             }
         }
 

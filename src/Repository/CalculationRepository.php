@@ -86,7 +86,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function countItemsBelow(float $minMargin): int
     {
-        // create
         $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)');
         $builder = self::addBelowFilter($builder, $minMargin);
@@ -103,7 +102,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function countItemsDuplicate(): int
     {
-        // sub query
         $dql = $this->createQueryBuilder('e')
             ->select('e.id')
             ->innerJoin('e.groups', 'g')
@@ -113,8 +111,6 @@ class CalculationRepository extends AbstractRepository
             ->addGroupBy('i.description')
             ->having('COUNT(i.id) > 1')
             ->getDQL();
-
-        // main query
         /** @psalm-var literal-string $where */
         $where = "r.id in($dql)"; // @phpstan-ignore-line
         $builder = $this->createQueryBuilder('r')
@@ -133,7 +129,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function countItemsEmpty(): int
     {
-        // sub query
         $dql = $this->createQueryBuilder('e')
             ->select('e.id')
             ->innerJoin('e.groups', 'g')
@@ -142,8 +137,6 @@ class CalculationRepository extends AbstractRepository
             ->where('i.price = 0')
             ->orWhere('i.quantity = 0')
             ->getDQL();
-
-        // main query
         /** @psalm-var literal-string $where */
         $where = "r.id in($dql)"; // @phpstan-ignore-line
         $builder = $this->createQueryBuilder('r')
@@ -223,7 +216,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function getByMonth(int $maxResults = 6): array
     {
-        // build
         $builder = $this->createQueryBuilder('c')
             ->select('COUNT(c.id) as count')
             ->addSelect('SUM(c.itemsTotal) as items')
@@ -236,17 +228,12 @@ class CalculationRepository extends AbstractRepository
             ->orderBy('year', Criteria::DESC)
             ->addOrderBy('month', Criteria::DESC)
             ->setMaxResults($maxResults);
-
-        // execute
         $result = $builder->getQuery()->getArrayResult();
-
-        // add date
         /** @psalm-var array $item */
         foreach ($result as &$item) {
             $item['date'] = $this->convertToDate($item);
         }
 
-        // reverse
         return \array_reverse($result);
     }
 
@@ -281,7 +268,6 @@ class CalculationRepository extends AbstractRepository
         $year = 'year(e.date)';
         $month = 'month(e.date)';
         $year_month = "$year * 1000 + $month";
-
         $builder = $this->createQueryBuilder('e')
             ->select("$year AS year")
             ->addSelect("$month AS month")
@@ -308,7 +294,6 @@ class CalculationRepository extends AbstractRepository
         $year = 'year(e.date)';
         $week = 'week(e.date, 3)';
         $year_week = "$year * 1000 + $week";
-
         $builder = $this->createQueryBuilder('e')
             ->select("$year AS year")
             ->addSelect("$week AS week")
@@ -381,14 +366,10 @@ class CalculationRepository extends AbstractRepository
      */
     public function getItemsBelow(float $minMargin): array
     {
-        // create
         $builder = $this->createQueryBuilder('c')
             ->addOrderBy('c.id', Criteria::DESC);
-
-        // filter
         $builder = self::addBelowFilter($builder, $minMargin);
 
-        // execute
         return $builder->getQuery()->getResult();
     }
 
@@ -413,7 +394,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
-        // build
         $builder = $this->createQueryBuilder('e')
             // calculation
             ->select('e.id              as calculation_id')
@@ -440,14 +420,8 @@ class CalculationRepository extends AbstractRepository
             ->addGroupBy('i.description')
 
             ->having('item_count > 1');
-
-        // order column and direction
         $this->updateOrder($builder, $orderColumn, $orderDirection);
-
-        // execute
         $items = $builder->getQuery()->getArrayResult();
-
-        // map calculations => items
         /**
          * @psalm-var array<int, array{
          *      id: int,
@@ -505,7 +479,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
-        // build
         $builder = $this->createQueryBuilder('e')
             // calculation
             ->select('e.id              as calculation_id')
@@ -534,14 +507,8 @@ class CalculationRepository extends AbstractRepository
 
             ->having('item_price = 0')
             ->orHaving('item_quantity = 0');
-
-        // order column and direction
         $this->updateOrder($builder, $orderColumn, $orderDirection);
-
-        // execute
         $items = $builder->getQuery()->getArrayResult();
-
-        // map calculations => items
         /**
          * @var array<int, array{
          *      id: int,
@@ -591,14 +558,11 @@ class CalculationRepository extends AbstractRepository
      */
     public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
-        // builder
         $builder = $this->createQueryBuilder('c')
             ->addOrderBy('c.updatedAt', Criteria::DESC)
             ->addOrderBy('c.date', Criteria::DESC)
             ->addOrderBy('c.id', Criteria::DESC)
             ->setMaxResults($maxResults);
-
-        // user?
         if (null !== $user) {
             $identifier = $user->getUserIdentifier();
             $builder->where('c.createdBy = :identifier')
@@ -606,7 +570,6 @@ class CalculationRepository extends AbstractRepository
                 ->setParameter('identifier', $identifier, Types::STRING);
         }
 
-        // execute
         return $builder->getQuery()->getResult();
     }
 
@@ -624,11 +587,9 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('MAX(c.date) as MAX_DATE')
             ->getQuery()
             ->getOneOrNullResult();
-
         if (!\is_array($values)) {
             return [null, null];
         }
-
         $min_date = \is_string($values['MIN_DATE']) ? new \DateTime($values['MIN_DATE']) : null;
         $max_date = \is_string($values['MAX_DATE']) ? new \DateTime($values['MAX_DATE']) : null;
 
@@ -653,7 +614,6 @@ class CalculationRepository extends AbstractRepository
      */
     public function getPivot(): array
     {
-        // build
         $builder = $this->createQueryBuilder('e')
             // calculation
             ->select('e.id                                   AS calculation_id')
@@ -681,7 +641,6 @@ class CalculationRepository extends AbstractRepository
             // not empty
             ->where('e.itemsTotal != 0');
 
-        // execute
         return $builder->getQuery()->getArrayResult();
     }
 

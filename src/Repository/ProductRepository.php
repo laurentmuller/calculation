@@ -114,8 +114,6 @@ class ProductRepository extends AbstractCategoryItemRepository
             ->orderBy('c.code')
             ->addOrderBy('p.description')
             ->setMaxResults($maxResults);
-
-        // where clause
         $param = ':search';
         $expr = $builder->expr();
         $or = $expr->orx(

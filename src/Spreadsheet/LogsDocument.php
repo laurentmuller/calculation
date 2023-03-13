@@ -49,11 +49,7 @@ class LogsDocument extends AbstractDocument
     public function render(): bool
     {
         $logFile = $this->logFile;
-
-        // initialize
         $this->start('log.title', true);
-
-        // headers
         $alignments = [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP];
         $row = $this->setHeaderValues([
             'log.fields.level' => $alignments,
@@ -62,12 +58,8 @@ class LogsDocument extends AbstractDocument
             'log.fields.message' => $alignments,
             'log.fields.user' => $alignments,
         ]);
-
-        // formats
         $this->setFormat(3, 'dd/mm/yyyy hh:mm:ss')
             ->setColumnWidth(4, 140, true);
-
-        // logs
         $logs = $logFile->getLogs();
         $sheet = $this->getActiveSheet();
         foreach ($logs as $log) {

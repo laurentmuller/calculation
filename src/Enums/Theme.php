@@ -58,7 +58,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
      */
     public function getCss(): string
     {
-        return (string) $this->getExtra('css');
+        return $this->getExtraString('css');
     }
 
     /**
@@ -66,7 +66,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
      */
     public function getIcon(): string
     {
-        return (string) $this->getExtra('icon');
+        return $this->getExtraString('icon');
     }
 
     /**
@@ -74,7 +74,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
      */
     public function getSuccess(): string
     {
-        return (string) $this->getExtra('success');
+        return $this->getExtraString('success');
     }
 
     /**
@@ -82,7 +82,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
      */
     public function getTitle(): string
     {
-        return (string) $this->getExtra('title');
+        return $this->getExtraString('title');
     }
 
     /**

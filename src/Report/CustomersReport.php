@@ -52,13 +52,8 @@ class CustomersReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('customer.list.title');
-
-        // new page
         $this->AddPage();
-
-        // create table
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
@@ -66,15 +61,12 @@ class CustomersReport extends AbstractArrayReport
                 PdfColumn::left($this->trans('customer.fields.address'), 25),
                 PdfColumn::left($this->trans('customer.fields.zipCity'), 25)
             )->outputHeaders();
-
-        // grouped?
         if ($this->grouped) {
             $this->outputGrouped($table, $entities);
         } else {
             $this->outputList($table, $entities);
         }
 
-        // count
         return $this->renderCount($entities);
     }
 
@@ -99,7 +91,6 @@ class CustomersReport extends AbstractArrayReport
             $key = $this->firstChar($c->getNameAndCompany());
             $result[$key][] = $c;
         }
-
         \uksort($result, function (string $str1, string $str2) {
             if ($str1 === $this->other) {
                 return -1;

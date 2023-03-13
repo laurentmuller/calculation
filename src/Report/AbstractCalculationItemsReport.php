@@ -77,16 +77,10 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // new page
         $this->AddPage();
-
-        // table
         $table = $this->createTable();
-
-        // items style
         $style = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
-
         foreach ($entities as $entity) {
             $table->startRow()
                 ->add(FormatUtils::formatId($entity['id']))
@@ -98,14 +92,11 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
                 ->endRow();
         }
         PdfStyle::getDefaultStyle()->apply($this);
-
-        // counters
         $parameters = [
             '%calculations%' => \count($entities),
             '%items%' => $this->computeItemsCount($entities),
         ];
         $text = $this->transCount($parameters);
-
         $margins = $this->setCellMargin(0);
         $this->Cell(0, self::LINE_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE);
         $this->setCellMargin($margins);

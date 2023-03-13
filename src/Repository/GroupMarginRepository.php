@@ -47,7 +47,6 @@ class GroupMarginRepository extends AbstractRepository
      */
     public function getMargin(Group $group, float $amount): float
     {
-        // builder
         $builder = $this->createQueryBuilder('e')
             ->select('e.margin')
             ->where('e.group = :group')
@@ -56,7 +55,6 @@ class GroupMarginRepository extends AbstractRepository
             ->setParameter('group', $group->getId(), Types::INTEGER)
             ->setParameter('amount', $amount, Types::FLOAT);
 
-        // execute
         return (float) $builder->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 }

@@ -76,37 +76,24 @@ class UserRightsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $service = $this->controller->getApplication();
-
-        // initialize
         $this->start('user.rights.title');
-
-        // headers
         $permissions = EntityPermission::sorted();
         $headers = ['user.rights.table_title' => Alignment::HORIZONTAL_GENERAL];
         foreach ($permissions as $permission) {
             $headers[$permission->getReadable()] = Alignment::HORIZONTAL_CENTER;
         }
         $row = $this->setHeaderValues($headers);
-
-        // admin role
         $this->outputRole($service->getAdminRole(), $row);
-
-        // user role
         $this->outputRole($service->getUserRole(), $row);
-
-        // users
         foreach ($entities as $entity) {
             $this->outputUser($entity, $row);
         }
-
-        // width
         $sheet = $this->getActiveSheet();
         foreach (\range(2, \count($headers)) as $column) {
             $name = $this->stringFromColumnIndex($column);
             $sheet->getColumnDimension($name)->setAutoSize(false)
                 ->setWidth(11);
         }
-
         $this->finish();
 
         return true;
@@ -121,11 +108,9 @@ class UserRightsDocument extends AbstractArrayDocument
     {
         $role = $this->translateRole($entity);
         $description = $this->trans('user.fields.role') . ' ';
-
         if ($entity instanceof Role) {
             return $description . $role;
         }
-
         if ($entity instanceof User) {
             $text = $entity->getUserIdentifier();
             if ($entity->isEnabled()) {
@@ -169,13 +154,10 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     private function outputRole(Role|User $role, int &$row): void
     {
-        // allow output user entity rights
         $outputUsers = $role->isAdmin();
-
         $this->writeName = true;
         $this->setRowValues($row++, [$this->getEntityName($role)]);
         $this->writeName = false;
-
         $this->writeRights = true;
         $entities = EntityName::sorted();
         foreach ($entities as $entity) {

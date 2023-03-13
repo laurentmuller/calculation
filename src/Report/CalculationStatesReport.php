@@ -51,7 +51,6 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
      */
     public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
     {
-        // color column?
         if (3 === $index) {
             if ($this->started) {
                 $doc = $builder->getParent();
@@ -75,13 +74,8 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('calculationstate.list.title');
-
-        // new page
         $this->AddPage();
-
-        // table
         $table = PdfTableBuilder::instance($this)
             ->setListener($this)
             ->addColumns(
@@ -91,7 +85,6 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
                 PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true),
                 PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true)
             )->outputHeaders();
-
         foreach ($entities as $entity) {
             $table->startRow()
                 ->add($entity->getCode())
@@ -102,7 +95,6 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
                 ->endRow();
         }
 
-        // count
         return $this->renderCount($entities, 'counters.states');
     }
 

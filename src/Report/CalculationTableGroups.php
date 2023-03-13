@@ -59,11 +59,7 @@ class CalculationTableGroups extends PdfTableBuilder
         if ($groups->isEmpty()) {
             return;
         }
-
-        // style
         $style = PdfStyle::getHeaderStyle()->setFontRegular();
-
-        // headers
         $columns = [
             PdfColumn::left($this->trans('report.calculation.resume'), 50),
             PdfColumn::right($this->trans('report.calculation.amount'), 20, true),
@@ -72,15 +68,12 @@ class CalculationTableGroups extends PdfTableBuilder
             PdfColumn::right($this->trans('report.calculation.total'), 20, true),
         ];
         $this->addColumns(...$columns);
-
         $this->startHeaderRow()
             ->add($columns[0]->getText())
             ->add($columns[1]->getText())
             ->add(text: $this->trans('report.calculation.margins'), cols: 2, alignment: PdfTextAlignment::CENTER)
             ->add($columns[4]->getText())
             ->endRow();
-
-        // groupes
         foreach ($groups as $group) {
             $this->startRow()
                 ->add($group->getCode())
@@ -90,8 +83,6 @@ class CalculationTableGroups extends PdfTableBuilder
                 ->add(FormatUtils::formatAmount($group->getTotal()))
                 ->endRow();
         }
-
-        // groups total
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.marginTotal'))
             ->add(text: FormatUtils::formatAmount($calculation->getGroupsAmount()), style: $style)

@@ -96,26 +96,20 @@ abstract class AbstractTable implements SortModeInterface
     public function getDataQuery(Request $request): DataQuery
     {
         $query = new DataQuery();
-
-        // global parameters
         $query->callback = $request->isXmlHttpRequest();
         $query->id = $this->getParamInt($request, TableInterface::PARAM_ID);
         $query->search = $this->getParamString($request, TableInterface::PARAM_SEARCH, '', '');
 
-        // find view
         $view = $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
         $tableView = TableView::tryFrom($view) ?? TableView::TABLE;
         $query->view = $tableView;
 
-        // find limit
         $limit = $this->getParamInt($request, TableInterface::PARAM_LIMIT, $this->getPrefix(), $tableView->getPageSize());
         $query->limit = $limit;
 
-        // offset and page
         $query->offset = $this->getParamInt($request, TableInterface::PARAM_OFFSET);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
-        // sort and order
         if (null !== ($column = $this->getDefaultColumn())) {
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
@@ -204,14 +198,12 @@ abstract class AbstractTable implements SortModeInterface
         if (\end($sizes) <= $totalNotFiltered) {
             return $sizes;
         }
-
         foreach ($sizes as $index => $size) {
             if ($size >= $totalNotFiltered) {
                 return \array_slice($sizes, 0, $index + 1);
             }
         }
 
-        // must never been here!
         return $sizes;
     }
 
@@ -303,7 +295,6 @@ abstract class AbstractTable implements SortModeInterface
 
             return $result;
         };
-
         /** @var array<string, string> $mappings */
         $mappings = \array_reduce($columns, $callback, []);
 
@@ -315,11 +306,8 @@ abstract class AbstractTable implements SortModeInterface
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        // page list and limit
         $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
         $limit = [] !== $results->pageList ? \min($query->limit, \max($results->pageList)) : $query->limit;
-
-        // parameters
         $results->params = \array_merge([
             TableInterface::PARAM_ID => $query->id,
             TableInterface::PARAM_SEARCH => $query->search,
@@ -329,16 +317,10 @@ abstract class AbstractTable implements SortModeInterface
             TableInterface::PARAM_VIEW => $query->view->value,
             TableInterface::PARAM_LIMIT => $limit,
         ], $results->params);
-
-        // callback?
         if ($query->callback) {
             return;
         }
-
-        // columns
         $results->columns = $this->getColumns();
-
-        // attributes
         $results->attributes = \array_merge([
             'total-not-filtered' => $results->totalNotFiltered,
             'total-rows' => $results->filtered,

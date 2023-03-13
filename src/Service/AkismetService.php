@@ -131,33 +131,27 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
             /** @var \App\Entity\User|null $user */
             $user = $this->security->getUser();
             $headers = $request->headers;
-
             $body = \array_filter(\array_merge([
                 'user_ip' => $request->getClientIp(),
                 'user_agent' => $headers->get('User-Agent'),
                 'referrer' => $headers->get('referer'),
-
                 'comment_content' => $content,
                 'comment_type' => 'contact-form',
                 'comment_author' => $user?->getUserIdentifier(),
                 'comment_author_email' => $user?->getEmail(),
-
                 'blog' => $request->getSchemeAndHttpHost(),
                 'blog_lang' => $request->getLocale(),
                 'blog_charset' => 'UTF-8',
                 'is_test' => true,
             ], $options));
-
             $response = $this->requestPost(self::URI_COMMENT_CHECK, [
                 self::BODY => $body,
             ]);
-
             if (Response::HTTP_OK !== $response->getStatusCode()) {
                 $this->checkError($response);
 
                 return true;
             }
-
             $content = $response->getContent();
             switch ($content) {
                 case self::VALUE_TRUE:
@@ -189,23 +183,19 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
         if (\is_bool($verified)) {
             return $verified;
         }
-
         if (null !== ($request = $this->getCurrentRequest())) {
             $body = [
                 'key' => $this->key,
                 'blog' => $request->getSchemeAndHttpHost(),
             ];
-
             $response = $this->requestPost(self::URI_VERIFY, [
                 self::BODY => $body,
             ]);
-
             if (Response::HTTP_OK !== $response->getStatusCode()) {
                 $this->checkError($response);
 
                 return false;
             }
-
             $verified = self::VALUE_VALID === $response->getContent();
             $this->setUrlCacheValue(self::URI_VERIFY, $verified);
 

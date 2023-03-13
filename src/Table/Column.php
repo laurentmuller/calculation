@@ -135,19 +135,13 @@ class Column implements \Stringable, SortModeInterface
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {
-        // decode
         /** @var array<array<string, string|bool>> $definitions */
         $definitions = FileUtils::decodeJson($path);
-
-        // definitions?
         if ([] === $definitions) {
             throw new \InvalidArgumentException("The file '$path' does not contain any definition.");
         }
-
-        // accessor
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        // map
         return \array_map(function (array $definition) use ($parent, $accessor): self {
             $column = new self();
             foreach ($definition as $key => $value) {
@@ -177,7 +171,6 @@ class Column implements \Stringable, SortModeInterface
      */
     public function getAttributes(): array
     {
-        // required
         $result = [
             'class' => $this->getClass(),
             'field' => $this->getAlias(),
@@ -186,8 +179,6 @@ class Column implements \Stringable, SortModeInterface
             'numeric' => $this->isNumeric(),
             'sortable' => $this->isSortable(),
         ];
-
-        // optional
         if ($this->cellFormatter) {
             $result['formatter'] = $this->cellFormatter;
         }
@@ -400,7 +391,6 @@ class Column implements \Stringable, SortModeInterface
         if (\is_callable($this->fieldFormatter)) {
             return \call_user_func($this->fieldFormatter, $value, $objectOrArray);
         }
-
         if (\is_bool($value)) {
             return $value ? '1' : '0';
         }

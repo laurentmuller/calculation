@@ -118,41 +118,22 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        // default
         $results = parent::handleQuery($query);
-
-        // builder
         $builder = $this->createDefaultQueryBuilder();
         $alias = $builder->getRootAliases()[0];
-
-        // count all
         $results->totalNotFiltered = $results->filtered = $this->count();
-
-        // search clause
         if ($this->search($query, $builder, $alias)) {
             $results->filtered = $this->countFiltered($builder, $alias);
         }
-
-        // order by clause
         $this->orderBy($query, $builder, $alias);
-
-        // offset and limit clause
         $this->limit($query, $builder);
-
-        // join?
         $q = $builder->getQuery();
         if (empty($builder->getDQLPart(self::JOIN_PART))) {
             $q->setHint(CountWalker::HINT_DISTINCT, false);
         }
-
-        // get result
         /** @var AbstractEntity[] $entities */
         $entities = $q->getResult();
-
-        // add selection
         $this->addSelection($entities, $query);
-
-        // map entities
         $results->rows = $this->mapEntities($entities);
 
         return $results;
@@ -180,21 +161,13 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function orderBy(DataQuery $query, QueryBuilder $builder, string $alias): void
     {
         $orderBy = [];
-
-        // add query sort
         if ($sorting = StringUtils::isString($query->sort) && StringUtils::isString($query->order)) {
             $this->updateOrderBy($orderBy, $query, $alias);
         }
-
-        // add default column
         if (!$sorting && null !== $column = $this->getDefaultColumn()) {
             $this->updateOrderBy($orderBy, $column, $alias);
         }
-
-        // add default order
         $this->updateOrderBy($orderBy, $this->getDefaultOrder(), $alias);
-
-        // apply
         foreach ($orderBy as $sort => $order) {
             $builder->addOrderBy($sort, $order);
         }
@@ -209,18 +182,13 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
-        // search?
         $search = $query->search;
         if (!StringUtils::isString($search)) {
             return false;
         }
-
-        // fields?
         if ([] === $searchFields = $this->getSearchFields()) {
             return false;
         }
-
-        // build
         $whereExpr = new Orx();
         $builderExpr = $builder->expr();
         $repository = $this->repository;
@@ -234,8 +202,6 @@ abstract class AbstractEntityTable extends AbstractTable
         if (0 === $whereExpr->count()) {
             return false;
         }
-
-        // update
         $builder->andWhere($whereExpr)
             ->setParameter(TableInterface::PARAM_SEARCH, "%$search%", Types::STRING);
 
@@ -253,21 +219,15 @@ abstract class AbstractEntityTable extends AbstractTable
         if (0 === $id = $query->id) {
             return;
         }
-
-        // existing?
         foreach ($entities as $entity) {
             if ($id === $entity->getId()) {
                 return;
             }
         }
-
-        // find entity
         $entity = $this->repository->find($id);
         if (!$entity instanceof AbstractEntity) {
             return;
         }
-
-        // add to the first position and limit size
         \array_unshift($entities, $entity);
         if (\count($entities) > $query->limit) {
             \array_pop($entities);
@@ -301,7 +261,6 @@ abstract class AbstractEntityTable extends AbstractTable
         } elseif ($value instanceof Column) {
             $value = [$value->getField() => $value->getOrder()];
         }
-
         foreach ($value as $field => $order) {
             $sortField = $this->repository->getSortField($field, $alias);
             if (!\array_key_exists($sortField, $orderBy)) {

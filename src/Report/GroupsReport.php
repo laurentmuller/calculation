@@ -31,27 +31,17 @@ class GroupsReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('group.list.title', [], true);
-
-        // count values
         $marginsCount = 0;
         $groupsCount = 0;
-
         foreach ($entities as $entity) {
             $marginsCount += $entity->countMargins();
             $groupsCount += $entity->countCategories();
         }
-
-        // new page
         $this->AddPage();
-
-        // table
         $table = $this->createTable();
-
         $last = \end($entities);
         $emptyStyle = PdfStyle::getCellStyle()->setBorder(PdfBorder::LEFT . PdfBorder::RIGHT);
-
         foreach ($entities as $entity) {
             $this->outputGroup($table, $entity);
             if ($entity !== $last) {
@@ -59,8 +49,6 @@ class GroupsReport extends AbstractArrayReport
             }
         }
         $this->resetStyle();
-
-        // totals
         $txtCount = $this->trans('counters.groups', [
             'count' => \count($entities),
         ]);
@@ -70,7 +58,6 @@ class GroupsReport extends AbstractArrayReport
         $txtMargin = $this->trans('counters.margins', [
             'count' => $marginsCount,
         ]);
-
         $margins = $this->setCellMargin(0);
         PdfTableBuilder::instance($this)
             ->addColumns(
@@ -117,7 +104,6 @@ class GroupsReport extends AbstractArrayReport
             ->add($group->getCode())
             ->add($group->getDescription())
             ->add(FormatUtils::formatInt($group->countCategories()));
-
         if ($group->hasMargins()) {
             $skip = false;
             $margins = $group->getMargins();

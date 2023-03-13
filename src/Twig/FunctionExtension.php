@@ -148,7 +148,6 @@ final class FunctionExtension extends AbstractExtension
             return false;
         }
 
-        // check if file is well contained in public/ directory (prevents ../ in paths)
         return 0 === \strncmp($this->webDir, $file, \strlen($this->webDir));
     }
 
@@ -260,18 +259,13 @@ final class FunctionExtension extends AbstractExtension
      */
     private function getRealPath(?string $path): ?string
     {
-        // empty?
         if (empty($path) || empty($this->webDir)) {
             return null;
         }
-
-        // real path?
         $full_path = \implode('/', [$this->webDir, $path]);
         if (false === $file = \realpath($full_path)) {
             return null;
         }
-
-        // file exist?
         if (!FileUtils::isFile($file)) {
             return null;
         }

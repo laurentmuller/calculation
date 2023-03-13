@@ -180,13 +180,11 @@ class PdfDocument extends \FPDF
         if ($y < 0) {
             $y = $this->y;
         }
-
         $linkId = '';
         $page = $this->page;
         if ($link) {
             $linkId = $this->CreateLink($y, $page);
         }
-
         $this->bookmarks[] = [
             'text' => $text,
             'level' => \max(0, $level),
@@ -236,16 +234,10 @@ class PdfDocument extends \FPDF
         if ([] === $this->bookmarks) {
             return $this;
         }
-
-        // default values
         $title ??= 'Index';
         $titleStyle ??= PdfStyle::getBoldCellStyle();
         $contentStyle ??= PdfStyle::getDefaultStyle();
-
-        // new page
         $this->AddPage();
-
-        // title
         $titleStyle->apply($this);
         $this->Cell(
             w: 0,
@@ -254,30 +246,20 @@ class PdfDocument extends \FPDF
             ln: PdfMove::NEW_LINE,
             align: PdfTextAlignment::CENTER,
         );
-
-        // bookmark
         if ($addBookmark) {
             $this->addBookmark(text: $title, y: $this->y - $this->lasth);
         }
-
-        // bookmarks
         $space = 1.25;
         $contentStyle->apply($this);
         $line_height = $this->getFontSize() + 2.0;
         $printable_width = $this->getPrintableWidth();
-
         foreach ($this->bookmarks as $bookmark) {
-            // offset
             $offset = (float) $bookmark['level'] * 2.0 * $space;
             if ($offset > 0) {
                 $this->Cell($offset);
             }
-
-            // page
             $page_text = FormatUtils::formatInt($bookmark['page']);
             $page_size = $this->GetStringWidth($page_text) + $space;
-
-            // text
             $link = $bookmark['link'];
             $text = (string) \iconv('UTF-8', 'ISO-8859-1', $bookmark['text']);
             $text_size = $this->GetStringWidth($text);
@@ -292,8 +274,6 @@ class PdfDocument extends \FPDF
                 txt: $text,
                 link: $link
             );
-
-            // dots
             $dots_width = $printable_width - $page_size - $offset - $text_size - 2.0 * $space;
             $dots_count = (int) ($dots_width / $this->GetStringWidth('.'));
             if ($dots_count > 0) {
@@ -306,8 +286,6 @@ class PdfDocument extends \FPDF
                     link: $link
                 );
             }
-
-            // page number
             $this->Cell(
                 w: $page_size,
                 h: $line_height,
@@ -512,32 +490,24 @@ class PdfDocument extends \FPDF
      */
     public function getLinesCount(?string $text, float $width = 0): int
     {
-        // text?
         if (null === $text || '' === $text) {
             return 0;
         }
-
-        // clean text
         $text = \rtrim(\str_replace("\r", '', $text));
         $lenText = \strlen($text);
         if (0 === $lenText) {
             return 0;
         }
-
-        // check width
         if ($width <= 0) {
             $width = $this->w - $this->rMargin - $this->x;
         }
         $maxWidth = ($width - 2.0 * $this->cMargin) * 1000.0 / $this->FontSize;
-
         $sep = -1;
         $index = 0;
         $lastIndex = 0;
         $currentWidth = 0.0;
         $linesCount = 1;
         $cw = $this->CurrentFont['cw'];
-
-        // run over text
         while ($index < $lenText) {
             $ch = $text[$index];
             // new line?
@@ -549,13 +519,10 @@ class PdfDocument extends \FPDF
                 ++$linesCount;
                 continue;
             }
-            // separator?
             if (' ' === $ch) {
                 $sep = $index;
             }
-            // compute width
             $currentWidth += $cw[$ch];
-            // exceed allowed width?
             if ($currentWidth > $maxWidth) {
                 if (-1 === $sep) {
                     if ($index === $lastIndex) {
@@ -817,7 +784,6 @@ class PdfDocument extends \FPDF
             }
             $style = $style->getRectangleStyle();
         }
-
         if ($style instanceof PdfRectangleStyle) {
             if (!$style->isApplicable()) {
                 return;
@@ -968,25 +934,16 @@ class PdfDocument extends \FPDF
      */
     public function subWrite(float $h, string $text, float $fontSize = PdfFont::DEFAULT_SIZE, float $offset = 0.0, int|string $link = ''): self
     {
-        // resize font
         $oldFontSize = $this->FontSizePt;
         $this->SetFontSize($fontSize);
-
-        // reposition y
         $offset = ((($fontSize - $oldFontSize) / $this->k) * 0.3) + ($offset / $this->k);
         $x = $this->x;
         $y = $this->y;
         $this->SetXY($x, $y - $offset);
-
-        // output text
         $this->Write($h, $text, $link);
-
-        // restore position
         $x = $this->x;
         $y = $this->y;
         $this->SetXY($x, $y + $offset);
-
-        // restore font size
         $this->SetFontSize($oldFontSize);
 
         return $this;
@@ -1029,7 +986,6 @@ class PdfDocument extends \FPDF
                 $this->_put(\sprintf('/%s %d 0 R', \ucfirst($key), $n + (int) $bookmark[$key]));
             }
         }
-
         $pageN = $this->PageInfo[$bookmark['page']]['n'];
         $this->_put(\sprintf('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']));
         $this->_put('/Count 0>>');
@@ -1040,25 +996,20 @@ class PdfDocument extends \FPDF
     {
         /** @psalm-var array<int, int> $lastUsedReferences */
         $lastUsedReferences = [];
-
-        // build hierarchy
         $level = 0;
         $count = \count($this->bookmarks);
         foreach ($this->bookmarks as $index => $bookmark) {
             if ($bookmark['level'] > 0) {
                 $parent = $lastUsedReferences[$bookmark['level'] - 1];
-                // set parent and last pointers
                 $this->bookmarks[$index]['parent'] = $parent;
                 $this->bookmarks[$parent]['last'] = $index;
                 if ($bookmark['level'] > $level) {
-                    // level increasing: set first pointer
                     $this->bookmarks[$parent]['first'] = $index;
                 }
             } else {
                 $this->bookmarks[$index]['parent'] = $count;
             }
             if ($bookmark['level'] <= $level && $index > 0) {
-                // set previous and next pointers
                 $prev = $lastUsedReferences[$bookmark['level']];
                 $this->bookmarks[$prev]['next'] = $index;
                 $this->bookmarks[$index]['prev'] = $prev;
@@ -1066,14 +1017,10 @@ class PdfDocument extends \FPDF
             $lastUsedReferences[$bookmark['level']] = $index;
             $level = $bookmark['level'];
         }
-
-        // outline bookmarks
         $n = $this->n + 1;
         foreach ($this->bookmarks as $bookmark) {
             $this->_putBookmark($bookmark, $n);
         }
-
-        // outline root
         $this->_newobj();
         $this->bookmakRoot = $this->n;
         $this->_put(\sprintf('<</Type /Outlines /First %d 0 R', $n));

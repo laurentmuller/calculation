@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Interfaces\DefaultEnumInterface;
-use Elao\Enum\ExtrasTrait;
 
 /**
  * Trait for class implementing {@link DefaultEnumInterface} interface.
@@ -22,7 +21,7 @@ use Elao\Enum\ExtrasTrait;
  */
 trait DefaultEnumTrait
 {
-    use ExtrasTrait;
+    use ExtendedExtrasTrait;
 
     /**
      * {@inheritdoc}
@@ -45,9 +44,6 @@ trait DefaultEnumTrait
      */
     public function isDefault(): bool
     {
-        /** @psalm-var bool|null $default */
-        $default = $this->getExtra('default');
-
-        return \is_bool($default) && $default;
+        return $this->getExtraBool('default');
     }
 }

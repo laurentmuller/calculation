@@ -34,33 +34,26 @@ class MySqlDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        // get values
         $database = $this->info->getDatabase();
         $configuration = $this->info->getConfiguration();
         if ([] === $database && [] === $configuration) {
             return false;
         }
-
-        // initialize
         $this->start($this->trans('about.mysql_version', ['%version%' => $this->info->getVersion()]));
-
         $row = $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Value' => Alignment::HORIZONTAL_LEFT,
         ]);
-
         if ([] !== $database) {
             $row = $this->outputArray($row, $database);
         }
         if ([] !== $configuration) {
             $this->outputArray($row, $configuration);
         }
-
         $this->getActiveSheet()
             ->getStyle('A:B')
             ->getAlignment()
             ->setVertical(Alignment::VERTICAL_TOP);
-
         $this->setAutoSize(1)
             ->setColumnWidth(2, 50, true)
             ->finish();

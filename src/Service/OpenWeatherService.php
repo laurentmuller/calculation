@@ -337,12 +337,10 @@ class OpenWeatherService extends AbstractHttpClientService
         if (\count($cityIds) > self::MAX_GROUP) {
             throw new \InvalidArgumentException('The number of city identifiers is greater than 20.');
         }
-
         $query = [
             'id' => \implode(',', $cityIds),
             'units' => $units,
         ];
-
         /** @psalm-var false|array<array{
          *      cnt: int,
          *      units: array,
@@ -403,7 +401,6 @@ class OpenWeatherService extends AbstractHttpClientService
         if (\is_array($result)) {
             return $result;
         }
-
         $db = null;
 
         try {
@@ -503,7 +500,6 @@ class OpenWeatherService extends AbstractHttpClientService
         if (\is_array($result)) {
             return $result;
         }
-
         $response = $this->requestGet($uri, [
             self::QUERY => $query,
         ]);
@@ -511,7 +507,6 @@ class OpenWeatherService extends AbstractHttpClientService
         if (!$this->checkErrorCode($result)) {
             return false;
         }
-
         $offset = $this->findTimezone($result);
         $timezone = $this->offsetToTimZone($offset);
         $this->updateResult($result, $timezone);
@@ -603,16 +598,12 @@ class OpenWeatherService extends AbstractHttpClientService
         if (isset($result['dt_date'])) {
             return;
         }
-
         $result['dt_date'] = FormatUtils::formatDate($value, self::TYPE_SHORT);
         $result['dt_date_locale'] = FormatUtils::formatDate($value, self::TYPE_SHORT, $timezone);
-
         $result['dt_time'] = FormatUtils::formatTime($value, self::TYPE_SHORT);
         $result['dt_time_locale'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
-
         $result['dt_date_time'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
         $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
-
         $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
         $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
 

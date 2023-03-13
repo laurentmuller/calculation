@@ -77,19 +77,15 @@ class PivotTableFactory
      */
     public function create(): ?PivotTable
     {
-        // check values
         if (!$this->isValid()) {
             return null;
         }
-
         $keys = [];
         $keyField = $this->keyField;
         $dataField = $this->dataField;
         $rowFields = $this->rowFields;
         $columnFields = $this->columnFields;
         $table = new PivotTable($this->createAggregator(), $this->title);
-
-        // build
         /** @psalm-var array $row */
         foreach ($this->dataset as $row) {
             // key
@@ -100,34 +96,21 @@ class PivotTableFactory
                 }
                 $keys[] = $key;
             }
-
-            // value
             $value = $dataField?->getValue($row);
-
-            // find or create columns and update value
             $currentCol = $this->setNodeValue($columnFields, $row, $table->getColumn(), $value);
-
-            // find or create rows and update value
             $currentRow = $this->setNodeValue($rowFields, $row, $table->getRow(), $value);
-
-            // update or create cell
             if (null !== ($cell = $table->findCellByNode($currentCol, $currentRow))) {
                 $cell->addValue($value);
             } else {
                 $aggregator = $this->createAggregator();
                 $table->addCellValue($aggregator, $currentCol, $currentRow, $value);
             }
-
             $table->addValue($value);
         }
-
-        // update fields
         $this->updateKeyField($table, $keyField)
             ->updateDataField($table, $dataField)
             ->updateRowFields($table, $rowFields)
             ->updateColumnFields($table, $columnFields);
-
-        // titles
         $table->getColumn()->setTitle($this->buildFieldsTitle($columnFields));
         $table->getRow()->setTitle($this->buildFieldsTitle($rowFields));
 
@@ -340,7 +323,6 @@ class PivotTableFactory
         if (!\is_array($fields)) {
             $fields = [$fields];
         }
-
         /** @var PivotField[] $result */
         $result = [];
         foreach ($fields as $field) {
@@ -383,8 +365,6 @@ class PivotTableFactory
                 $node = $child;
             }
         }
-
-        // update
         $node->addValue($value);
 
         return $node;

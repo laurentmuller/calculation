@@ -48,13 +48,8 @@ class UsersDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('user.list.title');
-
-        // conditionals
         $this->createEnabledConditionals();
-
-        // headers
         $row = $this->setHeaderValues([
             'user.fields.imageFile' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
             'user.fields.username' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
@@ -63,11 +58,7 @@ class UsersDocument extends AbstractArrayDocument
             'user.fields.enabled' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
             'user.fields.lastLogin' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
         ]);
-
-        // format
         $this->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 null,
@@ -77,17 +68,13 @@ class UsersDocument extends AbstractArrayDocument
                 $entity->isEnabled(),
                 $this->formatLastLogin($entity->getLastLogin()),
             ]);
-
-            // image
             $path = $this->getImagePath($entity);
             if (!empty($path) && FileUtils::isFile($path)) {
                 [$width, $height] = (array) \getimagesize($path);
                 $this->setCellImage($path, "A$row", (int) $width, (int) $height);
             }
-
             ++$row;
         }
-
         $this->finish();
 
         return true;

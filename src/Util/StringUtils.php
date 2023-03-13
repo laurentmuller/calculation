@@ -110,13 +110,11 @@ final class StringUtils
     {
         try {
             $export = \var_export($expression, true);
-
             $searches = [
                 '\\\\' => '\\',
                 ',' => '',
             ];
             $export = \str_replace(\array_keys($searches), \array_values($searches), $export);
-
             $patterns = [
                 "/array \(/" => '[',
                 "/^([ ]*)\)(,?)$/m" => '$1]$2',
@@ -148,7 +146,6 @@ final class StringUtils
             return (new \ReflectionClass($objectOrClass))->getShortName();
         } catch (\ReflectionException $e) {
             $type = \is_object($objectOrClass) ? \get_debug_type($objectOrClass) : $objectOrClass;
-
             $message = \sprintf("Unable to get short name for '%s'.", $type);
             throw new \RuntimeException($message, $e->getCode(), $e);
         }

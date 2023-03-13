@@ -134,7 +134,6 @@ trait PropertyServiceTrait
         if (!\is_string($value)) {
             return $default;
         }
-
         /** @psalm-var mixed $array */
         $array = \json_decode($value, true);
         if (\JSON_ERROR_NONE !== \json_last_error() || !\is_array($array) || \count($array) !== \count($default)) {

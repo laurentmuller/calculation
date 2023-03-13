@@ -125,7 +125,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         if (0 === $groupId = $query->getCustomData(self::PARAM_GROUP, 0)) {
             return $result;
         }
-
         /** @psalm-var string $field */
         $field = $this->repository->getSearchFields('group.id', $alias);
         $builder->andWhere($field . '=:' . self::PARAM_GROUP)

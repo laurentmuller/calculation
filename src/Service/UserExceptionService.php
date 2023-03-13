@@ -54,7 +54,6 @@ class UserExceptionService
      */
     private function mapException(\Throwable $e): CustomUserMessageAuthenticationException
     {
-        // register user
         if ($e instanceof ExpiredSignatureException) {
             return $this->createException('registration_expired_signature', $e);
         }
@@ -67,8 +66,6 @@ class UserExceptionService
         if ($e instanceof VerifyEmailExceptionInterface) {
             return $this->createException($e->getReason(), $e);
         }
-
-        // reset password
         if ($e instanceof ExpiredResetPasswordTokenException) {
             return $this->createException('reset_expired_reset_password_token', $e);
         }
@@ -83,13 +80,10 @@ class UserExceptionService
         if ($e instanceof ResetPasswordExceptionInterface) {
             return $this->createException($e->getReason(), $e);
         }
-
-        // mailer
         if ($e instanceof TransportExceptionInterface) {
             return $this->createException('send_email_error', $e);
         }
 
-        // default
         return $this->createException('error_unknown', $e);
     }
 }

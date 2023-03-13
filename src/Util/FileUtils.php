@@ -80,11 +80,9 @@ final class FileUtils
         if (!self::isFile($file)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", $file));
         }
-
         if (false === $json = \file_get_contents(self::realPath($file))) {
             throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
-
         /** @var array|\stdClass $content */
         $content = \json_decode($json, $assoc);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
@@ -142,7 +140,6 @@ final class FileUtils
         if (0 === $size) {
             return 'Empty';
         }
-
         foreach (self::SIZES as $minSize => $format) {
             if ($size >= $minSize) {
                 $value = 0 !== $minSize ? $size / $minSize : $size;
@@ -176,7 +173,6 @@ final class FileUtils
         if (!self::isFile($filename) || self::empty($filename)) {
             return 0;
         }
-
         $flags = \SplFileObject::DROP_NEW_LINE;
         if ($skipEmpty) {
             $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;
@@ -290,12 +286,10 @@ final class FileUtils
         if (self::isFile($file)) {
             return \filesize($file) ?: 0;
         }
-
         $size = 0;
         $flags = \FilesystemIterator::SKIP_DOTS;
         $innerIterator = new \RecursiveDirectoryIterator($file, $flags);
         $outerIterator = new \RecursiveIteratorIterator($innerIterator);
-
         /** @var \SplFileInfo $child */
         foreach ($outerIterator as $child) {
             if ($child->isReadable()) {

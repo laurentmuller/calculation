@@ -65,7 +65,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (!$response = $this->call(uri: self::URI_DETECT, query: $query)) {
             return false;
         }
-
         /** @psalm-var string|null $tag */
         $tag = $this->getValue($response, '[data][detections][0][0][language]');
         if (!\is_string($tag)) {
@@ -110,13 +109,11 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (!$response = $this->call(uri: self::URI_TRANSLATE, query: $query)) {
             return false;
         }
-
         /** @psalm-var string|null $target */
         $target = $this->getValue($response, '[data][translations][0][translatedText]');
         if (!\is_string($target)) {
             return false;
         }
-
         /** @psalm-var string|null $language */
         $language = $this->getValue($response, '[data][translations][0][detectedSourceLanguage]', false);
         if (\is_string($language)) {
@@ -161,13 +158,11 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (!$response = $this->call(uri: self::URI_LANGUAGE, query: $query)) {
             return false;
         }
-
         /** @psalm-var array<array{name: string, language: string}>|false  $languages */
         $languages = $this->getValue($response, '[data][languages]');
         if (!\is_array($languages)) {
             return false;
         }
-
         $result = [];
         foreach ($languages as $language) {
             $result[$language['name']] = $language['language'];
@@ -185,7 +180,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
         $response = $this->requestGet($uri, [
             self::QUERY => $query,
         ]);
-
         $response = $response->toArray(false);
         if (!$this->handleError($response)) {
             return false;

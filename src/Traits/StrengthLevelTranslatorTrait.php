@@ -32,7 +32,6 @@ trait StrengthLevelTranslatorTrait
             '%minimum%' => $this->translateLevel($minimum),
             '%score%' => $this->translateLevel($score),
         ];
-
         $context->buildViolation($constraint->strength_message)
             ->setCode(Strength::IS_STRENGTH_ERROR)
             ->setParameters($parameters)

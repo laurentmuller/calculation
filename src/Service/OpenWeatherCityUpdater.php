@@ -82,29 +82,20 @@ class OpenWeatherCityUpdater
         $db = null;
 
         try {
-            // create temp file
             if (null === $temp_name = FileUtils::tempfile('sql')) {
                 return $this->falseResult('swisspost.error.temp_file');
             }
-
-            // get cities
             if (false === $cities = $this->getFileContent($file)) {
                 return $this->falseResult('swisspost.error.open_archive', [
                         '%name%' => $file->getClientOriginalName(),
                     ]);
             }
-
-            // insert cities
             $db = new OpenWeatherDatabase($temp_name);
             [$valid, $error] = $this->insertCities($db, $cities);
             $db->close();
-
-            // cities?
             if (0 === $valid) {
                 return $this->falseResult('openweather.error.empty_city');
             }
-
-            // move database
             if (!FileUtils::rename($temp_name, $this->service->getDatabaseName(), true)) {
                 return $this->falseResult('swisspost.error.rename_database');
             }

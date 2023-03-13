@@ -64,7 +64,6 @@ final class DatabaseInfoService
                     };
                 }
             } catch (\Exception) {
-                // ignore
             }
         }
 
@@ -94,7 +93,6 @@ final class DatabaseInfoService
                     }
                 }
             } catch (\Exception) {
-                // ignore
             }
         }
 

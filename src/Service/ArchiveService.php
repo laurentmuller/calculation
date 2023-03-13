@@ -59,19 +59,15 @@ class ArchiveService implements ServiceSubscriberInterface
      */
     public function createForm(ArchiveQuery $query): FormInterface
     {
-        // create helper
         $builder = $this->factory->createBuilder(FormType::class, $query);
         $helper = new FormHelper($builder, 'archive.fields.');
         $sources = $this->getSources(false);
-
-        // add fields
         $helper->field('date')
             ->updateAttributes([
                 'min' => $this->getDateMinConstraint($sources),
                 'max' => $this->getDateMaxConstraint($sources),
             ])
             ->addDateType();
-
         $helper->field('sources')
             ->updateOptions([
                 'multiple' => true,
@@ -82,14 +78,12 @@ class ArchiveService implements ServiceSubscriberInterface
             ->labelClass('switch-custom')
             ->widgetClass('form-check form-check-inline')
             ->add(CalculationStateListType::class);
-
         $helper->field('target')
             ->updateOptions([
                 'group_by' => fn () => null,
                 'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getNotEditableQueryBuilder(),
             ])
             ->add(CalculationStateListType::class);
-
         $helper->addCheckboxSimulate()
             ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());
 
@@ -122,7 +116,6 @@ class ArchiveService implements ServiceSubscriberInterface
         $result->setDate($date)
             ->setTarget($target)
             ->setSimulate($simulate);
-
         $calculations = $this->getCalculations($date, $query->getSources());
         foreach ($calculations as $calculation) {
             $oldState = $calculation->getState();
@@ -184,9 +177,7 @@ class ArchiveService implements ServiceSubscriberInterface
         if ([] === $sources) {
             return [];
         }
-
         $builder = $this->createQueryBuilder($sources, $date);
-
         /** @var Calculation[] $result */
         $result = $builder->getQuery()->getResult();
 
@@ -199,7 +190,6 @@ class ArchiveService implements ServiceSubscriberInterface
         if (null !== $date) {
             return $date;
         }
-
         $sources = $this->getSources(false);
         $minDate = $this->getDateMin($sources);
         if (!$minDate instanceof \DateTime) {
@@ -292,7 +282,6 @@ class ArchiveService implements ServiceSubscriberInterface
     {
         /** @var CalculationState[] $sources */
         $sources = $this->stateRepository->getEditableQueryBuilder()->getQuery()->getResult();
-
         if ($useSession) {
             /** @var int[] $ids */
             $ids = $this->getSessionValue(self::KEY_SOURCES, []);

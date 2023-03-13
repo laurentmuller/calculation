@@ -116,7 +116,6 @@ class LogService implements ServiceSubscriberInterface
      */
     private function parseFile(): ?LogFile
     {
-        // check file
         if (!$this->isFileValid()) {
             return null;
         }
@@ -137,7 +136,6 @@ class LogService implements ServiceSubscriberInterface
                     ->setContext($this->parseJson($values[4]))
                     ->setExtra($this->parseJson($values[5])));
             }
-
             $file->sort();
             $this->setCacheValue(self::KEY_CACHE, $file);
 

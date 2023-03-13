@@ -38,61 +38,44 @@ trait ValidateMarginsTrait
     {
         /** @var ArrayCollection<int, MarginInterface> $margins */
         $margins = $this->getMargins();
-
-        // margins?
         if (\count($margins) < 2) {
             return;
         }
-
-        // sort
         $criteria = Criteria::create()
             ->orderBy(['minimum' => Criteria::ASC]);
         $margins = $margins->matching($criteria);
-
         $lastMax = null;
         foreach ($margins as $key => $margin) {
             $min = $margin->getMinimum();
             $max = $margin->getMaximum();
-
-            // the maximum is smaller than or equal to the minimum
             if ($max <= $min) {
                 $context->buildViolation('margin.maximum_greater_minimum')
                     ->atPath("margins[$key].maximum")
                     ->addViolation();
                 break;
             }
-
-            // first time
             if (null === $lastMax) {
                 $lastMax = $max;
                 continue;
             }
-
-            // the minimum is overlapping the previous margin
             if ($min < $lastMax) {
                 $context->buildViolation('margin.minimum_overlap')
                     ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;
             }
-
-            // the maximum is overlapping the previous margin
             if ($max < $lastMax) {
                 $context->buildViolation('margin.maximum_overlap')
                     ->atPath("margins[$key].maximum")
                     ->addViolation();
                 break;
             }
-
-            // the minimum is not equal to the previous maximum
             if ($min !== $lastMax) {
                 $context->buildViolation('margin.minimum_discontinued')
                     ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;
             }
-
-            // copy
             $lastMax = $max;
         }
     }

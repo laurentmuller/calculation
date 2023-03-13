@@ -95,23 +95,13 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {
-        // not force and valid?
         if (!$force && $this->validateTimeout() && $this->hasSessionValue(self::KEY_DATA)) {
             return $this->getSessionString(self::KEY_DATA);
         }
-
-        // clear previous values
         $this->clear();
-
-        // text
         $text = $this->generateRandomString($length);
-
-        // image
         if (null !== $image = $this->createImage($text, $width, $height)) {
-            // encode image
             $data = $this->encodeImage($image);
-
-            // save
             $this->setSessionValues([
                 self::KEY_TEXT => $text,
                 self::KEY_DATA => $data,
@@ -173,12 +163,9 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function createImage(string $text, int $width, int $height): ?ImageHandler
     {
-        // create image
         if (null === $image = ImageHandler::fromTrueColor($width, $height)) {
             return null;
         }
-
-        // draw
         $this->drawBackground($image)
             ->drawPoints($image, $width, $height)
             ->drawLines($image, $width, $height)
@@ -247,22 +234,16 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function drawText(ImageHandler $image, int $width, int $height, string $text): self
     {
-        // font and color
         $font = $this->font;
         $color = $image->allocateBlack();
         if (\is_int($color)) {
-            // get layout
             $size = (int) ((float) $height * 0.7);
             /** @psalm-var non-empty-array<array{angle: int, char: string, height: int, width: int}> $items */
             $items = $this->computeText($image, $size, $font, $text);
-
-            // get position
             $textHeight = \max(\array_column($items, 'height'));
             $textWidth = \array_sum(\array_column($items, 'width')) + (\count($items) - 1) * self::CHAR_SPACE;
             $x = \intdiv($width - $textWidth, 2);
             $y = \intdiv($height - $textHeight, 2) + $size;
-
-            // draw
             foreach ($items as $item) {
                 $image->ttfText($size, $item['angle'], $x, $y, $color, $font, $item['char']);
                 $x += $item['width'] + self::CHAR_SPACE;
@@ -277,13 +258,11 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function encodeImage(ImageHandler $image): string
     {
-        // save
         \ob_start();
         $image->toPng();
         $buffer = (string) \ob_get_contents();
         \ob_end_clean();
 
-        // encode
         return self::IMAGE_PREFIX . \base64_encode($buffer);
     }
 

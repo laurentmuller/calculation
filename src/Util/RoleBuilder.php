@@ -88,7 +88,6 @@ class RoleBuilder
         $all = self::getAllPermissions();
         $none = self::getNonePermissions();
         $default = self::getDefaultPermissions();
-
         $role = new Role(RoleInterface::ROLE_USER);
         $role->EntityCalculation = $all;
         $role->EntityCalculationState = $default;

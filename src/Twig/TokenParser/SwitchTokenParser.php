@@ -43,27 +43,19 @@ final class SwitchTokenParser extends AbstractTokenParser
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-
         $nodes = [
             'value' => $this->parser->getExpressionParser()->parseExpression(),
         ];
-
         $stream->expect(Token::BLOCK_END_TYPE);
-
-        // There can be some whitespace between the {% switch %} and first {% case %} tag.
         while (Token::TEXT_TYPE === $stream->getCurrent()->getType() && '' === \trim((string) $stream->getCurrent()->getValue())) {
             $stream->next();
         }
-
         $stream->expect(Token::BLOCK_START_TYPE);
-
         $cases = [];
         $end = false;
         $expressionParser = $this->parser->getExpressionParser();
-
         while (!$end) {
             $next = $stream->next();
-
             switch ($next->getValue()) {
                 case 'case':
                     /** @psalm-var Node[] $values */
@@ -101,9 +93,7 @@ final class SwitchTokenParser extends AbstractTokenParser
                     throw new SyntaxError(\sprintf('Unexpected end of template. Twig was looking for the following tags "case", "default", or "endswitch" to close the "switch" block started at line %d)', $lineno), -1);
             }
         }
-
         $nodes['cases'] = new Node($cases);
-
         $stream->expect(Token::BLOCK_END_TYPE);
 
         return new SwitchNode($nodes, [], $lineno, $this->getTag());

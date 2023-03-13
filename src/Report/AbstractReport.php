@@ -52,19 +52,13 @@ abstract class AbstractReport extends PdfDocument
         parent::__construct($orientation, $unit, $size);
         $this->translator = $this->controller->getTranslator();
         $this->extension = new FormatExtension($this->translator);
-
-        // meta-data
         $appName = $controller->getApplicationName();
         $this->SetCreator($appName);
         if (null !== $userName = $controller->getUserIdentifier()) {
             $this->SetAuthor($userName);
         }
-
-        // header
         $service = $this->controller->getUserService();
         $this->header->setCustomer($service->getCustomer());
-
-        // footer
         $this->footer->setContent($appName, $controller->getApplicationOwnerUrl());
     }
 

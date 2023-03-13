@@ -36,25 +36,19 @@ final class SwitchNode extends Node
             ->subcompile($this->getNode('value'))
             ->raw(") {\n")
             ->indent();
-
         /** @psalm-var Node[] $cases */
         $cases = $this->getNode('cases'); // @phpstan-ignore-line
         foreach ($cases as $case) {
-            // The 'body' node may have been removed by Twig if it was an empty text node in a sub-template,
-            // outside any blocks
             if (!$case->hasNode('body')) {
                 continue;
             }
-
             /** @psalm-var Node[] $values */
             $values = $case->getNode('values');
             foreach ($values as $value) {
-                $compiler
-                    ->write('case ')
+                $compiler->write('case ')
                     ->subcompile($value)
                     ->raw(":\n");
             }
-
             $compiler
                 ->write("{\n")
                 ->indent()
@@ -63,19 +57,15 @@ final class SwitchNode extends Node
                 ->outdent()
                 ->write("}\n");
         }
-
         if ($this->hasNode('default')) {
-            $compiler
-                ->write("default:\n")
+            $compiler->write("default:\n")
                 ->write("{\n")
                 ->indent()
                 ->subcompile($this->getNode('default'))
                 ->outdent()
                 ->write("}\n");
         }
-
-        $compiler
-            ->outdent()
+        $compiler->outdent()
             ->write("}\n");
     }
 }

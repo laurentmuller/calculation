@@ -40,18 +40,14 @@ class TranslatorFactory implements ServiceSubscriberInterface
     private const KEY_LAST_SERVICE = 'translator_service';
 
     /**
-     * @var TranslatorServiceInterface[]
-     */
-    private readonly array $translators;
-
-    /**
      * Constructor.
      *
      * @param iterable<TranslatorServiceInterface> $translators
      */
-    public function __construct(#[TaggedIterator(TranslatorServiceInterface::class)] iterable $translators)
-    {
-        $this->translators = $translators instanceof \Traversable ? \iterator_to_array($translators) : $translators;
+    public function __construct(
+        #[TaggedIterator(TranslatorServiceInterface::class)]
+        private readonly iterable $translators
+    ) {
     }
 
     /**
@@ -125,9 +121,9 @@ class TranslatorFactory implements ServiceSubscriberInterface
     /**
      * Gets the registered translator services.
      *
-     * @return TranslatorServiceInterface[]
+     * @return iterable<TranslatorServiceInterface>
      */
-    public function getTranslators(): array
+    public function getTranslators(): iterable
     {
         return $this->translators;
     }

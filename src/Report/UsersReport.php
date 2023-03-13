@@ -50,17 +50,10 @@ class UsersReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('user.list.title');
-
-        // styles
         $disabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
         $enabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
-
-        // new page
         $this->AddPage();
-
-        // table
         $table = PdfTableBuilder::instance($this)
             ->addColumns(
                 PdfColumn::center($this->trans('user.fields.imageFile'), 18, true),
@@ -70,14 +63,12 @@ class UsersReport extends AbstractArrayReport
                 PdfColumn::left($this->trans('user.fields.enabled'), 18, true),
                 PdfColumn::left($this->trans('user.fields.lastLogin'), 30, true)
             )->outputHeaders();
-
         foreach ($entities as $entity) {
             $enabled = $entity->isEnabled();
             $style = $enabled ? $enabledStyle : $disabledStyle;
             $text = $this->formatBoolean($enabled, 'common.value_enabled', 'common.value_disabled', true);
             $role = $this->translateRole($entity->getRole());
             $cell = $this->getImageCell($entity);
-
             $table->startRow()
                 ->addCell($cell)
                 ->add($entity->getUserIdentifier())
@@ -88,7 +79,6 @@ class UsersReport extends AbstractArrayReport
                 ->endRow();
         }
 
-        // count
         return $this->renderCount($entities, 'counters.users');
     }
 
@@ -113,7 +103,6 @@ class UsersReport extends AbstractArrayReport
         if (null === $path) {
             return new PdfCell();
         }
-
         $size = 64;
         $cell = new PdfImageCell($path);
         [$width, $height] = $cell->getOriginalSize();

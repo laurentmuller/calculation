@@ -38,21 +38,14 @@ class SymfonyDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        // initialize
         $info = $this->info;
         $this->start($this->trans('about.symfony_version', ['%version%' => $info->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
-
-        // info
         $this->outputInfo($info);
-
-        // bundles
         $bundles = $info->getBundles();
         if ([] !== $bundles) {
             $this->outputBundles($bundles);
         }
-
-        // packages
         $packages = $info->getPackages();
         $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if ([] !== $runtimePackages) {
@@ -62,8 +55,6 @@ class SymfonyDocument extends AbstractDocument
         if ([] !== $debugPackages) {
             $this->outputPackages('Debug Packages', $debugPackages);
         }
-
-        // routes
         $routes = $info->getRoutes();
         $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if ([] !== $runtimeRoutes) {
@@ -73,7 +64,6 @@ class SymfonyDocument extends AbstractDocument
         if ([] !== $debugRoutes) {
             $this->outputRoutes('Debug Routes', $debugRoutes);
         }
-
         $this->setActiveSheetIndex(0);
 
         return true;
@@ -87,16 +77,13 @@ class SymfonyDocument extends AbstractDocument
     private function outputBundles(array $bundles): void
     {
         $this->createSheetAndTitle($this->controller, 'Bundles');
-
         $row = $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Path' => Alignment::HORIZONTAL_LEFT,
         ]);
-
         foreach ($bundles as $bundle) {
             $this->outputRow($row++, $bundle['name'], $bundle['path']);
         }
-
         $this->setAutoSize(1, 2)->finish();
     }
 
@@ -119,36 +106,30 @@ class SymfonyDocument extends AbstractDocument
     {
         $app = $this->controller->getApplication();
         $this->setActiveTitle('Symfony', $this->controller);
-
         $row = 1;
         $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Value' => Alignment::HORIZONTAL_LEFT,
         ], 1, $row++);
-
         $this->outputGroup($row++, 'Kernel')
             ->outputRow($row++, 'Environment', $info->getEnvironment())
             ->outputRow($row++, 'Mode', $this->mode)
             ->outputRow($row++, 'Version status', $info->getMaintenanceStatus())
             ->outputRow($row++, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($row++, 'End of product life', $info->getEndOfLife());
-
         $this->outputGroup($row++, 'Parameters')
             ->outputRow($row++, 'Intl Locale', $this->locale)
             ->outputRow($row++, 'Timezone', $info->getTimeZone())
             ->outputRow($row++, 'Charset', $info->getCharset());
-
         $this->outputGroup($row++, 'Extensions')
             ->outputRowEnabled($row++, 'Debug', $app->isDebug())
             ->outputRowEnabled($row++, 'OP Cache', $info->isZendCacheLoaded())
             ->outputRowEnabled($row++, 'APCu', $info->isApcuLoaded())
             ->outputRowEnabled($row++, 'Xdebug', $info->isXdebugLoaded());
-
         $this->outputGroup($row++, 'Directories')
             ->outputRow($row++, 'Project', $info->getProjectDir())
             ->outputRow($row++, 'Logs', $info->getLogInfo())
             ->outputRow($row, 'Cache', $info->getCacheInfo());
-
         $this->setAutoSize(1, 2)->finish();
     }
 
@@ -160,14 +141,12 @@ class SymfonyDocument extends AbstractDocument
     private function outputPackages(string $title, array $packages): void
     {
         $this->createSheetAndTitle($this->controller, $title);
-
         $row = 1;
         $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Version' => Alignment::HORIZONTAL_LEFT,
             'Description' => Alignment::HORIZONTAL_LEFT,
         ], 1, $row++);
-
         foreach ($packages as $package) {
             $this->outputRow(
                 $row++,
@@ -176,12 +155,10 @@ class SymfonyDocument extends AbstractDocument
                 $package['description']
             );
         }
-
         $this->getActiveSheet()
             ->getStyle('A:C')
             ->getAlignment()
             ->setVertical(Alignment::VERTICAL_TOP);
-
         $this->setAutoSize(1, 2)
             ->setColumnWidth(3, 70, true)
             ->finish();
@@ -195,17 +172,14 @@ class SymfonyDocument extends AbstractDocument
     private function outputRoutes(string $title, array $routes): void
     {
         $this->createSheetAndTitle($this->controller, $title);
-
         $row = 1;
         $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Path' => Alignment::HORIZONTAL_LEFT,
         ], 1, $row++);
-
         foreach ($routes as $route) {
             $this->outputRow($row++, $route['name'], $route['path']);
         }
-
         $this->setAutoSize(1, 2)->finish();
     }
 

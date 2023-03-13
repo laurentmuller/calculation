@@ -195,16 +195,12 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function getHelp(): array
     {
-        // read from cache
         /** @psalm-var HelpContentType|null $help */
         $help = $this->getCacheValue(self::CACHE_KEY);
         if (\is_array($help)) {
             return $help;
         }
-
-        // load
         $content = (string) \file_get_contents($this->file);
-
         /** @psalm-var HelpContentType|null $help */
         $help = \json_decode($content, true);
         if (\is_array($help)) {
@@ -297,7 +293,6 @@ class HelpService implements ServiceSubscriberInterface
             if (0 !== $result = \strnatcmp($entityA, $entityB)) {
                 return $result;
             }
-
             $textA = $this->trans((string) $a['id']);
             $textB = $this->trans((string) $b['id']);
 

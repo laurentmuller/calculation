@@ -29,18 +29,14 @@ class SuspendEventListenerService
     private bool $disabled = false;
 
     /**
-     * @var DisableListenerInterface[]
-     */
-    private readonly array $listeners;
-
-    /**
      * Constructor.
      *
      * @param iterable<DisableListenerInterface> $listeners
      */
-    public function __construct(#[TaggedIterator(DisableListenerInterface::class)] iterable $listeners)
-    {
-        $this->listeners = $listeners instanceof \Traversable ? \iterator_to_array($listeners) : $listeners;
+    public function __construct(
+        #[TaggedIterator(DisableListenerInterface::class)]
+        private readonly iterable $listeners
+    ) {
     }
 
     /**

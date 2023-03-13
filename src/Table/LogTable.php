@@ -122,43 +122,26 @@ class LogTable extends AbstractTable implements \Countable
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);
-
         if (null === $logFile = $this->service->getLogFile()) {
             return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
         }
-
         if ($logFile->isEmpty()) {
             return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
         }
-
         $entities = $logFile->getLogs();
         $results->totalNotFiltered = \count($entities);
-
-        // filter
         $entities = $this->filter($query, $entities);
         $results->filtered = \count($entities);
-
-        // sort
         $this->sort($query, $entities);
-
-        // limit
         $entities = \array_slice($entities, $query->offset, $query->limit);
-
-        // map entities
         $results->rows = $this->mapEntities($entities);
-
-        // ajax?
         if (!$query->callback) {
             $level = (string) $query->customData[self::PARAM_LEVEL];
             $channel = (string) $query->customData[self::PARAM_CHANNEL];
-
-            // action parameters
             $results->params = [
                 self::PARAM_LEVEL => $level,
                 self::PARAM_CHANNEL => $channel,
             ];
-
-            // custom data
             $results->customData = [
                 'level' => $level,
                 'channel' => $channel,

@@ -62,32 +62,22 @@ class CalculationsReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // title
         if (empty($this->title)) {
             $this->setTitleTrans('calculation.list.title');
         }
-
-        // new page
         $this->AddPage();
-
-        // grouping?
         $table = $this->grouped ? $this->outputByGroup($entities) : $this->outputByList($entities);
-
-        // totals
         $items = 0.0;
         $overall = 0.0;
-
         foreach ($entities as $entity) {
             $items += $entity->getItemsTotal();
             $overall += $entity->getOverallTotal();
         }
         $margins = $this->isFloatZero($items) ? 0 : $this->safeDivide($overall, $items);
-
         $style = null;
         if (!$this->isFloatZero($margins) && $margins < $this->minMargin) {
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
-
         $text = $this->translateCount($entities, 'counters.calculations', false);
         $columns = $table->getColumnsCount() - 3;
         $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
@@ -109,7 +99,6 @@ class CalculationsReport extends AbstractArrayReport
      */
     private function createTable(bool $grouped): PdfGroupTableBuilder
     {
-        // create table
         $columns = [
             PdfColumn::center($this->trans('calculation.fields.id'), 17, true),
             PdfColumn::center($this->trans('calculation.fields.date'), 20, true),
@@ -165,11 +154,7 @@ class CalculationsReport extends AbstractArrayReport
             $key = (string) $entity->getStateCode();
             $groups[$key][] = $entity;
         }
-
-        // create table
         $table = $this->createTable(true);
-
-        // output
         foreach ($groups as $group => $items) {
             $table->setGroupKey($group);
             foreach ($items as $item) {
@@ -189,10 +174,7 @@ class CalculationsReport extends AbstractArrayReport
      */
     private function outputByList(array $entities): PdfGroupTableBuilder
     {
-        // create table
         $table = $this->createTable(false);
-
-        // output
         foreach ($entities as $entity) {
             $this->outputItem($table, $entity, false);
         }
@@ -209,17 +191,13 @@ class CalculationsReport extends AbstractArrayReport
      */
     private function outputItem(PdfGroupTableBuilder $table, Calculation $c, bool $groupByState): void
     {
-        // margin below style
         $style = $this->getMarginStyle($c);
-
         $table->startRow()
             ->add($c->getFormattedId())
             ->add($c->getFormattedDate());
-
         if (!$groupByState) {
             $table->add($c->getStateCode());
         }
-
         $table->add($c->getCustomer())
             ->add($c->getDescription())
             ->add(FormatUtils::formatAmount($c->getItemsTotal()))

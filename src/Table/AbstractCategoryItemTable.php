@@ -71,7 +71,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         if (0 === $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0)) {
             return $result;
         }
-
         /** @psalm-var string $field */
         $field = $this->repository->getSearchFields('category.id', $alias);
         $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)

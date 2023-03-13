@@ -28,22 +28,15 @@ class GlobalMarginsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('globalmargin.list.title');
-
-        // headers
         $row = $this->setHeaderValues([
             'globalmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.margin' => Alignment::HORIZONTAL_RIGHT,
         ]);
-
-        // formats
         $this->setFormatAmount(1)
             ->setFormatAmount(2)
             ->setFormatPercent(3);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                     $entity->getMinimum(),
@@ -51,7 +44,6 @@ class GlobalMarginsDocument extends AbstractArrayDocument
                     $entity->getMargin(),
                 ]);
         }
-
         $this->finish();
 
         return true;

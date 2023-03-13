@@ -117,7 +117,6 @@ final class FormatUtils
         if ($number instanceof \Countable || \is_array($number)) {
             $number = \count($number);
         }
-
         $value = self::checkNegativeZero($number);
 
         return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format($value);
@@ -136,7 +135,6 @@ final class FormatUtils
         $style = \NumberFormatter::PERCENT;
         $extraHash = $includeSign ? '1' : '0';
         $hash = self::getNumberHash($style, $decimals, $roundingMode, $extraHash);
-
         if (isset(self::$numberFormatters[$hash])) {
             $formatter = self::$numberFormatters[$hash];
         } else {
@@ -186,7 +184,6 @@ final class FormatUtils
         $timetype ??= self::getTimeType();
         $locale ??= \Locale::getDefault();
         $pattern ??= '';
-
         $hash = \implode('|', [
             $datetype,
             $timetype,
@@ -198,14 +195,11 @@ final class FormatUtils
         if (!isset(self::$dateFormatters[$hash])) {
             /** @var \IntlDateFormatter $formatter */
             $formatter = \IntlDateFormatter::create($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
-
-            // check if year pattern is present within 4 digits
             $pattern = $formatter->getPattern();
             if (self::LOCALE_FR_CH === $locale && !\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
                 $pattern = \str_replace('yy', 'yyyy', $pattern);
                 $formatter->setPattern($pattern);
             }
-
             self::$dateFormatters[$hash] = $formatter;
         }
 
@@ -230,8 +224,6 @@ final class FormatUtils
         if ($decimal) {
             return $decimal;
         }
-
-        // special case for Swiss French
         $locale = \Locale::getDefault();
         if (self::LOCALE_FR_CH === $locale) {
             $decimal = '.';
@@ -254,8 +246,6 @@ final class FormatUtils
         if ($grouping) {
             return $grouping;
         }
-
-        // special case for Swiss French
         $locale = \Locale::getDefault();
         if (self::LOCALE_FR_CH === $locale) {
             $grouping = '\'';
@@ -264,8 +254,6 @@ final class FormatUtils
             $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
             $grouping = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
         }
-
-        // special case when space is in 2 characters
         if (2 === \strlen($grouping) && 194 === \ord($grouping[0]) && 160 === \ord($grouping[1])) {
             $grouping = ' ';
         }
@@ -307,7 +295,6 @@ final class FormatUtils
         if ($percent) {
             return $percent;
         }
-
         /** @var \NumberFormatter $formatter */
         $formatter = \NumberFormatter::create(\Locale::getDefault(), \NumberFormatter::PERCENT);
         $percent = $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);

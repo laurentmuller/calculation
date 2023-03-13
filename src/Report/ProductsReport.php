@@ -30,37 +30,24 @@ class ProductsReport extends AbstractArrayReport
      */
     protected function doRender(array $entities): bool
     {
-        // title
         $this->setTitleTrans('product.list.title');
-
-        // new page
         $this->AddPage();
-
-        // create table
         $table = $this->createTable();
-
-        // style for empty price
         $emptyStyle = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
-
         $groupCode = null;
         $categoryCode = null;
         foreach ($entities as $entity) {
-            // group outline
             if ($groupCode !== $entity->getGroupCode()) {
                 $this->addBookmark((string) $entity->getGroupCode(), true);
                 $groupCode = $entity->getGroupCode();
             }
-            // category outline
             if ($categoryCode !== $entity->getCategoryCode()) {
                 $this->addBookmark((string) $entity->getCategoryCode(), true, 1);
                 $categoryCode = $entity->getCategoryCode();
             }
-            // group key
             $key = \sprintf('%s / %s', (string) $groupCode, (string) $categoryCode);
             $table->setGroupKey($key);
-
-            // product
             $style = empty($entity->getPrice()) ? $emptyStyle : null;
             $table->startRow()
                 ->add($entity->getDescription())
@@ -69,7 +56,6 @@ class ProductsReport extends AbstractArrayReport
                 ->add($entity->getSupplier())
                 ->endRow();
         }
-
         $this->renderCount($entities, 'counters.products');
         $this->addPageIndex();
 

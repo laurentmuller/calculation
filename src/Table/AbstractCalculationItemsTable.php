@@ -119,16 +119,10 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);
-
-        // find entities
         $entities = $this->getEntities($query->sort, $query->order);
         $results->totalNotFiltered = $results->filtered = \count($entities);
-
-        // limit and and map entities
         $entities = \array_slice($entities, $query->offset, $query->limit);
         $results->rows = $this->mapEntities($entities);
-
-        // ajax?
         if (!$query->callback) {
             $results->customData = [
                 'itemsCount' => $this->getItemsCount($entities),

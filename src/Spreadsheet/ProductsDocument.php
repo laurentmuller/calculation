@@ -28,10 +28,7 @@ class ProductsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $this->start('product.list.title');
-
-        // headers
         $row = $this->setHeaderValues([
             'product.fields.group' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.category' => Alignment::HORIZONTAL_GENERAL,
@@ -40,11 +37,7 @@ class ProductsDocument extends AbstractArrayDocument
             'product.fields.unit' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
         ]);
-
-        // price format
         $this->setFormatPrice(4);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getGroupCode(),
@@ -55,7 +48,6 @@ class ProductsDocument extends AbstractArrayDocument
                 $entity->getSupplier(),
             ]);
         }
-
         $this->finish();
 
         return true;

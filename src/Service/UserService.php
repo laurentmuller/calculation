@@ -229,7 +229,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
     {
         if ([] !== $properties && null !== $user = $this->getUser()) {
             $defaultValues = $this->service->getProperties();
-
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
                 $this->saveProperty($key, $value, $defaultValues, $user);
@@ -268,7 +267,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
                 $this->repository->remove($property, false);
             }
         } else {
-            // create if needed
             if (!$property instanceof UserProperty) {
                 $property = UserProperty::instance($name, $user);
                 $this->repository->add($property, false);

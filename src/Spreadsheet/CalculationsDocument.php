@@ -28,11 +28,8 @@ class CalculationsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        // initialize
         $title = $this->title ?? 'calculation.list.title';
         $this->start($title, true);
-
-        // headers
         $row = $this->setHeaderValues([
             'calculation.fields.id' => Alignment::HORIZONTAL_CENTER,
             'calculation.fields.date' => Alignment::HORIZONTAL_CENTER,
@@ -43,15 +40,11 @@ class CalculationsDocument extends AbstractArrayDocument
             'calculation.fields.margin' => Alignment::HORIZONTAL_RIGHT,
             'calculation.fields.total' => Alignment::HORIZONTAL_RIGHT,
         ]);
-
-        // formats
         $this->setFormatId(1)
             ->setFormatDate(2)
             ->setFormatAmount(6)
             ->setFormat(7, $this->getMarginFormat())
             ->setFormatAmount(8);
-
-        // rows
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getId(),
@@ -64,7 +57,6 @@ class CalculationsDocument extends AbstractArrayDocument
                 $entity->getOverallTotal(),
             ]);
         }
-
         $this->finish();
 
         return true;

@@ -36,7 +36,6 @@ class GlobalMarginTable extends AbstractEntityTable
      */
     public function getDataQuery(Request $request): DataQuery
     {
-        // display always all records
         $query = parent::getDataQuery($request);
         $query->limit = \PHP_INT_MAX;
 
@@ -66,7 +65,6 @@ class GlobalMarginTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            // hide pages list and search
             $results->pageList = [];
             $results->addAttribute('search', false);
             $results->addAttribute('pagination', false);

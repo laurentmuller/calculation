@@ -31,7 +31,7 @@ jobs:
 
       - name: Download dependencies
         id: install
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install $COMPOSER_FLAGS
 
       - name: Download Symfony CLI
         if: always() && steps.install.outcome == 'success'

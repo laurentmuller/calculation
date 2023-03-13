@@ -23,6 +23,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class to generate calculations.
+ *
+ * @extends AbstractEntityGenerator<Calculation>
  */
 class CalculationGenerator extends AbstractEntityGenerator
 {

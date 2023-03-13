@@ -42,7 +42,6 @@ class Week extends AbstractCalendarItem
         if ($number < 1 || $number > 53) {
             throw new CalendarException("The week number $number is not between 1 and 53 inclusive.");
         }
-
         $key = self::formatKey($calendar->getYear(), $number);
         parent::__construct($calendar, $key);
     }
@@ -126,7 +125,6 @@ class Week extends AbstractCalendarItem
         $months = $this->getMonths();
         $number = $month->getNumber();
         $year = $month->getYear();
-
         foreach ($months as $current) {
             if ($year === $current->getYear() && $number === $current->getNumber()) {
                 return true;

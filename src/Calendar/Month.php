@@ -42,7 +42,6 @@ class Month extends AbstractCalendarItem implements \Stringable
         if ($number < 1 || $number > 12) {
             throw new CalendarException("The month number $number is not between 1 and 12 inclusive.");
         }
-
         $key = self::formatKey($calendar->getYear(), $number);
         parent::__construct($calendar, $key);
     }
@@ -143,7 +142,6 @@ class Month extends AbstractCalendarItem implements \Stringable
         $weeks = $this->getWeeks();
         $number = $week->getNumber();
         $year = $week->getYear();
-
         foreach ($weeks as $current) {
             if ($year === $current->getYear() && $number === $current->getNumber()) {
                 return true;

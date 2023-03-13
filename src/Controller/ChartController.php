@@ -41,9 +41,7 @@ class ChartController extends AbstractController
     #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => Requirement::DIGITS])]
     public function month(MonthChart $chart, int $count = 6): Response
     {
-        $data = $chart->generate($count);
-
-        return $this->render('chart/chart_month.html.twig', $data);
+        return $this->render('chart/chart_month.html.twig', $chart->generate($count));
     }
 
     /**
@@ -54,8 +52,6 @@ class ChartController extends AbstractController
     #[Route(path: '/state', name: 'chart_by_state')]
     public function state(StateChart $chart): Response
     {
-        $data = $chart->generate();
-
-        return $this->render('chart/chart_state.html.twig', $data);
+        return $this->render('chart/chart_state.html.twig', $chart->generate());
     }
 }

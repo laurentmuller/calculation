@@ -81,11 +81,9 @@ class UserController extends AbstractEntityController
     #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
-        // same?
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
             $this->warningTrans('user.delete.connected');
 
-            // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
@@ -116,7 +114,6 @@ class UserController extends AbstractEntityController
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new UsersDocument($this, $entities, $storage);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -128,21 +125,17 @@ class UserController extends AbstractEntityController
     #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => Requirement::DIGITS])]
     public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
     {
-        // same user?
         if ($this->isConnectedUser($user)) {
             $this->warningTrans('user.message.connected');
 
             return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
-
         /** @var User $from */
         $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment(true);
         $comment->setSubject($this->getApplicationName())
             ->setFromAddress($from)
             ->setToAddress($user);
-
-        // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {
@@ -154,8 +147,6 @@ class UserController extends AbstractEntityController
                 return $this->renderFormException('user.message.error', $e, $logger);
             }
         }
-
-        // parameters
         $parameters = [
             'item' => $user,
             'form' => $form,
@@ -163,7 +154,6 @@ class UserController extends AbstractEntityController
             'params' => ['id' => $user->getId()],
         ];
 
-        // render
         return $this->render('user/user_comment.html.twig', $parameters);
     }
 
@@ -175,23 +165,17 @@ class UserController extends AbstractEntityController
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // save
             $this->saveToDatabase($item);
-            // message
             $this->successTrans('user.change_password.change_success', ['%name%' => $item->getDisplay()]);
 
-            // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
-
-        // parameters
         $parameters = [
             'item' => $item,
             'form' => $form,
             'params' => ['id' => $item->getId()],
         ];
 
-        // show form
         return $this->render('user/user_password.html.twig', $parameters);
     }
 
@@ -209,7 +193,6 @@ class UserController extends AbstractEntityController
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new UsersReport($this, $entities, $storage);
 
         return $this->renderPdfDocument($doc);
@@ -225,13 +208,11 @@ class UserController extends AbstractEntityController
         $repository = $this->repository;
         $users = $repository->getResettableUsers();
         $generator = $this->getUrlGenerator();
-
         if ([] === $users) {
             $this->warningTrans('user.reset_all.empty');
 
             return $generator->redirect($request, null, $this->getDefaultRoute());
         }
-
         if (1 === \count($users)) {
             $id = \reset($users)->getId();
             $params = $generator->routeParams($request, $id);
@@ -247,7 +228,6 @@ class UserController extends AbstractEntityController
             /** @var User[] $users */
             $users = $form->get($name)->getData();
             $repository->resetPasswordRequest($users);
-
             $count = \count($users);
             if (1 === $count && false !== $user = \reset($users)) {
                 $this->successTrans('user.reset.success', ['%name%' => $user->getUserIdentifier()]);
@@ -271,7 +251,6 @@ class UserController extends AbstractEntityController
     {
         $identifier = $item->getUserIdentifier();
         $form = $this->createFormBuilder()->getForm();
-
         if ($this->handleRequestForm($request, $form)) {
             if ($item->isResetPassword()) {
                 /** @psalm-var UserRepository $repository */
@@ -297,28 +276,19 @@ class UserController extends AbstractEntityController
     #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
     public function rights(Request $request, User $item, RoleHierarchyService $service, EntityManagerInterface $manager): Response
     {
-        // same user and not super admin?
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
             $this->warningTrans('user.rights.connected');
 
-            // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
-
-        // form
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // save
             $manager->flush();
-
-            // message
             $this->successTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
 
-            // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        // show form
         return $this->render('user/user_rights.html.twig', [
             'item' => $item,
             'form' => $form,
@@ -343,7 +313,6 @@ class UserController extends AbstractEntityController
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new UserRightsDocument($this, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
@@ -363,7 +332,6 @@ class UserController extends AbstractEntityController
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
-
         $doc = new UsersRightsReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
@@ -400,7 +368,6 @@ class UserController extends AbstractEntityController
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
-        // remove super admin users if not granted
         if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
             /** @psalm-var UserRepository $repository */
             $repository = $this->repository;

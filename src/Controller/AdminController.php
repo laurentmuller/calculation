@@ -48,7 +48,6 @@ class AdminController extends AbstractController
     {
         $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            // first clear user and application caches
             $this->getUserService()->clearCache();
             $this->getApplication()->clearCache();
 
@@ -75,11 +74,8 @@ class AdminController extends AbstractController
     #[Route(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
     {
-        // properties
         $application = $this->getApplication();
         $data = $application->getProperties();
-
-        // form
         $form = $this->createForm(ApplicationParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
@@ -89,7 +85,6 @@ class AdminController extends AbstractController
             return $this->redirectToHomePage('parameters.success');
         }
 
-        // display
         return $this->render('admin/parameters.html.twig', [
             'options' => PropertyServiceInterface::PASSWORD_OPTIONS,
             'form' => $form,
@@ -132,12 +127,9 @@ class AdminController extends AbstractController
      */
     private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
     {
-        // create role
         $role = new Role($roleName);
         $role->setName($this->translateRole($roleName))
             ->setRights($rights);
-
-        // create and handle form
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
             // update property
@@ -151,7 +143,6 @@ class AdminController extends AbstractController
             return $this->redirectToHomePage('admin.rights.success', ['%name%' => $role->getName()]);
         }
 
-        // show form
         return $this->render('admin/role_rights.html.twig', [
             'form' => $form,
             'default' => $default,

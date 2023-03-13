@@ -41,26 +41,20 @@ class UpdateEntityController extends AbstractController
     #[Route(path: '', name: 'update')]
     public function update(): Response
     {
-        // choices
         $type = UrlGeneratorInterface::ABSOLUTE_URL;
         $choices = [
             'customer.name' => $this->generateUrl('update_customer', [], $type),
             'calculation.name' => $this->generateUrl('update_calculation', [], $type),
         ];
-
-        // attributes
         $attributes = [
             'customer.name' => ['data-help' => $this->trans('update.help.customer')],
             'calculation.name' => ['data-help' => $this->trans('update.help.calculation')],
         ];
-
         $helper = $this->createFormHelper('update.fields.');
-
         $helper->field('entity')
             ->updateOption('choice_attr', $attributes)
             ->help('update.help.customer')
             ->addChoiceType($choices);
-
         $helper->addCheckboxConfirm($this->getTranslator(), false);
 
         return $this->render('admin/update.html.twig', [
@@ -77,7 +71,6 @@ class UpdateEntityController extends AbstractController
         $styles = [0, 1, 2];
         $generator = $service->getGenerator();
         $states = $this->getCalculationState($manager);
-
         /** @var Calculation[] $calculations */
         $calculations = $manager->getRepository(Calculation::class)->findAll();
 
@@ -102,7 +95,6 @@ class UpdateEntityController extends AbstractController
         } finally {
             $listener->enableListeners();
         }
-
         $count = \count($calculations);
 
         return $this->redirectToHomePage('counters.calculations_update', ['count' => $count], FlashType::INFO);
@@ -118,7 +110,6 @@ class UpdateEntityController extends AbstractController
         $genders = $this->getGenders();
         $accessor = PropertyAccess::createPropertyAccessor();
         $generator = $service->getGenerator();
-
         /** @var Customer[] $customers */
         $customers = $manager->getRepository(Customer::class)->findAll();
 
@@ -127,7 +118,6 @@ class UpdateEntityController extends AbstractController
             foreach ($customers as $customer) {
                 $style = (int) $generator->randomElement($styles);
                 $gender = (string) $generator->randomElement($genders);
-
                 match ($style) {
                     // company
                     0 => $this->replace($accessor, $customer, 'company', $generator->company())
@@ -148,8 +138,6 @@ class UpdateEntityController extends AbstractController
                         ->replace($accessor, $customer, 'lastName', $generator->lastName())
                         ->replace($accessor, $customer, 'email', $generator->email()),
                 };
-
-                // other fields
                 $this->replace($accessor, $customer, 'address', $generator->streetAddress())
                     ->replace($accessor, $customer, 'zipCode', $generator->postcode())
                     ->replace($accessor, $customer, 'city', $generator->city());

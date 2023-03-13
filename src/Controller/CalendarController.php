@@ -53,14 +53,11 @@ class CalendarController extends AbstractController
     #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS])]
     public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
     {
-        // validate values
         $year = $this->validateYear($year);
         $month = $this->validateMonth($month);
-        // generate
         $calendar = $this->generate($service, $year);
         $calculations = $repository->getForMonth($year, $month);
         $this->merge($calendar, $calculations);
-        // months
         $yearsMonths = $repository->getCalendarYearsMonths();
         $today = $this->todayMonth($yearsMonths, $year, $month);
         $previous = $this->previousMonth($yearsMonths, $year, $month);
@@ -93,10 +90,8 @@ class CalendarController extends AbstractController
     #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS])]
     public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
     {
-        // validate values
         $year = $this->validateYear($year);
         $week = $this->validateWeek($week);
-        // generate
         $calendar = $this->generate($service, $year);
         $calculations = $repository->getForWeek($year, $week);
         $this->merge($calendar, $calculations);
@@ -136,13 +131,10 @@ class CalendarController extends AbstractController
     #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS])]
     public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
     {
-        // validate year
         $year = $this->validateYear($year);
-        // generate
         $calendar = $this->generate($service, $year);
         $calculations = $repository->getForYear($year);
         $this->merge($calendar, $calculations);
-        // get previous and next years
         $years = $repository->getCalendarYears();
         $today = $this->todayYear($years, $year);
         $previous = $this->previousYear($years, $year);
@@ -217,7 +209,6 @@ class CalendarController extends AbstractController
     {
         $yearMonth = $year * 1000 + $month;
         $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] > $yearMonth);
-
         /** @psalm-var int[]|bool $result */
         $result = \reset($filtered);
 
@@ -237,7 +228,6 @@ class CalendarController extends AbstractController
     {
         $yearWeek = $year * 1000 + $week;
         $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] > $yearWeek);
-
         /** @psalm-var int[]|bool $result */
         $result = \reset($filtered);
 
@@ -255,7 +245,6 @@ class CalendarController extends AbstractController
     private function nextYear(array $years, int $year): bool|int
     {
         $filtered = \array_filter($years, fn (int $current): bool => $current > $year);
-
         /** @psalm-var int|bool $result */
         $result = \reset($filtered);
 
@@ -275,7 +264,6 @@ class CalendarController extends AbstractController
     {
         $yearMonth = $year * 1000 + $month;
         $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] < $yearMonth);
-
         /** @psalm-var int[]|bool $result */
         $result = \reset($filtered);
 
@@ -295,7 +283,6 @@ class CalendarController extends AbstractController
     {
         $yearWeek = $year * 1000 + $week;
         $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] < $yearWeek);
-
         /** @psalm-var int[]|bool $result */
         $result = \reset($filtered);
 
@@ -333,7 +320,6 @@ class CalendarController extends AbstractController
         if ($year !== $todayYear || $month !== $todayMonth) {
             $yearMonth = $todayYear * 1000 + $todayMonth;
             $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] === $yearMonth);
-
             /** @psalm-var int[]|bool $result */
             $result = \reset($filtered);
 
@@ -359,7 +345,6 @@ class CalendarController extends AbstractController
         if ($year !== $todayYear || $week !== $todayWeek) {
             $yearWeek = $year * 1000 + $week;
             $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] === $yearWeek);
-
             /** @psalm-var int[]|bool $result */
             $result = \reset($filtered);
 

@@ -159,7 +159,7 @@ class Column implements \Stringable, SortModeInterface
                 try {
                     $accessor->setValue($column, $key, $value);
                 } catch (\Exception $e) {
-                    throw new \InvalidArgumentException(\sprintf("Cannot set the property '%s'.", $key), 0, $e);
+                    throw new \InvalidArgumentException(\sprintf("Cannot set the property '%s'.", $key), (int) $e->getCode(), $e);
                 }
             }
 

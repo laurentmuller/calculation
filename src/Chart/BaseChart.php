@@ -77,7 +77,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     public function __construct(protected readonly ApplicationService $application)
     {
         parent::__construct();
-
         $this->hideCredits()
             ->initLangOptions()
             ->setRenderTo(self::CONTAINER)

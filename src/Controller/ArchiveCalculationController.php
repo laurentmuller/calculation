@@ -36,18 +36,11 @@ class ArchiveCalculationController extends AbstractController
         $application = $this->getApplication();
         $query = $service->createQuery();
         $form = $service->createForm($query);
-
-        // handle request
         if ($this->handleRequestForm($request, $form)) {
             try {
-                // save
                 $service->saveQuery($query);
-
-                // update
                 $listener->disableListeners();
                 $result = $service->processQuery($query);
-
-                // update last date
                 if (!$query->isSimulate() && $result->isValid()) {
                     $application->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, new \DateTime());
                 }

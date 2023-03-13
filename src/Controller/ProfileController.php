@@ -38,7 +38,6 @@ class ProfileController extends AbstractController
     #[Route(path: '/change-password', name: 'user_profile_change_password')]
     public function changePassword(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
-        // create and validate form
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();
@@ -46,7 +45,6 @@ class ProfileController extends AbstractController
             return $this->redirectToHomePage('profile.change_password.success', ['%username%' => $user->getUserIdentifier()]);
         }
 
-        // display
         return $this->render('profile/profile_change_password.html.twig', [
             'form' => $form,
         ]);
@@ -58,7 +56,6 @@ class ProfileController extends AbstractController
     #[Route(path: '/edit', name: 'user_profile_edit')]
     public function editProfil(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
-        // create and validate form
         $form = $this->createForm(ProfileEditType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();

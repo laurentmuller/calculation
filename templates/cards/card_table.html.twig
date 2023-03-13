@@ -128,7 +128,7 @@
 {%- set sortable_columns = columns|filter(c => c.sortable and c.visible) -%}
 {%- set sortable = sortable_columns|length -%}
 {%- set allow_search = attributes.search is defined ? attributes.search : true -%}
-{%- set allow_global = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
+{%- set allow_global = allow_global is defined ? allow_global : is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {%- set row_selector = 'table-primary' -%}
 {%- set caller = path(app.current_route) -%}
 {%- set params = params|default({})|merge({'caller': caller}) -%}

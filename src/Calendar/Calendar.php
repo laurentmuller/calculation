@@ -137,61 +137,39 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function generate(int $year): self
     {
-        // check year
         $this->year = DateUtils::completYear($year);
         $this->key = (string) $this->year;
-
-        // clean
         $this->reset();
-
-        // get first and last days of the year
         $firstYearDate = new \DateTimeImmutable(\sprintf('1 January %d', $this->year));
         $lastYearDate = new \DateTimeImmutable(\sprintf('31 December %d', $this->year));
-
-        // get first day in calendar (monday of the 1st week)
         $firstDate = new \DateTime(\sprintf('first monday of January %s', $this->year));
         if ($firstDate > $firstYearDate) {
             $firstDate->sub(new \DateInterval('P1W'));
         }
-
-        // get the last days in calendar (sunday of the last week)
         $lastDate = new \DateTime(\sprintf('last sunday of December %d', $this->year));
         if ($lastDate < $lastYearDate) {
             $lastDate->add(new \DateInterval('P1W'));
         }
-
         /** @var ?Week $currentWeek */
         $currentWeek = null;
-
         /** @var ?Month $currentMonth */
         $currentMonth = null;
-
-        // build calendar
         $interval = new \DateInterval('P1D');
         while ($firstDate <= $lastDate) {
-            // add day
             $day = $this->createDay($firstDate);
-
-            // calculate numbers
             $monthYear = (int) $firstDate->format('Y');
             $monthNumber = (int) $firstDate->format('n');
             $weekNumber = (int) $firstDate->format('W');
-
             if ($monthYear === $this->year) {
-                // create month if needed
                 if (!$currentMonth instanceof Month || $currentMonth->getNumber() !== $monthNumber) {
                     $currentMonth = $this->createMonth($monthNumber);
                 }
                 $currentMonth->addDay($day);
             }
-
-            // create week if needed
             if (!$currentWeek instanceof Week || $currentWeek->getNumber() !== $weekNumber) {
                 $currentWeek = $this->createWeek($weekNumber);
             }
             $currentWeek->addDay($day);
-
-            // next day
             $firstDate->add($interval);
         }
 
@@ -212,7 +190,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         if ($key instanceof \DateTimeInterface) {
             $key = $key->format(Month::KEY_FORMAT);
         }
-
         if (\is_int($key)) {
             foreach ($this->months as $month) {
                 if ($key === $month->getNumber()) {
@@ -297,7 +274,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         if ($key instanceof \DateTimeInterface) {
             $key = $key->format(Week::KEY_FORMAT);
         }
-
         foreach ($this->weeks as $week) {
             if ($key === $week->getKey()) {
                 return $week;

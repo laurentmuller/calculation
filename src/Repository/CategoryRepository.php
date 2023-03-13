@@ -102,7 +102,7 @@ class CategoryRepository extends AbstractRepository
      * @param string $alias      the default entity alias
      *
      * @psalm-param literal-string $alias
-     * @psalm-param (self::FILTER_NONE | self::FILTER_PRODUCTS | self::FILTER_TASKS) $filterType
+     * @psalm-param self::FILTER_* $filterType
      */
     public function getQueryBuilderByGroup(int $filterType = self::FILTER_NONE, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

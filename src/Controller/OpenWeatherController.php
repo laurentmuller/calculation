@@ -216,7 +216,6 @@ class OpenWeatherController extends AbstractController
                     self::KEY_LONGITUDE => $city[self::KEY_LONGITUDE],
                 ];
                 $city['onecall_url'] = $generator->generate('openweather_api_onecall', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-
                 $parameters = [
                     self::KEY_UNITS => $units,
                     self::KEY_ID => $city['id'],
@@ -315,8 +314,6 @@ class OpenWeatherController extends AbstractController
                     self::KEY_LIMIT => $limit,
                     self::KEY_COUNT => $count,
                 ]);
-
-                // display current weather if only 1 city is found
                 if (1 === \count($cities)) {
                     return $this->redirectToRoute('openweather_current', [
                         self::KEY_ID => \reset($cities)['id'],
@@ -324,7 +321,6 @@ class OpenWeatherController extends AbstractController
                         self::KEY_COUNT => $count,
                     ]);
                 }
-
                 /** @psalm-var array{units: array, list: array<int, mixed>}|null $group */
                 $group = null;
                 $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);

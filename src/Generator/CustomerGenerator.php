@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class to generate customers.
+ *
+ * @extends AbstractEntityGenerator<Customer>
  */
 class CustomerGenerator extends AbstractEntityGenerator
 {

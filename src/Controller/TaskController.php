@@ -94,10 +94,8 @@ class TaskController extends AbstractEntityController
         } else {
             $tasks = [$task];
         }
-
         $query = new TaskComputeQuery($task, true);
         $result = $service->computeQuery($query);
-
         $simple_widget = 1 === \count($tasks);
         $form = $this->createForm(TaskServiceType::class, $result, ['simple_widget' => $simple_widget]);
         $parameters = [

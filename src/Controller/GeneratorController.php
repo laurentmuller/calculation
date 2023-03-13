@@ -45,20 +45,17 @@ class GeneratorController extends AbstractController
     {
         $data = $this->getSessionData();
         $helper = $this->createFormHelper('generate.fields.', $data);
-
         $choices = $this->getChoices();
         $attributes = $this->getAttributes($choices);
         $helper->field('entity')
             ->updateOption('choice_attr', $attributes)
             ->addChoiceType($choices);
-
         $helper->field('count')
             ->updateAttributes([
                 'min' => 1,
                 'max' => 20,
                 'step' => 1,
             ])->addNumberType(0);
-
         $helper->addCheckboxSimulate()
             ->addCheckboxConfirm($this->getTranslator(), $data['simulate']);
 
@@ -103,7 +100,6 @@ class GeneratorController extends AbstractController
         $simulate = $this->getRequestBoolean($request, 'simulate', true);
         $route = $this->getRequestString($request, '_route', self::ROUTE_CUSTOMER);
         $entity = $this->generateUrl($route);
-
         $this->setSessionValues([
             self::KEY_COUNT => $count,
             self::KEY_SIMULATE => $simulate,

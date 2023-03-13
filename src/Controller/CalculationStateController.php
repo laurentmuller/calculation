@@ -78,7 +78,6 @@ class CalculationStateController extends AbstractEntityController
     #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
-        // calculation?
         $calculations = $repository->countStateReferences($item);
         if (0 !== $calculations) {
             $display = $item->getDisplay();

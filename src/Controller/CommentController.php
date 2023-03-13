@@ -45,8 +45,6 @@ class CommentController extends AbstractController
         $comment->setSubject($this->getApplicationName())
             ->setFromAddress($from)
             ->setToAddress($this->getAddressFrom());
-
-        // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
         if ($this->handleRequestForm($request, $form)) {
             try {
@@ -57,7 +55,7 @@ class CommentController extends AbstractController
                 return $this->renderFormException('user.comment.error', $e, $logger);
             }
         }
-        // render
+
         return $this->render('user/user_comment.html.twig', [
             'form' => $form,
             'isMail' => $comment->isMail(),

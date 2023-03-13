@@ -69,9 +69,7 @@ class CalculationController extends AbstractEntityController
         $state = $application->getDefaultState();
         $product = $application->getDefaultProduct();
         $quantity = $application->getDefaultQuantity();
-        // create
         $item = new Calculation();
-        // update
         if (null !== $state) {
             $item->setState($state);
         }
@@ -92,7 +90,6 @@ class CalculationController extends AbstractEntityController
     #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Calculation $item): Response
     {
-        // clone
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
         $state = $this->getApplication()->getDefaultState();
         $clone = $item->clone($state, $description);
@@ -259,8 +256,6 @@ class CalculationController extends AbstractEntityController
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['empty_items'] = $item->hasEmptyItems();
-
-        // editable?
         if ($parameters['editable'] = $item->isEditable()) {
             $parameters['group_index'] = $item->getGroupsCount();
             $parameters['category_index'] = $item->getCategoriesCount();
@@ -316,17 +311,8 @@ class CalculationController extends AbstractEntityController
             ->getResult();
     }
 
-    /**
-     * Returns if the given calculation has an overall margin below the minimum.
-     *
-     * @param Calculation $calculation the calculation to verify
-     *
-     * @return bool true if margin is below
-     */
     private function isMarginBelow(Calculation $calculation): bool
     {
-        $margin = $this->getApplication()->getMinMargin();
-
-        return $calculation->isMarginBelow($margin);
+        return $this->getApplication()->isMarginBelow($calculation);
     }
 }

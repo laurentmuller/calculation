@@ -58,7 +58,6 @@ class RegistrationController extends AbstractController
             $this->repository->add($user);
 
             try {
-                // generate a signed url and send email
                 $email = $this->createEmail($user);
                 $this->verifier->sendEmail(self::ROUTE_VERIFY, $user, $email);
 

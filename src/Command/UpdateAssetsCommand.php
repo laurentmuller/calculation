@@ -64,36 +64,26 @@ class UpdateAssetsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // to output messages
         $this->io = new SymfonyStyle($input, $output);
-
-        // public dir
         if (!$publicDir = $this->getPublicDir()) {
             $this->writeNote('No public directory found.');
 
             return Command::INVALID;
         }
-
-        // configuration
         if (null === ($configuration = $this->loadConfiguration($publicDir))) {
             $this->writeNote('No configuration found.');
 
             return Command::INVALID;
         }
-
-        // check values
         if (!$this->propertyExists($configuration, ['source', 'target', 'format', 'plugins'], true)) {
             return Command::INVALID;
         }
-
-        // get values
         /** @var string $source */
         $source = $configuration->source;
         $target = FileUtils::buildPath($publicDir, (string) $configuration->target);
         if (!$targetTemp = $this->getTargetTemp($publicDir)) {
             return Command::FAILURE;
         }
-
         /** @var string $format */
         $format = $configuration->format;
         /** @var \stdClass[] $plugins */
@@ -109,7 +99,6 @@ class UpdateAssetsCommand extends Command
         $countPlugins = 0;
 
         try {
-            // parse plugins
             foreach ($plugins as $plugin) {
                 $name = (string) $plugin->name;
                 $version = (string) $plugin->version;
@@ -118,27 +107,17 @@ class UpdateAssetsCommand extends Command
                     $this->writeVerbose("Skipping   '$display v$version'.", 'fg=gray');
                     continue;
                 }
-
                 $this->writeVerbose("Installing '$display v$version'.");
-
-                // copy files
                 /** @var string[] $files */
                 $files = $plugin->files;
                 foreach ($files as $file) {
-                    // get source
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
-
-                    // get target
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
-
-                    // copy
                     if ($this->copyFile($sourceFile, $targetFile, $prefixes, $suffixes, $renames)) {
                         ++$countFiles;
                     }
                 }
                 ++$countPlugins;
-
-                // check version
                 $versionSource = (string) ($plugin->source ?? $source);
                 if (false !== \stripos($versionSource, 'cdnjs')) {
                     $this->checkVersionCdnjs($name, $version);
@@ -146,8 +125,6 @@ class UpdateAssetsCommand extends Command
                     $this->checkVersionJsDelivr($name, $version);
                 }
             }
-
-            // check loaded files
             $expected = \array_reduce($plugins, function (int $carry, \stdClass $plugin) {
                 if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
                     return $carry;
@@ -158,16 +135,12 @@ class UpdateAssetsCommand extends Command
             if ($expected !== $countFiles) {
                 $this->writeError("Not all files has been loaded! Expected: $expected, Loaded: $countFiles.");
             }
-
-            // rename directory
             $this->writeVerbose("Rename directory '$targetTemp' to '$target'.");
             if (!$this->rename($targetTemp, $target)) {
                 $this->writeError("Unable rename directory '$targetTemp' to '$target'.");
 
                 return Command::FAILURE;
             }
-
-            // result
             $this->writeSuccess("Installed $countPlugins plugins and $countFiles files to the directory '$target'.");
 
             return Command::SUCCESS;
@@ -176,7 +149,6 @@ class UpdateAssetsCommand extends Command
 
             return Command::FAILURE;
         } finally {
-            // remove temp directory
             $this->remove($targetTemp);
         }
     }
@@ -189,7 +161,6 @@ class UpdateAssetsCommand extends Command
 
             return;
         }
-
         foreach ($paths as $path) {
             if (!isset($content->$path)) {
                 $this->write("Unable to find the path '$path' for the plugin '$name'.");
@@ -199,7 +170,6 @@ class UpdateAssetsCommand extends Command
             /** @var \stdClass $content */
             $content = $content->$path;
         }
-
         /** @var string $newVersion */
         $newVersion = $content;
         if (\version_compare($version, $newVersion, '<')) {
@@ -268,7 +238,6 @@ class UpdateAssetsCommand extends Command
                     $result .= "}\n";
                 }
             }
-
             if (!empty($result)) {
                 return "\n/*\n * '$newStyle' (copied from '$searchStyle')  \n */\n" . $result;
             }
@@ -284,40 +253,25 @@ class UpdateAssetsCommand extends Command
      */
     private function dumpFile(string $content, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
-        // get extension
         $ext = \pathinfo($targetFile, \PATHINFO_EXTENSION);
-
-        // add prefix
         if (isset($prefixes[$ext])) {
             $content = $prefixes[$ext] . $content;
         }
-
-        // add suffix
         if (isset($suffixes[$ext])) {
             $content .= $suffixes[$ext];
         }
-
-        // rename
         foreach ($renames as $reg => $replace) {
             $pattern = "/$reg/";
             $targetFile = (string) \preg_replace($pattern, $replace, $targetFile);
         }
-
-        // css?
         if ('css' === \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
             $content = \str_replace('/*!', '/*', $content);
         }
-
-        // bootstrap.css?
         $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
         if (\in_array($name, self::BOOTSTRAP_FILES_STYLE, true)) {
             $content = $this->updateStyle($content);
         }
-
-        // write target
         $this->writeFile($targetFile, $content);
-
-        // set read-only
         FileUtils::chmod($targetFile, 0o644, false);
 
         return true;
@@ -379,18 +333,12 @@ class UpdateAssetsCommand extends Command
     {
         $name = (string) $plugin->name;
         $version = (string) $plugin->version;
-
-        // source
         if (\property_exists($plugin, 'source') && null !== $plugin->source) {
             $source = (string) $plugin->source;
         }
-
-        // format
         if (\property_exists($plugin, 'format') && null !== $plugin->format) {
             $format = (string) $plugin->format;
         }
-
-        // replace
         $search = ['{source}', '{name}', '{version}', '{file}'];
         $replace = [$source, $name, $version, $file];
 
@@ -417,14 +365,12 @@ class UpdateAssetsCommand extends Command
 
     private function loadConfiguration(string $publicDir): ?\stdClass
     {
-        // check file
         $vendorFile = FileUtils::buildPath($publicDir, self::VENDOR_FILE_NAME);
         if (!FileUtils::exists($publicDir) || !FileUtils::exists($vendorFile)) {
             $this->writeVerbose("The file '$vendorFile' does not exist.");
 
             return null;
         }
-
         $configuration = $this->loadJson($vendorFile);
         if (!$configuration instanceof \stdClass) {
             return null;
@@ -438,7 +384,6 @@ class UpdateAssetsCommand extends Command
         if (!$content = $this->readFile($filename)) {
             return false;
         }
-
         $data = \json_decode($content, false);
         if (\JSON_ERROR_NONE !== \json_last_error()) {
             $this->writeError(\json_last_error_msg());
@@ -478,7 +423,6 @@ class UpdateAssetsCommand extends Command
     {
         $this->writeVeryVerbose("Load '$filename'");
         $content = \file_get_contents($filename);
-
         if (!\is_string($content)) {
             $this->writeError("Unable to get content of '$filename'.");
 
@@ -532,14 +476,10 @@ class UpdateAssetsCommand extends Command
             '.btn-secondary' => '.toast-header-secondary',
             '.btn-dark' => '.toast-header-dark',
         ];
-
-        // copy styles
         $toAppend = '';
         foreach ($styles as $searchStyle => $newStyle) {
             $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle);
         }
-
-        // context menu
         $toAppend .= $this->copyStyleEntries(
             $content,
             '.dropdown-menu',
@@ -570,15 +510,12 @@ class UpdateAssetsCommand extends Command
             '.context-menu-header',
             ['color', 'display', 'font-size', 'margin-bottom', 'white-space']
         );
-
-        // simple editor
         $toAppend .= $this->copyStyleEntries(
             $content,
             '.form-control',
             '.simple-editor',
             ['color', 'background-color']
         );
-
         if (empty($toAppend)) {
             return $content;
         }

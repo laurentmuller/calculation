@@ -145,7 +145,6 @@ class SchemaController extends AbstractController
         if ([] === $associationNames) {
             return [];
         }
-
         $result = [];
         foreach ($associationNames as $associationName) {
             $targetClass = $metaData->getAssociationTargetClass($associationName);

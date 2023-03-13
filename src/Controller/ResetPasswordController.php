@@ -67,9 +67,6 @@ class ResetPasswordController extends AbstractController
     #[Route(path: '/check-email', name: self::ROUTE_CHECK)]
     public function checkEmail(): Response
     {
-        // prevent users from directly accessing this page
-        // generates a fake token if the user does not exist or
-        // someone hit this page directly.
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             $resetToken = $this->helper->generateFakeResetToken();
         }
@@ -108,13 +105,10 @@ class ResetPasswordController extends AbstractController
     public function reset(Request $request, ?string $token = null): Response
     {
         if (null !== $token) {
-            // we store the token in session and remove it from the URL, to avoid the URL being
-            // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
             $this->storeTokenInSession($token);
 
             return $this->redirectToRoute(self::ROUTE_RESET);
         }
-
         $token = $this->getTokenFromSession();
         if (null === $token) {
             throw $this->createNotFoundException($this->trans('reset_not_found_password_token', [], 'security'));
@@ -128,18 +122,12 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute(self::ROUTE_FORGET);
         }
-        // the token is valid; allow the user to change their password.
         $form = $this->createForm(ResetChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
-            // a password reset token should be used only once, remove it
             $this->helper->removeResetRequest($token);
-            //  save user
             $this->repository->flush();
-
-            // the session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            // redirect
             return $this->redirectToHomePage('resetting.success', ['%username%' => $user->getUserIdentifier()], FlashType::INFO);
         }
 
@@ -201,7 +189,6 @@ class ResetPasswordController extends AbstractController
      */
     private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer): RedirectResponse
     {
-        // do not reveal whether a user account was found or not.
         $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
         if (!$user instanceof User) {
             return $this->redirectToRoute(self::ROUTE_CHECK);

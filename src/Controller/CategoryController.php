@@ -84,7 +84,6 @@ class CategoryController extends AbstractEntityController
     #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
-        // external references?
         $tasks = $taskRepository->countCategoryReferences($item);
         $products = $productRepository->countCategoryReferences($item);
         $calculations = $categoryRepository->countCategoryReferences($item);
@@ -100,8 +99,6 @@ class CategoryController extends AbstractEntityController
                 $items[] = $this->trans('counters.tasks', ['count' => $tasks]);
             }
             $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
-
-            // parameters
             $parameters = [
                 'item' => $item,
                 'id' => $item->getId(),

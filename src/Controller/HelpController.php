@@ -43,7 +43,6 @@ class HelpController extends AbstractController
         if (null === $dialog) {
             throw $this->createNotFoundException("Unable to find the resource for the dialog '$id'.");
         }
-
         /** @psalm-var HelpEntityType|null $entity */
         $entity = $service->findEntityByDialog($dialog);
 

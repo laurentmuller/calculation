@@ -43,26 +43,18 @@ class MonthChart extends BaseChart
      */
     public function generate(int $months): array
     {
-        // get values
         $allowedMonths = $this->getAllowedMonths();
         $months = $this->checkMonth($months, $allowedMonths);
         $data = $this->repository->getByMonth($months);
-
         $dateValues = $this->getDateValues($data);
         $countValues = $this->getCountValues($data);
         $itemValues = $this->getItemValues($data);
         $sumValues = $this->getSumValues($data);
         $marginPercents = $this->getMarginPercents($data);
         $marginAmounts = $this->getMarginAmounts($data);
-
-        // series
         $series = $this->getSeries($data);
-
-        // axes
         $yAxis = $this->getYaxis();
         $xAxis = $this->getXAxis($dateValues);
-
-        // update
         $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
             ->hideLegend()
@@ -71,8 +63,6 @@ class MonthChart extends BaseChart
             ->xAxis($xAxis)
             ->yAxis($yAxis)
             ->series($series);
-
-        // data
         $data = [];
         foreach ($dateValues as $index => $date) {
             $data[] = [
@@ -84,7 +74,6 @@ class MonthChart extends BaseChart
                 'marginPercent' => $marginPercents[$index],
             ];
         }
-
         $count = \array_sum($countValues);
         $total = (float) \array_sum($sumValues);
         $items = (float) \array_sum($itemValues);
@@ -190,7 +179,6 @@ class MonthChart extends BaseChart
         $marginAmount = $this->transChart('fields.margin_amount');
         $marginPercent = $this->transChart('fields.margin_percent');
         $sep = '&nbsp:&nbsp';
-
         $function = <<<JAVA_SCRIPT
             function () {
                 const ptMargin = this.points[0];

@@ -25,6 +25,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Class to generate entities.
+ *
+ * @template T of \App\Entity\AbstractEntity
  */
 abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSubscriberInterface
 {

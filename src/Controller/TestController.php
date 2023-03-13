@@ -86,7 +86,6 @@ class TestController extends AbstractController
             'email' => $this->getUserEmail(),
             'importance' => Importance::MEDIUM,
         ];
-
         $helper = $this->createFormHelper('user.fields.', $data);
         $helper->field('email')
             ->addEmailType();
@@ -104,8 +103,6 @@ class TestController extends AbstractController
                 'maxsizetotal' => '30mi', ])
             ->notRequired()
             ->addFileType();
-
-        // handle request
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $user = $this->getUser();
@@ -138,15 +135,11 @@ class TestController extends AbstractController
     #[Route(path: '/html', name: 'test_html')]
     public function html(): PdfResponse
     {
-        // get content
         $content = $this->renderView('test/html_report.html.twig');
-
-        // create report
         $report = new HtmlReport($this);
         $report->setContent($content)
             ->SetTitle($this->trans('test.html'), true);
 
-        // render
         return $this->renderPdfDocument($report);
     }
 
@@ -197,7 +190,6 @@ class TestController extends AbstractController
             $strength = (int) $data['level'];
             $strengthConstraint->minimum = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;
         };
-
         $data = [
             'input' => 'aB123456#*/82568A',
             'level' => StrengthLevel::MEDIUM,
@@ -205,10 +197,8 @@ class TestController extends AbstractController
         foreach ($options as $option) {
             $data[$option] = true;
         }
-
         $helper = $this->createFormHelper('password.', $data);
         $helper->listenerPreSubmit($listener);
-
         $helper->field('input')
             ->widgetClass('password-strength')
             ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
@@ -233,21 +223,17 @@ class TestController extends AbstractController
         $helper->field('alpha')
             ->label('captcha.label')
             ->add(AlphaCaptchaType::class);
-
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $message = $this->trans('password.success');
             $message .= '<ul>';
-
-            // options
             foreach ($options as $option) {
                 if ($data[$option]) {
                     $message .= '<li>' . $this->trans("password.$option") . '</li>';
                 }
             }
-
             /** @psalm-var StrengthLevel $level */
             $level = $data['level'];
             if (StrengthLevel::NONE !== $level) {
@@ -280,14 +266,10 @@ class TestController extends AbstractController
             ->field('message')->addTextType()
             ->field('recaptcha')->addHiddenType()
             ->getBuilder()->setAttribute('block_name', '');
-
-        // render
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $response = (string) $form->get('recaptcha')->getData();
             $result = $service->verify($request, $response);
-
-            // OK?
             if ($result->isSuccess()) {
                 /** @psalm-var array<string, string[]|string> $values */
                 $values = $result->toArray();
@@ -295,8 +277,6 @@ class TestController extends AbstractController
 
                 return $this->redirectToHomePage($html);
             }
-
-            // translate and add errors
             $errors = $service->translateErrors($result->getErrorCodes());
             foreach ($errors as $error) {
                 $form->addError(new FormError($error));
@@ -320,9 +300,7 @@ class TestController extends AbstractController
         $zip = $this->getRequestString($request, 'zip');
         $city = $this->getRequestString($request, 'city');
         $street = $this->getRequestString($request, 'street');
-
         $limit = $this->getRequestInt($request, 'limit', 25);
-
         if (null !== $all) {
             $rows = $service->findAll($all, $limit);
         } elseif (null !== $zip) {
@@ -334,7 +312,6 @@ class TestController extends AbstractController
         } else {
             $rows = [];
         }
-
         $data = [
             'result' => [] !== $rows,
             'query' => $all ?? $zip ?? $city ?? $street ?? '',
@@ -356,10 +333,7 @@ class TestController extends AbstractController
     {
         $service = $factory->getSessionService();
         $languages = $service->getLanguages();
-
-        // check error
         if (null !== $error = $service->getLastError()) {
-            // translate message
             $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));
@@ -373,8 +347,6 @@ class TestController extends AbstractController
             $this->error($message);
             $error = true;
         }
-
-        // form and parameters
         $parameters = [
             'form' => $this->createForm(),
             'service' => $service,
@@ -390,7 +362,6 @@ class TestController extends AbstractController
     #[Route(path: '/tree', name: 'test_tree')]
     public function tree(Request $request, EntityManagerInterface $manager): Response
     {
-        // JSON?
         if ($request->isXmlHttpRequest()) {
             $count = 0;
             $nodes = [];
@@ -402,7 +373,6 @@ class TestController extends AbstractController
                     'icon' => 'fas fa-code-branch fa-fw',
                     'badgeValue' => $group->countItems(),
                 ];
-
                 foreach ($group->getCategories() as $category) {
                     $count += $category->countItems();
 
@@ -413,12 +383,8 @@ class TestController extends AbstractController
                         'badgeValue' => $category->countItems(),
                     ];
                 }
-
                 $nodes[] = $node;
             }
-
-            // root
-
             $root = [
                 'id' => 'root',
                 'text' => 'Catalogue',
@@ -457,7 +423,6 @@ class TestController extends AbstractController
             $row[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
             $row[SearchService::COLUMN_CONTENT] = $service->formatContent("$type.$field", $row[SearchService::COLUMN_CONTENT]);
         }
-
         $data = [
             'query' => $query,
             'entity' => $entity,
@@ -549,7 +514,6 @@ class TestController extends AbstractController
                 'name' => "$name - $symbol",
             ];
         }, Currencies::getCurrencyCodes());
-
         $currencies = \array_filter($currencies, static fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name']));
         \usort($currencies, static fn (array $left, array $right): int => \strnatcasecmp((string) $left['name'], (string) $right['name']));
 

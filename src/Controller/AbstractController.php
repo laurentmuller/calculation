@@ -364,17 +364,13 @@ abstract class AbstractController extends BaseController
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
-        // render
         if ($doc instanceof AbstractReport && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-
-        // title
         if (empty($name) && \is_string($title = $doc->getTitle())) {
             $name = $title;
         }
 
-        // create response
         return new PdfResponse($doc, $inline, $name);
     }
 
@@ -391,12 +387,9 @@ abstract class AbstractController extends BaseController
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
     {
-        // render
         if ($doc instanceof AbstractDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-
-        // title
         if (empty($name) && \is_string($title = $doc->getTitle())) {
             $name = \sprintf('%s.xlsx', $title);
         }

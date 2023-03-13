@@ -36,7 +36,6 @@ class SecurityController extends AbstractController
         if (null !== $user) {
             return $this->redirectToHomePage();
         }
-
         $form = $this->createForm(UserLoginType::class, [
             'username' => $utils->getLastUsername(),
             'remember_me' => true,

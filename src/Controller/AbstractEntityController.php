@@ -83,19 +83,12 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
-        // check permission
         $this->checkPermission(EntityPermission::DELETE);
-
-        // add item as parameter
         $parameters['item'] = $item;
-
-        // create form and handle request
         $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
-                // remove
                 $this->deleteFromDatabase($item);
-                // message
                 $message = $this->getMessageTrans($item, '.delete.success', 'common.delete_success');
                 $this->warning($message);
             } catch (\Exception $e) {
@@ -103,21 +96,17 @@ abstract class AbstractEntityController extends AbstractController
 
                 return $this->renderFormException($id, $e, $logger);
             }
-
-            // redirect
             $id = 0;
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
-        // update parameters
         $parameters['form'] = $form;
         $parameters['title'] = $this->getMessageId('.delete.title', 'common.delete_title');
         $parameters['message'] = $this->getMessageTrans($item, '.delete.message', 'common.delete_message');
         $this->updateQueryParameters($request, $parameters, $item->getId());
 
-        // show page
         return $this->render('cards/card_delete.html.twig', $parameters);
     }
 
@@ -144,34 +133,26 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
-        // check permission
         $isNew = $item->isNew();
         $permission = $isNew ? EntityPermission::ADD : EntityPermission::EDIT;
         $this->checkPermission($permission);
-
-        // form
         /** @psalm-var class-string<\Symfony\Component\Form\FormTypeInterface> $type  */
         $type = $this->getEditFormType();
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // save
             $this->saveToDatabase($item);
-            // message
             if ($isNew) {
                 $message = $this->getMessageTrans($item, '.add.success', 'common.add_success');
             } else {
                 $message = $this->getMessageTrans($item, '.edit.success', 'common.edit_success');
             }
             $this->success($message);
-
-            // redirect
             $id = $item->getId();
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
-        // update parameters
         $parameters['new'] = $isNew;
         $parameters['item'] = $item;
         $parameters['form'] = $form;
@@ -291,13 +272,9 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function showEntity(AbstractEntity $item, array $parameters = []): Response
     {
-        // check permission
         $this->checkPermission(EntityPermission::SHOW);
-
-        // add item parameter
         $parameters['item'] = $item;
 
-        // render
         return $this->render($this->getShowTemplate(), $parameters);
     }
 

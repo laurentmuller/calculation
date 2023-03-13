@@ -32,20 +32,12 @@ class ProductUpdateController extends AbstractController
     #[Route(path: '/product', name: 'admin_product')]
     public function invoke(Request $request, ProductUpdater $updater): Response
     {
-        // create form
         $application = $this->getApplication();
         $query = $updater->createUpdateQuery();
         $form = $updater->createForm($query);
-
-        // handle request
         if ($this->handleRequestForm($request, $form)) {
-            // save query
             $updater->saveUpdateQuery($query);
-
-            // update
             $result = $updater->update($query);
-
-            // update last date
             if (!$query->isSimulate() && $result->isValid()) {
                 $application->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, new \DateTime());
             }
@@ -56,7 +48,7 @@ class ProductUpdateController extends AbstractController
             ]);
         }
 
-        return $this->render('admin/product_update.html.twig', [
+        return $this->render('admin/product_query.html.twig', [
             'last_update' => $application->getUpdateProducts(),
             'form' => $form,
         ]);

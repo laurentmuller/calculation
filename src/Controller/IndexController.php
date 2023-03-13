@@ -83,7 +83,6 @@ class IndexController extends AbstractController
             $parameters['state_count'] = $this->count(CalculationState::class);
             $parameters['margin_count'] = $this->count(GlobalMargin::class);
         }
-
         $path = $this->getCookiePath();
         $response = $this->render('index/index.html.twig', $parameters);
         $this->setCookie($response, self::PARAM_RESTRICT, $restrict, '', $path);
@@ -117,8 +116,6 @@ class IndexController extends AbstractController
     private function getStates(): array
     {
         $results = $this->manager->getRepository(CalculationState::class)->getCalculations();
-
-        // add overall entry
         $count = \array_sum(\array_column($results, 'count'));
         $total = \array_sum(\array_column($results, 'total'));
         $items = \array_sum(\array_column($results, 'items'));

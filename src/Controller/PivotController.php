@@ -60,30 +60,19 @@ class PivotController extends AbstractController
     #[Route(path: '/csv', name: 'calculation_pivot_csv')]
     public function toCsv(): CsvResponse
     {
-        // load data
         $dataset = $this->getDataset();
-        // callback
         $callback = function () use ($dataset): void {
-            // data?
             if ([] !== $dataset) {
                 /** @var resource $handle */
                 $handle = \fopen('php://output', 'w+');
-
-                // utf-8
                 \fprintf($handle, \chr(0xEF) . \chr(0xBB) . \chr(0xBF));
-
-                // headers
                 \fputcsv($handle, \array_keys($dataset[0]), ';');
-
-                // rows
                 foreach ($dataset as $row) {
                     $row['calculation_date'] = FormatUtils::formatDate($row['calculation_date']);
                     $row['calculation_overall_margin'] = \round($row['calculation_overall_margin'], 3);
                     $row['item_total'] = \round($row['item_total'], 2);
                     \fputcsv($handle, $row, ';');
                 }
-
-                // close
                 \fclose($handle);
             }
         };
@@ -128,11 +117,8 @@ class PivotController extends AbstractController
      */
     private function getTable(): ?PivotTable
     {
-        // callbacks
         $semesterFormatter = fn (int $semestre): string => $this->trans("pivot.semester.$semestre");
         $quarterFormatter = fn (int $quarter): string => $this->trans("pivot.quarter.$quarter");
-
-        // fields
         $key = PivotFieldFactory::integer('calculation_id', $this->trans('calculation.fields.id'));
         $data = PivotFieldFactory::float('calculation_overall_total', $this->trans('calculation.fields.overallTotal'));
         $rows = [
@@ -148,11 +134,9 @@ class PivotController extends AbstractController
                 ->setFormatter($quarterFormatter),
             PivotFieldFactory::month('calculation_date', $this->trans('pivot.fields.month')),
         ];
-
         $dataset = $this->getDataset();
         $title = $this->trans('calculation.list.title');
 
-        // create pivot table
         return PivotTableFactory::instance($dataset, $title, SumAggregator::class)
             ->setColumnFields($columns)
             ->setRowFields($rows)

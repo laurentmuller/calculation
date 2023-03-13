@@ -46,18 +46,14 @@ class LogController extends AbstractController
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
-        // empty?
         $logFile = $service->getLogFile();
         if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
             return $this->getEmptyResponse();
         }
-
-        // handle request
         $file = $logFile->getFile();
         $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
-                // delete file
                 FileUtils::remove($file);
             } catch (\Exception $e) {
                 return $this->renderFormException('log.delete.error', $e, $logger);

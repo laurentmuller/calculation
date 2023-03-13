@@ -286,11 +286,9 @@ class AboutController extends AbstractController
     {
         $matches = [];
         $regex = '/Apache\/(?P<version>[1-9]\d*\.\d[^\s]*)/i';
-
         if (\function_exists('apache_get_version') && (($version = apache_get_version()) && \preg_match($regex, $version, $matches))) {
             return $matches['version'];
         }
-
         $server = $request->server;
         /** @psalm-var string|null $software */
         $software = $server->get('SERVER_SOFTWARE');

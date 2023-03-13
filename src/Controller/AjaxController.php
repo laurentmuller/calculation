@@ -77,10 +77,8 @@ class AjaxController extends AbstractController
     #[Route(path: '/check/user/email', name: 'ajax_check_user_email')]
     public function checkUserEmail(Request $request, UserRepository $repository): JsonResponse
     {
-        // get values
         $id = $this->getRequestInt($request, 'id');
         $email = $this->getRequestString($request, 'email');
-        // check
         $message = null;
         if (empty($email)) {
             $message = 'email.blank';
@@ -108,10 +106,8 @@ class AjaxController extends AbstractController
     #[Route(path: '/check/user/name', name: 'ajax_check_user_name')]
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
-        // get values
         $id = $this->getRequestInt($request, 'id');
         $username = $this->getRequestString($request, 'username');
-        // check
         $message = null;
         if (empty($username)) {
             $message = 'username.blank';
@@ -144,7 +140,6 @@ class AjaxController extends AbstractController
                 'message' => $this->trans('task_compute.error.task'),
             ]);
         }
-
         $result = $service->computeQuery($query);
         $data = \array_merge($result->jsonSerialize(), [
             'message' => $this->trans('task_compute.success'),
@@ -162,12 +157,9 @@ class AjaxController extends AbstractController
     #[Route(path: '/detect', name: 'ajax_detect')]
     public function detect(Request $request, TranslatorFactory $factory): JsonResponse
     {
-        // get parameters
         $text = $this->getRequestString($request, 'text', '');
         $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
-
-        // check parameters
         if (!StringUtils::isString($text)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
@@ -175,7 +167,6 @@ class AjaxController extends AbstractController
         }
 
         try {
-            // translate
             if ($result = $service->detect($text)) {
                 return $this->jsonTrue([
                     'service' => $service::getName(),
@@ -183,7 +174,6 @@ class AjaxController extends AbstractController
                 ]);
             }
 
-            // error
             return $this->handleTranslationError($service, 'translator.detect_error');
         } catch (\Exception $e) {
             return $this->jsonException($e, $this->trans('translator.detect_error'));
@@ -217,13 +207,10 @@ class AjaxController extends AbstractController
     #[Route(path: '/password', name: 'ajax_password')]
     public function password(Request $request, PasswordService $service, #[Autowire('%kernel.debug')] bool $debug): JsonResponse
     {
-        // get values
         $password = $this->getRequestString($request, 'password', '');
         $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE);
         $email = $this->getRequestString($request, 'email');
         $user = $this->getRequestString($request, 'user');
-
-        // get results
         $results = $service->validate($password, $strength, $email, $user);
         if ($debug) {
             \ksort($results);
@@ -239,7 +226,6 @@ class AjaxController extends AbstractController
     #[Route(path: '/random/text', name: 'ajax_random_text')]
     public function randomText(Request $request, FakerService $service): JsonResponse
     {
-        // get parameters
         $maxNbChars = $this->getRequestInt($request, 'maxNbChars', 145);
         $indexSize = $this->getRequestInt($request, 'indexSize', 2);
         $generator = $service->getGenerator();
@@ -266,8 +252,6 @@ class AjaxController extends AbstractController
                 $menu = \filter_var($menu, \FILTER_VALIDATE_BOOLEAN);
                 $session->set($key, $menu);
             }
-
-            // save hidden menu state to cookie
             $response = $this->json(true);
             $path = $this->getCookiePath();
             $isHidden = $menus['menu_sidebar_hide'] ?? true;
@@ -308,7 +292,6 @@ class AjaxController extends AbstractController
     {
         $requestView = $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE);
         $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
-
         $response = $this->json(true);
         $path = $this->getCookiePath();
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $path);
@@ -371,7 +354,6 @@ class AjaxController extends AbstractController
                 'values' => [],
             ]);
         }
-        // field
         $field = $this->getRequestString($request, 'field');
         if (!StringUtils::isString($field)) {
             return $this->jsonFalse([
@@ -406,7 +388,6 @@ class AjaxController extends AbstractController
                 }
             }
 
-            // empty
             return $this->jsonFalse([
                 'products' => [],
             ]);
@@ -454,17 +435,14 @@ class AjaxController extends AbstractController
     #[Route(path: '/translate', name: 'ajax_translate')]
     public function translate(Request $request, TranslatorFactory $factory): JsonResponse
     {
-        // ajax call ?
         if (null !== ($response = $this->checkAjaxCall($request))) {
             return $response;
         }
-        // get parameters
         $to = $this->getRequestString($request, 'to', '');
         $from = $this->getRequestString($request, 'from');
         $text = $this->getRequestString($request, 'text', '');
         $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
-        // check parameters
         if (!StringUtils::isString($text)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
@@ -477,7 +455,6 @@ class AjaxController extends AbstractController
         }
 
         try {
-            // translate
             if ($result = $service->translate($text, $to, $from)) {
                 return $this->jsonTrue([
                     'service' => $service::getName(),
@@ -485,7 +462,6 @@ class AjaxController extends AbstractController
                 ]);
             }
 
-            // error
             return $this->handleTranslationError($service, 'translator.translate_error');
         } catch (\Exception $e) {
             return $this->jsonException($e, $this->trans('translator.translate_error'));
@@ -499,33 +475,21 @@ class AjaxController extends AbstractController
     #[Route(path: '/update', name: 'ajax_update')]
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
-        // ajax call ?
         if (null !== ($response = $this->checkAjaxCall($request))) {
             return $response;
         }
 
         try {
-            // source
             $source = $this->getRequestAll($request, 'calculation');
-
-            // compute
             $parameters = $service->createGroupsFromData($source);
-
-            // OK?
             if (false === $parameters['result']) {
                 return $this->json($parameters);
             }
-
-            // adjust user margin?
             $parameters['min_margin'] = $service->getMinMargin();
             if ($this->getRequestBoolean($request, 'adjust') && $parameters['overall_below']) {
                 $service->adjustUserMargin($parameters);
             }
-
-            // render table
             $body = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
-
-            // ok
             $result = [
                 'result' => true,
                 'body' => $body,
@@ -537,7 +501,6 @@ class AjaxController extends AbstractController
 
             return $this->json($result);
         } catch (\Exception $e) {
-            // log
             $message = $this->trans('calculation.edit.error.update_total');
             $context = Utils::getExceptionContext($e);
             $logger->error($message, $context);
@@ -553,7 +516,6 @@ class AjaxController extends AbstractController
      */
     private function checkAjaxCall(Request $request): ?JsonResponse
     {
-        // ajax call ?
         if (!$request->isXmlHttpRequest()) {
             return $this->jsonFalse([
                 'message' => $this->trans('errors.invalid_request'),
@@ -612,7 +574,6 @@ class AjaxController extends AbstractController
                 }
             }
 
-            // empty
             return $this->jsonFalse([
                 'values' => [],
             ]);

@@ -2,9 +2,6 @@ name: Psalm
 
 on: [push, pull_request]
 
-env:
-  COMPOSER_FLAGS: '-q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist'
-
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -2,6 +2,9 @@ name: Psalm
 
 on: [push, pull_request]
 
+env:
+  COMPOSER_FLAGS: '-q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,11 +33,11 @@ jobs:
           restore-keys: composer-${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install $COMPOSER_FLAGS
 
       - name: Install psalm
         working-directory: ./vendor-bin/psalm
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install $COMPOSER_FLAGS
 
       - name: Run psalm
         run: vendor-bin/psalm/vendor/bin/psalm src

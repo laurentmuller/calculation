@@ -45,16 +45,7 @@ class CalculationGenerator extends AbstractEntityGenerator
         $entities = [];
         [$min, $max] = $this->getMinMax($generator);
         for ($i = 0; $i < $count; ++$i) {
-            $date = $generator->dateTimeBetween('today', 'last day of next month');
-            $entity = new Calculation();
-            $this->generateProducts($entity, $min, $max, $generator)
-                ->setDescription($generator->catchPhrase())
-                ->setUserMargin($generator->randomFloat(2, 0, 0.1))
-                ->setCustomer($generator->name())
-                ->setState($generator->state())
-                ->setDate($date);
-            $this->service->updateTotal($entity);
-            $entities[] = $entity;
+            $entities[] = $this->createEntity($min, $max, $generator);
         }
 
         return $entities;
@@ -78,8 +69,26 @@ class CalculationGenerator extends AbstractEntityGenerator
         ];
     }
 
-    private function generateProducts(Calculation $entity, int $min, int $max, Generator $generator): Calculation
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function createEntity(int $min, int $max, Generator $generator): Calculation
     {
+        $date = $generator->dateTimeBetween('today', 'last day of next month');
+        $entity = $this->generateEntity($min, $max, $generator)
+            ->setDescription($generator->catchPhrase())
+            ->setUserMargin($generator->randomFloat(2, 0, 0.1))
+            ->setCustomer($generator->name())
+            ->setState($generator->state())
+            ->setDate($date);
+        $this->service->updateTotal($entity);
+
+        return $entity;
+    }
+
+    private function generateEntity(int $min, int $max, Generator $generator): Calculation
+    {
+        $entity = new Calculation();
         $products = $generator->products($generator->numberBetween($min, $max));
         foreach ($products as $product) {
             $item = CalculationItem::create($product)->setQuantity($generator->numberBetween(1, 10));

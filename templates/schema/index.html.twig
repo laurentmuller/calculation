@@ -4,16 +4,19 @@
 {%- set title = 'schema.index.title' -%}
 {%- set title_description = 'schema.index.description' -%}
 {%- set title_icon = 'table' -%}
+{# class styles #}
+{% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {# body #}
 {% block card_body -%}
 <div class="table-responsive">
     <table class="table table-hover table-list table-sm">
         <thead>
             <tr>
-                <th class="w-100 text-nowrap">{{ 'schema.index.fields.name'|trans }}</th>
-                <th class="text-right">{{ 'schema.index.fields.count'|trans }}</th>
-                <th class="text-right">{{ 'schema.table.fields.records'|trans }}</th>
-                <th class="text-right">{{ 'schema.table.associations'|trans }}</th>
+                <th class="w-100 text-nowrap">{{ 'schema.fields.name'|trans }}</th>
+                <th class="text-right">{{ 'schema.fields.columns'|trans }}</th>
+                <th class="text-right">{{ 'schema.fields.records'|trans }}</th>
+                <th class="text-right">{{ 'schema.fields.indexes'|trans }}</th>
+                <th class="text-right">{{ 'schema.fields.associations'|trans }}</th>
             </tr>
         </thead>
         <tbody data-link="row" class="rowlink">
@@ -23,6 +26,7 @@
                 <td class="w-100 text-nowrap"><a href="{{ path('schema_table', {'name': name}) }}">{{ name }}</a></td>
                 <td class="text-right">{{ table.columns|integer }}</td>
                 <td class="text-right">{{ table.records|integer }}</td>
+                <td class="text-right">{{ table.indexes|integer }}</td>
                 <td class="text-right">{{ table.associations|integer }}</td>
             </tr>
         {% endfor %}

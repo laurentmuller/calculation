@@ -49,11 +49,18 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
      */
     public function generate(int $count, bool $simulate): JsonResponse
     {
+        if ($count <= 0) {
+            return new JsonResponse([
+                'result' => false,
+                'message' => $this->trans('generate.error.empty'),
+            ]);
+        }
+
         try {
             $items = [];
             $entities = $this->createEntities($count, $simulate, $this->generator);
             if (($count = \count($entities)) > 0) {
-                $items = $this->mapEntities($entities, $simulate);
+                $items = $this->saveAndMapEntities($entities, $simulate);
             }
 
             return new JsonResponse([
@@ -94,10 +101,8 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
 
     /**
      * @param T[] $entities
-     *
-     * @return array<array<string, mixed>>
      */
-    private function mapEntities(array $entities, bool $simulate): array
+    private function saveAndMapEntities(array $entities, bool $simulate): array
     {
         $items = [];
         foreach ($entities as $entity) {

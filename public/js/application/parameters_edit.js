@@ -92,14 +92,6 @@ function displayNotification() {
     });
 }
 
-function handleUrl() {
-    'use strict';
-    const handler = function (value) {
-        window.open(value, '_blank');
-    };
-    handleInput('#customer_url', '.input-group-url', handler);
-}
-
 /**
  * @param {string} inputId the input selector.
  * @param {string} groupId the group selector.
@@ -130,6 +122,14 @@ function handleInput(inputId, groupId, callback) {
             $group.addClass('cursor-pointer').on('click', handler);
         }
     }).trigger('input');
+}
+
+function handleUrl() {
+    'use strict';
+    const handler = function (value) {
+        window.open(value, '_blank');
+    };
+    handleInput('#customer_url', '.input-group-url', handler);
 }
 
 function handlePhone() {

@@ -2,43 +2,53 @@
 {% from 'macros/_icons.html.twig' import link, homepage %}
 {# macros #}
 {% macro output_required(column) -%}
-{%- set required = column.nullable is defined ? not column.nullable : true -%}
-{% if required %}
-<i class="fa-solid fa-check"></i>
-{% endif %}
+{{- _self.output_checkbox(column.nullable is defined ? not column.nullable : true) -}}
+{%- endmacro %}
+{% macro output_checkbox(value) -%}
+{%- if value -%}
+    <i class="fa-solid fa-check"></i>
+{%- else -%}
+    &nbsp;
+{%- endif -%}
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'schema.table.title' -%}
 {%- set title_description = 'schema.table.description' -%}
 {%- set title_parameters = {'%name%': name} -%}
 {%- set title_icon = 'table-columns' -%}
+{# class styles #}
+{% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {# body #}
 {% block card_body -%}
 {% if columns|length %}
-<p class="mb-0 font-weight-bold">{{ 'schema.table.columns'|trans }}</p>
+{# columns #}
+<p class="mb-0 font-weight-bold">{{ 'schema.fields.columns'|trans }}</p>
 <div class="table-responsive">
     <table class="table table-hover table-list table-sm">
         <thead>
             <tr>
-                <th class="w-100 text-nowrap">{{ 'schema.table.fields.name'|trans }}</th>
-                <th class="text-group">{{ 'schema.table.fields.type'|trans }}</th>
-                <th class="text-boolean">{{ 'schema.table.fields.required'|trans }}</th>
-                <th class="text-nowrap text-center">{{ 'schema.table.fields.default'|trans }}</th>
+                <th class="w-100 text-nowrap">{{ 'schema.fields.name'|trans }}</th>
+                <th class="text-group">{{ 'schema.fields.type'|trans }}</th>
+                <th class="text-boolean">{{ 'schema.fields.required'|trans }}</th>
+                <th class="text-total">{{ 'schema.fields.default'|trans }}</th>
             </tr>
         </thead>
         <tbody>
         {% for column in columns %}
-            {% set foreign_table = column.foreignTableName ?? false %}
+            {% set foreign_name = column.foreign_name ?? false %}
             <tr>
                 <td class="w-100 text-nowrap">
-                    {% if column.primaryKey %}<i class="fa-solid fa-key mr-1" title="{{ 'schema.table.primary_key'|trans }}"></i>{% endif %}
-                    {% if column.unique and not column.primaryKey %}<i class="fa-solid fa-lock mr-1" title="{{ 'schema.table.index_unique'|trans }}"></i>{% endif %}
-                    {% if foreign_table -%}{{ link(path('schema_table', {'name': foreign_table}), null, null, 'link mr-1', 'schema.index.tooltip'|trans({'%name%': foreign_table})) }}{%- endif -%}
-                    {{ column.name }}
+                    {% if column.primary %}<i class="fa-solid fa-key fa-fw mr-1" title="{{ 'schema.fields.primary'|trans }}"></i>{% endif %}
+                    {% if column.unique and not column.primary %}<i class="fa-solid fa-lock fa-fw mr-1" title="{{ 'schema.fields.unique'|trans }}"></i>{% endif %}
+                    {%- if foreign_name -%}
+                        <a href="{{ path('schema_table', {'name': foreign_name}) }}" title="{% if foreign_name %}{{ 'schema.index.tooltip'|trans({'%name%': foreign_name}) }}"{% endif %}><i class="fa-solid fa-link fa-fw mr-1"></i>{{ column.name -}}</a>
+                    {%- else -%}
+                        {{- column.name -}}
+                    {%- endif -%}
                 </td>
                 <td class="text-group">{{ column.type }}{% if column.length %}({{ column.length|integer }}){% endif %}</td>
-                <td class="text-nowrap text-center">{{ _self.output_required(column) }}</td>
-                <td class="text-id">{{ column.default }}</td>
+                <td class="text-boolean text-success">{{ _self.output_required(column) }}</td>
+                <td class="text-total">{{ column.default }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -47,21 +57,47 @@
 {% else %}
     <div class="alert alert-warning text-center" role="alert">{{ 'schema.table.empty'|trans }}</div>
 {% endif %}
+{# indexes #}
+{% if columns|length and indexes|length %}
+<p class="mt-3 mb-0 font-weight-bold">{{ 'schema.fields.indexes'|trans }}</p>
+<div class="table-responsive">
+    <table class="table table-hover table-list table-sm">
+        <thead>
+            <tr>
+                <th class="w-50">{{ 'schema.fields.name'|trans }}</th>
+                <th class="w-50">{{ 'schema.fields.columns'|trans }}</th>
+                <th class="text-boolean">{{ 'schema.fields.primary'|trans }}</th>
+                <th class="text-boolean">{{ 'schema.fields.unique'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for index in indexes %}
+            <tr>
+                <td>{{ index.name }}</td>
+                <td>{{ index.columns|join(', ') }}</td>
+                <td class="text-boolean text-success">{{ _self.output_checkbox(index.primary) }}</td>
+                <td class="text-boolean text-success">{{ _self.output_checkbox(index.unique) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
 {# associations #}
-{% if associations|length %}
-<p class="mb-0 font-weight-bold">{{ 'schema.table.associations'|trans }}</p>
+{% if columns|length and associations|length %}
+<p class="mt-3 mb-0 font-weight-bold">{{ 'schema.fields.associations'|trans }}</p>
 <div class="table-responsive">
     <table class="table table-hover table-list table-sm">
         <tr>
-            <th class="w-30">{{ 'schema.table.fields.name'|trans }}</th>
-            <th class="w-35">{{ 'schema.table.fields.table'|trans }}</th>
-            <th class="w-25">{{ 'schema.table.fields.relation'|trans }}</th>
+            <th class="w-30">{{ 'schema.fields.name'|trans }}</th>
+            <th class="w-35">{{ 'schema.fields.table'|trans }}</th>
+            <th class="w-25">{{ 'schema.fields.relation'|trans }}</th>
         </tr>
         <tbody data-link="row" class="rowlink">
         {% for association in associations %}
-            <tr>
-                <td class="w-30 text-nowrap">{{ association.name }}</td>
-                <td class="w-35 text-nowrap"><a href="{{ association.table }}" title="{{ 'schema.index.tooltip'|trans({'%name%': association.table}) }}">{{ association.table }}</a></td>
+            <tr title="{{ 'schema.index.tooltip'|trans({'%name%': association.table}) }}">
+                <td class="w-30 text-nowrap"><a href="{{ association.table }}">{{ association.name }}</a></td>
+                <td class="w-35 text-nowrap">{{ association.table }}</td>
                 <td class="w-25 text-nowrap">{{ association.inverseSide|boolean('schema.table.one_to_many', 'schema.table.many_to_one', true) }}</td>
             </tr>
         {% endfor %}

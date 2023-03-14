@@ -30,14 +30,7 @@ class ProductGenerator extends AbstractEntityGenerator
     {
         $entities = [];
         for ($i = 0; $i < $count; ++$i) {
-            $entity = new Product();
-            $description = $this->getDescription($generator);
-            $entity->setDescription($description)
-                ->setPrice($generator->randomFloat(2, 1, 50))
-                ->setSupplier($generator->productSupplier())
-                ->setUnit($generator->productUnit())
-                ->setCategory($generator->category());
-            $entities[] = $entity;
+            $entities[] = $this->createEntity($generator);
         }
 
         return $entities;
@@ -57,6 +50,18 @@ class ProductGenerator extends AbstractEntityGenerator
             'price' => FormatUtils::formatAmount($entity->getPrice()),
             'unit' => $entity->getUnit(),
         ];
+    }
+
+    private function createEntity(Generator $generator): Product
+    {
+        $entity = new Product();
+        $entity->setDescription($this->getDescription($generator))
+            ->setPrice($generator->randomFloat(2, 1, 50))
+            ->setSupplier($generator->productSupplier())
+            ->setUnit($generator->productUnit())
+            ->setCategory($generator->category());
+
+        return $entity;
     }
 
     /**

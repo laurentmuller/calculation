@@ -129,7 +129,7 @@ class PdfDocument extends \FPDF
     /**
      * The bookmark root object number.
      */
-    private int $bookmakRoot = -1;
+    private int $bookmarkRoot = -1;
 
     /**
      * The bookmarks.
@@ -180,11 +180,8 @@ class PdfDocument extends \FPDF
         if ($y < 0) {
             $y = $this->y;
         }
-        $linkId = '';
         $page = $this->page;
-        if ($link) {
-            $linkId = $this->CreateLink($y, $page);
-        }
+        $linkId = $link ? $this->CreateLink($y, $page) : '';
         $this->bookmarks[] = [
             'text' => $text,
             'level' => \max(0, $level),
@@ -1022,7 +1019,7 @@ class PdfDocument extends \FPDF
             $this->_putBookmark($bookmark, $n);
         }
         $this->_newobj();
-        $this->bookmakRoot = $this->n;
+        $this->bookmarkRoot = $this->n;
         $this->_put(\sprintf('<</Type /Outlines /First %d 0 R', $n));
         $this->_put(\sprintf('/Last %d 0 R>>', $n + $lastUsedReferences[0]));
         $this->_put('endobj');
@@ -1032,7 +1029,7 @@ class PdfDocument extends \FPDF
     {
         parent::_putcatalog();
         if ([] !== $this->bookmarks) {
-            $this->_put(\sprintf('/Outlines %d 0 R', $this->bookmakRoot));
+            $this->_put(\sprintf('/Outlines %d 0 R', $this->bookmarkRoot));
             $this->_put('/PageMode /UseOutlines');
         }
     }

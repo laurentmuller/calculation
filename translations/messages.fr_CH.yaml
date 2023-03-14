@@ -964,32 +964,30 @@ rights:
   show: Afficher
 schema:
   index:
-    description: Liste des tables de la base de données.
-    fields:
-      count: Colonnes
-      name: Nom
     title: Tables
+    description: Liste des tables de la base de données.
     tooltip: Afficher la définition de la table %name%
   table:
     title: Table %name%
     description: Liste des colonnes et des associations de la base de données.
     empty: Aucune colonne n'est définie.
     error: La table '%name%' n'existe pas ou est introuvable.
-    columns: Colonnes
-    associations: Associations
-    fields:
-      required: Requis
-      length: Longueur
-      name: Nom
-      type: Type
-      table: Table
-      records: Lignes
-      relation: Relation
-      default: Défaut
-    index_unique: Valeur unique
-    primary_key: Clé primaire
     one_to_many: Un à plusieurs.
     many_to_one: Plusieurs à un.
+  fields:
+    name: Nom
+    table: Table
+    columns: Colonnes
+    indexes: Indexes
+    records: Enregistrements
+    associations: Associations
+    type: Type
+    length: Longueur
+    required: Requis
+    default: Valeur par défaut
+    relation: Relation
+    primary: Clé primaire
+    unique: Valeur unique
 search:
   title: Rechercher
   clear: Effacer les critères de recherche

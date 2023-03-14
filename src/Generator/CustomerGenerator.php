@@ -32,14 +32,7 @@ class CustomerGenerator extends AbstractEntityGenerator
         $styles = [0, 1, 2];
         $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
         for ($i = 0; $i < $count; ++$i) {
-            $entity = new Customer();
-            $style = (int) $generator->randomElement($styles);
-            $gender = (string) $generator->randomElement($genders);
-            $this->updateContact($entity, $style, $gender, $generator)
-                ->setAddress($generator->streetAddress())
-                ->setZipCode($generator->postcode())
-                ->setCity($generator->city());
-            $entities[] = $entity;
+            $entities[] = $this->createEntity($styles, $genders, $generator);
         }
 
         return $entities;
@@ -59,8 +52,20 @@ class CustomerGenerator extends AbstractEntityGenerator
         ];
     }
 
-    private function updateContact(Customer $entity, int $style, string $gender, Generator $generator): Customer
+    private function createEntity(array $styles, array $genders, Generator $generator): Customer
     {
+        $style = (int) $generator->randomElement($styles);
+        $gender = (string) $generator->randomElement($genders);
+
+        return $this->generateEntity($style, $gender, $generator)
+            ->setAddress($generator->streetAddress())
+            ->setZipCode($generator->postcode())
+            ->setCity($generator->city());
+    }
+
+    private function generateEntity(int $style, string $gender, Generator $generator): Customer
+    {
+        $entity = new Customer();
         match ($style) {
             // company
             0 => $entity->setCompany($generator->company())

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
+use App\Util\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
@@ -20,6 +21,7 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\FloatType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -83,13 +85,12 @@ class SchemaController extends AbstractController
     #[Route(path: '/{name}', name: 'schema_table')]
     public function table(string $name): Response
     {
-        if (!$this->tableExist($name)) {
-            throw $this->createNotFoundException($this->trans('schema.table.error', ['%name%' => $name]));
-        }
+        $table = $this->getTable($name);
 
         return $this->render('schema/table.html.twig', [
             'name' => $name,
-            'columns' => $this->getColumns($name),
+            'columns' => $this->getColumns($table),
+            'indexes' => $this->getIndexes($table),
             'associations' => $this->getAssociations($name),
         ]);
     }
@@ -102,15 +103,38 @@ class SchemaController extends AbstractController
     }
 
     /**
+     * @param Column[] $columns
+     */
+    private function countRecords(Table $table, array $columns): int
+    {
+        $result = null;
+        $name = $table->getName();
+        if (!isset($this->counters[$name])) {
+            try {
+                $column = \array_key_first($columns);
+                $result = $this->connection->executeQuery("SELECT COUNT($column) AS TOTAL FROM $name");
+                $count = (int) $result->fetchOne();
+            } catch (\Doctrine\DBAL\Exception) {
+                $count = 0;
+            } finally {
+                $result?->free();
+            }
+            $this->counters[$name] = $count;
+        }
+
+        return $this->counters[$name];
+    }
+
+    /**
      * @return array<string, ClassMetadataInfo<object>>
      */
     private function filterMetaDatas(EntityManagerInterface $manager): array
     {
         $result = [];
-        $metaDatas = $manager->getMetadataFactory()->getAllMetadata();
-        foreach ($metaDatas as $data) {
+        $datas = $manager->getMetadataFactory()->getAllMetadata();
+        foreach ($datas as $data) {
             if (!$data->isMappedSuperclass && !$data->isEmbeddedClass) {
-                $result[\strtolower($data->table['name'])] = $data;
+                $result[$data->table['name']] = $data;
             }
         }
 
@@ -125,16 +149,13 @@ class SchemaController extends AbstractController
         foreach ($foreignKeys as $foreignKey) {
             $columns = $foreignKey->getLocalColumns();
             if (\in_array($name, $columns, true)) {
-                return $foreignKey->getForeignTableName();
+                return $this->mapTableName($foreignKey->getForeignTableName());
             }
         }
 
         return null;
     }
 
-    /**
-     * @return array<array{name: string, table: string, inverseSide: bool}>
-     */
     private function getAssociations(string $name): array
     {
         $metaData = $this->getTableMetaData($name);
@@ -153,8 +174,8 @@ class SchemaController extends AbstractController
             if ($targetData instanceof ClassMetadataInfo) {
                 $result[] = [
                     'name' => $associationName,
-                    'table' => $targetData->table['name'],
                     'inverseSide' => $inverseSide,
+                    'table' => $this->mapTableName($targetData->table['name']),
                     ];
             }
         }
@@ -162,41 +183,26 @@ class SchemaController extends AbstractController
         return $result;
     }
 
-    /**
-     * Gets the columns for the given table name.
-     *
-     * @return array<array{
-     *      name: string,
-     *      primaryKey: bool,
-     *      unique: bool,
-     *      type: string,
-     *      length: int,
-     *      nullable: bool,
-     *      foreignTableName: null|string}>
-     *
-     * @throws \Doctrine\DBAL\Exception
-     */
-    private function getColumns(string $name): array
+    private function getColumns(Table $table): array
     {
-        $table = $this->getManager()->introspectTable($name);
         $indexes = $table->getIndexes();
         $foreignKeys = $table->getForeignKeys();
         $primaryKeys = $this->getPrimaryKeys($table);
 
         return \array_map(function (Column $column) use ($primaryKeys, $indexes, $foreignKeys): array {
             $name = $column->getName();
-            $isPrimaryKey = \in_array($name, $primaryKeys, true);
+            $primary = \in_array($name, $primaryKeys, true);
             $unique = $this->isIndexUnique($name, $indexes);
             $foreignTableName = $this->findForeignTableName($name, $foreignKeys);
 
             return [
                 'name' => $name,
-                'primaryKey' => $isPrimaryKey,
+                'primary' => $primary,
                 'unique' => $unique,
                 'type' => $this->getColumnType($column),
                 'length' => $column->getLength() ?? 0,
                 'nullable' => !$column->getNotnull(),
-                'foreignTableName' => $foreignTableName,
+                'foreign_name' => $foreignTableName,
                 'default' => $this->getDefaultValue($column),
             ];
         }, $table->getColumns());
@@ -213,23 +219,30 @@ class SchemaController extends AbstractController
 
     private function getDefaultValue(Column $column): string
     {
-        $default = $column->getDefault();
-        if (null !== $default && $column->getType() instanceof BooleanType) {
-            /** @psalm-var bool $value */
-            $value = \filter_var($default, \FILTER_VALIDATE_BOOLEAN);
-
-            return \ucfirst((string) \json_encode($value));
+        $type = $column->getType();
+        $default = $column->getDefault() ?? '';
+        if ('' !== $default && $type instanceof BooleanType) {
+            return (string) \json_encode(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
+        }
+        if ('0' === $default && $type instanceof FloatType) {
+            return '0.00';
         }
 
-        return $default ?? '';
+        return $default;
     }
 
-    /**
-     * @return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
-     */
-    private function getManager(): AbstractSchemaManager
+    private function getIndexes(Table $table): array
     {
-        return $this->manager;
+        $indexes = $table->getIndexes();
+
+        return \array_map(function (Index $index): array {
+            return [
+                'name' => \strtolower($index->getName()),
+                'primary' => $index->isPrimary(),
+                'unique' => $index->isUnique(),
+                'columns' => $index->getColumns(),
+            ];
+        }, $indexes);
     }
 
     /**
@@ -241,24 +254,16 @@ class SchemaController extends AbstractController
     }
 
     /**
-     * @param Column[] $columns
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Doctrine\DBAL\Exception
      */
-    private function getRecords(Table $table, array $columns): int
+    private function getTable(string $name): Table
     {
-        $name = $table->getName();
-        if (!isset($this->counters[$name])) {
-            try {
-                $column = \array_key_first($columns);
-                $result = $this->connection->executeQuery("SELECT COUNT($column) AS TOTAL FROM $name");
-                $count = (int) $result->fetchOne();
-                $result->free();
-            } catch (\Doctrine\DBAL\Exception) {
-                $count = 0;
-            }
-            $this->counters[$name] = $count;
+        if (!$this->manager->tablesExist([$name])) {
+            throw $this->createNotFoundException($this->trans('schema.table.error', ['%name%' => $name]));
         }
 
-        return $this->counters[$name];
+        return $this->manager->introspectTable($name);
     }
 
     /**
@@ -266,32 +271,26 @@ class SchemaController extends AbstractController
      */
     private function getTableMetaData(string $name): ?ClassMetadataInfo
     {
-        return $this->metaDatas[\strtolower($name)] ?? null;
+        return $this->metaDatas[$name] ?? null;
     }
 
     /**
-     * Gets the tables.
-     *
-     * @return array<array{
-     *      name: string,
-     *      columns: int,
-     *      associations: int}>
-     *
      * @throws \Doctrine\DBAL\Exception
      */
     private function getTables(): array
     {
-        $tables = $this->getManager()->listTables();
+        $tables = $this->manager->listTables();
         \usort($tables, static fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
 
         return \array_map(function (Table $table): array {
-            $name = $table->getName();
             $columns = $table->getColumns();
+            $name = $this->mapTableName($table->getName());
 
             return [
                 'name' => $name,
                 'columns' => \count($columns),
-                'records' => $this->getRecords($table, $columns),
+                'indexes' => \count($this->getIndexes($table)),
+                'records' => $this->countRecords($table, $columns),
                 'associations' => $this->countAssociationNames($name),
              ];
         }, $tables);
@@ -325,11 +324,14 @@ class SchemaController extends AbstractController
         return false;
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
-    private function tableExist(string $name): bool
+    private function mapTableName(string $name): string
     {
-        return $this->getManager()->tablesExist([$name]);
+        foreach (\array_keys($this->metaDatas) as $key) {
+            if (StringUtils::equalIgnoreCase($key, $name)) {
+                return $key;
+            }
+        }
+
+        return $name;
     }
 }

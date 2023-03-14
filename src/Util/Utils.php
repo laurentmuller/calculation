@@ -73,7 +73,7 @@ final class Utils
      *
      * @return array the grouped array
      */
-    public static function groupBy(array $array, string|int|callable $key, string | int | callable ...$others): array
+    public static function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
     {
         $result = [];
         /** @psalm-var object|array $value */

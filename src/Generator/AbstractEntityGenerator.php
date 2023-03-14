@@ -34,10 +34,7 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 
-    /**
-     * The faker generator.
-     */
-    protected Generator $generator;
+    private readonly Generator $generator;
 
     /**
      * Constructor.
@@ -53,7 +50,19 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
     public function generate(int $count, bool $simulate): JsonResponse
     {
         try {
-            return $this->generateEntities($count, $simulate, $this->manager, $this->generator);
+            $items = [];
+            $entities = $this->createEntities($count, $simulate, $this->generator);
+            if (($count = \count($entities)) > 0) {
+                $items = $this->mapEntities($entities, $simulate);
+            }
+
+            return new JsonResponse([
+                'result' => true,
+                'items' => $items,
+                'count' => $count,
+                'simulate' => $simulate,
+                'message' => $this->getCountMessage($count),
+            ]);
         } catch (\Exception $e) {
             $message = $this->trans('generate.error.failed');
             $context = Utils::getExceptionContext($e);
@@ -68,7 +77,39 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
     }
 
     /**
-     * Generate entities.
+     * Create entities.
+     *
+     * @return T[]
      */
-    abstract protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse;
+    abstract protected function createEntities(int $count, bool $simulate, Generator $generator): array;
+
+    abstract protected function getCountMessage(int $count): string;
+
+    /**
+     * @param T $entity
+     *
+     * @return array<string, mixed>
+     */
+    abstract protected function mapEntity($entity): array;
+
+    /**
+     * @param T[] $entities
+     *
+     * @return array<array<string, mixed>>
+     */
+    private function mapEntities(array $entities, bool $simulate): array
+    {
+        $items = [];
+        foreach ($entities as $entity) {
+            if (!$simulate) {
+                $this->manager->persist($entity);
+            }
+            $items[] = $this->mapEntity($entity);
+        }
+        if (!$simulate) {
+            $this->manager->flush();
+        }
+
+        return $items;
+    }
 }

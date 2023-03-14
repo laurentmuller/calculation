@@ -15,8 +15,6 @@ namespace App\Generator;
 use App\Entity\Product;
 use App\Faker\Generator;
 use App\Util\FormatUtils;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class to generate products.
@@ -28,52 +26,37 @@ class ProductGenerator extends AbstractEntityGenerator
     /**
      * {@inheritDoc}
      */
-    protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
+    protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
-        $products = [];
+        $entities = [];
         for ($i = 0; $i < $count; ++$i) {
-            $product = new Product();
+            $entity = new Product();
             $description = $this->getDescription($generator);
-            $product->setDescription($description)
+            $entity->setDescription($description)
                 ->setPrice($generator->randomFloat(2, 1, 50))
                 ->setSupplier($generator->productSupplier())
                 ->setUnit($generator->productUnit())
                 ->setCategory($generator->category());
-
-            // save
-            if (!$simulate) {
-                $manager->persist($product);
-            }
-
-            // add
-            $products[] = $product;
+            $entities[] = $entity;
         }
 
-        // save
-        if (!$simulate) {
-            $manager->flush();
-        }
+        return $entities;
+    }
 
-        // map
-        $items = \array_map(static function (Product $p): array {
-            return [
-                    'id' => $p->getId(),
-                    'group' => $p->getGroupCode(),
-                    'category' => $p->getCategoryCode(),
-                    'description' => $p->getDescription(),
-                    'price' => FormatUtils::formatAmount($p->getPrice()),
-                    'unit' => $p->getUnit(),
-                    'supplier' => $p->getSupplier(),
-                ];
-        }, $products);
+    protected function getCountMessage(int $count): string
+    {
+        return $this->trans('counters.products_generate', ['count' => $count]);
+    }
 
-        return new JsonResponse([
-                'result' => true,
-                'items' => $items,
-                'count' => \count($items),
-                'simulate' => $simulate,
-                'message' => $this->trans('counters.products_generate', ['count' => $count]),
-            ]);
+    protected function mapEntity($entity): array
+    {
+        return [
+            'description' => $entity->getDescription(),
+            'group' => $entity->getGroupCode(),
+            'category' => $entity->getCategoryCode(),
+            'price' => FormatUtils::formatAmount($entity->getPrice()),
+            'unit' => $entity->getUnit(),
+        ];
     }
 
     /**

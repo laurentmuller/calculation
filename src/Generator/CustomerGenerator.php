@@ -14,9 +14,7 @@ namespace App\Generator;
 
 use App\Entity\Customer;
 use App\Faker\Generator;
-use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class to generate customers.
@@ -28,74 +26,58 @@ class CustomerGenerator extends AbstractEntityGenerator
     /**
      * {@inheritDoc}
      */
-    protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
+    protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
-        $customers = [];
+        $entities = [];
         $styles = [0, 1, 2];
         $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
-
         for ($i = 0; $i < $count; ++$i) {
-            $customer = new Customer();
+            $entity = new Customer();
             $style = (int) $generator->randomElement($styles);
             $gender = (string) $generator->randomElement($genders);
-
-            match ($style) {
-                // company
-                0 => $customer->setCompany($generator->company())
-                    ->setEmail($generator->companyEmail()),
-                // contact
-                1 => $customer->setTitle($generator->title($gender))
-                    ->setFirstName($generator->firstName($gender))
-                    ->setLastName($generator->lastName())
-                    ->setEmail($generator->email()),
-                // both
-                default => $customer->setCompany($generator->company())
-                    ->setFirstName($generator->firstName($gender))
-                    ->setTitle($generator->title($gender))
-                    ->setLastName($generator->lastName())
-                    ->setEmail($generator->email())
-            };
-
-            $customer->setAddress($generator->streetAddress())
+            $this->updateContact($entity, $style, $gender, $generator)
+                ->setAddress($generator->streetAddress())
                 ->setZipCode($generator->postcode())
                 ->setCity($generator->city());
-
-            // save
-            if (!$simulate) {
-                $manager->persist($customer);
-            }
-
-            // add
-            $customers[] = $customer;
+            $entities[] = $entity;
         }
 
-        // save
-        if (!$simulate) {
-            $manager->flush();
-        }
+        return $entities;
+    }
 
-        // map
-        $items = \array_map(static function (Customer $c): array {
-            return [
-                    'id' => $c->getId(),
-                    'company' => $c->getCompany(),
-                    'firstName' => $c->getFirstName(),
-                    'lastName' => $c->getLastName(),
-                    'fullName' => $c->getFullName(),
-                    'nameAndCompany' => $c->getNameAndCompany(),
-                    'address' => $c->getAddress(),
-                    'zipCode' => $c->getZipCode(),
-                    'city' => $c->getCity(),
-                    'zipCity' => $c->getZipCity(),
-                ];
-        }, $customers);
+    protected function getCountMessage(int $count): string
+    {
+        return $this->trans('counters.customers_generate', ['count' => $count]);
+    }
 
-        return new JsonResponse([
-                'result' => true,
-                'items' => $items,
-                'count' => \count($items),
-                'simulate' => $simulate,
-                'message' => $this->trans('counters.customers_generate', ['count' => $count]),
-            ]);
+    protected function mapEntity($entity): array
+    {
+        return [
+            'nameAndCompany' => $entity->getNameAndCompany(),
+            'address' => $entity->getAddress(),
+            'zipCity' => $entity->getZipCity(),
+        ];
+    }
+
+    private function updateContact(Customer $entity, int $style, string $gender, Generator $generator): Customer
+    {
+        match ($style) {
+            // company
+            0 => $entity->setCompany($generator->company())
+                ->setEmail($generator->companyEmail()),
+            // contact
+            1 => $entity->setTitle($generator->title($gender))
+                ->setFirstName($generator->firstName($gender))
+                ->setLastName($generator->lastName())
+                ->setEmail($generator->email()),
+            // both
+            default => $entity->setCompany($generator->company())
+                ->setFirstName($generator->firstName($gender))
+                ->setTitle($generator->title($gender))
+                ->setLastName($generator->lastName())
+                ->setEmail($generator->email())
+        };
+
+        return $entity;
     }
 }

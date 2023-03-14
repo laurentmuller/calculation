@@ -134,7 +134,7 @@ class GeneratorController extends AbstractController
     }
 
     /**
-     * @return array{count: ?int, entity: ?string, simulate: bool}
+     * @return array{count: int, entity: ?string, simulate: bool}
      */
     private function getSessionData(): array
     {

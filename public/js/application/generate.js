@@ -42,8 +42,7 @@ function createRows(items, mapping, callback) {
 function renderCalculations(items) {
     'use strict';
     const mapping = {
-        'id': 'text-id text-border',
-        'date': 'text-date',
+        'date': 'text-date text-border',
         'state': 'text-state',
         'customer': 'text-nowrap',
         'description': 'text-nowrap',

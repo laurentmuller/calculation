@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7871b2c849c758400e828d4843c8be0",
+    "content-hash": "263d564da9f734815a719b9a6c5c2031",
     "packages": [
         {
             "name": "friendsoftwig/twigcs",

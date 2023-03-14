@@ -19,7 +19,6 @@ use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Util\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class to generate calculations.
@@ -41,80 +40,68 @@ class CalculationGenerator extends AbstractEntityGenerator
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
+    protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
-        $calculations = [];
-        $id = $simulate ? $manager->getRepository(Calculation::class)->getNextId() : 0;
-
-        // products range
-        $productsCount = $generator->productsCount();
-        $min = \min(5, $productsCount);
-        $max = \min(15, $productsCount);
-
+        $entities = [];
+        [$min, $max] = $this->getMinMax($generator);
         for ($i = 0; $i < $count; ++$i) {
-            $date = $generator->dateTimeBetween('first day of previous month', 'last day of next month');
-            $calculation = new Calculation();
-            $calculation->setDate($date)
+            $date = $generator->dateTimeBetween('today', 'last day of next month');
+            $entity = new Calculation();
+            $this->generateProducts($entity, $min, $max, $generator)
                 ->setDescription($generator->catchPhrase())
                 ->setUserMargin($generator->randomFloat(2, 0, 0.1))
+                ->setCustomer($generator->name())
                 ->setState($generator->state())
-                ->setCustomer($generator->name());
-
-            // add products
-            $products = $generator->products($generator->numberBetween($min, $max));
-            foreach ($products as $product) {
-                // copy
-                $item = CalculationItem::create($product)->setQuantity($generator->numberBetween(1, 10));
-                if ($item->isEmptyPrice()) {
-                    $item->setPrice($generator->randomFloat(2, 1, 10));
-                }
-
-                // find category and add
-                $category = $product->getCategory();
-                if (null !== $category) {
-                    $calculation->findCategory($category)->addItem($item);
-                }
-            }
-
-            // update
-            $this->service->updateTotal($calculation);
-
-            // save
-            if (!$simulate) {
-                $manager->persist($calculation);
-            } else {
-                $calculation->setId($id++);
-            }
-
-            // add
-            $calculations[] = $calculation;
+                ->setDate($date);
+            $this->service->updateTotal($entity);
+            $entities[] = $entity;
         }
 
-        // save
-        if (!$simulate) {
-            $manager->flush();
+        return $entities;
+    }
+
+    protected function getCountMessage(int $count): string
+    {
+        return $this->trans('counters.calculations_generate', ['count' => $count]);
+    }
+
+    protected function mapEntity($entity): array
+    {
+        return [
+            'date' => $entity->getFormattedDate(),
+            'state' => $entity->getStateCode(),
+            'customer' => $entity->getCustomer(),
+            'description' => $entity->getDescription(),
+            'margin' => FormatUtils::formatPercent($entity->getOverallMargin()),
+            'total' => FormatUtils::formatAmount($entity->getOverallTotal()),
+            'color' => $entity->getStateColor(),
+        ];
+    }
+
+    private function generateProducts(Calculation $entity, int $min, int $max, Generator $generator): Calculation
+    {
+        $products = $generator->products($generator->numberBetween($min, $max));
+        foreach ($products as $product) {
+            $item = CalculationItem::create($product)->setQuantity($generator->numberBetween(1, 10));
+            if ($item->isEmptyPrice()) {
+                $item->setPrice($generator->randomFloat(2, 1, 10));
+            }
+            $category = $product->getCategory();
+            if (null !== $category) {
+                $entity->findCategory($category)->addItem($item);
+            }
         }
 
-        // map
-        $items = \array_map(static function (Calculation $c): array {
-            return [
-                    'id' => $c->getFormattedId(),
-                    'date' => $c->getFormattedDate(),
-                    'state' => $c->getStateCode(),
-                    'description' => $c->getDescription(),
-                    'customer' => $c->getCustomer(),
-                    'margin' => FormatUtils::formatPercent($c->getOverallMargin()),
-                    'total' => FormatUtils::formatAmount($c->getOverallTotal()),
-                    'color' => $c->getStateColor(),
-                ];
-        }, $calculations);
+        return $entity;
+    }
 
-        return new JsonResponse([
-                'result' => true,
-                'items' => $items,
-                'count' => \count($items),
-                'simulate' => $simulate,
-                'message' => $this->trans('counters.calculations_generate', ['count' => $count]),
-            ]);
+    /**
+     * @return array{0: int, 1: int}
+     */
+    private function getMinMax(Generator $generator): array
+    {
+        $productsCount = $generator->productsCount();
+
+        return [\min(5, $productsCount), \min(15, $productsCount)];
     }
 }

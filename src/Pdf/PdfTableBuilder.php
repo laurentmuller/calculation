@@ -615,12 +615,9 @@ class PdfTableBuilder
      */
     protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds): void
     {
-        // handle by listener?
         if ($this->listener && $this->listener->drawCellBackground($this, $index, $bounds)) {
             return;
         }
-
-        // default
         $parent->rectangle($bounds, PdfRectangleStyle::FILL);
     }
 
@@ -634,12 +631,9 @@ class PdfTableBuilder
      */
     protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
     {
-        // handle by listener?
         if ($this->listener && $this->listener->drawCellBorder($this, $index, $bounds, $border)) {
             return;
         }
-
-        // get values
         $x = $bounds->x();
         $y = $bounds->y();
         if ($border->isRectangleStyle()) {
@@ -687,13 +681,10 @@ class PdfTableBuilder
      */
     protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
     {
-        // handle by listener?
         if ($this->listener && $this->listener->drawCellText($this, $index, $bounds, $text, $alignment, $height)) {
             return;
         }
-
-        // default
-        $parent->MultiCell($bounds->width(), $height, $text, PdfBorder::none(), $alignment);
+        $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);
     }
 
     /**

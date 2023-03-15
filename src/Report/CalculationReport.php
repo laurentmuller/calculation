@@ -89,7 +89,7 @@ class CalculationReport extends AbstractReport
         if ($calculation->isEmpty()) {
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
-            $this->Cell(0, 0, $message, PdfBorder::none(), PdfMove::NEW_LINE, PdfTextAlignment::CENTER);
+            $this->Cell(txt: $message, ln: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
             $this->renderQrCode();
 
             return true;

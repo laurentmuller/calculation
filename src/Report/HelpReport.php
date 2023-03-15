@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfTextAlignment;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfStyle;
@@ -184,7 +183,7 @@ class HelpReport extends AbstractReport
         $margin = $this->getLeftMargin();
         $this->SetLeftMargin($margin + 4.0);
         foreach ($constraints as $constraint) {
-            $this->MultiCell(0, self::LINE_HEIGHT, \strip_tags("- $constraint"), PdfBorder::none(), PdfTextAlignment::LEFT);
+            $this->MultiCell(txt: \strip_tags("- $constraint"), align: PdfTextAlignment::LEFT);
         }
         $this->SetLeftMargin($margin);
     }
@@ -199,7 +198,7 @@ class HelpReport extends AbstractReport
 
             return empty($carry) ? $str : $carry . ' ' . $str;
         }, '');
-        $this->MultiCell(0, self::LINE_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::LEFT);
+        $this->MultiCell(txt: $text, align: PdfTextAlignment::LEFT);
     }
 
     /**
@@ -209,7 +208,7 @@ class HelpReport extends AbstractReport
     {
         $this->outputTitle($item['id']);
         if ($description = $item['description'] ?? false) {
-            $this->MultiCell(0, self::LINE_HEIGHT, $description);
+            $this->MultiCell(txt: $description);
         }
         if ($image = $item['image'] ?? false) {
             $this->Ln(3);
@@ -328,7 +327,7 @@ class HelpReport extends AbstractReport
     {
         $this->outputTitle($item['id'] . '.name');
         if ($description = $item['description'] ?? false) {
-            $this->MultiCell(0, self::LINE_HEIGHT, $description);
+            $this->MultiCell(txt: $description);
         }
         $fields = $this->findFields($item);
         if (null !== $fields) {
@@ -453,7 +452,7 @@ class HelpReport extends AbstractReport
         if ($translate) {
             $id = $this->trans($id);
         }
-        $this->MultiCell(0, self::LINE_HEIGHT, $id);
+        $this->MultiCell(txt: $id);
     }
 
     private function outputTitle(string $id, float $size = 10): void

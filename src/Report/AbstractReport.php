@@ -18,7 +18,6 @@ use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Traits\TranslatorTrait;
@@ -120,7 +119,7 @@ abstract class AbstractReport extends PdfDocument
         }
         $text = $this->translateCount($count, $message);
         $margins = $this->setCellMargin(0);
-        $this->Cell(0, self::LINE_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE, $align);
+        $this->Cell(txt: $text, ln: PdfMove::NEW_LINE, align: $align);
         $this->setCellMargin($margins);
 
         return (\is_countable($count) ? \count($count) : $count) > 0;

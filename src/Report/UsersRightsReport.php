@@ -70,12 +70,12 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             }
             [$x, $y] = $this->GetXY();
             $group->apply($this);
-            $this->Cell(0, self::LINE_HEIGHT, '', PdfBorder::all());
+            $this->Cell(border: PdfBorder::all());
             $this->SetXY($x, $y);
             $width = $this->GetStringWidth($text);
-            $this->Cell($width, self::LINE_HEIGHT, $text);
+            $this->Cell(w: $width, txt: $text);
             PdfStyle::getDefaultStyle()->setFontItalic()->apply($this);
-            $this->Cell(0, self::LINE_HEIGHT, ' - ' . $description, PdfBorder::none(), PdfMove::NEW_LINE);
+            $this->Cell(txt: ' - ' . $description, ln: PdfMove::NEW_LINE);
 
             return true;
         }

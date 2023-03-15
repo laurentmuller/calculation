@@ -59,7 +59,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
             throw new \InvalidArgumentException("The image '$path' does not exist.");
         }
 
-        parent::__construct(null, $cols, $style, $alignment, $link);
+        parent::__construct(cols: $cols, style: $style, alignment: $alignment, link: $link);
 
         /** @psalm-var array{0: int, 1: int} $size */
         $size = \getimagesize($path);

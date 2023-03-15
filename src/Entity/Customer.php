@@ -32,7 +32,7 @@ class Customer extends AbstractEntity
     private ?string $address = null;
 
     #[Assert\Date]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthday = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]

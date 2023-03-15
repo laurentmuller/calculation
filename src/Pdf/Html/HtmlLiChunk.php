@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
@@ -70,7 +68,12 @@ class HtmlLiChunk extends HtmlParentChunk
         $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use ($text): void {
             $width = $this->getBulletMargin($report);
             $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-            $report->Cell($width, $height, $text, PdfBorder::none(), PdfMove::RIGHT, PdfTextAlignment::RIGHT);
+            $report->Cell(
+                w: $width,
+                h: $height,
+                txt: $text,
+                align: PdfTextAlignment::RIGHT
+            );
         });
     }
 

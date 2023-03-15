@@ -262,7 +262,15 @@ class PdfHeader
 
     private function outputText(float $width, float $height, string $text, PdfBorder $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
     {
-        $this->parent->Cell($width, $height, $text, $border, $move, $align, false, $link);
+        $this->parent->Cell(
+            w: $width,
+            h: $height,
+            txt: $text,
+            border: $border,
+            ln: $move,
+            align: $align,
+            link: $link
+        );
     }
 
     private function outputTitle(float $width, bool $isAddress): void

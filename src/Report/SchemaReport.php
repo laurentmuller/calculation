@@ -259,12 +259,7 @@ class SchemaReport extends AbstractReport
         $text = $this->trans($id, $parameters);
         PdfStyle::getDefaultStyle()->setFontBold()->apply($this);
         $this->addBookmark(text: $text, y: 0);
-        $this->Cell(
-            w: 0,
-            h: self::LINE_HEIGHT + 2.0,
-            txt: $text,
-            ln: PdfMove::NEW_LINE
-        );
+        $this->Cell(h: self::LINE_HEIGHT + 2.0, txt: $text, ln: PdfMove::NEW_LINE);
         $this->setCellMargin($margin);
         $this->resetStyle();
     }

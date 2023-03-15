@@ -15,7 +15,6 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -98,7 +97,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
         ];
         $text = $this->transCount($parameters);
         $margins = $this->setCellMargin(0);
-        $this->Cell(0, self::LINE_HEIGHT, $text, PdfBorder::none(), PdfMove::NEW_LINE);
+        $this->Cell(txt: $text, ln: PdfMove::NEW_LINE);
         $this->setCellMargin($margins);
 
         return true;

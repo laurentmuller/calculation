@@ -130,7 +130,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $logFile = $this->logFile;
         $this->AddPage();
         if ($logFile->isEmpty()) {
-            $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.list.empty'));
+            $this->Cell(txt: $this->trans('log.list.empty'));
 
             return true;
         }
@@ -142,7 +142,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     private function cellTitle(string $title): void
     {
         PdfFont::default()->bold()->apply($this);
-        $this->Cell(0, self::LINE_HEIGHT, $this->trans($title), 0, PdfMove::BELOW);
+        $this->Cell(txt: $this->trans($title), ln: PdfMove::BELOW);
         $this->resetStyle();
     }
 
@@ -200,7 +200,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $valueCells = [];
         $sepCol = PdfColumn::center(null, 3);
         $emptyCol = PdfColumn::center(null, 1);
-        $emptyCell = new PdfCell(null, 1, PdfStyle::getNoBorderStyle());
+        $emptyCell = new PdfCell(cols: 1, style: PdfStyle::getNoBorderStyle());
         $this->outputCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;

@@ -236,13 +236,7 @@ class PdfDocument extends \FPDF
         $contentStyle ??= PdfStyle::getDefaultStyle();
         $this->AddPage();
         $titleStyle->apply($this);
-        $this->Cell(
-            w: 0,
-            h: self::LINE_HEIGHT,
-            txt: $title,
-            ln: PdfMove::NEW_LINE,
-            align: PdfTextAlignment::CENTER,
-        );
+        $this->Cell(txt: $title, ln: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
         if ($addBookmark) {
             $this->addBookmark(text: $title, y: $this->y - $this->lasth);
         }
@@ -356,7 +350,7 @@ class PdfDocument extends \FPDF
      *
      * @see PdfDocument::MultiCell()
      */
-    public function Cell($w, $h = 0.0, $txt = '', $border = PdfBorder::NONE, $ln = PdfMove::RIGHT, $align = PdfTextAlignment::LEFT, $fill = false, $link = ''): void
+    public function Cell($w = 0, $h = self::LINE_HEIGHT, $txt = '', $border = PdfBorder::NONE, $ln = PdfMove::RIGHT, $align = PdfTextAlignment::LEFT, $fill = false, $link = ''): void
     {
         if ($ln instanceof PdfMove) {
             $ln = $ln->value;
@@ -703,7 +697,7 @@ class PdfDocument extends \FPDF
      *
      * @see PdfDocument::Cell()
      */
-    public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false): void
+    public function MultiCell($w = 0, $h = self::LINE_HEIGHT, $txt = '', $border = PdfBorder::NONE, $align = PdfTextAlignment::JUSTIFIED, $fill = false): void
     {
         if ($border instanceof PdfBorder) {
             $border = $border->getValue();

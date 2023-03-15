@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Report\AbstractReport;
 use App\Util\FormatUtils;
@@ -108,7 +107,13 @@ class PdfFooter
      */
     private function outputText(string $text, float $cellWidth, PdfTextAlignment $align, string $link = ''): self
     {
-        $this->parent->Cell($cellWidth, PdfDocument::LINE_HEIGHT, $text, $this->border, PdfMove::RIGHT, $align, false, $link);
+        $this->parent->Cell(
+            w: $cellWidth,
+            txt: $text,
+            border: $this->border,
+            align: $align,
+            link: $link
+        );
 
         return $this;
     }

@@ -20,6 +20,13 @@ use App\Pdf\Enums\PdfFontName;
 class PdfStyle implements PdfDocumentUpdaterInterface
 {
     /**
+     * The bullet character (0xB7 = 183).
+     *
+     * @see PdfStyle::getBulletStyle()
+     */
+    public const BULLET = '·';
+
+    /**
      * The border style.
      */
     protected PdfBorder $border;
@@ -133,6 +140,28 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     public function getBorder(): PdfBorder
     {
         return $this->border;
+    }
+
+    /**
+     * Gets the bullet style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Symbol 9pt.
+     * - Line width: 0.2mm.
+     * - Fill color: White.
+     * - Draw color: RGB(221, 221, 221).
+     * - Text color: Black.
+     *
+     * @param PdfStyle|null $source the source style to update or null to use the cell style
+     *
+     * @see PdfStyle::BULLET
+     */
+    public static function getBulletStyle(?self $source = null): self
+    {
+        $source ??= self::getCellStyle();
+
+        return $source->setFontName(PdfFontName::SYMBOL);
     }
 
     /**

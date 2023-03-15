@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\CacheAwareTrait;
 use App\Util\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -25,6 +26,8 @@ use Doctrine\DBAL\Types\FloatType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to get database schema information.
@@ -35,7 +38,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  *     unique: bool,
  *     type: string,
  *     length: int,
- *     nullable: bool,
+ *     required: bool,
  *     foreign_name: string|null,
  *     default: string}
  * @psalm-type SchemaIndexType=array{
@@ -45,7 +48,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  *     columns: array<string>}
  * @psalm-type SchemaAssociationType=array{
  *     name: string,
- *     inverseSide: bool,
+ *     inverse: bool,
  *     table: string}
  * @psalm-type SchemaTableType=array{
  *          name: string,
@@ -60,33 +63,25 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  *          indexes: int,
  *          associations: int}
  */
-class SchemaService
+class SchemaService implements ServiceSubscriberInterface
 {
-    private readonly Connection $connection;
+    use CacheAwareTrait;
+    use ServiceSubscriberTrait;
 
     /**
-     * @var array<string, int>
+     * The cache TTL (1 day).
      */
-    private array $counters = [];
+    private const LIFE_TIME = 86_400;
+
+    private ?Connection $connection = null;
 
     /**
-     * @var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
+     * @psalm-var AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      */
-    private readonly AbstractSchemaManager $manager;
+    private ?AbstractSchemaManager $schemaManager = null;
 
-    /**
-     * @var array<string, ClassMetadataInfo<object>>
-     */
-    private readonly array $metaDatas;
-
-    /**
-     * @throws Exception
-     */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(private readonly EntityManagerInterface $manager)
     {
-        $this->connection = $manager->getConnection();
-        $this->manager = $this->connection->createSchemaManager();
-        $this->metaDatas = $this->filterMetaDatas($manager);
     }
 
     /**
@@ -98,26 +93,24 @@ class SchemaService
      */
     public function getTable(string $name): array
     {
-        $table = $this->introspectTable($name);
+        $key = 'schema_service.metadata.table.' . $name;
 
-        return [
+        /** @psalm-var SchemaTableType|null $results */
+        $results = $this->getCacheValue($key);
+        if (\is_array($results)) {
+            return $results;
+        }
+
+        $table = $this->introspectTable($name);
+        $results = [
             'name' => $name,
             'columns' => $this->getColumns($table),
             'indexes' => $this->getIndexes($table),
-            'associations' => $this->getAssociations($name),
+            'associations' => $this->getAssociations($table),
         ];
-    }
+        $this->setCacheValue($key, $results, self::LIFE_TIME);
 
-    /**
-     * @return string[]
-     *
-     * @throws Exception
-     */
-    public function getTableNames(): array
-    {
-        $tables = $this->manager->listTables();
-
-        return \array_map(fn (Table $table) => $this->mapTableName($table->getName()), $tables);
+        return $results;
     }
 
     /**
@@ -129,67 +122,54 @@ class SchemaService
      */
     public function getTables(): array
     {
-        $tables = $this->manager->listTables();
-        \usort($tables, static fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
+        /** @psalm-var SchemaSoftTableType[] $results */
+        $results = $this->getCacheValue('schema_service.tables', fn () => $this->loadTables());
 
-        return \array_map(function (Table $table): array {
-            $columns = $table->getColumns();
-            $name = $this->mapTableName($table->getName());
+        // update records
+        foreach ($results as &$result) {
+            $result['records'] = $this->countRecords($result['name']);
+        }
 
-            return [
-                'name' => $name,
-                'columns' => \count($columns),
-                'indexes' => \count($this->getIndexes($table)),
-                'records' => $this->countRecords($table, $columns),
-                'associations' => $this->countAssociationNames($name),
-            ];
-        }, $tables);
+        return $results;
     }
 
-    private function countAssociationNames(string $name): int
+    private function countAssociationNames(Table $table): int
     {
+        $name = $this->mapTableName($table->getName());
         $metaData = $this->getTableMetaData($name);
 
         return $metaData instanceof ClassMetadataInfo ? \count($metaData->getAssociationNames()) : 0;
     }
 
-    /**
-     * @param Column[] $columns
-     */
-    private function countRecords(Table $table, array $columns): int
+    private function countColumns(Table $table): int
     {
-        $result = null;
-        $name = $table->getName();
-        if (!isset($this->counters[$name])) {
-            try {
-                $column = \array_key_first($columns);
-                $result = $this->connection->executeQuery("SELECT COUNT($column) AS TOTAL FROM $name");
-                $count = (int) $result->fetchOne();
-            } catch (Exception) {
-                $count = 0;
-            } finally {
-                $result?->free();
-            }
-            $this->counters[$name] = $count;
-        }
+        return \count($table->getColumns());
+    }
 
-        return $this->counters[$name];
+    private function countIndexes(Table $table): int
+    {
+        return \count($table->getIndexes());
     }
 
     /**
-     * @return array<string, ClassMetadataInfo<object>>
+     * @throws Exception
      */
-    private function filterMetaDatas(EntityManagerInterface $manager): array
+    private function countRecords(string|Table $nameOrTable): int
     {
-        $result = [];
-        $datas = $manager->getMetadataFactory()->getAllMetadata();
-        foreach ($datas as $data) {
-            if (!$data->isMappedSuperclass && !$data->isEmbeddedClass) {
-                $result[$data->table['name']] = $data;
-            }
-        }
+        $result = null;
+        $table = \is_string($nameOrTable) ? $this->introspectTable($nameOrTable) : $nameOrTable;
+        $column = \array_key_first($table->getColumns());
+        $name = $table->getName();
 
-        return $result;
+        try {
+            $result = $this->getConnection()->executeQuery("SELECT COUNT($column) AS TOTAL FROM $name");
+
+            return (int) $result->fetchOne();
+        } catch (Exception) {
+            return 0;
+        } finally {
+            $result?->free();
+        }
     }
 
     /**
@@ -210,8 +190,9 @@ class SchemaService
     /**
      * @pslam-return array<SchemaAssociationType>
      */
-    private function getAssociations(string $name): array
+    private function getAssociations(Table $table): array
     {
+        $name = $this->mapTableName($table->getName());
         $metaData = $this->getTableMetaData($name);
         if (!$metaData instanceof ClassMetadataInfo) {
             return [];
@@ -223,12 +204,12 @@ class SchemaService
         $result = [];
         foreach ($associationNames as $associationName) {
             $targetClass = $metaData->getAssociationTargetClass($associationName);
-            $inverseSide = $metaData->isAssociationInverseSide($associationName);
+            $inverse = $metaData->isAssociationInverseSide($associationName);
             $targetData = $this->getTargetMetaData($targetClass);
             if ($targetData instanceof ClassMetadataInfo) {
                 $result[] = [
                     'name' => $associationName,
-                    'inverseSide' => $inverseSide,
+                    'inverse' => $inverse,
                     'table' => $this->mapTableName($targetData->table['name']),
                 ];
             }
@@ -258,7 +239,7 @@ class SchemaService
                 'unique' => $unique,
                 'type' => $this->getColumnType($column),
                 'length' => $column->getLength() ?? 0,
-                'nullable' => !$column->getNotnull(),
+                'required' => $column->getNotnull(),
                 'foreign_name' => $foreignTableName,
                 'default' => $this->getDefaultValue($column),
             ];
@@ -270,8 +251,17 @@ class SchemaService
         try {
             return Type::getTypeRegistry()->lookupName($column->getType());
         } catch (Exception) {
-            return 'Unknown';
+            return 'unknown';
         }
+    }
+
+    private function getConnection(): Connection
+    {
+        if (null === $this->connection) {
+            $this->connection = $this->manager->getConnection();
+        }
+
+        return $this->connection;
     }
 
     private function getDefaultValue(Column $column): string
@@ -306,6 +296,21 @@ class SchemaService
     }
 
     /**
+     * @return array<string, ClassMetadataInfo<object>>
+     */
+    private function getMetaDatas(): array
+    {
+        /** @psalm-var array<string, ClassMetadataInfo<object>> $metaDatas */
+        $metaDatas = $this->getCacheValue(
+            'schema_service.metadata',
+            fn () => $this->loadMetaDatas($this->manager),
+            self::LIFE_TIME
+        );
+
+        return $metaDatas;
+    }
+
+    /**
      * @return string[]
      */
     private function getPrimaryKeys(Table $table): array
@@ -314,11 +319,25 @@ class SchemaService
     }
 
     /**
+     * @psalm-return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
+     *
+     * @throws Exception
+     */
+    private function getSchemaManager(): AbstractSchemaManager
+    {
+        if (null === $this->schemaManager) {
+            $this->schemaManager = $this->getConnection()->createSchemaManager();
+        }
+
+        return $this->schemaManager;
+    }
+
+    /**
      * @psalm-return ClassMetadataInfo<object>|null
      */
     private function getTableMetaData(string $name): ?ClassMetadataInfo
     {
-        return $this->metaDatas[$name] ?? null;
+        return $this->getMetaDatas()[$name] ?? null;
     }
 
     /**
@@ -326,7 +345,7 @@ class SchemaService
      */
     private function getTargetMetaData(string $name): ?ClassMetadataInfo
     {
-        foreach ($this->metaDatas as $metaData) {
+        foreach ($this->getMetaDatas() as $metaData) {
             if ($metaData->getName() === $name) {
                 return $metaData;
             }
@@ -340,7 +359,7 @@ class SchemaService
      */
     private function introspectTable(string $name): Table
     {
-        return $this->manager->introspectTable($name);
+        return $this->getSchemaManager()->introspectTable($name);
     }
 
     /**
@@ -357,9 +376,45 @@ class SchemaService
         return false;
     }
 
+    /**
+     * @return array<string, ClassMetadataInfo<object>>
+     */
+    private function loadMetaDatas(EntityManagerInterface $manager): array
+    {
+        $result = [];
+        $datas = $manager->getMetadataFactory()->getAllMetadata();
+        foreach ($datas as $data) {
+            if (!$data->isMappedSuperclass && !$data->isEmbeddedClass) {
+                $result[$data->table['name']] = $data;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @pslam-return SchemaSoftTableType[]
+     *
+     * @throws Exception
+     */
+    private function loadTables(): array
+    {
+        $tables = $this->getSchemaManager()->listTables();
+        \usort($tables, static fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
+
+        return \array_map(function (Table $table): array {
+            return [
+                'name' => $this->mapTableName($table->getName()),
+                'columns' => $this->countColumns($table),
+                'indexes' => $this->countIndexes($table),
+                'associations' => $this->countAssociationNames($table),
+            ];
+        }, $tables);
+    }
+
     private function mapTableName(string $name): string
     {
-        foreach (\array_keys($this->metaDatas) as $key) {
+        foreach (\array_keys($this->getMetaDatas()) as $key) {
             if (StringUtils::equalIgnoreCase($key, $name)) {
                 return $key;
             }

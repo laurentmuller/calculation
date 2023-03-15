@@ -26,9 +26,9 @@ class PdfCell
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param ?string           $link      the cell link
+     * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
      */
-    public function __construct(protected ?string $text = null, protected int $cols = 1, protected ?PdfStyle $style = null, protected ?PdfTextAlignment $alignment = null, protected ?string $link = null)
+    public function __construct(protected ?string $text = null, protected int $cols = 1, protected ?PdfStyle $style = null, protected ?PdfTextAlignment $alignment = null, protected string|int $link = '')
     {
         $this->setText($text)
             ->setCols($cols)
@@ -63,7 +63,7 @@ class PdfCell
     /**
      * Gets the link.
      */
-    public function getLink(): ?string
+    public function getLink(): string|int
     {
         return $this->link;
     }
@@ -107,7 +107,7 @@ class PdfCell
     /**
      * Sets the link.
      */
-    public function setLink(?string $link): self
+    public function setLink(string|int $link = ''): self
     {
         $this->link = $link;
 

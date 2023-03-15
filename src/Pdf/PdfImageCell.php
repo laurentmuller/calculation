@@ -51,9 +51,9 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param ?string           $link      the cell link
+     * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
      */
-    public function __construct(protected string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, ?string $link = null)
+    public function __construct(protected string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int $link = '')
     {
         if (!FileUtils::exists($path)) {
             throw new \InvalidArgumentException("The image '$path' does not exist.");
@@ -90,7 +90,14 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
         };
 
         // draw
-        $parent->Image($this->path, $x, $y, $width, $height, $this->link ?? '');
+        $parent->Image(
+            file: $this->path,
+            x: $x,
+            y: $y,
+            w: $width,
+            h: $height,
+            link: $this->link
+        );
     }
 
     /**

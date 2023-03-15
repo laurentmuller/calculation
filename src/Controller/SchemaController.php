@@ -30,20 +30,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class SchemaController extends AbstractController
 {
     /**
-     * Constructor.
-     */
-    public function __construct(private readonly SchemaService $service)
-    {
-    }
-
-    /**
+     * Display information for tables.
+     *
      * @throws \Doctrine\DBAL\Exception
      */
     #[Route(path: '', name: 'schema')]
-    public function index(): Response
+    public function index(SchemaService $service): Response
     {
         return $this->render('schema/index.html.twig', [
-            'tables' => $this->service->getTables(),
+            'tables' => $service->getTables(),
         ]);
     }
 
@@ -51,21 +46,26 @@ class SchemaController extends AbstractController
      * Export the schema to a PDF document.
      */
     #[Route(path: '/pdf', name: 'schema_pdf')]
-    public function pdf(): PdfResponse
+    public function pdf(SchemaService $service): PdfResponse
     {
-        $report = new SchemaReport($this, $this->service);
+        $report = new SchemaReport($this, $service);
 
         return $this->renderPdfDocument($report);
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * Display information for the given table name.
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     #[Route(path: '/{name}', name: 'schema_table')]
-    public function table(string $name): Response
+    public function table(string $name, SchemaService $service): Response
     {
-        $table = $this->service->getTable($name);
-
-        return $this->render('schema/table.html.twig', $table);
+        try {
+            return $this->render('schema/table.html.twig', $service->getTable($name));
+        } catch (\Doctrine\DBAL\Exception $e) {
+            $msg = $this->trans('schema.table.error', ['%name%' => $name]);
+            throw $this->createNotFoundException($msg, $e);
+        }
     }
 }

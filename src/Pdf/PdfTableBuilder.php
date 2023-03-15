@@ -88,15 +88,17 @@ class PdfTableBuilder
      * @param int               $cols      the number of columns to span
      * @param ?PdfStyle         $style     the cell style to use or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param ?string           $link      the link of the cell
+     * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
      */
-    public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, ?string $link = null): static
+    public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int $link = ''): static
     {
         return $this->addCell(new PdfCell($text, $cols, $style, $alignment, $link));
     }
 
     /**
-     * Adds the given cell to the list of cells. Do nothing if the cell is null.
+     * Adds the given cell to the list of cells.
+     *
+     * Do nothing if the cell is null.
      *
      * @throws \LogicException if no current row is started
      */
@@ -180,6 +182,20 @@ class PdfTableBuilder
         }
 
         return $this->completeRow();
+    }
+
+    /**
+     * Adds the given values to the list of cells.
+     *
+     * @throws \LogicException if no current row is started
+     */
+    public function addValues(?string ...$values): static
+    {
+        foreach ($values as $value) {
+            $this->add($value);
+        }
+
+        return $this;
     }
 
     /**
@@ -652,9 +668,9 @@ class PdfTableBuilder
      *
      * @param PdfDocument  $parent the parent document
      * @param PdfRectangle $bounds the link bounds
-     * @param string       $link   the link URL
+     * @param string|int   $link   the link URL. A URL or identifier returned by AddLink().
      */
-    protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string $link): void
+    protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string|int $link): void
     {
         $parent->Link($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $link);
     }

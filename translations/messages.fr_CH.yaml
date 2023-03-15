@@ -963,7 +963,8 @@ rights:
   list: Liste
   show: Afficher
 schema:
-  name: Schéma de la base de données
+  name: Schéma
+  description: Informations sur les tables de la base de données.
   index:
     title: Tables
     description: Liste des tables de la base de données.

@@ -14,7 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfMove;
-use App\Pdf\PdfBorder;
+use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -32,10 +32,18 @@ use App\Util\FormatUtils;
  */
 class SchemaReport extends AbstractReport
 {
+    private ?PdfStyle $booleanStyle = null;
+
+    /**
+     * @var array<string, int>
+     */
+    private array $tableLinks = [];
+
     public function __construct(AbstractController $controller, private readonly SchemaService $service)
     {
         parent::__construct($controller);
         $this->setTitleTrans('schema.name', [], true);
+        $this->setDescription($this->trans('schema.description'));
     }
 
     /**
@@ -43,23 +51,77 @@ class SchemaReport extends AbstractReport
      */
     public function render(): bool
     {
+        /** @psalm-var SchemaSoftTableType[] $tables */
         $tables = $this->service->getTables();
         if ([] === $tables) {
             return false;
         }
 
         $this->AddPage();
+        $this->booleanStyle = PdfStyle::getBulletStyle();
+
+        /** @psalm-var string[] $names */
+        $names = \array_column($tables, 'name');
+        $this->createLinks($names);
+
         $this->outputTables($tables);
-        $names = $this->service->getTableNames();
         foreach ($names as $name) {
-            /** @var SchemaTableType $table */
+            /** @psalm-var SchemaTableType $table */
             $table = $this->service->getTable($name);
-            $this->outputColumns($table['columns']);
-            $this->outputIndexes($table['indexes']);
-            $this->outputAssociations($table['associations']);
+            $this->outputTable($table);
         }
+        $this->addPageIndex();
 
         return true;
+    }
+
+    /**
+     * @param string[] $names
+     */
+    private function createLinks(array $names): void
+    {
+        foreach ($names as $name) {
+            $this->tableLinks[$name] = $this->AddLink();
+        }
+    }
+
+    private function createTableBuilder(string $id, PdfColumn ...$columns): PdfTableBuilder
+    {
+        return PdfTableBuilder::instance($this)
+            ->addColumns(...$columns)
+            ->startHeaderRow()
+            ->add($this->trans($id), \count($columns))
+            ->completeRow()
+            ->outputHeaders();
+    }
+
+    private function findLink(string $name): int|string
+    {
+        return $this->tableLinks[$name] ?? '';
+    }
+
+    private function formatBool(bool $value): ?string
+    {
+        return $value ? PdfStyle::BULLET : null;
+    }
+
+    private function formatInverse(bool $inverse): string
+    {
+        $id = $inverse ? 'schema.table.one_to_many' : 'schema.table.many_to_one';
+
+        return $this->trans($id);
+    }
+
+    /**
+     * @psalm-param SchemaColumnType $column
+     */
+    private function formatType(array $column): string
+    {
+        if (($length = $column['length']) > 0) {
+            return \sprintf('%s(%d)', $column['type'], $length);
+        }
+
+        return $column['type'];
     }
 
     /**
@@ -67,7 +129,25 @@ class SchemaReport extends AbstractReport
      */
     private function outputAssociations(array $associations): void
     {
-        if ([] !== $associations) {
+        if ([] === $associations) {
+            return;
+        }
+
+        $builder = $this->createTableBuilder(
+            'schema.fields.associations',
+            PdfColumn::left($this->trans('schema.fields.name'), 100),
+            PdfColumn::left($this->trans('schema.fields.table'), 100),
+            PdfColumn::left($this->trans('schema.fields.relation'), 55, true)
+        );
+
+        foreach ($associations as $association) {
+            $table = $association['table'];
+            $link = $this->findLink($table);
+            $builder->startRow()
+                ->add($association['name'])
+                ->addCell(new PdfCell(text: $table, link: $link))
+                ->add($this->formatInverse($association['inverse']))
+                ->completeRow();
         }
     }
 
@@ -76,8 +156,27 @@ class SchemaReport extends AbstractReport
      */
     private function outputColumns(array $columns): void
     {
-        if ([] !== $columns) {
+        if ([] === $columns) {
+            return;
         }
+
+        $builder = $this->createTableBuilder(
+            'schema.fields.columns',
+            PdfColumn::left($this->trans('schema.fields.name'), 100),
+            PdfColumn::left($this->trans('schema.fields.type'), 35, true),
+            PdfColumn::center($this->trans('schema.fields.required'), 20, true),
+            PdfColumn::left($this->trans('schema.fields.default'), 35, true)
+        );
+
+        foreach ($columns as $column) {
+            $builder->startRow()
+                ->add($column['name'])
+                ->add($this->formatType($column))
+                ->add(text: $this->formatBool($column['required']), style: $this->booleanStyle)
+                ->add($column['default'])
+                ->completeRow();
+        }
+        $this->Ln();
     }
 
     /**
@@ -85,8 +184,43 @@ class SchemaReport extends AbstractReport
      */
     private function outputIndexes(array $indexes): void
     {
-        if ([] !== $indexes) {
+        if ([] === $indexes) {
+            return;
         }
+
+        $builder = $this->createTableBuilder(
+            'schema.fields.indexes',
+            PdfColumn::left($this->trans('schema.fields.name'), 100),
+            PdfColumn::left($this->trans('schema.fields.columns'), 100),
+            PdfColumn::center($this->trans('schema.fields.primary'), 25, true),
+            PdfColumn::center($this->trans('schema.fields.unique'), 30, true),
+        );
+
+        foreach ($indexes as $index) {
+            $builder->startRow()
+                ->add($index['name'])
+                ->add(\implode(', ', $index['columns']))
+                ->add(text: $this->formatBool($index['primary']), style: $this->booleanStyle)
+                ->add(text: $this->formatBool($index['unique']), style: $this->booleanStyle)
+                ->completeRow();
+        }
+        $this->Ln();
+    }
+
+    /**
+     * @psalm-param SchemaTableType $table
+     */
+    private function outputTable(array $table): void
+    {
+        $this->AddPage();
+        $name = $table['name'];
+        if (\is_int($link = $this->findLink($name))) {
+            $this->SetLink($link);
+        }
+        $this->outputTitle('schema.table.title', ['%name%' => $name]);
+        $this->outputColumns($table['columns']);
+        $this->outputIndexes($table['indexes']);
+        $this->outputAssociations($table['associations']);
     }
 
     /**
@@ -94,30 +228,44 @@ class SchemaReport extends AbstractReport
      */
     private function outputTables(array $tables): void
     {
-        // title
-        $margin = $this->setCellMargin(0);
-        PdfStyle::getDefaultStyle()->setFontBold()->apply($this);
-        $this->Cell(0, self::LINE_HEIGHT + 2.0, $this->trans('schema.index.title'), PdfBorder::none(), PdfMove::NEW_LINE);
-        $this->setCellMargin($margin);
-        $this->resetStyle();
-
+        $this->outputTitle('schema.index.title');
         $builder = PdfTableBuilder::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('schema.fields.name'), 200),
-                PdfColumn::right($this->trans('schema.fields.columns'), 70),
-                PdfColumn::right($this->trans('schema.fields.records'), 70),
-                PdfColumn::right($this->trans('schema.fields.indexes'), 70),
-                PdfColumn::right($this->trans('schema.fields.associations'), 70)
+                PdfColumn::left($this->trans('schema.fields.name'), 100),
+                PdfColumn::right($this->trans('schema.fields.columns'), 30, true),
+                PdfColumn::right($this->trans('schema.fields.records'), 30, true),
+                PdfColumn::right($this->trans('schema.fields.indexes'), 30, true),
+                PdfColumn::right($this->trans('schema.fields.associations'), 30, true)
             )->outputHeaders();
 
         foreach ($tables as $table) {
-            $builder->addRow(
-                $table['name'],
-                FormatUtils::formatInt($table['columns']),
-                FormatUtils::formatInt($table['records']),
-                FormatUtils::formatInt($table['indexes']),
-                FormatUtils::formatInt($table['associations'])
-            );
+            $name = $table['name'];
+            $link = $this->findLink($name);
+            $builder->startRow()
+                ->addCell(new PdfCell(text: $name, link: $link))
+                ->addValues(
+                    FormatUtils::formatInt($table['columns']),
+                    FormatUtils::formatInt($table['records']),
+                    FormatUtils::formatInt($table['indexes']),
+                    FormatUtils::formatInt($table['associations'])
+                )
+                ->completeRow();
         }
+    }
+
+    private function outputTitle(string $id, array $parameters = []): void
+    {
+        $margin = $this->setCellMargin(0);
+        $text = $this->trans($id, $parameters);
+        PdfStyle::getDefaultStyle()->setFontBold()->apply($this);
+        $this->addBookmark(text: $text, y: 0);
+        $this->Cell(
+            w: 0,
+            h: self::LINE_HEIGHT + 2.0,
+            txt: $text,
+            ln: PdfMove::NEW_LINE
+        );
+        $this->setCellMargin($margin);
+        $this->resetStyle();
     }
 }

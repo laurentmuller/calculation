@@ -16,7 +16,6 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Model\Role;
-use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
@@ -37,11 +36,6 @@ use Elao\Enum\FlagBag;
 class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
     use RoleTranslatorTrait;
-
-    /**
-     * The ASCII bullet character.
-     */
-    private const BULLET_ASCII = 183;
 
     /**
      * The right cell style.
@@ -99,8 +93,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $count = 0;
         $this->setTitleTrans('user.rights.title', [], true);
         $this->AddPage();
+        $this->rightStyle = PdfStyle::getBulletStyle();
         $this->titleStyle = PdfStyle::getCellStyle()->setIndent(2);
-        $this->rightStyle = PdfStyle::getCellStyle()->setFontName(PdfFontName::SYMBOL);
         $builder = $this->createTableBuilder();
         $count += $this->outputRoleAdmin($builder);
         $count += $this->outputRoleUser($builder);
@@ -141,7 +135,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
     {
-        return null !== $rights && $rights->hasFlags($permission) ? \chr(self::BULLET_ASCII) : null;
+        return null !== $rights && $rights->hasFlags($permission) ? PdfStyle::BULLET : null;
     }
 
     /**

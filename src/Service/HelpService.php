@@ -74,6 +74,11 @@ class HelpService implements ServiceSubscriberInterface
     private const CACHE_KEY = 'help';
 
     /**
+     * The cache timeout (15 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 15;
+
+    /**
      * The relative path to the JSON help file.
      */
     private const FILE_PATH = '/public/help/help.json';
@@ -195,27 +200,14 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function getHelp(): array
     {
-        /** @psalm-var HelpContentType|null $help */
-        $help = $this->getCacheValue(self::CACHE_KEY);
-        if (\is_array($help)) {
-            return $help;
-        }
-        $content = (string) \file_get_contents($this->file);
-        /** @psalm-var HelpContentType|null $help */
-        $help = \json_decode($content, true);
-        if (\is_array($help)) {
-            if (!empty($help['dialogs'])) {
-                $this->sortDialogs($help['dialogs']);
-            }
-            if (!empty($help['entities'])) {
-                $this->sortEntities($help['entities']);
-            }
-            $this->setCacheValue(self::CACHE_KEY, $help);
+        /** @psalm-var HelpContentType $results */
+        $results = $this->getCacheValue(
+            self::CACHE_KEY,
+            fn () => $this->loadHelp(),
+            self::CACHE_TIMEOUT
+        );
 
-            return $help;
-        }
-
-        return [];
+        return $results;
     }
 
     /**
@@ -280,6 +272,29 @@ class HelpService implements ServiceSubscriberInterface
         }
 
         return $entries;
+    }
+
+    /**
+     * @pslam-return HelpContentType
+     */
+    private function loadHelp(): array
+    {
+        $content = (string) \file_get_contents($this->file);
+
+        /** @psalm-var HelpContentType|null $help */
+        $help = \json_decode($content, true);
+        if (\is_array($help)) {
+            if (!empty($help['dialogs'])) {
+                $this->sortDialogs($help['dialogs']);
+            }
+            if (!empty($help['entities'])) {
+                $this->sortEntities($help['entities']);
+            }
+
+            return $help;
+        }
+
+        return [];
     }
 
     /**

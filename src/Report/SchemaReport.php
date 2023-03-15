@@ -95,9 +95,9 @@ class SchemaReport extends AbstractReport
             ->outputHeaders();
     }
 
-    private function findLink(string $name): int|string
+    private function findLink(?string $name): int|string
     {
-        return $this->tableLinks[$name] ?? '';
+        return null === $name ? '' : $this->tableLinks[$name] ?? '';
     }
 
     private function formatBool(bool $value): ?string
@@ -169,8 +169,9 @@ class SchemaReport extends AbstractReport
         );
 
         foreach ($columns as $column) {
+            $link = $this->findLink($column['foreign_table']);
             $builder->startRow()
-                ->add($column['name'])
+                ->addCell(new PdfCell(text: $column['name'], link: $link))
                 ->add($this->formatType($column))
                 ->add(text: $this->formatBool($column['required']), style: $this->booleanStyle)
                 ->add($column['default'])

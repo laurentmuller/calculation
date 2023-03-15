@@ -39,13 +39,13 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     type: string,
  *     length: int,
  *     required: bool,
- *     foreign_name: string|null,
+ *     foreign_table: string|null,
  *     default: string}
  * @psalm-type SchemaIndexType=array{
  *     name: string,
  *     primary: bool,
  *     unique: bool,
- *     columns: array<string>}
+ *     columns: string[]}
  * @psalm-type SchemaAssociationType=array{
  *     name: string,
  *     inverse: bool,
@@ -54,8 +54,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *          name: string,
  *          columns: array<SchemaColumnType>,
  *          records: int,
- *          indexes: array<SchemaIndexType>,
- *          associations: array<SchemaAssociationType>}
+ *          indexes: SchemaIndexType[],
+ *          associations: SchemaAssociationType[]}
  * @psalm-type SchemaSoftTableType=array{
  *          name: string,
  *          columns: int,
@@ -69,9 +69,9 @@ class SchemaService implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
 
     /**
-     * The cache TTL (1 day).
+     * The cache timeout (1 day).
      */
-    private const LIFE_TIME = 86_400;
+    private const CACHE_TIMEOUT = 86_400;
 
     private ?Connection $connection = null;
 
@@ -88,27 +88,15 @@ class SchemaService implements ServiceSubscriberInterface
      * Get table information.
      *
      * @pslam-return SchemaTableType
-     *
-     * @throws Exception
      */
     public function getTable(string $name): array
     {
-        $key = 'schema_service.metadata.table.' . $name;
-
-        /** @psalm-var SchemaTableType|null $results */
-        $results = $this->getCacheValue($key);
-        if (\is_array($results)) {
-            return $results;
-        }
-
-        $table = $this->introspectTable($name);
-        $results = [
-            'name' => $name,
-            'columns' => $this->getColumns($table),
-            'indexes' => $this->getIndexes($table),
-            'associations' => $this->getAssociations($table),
-        ];
-        $this->setCacheValue($key, $results, self::LIFE_TIME);
+        /** @psalm-var SchemaTableType $results */
+        $results = $this->getCacheValue(
+            "schema_service.metadata.table.$name",
+            fn () => $this->loadTable($name),
+            self::CACHE_TIMEOUT
+        );
 
         return $results;
     }
@@ -123,7 +111,11 @@ class SchemaService implements ServiceSubscriberInterface
     public function getTables(): array
     {
         /** @psalm-var SchemaSoftTableType[] $results */
-        $results = $this->getCacheValue('schema_service.tables', fn () => $this->loadTables());
+        $results = $this->getCacheValue(
+            'schema_service.tables',
+            fn () => $this->loadTables(),
+            self::CACHE_TIMEOUT
+        );
 
         // update records
         foreach ($results as &$result) {
@@ -231,7 +223,7 @@ class SchemaService implements ServiceSubscriberInterface
             $name = $column->getName();
             $primary = \in_array($name, $primaryKeys, true);
             $unique = $this->isIndexUnique($name, $indexes);
-            $foreignTableName = $this->findForeignTableName($name, $foreignKeys);
+            $foreignTable = $this->findForeignTableName($name, $foreignKeys);
 
             return [
                 'name' => $name,
@@ -240,7 +232,7 @@ class SchemaService implements ServiceSubscriberInterface
                 'type' => $this->getColumnType($column),
                 'length' => $column->getLength() ?? 0,
                 'required' => $column->getNotnull(),
-                'foreign_name' => $foreignTableName,
+                'foreign_table' => $foreignTable,
                 'default' => $this->getDefaultValue($column),
             ];
         }, $table->getColumns());
@@ -300,14 +292,14 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getMetaDatas(): array
     {
-        /** @psalm-var array<string, ClassMetadataInfo<object>> $metaDatas */
-        $metaDatas = $this->getCacheValue(
+        /** @psalm-var array<string, ClassMetadataInfo<object>> $results */
+        $results = $this->getCacheValue(
             'schema_service.metadata',
             fn () => $this->loadMetaDatas($this->manager),
-            self::LIFE_TIME
+            self::CACHE_TIMEOUT
         );
 
-        return $metaDatas;
+        return $results;
     }
 
     /**
@@ -390,6 +382,23 @@ class SchemaService implements ServiceSubscriberInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @pslam-return SchemaTableType
+     *
+     * @throws Exception
+     */
+    private function loadTable(string $name): array
+    {
+        $table = $this->introspectTable($name);
+
+        return [
+            'name' => $name,
+            'columns' => $this->getColumns($table),
+            'indexes' => $this->getIndexes($table),
+            'associations' => $this->getAssociations($table),
+        ];
     }
 
     /**

@@ -34,12 +34,21 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     private const CACHE_KEY = 'twig_constant_extension';
 
+    /**
+     * The cache timeout (1 day).
+     */
+    private const CACHE_TIMEOUT = 86_400;
+
     public function getGlobals(): array
     {
-        /** @var array<string, mixed> $globals */
-        $globals = (array) $this->getCacheValue(self::CACHE_KEY, fn () => $this->getValues());
+        /** @var array<string, mixed> $results */
+        $results = $this->getCacheValue(
+            self::CACHE_KEY,
+            fn () => $this->loadValues(),
+            self::CACHE_TIMEOUT
+        );
 
-        return $globals;
+        return $results;
     }
 
     /**
@@ -97,7 +106,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      *
      * @throws \ReflectionException
      */
-    private function getValues(): array
+    private function loadValues(): array
     {
         return \array_merge(
             $this->getIcons(),

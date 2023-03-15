@@ -28,6 +28,11 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     final protected const ERROR_NOT_FOUND = 199;
 
     /**
+     * The cache timeout (15 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 15;
+
+    /**
      * The key to cache language.
      */
     protected ?string $cacheKey = null;
@@ -59,17 +64,15 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     public function getLanguages(): array|false
     {
         $key = $this->getCacheKey();
-        /** @var array<string, string>|null $languages */
-        $languages = $this->getCacheValue($key);
-        if (\is_array($languages)) {
-            return $languages;
-        }
-        $languages = $this->loadLanguages();
-        if (!empty($languages) && null === $this->lastError) {
-            $this->setCacheValue($key, $languages);
-        }
 
-        return $languages;
+        /** @psalm-var array<string, string>|null $results */
+        $results = $this->getCacheValue(
+            $key,
+            fn () => $this->doLoadLanguages(),
+            self::CACHE_TIMEOUT
+        );
+
+        return $results ?? false;
     }
 
     protected function getValue(array $values, string $path, bool $error = true): mixed
@@ -109,6 +112,19 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      * @psalm-return array<string, string>|false
      */
     abstract protected function loadLanguages(): array|false;
+
+    /**
+     * @return array<string, string>|null
+     */
+    private function doLoadLanguages(): ?array
+    {
+        $languages = $this->loadLanguages();
+        if (!empty($languages) && null === $this->lastError) {
+            return $languages;
+        }
+
+        return null;
+    }
 
     private function getCacheKey(): string
     {

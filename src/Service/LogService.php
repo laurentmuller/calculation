@@ -34,6 +34,11 @@ class LogService implements ServiceSubscriberInterface
     use TranslatorAwareTrait;
 
     /**
+     * The cache timeout (15 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 15;
+
+    /**
      * The key to cache result.
      */
     private const KEY_CACHE = 'log_service_file';
@@ -87,10 +92,14 @@ class LogService implements ServiceSubscriberInterface
      */
     public function getLogFile(): ?LogFile
     {
-        /** @var ?LogFile $value */
-        $value = $this->getCacheValue(self::KEY_CACHE);
+        /** @psalm-var LogFile|null $result */
+        $result = $this->getCacheValue(
+            self::KEY_CACHE,
+            fn () => $this->parseFile(),
+            self::CACHE_TIMEOUT
+        );
 
-        return $value instanceof LogFile ? $value : $this->parseFile();
+        return $result;
     }
 
     /**
@@ -137,7 +146,6 @@ class LogService implements ServiceSubscriberInterface
                     ->setExtra($this->parseJson($values[5])));
             }
             $file->sort();
-            $this->setCacheValue(self::KEY_CACHE, $file);
 
             return $file;
         } catch (\Exception $e) {

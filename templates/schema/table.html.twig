@@ -28,13 +28,13 @@
         </thead>
         <tbody>
         {% for column in columns %}
-            {% set foreign_name = column.foreign_name ?? false %}
+            {% set foreign_table = column.foreign_table ?? false %}
             <tr>
                 <td class="w-100 text-nowrap">
                     {% if column.primary %}<i class="fa-solid fa-key fa-fw mr-1" title="{{ 'schema.fields.primary'|trans }}"></i>{% endif %}
                     {% if column.unique and not column.primary %}<i class="fa-solid fa-lock fa-fw mr-1" title="{{ 'schema.fields.unique'|trans }}"></i>{% endif %}
-                    {%- if foreign_name -%}
-                        <a href="{{ path('schema_table', {'name': foreign_name}) }}" title="{% if foreign_name %}{{ 'schema.index.tooltip'|trans({'%name%': foreign_name}) }}"{% endif %}><i class="fa-solid fa-link fa-fw mr-1"></i>{{ column.name -}}</a>
+                    {%- if foreign_table -%}
+                        <a href="{{ path('schema_table', {'name': foreign_table}) }}" title="{% if foreign_table %}{{ 'schema.index.tooltip'|trans({'%name%': foreign_table}) }}"{% endif %}><i class="fa-solid fa-link fa-fw mr-1"></i>{{ column.name -}}</a>
                     {%- else -%}
                         {{- column.name -}}
                     {%- endif -%}

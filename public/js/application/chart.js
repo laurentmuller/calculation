@@ -10,8 +10,9 @@ function onMonthsChange($months) {
     const oldMonths = $months.data('months');
     const newMonths = $.parseInt($months.val());
     if (newMonths !== oldMonths) {
-        const url = $months.data('url') + "/" + newMonths;
-        window.location.assign(url);
+        const url = new URL($months.data('url'));
+        url.searchParams.set('count', newMonths);
+        window.location.assign(url.href);
     }
 }
 
@@ -25,6 +26,7 @@ function onMonthsChange($months) {
         selector: '.has-tooltip',
         customClass: 'tooltip-danger'
     });
+
     // handle months change
     const $months = $('#months');
     if ($months.length) {

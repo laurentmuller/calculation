@@ -33,6 +33,11 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
     use TranslatorAwareTrait;
 
     /**
+     * The cache timeout (15 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 15;
+
+    /**
      * The host name.
      */
     private const HOST_NAME = 'https://%s.rest.akismet.com/1.1/';
@@ -51,16 +56,6 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      * The value returned when the comment is not a spam.
      */
     private const VALUE_FALSE = 'false';
-
-    /**
-     * The value returned when the API key is invalid.
-     */
-    private const VALUE_INVALID = 'invalid';
-
-    /**
-     * The value returned when the comment is a spam.
-     */
-    private const VALUE_TRUE = 'true';
 
     /**
      * The value returned when the API key is valid.
@@ -127,82 +122,39 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      */
     public function verifyComment(string $content, array $options = []): bool
     {
-        if (null !== ($request = $this->getCurrentRequest())) {
-            /** @var \App\Entity\User|null $user */
-            $user = $this->security->getUser();
-            $headers = $request->headers;
-            $body = \array_filter(\array_merge([
-                'user_ip' => $request->getClientIp(),
-                'user_agent' => $headers->get('User-Agent'),
-                'referrer' => $headers->get('referer'),
-                'comment_content' => $content,
-                'comment_type' => 'contact-form',
-                'comment_author' => $user?->getUserIdentifier(),
-                'comment_author_email' => $user?->getEmail(),
-                'blog' => $request->getSchemeAndHttpHost(),
-                'blog_lang' => $request->getLocale(),
-                'blog_charset' => 'UTF-8',
-                'is_test' => true,
-            ], $options));
-            $response = $this->requestPost(self::URI_COMMENT_CHECK, [
-                self::BODY => $body,
-            ]);
-            if (Response::HTTP_OK !== $response->getStatusCode()) {
-                $this->checkError($response);
-
-                return true;
-            }
-            $content = $response->getContent();
-            switch ($content) {
-                case self::VALUE_TRUE:
-                    return true;
-                case self::VALUE_FALSE:
-                    return false;
-                case self::VALUE_INVALID:
-                default:
-                    $this->checkError($response);
-
-                    return true;
-            }
+        if (null === $request = $this->getCurrentRequest()) {
+            return true;
         }
 
-        return true;
+        $body = $this->getVerifyParameters($request, $content, $options);
+        $response = $this->requestPost(self::URI_COMMENT_CHECK, [
+            self::BODY => $body,
+        ]);
+        if (Response::HTTP_OK !== $response->getStatusCode() || !$this->checkError($response)) {
+            return true;
+        }
+
+        return match ($response->getContent()) {
+            self::VALUE_FALSE => false,
+            default => true
+        };
     }
 
     /**
      * Verify that API key is valid.
      *
      * @return bool true if valid; false otherwise
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function verifyKey(): bool
     {
-        /** @var bool|null $verified */
-        $verified = $this->getUrlCacheValue(self::URI_VERIFY);
-        if (\is_bool($verified)) {
-            return $verified;
-        }
-        if (null !== ($request = $this->getCurrentRequest())) {
-            $body = [
-                'key' => $this->key,
-                'blog' => $request->getSchemeAndHttpHost(),
-            ];
-            $response = $this->requestPost(self::URI_VERIFY, [
-                self::BODY => $body,
-            ]);
-            if (Response::HTTP_OK !== $response->getStatusCode()) {
-                $this->checkError($response);
+        /** @psalm-var bool|null $results */
+        $results = $this->getUrlCacheValue(
+            self::URI_VERIFY,
+            fn () => $this->doVerifyKey(),
+            self::CACHE_TIMEOUT
+        );
 
-                return false;
-            }
-            $verified = self::VALUE_VALID === $response->getContent();
-            $this->setUrlCacheValue(self::URI_VERIFY, $verified);
-
-            return $verified;
-        }
-
-        return false;
+        return \is_bool($results) ? $results : false;
     }
 
     /**
@@ -216,9 +168,11 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
     /**
      * Checks response error.
      *
+     * @return bool false if an error is found; true otherwise
+     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function checkError(ResponseInterface $response): void
+    private function checkError(ResponseInterface $response): bool
     {
         $headers = $response->getHeaders();
         $code = (int) ($headers['X-akismet-alert-code'][0] ?? 0);
@@ -227,12 +181,58 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
             if ($message === (string) $code) {
                 $message = $headers['X-akismet-alert-msg'][0] ?? $this->trans('unknown', [], 'askimet');
             }
-            $this->setLastError($code, $message);
+
+            return $this->setLastError($code, $message);
         }
+
+        return true;
+    }
+
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     */
+    private function doVerifyKey(): ?bool
+    {
+        if (null === $request = $this->getCurrentRequest()) {
+            return null;
+        }
+        $body = [
+            'key' => $this->key,
+            'blog' => $request->getSchemeAndHttpHost(),
+        ];
+        $response = $this->requestPost(self::URI_VERIFY, [
+            self::BODY => $body,
+        ]);
+        if (Response::HTTP_OK !== $response->getStatusCode() || !$this->checkError($response)) {
+            return null;
+        }
+
+        return self::VALUE_VALID === $response->getContent();
     }
 
     private function getCurrentRequest(): ?Request
     {
         return $this->stack->getCurrentRequest();
+    }
+
+    private function getVerifyParameters(Request $request, string $content, array $options): array
+    {
+        /** @psalm-var \App\Entity\User|null $user */
+        $user = $this->security->getUser();
+        $headers = $request->headers;
+
+        return \array_filter(\array_merge([
+             'user_ip' => $request->getClientIp(),
+             'user_agent' => $headers->get('User-Agent'),
+             'referrer' => $headers->get('referer'),
+             'comment_content' => $content,
+             'comment_type' => 'contact-form',
+             'comment_author' => $user?->getUserIdentifier(),
+             'comment_author_email' => $user?->getEmail(),
+             'blog' => $request->getSchemeAndHttpHost(),
+             'blog_lang' => $request->getLocale(),
+             'blog_charset' => 'UTF-8',
+             'is_test' => true,
+         ], $options));
     }
 }

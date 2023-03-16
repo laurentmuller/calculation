@@ -130,7 +130,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * Gets the default requests options used to create the HTTP client.
      *
-     * @return array the default requests options
+     * @return array<string, string|array> the default requests options
      *
      * @see AbstractHttpClientService::createClient()
      */
@@ -142,17 +142,20 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * Gets the value from this cache for the given URL.
      *
-     * @param string $url     The URL for which to return the corresponding value
-     * @param mixed  $default The default value to return or a callable function to get the default value.
-     *                        If the callable function returns a value, this value is saved to the cache.
+     * @param string                 $url     The URL for which to return the corresponding value
+     * @param mixed                  $default The default value to return or a callable function to get the default value.
+     *                                        If the callable function returns a value, this value is saved to the cache.
+     * @param \DateInterval|int|null $time    The period of time from the present after which the item must be considered
+     *                                        expired. An integer parameter is understood to be the time in seconds until
+     *                                        expiration. If null is passed, the expiration time is not set.
      *
      * @return mixed the value, if found; the default otherwise
      */
-    protected function getUrlCacheValue(string $url, mixed $default = null): mixed
+    protected function getUrlCacheValue(string $url, mixed $default = null, int|\DateInterval|null $time = null): mixed
     {
         $key = $this->getUrlKey($url);
 
-        return $this->getCacheValue($key, $default);
+        return $this->getCacheValue($key, $default, $time);
     }
 
     /**
@@ -161,9 +164,11 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     protected function getUrlKey(string $url): string
     {
         $options = $this->getDefaultOptions();
-        $prefix = (string) ($options[self::BASE_URI] ?? '');
+        if (isset($options[self::BASE_URI]) && \is_string($options[self::BASE_URI])) {
+            return $options[self::BASE_URI] . $url;
+        }
 
-        return $prefix . $url;
+        return $url;
     }
 
     /**
@@ -216,10 +221,8 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
 
     /**
      * Sets the last error and log it.
-     *
-     * @return false this function returns always false
      */
-    protected function setLastError(int $code, string $message, ?\Exception $exception = null): bool
+    protected function setLastError(int $code, string $message, ?\Exception $exception = null): false
     {
         $this->lastError = new HttpClientError($code, $message, $exception);
         if (null !== $exception) {
@@ -229,23 +232,5 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
         }
 
         return false;
-    }
-
-    /**
-     * Save the given value to the cache for the given URL.
-     *
-     * @param string                 $url   The URL for which to save the value
-     * @param mixed                  $value The value to save. If null, the key item is removed from the cache.
-     * @param \DateInterval|int|null $time  The period of time from the present after which the item must be considered
-     *                                      expired. An integer parameter is understood to be the time in seconds until
-     *                                      expiration. If null is passed, a default value (60 minutes) is used.
-     *
-     * @return bool true if the cache is updated
-     */
-    protected function setUrlCacheValue(string $url, mixed $value, \DateInterval|int $time = null): bool
-    {
-        $key = $this->getUrlKey($url);
-
-        return $this->setCacheValue($key, $value, $time);
     }
 }

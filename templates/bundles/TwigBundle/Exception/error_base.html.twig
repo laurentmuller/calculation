@@ -2,7 +2,6 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import link, homepage %}
 {# parameters #}
-{%- set is_exception = exception is defined -%}
 {%- set title_icon = 'exclamation-circle' -%}
 {% if not title is defined %}
     {% if status_code is defined and status_code != 0 %}
@@ -13,11 +12,12 @@
     {% endif %}
 {% endif %}
 {%- set title_description = 'error_page.description' -%}
-
-{% block card_container_class '' %}
+{%- set is_exception = exception is defined and exception -%}
+{# class #}
 {% block card_class ' border-danger' %}
 {% block card_header_class ' text-white bg-danger' %}
-
+{% block card_container_class is_exception ? '' : ' col-xl-8 offset-xl-2' %}
+{# body #}
 {% block card_body %}
 <p>
 {% block error_message -%}
@@ -25,14 +25,14 @@
 {%- endblock %}
 </p>
 <div class="row d-print-none">
-    <div class="col-md-9">
+    <div class="col{% if is_exception %}-md-9{% endif %}">
         <p class="mb-0">{{ 'error_page.link'|trans({'%mailto%': mailer_user_email, '%subject%': app_name_version|url_encode})|raw }}</p>
     </div>
+    {% if is_exception %}
     <div class="col-md-3 text-md-right">
-        {% if is_exception %}
-            <a data-toggle="collapse" href="#exception-detail" class="collapsed" aria-expanded="false" aria-controls="exception-detail">{{ 'error_page.details'|trans }}</a>
-        {% endif %}
+        <a data-toggle="collapse" href="#exception-detail" class="collapsed" aria-expanded="false" aria-controls="exception-detail">{{ 'error_page.details'|trans }}</a>
     </div>
+    {% endif %}
 </div>
 {% if is_exception %}
 <div id="exception-detail" class="collapse mt-3" aria-expanded="false">
@@ -90,7 +90,7 @@
 </div>
 {% endif %}
 {% endblock %}
-
+{# footer #}
 {% block card_footer %}
 {% if page_list is defined %}
     {%- set id = id|default(0) -%}

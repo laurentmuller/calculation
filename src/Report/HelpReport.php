@@ -33,11 +33,6 @@ use App\Util\FileUtils;
 class HelpReport extends AbstractReport
 {
     /**
-     * The absolute path to the images.
-     */
-    private readonly string $imagePath;
-
-    /**
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
@@ -46,7 +41,6 @@ class HelpReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly HelpService $service)
     {
         parent::__construct($controller);
-        $this->imagePath = $service->getImagePath();
         $this->setTitleTrans('help.title');
     }
 
@@ -223,12 +217,12 @@ class HelpReport extends AbstractReport
         $entity = $this->findEntity($item);
         $fields = $this->findFields($entity);
         if (null !== $entity && null !== $fields) {
-            if (isset($item['displayEntityColumns']) && $item['displayEntityColumns']) {
+            if (isset($item['displayEntityColumns'])) {
                 $this->Ln(3);
                 $this->outputText('help.labels.edit_columns');
                 $this->outputColumns($entity, $fields);
             }
-            if (isset($item['displayEntityFields']) && $item['displayEntityFields']) {
+            if (isset($item['displayEntityFields'])) {
                 $this->Ln(3);
                 $this->outputText('help.labels.edit_fields');
                 $this->outputFields($entity, $fields);
@@ -375,12 +369,15 @@ class HelpReport extends AbstractReport
 
     private function outputImage(string $image): void
     {
-        $file = $this->imagePath . $image;
+        $file = FileUtils::buildPath($this->service->getImagePath(), $image);
         if (!FileUtils::exists($file)) {
             return;
         }
-        /** @var float[] $size */
+        /** @psalm-var int[]|false $size */
         $size = \getimagesize($file);
+        if (!\is_array($size)) {
+            return;
+        }
         $width = $this->pixels2UserUnit($size[0]);
         $width = \min($width, $this->getPrintableWidth());
         $this->Image(file: $file, w: $width);

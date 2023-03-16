@@ -30,11 +30,21 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     fractionDigits: int,
  *     roundingIncrement: int
  * }
+ * @psalm-type ExchangeRateAndDateType = array{
+ *     rate: float,
+ *     next: int|null,
+ *     update: int|null
+ * }
  */
 class ExchangeRateService extends AbstractHttpClientService implements ServiceSubscriberInterface
 {
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
+
+    /**
+     * The default cache timeout (15 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 15;
 
     /**
      * The host name.
@@ -67,6 +77,11 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     private readonly string $endpoint;
 
     /**
+     * The cache timeout.
+     */
+    private ?int $timeout = null;
+
+    /**
      * Constructor.
      *
      * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
@@ -86,28 +101,17 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $code the base currency code
      *
      * @return array<string, float> an array with the currency code as key and the currency rate as value or an empty array if an error occurs
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function getLatest(string $code): array
     {
         $url = $this->getUrl(self::URI_LATEST, $code);
-        /** @psalm-var array<string, float>|null $rates */
-        $rates = $this->getUrlCacheValue($url);
-        if (\is_array($rates)) {
-            return $rates;
-        }
-        if (\is_array($response = $this->get($url))) {
-            /** @psalm-var array<string, float>|null $rates */
-            $rates = $response['conversion_rates'] ?? null;
-            if (\is_array($rates)) {
-                $this->saveResponse($url, $response, $rates);
+        /** @psalm-var array<string, float>|null $results */
+        $results = $this->getUrlCacheValue(
+            $url,
+            fn () => $this->doGetLatest($url)
+        );
 
-                return $rates;
-            }
-        }
-
-        return [];
+        return $results ?? [];
     }
 
     /**
@@ -117,28 +121,18 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $targetCode the target currency code
      *
      * @return float the exchange rate or 0.0 if an error occurs.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function getRate(string $baseCode, string $targetCode): float
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
-        /** @psalm-var float|null $rate */
-        $rate = $this->getUrlCacheValue($url);
-        if (\is_float($rate)) {
-            return $rate;
-        }
-        if (\is_array($response = $this->get($url))) {
-            /** @psalm-var float|null $rate */
-            $rate = $response['conversion_rate'] ?? null;
-            if (\is_float($rate)) {
-                $this->saveResponse($url, $response, $rate);
+        /** @psalm-var float|null $results */
+        $results = $this->getUrlCacheValue(
+            $url,
+            fn () => $this->doGetRate($url),
+            $this->timeout
+        );
 
-                return $rate;
-            }
-        }
-
-        return 0.0;
+        return $results ?? 0.0;
     }
 
     /**
@@ -147,63 +141,37 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $baseCode   the base currency code
      * @param string $targetCode the target currency code
      *
-     * @return array{rate: float, next: int|null, update: int|null}|null the exchange rate, the next update and last update dates or null if an error occurs
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @psalm-return ExchangeRateAndDateType|null the exchange rate, the next update and last update dates or null if an error occurs
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
-        /** @psalm-var array{rate: float, next: int|null, update: int|null}|null $result */
-        $result = $this->getUrlCacheValue($url);
-        if (\is_array($result)) {
-            return $result;
-        }
-        if (\is_array($response = $this->get($url))) {
-            /** @psalm-var float|null $rate */
-            $rate = $response['conversion_rate'] ?? null;
-            if (\is_float($rate)) {
-                $result = [
-                    'rate' => $rate,
-                    'next' => $this->getNextTime($response),
-                    'update' => $this->getUpdateTime($response),
-                ];
-                $this->saveResponse($url, $response, $result);
+        /** @psalm-var ExchangeRateAndDateType|null $results */
+        $results = $this->getUrlCacheValue(
+            $url,
+            fn () => $this->doGetRateAndDates($url),
+            $this->timeout
+        );
 
-                return $result;
-            }
-        }
-
-        return null;
+        return $results;
     }
 
     /**
      * Gets the supported currency codes.
      *
      * @return array<string, ExchangeRateType> the supported currency codes or an empty array if an error occurs
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function getSupportedCodes(): array
     {
         $url = self::URI_CODES;
-        /** @psalm-var array<string, ExchangeRateType>|null $result */
-        $result = $this->getUrlCacheValue($url);
-        if (\is_array($result)) {
-            return $result;
-        }
-        if (\is_array($response = $this->get($url))) {
-            /** @psalm-var string[]|null $codes */
-            $codes = $response['supported_codes'] ?? null;
-            if (\is_array($codes)) {
-                $result = $this->mapCodes($codes);
-                $this->saveResponse($url, $response, $result);
+        /** @psalm-var array<string, ExchangeRateType>|null $results */
+        $results = $this->getUrlCacheValue(
+            $url,
+            fn () => $this->doGetSupportedCodes($url),
+            $this->timeout
+        );
 
-                return $result;
-            }
-        }
-
-        return [];
+        return $results ?? [];
     }
 
     /**
@@ -212,6 +180,89 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     protected function getDefaultOptions(): array
     {
         return [self::BASE_URI => $this->endpoint];
+    }
+
+    /**
+     * @psalm-return array<string, float>|null $rates
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     */
+    private function doGetLatest(string $url): ?array
+    {
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var array<string, float>|null $rates */
+            $rates = $response['conversion_rates'] ?? null;
+            if (\is_array($rates)) {
+                $this->timeout = $this->getDeltaTime($response);
+
+                return $rates;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     */
+    private function doGetRate(string $url): ?float
+    {
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var float|null $rate */
+            $rate = $response['conversion_rate'] ?? null;
+            if (\is_float($rate)) {
+                $this->timeout = $this->getDeltaTime($response);
+
+                return $rate;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     *
+     * @psalm-return ExchangeRateAndDateType|null
+     */
+    private function doGetRateAndDates(string $url): ?array
+    {
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var float|null $rate */
+            $rate = $response['conversion_rate'] ?? null;
+            if (\is_float($rate)) {
+                $this->timeout = $this->getDeltaTime($response);
+
+                return [
+                    'rate' => $rate,
+                    'next' => $this->getNextTime($response),
+                    'update' => $this->getUpdateTime($response),
+                ];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array<string, ExchangeRateType>|null
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     */
+    private function doGetSupportedCodes(string $url): ?array
+    {
+        if (\is_array($response = $this->get($url))) {
+            /** @psalm-var string[]|null $codes */
+            $codes = $response['supported_codes'] ?? null;
+            if (\is_array($codes)) {
+                $results = $this->mapCodes($codes);
+                $this->timeout = $this->getDeltaTime($response);
+
+                return $results;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -234,7 +285,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         return null;
     }
 
-    private function getDeltaTime(array $response): ?int
+    private function getDeltaTime(array $response): int
     {
         $time = $this->getNextTime($response);
         if (null !== $time) {
@@ -244,7 +295,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
             }
         }
 
-        return null;
+        return self::CACHE_TIMEOUT;
     }
 
     private function getNextTime(array $response): ?int
@@ -256,7 +307,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $time = (int) ($response[$key] ?? 0);
 
-        return 0 !== $time ? $time : null;
+        return $time > 0 ? $time : null;
     }
 
     private function getUpdateTime(array $response): ?int
@@ -320,12 +371,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         \uasort($result, fn (array $a, array $b) => $a['name'] <=> $b['name']);
 
         return $result;
-    }
-
-    private function saveResponse(string $url, array $response, mixed $value): void
-    {
-        $time = $this->getDeltaTime($response);
-        $this->setUrlCacheValue($url, $value, $time);
     }
 
     private function translateError(string $id): string

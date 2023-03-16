@@ -21,23 +21,23 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to provide help.
  *
- *  @psalm-type  HelpFieldType = array{
+ *  @psalm-type HelpFieldType = array{
  *      name: string,
  *      description: string,
  *      type: string|null,
  *      length: int|null,
  *      required: bool|null}
- * @psalm-type  HelpDialogType = array{
+ * @psalm-type HelpDialogType = array{
  *      id: string,
  *      description: string|null,
  *      image: string|null,
- *      displayEntityColumns: null|bool,
- *      displayEntityFields: null|bool,
- *      displayEntityActions: null|bool,
+ *      displayEntityColumns: true|null,
+ *      displayEntityFields: true|null,
+ *      displayEntityActions: true|null,
  *      entity: null|string,
  *      editActions: null|array,
- *      globalActions: null|array,
- *      forbidden: null|array,
+ *      globalActions: array|null,
+ *      forbidden: array|null,
  *      details: string[]|null}
  * @psalm-type HelpEntityType = array{
  *      id: string,
@@ -79,34 +79,17 @@ class HelpService implements ServiceSubscriberInterface
     private const CACHE_TIMEOUT = 60 * 15;
 
     /**
-     * The relative path to the JSON help file.
-     */
-    private const FILE_PATH = '/public/help/help.json';
-
-    /**
-     * The relative path to the images.
-     */
-    private const IMAGE_PATH = '/public/help/images/';
-
-    /**
-     * The absolute path to the JSON help file.
-     */
-    private readonly string $file;
-
-    /**
-     * The absolute root path to the images.
-     */
-    private readonly string $imagePath;
-
-    /**
      * Constructor.
+     *
+     * @param string $file      the absolute path to the JSON help file
+     * @param string $imagePath the absolute path to images
      */
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir
+        #[Autowire('%kernel.project_dir%/public/help/help.json')]
+        private readonly string $file,
+        #[Autowire('%kernel.project_dir%/public/help/images')]
+        private readonly string $imagePath
     ) {
-        $this->file = $projectDir . self::FILE_PATH;
-        $this->imagePath = $projectDir . self::IMAGE_PATH;
     }
 
     /**
@@ -200,14 +183,14 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function getHelp(): array
     {
-        /** @psalm-var HelpContentType $results */
+        /** @psalm-var HelpContentType|null $results */
         $results = $this->getCacheValue(
             self::CACHE_KEY,
             fn () => $this->loadHelp(),
             self::CACHE_TIMEOUT
         );
 
-        return $results;
+        return $results ?? [];
     }
 
     /**
@@ -275,26 +258,26 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
-     * @pslam-return HelpContentType
+     * @pslam-return HelpContentType|null
      */
-    private function loadHelp(): array
+    private function loadHelp(): ?array
     {
-        $content = (string) \file_get_contents($this->file);
-
+        if (!\is_string($content = \file_get_contents($this->file))) {
+            return null;
+        }
         /** @psalm-var HelpContentType|null $help */
         $help = \json_decode($content, true);
-        if (\is_array($help)) {
-            if (!empty($help['dialogs'])) {
-                $this->sortDialogs($help['dialogs']);
-            }
-            if (!empty($help['entities'])) {
-                $this->sortEntities($help['entities']);
-            }
-
-            return $help;
+        if (!\is_array($help)) {
+            return null;
+        }
+        if (!empty($help['dialogs'])) {
+            $this->sortDialogs($help['dialogs']);
+        }
+        if (!empty($help['entities'])) {
+            $this->sortEntities($help['entities']);
         }
 
-        return [];
+        return $help;
     }
 
     /**
@@ -303,13 +286,17 @@ class HelpService implements ServiceSubscriberInterface
     private function sortDialogs(array &$values): void
     {
         \usort($values, function (array $a, array $b): int {
-            $entityA = isset($a['entity']) ? $this->trans((string) $a['entity'] . '.name') : 'zzzz';
-            $entityB = isset($b['entity']) ? $this->trans((string) $b['entity'] . '.name') : 'zzzz';
+            /**
+             * @psalm-var HelpDialogType $a
+             * @psalm-var HelpDialogType $b
+             */
+            $entityA = isset($a['entity']) ? $this->trans($a['entity'] . '.name') : 'zzzz';
+            $entityB = isset($b['entity']) ? $this->trans($b['entity'] . '.name') : 'zzzz';
             if (0 !== $result = \strnatcmp($entityA, $entityB)) {
                 return $result;
             }
-            $textA = $this->trans((string) $a['id']);
-            $textB = $this->trans((string) $b['id']);
+            $textA = $this->trans($a['id']);
+            $textB = $this->trans($b['id']);
 
             return \strnatcmp($textA, $textB);
         });
@@ -321,8 +308,12 @@ class HelpService implements ServiceSubscriberInterface
     private function sortEntities(array &$values): void
     {
         \usort($values, function (array $a, array $b): int {
-            $textA = $this->trans((string) $a['id'] . '.name');
-            $textB = $this->trans((string) $b['id'] . '.name');
+            /**
+             * @psalm-var HelpEntityType $a
+             * @psalm-var HelpEntityType $b
+             */
+            $textA = $this->trans($a['id'] . '.name');
+            $textB = $this->trans($b['id'] . '.name');
 
             return \strnatcmp($textA, $textB);
         });

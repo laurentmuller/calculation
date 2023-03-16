@@ -40,6 +40,18 @@ class MonthChart extends BaseChart
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
+     *
+     * @psalm-return array{
+     *     chart: MonthChart&static,
+     *     data: list<array{count: int, date: int, items: float, marginAmount: float, marginPercent: float, sum: float}>,
+     *     count: int,
+     *     items: float,
+     *     months: int,
+     *     marginPercent: float,
+     *     marginAmount: float,
+     *     total: float,
+     *     allowed_months: int[],
+     *     min_margin: float}
      */
     public function generate(int $months): array
     {
@@ -66,7 +78,7 @@ class MonthChart extends BaseChart
         $data = [];
         foreach ($dateValues as $index => $date) {
             $data[] = [
-                'date' => ($date / 1000),
+                'date' => (int) ($date / 1000),
                 'count' => $countValues[$index],
                 'sum' => $sumValues[$index],
                 'items' => $itemValues[$index],

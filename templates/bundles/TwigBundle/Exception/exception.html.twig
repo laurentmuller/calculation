@@ -1,5 +1,5 @@
 {% extends '@Twig/Exception/error_base.html.twig' %}
-
+{# status_code #}
 {%- set status_code = status_code|default(0) -%}
 {% switch status_code -%}
 {% case 403 %}
@@ -15,7 +15,7 @@
     {% set description = 'http_error_503.description'|trans %}
     {% set suggestion = 'http_error_503.suggestion'|trans({'%url%': path('homepage')}) %}
 {%- endswitch %}
-
+{# message #}
 {% block error_message -%}
 {% if description is defined %}
     {{ parent() }}

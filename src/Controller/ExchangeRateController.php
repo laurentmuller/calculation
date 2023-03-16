@@ -24,6 +24,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for the exchange rate service.
+ *
+ * @psalm-import-type ExchangeRateAndDateType from ExchangeRateService
  */
 #[AsController]
 #[Route(path: '/exchange')]
@@ -39,8 +41,6 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Display the view.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '', name: 'exchange_display')]
     public function display(): Response
@@ -53,8 +53,6 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the supported currency codes.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/codes', name: 'exchange_codes')]
     public function getCodes(): JsonResponse
@@ -71,8 +69,6 @@ class ExchangeRateController extends AbstractController
      * Gets the exchange rates from the given currency code to all the other currencies supported.
      *
      * @param string $code the base currency code
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/latest/{code}', name: 'exchange_latest')]
     public function getLatest(string $code): JsonResponse
@@ -87,8 +83,6 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the exchange rate from the base currency code to the target currency code.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/rate', name: 'exchange_rate')]
     public function getRate(Request $request): JsonResponse

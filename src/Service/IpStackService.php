@@ -24,6 +24,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * @psalm-type IpStackType = array{
  *     city: ?string,
  *     region_name: ?string,
+ *     latitude: ?float,
+ *     longitude: ?float,
  *     error?: array{code: ?int, type: ?string, info: ?string}
  * }
  *
@@ -35,9 +37,14 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     use TranslatorAwareTrait;
 
     /**
+     * The cache timeout (15 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 15;
+
+    /**
      * The host name.
      */
-    private const HOST_NAME = 'https://api.ipstack.com/';
+    private const HOST_NAME = 'http://api.ipstack.com/';
 
     /**
      * The API endpoint for detecting the IP address.
@@ -63,18 +70,35 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      * @param ?Request $request the request to get client IP address or null for detecting the IP address
      *
      * @return IpStackType|null the current Ip information if success; null on error
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function getIpInfo(?Request $request = null): ?array
     {
         $clientIp = $this->getClientIp($request);
-        /** @psalm-var IpStackType|null $result */
-        $result = $this->getUrlCacheValue($clientIp);
-        if (\is_array($result)) {
-            return $result;
-        }
+        /** @psalm-var IpStackType|null $results */
+        $results = $this->getUrlCacheValue(
+            $clientIp,
+            fn () => $this->doGetIpInfo($clientIp),
+            self::CACHE_TIMEOUT
+        );
 
+        return $results;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultOptions(): array
+    {
+        return [self::BASE_URI => self::HOST_NAME];
+    }
+
+    /**
+     * @psalm-return IpStackType|null
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     */
+    private function doGetIpInfo(string $clientIp): ?array
+    {
         try {
             $query = [
                 'output' => 'json',
@@ -92,7 +116,15 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
             if (isset($result['region_name'])) {
                 $result['region_name'] = \ucfirst($result['region_name']);
             }
-            $this->setUrlCacheValue($clientIp, $result);
+            if (isset($result['latitude'])) {
+                $result['latitude_html'] = $this->formatLatitude($result['latitude']);
+            }
+            if (isset($result['longitude'])) {
+                $result['longitude_html'] = $this->formatLongitude($result['longitude']);
+            }
+            if (isset($result['latitude']) && isset($result['longitude'])) {
+                $result['position_html'] = $this->formatLatLng($result['latitude'], $result['longitude']);
+            }
 
             return $result;
         } catch (\Exception $e) {
@@ -102,12 +134,31 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultOptions(): array
+    private function formatLatitude(float $latitude): string
     {
-        return [self::BASE_URI => self::HOST_NAME];
+        return $this->formatPosition($latitude, 'N', 'S');
+    }
+
+    private function formatLatLng(float $latitude, float $longitude): string
+    {
+        return \sprintf('%s / %s', $this->formatLatitude($latitude), $this->formatLongitude($longitude));
+    }
+
+    private function formatLongitude(float $longitude): string
+    {
+        return $this->formatPosition($longitude, 'E', 'O');
+    }
+
+    private function formatPosition(float $position, string $positiveSuffix, string $negativeSuffix): string
+    {
+        $suffix = $position >= 0 ? $positiveSuffix : $negativeSuffix;
+        $position = \abs($position);
+        $degrees = \floor($position);
+        $position = ($position - $degrees) * 60.0;
+        $minutes = \floor($position);
+        $secconds = \floor(($position - $minutes) * 60.0);
+
+        return \sprintf("%d&deg; %d' %d\" %s", $degrees, $minutes, $secconds, $suffix);
     }
 
     /**
@@ -122,6 +173,9 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         if (null === $clientIp || '127.0.0.1' === $clientIp) {
             return self::URI_CHECK;
         }
+
+        // for debug purpose
+        $this->logInfo("Client Ip: $clientIp");
 
         return $clientIp;
     }

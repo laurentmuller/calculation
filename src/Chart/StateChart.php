@@ -64,15 +64,15 @@ class StateChart extends BaseChart
         $this->colors = $this->getColors($states);
 
         return [
-                'chart' => $this,
-                'data' => $states,
-                'count' => $count,
-                'items' => $items,
-                'total' => $total,
-                'margin' => $this->safeDivide($total, $items),
-                'marginAmount' => $total - $items,
-                'min_margin' => $this->getMinMargin(),
-            ];
+            'chart' => $this,
+            'data' => $states,
+            'count' => $count,
+            'items' => $items,
+            'total' => $total,
+            'margin' => $this->safeDivide($total, $items),
+            'marginAmount' => $total - $items,
+            'min_margin' => $this->getMinMargin(),
+        ];
     }
 
     private function getClickExpression(): Expr

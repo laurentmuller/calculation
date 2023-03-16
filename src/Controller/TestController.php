@@ -28,10 +28,7 @@ use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Service\AbstractHttpClientService;
-use App\Service\AkismetService;
 use App\Service\CaptchaImageService;
-use App\Service\FakerService;
-use App\Service\IpStackService;
 use App\Service\MailerService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
@@ -141,23 +138,6 @@ class TestController extends AbstractController
             ->SetTitle($this->trans('test.html'), true);
 
         return $this->renderPdfDocument($report);
-    }
-
-    /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    #[Route(path: '/ipstack', name: 'test_ipstack')]
-    public function ipStack(Request $request, IpStackService $service): JsonResponse
-    {
-        $result = $service->getIpInfo($request);
-        if (null !== $lastError = $service->getLastError()) {
-            return $this->json($lastError);
-        }
-
-        return $this->json([
-            'result' => true,
-            'response' => $result,
-        ]);
     }
 
     /**
@@ -434,38 +414,6 @@ class TestController extends AbstractController
         ];
 
         return $this->json($data);
-    }
-
-    /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    #[Route(path: '/spam', name: 'test_spam')]
-    public function verifyAkismetComment(AkismetService $akismetService, FakerService $fakerService): JsonResponse
-    {
-        $generator = $fakerService->getGenerator();
-        $comment = $generator->realText(145);
-        $value = $akismetService->verifyComment($comment);
-        if (null !== $lastError = $akismetService->getLastError()) {
-            return $this->json($lastError);
-        }
-
-        return $this->json([
-            'comment' => $comment,
-            'spam' => $value,
-        ]);
-    }
-
-    /**
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
-     */
-    #[Route(path: '/verify', name: 'test_verify')]
-    public function verifyAkismetKey(AkismetService $service): JsonResponse
-    {
-        if (!$service->verifyKey()) {
-            return $this->json($service->getLastError());
-        }
-
-        return $this->json(['valid_key' => true]);
     }
 
     /**

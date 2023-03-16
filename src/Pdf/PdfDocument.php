@@ -730,25 +730,25 @@ class PdfDocument extends \FPDF
     /**
      * Converts the given pixels to millimeters using 72 dot per each (DPI).
      *
-     * @param float $pixels the pixels to convert
+     * @param float|int $pixels the pixels to convert
      *
      * @return float the converted value as millimeters
      */
-    public function pixels2mm(float $pixels): float
+    public function pixels2mm(float|int $pixels): float
     {
-        return $pixels * 25.4 / 72.0;
+        return (float) $pixels * 25.4 / 72.0;
     }
 
     /**
      * Converts the given pixels to user unit using 72 dot per each (DPI).
      *
-     * @param float $pixels the pixels to convert
+     * @param float|int $pixels the pixels to convert
      *
      * @return float the converted value as user unit
      */
-    public function pixels2UserUnit(float $pixels): float
+    public function pixels2UserUnit(float|int $pixels): float
     {
-        return $pixels * 72.0 / 96.0 / $this->k;
+        return (float) $pixels * 72.0 / 96.0 / $this->k;
     }
 
     /**

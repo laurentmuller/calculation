@@ -1,0 +1,46 @@
+{% extends 'cards/card_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import homepage %}
+{# macros #}
+{% macro output_row(name, value) -%}
+{% if value %}
+    <tr>
+        <td>{{ name }}</td>
+        <td>{{ value|raw }}</td>
+    </tr>
+{% endif %}
+{%- endmacro %}
+{% macro output_header(name) -%}
+    <tr>
+        <th colspan="2">{{ name }}</th>
+    </tr>
+{%- endmacro %}
+
+{# parameters #}
+{%- set title = 'test.ip_stack' -%}
+{%- set title_icon = 'location-dot' -%}
+{# body #}
+{% block card_body %}
+<table class="table table-sm table-hover">
+    <tbody>
+    {{ _self.output_header('Générale') }}
+    {{ _self.output_row('Adresse IP', results.ip|default(false)) }}
+    {{ _self.output_row('Type', results.type|default(false)) }}
+    {{ _self.output_header('Position') }}
+    {{ _self.output_row('Continent', results.continent_name|default(false)) }}
+    {{ _self.output_row('Pays', results.country_name|default(false)) }}
+    {{ _self.output_row('Région', results.region_name|default(false)) }}
+    {{ _self.output_row('Ville', results.city|default(false)) }}
+    {{ _self.output_row('Position', results.position_html|default(false)) }}
+    </tbody>
+</table>
+<a href="#raw-data" data-toggle="collapse" class="drop-down-icon-left horizontal-line collapsed" aria-expanded="false" aria-controls="raw-data">Données brutes</a>
+<div id="raw-data" class="collapse border pre-scrollable mt-2 p-2" aria-expanded="false">
+    <pre class="text-success mb-0" style="font-size: 12px;">
+        {{- results|var_export|trim|raw -}}
+    </pre>
+</div>
+{% endblock %}
+{# footer #}
+{% block card_footer -%}
+    {{ homepage() }}
+{%- endblock %}

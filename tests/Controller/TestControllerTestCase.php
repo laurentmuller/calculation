@@ -21,7 +21,6 @@ class TestControllerTestCase extends AbstractControllerTestCase
     private const ROUTES = [
         'editor',
         'html',
-        'ipstack',
         'notifications',
         'password',
         'recaptcha',
@@ -29,8 +28,6 @@ class TestControllerTestCase extends AbstractControllerTestCase
         'translate',
         'tree',
         'union',
-        'spam',
-        'verify',
         ];
 
     public static function getRoutes(): \Generator

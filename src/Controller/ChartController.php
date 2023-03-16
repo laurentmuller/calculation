@@ -16,10 +16,10 @@ use App\Chart\MonthChart;
 use App\Chart\StateChart;
 use App\Interfaces\RoleInterface;
 use App\Traits\MathTrait;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -38,10 +38,16 @@ class ChartController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
      */
-    #[Route(path: '/month/{count}', name: 'chart_by_month', requirements: ['count' => Requirement::DIGITS])]
-    public function month(MonthChart $chart, int $count = 6): Response
+    #[Route(path: '/month', name: 'chart_by_month')]
+    public function month(Request $request, MonthChart $chart): Response
     {
-        return $this->render('chart/chart_month.html.twig', $chart->generate($count));
+        $key = 'chart_by_month';
+        $count = $this->getSessionInt($key, 6);
+        $count = $this->getRequestInt($request, 'count', $count);
+        $parameters = $chart->generate($count);
+        $this->setSessionValue($key, $parameters['months']);
+
+        return $this->render('chart/chart_month.html.twig', $parameters);
     }
 
     /**

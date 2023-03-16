@@ -104,7 +104,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      *
      * @throws ORMException
      */
-    protected function deleteEntity(?AbstractEntity $entity): mixed
+    protected function deleteEntity(?AbstractEntity $entity): null
     {
         if (null !== $entity) {
             $em = self::getManager();

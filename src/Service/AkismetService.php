@@ -81,6 +81,14 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
+    }
+
+    /**
      * Verify if the given comment is a spam.
      * <p>
      * The parameters options can be one of the following:
@@ -148,11 +156,7 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
     public function verifyKey(): bool
     {
         /** @psalm-var bool|null $results */
-        $results = $this->getUrlCacheValue(
-            self::URI_VERIFY,
-            fn () => $this->doVerifyKey(),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getUrlCacheValue(self::URI_VERIFY, fn () => $this->doVerifyKey());
 
         return \is_bool($results) ? $results : false;
     }

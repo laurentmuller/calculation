@@ -83,6 +83,18 @@ trait CacheAwareTrait
     }
 
     /**
+     * Gets the default cache timeout.
+     *
+     * @return \DateInterval|int|null The period of time from the present after which the item must be considered
+     *                                expired. An integer parameter is understood to be the time in seconds until
+     *                                expiration. If null is returned, the expiration time is not set.
+     */
+    public function getCacheTimeout(): \DateInterval|int|null
+    {
+        return null;
+    }
+
+    /**
      * Gets the value from this cache for the given key.
      *
      * @param string                 $key     The key for which to return the corresponding value
@@ -175,10 +187,8 @@ trait CacheAwareTrait
         if (null === $value) {
             return $this->deleteCacheItem($key);
         } elseif (null !== $item = $this->getCacheItem($key)) {
-            $item->set($value);
-            if (null !== $time) {
-                $item->expiresAfter($time);
-            }
+            $item->expiresAfter($time ?? $this->getCacheTimeout())
+                ->set($value);
 
             return $this->getCacheAdapter()->save($item);
         }

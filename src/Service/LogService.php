@@ -72,6 +72,14 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
+    }
+
+    /**
      * Gets the file name.
      */
     public function getFileName(): string
@@ -93,11 +101,7 @@ class LogService implements ServiceSubscriberInterface
     public function getLogFile(): ?LogFile
     {
         /** @psalm-var LogFile|null $result */
-        $result = $this->getCacheValue(
-            self::KEY_CACHE,
-            fn () => $this->parseFile(),
-            self::CACHE_TIMEOUT
-        );
+        $result = $this->getCacheValue(self::KEY_CACHE, fn () => $this->parseFile());
 
         return $result;
     }

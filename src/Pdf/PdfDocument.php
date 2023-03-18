@@ -226,11 +226,13 @@ class PdfDocument extends \FPDF
      *
      * @see PdfDocument::addBookmark()
      */
-    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null, bool $addBookmark = false): self
+    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null, bool $addBookmark = true): self
     {
         if ([] === $this->bookmarks) {
             return $this;
         }
+
+        // title
         $title ??= 'Index';
         $titleStyle ??= PdfStyle::getBoldCellStyle();
         $contentStyle ??= PdfStyle::getDefaultStyle();
@@ -240,50 +242,49 @@ class PdfDocument extends \FPDF
         if ($addBookmark) {
             $this->addBookmark(text: $title, y: $this->y - $this->lasth);
         }
+        // bookmarks
         $space = 1.25;
         $contentStyle->apply($this);
         $line_height = $this->getFontSize() + 2.0;
         $printable_width = $this->getPrintableWidth();
+        $index_bookmark = $addBookmark ? \end($this->bookmarks) : null;
         foreach ($this->bookmarks as $bookmark) {
-            $offset = (float) $bookmark['level'] * 2.0 * $space;
-            if ($offset > 0) {
-                $this->Cell($offset);
+            // skip this bookmark
+            if ($index_bookmark === $bookmark) {
+                continue;
             }
+            // page size
             $page_text = FormatUtils::formatInt($bookmark['page']);
             $page_size = $this->GetStringWidth($page_text) + $space;
+            // level
+            $offset = $this->_outputIndexLevel($bookmark['level'], $space);
+            // text
             $link = $bookmark['link'];
-            $text = (string) \iconv('UTF-8', 'ISO-8859-1', $bookmark['text']);
-            $text_size = $this->GetStringWidth($text);
-            $available_size = $printable_width - $page_size - $offset - 2.0 * $space;
-            while ($text_size >= $available_size) {
-                $text = \substr($text, 0, -1);
-                $text_size = $this->GetStringWidth($text);
-            }
-            $this->Cell(
-                w: $text_size + $space,
-                h: $line_height,
-                txt: $text,
-                link: $link
+            $text_size = $this->_outputIndexText(
+                $bookmark['text'],
+                $printable_width,
+                $line_height,
+                $page_size,
+                $offset,
+                $space,
+                $link
             );
-            $dots_width = $printable_width - $page_size - $offset - $text_size - 2.0 * $space;
-            $dots_count = (int) ($dots_width / $this->GetStringWidth('.'));
-            if ($dots_count > 0) {
-                $dots_text = \str_repeat('.', $dots_count);
-                $this->Cell(
-                    w: $dots_width + $space,
-                    h: $line_height,
-                    txt: $dots_text,
-                    align: PdfTextAlignment::RIGHT,
-                    link: $link
-                );
-            }
-            $this->Cell(
-                w: $page_size,
-                h: $line_height,
-                txt: $page_text,
-                ln: PdfMove::NEW_LINE,
-                align: PdfTextAlignment::RIGHT,
-                link: $link
+            // dot
+            $this->_outputIndexDot(
+                $printable_width,
+                $line_height,
+                $page_size,
+                $offset,
+                $text_size,
+                $space,
+                $link
+            );
+            // page
+            $this->_outputIndexPage(
+                $line_height,
+                $page_size,
+                $page_text,
+                $link
             );
         }
 
@@ -717,6 +718,8 @@ class PdfDocument extends \FPDF
      * @param bool                     $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
      *
      * @return string the content if the output is string
+     *
+     * @noinspection PhpCastIsUnnecessaryInspection
      */
     public function Output($dest = '', $name = '', $isUTF8 = false): string
     {
@@ -912,35 +915,6 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * This method prints text from the current position in the same way as Write().
-     *
-     * An additional parameter allows reducing or increase the font size; it's useful for initials.
-     * A second parameter allows to specify an offset so that text is placed at a superscripted or subscribed position.
-     *
-     * @param float      $h        the line height
-     * @param string     $text     the string to print
-     * @param float      $fontSize the size of font in points (9 by default)
-     * @param float      $offset   the offset of text in points (positive means superscript, negative subscript; 0 by default)
-     * @param int|string $link     a URL or an identifier returned by AddLink()
-     */
-    public function subWrite(float $h, string $text, float $fontSize = PdfFont::DEFAULT_SIZE, float $offset = 0.0, int|string $link = ''): self
-    {
-        $oldFontSize = $this->FontSizePt;
-        $this->SetFontSize($fontSize);
-        $offset = ((($fontSize - $oldFontSize) / $this->k) * 0.3) + ($offset / $this->k);
-        $x = $this->x;
-        $y = $this->y;
-        $this->SetXY($x, $y - $offset);
-        $this->Write($h, $text, $link);
-        $x = $this->x;
-        $y = $this->y;
-        $this->SetXY($x, $y + $offset);
-        $this->SetFontSize($oldFontSize);
-
-        return $this;
-    }
-
-    /**
      * Prints a character string. The origin is on the left of the first character, on the baseline.This method allows to place a string precisely on the page, but it is usually easier to use Cell(), MultiCell() or Write() which are the standard methods to print text.
      *
      * @param float  $x   the abscissa of the origin
@@ -1071,5 +1045,82 @@ class PdfDocument extends \FPDF
         }
 
         return $str;
+    }
+
+    private function _outputIndexDot(
+        float $printable_width,
+        float $line_height,
+        float $page_size,
+        float $offset,
+        float $text_size,
+        float $space,
+        string|int $link
+    ): void {
+        $dots_width = $printable_width - $page_size - $offset - $text_size - 2.0 * $space;
+        $dots_count = (int) ($dots_width / $this->GetStringWidth('.'));
+        if ($dots_count > 0) {
+            $dots_text = \str_repeat('.', $dots_count);
+            $this->Cell(
+                w: $dots_width + $space,
+                h: $line_height,
+                txt: $dots_text,
+                align: PdfTextAlignment::RIGHT,
+                link: $link
+            );
+        }
+    }
+
+    private function _outputIndexLevel(int $level, float $space): float
+    {
+        if ($level > 0) {
+            $offset = (float) $level * 2.0 * $space;
+            $this->Cell($offset);
+
+            return $offset;
+        }
+
+        return 0;
+    }
+
+    private function _outputIndexPage(
+        float $line_height,
+        float $page_size,
+        string $page_text,
+        string|int $link
+    ): void {
+        $this->Cell(
+            w: $page_size,
+            h: $line_height,
+            txt: $page_text,
+            ln: PdfMove::NEW_LINE,
+            align: PdfTextAlignment::RIGHT,
+            link: $link
+        );
+    }
+
+    private function _outputIndexText(
+        string $text,
+        float $printable_width,
+        float $line_height,
+        float $page_size,
+        float $offset,
+        float $space,
+        string|int $link
+    ): float {
+        $text = (string) \iconv('UTF-8', 'ISO-8859-1', $text);
+        $text_size = $this->GetStringWidth($text);
+        $available_size = $printable_width - $page_size - $offset - 2.0 * $space;
+        while ($text_size >= $available_size) {
+            $text = \substr($text, 0, -1);
+            $text_size = $this->GetStringWidth($text);
+        }
+        $this->Cell(
+            w: $text_size + $space,
+            h: $line_height,
+            txt: $text,
+            link: $link
+        );
+
+        return $text_size;
     }
 }

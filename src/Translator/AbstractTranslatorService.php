@@ -61,16 +61,20 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * {@inheritdoc}
      */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLanguages(): array|false
     {
         $key = $this->getCacheKey();
 
         /** @psalm-var array<string, string>|null $results */
-        $results = $this->getCacheValue(
-            $key,
-            fn () => $this->doLoadLanguages(),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getCacheValue($key, fn () => $this->doLoadLanguages());
 
         return $results ?? false;
     }

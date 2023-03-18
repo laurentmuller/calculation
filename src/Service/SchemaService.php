@@ -15,7 +15,6 @@ namespace App\Service;
 use App\Traits\CacheAwareTrait;
 use App\Util\StringUtils;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
@@ -61,7 +60,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *          columns: int,
  *          records: int,
  *          indexes: int,
- *          associations: int}
+ *          associations: int,
+ *          sql: string}
  */
 class SchemaService implements ServiceSubscriberInterface
 {
@@ -85,18 +85,24 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
+    }
+
+    /**
      * Get table information.
      *
-     * @pslam-return SchemaTableType
+     * @param string $name the table's name to get information for
+     *
+     * @return SchemaTableType
      */
     public function getTable(string $name): array
     {
         /** @psalm-var SchemaTableType $results */
-        $results = $this->getCacheValue(
-            "schema_service.metadata.table.$name",
-            fn () => $this->loadTable($name),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getCacheValue("schema_service.metadata.table.$name", fn () => $this->loadTable($name));
 
         return $results;
     }
@@ -104,33 +110,39 @@ class SchemaService implements ServiceSubscriberInterface
     /**
      * Gets tables information.
      *
-     * @pslam-return SchemaSoftTableType[]
-     *
-     * @throws Exception
+     * @return SchemaSoftTableType[]
      */
     public function getTables(): array
     {
         /** @psalm-var SchemaSoftTableType[] $results */
-        $results = $this->getCacheValue(
-            'schema_service.tables',
-            fn () => $this->loadTables(),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getCacheValue('schema_service.tables', fn () => $this->loadTables());
 
         // update records
         foreach ($results as &$result) {
-            $result['records'] = $this->countRecords($result['name']);
+            $result['records'] = $this->countRecords($result);
         }
 
         return $results;
     }
 
-    private function countAssociationNames(Table $table): int
+    /**
+     * Returns if the given table exists.
+     *
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function tableExist(string $name): bool
     {
-        $name = $this->mapTableName($table->getName());
-        $metaData = $this->getTableMetaData($name);
+        return $this->getSchemaManager()->tablesExist([$name]);
+    }
 
-        return $metaData instanceof ClassMetadataInfo ? \count($metaData->getAssociationNames()) : 0;
+    private function countAssociations(Table $table): int
+    {
+        $metaData = $this->getMetaData($table);
+        if ($metaData instanceof ClassMetadataInfo) {
+            return \count($metaData->getAssociationNames());
+        }
+
+        return 0;
     }
 
     private function countColumns(Table $table): int
@@ -144,20 +156,19 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
-     * @throws Exception
+     * @psalm-param SchemaSoftTableType $table
      */
-    private function countRecords(string|Table $nameOrTable): int
+    private function countRecords(array $table): int
     {
         $result = null;
-        $table = \is_string($nameOrTable) ? $this->introspectTable($nameOrTable) : $nameOrTable;
-        $column = \array_key_first($table->getColumns());
-        $name = $table->getName();
 
         try {
-            $result = $this->getConnection()->executeQuery("SELECT COUNT($column) AS TOTAL FROM $name");
+            $sql = $table['sql'];
+            $result = $this->getConnection()
+                ->executeQuery($sql);
 
             return (int) $result->fetchOne();
-        } catch (Exception) {
+        } catch (\Doctrine\DBAL\Exception) {
             return 0;
         } finally {
             $result?->free();
@@ -184,8 +195,7 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getAssociations(Table $table): array
     {
-        $name = $this->mapTableName($table->getName());
-        $metaData = $this->getTableMetaData($name);
+        $metaData = $this->getMetaData($table);
         if (!$metaData instanceof ClassMetadataInfo) {
             return [];
         }
@@ -197,7 +207,7 @@ class SchemaService implements ServiceSubscriberInterface
         foreach ($associationNames as $associationName) {
             $targetClass = $metaData->getAssociationTargetClass($associationName);
             $inverse = $metaData->isAssociationInverseSide($associationName);
-            $targetData = $this->getTargetMetaData($targetClass);
+            $targetData = $this->getMetaData($targetClass);
             if ($targetData instanceof ClassMetadataInfo) {
                 $result[] = [
                     'name' => $associationName,
@@ -242,7 +252,7 @@ class SchemaService implements ServiceSubscriberInterface
     {
         try {
             return Type::getTypeRegistry()->lookupName($column->getType());
-        } catch (Exception) {
+        } catch (\Doctrine\DBAL\Exception) {
             return 'unknown';
         }
     }
@@ -259,15 +269,15 @@ class SchemaService implements ServiceSubscriberInterface
     private function getDefaultValue(Column $column): string
     {
         $type = $column->getType();
-        $default = $column->getDefault() ?? '';
-        if ('' !== $default && $type instanceof BooleanType) {
+        $default = $column->getDefault();
+        if (null !== $default && $type instanceof BooleanType) {
             return (string) \json_encode(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
         }
         if ('0' === $default && $type instanceof FloatType) {
             return '0.00';
         }
 
-        return $default;
+        return $default ?? '';
     }
 
     /**
@@ -285,6 +295,16 @@ class SchemaService implements ServiceSubscriberInterface
                 'columns' => $index->getColumns(),
             ];
         }, $indexes);
+    }
+
+    /**
+     * @psalm-return ClassMetadataInfo<object>|null
+     */
+    private function getMetaData(Table|string $name): ?ClassMetadataInfo
+    {
+        $name = $this->mapTableName($name);
+
+        return $this->getMetaDatas()[$name] ?? null;
     }
 
     /**
@@ -313,7 +333,7 @@ class SchemaService implements ServiceSubscriberInterface
     /**
      * @psalm-return AbstractSchemaManager<\Doctrine\DBAL\Platforms\AbstractPlatform>
      *
-     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getSchemaManager(): AbstractSchemaManager
     {
@@ -324,30 +344,16 @@ class SchemaService implements ServiceSubscriberInterface
         return $this->schemaManager;
     }
 
-    /**
-     * @psalm-return ClassMetadataInfo<object>|null
-     */
-    private function getTableMetaData(string $name): ?ClassMetadataInfo
+    private function getSqlCounter(Table $table): string
     {
-        return $this->getMetaDatas()[$name] ?? null;
+        $name = $table->getName();
+        $column = (string) \array_key_first($table->getColumns());
+
+        return "SELECT COUNT($column) AS TOTAL FROM $name";
     }
 
     /**
-     * @psalm-return ClassMetadataInfo<object>|null
-     */
-    private function getTargetMetaData(string $name): ?ClassMetadataInfo
-    {
-        foreach ($this->getMetaDatas() as $metaData) {
-            if ($metaData->getName() === $name) {
-                return $metaData;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function introspectTable(string $name): Table
     {
@@ -387,7 +393,7 @@ class SchemaService implements ServiceSubscriberInterface
     /**
      * @pslam-return SchemaTableType
      *
-     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function loadTable(string $name): array
     {
@@ -404,7 +410,7 @@ class SchemaService implements ServiceSubscriberInterface
     /**
      * @pslam-return SchemaSoftTableType[]
      *
-     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function loadTables(): array
     {
@@ -413,16 +419,20 @@ class SchemaService implements ServiceSubscriberInterface
 
         return \array_map(function (Table $table): array {
             return [
-                'name' => $this->mapTableName($table->getName()),
+                'name' => $this->mapTableName($table),
                 'columns' => $this->countColumns($table),
                 'indexes' => $this->countIndexes($table),
-                'associations' => $this->countAssociationNames($table),
+                'associations' => $this->countAssociations($table),
+                'sql' => $this->getSqlCounter($table),
             ];
         }, $tables);
     }
 
-    private function mapTableName(string $name): string
+    private function mapTableName(Table|string $name): string
     {
+        if ($name instanceof Table) {
+            $name = $name->getName();
+        }
         foreach (\array_keys($this->getMetaDatas()) as $key) {
             if (StringUtils::equalIgnoreCase($key, $name)) {
                 return $key;

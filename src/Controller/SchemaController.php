@@ -31,8 +31,6 @@ class SchemaController extends AbstractController
 {
     /**
      * Display information for tables.
-     *
-     * @throws \Doctrine\DBAL\Exception
      */
     #[Route(path: '', name: 'schema')]
     public function index(SchemaService $service): Response
@@ -62,6 +60,8 @@ class SchemaController extends AbstractController
     public function table(string $name, SchemaService $service): Response
     {
         try {
+            $service->tableExist($name);
+
             return $this->render('schema/table.html.twig', $service->getTable($name));
         } catch (\Doctrine\DBAL\Exception $e) {
             $msg = $this->trans('schema.table.error', ['%name%' => $name]);

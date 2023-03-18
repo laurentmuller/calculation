@@ -96,6 +96,14 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): ?int
+    {
+        return $this->timeout;
+    }
+
+    /**
      * Gets the latest exchange rates from the given currency code to all the other currencies supported.
      *
      * @param string $code the base currency code
@@ -106,10 +114,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = $this->getUrl(self::URI_LATEST, $code);
         /** @psalm-var array<string, float>|null $results */
-        $results = $this->getUrlCacheValue(
-            $url,
-            fn () => $this->doGetLatest($url)
-        );
+        $results = $this->getUrlCacheValue($url, fn () => $this->doGetLatest($url));
 
         return $results ?? [];
     }
@@ -126,11 +131,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
         /** @psalm-var float|null $results */
-        $results = $this->getUrlCacheValue(
-            $url,
-            fn () => $this->doGetRate($url),
-            $this->timeout
-        );
+        $results = $this->getUrlCacheValue($url, fn () => $this->doGetRate($url));
 
         return $results ?? 0.0;
     }
@@ -147,11 +148,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
         /** @psalm-var ExchangeRateAndDateType|null $results */
-        $results = $this->getUrlCacheValue(
-            $url,
-            fn () => $this->doGetRateAndDates($url),
-            $this->timeout
-        );
+        $results = $this->getUrlCacheValue($url, fn () => $this->doGetRateAndDates($url));
 
         return $results;
     }
@@ -165,11 +162,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = self::URI_CODES;
         /** @psalm-var array<string, ExchangeRateType>|null $results */
-        $results = $this->getUrlCacheValue(
-            $url,
-            fn () => $this->doGetSupportedCodes($url),
-            $this->timeout
-        );
+        $results = $this->getUrlCacheValue($url, fn () => $this->doGetSupportedCodes($url));
 
         return $results ?? [];
     }

@@ -141,6 +141,14 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
+    }
+
+    /**
      * Gets the dialogs.
      *
      * @return array|null the dialogs, if found; null otherwise
@@ -184,11 +192,7 @@ class HelpService implements ServiceSubscriberInterface
     public function getHelp(): array
     {
         /** @psalm-var HelpContentType|null $results */
-        $results = $this->getCacheValue(
-            self::CACHE_KEY,
-            fn () => $this->loadHelp(),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadHelp());
 
         return $results ?? [];
     }

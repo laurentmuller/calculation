@@ -181,29 +181,31 @@ class CalculationReport extends AbstractReport
      */
     private function renderQrCode(): void
     {
-        if (null !== $this->qrcode) {
-            try {
-                if (null === $path = FileUtils::tempfile('qr_code')) {
-                    $this->logWarning($this->trans('report.calculation.error_qr_code'), [
-                        'calculation' => $this->calculation->getDisplay(),
-                    ]);
+        if (null === $this->qrcode) {
+            return;
+        }
 
-                    return;
-                }
-                Builder::create()
-                    ->roundBlockSizeMode(new RoundBlockSizeModeNone())
-                    ->writer(new PngWriter())
-                    ->data($this->qrcode)
-                    ->margin(0)
-                    ->build()
-                    ->saveToFile($path);
-                $size = $this->getQrCodeSize();
-                $x = $this->GetPageWidth() - $this->getRightMargin() - $size;
-                $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1.0;
-                $this->Image($path, $x, $y, $size, $size, PdfImageType::PNG, $this->getQrCodeLink());
-            } catch (\Exception $e) {
-                $this->logException($e, $this->trans('report.calculation.error_qr_code'));
+        try {
+            if (null === $path = FileUtils::tempfile('qr_code')) {
+                $this->logWarning($this->trans('report.calculation.error_qr_code'), [
+                    'calculation' => $this->calculation->getDisplay(),
+                ]);
+
+                return;
             }
+            Builder::create()
+                ->roundBlockSizeMode(new RoundBlockSizeModeNone())
+                ->writer(new PngWriter())
+                ->data($this->qrcode)
+                ->margin(0)
+                ->build()
+                ->saveToFile($path);
+            $size = $this->getQrCodeSize();
+            $x = $this->GetPageWidth() - $this->getRightMargin() - $size;
+            $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1.0;
+            $this->Image($path, $x, $y, $size, $size, PdfImageType::PNG, $this->getQrCodeLink());
+        } catch (\Exception $e) {
+            $this->logException($e, $this->trans('report.calculation.error_qr_code'));
         }
     }
 }

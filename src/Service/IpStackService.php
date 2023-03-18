@@ -37,9 +37,9 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     use TranslatorAwareTrait;
 
     /**
-     * The cache timeout (15 minutes).
+     * The cache timeout (1 minute).
      */
-    private const CACHE_TIMEOUT = 60 * 15;
+    private const CACHE_TIMEOUT = 60;
 
     /**
      * The host name.
@@ -65,6 +65,14 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
+    }
+
+    /**
      * Gets the IP information.
      *
      * @param ?Request $request the request to get client IP address or null for detecting the IP address
@@ -75,11 +83,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     {
         $clientIp = $this->getClientIp($request);
         /** @psalm-var IpStackType|null $results */
-        $results = $this->getUrlCacheValue(
-            $clientIp,
-            fn () => $this->doGetIpInfo($clientIp),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getUrlCacheValue($clientIp, fn () => $this->doGetIpInfo($clientIp));
 
         return $results;
     }
@@ -146,12 +150,13 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
 
     private function formatLongitude(float $longitude): string
     {
-        return $this->formatPosition($longitude, 'E', 'O');
+        return $this->formatPosition($longitude, 'E', 'W');
     }
 
     private function formatPosition(float $position, string $positiveSuffix, string $negativeSuffix): string
     {
         $suffix = $position >= 0 ? $positiveSuffix : $negativeSuffix;
+        $suffix = $this->trans("openweather.direction.$suffix");
         $position = \abs($position);
         $degrees = \floor($position);
         $position = ($position - $degrees) * 60.0;

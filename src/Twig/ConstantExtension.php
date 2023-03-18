@@ -39,14 +39,18 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     private const CACHE_TIMEOUT = 86_400;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
+    }
+
     public function getGlobals(): array
     {
         /** @var array<string, mixed> $results */
-        $results = $this->getCacheValue(
-            self::CACHE_KEY,
-            fn () => $this->loadValues(),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadValues());
 
         return $results;
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
@@ -46,19 +47,16 @@ class SchemaReport extends AbstractReport
         $this->setDescription($this->trans('schema.description'));
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
     public function render(): bool
     {
-        /** @psalm-var SchemaSoftTableType[] $tables */
         $tables = $this->service->getTables();
         if ([] === $tables) {
             return false;
         }
 
         $this->AddPage();
-        $this->booleanStyle = PdfStyle::getBulletStyle();
+        $this->booleanStyle = PdfStyle::getCellStyle()
+            ->setFontName(PdfFontName::ZAPFDINGBATS);
 
         /** @psalm-var string[] $names */
         $names = \array_column($tables, 'name');
@@ -66,7 +64,6 @@ class SchemaReport extends AbstractReport
 
         $this->outputTables($tables);
         foreach ($names as $name) {
-            /** @psalm-var SchemaTableType $table */
             $table = $this->service->getTable($name);
             $this->outputTable($table);
         }
@@ -97,12 +94,12 @@ class SchemaReport extends AbstractReport
 
     private function findLink(?string $name): int|string
     {
-        return null === $name ? '' : $this->tableLinks[$name] ?? '';
+        return $this->tableLinks[$name ?? ''] ?? '';
     }
 
     private function formatBool(bool $value): ?string
     {
-        return $value ? PdfStyle::BULLET : null;
+        return $value ? '3' : null;
     }
 
     private function formatInverse(bool $inverse): string

@@ -195,8 +195,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      *
      * @return array{current: array|false, forecast: array|false, daily: array|false}
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function all(int $id, int $count = -1, string $units = self::UNIT_METRIC): array
     {
@@ -214,8 +212,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function current(int $id, string $units = self::UNIT_METRIC): array|false
     {
@@ -235,8 +231,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function daily(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
@@ -259,8 +253,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function forecast(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
     {
@@ -273,6 +265,14 @@ class OpenWeatherService extends AbstractHttpClientService
         }
 
         return $this->get(self::URI_FORECAST, $query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheTimeout(): int
+    {
+        return self::CACHE_TIMEOUT;
     }
 
     /**
@@ -329,8 +329,6 @@ class OpenWeatherService extends AbstractHttpClientService
      *      units: array,
      *      list: array<int, array>
      *  }>|false
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function group(array $cityIds, string $units = self::UNIT_METRIC): array|false
     {
@@ -367,8 +365,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param string   $units     the units to use
      *
      * @return array|false the essential conditions if success; false on error
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function oneCall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, array $exclude = []): array|false
     {
@@ -398,11 +394,7 @@ class OpenWeatherService extends AbstractHttpClientService
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
 
         /** @psalm-var array<int, OpenWeatherCityType>|null $results */
-        $results = $this->getCacheValue(
-            $key,
-            fn () => $this->doSearch($name, $limit),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getCacheValue($key, fn () => $this->doSearch($name, $limit));
 
         return $results ?? [];
     }
@@ -519,8 +511,6 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param array  $query an associative array of query string values to add to the request
      *
      * @return array|false the JSON response on success, false on failure
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     private function get(string $uri, array $query = []): array|false
     {
@@ -528,11 +518,7 @@ class OpenWeatherService extends AbstractHttpClientService
         $key = $this->getCacheKey($uri, $query);
 
         /** @psalm-var ?array $results */
-        $results = $this->getCacheValue(
-            $key,
-            fn () => $this->doGet($uri, $query),
-            self::CACHE_TIMEOUT
-        );
+        $results = $this->getCacheValue($key, fn () => $this->doGet($uri, $query));
 
         return $results ?? false;
     }

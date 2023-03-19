@@ -12,13 +12,15 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Util\Utils;
+use App\Traits\ExceptionContextTrait;
 
 /**
  * Contains Http client error.
  */
 class HttpClientError implements \JsonSerializable, \Stringable
 {
+    use ExceptionContextTrait;
+
     /**
      * Constructor.
      *
@@ -77,7 +79,7 @@ class HttpClientError implements \JsonSerializable, \Stringable
             'message' => $this->message,
         ];
         if (null !== $this->exception) {
-            $result['exception'] = Utils::getExceptionContext($this->exception);
+            $result['exception'] = $this->getExceptionContext($this->exception);
         }
 
         return $result;

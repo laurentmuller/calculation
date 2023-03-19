@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -20,6 +19,8 @@ use Psr\Log\LoggerInterface;
  */
 trait LoggerTrait
 {
+    use ExceptionContextTrait;
+
     /**
      * Gets the logger.
      */
@@ -52,6 +53,14 @@ trait LoggerTrait
     }
 
     /**
+     * Logs a debug message.
+     */
+    public function logDebug(string|\Stringable $message, array $context = []): void
+    {
+        $this->getLogger()->debug($message, $context);
+    }
+
+    /**
      * Logs an emergency message.
      */
     public function logEmergency(string|\Stringable $message, array $context = []): void
@@ -73,7 +82,7 @@ trait LoggerTrait
     public function logException(\Throwable $e, ?string $message = null): void
     {
         $message ??= $e->getMessage();
-        $context = Utils::getExceptionContext($e);
+        $context = $this->getExceptionContext($e);
         $this->logError($message, $context);
     }
 

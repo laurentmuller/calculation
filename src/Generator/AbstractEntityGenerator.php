@@ -17,7 +17,6 @@ use App\Interfaces\GeneratorInterface;
 use App\Service\FakerService;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -72,7 +71,7 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
             ]);
         } catch (\Exception $e) {
             $message = $this->trans('generate.error.failed');
-            $context = Utils::getExceptionContext($e);
+            $context = $this->getExceptionContext($e);
             $this->logError($message, $context);
 
             return new JsonResponse([

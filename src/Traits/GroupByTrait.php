@@ -10,70 +10,23 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Traits;
 
 /**
- * Utility class.
+ * Trait to group object or array.
  */
-final class Utils
+trait GroupByTrait
 {
-    // prevent instance creation
-    private function __construct()
-    {
-        // no-op
-    }
-
-    /**
-     * Check if the given class name is a subclass of the given target class name.
-     *
-     * @throws \InvalidArgumentException if check failed
-     *
-     * @psalm-param class-string $targetClassName
-     */
-    public static function checkSubClass(string $className, string $targetClassName): void
-    {
-        if (!\is_subclass_of($className, $targetClassName)) {
-            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', $targetClassName, $className));
-        }
-    }
-
-    /**
-     * Gets the context, as array; for the given exception.
-     *
-     * @param \Throwable $e the exception to get the context for
-     *
-     * @return array{
-     *     message: string,
-     *     code: string|int,
-     *     file: string,
-     *     line: int,
-     *     class: string,
-     *     trace: string}
-     */
-    public static function getExceptionContext(\Throwable $e): array
-    {
-        return [
-            'message' => $e->getMessage(),
-            'code' => $e->getCode(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'class' => StringUtils::getShortName($e),
-            'trace' => $e->getTraceAsString(),
-        ];
-    }
-
     /**
      * Groups an array by the given key.
      *
      * Any additional keys will be used for grouping the next set of sub-arrays.
      *
-     * @psalm-param array<array-key, mixed>         $array
+     * @psalm-param array<array-key, mixed>              $array
      * @psalm-param string|int|callable(mixed):array-key $key
      * @psalm-param string|int|callable(mixed):array-key ...$others
-     *
-     * @return array the grouped array
      */
-    public static function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
+    public function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
     {
         $result = [];
         /** @psalm-var object|array $value */
@@ -91,6 +44,7 @@ final class Utils
         }
         if (\func_num_args() > 2) {
             $args = \func_get_args();
+            /** @psalm-var callable(mixed):array-key $callback */
             $callback = [__CLASS__, __FUNCTION__];
             /** @psalm-param string|int $groupKey */
             foreach ($result as $groupKey => $value) {

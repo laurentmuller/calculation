@@ -18,7 +18,6 @@ use App\Enums\TableView;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractTable;
 use App\Table\DataResults;
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait TableTrait
 {
     use CookieTrait;
+    use ExceptionContextTrait;
     use RequestTrait;
 
     /**
@@ -52,7 +52,7 @@ trait TableTrait
 
             return $response;
         } catch (\Throwable $e) {
-            $context = Utils::getExceptionContext($e);
+            $context = $this->getExceptionContext($e);
             $message = $this->trans('error_page.description');
             $logger->error($message, $context);
             $status = Response::HTTP_BAD_REQUEST;

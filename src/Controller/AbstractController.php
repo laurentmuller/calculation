@@ -25,9 +25,9 @@ use App\Service\UrlGeneratorService;
 use App\Service\UserService;
 use App\Spreadsheet\AbstractDocument;
 use App\Spreadsheet\SpreadsheetDocument;
+use App\Traits\ExceptionContextTrait;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -47,6 +47,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class AbstractController extends BaseController
 {
+    use ExceptionContextTrait;
     use RequestTrait;
     use TranslatorFlashMessageAwareTrait;
 
@@ -313,7 +314,7 @@ abstract class AbstractController extends BaseController
     {
         return $this->jsonFalse([
             'message' => $message ?? $e->getMessage(),
-            'exception' => Utils::getExceptionContext($e),
+            'exception' => $this->getExceptionContext($e),
         ]);
     }
 
@@ -343,7 +344,7 @@ abstract class AbstractController extends BaseController
     protected function renderFormException(string $id, \Throwable $e, LoggerInterface $logger = null): Response
     {
         $message = $this->trans($id);
-        $context = Utils::getExceptionContext($e);
+        $context = $this->getExceptionContext($e);
         $logger?->error($message, $context);
 
         return $this->render('@Twig/Exception/exception.html.twig', [

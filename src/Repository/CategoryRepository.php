@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
-use App\Util\Utils;
+use App\Traits\GroupByTrait;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,6 +25,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends AbstractRepository
 {
+    use GroupByTrait;
     /**
      * The filter type to display all categories.
      */
@@ -162,6 +163,6 @@ class CategoryRepository extends AbstractRepository
     {
         $values = $builder->getQuery()->getArrayResult();
 
-        return Utils::groupBy($values, 'group');
+        return $this->groupBy($values, 'group');
     }
 }

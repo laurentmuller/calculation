@@ -15,7 +15,7 @@ namespace App\Pivot;
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
-use App\Util\Utils;
+use App\Traits\CheckSubClassTrait;
 use Symfony\Component\Intl\Exception\UnexpectedTypeException;
 
 /**
@@ -25,6 +25,8 @@ use Symfony\Component\Intl\Exception\UnexpectedTypeException;
  */
 class PivotTableFactory
 {
+    use CheckSubClassTrait;
+
     /**
      * The aggregator class name.
      *
@@ -66,7 +68,7 @@ class PivotTableFactory
     public function __construct(private readonly array $dataset, private ?string $title = null, ?string $aggregatorClass = null)
     {
         $aggregatorClass ??= SumAggregator::class;
-        Utils::checkSubClass($aggregatorClass, AbstractAggregator::class);
+        $this->checkSubClass($aggregatorClass, AbstractAggregator::class);
         $this->aggregatorClass = $aggregatorClass;
     }
 
@@ -214,7 +216,7 @@ class PivotTableFactory
      */
     public function setAggregatorClass(string $aggregatorClass): self
     {
-        Utils::checkSubClass($aggregatorClass, AbstractAggregator::class);
+        $this->checkSubClass($aggregatorClass, AbstractAggregator::class);
         $this->aggregatorClass = $aggregatorClass;
 
         return $this;

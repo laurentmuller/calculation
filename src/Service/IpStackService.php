@@ -178,9 +178,8 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         if (null === $clientIp || '127.0.0.1' === $clientIp) {
             return self::URI_CHECK;
         }
-
         // for debug purpose
-        $this->logInfo("Client Ip: $clientIp");
+        $this->logDebug("Client Ip: $clientIp");
 
         return $clientIp;
     }

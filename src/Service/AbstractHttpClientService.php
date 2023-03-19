@@ -120,11 +120,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      */
     protected function getClient(): HttpClientInterface
     {
-        if (null === $this->client) {
-            $this->client = $this->createClient();
-        }
-
-        return $this->client;
+        return $this->client ??= $this->createClient();
     }
 
     /**

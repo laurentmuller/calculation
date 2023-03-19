@@ -33,7 +33,6 @@ use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Util\StringUtils;
-use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -502,7 +501,7 @@ class AjaxController extends AbstractController
             return $this->json($result);
         } catch (\Exception $e) {
             $message = $this->trans('calculation.edit.error.update_total');
-            $context = Utils::getExceptionContext($e);
+            $context = $this->getExceptionContext($e);
             $logger->error($message, $context);
 
             return $this->jsonException($e, $message);

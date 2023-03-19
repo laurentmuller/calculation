@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationState;
-use App\Util\Utils;
+use App\Traits\GroupByTrait;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -36,6 +36,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CalculationStateRepository extends AbstractRepository
 {
+    use GroupByTrait;
+
     /**
      * Constructor.
      *
@@ -199,7 +201,7 @@ class CalculationStateRepository extends AbstractRepository
     {
         $values = $builder->getQuery()->getArrayResult();
 
-        return Utils::groupBy($values, 'editable');
+        return $this->groupBy($values, 'editable');
     }
 
     /**

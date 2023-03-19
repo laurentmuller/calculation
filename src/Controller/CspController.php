@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -41,7 +40,7 @@ class CspController extends AbstractController
                 $logger->error($title, $context);
                 $this->sendNotification($title, $context, $mailer);
             } catch (TransportExceptionInterface $e) {
-                $context = Utils::getExceptionContext($e);
+                $context = $this->getExceptionContext($e);
                 $logger->error($e->getMessage(), $context);
             }
         }

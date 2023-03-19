@@ -10,38 +10,18 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Utils;
+namespace App\Tests\Traits;
 
-use App\Util\Utils;
+use App\Traits\GroupByTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @psalm-type UtilsType = array{id: int, value: string}
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(Utils::class)]
-class UtilsTest extends TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(GroupByTrait::class)]
+class GroupByTraitTest extends TestCase
 {
-    public function testExceptionContext(): void
-    {
-        $code = 200;
-        $message = 'My message';
-        $file = __FILE__;
-        $line = __LINE__ + 1;
-        $e = new \Exception($message, $code);
-
-        $result = Utils::getExceptionContext($e);
-
-        self::assertArrayHasKey('message', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('code', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('file', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('line', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('trace', $result); // @phpstan-ignore-line
-
-        self::assertSame($message, $result['message']);
-        self::assertSame($code, $result['code']);
-        self::assertSame($file, $result['file']);
-        self::assertSame($line, $result['line']);
-    }
+    use GroupByTrait;
 
     public function testGroupByArrays(): void
     {
@@ -52,7 +32,7 @@ class UtilsTest extends TestCase
             self::createObject(2, '3'),
         ];
         $key = 'id';
-        $result = Utils::groupBy($array, $key);
+        $result = $this->groupBy($array, $key);
 
         self::assertIsArray($result[1]);
         self::assertIsArray($result[2]);
@@ -69,7 +49,7 @@ class UtilsTest extends TestCase
             self::createObject(2, '3'),
         ];
         $key = fn (array $value): int => (int) $value['id'];
-        $result = Utils::groupBy($array, $key);
+        $result = $this->groupBy($array, $key);
 
         self::assertIsArray($result[1]);
         self::assertIsArray($result[2]);
@@ -89,7 +69,7 @@ class UtilsTest extends TestCase
             ['id0' => 2, 'id1' => '1', 'value' => '2'],
             ['id0' => 2, 'id1' => '2', 'value' => '2'],
         ];
-        $result = Utils::groupBy($array, 'id0', 'id1');
+        $result = $this->groupBy($array, 'id0', 'id1');
 
         // first level
         self::assertIsArray($result[1]);
@@ -120,7 +100,7 @@ class UtilsTest extends TestCase
             (object) self::createObject(2, '3'),
         ];
         $key = 'id';
-        $result = Utils::groupBy($array, $key);
+        $result = $this->groupBy($array, $key);
 
         self::assertArrayHasKey(1, $result);
         self::assertArrayHasKey(2, $result);
@@ -138,7 +118,7 @@ class UtilsTest extends TestCase
             self::createObject(3, '2'),
         ];
         $key = 'value';
-        $result = Utils::groupBy($array, $key);
+        $result = $this->groupBy($array, $key);
 
         self::assertArrayHasKey('1', $result);
         self::assertArrayHasKey('2', $result);

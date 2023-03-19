@@ -18,8 +18,8 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
+use App\Traits\GroupByTrait;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 
 /**
  * Report for the list of categories.
@@ -28,6 +28,8 @@ use App\Util\Utils;
  */
 class CategoriesReport extends AbstractArrayReport
 {
+    use GroupByTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -39,7 +41,7 @@ class CategoriesReport extends AbstractArrayReport
         $default = $this->trans('report.other');
         $fn = fn (Category $category): string => $category->getGroupCode() ?? $default;
         /** @var array<string, Category[]> $groups */
-        $groups = Utils::groupBy($entities, $fn);
+        $groups = $this->groupBy($entities, $fn);
         $this->AddPage();
         $table = $this->createTable();
         foreach ($groups as $key => $items) {

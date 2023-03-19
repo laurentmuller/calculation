@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\AbstractEntity;
+use App\Traits\CheckSubClassTrait;
 use App\Util\StringUtils;
-use App\Util\Utils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -24,6 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractEntityType extends AbstractHelperType
 {
+    use CheckSubClassTrait;
     /**
      * The entity class name.
      *
@@ -42,7 +43,7 @@ abstract class AbstractEntityType extends AbstractHelperType
      */
     protected function __construct(string $className)
     {
-        Utils::checkSubClass($className, AbstractEntity::class);
+        $this->checkSubClass($className, AbstractEntity::class);
         $this->className = $className;
     }
 

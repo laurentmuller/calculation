@@ -14,15 +14,16 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
+use App\Traits\GroupByTrait;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 
 /**
  * Service for calculations timeline.
  */
 class TimelineService
 {
+    use GroupByTrait;
     private const DATE_FORMAT = 'Y-m-d';
 
     public function __construct(private readonly CalculationRepository $repository)
@@ -173,6 +174,6 @@ class TimelineService
         }
         $fn = static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG);
 
-        return Utils::groupBy($calculations, $fn);
+        return $this->groupBy($calculations, $fn);
     }
 }

@@ -33,10 +33,10 @@ use App\Service\MailerService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
+use App\Traits\GroupByTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use App\Validator\Strength;
@@ -71,6 +71,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestController extends AbstractController
 {
+    use GroupByTrait;
     use StrengthLevelTranslatorTrait;
 
     /**
@@ -444,7 +445,7 @@ class TestController extends AbstractController
             ->getResult();
         $fn = static fn (Category $c): string => (string) $c->getGroupCode();
 
-        return Utils::groupBy($categories, $fn);
+        return $this->groupBy($categories, $fn);
     }
 
     /**
@@ -473,7 +474,7 @@ class TestController extends AbstractController
         $products = $manager->getRepository(Product::class)->findAllByGroup();
         $fn = static fn (Product $p): string => \sprintf('%s - %s', (string) $p->getGroupCode(), (string) $p->getCategoryCode());
 
-        return Utils::groupBy($products, $fn);
+        return $this->groupBy($products, $fn);
     }
 
     private function getStates(EntityManagerInterface $manager): array
@@ -485,6 +486,6 @@ class TestController extends AbstractController
             ->getResult();
         $fn = static fn (CalculationState $state): string => $state->isEditable() ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable';
 
-        return Utils::groupBy($states, $fn);
+        return $this->groupBy($states, $fn);
     }
 }

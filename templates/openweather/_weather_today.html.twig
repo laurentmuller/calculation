@@ -24,7 +24,16 @@
     {{ _self.row_unit(name, value|number_format(1), unit, '') }}
 {% endmacro %}
 {# title #}
-<h6 class="p-2 mb-2 bg-secondary text-white">{{ 'openweather.fields.current'|trans }}</h6>
+<div class="row bg-secondary text-white py-1 m-0">
+    <div class="col-lg-10 px-2">
+        <h6 class="mb-0">{{ 'openweather.fields.current'|trans }}</h6>
+    </div>
+    <div class="col-lg-2 px-2 text-lg-right d-print-none">
+        <a href="#" class="text-white" data-toggle="modal" data-target="#current_data_modal" title="{{ 'common.button_raw_data'|trans }}">
+            <i class="fa-solid fa-laptop-code"></i>
+        </a>
+    </div>
+</div>
 {# table #}
 <table class="table table-sm mb-0">
     <tbody>
@@ -72,9 +81,10 @@
         {{ _self.row_no_sep('openweather.fields.clouds', current.clouds.all, units_percent) }}
 
         {%- set href = 'https://www.google.ch/maps/place/' ~ current.coord.lat ~ ',' ~ current.coord.lon -%}
-        {%- set text = tools.value_no_sep(current.coord.lat, units_degree) ~ ' / ' ~ tools.value_no_sep(current.coord.lon, units_degree) -%}
+        {%- set text = current.coord.lat_dms ~ ' / ' ~ current.coord.lon_dms -%}
         {%- set raw = '<a href="' ~ href ~ '" target="_blank" rel="noopener noreferrer">' ~ text ~ '</a>' -%}
         {{ _self.row_text('openweather.fields.position', raw) }}
         {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
     </tbody>
 </table>
+{% include 'dialog/raw_data_dialog.html.twig' with {'id': 'current_data_modal', 'raw_data': current, 'max_height': 400} %}

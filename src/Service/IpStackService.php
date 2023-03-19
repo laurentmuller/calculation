@@ -59,7 +59,8 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%ip_stack_key%')]
-        string $key
+        string $key,
+        private readonly PositionService $service
     ) {
         parent::__construct($key);
     }
@@ -121,13 +122,13 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
                 $result['region_name'] = \ucfirst($result['region_name']);
             }
             if (isset($result['latitude'])) {
-                $result['latitude_html'] = $this->formatLatitude($result['latitude']);
+                $result['latitude_dms'] = $this->service->formatLat($result['latitude']);
             }
             if (isset($result['longitude'])) {
-                $result['longitude_html'] = $this->formatLongitude($result['longitude']);
+                $result['longitude_dms'] = $this->service->formatLng($result['longitude']);
             }
             if (isset($result['latitude']) && isset($result['longitude'])) {
-                $result['position_html'] = $this->formatLatLng($result['latitude'], $result['longitude']);
+                $result['position_dms'] = $this->service->formatLatLng($result['latitude'], $result['longitude']);
             }
 
             return $result;
@@ -136,34 +137,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         }
 
         return null;
-    }
-
-    private function formatLatitude(float $latitude): string
-    {
-        return $this->formatPosition($latitude, 'N', 'S');
-    }
-
-    private function formatLatLng(float $latitude, float $longitude): string
-    {
-        return \sprintf('%s / %s', $this->formatLatitude($latitude), $this->formatLongitude($longitude));
-    }
-
-    private function formatLongitude(float $longitude): string
-    {
-        return $this->formatPosition($longitude, 'E', 'W');
-    }
-
-    private function formatPosition(float $position, string $positiveSuffix, string $negativeSuffix): string
-    {
-        $suffix = $position >= 0 ? $positiveSuffix : $negativeSuffix;
-        $suffix = $this->trans("openweather.direction.$suffix");
-        $position = \abs($position);
-        $degrees = \floor($position);
-        $position = ($position - $degrees) * 60.0;
-        $minutes = \floor($position);
-        $secconds = \floor(($position - $minutes) * 60.0);
-
-        return \sprintf("%d&deg; %d' %d\" %s", $degrees, $minutes, $secconds, $suffix);
     }
 
     /**

@@ -18,6 +18,17 @@
 {# parameters #}
 {%- set title = 'test.ip_stack' -%}
 {%- set title_icon = 'location-dot' -%}
+{# header #}
+{% block card_header %}
+<div class="row">
+    <div class="col-lg-10 mt-1">{{ parent() }}</div>
+    <div class="col-lg-2 text-lg-right d-print-none">
+        <a href="#" data-toggle="modal" data-target="#raw_data_modal" title="{{ 'common.button_raw_data'|trans }}">
+            <i class="fa-solid fa-laptop-code"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
 {# body #}
 {% block card_body %}
 <table class="table table-sm table-hover">
@@ -30,15 +41,10 @@
     {{ _self.output_row('Pays', results.country_name|default(false)) }}
     {{ _self.output_row('Région', results.region_name|default(false)) }}
     {{ _self.output_row('Ville', results.city|default(false)) }}
-    {{ _self.output_row('Position', results.position_html|default(false)) }}
+    {{ _self.output_row('Position', results.position_dms|default(false)) }}
     </tbody>
 </table>
-<a href="#raw-data" data-toggle="collapse" class="drop-down-icon-left horizontal-line collapsed" aria-expanded="false" aria-controls="raw-data">Données brutes</a>
-<div id="raw-data" class="collapse border pre-scrollable mt-2 p-2" aria-expanded="false">
-    <pre class="text-success mb-0" style="font-size: 12px;">
-        {{- results|var_export|trim|raw -}}
-    </pre>
-</div>
+{% include 'dialog/raw_data_dialog.html.twig' with {'raw_data': results, 'max_height': 400} %}
 {% endblock %}
 {# footer #}
 {% block card_footer -%}

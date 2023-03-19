@@ -13,13 +13,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
-use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to get weather from OpenWeatherMap.
@@ -30,8 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
-    use TranslatorTrait;
-
     /**
      * The imperial degree.
      */
@@ -148,29 +144,6 @@ class OpenWeatherService extends AbstractHttpClientService
     private const URI_ONECALL = 'onecall';
 
     /**
-     * The wind directions.
-     */
-    private const WIND_DIRECTIONS = [
-        'N',
-        'N / N-E',
-        'N-E',
-        'E / N-E',
-        'E',
-        'E / S-E',
-        'S-E',
-        'S / S-E',
-        'S',
-        'S / S-W',
-        'S-W',
-        'W / S-W',
-        'W',
-        'W / N-W',
-        'N-W',
-        'N / N-W',
-        'N',
-    ];
-
-    /**
      * Constructor.
      *
      * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
@@ -181,7 +154,7 @@ class OpenWeatherService extends AbstractHttpClientService
         string $key,
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
         private readonly string $databaseName,
-        private readonly TranslatorInterface $translator
+        private readonly PositionService $service
     ) {
         parent::__construct($key);
     }
@@ -309,11 +282,6 @@ class OpenWeatherService extends AbstractHttpClientService
     public function getSpeedUnit(string $units): string
     {
         return self::UNIT_METRIC === $units ? self::SPEED_METRIC : self::SPEED_IMPERIAL;
-    }
-
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -544,39 +512,6 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the wind description for the given degrees.
-     */
-    private function getWindDescription(int $deg): string
-    {
-        $direction = $this->getWindDirection($deg);
-        $search = [
-            'N',
-            'S',
-            'E',
-            'W',
-        ];
-        $replace = [
-            $this->trans('openweather.direction.N'),
-            $this->trans('openweather.direction.S'),
-            $this->trans('openweather.direction.E'),
-            $this->trans('openweather.direction.W'),
-        ];
-
-        return \str_replace($search, $replace, $direction);
-    }
-
-    /**
-     * Gets the wind direction for the given degrees.
-     */
-    private function getWindDirection(int $deg): string
-    {
-        $deg %= 360;
-        $index = (int) \floor((float) $deg / 22.5 + 0.5);
-
-        return self::WIND_DIRECTIONS[$index];
-    }
-
-    /**
      * Converts the given offset to a time zone.
      *
      * @param int $offset the timezone offset in seconds from UTC
@@ -629,41 +564,39 @@ class OpenWeatherService extends AbstractHttpClientService
                     $results['icon_big'] = $this->replaceUrl(self::ICON_BIG_URL, (string) $value);
                     $results['icon_small'] = $this->replaceUrl(self::ICON_SMALL_URL, (string) $value);
                     break;
-
                 case 'description':
                     $results[$key] = \ucfirst((string) $value);
                     break;
-
                 case 'country':
                     $results['country_name'] = $this->getCountryName((string) $value) ?? '';
                     $results['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower((string) $value));
                     break;
-
                 case 'dt':
                     $this->updateDates($results, (int) $value, $timezone);
                     break;
-
                 case 'sunrise':
                     $results['sunrise_formatted'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT, $timezone);
                     break;
-
                 case 'sunset':
                     $results['sunset_formatted'] = FormatUtils::formatTime((int) $value, self::TYPE_SHORT, $timezone);
                     break;
-
                 case 'weather':
                     if (\is_array($value) && [] !== $value) {
                         $this->updateResults($value, $timezone);
                         $value = (array) \reset($value);
                     }
                     break;
-
+                case 'lon':
+                    $results['lon_dms'] = $this->service->formatLng((float) $value);
+                    break;
+                case 'lat':
+                    $results['lat_dms'] = $this->service->formatLat((float) $value);
+                    break;
                 case 'deg':
                     $deg = (int) $value;
-                    $results['deg_direction'] = $this->getWindDirection($deg);
-                    $results['deg_description'] = $this->getWindDescription($deg);
+                    $results['deg_direction'] = $this->service->getDirection($deg);
+                    $results['deg_description'] = $this->service->formatDirection($deg);
                     break;
-
                 default:
                     if (\is_array($value)) {
                         $this->updateResults($value, $timezone);

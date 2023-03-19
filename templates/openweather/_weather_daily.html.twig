@@ -1,6 +1,15 @@
 {% import 'openweather/_weather_macro.html.twig' as tools %}
 {# title #}
-<h6 class="p-2 mb-2 bg-secondary text-white">{{ 'counters.weather_daily'|trans({count: daily.cnt}) }}</h6>
+<div class="row bg-secondary text-white py-1 m-0">
+    <div class="col-lg-10 px-2">
+        <h6 class="mb-0">{{ 'counters.weather_daily'|trans({count: daily.cnt}) }}</h6>
+    </div>
+    <div class="col-lg-2 px-2 text-lg-right d-print-none">
+        <a href="#" class="text-white" data-toggle="modal" data-target="#daily_data_modal" title="{{ 'common.button_raw_data'|trans }}">
+            <i class="fa-solid fa-laptop-code"></i>
+        </a>
+    </div>
+</div>
 {# table #}
 <div class="table-responsive">
     <table class="table table-sm mb-0">
@@ -40,3 +49,4 @@
         </tbody>
     </table>
 </div>
+{% include 'dialog/raw_data_dialog.html.twig' with {'id': 'daily_data_modal', 'raw_data': daily, 'max_height': 400} %}

@@ -70,7 +70,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Gets calculation states.
      *
-     * @return array<int, array{id: int, code: string, editable: int, color: string}>
+     * @psalm-return array<int, array{id: int, code: string, editable: int, color: string}>
      */
     protected function getCalculationStates(): array
     {

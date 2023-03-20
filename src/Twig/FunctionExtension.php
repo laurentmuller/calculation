@@ -13,34 +13,27 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
-use App\Controller\ThemeController;
 use App\Entity\User;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
-use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
-use App\Util\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
- * Twig extension for the application.
+ * Twig extension for assets.
  */
 final class FunctionExtension extends AbstractExtension
 {
-    use RoleTranslatorTrait;
-
     /**
      * The default file version.
      */
-    private readonly int $version;
+    private int $version = Kernel::VERSION_ID;
 
     /**
      * The asset versions.
@@ -50,39 +43,24 @@ final class FunctionExtension extends AbstractExtension
     private array $versions = [];
 
     /**
-     * The real path of the public directory.
-     */
-    private readonly string $webDir;
-
-    /**
      * Constructor.
      */
     public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        string $projectDir,
+        #[Autowire('%kernel.project_dir%/composer.lock')]
+        string $composer_file,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
+        #[Autowire('%kernel.project_dir%/public')]
+        private readonly string $webDir,
         #[Autowire(service: 'twig.extension.assets')]
         private readonly AssetExtension $extension,
         private readonly NonceService $service,
         private readonly UploaderHelper $helper,
         private readonly UrlGeneratorService $generator,
-        private readonly TranslatorInterface $translator
     ) {
-        $filename = FileUtils::buildPath($projectDir, 'composer.lock');
-        $this->version = FileUtils::exists($filename) ? (int) \filemtime($filename) : Kernel::VERSION_ID;
-        $this->webDir = FileUtils::realpath(FileUtils::buildPath($projectDir, 'public'));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('trans_role', $this->translateRole(...)),
-            new TwigFilter('var_export', StringUtils::exportVar(...)),
-        ];
+        if (FileUtils::exists($composer_file) && \is_int($version = \filemtime($composer_file))) {
+            $this->version = $version;
+        }
     }
 
     /**
@@ -104,19 +82,7 @@ final class FunctionExtension extends AbstractExtension
             // routes
             new TwigFunction('cancel_url', $this->cancelUrl(...)),
             new TwigFunction('route_params', $this->routeParams(...)),
-            // php
-            new TwigFunction('is_int', 'is_int'),
-            // theme
-            new TwigFunction('theme_dark', $this->isDarkTheme(...)),
         ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -284,14 +250,6 @@ final class FunctionExtension extends AbstractExtension
         [$width, $height] = (array) \getimagesize($full_path);
 
         return [(int) $width, (int) $height];
-    }
-
-    /**
-     * Returns if the selected theme is dark.
-     */
-    private function isDarkTheme(Request $request): bool
-    {
-        return $request->cookies->getBoolean(ThemeController::KEY_DARK);
     }
 
     /**

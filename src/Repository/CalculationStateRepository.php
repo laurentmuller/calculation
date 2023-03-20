@@ -75,7 +75,9 @@ class CalculationStateRepository extends AbstractRepository
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
-     * @return array<int, array{id: int, code: string, editable: int, color: string}> an array grouped by editable with the states
+     * @return array an array grouped by editable with the states
+     *
+     * @psalm-return array<int, array{id: int, code: string, editable: int, color: string}>
      */
     public function getDropDownStates(): array
     {
@@ -89,7 +91,9 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @param float $minMargin the minimum margin
      *
-     * @return array<int, array{id: int, code: string, editable: int, color: string}> an array grouped by editable with the states
+     * @return array an array grouped by editable with the states
+     *
+     * @psalm-return array<int, array{id: int, code: string, editable: int, color: string}>
      */
     public function getDropDownStatesBelow(float $minMargin): array
     {

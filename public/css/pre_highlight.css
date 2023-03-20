@@ -1,0 +1,39 @@
+/**! compression tag for ftp-deployment */
+
+/**
+ * highlight
+ */
+pre.highlight {
+    margin: 0;
+    white-space: pre-wrap;
+}
+pre.highlight-small {
+    font-size: 12px;
+}
+pre.highlight .variable {
+    color: darkgreen;
+}
+pre.highlight .number {
+    color: blue;
+}
+pre.highlight .string {
+    color: green;
+}
+pre.highlight .other {
+    color: #FF8400;
+}
+/**
+ * Dark theme
+ */
+body.dark pre.highlight {
+    color: white;
+}
+body.dark pre.highlight .variable {
+    color: #56DB3A;
+}
+body.dark pre.highlight .number {
+    color: #1299DA;
+}
+body.dark pre.highlight .string {
+    color: #09A63E;
+}

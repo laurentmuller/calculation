@@ -129,14 +129,12 @@ class SchemaReport extends AbstractReport
         if ([] === $associations) {
             return;
         }
-
         $builder = $this->createTableBuilder(
             'schema.fields.associations',
             PdfColumn::left($this->trans('schema.fields.name'), 100),
             PdfColumn::left($this->trans('schema.fields.table'), 100),
             PdfColumn::left($this->trans('schema.fields.relation'), 55, true)
         );
-
         foreach ($associations as $association) {
             $table = $association['table'];
             $link = $this->findLink($table);
@@ -156,7 +154,6 @@ class SchemaReport extends AbstractReport
         if ([] === $columns) {
             return;
         }
-
         $builder = $this->createTableBuilder(
             'schema.fields.columns',
             PdfColumn::left($this->trans('schema.fields.name'), 100),
@@ -164,7 +161,6 @@ class SchemaReport extends AbstractReport
             PdfColumn::center($this->trans('schema.fields.required'), 20, true),
             PdfColumn::left($this->trans('schema.fields.default'), 35, true)
         );
-
         foreach ($columns as $column) {
             $link = $this->findLink($column['foreign_table']);
             $builder->startRow()
@@ -185,7 +181,6 @@ class SchemaReport extends AbstractReport
         if ([] === $indexes) {
             return;
         }
-
         $builder = $this->createTableBuilder(
             'schema.fields.indexes',
             PdfColumn::left($this->trans('schema.fields.name'), 100),
@@ -193,7 +188,6 @@ class SchemaReport extends AbstractReport
             PdfColumn::center($this->trans('schema.fields.primary'), 25, true),
             PdfColumn::center($this->trans('schema.fields.unique'), 30, true),
         );
-
         foreach ($indexes as $index) {
             $builder->startRow()
                 ->add($index['name'])
@@ -230,12 +224,11 @@ class SchemaReport extends AbstractReport
         $builder = PdfTableBuilder::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('schema.fields.name'), 100),
-                PdfColumn::right($this->trans('schema.fields.columns'), 30, true),
+                PdfColumn::right($this->trans('schema.fields.columns'), 19, true),
                 PdfColumn::right($this->trans('schema.fields.records'), 30, true),
-                PdfColumn::right($this->trans('schema.fields.indexes'), 30, true),
-                PdfColumn::right($this->trans('schema.fields.associations'), 30, true)
+                PdfColumn::right($this->trans('schema.fields.indexes'), 17, true),
+                PdfColumn::right($this->trans('schema.fields.associations'), 25, true)
             )->outputHeaders();
-
         foreach ($tables as $table) {
             $name = $table['name'];
             $link = $this->findLink($name);

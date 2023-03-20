@@ -592,7 +592,9 @@ class PdfDocument extends \FPDF
     /**
      * Gets the current X and Y position.
      *
-     * @return array{0: float, 1: float} the X and Y position
+     * @return float[] the X and Y position
+     *
+     * @psalm-return array{0: float, 1: float}
      *
      * @see PdfDocument::GetX()
      * @see PdfDocument::GetY()

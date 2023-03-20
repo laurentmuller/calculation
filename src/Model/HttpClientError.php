@@ -58,7 +58,7 @@ class HttpClientError implements \JsonSerializable, \Stringable
     /**
      * {@inheritdoc}
      *
-     * @return array{
+     * @psalm-return array{
      *      result: false,
      *      code: int,
      *      message: string,

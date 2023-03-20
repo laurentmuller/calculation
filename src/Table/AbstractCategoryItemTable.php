@@ -58,7 +58,9 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     /**
      * Gets categories.
      *
-     * @return array<string, array{id: int, code: string, group: string}> an array grouped by group name with the categories
+     * @return array an array grouped by group name with the categories
+     *
+     * @psalm-return array<string, array{id: int, code: string, group: string}>
      */
     abstract protected function getCategories(): array;
 

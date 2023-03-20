@@ -186,8 +186,6 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the red, the green and the blue values.
      *
-     * @return array{0: int, 1: int, 2: int}
-     *
      * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
      */
     public function getRGB(): array
@@ -236,7 +234,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @param ?string $value a hexadecimal string
      *
-     * @return array{0: int, 1: int, 2: int}|false the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
+     * @return array|false the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
      *
      * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false
      */

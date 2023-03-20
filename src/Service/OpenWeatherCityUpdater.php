@@ -75,7 +75,7 @@ class OpenWeatherCityUpdater
     /**
      * Import data from the given file.
      *
-     * @return array{result: bool, message: string, valid: int, error: int}
+     * @psalm-return array{result: bool, message: string, valid: int, error: int}
      */
     public function import(UploadedFile $file): array
     {
@@ -113,7 +113,7 @@ class OpenWeatherCityUpdater
     }
 
     /**
-     * @return array{result: bool, message: string, valid: int, error: int}
+     * @psalm-return array{result: bool, message: string, valid: int, error: int}
      */
     private function falseResult(string $message, array $parameters = []): array
     {
@@ -126,7 +126,7 @@ class OpenWeatherCityUpdater
     }
 
     /**
-     * @return OpenWeatherCityType[]|false
+     * @psalm-return OpenWeatherCityType[]|false
      */
     private function getFileContent(UploadedFile $file): array|false
     {
@@ -142,7 +142,7 @@ class OpenWeatherCityUpdater
         if (false === $content = \gzdecode($content)) {
             return false;
         }
-        /** @var OpenWeatherCityType[]|null $result */
+        /** @psalm-var OpenWeatherCityType[]|null $result */
         $result = \json_decode($content, true);
 
         return \is_array($result) ? $result : false;
@@ -151,7 +151,7 @@ class OpenWeatherCityUpdater
     /**
      * @param OpenWeatherCityType[] $cities
      *
-     * @return array{0: int, 1: int}
+     * @psalm-return array{0: int, 1: int}
      */
     private function insertCities(OpenWeatherDatabase $db, array $cities): array
     {

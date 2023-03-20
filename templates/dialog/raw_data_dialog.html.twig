@@ -1,14 +1,19 @@
 {% from 'macros/_icons.html.twig' import button_close_modal %}
+{# dialog #}
 <div id="{{ id|default('raw_data_modal') }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="fa-solid fa-terminal"></i> <span class="dialog-title">{{ 'common.button_raw_data'|trans }}</span></h5>{{ button_close_modal() }}
+                <h5 class="modal-title"><i class="fa-solid fa-laptop-code"></i> <span class="dialog-title">{{ 'common.button_raw_data'|trans }}</span></h5>{{ button_close_modal() }}
             </div>
             <div class="modal-body">
-                <div class="border pre-scrollable p-2" style="max-height: {{ max_height|default(340) }}px;">
-                    <pre class="text-success mb-0" style="font-size: 12px;">
-                        {{- raw_data|var_export|trim|raw -}}
+                <div class="border pre-scrollable p-2" style="max-height: {{ max_height|default(400) }}px;">
+                    <pre class="highlight highlight-small mb-0">
+                    {%- if raw_data is defined and raw_data -%}
+                        {{- raw_data|var_export_html -}}
+                    {%- else -%}
+                        {{ 'common.value_null'|trans }}
+                    {%- endif -%}
                     </pre>
                 </div>
             </div>

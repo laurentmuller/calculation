@@ -14,7 +14,6 @@
         <th colspan="2">{{ name }}</th>
     </tr>
 {%- endmacro %}
-
 {# parameters #}
 {%- set title = 'test.ip_stack' -%}
 {%- set title_icon = 'location-dot' -%}
@@ -44,9 +43,14 @@
     {{ _self.output_row('Position', results.position_dms|default(false)) }}
     </tbody>
 </table>
-{% include 'dialog/raw_data_dialog.html.twig' with {'raw_data': results, 'max_height': 400} %}
+{% include 'dialog/raw_data_dialog.html.twig' with {'raw_data': results} %}
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
     {{- homepage() }}
 {%- endblock %}
+{# stylesheets #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{- asset_css('css/pre_highlight.css') }}
+{% endblock %}

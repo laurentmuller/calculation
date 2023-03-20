@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherService;
+use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -103,8 +104,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns current conditions data for a specific location.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/current', name: 'openweather_api_current')]
     public function apiCurrent(Request $request): JsonResponse
@@ -124,8 +123,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 16 day / daily forecast conditions data for a specific location.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/daily', name: 'openweather_api_daily')]
     public function apiDaily(Request $request): JsonResponse
@@ -146,8 +143,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns 5 days / 3 hours forecast conditions data for a specific location.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/forecast', name: 'openweather_api_forecast')]
     public function apiForecast(Request $request): JsonResponse
@@ -168,8 +163,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns all essential weather data for a specific location.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/api/onecall', name: 'openweather_api_onecall')]
     public function apiOneCall(Request $request): JsonResponse
@@ -233,8 +226,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Returns current conditions data for a specific location.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response
@@ -283,8 +274,6 @@ class OpenWeatherController extends AbstractController
 
     /**
      * Shows the search city view.
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     #[Route(path: '/search', name: 'openweather_search')]
     public function search(Request $request): Response
@@ -386,11 +375,12 @@ class OpenWeatherController extends AbstractController
                 'openweather.current.metric.text' => OpenWeatherService::UNIT_METRIC,
                 'openweather.current.imperial.text' => OpenWeatherService::UNIT_IMPERIAL,
             ]);
-        $limits = [5, 10, 15, 20];
+        $transformer = new NumberToLocalizedStringTransformer(0);
         $helper->field(self::KEY_LIMIT)
-            ->updateOption('choice_translation_domain', false)
-            ->addChoiceType(\array_combine($limits, $limits));
+            ->modelTransformer($transformer)
+            ->addHiddenType();
         $helper->field(self::KEY_COUNT)
+            ->modelTransformer($transformer)
             ->addHiddenType();
 
         return $helper->createForm();

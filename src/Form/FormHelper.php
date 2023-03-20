@@ -650,10 +650,12 @@ class FormHelper
     /**
      * Adds a post-set-data-submit event listener to this form builder.
      *
-     * @param callable(PostSetDataEvent): void $listener the event listener to add
-     * @param int                              $priority The priority of the listener. Listeners
-     *                                                   with a higher priority are called before
-     *                                                   listeners with a lower priority.
+     * @param callable $listener the event listener to add
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     *
+     * @psalm-param callable(PostSetDataEvent): void $listener
      */
     public function listenerPostSetData(callable $listener, int $priority = 0): self
     {
@@ -663,10 +665,12 @@ class FormHelper
     /**
      * Adds a post-submit event listener to this form builder.
      *
-     * @param callable(PostSubmitEvent): void $listener the event listener to add
-     * @param int                             $priority The priority of the listener. Listeners
-     *                                                  with a higher priority are called before
-     *                                                  listeners with a lower priority.
+     * @param callable $listener the event listener to add
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     *
+     * @psalm-param callable(PostSubmitEvent): void $listener
      */
     public function listenerPostSubmit(callable $listener, int $priority = 0): self
     {
@@ -676,10 +680,12 @@ class FormHelper
     /**
      * Adds a pre-set-data event listener to this form builder.
      *
-     * @param callable(PreSetDataEvent): void $listener the event listener to add
-     * @param int                             $priority The priority of the listener. Listeners
-     *                                                  with a higher priority are called before
-     *                                                  listeners with a lower priority.
+     * @param callable $listener the event listener to add
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     *
+     * @psalm-param callable(PreSetDataEvent): void $listener
      */
     public function listenerPreSetData(callable $listener, int $priority = 0): self
     {
@@ -689,10 +695,12 @@ class FormHelper
     /**
      * Adds a pre-submit event listener to this form builder.
      *
-     * @param callable(PreSubmitEvent): void $listener the event listener to add
-     * @param int                            $priority The priority of the listener. Listeners
-     *                                                 with a higher priority are called before
-     *                                                 listeners with a lower priority.
+     * @param callable $listener the event listener to add
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     *
+     * @psalm-param callable(PreSubmitEvent): void $listener
      */
     public function listenerPreSubmit(callable $listener, int $priority = 0): self
     {
@@ -702,10 +710,12 @@ class FormHelper
     /**
      * Adds a submit event listener to this form builder.
      *
-     * @param callable(SubmitEvent): void $listener the event listener to add
-     * @param int                         $priority The priority of the listener. Listeners
-     *                                              with a higher priority are called before
-     *                                              listeners with a lower priority.
+     * @param callable $listener the event listener to add
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     *
+     * @psalm-param callable(SubmitEvent): void $listener
      */
     public function listenerSubmit(callable $listener, int $priority = 0): self
     {

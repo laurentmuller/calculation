@@ -72,7 +72,7 @@
     <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
 {% endif %}
 <hr class="my-1 d-print-none">
-<p class="small text-right mb-0 d-print-none">
+<p class="small text-right mt-1 mb-0 d-print-none">
     {{ linkExternal(api_url, 'common.api_documentation') }}
 </p>
 {% endblock %}

@@ -142,7 +142,9 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $baseCode   the base currency code
      * @param string $targetCode the target currency code
      *
-     * @psalm-return ExchangeRateAndDateType|null the exchange rate, the next update and last update dates or null if an error occurs
+     * @return ?array the exchange rate, the next update and last update dates or null if an error occurs
+     *
+     * @psalm-return ExchangeRateAndDateType|null
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
@@ -156,7 +158,9 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     /**
      * Gets the supported currency codes.
      *
-     * @return array<string, ExchangeRateType> the supported currency codes or an empty array if an error occurs
+     * @return array the supported currency codes or an empty array if an error occurs
+     *
+     * @psalm-return array<string, ExchangeRateType>
      */
     public function getSupportedCodes(): array
     {
@@ -176,7 +180,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     }
 
     /**
-     * @psalm-return array<string, float>|null $rates
+     * @psalm-return array<string, float>|null
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */

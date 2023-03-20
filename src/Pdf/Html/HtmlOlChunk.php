@@ -28,17 +28,6 @@ class HtmlOlChunk extends HtmlParentChunk
     protected HtmlListType $type = HtmlListType::NUMBER;
 
     /**
-     * Constructor.
-     *
-     * @param string           $name   the tag name
-     * @param ?HtmlParentChunk $parent the parent chunk
-     */
-    public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
-    {
-        parent::__construct($name, $parent);
-    }
-
-    /**
      * Gets the bullet text for the given child.
      *
      * @param AbstractHtmlChunk $chunk the child chunk to get text for

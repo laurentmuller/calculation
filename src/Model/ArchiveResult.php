@@ -21,7 +21,7 @@ use App\Entity\CalculationState;
 class ArchiveResult
 {
     private ?\DateTimeInterface $date = null;
-    /** @var array<string, array{state: CalculationState, calculations: array<Calculation>}> */
+    /** @psalm-var array<string, array{state: CalculationState, calculations: array<Calculation>}> */
     private array $results = [];
     private bool $simulate = true;
     private ?CalculationState $target = null;
@@ -49,7 +49,7 @@ class ArchiveResult
     }
 
     /**
-     * @return array<string, array{state: CalculationState, calculations: array<Calculation>}>
+     * @psalm-return array<string, array{state: CalculationState, calculations: array<Calculation>}>
      */
     public function getResults(): array
     {

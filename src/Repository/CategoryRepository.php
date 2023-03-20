@@ -71,7 +71,9 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
-     * @return array<string, array{id: int, code: string, group: string}> an array grouped by group name with the categories
+     * @return array an array grouped by group name with the categories
+     *
+     * @psalm-return array<string, array{id: int, code: string, group: string}>
      */
     public function getDropDownProducts(): array
     {
@@ -86,7 +88,9 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one task are returned.
      *
-     * @return array<string, array{id: int, code: string, group: string}> an array grouped by group name with the categories
+     * @return array an array grouped by group name with the categories
+     *
+     * @psalm-return array<string, array{id: int, code: string, group: string}>
      */
     public function getDropDownTasks(): array
     {

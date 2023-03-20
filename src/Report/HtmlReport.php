@@ -12,10 +12,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Html\HtmlParser;
 
 /**
@@ -38,22 +34,6 @@ class HtmlReport extends AbstractReport
      * The right margin.
      */
     private ?float $rightMargin = null;
-
-    /**
-     * Constructor.
-     *
-     * @param PdfDocumentOrientation $orientation the page orientation
-     * @param PdfDocumentUnit        $unit        the user unit
-     * @param PdfDocumentSize        $size        the document size
-     */
-    public function __construct(
-        AbstractController $controller,
-        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
-        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
-        PdfDocumentSize $size = PdfDocumentSize::A4
-    ) {
-        parent::__construct($controller, $orientation, $unit, $size);
-    }
 
     public function Footer(): void
     {

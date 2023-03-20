@@ -1,21 +1,11 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_properties.html.twig' import property %}
 {# macros #}
-{% macro format_var(value) -%}
-{{- value|var_export|replace({
-    '[': '<samp class="comment">[</samp>',
-    ']': '<samp class="comment">]</samp>',
-    '"': '<samp class="number">"</samp>',
-    '\'': '<samp class="number">\'</samp>',
-    '=>': '<samp class="backtick">=></samp>',
-    ',': '<samp class="text-muted">,</samp>'
-})|raw -}}
-{%- endmacro %}
 {% macro formatArray(name, value) %}
 {%- if value|length -%}
 <tr>
     <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75"><pre class="highlight text-body mb-0">{{- _self.format_var(value) -}}</pre></td>
+    <td class="w-75"><pre class="highlight text-body mb-0">{{- value|var_export_html -}}</pre></td>
 </tr>
 {%- endif -%}
 {% endmacro %}

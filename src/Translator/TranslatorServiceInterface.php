@@ -26,8 +26,9 @@ interface TranslatorServiceInterface
      *
      * @param string $text the text to detect
      *
-     * @return array{tag: string, name: string|null}|false the detected language; false if not
-     *                                                     found or if an error occurs
+     * @return array|false the detected language; false if not found or if an error occurs
+     *
+     * @psalm-return array{tag: string, name: string|null}|false
      */
     public function detect(string $text): array|false;
 
@@ -63,7 +64,9 @@ interface TranslatorServiceInterface
      *                      language detection is applied to determine the source language.
      * @param bool    $html defines whether the text being translated is HTML text (true) or plain text (false)
      *
-     * @return array{source: string, target: string, from: array{tag: string, name: string|null}, to: array{tag: string, name: string|null}}|false the translated text; false if an error occurs
+     * @return array|false the translated text; false if an error occurs
+     *
+     * @psalm-return array{source: string, target: string, from: array{tag: string, name: string|null}, to: array{tag: string, name: string|null}}|false
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false;
 }

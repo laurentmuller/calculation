@@ -24,7 +24,7 @@ trait ExceptionContextTrait
      *
      * @param \Throwable $e the exception to get the context for
      *
-     * @return array{
+     * @psalm-return array{
      *     message: string,
      *     code: string|int,
      *     file: string,

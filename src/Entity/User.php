@@ -129,7 +129,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * @return array{
+     * @psalm-return array{
      *      id: int|null,
      *      username: string|null,
      *      password: string|null}
@@ -144,7 +144,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * @param array{
+     * @psalm-param array{
      *     id: int|null,
      *     username: string|null,
      *     password: string|null} $data

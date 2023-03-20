@@ -111,7 +111,9 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Gets the original image width and height.
      *
-     * @return array{0: int, 1: int} an array with 2 elements. Index 0 and 1 contains respectively the original width and the original height.
+     * @return int[] an array with 2 elements. Index 0 and 1 contains respectively the original width and the original height.
+     *
+     * @psalm-return array{0: int, 1: int}
      */
     public function getOriginalSize(): array
     {
@@ -129,7 +131,9 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * Gets the current image size.
      *
-     * @return array{0: int, 1: int} an array with 2 elements. Index 0 and 1 contains respectively the width and the height.
+     * @return int[] an array with 2 elements. Index 0 and 1 contains respectively the width and the height.
+     *
+     * @psalm-return array{0: int, 1: int}
      */
     public function getSize(): array
     {

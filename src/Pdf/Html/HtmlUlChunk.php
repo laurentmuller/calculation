@@ -17,14 +17,4 @@ namespace App\Pdf\Html;
  */
 class HtmlUlChunk extends HtmlParentChunk
 {
-    /**
-     * Constructor.
-     *
-     * @param string           $name   the tag name
-     * @param ?HtmlParentChunk $parent the parent chunk
-     */
-    public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
-    {
-        parent::__construct($name, $parent);
-    }
 }

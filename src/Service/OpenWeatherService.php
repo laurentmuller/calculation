@@ -167,7 +167,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int    $count the number of result to return or -1 for all
      * @param string $units the units to use
      *
-     * @return array{current: array|false, forecast: array|false, daily: array|false}
+     * @psalm-return array{current: array|false, forecast: array|false, daily: array|false}
      */
     public function all(int $id, int $count = -1, string $units = self::UNIT_METRIC): array
     {

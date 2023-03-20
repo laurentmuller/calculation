@@ -24,7 +24,7 @@ class HtmlParser
      *
      * @param ?string $html the HTML content to parse
      */
-    public function __construct(protected ?string $html)
+    public function __construct(private readonly ?string $html)
     {
     }
 

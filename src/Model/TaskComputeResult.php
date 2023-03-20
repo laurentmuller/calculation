@@ -22,7 +22,7 @@ class TaskComputeResult implements \JsonSerializable
     private float $overall = 0;
 
     /**
-     * @var array<array{id: int, name: string, value: float, amount: float, checked: bool}>
+     * @psalm-var array<array{id: int, name: string, value: float, amount: float, checked: bool}>
      */
     private array $results = [];
 
@@ -51,7 +51,7 @@ class TaskComputeResult implements \JsonSerializable
     }
 
     /**
-     * @return array<array{id: int, name: string, value: float, amount: float, checked: bool}>
+     * @psalm-return array<array{id: int, name: string, value: float, amount: float, checked: bool}>
      */
     public function getResults(): array
     {

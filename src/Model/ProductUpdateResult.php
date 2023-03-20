@@ -18,7 +18,7 @@ namespace App\Model;
 class ProductUpdateResult implements \Countable
 {
     /**
-     * @var array<array{description: string|null, oldPrice: float, newPrice: float}>
+     * @psalm-var array<array{description: string|null, oldPrice: float, newPrice: float}>
      */
     private array $products = [];
     private bool $simulate = true;
@@ -26,7 +26,7 @@ class ProductUpdateResult implements \Countable
     /**
      * Add a product to the list of updated products.
      *
-     * @param array{description: string|null, oldPrice: float, newPrice: float} $values
+     * @psalm-param array{description: string|null, oldPrice: float, newPrice: float} $values
      */
     public function addProduct(array $values): self
     {
@@ -46,7 +46,7 @@ class ProductUpdateResult implements \Countable
     /**
      * Gets the updated products.
      *
-     * @return array<array{description: string|null, oldPrice: float, newPrice: float}>
+     * @psalm-return array<array{description: string|null, oldPrice: float, newPrice: float}>
      */
     public function getProducts(): array
     {

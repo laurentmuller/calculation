@@ -11,14 +11,11 @@
 {# body #}
 {% block card_body %}
 <div class="form-row">
-    <div class="col-md-6">
+    <div class="col-md-7">
         {{ form_row(form.query) }}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
         {{ form_row(form.units) }}
-    </div>
-    <div class="col-md-2">
-        {{ form_row(form.limit) }}
     </div>
 </div>
 {% if cities is defined %}

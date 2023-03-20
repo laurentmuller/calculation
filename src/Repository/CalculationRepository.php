@@ -576,7 +576,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the minimum (first) and maximum (last) dates of calculations.
      *
-     * @return array{0: ?\DateTimeInterface, 1: ?\DateTimeInterface}
+     * @psalm-return array{0: ?\DateTimeInterface, 1: ?\DateTimeInterface}
      *
      * @throws \Exception
      */

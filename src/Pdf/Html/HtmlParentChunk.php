@@ -146,22 +146,11 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     {
         // update margins
         $this->applyMargins($report, $this->getLeftMargin(), $this->getRightMargin(), function (HtmlReport $report): void {
-            // top margin
             $this->moveY($report, $this->getTopMargin());
-
-            // default
             parent::output($report);
-
-            // children
             $this->outputChildren($report);
-
-            // bottom margin
             $this->moveY($report, $this->getBottomMargin());
-
-            // restore style
-            if (null !== $parent = $this->getParent()) {
-                $parent->applyStyle($report);
-            }
+            $this->getParent()?->applyStyle($report);
         });
     }
 
@@ -173,10 +162,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     public function outputChildren(HtmlReport $report): void
     {
         foreach ($this->children as $child) {
-            // output
             $child->output($report);
-
-            // new line
             if ($child->isNewLine()) {
                 $report->Ln();
             }

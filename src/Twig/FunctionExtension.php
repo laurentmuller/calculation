@@ -43,6 +43,11 @@ final class FunctionExtension extends AbstractExtension
     private array $versions = [];
 
     /**
+     * The public directory.
+     */
+    private readonly string $webDir;
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -51,7 +56,7 @@ final class FunctionExtension extends AbstractExtension
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
         #[Autowire('%kernel.project_dir%/public')]
-        private readonly string $webDir,
+        string $webDir,
         #[Autowire(service: 'twig.extension.assets')]
         private readonly AssetExtension $extension,
         private readonly NonceService $service,
@@ -61,6 +66,7 @@ final class FunctionExtension extends AbstractExtension
         if (FileUtils::exists($composer_file) && \is_int($version = \filemtime($composer_file))) {
             $this->version = $version;
         }
+        $this->webDir = FileUtils::normalize($webDir);
     }
 
     /**
@@ -221,22 +227,22 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets the real (absolute) path or null if not exist.
+     * Gets the real (absolute) file path or null if not exist.
      */
     private function getRealPath(?string $path): ?string
     {
-        if (empty($path) || empty($this->webDir)) {
+        if (empty($path)) {
             return null;
         }
-        $full_path = \implode('/', [$this->webDir, $path]);
-        if (false === $file = \realpath($full_path)) {
+        $path = FileUtils::buildPath($this->webDir, $path);
+        if (false === $file = \realpath($path)) {
             return null;
         }
         if (!FileUtils::isFile($file)) {
             return null;
         }
 
-        return $file;
+        return FileUtils::normalize($file);
     }
 
     /**

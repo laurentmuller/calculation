@@ -17,7 +17,6 @@ use App\Pdf\Html\HtmlParser;
 /**
  * Report to output HTML content.
  */
-#[\AllowDynamicProperties]
 class HtmlReport extends AbstractReport
 {
     /**

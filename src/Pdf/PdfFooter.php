@@ -18,16 +18,18 @@ use App\Util\FormatUtils;
 
 /**
  * Class to output footer in PDF documents.
+ *
+ * The page and total pages are output to the left, the content (if any) to the center and the date and time to the right.
  */
 class PdfFooter
 {
     /**
-     * The footer text.
+     * The content text.
      */
-    protected ?string $text = null;
+    protected ?string $content = null;
 
     /**
-     * The footer URL.
+     * The content URL.
      */
     protected ?string $url = null;
 
@@ -39,7 +41,7 @@ class PdfFooter
     /**
      * Constructor.
      */
-    public function __construct(protected readonly PdfDocument $parent)
+    public function __construct(private readonly PdfDocument $parent)
     {
         $this->border = PdfBorder::top();
     }
@@ -57,12 +59,12 @@ class PdfFooter
         $parent->SetY(PdfDocument::FOOTER_OFFSET);
         $cellWidth = $parent->getPrintableWidth() / 3.0;
 
-        // style and line color
+        // style
         PdfStyle::getDefaultStyle()->setFontSize(8)->apply($parent);
 
         // pages (left) +  text and url (center) + date (right)
         $this->outputText($this->getPage(), $cellWidth, PdfTextAlignment::LEFT)
-            ->outputText($this->text ?? '', $cellWidth, PdfTextAlignment::CENTER, $this->url ?? '')
+            ->outputText($this->content ?? '', $cellWidth, PdfTextAlignment::CENTER, $this->url ?? '')
             ->outputText($this->getDate(), $cellWidth, PdfTextAlignment::RIGHT);
 
         // reset
@@ -70,11 +72,13 @@ class PdfFooter
     }
 
     /**
-     * Sets the content.
+     * Sets the text content and the optional link.
+     *
+     * The given text (if any) is output to the center.
      */
-    public function setContent(string $text, ?string $url = null): self
+    public function setContent(string $content, ?string $url = null): self
     {
-        $this->text = $text;
+        $this->content = $content;
         $this->url = $url;
 
         return $this;

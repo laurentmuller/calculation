@@ -82,7 +82,7 @@ class OpenWeatherCityUpdater
         $db = null;
 
         try {
-            if (null === $temp_name = FileUtils::tempfile('sql')) {
+            if (null === $temp_name = FileUtils::tempFile('sql')) {
                 return $this->falseResult('swisspost.error.temp_file');
             }
             if (false === $cities = $this->getFileContent($file)) {

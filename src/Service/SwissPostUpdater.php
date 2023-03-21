@@ -120,7 +120,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         if (null !== $this->validateInput($result, $sourceFile)) {
             return $result;
         }
-        if (null === $temp_name = FileUtils::tempfile('sql')) {
+        if (null === $temp_name = FileUtils::tempFile('sql')) {
             return $this->setError($result, 'file_temp');
         }
         $reader = null;

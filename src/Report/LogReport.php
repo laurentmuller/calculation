@@ -21,9 +21,8 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
-use App\Pdf\PdfCellListenerInterface;
-use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfDrawCellBorderInterface;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
@@ -37,10 +36,8 @@ use Psr\Log\LogLevel;
 /**
  * Report for the log.
  */
-class LogReport extends AbstractReport implements PdfCellListenerInterface
+class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
 {
-    use PdfCellListenerTrait;
-
     /**
      * The borderline width.
      */
@@ -139,10 +136,10 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         return $this->outputLogs($logFile->getLogs());
     }
 
-    private function cellTitle(string $title): void
+    private function cellTitle(): void
     {
         PdfFont::default()->bold()->apply($this);
-        $this->Cell(txt: $this->trans($title), ln: PdfMove::BELOW);
+        $this->Cell(txt: $this->trans('log.name'), ln: PdfMove::BELOW);
         $this->resetStyle();
     }
 
@@ -221,9 +218,9 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
             ->add($this->trans('log.fields.level'), \count($levels) * 2, $titleStyle, PdfTextAlignment::LEFT)
             ->add($this->trans('log.fields.channel'), \count($channels) * 2 + 1, $titleStyle, PdfTextAlignment::LEFT)
             ->endRow()
-            ->setListener($this)
-            ->row($textCells, PdfStyle::getHeaderStyle()->resetFont())
-            ->row($valueCells, PdfStyle::getCellStyle()->setFontSize(14));
+            ->setDrawCellBorderListener($this)
+            ->addStyledRow($textCells, PdfStyle::getHeaderStyle()->resetFont())
+            ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14));
         $this->Ln(3);
     }
 
@@ -258,9 +255,9 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     private function outputLogs(array $logs): bool
     {
         $this->drawCards = false;
-        $this->cellTitle('log.name');
+        $this->cellTitle();
         $table = PdfTableBuilder::instance($this)
-            ->setListener($this)
+            ->setDrawCellBorderListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('log.fields.level'), 20, true),
                 PdfColumn::left($this->trans('log.fields.channel'), 20, true),

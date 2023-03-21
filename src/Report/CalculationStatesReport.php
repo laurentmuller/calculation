@@ -14,9 +14,8 @@ namespace App\Report;
 
 use App\Entity\CalculationState;
 use App\Pdf\Enums\PdfRectangleStyle;
-use App\Pdf\PdfCellListenerInterface;
-use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
@@ -28,10 +27,8 @@ use App\Util\FormatUtils;
  *
  * @extends AbstractArrayReport<CalculationState>
  */
-class CalculationStatesReport extends AbstractArrayReport implements PdfCellListenerInterface
+class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface
 {
-    use PdfCellListenerTrait;
-
     /**
      * The started page.
      */
@@ -77,7 +74,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
         $this->setTitleTrans('calculationstate.list.title');
         $this->AddPage();
         $table = PdfTableBuilder::instance($this)
-            ->setListener($this)
+            ->setDrawCellBackgroundListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('calculationstate.fields.code'), 20),
                 PdfColumn::left($this->trans('calculationstate.fields.description'), 80),

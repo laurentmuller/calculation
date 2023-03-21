@@ -222,6 +222,21 @@ final class FileUtils
     }
 
     /**
+     * Normalizes the given file.
+     *
+     * During normalization, all slashes are replaced by forward slashes (“/“).
+     * This method does not remove invalid or dot path segments. Consequently, it is much
+     * more efficient and should be used whenever the given path is known to be a valid,
+     * absolute system path.
+     */
+    public static function normalize(string|\SplFileInfo $file): string
+    {
+        $file = self::realPath($file);
+
+        return Path::normalize($file);
+    }
+
+    /**
      * Gets the real path of the given file.
      */
     public static function realPath(string|\SplFileInfo $file): string
@@ -309,7 +324,7 @@ final class FileUtils
      *
      * @return string|null the new temporary directory; null on failure
      */
-    public static function tempdir(string $dir, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
+    public static function tempDir(string $dir, string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         try {
             $base = "$dir/$prefix";
@@ -337,7 +352,7 @@ final class FileUtils
      *
      * @return string|null the new temporary file name (with path); null on failure
      */
-    public static function tempfile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
+    public static function tempFile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         try {
             $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);

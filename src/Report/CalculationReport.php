@@ -186,7 +186,7 @@ class CalculationReport extends AbstractReport
         }
 
         try {
-            if (null === $path = FileUtils::tempfile('qr_code')) {
+            if (null === $path = FileUtils::tempFile('qr_code')) {
                 $this->logWarning($this->trans('report.calculation.error_qr_code'), [
                     'calculation' => $this->calculation->getDisplay(),
                 ]);

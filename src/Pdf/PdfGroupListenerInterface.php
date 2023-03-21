@@ -20,7 +20,7 @@ interface PdfGroupListenerInterface
     /**
      * Called when a group must be rendered.
      *
-     * @param PdfGroupTableBuilder $parent the parent table
+     * @param PdfGroupTableBuilder $parent the parent's table
      * @param PdfGroup             $group  the group to output
      *
      * @return bool true if the listener handle the output; false to use the default output

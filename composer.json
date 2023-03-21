@@ -39,7 +39,7 @@
 		"doctrine/annotations": "^1.0",
 		"doctrine/doctrine-bundle": "^2.6",
 		"doctrine/orm": "^2.11",
-		"ehymel/highcharts-bundle": "^1.7",
+		"94noni/highcharts-bundle": "^2.0",
 		"elao/enum": "^2.0",
 		"endroid/qr-code": "^4.2",
 		"erusev/parsedown": "^1.7",

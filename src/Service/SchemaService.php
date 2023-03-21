@@ -137,9 +137,9 @@ class SchemaService implements ServiceSubscriberInterface
 
     private function countAssociations(Table $table): int
     {
-        $metaData = $this->getMetaData($table);
-        if ($metaData instanceof ClassMetadataInfo) {
-            return \count($metaData->getAssociationNames());
+        $data = $this->getMetaData($table);
+        if ($data instanceof ClassMetadataInfo) {
+            return \count($data->getAssociationNames());
         }
 
         return 0;
@@ -195,20 +195,20 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getAssociations(Table $table): array
     {
-        $metaData = $this->getMetaData($table);
-        if (!$metaData instanceof ClassMetadataInfo) {
+        $data = $this->getMetaData($table);
+        if (!$data instanceof ClassMetadataInfo) {
             return [];
         }
-        $names = $metaData->getAssociationNames();
+        $names = $data->getAssociationNames();
         if ([] === $names) {
             return [];
         }
         $result = [];
         foreach ($names as $name) {
-            $target = $metaData->getAssociationTargetClass($name);
+            $target = $data->getAssociationTargetClass($name);
             $targetData = $this->getTargetMetaData($target);
             if ($targetData instanceof ClassMetadataInfo) {
-                $inverse = $metaData->isAssociationInverseSide($name);
+                $inverse = $data->isAssociationInverseSide($name);
                 $result[] = [
                     'name' => $name,
                     'inverse' => $inverse,
@@ -287,7 +287,7 @@ class SchemaService implements ServiceSubscriberInterface
     {
         $indexes = $table->getIndexes();
 
-        return \array_map(function (Index $index): array {
+        $results = \array_map(function (Index $index): array {
             return [
                 'name' => \strtolower($index->getName()),
                 'primary' => $index->isPrimary(),
@@ -295,6 +295,8 @@ class SchemaService implements ServiceSubscriberInterface
                 'columns' => $index->getColumns(),
             ];
         }, $indexes);
+
+        return $this->sortIndexes($results);
     }
 
     /**
@@ -357,9 +359,9 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getTargetMetaData(string $name): ?ClassMetadataInfo
     {
-        foreach ($this->getMetaDatas() as $metaData) {
-            if ($metaData->getName() === $name) {
-                return $metaData;
+        foreach ($this->getMetaDatas() as $data) {
+            if ($data->getName() === $name) {
+                return $data;
             }
         }
 
@@ -459,5 +461,31 @@ class SchemaService implements ServiceSubscriberInterface
         }
 
         return $name;
+    }
+
+    /**
+     * @psalm-param SchemaIndexType[] $indexes
+     *
+     * @psalm-return SchemaIndexType[]
+     */
+    private function sortIndexes(array &$indexes): array
+    {
+        /**
+         * @psalm-param SchemaIndexType $a
+         * @psalm-param SchemaIndexType $b
+         */
+        $callback = static function (array $a, array $b): int {
+            if ($a['primary']) {
+                return -1;
+            } elseif ($b['primary']) {
+                return 1;
+            } else {
+                return \strnatcmp((string) $a['name'], (string) $b['name']);
+            }
+        };
+
+        \usort($indexes, $callback);
+
+        return $indexes;
     }
 }

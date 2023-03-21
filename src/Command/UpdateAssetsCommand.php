@@ -54,8 +54,10 @@ class UpdateAssetsCommand extends Command
      */
     private const VENDOR_FILE_NAME = 'vendor.json';
 
-    public function __construct(#[Autowire('%kernel.project_dir%')] private readonly string $projectDir)
-    {
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        private readonly string $projectDir
+    ) {
         parent::__construct();
     }
 
@@ -354,7 +356,7 @@ class UpdateAssetsCommand extends Command
 
     private function getTargetTemp(string $publicDir): string|false
     {
-        if (!$dir = FileUtils::tempdir($publicDir)) {
+        if (!$dir = FileUtils::tempDir($publicDir)) {
             $this->writeError('Unable to create a temporary directory.');
 
             return false;

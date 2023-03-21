@@ -54,7 +54,7 @@ class PdfHeader
     /**
      * Constructor.
      */
-    public function __construct(protected readonly PdfDocument $parent)
+    public function __construct(private readonly PdfDocument $parent)
     {
     }
 
@@ -82,7 +82,7 @@ class PdfHeader
     }
 
     /**
-     * Sets the customer's information.
+     * Sets the customer information to output.
      */
     public function setCustomer(CustomerInformation $customer): self
     {
@@ -127,37 +127,37 @@ class PdfHeader
 
     private function getAddress(): string
     {
-        return null !== $this->customer ? $this->toEmpty($this->customer->getAddress()) : '';
+        return $this->customer?->getAddress() ?? '';
     }
 
     private function getEmail(): string
     {
-        return null !== $this->customer ? $this->toEmpty($this->customer->getEmail()) : '';
+        return $this->customer?->getEmail() ?? '';
     }
 
     private function getFax(): string
     {
-        return null !== $this->customer ? $this->customer->getTranslatedFax($this->parent) : '';
+        return $this->customer?->getTranslatedFax($this->parent) ?? '';
     }
 
     private function getName(): string
     {
-        return null !== $this->customer ? $this->toEmpty($this->customer->getName()) : '';
+        return $this->customer?->getName() ?? '';
     }
 
     private function getPhone(): string
     {
-        return null !== $this->customer ? $this->customer->getTranslatedPhone($this->parent) : '';
+        return $this->customer?->getTranslatedPhone($this->parent) ?? '';
     }
 
     private function getUrl(): string
     {
-        return null !== $this->customer ? $this->toEmpty($this->customer->getUrl()) : '';
+        return $this->customer?->getUrl() ?? '';
     }
 
     private function getZipCity(): string
     {
-        return null !== $this->customer ? $this->toEmpty($this->customer->getZipCity()) : '';
+        return $this->customer?->getZipCity() ?? '';
     }
 
     private function isPrintAddress(): bool
@@ -260,12 +260,12 @@ class PdfHeader
         $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE);
     }
 
-    private function outputText(float $width, float $height, string $text, PdfBorder $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
+    private function outputText(float $width, float $height, ?string $text, PdfBorder $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
     {
         $this->parent->Cell(
             w: $width,
             h: $height,
-            txt: $text,
+            txt: $text ?? '',
             border: $border,
             ln: $move,
             align: $align,
@@ -276,7 +276,7 @@ class PdfHeader
     private function outputTitle(float $width, bool $isAddress): void
     {
         $this->applyTitleStyle();
-        $title = $this->toEmpty($this->parent->getTitle());
+        $title = $this->parent?->getTitle() ?? '';
         $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $this->outputText($width, PdfDocument::LINE_HEIGHT, $title, $border, $align);
@@ -287,10 +287,5 @@ class PdfHeader
         $this->applySmallStyle();
         $text = $this->getZipCity();
         $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfTextAlignment::LEFT);
-    }
-
-    private function toEmpty(?string $value): string
-    {
-        return null === $value ? '' : $value;
     }
 }

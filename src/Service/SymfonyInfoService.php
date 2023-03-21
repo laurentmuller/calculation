@@ -75,6 +75,11 @@ final class SymfonyInfoService
     private ?array $packages = null;
 
     /**
+     * The project directory.
+     */
+    private readonly string $projectDir;
+
+    /**
      * The routes.
      *
      * @var null|array{
@@ -91,8 +96,9 @@ final class SymfonyInfoService
         private readonly KernelInterface $kernel,
         private readonly RouterInterface $router,
         #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir,
+        string $projectDir,
     ) {
+        $this->projectDir = FileUtils::normalize($projectDir);
     }
 
     /**
@@ -265,7 +271,7 @@ final class SymfonyInfoService
      */
     public function getProjectDir(): string
     {
-        return \str_replace(\DIRECTORY_SEPARATOR, '/', $this->projectDir);
+        return $this->projectDir;
     }
 
     /**

@@ -4,8 +4,74 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37814294cd0d0aaf4b5cfb9771fa57be",
+    "content-hash": "cb9e9799f1540f171d8c2cd44fba6219",
     "packages": [
+        {
+            "name": "94noni/highcharts-bundle",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/94noni/ObHighchartsBundle.git",
+                "reference": "78d44c86dba3966e123d97c91db88e3b7fb444e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/94noni/ObHighchartsBundle/zipball/78d44c86dba3966e123d97c91db88e3b7fb444e9",
+                "reference": "78d44c86dba3966e123d97c91db88e3b7fb444e9",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-json": "^3.1",
+                "php": "^8.0",
+                "symfony/config": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/http-kernel": "^5.4|^6.0",
+                "symfony/yaml": "^5.4|^6.0",
+                "twig/twig": "^3.3"
+            },
+            "require-dev": {
+                "nyholm/symfony-bundle-test": "^1.6.1",
+                "symfony/framework-bundle": "^5.4|^6.0",
+                "symfony/phpunit-bridge": "^5.4|^6.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ob\\HighchartsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Aubé"
+                }
+            ],
+            "description": "Symfony Bundle that ease the use of highcharts to display rich graph and charts in your app (for Symfony v6)",
+            "homepage": "https://github.com/marcaube/ObHighchartsBundle",
+            "keywords": [
+                "chart",
+                "charting",
+                "charts",
+                "graph",
+                "graphs",
+                "highcharts",
+                "marcaube",
+                "ob",
+                "symfony"
+            ],
+            "support": {
+                "source": "https://github.com/94noni/ObHighchartsBundle/tree/v2.0.0"
+            },
+            "time": "2022-01-08T15:51:04+00:00"
+        },
         {
             "name": "bacon/bacon-qr-code",
             "version": "2.0.8",
@@ -1534,72 +1600,6 @@
                 }
             ],
             "time": "2023-01-14T14:17:03+00:00"
-        },
-        {
-            "name": "ehymel/highcharts-bundle",
-            "version": "1.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ehymel/HighchartsBundle.git",
-                "reference": "22fbdc70c0bca3086e11d2c2c6e80982eec478ef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ehymel/HighchartsBundle/zipball/22fbdc70c0bca3086e11d2c2c6e80982eec478ef",
-                "reference": "22fbdc70c0bca3086e11d2c2c6e80982eec478ef",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-json": "^3.1",
-                "php": "^7.2 || ^8.0",
-                "symfony/config": "^4.4 || ^5.0 || ^6.0",
-                "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
-                "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0",
-                "symfony/yaml": "^4.4 || ^5.0 || ^6.0",
-                "twig/twig": "^2.10 || ^3.0"
-            },
-            "require-dev": {
-                "nyholm/symfony-bundle-test": "^1.6.1",
-                "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
-                "symfony/phpunit-bridge": "^4.4 || ^5.0 || ^6.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.8.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Ob\\HighchartsBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marc Aubé"
-                }
-            ],
-            "description": "Symfony Bundle that ease the use of highcharts to display rich graph and charts in your app",
-            "homepage": "https://github.com/ehymel/ObHighchartsBundle",
-            "keywords": [
-                "chart",
-                "charting",
-                "charts",
-                "graph",
-                "graphs",
-                "highcharts",
-                "marcaube",
-                "ob",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/ehymel/HighchartsBundle/tree/1.7.2"
-            },
-            "time": "2021-12-20T18:36:42+00:00"
         },
         {
             "name": "elao/enum",

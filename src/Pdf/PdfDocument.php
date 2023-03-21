@@ -757,6 +757,18 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Converts the given points to user unit.
+     *
+     * @param float|int $points the points to convert
+     *
+     * @return float the converted value as user unit
+     */
+    public function points2UserUnit(float|int $points): float
+    {
+        return (float) $points / $this->k;
+    }
+
+    /**
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
      * @param float                              $x     the abscissa of upper-left corner

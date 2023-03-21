@@ -481,16 +481,16 @@
         },
         {
             "name": "spaze/phpstan-disallowed-calls",
-            "version": "v2.12.0",
+            "version": "v2.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spaze/phpstan-disallowed-calls.git",
-                "reference": "d32b50dfa7959a0fdc9dd67a463883df212fc199"
+                "reference": "d598c896bcc05f77e8b270f5a249910680686e65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/d32b50dfa7959a0fdc9dd67a463883df212fc199",
-                "reference": "d32b50dfa7959a0fdc9dd67a463883df212fc199",
+                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/d598c896bcc05f77e8b270f5a249910680686e65",
+                "reference": "d598c896bcc05f77e8b270f5a249910680686e65",
                 "shasum": ""
             },
             "require": {
@@ -535,9 +535,9 @@
             ],
             "support": {
                 "issues": "https://github.com/spaze/phpstan-disallowed-calls/issues",
-                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v2.12.0"
+                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v2.12.1"
             },
-            "time": "2023-03-05T17:14:49+00:00"
+            "time": "2023-03-20T20:29:04+00:00"
         }
     ],
     "packages-dev": [],

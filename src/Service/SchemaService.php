@@ -199,20 +199,20 @@ class SchemaService implements ServiceSubscriberInterface
         if (!$metaData instanceof ClassMetadataInfo) {
             return [];
         }
-        $associationNames = $metaData->getAssociationNames();
-        if ([] === $associationNames) {
+        $names = $metaData->getAssociationNames();
+        if ([] === $names) {
             return [];
         }
         $result = [];
-        foreach ($associationNames as $associationName) {
-            $targetClass = $metaData->getAssociationTargetClass($associationName);
-            $inverse = $metaData->isAssociationInverseSide($associationName);
-            $targetData = $this->getMetaData($targetClass);
+        foreach ($names as $name) {
+            $target = $metaData->getAssociationTargetClass($name);
+            $targetData = $this->getTargetMetaData($target);
             if ($targetData instanceof ClassMetadataInfo) {
+                $inverse = $metaData->isAssociationInverseSide($name);
                 $result[] = [
-                    'name' => $associationName,
+                    'name' => $name,
                     'inverse' => $inverse,
-                    'table' => $this->mapTableName($targetData->table['name']),
+                    'table' => $this->mapTableName($targetData),
                 ];
             }
         }
@@ -353,6 +353,20 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
+     * @psalm-return ClassMetadataInfo<object>|null
+     */
+    private function getTargetMetaData(string $name): ?ClassMetadataInfo
+    {
+        foreach ($this->getMetaDatas() as $metaData) {
+            if ($metaData->getName() === $name) {
+                return $metaData;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @throws \Doctrine\DBAL\Exception
      */
     private function introspectTable(string $name): Table
@@ -428,10 +442,15 @@ class SchemaService implements ServiceSubscriberInterface
         }, $tables);
     }
 
-    private function mapTableName(Table|string $name): string
+    /**
+     * @psalm-param Table|ClassMetadataInfo<object>|string $name
+     */
+    private function mapTableName(Table|ClassMetadataInfo|string $name): string
     {
         if ($name instanceof Table) {
             $name = $name->getName();
+        } elseif ($name instanceof ClassMetadataInfo) {
+            $name = $name->table['name'];
         }
         foreach (\array_keys($this->getMetaDatas()) as $key) {
             if (StringUtils::equalIgnoreCase($key, $name)) {

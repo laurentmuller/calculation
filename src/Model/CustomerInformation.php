@@ -71,12 +71,14 @@ class CustomerInformation
      */
     public function getTranslatedFax(object $translator): string
     {
-        $fax = $this->getFax() ?? '';
+        if ('' === $fax = $this->fax ?? '') {
+            return $fax;
+        }
         if (\method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.fax', ['{0}' => $fax]);
         }
 
-        return empty($fax) ? '' : "Fax: $fax";
+        return "Fax: $fax";
     }
 
     /**
@@ -84,12 +86,14 @@ class CustomerInformation
      */
     public function getTranslatedPhone(object $translator): string
     {
-        $phone = $this->getPhone() ?? '';
+        if ('' === $phone = $this->phone ?? '') {
+            return $phone;
+        }
         if (\method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.phone', ['{0}' => $phone]);
         }
 
-        return empty($phone) ? '' : "Phone: $phone";
+        return "Phone: $phone";
     }
 
     /**

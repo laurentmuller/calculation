@@ -276,7 +276,7 @@ class PdfHeader
     private function outputTitle(float $width, bool $isAddress): void
     {
         $this->applyTitleStyle();
-        $title = $this->parent?->getTitle() ?? '';
+        $title = $this->parent->getTitle() ?? '';
         $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $this->outputText($width, PdfDocument::LINE_HEIGHT, $title, $border, $align);

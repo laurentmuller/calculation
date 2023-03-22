@@ -10,7 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Interfaces;
+
+use App\Pdf\PdfGroup;
+use App\Pdf\PdfGroupTableBuilder;
 
 /**
  * Class implementing this interface deals with group render.

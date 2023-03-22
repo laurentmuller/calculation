@@ -24,7 +24,7 @@ class MySqlDocument extends AbstractDocument
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $info)
+    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);
     }
@@ -34,12 +34,12 @@ class MySqlDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        $database = $this->info->getDatabase();
-        $configuration = $this->info->getConfiguration();
+        $database = $this->service->getDatabase();
+        $configuration = $this->service->getConfiguration();
         if ([] === $database && [] === $configuration) {
             return false;
         }
-        $this->start($this->trans('about.mysql_version', ['%version%' => $this->info->getVersion()]));
+        $this->start($this->trans('about.mysql_version', ['%version%' => $this->service->getVersion()]));
         $row = $this->setHeaderValues([
             'Name' => Alignment::HORIZONTAL_LEFT,
             'Value' => Alignment::HORIZONTAL_LEFT,

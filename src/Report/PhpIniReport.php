@@ -18,6 +18,7 @@ use App\Pdf\PdfFont;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
+use App\Service\PhpInfoService;
 use App\Util\StringUtils;
 
 /**
@@ -27,15 +28,14 @@ class PhpIniReport extends AbstractReport
 {
     /**
      * Constructor.
-     *
-     * @param array<string, array<string, mixed>> $content
      */
-    public function __construct(AbstractController $controller, private readonly array $content, string $version)
+    public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
         if ($description = \php_ini_loaded_file()) {
             $this->header->setDescription($description);
         }
+        $version = $this->service->getVersion();
         $this->setTitleTrans('about.php_version', ['%version%' => $version]);
     }
 
@@ -45,7 +45,7 @@ class PhpIniReport extends AbstractReport
     public function render(): bool
     {
         $this->AddPage();
-        $content = $this->content;
+        $content = $this->service->asArray();
         if ([] === $content) {
             $this->Cell(txt: $this->trans('about.error'));
 
@@ -59,9 +59,8 @@ class PhpIniReport extends AbstractReport
                 PdfColumn::left('Local Value', 30),
                 PdfColumn::left('Master Value', 30)
             )->outputHeaders();
-        foreach ($content as $key => $value) {
-            $table->setGroupKey($key);
-            $this->outputEntries($table, $value);
+        foreach ($content as $key => $entries) {
+            $this->outputEntries($table, $key, $entries);
         }
 
         return true;
@@ -100,16 +99,18 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * @param array<string, mixed> $entries
+     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
      */
-    private function outputEntries(PdfGroupTableBuilder $table, array $entries): void
+    private function outputEntries(PdfGroupTableBuilder $table, string $key, array $entries): void
     {
+        $this->addBookmark($key);
+        $table->setGroupKey($key);
         $this->sortEntries($entries);
-        /** @var mixed $entry */
+
         foreach ($entries as $key => $entry) {
             if (\is_array($entry)) {
-                $local = $this->convert(\reset($entry));
-                $master = $this->convert(\end($entry));
+                $local = $this->convert($entry['local']);
+                $master = $this->convert($entry['master']);
                 $table->startRow()
                     ->add($this->convert($key))
                     ->add(text: $local, style: $this->getCellStyle($local))
@@ -126,7 +127,7 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * @param array<string, mixed> $entries
+     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
      */
     private function sortEntries(array &$entries): void
     {

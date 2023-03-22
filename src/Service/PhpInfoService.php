@@ -34,7 +34,7 @@ final class PhpInfoService
      *                  One can also combine the respective constants or bitwise values
      *                  together with the bitwise or operator.
      *
-     * @return array<string, array<string, mixed>>
+     * @psalm-return array<string, array<string, array{local: scalar, master: scalar}|scalar>>
      */
     public function asArray(int $what = \INFO_ALL): array
     {
@@ -51,35 +51,27 @@ final class PhpInfoService
 
         $result = [];
         $matchs = null;
-        $directive1 = null;
-        $directive2 = null;
         foreach ($array as $index => $entry) {
             if (\preg_match($regexLine, (string) $entry, $matchs)) {
                 $name = \trim($matchs[1]);
                 $vals = \explode("\n", (string) $array[$index + 1]);
                 foreach ($vals as $val) {
-                    if (\preg_match($regex3cols, $val, $matchs)) { // 3 columns
+                    if (\preg_match($regex3cols, $val, $matchs)) {
+                        // 3 columns
                         $match1 = \trim($matchs[1]);
                         $match2 = $this->convert(\trim($matchs[2]));
                         $match3 = $this->convert(\trim($matchs[3]));
-
-                        // special case for 'Directive'
-                        if (StringUtils::equalIgnoreCase('directive', $match1)) {
-                            $directive1 = $match2;
-                            $directive2 = $match3;
-                        } elseif ($directive1 && $directive2) {
+                        if (!StringUtils::equalIgnoreCase('directive', $match1)) {
                             $result[$name][$match1] = [
-                                (string) $directive1 => $match2,
-                                (string) $directive2 => $match3,
+                                'local' => $match2,
+                                'master' => $match3,
                             ];
-                        } else {
-                            $result[$name][$match1] = [$match2,  $match3];
                         }
-                    } elseif (\preg_match($regex2cols, $val, $matchs)) { // 2 columns
+                    } elseif (\preg_match($regex2cols, $val, $matchs)) {
+                        // 2 columns
                         $match1 = \trim($matchs[1]);
                         $match2 = $this->convert(\trim($matchs[2]));
                         $result[$name][$match1] = $match2;
-                        $directive1 = $directive2 = null;
                     }
                 }
             }

@@ -12,32 +12,50 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\PdfDrawColor;
+use App\Pdf\PdfFillColor;
+use App\Pdf\PdfTextColor;
+
 /**
- * Bootstrap colors.
+ * Bootstrap color enumeration.
  *
  * @version 4.4.1
  */
-class HtmlBootstrapColors
+enum HtmlBootstrapColors: string
 {
-    final public const BLUE = '#007BFF';
-    final public const CYAN = '#17A2B8';
-    final public const DANGER = '#DC3545';
-    final public const DARK = '#343A40';
-    final public const GRAY = '#6C757D';
-    final public const GRAY_DARK = '#343A40';
-    final public const GREEN = '#28A745';
-    final public const INDIGO = '#6610F2';
-    final public const INFO = '#17A2B8';
-    final public const LIGHT = '#F8F9FA';
-    final public const ORANGE = '#FD7E14';
-    final public const PINK = '#E83E8C';
-    final public const PRIMARY = '#007BFF';
-    final public const PURPLE = '#6F42C1';
-    final public const RED = '#DC3545';
-    final public const SECONDARY = '#6C757D';
-    final public const SUCCESS = '#28A745';
-    final public const TEAL = '#20C997';
-    final public const WARNING = '#FFC107';
-    final public const WHITE = '#FFF';
-    final public const YELLOW = '#FFC107';
+    case DANGER = '#DC3545';
+    case DARK = '#343A40';
+    case INFO = '#17A2B8';
+    case LIGHT = '#F8F9FA';
+    case PRIMARY = '#007BFF';
+    case SECONDARY = '#6C757D';
+    case SUCCESS = '#28A745';
+    case WARNING = '#FFC107';
+
+    public function getDrawColor(): PdfDrawColor
+    {
+        if (null === $color = PdfDrawColor::create($this->value)) {
+            throw new \RuntimeException('Unable to create draw color.');
+        }
+
+        return $color;
+    }
+
+    public function getFillColor(): PdfFillColor
+    {
+        if (null === $color = PdfFillColor::create($this->value)) {
+            throw new \RuntimeException('Unable to create fill color.');
+        }
+
+        return $color;
+    }
+
+    public function getTextColor(): PdfTextColor
+    {
+        if (null === $color = PdfTextColor::create($this->value)) {
+            throw new \RuntimeException('Unable to create text color.');
+        }
+
+        return $color;
+    }
 }

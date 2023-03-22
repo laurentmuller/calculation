@@ -19,10 +19,10 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Html\HtmlBootstrapColors;
+use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDrawCellBorderInterface;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
@@ -176,11 +176,11 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
                 LogLevel::ALERT,
                 LogLevel::CRITICAL,
                 LogLevel::EMERGENCY,
-                LogLevel::ERROR => PdfDrawColor::create(HtmlBootstrapColors::DANGER),
-                LogLevel::WARNING => PdfDrawColor::create(HtmlBootstrapColors::WARNING),
-                LogLevel::DEBUG => PdfDrawColor::create(HtmlBootstrapColors::SECONDARY),
+                LogLevel::ERROR => HtmlBootstrapColors::DANGER->getDrawColor(),
+                LogLevel::WARNING => HtmlBootstrapColors::WARNING->getDrawColor(),
+                LogLevel::DEBUG => HtmlBootstrapColors::SECONDARY->getDrawColor(),
                 LogLevel::INFO,
-                LogLevel::NOTICE => PdfDrawColor::create(HtmlBootstrapColors::INFO),
+                LogLevel::NOTICE => HtmlBootstrapColors::INFO->getDrawColor(),
                 default => null
             };
         }
@@ -218,7 +218,7 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
             ->add($this->trans('log.fields.level'), \count($levels) * 2, $titleStyle, PdfTextAlignment::LEFT)
             ->add($this->trans('log.fields.channel'), \count($channels) * 2 + 1, $titleStyle, PdfTextAlignment::LEFT)
             ->endRow()
-            ->setDrawCellBorderListener($this)
+            ->setBorderListener($this)
             ->addStyledRow($textCells, PdfStyle::getHeaderStyle()->resetFont())
             ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14));
         $this->Ln(3);
@@ -257,7 +257,7 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
         $this->drawCards = false;
         $this->cellTitle();
         $table = PdfTableBuilder::instance($this)
-            ->setDrawCellBorderListener($this)
+            ->setBorderListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('log.fields.level'), 20, true),
                 PdfColumn::left($this->trans('log.fields.channel'), 20, true),

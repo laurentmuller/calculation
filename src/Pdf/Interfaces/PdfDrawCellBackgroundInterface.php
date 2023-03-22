@@ -10,7 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Interfaces;
+
+use App\Pdf\PdfRectangle;
+use App\Pdf\PdfTableBuilder;
 
 /**
  * Class implementing this interface handle the draw cell background event.

@@ -69,7 +69,7 @@ abstract class AbstractReport extends PdfDocument
     public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null, bool $addBookmark = false): self
     {
         $title ??= $this->trans('report.index');
-        parent::addPageIndex($title, $titleStyle, $contentStyle, true);
+        parent::addPageIndex($title, $titleStyle, $contentStyle);
 
         return $this;
     }

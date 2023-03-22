@@ -26,10 +26,10 @@ class MySqlReport extends AbstractReport
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $info)
+    public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);
-        $this->setTitleTrans('about.mysql_version', ['%version%' => $this->info->getVersion()]);
+        $this->setTitleTrans('about.mysql_version', ['%version%' => $this->service->getVersion()]);
     }
 
     /**
@@ -37,8 +37,8 @@ class MySqlReport extends AbstractReport
      */
     public function render(): bool
     {
-        $database = $this->info->getDatabase();
-        $configuration = $this->info->getConfiguration();
+        $database = $this->service->getDatabase();
+        $configuration = $this->service->getConfiguration();
         if ([] === $database && [] === $configuration) {
             return false;
         }

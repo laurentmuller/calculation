@@ -101,24 +101,28 @@ class HtmlTextChunk extends AbstractHtmlChunk
     protected function outputText(HtmlReport $report, string $text): void
     {
         $parent = $this->getParent();
+        if (null !== $parent) {
+            // bookmark
+            if ($parent->bookmark) {
+                $report->addBookmark($text, true, $parent->level);
+            }
+            // special case when parent contains only this text
+            if (1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {
+                $align = $parent->getAlignment();
+                switch ($align) {
+                    case PdfTextAlignment::RIGHT:
+                    case PdfTextAlignment::CENTER:
+                    case PdfTextAlignment::JUSTIFIED:
+                        $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
+                        $report->MultiCell(h: $height, txt: $text, align: $align);
+                        $report->SetY($report->GetY() - $report->getLastHeight());
 
-        // special case when parent contains only this text
-        if (null !== $parent && 1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {
-            $align = $parent->getAlignment();
-            switch ($align) {
-                case PdfTextAlignment::RIGHT:
-                case PdfTextAlignment::CENTER:
-                case PdfTextAlignment::JUSTIFIED:
-                    $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-                    $report->MultiCell(h: $height, txt: $text, align: $align);
-                    $report->SetY($report->GetY() - $report->getLastHeight());
-
-                    return;
-                default:
-                    break;
+                        return;
+                    default:
+                        break;
+                }
             }
         }
-
         parent::outputText($report, $text);
     }
 }

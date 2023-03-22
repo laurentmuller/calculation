@@ -53,15 +53,17 @@ class HtmlReport extends AbstractReport
      */
     public function render(): bool
     {
-        $parser = new HtmlParser($this->content);
-        if (null !== ($root = $parser->parse())) {
-            $this->AddPage();
-            $root->output($this);
-
-            return true;
+        if (null === $this->content || '' === $this->content) {
+            return false;
         }
+        $parser = new HtmlParser($this->content);
+        if (null === $root = $parser->parse()) {
+            return false;
+        }
+        $this->AddPage();
+        $root->output($this);
 
-        return false;
+        return true;
     }
 
     /**

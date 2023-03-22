@@ -14,8 +14,8 @@ namespace App\Report;
 
 use App\Entity\CalculationState;
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
@@ -74,7 +74,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
         $this->setTitleTrans('calculationstate.list.title');
         $this->AddPage();
         $table = PdfTableBuilder::instance($this)
-            ->setDrawCellBackgroundListener($this)
+            ->setBackgroundListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('calculationstate.fields.code'), 20),
                 PdfColumn::left($this->trans('calculationstate.fields.description'), 80),

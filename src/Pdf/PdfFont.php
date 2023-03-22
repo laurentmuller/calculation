@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Enums\PdfFontName;
+use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 
 /**
  * Define a font style.

@@ -28,7 +28,7 @@ class SymfonyDocument extends AbstractDocument
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
+    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $service, private readonly string $locale, private readonly string $mode)
     {
         parent::__construct($controller);
     }
@@ -38,7 +38,7 @@ class SymfonyDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        $info = $this->info;
+        $info = $this->service;
         $this->start($this->trans('about.symfony_version', ['%version%' => $info->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
         $this->outputInfo($info);

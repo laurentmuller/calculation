@@ -93,7 +93,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
                 }
             }
         }
-        $this->inProgress = true;
+        $this->setInProgress(true);
         $total = $calculation->getItemsTotal();
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.itemsTotal'), 4)
@@ -145,9 +145,9 @@ class CalculationTableItems extends PdfGroupTableBuilder
 
     private function checkLines(int $lines): bool
     {
-        $this->inProgress = true;
+        $this->setInProgress(true);
         $result = $this->checkNewPage((float) $lines * PdfDocument::LINE_HEIGHT);
-        $this->inProgress = false;
+        $this->setInProgress(false);
 
         return $result;
     }

@@ -1,10 +1,10 @@
 {% import 'about/_about_macro.html.twig' as tools %}
 {# parameters #}
-{%- set bundles = info.bundles|default([]) -%}
-{%- set runtime_packages = info.packages.runtime|default([]) -%}
-{%- set debug_packages = info.packages.debug|default([]) -%}
-{%- set runtime_routes = info.routes.runtime|default([]) -%}
-{%- set debug_routes = info.routes.debug|default([]) -%}
+{%- set bundles = service.bundles|default([]) -%}
+{%- set runtime_packages = service.packages.runtime|default([]) -%}
+{%- set debug_packages = service.packages.debug|default([]) -%}
+{%- set runtime_routes = service.routes.runtime|default([]) -%}
+{%- set debug_routes = service.routes.debug|default([]) -%}
 {# content #}
 <div class="phpversion">
     <table id="data-table-symfony" class="table table-hover table-sm mb-0">
@@ -13,32 +13,32 @@
                 <td colspan="2" style="transform: rotate(0);">
                     <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}">
                         <i class="icon-symfony icon-about"></i>
-                        <h1 class="p text-body">{{ 'about.version'|trans({'%version%': info.version}) }}</h1>
+                        <h1 class="p text-body">{{ 'about.version'|trans({'%version%': service.version}) }}</h1>
                     </a>
                 </td>
             </tr>
             {{ tools.headerInfo('Kernel') }}
             {{ tools.rowInfo('Environment', app.environment) }}
             {{ tools.rowInfo('Mode', app_mode) }}
-            {{ tools.rowInfo('Version status', info.maintenanceStatus) }}
-            {{ tools.rowInfo('End of maintenance', info.endOfMaintenance) }}
-            {{ tools.rowInfo('End of product life', info.endOfLife) }}
+            {{ tools.rowInfo('Version status', service.maintenanceStatus) }}
+            {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}
+            {{ tools.rowInfo('End of product life', service.endOfLife) }}
 
             {{ tools.headerInfo('Parameters') }}
             {{ tools.rowInfo('Intl Locale', locale) }}
-            {{ tools.rowInfo('Timezone', info.timezone) }}
-            {{ tools.rowInfo('Charset', info.charset) }}
+            {{ tools.rowInfo('Timezone', service.timezone) }}
+            {{ tools.rowInfo('Charset', service.charset) }}
 
             {{ tools.headerInfo('Extensions') }}
             {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug) }}
-            {{ tools.rowInfoBoolean('OP Cache', info.zendCacheLoaded ? 'Enabled' : 'Disabled', info.zendCacheLoaded) }}
-            {{ tools.rowInfoBoolean('APCu', info.apcuLoaded ? 'Enabled' : 'Disabled', info.apcuLoaded) }}
-            {{ tools.rowInfoBoolean('Xdebug', info.xdebugLoaded ? 'Enabled' : 'Disabled', info.xdebugLoaded) }}
+            {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded) }}
+            {{ tools.rowInfoBoolean('APCu', service.apcuLoaded ? 'Enabled' : 'Disabled', service.apcuLoaded) }}
+            {{ tools.rowInfoBoolean('Xdebug', service.xdebugLoaded ? 'Enabled' : 'Disabled', service.xdebugLoaded) }}
 
             {{ tools.headerInfo('Directories') }}
-            {{ tools.rowInfo('Project', info.projectDir) }}
-            {{ tools.rowInfo('Logs', info.logInfo) }}
-            {{ tools.rowInfo('Cache', info.cacheInfo) }}
+            {{ tools.rowInfo('Project', service.projectDir) }}
+            {{ tools.rowInfo('Logs', service.logInfo) }}
+            {{ tools.rowInfo('Cache', service.cacheInfo) }}
         </tbody>
     </table>
     {# Configuration #}
@@ -50,7 +50,7 @@
         <table id="data-table-bundles" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Bundles', 'bundles', bundles) }}
             <tbody class="collapse" id="bundles" data-parent="#symfonyAccordion">
-            {% for bundle in info.bundles %}
+            {% for bundle in service.bundles %}
                 {{ tools.rowBundle(bundle) }}
             {% endfor %}
             </tbody>

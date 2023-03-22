@@ -17,14 +17,14 @@ use App\Util\StringUtils;
 /**
  * Class to parse HTML content.
  */
-class HtmlParser
+readonly class HtmlParser
 {
     /**
      * Constructor.
      *
-     * @param ?string $html the HTML content to parse
+     * @param string $html the HTML content to parse
      */
-    public function __construct(private readonly ?string $html)
+    public function __construct(private string $html)
     {
     }
 
@@ -35,29 +35,26 @@ class HtmlParser
      */
     public function parse(): ?HtmlParentChunk
     {
-        if (!$html = $this->trimHtml()) {
+        if (false === $source = $this->trimHtml()) {
             return null;
         }
 
         // load content
-        $dom = new \DOMDocument();
-        if (!$dom->loadHTML($html, \LIBXML_NOERROR | \LIBXML_NOBLANKS)) {
+        $document = new \DOMDocument();
+        if (!$document->loadHTML($source, \LIBXML_NOERROR | \LIBXML_NOBLANKS)) {
             return null;
         }
 
         // find body
-        if (null === ($body = $this->findBody($dom))) {
+        if (null === $body = $this->findBody($document)) {
             return null;
         }
 
         // parse
         $root = new HtmlParentChunk($body->nodeName);
         $this->parseNodes($root, $body);
-        if ($root->isEmpty()) {
-            return null;
-        }
 
-        return $root;
+        return $root->isEmpty() ? null : $root;
     }
 
     /**
@@ -258,11 +255,8 @@ class HtmlParser
      */
     private function parseNode(HtmlParentChunk $parent, \DOMNode $node): void
     {
-        // get values
         $name = $node->nodeName;
         $class = $this->getClassAttribute($node);
-
-        // create chunk
         switch ($node->nodeType) {
             case \XML_ELEMENT_NODE:
                 if (HtmlConstantsInterface::PAGE_BREAK === $class) {
@@ -284,8 +278,6 @@ class HtmlParser
                 $this->createTextChunk($name, $parent, $class, $node);
                 break;
         }
-
-        // children
         $this->parseNodes($parent, $node);
     }
 
@@ -307,25 +299,18 @@ class HtmlParser
     /**
      * Gets the clean HTML content.
      *
-     * @return ?string the HTML content or null if no content
+     * @psalm-return non-empty-string|false
      */
-    private function trimHtml(): ?string
+    private function trimHtml(): string|false
     {
-        // check content
-        if (!StringUtils::isString($content = \trim((string) $this->html))) {
-            return null;
+        if ('' === $content = \trim($this->html)) {
+            return false;
         }
-
-        // trim new line and spaces
         $content = \trim(\preg_replace('/\r\n|\n|\r/m', '', $content));
         $content = \trim(\preg_replace('/\s\s+/m', ' ', $content));
-
-        // string?
-        if (!StringUtils::isString($content)) {
-            return null;
+        if ('' === $content) {
+            return false;
         }
-
-        // add encoding
 
         return "<?xml encoding='UTF-8'>$content";
     }

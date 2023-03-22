@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Task;
+use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroup;
-use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;

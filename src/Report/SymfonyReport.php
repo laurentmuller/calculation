@@ -31,10 +31,10 @@ class SymfonyReport extends AbstractReport
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $info, private readonly string $locale, private readonly string $mode)
+    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $service, private readonly string $locale, private readonly string $mode)
     {
         parent::__construct($controller);
-        $this->setTitleTrans('about.symfony_version', ['%version%' => $this->info->getVersion()]);
+        $this->setTitleTrans('about.symfony_version', ['%version%' => $this->service->getVersion()]);
     }
 
     /**
@@ -42,7 +42,7 @@ class SymfonyReport extends AbstractReport
      */
     public function render(): bool
     {
-        $info = $this->info;
+        $info = $this->service;
         $this->AddPage();
         $this->outputInfo($info);
         $bundles = $info->getBundles();
@@ -81,6 +81,7 @@ class SymfonyReport extends AbstractReport
      */
     private function outputBundles(array $bundles): void
     {
+        $this->addBookmark('Bundles');
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
@@ -100,6 +101,7 @@ class SymfonyReport extends AbstractReport
 
     private function outputInfo(SymfonyInfoService $info): void
     {
+        $this->addBookmark('Kernel');
         $app = $this->controller->getApplication();
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -133,6 +135,7 @@ class SymfonyReport extends AbstractReport
      */
     private function outputPackages(string $title, array $packages): void
     {
+        $this->addBookmark($title);
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
@@ -157,6 +160,7 @@ class SymfonyReport extends AbstractReport
      */
     private function outputRoutes(string $title, array $routes): void
     {
+        $this->addBookmark($title);
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(

@@ -28,6 +28,11 @@ use App\Util\StringUtils;
 abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 {
     /**
+     * The bookmark.
+     */
+    protected bool $bookmark = false;
+
+    /**
      * The class name.
      */
     protected ?string $className = null;
@@ -36,6 +41,11 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * The css style.
      */
     protected ?string $css = null;
+
+    /**
+     * The bookmark level.
+     */
+    protected int $level = 0;
 
     /**
      * The parent chunk.
@@ -410,13 +420,30 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         }
     }
 
+    private function parseBookmark(string $class): self
+    {
+        // bookmark
+        if ('bookmark' === $class) {
+            $this->bookmark = true;
+        }
+
+        // level
+        $matches = [];
+        $regex = '/bookmark-(\d+)/';
+        if (\preg_match($regex, $class, $matches)) {
+            $this->level = (int) $matches[1];
+        }
+
+        return $this;
+    }
+
     /**
      * Parses the border class.
      *
      * @param HtmlStyle $style the style to update
      * @param string    $class the border class name
      */
-    private function parseBorders(HtmlStyle $style, string $class): void
+    private function parseBorders(HtmlStyle $style, string $class): self
     {
         $border = match ($class) {
             'border' => PdfBorder::ALL,
@@ -434,26 +461,30 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         if (null !== $border) {
             $style->setBorder($border);
         }
+
+        return $this;
     }
 
-    private function parseColor(HtmlStyle $style, string $class): void
+    private function parseColor(HtmlStyle $style, string $class): self
     {
         $color = match ($class) {
-            'text-primary' => PdfTextColor::create(HtmlBootstrapColors::PRIMARY),
-            'text-secondary' => PdfTextColor::create(HtmlBootstrapColors::SECONDARY),
-            'text-success' => PdfTextColor::create(HtmlBootstrapColors::SUCCESS),
-            'text-danger' => PdfTextColor::create(HtmlBootstrapColors::DANGER),
-            'text-warning' => PdfTextColor::create(HtmlBootstrapColors::WARNING),
-            'text-info' => PdfTextColor::create(HtmlBootstrapColors::INFO),
+            'text-primary' => HtmlBootstrapColors::PRIMARY->getTextColor(),
+            'text-secondary' => HtmlBootstrapColors::SECONDARY->getTextColor(),
+            'text-success' => HtmlBootstrapColors::SUCCESS->getTextColor(),
+            'text-danger' => HtmlBootstrapColors::DANGER->getTextColor(),
+            'text-warning' => HtmlBootstrapColors::WARNING->getTextColor(),
+            'text-info' => HtmlBootstrapColors::INFO->getTextColor(),
             default => null,
         };
 
         if (null !== $color) {
             $style->setTextColor($color);
         }
+
+        return $this;
     }
 
-    private function parseFont(HtmlStyle $style, string $class): void
+    private function parseFont(HtmlStyle $style, string $class): self
     {
         switch ($class) {
             case 'font-weight-bold':
@@ -469,6 +500,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                 $style->regular()->getFont()->setName(PdfFontName::COURIER);
                 break;
         }
+
+        return $this;
     }
 
     /**
@@ -477,7 +510,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * @param HtmlStyle $style the style to update
      * @param string    $class the margins class name
      */
-    private function parseMargins(HtmlStyle $style, string $class): void
+    private function parseMargins(HtmlStyle $style, string $class): self
     {
         $matches = [];
         $pattern = '/[m|p]([tblrxy])?.*-([012345])/im';
@@ -494,6 +527,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                 default => $style->setMargins($value) // all
             };
         }
+
+        return $this;
     }
 
     /**
@@ -511,11 +546,12 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         if ($this->className) {
             $classNames = \explode(' ', $this->className);
             foreach ($classNames as $class) {
-                $this->parseFont($style, $class);
-                $this->parseColor($style, $class);
-                $this->parseMargins($style, $class);
-                $this->parseBorders($style, $class);
-                $this->parseAlignment($style, $class);
+                $this->parseBookmark($class)
+                    ->parseFont($style, $class)
+                    ->parseColor($style, $class)
+                    ->parseMargins($style, $class)
+                    ->parseBorders($style, $class)
+                    ->parseAlignment($style, $class);
             }
         }
 

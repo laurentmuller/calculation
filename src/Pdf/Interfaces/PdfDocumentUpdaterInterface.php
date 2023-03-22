@@ -10,7 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Interfaces;
+
+use App\Pdf\PdfDocument;
 
 /**
  * Class implementing this interface applies properties to a PdfDocument.

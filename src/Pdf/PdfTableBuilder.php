@@ -14,6 +14,9 @@ namespace App\Pdf;
 
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
+use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
+use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Traits\MathTrait;
 use App\Util\StringUtils;
 
@@ -29,56 +32,56 @@ class PdfTableBuilder
     /**
      * The column alignment.
      */
-    protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
+    private PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
+
+    /**
+     * The draw cell background listener.
+     */
+    private ?PdfDrawCellBackgroundInterface $backgroundListener = null;
 
     /**
      * The border style.
      */
-    protected PdfBorder $border;
+    private PdfBorder $border;
+
+    /**
+     * The draw cell border listener.
+     */
+    private ?PdfDrawCellBorderInterface $borderListener = null;
 
     /**
      * The cells.
      *
      * @var PdfCell[]
      */
-    protected array $cells = [];
+    private array $cells = [];
 
     /**
      * The columns.
      *
      * @var PdfColumn[]
      */
-    protected array $columns = [];
-
-    /**
-     * The draw cell background listener.
-     */
-    protected ?PdfDrawCellBackgroundInterface $drawCellBackgroundListener = null;
-
-    /**
-     * The draw cell border listener.
-     */
-    protected ?PdfDrawCellBorderInterface $drawCellBorderListener = null;
-
-    /**
-     * The draw cell text listener.
-     */
-    protected ?PdfDrawCellTextInterface $drawCellTextListener = null;
+    private array $columns = [];
 
     /**
      * The header style.
      */
-    protected ?PdfStyle $headerStyle = null;
+    private ?PdfStyle $headerStyle = null;
 
     /**
      * Print headers when a new page is added.
      */
-    protected bool $repeatHeader = true;
+    private bool $repeatHeader = true;
 
     /**
      * The current row style.
      */
-    protected ?PdfStyle $rowStyle = null;
+    private ?PdfStyle $rowStyle = null;
+
+    /**
+     * The draw cell text listener.
+     */
+    private ?PdfDrawCellTextInterface $textListener = null;
 
     /**
      * Constructor.
@@ -370,6 +373,14 @@ class PdfTableBuilder
     }
 
     /**
+     * Returns if the header row is printed when a new page is added.
+     */
+    public function isRepeatHeader(): bool
+    {
+        return $this->repeatHeader;
+    }
+
+    /**
      * Returns a value indicating if a row is currently started.
      */
     public function isRowStarted(): bool
@@ -392,6 +403,16 @@ class PdfTableBuilder
     }
 
     /**
+     * Sets the draw cell background listener.
+     */
+    public function setBackgroundListener(?PdfDrawCellBackgroundInterface $backgroundListener): static
+    {
+        $this->backgroundListener = $backgroundListener;
+
+        return $this;
+    }
+
+    /**
      * Sets the border.
      */
     public function setBorder(PdfBorder|string|int $border): static
@@ -402,31 +423,11 @@ class PdfTableBuilder
     }
 
     /**
-     * Sets the draw cell background listener.
-     */
-    public function setDrawCellBackgroundListener(?PdfDrawCellBackgroundInterface $drawCellBackgroundListener): static
-    {
-        $this->drawCellBackgroundListener = $drawCellBackgroundListener;
-
-        return $this;
-    }
-
-    /**
      * Sets the draw cell border listener.
      */
-    public function setDrawCellBorderListener(?PdfDrawCellBorderInterface $drawCellBorderListener): static
+    public function setBorderListener(?PdfDrawCellBorderInterface $borderListener): static
     {
-        $this->drawCellBorderListener = $drawCellBorderListener;
-
-        return $this;
-    }
-
-    /**
-     * Sets the draw cell text listener.
-     */
-    public function setDrawCellTextListener(?PdfDrawCellTextInterface $drawCellTextListener): static
-    {
-        $this->drawCellTextListener = $drawCellTextListener;
+        $this->borderListener = $borderListener;
 
         return $this;
     }
@@ -439,6 +440,16 @@ class PdfTableBuilder
     public function setRepeatHeader(bool $repeatHeader): static
     {
         $this->repeatHeader = $repeatHeader;
+
+        return $this;
+    }
+
+    /**
+     * Sets the draw cell text listener.
+     */
+    public function setTextListener(?PdfDrawCellTextInterface $textListener): static
+    {
+        $this->textListener = $textListener;
 
         return $this;
     }
@@ -562,7 +573,7 @@ class PdfTableBuilder
      */
     protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds): void
     {
-        if (null !== $this->drawCellBackgroundListener && $this->drawCellBackgroundListener->drawCellBackground($this, $index, $bounds)) {
+        if (null !== $this->backgroundListener && $this->backgroundListener->drawCellBackground($this, $index, $bounds)) {
             return;
         }
         $parent->rectangle($bounds, PdfRectangleStyle::FILL);
@@ -578,7 +589,7 @@ class PdfTableBuilder
      */
     protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
     {
-        if (null !== $this->drawCellBorderListener && $this->drawCellBorderListener->drawCellBorder($this, $index, $bounds, $border)) {
+        if (null !== $this->borderListener && $this->borderListener->drawCellBorder($this, $index, $bounds, $border)) {
             return;
         }
         $x = $bounds->x();
@@ -628,7 +639,7 @@ class PdfTableBuilder
      */
     protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
     {
-        if (null !== $this->drawCellTextListener && $this->drawCellTextListener->drawCellText($this, $index, $bounds, $text, $alignment, $height)) {
+        if (null !== $this->textListener && $this->textListener->drawCellText($this, $index, $bounds, $text, $alignment, $height)) {
             return;
         }
         $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);

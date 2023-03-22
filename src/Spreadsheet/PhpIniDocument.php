@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use App\Service\PhpInfoService;
 use App\Util\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -29,10 +30,8 @@ class PhpIniDocument extends AbstractDocument
 
     /**
      * Constructor.
-     *
-     * @param array<string, array<string, mixed>> $content $content
      */
-    public function __construct(AbstractController $controller, private readonly array $content, private readonly string $version)
+    public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
     }
@@ -42,9 +41,10 @@ class PhpIniDocument extends AbstractDocument
      */
     public function render(): bool
     {
-        $this->start($this->trans('about.php_version', ['%version%' => $this->version]));
+        $content = $this->service->asArray();
+        $version = $this->service->getVersion();
+        $this->start($this->trans('about.php_version', ['%version%' => $version]));
         $this->setActiveTitle('Configuration', $this->controller);
-        $content = $this->content;
         if ([] === $content) {
             $this->setCellValue($this->getActiveSheet(), 1, 1, $this->trans('about.error'))
                 ->finish('A1');
@@ -116,7 +116,7 @@ class PhpIniDocument extends AbstractDocument
     }
 
     /**
-     * @param array<string, mixed> $entries
+     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
      */
     private function outputEntries(int $row, array $entries): int
     {
@@ -168,7 +168,7 @@ class PhpIniDocument extends AbstractDocument
     }
 
     /**
-     * @param array<string, mixed> $entries
+     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
      */
     private function sortEntries(array &$entries): void
     {

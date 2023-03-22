@@ -12,30 +12,32 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Interfaces\PdfGroupListenerInterface;
+
 /**
  * Extends the PDF table builder by adding a group row when headers and/or new pages are output.
  */
 class PdfGroupTableBuilder extends PdfTableBuilder
 {
     /**
-     * The group.
+     * The current group.
      */
-    protected PdfGroup $group;
+    private PdfGroup $group;
 
     /*
      * The output the group before header.
      */
-    protected bool $groupBeforeHeader = false;
+    private bool $groupBeforeHeader = false;
 
     /**
      * The group render listener.
      */
-    protected ?PdfGroupListenerInterface $groupListener = null;
+    private ?PdfGroupListenerInterface $groupListener = null;
 
     /**
      * The outputting group state.
      */
-    protected bool $inProgress = false;
+    private bool $inProgress = false;
 
     /**
      * Constructor.
@@ -54,13 +56,13 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function checkNewPage(float $height): bool
     {
-        if ($this->groupBeforeHeader && $this->repeatHeader) {
-            $this->repeatHeader = false;
+        if ($this->groupBeforeHeader && $this->isRepeatHeader()) {
+            $this->setRepeatHeader(false);
             if ($result = parent::checkNewPage($height)) {
                 $this->outputGroup();
                 $this->outputHeaders();
             }
-            $this->repeatHeader = true;
+            $this->setRepeatHeader(true);
 
             return $result;
         }
@@ -122,7 +124,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     {
         if ($this->group->isKey() && !$this->inProgress) {
             $this->inProgress = true;
-            if (!$this->groupListener instanceof PdfGroupListenerInterface || !$this->groupListener->outputGroup($this, $this->group)) {
+            if (null === $this->groupListener || !$this->groupListener->outputGroup($this, $this->group)) {
                 $this->group->output($this);
             }
             $this->inProgress = false;
@@ -197,6 +199,18 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     public function setGroupStyle(?PdfStyle $style): static
     {
         $this->group->setStyle($style);
+
+        return $this;
+    }
+
+    protected function isInProgress(): bool
+    {
+        return $this->inProgress;
+    }
+
+    protected function setInProgress(bool $inProgress): static
+    {
+        $this->inProgress = $inProgress;
 
         return $this;
     }

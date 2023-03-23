@@ -71,6 +71,53 @@ final class StringUtils
     }
 
     /**
+     * Takes a JSON encoded string and converts it into a PHP value.
+     *
+     * @param string $value the value to decode
+     * @param bool   $assoc when true, returned objects will be converted into associative arrays
+     *
+     * @return mixed the decoded value in appropriate PHP type
+     *
+     * @throws \InvalidArgumentException if the value can not be decoded
+     *
+     * @see StringUtils::encodeJson()
+     */
+    public static function decodeJson(string $value, bool $assoc = true): mixed
+    {
+        /** @psalm-var mixed $result */
+        $result = \json_decode($value, $assoc);
+        if (\JSON_ERROR_NONE !== $code = \json_last_error()) {
+            $message = \json_last_error_msg();
+            throw new \InvalidArgumentException($message, $code);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the JSON representation of a value.
+     *
+     * @param mixed $value the value being encoded
+     * @param int   $flags a bitmask flag
+     *
+     * @return string a JSON encoded string
+     *
+     * @throws \InvalidArgumentException if the value can not be encoded
+     *
+     * @see StringUtils::decodeJson()
+     */
+    public static function encodeJson(mixed $value, int $flags = 0): string
+    {
+        $result = \json_encode($value, $flags);
+        if (\JSON_ERROR_NONE !== $code = \json_last_error()) {
+            $message = \json_last_error_msg();
+            throw new \InvalidArgumentException($message, $code);
+        }
+
+        return (string) $result;
+    }
+
+    /**
      * Tests if a string ends within a substring.
      *
      * <b>NB:</b> If the needle is empty, this function return false.

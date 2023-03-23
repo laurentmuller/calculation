@@ -85,15 +85,11 @@ final class FileUtils
         if (false === $json = \file_get_contents(self::realPath($file))) {
             throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
-        /** @var array|\stdClass $content */
-        $content = \json_decode($json, $assoc);
-        if (\JSON_ERROR_NONE !== \json_last_error()) {
-            $message = \json_last_error_msg();
 
-            throw new \InvalidArgumentException(\sprintf("Unable to decode the content of the file '%s' (%s).", $file, $message));
-        }
+        /** @psalm-var array|\stdClass $result */
+        $result = StringUtils::decodeJson($json, $assoc);
 
-        return $content;
+        return $result;
     }
 
     /**

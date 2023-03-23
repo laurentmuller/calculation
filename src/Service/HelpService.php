@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Traits\CacheAwareTrait;
 use App\Traits\TranslatorAwareTrait;
+use App\Util\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -269,19 +270,21 @@ class HelpService implements ServiceSubscriberInterface
         if (!\is_string($content = \file_get_contents($this->file))) {
             return null;
         }
-        /** @psalm-var HelpContentType|null $help */
-        $help = \json_decode($content, true);
-        if (!\is_array($help)) {
+
+        try {
+            /** @psalm-var HelpContentType $help */
+            $help = StringUtils::decodeJson($content);
+            if (!empty($help['dialogs'])) {
+                $this->sortDialogs($help['dialogs']);
+            }
+            if (!empty($help['entities'])) {
+                $this->sortEntities($help['entities']);
+            }
+
+            return $help;
+        } catch (\InvalidArgumentException) {
             return null;
         }
-        if (!empty($help['dialogs'])) {
-            $this->sortDialogs($help['dialogs']);
-        }
-        if (!empty($help['entities'])) {
-            $this->sortEntities($help['entities']);
-        }
-
-        return $help;
     }
 
     /**

@@ -19,6 +19,7 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Util\CSVReader;
 use App\Util\FileUtils;
+use App\Util\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -164,9 +165,13 @@ class LogService implements ServiceSubscriberInterface
      */
     private function parseJson(string $value): ?array
     {
-        /** @psalm-var array|null $result */
-        $result = \json_decode($value, true);
+        try {
+            /** @psalm-var array $result */
+            $result = StringUtils::decodeJson($value);
 
-        return \is_array($result) ? $result : null;
+            return $result;
+        } catch (\InvalidArgumentException) {
+            return null;
+        }
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Database;
 
 use App\Entity\Log;
+use App\Util\StringUtils;
 
 /**
  * SQLite database for logs.
@@ -89,11 +90,7 @@ class LogDatabase extends AbstractDatabase
      */
     private function arrayToString(?array $array): ?string
     {
-        if (!empty($array)) {
-            return (string) \json_encode($array);
-        }
-
-        return null;
+        return empty($array) ? null : StringUtils::encodeJson($array);
     }
 
     /**

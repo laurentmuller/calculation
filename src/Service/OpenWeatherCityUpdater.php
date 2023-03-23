@@ -16,6 +16,7 @@ use App\Database\OpenWeatherDatabase;
 use App\Form\FormHelper;
 use App\Traits\TranslatorTrait;
 use App\Util\FileUtils;
+use App\Util\StringUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -142,10 +143,15 @@ class OpenWeatherCityUpdater
         if (false === $content = \gzdecode($content)) {
             return false;
         }
-        /** @psalm-var OpenWeatherCityType[]|null $result */
-        $result = \json_decode($content, true);
 
-        return \is_array($result) ? $result : false;
+        try {
+            /** @psalm-var OpenWeatherCityType[] $result */
+            $result = StringUtils::decodeJson($content);
+
+            return $result;
+        } catch (\InvalidArgumentException) {
+            return false;
+        }
     }
 
     /**

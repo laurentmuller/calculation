@@ -271,7 +271,7 @@ class SchemaService implements ServiceSubscriberInterface
         $type = $column->getType();
         $default = $column->getDefault();
         if (null !== $default && $type instanceof BooleanType) {
-            return (string) \json_encode(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
+            return StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
         }
         if ('0' === $default && $type instanceof FloatType) {
             return '0.00';

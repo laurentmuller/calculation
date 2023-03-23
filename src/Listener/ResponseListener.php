@@ -15,6 +15,7 @@ namespace App\Listener;
 use App\Interfaces\MimeTypeInterface;
 use App\Service\NonceService;
 use App\Util\FileUtils;
+use App\Util\StringUtils;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -152,9 +153,10 @@ class ResponseListener
             return [];
         }
 
-        /** @psalm-var array<string, string|string[]> $csp */
-        $csp = \json_decode($content, true);
-        if (\JSON_ERROR_NONE !== \json_last_error() || [] === $csp) {
+        try {
+            /** @psalm-var array<string, string|string[]> $csp */
+            $csp = StringUtils::decodeJson($content);
+        } catch (\InvalidArgumentException) {
             return [];
         }
 

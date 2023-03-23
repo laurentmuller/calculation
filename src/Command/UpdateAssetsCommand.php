@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Util\FileUtils;
+use App\Util\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -386,14 +387,12 @@ class UpdateAssetsCommand extends Command
         if (!$content = $this->readFile($filename)) {
             return false;
         }
-        $data = \json_decode($content, false);
-        if (\JSON_ERROR_NONE !== \json_last_error()) {
-            $this->writeError(\json_last_error_msg());
-            $this->writeError("Unable to decode file '$filename'.");
 
-            return false;
-        }
-        if (!($data instanceof \stdClass)) {
+        try {
+            /** @psalm-var \stdClass $data */
+            $data = StringUtils::decodeJson($content, false);
+        } catch (\InvalidArgumentException $e) {
+            $this->writeError($e->getMessage());
             $this->writeError("Unable to decode file '$filename'.");
 
             return false;

@@ -275,7 +275,7 @@ class AjaxController extends AbstractController
         $name = $this->getRequestString($request, 'name');
         $value = $this->getRequestString($request, 'value');
         if (null !== $name && null !== $value) {
-            $this->setSessionValue($name, \json_decode($value));
+            $this->setSessionValue($name, StringUtils::decodeJson($value));
             $result = true;
         }
 

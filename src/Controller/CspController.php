@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
+use App\Util\StringUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -73,18 +74,19 @@ class CspController extends AbstractController
     private function getContext(): array|false
     {
         $content = (string) \file_get_contents('php://input');
-        /** @psalm-var bool|array{csp-report: string[]} $data */
-        $data = \json_decode($content, true);
-        if (\is_array($data)) {
+
+        try {
+            /** @psalm-var array{csp-report: string[]} $data */
+            $data = StringUtils::decodeJson($content);
             $context = \array_filter($data['csp-report']);
             if (isset($context['original-policy'])) {
                 $context['original-policy'] = $this->explodeOriginalPolicy($context['original-policy']);
             }
 
             return $context;
+        } catch (\InvalidArgumentException) {
+            return false;
         }
-
-        return false;
     }
 
     /**

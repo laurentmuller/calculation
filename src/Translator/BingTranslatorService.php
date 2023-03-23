@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
+use App\Util\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -211,12 +212,10 @@ class BingTranslatorService extends AbstractTranslatorService
         if (Response::HTTP_OK !== $response->getStatusCode()) {
             $content = $response->getContent(false);
             /** @psalm-var array $value */
-            $value = \json_decode($content, true);
+            $value = StringUtils::decodeJson($content);
         } else {
             $value = $response->toArray(false);
         }
-
-        // check error
         if (!$this->handleError($value)) {
             return false;
         }

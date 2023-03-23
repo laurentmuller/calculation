@@ -14,6 +14,7 @@ namespace App\Tests\Controller;
 
 use App\Controller\AjaxController;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use App\Util\StringUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -114,12 +115,18 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     private function validateResponse(Response $response, string|bool $expected): void
     {
         self::assertTrue($response->isOk());
-        /** @psalm-var mixed $result */
-        $result = \json_decode((string) $response->getContent(), true);
-        if (\is_string($expected)) {
-            self::assertNotNull($this->translator);
-            $expected = $this->translator->trans($expected, [], 'validators');
+
+        try {
+            $content = $response->getContent();
+            self::assertIsString($content);
+            $result = StringUtils::decodeJson($content);
+            if (\is_string($expected)) {
+                self::assertNotNull($this->translator);
+                $expected = $this->translator->trans($expected, [], 'validators');
+            }
+            self::assertSame($expected, $result);
+        } catch (\UnexpectedValueException $e) {
+            self::fail($e->getMessage());
         }
-        self::assertSame($expected, $result);
     }
 }

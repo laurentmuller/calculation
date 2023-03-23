@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
+use App\Util\StringUtils;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -134,13 +135,17 @@ trait PropertyServiceTrait
         if (!\is_string($value)) {
             return $default;
         }
-        /** @psalm-var mixed $array */
-        $array = \json_decode($value, true);
-        if (\JSON_ERROR_NONE !== \json_last_error() || !\is_array($array) || \count($array) !== \count($default)) {
-            return $default;
+
+        try {
+            /** @psalm-var array $result */
+            $result = StringUtils::decodeJson($value);
+            if (\count($result) === \count($default)) {
+                return $result;
+            }
+        } catch (\InvalidArgumentException) {
         }
 
-        return $array;
+        return $default;
     }
 
     /**

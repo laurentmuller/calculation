@@ -109,7 +109,7 @@ class PhpIniDocument extends AbstractDocument
     private function convert(mixed $var): string
     {
         if (\is_bool($var)) {
-            return \ucfirst((string) \json_encode($var));
+            return \ucfirst(StringUtils::encodeJson($var));
         } else {
             return \htmlspecialchars_decode((string) $var);
         }

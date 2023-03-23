@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Util\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -63,10 +64,12 @@ abstract class AbstractProperty extends AbstractEntity
     public function getArray(): ?array
     {
         if (!empty($this->value)) {
-            /** @psalm-var array|null $result */
-            $result = \json_decode($this->value, true);
-            if (\JSON_ERROR_NONE === \json_last_error()) {
-                return (array) $result;
+            try {
+                /** @psalm-var array $result */
+                $result = StringUtils::decodeJson($this->value);
+
+                return $result;
+            } catch (\InvalidArgumentException) {
             }
         }
 
@@ -134,7 +137,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function setArray(?array $value): static
     {
-        return $this->setString(empty($value) ? null : (string) \json_encode($value));
+        return $this->setString(empty($value) ? null : StringUtils::encodeJson($value));
     }
 
     /**
